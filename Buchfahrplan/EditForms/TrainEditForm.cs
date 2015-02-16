@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
+using Buchfahrplan.Properties;
 
 namespace Buchfahrplan
 {
@@ -21,6 +22,8 @@ namespace Buchfahrplan
         public TrainEditForm()
         {
             InitializeComponent();
+
+            this.Icon = Resources.programm;
         }
 
         public void Init(List<Train> trains)

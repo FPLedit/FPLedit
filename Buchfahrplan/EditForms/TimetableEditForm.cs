@@ -1,4 +1,5 @@
 ﻿using Buchfahrplan.FileModel;
+using Buchfahrplan.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,6 +21,8 @@ namespace Buchfahrplan
         public TimetableEditForm()
         {
             InitializeComponent();
+
+            this.Icon = Resources.programm;
             
             topDataGridView.AllowUserToAddRows = false;
             bottomDataGridView.AllowUserToAddRows = false;

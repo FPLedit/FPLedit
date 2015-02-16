@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Buchfahrplan.FileModel
 {
     [Serializable]
-    public class Timetable
+    public sealed class Timetable
     {
         public string Name { get; set; }
 

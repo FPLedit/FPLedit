@@ -1,4 +1,5 @@
 ﻿using Buchfahrplan.FileModel;
+using Buchfahrplan.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,9 +16,12 @@ namespace Buchfahrplan
     public partial class NewEditForm : Form
     {
         public List<Train> trains = new List<Train>();
+
         public NewEditForm()
         {
             InitializeComponent();
+
+            this.Icon = Resources.programm;
         }
 
         public void Init(List<Train> trains)

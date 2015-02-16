@@ -1,4 +1,5 @@
 ﻿using Buchfahrplan.FileModel;
+using Buchfahrplan.Properties;
 using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,8 @@ namespace Buchfahrplan
         public LineEditForm()
         {
             InitializeComponent();
+
+            this.Icon = Resources.programm;
 
             stationListView.Columns.Add("Bahnhof");
             stationListView.Columns.Add("Position");

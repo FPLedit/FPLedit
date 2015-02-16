@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Buchfahrplan.FileModel
 {
     [Serializable]
-    public class Station
+    public sealed class Station
     {
         public string Name { get; set; }
 

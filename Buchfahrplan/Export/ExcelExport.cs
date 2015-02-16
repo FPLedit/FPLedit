@@ -6,127 +6,75 @@ using System.Text;
 using System.Threading.Tasks;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace Buchfahrplan.Export
 {
     public static class ExcelExport
     {
+        private static Font headingFont = new Font("DIN 1451 Mittelschrift Alt", 15);
+        private static Font subHeadingFont = new Font("DIN 1451 Mittelschrift Alt", 12);
+        private static Font cellFont = new Font("DIN 1451 Mittelschrift Alt", 11);
+
         public static void Export(Timetable timetable, string filename, ExportFileType filetype)
-        {            
+        {
             Excel.Application objExcel = new Excel.Application();
             Excel.Workbook workbook = objExcel.Workbooks.Add();
             Excel.Worksheet worksheet = workbook.Worksheets["Tabelle1"];
-            objExcel.Visible = true;           
+            Excel.HPageBreaks hBreaks = worksheet.HPageBreaks;
+            objExcel.Visible = true;            
 
-            int line = 1;
+            int lineCount = timetable.Trains.Count * (timetable.Stations.Count + 8);
+            int columnCount = 5;
+
+            string[,] cellBuffer = new string[lineCount, columnCount];
+
+            #region cellBuffer
+            // Baue cellBuffer
+            int cellBufferLine = 0;
             foreach (Train train in timetable.Trains)
             {
-                SetColumnWidth(worksheet, 3, 40);
-
                 // Kopf zeichnen
-                for (int i = 0; i <= 4; i++)
+                cellBuffer[cellBufferLine, 0] = train.Name;
+                cellBufferLine++;
+
+                cellBuffer[cellBufferLine, 0] = train.Line;
+                cellBufferLine++;
+
+                cellBuffer[cellBufferLine, 0] = "Tfz " + train.Locomotive;
+                cellBufferLine++;                
+
+                for (int x = 0; x <= 4; x++)
                 {
-                    switch (i)
-                    {
-                        case 0:
-                            MergeCells(worksheet, GetRangeName(line, 1), GetRangeName(line, 5));
-                            worksheet.Cells[line, 1] = train.Name;
-                            SetTextAlignment(worksheet.Cells[line, 1], HTextAlignment.Center, VTextAlignment.Middle);
-                            SetFont(worksheet.Cells[line, 1], new Font("DIN 1451 Mittelschrift Alt", 15));
-                            break;
-
-                        case 1:
-                            MergeCells(worksheet, GetRangeName(line, 1), GetRangeName(line, 5));
-                            worksheet.Cells[line, 1] = train.Line;
-                            SetTextAlignment(worksheet.Cells[line, 1], HTextAlignment.Center, VTextAlignment.Middle);
-                            SetFont(worksheet.Cells[line, 1], new Font("DIN 1451 Mittelschrift Alt", 12));
-                            break;
-
-                        case 2:
-                            worksheet.Cells[line, 1] = "Tfz " + train.Locomotive;
-                            SetFont(worksheet.Cells[line, 1], new Font("DIN 1451 Mittelschrift Alt", 11));
-                            break;
-
-                        case 3:
-                            for (int x = 1; x <= 5; x++)
-                            {
-                                worksheet.Cells[line, x] = x;
-                                SetTextAlignment(worksheet.Cells[line, x], HTextAlignment.Center, VTextAlignment.Top);
-                                SetCellBorder(worksheet.Cells[line, x], BorderType.Thick, BorderType.Thick, BorderType.Thick,
-                                    BorderType.Normal);
-                                SetFont(worksheet.Cells[line, x], new Font("DIN 1451 Mittelschrift Alt", 11));
-                            }
-                            break;
-
-                        case 4:
-                            SetRowHeight(worksheet, line, 100);
-
-                            worksheet.Cells[line, 1] = "Lage\nder\nBetriebs-\nstelle\n\n(km)";
-                            SetTextAlignment(worksheet.Cells[line, 1], HTextAlignment.Center, VTextAlignment.Top);
-                            SetCellBorder(worksheet.Cells[line, 1], BorderType.Thick, BorderType.Normal, BorderType.Thick, BorderType.Thick);
-                            SetFont(worksheet.Cells[line, 1], new Font("DIN 1451 Mittelschrift Alt", 11));
-
-                            worksheet.Cells[line, 2] = "Höchst-\nGeschwin-\ndigkeit\n\n\n(km/h)";
-                            SetTextAlignment(worksheet.Cells[line, 2], HTextAlignment.Center, VTextAlignment.Top);
-                            SetCellBorder(worksheet.Cells[line, 2], BorderType.Thick, BorderType.Normal, BorderType.Thick, BorderType.Thick);
-                            SetFont(worksheet.Cells[line, 2], new Font("DIN 1451 Mittelschrift Alt", 11));
-
-                            worksheet.Cells[line, 3] = "Betriebsstellen,\nständige Langsamfahrstellen,\nverkürzter Vorsignalabstand";
-                            SetTextAlignment(worksheet.Cells[line, 3], HTextAlignment.Left, VTextAlignment.Top);
-                            SetCellBorder(worksheet.Cells[line, 3], BorderType.Thick, BorderType.Normal, BorderType.Thick, BorderType.Thick);
-                            SetFont(worksheet.Cells[line, 3], new Font("DIN 1451 Mittelschrift Alt", 11));
-
-                            worksheet.Cells[line, 4] = "Ankunft";
-                            SetTextAlignment(worksheet.Cells[line, 4], HTextAlignment.Center, VTextAlignment.Top);
-                            SetCellBorder(worksheet.Cells[line, 4], BorderType.Thick, BorderType.Normal, BorderType.Thick, BorderType.Thick);
-                            SetFont(worksheet.Cells[line, 4], new Font("DIN 1451 Mittelschrift Alt", 11));
-
-                            worksheet.Cells[line, 5] = "Abfahrt\noder Durch-\nfahrt";
-                            SetTextAlignment(worksheet.Cells[line, 5], HTextAlignment.Left, VTextAlignment.Top);
-                            SetCellBorder(worksheet.Cells[line, 5], BorderType.Thick, BorderType.Normal, BorderType.Thick, BorderType.Thick);
-                            SetFont(worksheet.Cells[line, 5], new Font("DIN 1451 Mittelschrift Alt", 11));
-                            break;
-                    }
-                    line++;
+                    cellBuffer[cellBufferLine, x] = x.ToString();
                 }
+                cellBufferLine++;
+
+                cellBuffer[cellBufferLine, 0] = "Lage\nder\nBetriebs-\nstelle\n\n(km)";
+                cellBuffer[cellBufferLine, 1] = "Höchst-\nGeschwin-\ndigkeit\n\n\n(km/h)";
+                cellBuffer[cellBufferLine, 2] = "Betriebsstellen,\nständige Langsamfahrstellen,\nverkürzter Vorsignalabstand";
+                cellBuffer[cellBufferLine, 3] = "Ankunft";
+                cellBuffer[cellBufferLine, 4] = "Abfahrt\noder Durch-\nfahrt";
+                cellBufferLine++;
 
                 if (!train.Negative)
                 {
                     // Stationen und An- Abfahrten Zeichnen
                     foreach (var station in timetable.Stations.OrderBy(s => s.Kilometre))
                     {
-                        worksheet.Cells[line, 1] = station.Kilometre.ToString("0.0");
-                        SetFont(worksheet.Cells[line, 1], new Font("DIN 1451 Mittelschrift Alt", 11));
-                        SetTextAlignment(worksheet.Cells[line, 1], HTextAlignment.Center, VTextAlignment.Middle);
-                        SetCellBorder(worksheet.Cells[line, 1], BorderType.Thick, BorderType.CurrentStatus, BorderType.Thick,
-                            BorderType.CurrentStatus);
+                        cellBuffer[cellBufferLine, 0] = station.Kilometre.ToString("0.0");
 
-                        worksheet.Cells[line, 2] = station.MaxVelocity.ToString("#");
-                        SetFont(worksheet.Cells[line, 2], new Font("DIN 1451 Mittelschrift Alt", 11));
-                        SetTextAlignment(worksheet.Cells[line, 2], HTextAlignment.Center, VTextAlignment.Middle);
-                        SetCellBorder(worksheet.Cells[line, 2], BorderType.Thick, BorderType.Thick, BorderType.Thick,
-                            BorderType.CurrentStatus);
+                        cellBuffer[cellBufferLine, 1] = station.MaxVelocity.ToString("#");
 
-                        worksheet.Cells[line, 3] = station.Name;
-                        SetFont(worksheet.Cells[line, 3], new Font("DIN 1451 Mittelschrift Alt", 11));
-                        SetCellBorder(worksheet.Cells[line, 3], BorderType.Thick, BorderType.CurrentStatus, BorderType.Thick,
-                            BorderType.CurrentStatus);
-
-                        try { worksheet.Cells[line, 4] = train.Arrivals[station].ToShortTimeString(); }
+                        cellBuffer[cellBufferLine, 2] = station.Name;
+       
+                        try { cellBuffer[cellBufferLine, 3] = train.Arrivals[station].ToShortTimeString(); }
                         catch { }
-                        SetFont(worksheet.Cells[line, 4], new Font("DIN 1451 Mittelschrift Alt", 11));
-                        SetTextAlignment(worksheet.Cells[line, 4], HTextAlignment.Center, VTextAlignment.Middle);
-                        SetCellBorder(worksheet.Cells[line, 4], BorderType.Thick, BorderType.CurrentStatus, BorderType.Thick,
-                            BorderType.CurrentStatus);
-
-                        try { worksheet.Cells[line, 5] = train.Departures[station].ToShortTimeString(); }
+   
+                        try { cellBuffer[cellBufferLine, 4] = train.Departures[station].ToShortTimeString(); }
                         catch { }
-                        SetFont(worksheet.Cells[line, 5], new Font("DIN 1451 Mittelschrift Alt", 11));
-                        SetTextAlignment(worksheet.Cells[line, 5], HTextAlignment.Center, VTextAlignment.Middle);
-                        SetCellBorder(worksheet.Cells[line, 5], BorderType.Thick, BorderType.CurrentStatus, BorderType.Thick,
-                            BorderType.CurrentStatus);
 
-                        line++;
+                        cellBufferLine++;
                     }
                 }
 
@@ -135,54 +83,163 @@ namespace Buchfahrplan.Export
                     // Stationen und An- Abfahrten Zeichnen
                     foreach (var station in timetable.Stations.OrderBy(s => s.Kilometre).Reverse())
                     {
-                        worksheet.Cells[line, 1] = station.Kilometre.ToString("0.0");
-                        SetFont(worksheet.Cells[line, 1], new Font("DIN 1451 Mittelschrift Alt", 11));
-                        SetTextAlignment(worksheet.Cells[line, 1], HTextAlignment.Center, VTextAlignment.Middle);
-                        SetCellBorder(worksheet.Cells[line, 1], BorderType.Thick, BorderType.CurrentStatus, BorderType.Thick,
-                            BorderType.CurrentStatus);
+                        cellBuffer[cellBufferLine, 0] = station.Kilometre.ToString("0.0");
 
-                        worksheet.Cells[line, 2] = station.MaxVelocity.ToString("#");
-                        SetFont(worksheet.Cells[line, 2], new Font("DIN 1451 Mittelschrift Alt", 11));
-                        SetTextAlignment(worksheet.Cells[line, 2], HTextAlignment.Center, VTextAlignment.Middle);
-                        SetCellBorder(worksheet.Cells[line, 2], BorderType.Thick, BorderType.Thick, BorderType.Thick,
-                            BorderType.CurrentStatus);
+                        cellBuffer[cellBufferLine, 1] = station.MaxVelocity.ToString("#");
 
-                        worksheet.Cells[line, 3] = station.Name;
-                        SetFont(worksheet.Cells[line, 3], new Font("DIN 1451 Mittelschrift Alt", 11));
-                        SetCellBorder(worksheet.Cells[line, 3], BorderType.Thick, BorderType.CurrentStatus, BorderType.Thick,
-                            BorderType.CurrentStatus);
+                        cellBuffer[cellBufferLine, 2] = station.Name;
 
-                        try { worksheet.Cells[line, 4] = train.Arrivals[station].ToShortTimeString(); }
+                        try { cellBuffer[cellBufferLine, 3] = train.Arrivals[station].ToShortTimeString(); }
                         catch { }
-                        SetFont(worksheet.Cells[line, 4], new Font("DIN 1451 Mittelschrift Alt", 11));
-                        SetTextAlignment(worksheet.Cells[line, 4], HTextAlignment.Center, VTextAlignment.Middle);
-                        SetCellBorder(worksheet.Cells[line, 4], BorderType.Thick, BorderType.CurrentStatus, BorderType.Thick,
-                            BorderType.CurrentStatus);
 
-                        try { worksheet.Cells[line, 5] = train.Departures[station].ToShortTimeString(); }
+                        try { cellBuffer[cellBufferLine, 4] = train.Departures[station].ToShortTimeString(); }
                         catch { }
-                        SetFont(worksheet.Cells[line, 5], new Font("DIN 1451 Mittelschrift Alt", 11));
-                        SetTextAlignment(worksheet.Cells[line, 5], HTextAlignment.Center, VTextAlignment.Middle);
-                        SetCellBorder(worksheet.Cells[line, 5], BorderType.Thick, BorderType.CurrentStatus, BorderType.Thick,
-                            BorderType.CurrentStatus);
 
-                        line++;
+                        cellBufferLine++;
                     }
                 }
 
-                for (int x = 1; x <= 5; x++)
+                // Leerzeilen nach einem Fahrplan
+                cellBufferLine += 3;
+            }
+
+            worksheet.Range["A1:E" + lineCount.ToString()]
+                .set_Value(Excel.XlRangeValueDataType.xlRangeValueDefault, cellBuffer);
+
+            #endregion
+
+            // Formatieren
+            // 3. Spalte breit
+            Excel.Range cell = worksheet.Cells[1, 3];
+            Excel.Range col = cell.EntireColumn;
+            col.ColumnWidth = 40;
+
+            Marshal.ReleaseComObject(col);
+            Marshal.ReleaseComObject(cell);
+
+            int line = 1;
+            foreach (Train train in timetable.Trains)
+            {
+                SetTextAlignment(worksheet.Range["A" + line.ToString() + ":A" + (line + 1).ToString()], 
+                    HTextAlignment.Center, VTextAlignment.Middle);
+
+                // Kopf zeichnen
+                // Zugnummer
+                worksheet.Range["A" + line.ToString() + ":E" + line.ToString()].Merge(Type.Missing);
+                SetFont(worksheet.Cells[line, 1], headingFont);
+                line++;
+
+                // Strecke
+                worksheet.Range["A" + line.ToString() + ":E" + line.ToString()].Merge(Type.Missing);
+                SetFont(worksheet.Cells[line, 1], subHeadingFont);
+                line++;
+
+                // Tfz
+                SetFont(worksheet.Cells[line, 1], cellFont);
+                line++;
+
+                // Spaltennummern
+                Excel.Range range1 = worksheet.Range["A" + line.ToString() + ":E" + (line + 1).ToString()];
+                SetTextAlignment(range1,  HTextAlignment.Center, VTextAlignment.Top);
+                SetFont(range1, cellFont);
+
+                Excel.Borders border1 = range1.Borders;
+
+                border1[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
+                border1[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlThick;
+
+                border1[Excel.XlBordersIndex.xlEdgeTop].LineStyle = Excel.XlLineStyle.xlContinuous;
+                border1[Excel.XlBordersIndex.xlEdgeTop].Weight = Excel.XlBorderWeight.xlThick;
+
+                border1[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
+                border1[Excel.XlBordersIndex.xlEdgeRight].Weight = Excel.XlBorderWeight.xlThick;
+
+                border1[Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Excel.XlLineStyle.xlContinuous;
+                border1[Excel.XlBordersIndex.xlEdgeBottom].Weight = Excel.XlBorderWeight.xlThick;
+
+                border1[Excel.XlBordersIndex.xlInsideVertical].LineStyle = Excel.XlLineStyle.xlContinuous;
+                border1[Excel.XlBordersIndex.xlInsideVertical].Weight = Excel.XlBorderWeight.xlThick;
+
+                border1[Excel.XlBordersIndex.xlInsideHorizontal].LineStyle = Excel.XlLineStyle.xlContinuous;
+                border1[Excel.XlBordersIndex.xlInsideHorizontal].Weight = Excel.XlBorderWeight.xlThin;
+
+                Marshal.ReleaseComObject(border1);
+                Marshal.ReleaseComObject(range1);
+                line++;
+
+                // Spaltenerklärungen
+                Excel.Range cell2 = worksheet.Cells[line, 1];
+                Excel.Range row = cell.EntireRow;
+                col.RowHeight = 100;
+
+                Marshal.ReleaseComObject(row);
+                Marshal.ReleaseComObject(cell2);
+                line++;
+
+                // Stationen und An- Abfahrten Zeichnen
+                foreach (var station in timetable.Stations.OrderBy(s => s.Kilometre))
                 {
-                    SetCellBorder(worksheet.Cells[line, x], BorderType.Thick, BorderType.CurrentStatus, BorderType.Thick,
-                        BorderType.Thick);
-                }
+                    Excel.Range range3 = worksheet.Range["A" + line.ToString() + ":E" + line.ToString()];
+                    SetFont(range3, cellFont);
+                    SetTextAlignment(range3, HTextAlignment.Center, VTextAlignment.Top);
+
+                    Excel.Borders border3 = range3.Borders;
+
+                    border3[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
+                    border3[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlThick;
+
+                    border3[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
+                    border3[Excel.XlBordersIndex.xlEdgeRight].Weight = Excel.XlBorderWeight.xlThick;
+
+                    border3[Excel.XlBordersIndex.xlInsideVertical].LineStyle = Excel.XlLineStyle.xlContinuous;
+                    border3[Excel.XlBordersIndex.xlInsideVertical].Weight = Excel.XlBorderWeight.xlThick;
+
+                    Marshal.ReleaseComObject(border3);
+                    Marshal.ReleaseComObject(range3);
+
+                    if (station.MaxVelocity != 0)
+                    {
+                        Excel.Range range4 = worksheet.Cells[line, 2];
+                        Excel.Borders border4 = range4.Borders;
+
+                        border4[Excel.XlBordersIndex.xlEdgeTop].LineStyle = Excel.XlLineStyle.xlContinuous;
+                        border4[Excel.XlBordersIndex.xlEdgeTop].Weight = Excel.XlBorderWeight.xlThick;
+
+                        Marshal.ReleaseComObject(border4);
+                        Marshal.ReleaseComObject(range4);
+                    }
+
+                    line++;
+                }                
+
+                // Ende der Tabelle
+                Excel.Range range5 = worksheet.Range["A" + line.ToString() + ":E" + line.ToString()];
+                SetTextAlignment(range5, HTextAlignment.Center, VTextAlignment.Top);
+                SetFont(range5, cellFont);
+
+                Excel.Borders border5 = range5.Borders;
+
+                border5[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
+                border5[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlThick;
+
+                border5[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
+                border5[Excel.XlBordersIndex.xlEdgeRight].Weight = Excel.XlBorderWeight.xlThick;
+
+                border5[Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Excel.XlLineStyle.xlContinuous;
+                border5[Excel.XlBordersIndex.xlEdgeBottom].Weight = Excel.XlBorderWeight.xlThick;
+
+                border5[Excel.XlBordersIndex.xlInsideVertical].LineStyle = Excel.XlLineStyle.xlContinuous;
+                border5[Excel.XlBordersIndex.xlInsideVertical].Weight = Excel.XlBorderWeight.xlThick;
+
+                Marshal.ReleaseComObject(border5);
+                Marshal.ReleaseComObject(range5);
 
                 // Leerzeilen nach einem Fahrplan
                 line += 3;
 
-                worksheet.HPageBreaks.Add(worksheet.Range["A"+ line.ToString()]);
-
+                hBreaks.Add(worksheet.Range["A" + line.ToString()]);
             }
-            
+
             switch (filetype)
             {
                 case ExportFileType.XlFile:
@@ -198,6 +255,12 @@ namespace Buchfahrplan.Export
             workbook.Close();
             objExcel.Quit();
 
+            // Alle Objekte freigeben
+            Marshal.ReleaseComObject(hBreaks);
+            Marshal.ReleaseComObject(worksheet);
+            Marshal.ReleaseComObject(workbook);
+            Marshal.ReleaseComObject(objExcel);
+
             worksheet = null;
             workbook = null;
             objExcel = null;
@@ -208,86 +271,10 @@ namespace Buchfahrplan.Export
             GC.WaitForPendingFinalizers();
         }
 
-
-        private static void SetCellBorder(Excel.Range range, BorderType leftBorder, BorderType topBorder, BorderType rightBorder,
-                BorderType bottomBorder)
-        {
-            Excel.Borders border = range.Borders;
-
-            switch (leftBorder)
-            {
-                case BorderType.None:
-                    border[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlLineStyleNone;
-                    break;
-                case BorderType.Normal:
-                    border[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
-                    border[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlThin;
-                    break;
-                case BorderType.Thick:
-                    border[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
-                    border[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlThick;
-                    break;
-            }
-
-            switch (topBorder)
-            {
-                case BorderType.None:
-                    border[Excel.XlBordersIndex.xlEdgeTop].LineStyle = Excel.XlLineStyle.xlLineStyleNone;
-                    break;
-                case BorderType.Normal:
-                    border[Excel.XlBordersIndex.xlEdgeTop].LineStyle = Excel.XlLineStyle.xlContinuous;
-                    border[Excel.XlBordersIndex.xlEdgeTop].Weight = Excel.XlBorderWeight.xlThin;
-                    break;
-                case BorderType.Thick:
-                    border[Excel.XlBordersIndex.xlEdgeTop].LineStyle = Excel.XlLineStyle.xlContinuous;
-                    border[Excel.XlBordersIndex.xlEdgeTop].Weight = Excel.XlBorderWeight.xlThick;
-                    break;
-            }
-
-            switch (bottomBorder)
-            {
-                case BorderType.None:
-                    border[Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Excel.XlLineStyle.xlLineStyleNone;
-                    break;
-                case BorderType.Normal:
-                    border[Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Excel.XlLineStyle.xlContinuous;
-                    border[Excel.XlBordersIndex.xlEdgeBottom].Weight = Excel.XlBorderWeight.xlThin;
-                    break;
-                case BorderType.Thick:
-                    border[Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Excel.XlLineStyle.xlContinuous;
-                    border[Excel.XlBordersIndex.xlEdgeBottom].Weight = Excel.XlBorderWeight.xlThick;
-                    break;
-            }
-
-            switch (rightBorder)
-            {
-                case BorderType.None:
-                    border[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlLineStyleNone;
-                    break;
-                case BorderType.Normal:
-                    border[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
-                    border[Excel.XlBordersIndex.xlEdgeRight].Weight = Excel.XlBorderWeight.xlThin;
-                    break;
-                case BorderType.Thick:
-                    border[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
-                    border[Excel.XlBordersIndex.xlEdgeRight].Weight = Excel.XlBorderWeight.xlThick;
-                    break;
-            }
-        }
-
-        private static void SetColumnWidth(Excel.Worksheet worksheet, int column, int width)
-        {
-            ((Excel.Range)worksheet.Cells[1, column]).EntireColumn.ColumnWidth = width;
-        }
-
         private static void SetFont(Excel.Range range, Font font)
         {
             range.Font.Name = font.Name;
             range.Font.Size = font.Size;
-
-            range.Font.Bold = font.Bold;
-            range.Font.Italic = font.Italic;
-            range.Font.Underline = font.Underline;
         }
 
         private static void SetTextAlignment(Excel.Range range, HTextAlignment hAlignment, VTextAlignment vAlignment)
@@ -318,32 +305,6 @@ namespace Buchfahrplan.Export
                     break;
             }
         }
-
-        private static void SetRowHeight(Excel.Worksheet worksheet, int row, int height)
-        {
-            ((Excel.Range)worksheet.Cells[row, 1]).EntireRow.RowHeight = height;
-        }
-
-        private static void MergeCells(Excel.Worksheet worksheet, string beginCell, string endCell)
-        {
-            worksheet.get_Range(beginCell, endCell).Merge(Type.Missing);
-        }
-
-        private static string GetRangeName(int row, int column)
-        {
-            string[] columns = new string[26] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", 
-                "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
-
-            return columns[column - 1] + row.ToString();
-        }
-    }
-
-    public enum BorderType
-    {
-        Normal,
-        Thick,
-        None,
-        CurrentStatus
     }
 
     public enum HTextAlignment
@@ -365,4 +326,47 @@ namespace Buchfahrplan.Export
         XlFile,
         PdfFile
     }
+
+    /*internal sealed class FontImpl : Excel.Font 
+    {
+        public Excel.Application Application { get; private set; }
+
+        dynamic Background { get; set; }
+
+        dynamic Bold { get; set; }
+
+        dynamic Color { get; set; }
+
+        dynamic ColorIndex { get; set; }
+
+        public Excel.XlCreator Creator { get; private set; }
+
+        dynamic FontStyle { get; set; }
+
+        dynamic Italic { get; set; }
+
+        dynamic Name { get; set; }
+
+        dynamic OutlineFont { get; set; }
+
+        dynamic Parent { get; }
+
+        dynamic Shadow { get; set; }
+
+        dynamic Size { get; set; }
+
+        dynamic Strikethrough { get; set; }
+
+        dynamic Subscript { get; set; }
+
+        dynamic Superscript { get; set; }
+
+        dynamic ThemeColor { get; set; }
+
+        Excel.XlThemeFont ThemeFont { get; set; }
+
+        dynamic TintAndShade { get; set; }
+
+        dynamic Underline { get; set; }        
+    }*/
 }

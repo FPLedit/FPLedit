@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 using Buchfahrplan.Export;
+using Buchfahrplan.Properties;
 
 namespace Buchfahrplan
 {
@@ -22,11 +23,21 @@ namespace Buchfahrplan
         {
             InitializeComponent();
 
+            this.Icon = Resources.programm;
+
             newEdit = new NewEditForm();
             trEdit = new TrainEditForm();
             liEdit = new LineEditForm();
             ttEdit = new TimetableEditForm();
-        }
+
+            string[] args = Environment.GetCommandLineArgs();
+
+            if (args.Length == 2)
+            {
+                string filename = args[1];
+                OpenFile(filename);
+            }
+        }       
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -51,19 +62,7 @@ namespace Buchfahrplan
             DialogResult result = bfplSaveFileDialog.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
             {
-                statusLabel.Text = "Speichere Datei...";
-                logTextBox.Log("Speichere Datei...");                
-                try
-                {
-                    tt.SaveToFile(bfplSaveFileDialog.FileName);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-                statusLabel.Text = "";
-                logTextBox.Log("Datei erfolgreich gespeichert!");
-                fileSaved = true;
+                SaveFile(bfplSaveFileDialog.FileName);
             }            
         }
 
@@ -72,37 +71,58 @@ namespace Buchfahrplan
             DialogResult result = fplOpenFileDialog.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
             {
-                statusLabel.Text = "Öffne Datei...";
-                logTextBox.Log("Öffne Datei...");
-                if (Path.GetExtension(fplOpenFileDialog.FileName) == ".fpl")
-                {
-                    tt = FplImport.Import(fplOpenFileDialog.FileName);
-
-                    newEdit.Init(tt.Trains);
-                    DialogResult res = newEdit.ShowDialog();
-                    if (res == System.Windows.Forms.DialogResult.OK)
-                    {
-                        tt.Trains = newEdit.trains;
-                    }
-                }
-                else
-                {
-                    try
-                    {
-                        tt = Timetable.OpenFromFile(fplOpenFileDialog.FileName);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
-                }
-                statusLabel.Text = "";
-                logTextBox.Log("Datei erfolgeich geöffnet!");
-                fileOpened = true;
-                UpdateButtonsEnabled();
+                OpenFile(fplOpenFileDialog.FileName);
             }
         }
 
+        private void OpenFile(string filename)
+        {
+            statusLabel.Text = "Öffne Datei...";
+            logTextBox.Log("Öffne Datei...");
+            if (Path.GetExtension(filename) == ".fpl")
+            {
+                tt = FplImport.Import(filename);
+
+                newEdit.Init(tt.Trains);
+                DialogResult res = newEdit.ShowDialog();
+                if (res == System.Windows.Forms.DialogResult.OK)
+                {
+                    tt.Trains = newEdit.trains;
+                }
+            }
+            else
+            {
+                try
+                {
+                    tt = Timetable.OpenFromFile(filename);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            statusLabel.Text = "";
+            logTextBox.Log("Datei erfolgeich geöffnet!");
+            fileOpened = true;
+            UpdateButtonsEnabled();
+        }
+
+        private void SaveFile(string filename)
+        {
+            statusLabel.Text = "Speichere Datei...";
+            logTextBox.Log("Speichere Datei...");
+            try
+            {
+                tt.SaveToFile(filename);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            statusLabel.Text = "";
+            logTextBox.Log("Datei erfolgreich gespeichert!");
+            fileSaved = true;
+        }
 
         private void UpdateButtonsEnabled()
         {
