@@ -80,6 +80,12 @@ namespace Buchfahrplan
 
         private void changeNameButton_Click(object sender, EventArgs e)
         {
+            if (stationListView.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("Zuerst muss ien Zug ausgewählt werden!", "Namen ändern");
+                return;
+            }
+
             string newName = Interaction.InputBox("Bitte einen neuen Namen eingeben:", "Namen ändern");
 
             if (stationListView.SelectedItems.Count > 0)
@@ -94,6 +100,12 @@ namespace Buchfahrplan
 
         private void changePositionButton_Click(object sender, EventArgs e)
         {
+            if (stationListView.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("Zuerst muss ien Zug ausgewählt werden!", "Position ändern");
+                return;
+            }
+
             string newPosString = Interaction.InputBox("Bitte die neue Position eingeben:", "Position ändern");
 
             if (stationListView.SelectedItems.Count > 0)
@@ -115,6 +127,12 @@ namespace Buchfahrplan
 
         private void deleteStationButton_Click(object sender, EventArgs e)
         {
+            if (stationListView.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("Zuerst muss ien Zug ausgewählt werden!", "Zug löschen");
+                return;
+            }
+
             if (stationListView.SelectedItems.Count > 0)
             {
                 ListViewItem item = (ListViewItem)stationListView.Items[stationListView.SelectedIndices[0]];
@@ -126,45 +144,22 @@ namespace Buchfahrplan
 
         private void newStationButton_Click(object sender, EventArgs e)
         {
-            string name = Interaction.InputBox("Bitte den Namen der Station eingeben:", "Station hinzufügen");
-            float pos = 0f;
-            int velocity = 0;
-            try
+            NewStationForm nsf = new NewStationForm();
+            DialogResult res = nsf.ShowDialog();
+            if (res == System.Windows.Forms.DialogResult.OK)
             {
-                pos = Convert.ToSingle(Interaction.InputBox("Bitte die Position eingeben:", "Station hinzufügen"));
-            }
-            catch
-            {
-                MessageBox.Show("Fehler die eingegebene Zeichenfolge ist kein valider Wert für eine Kommazahl!");
-                return;
-            }
+                Station sta = nsf.NewStation;
 
-            try
-            {
-                velocity = Convert.ToInt32(Interaction.InputBox("Bitte die Höchsgeschwindigkeit eingeben:", "Station hinzufügen"));
-            }
-            catch
-            {
-                MessageBox.Show("Fehler die eingegebene Zeichenfolge ist kein valider Wert für eine Ganzzahl!");
-                return;
-            }
+                stations.Add(sta);
 
-            Station sta = new Station()
-            {
-                Name = name,
-                Kilometre = pos,
-                MaxVelocity = velocity
-            };
+                foreach (var t in trains)
+                {
+                    t.Arrivals.Add(sta, new DateTime());
+                    t.Departures.Add(sta, new DateTime());
+                }
 
-            stations.Add(sta);
-
-            foreach (var t in trains)
-            {
-                t.Arrivals.Add(sta, new DateTime());
-                t.Departures.Add(sta, new DateTime());
-            }
-
-            UpdateStations();
+                UpdateStations();
+            }            
         }
 
         private void LineEditForm_Load(object sender, EventArgs e)
@@ -174,6 +169,12 @@ namespace Buchfahrplan
 
         private void changeVelocityButton_Click(object sender, EventArgs e)
         {
+            if (stationListView.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("Zuerst muss ien Zug ausgewählt werden!", "Höchstgeschwindigkeit ändern");
+                return;
+            }
+
             string newVelString = Interaction.InputBox("Bitte die neue Höchsgeschwindigkeit eingeben:", "Höchsgeschwindigkeit ändern");
 
             if (stationListView.SelectedItems.Count > 0)
@@ -186,7 +187,7 @@ namespace Buchfahrplan
                 }
                 catch
                 {
-                    MessageBox.Show("Fehler die eingegebene Zeichenfolge ist kein valider Wert für eine Ganzzahl!");
+                    MessageBox.Show("Fehler: Die eingegebene Zeichenfolge ist kein valider Wert für eine Ganzzahl!");
                 }
 
                 UpdateStations();

@@ -76,6 +76,7 @@
             // closeButton
             // 
             this.closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.closeButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.closeButton.Location = new System.Drawing.Point(902, 627);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
@@ -97,8 +98,10 @@
             // 
             // TimetableEditForm
             // 
+            this.AcceptButton = this.closeButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(989, 662);
             this.Controls.Add(this.bottomDataGridView);
             this.Controls.Add(this.cancelButton);

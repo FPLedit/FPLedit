@@ -40,6 +40,10 @@
             this.bottomChangeNameButton = new System.Windows.Forms.Button();
             this.bottomDeleteTrainButton = new System.Windows.Forms.Button();
             this.bottomTrainListView = new System.Windows.Forms.ListView();
+            this.topNewTrainButton = new System.Windows.Forms.Button();
+            this.bottomNewTrainButton = new System.Windows.Forms.Button();
+            this.topFromToLabel = new System.Windows.Forms.Label();
+            this.bottomFromToLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // closeButton
@@ -71,7 +75,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.topTrainListView.HideSelection = false;
-            this.topTrainListView.Location = new System.Drawing.Point(12, 12);
+            this.topTrainListView.Location = new System.Drawing.Point(12, 27);
             this.topTrainListView.MultiSelect = false;
             this.topTrainListView.Name = "topTrainListView";
             this.topTrainListView.Size = new System.Drawing.Size(634, 196);
@@ -82,7 +86,7 @@
             // topDeleteTrainButton
             // 
             this.topDeleteTrainButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.topDeleteTrainButton.Location = new System.Drawing.Point(652, 99);
+            this.topDeleteTrainButton.Location = new System.Drawing.Point(652, 114);
             this.topDeleteTrainButton.Name = "topDeleteTrainButton";
             this.topDeleteTrainButton.Size = new System.Drawing.Size(102, 23);
             this.topDeleteTrainButton.TabIndex = 15;
@@ -93,7 +97,7 @@
             // topChangeNameButton
             // 
             this.topChangeNameButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.topChangeNameButton.Location = new System.Drawing.Point(652, 12);
+            this.topChangeNameButton.Location = new System.Drawing.Point(652, 27);
             this.topChangeNameButton.Name = "topChangeNameButton";
             this.topChangeNameButton.Size = new System.Drawing.Size(102, 23);
             this.topChangeNameButton.TabIndex = 16;
@@ -104,7 +108,7 @@
             // topChangeLineButton
             // 
             this.topChangeLineButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.topChangeLineButton.Location = new System.Drawing.Point(652, 41);
+            this.topChangeLineButton.Location = new System.Drawing.Point(652, 56);
             this.topChangeLineButton.Name = "topChangeLineButton";
             this.topChangeLineButton.Size = new System.Drawing.Size(102, 23);
             this.topChangeLineButton.TabIndex = 17;
@@ -115,7 +119,7 @@
             // topChangeLocomotiveButton
             // 
             this.topChangeLocomotiveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.topChangeLocomotiveButton.Location = new System.Drawing.Point(652, 70);
+            this.topChangeLocomotiveButton.Location = new System.Drawing.Point(652, 85);
             this.topChangeLocomotiveButton.Name = "topChangeLocomotiveButton";
             this.topChangeLocomotiveButton.Size = new System.Drawing.Size(102, 23);
             this.topChangeLocomotiveButton.TabIndex = 18;
@@ -126,7 +130,7 @@
             // bottomChangeLocomotiveButton
             // 
             this.bottomChangeLocomotiveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bottomChangeLocomotiveButton.Location = new System.Drawing.Point(652, 294);
+            this.bottomChangeLocomotiveButton.Location = new System.Drawing.Point(655, 314);
             this.bottomChangeLocomotiveButton.Name = "bottomChangeLocomotiveButton";
             this.bottomChangeLocomotiveButton.Size = new System.Drawing.Size(102, 23);
             this.bottomChangeLocomotiveButton.TabIndex = 23;
@@ -136,7 +140,7 @@
             // bottomChangeLineButton
             // 
             this.bottomChangeLineButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bottomChangeLineButton.Location = new System.Drawing.Point(652, 265);
+            this.bottomChangeLineButton.Location = new System.Drawing.Point(655, 285);
             this.bottomChangeLineButton.Name = "bottomChangeLineButton";
             this.bottomChangeLineButton.Size = new System.Drawing.Size(102, 23);
             this.bottomChangeLineButton.TabIndex = 22;
@@ -146,7 +150,7 @@
             // bottomChangeNameButton
             // 
             this.bottomChangeNameButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bottomChangeNameButton.Location = new System.Drawing.Point(652, 236);
+            this.bottomChangeNameButton.Location = new System.Drawing.Point(655, 256);
             this.bottomChangeNameButton.Name = "bottomChangeNameButton";
             this.bottomChangeNameButton.Size = new System.Drawing.Size(102, 23);
             this.bottomChangeNameButton.TabIndex = 21;
@@ -156,7 +160,7 @@
             // bottomDeleteTrainButton
             // 
             this.bottomDeleteTrainButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bottomDeleteTrainButton.Location = new System.Drawing.Point(652, 323);
+            this.bottomDeleteTrainButton.Location = new System.Drawing.Point(655, 343);
             this.bottomDeleteTrainButton.Name = "bottomDeleteTrainButton";
             this.bottomDeleteTrainButton.Size = new System.Drawing.Size(102, 23);
             this.bottomDeleteTrainButton.TabIndex = 20;
@@ -169,7 +173,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.bottomTrainListView.HideSelection = false;
-            this.bottomTrainListView.Location = new System.Drawing.Point(12, 236);
+            this.bottomTrainListView.Location = new System.Drawing.Point(15, 256);
             this.bottomTrainListView.MultiSelect = false;
             this.bottomTrainListView.Name = "bottomTrainListView";
             this.bottomTrainListView.Size = new System.Drawing.Size(634, 196);
@@ -177,11 +181,58 @@
             this.bottomTrainListView.UseCompatibleStateImageBehavior = false;
             this.bottomTrainListView.View = System.Windows.Forms.View.Details;
             // 
-            // EditForm
+            // topNewTrainButton
+            // 
+            this.topNewTrainButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.topNewTrainButton.Location = new System.Drawing.Point(652, 143);
+            this.topNewTrainButton.Name = "topNewTrainButton";
+            this.topNewTrainButton.Size = new System.Drawing.Size(102, 23);
+            this.topNewTrainButton.TabIndex = 24;
+            this.topNewTrainButton.Text = "Neuer Zug...";
+            this.topNewTrainButton.UseVisualStyleBackColor = true;
+            this.topNewTrainButton.Click += new System.EventHandler(this.topNewTrainButton_Click);
+            // 
+            // bottomNewTrainButton
+            // 
+            this.bottomNewTrainButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.bottomNewTrainButton.Location = new System.Drawing.Point(655, 372);
+            this.bottomNewTrainButton.Name = "bottomNewTrainButton";
+            this.bottomNewTrainButton.Size = new System.Drawing.Size(102, 23);
+            this.bottomNewTrainButton.TabIndex = 25;
+            this.bottomNewTrainButton.Text = "Neuer Zug...";
+            this.bottomNewTrainButton.UseVisualStyleBackColor = true;
+            // 
+            // topFromToLabel
+            // 
+            this.topFromToLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.topFromToLabel.Location = new System.Drawing.Point(12, 9);
+            this.topFromToLabel.Name = "topFromToLabel";
+            this.topFromToLabel.Size = new System.Drawing.Size(634, 15);
+            this.topFromToLabel.TabIndex = 26;
+            this.topFromToLabel.Text = "Züge von ... nach ...";
+            this.topFromToLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // bottomFromToLabel
+            // 
+            this.bottomFromToLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.bottomFromToLabel.Location = new System.Drawing.Point(12, 238);
+            this.bottomFromToLabel.Name = "bottomFromToLabel";
+            this.bottomFromToLabel.Size = new System.Drawing.Size(634, 15);
+            this.bottomFromToLabel.TabIndex = 27;
+            this.bottomFromToLabel.Text = "Züge von ... nach ...";
+            this.bottomFromToLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // TrainEditForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(766, 515);
+            this.Controls.Add(this.bottomFromToLabel);
+            this.Controls.Add(this.topFromToLabel);
+            this.Controls.Add(this.bottomNewTrainButton);
+            this.Controls.Add(this.topNewTrainButton);
             this.Controls.Add(this.bottomChangeLocomotiveButton);
             this.Controls.Add(this.bottomChangeLineButton);
             this.Controls.Add(this.bottomChangeNameButton);
@@ -195,7 +246,7 @@
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.closeButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-            this.Name = "EditForm";
+            this.Name = "TrainEditForm";
             this.Text = "Züge bearbeiten...";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EditForm_FormClosing);
             this.Load += new System.EventHandler(this.NewEditForm_Load);
@@ -217,6 +268,10 @@
         private System.Windows.Forms.Button bottomChangeNameButton;
         private System.Windows.Forms.Button bottomDeleteTrainButton;
         private System.Windows.Forms.ListView bottomTrainListView;
+        private System.Windows.Forms.Button topNewTrainButton;
+        private System.Windows.Forms.Button bottomNewTrainButton;
+        private System.Windows.Forms.Label topFromToLabel;
+        private System.Windows.Forms.Label bottomFromToLabel;
 
     }
 }

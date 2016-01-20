@@ -40,11 +40,11 @@
             this.bearbeitenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editTimetableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.fplOpenFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.logTextBox = new Buchfahrplan.LogTextBox();
-            this.editTimetableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
@@ -116,8 +116,8 @@
             // bearbeitenToolStripMenuItem
             // 
             this.bearbeitenToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.editToolStripMenuItem,
             this.editLineToolStripMenuItem,
+            this.editToolStripMenuItem,
             this.editTimetableToolStripMenuItem});
             this.bearbeitenToolStripMenuItem.Name = "bearbeitenToolStripMenuItem";
             this.bearbeitenToolStripMenuItem.Size = new System.Drawing.Size(75, 20);
@@ -136,6 +136,13 @@
             this.editLineToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.editLineToolStripMenuItem.Text = "Strecke bearbeiten...";
             this.editLineToolStripMenuItem.Click += new System.EventHandler(this.editLineToolStripMenuItem_Click);
+            // 
+            // editTimetableToolStripMenuItem
+            // 
+            this.editTimetableToolStripMenuItem.Name = "editTimetableToolStripMenuItem";
+            this.editTimetableToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.editTimetableToolStripMenuItem.Text = "Fahrplan bearbeiten...";
+            this.editTimetableToolStripMenuItem.Click += new System.EventHandler(this.editTimetableToolStripMenuItem_Click);
             // 
             // statusStrip
             // 
@@ -166,13 +173,6 @@
             this.logTextBox.ReadOnly = true;
             this.logTextBox.Size = new System.Drawing.Size(284, 215);
             this.logTextBox.TabIndex = 2;
-            // 
-            // editTimetableToolStripMenuItem
-            // 
-            this.editTimetableToolStripMenuItem.Name = "editTimetableToolStripMenuItem";
-            this.editTimetableToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
-            this.editTimetableToolStripMenuItem.Text = "Fahrplan bearbeiten...";
-            this.editTimetableToolStripMenuItem.Click += new System.EventHandler(this.editTimetableToolStripMenuItem_Click);
             // 
             // Form1
             // 

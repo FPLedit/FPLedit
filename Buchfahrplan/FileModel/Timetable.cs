@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Buchfahrplan.Import;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,7 +21,8 @@ namespace Buchfahrplan.FileModel
 
         public Timetable()
         {
-            
+            Stations = new List<Station>();
+            Trains = new List<Train>();
         }
 
         public static Timetable GenerateTestTimetable()
@@ -64,7 +66,7 @@ namespace Buchfahrplan.FileModel
             }
             catch (SerializationException e)
             {
-                throw new Exception("Ein Fehler ist beim Speichern der Datei aufgetreten: " + e.Message);
+                throw new ExportException("Ein Fehler ist beim Speichern der Datei aufgetreten: " + e.Message);
             }
             finally
             {
@@ -84,7 +86,7 @@ namespace Buchfahrplan.FileModel
             }
             catch (SerializationException e)
             {
-                throw new Exception("Ein Fehler ist beim Öffnen der Datei aufgetreten: " + e.Message);
+                throw new ImportException("Ein Fehler ist beim Öffnen der Datei aufgetreten: " + e.Message);
             }
             finally
             {
@@ -93,5 +95,20 @@ namespace Buchfahrplan.FileModel
 
             return tt;
         }
-    }
+
+        public string GetLineName(bool negative)
+        {
+            string first = Stations.First().Name;
+            string last = Stations.Last().Name;          
+
+            if (!negative)
+            {
+                return first + " - " + last;
+            }
+            else
+            {
+                return last + " - " + first;
+            }
+        }
+    }    
 }

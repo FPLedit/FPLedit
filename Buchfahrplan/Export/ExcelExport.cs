@@ -1,4 +1,6 @@
-﻿using Buchfahrplan.FileModel;
+﻿#if OFFICE
+
+using Buchfahrplan.FileModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,13 +12,13 @@ using System.Runtime.InteropServices;
 
 namespace Buchfahrplan.Export
 {
-    public static class ExcelExport
+    public class ExcelExport : IExport
     {
         private static Font headingFont = new Font("DIN 1451 Mittelschrift Alt", 15);
         private static Font subHeadingFont = new Font("DIN 1451 Mittelschrift Alt", 12);
         private static Font cellFont = new Font("DIN 1451 Mittelschrift Alt", 11);
 
-        public static void Export(Timetable timetable, string filename, ExportFileType filetype)
+        public void Export(Timetable timetable, string filename)
         {
             Excel.Application objExcel = new Excel.Application();
             Excel.Workbook workbook = objExcel.Workbooks.Add();
@@ -42,7 +44,7 @@ namespace Buchfahrplan.Export
                 cellBufferLine++;
 
                 cellBuffer[cellBufferLine, 0] = "Tfz " + train.Locomotive;
-                cellBufferLine++;                
+                cellBufferLine++;
 
                 for (int x = 0; x <= 4; x++)
                 {
@@ -103,8 +105,9 @@ namespace Buchfahrplan.Export
                 cellBufferLine += 3;
             }
 
-            worksheet.Range["A1:E" + lineCount.ToString()]
-                .set_Value(Excel.XlRangeValueDataType.xlRangeValueDefault, cellBuffer);
+            Excel.Range range = worksheet.Range["A1:E" + lineCount.ToString()];
+            range.set_Value(Excel.XlRangeValueDataType.xlRangeValueDefault, cellBuffer);
+            Marshal.ReleaseComObject(range);
 
             #endregion
 
@@ -169,8 +172,8 @@ namespace Buchfahrplan.Export
 
                 // Spaltenerklärungen
                 Excel.Range cell2 = worksheet.Cells[line, 1];
-                Excel.Range row = cell.EntireRow;
-                col.RowHeight = 100;
+                Excel.Range row = cell2.EntireRow;
+                row.RowHeight = 100;
 
                 Marshal.ReleaseComObject(row);
                 Marshal.ReleaseComObject(cell2);
@@ -239,6 +242,8 @@ namespace Buchfahrplan.Export
 
                 hBreaks.Add(worksheet.Range["A" + line.ToString()]);
             }
+
+            ExportFileType filetype = ExportFileType.XlFile;
 
             switch (filetype)
             {
@@ -326,47 +331,5 @@ namespace Buchfahrplan.Export
         XlFile,
         PdfFile
     }
-
-    /*internal sealed class FontImpl : Excel.Font 
-    {
-        public Excel.Application Application { get; private set; }
-
-        dynamic Background { get; set; }
-
-        dynamic Bold { get; set; }
-
-        dynamic Color { get; set; }
-
-        dynamic ColorIndex { get; set; }
-
-        public Excel.XlCreator Creator { get; private set; }
-
-        dynamic FontStyle { get; set; }
-
-        dynamic Italic { get; set; }
-
-        dynamic Name { get; set; }
-
-        dynamic OutlineFont { get; set; }
-
-        dynamic Parent { get; }
-
-        dynamic Shadow { get; set; }
-
-        dynamic Size { get; set; }
-
-        dynamic Strikethrough { get; set; }
-
-        dynamic Subscript { get; set; }
-
-        dynamic Superscript { get; set; }
-
-        dynamic ThemeColor { get; set; }
-
-        Excel.XlThemeFont ThemeFont { get; set; }
-
-        dynamic TintAndShade { get; set; }
-
-        dynamic Underline { get; set; }        
-    }*/
 }
+#endif

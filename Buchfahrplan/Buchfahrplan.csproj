@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Buchfahrplan</RootNamespace>
     <AssemblyName>Buchfahrplan</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -26,6 +26,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,10 +34,11 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;OFFICE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <WarningLevel>1</WarningLevel>
     <UseVSHostingProcess>false</UseVSHostingProcess>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -46,13 +48,14 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>
     </ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <Win32Resource>F:\Buchfahrplan\Buchfahrplan\Buchfahrplan\Icons\Icons.res</Win32Resource>
+    <Win32Resource>F:\VS-Projects\Buchfahrplan\Buchfahrplan\Buchfahrplan\Icons\Icons.res</Win32Resource>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
@@ -80,7 +83,24 @@
     <Compile Include="EditForms\DaysEditForm.Designer.cs">
       <DependentUpon>DaysEditForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="EditForms\NewStationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditForms\NewStationForm.Designer.cs">
+      <DependentUpon>NewStationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditForms\NewTrainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditForms\NewTrainForm.Designer.cs">
+      <DependentUpon>NewTrainForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Export\ExcelExport.cs" />
+    <Compile Include="Export\HtmlExport.cs" />
+    <Compile Include="Export\IExport.cs" />
+    <Compile Include="FileModel\Station.cs" />
+    <Compile Include="FileModel\Timetable.cs" />
+    <Compile Include="FileModel\Train.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -94,6 +114,8 @@
     <Compile Include="EditForms\LineEditForm.Designer.cs">
       <DependentUpon>LineEditForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Import\ExportException.cs" />
+    <Compile Include="Import\ImportException.cs" />
     <Compile Include="LogTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -123,6 +145,12 @@
     <EmbeddedResource Include="EditForms\DaysEditForm.resx">
       <DependentUpon>DaysEditForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="EditForms\NewStationForm.resx">
+      <DependentUpon>NewStationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditForms\NewTrainForm.resx">
+      <DependentUpon>NewTrainForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -150,6 +178,9 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Content Include="Icons\Icons.res" />
+    <None Include="output.tmpl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -210,10 +241,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FileModel\FileModel.csproj">
-      <Project>{d9f51f61-4fc5-4cc1-bde8-162a41f6ae81}</Project>
-      <Name>FileModel</Name>
-    </ProjectReference>
+    <Folder Include="CompressLib\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

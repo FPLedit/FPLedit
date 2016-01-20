@@ -16,8 +16,8 @@ namespace Buchfahrplan
 {
     public partial class TrainEditForm : Form
     {
-        private List<Train> trains;
-        private List<Train> trains_undo;
+        private Timetable tt;
+        private Timetable tt_undo;
 
         public TrainEditForm()
         {
@@ -26,10 +26,13 @@ namespace Buchfahrplan
             this.Icon = Resources.programm;
         }
 
-        public void Init(List<Train> trains)
+        public void Init(Timetable tt)
         {
-            this.trains = trains;
-            this.trains_undo = trains;
+            this.tt = tt;
+            this.tt_undo = tt;
+
+            topFromToLabel.Text = "Züge " + tt.GetLineName(false);
+            topFromToLabel.Text = "Züge " + tt.GetLineName(true);
             UpdateTrains();
         }
 
@@ -38,7 +41,7 @@ namespace Buchfahrplan
             topTrainListView.Items.Clear();
             bottomTrainListView.Items.Clear();
 
-            foreach (var train in trains.Where(o => o.Negative == false))
+            foreach (var train in tt.Trains.Where(o => o.Negative == false))
             {
                 topTrainListView.Items.Add(new ListViewItem(new[] { 
                     train.Name, 
@@ -48,7 +51,7 @@ namespace Buchfahrplan
                     { Tag = train });
             }
 
-            foreach (var train in trains.Where(o => o.Negative == true))
+            foreach (var train in tt.Trains.Where(o => o.Negative == true))
             {
                 bottomTrainListView.Items.Add(new ListViewItem(new[] { 
                     train.Name, 
@@ -81,7 +84,7 @@ namespace Buchfahrplan
         private void cancelButton_Click(object sender, EventArgs e)
         {
             this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            trains = trains_undo;
+            tt = tt_undo;
 
             this.Close();
         }
@@ -96,10 +99,16 @@ namespace Buchfahrplan
 
         private void topDeleteTrainButton_Click(object sender, EventArgs e)
         {
+            if (topTrainListView.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug löschen");
+                return;
+            }
+
             if (topTrainListView.SelectedItems.Count > 0)
             {
                 ListViewItem item = (ListViewItem)topTrainListView.Items[topTrainListView.SelectedIndices[0]];
-                trains.Remove((Train)item.Tag);
+                tt.Trains.Remove((Train)item.Tag);
 
                 UpdateTrains();
             }
@@ -107,13 +116,19 @@ namespace Buchfahrplan
 
         private void topChangeNameButton_Click(object sender, EventArgs e)
         {
+            if (topTrainListView.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Namen ändern");
+                return;
+            }
+
             string newName = Interaction.InputBox("Bitte einen neuen Namen eingeben:", "Namen ändern");
 
             if (topTrainListView.SelectedItems.Count > 0)
             {
                 ListViewItem item = (ListViewItem)topTrainListView.Items[topTrainListView.SelectedIndices[0]];
 
-                trains[trains.IndexOf((Train)item.Tag)].Name = newName;
+                tt.Trains[tt.Trains.IndexOf((Train)item.Tag)].Name = newName;
 
                 UpdateTrains();
             }
@@ -121,13 +136,19 @@ namespace Buchfahrplan
 
         private void topChangeLineButton_Click(object sender, EventArgs e)
         {
+            if (topTrainListView.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Streckennamen ändern");
+                return;
+            }
+
             string newLine = Interaction.InputBox("Bitte einen neuen Steckennamen eingeben:", "Streckennamen ändern");
 
             if (topTrainListView.SelectedItems.Count > 0)
             {
                 ListViewItem item = (ListViewItem)topTrainListView.Items[topTrainListView.SelectedIndices[0]];
 
-                trains[trains.IndexOf((Train)item.Tag)].Line = newLine;
+                tt.Trains[tt.Trains.IndexOf((Train)item.Tag)].Line = newLine;
 
                 UpdateTrains();
             }
@@ -135,13 +156,19 @@ namespace Buchfahrplan
 
         private void topChangeLocomotiveButton_Click(object sender, EventArgs e)
         {
+            if (topTrainListView.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Tfz ändern");
+                return;
+            }
+
             string newLocomotive = Interaction.InputBox("Bitte einen neuen Namen eingeben:", "Tfz ändern");
 
             if (topTrainListView.SelectedItems.Count > 0)
             {
                 ListViewItem item = (ListViewItem)topTrainListView.Items[topTrainListView.SelectedIndices[0]];
 
-                trains[trains.IndexOf((Train)item.Tag)].Locomotive = newLocomotive;
+                tt.Trains[tt.Trains.IndexOf((Train)item.Tag)].Locomotive = newLocomotive;
 
                 UpdateTrains();
             }
@@ -151,10 +178,16 @@ namespace Buchfahrplan
 
         private void bottomDeleteTrainButton_Click(object sender, EventArgs e)
         {
+            if (bottomTrainListView.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug löschen");
+                return;
+            }
+
             if (bottomTrainListView.SelectedItems.Count > 0)
             {
                 ListViewItem item = (ListViewItem)bottomTrainListView.Items[bottomTrainListView.SelectedIndices[0]];
-                trains.Remove((Train)item.Tag);
+                tt.Trains.Remove((Train)item.Tag);
 
                 UpdateTrains();
             }
@@ -162,13 +195,19 @@ namespace Buchfahrplan
 
         private void bottomChangeNameButton_Click(object sender, EventArgs e)
         {
+            if (bottomTrainListView.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Namen ändern");
+                return;
+            }
+
             string newName = Interaction.InputBox("Bitte einen neuen Namen eingeben:", "Namen ändern");
 
             if (bottomTrainListView.SelectedItems.Count > 0)
             {
                 ListViewItem item = (ListViewItem)bottomTrainListView.Items[bottomTrainListView.SelectedIndices[0]];
 
-                trains[trains.IndexOf((Train)item.Tag)].Name = newName;
+                tt.Trains[tt.Trains.IndexOf((Train)item.Tag)].Name = newName;
 
                 UpdateTrains();
             }
@@ -176,13 +215,19 @@ namespace Buchfahrplan
 
         private void bottomChangeLineButton_Click(object sender, EventArgs e)
         {
+            if (bottomTrainListView.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Streckennamen ändern");
+                return;
+            }
+
             string newLine = Interaction.InputBox("Bitte einen neuen Steckennamen eingeben:", "Streckennamen ändern");
 
             if (bottomTrainListView.SelectedItems.Count > 0)
             {
                 ListViewItem item = (ListViewItem)bottomTrainListView.Items[bottomTrainListView.SelectedIndices[0]];
 
-                trains[trains.IndexOf((Train)item.Tag)].Line = newLine;
+                tt.Trains[tt.Trains.IndexOf((Train)item.Tag)].Line = newLine;
 
                 UpdateTrains();
             }
@@ -190,16 +235,50 @@ namespace Buchfahrplan
 
         private void bottomChangeLocomotiveButton_Click(object sender, EventArgs e)
         {
+            if (bottomTrainListView.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Tfz ändern");
+                return;
+            }
+
             string newLocomotive = Interaction.InputBox("Bitte einen neuen Namen eingeben:", "Tfz ändern");
 
             if (bottomTrainListView.SelectedItems.Count > 0)
             {
                 ListViewItem item = (ListViewItem)bottomTrainListView.Items[bottomTrainListView.SelectedIndices[0]];
 
-                trains[trains.IndexOf((Train)item.Tag)].Locomotive = newLocomotive;
+                tt.Trains[tt.Trains.IndexOf((Train)item.Tag)].Locomotive = newLocomotive;
 
                 UpdateTrains();
             }
+        }
+
+        private void topNewTrainButton_Click(object sender, EventArgs e)
+        {
+            NewTrainForm ntf = new NewTrainForm();
+            DialogResult res = ntf.ShowDialog();
+            if (res == System.Windows.Forms.DialogResult.OK)
+            {
+                Train tra = ntf.NewTrain;
+                if (!tra.Negative)
+                {
+                    foreach (var sta in tt.Stations.OrderBy(s => s.Kilometre))
+                    {
+                        tra.Arrivals.Add(sta, new DateTime());                        
+                    }
+                }
+                else
+                {
+                    foreach (var sta in tt.Stations.OrderByDescending(s => s.Kilometre))
+                    {
+                        tra.Arrivals.Add(sta, new DateTime());
+                    }
+                }
+
+                tt.Trains.Add(tra);
+
+                UpdateTrains();
+            }            
         }
     }
 }
