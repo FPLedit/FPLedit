@@ -114,7 +114,7 @@
     <Compile Include="EditForms\LineEditForm.Designer.cs">
       <DependentUpon>LineEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Import\ExportException.cs" />
+    <Compile Include="Export\ExportException.cs" />
     <Compile Include="Import\ImportException.cs" />
     <Compile Include="LogTextBox.cs">
       <SubType>Component</SubType>
@@ -240,9 +240,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="CompressLib\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
