@@ -50,7 +50,7 @@ namespace Buchfahrplan
             listView1.Columns.Add("Zugnummer");
             listView1.Columns.Add("Strecke");
             listView1.Columns.Add("Tfz");
-            listView1.Columns.Add("Umgekehrt");            
+            listView1.Columns.Add("Umgekehrt");
         }
 
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
@@ -72,15 +72,17 @@ namespace Buchfahrplan
         }
 
         private void saveTrainButton_Click(object sender, EventArgs e)
-        {
-            //TODO: Lokomotive
+        {            
             if (listView1.SelectedItems.Count > 0)
             {
-                ListViewItem item = (ListViewItem)listView1.Items[listView1.SelectedIndices[0]];
+                for (int i = 0; i < listView1.SelectedIndices.Count; i++)
+                {
+                    ListViewItem item = (ListViewItem)listView1.Items[listView1.SelectedIndices[i]];
 
-                trains[trains.IndexOf((Train)item.Tag)].Line = lineTextBox.Text;
-                trains[trains.IndexOf((Train)item.Tag)].Locomotive = locomotiveTextBox.Text;
-                trains[trains.IndexOf((Train)item.Tag)].Negative = negativeCheckBox.Checked;
+                    trains[trains.IndexOf((Train)item.Tag)].Line = lineTextBox.Text;
+                    trains[trains.IndexOf((Train)item.Tag)].Locomotive = locomotiveTextBox.Text;
+                    trains[trains.IndexOf((Train)item.Tag)].Negative = negativeCheckBox.Checked;                    
+                }
 
                 UpdateTrains();
             }

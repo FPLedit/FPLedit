@@ -13,52 +13,65 @@ namespace Buchfahrplan
     {
         public static Timetable Import(string filename)
         {
-             List<Station> stas = new List<Station>();
-             List<Train> trs = new List<Train>();
-             XElement el = XElement.Load(filename);
+            List<Station> stas = new List<Station>();
+            List<Train> trs = new List<Train>();
+            XElement el = XElement.Load(filename);
 
-             XElement stations = el.Element("stations");
-             foreach (var station in stations.Elements())
-             {
-                 stas.Add(new Station() 
-                 { 
-                     Name = station.Attribute("name").Value, 
-                     Kilometre = float.Parse(station.Attribute("km").Value, CultureInfo.InvariantCulture) 
-                 });
-             }
+            XElement stations = el.Element("stations");
+            foreach (var station in stations.Elements())
+            {
+                stas.Add(new Station()
+                {
+                    Name = station.Attribute("name").Value,
+                    Kilometre = float.Parse(station.Attribute("km").Value, CultureInfo.InvariantCulture)
+                });
+            }
 
-             XElement trains = el.Element("trains");
-             foreach (var train in trains.Elements())
-             {
-                 Dictionary<Station, DateTime> ar = new Dictionary<Station, DateTime>();
-                 Dictionary<Station, DateTime> dp = new Dictionary<Station, DateTime>();
-                 int i = 0;
+            string line1 = stas.First().Name + " - " + stas.Last().Name;
+            string line2 = stas.Last().Name + " - " + stas.First().Name;
 
-                 foreach (var time in train.Elements())
-                 {
-                     //MessageBox.Show(time.Attribute("a").Value);
-                     try { ar.Add(stas.ElementAt(i), DateTime.ParseExact(time.Attribute("a").Value, "HH:mm", CultureInfo.InvariantCulture)); }
-                     catch { }
+            XElement trains = el.Element("trains");
+            foreach (var train in trains.Elements())
+            {
+                Dictionary<Station, DateTime> ar = new Dictionary<Station, DateTime>();
+                Dictionary<Station, DateTime> dp = new Dictionary<Station, DateTime>();
+                int i = 0;
 
-                     try { dp.Add(stas.ElementAt(i), DateTime.Parse(time.Attribute("d").Value)); }
-                     catch { }
-                     i++;
-                 }
+                foreach (var time in train.Elements())
+                {
+                    try { ar.Add(stas.ElementAt(i), DateTime.ParseExact(time.Attribute("a").Value, "HH:mm", CultureInfo.InvariantCulture)); }
+                    catch { }
 
-                 trs.Add(new Train()
-                 {
-                     Name = train.Attribute("name").Value, 
-                     Arrivals = ar, 
-                     Departures = dp                     
-                 });
-             }
+                    try { dp.Add(stas.ElementAt(i), DateTime.Parse(time.Attribute("d").Value)); }
+                    catch { }
+                    i++;
+                }
 
-             return new Timetable()
-             {
-                 Name = el.Attribute("name").Value,
-                 Stations = stas,
-                 Trains = trs
-             };
+                bool neg = IsNegative(ar, dp, stas.First(), stas.Last());
+                trs.Add(new Train()
+                {
+                    Name = train.Attribute("name").Value,
+                    Arrivals = ar,
+                    Departures = dp,
+                    Negative = neg,
+                    Line = neg ? line2 : line1
+                });
+            }
+
+            return new Timetable()
+            {
+                Name = el.Attribute("name").Value,
+                Stations = stas,
+                Trains = trs
+            };
+        }
+
+        private static bool IsNegative(Dictionary<Station, DateTime> ar, Dictionary<Station, DateTime> dp, Station first, Station last)
+        {
+            DateTime firsttime = ar.ContainsKey(first) ? ar.First().Value : dp.First().Value;
+            DateTime lasttime = ar.ContainsKey(last) ? ar.Last().Value : dp.Last().Value;
+
+            return firsttime > lasttime;
         }
     }
 }
