@@ -2,9 +2,7 @@
 using System;
 using System.IO;
 using System.Windows.Forms;
-using Buchfahrplan.Export;
 using Buchfahrplan.Properties;
-using Buchfahrplan.Import;
 using Buchfahrplan.BuchfahrplanExport;
 
 namespace Buchfahrplan
@@ -97,7 +95,7 @@ namespace Buchfahrplan
                 {
                     tt = FplImport.Import(filename);
                 }
-                catch (ImportException ex)
+                catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
                     return;
@@ -116,7 +114,7 @@ namespace Buchfahrplan
                 {
                     tt = Timetable.OpenFromFile(filename);
                 }
-                catch (ExportException ex)
+                catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
                     return;

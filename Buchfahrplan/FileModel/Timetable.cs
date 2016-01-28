@@ -1,6 +1,4 @@
-﻿using Buchfahrplan.Export;
-using Buchfahrplan.Import;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -67,7 +65,7 @@ namespace Buchfahrplan.FileModel
             }
             catch (SerializationException e)
             {
-                throw new ExportException("Ein Fehler ist beim Speichern der Datei aufgetreten: " + e.Message);
+                throw new Exception("Ein Fehler ist beim Speichern der Datei aufgetreten: " + e.Message);
             }
             finally
             {
@@ -87,7 +85,7 @@ namespace Buchfahrplan.FileModel
             }
             catch (SerializationException e)
             {
-                throw new ImportException("Ein Fehler ist beim Öffnen der Datei aufgetreten: " + e.Message);
+                throw new Exception("Ein Fehler ist beim Öffnen der Datei aufgetreten: " + e.Message);
             }
             finally
             {

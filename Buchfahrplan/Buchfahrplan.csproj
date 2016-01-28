@@ -107,15 +107,13 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Import\FplImport.cs" />
+    <Compile Include="FplImport.cs" />
     <Compile Include="EditForms\LineEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="EditForms\LineEditForm.Designer.cs">
       <DependentUpon>LineEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Export\ExportException.cs" />
-    <Compile Include="Import\ImportException.cs" />
     <Compile Include="LogTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
