@@ -10,7 +10,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
-namespace Buchfahrplan.Export
+namespace Buchfahrplan.BuchfahrplanExport
 {
     public class ExcelExport : IExport
     {

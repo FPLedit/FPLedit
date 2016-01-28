@@ -95,9 +95,9 @@
     <Compile Include="EditForms\NewTrainForm.Designer.cs">
       <DependentUpon>NewTrainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Export\ExcelExport.cs" />
-    <Compile Include="Export\HtmlExport.cs" />
-    <Compile Include="Export\IExport.cs" />
+    <Compile Include="BuchfahrplanExport\ExcelExport.cs" />
+    <Compile Include="BuchfahrplanExport\HtmlExport.cs" />
+    <Compile Include="IExport.cs" />
     <Compile Include="FileModel\Station.cs" />
     <Compile Include="FileModel\Timetable.cs" />
     <Compile Include="FileModel\Train.cs" />

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Buchfahrplan.Export
+namespace Buchfahrplan.BuchfahrplanExport
 {
     public class HtmlExport : IExport
     {
@@ -81,21 +81,21 @@ namespace Buchfahrplan.Export
 
             return files;
         }
-    }
 
-    public class Template
-    {
-        public string GlobalTemplate { get; private set; }
-
-        public string TrainTemplate { get; private set; }
-
-        public string LineTemplate { get; private set; }
-
-        public Template(Dictionary<string, string> filetable)
+        private class Template
         {
-            GlobalTemplate = filetable["GLOB_TEMPLATE"];
-            TrainTemplate = filetable["TRAIN_TEMPLATE"];
-            LineTemplate = filetable["LINE_TEMPLATE"];
+            public string GlobalTemplate { get; private set; }
+
+            public string TrainTemplate { get; private set; }
+
+            public string LineTemplate { get; private set; }
+
+            public Template(Dictionary<string, string> filetable)
+            {
+                GlobalTemplate = filetable["GLOB_TEMPLATE"];
+                TrainTemplate = filetable["TRAIN_TEMPLATE"];
+                LineTemplate = filetable["LINE_TEMPLATE"];
+            }
         }
-    }
+    }    
 }
