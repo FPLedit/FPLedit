@@ -51,11 +51,11 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>programm.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <Win32Resource>F:\VS-Projects\Buchfahrplan\Buchfahrplan\Buchfahrplan\Icons\Icons.res</Win32Resource>
+    <Win32Resource>
+    </Win32Resource>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
@@ -137,9 +137,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Content Include="Icons\fplfile.ico" />
-    <Content Include="Icons\Icons.rct" />
-    <Content Include="Icons\programm.ico" />
+    <Content Include="programm.ico" />
     <EmbeddedResource Include="EditForms\DaysEditForm.resx">
       <DependentUpon>DaysEditForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -175,7 +173,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Content Include="Icons\Icons.res" />
     <None Include="output.tmpl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
