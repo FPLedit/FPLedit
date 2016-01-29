@@ -1,6 +1,4 @@
-﻿#if OFFICE
-
-using Buchfahrplan.FileModel;
+﻿using Buchfahrplan.FileModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -332,4 +330,3 @@ namespace Buchfahrplan.BuchfahrplanExport
         PdfFile
     }
 }
-#endif

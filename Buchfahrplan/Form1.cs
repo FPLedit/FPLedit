@@ -51,10 +51,11 @@ namespace Buchfahrplan
         private void exportToolStripMenuItem_Click(object sender, EventArgs e)
         {
 #if OFFICE
-            export = new ExcelExport();
+            //export = new ExcelExport();
 #else
             export = new HtmlExport();
 #endif
+            export = new HtmlExport();
 
             DialogResult result = excelSaveFileDialog.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
