@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buchfahrplan", "Buchfahrplan\Buchfahrplan.csproj", "{2809F962-DC06-4740-8AD0-0981891446DA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "compress", "compress\compress.csproj", "{CA2D0C24-FD1D-4997-904A-C4E806E70634}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuchfahrplanWebViewer", "BuchfahrplanWebViewer\BuchfahrplanWebViewer.csproj", "{B4FD4355-1DDF-4A0B-A006-C06C2FDF73BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{CA2D0C24-FD1D-4997-904A-C4E806E70634}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA2D0C24-FD1D-4997-904A-C4E806E70634}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA2D0C24-FD1D-4997-904A-C4E806E70634}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4FD4355-1DDF-4A0B-A006-C06C2FDF73BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4FD4355-1DDF-4A0B-A006-C06C2FDF73BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4FD4355-1DDF-4A0B-A006-C06C2FDF73BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4FD4355-1DDF-4A0B-A006-C06C2FDF73BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
