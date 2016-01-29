@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Buchfahrplan.BuchfahrplanExport
+namespace Buchfahrplan.BuchfahrplanHtmlExport
 {
     public class HtmlExport : IExport
     {

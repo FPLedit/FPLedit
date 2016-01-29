@@ -7,8 +7,8 @@
     <ProjectGuid>{B8C290DF-2E82-4C7F-8C62-5ED797005748}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ExcelBuchfahrplan</RootNamespace>
-    <AssemblyName>ExcelBuchfahrplan</AssemblyName>
+    <RootNamespace>Buchfahrplan.BuchfahrplanExcelExport</RootNamespace>
+    <AssemblyName>Buchfahrplan.BuchfahrplanExcelExport</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

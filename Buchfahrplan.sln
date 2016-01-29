@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buchfahrplan", "Buchfahrplan\Buchfahrplan.csproj", "{2809F962-DC06-4740-8AD0-0981891446DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelBuchfahrplan", "ExcelBuchfahrplan\ExcelBuchfahrplan.csproj", "{B8C290DF-2E82-4C7F-8C62-5ED797005748}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buchfahrplan.BuchfahrplanExcelExport", "ExcelBuchfahrplan\Buchfahrplan.BuchfahrplanExcelExport.csproj", "{B8C290DF-2E82-4C7F-8C62-5ED797005748}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buchfahrplan.FileModel", "Buchfahrplan.FileModel\Buchfahrplan.FileModel.csproj", "{CE38D005-22B2-4B15-80BA-614F038240FD}"
 EndProject

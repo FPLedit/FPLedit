@@ -8,7 +8,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
-namespace Buchfahrplan.BuchfahrplanExport
+namespace Buchfahrplan.BuchfahrplanExcelExport
 {
     public class ExcelExport : IExport
     {
