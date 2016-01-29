@@ -12,6 +12,15 @@ namespace Buchfahrplan.BuchfahrplanExport
     public class HtmlExport : IExport
     {
         private Template template;
+
+        public string Filter
+        {
+            get
+            {
+                return "HTML Datei (*.html)|*.html";
+            }
+        }
+
         public HtmlExport()
         {
             template = new Template(Decompress("output.tmpl"));
@@ -20,7 +29,7 @@ namespace Buchfahrplan.BuchfahrplanExport
         public void Export(FileModel.Timetable timetable, string filename)
         {
             string cont = template.GlobalTemplate.Replace("{0}", BuildTrain(timetable));
-            File.WriteAllText(filename, cont);  
+            File.WriteAllText(filename, cont);
         }
 
         private string BuildTrain(Timetable tt)
@@ -30,7 +39,7 @@ namespace Buchfahrplan.BuchfahrplanExport
             {
                 string val = "";
                 foreach (var s in tt.Stations.OrderBy(o => o.Kilometre))
-                {                   
+                {
                     val += template.LineTemplate
                         .Replace("{0}", s.Kilometre.ToString("0.0"))
                         .Replace("{1}", s.MaxVelocity.ToString("#")).Replace("{2}", s.Name)
@@ -75,7 +84,7 @@ namespace Buchfahrplan.BuchfahrplanExport
                         filecont += line;
                     }
                 }
-                if (file != "")                
+                if (file != "")
                     files.Add(file, filecont);
             }
 
@@ -97,5 +106,5 @@ namespace Buchfahrplan.BuchfahrplanExport
                 LineTemplate = filetable["LINE_TEMPLATE"];
             }
         }
-    }    
+    }
 }

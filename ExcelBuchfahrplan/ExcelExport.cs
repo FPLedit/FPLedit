@@ -16,13 +16,21 @@ namespace Buchfahrplan.BuchfahrplanExport
         private static Font subHeadingFont = new Font("DIN 1451 Mittelschrift Alt", 12);
         private static Font cellFont = new Font("DIN 1451 Mittelschrift Alt", 11);
 
+        public string Filter
+        {
+            get
+            {
+                return "Excel Datei (*.xlsx)|*.xlsx";
+            }
+        }
+
         public void Export(Timetable timetable, string filename)
         {
             Excel.Application objExcel = new Excel.Application();
             Excel.Workbook workbook = objExcel.Workbooks.Add();
             Excel.Worksheet worksheet = workbook.Worksheets["Tabelle1"];
             Excel.HPageBreaks hBreaks = worksheet.HPageBreaks;
-            objExcel.Visible = true;            
+            objExcel.Visible = true;
 
             int lineCount = timetable.Trains.Count * (timetable.Stations.Count + 8);
             int columnCount = 5;
@@ -67,10 +75,10 @@ namespace Buchfahrplan.BuchfahrplanExport
                         cellBuffer[cellBufferLine, 1] = station.MaxVelocity.ToString("#");
 
                         cellBuffer[cellBufferLine, 2] = station.Name;
-       
+
                         try { cellBuffer[cellBufferLine, 3] = train.Arrivals[station].ToShortTimeString(); }
                         catch { }
-   
+
                         try { cellBuffer[cellBufferLine, 4] = train.Departures[station].ToShortTimeString(); }
                         catch { }
 
@@ -121,7 +129,7 @@ namespace Buchfahrplan.BuchfahrplanExport
             int line = 1;
             foreach (Train train in timetable.Trains)
             {
-                SetTextAlignment(worksheet.Range["A" + line.ToString() + ":A" + (line + 1).ToString()], 
+                SetTextAlignment(worksheet.Range["A" + line.ToString() + ":A" + (line + 1).ToString()],
                     HTextAlignment.Center, VTextAlignment.Middle);
 
                 // Kopf zeichnen
@@ -141,7 +149,7 @@ namespace Buchfahrplan.BuchfahrplanExport
 
                 // Spaltennummern
                 Excel.Range range1 = worksheet.Range["A" + line.ToString() + ":E" + (line + 1).ToString()];
-                SetTextAlignment(range1,  HTextAlignment.Center, VTextAlignment.Top);
+                SetTextAlignment(range1, HTextAlignment.Center, VTextAlignment.Top);
                 SetFont(range1, cellFont);
 
                 Excel.Borders border1 = range1.Borders;
@@ -211,7 +219,7 @@ namespace Buchfahrplan.BuchfahrplanExport
                     }
 
                     line++;
-                }                
+                }
 
                 // Ende der Tabelle
                 Excel.Range range5 = worksheet.Range["A" + line.ToString() + ":E" + line.ToString()];

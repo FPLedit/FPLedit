@@ -38,8 +38,8 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bearbeitenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editTimetableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -48,10 +48,6 @@
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // excelSaveFileDialog
-            // 
-            this.excelSaveFileDialog.Filter = "Excel Datei (*.xlsx)|*.xlsx";
             // 
             // bfplSaveFileDialog
             // 
@@ -123,19 +119,19 @@
             this.bearbeitenToolStripMenuItem.Size = new System.Drawing.Size(75, 20);
             this.bearbeitenToolStripMenuItem.Text = "Bearbeiten";
             // 
-            // editToolStripMenuItem
-            // 
-            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
-            this.editToolStripMenuItem.Text = "Züge bearbeiten...";
-            this.editToolStripMenuItem.Click += new System.EventHandler(this.editTrainsToolStripMenuItem_Click);
-            // 
             // editLineToolStripMenuItem
             // 
             this.editLineToolStripMenuItem.Name = "editLineToolStripMenuItem";
             this.editLineToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.editLineToolStripMenuItem.Text = "Strecke bearbeiten...";
             this.editLineToolStripMenuItem.Click += new System.EventHandler(this.editLineToolStripMenuItem_Click);
+            // 
+            // editToolStripMenuItem
+            // 
+            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.editToolStripMenuItem.Text = "Züge bearbeiten...";
+            this.editToolStripMenuItem.Click += new System.EventHandler(this.editTrainsToolStripMenuItem_Click);
             // 
             // editTimetableToolStripMenuItem
             // 
@@ -161,7 +157,7 @@
             // 
             // fplOpenFileDialog
             // 
-            this.fplOpenFileDialog.Filter = "Buchfahrplan Dateien (*.bfpl)|*.bfpl|jTrainGraph Fahrplan Dateien (*.fpl)|*.fpl";
+            this.fplOpenFileDialog.Filter = "jTrainGraph Fahrplan Dateien (*.fpl)|*.fpl|Buchfahrplan Dateien (*.bfpl)|*.bfpl";
             // 
             // logTextBox
             // 

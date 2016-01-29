@@ -3,7 +3,8 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 using Buchfahrplan.Properties;
-using Buchfahrplan.BuchfahrplanExport;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Buchfahrplan
 {
@@ -16,12 +17,12 @@ namespace Buchfahrplan
         private LineEditForm liEdit;
         private TimetableEditForm ttEdit;
 
-        private IExport export;
-
         private bool fileOpened = false;
         private bool fileSaved = false;
         private bool lineCreated = false;
         private bool trainsCreated = false;
+
+        List<IExport> exports;
 
         public Form1()
         {
@@ -41,25 +42,27 @@ namespace Buchfahrplan
                 string filename = args[1];
                 OpenFile(filename);
             }
+
+            exports = new List<IExport>();
         }       
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            foreach (var export in ExtensionManager.GetInstances<IExport>())
+            {
+                excelSaveFileDialog.Filter += excelSaveFileDialog.Filter == "" ? export.Filter : "|" + export.Filter;
+                exports.Add(export);
+            }
+
             UpdateButtonsEnabled();
         }
 
         private void exportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-#if OFFICE
-            //export = new ExcelExport();
-#else
-            export = new HtmlExport();
-#endif
-            export = new HtmlExport();
-
             DialogResult result = excelSaveFileDialog.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
             {
+                IExport export = exports[excelSaveFileDialog.FilterIndex - 1];
                 statusLabel.Text = "Exportiere...";
                 logTextBox.Log("Exportiere...");
                 export.Export(tt, excelSaveFileDialog.FileName);

@@ -10,5 +10,7 @@ namespace Buchfahrplan
     public interface IExport
     {
         void Export(Timetable tt, string filename);
+
+        string Filter { get; }
     }
 }
