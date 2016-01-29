@@ -51,7 +51,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="output.tmpl">
+    <None Include="Buchfahrplan.BuchfahrplanHtmlExport.tmpl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

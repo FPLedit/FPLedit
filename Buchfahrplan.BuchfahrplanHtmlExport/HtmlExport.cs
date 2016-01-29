@@ -23,7 +23,7 @@ namespace Buchfahrplan.BuchfahrplanExport
 
         public HtmlExport()
         {
-            template = new Template(Decompress("output.tmpl"));
+            template = new Template(Decompress("Buchfahrplan.BuchfahrplanHtmlExport.tmpl"));
         }
 
         public void Export(FileModel.Timetable timetable, string filename)
