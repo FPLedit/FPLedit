@@ -81,7 +81,7 @@ namespace Buchfahrplan.BuchfahrplanExport
                     }
                     else
                     {
-                        filecont += line;
+                        filecont += line + Environment.NewLine;
                     }
                 }
                 if (file != "")
