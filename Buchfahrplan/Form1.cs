@@ -1,10 +1,10 @@
-﻿using Buchfahrplan.FileModel;
-using System;
+﻿using System;
 using System.IO;
 using System.Windows.Forms;
 using Buchfahrplan.Properties;
 using System.Linq;
 using System.Collections.Generic;
+using Buchfahrplan.Shared;
 
 namespace Buchfahrplan
 {
@@ -12,7 +12,6 @@ namespace Buchfahrplan
     {
         private Timetable tt;
 
-        private NewEditForm newEdit;
         private TrainEditForm trEdit;
         private LineEditForm liEdit;
         private TimetableEditForm ttEdit;
@@ -22,7 +21,8 @@ namespace Buchfahrplan
         private bool lineCreated = false;
         private bool trainsCreated = false;
 
-        List<IExport> exports;
+        List<IExport> exporters;
+        List<IImport> importers;
 
         public Form1()
         {
@@ -30,122 +30,70 @@ namespace Buchfahrplan
 
             this.Icon = Resources.programm;
 
-            newEdit = new NewEditForm();
             trEdit = new TrainEditForm();
             liEdit = new LineEditForm();
             ttEdit = new TimetableEditForm();
 
             string[] args = Environment.GetCommandLineArgs();
 
-            if (args.Length == 2)
+            /*if (args.Length == 2)
             {
                 string filename = args[1];
                 OpenFile(filename);
-            }
+            }*/
 
-            exports = new List<IExport>();
+            exporters = new List<IExport>();
+            importers = new List<IImport>();
         }       
 
         private void Form1_Load(object sender, EventArgs e)
         {
             foreach (var export in ExtensionManager.GetInstances<IExport>())
             {
-                excelSaveFileDialog.Filter += excelSaveFileDialog.Filter == "" ? export.Filter : "|" + export.Filter;
-                exports.Add(export);
+                exportFileDialog.Filter += exportFileDialog.Filter == "" ? export.Filter : "|" + export.Filter;
+                exporters.Add(export);
+            }
+
+            foreach (var import in ExtensionManager.GetInstances<IImport>())
+            {
+                openFileDialog.Filter += openFileDialog.Filter == "" ? import.Filter : "|" + import.Filter;
+                importers.Add(import);
             }
 
             UpdateButtonsEnabled();
-        }
-
-        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            DialogResult result = excelSaveFileDialog.ShowDialog();
-            if (result == System.Windows.Forms.DialogResult.OK)
-            {
-                IExport export = exports[excelSaveFileDialog.FilterIndex - 1];
-                statusLabel.Text = "Exportiere...";
-                logTextBox.Log("Exportiere...");
-                export.Export(tt, excelSaveFileDialog.FileName);
-                statusLabel.Text = "";
-                logTextBox.Log("Exportieren erfolgreich abgeschlossen!");
-            }
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult result = bfplSaveFileDialog.ShowDialog();
+            DialogResult result = exportFileDialog.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
             {
-                SaveFile(bfplSaveFileDialog.FileName);
-            }            
+                IExport export = exporters[exportFileDialog.FilterIndex - 1];
+                logger.Log("Speichere...");
+                bool ret = export.Export(tt, exportFileDialog.FileName, logger);
+                if (ret == false)
+                    return;
+                logger.Log("Speichern erfolgreich abgeschlossen!");
+                if (export.Reoppenable)
+                    fileSaved = true;
+            }
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult result = fplOpenFileDialog.ShowDialog();
+            DialogResult result = openFileDialog.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
             {
-                OpenFile(fplOpenFileDialog.FileName);
-            }
-        }
-
-        private void OpenFile(string filename)
-        {
-            statusLabel.Text = "Öffne Datei...";
-            logTextBox.Log("Öffne Datei...");
-            if (Path.GetExtension(filename) == ".fpl")
-            {
-                try
-                {
-                    tt = FplImport.Import(filename);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
+                IImport import = importers[openFileDialog.FilterIndex - 1];
+                logger.Log("Öffne Datei...");
+                tt = import.Import(openFileDialog.FileName, logger);
+                if (tt == null)
                     return;
-                }
-
-                newEdit.Init(tt.Trains);
-                DialogResult res = newEdit.ShowDialog();
-                if (res == System.Windows.Forms.DialogResult.OK)
-                {
-                    tt.Trains = newEdit.trains;
-                }
+                logger.Log("Datei erfolgeich geöffnet!");
+                fileOpened = true;
+                fileSaved = true;
+                UpdateButtonsEnabled();
             }
-            else
-            {
-                try
-                {
-                    tt = Timetable.OpenFromFile(filename);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                    return;
-                }
-            }
-            statusLabel.Text = "";
-            logTextBox.Log("Datei erfolgeich geöffnet!");
-            fileOpened = true;
-            fileSaved = true;
-            UpdateButtonsEnabled();
-        }
-
-        private void SaveFile(string filename)
-        {
-            statusLabel.Text = "Speichere Datei...";
-            logTextBox.Log("Speichere Datei...");
-            try
-            {
-                tt.SaveToFile(filename);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            statusLabel.Text = "";
-            logTextBox.Log("Datei erfolgreich gespeichert!");
-            fileSaved = true;
         }
 
         private void UpdateButtonsEnabled()
@@ -162,9 +110,6 @@ namespace Buchfahrplan
             }
 
             saveToolStripMenuItem.Enabled = fileOpened;
-            saveToolStripMenuItem.Enabled &= fileSaved;
-
-            exportToolStripMenuItem.Enabled = fileOpened;            
 
             editLineToolStripMenuItem.Enabled = fileOpened;
 

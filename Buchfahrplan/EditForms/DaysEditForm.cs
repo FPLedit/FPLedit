@@ -7,8 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Buchfahrplan.FileModel;
 using Buchfahrplan.Properties;
+using Buchfahrplan.Shared;
 
 namespace Buchfahrplan.EditForms
 {

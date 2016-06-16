@@ -1,15 +1,26 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buchfahrplan", "Buchfahrplan\Buchfahrplan.csproj", "{2809F962-DC06-4740-8AD0-0981891446DA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B8BA56BA-15FC-4D2E-8929-FDD6C6E13B5A} = {B8BA56BA-15FC-4D2E-8929-FDD6C6E13B5A}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buchfahrplan.BuchfahrplanExcelExport", "ExcelBuchfahrplan\Buchfahrplan.BuchfahrplanExcelExport.csproj", "{B8C290DF-2E82-4C7F-8C62-5ED797005748}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buchfahrplan.FileModel", "Buchfahrplan.FileModel\Buchfahrplan.FileModel.csproj", "{CE38D005-22B2-4B15-80BA-614F038240FD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buchfahrplan.Shared", "Buchfahrplan.FileModel\Buchfahrplan.Shared.csproj", "{CE38D005-22B2-4B15-80BA-614F038240FD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buchfahrplan.BuchfahrplanHtmlExport", "Buchfahrplan.BuchfahrplanHtmlExport\Buchfahrplan.BuchfahrplanHtmlExport.csproj", "{B8BA56BA-15FC-4D2E-8929-FDD6C6E13B5A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buchfahrplan.AushangfahrplanHtmlExport", "Buchfahrplan.AushangfahrplanHtmlExport\Buchfahrplan.AushangfahrplanHtmlExport.csproj", "{4F19AB0D-9998-4E45-A166-DFC40014D48F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buchfahrplan.JTrainGraphImport", "Buchfahrplan.JTrainGraphImport\Buchfahrplan.JTrainGraphImport.csproj", "{0959C902-8FCE-4125-A8F0-2D5A06EB890C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Import", "Import", "{67D8D2A6-E712-4DE5-A5C1-4E0961A41486}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Export", "Export", "{5A859144-0558-4FEB-965B-BFD83D9336A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,8 +44,22 @@ Global
 		{B8BA56BA-15FC-4D2E-8929-FDD6C6E13B5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8BA56BA-15FC-4D2E-8929-FDD6C6E13B5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8BA56BA-15FC-4D2E-8929-FDD6C6E13B5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F19AB0D-9998-4E45-A166-DFC40014D48F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F19AB0D-9998-4E45-A166-DFC40014D48F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F19AB0D-9998-4E45-A166-DFC40014D48F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F19AB0D-9998-4E45-A166-DFC40014D48F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0959C902-8FCE-4125-A8F0-2D5A06EB890C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0959C902-8FCE-4125-A8F0-2D5A06EB890C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0959C902-8FCE-4125-A8F0-2D5A06EB890C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0959C902-8FCE-4125-A8F0-2D5A06EB890C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B8C290DF-2E82-4C7F-8C62-5ED797005748} = {5A859144-0558-4FEB-965B-BFD83D9336A9}
+		{B8BA56BA-15FC-4D2E-8929-FDD6C6E13B5A} = {5A859144-0558-4FEB-965B-BFD83D9336A9}
+		{4F19AB0D-9998-4E45-A166-DFC40014D48F} = {5A859144-0558-4FEB-965B-BFD83D9336A9}
+		{0959C902-8FCE-4125-A8F0-2D5A06EB890C} = {67D8D2A6-E712-4DE5-A5C1-4E0961A41486}
 	EndGlobalSection
 EndGlobal

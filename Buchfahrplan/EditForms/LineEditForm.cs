@@ -1,5 +1,5 @@
-﻿using Buchfahrplan.FileModel;
-using Buchfahrplan.Properties;
+﻿using Buchfahrplan.Properties;
+using Buchfahrplan.Shared;
 using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;

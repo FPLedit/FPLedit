@@ -28,25 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.excelSaveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.exportFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.bfplSaveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bearbeitenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editTimetableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.statusStrip = new System.Windows.Forms.StatusStrip();
-            this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.fplOpenFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.logTextBox = new Buchfahrplan.LogTextBox();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.logger = new Buchfahrplan.LogTextBox();
             this.menuStrip.SuspendLayout();
-            this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // bfplSaveFileDialog
@@ -69,9 +64,7 @@
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newToolStripMenuItem,
             this.openToolStripMenuItem,
-            this.saveToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.exportToolStripMenuItem});
+            this.saveToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.fileToolStripMenuItem.Text = "Datei";
@@ -96,18 +89,6 @@
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.saveToolStripMenuItem.Text = "Speichern...";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(139, 6);
-            // 
-            // exportToolStripMenuItem
-            // 
-            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
-            this.exportToolStripMenuItem.Text = "Exportieren...";
-            this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
             // 
             // bearbeitenToolStripMenuItem
             // 
@@ -140,43 +121,23 @@
             this.editTimetableToolStripMenuItem.Text = "Fahrplan bearbeiten...";
             this.editTimetableToolStripMenuItem.Click += new System.EventHandler(this.editTimetableToolStripMenuItem_Click);
             // 
-            // statusStrip
+            // logger
             // 
-            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.statusLabel});
-            this.statusStrip.Location = new System.Drawing.Point(0, 239);
-            this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(284, 22);
-            this.statusStrip.TabIndex = 1;
-            this.statusStrip.Text = "statusStrip1";
-            // 
-            // statusLabel
-            // 
-            this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(0, 17);
-            // 
-            // fplOpenFileDialog
-            // 
-            this.fplOpenFileDialog.Filter = "jTrainGraph Fahrplan Dateien (*.fpl)|*.fpl|Buchfahrplan Dateien (*.bfpl)|*.bfpl";
-            // 
-            // logTextBox
-            // 
-            this.logTextBox.BackColor = System.Drawing.Color.White;
-            this.logTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.logTextBox.Location = new System.Drawing.Point(0, 24);
-            this.logTextBox.Multiline = true;
-            this.logTextBox.Name = "logTextBox";
-            this.logTextBox.ReadOnly = true;
-            this.logTextBox.Size = new System.Drawing.Size(284, 215);
-            this.logTextBox.TabIndex = 2;
+            this.logger.BackColor = System.Drawing.Color.White;
+            this.logger.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.logger.Location = new System.Drawing.Point(0, 24);
+            this.logger.Multiline = true;
+            this.logger.Name = "logger";
+            this.logger.ReadOnly = true;
+            this.logger.Size = new System.Drawing.Size(284, 237);
+            this.logger.TabIndex = 2;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 261);
-            this.Controls.Add(this.logTextBox);
-            this.Controls.Add(this.statusStrip);
+            this.Controls.Add(this.logger);
             this.Controls.Add(this.menuStrip);
             this.MainMenuStrip = this.menuStrip;
             this.Name = "Form1";
@@ -184,8 +145,6 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
-            this.statusStrip.ResumeLayout(false);
-            this.statusStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -193,20 +152,16 @@
 
         #endregion
 
-        private System.Windows.Forms.SaveFileDialog excelSaveFileDialog;
+        private System.Windows.Forms.SaveFileDialog exportFileDialog;
         private System.Windows.Forms.SaveFileDialog bfplSaveFileDialog;
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
-        private System.Windows.Forms.StatusStrip statusStrip;
-        private System.Windows.Forms.ToolStripStatusLabel statusLabel;
-        private System.Windows.Forms.OpenFileDialog fplOpenFileDialog;
+        private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.ToolStripMenuItem bearbeitenToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
-        private LogTextBox logTextBox;
+        private LogTextBox logger;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editLineToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editTimetableToolStripMenuItem;

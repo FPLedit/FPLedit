@@ -77,6 +77,8 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BfplExport.cs" />
+    <Compile Include="BfplImport.cs" />
     <Compile Include="EditForms\DaysEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -102,7 +104,6 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="FplImport.cs" />
     <Compile Include="EditForms\LineEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -123,12 +124,6 @@
     </Compile>
     <Compile Include="EditForms\TrainEditForm.Designer.cs">
       <DependentUpon>TrainEditForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="EditForms\NewEditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="EditForms\NewEditForm.Designer.cs">
-      <DependentUpon>NewEditForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -154,9 +149,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="EditForms\LineEditForm.resx">
       <DependentUpon>LineEditForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="EditForms\NewEditForm.resx">
-      <DependentUpon>NewEditForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -210,9 +202,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Buchfahrplan.FileModel\Buchfahrplan.FileModel.csproj">
+    <ProjectReference Include="..\Buchfahrplan.FileModel\Buchfahrplan.Shared.csproj">
       <Project>{ce38d005-22b2-4b15-80ba-614f038240fd}</Project>
-      <Name>Buchfahrplan.FileModel</Name>
+      <Name>Buchfahrplan.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,11 +1,9 @@
-﻿using Buchfahrplan.FileModel;
+﻿using Buchfahrplan.Shared;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 
 namespace Buchfahrplan.BuchfahrplanHtmlExport
 {
@@ -17,19 +15,37 @@ namespace Buchfahrplan.BuchfahrplanHtmlExport
         {
             get
             {
-                return "HTML Datei (*.html)|*.html";
+                return "Buchfahrplan als HTML Datei (*.html)|*.html";
+            }
+        }
+
+        public bool Reoppenable
+        {
+            get
+            {
+                return false;
             }
         }
 
         public HtmlExport()
         {
-            template = new Template(Decompress("Buchfahrplan.BuchfahrplanHtmlExport.tmpl"));
+            var assembly = Assembly.GetAssembly(GetType());
+            var resourceName = "Buchfahrplan.BuchfahrplanHtmlExport.Template.tmpl";
+
+
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                string content = reader.ReadToEnd();
+                template = new Template(DecompressFromString(content));
+            }
         }
 
-        public void Export(FileModel.Timetable timetable, string filename)
+        public bool Export(Timetable timetable, string filename, ILog logger)
         {
             string cont = template.GlobalTemplate.Replace("{0}", BuildTrain(timetable));
             File.WriteAllText(filename, cont);
+            return true;
         }
 
         private string BuildTrain(Timetable tt)
@@ -56,15 +72,14 @@ namespace Buchfahrplan.BuchfahrplanHtmlExport
             return res;
         }
 
-        public Dictionary<string, string> Decompress(string filename)
+        public Dictionary<string, string> DecompressFromString(string content)
         {
             string sep = "////////////";
-            string cont = File.ReadAllText(filename);
             string file = "";
             string filecont = "";
             Dictionary<string, string> files = new Dictionary<string, string>();
 
-            using (StringReader sr = new StringReader(cont))
+            using (StringReader sr = new StringReader(content))
             {
                 string line;
                 while ((line = sr.ReadLine()) != null)

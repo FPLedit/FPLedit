@@ -1,5 +1,4 @@
-﻿using Buchfahrplan.FileModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,6 +6,7 @@ using System.Threading.Tasks;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Buchfahrplan.Shared;
 
 namespace Buchfahrplan.BuchfahrplanExcelExport
 {
@@ -20,11 +20,19 @@ namespace Buchfahrplan.BuchfahrplanExcelExport
         {
             get
             {
-                return "Excel Datei (*.xlsx)|*.xlsx";
+                return "Buchfahrplan als Excel Datei (*.xlsx)|*.xlsx";
             }
         }
 
-        public void Export(Timetable timetable, string filename)
+        public bool Reoppenable
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public bool Export(Timetable timetable, string filename, ILog logger)
         {
             Excel.Application objExcel = new Excel.Application();
             Excel.Workbook workbook = objExcel.Workbooks.Add();
@@ -280,6 +288,8 @@ namespace Buchfahrplan.BuchfahrplanExcelExport
             GC.WaitForPendingFinalizers();
             GC.Collect();
             GC.WaitForPendingFinalizers();
+
+            return true;
         }
 
         private static void SetFont(Excel.Range range, Font font)

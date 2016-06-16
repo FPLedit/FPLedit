@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Buchfahrplan.Shared;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -9,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Buchfahrplan
 {
-    public partial class LogTextBox : TextBox
+    public partial class LogTextBox : TextBox, ILog
     {
         public LogTextBox()
         {

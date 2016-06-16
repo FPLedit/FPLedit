@@ -1,5 +1,4 @@
-﻿using Buchfahrplan.FileModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
 using Buchfahrplan.Properties;
+using Buchfahrplan.Shared;
 
 namespace Buchfahrplan
 {

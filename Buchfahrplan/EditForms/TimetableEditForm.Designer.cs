@@ -54,7 +54,7 @@
             // 
             // timetableBindingSource
             // 
-            this.timetableBindingSource.DataSource = typeof(Buchfahrplan.FileModel.Timetable);
+            this.timetableBindingSource.DataSource = typeof(Buchfahrplan.Shared.Timetable);
             // 
             // trainsBindingSource
             // 

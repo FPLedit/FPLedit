@@ -21,6 +21,7 @@ namespace Buchfahrplan
             if (assemblies == null)
             {
                 assemblies = new List<Assembly>();
+                assemblies.Add(Assembly.GetExecutingAssembly());
                 Errors = new List<Exception>();
                 DirectoryInfo dir = new DirectoryInfo(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
 
@@ -42,15 +43,21 @@ namespace Buchfahrplan
             List<Type> result = new List<Type>();
             foreach (var assembly in assemblies)
             {
-                foreach (var type in assembly.GetTypes())
+                try
                 {
-                    if (!type.IsPublic) continue;
-                    if (type == typeof(T)) continue;
+                    foreach (var type in assembly.GetTypes())
+                    {
+                        if (!type.IsPublic) continue;
+                        if (type == typeof(T)) continue;
 
-                    if (typeof(T).IsAssignableFrom(type))
-                        result.Add(type);
+                        if (typeof(T).IsAssignableFrom(type))
+                            result.Add(type);
+                    }
                 }
-
+                catch (Exception ex)
+                {
+                    Errors.Add(ex);
+                }
             }
             return result;
         }

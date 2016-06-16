@@ -1,14 +1,6 @@
-﻿using Buchfahrplan.FileModel;
-using Buchfahrplan.Properties;
+﻿using Buchfahrplan.Shared;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Buchfahrplan
@@ -20,8 +12,6 @@ namespace Buchfahrplan
         public NewEditForm()
         {
             InitializeComponent();
-
-            this.Icon = Resources.programm;
         }
 
         public void Init(List<Train> trains)
@@ -59,7 +49,7 @@ namespace Buchfahrplan
 
             if (listView1.SelectedItems.Count > 0)
             {
-                item = (ListViewItem)listView1.Items[listView1.SelectedIndices[0]];
+                item = listView1.Items[listView1.SelectedIndices[0]];
             }
 
             //TODO: Bug fixen, funktioniert nur bei manuellem deselektieren und neu selektieren!
@@ -77,7 +67,7 @@ namespace Buchfahrplan
             {
                 for (int i = 0; i < listView1.SelectedIndices.Count; i++)
                 {
-                    ListViewItem item = (ListViewItem)listView1.Items[listView1.SelectedIndices[i]];
+                    ListViewItem item = listView1.Items[listView1.SelectedIndices[i]];
 
                     trains[trains.IndexOf((Train)item.Tag)].Line = lineTextBox.Text;
                     trains[trains.IndexOf((Train)item.Tag)].Locomotive = locomotiveTextBox.Text;
@@ -90,20 +80,20 @@ namespace Buchfahrplan
 
         private void closeButton_Click(object sender, EventArgs e)
         {
-            this.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.Close();
+            DialogResult = DialogResult.OK;
+            Close();
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
         {
-            this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.Close();
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
 
         private void NewEditForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = true;
-            this.Hide();
+            Hide();
         }
     }
 }

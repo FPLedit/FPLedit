@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B8BA56BA-15FC-4D2E-8929-FDD6C6E13B5A}</ProjectGuid>
+    <ProjectGuid>{CE38D005-22B2-4B15-80BA-614F038240FD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Buchfahrplan.BuchfahrplanHtmlExport</RootNamespace>
-    <AssemblyName>Buchfahrplan.BuchfahrplanHtmlExport</AssemblyName>
+    <RootNamespace>Buchfahrplan.FileModel</RootNamespace>
+    <AssemblyName>Buchfahrplan.FileModel</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -40,17 +40,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HtmlExport.cs" />
+    <Compile Include="IExport.cs" />
+    <Compile Include="IImport.cs" />
+    <Compile Include="ILog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Buchfahrplan.FileModel\Buchfahrplan.Shared.csproj">
-      <Project>{ce38d005-22b2-4b15-80ba-614f038240fd}</Project>
-      <Name>Buchfahrplan.Shared</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Template.tmpl" />
+    <Compile Include="Station.cs" />
+    <Compile Include="Timetable.cs" />
+    <Compile Include="Train.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
