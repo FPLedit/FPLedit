@@ -8,7 +8,7 @@ using Buchfahrplan.Shared;
 
 namespace Buchfahrplan
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         private Timetable tt;
 
@@ -24,7 +24,7 @@ namespace Buchfahrplan
         List<IExport> exporters;
         List<IImport> importers;
 
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
 
