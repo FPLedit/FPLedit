@@ -30,7 +30,7 @@ namespace Buchfahrplan
                     train.Name, 
                     train.Line,
                     train.Locomotive,
-                    train.Negative.ToString() }) 
+                    train.Direction.ToString() }) 
                     { Tag = train });
             }
         }
@@ -56,7 +56,7 @@ namespace Buchfahrplan
             if (item != null)
             {
                 Train train = (Train)item.Tag;
-                negativeCheckBox.Checked = train.Negative;
+                directionCheckBox.Checked = train.Direction;
                 lineTextBox.Text = train.Line;
             }
         }
@@ -71,7 +71,7 @@ namespace Buchfahrplan
 
                     trains[trains.IndexOf((Train)item.Tag)].Line = lineTextBox.Text;
                     trains[trains.IndexOf((Train)item.Tag)].Locomotive = locomotiveTextBox.Text;
-                    trains[trains.IndexOf((Train)item.Tag)].Negative = negativeCheckBox.Checked;                    
+                    trains[trains.IndexOf((Train)item.Tag)].Direction = directionCheckBox.Checked;                    
                 }
 
                 UpdateTrains();

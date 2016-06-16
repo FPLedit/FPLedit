@@ -32,7 +32,7 @@ namespace Buchfahrplan.Shared
             Station b = new Station() { Name = "BTal", Kilometre = 1.0f, MaxVelocity = 100 };
             Train tr = new Train() { Name = "P 01", Locomotive = "211" };
             tr.Line = "ATal - BTal";
-            tr.Negative = true;
+            tr.Direction = true;
             tr.Arrivals = new Dictionary<Station, DateTime>();
             tr.Departures = new Dictionary<Station, DateTime>();
             tr.Arrivals.Add(b, DateTime.Now);
@@ -95,12 +95,12 @@ namespace Buchfahrplan.Shared
             return tt;
         }
 
-        public string GetLineName(bool negative)
+        public string GetLineName(bool direction)
         {
             string first = Stations.First().Name;
             string last = Stations.Last().Name;          
 
-            if (!negative)
+            if (!direction)
             {
                 return first + " - " + last;
             }

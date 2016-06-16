@@ -37,7 +37,7 @@
             this.saveTrainButton = new System.Windows.Forms.Button();
             this.lineLabel = new System.Windows.Forms.Label();
             this.lineTextBox = new System.Windows.Forms.TextBox();
-            this.negativeCheckBox = new System.Windows.Forms.CheckBox();
+            this.directionCheckBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -64,7 +64,7 @@
             this.splitContainer1.Panel2.Controls.Add(this.saveTrainButton);
             this.splitContainer1.Panel2.Controls.Add(this.lineLabel);
             this.splitContainer1.Panel2.Controls.Add(this.lineTextBox);
-            this.splitContainer1.Panel2.Controls.Add(this.negativeCheckBox);
+            this.splitContainer1.Panel2.Controls.Add(this.directionCheckBox);
             this.splitContainer1.Size = new System.Drawing.Size(507, 331);
             this.splitContainer1.SplitterDistance = 196;
             this.splitContainer1.TabIndex = 3;
@@ -144,15 +144,15 @@
             this.lineTextBox.Size = new System.Drawing.Size(283, 20);
             this.lineTextBox.TabIndex = 1;
             // 
-            // negativeCheckBox
+            // directionCheckBox
             // 
-            this.negativeCheckBox.AutoSize = true;
-            this.negativeCheckBox.Location = new System.Drawing.Point(15, 73);
-            this.negativeCheckBox.Name = "negativeCheckBox";
-            this.negativeCheckBox.Size = new System.Drawing.Size(124, 17);
-            this.negativeCheckBox.TabIndex = 0;
-            this.negativeCheckBox.Text = "Umgekerte Richtung";
-            this.negativeCheckBox.UseVisualStyleBackColor = true;
+            this.directionCheckBox.AutoSize = true;
+            this.directionCheckBox.Location = new System.Drawing.Point(15, 73);
+            this.directionCheckBox.Name = "directionCheckBox";
+            this.directionCheckBox.Size = new System.Drawing.Size(124, 17);
+            this.directionCheckBox.TabIndex = 0;
+            this.directionCheckBox.Text = "Umgekerte Richtung";
+            this.directionCheckBox.UseVisualStyleBackColor = true;
             // 
             // NewEditForm
             // 
@@ -182,7 +182,7 @@
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.Label lineLabel;
         private System.Windows.Forms.TextBox lineTextBox;
-        private System.Windows.Forms.CheckBox negativeCheckBox;
+        private System.Windows.Forms.CheckBox directionCheckBox;
         private System.Windows.Forms.Button saveTrainButton;
         private System.Windows.Forms.Button closeButton;
         private System.Windows.Forms.Button cancelButton;

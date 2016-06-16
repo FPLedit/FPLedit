@@ -45,7 +45,7 @@ namespace Buchfahrplan
                 topDataGridView.Columns.Add(sta.Name + "dp", sta.Name + "ab");
             }
 
-            foreach (var tra in tt.Trains.Where(t => t.Negative))
+            foreach (var tra in tt.Trains.Where(t => t.Direction))
             {
                 DataGridViewRow trainRow = topDataGridView.Rows[topDataGridView.Rows.Add()];
 
@@ -78,7 +78,7 @@ namespace Buchfahrplan
                 bottomDataGridView.Columns.Add(sta.Name + "dp", sta.Name + "ab");
             }
 
-            foreach (var tra in tt.Trains.Where(t => !t.Negative))
+            foreach (var tra in tt.Trains.Where(t => !t.Direction))
             {
                 DataGridViewRow trainRow = bottomDataGridView.Rows[bottomDataGridView.Rows.Add()];
 

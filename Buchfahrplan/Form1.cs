@@ -12,7 +12,7 @@ namespace Buchfahrplan
     {
         private Timetable tt;
 
-        private TrainEditForm trEdit;
+        private TrainsEditForm trEdit;
         private LineEditForm liEdit;
         private TimetableEditForm ttEdit;
 
@@ -30,7 +30,7 @@ namespace Buchfahrplan
 
             this.Icon = Resources.programm;
 
-            trEdit = new TrainEditForm();
+            trEdit = new TrainsEditForm();
             liEdit = new LineEditForm();
             ttEdit = new TimetableEditForm();
 

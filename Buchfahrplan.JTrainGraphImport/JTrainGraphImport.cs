@@ -56,14 +56,14 @@ namespace Buchfahrplan.JTrainGraphImport
                         i++;
                     }
 
-                    bool neg = IsNegative(ar, dp, stas.First(), stas.Last());
+                    bool dir = GetDirection(ar, dp, stas.First(), stas.Last());
                     trs.Add(new Train()
                     {
                         Name = train.Attribute("name").Value,
                         Arrivals = ar,
                         Departures = dp,
-                        Negative = neg,
-                        Line = neg ? line2 : line1
+                        Direction = dir,
+                        Line = dir ? line2 : line1
                     });
                 }
 
@@ -86,7 +86,7 @@ namespace Buchfahrplan.JTrainGraphImport
             }
         }
 
-        private static bool IsNegative(Dictionary<Station, DateTime> ar, Dictionary<Station, DateTime> dp, Station first, Station last)
+        private static bool GetDirection(Dictionary<Station, DateTime> ar, Dictionary<Station, DateTime> dp, Station first, Station last)
         {
             DateTime firsttime = ar.ContainsKey(first) ? ar.First().Value : dp.First().Value;
             DateTime lasttime = ar.ContainsKey(last) ? ar.Last().Value : dp.Last().Value;

@@ -73,7 +73,7 @@ namespace Buchfahrplan.BuchfahrplanExcelExport
                 cellBuffer[cellBufferLine, 4] = "Abfahrt\noder Durch-\nfahrt";
                 cellBufferLine++;
 
-                if (!train.Negative)
+                if (!train.Direction)
                 {
                     // Stationen und An- Abfahrten Zeichnen
                     foreach (var station in timetable.Stations.OrderBy(s => s.Kilometre))
@@ -94,7 +94,7 @@ namespace Buchfahrplan.BuchfahrplanExcelExport
                     }
                 }
 
-                if (train.Negative)
+                if (train.Direction)
                 {
                     // Stationen und An- Abfahrten Zeichnen
                     foreach (var station in timetable.Stations.OrderBy(s => s.Kilometre).Reverse())

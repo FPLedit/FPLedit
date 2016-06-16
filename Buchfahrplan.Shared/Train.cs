@@ -20,7 +20,7 @@ namespace Buchfahrplan.Shared
 
         public string Locomotive { get; set; }
 
-        public bool Negative { get; set; }
+        public bool Direction { get; set; }
 
 
         /*public bool Monday { get; set; }
@@ -42,5 +42,11 @@ namespace Buchfahrplan.Shared
 
 
         public bool Sunday { get; set; }*/
+
+        public Train()
+        {
+            Arrivals = new Dictionary<Station, DateTime>();
+            Departures = new Dictionary<Station, DateTime>();
+        }
     }
 }
