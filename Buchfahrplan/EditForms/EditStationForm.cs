@@ -18,6 +18,15 @@ namespace Buchfahrplan
             InitializeComponent();
         }
 
+        public void Initialize(Station station)
+        {
+            Text = "Station bearbeiten";
+            nameTextBox.Text = station.Name;
+            velocityTextBox.Text = station.MaxVelocity.ToString();
+            positionTextBox.Text = station.Kilometre.ToString();
+            NewStation = station;
+        }
+
         public Station NewStation { get; set; }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -45,12 +54,24 @@ namespace Buchfahrplan
                 return;
             }
 
-            NewStation = new Station()
+            if (NewStation == null)
             {
-                Name = name,
-                Kilometre = pos,
-                MaxVelocity = velocity
-            };
+                NewStation = new Station()
+                {
+                    Name = name,
+                    Kilometre = pos,
+                    MaxVelocity = velocity
+                };
+            }
+            else
+            {
+                NewStation.Name = name;
+                NewStation.Kilometre = pos;
+                NewStation.MaxVelocity = velocity;
+            }
+
+            DialogResult = DialogResult.OK;
+            Close();
         }
     }
 }

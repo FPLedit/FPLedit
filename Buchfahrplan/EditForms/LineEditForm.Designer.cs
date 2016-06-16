@@ -29,13 +29,11 @@
         private void InitializeComponent()
         {
             this.stationListView = new System.Windows.Forms.ListView();
-            this.changeNameButton = new System.Windows.Forms.Button();
-            this.changePositionButton = new System.Windows.Forms.Button();
+            this.editStationButton = new System.Windows.Forms.Button();
             this.deleteStationButton = new System.Windows.Forms.Button();
             this.newStationButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.closeButton = new System.Windows.Forms.Button();
-            this.changeVelocityButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // stationListView
@@ -52,32 +50,21 @@
             this.stationListView.UseCompatibleStateImageBehavior = false;
             this.stationListView.View = System.Windows.Forms.View.Details;
             // 
-            // changeNameButton
+            // editStationButton
             // 
-            this.changeNameButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.changeNameButton.Location = new System.Drawing.Point(542, 12);
-            this.changeNameButton.Name = "changeNameButton";
-            this.changeNameButton.Size = new System.Drawing.Size(102, 23);
-            this.changeNameButton.TabIndex = 17;
-            this.changeNameButton.Text = "Name ändern";
-            this.changeNameButton.UseVisualStyleBackColor = true;
-            this.changeNameButton.Click += new System.EventHandler(this.changeNameButton_Click);
-            // 
-            // changePositionButton
-            // 
-            this.changePositionButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.changePositionButton.Location = new System.Drawing.Point(542, 41);
-            this.changePositionButton.Name = "changePositionButton";
-            this.changePositionButton.Size = new System.Drawing.Size(102, 23);
-            this.changePositionButton.TabIndex = 18;
-            this.changePositionButton.Text = "Position ändern";
-            this.changePositionButton.UseVisualStyleBackColor = true;
-            this.changePositionButton.Click += new System.EventHandler(this.changePositionButton_Click);
+            this.editStationButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.editStationButton.Location = new System.Drawing.Point(542, 41);
+            this.editStationButton.Name = "editStationButton";
+            this.editStationButton.Size = new System.Drawing.Size(102, 23);
+            this.editStationButton.TabIndex = 17;
+            this.editStationButton.Text = "Station bearbeiten";
+            this.editStationButton.UseVisualStyleBackColor = true;
+            this.editStationButton.Click += new System.EventHandler(this.editStationButton_Click);
             // 
             // deleteStationButton
             // 
             this.deleteStationButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.deleteStationButton.Location = new System.Drawing.Point(542, 99);
+            this.deleteStationButton.Location = new System.Drawing.Point(542, 70);
             this.deleteStationButton.Name = "deleteStationButton";
             this.deleteStationButton.Size = new System.Drawing.Size(102, 23);
             this.deleteStationButton.TabIndex = 19;
@@ -88,7 +75,7 @@
             // newStationButton
             // 
             this.newStationButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.newStationButton.Location = new System.Drawing.Point(542, 128);
+            this.newStationButton.Location = new System.Drawing.Point(542, 12);
             this.newStationButton.Name = "newStationButton";
             this.newStationButton.Size = new System.Drawing.Size(102, 23);
             this.newStationButton.TabIndex = 20;
@@ -119,17 +106,6 @@
             this.closeButton.UseVisualStyleBackColor = true;
             this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
             // 
-            // changeVelocityButton
-            // 
-            this.changeVelocityButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.changeVelocityButton.Location = new System.Drawing.Point(542, 70);
-            this.changeVelocityButton.Name = "changeVelocityButton";
-            this.changeVelocityButton.Size = new System.Drawing.Size(102, 23);
-            this.changeVelocityButton.TabIndex = 23;
-            this.changeVelocityButton.Text = "Vmax ändern";
-            this.changeVelocityButton.UseVisualStyleBackColor = true;
-            this.changeVelocityButton.Click += new System.EventHandler(this.changeVelocityButton_Click);
-            // 
             // LineEditForm
             // 
             this.AcceptButton = this.closeButton;
@@ -137,18 +113,17 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(656, 335);
-            this.Controls.Add(this.changeVelocityButton);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.closeButton);
             this.Controls.Add(this.newStationButton);
             this.Controls.Add(this.deleteStationButton);
-            this.Controls.Add(this.changePositionButton);
-            this.Controls.Add(this.changeNameButton);
+            this.Controls.Add(this.editStationButton);
             this.Controls.Add(this.stationListView);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "LineEditForm";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "Strecke bearbeiten";
-            this.Load += new System.EventHandler(this.LineEditForm_Load);
             this.ResumeLayout(false);
 
         }
@@ -156,12 +131,10 @@
         #endregion
 
         private System.Windows.Forms.ListView stationListView;
-        private System.Windows.Forms.Button changeNameButton;
-        private System.Windows.Forms.Button changePositionButton;
+        private System.Windows.Forms.Button editStationButton;
         private System.Windows.Forms.Button deleteStationButton;
         private System.Windows.Forms.Button newStationButton;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button closeButton;
-        private System.Windows.Forms.Button changeVelocityButton;
     }
 }

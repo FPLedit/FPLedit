@@ -85,11 +85,11 @@
     <Compile Include="EditForms\DaysEditForm.Designer.cs">
       <DependentUpon>DaysEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="EditForms\NewStationForm.cs">
+    <Compile Include="EditForms\EditStationForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EditForms\NewStationForm.Designer.cs">
-      <DependentUpon>NewStationForm.cs</DependentUpon>
+    <Compile Include="EditForms\EditStationForm.Designer.cs">
+      <DependentUpon>EditStationForm.cs</DependentUpon>
     </Compile>
     <Compile Include="EditForms\NewTrainForm.cs">
       <SubType>Form</SubType>
@@ -131,8 +131,8 @@
     <EmbeddedResource Include="EditForms\DaysEditForm.resx">
       <DependentUpon>DaysEditForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="EditForms\NewStationForm.resx">
-      <DependentUpon>NewStationForm.cs</DependentUpon>
+    <EmbeddedResource Include="EditForms\EditStationForm.resx">
+      <DependentUpon>EditStationForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EditForms\NewTrainForm.resx">
       <DependentUpon>NewTrainForm.cs</DependentUpon>
@@ -202,7 +202,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Buchfahrplan.FileModel\Buchfahrplan.Shared.csproj">
+    <ProjectReference Include="..\Buchfahrplan.Shared\Buchfahrplan.Shared.csproj">
       <Project>{ce38d005-22b2-4b15-80ba-614f038240fd}</Project>
       <Name>Buchfahrplan.Shared</Name>
     </ProjectReference>

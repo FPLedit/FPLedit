@@ -1,6 +1,5 @@
 ﻿using Buchfahrplan.Properties;
 using Buchfahrplan.Shared;
-using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -78,50 +77,24 @@ namespace Buchfahrplan
             this.Hide();
         }
 
-        private void changeNameButton_Click(object sender, EventArgs e)
+        private void editStationButton_Click(object sender, EventArgs e)
         {
             if (stationListView.SelectedItems.Count == 0)
             {
-                MessageBox.Show("Zuerst muss ien Zug ausgewählt werden!", "Namen ändern");
+                MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Station bearbeiten");
                 return;
             }
-
-            string newName = Interaction.InputBox("Bitte einen neuen Namen eingeben:", "Namen ändern");
 
             if (stationListView.SelectedItems.Count > 0)
             {
                 ListViewItem item = (ListViewItem)stationListView.Items[stationListView.SelectedIndices[0]];
+                Station oldStation = stations[stations.IndexOf((Station)item.Tag)];
 
-                stations[stations.IndexOf((Station)item.Tag)].Name = newName;
-
-                UpdateStations();
-            }
-        }
-
-        private void changePositionButton_Click(object sender, EventArgs e)
-        {
-            if (stationListView.SelectedItems.Count == 0)
-            {
-                MessageBox.Show("Zuerst muss ien Zug ausgewählt werden!", "Position ändern");
-                return;
-            }
-
-            string newPosString = Interaction.InputBox("Bitte die neue Position eingeben:", "Position ändern");
-
-            if (stationListView.SelectedItems.Count > 0)
-            {
-                ListViewItem item = (ListViewItem)stationListView.Items[stationListView.SelectedIndices[0]];
-
-                try
-                {
-                    stations[stations.IndexOf((Station)item.Tag)].Kilometre = Convert.ToSingle(newPosString);
-                }
-                catch
-                {
-                    MessageBox.Show("Fehler die eingegebene Zeichenfolge ist kein valider Wert für eine Kommazahl!");
-                }
-
-                UpdateStations();
+                NewStationForm nsf = new NewStationForm();
+                nsf.Initialize(oldStation);
+                DialogResult res = nsf.ShowDialog();
+                if (res == System.Windows.Forms.DialogResult.OK)
+                    UpdateStations();
             }
         }
 
@@ -156,38 +129,6 @@ namespace Buchfahrplan
                 {
                     t.Arrivals.Add(sta, new DateTime());
                     t.Departures.Add(sta, new DateTime());
-                }
-
-                UpdateStations();
-            }            
-        }
-
-        private void LineEditForm_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void changeVelocityButton_Click(object sender, EventArgs e)
-        {
-            if (stationListView.SelectedItems.Count == 0)
-            {
-                MessageBox.Show("Zuerst muss ien Zug ausgewählt werden!", "Höchstgeschwindigkeit ändern");
-                return;
-            }
-
-            string newVelString = Interaction.InputBox("Bitte die neue Höchsgeschwindigkeit eingeben:", "Höchsgeschwindigkeit ändern");
-
-            if (stationListView.SelectedItems.Count > 0)
-            {
-                ListViewItem item = (ListViewItem)stationListView.Items[stationListView.SelectedIndices[0]];
-
-                try
-                {
-                    stations[stations.IndexOf((Station)item.Tag)].MaxVelocity = Convert.ToInt32(newVelString);
-                }
-                catch
-                {
-                    MessageBox.Show("Fehler: Die eingegebene Zeichenfolge ist kein valider Wert für eine Ganzzahl!");
                 }
 
                 UpdateStations();

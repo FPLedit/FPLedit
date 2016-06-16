@@ -52,7 +52,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Buchfahrplan.FileModel\Buchfahrplan.Shared.csproj">
+    <ProjectReference Include="..\Buchfahrplan.Shared\Buchfahrplan.Shared.csproj">
       <Project>{ce38d005-22b2-4b15-80ba-614f038240fd}</Project>
       <Name>Buchfahrplan.Shared</Name>
     </ProjectReference>

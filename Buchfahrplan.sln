@@ -10,7 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buchfahrplan", "Buchfahrpla
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buchfahrplan.BuchfahrplanExcelExport", "ExcelBuchfahrplan\Buchfahrplan.BuchfahrplanExcelExport.csproj", "{B8C290DF-2E82-4C7F-8C62-5ED797005748}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buchfahrplan.Shared", "Buchfahrplan.FileModel\Buchfahrplan.Shared.csproj", "{CE38D005-22B2-4B15-80BA-614F038240FD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buchfahrplan.Shared", "Buchfahrplan.Shared\Buchfahrplan.Shared.csproj", "{CE38D005-22B2-4B15-80BA-614F038240FD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buchfahrplan.BuchfahrplanHtmlExport", "Buchfahrplan.BuchfahrplanHtmlExport\Buchfahrplan.BuchfahrplanHtmlExport.csproj", "{B8BA56BA-15FC-4D2E-8929-FDD6C6E13B5A}"
 EndProject
