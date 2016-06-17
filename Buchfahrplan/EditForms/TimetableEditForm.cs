@@ -23,7 +23,7 @@ namespace Buchfahrplan
             InitializeComponent();
 
             this.Icon = Resources.programm;
-            
+
             topDataGridView.AllowUserToAddRows = false;
             bottomDataGridView.AllowUserToAddRows = false;
         }
@@ -33,33 +33,33 @@ namespace Buchfahrplan
             this.tt = tt;
             this.tt_undo = tt;
 
+            topFromToLabel.Text = "Züge " + tt.GetLineName(true);
+            bottomFromToLabel.Text = "Züge " + tt.GetLineName(false);
+
             UpdateGrid();
         }
 
         private void UpdateGrid()
         {
             // Obere DataGridView
-            foreach (var sta in tt.Stations.OrderBy(s => s.Kilometre))
+            var topStations = tt.Stations.OrderByDescending(s => s.Kilometre);
+            foreach (var sta in topStations)
             {
-                topDataGridView.Columns.Add(sta.Name + "ar", sta.Name + "an");
-                topDataGridView.Columns.Add(sta.Name + "dp", sta.Name + "ab");
+                if (topStations.First() != sta)
+                    topDataGridView.Columns.Add(sta.Name + "ar", sta.Name + " an");
+                if (topStations.Last() != sta)
+                    topDataGridView.Columns.Add(sta.Name + "dp", sta.Name + " ab");
             }
 
             foreach (var tra in tt.Trains.Where(t => t.Direction))
             {
                 DataGridViewRow trainRow = topDataGridView.Rows[topDataGridView.Rows.Add()];
 
-                foreach (var sta in tra.Arrivals.Keys.OrderBy(s => s.Kilometre))
-                {
-                    try { trainRow.Cells[sta.Name + "ar"].Value = tra.Arrivals[sta].ToShortTimeString(); }
-                    catch { trainRow.Cells[sta.Name + "ar"].Value = ""; }
-                }
+                foreach (var sta in tra.Arrivals.Keys.OrderByDescending(s => s.Kilometre))
+                    trainRow.Cells[sta.Name + "ar"].Value = tra.Arrivals[sta].ToShortTimeString();
 
-                foreach (var sta in tra.Departures.Keys.OrderBy(s => s.Kilometre))
-                {
-                    try { trainRow.Cells[sta.Name + "dp"].Value = tra.Departures[sta].ToShortTimeString(); }
-                    catch { trainRow.Cells[sta.Name + "dp"].Value = ""; }
-                }
+                foreach (var sta in tra.Departures.Keys.OrderByDescending(s => s.Kilometre))
+                    trainRow.Cells[sta.Name + "dp"].Value = tra.Departures[sta].ToShortTimeString();
 
                 trainRow.Tag = tra;
                 trainRow.HeaderCell = new DataGridViewRowHeaderCell() { Value = tra.Name };
@@ -67,32 +67,29 @@ namespace Buchfahrplan
 
             foreach (DataGridViewColumn column in topDataGridView.Columns)
             {
+                column.AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
                 column.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
 
             // Untere DataGridView
-
-            foreach (var sta in tt.Stations.OrderByDescending(s => s.Kilometre))
+            var bottomStations = tt.Stations.OrderBy(s => s.Kilometre);
+            foreach (var sta in bottomStations)
             {
-                bottomDataGridView.Columns.Add(sta.Name + "ar", sta.Name + "an");
-                bottomDataGridView.Columns.Add(sta.Name + "dp", sta.Name + "ab");
+                if (bottomStations.First() != sta)
+                    bottomDataGridView.Columns.Add(sta.Name + "ar", sta.Name + " an");
+                if (bottomStations.Last() != sta)
+                    bottomDataGridView.Columns.Add(sta.Name + "dp", sta.Name + " ab");
             }
 
             foreach (var tra in tt.Trains.Where(t => !t.Direction))
             {
                 DataGridViewRow trainRow = bottomDataGridView.Rows[bottomDataGridView.Rows.Add()];
 
-                foreach (var sta in tra.Arrivals.Keys.OrderByDescending(s => s.Kilometre))
-                {
-                    try { trainRow.Cells[sta.Name + "ar"].Value = tra.Arrivals[sta].ToShortTimeString(); }
-                    catch { trainRow.Cells[sta.Name + "ar"].Value = ""; }
-                }
+                foreach (var sta in tra.Arrivals.Keys.OrderBy(s => s.Kilometre))
+                    trainRow.Cells[sta.Name + "ar"].Value = tra.Arrivals[sta].ToShortTimeString();
 
-                foreach (var sta in tra.Departures.Keys.OrderByDescending(s => s.Kilometre))
-                {
-                    try { trainRow.Cells[sta.Name + "dp"].Value = tra.Departures[sta].ToShortTimeString(); }
-                    catch { trainRow.Cells[sta.Name + "dp"].Value = ""; }
-                }
+                foreach (var sta in tra.Departures.Keys.OrderBy(s => s.Kilometre))
+                    trainRow.Cells[sta.Name + "dp"].Value = tra.Departures[sta].ToShortTimeString();
 
                 trainRow.Tag = tra;
                 trainRow.HeaderCell = new DataGridViewRowHeaderCell() { Value = tra.Name };
@@ -100,15 +97,15 @@ namespace Buchfahrplan
 
             foreach (DataGridViewColumn column in bottomDataGridView.Columns)
             {
+                column.AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
                 column.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
         }
 
-        private bool GetTrainData(string trainName, out Dictionary<Station, DateTime> ar,
-            out Dictionary<Station, DateTime> dp)
+        private void UpdateTrainData(Train train)
         {
-            ar = new Dictionary<Station, DateTime>();
-            dp = new Dictionary<Station, DateTime>();
+            var ar = new Dictionary<Station, DateTime>();
+            var dp = new Dictionary<Station, DateTime>();
 
             bool found = false;
 
@@ -117,25 +114,38 @@ namespace Buchfahrplan
             {
                 Train t = (Train)row.Tag;
 
-                if (t.Name != trainName)
+                if (t != train)
                     continue;
                 if (found)
                     break;
 
                 foreach (var sta in tt.Stations)
                 {
-                    DataGridViewCell cellAr = row.Cells[sta.Name + "ar"];
+                    if (topDataGridView.Columns.Contains(sta.Name + "ar"))
+                    {
+                        DataGridViewCell cellAr = row.Cells[sta.Name + "ar"];
 
-                    DateTime dtAr;
-                    DateTime.TryParse((string)cellAr.Value, out dtAr);
+                        if ((string)cellAr.Value != "" && cellAr.Value != null)
+                        {
+                            DateTime dtAr;
+                            DateTime.TryParse((string)cellAr.Value, out dtAr);
 
-                    DataGridViewCell cellDp = row.Cells[sta.Name + "dp"];
+                            ar.Add(sta, dtAr);
+                        }
+                    }
 
-                    DateTime dtDp;
-                    DateTime.TryParse((string)cellDp.Value, out dtDp);
+                    if (topDataGridView.Columns.Contains(sta.Name + "dp"))
+                    {
+                        DataGridViewCell cellDp = row.Cells[sta.Name + "dp"];
 
-                    ar.Add(sta, dtAr);
-                    dp.Add(sta, dtDp);
+                        if ((string)cellDp.Value != "" && cellDp.Value != null)
+                        {
+                            DateTime dtDp;
+                            DateTime.TryParse((string)cellDp.Value, out dtDp);
+
+                            dp.Add(sta, dtDp);
+                        }
+                    }
                 }
 
                 found = true;
@@ -146,31 +156,50 @@ namespace Buchfahrplan
             {
                 Train t = (Train)row.Tag;
 
-                if (t.Name != trainName)
+                if (t != train)
                     continue;
                 if (found)
                     break;
 
                 foreach (var sta in tt.Stations)
                 {
-                    DataGridViewCell cellAr = row.Cells[sta.Name + "ar"];
+                    if (bottomDataGridView.Columns.Contains(sta.Name + "ar"))
+                    {
+                        DataGridViewCell cellAr = row.Cells[sta.Name + "ar"];
 
-                    DateTime dtAr;
-                    DateTime.TryParse((string)cellAr.Value, out dtAr);
+                        if ((string)cellAr.Value != "" && cellAr.Value != null)
+                        {
+                            DateTime dtAr;
+                            DateTime.TryParse((string)cellAr.Value, out dtAr);
 
-                    DataGridViewCell cellDp = row.Cells[sta.Name + "dp"];
+                            ar.Add(sta, dtAr);
+                        }
+                    }
 
-                    DateTime dtDp;
-                    DateTime.TryParse((string)cellDp.Value, out dtDp);
+                    if (bottomDataGridView.Columns.Contains(sta.Name + "dp"))
+                    {
+                        DataGridViewCell cellDp = row.Cells[sta.Name + "dp"];
 
-                    ar.Add(sta, dtAr);
-                    dp.Add(sta, dtDp);
+                        if ((string)cellDp.Value != null && cellDp.Value != null)
+                        {
+                            DateTime dtDp;
+                            DateTime.TryParse((string)cellDp.Value, out dtDp);
+
+                            dp.Add(sta, dtDp);
+                        }
+                    }
                 }
 
                 found = true;
             }
- 
-            return found;
+
+            if (found)
+            {
+                train.Arrivals = ar;
+                train.Departures = dp;
+            }
+            else
+                throw new Exception("In der Anwendung ist ein interner Fehler aufgetreten!");
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -178,16 +207,7 @@ namespace Buchfahrplan
             this.DialogResult = System.Windows.Forms.DialogResult.OK;
 
             foreach (var t in tt.Trains)
-            {
-                Dictionary<Station, DateTime> ar;
-                Dictionary<Station, DateTime> dp;
-
-                if (!GetTrainData(t.Name, out ar, out dp))
-                    throw new Exception("In der Anwendung ist ein interner Fehler aufgetreten!");
-
-                t.Arrivals = ar;
-                t.Departures = dp;
-            }
+                UpdateTrainData(t);
 
             topDataGridView.Rows.Clear();
             topDataGridView.Columns.Clear();
@@ -200,16 +220,16 @@ namespace Buchfahrplan
 
         private void cancelButton_Click(object sender, EventArgs e)
         {
-            this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            DialogResult = DialogResult.Cancel;
             tt = tt_undo;
 
-            this.Close();
+            Close();
         }
 
-        private void lineEditForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void timetableEditForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = true;
-            this.Hide();
+            Hide();
         }
     }
 }

@@ -7,8 +7,8 @@
     <ProjectGuid>{CE38D005-22B2-4B15-80BA-614F038240FD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Buchfahrplan.FileModel</RootNamespace>
-    <AssemblyName>Buchfahrplan.FileModel</AssemblyName>
+    <RootNamespace>Buchfahrplan.Shared</RootNamespace>
+    <AssemblyName>Buchfahrplan.Shared</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

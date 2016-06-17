@@ -48,5 +48,10 @@ namespace Buchfahrplan.Shared
             Arrivals = new Dictionary<Station, DateTime>();
             Departures = new Dictionary<Station, DateTime>();
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

@@ -164,6 +164,8 @@
             this.Controls.Add(this.splitContainer1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "NewEditForm";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "Zusätliche Informationen zum Zug hinzfügen...";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.NewEditForm_FormClosing);
             this.Load += new System.EventHandler(this.NewEditForm_Load);

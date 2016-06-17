@@ -42,24 +42,25 @@ namespace Buchfahrplan.JTrainGraphImport
                 XElement trains = el.Element("trains");
                 foreach (var train in trains.Elements())
                 {
+                    string name = train.Attribute("name").Value;
                     Dictionary<Station, DateTime> ar = new Dictionary<Station, DateTime>();
                     Dictionary<Station, DateTime> dp = new Dictionary<Station, DateTime>();
                     int i = 0;
 
                     foreach (var time in train.Elements())
                     {
-                        try { ar.Add(stas.ElementAt(i), DateTime.ParseExact(time.Attribute("a").Value, "HH:mm", CultureInfo.InvariantCulture)); }
-                        catch { }
+                        if (time.Attribute("a").Value != "")
+                            ar.Add(stas.ElementAt(i), DateTime.ParseExact(time.Attribute("a").Value, "HH:mm", CultureInfo.InvariantCulture));
 
-                        try { dp.Add(stas.ElementAt(i), DateTime.Parse(time.Attribute("d").Value)); }
-                        catch { }
+                        if (time.Attribute("d").Value != "")
+                            dp.Add(stas.ElementAt(i), DateTime.Parse(time.Attribute("d").Value));
                         i++;
                     }
 
                     bool dir = GetDirection(ar, dp, stas.First(), stas.Last());
                     trs.Add(new Train()
                     {
-                        Name = train.Attribute("name").Value,
+                        Name = name,
                         Arrivals = ar,
                         Departures = dp,
                         Direction = dir,

@@ -101,13 +101,14 @@ namespace Buchfahrplan.Shared
             string last = Stations.Last().Name;          
 
             if (!direction)
-            {
                 return first + " - " + last;
-            }
             else
-            {
                 return last + " - " + first;
-            }
+        }
+
+        public override string ToString()
+        {
+            return GetLineName(true);
         }
     }    
 }
