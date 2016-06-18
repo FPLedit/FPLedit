@@ -71,11 +71,6 @@ namespace Buchfahrplan.JTrainGraphImport
                     });
                 }
 
-                NewEditForm newEdit = new NewEditForm();
-                newEdit.Init(trs);
-                if (newEdit.ShowDialog() == DialogResult.OK)
-                    trs = newEdit.trains;
-
                 return new Timetable()
                 {
                     Name = el.Attribute("name").Value,

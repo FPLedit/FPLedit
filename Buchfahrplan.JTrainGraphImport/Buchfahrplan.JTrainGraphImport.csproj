@@ -43,12 +43,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="JTrainGraphImport.cs" />
-    <Compile Include="NewEditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="NewEditForm.Designer.cs">
-      <DependentUpon>NewEditForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -56,11 +50,6 @@
       <Project>{ce38d005-22b2-4b15-80ba-614f038240fd}</Project>
       <Name>Buchfahrplan.Shared</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="NewEditForm.resx">
-      <DependentUpon>NewEditForm.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
