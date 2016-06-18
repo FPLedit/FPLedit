@@ -22,6 +22,9 @@
 			border-collapse: collapse;
 			table-layout:fixed;
 			width:454pt;
+			page-break-before:always;
+			margin-left:auto;
+			margin-right:auto;
 		}
 		.trainname {
 			height:19.5pt;
@@ -36,7 +39,7 @@
 			font-family:"DIN 1451 Mittelschrift Alt", sans-serif;
 			text-align:center;
 			vertical-align:middle;
-			white-space:nowrap;
+			white-space:nowrap;			
 		}
 		.linename {
 			padding-top:1px;
@@ -128,12 +131,7 @@
 	</head>
 	<body>
 		<div>
-			<table>
-				<col width=80 span=2>
-				<col width=285>
-				<col width=80 span=2>
-				{0}
-			</table>
+			{0}			
 		</div>
 	</body>
 </html>
@@ -146,6 +144,10 @@
 					<td class=zug>{4}</td>
 				</tr>
 ////////////TRAIN_TEMPLATE////////////
+			<table>
+				<col width=80 span=2>
+				<col width=285>
+				<col width=80 span=2>
 				<tr>
 					<td colspan=5 class=trainname>{0}</td>
 				</tr>
@@ -201,3 +203,4 @@
 					<td></td>
 					<td></td>
 				</tr>
+			</table>

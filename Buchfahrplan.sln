@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buchfahrplan", "Buchfahrplan\Buchfahrplan.csproj", "{2809F962-DC06-4740-8AD0-0981891446DA}"
 	ProjectSection(ProjectDependencies) = postProject
 		{0959C902-8FCE-4125-A8F0-2D5A06EB890C} = {0959C902-8FCE-4125-A8F0-2D5A06EB890C}
+		{B8BA56BA-15FC-4D2E-8929-FDD6C6E13B5A} = {B8BA56BA-15FC-4D2E-8929-FDD6C6E13B5A}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buchfahrplan.BuchfahrplanExcelExport", "ExcelBuchfahrplan\Buchfahrplan.BuchfahrplanExcelExport.csproj", "{B8C290DF-2E82-4C7F-8C62-5ED797005748}"

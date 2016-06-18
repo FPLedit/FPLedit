@@ -24,10 +24,13 @@ namespace Buchfahrplan.Shared
 
         public bool[] Days { get; set; }
 
+        public Dictionary<string, string> Metadata { get; }
+
         public Train()
         {
             Arrivals = new Dictionary<Station, DateTime>();
             Departures = new Dictionary<Station, DateTime>();
+            Metadata = new Dictionary<string, string>();
             Days = new bool[7];
         }
 
