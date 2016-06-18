@@ -36,7 +36,8 @@ namespace Buchfahrplan
                 topTrainListView.Items.Add(new ListViewItem(new[] { 
                     train.Name, 
                     train.Line,
-                    train.Locomotive }) 
+                    train.Locomotive,
+                    Days(train.Days)}) 
                     { Tag = train });
             }
 
@@ -45,20 +46,40 @@ namespace Buchfahrplan
                 bottomTrainListView.Items.Add(new ListViewItem(new[] { 
                     train.Name, 
                     train.Line,
-                    train.Locomotive })
+                    train.Locomotive,
+                    Days(train.Days) })
                     { Tag = train });
             }
         }
 
+        private string Days(bool[] days)
+        {
+            string[] str = new string[7];
+            str[0] = days[0] ? "Montag" : null;
+            str[1] = days[1] ? "Dienstag" : null;
+            str[2] = days[2] ? "Mittwoch" : null;
+            str[3] = days[3] ? "Donnerstag" : null;
+            str[4] = days[4] ? "Freitag" : null;
+            str[5] = days[5] ? "Samstag" : null;
+            str[6] = days[6] ? "Sonntag" : null;
+
+            return string.Join(", ", str.Where(o => o != null));
+        }
+
         private void NewEditForm_Load(object sender, EventArgs e)
         {
+            
             topTrainListView.Columns.Add("Zugnummer");
             topTrainListView.Columns.Add("Strecke");
             topTrainListView.Columns.Add("Tfz");
+            topTrainListView.Columns.Add("Verkehrstage");
+            topTrainListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
 
             bottomTrainListView.Columns.Add("Zugnummer");
             bottomTrainListView.Columns.Add("Strecke");
             bottomTrainListView.Columns.Add("Tfz");
+            bottomTrainListView.Columns.Add("Verkehrstage");
+            bottomTrainListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
 
         private void closeButton_Click(object sender, EventArgs e)

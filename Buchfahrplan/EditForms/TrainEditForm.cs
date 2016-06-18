@@ -14,7 +14,7 @@ namespace Buchfahrplan
         {
             InitializeComponent();
         }
-        
+
         public void Initialize(Train train)
         {
             NewTrain = train;
@@ -22,6 +22,14 @@ namespace Buchfahrplan
             lineTextBox.Text = train.Line;
             direction = train.Direction;
             locomotiveTextBox.Text = train.Locomotive;
+
+            mondayCheckBox.Checked = NewTrain.Days[0];
+            tuesdayCheckBox.Checked = NewTrain.Days[1];
+            wednesdayCheckBox.Checked = NewTrain.Days[2];
+            thursdayCheckBox.Checked = NewTrain.Days[3];
+            fridayCheckBox.Checked = NewTrain.Days[4];
+            saturdayCheckBox.Checked = NewTrain.Days[5];
+            sundayCheckBox.Checked = NewTrain.Days[6];
         }
 
         public void Initialize(bool direction)
@@ -38,6 +46,13 @@ namespace Buchfahrplan
             NewTrain.Line = lineTextBox.Text;
             NewTrain.Locomotive = locomotiveTextBox.Text;
             NewTrain.Direction = direction;
+            NewTrain.Days[0] = mondayCheckBox.Checked;
+            NewTrain.Days[1] = tuesdayCheckBox.Checked;
+            NewTrain.Days[2] = wednesdayCheckBox.Checked;
+            NewTrain.Days[3] = thursdayCheckBox.Checked;
+            NewTrain.Days[4] = fridayCheckBox.Checked;
+            NewTrain.Days[5] = saturdayCheckBox.Checked;
+            NewTrain.Days[6] = sundayCheckBox.Checked;
 
             DialogResult = DialogResult.OK;
             Close();

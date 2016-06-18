@@ -22,31 +22,13 @@ namespace Buchfahrplan.Shared
 
         public bool Direction { get; set; }
 
-
-        /*public bool Monday { get; set; }
-
-
-        public bool Tuesday { get; set; }
-
-
-        public bool Wednesday { get; set; }
-
-
-        public bool Thursday { get; set; }
-
-
-        public bool Friday { get; set; }
-
-
-        public bool Saturday { get; set; }
-
-
-        public bool Sunday { get; set; }*/
+        public bool[] Days { get; set; }
 
         public Train()
         {
             Arrivals = new Dictionary<Station, DateTime>();
             Departures = new Dictionary<Station, DateTime>();
+            Days = new bool[7];
         }
 
         public override string ToString()

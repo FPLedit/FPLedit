@@ -47,6 +47,8 @@ namespace Buchfahrplan.JTrainGraphImport
                     Dictionary<Station, DateTime> dp = new Dictionary<Station, DateTime>();
                     int i = 0;
 
+                    bool[] days = ParseDays(train.Attribute("d").Value);
+
                     foreach (var time in train.Elements())
                     {
                         if (time.Attribute("a").Value != "")
@@ -64,6 +66,7 @@ namespace Buchfahrplan.JTrainGraphImport
                         Arrivals = ar,
                         Departures = dp,
                         Direction = dir,
+                        Days = days,
                         Line = dir ? line2 : line1
                     });
                 }
@@ -87,12 +90,21 @@ namespace Buchfahrplan.JTrainGraphImport
             }
         }
 
-        private static bool GetDirection(Dictionary<Station, DateTime> ar, Dictionary<Station, DateTime> dp, Station first, Station last)
+        private bool GetDirection(Dictionary<Station, DateTime> ar, Dictionary<Station, DateTime> dp, Station first, Station last)
         {
             DateTime firsttime = ar.ContainsKey(first) ? ar.First().Value : dp.First().Value;
             DateTime lasttime = ar.ContainsKey(last) ? ar.Last().Value : dp.Last().Value;
 
             return firsttime > lasttime;
+        }
+
+        private bool[] ParseDays(string att)
+        {
+            bool[] days = new bool[7];
+            char[] chars = att.ToCharArray();
+            for (int i = 0; i < chars.Length; i++)
+                days[i] = chars[i] == '1';
+            return days;
         }
     }
 }

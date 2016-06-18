@@ -36,6 +36,15 @@
             this.nameTextBox = new System.Windows.Forms.TextBox();
             this.cancelButton = new System.Windows.Forms.Button();
             this.closeButton = new System.Windows.Forms.Button();
+            this.daysGroupBox = new System.Windows.Forms.GroupBox();
+            this.sundayCheckBox = new System.Windows.Forms.CheckBox();
+            this.saturdayCheckBox = new System.Windows.Forms.CheckBox();
+            this.fridayCheckBox = new System.Windows.Forms.CheckBox();
+            this.thursdayCheckBox = new System.Windows.Forms.CheckBox();
+            this.wednesdayCheckBox = new System.Windows.Forms.CheckBox();
+            this.tuesdayCheckBox = new System.Windows.Forms.CheckBox();
+            this.mondayCheckBox = new System.Windows.Forms.CheckBox();
+            this.daysGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // locomotiveTextBox
@@ -89,7 +98,7 @@
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(40, 93);
+            this.cancelButton.Location = new System.Drawing.Point(44, 160);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 13;
@@ -98,7 +107,7 @@
             // 
             // closeButton
             // 
-            this.closeButton.Location = new System.Drawing.Point(121, 93);
+            this.closeButton.Location = new System.Drawing.Point(125, 160);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
             this.closeButton.TabIndex = 14;
@@ -106,13 +115,114 @@
             this.closeButton.UseVisualStyleBackColor = true;
             this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
             // 
+            // daysGroupBox
+            // 
+            this.daysGroupBox.Controls.Add(this.sundayCheckBox);
+            this.daysGroupBox.Controls.Add(this.saturdayCheckBox);
+            this.daysGroupBox.Controls.Add(this.fridayCheckBox);
+            this.daysGroupBox.Controls.Add(this.thursdayCheckBox);
+            this.daysGroupBox.Controls.Add(this.wednesdayCheckBox);
+            this.daysGroupBox.Controls.Add(this.tuesdayCheckBox);
+            this.daysGroupBox.Controls.Add(this.mondayCheckBox);
+            this.daysGroupBox.Location = new System.Drawing.Point(12, 85);
+            this.daysGroupBox.Name = "daysGroupBox";
+            this.daysGroupBox.Size = new System.Drawing.Size(188, 69);
+            this.daysGroupBox.TabIndex = 22;
+            this.daysGroupBox.TabStop = false;
+            this.daysGroupBox.Text = "Verkehrstage";
+            // 
+            // sundayCheckBox
+            // 
+            this.sundayCheckBox.AutoSize = true;
+            this.sundayCheckBox.Checked = true;
+            this.sundayCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.sundayCheckBox.Location = new System.Drawing.Point(99, 44);
+            this.sundayCheckBox.Name = "sundayCheckBox";
+            this.sundayCheckBox.Size = new System.Drawing.Size(39, 17);
+            this.sundayCheckBox.TabIndex = 28;
+            this.sundayCheckBox.Text = "So";
+            this.sundayCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // saturdayCheckBox
+            // 
+            this.saturdayCheckBox.AutoSize = true;
+            this.saturdayCheckBox.Checked = true;
+            this.saturdayCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.saturdayCheckBox.Location = new System.Drawing.Point(52, 44);
+            this.saturdayCheckBox.Name = "saturdayCheckBox";
+            this.saturdayCheckBox.Size = new System.Drawing.Size(39, 17);
+            this.saturdayCheckBox.TabIndex = 27;
+            this.saturdayCheckBox.Text = "Sa";
+            this.saturdayCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // fridayCheckBox
+            // 
+            this.fridayCheckBox.AutoSize = true;
+            this.fridayCheckBox.Checked = true;
+            this.fridayCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.fridayCheckBox.Location = new System.Drawing.Point(5, 44);
+            this.fridayCheckBox.Name = "fridayCheckBox";
+            this.fridayCheckBox.Size = new System.Drawing.Size(35, 17);
+            this.fridayCheckBox.TabIndex = 26;
+            this.fridayCheckBox.Text = "Fr";
+            this.fridayCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // thursdayCheckBox
+            // 
+            this.thursdayCheckBox.AutoSize = true;
+            this.thursdayCheckBox.Checked = true;
+            this.thursdayCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.thursdayCheckBox.Location = new System.Drawing.Point(146, 21);
+            this.thursdayCheckBox.Name = "thursdayCheckBox";
+            this.thursdayCheckBox.Size = new System.Drawing.Size(40, 17);
+            this.thursdayCheckBox.TabIndex = 25;
+            this.thursdayCheckBox.Text = "Do";
+            this.thursdayCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // wednesdayCheckBox
+            // 
+            this.wednesdayCheckBox.AutoSize = true;
+            this.wednesdayCheckBox.Checked = true;
+            this.wednesdayCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.wednesdayCheckBox.Location = new System.Drawing.Point(99, 21);
+            this.wednesdayCheckBox.Name = "wednesdayCheckBox";
+            this.wednesdayCheckBox.Size = new System.Drawing.Size(37, 17);
+            this.wednesdayCheckBox.TabIndex = 24;
+            this.wednesdayCheckBox.Text = "Mi";
+            this.wednesdayCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // tuesdayCheckBox
+            // 
+            this.tuesdayCheckBox.AutoSize = true;
+            this.tuesdayCheckBox.Checked = true;
+            this.tuesdayCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tuesdayCheckBox.Location = new System.Drawing.Point(52, 21);
+            this.tuesdayCheckBox.Name = "tuesdayCheckBox";
+            this.tuesdayCheckBox.Size = new System.Drawing.Size(36, 17);
+            this.tuesdayCheckBox.TabIndex = 23;
+            this.tuesdayCheckBox.Text = "Di";
+            this.tuesdayCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // mondayCheckBox
+            // 
+            this.mondayCheckBox.AutoSize = true;
+            this.mondayCheckBox.Checked = true;
+            this.mondayCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.mondayCheckBox.Location = new System.Drawing.Point(5, 21);
+            this.mondayCheckBox.Name = "mondayCheckBox";
+            this.mondayCheckBox.Size = new System.Drawing.Size(41, 17);
+            this.mondayCheckBox.TabIndex = 22;
+            this.mondayCheckBox.Text = "Mo";
+            this.mondayCheckBox.UseVisualStyleBackColor = true;
+            // 
             // TrainEditForm
             // 
             this.AcceptButton = this.closeButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(212, 128);
+            this.ClientSize = new System.Drawing.Size(212, 197);
+            this.Controls.Add(this.daysGroupBox);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.closeButton);
             this.Controls.Add(this.locomotiveTextBox);
@@ -124,6 +234,8 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "TrainEditForm";
             this.Text = "Neuen Zug erstellen";
+            this.daysGroupBox.ResumeLayout(false);
+            this.daysGroupBox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -139,5 +251,13 @@
         private System.Windows.Forms.TextBox nameTextBox;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button closeButton;
+        private System.Windows.Forms.GroupBox daysGroupBox;
+        private System.Windows.Forms.CheckBox sundayCheckBox;
+        private System.Windows.Forms.CheckBox saturdayCheckBox;
+        private System.Windows.Forms.CheckBox fridayCheckBox;
+        private System.Windows.Forms.CheckBox thursdayCheckBox;
+        private System.Windows.Forms.CheckBox wednesdayCheckBox;
+        private System.Windows.Forms.CheckBox tuesdayCheckBox;
+        private System.Windows.Forms.CheckBox mondayCheckBox;
     }
 }

@@ -70,12 +70,6 @@
   <ItemGroup>
     <Compile Include="BfplExport.cs" />
     <Compile Include="BfplImport.cs" />
-    <Compile Include="EditForms\DaysEditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="EditForms\DaysEditForm.Designer.cs">
-      <DependentUpon>DaysEditForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="EditForms\EditStationForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -119,9 +113,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="programm.ico" />
-    <EmbeddedResource Include="EditForms\DaysEditForm.resx">
-      <DependentUpon>DaysEditForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="EditForms\EditStationForm.resx">
       <DependentUpon>EditStationForm.cs</DependentUpon>
     </EmbeddedResource>
