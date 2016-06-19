@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Allgemeine Informationen über eine Assembly werden über die folgenden 
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die einer Assembly zugeordnet sind.
-[assembly: AssemblyTitle("Buchfahrplan.AushangfahrplanHtmlExport")]
+[assembly: AssemblyTitle("Buchfahrplan.BildfahrplanHtmlExport")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Buchfahrplan.AushangfahrplanHtmlExport")]
+[assembly: AssemblyProduct("Buchfahrplan.BildfahrplanHtmlExport")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Die folgende GUID bestimmt die ID der Typbibliothek, wenn dieses Projekt für COM verfügbar gemacht wird
-[assembly: Guid("4f19ab0d-9998-4e45-a166-dfc40014d48f")]
+[assembly: Guid("77ee9755-ce3e-4b7b-aef1-474b228e7b50")]
 
 // Versionsinformationen für eine Assembly bestehen aus den folgenden vier Werten:
 //

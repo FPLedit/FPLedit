@@ -15,6 +15,13 @@ namespace Buchfahrplan.Shared
 
         public int MaxVelocity { get; set; }
 
+        public Dictionary<string, string> Metadata { get; }
+
+        public Station()
+        {
+            Metadata = new Dictionary<string, string>();
+        }
+
         public override string ToString()
         {
             return Name + " (" + Kilometre + ")";

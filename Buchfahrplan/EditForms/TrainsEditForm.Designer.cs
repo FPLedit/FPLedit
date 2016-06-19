@@ -70,6 +70,7 @@
             this.topTrainListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.topTrainListView.FullRowSelect = true;
             this.topTrainListView.HideSelection = false;
             this.topTrainListView.Location = new System.Drawing.Point(12, 27);
             this.topTrainListView.MultiSelect = false;
@@ -128,6 +129,7 @@
             this.bottomTrainListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.bottomTrainListView.FullRowSelect = true;
             this.bottomTrainListView.HideSelection = false;
             this.bottomTrainListView.Location = new System.Drawing.Point(15, 256);
             this.bottomTrainListView.MultiSelect = false;
