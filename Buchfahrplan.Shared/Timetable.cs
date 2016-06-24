@@ -18,10 +18,13 @@ namespace Buchfahrplan.Shared
 
         public List<Train> Trains { get; set; }
 
+        public Dictionary<string, string> Metadata { get; set; }
+
         public Timetable()
         {
             Stations = new List<Station>();
             Trains = new List<Train>();
+            Metadata = new Dictionary<string, string>();
         }
 
         public static Timetable GenerateTestTimetable()
@@ -33,16 +36,16 @@ namespace Buchfahrplan.Shared
             Train tr = new Train() { Name = "P 01", Locomotive = "211" };
             tr.Line = "ATal - BTal";
             tr.Direction = true;
-            tr.Arrivals = new Dictionary<Station, DateTime>();
-            tr.Departures = new Dictionary<Station, DateTime>();
-            tr.Arrivals.Add(b, DateTime.Now);
-            tr.Departures.Add(a, DateTime.Now);
+            tr.Arrivals = new Dictionary<Station, TimeSpan>();
+            tr.Departures = new Dictionary<Station, TimeSpan>();
+            tr.Arrivals.Add(b, DateTime.Now.TimeOfDay);
+            tr.Departures.Add(a, DateTime.Now.TimeOfDay);
 
             Train t2 = new Train() { Name = "P 01", Locomotive = "211" };
-            t2.Arrivals = new Dictionary<Station, DateTime>();
-            t2.Departures = new Dictionary<Station, DateTime>();
-            t2.Arrivals.Add(b, DateTime.Now);
-            t2.Departures.Add(a, DateTime.Now);
+            t2.Arrivals = new Dictionary<Station, TimeSpan>();
+            t2.Departures = new Dictionary<Station, TimeSpan>();
+            t2.Arrivals.Add(b, DateTime.Now.TimeOfDay);
+            t2.Departures.Add(a, DateTime.Now.TimeOfDay);
 
             t.Stations = new List<Station>();
             t.Trains = new List<Train>();

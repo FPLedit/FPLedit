@@ -111,7 +111,7 @@ namespace Buchfahrplan
             {
                 Train tra = tef.NewTrain;
                 foreach (var sta in tt.Stations.OrderBy(s => s.Kilometre))
-                    tra.Arrivals.Add(sta, new DateTime());
+                    tra.Arrivals.Add(sta, new TimeSpan());
 
                 tt.Trains.Add(tra);
 
@@ -158,7 +158,7 @@ namespace Buchfahrplan
             {
                 Train tra = tef.NewTrain;
                 foreach (var sta in tt.Stations.OrderByDescending(s => s.Kilometre))
-                    tra.Arrivals.Add(sta, new DateTime());
+                    tra.Arrivals.Add(sta, new TimeSpan());
 
                 tt.Trains.Add(tra);
 

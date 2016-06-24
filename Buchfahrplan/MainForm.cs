@@ -175,6 +175,11 @@ namespace Buchfahrplan
                 return menuStrip;
             }
         }
+
+        public dynamic ShowDialog(dynamic form)
+        {
+            return form.ShowDialog();
+        }
         #endregion
     }
 }

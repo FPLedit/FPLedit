@@ -16,6 +16,8 @@ namespace Buchfahrplan.Shared
 
         dynamic Menu { get; }
 
+        dynamic ShowDialog(dynamic form);
+
         event EventHandler<FileStateChangedEventArgs> FileStateChanged;
     }
 

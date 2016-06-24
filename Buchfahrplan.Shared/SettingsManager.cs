@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Reflection;
 
@@ -9,15 +10,26 @@ namespace Buchfahrplan.Shared
     /// </summary>
     public static class SettingsManager
     {
+        private static Dictionary<string, string> defaults = new Dictionary<string, string>();
+        
         /// <summary>
         /// Gibt den Wert einer Einstellung zurück.
         /// </summary>
         /// <param name="key">Der Schlüssel der Einstellung.</param>
-        /// <returns>Der Wert der Einstellung.</returns>
+        /// <returns>Der Wert der Einstellung oder, falls dieser nicht vorhanden ist, der Standardwert.</returns>
         public static string Get(string key)
         {
-            var config = ConfigurationManager.OpenExeConfiguration(Assembly.GetEntryAssembly().Location);
-            return config.AppSettings.Settings[key].Value;
+            if (KeyExists(key))
+            {
+                var config = ConfigurationManager.OpenExeConfiguration(Assembly.GetEntryAssembly().Location);
+                return config.AppSettings.Settings[key].Value;
+            }
+            else if (defaults.ContainsKey(key))
+            {
+                return defaults[key];
+            }
+            else
+                return null;
         }
 
         /// <summary>
@@ -44,6 +56,16 @@ namespace Buchfahrplan.Shared
             else
                 config.AppSettings.Settings.Add(key, value);
             config.Save(ConfigurationSaveMode.Modified, false);
+        }
+
+        /// <summary>
+        /// Setzt den Standardwert für eine Einstellung.
+        /// </summary>
+        /// <param name="key">Der Schlüssel der Einstellung.</param>
+        /// <param name="value">Der neue Standardwert.</param>
+        public static void SetDefault(string key, string value)
+        {
+            defaults[key] = value;
         }
     }
 }

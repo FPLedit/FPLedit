@@ -124,8 +124,8 @@ namespace Buchfahrplan
 
                 foreach (var t in trains)
                 {
-                    t.Arrivals.Add(sta, new DateTime());
-                    t.Departures.Add(sta, new DateTime());
+                    t.Arrivals.Add(sta, new TimeSpan());
+                    t.Departures.Add(sta, new TimeSpan());
                 }
 
                 UpdateStations();

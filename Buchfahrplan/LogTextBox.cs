@@ -21,7 +21,7 @@ namespace Buchfahrplan
 
         public void Log(string message)
         {
-            this.Text += "\n" + message;
+            this.Text += message + Environment.NewLine;
         }
     }
 }

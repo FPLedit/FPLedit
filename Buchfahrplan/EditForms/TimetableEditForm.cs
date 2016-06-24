@@ -104,8 +104,8 @@ namespace Buchfahrplan
 
         private void UpdateTrainData(Train train)
         {
-            var ar = new Dictionary<Station, DateTime>();
-            var dp = new Dictionary<Station, DateTime>();
+            var ar = new Dictionary<Station, TimeSpan>();
+            var dp = new Dictionary<Station, TimeSpan>();
 
             bool found = false;
 
@@ -127,10 +127,8 @@ namespace Buchfahrplan
 
                         if ((string)cellAr.Value != "" && cellAr.Value != null)
                         {
-                            DateTime dtAr;
-                            DateTime.TryParse((string)cellAr.Value, out dtAr);
-
-                            ar.Add(sta, dtAr);
+                            TimeSpan tsAr = TimeSpan.Parse((string)cellAr.Value);
+                            ar.Add(sta, tsAr);
                         }
                     }
 
@@ -140,10 +138,8 @@ namespace Buchfahrplan
 
                         if ((string)cellDp.Value != "" && cellDp.Value != null)
                         {
-                            DateTime dtDp;
-                            DateTime.TryParse((string)cellDp.Value, out dtDp);
-
-                            dp.Add(sta, dtDp);
+                            TimeSpan tsDp = TimeSpan.Parse((string)cellDp.Value);
+                            dp.Add(sta, tsDp);
                         }
                     }
                 }
@@ -169,10 +165,8 @@ namespace Buchfahrplan
 
                         if ((string)cellAr.Value != "" && cellAr.Value != null)
                         {
-                            DateTime dtAr;
-                            DateTime.TryParse((string)cellAr.Value, out dtAr);
-
-                            ar.Add(sta, dtAr);
+                            TimeSpan tsAr = TimeSpan.Parse((string)cellAr.Value);
+                            ar.Add(sta, tsAr);
                         }
                     }
 
@@ -182,10 +176,8 @@ namespace Buchfahrplan
 
                         if ((string)cellDp.Value != null && cellDp.Value != null)
                         {
-                            DateTime dtDp;
-                            DateTime.TryParse((string)cellDp.Value, out dtDp);
-
-                            dp.Add(sta, dtDp);
+                            TimeSpan tsDp = TimeSpan.Parse((string)cellDp.Value);
+                            dp.Add(sta, tsDp);
                         }
                     }
                 }

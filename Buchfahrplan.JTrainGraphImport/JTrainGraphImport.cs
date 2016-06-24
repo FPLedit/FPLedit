@@ -43,19 +43,24 @@ namespace Buchfahrplan.JTrainGraphImport
                 foreach (var train in trains.Elements())
                 {
                     string name = train.Attribute("name").Value;
-                    Dictionary<Station, DateTime> ar = new Dictionary<Station, DateTime>();
-                    Dictionary<Station, DateTime> dp = new Dictionary<Station, DateTime>();
+                    Dictionary<Station, TimeSpan> ar = new Dictionary<Station, TimeSpan>();
+                    Dictionary<Station, TimeSpan> dp = new Dictionary<Station, TimeSpan>();
+                    Dictionary<string, string> md = new Dictionary<string, string>();
+
+                    bool[] days = Train.ParseDays(train.Attribute("d").Value);
+
+                    string color = colors.ContainsKey(train.Attribute("cl").Value) ? colors[train.Attribute("cl").Value] : null;
+                    if (color != null)
+                        md.Add("Color", color);
+
                     int i = 0;
-
-                    bool[] days = ParseDays(train.Attribute("d").Value);
-
                     foreach (var time in train.Elements())
                     {
                         if (time.Attribute("a").Value != "")
-                            ar.Add(stas.ElementAt(i), DateTime.ParseExact(time.Attribute("a").Value, "HH:mm", CultureInfo.InvariantCulture));
+                            ar.Add(stas.ElementAt(i), TimeSpan.Parse(time.Attribute("a").Value));
 
                         if (time.Attribute("d").Value != "")
-                            dp.Add(stas.ElementAt(i), DateTime.Parse(time.Attribute("d").Value));
+                            dp.Add(stas.ElementAt(i), TimeSpan.Parse(time.Attribute("d").Value));
                         i++;
                     }
 
@@ -67,7 +72,8 @@ namespace Buchfahrplan.JTrainGraphImport
                         Departures = dp,
                         Direction = dir,
                         Days = days,
-                        Line = dir ? line2 : line1
+                        Line = dir ? line2 : line1,
+                        Metadata = md
                     });
                 }
 
@@ -85,21 +91,28 @@ namespace Buchfahrplan.JTrainGraphImport
             }
         }
 
-        private bool GetDirection(Dictionary<Station, DateTime> ar, Dictionary<Station, DateTime> dp, Station first, Station last)
+        private bool GetDirection(Dictionary<Station, TimeSpan> ar, Dictionary<Station, TimeSpan> dp, Station first, Station last)
         {
-            DateTime firsttime = ar.ContainsKey(first) ? ar.First().Value : dp.First().Value;
-            DateTime lasttime = ar.ContainsKey(last) ? ar.Last().Value : dp.Last().Value;
+            TimeSpan firsttime = ar.ContainsKey(first) ? ar.First().Value : dp.First().Value;
+            TimeSpan lasttime = ar.ContainsKey(last) ? ar.Last().Value : dp.Last().Value;
 
             return firsttime > lasttime;
-        }
+        }        
 
-        private bool[] ParseDays(string att)
+        private Dictionary<string, string> colors = new Dictionary<string, string>()
         {
-            bool[] days = new bool[7];
-            char[] chars = att.ToCharArray();
-            for (int i = 0; i < chars.Length; i++)
-                days[i] = chars[i] == '1';
-            return days;
-        }
+            ["schwarz"] = "Black",
+            ["grau"] = "Gray",
+            ["weiß"] = "White",
+            ["rot"] = "Red",
+            ["orange"] = "Orange",
+            ["gelb"] = "Yellow",
+            ["blau"] = "Blue",
+            ["hellblau"] = "LightBlue",
+            ["grün"] = "Green",
+            ["dunkelgrün"] = "DrakGreen",
+            ["braun"] = "Brown",
+            ["magenta"] = "Magenta"
+        };
     }
 }
