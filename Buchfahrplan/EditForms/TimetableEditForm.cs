@@ -15,8 +15,7 @@ namespace Buchfahrplan
 {
     public partial class TimetableEditForm : Form
     {
-        private Timetable tt;
-        private Timetable tt_undo;
+        private IInfo info;
 
         public TimetableEditForm()
         {
@@ -28,13 +27,13 @@ namespace Buchfahrplan
             bottomDataGridView.AllowUserToAddRows = false;
         }
 
-        public void Init(Timetable tt)
+        public void Init(IInfo info)
         {
-            this.tt = tt;
-            this.tt_undo = tt;
+            this.info = info;
+            info.BackupTimetable();
 
-            topFromToLabel.Text = "Züge " + tt.GetLineName(true);
-            bottomFromToLabel.Text = "Züge " + tt.GetLineName(false);
+            topFromToLabel.Text = "Züge " + info.Timetable.GetLineName(true);
+            bottomFromToLabel.Text = "Züge " + info.Timetable.GetLineName(false);
 
             UpdateGrid();
         }
@@ -42,7 +41,7 @@ namespace Buchfahrplan
         private void UpdateGrid()
         {
             // Obere DataGridView
-            var topStations = tt.Stations.OrderByDescending(s => s.Kilometre);
+            var topStations = info.Timetable.Stations.OrderByDescending(s => s.Kilometre);
             foreach (var sta in topStations)
             {
                 if (topStations.First() != sta)
@@ -51,7 +50,7 @@ namespace Buchfahrplan
                     topDataGridView.Columns.Add(sta.Name + "dp", sta.Name + " ab");
             }
 
-            foreach (var tra in tt.Trains.Where(t => t.Direction))
+            foreach (var tra in info.Timetable.Trains.Where(t => t.Direction))
             {
                 DataGridViewRow trainRow = topDataGridView.Rows[topDataGridView.Rows.Add()];
 
@@ -72,7 +71,7 @@ namespace Buchfahrplan
             }
 
             // Untere DataGridView
-            var bottomStations = tt.Stations.OrderBy(s => s.Kilometre);
+            var bottomStations = info.Timetable.Stations.OrderBy(s => s.Kilometre);
             foreach (var sta in bottomStations)
             {
                 if (bottomStations.First() != sta)
@@ -81,7 +80,7 @@ namespace Buchfahrplan
                     bottomDataGridView.Columns.Add(sta.Name + "dp", sta.Name + " ab");
             }
 
-            foreach (var tra in tt.Trains.Where(t => !t.Direction))
+            foreach (var tra in info.Timetable.Trains.Where(t => !t.Direction))
             {
                 DataGridViewRow trainRow = bottomDataGridView.Rows[bottomDataGridView.Rows.Add()];
 
@@ -119,7 +118,7 @@ namespace Buchfahrplan
                 if (found)
                     break;
 
-                foreach (var sta in tt.Stations)
+                foreach (var sta in info.Timetable.Stations)
                 {
                     if (topDataGridView.Columns.Contains(sta.Name + "ar"))
                     {
@@ -157,7 +156,7 @@ namespace Buchfahrplan
                 if (found)
                     break;
 
-                foreach (var sta in tt.Stations)
+                foreach (var sta in info.Timetable.Stations)
                 {
                     if (bottomDataGridView.Columns.Contains(sta.Name + "ar"))
                     {
@@ -198,7 +197,7 @@ namespace Buchfahrplan
         {
             this.DialogResult = System.Windows.Forms.DialogResult.OK;
 
-            foreach (var t in tt.Trains)
+            foreach (var t in info.Timetable.Trains)
                 UpdateTrainData(t);
 
             topDataGridView.Rows.Clear();
@@ -207,21 +206,16 @@ namespace Buchfahrplan
             bottomDataGridView.Rows.Clear();
             bottomDataGridView.Columns.Clear();
 
+            info.ClearBackup();
             this.Close();
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
-            tt = tt_undo;
+            info.RestoreTimetable();
 
             Close();
-        }
-
-        private void timetableEditForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            e.Cancel = true;
-            Hide();
         }
     }
 }

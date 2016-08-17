@@ -78,20 +78,21 @@ namespace Buchfahrplan.BildfahrplanExport
             if (width == 0) width = g.VisibleClipBounds.Width;
             if (height == 0) height = g.VisibleClipBounds.Height;
 
-            // MarginTop berechnen
-            List<float> ssizes = new List<float>();
-            foreach (var sta in tt.Stations)
-                ssizes.Add(g.MeasureString(sta.ToString(displayKilometre), stationFont).Width);
-            marginTop = drawHeader ? ssizes.Max() + marginTop : marginTop;
+            if (!marginsCalced)
+            {
+                // MarginTop berechnen
+                List<float> ssizes = new List<float>();
+                foreach (var sta in tt.Stations)
+                    ssizes.Add(g.MeasureString(sta.ToString(displayKilometre), stationFont).Width);
+                marginTop = drawHeader ? ssizes.Max() + marginTop : marginTop;
 
-            // MarginLeft berechnen
-            List<float> tsizes = new List<float>();
-            foreach (var l in GetTimeLines())
-                tsizes.Add(g.MeasureString(new TimeSpan(0, l + startTime.GetMinutes(), 0).ToString(@"hh\:mm"), timeFont).Width);
-            marginLeft = tsizes.Max() + marginLeft;
-
-            marginsCalced = true;
-
+                // MarginLeft berechnen
+                List<float> tsizes = new List<float>();
+                foreach (var l in GetTimeLines())
+                    tsizes.Add(g.MeasureString(new TimeSpan(0, l + startTime.GetMinutes(), 0).ToString(@"hh\:mm"), timeFont).Width);
+                marginLeft = tsizes.Max() + marginLeft;
+                marginsCalced = true;
+            }
             
             // Zeitaufteilung
             bool hour;
@@ -142,6 +143,7 @@ namespace Buchfahrplan.BildfahrplanExport
             foreach (var train in trains)
             {
                 Color color = train.GetMeta("Color", trainColor, Color.FromName);
+                int tWidth = train.GetMeta("Width", trainWidth, int.Parse);
                 List<PointF> points = new List<PointF>();
                 foreach (var sta in stations)
                 {
@@ -184,7 +186,7 @@ namespace Buchfahrplan.BildfahrplanExport
 
                 for (int i = 0; i < points.Count; i += 2)
                 {
-                    g.DrawLine(new Pen(color, trainWidth), points[i], points[i + 1]);
+                    g.DrawLine(new Pen(color, tWidth), points[i], points[i + 1]);
 
                     if (points[i].X == points[i + 1].X)
                         continue;

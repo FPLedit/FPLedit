@@ -110,5 +110,16 @@ namespace Buchfahrplan.Shared
         {
             return GetLineName(true);
         }
+
+        public Timetable Clone()
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+                formatter.Serialize(stream, this);
+                stream.Seek(0, SeekOrigin.Begin);
+                return (Timetable)formatter.Deserialize(stream);
+            }
+        }
     }    
 }

@@ -8,18 +8,19 @@ namespace Buchfahrplan
 {
     public partial class TrainsEditForm : Form
     {
+        private IInfo info;
         private Timetable tt;
-        private Timetable tt_undo;
 
         public TrainsEditForm()
         {
             InitializeComponent();
         }
 
-        public void Init(Timetable tt)
+        public void Init(IInfo info)
         {
-            this.tt = tt;
-            this.tt_undo = tt;
+            this.info = info;
+            tt = info.Timetable;
+            info.BackupTimetable();
 
             topFromToLabel.Text = "Züge " + tt.GetLineName(false);
             bottomFromToLabel.Text = "Züge " + tt.GetLineName(true);
@@ -66,9 +67,8 @@ namespace Buchfahrplan
             return string.Join(", ", str.Where(o => o != null));
         }
 
-        private void NewEditForm_Load(object sender, EventArgs e)
-        {
-            
+        private void TrainsEditForm_Load(object sender, EventArgs e)
+        {            
             topTrainListView.Columns.Add("Zugnummer");
             topTrainListView.Columns.Add("Strecke");
             topTrainListView.Columns.Add("Tfz");
@@ -84,6 +84,7 @@ namespace Buchfahrplan
 
         private void closeButton_Click(object sender, EventArgs e)
         {
+            info.ClearBackup();
             DialogResult = System.Windows.Forms.DialogResult.OK;
             Close();
         }
@@ -91,16 +92,10 @@ namespace Buchfahrplan
         private void cancelButton_Click(object sender, EventArgs e)
         {
             DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            tt = tt_undo;
+            info.RestoreTimetable();
 
             Close();
-        }
-
-        private void EditForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            e.Cancel = true;
-            Hide();
-        }        
+        } 
 
         private void topNewTrainButton_Click(object sender, EventArgs e)
         {

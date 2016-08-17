@@ -10,7 +10,9 @@ namespace Buchfahrplan
 {
     public partial class MainForm : Form, IInfo
     {        
-        public Timetable Timetable { get; private set; }
+        public Timetable Timetable { get; set; }
+
+        private Timetable timetableBackup = null;
 
         public bool FileOpened
         {
@@ -142,7 +144,7 @@ namespace Buchfahrplan
         private void editTrainsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var trEdit = new TrainsEditForm();
-            trEdit.Init(Timetable);
+            trEdit.Init(this);
             trEdit.ShowDialog();
             FileSaved = false;
             UpdateButtonsEnabled();
@@ -151,7 +153,7 @@ namespace Buchfahrplan
         private void editLineToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var liEdit = new LineEditForm();
-            liEdit.Init(Timetable.Stations, Timetable.Trains);
+            liEdit.Init(this);
             liEdit.ShowDialog();
             FileSaved = false;
             UpdateButtonsEnabled();
@@ -160,7 +162,7 @@ namespace Buchfahrplan
         private void editTimetableToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var ttEdit = new TimetableEditForm();
-            ttEdit.Init(Timetable);
+            ttEdit.Init(this);
             ttEdit.ShowDialog();
             FileSaved = false;
             UpdateButtonsEnabled();
@@ -179,6 +181,22 @@ namespace Buchfahrplan
         public dynamic ShowDialog(dynamic form)
         {
             return form.ShowDialog();
+        }
+
+        public void BackupTimetable()
+        {
+            timetableBackup = Timetable.Clone();
+        }
+
+        public void RestoreTimetable()
+        {
+            Timetable = timetableBackup;
+            timetableBackup = null;
+        }
+
+        public void ClearBackup()
+        {
+            timetableBackup = null;
         }
         #endregion
     }

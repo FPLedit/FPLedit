@@ -13,11 +13,8 @@ namespace Buchfahrplan
 {
     public partial class LineEditForm : Form
     {
-        private List<Station> stations;
-        private List<Station> stations_undo;
-
-        private List<Train> trains;
-        private List<Train> trains_undo;
+        private IInfo info;
+        private Timetable tt;        
 
         public LineEditForm()
         {
@@ -28,13 +25,11 @@ namespace Buchfahrplan
             stationListView.Columns.Add("Höchstgeschwindigkeit");
         }
 
-        public void Init(List<Station> stations, List<Train> trains)
+        public void Init(IInfo info)
         {
-            this.stations = stations;
-            this.stations_undo = stations;
-
-            this.trains = trains;
-            this.trains_undo = trains;
+            this.info = info;
+            this.tt = info.Timetable;
+            info.BackupTimetable();
 
             UpdateStations();
         }
@@ -43,7 +38,7 @@ namespace Buchfahrplan
         {            
             stationListView.Items.Clear();
 
-            foreach (var station in stations.OrderBy(s => s.Kilometre))
+            foreach (var station in tt.Stations.OrderBy(s => s.Kilometre))
             {
                 stationListView.Items.Add(new ListViewItem(new[] { 
                     station.Name,                     
@@ -55,6 +50,7 @@ namespace Buchfahrplan
 
         private void closeButton_Click(object sender, EventArgs e)
         {
+            info.ClearBackup();
             this.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.Close();
         }
@@ -62,16 +58,9 @@ namespace Buchfahrplan
         private void cancelButton_Click(object sender, EventArgs e)
         {
             this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            stations = stations_undo;
-            trains = trains_undo;
+            info.RestoreTimetable();
 
             this.Close();
-        }
-
-        private void lineEditForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            e.Cancel = true;
-            this.Hide();
         }
 
         private void editStationButton_Click(object sender, EventArgs e)
@@ -85,7 +74,7 @@ namespace Buchfahrplan
             if (stationListView.SelectedItems.Count > 0)
             {
                 ListViewItem item = (ListViewItem)stationListView.Items[stationListView.SelectedIndices[0]];
-                Station oldStation = stations[stations.IndexOf((Station)item.Tag)];
+                Station oldStation = tt.Stations[tt.Stations.IndexOf((Station)item.Tag)];
 
                 NewStationForm nsf = new NewStationForm();
                 nsf.Initialize(oldStation);
@@ -106,7 +95,7 @@ namespace Buchfahrplan
             if (stationListView.SelectedItems.Count > 0)
             {
                 ListViewItem item = (ListViewItem)stationListView.Items[stationListView.SelectedIndices[0]];
-                stations.Remove((Station)item.Tag);
+                tt.Stations.Remove((Station)item.Tag);
 
                 UpdateStations();
             }
@@ -120,9 +109,9 @@ namespace Buchfahrplan
             {
                 Station sta = nsf.NewStation;
 
-                stations.Add(sta);
+                tt.Stations.Add(sta);
 
-                foreach (var t in trains)
+                foreach (var t in tt.Trains)
                 {
                     t.Arrivals.Add(sta, new TimeSpan());
                     t.Departures.Add(sta, new TimeSpan());

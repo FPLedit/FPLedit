@@ -8,7 +8,13 @@ namespace Buchfahrplan.Shared
 {
     public interface IInfo
     {
-        Timetable Timetable { get; }
+        Timetable Timetable { get; set; }
+
+        void BackupTimetable();
+
+        void RestoreTimetable();
+
+        void ClearBackup();
 
         bool FileOpened { get; }
 
