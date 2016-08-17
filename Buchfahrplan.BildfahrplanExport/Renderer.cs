@@ -142,6 +142,9 @@ namespace Buchfahrplan.BildfahrplanExport
             });            
             foreach (var train in trains)
             {
+                if (!train.GetMeta("Draw", true, bool.Parse))
+                    continue;
+
                 Color color = train.GetMeta("Color", trainColor, Color.FromName);
                 int tWidth = train.GetMeta("Width", trainWidth, int.Parse);
                 List<PointF> points = new List<PointF>();

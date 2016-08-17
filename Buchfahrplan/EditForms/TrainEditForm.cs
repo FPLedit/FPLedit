@@ -30,6 +30,7 @@ namespace Buchfahrplan
             fridayCheckBox.Checked = NewTrain.Days[4];
             saturdayCheckBox.Checked = NewTrain.Days[5];
             sundayCheckBox.Checked = NewTrain.Days[6];
+            Text = "Zug bearbeiten";
         }
 
         public void Initialize(bool direction)

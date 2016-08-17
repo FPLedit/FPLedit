@@ -64,6 +64,12 @@
     <Compile Include="TrainColorForm.Designer.cs">
       <DependentUpon>TrainColorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="TrainColorEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TrainColorEditForm.Designer.cs">
+      <DependentUpon>TrainColorEditForm.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Buchfahrplan.Shared\Buchfahrplan.Shared.csproj">
@@ -80,6 +86,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TrainColorForm.resx">
       <DependentUpon>TrainColorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TrainColorEditForm.resx">
+      <DependentUpon>TrainColorEditForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

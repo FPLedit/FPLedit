@@ -118,13 +118,13 @@ namespace Buchfahrplan
         {
             if (topTrainListView.SelectedItems.Count > 0)
             {
-                ListViewItem item = (ListViewItem)topTrainListView.Items[topTrainListView.SelectedIndices[0]];
-                Train oldTrain = tt.Trains[tt.Trains.IndexOf((Train)item.Tag)];
+                ListViewItem item = topTrainListView.Items[topTrainListView.SelectedIndices[0]];
+                Train train = tt.Trains[tt.Trains.IndexOf((Train)item.Tag)];
 
                 TrainEditForm tef = new TrainEditForm();
-                tef.Initialize(oldTrain);
+                tef.Initialize(train);
                 DialogResult res = tef.ShowDialog();
-                if (res == System.Windows.Forms.DialogResult.OK)
+                if (res == DialogResult.OK)
                     UpdateTrains();
             }
             else
@@ -135,7 +135,7 @@ namespace Buchfahrplan
         {
             if (topTrainListView.SelectedItems.Count > 0)
             {
-                ListViewItem item = (ListViewItem)topTrainListView.Items[topTrainListView.SelectedIndices[0]];
+                ListViewItem item = topTrainListView.Items[topTrainListView.SelectedIndices[0]];
                 tt.Trains.Remove((Train)item.Tag);
 
                 UpdateTrains();
@@ -149,7 +149,7 @@ namespace Buchfahrplan
             TrainEditForm tef = new TrainEditForm();
             tef.Initialize(true);
             DialogResult res = tef.ShowDialog();
-            if (res == System.Windows.Forms.DialogResult.OK)
+            if (res == DialogResult.OK)
             {
                 Train tra = tef.NewTrain;
                 foreach (var sta in tt.Stations.OrderByDescending(s => s.Kilometre))
@@ -165,13 +165,13 @@ namespace Buchfahrplan
         {
             if (bottomTrainListView.SelectedItems.Count > 0)
             {
-                ListViewItem item = (ListViewItem)bottomTrainListView.Items[bottomTrainListView.SelectedIndices[0]];
-                Train oldTrain = tt.Trains[tt.Trains.IndexOf((Train)item.Tag)];
+                ListViewItem item = bottomTrainListView.Items[bottomTrainListView.SelectedIndices[0]];
+                Train train = tt.Trains[tt.Trains.IndexOf((Train)item.Tag)];
 
                 TrainEditForm tef = new TrainEditForm();
-                tef.Initialize(oldTrain);
+                tef.Initialize(train);
                 DialogResult res = tef.ShowDialog();
-                if (res == System.Windows.Forms.DialogResult.OK)
+                if (res == DialogResult.OK)
                     UpdateTrains();
             }
             else
@@ -182,7 +182,7 @@ namespace Buchfahrplan
         {
             if (bottomTrainListView.SelectedItems.Count > 0)
             {
-                ListViewItem item = (ListViewItem)bottomTrainListView.Items[bottomTrainListView.SelectedIndices[0]];
+                ListViewItem item = bottomTrainListView.Items[bottomTrainListView.SelectedIndices[0]];
                 tt.Trains.Remove((Train)item.Tag);
 
                 UpdateTrains();

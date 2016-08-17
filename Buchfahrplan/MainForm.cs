@@ -75,11 +75,8 @@ namespace Buchfahrplan
             foreach (var plugin in plugins)
                 plugin.Init(this);
 
-            foreach (var export in exporters)
-                saveFileDialog.Filter += saveFileDialog.Filter == "" ? export.Filter : "|" + export.Filter;
-
-            foreach (var import in importers)
-                openFileDialog.Filter += openFileDialog.Filter == "" ? import.Filter : "|" + import.Filter;
+            saveFileDialog.Filter = string.Join("|", exporters.Select(ex => ex.Filter));
+            openFileDialog.Filter = string.Join("|", importers.Select(im => im.Filter));
 
             UpdateButtonsEnabled();
         }

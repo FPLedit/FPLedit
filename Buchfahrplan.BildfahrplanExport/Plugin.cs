@@ -59,7 +59,7 @@ namespace Buchfahrplan.BildfahrplanExport
         private void TrainColorItem_Click(object sender, EventArgs e)
         {
             TrainColorForm tcf = new TrainColorForm();
-            tcf.Init(info.Timetable);
+            tcf.Init(info);
             tcf.ShowDialog();
         }
 
