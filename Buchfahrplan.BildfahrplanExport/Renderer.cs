@@ -12,24 +12,32 @@ namespace Buchfahrplan.BildfahrplanExport
     {
         Timetable tt;
 
-        Font stationFont = new Font("Arial", 9);
-        Font timeFont = new Font("Arial", 9);
-        Font trainFont = new Font("Arial", 9);
-        StringFormat format = new StringFormat(StringFormatFlags.DirectionVertical); //
-        int heightPerHour = 100;
-        TimeSpan startTime = new TimeSpan(0, 0, 0);
-        TimeSpan endTime = new TimeSpan(24, 0, 0);
-        Color backgroundColor = Color.White;
-        Color stationColor = Color.Black;
-        int stationWidth = 1;
-        Color timeColor = Color.Orange;
-        int hourTimeWidth = 2;
-        int minuteTimeWidth = 1;
-        Color trainColor = Color.Gray;
-        int trainWidth = 1;
-        bool stationLines = true;
-        bool[] days = new bool[7];
-        bool displayKilometre = true;
+        public Font stationFont = new Font("Arial", 9);
+        public Font timeFont = new Font("Arial", 9);
+        public Font trainFont = new Font("Arial", 9);
+        public StringFormat format = new StringFormat(StringFormatFlags.DirectionVertical); //
+        public int heightPerHour = 100;
+        public TimeSpan startTime = new TimeSpan(0, 0, 0);
+        public TimeSpan endTime = new TimeSpan(24, 0, 0);
+        public Color backgroundColor = Color.White;
+        public Color stationColor = Color.Black;
+        public int stationWidth = 1;
+        public Color timeColor = Color.Orange;
+        public int hourTimeWidth = 2;
+        public int minuteTimeWidth = 1;
+        public Color trainColor = Color.Gray;
+        public int trainWidth = 1;
+        public bool stationLines = true;
+        public bool[] days = new bool[7];
+        public bool displayKilometre = true;
+        public bool drawHeader = false;
+
+        private bool marginsCalced = false;
+        public float marginRight = 20;
+        public float marginBottom = 20;
+        public float marginTop = 20;
+        public float marginLeft = 10;
+        public float width = 0, height = 0;
 
         public Renderer(Timetable timetable)
         {
@@ -41,65 +49,63 @@ namespace Buchfahrplan.BildfahrplanExport
 
         public void Init()
         {
-            /*if (tt.Metadata.ContainsKey("TrainColor"))
-                trainColor = Color.FromName(tt.Metadata["TrainColor"]);*/
-            trainColor = Meta.GetMeta(tt, "TrainColor", trainColor, Color.FromName);
-            /*if (tt.Metadata.ContainsKey("TimeColor"))
-                timeColor = Color.FromName(tt.Metadata["TimeColor"]);*/
-            timeColor = Meta.GetMeta(tt, "TimeColor", timeColor, Color.FromName);
-            if (tt.Metadata.ContainsKey("BgColor"))
-                backgroundColor = Color.FromName(tt.Metadata["BgColor"]);
-            if (tt.Metadata.ContainsKey("StationColor"))
-                stationColor = Color.FromName(tt.Metadata["StationColor"]);
-            if (tt.Metadata.ContainsKey("TrainWidth"))
-                trainWidth = int.Parse(tt.Metadata["TrainWidth"]);
-            if (tt.Metadata.ContainsKey("StationWidth"))
-                stationWidth = int.Parse(tt.Metadata["StationWidth"]);
-            if (tt.Metadata.ContainsKey("HourTimeWidth"))
-                hourTimeWidth = int.Parse(tt.Metadata["HourTimeWidth"]);
-            if (tt.Metadata.ContainsKey("MinuteTimeWidth"))
-                minuteTimeWidth = int.Parse(tt.Metadata["MinuteTimeWidth"]);
-            if (tt.Metadata.ContainsKey("StationFont") && tt.Metadata.ContainsKey("StationFontSize"))
-                stationFont = new Font(tt.Metadata["StationFont"], int.Parse(tt.Metadata["StationFontSize"]));
-            if (tt.Metadata.ContainsKey("TimeFont") && tt.Metadata.ContainsKey("TimeFontSize"))
-                timeFont = new Font(tt.Metadata["TimeFont"], int.Parse(tt.Metadata["TimeFontSize"]));
-            if (tt.Metadata.ContainsKey("TrainFont") && tt.Metadata.ContainsKey("TrainFontSize"))
-                trainFont = new Font(tt.Metadata["TrainFont"], int.Parse(tt.Metadata["TrainFontSize"]));
-            if (tt.Metadata.ContainsKey("StationLines"))
-                stationLines = bool.Parse(tt.Metadata["StationLines"]);
-            if (tt.Metadata.ContainsKey("HeightPerHour"))
-                heightPerHour = int.Parse(tt.Metadata["HeightPerHour"]);
-            if (tt.Metadata.ContainsKey("ShowDays"))
-                days = Train.ParseDays(tt.Metadata["ShowDays"]);
-            if (tt.Metadata.ContainsKey("StartTime"))
-                startTime = TimeSpan.Parse(tt.Metadata["StartTime"]);
-            if (tt.Metadata.ContainsKey("EndTime"))
-                endTime = TimeSpan.Parse(tt.Metadata["EndTime"] == "24:00" ? "1.00:00" : tt.Metadata["EndTime"]);
-            if (tt.Metadata.ContainsKey("DisplayKilometre"))
-                displayKilometre = bool.Parse(tt.Metadata["DisplayKilometre"]);
+            trainColor = tt.GetMeta("TrainColor", trainColor, Color.FromName);
+            timeColor = tt.GetMeta("TimeColor", timeColor, Color.FromName);
+            backgroundColor = tt.GetMeta("BgColor", backgroundColor, Color.FromName);
+            stationColor = tt.GetMeta("StationColor", stationColor, Color.FromName);
+            trainWidth = tt.GetMeta("TrainWidth", trainWidth, int.Parse);
+            stationWidth = tt.GetMeta("StationWidth", stationWidth, int.Parse);
+            hourTimeWidth = tt.GetMeta("HourTimeWidth", hourTimeWidth, int.Parse);
+            minuteTimeWidth = tt.GetMeta("MinuteTimeWidth", minuteTimeWidth, int.Parse);
+
+            stationLines = tt.GetMeta("StationLines", stationLines, bool.Parse);
+            displayKilometre = tt.GetMeta("DisplayKilometre", displayKilometre, bool.Parse);
+
+            heightPerHour = tt.GetMeta("HeightPerHour", heightPerHour, int.Parse);
+            days = tt.GetMeta("ShowDays", days, Train.ParseDays);
+            startTime = tt.GetMeta("StartTime", startTime, TimeSpan.Parse);
+            endTime = tt.GetMeta("EndTime", endTime, s => TimeSpan.Parse(s == "24:00" ? "1.00:00" : s));
+
+            stationFont = new Font(tt.GetMeta("StationFont", stationFont.Name), tt.GetMeta("StationFontSize", stationFont.Size, float.Parse));
+            timeFont = new Font(tt.GetMeta("TimeFont", timeFont.Name), tt.GetMeta("TimeFontSize", timeFont.Size, float.Parse));
+            trainFont = new Font(tt.GetMeta("TrainFont", trainFont.Name), tt.GetMeta("TrainFontSize", trainFont.Size, float.Parse));
         }
 
         public void Draw(Graphics g)
         {
             g.Clear(backgroundColor);
 
-            float width = g.VisibleClipBounds.Width;
-            float height = g.VisibleClipBounds.Height;
-            float marginRight = 20;
-            float marginBottom = 20;
-            float marginTop, marginLeft;
+            if (width == 0) width = g.VisibleClipBounds.Width;
+            if (height == 0) height = g.VisibleClipBounds.Height;
 
             // MarginTop berechnen
             List<float> ssizes = new List<float>();
             foreach (var sta in tt.Stations)
                 ssizes.Add(g.MeasureString(sta.ToString(displayKilometre), stationFont).Width);
-            marginTop = ssizes.Max() + 20;
+            marginTop = drawHeader ? ssizes.Max() + marginTop : marginTop;
 
             // MarginLeft berechnen
             List<float> tsizes = new List<float>();
             foreach (var l in GetTimeLines())
                 tsizes.Add(g.MeasureString(new TimeSpan(0, l + startTime.GetMinutes(), 0).ToString(@"hh\:mm"), timeFont).Width);
-            marginLeft = tsizes.Max() + 10;
+            marginLeft = tsizes.Max() + marginLeft;
+
+            marginsCalced = true;
+
+            
+            // Zeitaufteilung
+            bool hour;
+            foreach (var l in GetTimeLines(out hour))
+            {
+                var offset = marginTop + l * heightPerHour / 60f;
+                g.DrawLine(new Pen(timeColor, hour ? hourTimeWidth : minuteTimeWidth), marginLeft - 5, offset, width - marginRight, offset); // Linie
+
+                var size = g.MeasureString(new TimeSpan(0, l + startTime.GetMinutes(), 0).ToString(@"hh\:mm"), timeFont);
+                g.DrawString(new TimeSpan(0, l + startTime.GetMinutes(), 0).ToString(@"hh\:mm"), timeFont, new SolidBrush(timeColor), marginLeft - 5 - size.Width, offset - (size.Height / 2)); // Beschriftung
+                hour = !hour;
+            }
+
+            g.ExcludeClip(new Rectangle(0, GetHeight() - (int)marginBottom, (int)width, (int)(height - GetHeight() + marginBottom))); // Unterer Rand nicht bemalbar
 
             // Stationenaufteilung
             var stations = tt.Stations.OrderBy(s => s.Kilometre);
@@ -117,35 +123,25 @@ namespace Buchfahrplan.BildfahrplanExport
 
                 g.DrawLine(new Pen(stationColor, stationWidth), marginLeft + pos, marginTop - 5, marginLeft + pos, height - marginBottom); // Linie
 
-                g.DrawString(sta.ToString(displayKilometre), stationFont, new SolidBrush(stationColor), marginLeft + pos - (size.Height / 2), marginTop - 5 - size.Width, format); // Beschriftung
+                if (drawHeader)
+                    g.DrawString(sta.ToString(displayKilometre), stationFont, new SolidBrush(stationColor), marginLeft + pos - (size.Height / 2), marginTop - 5 - size.Width, format); // Beschriftung
 
                 stationOffsets.Add(sta, pos);
             }
 
-            // Zeitaufteilung
-            bool hour;
-            foreach (var l in GetTimeLines(out hour))
-            {
-                var offset = marginTop + l * heightPerHour / 60f;
-                g.DrawLine(new Pen(timeColor, hour ? hourTimeWidth : minuteTimeWidth), marginLeft - 5, offset, width - marginRight, offset); // Linie
-
-                var size = g.MeasureString(new TimeSpan(0, l + startTime.GetMinutes(), 0).ToString(@"hh\:mm"), timeFont);
-                g.DrawString(new TimeSpan(0, l + startTime.GetMinutes(), 0).ToString(@"hh\:mm"), timeFont, new SolidBrush(timeColor), marginLeft - 5 - size.Width, offset - (size.Height / 2)); // Beschriftung
-                hour = !hour;
-            }
-
             // Züge
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            g.ExcludeClip(new Rectangle(0, 0, (int)width, (int)marginTop)); // Kopf nicht bemalbar
             var trains = tt.Trains.Where(t =>
             {
                 return (days[0] && t.Days[0]) || (days[1] && t.Days[1])
                 || (days[2] && t.Days[2]) || (days[3] && t.Days[3])
                 || (days[4] && t.Days[4]) || (days[5] && t.Days[5])
                 || (days[6] && t.Days[6]);
-            });
+            });            
             foreach (var train in trains)
             {
-                Color color = train.Metadata.ContainsKey("Color") ? Color.FromName(train.Metadata["Color"]) : trainColor;
+                Color color = train.GetMeta("Color", trainColor, Color.FromName);
                 List<PointF> points = new List<PointF>();
                 foreach (var sta in stations)
                 {
@@ -207,13 +203,13 @@ namespace Buchfahrplan.BildfahrplanExport
                     g.TranslateTransform(-x, -y);
                 }
             }
-            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;            
         }
 
         private List<int> GetTimeLines()
         {
-            bool a;
-            return GetTimeLines(out a);
+            bool h;
+            return GetTimeLines(out h);
         }
 
         private List<int> GetTimeLines(out bool hourStart)
@@ -246,7 +242,37 @@ namespace Buchfahrplan.BildfahrplanExport
                 foreach (var sta in tt.Stations)
                     ssizes.Add(g.MeasureString(sta.ToString(displayKilometre), stationFont).Width);
 
-                return (int)(ssizes.Max() + 40 + (endTime - startTime).GetMinutes() * heightPerHour / 60f);
+                if (!marginsCalced)
+                    return (int)((drawHeader ? ssizes.Max() : 0) + marginTop + marginBottom + (endTime - startTime).GetMinutes() * heightPerHour / 60f);
+                else
+                    return (int)(marginTop + marginBottom + (endTime - startTime).GetMinutes() * heightPerHour / 60f);
+            }
+        }
+
+        public TimeSpan GetTimeByHeight(bool drawHeader, TimeSpan start, int height)
+        {
+            this.drawHeader = drawHeader;
+            startTime = start;
+            endTime = start + new TimeSpan(0, 60 - start.Minutes, 0); // to full hour
+            TimeSpan one = new TimeSpan(1, 0, 0);
+            TimeSpan last = endTime;
+            int h = GetHeight();
+            while (true)
+            {
+                endTime += one;
+                h += heightPerHour;
+                if (h >= height)
+                {
+                    endTime = last;
+                    var meta = tt.GetMeta("EndTime", new TimeSpan(24, 0, 0), TimeSpan.Parse);
+                    if (endTime > meta)
+                    {
+                        endTime = meta;
+                        return meta;
+                    }
+                    return last;
+                }
+                last = endTime;
             }
         }
     }

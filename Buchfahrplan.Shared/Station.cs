@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 namespace Buchfahrplan.Shared
 {
     [Serializable]
-    public sealed class Station
+    public sealed class Station : Meta
     {
         public string Name { get; set; }
 
@@ -15,18 +16,18 @@ namespace Buchfahrplan.Shared
 
         public int MaxVelocity { get; set; }
 
-        public Dictionary<string, string> Metadata { get; set; }
-
-        public Station()
+        public Station() : base()
         {
-            Metadata = new Dictionary<string, string>();
+            
         }
 
+        [DebuggerStepThrough]
         public override string ToString()
         {
             return ToString(true);
         }
 
+        [DebuggerStepThrough]
         public string ToString(bool includeKilometre)
         {
             if (includeKilometre)

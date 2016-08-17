@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 namespace Buchfahrplan.Shared
 {
     [Serializable]
-    public sealed class Train
+    public sealed class Train : Meta
     {
         public string Name { get; set; }
 
@@ -24,16 +25,14 @@ namespace Buchfahrplan.Shared
 
         public bool[] Days { get; set; }
 
-        public Dictionary<string, string> Metadata { get; set; }
-
-        public Train()
+        public Train() : base()
         {
             Arrivals = new Dictionary<Station, TimeSpan>();
             Departures = new Dictionary<Station, TimeSpan>();
-            Metadata = new Dictionary<string, string>();
             Days = new bool[7];
         }
 
+        [DebuggerStepThrough]
         public override string ToString()
         {
             return Name;

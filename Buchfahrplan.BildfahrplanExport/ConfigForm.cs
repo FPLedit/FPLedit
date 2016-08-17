@@ -72,29 +72,28 @@ namespace Buchfahrplan.BildfahrplanExport
         public void Init(Timetable tt)
         {
             this.tt = tt;
-            if (tt.Metadata.ContainsKey("BgColor")) bgColorComboBox.SelectedItem = tt.Metadata["BgColor"];
-            
-            if (tt.Metadata.ContainsKey("TimeColor")) timeColorComboBox.SelectedItem = tt.Metadata["TimeColor"];
-            if (tt.Metadata.ContainsKey("TrainColor")) trainColorComboBox.SelectedItem = tt.Metadata["TrainColor"];
-            if (tt.Metadata.ContainsKey("StationColor")) stationColorComboBox.SelectedItem = tt.Metadata["StationColor"];
-            if (tt.Metadata.ContainsKey("HourTimeWidth")) hourTimeWidthComboBox.SelectedItem = tt.Metadata["HourTimeWidth"];
-            if (tt.Metadata.ContainsKey("MinuteTimeWidth")) minuteTimeWidthComboBox.SelectedItem = tt.Metadata["MinuteTimeWidth"];
-            if (tt.Metadata.ContainsKey("TrainWidth")) trainWidthComboBox.SelectedItem = tt.Metadata["TrainWidth"];
-            if (tt.Metadata.ContainsKey("StationWidth")) stationWidthComboBox.SelectedItem = tt.Metadata["StationWidth"];
+            bgColorComboBox.SelectedItem = tt.GetMeta("BgColor", (string)bgColorComboBox.SelectedItem);
+            timeColorComboBox.SelectedItem = tt.GetMeta("TimeColor", (string)timeColorComboBox.SelectedItem);
+            trainColorComboBox.SelectedItem = tt.GetMeta("TrainColor", (string)trainColorComboBox.SelectedItem);
+            stationColorComboBox.SelectedItem = tt.GetMeta("StationColor", (string)stationColorComboBox.SelectedItem);
+            hourTimeWidthComboBox.SelectedItem = tt.GetMeta("HourTimeWidth", (string)hourTimeWidthComboBox.SelectedItem);
+            minuteTimeWidthComboBox.SelectedItem = tt.GetMeta("MinuteTimeWidth", (string)minuteTimeWidthComboBox.SelectedItem);
+            trainWidthComboBox.SelectedItem = tt.GetMeta("TrainWidth", (string)trainWidthComboBox.SelectedItem);
+            stationWidthComboBox.SelectedItem = tt.GetMeta("StationWidth", (string)stationWidthComboBox.SelectedItem);
 
-            if (tt.Metadata.ContainsKey("StationFont")) stationFontComboBox.SelectedItem = tt.Metadata["StationFont"];
-            if (tt.Metadata.ContainsKey("TimeFont")) timeFontComboBox.SelectedItem = tt.Metadata["TimeFont"];
-            if (tt.Metadata.ContainsKey("TrainFont")) trainFontComboBox.SelectedItem = tt.Metadata["TrainFont"];
-            if (tt.Metadata.ContainsKey("StationFontSize")) stationFontSizeComboBox.SelectedItem = tt.Metadata["StationFontSize"];
-            if (tt.Metadata.ContainsKey("TimeFontSize")) timeFontSizeComboBox.SelectedItem = tt.Metadata["TimeFontSize"];
-            if (tt.Metadata.ContainsKey("TrainFontSize")) trainFontSizeComboBox.SelectedItem = tt.Metadata["TrainFontSize"];
+            stationFontComboBox.SelectedItem = tt.GetMeta("StationFont", (string)stationFontComboBox.SelectedItem);
+            timeFontComboBox.SelectedItem = tt.GetMeta("TimeFont", (string)timeFontComboBox.SelectedItem);
+            trainFontComboBox.SelectedItem = tt.GetMeta("TrainFont", (string)trainFontComboBox.SelectedItem);
+            stationFontSizeComboBox.SelectedItem = tt.GetMeta("StationFontSize", (string)stationFontSizeComboBox.SelectedItem);
+            timeFontSizeComboBox.SelectedItem = tt.GetMeta("TimeFontSize", (string)timeFontSizeComboBox.SelectedItem);
+            trainFontSizeComboBox.SelectedItem = tt.GetMeta("TrainFontSize", (string)trainFontSizeComboBox.SelectedItem);
 
-            if (tt.Metadata.ContainsKey("StationLines")) stationLinesCheckBox.Checked = bool.Parse(tt.Metadata["StationLines"]);
-            if (tt.Metadata.ContainsKey("StationLines")) stationLinesCheckBox.Checked = bool.Parse(tt.Metadata["StationLines"]);
+            stationLinesCheckBox.Checked = tt.GetMeta("StationLines", stationLinesCheckBox.Checked, bool.Parse);
+            includeKilometreCheckBox.Checked = tt.GetMeta("DisplayKilometre", includeKilometreCheckBox.Checked, bool.Parse);
 
-            if (tt.Metadata.ContainsKey("HeightPerHour")) heightPerHourTextBox.Text = tt.Metadata["HeightPerHour"];
-            if (tt.Metadata.ContainsKey("StartTime")) startTimeTextBox.Text = tt.Metadata["StartTime"];
-            if (tt.Metadata.ContainsKey("EndTime")) endTimeTextBox.Text = tt.Metadata["EndTime"];
+            heightPerHourTextBox.Text = tt.GetMeta("HeightPerHour", heightPerHourTextBox.Text);
+            startTimeTextBox.Text = tt.GetMeta("StartTime", startTimeTextBox.Text);
+            endTimeTextBox.Text = tt.GetMeta("EndTime", endTimeTextBox.Text);
         }
 
         private void closeButton_Click(object sender, EventArgs e)

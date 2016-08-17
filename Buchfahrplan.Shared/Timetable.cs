@@ -10,22 +10,19 @@ using System.Threading.Tasks;
 namespace Buchfahrplan.Shared
 {
     [Serializable]
-    public sealed class Timetable
+    public sealed class Timetable : Meta
     {
         public string Name { get; set; }
 
         public List<Station> Stations { get; set; }
 
-        public List<Train> Trains { get; set; }
+        public List<Train> Trains { get; set; }        
 
-        public Dictionary<string, string> Metadata { get; set; }
-
-        public Timetable()
+        public Timetable() : base()
         {
             Stations = new List<Station>();
             Trains = new List<Train>();
-            Metadata = new Dictionary<string, string>();
-        }
+        }        
 
         public static Timetable GenerateTestTimetable()
         {

@@ -46,5 +46,13 @@ namespace Buchfahrplan.BildfahrplanExport
                 saturdayCheckBox.Checked, sundayCheckBox.Checked});
             ValueChanged?.Invoke(this, new EventArgs());
         }
+
+        private void preferencesButton_Click(object sender, EventArgs e)
+        {
+            ConfigForm cnf = new ConfigForm();
+            cnf.Init(tt);
+            cnf.ShowDialog();
+            ValueChanged?.Invoke(this, new EventArgs());
+        }
     }
 }

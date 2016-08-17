@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,10 +14,12 @@ namespace Buchfahrplan.BildfahrplanExport
     public class Plugin : IPlugin
     {
         private IInfo info;
-        private ToolStripItem showItem, configItem;
+        private ToolStripItem showItem, configItem, trainColorItem, printItem;
         private Renderer renderer;
         private Form frm;
         private Panel panel;
+        private PrintDocument doc;
+        private TimeSpan? last;
 
         public void Init(IInfo info)
         {
@@ -33,19 +36,62 @@ namespace Buchfahrplan.BildfahrplanExport
             configItem = item.DropDownItems.Add("Darstellung ändern");
             configItem.Enabled = false;
             configItem.Click += ConfigItem_Click;
-        }
 
-        private void ConfigItem_Click(object sender, EventArgs e)
-        {
-            ConfigForm cnf = new ConfigForm();
-            cnf.Init(info.Timetable);
-            DialogResult res = info.ShowDialog(cnf);
+            printItem = item.DropDownItems.Add("Drucken");
+            printItem.Enabled = false;
+            printItem.Click += PrintItem_Click;
+
+            trainColorItem = item.DropDownItems.Add("Zugdarstellung ändern");
+            trainColorItem.Enabled = false;
+            trainColorItem.Click += TrainColorItem_Click;
         }
 
         private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)
         {
             showItem.Enabled = e.Opened;
             configItem.Enabled = e.Opened;
+            printItem.Enabled = e.Opened;
+            trainColorItem.Enabled = e.Opened;
+        }
+
+        private void TrainColorItem_Click(object sender, EventArgs e)
+        {
+            TrainColorForm tcf = new TrainColorForm();
+            tcf.Init(info.Timetable);
+            tcf.ShowDialog();
+        }
+
+        private void PrintItem_Click(object sender, EventArgs e)
+        {            
+            doc = new PrintDocument();
+            doc.PrintPage += Doc_PrintPage;
+            PrintDialog dlg = new PrintDialog();
+            dlg.AllowCurrentPage = false;
+            dlg.AllowPrintToFile = false;
+            dlg.UseEXDialog = true;            
+            dlg.Document = doc;
+            if (dlg.ShowDialog() == DialogResult.OK)
+                doc.Print();
+        }
+
+        private void Doc_PrintPage(object sender, PrintPageEventArgs e)
+        {
+            renderer = new Renderer(info.Timetable);
+            int height = e.PageBounds.Height;
+            last = renderer.GetTimeByHeight(true, last.HasValue ? last.Value : info.Timetable.GetMeta("StartTime", new TimeSpan(0, 0, 0), TimeSpan.Parse), height);
+            renderer.Draw(e.Graphics);
+
+            if (last.Value < info.Timetable.GetMeta("EndTime", new TimeSpan(1, 0, 0, 0), TimeSpan.Parse))
+                e.HasMorePages = true;
+            else
+                last = null;
+        }
+
+        private void ConfigItem_Click(object sender, EventArgs e)
+        {
+            ConfigForm cnf = new ConfigForm();
+            cnf.Init(info.Timetable);
+            info.ShowDialog(cnf);
         }
 
         private void ShowItem_Click(object sender, EventArgs e)

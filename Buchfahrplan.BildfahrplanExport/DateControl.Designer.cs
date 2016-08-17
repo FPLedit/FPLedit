@@ -35,6 +35,7 @@
             this.wednesdayCheckBox = new System.Windows.Forms.CheckBox();
             this.tuesdayCheckBox = new System.Windows.Forms.CheckBox();
             this.mondayCheckBox = new System.Windows.Forms.CheckBox();
+            this.preferencesButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // sundayCheckBox
@@ -128,10 +129,21 @@
             this.mondayCheckBox.UseVisualStyleBackColor = true;
             this.mondayCheckBox.CheckedChanged += new System.EventHandler(this.CheckBox_CheckedChanged);
             // 
+            // preferencesButton
+            // 
+            this.preferencesButton.Location = new System.Drawing.Point(519, 1);
+            this.preferencesButton.Name = "preferencesButton";
+            this.preferencesButton.Size = new System.Drawing.Size(139, 23);
+            this.preferencesButton.TabIndex = 36;
+            this.preferencesButton.Text = "Darstellung ändern";
+            this.preferencesButton.UseVisualStyleBackColor = true;
+            this.preferencesButton.Click += new System.EventHandler(this.preferencesButton_Click);
+            // 
             // DateControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.preferencesButton);
             this.Controls.Add(this.sundayCheckBox);
             this.Controls.Add(this.saturdayCheckBox);
             this.Controls.Add(this.fridayCheckBox);
@@ -140,7 +152,7 @@
             this.Controls.Add(this.tuesdayCheckBox);
             this.Controls.Add(this.mondayCheckBox);
             this.Name = "DateControl";
-            this.Size = new System.Drawing.Size(519, 25);
+            this.Size = new System.Drawing.Size(667, 25);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -155,5 +167,6 @@
         private System.Windows.Forms.CheckBox wednesdayCheckBox;
         private System.Windows.Forms.CheckBox tuesdayCheckBox;
         private System.Windows.Forms.CheckBox mondayCheckBox;
+        private System.Windows.Forms.Button preferencesButton;
     }
 }
