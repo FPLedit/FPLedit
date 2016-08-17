@@ -25,6 +25,10 @@ namespace Buchfahrplan.Shared
         dynamic ShowDialog(dynamic form);
 
         event EventHandler<FileStateChangedEventArgs> FileStateChanged;
+
+        void RegisterExport(IExport export);
+
+        void RegisterImport(IImport import);
     }
 
     public class FileStateChangedEventArgs : EventArgs

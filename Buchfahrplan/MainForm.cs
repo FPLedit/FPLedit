@@ -62,21 +62,24 @@ namespace Buchfahrplan
         public MainForm()
         {
             InitializeComponent();
+            exporters = new List<IExport>();
+            importers = new List<IImport>();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            exporters = ExtensionManager.GetInstances<IExport>().ToList();
-            foreach (var export in exporters)
-                saveFileDialog.Filter += saveFileDialog.Filter == "" ? export.Filter : "|" + export.Filter;
-
-            importers = ExtensionManager.GetInstances<IImport>().ToList();
-            foreach (var import in importers)
-                openFileDialog.Filter += openFileDialog.Filter == "" ? import.Filter : "|" + import.Filter;
+            RegisterImport(new BfplImport());
+            RegisterExport(new BfplExport());
 
             plugins = ExtensionManager.GetInstances<IPlugin>().ToList();
             foreach (var plugin in plugins)
                 plugin.Init(this);
+
+            foreach (var export in exporters)
+                saveFileDialog.Filter += saveFileDialog.Filter == "" ? export.Filter : "|" + export.Filter;
+
+            foreach (var import in importers)
+                openFileDialog.Filter += openFileDialog.Filter == "" ? import.Filter : "|" + import.Filter;
 
             UpdateButtonsEnabled();
         }
@@ -197,6 +200,16 @@ namespace Buchfahrplan
         public void ClearBackup()
         {
             timetableBackup = null;
+        }
+
+        public void RegisterExport(IExport export)
+        {
+            exporters.Add(export);
+        }
+
+        public void RegisterImport(IImport import)
+        {
+            importers.Add(import);
         }
         #endregion
     }

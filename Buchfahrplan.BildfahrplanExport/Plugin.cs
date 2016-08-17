@@ -26,6 +26,8 @@ namespace Buchfahrplan.BildfahrplanExport
             this.info = info;
             info.FileStateChanged += Info_FileStateChanged;
 
+            info.RegisterExport(new BitmapExport());
+
             ToolStripMenuItem item = new ToolStripMenuItem("Bildfahrplan");
             info.Menu.Items.AddRange(new[] { item });
 

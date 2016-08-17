@@ -21,7 +21,6 @@ namespace Buchfahrplan
             if (assemblies == null)
             {
                 assemblies = new List<Assembly>();
-                assemblies.Add(Assembly.GetExecutingAssembly());
                 Errors = new List<Exception>();
                 DirectoryInfo dir = new DirectoryInfo(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
 

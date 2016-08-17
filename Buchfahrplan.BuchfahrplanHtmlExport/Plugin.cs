@@ -18,6 +18,9 @@ namespace Buchfahrplan.BuchfahrplanHtmlExport
         {
             this.info = info;
             info.FileStateChanged += Info_FileStateChanged;
+
+            info.RegisterExport(new HtmlExport());
+
             ToolStripMenuItem item = new ToolStripMenuItem("Buchfahrplan");
             info.Menu.Items.AddRange(new[] { item });
             showItem = item.DropDownItems.Add("Anzeigen");
