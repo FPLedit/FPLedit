@@ -50,7 +50,6 @@ namespace Buchfahrplan
 
         List<IExport> exporters;
         List<IImport> importers;
-        List<IPlugin> plugins;
 
         private bool lineCreated = false;
         private bool trainsCreated = false;
@@ -71,8 +70,7 @@ namespace Buchfahrplan
             RegisterImport(new BfplImport());
             RegisterExport(new BfplExport());
 
-            plugins = ExtensionManager.GetInstances<IPlugin>().ToList();
-            foreach (var plugin in plugins)
+            foreach (var plugin in ExtensionManager.Plugins)
                 plugin.Init(this);
 
             saveFileDialog.Filter = string.Join("|", exporters.Select(ex => ex.Filter));

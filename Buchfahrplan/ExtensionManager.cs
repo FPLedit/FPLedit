@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Buchfahrplan.Shared;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,20 +9,19 @@ using System.Text;
 namespace Buchfahrplan
 {
     /// <summary>
-    /// Stammt vom Projekt OctoAwesome, http://octoawesome.net
+    /// Stammt vom Projekt OctoAwesome, http://octoawesome.net, wurde aber abgeändert
     /// </summary>
     public static class ExtensionManager
     {
-        private static List<Assembly> assemblies;
-
-        public static List<Exception> Errors { get; private set; }
-
-        public static IEnumerable<Type> GetTypes<T>()
+        private static List<IPlugin> plugins;
+        public static List<IPlugin> Plugins
         {
-            if (assemblies == null)
+            get
             {
-                assemblies = new List<Assembly>();
-                Errors = new List<Exception>();
+                if (plugins != null)
+                    return plugins;
+
+                List<Assembly> assemblies = new List<Assembly>();
                 DirectoryInfo dir = new DirectoryInfo(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
 
                 foreach (var file in dir.GetFiles("*.dll"))
@@ -31,46 +31,34 @@ namespace Buchfahrplan
                         var assembly = Assembly.LoadFile(file.FullName);
                         assemblies.Add(assembly);
                     }
-                    catch (Exception ex)
+                    catch
                     {
-                        Errors.Add(ex);
                     }
                 }
 
-            }
-
-            List<Type> result = new List<Type>();
-            foreach (var assembly in assemblies)
-            {
-                try
+                List<IPlugin> result = new List<IPlugin>();
+                foreach (var assembly in assemblies)
                 {
-                    foreach (var type in assembly.GetTypes())
+                    try
                     {
-                        if (!type.IsPublic) continue;
-                        if (type == typeof(T)) continue;
+                        foreach (var type in assembly.GetTypes())
+                        {
+                            if (!type.IsClass) continue;
+                            if (!type.IsPublic) continue;
+                            if (type.IsAbstract) continue;
+                            if (type == typeof(IPlugin)) continue;
 
-                        if (typeof(T).IsAssignableFrom(type))
-                            result.Add(type);
+                            if (typeof(IPlugin).IsAssignableFrom(type))
+                                result.Add((IPlugin)Activator.CreateInstance(type));
+                        }
+                    }
+                    catch
+                    {
                     }
                 }
-                catch (Exception ex)
-                {
-                    Errors.Add(ex);
-                }
+                plugins = result;
+                return result;
             }
-            return result;
-        }
-
-        public static IEnumerable<T> GetInstances<T>()
-        {
-            List<T> result = new List<T>();
-            foreach (var type in GetTypes<T>())
-            {
-                if (type.IsAbstract) continue;
-
-                result.Add((T)Activator.CreateInstance(type));
-            }
-            return result;
         }
     }
 }
