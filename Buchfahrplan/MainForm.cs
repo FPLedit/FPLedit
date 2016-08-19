@@ -14,47 +14,51 @@ namespace Buchfahrplan
 
         private Timetable timetableBackup = null;
 
-        public bool FileOpened
+        private List<IExport> exporters;
+        private List<IImport> importers;
+
+        private FileState fileState;
+
+        public FileState FileState
         {
             get
             {
-                return fileOpened;
+                return fileState;
             }
-            private set
+            set
             {
-                if (value != fileOpened)
+                if (value != fileState)
                 {
-                    fileOpened = value;
-                    if (FileStateChanged != null)
-                        FileStateChanged(this, new FileStateChangedEventArgs(fileOpened, fileSaved));
+                    fileState = value;
+                    OnFileStateChanged();
                 }
             }
         }
 
-        public bool FileSaved
+        public void SetUnsaved()
         {
-            get
-            {
-                return fileSaved;
-            }
-            private set
-            {
-                if (value != fileOpened)
-                {
-                    fileSaved = value;
-                    if (FileStateChanged != null)
-                        FileStateChanged(this, new FileStateChangedEventArgs(fileOpened, fileSaved));
-                }
-            }
-        }        
+            fileState.Saved = false;
+            OnFileStateChanged();
+        }
 
-        List<IExport> exporters;
-        List<IImport> importers;
+        private void OnFileStateChanged()
+        {
+            if (Timetable != null)
+            {
+                fileState.LineCreated = Timetable.Stations.Count > 0;
+                fileState.TrainsCreated = Timetable.Trains.Count > 0;
+            }
+            else
+            {
+                fileState.LineCreated = false;
+                fileState.TrainsCreated = false;
+            }
 
-        private bool lineCreated = false;
-        private bool trainsCreated = false;
-        private bool fileSaved;
-        private bool fileOpened;
+            saveToolStripMenuItem.Enabled = fileState.Opened;
+
+            if (FileStateChanged != null)
+                FileStateChanged(this, new FileStateChangedEventArgs(fileState));
+        }
 
         public event EventHandler<FileStateChangedEventArgs> FileStateChanged;
 
@@ -63,6 +67,8 @@ namespace Buchfahrplan
             InitializeComponent();
             exporters = new List<IExport>();
             importers = new List<IImport>();
+
+            fileState = new FileState();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -72,8 +78,6 @@ namespace Buchfahrplan
 
             saveFileDialog.Filter = string.Join("|", exporters.Select(ex => ex.Filter));
             openFileDialog.Filter = string.Join("|", importers.Select(im => im.Filter));
-
-            UpdateButtonsEnabled();
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
@@ -87,7 +91,10 @@ namespace Buchfahrplan
                     return;
                 logger.Log("Speichern erfolgreich abgeschlossen!");
                 if (export.Reoppenable)
-                    FileSaved = true;
+                {
+                    fileState.Saved = true;
+                    OnFileStateChanged();
+                }
             }
         }
 
@@ -101,37 +108,18 @@ namespace Buchfahrplan
                 if (Timetable == null)
                     return;
                 logger.Log("Datei erfolgeich geöffnet!");
-                FileOpened = true;
-                FileSaved = true;
-                UpdateButtonsEnabled();
+                fileState.Opened = true;
+                fileState.Saved = true;
+                OnFileStateChanged();
             }
-        }
-
-        private void UpdateButtonsEnabled()
-        {
-            if (Timetable != null)
-            {
-                lineCreated = Timetable.Stations.Count > 0;
-                trainsCreated = Timetable.Trains.Count > 0;
-            }
-            else
-            {
-                lineCreated = false;
-                trainsCreated = false;
-            }
-
-            saveToolStripMenuItem.Enabled = FileOpened;
-            //editLineToolStripMenuItem.Enabled = FileOpened;
-            //editToolStripMenuItem.Enabled = FileOpened & lineCreated;
-            //editTimetableToolStripMenuItem.Enabled = FileOpened & trainsCreated;
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Timetable = new Timetable();
-            FileOpened = true;
-            UpdateButtonsEnabled();
-            FileSaved = false;
+            fileState.Opened = true;
+            fileState.Saved = false;
+            OnFileStateChanged();
         }
 
         #region IInfo

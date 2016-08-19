@@ -30,7 +30,7 @@ namespace Buchfahrplan.BuchfahrplanHtmlExport
 
         private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)
         {
-            showItem.Enabled = e.Opened;
+            showItem.Enabled = e.FileState.Opened;
         }
 
         private void ShowItem_Click(object sender, EventArgs e)

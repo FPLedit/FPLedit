@@ -16,9 +16,9 @@ namespace Buchfahrplan.Shared
 
         void ClearBackup();
 
-        bool FileOpened { get; }
+        FileState FileState { get; set; }
 
-        bool FileSaved { get; }
+        void SetUnsaved();
 
         dynamic Menu { get; }
 
@@ -33,14 +33,11 @@ namespace Buchfahrplan.Shared
 
     public class FileStateChangedEventArgs : EventArgs
     {
-        public bool Opened { get; private set; }
-
-        public bool Saved { get; private set; }
-
-        public FileStateChangedEventArgs(bool opened, bool saved)
+        public FileState FileState { get; private set; }
+   
+        public FileStateChangedEventArgs(FileState state)
         {
-            Opened = opened;
-            Saved = saved;
+            FileState = state;
         }
-    }
+    }    
 }

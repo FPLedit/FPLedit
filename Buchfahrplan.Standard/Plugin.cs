@@ -45,8 +45,7 @@ namespace Buchfahrplan.Standard
             var ttEdit = new TimetableEditForm();
             ttEdit.Init(info);
             ttEdit.ShowDialog();
-            //FileSaved = false;
-            //UpdateButtonsEnabled();
+            info.SetUnsaved();
         }
 
         private void EditTrainsItem_Click(object sender, EventArgs e)
@@ -54,8 +53,7 @@ namespace Buchfahrplan.Standard
             var trEdit = new TrainsEditForm();
             trEdit.Init(info);
             trEdit.ShowDialog();
-            //FileSaved = false;
-            //UpdateButtonsEnabled();
+            info.SetUnsaved();
         }
 
         private void EditLineItem_Click(object sender, EventArgs e)
@@ -63,15 +61,14 @@ namespace Buchfahrplan.Standard
             var liEdit = new LineEditForm();
             liEdit.Init(info);
             liEdit.ShowDialog();
-            //FileSaved = false;
-            //UpdateButtonsEnabled();
+            info.SetUnsaved();
         }
 
         private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)
         {
-            editLineItem.Enabled = e.Opened;
-            editTrainsItem.Enabled = e.Opened;
-            editTimetableItem.Enabled = e.Opened;
+            editLineItem.Enabled = e.FileState.Opened;
+            editTrainsItem.Enabled = e.FileState.Opened && e.FileState.LineCreated;
+            editTimetableItem.Enabled = e.FileState.Opened && e.FileState.TrainsCreated;
         }
     }
 }

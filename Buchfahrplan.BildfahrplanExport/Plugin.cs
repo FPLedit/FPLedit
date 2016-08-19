@@ -50,17 +50,18 @@ namespace Buchfahrplan.BildfahrplanExport
 
         private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)
         {
-            showItem.Enabled = e.Opened;
-            configItem.Enabled = e.Opened;
-            printItem.Enabled = e.Opened;
-            trainColorItem.Enabled = e.Opened;
+            showItem.Enabled = e.FileState.Opened && e.FileState.TrainsCreated;
+            configItem.Enabled = e.FileState.Opened;
+            printItem.Enabled = e.FileState.Opened && e.FileState.TrainsCreated;
+            trainColorItem.Enabled = e.FileState.Opened && e.FileState.TrainsCreated;
         }
 
         private void TrainColorItem_Click(object sender, EventArgs e)
         {
             TrainColorForm tcf = new TrainColorForm();
             tcf.Init(info);
-            tcf.ShowDialog();
+            if (tcf.ShowDialog() == DialogResult.OK)
+                info.SetUnsaved();            
         }
 
         private void PrintItem_Click(object sender, EventArgs e)
@@ -93,7 +94,8 @@ namespace Buchfahrplan.BildfahrplanExport
         {
             ConfigForm cnf = new ConfigForm();
             cnf.Init(info.Timetable);
-            info.ShowDialog(cnf);
+            if (info.ShowDialog(cnf) == DialogResult.OK)
+                info.SetUnsaved();
         }
 
         private void ShowItem_Click(object sender, EventArgs e)
