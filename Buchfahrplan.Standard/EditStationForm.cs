@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Buchfahrplan
+namespace Buchfahrplan.Standard
 {
     public partial class NewStationForm : Form
     {

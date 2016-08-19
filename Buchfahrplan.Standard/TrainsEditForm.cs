@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Buchfahrplan.Shared;
 
-namespace Buchfahrplan
+namespace Buchfahrplan.Standard
 {
     public partial class TrainsEditForm : Form
     {

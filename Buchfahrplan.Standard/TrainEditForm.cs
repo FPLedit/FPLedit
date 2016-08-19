@@ -2,7 +2,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace Buchfahrplan
+namespace Buchfahrplan.Standard
 {
     public partial class TrainEditForm : Form
     {

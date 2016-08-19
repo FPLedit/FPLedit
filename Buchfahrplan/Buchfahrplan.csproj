@@ -69,20 +69,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BfplExport.cs" />
-    <Compile Include="BfplImport.cs" />
-    <Compile Include="EditForms\EditStationForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="EditForms\EditStationForm.Designer.cs">
-      <DependentUpon>EditStationForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="EditForms\TrainEditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="EditForms\TrainEditForm.Designer.cs">
-      <DependentUpon>TrainEditForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="ExtensionManager.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -90,48 +76,14 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="EditForms\LineEditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="EditForms\LineEditForm.Designer.cs">
-      <DependentUpon>LineEditForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="LogTextBox.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="EditForms\TimetableEditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="EditForms\TimetableEditForm.Designer.cs">
-      <DependentUpon>TimetableEditForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="EditForms\TrainsEditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="EditForms\TrainsEditForm.Designer.cs">
-      <DependentUpon>TrainsEditForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="programm.ico" />
-    <EmbeddedResource Include="EditForms\EditStationForm.resx">
-      <DependentUpon>EditStationForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="EditForms\TrainEditForm.resx">
-      <DependentUpon>TrainEditForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="EditForms\TimetableEditForm.resx">
-      <DependentUpon>TimetableEditForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="EditForms\TrainsEditForm.resx">
-      <DependentUpon>TrainsEditForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="EditForms\LineEditForm.resx">
-      <DependentUpon>LineEditForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

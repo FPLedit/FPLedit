@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buchfahrplan", "Buchfahrplan\Buchfahrplan.csproj", "{2809F962-DC06-4740-8AD0-0981891446DA}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -23,6 +23,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Export", "Export", "{5A859144-0558-4FEB-965B-BFD83D9336A9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buchfahrplan.BildfahrplanExport", "Buchfahrplan.BildfahrplanExport\Buchfahrplan.BildfahrplanExport.csproj", "{77EE9755-CE3E-4B7B-AEF1-474B228E7B50}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buchfahrplan.Standard", "Buchfahrplan.Standard\Buchfahrplan.Standard.csproj", "{18F6EC68-60B0-4D31-9643-746EB8860C3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,6 +56,10 @@ Global
 		{77EE9755-CE3E-4B7B-AEF1-474B228E7B50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77EE9755-CE3E-4B7B-AEF1-474B228E7B50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77EE9755-CE3E-4B7B-AEF1-474B228E7B50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18F6EC68-60B0-4D31-9643-746EB8860C3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18F6EC68-60B0-4D31-9643-746EB8860C3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18F6EC68-60B0-4D31-9643-746EB8860C3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18F6EC68-60B0-4D31-9643-746EB8860C3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -67,9 +67,6 @@ namespace Buchfahrplan
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            RegisterImport(new BfplImport());
-            RegisterExport(new BfplExport());
-
             foreach (var plugin in ExtensionManager.Plugins)
                 plugin.Init(this);
 
@@ -124,9 +121,9 @@ namespace Buchfahrplan
             }
 
             saveToolStripMenuItem.Enabled = FileOpened;
-            editLineToolStripMenuItem.Enabled = FileOpened;
-            editToolStripMenuItem.Enabled = FileOpened & lineCreated;
-            editTimetableToolStripMenuItem.Enabled = FileOpened & trainsCreated;
+            //editLineToolStripMenuItem.Enabled = FileOpened;
+            //editToolStripMenuItem.Enabled = FileOpened & lineCreated;
+            //editTimetableToolStripMenuItem.Enabled = FileOpened & trainsCreated;
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
@@ -136,36 +133,6 @@ namespace Buchfahrplan
             UpdateButtonsEnabled();
             FileSaved = false;
         }
-
-        #region InitEditDialogs
-
-        private void editTrainsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var trEdit = new TrainsEditForm();
-            trEdit.Init(this);
-            trEdit.ShowDialog();
-            FileSaved = false;
-            UpdateButtonsEnabled();
-        }
-
-        private void editLineToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var liEdit = new LineEditForm();
-            liEdit.Init(this);
-            liEdit.ShowDialog();
-            FileSaved = false;
-            UpdateButtonsEnabled();
-        }
-
-        private void editTimetableToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var ttEdit = new TimetableEditForm();
-            ttEdit.Init(this);
-            ttEdit.ShowDialog();
-            FileSaved = false;
-            UpdateButtonsEnabled();
-        }
-        #endregion
 
         #region IInfo
         dynamic IInfo.Menu
@@ -205,7 +172,7 @@ namespace Buchfahrplan
         public void RegisterImport(IImport import)
         {
             importers.Add(import);
-        }
+        }        
         #endregion
     }
 }

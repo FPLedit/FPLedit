@@ -1,4 +1,4 @@
-﻿namespace Buchfahrplan
+﻿namespace Buchfahrplan.Standard
 {
     partial class TimetableEditForm
     {

@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Buchfahrplan
+namespace Buchfahrplan.Standard
 {
     public partial class LineEditForm : Form
     {
@@ -28,7 +28,7 @@ namespace Buchfahrplan
         public void Init(IInfo info)
         {
             this.info = info;
-            this.tt = info.Timetable;
+            tt = info.Timetable;
             info.BackupTimetable();
 
             UpdateStations();
@@ -51,16 +51,16 @@ namespace Buchfahrplan
         private void closeButton_Click(object sender, EventArgs e)
         {
             info.ClearBackup();
-            this.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.Close();
+            DialogResult = DialogResult.OK;
+            Close();
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
         {
-            this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            DialogResult = DialogResult.Cancel;
             info.RestoreTimetable();
 
-            this.Close();
+            Close();
         }
 
         private void editStationButton_Click(object sender, EventArgs e)
@@ -73,13 +73,12 @@ namespace Buchfahrplan
 
             if (stationListView.SelectedItems.Count > 0)
             {
-                ListViewItem item = (ListViewItem)stationListView.Items[stationListView.SelectedIndices[0]];
+                ListViewItem item = stationListView.Items[stationListView.SelectedIndices[0]];
                 Station oldStation = tt.Stations[tt.Stations.IndexOf((Station)item.Tag)];
 
                 NewStationForm nsf = new NewStationForm();
                 nsf.Initialize(oldStation);
-                DialogResult res = nsf.ShowDialog();
-                if (res == System.Windows.Forms.DialogResult.OK)
+                if (nsf.ShowDialog() == DialogResult.OK)
                     UpdateStations();
             }
         }
@@ -94,7 +93,7 @@ namespace Buchfahrplan
 
             if (stationListView.SelectedItems.Count > 0)
             {
-                ListViewItem item = (ListViewItem)stationListView.Items[stationListView.SelectedIndices[0]];
+                ListViewItem item = stationListView.Items[stationListView.SelectedIndices[0]];
                 tt.Stations.Remove((Station)item.Tag);
 
                 UpdateStations();
@@ -104,8 +103,7 @@ namespace Buchfahrplan
         private void newStationButton_Click(object sender, EventArgs e)
         {
             NewStationForm nsf = new NewStationForm();
-            DialogResult res = nsf.ShowDialog();
-            if (res == System.Windows.Forms.DialogResult.OK)
+            if (nsf.ShowDialog() == DialogResult.OK)
             {
                 Station sta = nsf.NewStation;
 
