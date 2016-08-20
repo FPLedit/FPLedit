@@ -82,6 +82,28 @@ namespace Buchfahrplan
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Save();
+        }
+
+        private void Open()
+        {
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                IImport import = importers[openFileDialog.FilterIndex - 1];
+                logger.Log("Öffne Datei...");
+                Timetable = import.Import(openFileDialog.FileName, logger);
+                if (Timetable == null)
+                    return;
+                logger.Log("Datei erfolgeich geöffnet!");
+                fileState.Opened = true;
+                fileState.Saved = true;
+                fileState.FileName = openFileDialog.FileName;
+                OnFileStateChanged();
+            }
+        }
+
+        private void Save()
+        {
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
                 IExport export = exporters[saveFileDialog.FilterIndex - 1];
@@ -100,18 +122,7 @@ namespace Buchfahrplan
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                IImport import = importers[openFileDialog.FilterIndex - 1];
-                logger.Log("Öffne Datei...");
-                Timetable = import.Import(openFileDialog.FileName, logger);
-                if (Timetable == null)
-                    return;
-                logger.Log("Datei erfolgeich geöffnet!");
-                fileState.Opened = true;
-                fileState.Saved = true;
-                OnFileStateChanged();
-            }
+            Open();
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
@@ -119,6 +130,7 @@ namespace Buchfahrplan
             Timetable = new Timetable();
             fileState.Opened = true;
             fileState.Saved = false;
+            fileState.FileName = null;
             OnFileStateChanged();
         }
 
@@ -160,7 +172,19 @@ namespace Buchfahrplan
         public void RegisterImport(IImport import)
         {
             importers.Add(import);
-        }        
+        }
         #endregion
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!fileState.Saved)
+            {
+                if (MessageBox.Show("Wollen Sie die Änderungen speichern?", "Buchfahrplan", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    e.Cancel = true;
+                    Save();
+                }
+            }
+        }
     }
 }
