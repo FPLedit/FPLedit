@@ -19,16 +19,21 @@ namespace Buchfahrplan.Shared
 
         public static bool operator !=(FileState s1, FileState s2)
         {
-            return !s1.Compare(s2);
+            return !s1.Equals(s2);
         }
 
         public static bool operator ==(FileState s1, FileState s2)
         {
-            return s1.Compare(s2);
+            return s1.Equals(s2);
         }
 
-        public bool Compare(FileState s)
+        public override bool Equals(object obj)
         {
+            if (!(obj is FileState))
+                return false;
+
+            FileState s = (FileState)obj;
+
             return (s.Opened == Opened) && (s.Saved == Saved)
                 && (s.LineCreated == LineCreated) && (s.TrainsCreated == TrainsCreated);
         }

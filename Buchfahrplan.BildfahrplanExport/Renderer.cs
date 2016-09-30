@@ -30,7 +30,7 @@ namespace Buchfahrplan.BildfahrplanExport
         public bool stationLines = true;
         public bool[] days = new bool[7];
         public bool displayKilometre = true;
-        public bool drawHeader = false;
+        public bool drawHeader = true;
 
         private bool marginsCalced = false;
         public float marginRight = 20;
@@ -69,6 +69,8 @@ namespace Buchfahrplan.BildfahrplanExport
             stationFont = new Font(tt.GetMeta("StationFont", stationFont.Name), tt.GetMeta("StationFontSize", stationFont.Size, float.Parse));
             timeFont = new Font(tt.GetMeta("TimeFont", timeFont.Name), tt.GetMeta("TimeFontSize", timeFont.Size, float.Parse));
             trainFont = new Font(tt.GetMeta("TrainFont", trainFont.Name), tt.GetMeta("TrainFontSize", trainFont.Size, float.Parse));
+
+            drawHeader = tt.GetMeta("DrawHeader", drawHeader, bool.Parse);
         }
 
         public void Draw(Graphics g)

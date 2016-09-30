@@ -64,12 +64,14 @@
             this.endTimeTextBox = new System.Windows.Forms.MaskedTextBox();
             this.layoutTextBox2 = new System.Windows.Forms.TextBox();
             this.includeKilometreCheckBox = new System.Windows.Forms.CheckBox();
+            this.layoutTextBox3 = new System.Windows.Forms.TextBox();
+            this.showStationNamesCheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(296, 389);
+            this.cancelButton.Location = new System.Drawing.Point(296, 427);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 15;
@@ -79,7 +81,7 @@
             // closeButton
             // 
             this.closeButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.closeButton.Location = new System.Drawing.Point(377, 389);
+            this.closeButton.Location = new System.Drawing.Point(377, 427);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
             this.closeButton.TabIndex = 16;
@@ -279,7 +281,7 @@
             // 
             // heightPerHourTextBox
             // 
-            this.heightPerHourTextBox.Location = new System.Drawing.Point(239, 301);
+            this.heightPerHourTextBox.Location = new System.Drawing.Point(239, 327);
             this.heightPerHourTextBox.Name = "heightPerHourTextBox";
             this.heightPerHourTextBox.Size = new System.Drawing.Size(150, 20);
             this.heightPerHourTextBox.TabIndex = 41;
@@ -287,7 +289,7 @@
             // endTimeLabel
             // 
             this.endTimeLabel.AutoSize = true;
-            this.endTimeLabel.Location = new System.Drawing.Point(12, 355);
+            this.endTimeLabel.Location = new System.Drawing.Point(12, 386);
             this.endTimeLabel.Name = "endTimeLabel";
             this.endTimeLabel.Size = new System.Drawing.Size(42, 13);
             this.endTimeLabel.TabIndex = 40;
@@ -296,7 +298,7 @@
             // startTimeLabel
             // 
             this.startTimeLabel.AutoSize = true;
-            this.startTimeLabel.Location = new System.Drawing.Point(12, 329);
+            this.startTimeLabel.Location = new System.Drawing.Point(12, 360);
             this.startTimeLabel.Name = "startTimeLabel";
             this.startTimeLabel.Size = new System.Drawing.Size(45, 13);
             this.startTimeLabel.TabIndex = 39;
@@ -305,7 +307,7 @@
             // heightPerHourLabel
             // 
             this.heightPerHourLabel.AutoSize = true;
-            this.heightPerHourLabel.Location = new System.Drawing.Point(12, 303);
+            this.heightPerHourLabel.Location = new System.Drawing.Point(12, 334);
             this.heightPerHourLabel.Name = "heightPerHourLabel";
             this.heightPerHourLabel.Size = new System.Drawing.Size(88, 13);
             this.heightPerHourLabel.TabIndex = 38;
@@ -348,7 +350,7 @@
             // 
             // defaultValuesButton
             // 
-            this.defaultValuesButton.Location = new System.Drawing.Point(15, 389);
+            this.defaultValuesButton.Location = new System.Drawing.Point(12, 427);
             this.defaultValuesButton.Name = "defaultValuesButton";
             this.defaultValuesButton.Size = new System.Drawing.Size(182, 23);
             this.defaultValuesButton.TabIndex = 50;
@@ -358,7 +360,7 @@
             // 
             // startTimeTextBox
             // 
-            this.startTimeTextBox.Location = new System.Drawing.Point(239, 326);
+            this.startTimeTextBox.Location = new System.Drawing.Point(239, 357);
             this.startTimeTextBox.Mask = "90:00";
             this.startTimeTextBox.Name = "startTimeTextBox";
             this.startTimeTextBox.Size = new System.Drawing.Size(150, 20);
@@ -366,7 +368,7 @@
             // 
             // endTimeTextBox
             // 
-            this.endTimeTextBox.Location = new System.Drawing.Point(239, 352);
+            this.endTimeTextBox.Location = new System.Drawing.Point(239, 383);
             this.endTimeTextBox.Mask = "90:00";
             this.endTimeTextBox.Name = "endTimeTextBox";
             this.endTimeTextBox.Size = new System.Drawing.Size(150, 20);
@@ -390,11 +392,31 @@
             this.includeKilometreCheckBox.Text = "Streckenkilometer anzeigen";
             this.includeKilometreCheckBox.UseVisualStyleBackColor = true;
             // 
+            // layoutTextBox3
+            // 
+            this.layoutTextBox3.Location = new System.Drawing.Point(239, 301);
+            this.layoutTextBox3.Name = "layoutTextBox3";
+            this.layoutTextBox3.Size = new System.Drawing.Size(10, 20);
+            this.layoutTextBox3.TabIndex = 55;
+            this.layoutTextBox3.Visible = false;
+            // 
+            // showStationNamesCheckBox
+            // 
+            this.showStationNamesCheckBox.AutoSize = true;
+            this.showStationNamesCheckBox.Location = new System.Drawing.Point(15, 303);
+            this.showStationNamesCheckBox.Name = "showStationNamesCheckBox";
+            this.showStationNamesCheckBox.Size = new System.Drawing.Size(142, 17);
+            this.showStationNamesCheckBox.TabIndex = 56;
+            this.showStationNamesCheckBox.Text = "Stationsnamen anzeigen";
+            this.showStationNamesCheckBox.UseVisualStyleBackColor = true;
+            // 
             // ConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(464, 425);
+            this.ClientSize = new System.Drawing.Size(464, 462);
+            this.Controls.Add(this.showStationNamesCheckBox);
+            this.Controls.Add(this.layoutTextBox3);
             this.Controls.Add(this.includeKilometreCheckBox);
             this.Controls.Add(this.layoutTextBox2);
             this.Controls.Add(this.endTimeTextBox);
@@ -478,5 +500,7 @@
         private System.Windows.Forms.MaskedTextBox endTimeTextBox;
         private System.Windows.Forms.TextBox layoutTextBox2;
         private System.Windows.Forms.CheckBox includeKilometreCheckBox;
+        private System.Windows.Forms.TextBox layoutTextBox3;
+        private System.Windows.Forms.CheckBox showStationNamesCheckBox;
     }
 }

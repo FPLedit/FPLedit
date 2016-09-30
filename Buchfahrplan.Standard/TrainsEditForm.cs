@@ -85,13 +85,13 @@ namespace Buchfahrplan.Standard
         private void closeButton_Click(object sender, EventArgs e)
         {
             info.ClearBackup();
-            DialogResult = System.Windows.Forms.DialogResult.OK;
+            DialogResult = DialogResult.OK;
             Close();
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
         {
-            DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            DialogResult = DialogResult.Cancel;
             info.RestoreTimetable();
 
             Close();
@@ -102,10 +102,10 @@ namespace Buchfahrplan.Standard
             TrainEditForm tef = new TrainEditForm();
             tef.Initialize(false);
             DialogResult res = tef.ShowDialog();
-            if (res == System.Windows.Forms.DialogResult.OK)
+            if (res == DialogResult.OK)
             {
                 Train tra = tef.NewTrain;
-                foreach (var sta in tt.Stations.OrderBy(s => s.Kilometre))
+                foreach (var sta in tt.Stations.OrderBy(s => s.Kilometre).Skip(1))
                     tra.Arrivals.Add(sta, new TimeSpan());
 
                 tt.Trains.Add(tra);
@@ -152,7 +152,7 @@ namespace Buchfahrplan.Standard
             if (res == DialogResult.OK)
             {
                 Train tra = tef.NewTrain;
-                foreach (var sta in tt.Stations.OrderByDescending(s => s.Kilometre))
+                foreach (var sta in tt.Stations.OrderByDescending(s => s.Kilometre).Skip(1))
                     tra.Arrivals.Add(sta, new TimeSpan());
 
                 tt.Trains.Add(tra);

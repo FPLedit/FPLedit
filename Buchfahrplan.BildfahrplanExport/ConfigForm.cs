@@ -64,6 +64,7 @@ namespace Buchfahrplan.BildfahrplanExport
             stationWidthComboBox.SelectedIndex = 0;
             stationLinesCheckBox.Checked = true;
             includeKilometreCheckBox.Checked = true;
+            showStationNamesCheckBox.Checked = true;
             heightPerHourTextBox.Text = "150";
             startTimeTextBox.Text = "00:00";
             endTimeTextBox.Text = "24:00";
@@ -90,6 +91,7 @@ namespace Buchfahrplan.BildfahrplanExport
 
             stationLinesCheckBox.Checked = tt.GetMeta("StationLines", stationLinesCheckBox.Checked, bool.Parse);
             includeKilometreCheckBox.Checked = tt.GetMeta("DisplayKilometre", includeKilometreCheckBox.Checked, bool.Parse);
+            showStationNamesCheckBox.Checked = tt.GetMeta("DrawHeader", showStationNamesCheckBox.Checked, bool.Parse);
 
             heightPerHourTextBox.Text = tt.GetMeta("HeightPerHour", heightPerHourTextBox.Text);
             startTimeTextBox.Text = tt.GetMeta("StartTime", startTimeTextBox.Text);
@@ -116,6 +118,8 @@ namespace Buchfahrplan.BildfahrplanExport
             tt.Metadata["TrainFontSize"] = (string)trainFontSizeComboBox.SelectedItem;
 
             tt.Metadata["StationLines"] = stationLinesCheckBox.Checked.ToString();
+            tt.Metadata["DisplayKilometre"] = includeKilometreCheckBox.Checked.ToString();
+            tt.Metadata["DrawHeader"] = showStationNamesCheckBox.Checked.ToString();
 
             tt.Metadata["HeightPerHour"] = heightPerHourTextBox.Text;
             tt.Metadata["StartTime"] = startTimeTextBox.Text;

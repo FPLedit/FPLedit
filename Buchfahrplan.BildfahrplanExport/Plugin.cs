@@ -128,15 +128,16 @@ namespace Buchfahrplan.BildfahrplanExport
 
         private void Dtc_ValueChanged(object sender, EventArgs e)
         {
-            renderer.Init();
+            renderer = new Renderer(info.Timetable);
             panel.Height = renderer.GetHeight();
+            
             renderer.Draw(panel.CreateGraphics());
         }
 
         private void Panel_Paint(object sender, PaintEventArgs e)
         {
             frm.Width = 1000;
-            frm.Height = 1000;
+            frm.Height = 1000;            
             renderer.Draw(e.Graphics);
         }
     }
