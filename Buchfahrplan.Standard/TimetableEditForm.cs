@@ -16,8 +16,8 @@ namespace Buchfahrplan.Standard
     {
         private IInfo info;
 
-        private const bool TOP_DIRECTION = true;
-        private const bool BOTTOM_DIRECTION = false;
+        private const bool TOP_DIRECTION = false;
+        private const bool BOTTOM_DIRECTION = true;
 
         public TimetableEditForm()
         {
