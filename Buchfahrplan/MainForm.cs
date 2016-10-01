@@ -191,7 +191,7 @@ namespace Buchfahrplan
         {
             string nl = Environment.NewLine;
             MessageBox.Show($"Fahrplan{nl}{nl}© 2015-2016 Manuel Huber{nl}https://www.manuelhu.de{nl}https://github.com/ManuelHu",
-                "Buchfahrplan", MessageBoxButtons.OK, MessageBoxIcon.Information);            
+                "Buchfahrplan Info", MessageBoxButtons.OK, MessageBoxIcon.Information);            
         }
     }
 }

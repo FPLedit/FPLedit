@@ -233,6 +233,7 @@
             this.Controls.Add(this.nameTextBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "TrainEditForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Neuen Zug erstellen";
             this.daysGroupBox.ResumeLayout(false);
             this.daysGroupBox.PerformLayout();
