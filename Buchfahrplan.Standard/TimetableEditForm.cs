@@ -16,12 +16,12 @@ namespace Buchfahrplan.Standard
     {
         private IInfo info;
 
+        private const bool TOP_DIRECTION = true;
+        private const bool BOTTOM_DIRECTION = false;
+
         public TimetableEditForm()
         {
             InitializeComponent();
-
-            topDataGridView.AllowUserToAddRows = false;
-            bottomDataGridView.AllowUserToAddRows = false;
         }
 
         public void Init(IInfo info)
@@ -29,95 +29,60 @@ namespace Buchfahrplan.Standard
             this.info = info;
             info.BackupTimetable();
 
-            topFromToLabel.Text = "Züge " + info.Timetable.GetLineName(true);
-            bottomFromToLabel.Text = "Züge " + info.Timetable.GetLineName(false);
+            topFromToLabel.Text = "Züge " + info.Timetable.GetLineName(TOP_DIRECTION);
+            bottomFromToLabel.Text = "Züge " + info.Timetable.GetLineName(BOTTOM_DIRECTION);
 
-            UpdateGrid();
+            InitializeGridView(topDataGridView, TOP_DIRECTION);
+            InitializeGridView(bottomDataGridView, BOTTOM_DIRECTION);
         }
 
-        private void UpdateGrid()
+        private void InitializeGridView(DataGridView view, bool direction)
         {
-            // Obere DataGridView
-            var topStations = info.Timetable.Stations.OrderByDescending(s => s.Kilometre);
-            foreach (var sta in topStations)
+            var stations = info.Timetable.GetStationsOrderedByDirection(direction);
+            foreach (var sta in stations)
             {
-                if (topStations.First() != sta)
-                    topDataGridView.Columns.Add(sta.Name + "ar", sta.Name + " an");
-                if (topStations.Last() != sta)
-                    topDataGridView.Columns.Add(sta.Name + "dp", sta.Name + " ab");
+                if (stations.First() != sta)
+                    view.Columns.Add(sta.Name + "ar", sta.Name + " an");
+                if (stations.Last() != sta)
+                    view.Columns.Add(sta.Name + "dp", sta.Name + " ab");
             }
 
-            foreach (var tra in info.Timetable.Trains.Where(t => t.Direction))
+            foreach (var tra in info.Timetable.Trains.Where(t => t.Direction == direction))
             {
-                DataGridViewRow trainRow = topDataGridView.Rows[topDataGridView.Rows.Add()];
+                DataGridViewRow trainRow = view.Rows[view.Rows.Add()];
 
-                foreach (var sta in tra.Arrivals.Keys.OrderByDescending(s => s.Kilometre))
+                foreach (var sta in tra.Arrivals.Keys)
                     trainRow.Cells[sta.Name + "ar"].Value = tra.Arrivals[sta].ToShortTimeString();
 
-                foreach (var sta in tra.Departures.Keys.OrderByDescending(s => s.Kilometre))
+                foreach (var sta in tra.Departures.Keys)
                     trainRow.Cells[sta.Name + "dp"].Value = tra.Departures[sta].ToShortTimeString();
 
                 trainRow.Tag = tra;
                 trainRow.HeaderCell = new DataGridViewRowHeaderCell() { Value = tra.Name };
             }
 
-            foreach (DataGridViewColumn column in topDataGridView.Columns)
-            {
-                column.AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
-                column.SortMode = DataGridViewColumnSortMode.NotSortable;
-            }
-
-            // Untere DataGridView
-            var bottomStations = info.Timetable.Stations.OrderBy(s => s.Kilometre);
-            foreach (var sta in bottomStations)
-            {
-                if (bottomStations.First() != sta)
-                    bottomDataGridView.Columns.Add(sta.Name + "ar", sta.Name + " an");
-                if (bottomStations.Last() != sta)
-                    bottomDataGridView.Columns.Add(sta.Name + "dp", sta.Name + " ab");
-            }
-
-            foreach (var tra in info.Timetable.Trains.Where(t => !t.Direction))
-            {
-                DataGridViewRow trainRow = bottomDataGridView.Rows[bottomDataGridView.Rows.Add()];
-
-                foreach (var sta in tra.Arrivals.Keys.OrderBy(s => s.Kilometre))
-                    trainRow.Cells[sta.Name + "ar"].Value = tra.Arrivals[sta].ToShortTimeString();
-
-                foreach (var sta in tra.Departures.Keys.OrderBy(s => s.Kilometre))
-                    trainRow.Cells[sta.Name + "dp"].Value = tra.Departures[sta].ToShortTimeString();
-
-                trainRow.Tag = tra;
-                trainRow.HeaderCell = new DataGridViewRowHeaderCell() { Value = tra.Name };
-            }
-
-            foreach (DataGridViewColumn column in bottomDataGridView.Columns)
+            foreach (DataGridViewColumn column in view.Columns)
             {
                 column.AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
                 column.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
         }
 
-        private void UpdateTrainData(Train train)
+        private bool UpdateTrainDataFromGrid(Train train, DataGridView view)
         {
             var ar = new Dictionary<Station, TimeSpan>();
             var dp = new Dictionary<Station, TimeSpan>();
 
-            bool found = false;
-
-            // Obere DataGridView
-            foreach (DataGridViewRow row in topDataGridView.Rows)
+            foreach (DataGridViewRow row in view.Rows)
             {
                 Train t = (Train)row.Tag;
 
                 if (t != train)
                     continue;
-                if (found)
-                    break;
 
                 foreach (var sta in info.Timetable.Stations)
                 {
-                    if (topDataGridView.Columns.Contains(sta.Name + "ar"))
+                    if (view.Columns.Contains(sta.Name + "ar"))
                     {
                         DataGridViewCell cellAr = row.Cells[sta.Name + "ar"];
 
@@ -128,7 +93,7 @@ namespace Buchfahrplan.Standard
                         }
                     }
 
-                    if (topDataGridView.Columns.Contains(sta.Name + "dp"))
+                    if (view.Columns.Contains(sta.Name + "dp"))
                     {
                         DataGridViewCell cellDp = row.Cells[sta.Name + "dp"];
 
@@ -140,71 +105,24 @@ namespace Buchfahrplan.Standard
                     }
                 }
 
-                found = true;
-            }
-
-            // Untere DataGridView
-            foreach (DataGridViewRow row in bottomDataGridView.Rows)
-            {
-                Train t = (Train)row.Tag;
-
-                if (t != train)
-                    continue;
-                if (found)
-                    break;
-
-                foreach (var sta in info.Timetable.Stations)
-                {
-                    if (bottomDataGridView.Columns.Contains(sta.Name + "ar"))
-                    {
-                        DataGridViewCell cellAr = row.Cells[sta.Name + "ar"];
-
-                        if ((string)cellAr.Value != "" && cellAr.Value != null)
-                        {
-                            TimeSpan tsAr = TimeSpan.Parse((string)cellAr.Value);
-                            ar.Add(sta, tsAr);
-                        }
-                    }
-
-                    if (bottomDataGridView.Columns.Contains(sta.Name + "dp"))
-                    {
-                        DataGridViewCell cellDp = row.Cells[sta.Name + "dp"];
-
-                        if ((string)cellDp.Value != null && cellDp.Value != null)
-                        {
-                            TimeSpan tsDp = TimeSpan.Parse((string)cellDp.Value);
-                            dp.Add(sta, tsDp);
-                        }
-                    }
-                }
-
-                found = true;
-            }
-
-            if (found)
-            {
                 train.Arrivals = ar;
                 train.Departures = dp;
+                return true;
             }
-            else
-                throw new Exception("In der Anwendung ist ein interner Fehler aufgetreten!");
+
+            return false;
         }
 
         private void closeButton_Click(object sender, EventArgs e)
         {
-            this.DialogResult = System.Windows.Forms.DialogResult.OK;
+            DialogResult = DialogResult.OK;
 
             foreach (var t in info.Timetable.Trains)
-                UpdateTrainData(t);
-
-            topDataGridView.Rows.Clear();
-            topDataGridView.Columns.Clear();
-
-            bottomDataGridView.Rows.Clear();
-            bottomDataGridView.Columns.Clear();
+                if (!(UpdateTrainDataFromGrid(t, topDataGridView) || UpdateTrainDataFromGrid(t, bottomDataGridView)))
+                    throw new Exception("In der Anwendung ist ein interner Fehler aufgetreten!");
 
             info.ClearBackup();
-            this.Close();
+            Close();
         }
 
         private void cancelButton_Click(object sender, EventArgs e)

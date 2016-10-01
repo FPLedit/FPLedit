@@ -40,6 +40,8 @@
             // 
             // topDataGridView
             // 
+            this.topDataGridView.AllowUserToAddRows = false;
+            this.topDataGridView.AllowUserToDeleteRows = false;
             this.topDataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllHeaders;
             this.topDataGridView.BackgroundColor = System.Drawing.SystemColors.Control;
             this.topDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -77,6 +79,8 @@
             // 
             // bottomDataGridView
             // 
+            this.bottomDataGridView.AllowUserToAddRows = false;
+            this.bottomDataGridView.AllowUserToDeleteRows = false;
             this.bottomDataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllHeaders;
             this.bottomDataGridView.BackgroundColor = System.Drawing.SystemColors.Control;
             this.bottomDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;

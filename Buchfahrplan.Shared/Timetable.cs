@@ -95,15 +95,19 @@ namespace Buchfahrplan.Shared
             return tt;
         }
 
+        public List<Station> GetStationsOrderedByDirection(bool direction)
+        {
+            return (direction ?
+                Stations.OrderByDescending(s => s.Kilometre)
+                : Stations.OrderBy(s => s.Kilometre)).ToList();
+        }
+
         public string GetLineName(bool direction)
         {
-            string first = Stations.First().Name;
-            string last = Stations.Last().Name;          
+            string first = GetStationsOrderedByDirection(direction).First().Name;
+            string last = GetStationsOrderedByDirection(direction).Last().Name;
 
-            if (!direction)
-                return first + " - " + last;
-            else
-                return last + " - " + first;
+            return first + " - " + last;
         }
 
         public override string ToString()

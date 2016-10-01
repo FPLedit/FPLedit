@@ -34,9 +34,7 @@ namespace Buchfahrplan.Shared
 
         public void InitializeStations(Timetable tt)
         {
-            var stas = (Direction ? 
-                tt.Stations.OrderByDescending(s => s.Kilometre)
-                : tt.Stations.OrderBy(s => s.Kilometre))
+            var stas = tt.GetStationsOrderedByDirection(Direction)
                 .Skip(1); // Remove first station (only departure)            
 
             foreach (var sta in stas)
