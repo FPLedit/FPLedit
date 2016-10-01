@@ -11,6 +11,9 @@ namespace Buchfahrplan.Standard
         private IInfo info;
         private Timetable tt;
 
+        private const bool TOP_DIRECTION = false;
+        private const bool BOTTOM_DIRECTION = true;
+
         public TrainsEditForm()
         {
             InitializeComponent();
@@ -22,64 +25,84 @@ namespace Buchfahrplan.Standard
             tt = info.Timetable;
             info.BackupTimetable();
 
-            topFromToLabel.Text = "Züge " + tt.GetLineName(false);
-            bottomFromToLabel.Text = "Züge " + tt.GetLineName(true);
-            UpdateTrains();
+            topFromToLabel.Text = "Züge " + tt.GetLineName(TOP_DIRECTION);
+            bottomFromToLabel.Text = "Züge " + tt.GetLineName(BOTTOM_DIRECTION);
+            UpdateListView(topTrainListView, TOP_DIRECTION);
+            UpdateListView(bottomTrainListView, BOTTOM_DIRECTION);
         }
 
-        private void UpdateTrains()
+        private void UpdateListView(ListView view, bool direction)
         {
-            topTrainListView.Items.Clear();
-            bottomTrainListView.Items.Clear();
-
-            foreach (var train in tt.Trains.Where(o => o.Direction == false))
+            view.Items.Clear();
+            foreach (var train in tt.Trains.Where(o => o.Direction == direction))
             {
-                topTrainListView.Items.Add(new ListViewItem(new[] { 
-                    train.Name, 
+                view.Items.Add(new ListViewItem(new[] {
+                    train.Name,
                     train.Line,
                     train.Locomotive,
-                    Days(train.Days)}) 
-                    { Tag = train });
+                    train.DaysToString() })
+                { Tag = train });
             }
-
-            foreach (var train in tt.Trains.Where(o => o.Direction == true))
-            {
-                bottomTrainListView.Items.Add(new ListViewItem(new[] { 
-                    train.Name, 
-                    train.Line,
-                    train.Locomotive,
-                    Days(train.Days) })
-                    { Tag = train });
-            }
+            view.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
 
-        private string Days(bool[] days)
+        private void InitListView(ListView view)
         {
-            string[] str = new string[7];
-            str[0] = days[0] ? "Montag" : null;
-            str[1] = days[1] ? "Dienstag" : null;
-            str[2] = days[2] ? "Mittwoch" : null;
-            str[3] = days[3] ? "Donnerstag" : null;
-            str[4] = days[4] ? "Freitag" : null;
-            str[5] = days[5] ? "Samstag" : null;
-            str[6] = days[6] ? "Sonntag" : null;
-
-            return string.Join(", ", str.Where(o => o != null));
+            view.Columns.Add("Zugnummer");
+            view.Columns.Add("Strecke");
+            view.Columns.Add("Tfz");
+            view.Columns.Add("Verkehrstage");            
         }
 
         private void TrainsEditForm_Load(object sender, EventArgs e)
-        {            
-            topTrainListView.Columns.Add("Zugnummer");
-            topTrainListView.Columns.Add("Strecke");
-            topTrainListView.Columns.Add("Tfz");
-            topTrainListView.Columns.Add("Verkehrstage");
-            topTrainListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+        {
+            InitListView(topTrainListView);
+            InitListView(bottomTrainListView);
+        }
 
-            bottomTrainListView.Columns.Add("Zugnummer");
-            bottomTrainListView.Columns.Add("Strecke");
-            bottomTrainListView.Columns.Add("Tfz");
-            bottomTrainListView.Columns.Add("Verkehrstage");
-            bottomTrainListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+        private void DeleteTrain(ListView view, bool direction)
+        {
+            if (view.SelectedItems.Count > 0)
+            {
+                ListViewItem item = view.Items[view.SelectedIndices[0]];
+                tt.Trains.Remove((Train)item.Tag);
+
+                UpdateListView(view, direction);
+            }
+            else
+                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug löschen");
+        }
+
+        private void EditTrain(ListView view, bool direction)
+        {
+            if (view.SelectedItems.Count > 0)
+            {
+                ListViewItem item = view.Items[view.SelectedIndices[0]];
+                Train train = tt.Trains[tt.Trains.IndexOf((Train)item.Tag)];
+
+                TrainEditForm tef = new TrainEditForm();
+                tef.Initialize(train);
+                DialogResult res = tef.ShowDialog();
+                if (res == DialogResult.OK)
+                    UpdateListView(view, direction);
+            }
+            else
+                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug bearbeiten");
+        }
+
+        private void NewTrain(ListView view, bool direction)
+        {
+            TrainEditForm tef = new TrainEditForm();
+            tef.Initialize(direction);
+            DialogResult res = tef.ShowDialog();
+            if (res == DialogResult.OK)
+            {
+                Train tra = tef.NewTrain;
+                tra.InitializeStations(tt);
+                tt.Trains.Add(tra);
+
+                UpdateListView(view, direction);
+            }
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -93,102 +116,25 @@ namespace Buchfahrplan.Standard
         {
             DialogResult = DialogResult.Cancel;
             info.RestoreTimetable();
-
             Close();
         } 
 
         private void topNewTrainButton_Click(object sender, EventArgs e)
-        {
-            TrainEditForm tef = new TrainEditForm();
-            tef.Initialize(false);
-            DialogResult res = tef.ShowDialog();
-            if (res == DialogResult.OK)
-            {
-                Train tra = tef.NewTrain;
-                foreach (var sta in tt.Stations.OrderBy(s => s.Kilometre).Skip(1))
-                    tra.Arrivals.Add(sta, new TimeSpan());
-
-                tt.Trains.Add(tra);
-
-                UpdateTrains();
-            }
-        }
+            => NewTrain(topTrainListView, TOP_DIRECTION);
 
         private void topEditTrainButton_Click(object sender, EventArgs e)
-        {
-            if (topTrainListView.SelectedItems.Count > 0)
-            {
-                ListViewItem item = topTrainListView.Items[topTrainListView.SelectedIndices[0]];
-                Train train = tt.Trains[tt.Trains.IndexOf((Train)item.Tag)];
-
-                TrainEditForm tef = new TrainEditForm();
-                tef.Initialize(train);
-                DialogResult res = tef.ShowDialog();
-                if (res == DialogResult.OK)
-                    UpdateTrains();
-            }
-            else
-                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug bearbeiten");
-        }
+            => EditTrain(topTrainListView, TOP_DIRECTION);
 
         private void topDeleteTrainButton_Click(object sender, EventArgs e)
-        {
-            if (topTrainListView.SelectedItems.Count > 0)
-            {
-                ListViewItem item = topTrainListView.Items[topTrainListView.SelectedIndices[0]];
-                tt.Trains.Remove((Train)item.Tag);
-
-                UpdateTrains();
-            }
-            else
-                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug löschen");
-        }
+            => DeleteTrain(topTrainListView, TOP_DIRECTION);
 
         private void bottomNewTrainButton_Click(object sender, EventArgs e)
-        {
-            TrainEditForm tef = new TrainEditForm();
-            tef.Initialize(true);
-            DialogResult res = tef.ShowDialog();
-            if (res == DialogResult.OK)
-            {
-                Train tra = tef.NewTrain;
-                foreach (var sta in tt.Stations.OrderByDescending(s => s.Kilometre).Skip(1))
-                    tra.Arrivals.Add(sta, new TimeSpan());
-
-                tt.Trains.Add(tra);
-
-                UpdateTrains();
-            }
-        }
+            => NewTrain(bottomTrainListView, BOTTOM_DIRECTION);
 
         private void bottomEditTrainButton_Click(object sender, EventArgs e)
-        {
-            if (bottomTrainListView.SelectedItems.Count > 0)
-            {
-                ListViewItem item = bottomTrainListView.Items[bottomTrainListView.SelectedIndices[0]];
-                Train train = tt.Trains[tt.Trains.IndexOf((Train)item.Tag)];
-
-                TrainEditForm tef = new TrainEditForm();
-                tef.Initialize(train);
-                DialogResult res = tef.ShowDialog();
-                if (res == DialogResult.OK)
-                    UpdateTrains();
-            }
-            else
-                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug bearbeiten");
-        }
+            => EditTrain(bottomTrainListView, BOTTOM_DIRECTION);
 
         private void bottomDeleteTrainButton_Click(object sender, EventArgs e)
-        {
-            if (bottomTrainListView.SelectedItems.Count > 0)
-            {
-                ListViewItem item = bottomTrainListView.Items[bottomTrainListView.SelectedIndices[0]];
-                tt.Trains.Remove((Train)item.Tag);
-
-                UpdateTrains();
-            }
-            else
-                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug löschen");
-        }
+            => DeleteTrain(bottomTrainListView, BOTTOM_DIRECTION);
     }
 }

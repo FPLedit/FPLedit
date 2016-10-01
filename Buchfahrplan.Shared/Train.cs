@@ -32,6 +32,17 @@ namespace Buchfahrplan.Shared
             Days = new bool[7];
         }
 
+        public void InitializeStations(Timetable tt)
+        {
+            var stas = (Direction ? 
+                tt.Stations.OrderByDescending(s => s.Kilometre)
+                : tt.Stations.OrderBy(s => s.Kilometre))
+                .Skip(1); // Remove first station (only departure)            
+
+            foreach (var sta in stas)
+                Arrivals.Add(sta, new TimeSpan());
+        }
+
         [DebuggerStepThrough]
         public override string ToString()
         {
@@ -53,6 +64,30 @@ namespace Buchfahrplan.Shared
             for (int i = 0; i < days.Length; i++)
                 ret += days[i] ? "1" : "0";
             return ret;
+        }
+
+        public string DaysToBinString()
+        {
+            return DaysToBinString(Days);
+        }
+
+        public static string DaysToString(bool[] days)
+        {
+            string[] str = new string[7];
+            str[0] = days[0] ? "Montag" : null;
+            str[1] = days[1] ? "Dienstag" : null;
+            str[2] = days[2] ? "Mittwoch" : null;
+            str[3] = days[3] ? "Donnerstag" : null;
+            str[4] = days[4] ? "Freitag" : null;
+            str[5] = days[5] ? "Samstag" : null;
+            str[6] = days[6] ? "Sonntag" : null;
+
+            return string.Join(", ", str.Where(o => o != null));
+        }
+
+        public string DaysToString()
+        {
+            return DaysToString(Days);
         }
     }
 }
