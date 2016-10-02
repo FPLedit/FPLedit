@@ -43,21 +43,12 @@ namespace Buchfahrplan
 
         private void OnFileStateChanged()
         {
-            if (Timetable != null)
-            {
-                fileState.LineCreated = Timetable.Stations.Count > 0;
-                fileState.TrainsCreated = Timetable.Trains.Count > 0;
-            }
-            else
-            {
-                fileState.LineCreated = false;
-                fileState.TrainsCreated = false;
-            }
+            fileState.LineCreated = Timetable?.Stations.Count > 0;
+            fileState.TrainsCreated = Timetable?.Trains.Count > 0;
 
             saveToolStripMenuItem.Enabled = fileState.Opened;
 
-            if (FileStateChanged != null)
-                FileStateChanged(this, new FileStateChangedEventArgs(fileState));
+            FileStateChanged?.Invoke(this, new FileStateChangedEventArgs(fileState));
         }
 
         public event EventHandler<FileStateChangedEventArgs> FileStateChanged;
@@ -177,13 +168,16 @@ namespace Buchfahrplan
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!fileState.Saved)
+            if (!fileState.Saved && fileState.Opened)
             {
-                if (MessageBox.Show("Wollen Sie die Änderungen speichern?", "Buchfahrplan", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                DialogResult res = MessageBox.Show("Wollen Sie die Änderungen speichern?", "Buchfahrplan", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                if (res == DialogResult.Yes)
                 {
                     e.Cancel = true;
                     Save();
                 }
+                else if (res == DialogResult.Cancel)
+                    e.Cancel = true;
             }
         }
 
