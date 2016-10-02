@@ -20,6 +20,7 @@ namespace Buchfahrplan.BildfahrplanExport
         private Panel panel;
         private PrintDocument doc;
         private TimeSpan? last;
+        private DateControl dtc;
 
         public void Init(IInfo info)
         {
@@ -111,7 +112,7 @@ namespace Buchfahrplan.BildfahrplanExport
             frm.AutoScroll = true;
             frm.AutoSize = false;
 
-            DateControl dtc = new DateControl(info.Timetable);
+            dtc = new DateControl(info.Timetable);
             dtc.Dock = DockStyle.Top;
             dtc.ValueChanged += Dtc_ValueChanged;
             frm.Controls.Add(dtc);
@@ -129,9 +130,13 @@ namespace Buchfahrplan.BildfahrplanExport
         private void Dtc_ValueChanged(object sender, EventArgs e)
         {
             renderer = new Renderer(info.Timetable);
+            frm.Controls.Remove(panel);
+            panel = new Panel();
+            panel.Width = frm.ClientSize.Width - SystemInformation.VerticalScrollBarWidth;
             panel.Height = renderer.GetHeight();
-            
-            renderer.Draw(panel.CreateGraphics());
+            panel.Top = dtc.Height;
+            frm.Controls.Add(panel);
+            panel.Paint += Panel_Paint;
         }
 
         private void Panel_Paint(object sender, PaintEventArgs e)
