@@ -12,6 +12,8 @@ namespace Buchfahrplan.Shared
     [Serializable]
     public sealed class Timetable : Meta
     {
+        public const string VERSION = "1.0";
+
         public string Name { get; set; }
 
         public List<Station> Stations { get; set; }
@@ -22,7 +24,9 @@ namespace Buchfahrplan.Shared
         {
             Stations = new List<Station>();
             Trains = new List<Train>();
-        }        
+
+            Metadata["Version"] = VERSION;
+        }
 
         public static Timetable GenerateTestTimetable()
         {
@@ -56,41 +60,39 @@ namespace Buchfahrplan.Shared
 
         public void SaveToFile(string filename)
         {            
-            FileStream fs = new FileStream(filename, FileMode.Create);
-
-            BinaryFormatter formatter = new BinaryFormatter();
-            try
+            using (FileStream stream = File.Open(filename, FileMode.OpenOrCreate))
             {
-                formatter.Serialize(fs, this);
-            }
-            catch (SerializationException e)
-            {
-                throw new Exception("Ein Fehler ist beim Speichern der Datei aufgetreten: " + e.Message);
-            }
-            finally
-            {
-                fs.Close();
+                BinaryFormatter formatter = new BinaryFormatter();
+                try
+                {
+                    formatter.Serialize(stream, this);
+                }
+                catch (SerializationException e)
+                {
+                    throw new Exception("Ein Fehler ist beim Speichern der Datei aufgetreten: " + e.Message);
+                }
             }
         }
 
         public static Timetable OpenFromFile(string filename)
         {
             Timetable tt;
-            
-            FileStream fs = new FileStream(filename, FileMode.Open);
-            try
+
+            using (FileStream stream = File.Open(filename, FileMode.Open))
             {
                 BinaryFormatter formatter = new BinaryFormatter();
-                tt = (Timetable)formatter.Deserialize(fs);
+                try
+                {                    
+                    tt = (Timetable)formatter.Deserialize(stream);
+                }
+                catch (SerializationException e)
+                {
+                    throw new Exception("Ein Fehler ist beim Öffnen der Datei aufgetreten: " + e.Message);
+                }
             }
-            catch (SerializationException e)
-            {
-                throw new Exception("Ein Fehler ist beim Öffnen der Datei aufgetreten: " + e.Message);
-            }
-            finally
-            {
-                fs.Close();
-            }
+
+            if (tt.GetMeta("Version", "") != VERSION)
+                throw new Exception("Ein Fehler ist beim Öffnen der Datei aufgetreten: Falsche Dateiversion");
 
             return tt;
         }
