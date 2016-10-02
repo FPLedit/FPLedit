@@ -65,7 +65,7 @@
             this.layoutTextBox2 = new System.Windows.Forms.TextBox();
             this.includeKilometreCheckBox = new System.Windows.Forms.CheckBox();
             this.layoutTextBox3 = new System.Windows.Forms.TextBox();
-            this.showStationNamesCheckBox = new System.Windows.Forms.CheckBox();
+            this.drawStationNamesCheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // cancelButton
@@ -400,22 +400,22 @@
             this.layoutTextBox3.TabIndex = 55;
             this.layoutTextBox3.Visible = false;
             // 
-            // showStationNamesCheckBox
+            // drawStationNamesCheckBox
             // 
-            this.showStationNamesCheckBox.AutoSize = true;
-            this.showStationNamesCheckBox.Location = new System.Drawing.Point(15, 303);
-            this.showStationNamesCheckBox.Name = "showStationNamesCheckBox";
-            this.showStationNamesCheckBox.Size = new System.Drawing.Size(142, 17);
-            this.showStationNamesCheckBox.TabIndex = 56;
-            this.showStationNamesCheckBox.Text = "Stationsnamen anzeigen";
-            this.showStationNamesCheckBox.UseVisualStyleBackColor = true;
+            this.drawStationNamesCheckBox.AutoSize = true;
+            this.drawStationNamesCheckBox.Location = new System.Drawing.Point(15, 303);
+            this.drawStationNamesCheckBox.Name = "drawStationNamesCheckBox";
+            this.drawStationNamesCheckBox.Size = new System.Drawing.Size(142, 17);
+            this.drawStationNamesCheckBox.TabIndex = 56;
+            this.drawStationNamesCheckBox.Text = "Stationsnamen anzeigen";
+            this.drawStationNamesCheckBox.UseVisualStyleBackColor = true;
             // 
             // ConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(464, 462);
-            this.Controls.Add(this.showStationNamesCheckBox);
+            this.Controls.Add(this.drawStationNamesCheckBox);
             this.Controls.Add(this.layoutTextBox3);
             this.Controls.Add(this.includeKilometreCheckBox);
             this.Controls.Add(this.layoutTextBox2);
@@ -501,6 +501,6 @@
         private System.Windows.Forms.TextBox layoutTextBox2;
         private System.Windows.Forms.CheckBox includeKilometreCheckBox;
         private System.Windows.Forms.TextBox layoutTextBox3;
-        private System.Windows.Forms.CheckBox showStationNamesCheckBox;
+        private System.Windows.Forms.CheckBox drawStationNamesCheckBox;
     }
 }
