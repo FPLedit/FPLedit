@@ -53,24 +53,24 @@ namespace Buchfahrplan.Standard
         {
             var ttEdit = new TimetableEditForm();
             ttEdit.Init(info);
-            ttEdit.ShowDialog();
-            info.SetUnsaved();
+            if (ttEdit.ShowDialog() == DialogResult.OK)
+                info.SetUnsaved();
         }
 
         private void EditTrainsItem_Click(object sender, EventArgs e)
         {
             var trEdit = new TrainsEditForm();
             trEdit.Init(info);
-            trEdit.ShowDialog();
-            info.SetUnsaved();
+            if (trEdit.ShowDialog() == DialogResult.OK)
+                info.SetUnsaved();
         }
 
         private void EditLineItem_Click(object sender, EventArgs e)
         {
             var liEdit = new LineEditForm();
             liEdit.Init(info);
-            liEdit.ShowDialog();
-            info.SetUnsaved();
+            if (liEdit.ShowDialog() == DialogResult.OK)
+                info.SetUnsaved();
         }
 
         private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)
