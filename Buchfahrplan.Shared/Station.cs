@@ -14,11 +14,6 @@ namespace Buchfahrplan.Shared
 
         public float Kilometre { get; set; }
 
-        public Station() : base()
-        {
-            
-        }
-
         [DebuggerStepThrough]
         public override string ToString()
         {

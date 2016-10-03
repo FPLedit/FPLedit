@@ -31,17 +31,9 @@ namespace Buchfahrplan.Standard
         private void closeButton_Click(object sender, EventArgs e)
         {
             string name = nameTextBox.Text;
-            float pos = 0f;
-            //TODO: Kein try/catch
-            try
-            {
-                pos = Convert.ToSingle(positionTextBox.Text);
-            }
-            catch
-            {
+            float pos;
+            if (!float.TryParse(positionTextBox.Text, out pos))
                 MessageBox.Show("Position (km): FEHLER Die eingegebene Zeichenfolge ist kein valider Wert für eine Kommazahl!");
-                return;
-            }
 
             if (NewStation == null)
             {
