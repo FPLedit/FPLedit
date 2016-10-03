@@ -43,10 +43,13 @@ namespace Buchfahrplan.Standard
 
         private void EditTimetableItem_MouseDown(object sender, MouseEventArgs e)
         {
-            MetaEdit mef = new MetaEdit();
-            mef.Initialize(info.Timetable);
-            if (mef.ShowDialog() == DialogResult.OK)
-                info.SetUnsaved();
+            if (e.Button == MouseButtons.Middle)
+            {
+                MetaEdit mef = new MetaEdit();
+                mef.Initialize(info.Timetable);
+                if (mef.ShowDialog() == DialogResult.OK)
+                    info.SetUnsaved();
+            }
         }
 
         private void EditTimetableItem_Click(object sender, EventArgs e)
