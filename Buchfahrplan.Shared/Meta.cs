@@ -30,5 +30,25 @@ namespace Buchfahrplan.Shared
             else
                 return defaultValue;
         }
+
+        public int GetMetaInt(string key, int defaultValue)
+        {
+            return GetMeta(key, defaultValue, int.Parse);
+        }
+
+        public float GetMetaFloat(string key, float defaultValue)
+        {
+            return GetMeta(key, defaultValue, float.Parse);
+        }
+
+        public bool GetMetaBool(string key, bool defaultValue)
+        {
+            return GetMeta(key, defaultValue, bool.Parse);
+        }
+
+        public TimeSpan GetMetaTimeSpan(string key, TimeSpan defaultValue)
+        {
+            return GetMeta(key, defaultValue, TimeSpan.Parse);
+        }
     }
 }

@@ -89,9 +89,9 @@ namespace Buchfahrplan.BildfahrplanExport
             timeFontSizeComboBox.SelectedItem = tt.GetMeta("TimeFontSize", (string)timeFontSizeComboBox.SelectedItem);
             trainFontSizeComboBox.SelectedItem = tt.GetMeta("TrainFontSize", (string)trainFontSizeComboBox.SelectedItem);
 
-            stationLinesCheckBox.Checked = tt.GetMeta("StationLines", stationLinesCheckBox.Checked, bool.Parse);
-            includeKilometreCheckBox.Checked = tt.GetMeta("DisplayKilometre", includeKilometreCheckBox.Checked, bool.Parse);
-            drawStationNamesCheckBox.Checked = tt.GetMeta("DrawHeader", drawStationNamesCheckBox.Checked, bool.Parse);
+            stationLinesCheckBox.Checked = tt.GetMetaBool("StationLines", stationLinesCheckBox.Checked);
+            includeKilometreCheckBox.Checked = tt.GetMetaBool("DisplayKilometre", includeKilometreCheckBox.Checked);
+            drawStationNamesCheckBox.Checked = tt.GetMetaBool("DrawHeader", drawStationNamesCheckBox.Checked);
 
             heightPerHourTextBox.Text = tt.GetMeta("HeightPerHour", heightPerHourTextBox.Text);
             startTimeTextBox.Text = tt.GetMeta("StartTime", startTimeTextBox.Text);

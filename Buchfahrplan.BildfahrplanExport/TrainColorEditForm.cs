@@ -26,7 +26,7 @@ namespace Buchfahrplan.BildfahrplanExport
 
             colorComboBox.SelectedItem = train.GetMeta("Color", (string)colorComboBox.SelectedItem);
             widthComboBox.SelectedItem = train.GetMeta("Width", (string)widthComboBox.SelectedItem);
-            drawCheckBox.Checked = train.GetMeta("Draw", drawCheckBox.Checked, bool.Parse);
+            drawCheckBox.Checked = train.GetMetaBool("Draw", drawCheckBox.Checked);
         }
 
         private void closeButton_Click(object sender, EventArgs e)

@@ -53,24 +53,24 @@ namespace Buchfahrplan.BildfahrplanExport
             timeColor = tt.GetMeta("TimeColor", timeColor, Color.FromName);
             backgroundColor = tt.GetMeta("BgColor", backgroundColor, Color.FromName);
             stationColor = tt.GetMeta("StationColor", stationColor, Color.FromName);
-            trainWidth = tt.GetMeta("TrainWidth", trainWidth, int.Parse);
-            stationWidth = tt.GetMeta("StationWidth", stationWidth, int.Parse);
-            hourTimeWidth = tt.GetMeta("HourTimeWidth", hourTimeWidth, int.Parse);
-            minuteTimeWidth = tt.GetMeta("MinuteTimeWidth", minuteTimeWidth, int.Parse);
+            trainWidth = tt.GetMetaInt("TrainWidth", trainWidth);
+            stationWidth = tt.GetMetaInt("StationWidth", stationWidth);
+            hourTimeWidth = tt.GetMetaInt("HourTimeWidth", hourTimeWidth);
+            minuteTimeWidth = tt.GetMetaInt("MinuteTimeWidth", minuteTimeWidth);
 
-            stationLines = tt.GetMeta("StationLines", stationLines, bool.Parse);
-            displayKilometre = tt.GetMeta("DisplayKilometre", displayKilometre, bool.Parse);
+            stationLines = tt.GetMetaBool("StationLines", stationLines);
+            displayKilometre = tt.GetMetaBool("DisplayKilometre", displayKilometre);
 
-            heightPerHour = tt.GetMeta("HeightPerHour", heightPerHour, int.Parse);
+            heightPerHour = tt.GetMetaInt("HeightPerHour", heightPerHour);
             days = tt.GetMeta("ShowDays", days, Train.ParseDays);
-            startTime = tt.GetMeta("StartTime", startTime, TimeSpan.Parse);
+            startTime = tt.GetMetaTimeSpan("StartTime", startTime);
             endTime = tt.GetMeta("EndTime", endTime, s => TimeSpan.Parse(s == "24:00" ? "1.00:00" : s));
 
-            stationFont = new Font(tt.GetMeta("StationFont", stationFont.Name), tt.GetMeta("StationFontSize", stationFont.Size, float.Parse));
-            timeFont = new Font(tt.GetMeta("TimeFont", timeFont.Name), tt.GetMeta("TimeFontSize", timeFont.Size, float.Parse));
-            trainFont = new Font(tt.GetMeta("TrainFont", trainFont.Name), tt.GetMeta("TrainFontSize", trainFont.Size, float.Parse));
+            stationFont = new Font(tt.GetMeta("StationFont", stationFont.Name), tt.GetMetaFloat("StationFontSize", stationFont.Size));
+            timeFont = new Font(tt.GetMeta("TimeFont", timeFont.Name), tt.GetMetaFloat("TimeFontSize", timeFont.Size));
+            trainFont = new Font(tt.GetMeta("TrainFont", trainFont.Name), tt.GetMetaFloat("TrainFontSize", trainFont.Size));
 
-            drawHeader = tt.GetMeta("DrawHeader", drawHeader, bool.Parse);
+            drawHeader = tt.GetMetaBool("DrawHeader", drawHeader);
         }
 
         public void Draw(Graphics g)

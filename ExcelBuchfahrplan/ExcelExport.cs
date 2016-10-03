@@ -80,7 +80,7 @@ namespace Buchfahrplan.BuchfahrplanExcelExport
                     {
                         cellBuffer[cellBufferLine, 0] = station.Kilometre.ToString("0.0");
 
-                        cellBuffer[cellBufferLine, 1] = station.GetMeta("MaxVelocity", 0, int.Parse).ToString("#");
+                        cellBuffer[cellBufferLine, 1] = station.GetMetaInt("MaxVelocity", 0).ToString("#");
 
                         cellBuffer[cellBufferLine, 2] = station.Name;
 
@@ -101,7 +101,7 @@ namespace Buchfahrplan.BuchfahrplanExcelExport
                     {
                         cellBuffer[cellBufferLine, 0] = station.Kilometre.ToString("0.0");
 
-                        cellBuffer[cellBufferLine, 1] = station.GetMeta("MaxVelocity", 0, int.Parse).ToString("#");
+                        cellBuffer[cellBufferLine, 1] = station.GetMetaInt("MaxVelocity", 0).ToString("#");
 
                         cellBuffer[cellBufferLine, 2] = station.Name;
 
@@ -214,7 +214,7 @@ namespace Buchfahrplan.BuchfahrplanExcelExport
                     Marshal.ReleaseComObject(border3);
                     Marshal.ReleaseComObject(range3);
 
-                    if (station.GetMeta("MaxVelocity", 0, int.Parse) != 0)
+                    if (station.GetMetaInt("MaxVelocity", 0) != 0)
                     {
                         Excel.Range range4 = worksheet.Cells[line, 2];
                         Excel.Borders border4 = range4.Borders;

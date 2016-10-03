@@ -58,7 +58,7 @@ namespace Buchfahrplan.BuchfahrplanHtmlExport
                 {
                     val += template.LineTemplate
                         .Replace("{0}", s.Kilometre.ToString("0.0"))
-                        .Replace("{1}", s.GetMeta("MaxVelocity", 0, int.Parse).ToString("#")).Replace("{2}", s.Name)
+                        .Replace("{1}", s.GetMetaInt("MaxVelocity", 0).ToString("#")).Replace("{2}", s.Name)
                         .Replace("{3}", t.Arrivals.ContainsKey(s) ? t.Arrivals[s].ToShortTimeString() : "")
                         .Replace("{4}", t.Departures.ContainsKey(s) ? t.Departures[s].ToShortTimeString() : "");
                 }
