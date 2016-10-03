@@ -105,6 +105,23 @@ namespace Buchfahrplan.Standard
             }
         }
 
+        private void EditMeta(ListView view, bool direction)
+        {
+            if (view.SelectedItems.Count > 0)
+            {
+                ListViewItem item = view.Items[view.SelectedIndices[0]];
+                Train train = tt.Trains[tt.Trains.IndexOf((Train)item.Tag)];
+
+                MetaEdit mef = new MetaEdit();
+                mef.Initialize(train);
+                DialogResult res = mef.ShowDialog();
+                if (res == DialogResult.OK)
+                    UpdateListView(view, direction);
+            }
+            else
+                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug-Metadaten bearbeiten");
+        }
+
         private void closeButton_Click(object sender, EventArgs e)
         {
             info.ClearBackup();
@@ -136,5 +153,17 @@ namespace Buchfahrplan.Standard
 
         private void bottomDeleteTrainButton_Click(object sender, EventArgs e)
             => DeleteTrain(bottomTrainListView, BOTTOM_DIRECTION);
+
+        private void topEditTrainButton_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Middle)
+                EditMeta(topTrainListView, TOP_DIRECTION);
+        }
+
+        private void bottomEditTrainButton_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Middle)
+                EditMeta(bottomTrainListView, BOTTOM_DIRECTION);
+        }
     }
 }

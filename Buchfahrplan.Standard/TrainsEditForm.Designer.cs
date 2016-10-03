@@ -203,6 +203,7 @@
             this.topEditTrainButton.Text = "Zug bearbeiten";
             this.topEditTrainButton.UseVisualStyleBackColor = true;
             this.topEditTrainButton.Click += new System.EventHandler(this.topEditTrainButton_Click);
+            this.topEditTrainButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.topEditTrainButton_MouseDown);
             // 
             // topNewTrainButton
             // 
@@ -246,6 +247,7 @@
             this.bottomEditTrainButton.Text = "Zug bearbeiten";
             this.bottomEditTrainButton.UseVisualStyleBackColor = true;
             this.bottomEditTrainButton.Click += new System.EventHandler(this.bottomEditTrainButton_Click);
+            this.bottomEditTrainButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.bottomEditTrainButton_MouseDown);
             // 
             // bottomNewTrainButton
             // 

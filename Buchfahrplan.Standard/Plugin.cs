@@ -38,6 +38,15 @@ namespace Buchfahrplan.Standard
             editTimetableItem = item.DropDownItems.Add("Fahrplan bearbeiten...");
             editTimetableItem.Enabled = false;
             editTimetableItem.Click += EditTimetableItem_Click;
+            editTimetableItem.MouseDown += EditTimetableItem_MouseDown;
+        }
+
+        private void EditTimetableItem_MouseDown(object sender, MouseEventArgs e)
+        {
+            MetaEdit mef = new MetaEdit();
+            mef.Initialize(info.Timetable);
+            if (mef.ShowDialog() == DialogResult.OK)
+                info.SetUnsaved();
         }
 
         private void EditTimetableItem_Click(object sender, EventArgs e)

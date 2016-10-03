@@ -85,7 +85,7 @@ namespace Buchfahrplan.Standard
         {
             if (stationListView.SelectedItems.Count == 0)
             {
-                MessageBox.Show("Zuerst muss ien Zug ausgewählt werden!", "Zug löschen");
+                MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Station löschen");
                 return;
             }
 
@@ -114,6 +114,29 @@ namespace Buchfahrplan.Standard
                 }
 
                 UpdateStations();
+            }
+        }
+
+        private void editStationButton_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Middle)
+            {
+                if (stationListView.SelectedItems.Count == 0)
+                {
+                    MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Stations-Metadaten bearbeiten");
+                    return;
+                }
+
+                if (stationListView.SelectedItems.Count > 0)
+                {
+                    ListViewItem item = stationListView.Items[stationListView.SelectedIndices[0]];
+                    Station station = tt.Stations[tt.Stations.IndexOf((Station)item.Tag)];
+
+                    MetaEdit mef = new MetaEdit();
+                    mef.Initialize(station);
+                    if (mef.ShowDialog() == DialogResult.OK)
+                        UpdateStations();
+                }
             }
         }
     }
