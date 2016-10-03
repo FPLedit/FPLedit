@@ -32,8 +32,6 @@
             this.positionTextBox = new System.Windows.Forms.TextBox();
             this.nameLabel = new System.Windows.Forms.Label();
             this.nameTextBox = new System.Windows.Forms.TextBox();
-            this.velocityLabel = new System.Windows.Forms.Label();
-            this.velocityTextBox = new System.Windows.Forms.TextBox();
             this.cancelButton = new System.Windows.Forms.Button();
             this.closeButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -70,26 +68,10 @@
             this.nameTextBox.Size = new System.Drawing.Size(131, 20);
             this.nameTextBox.TabIndex = 2;
             // 
-            // velocityLabel
-            // 
-            this.velocityLabel.AutoSize = true;
-            this.velocityLabel.Location = new System.Drawing.Point(12, 62);
-            this.velocityLabel.Name = "velocityLabel";
-            this.velocityLabel.Size = new System.Drawing.Size(33, 13);
-            this.velocityLabel.TabIndex = 5;
-            this.velocityLabel.Text = "Vmax";
-            // 
-            // velocityTextBox
-            // 
-            this.velocityTextBox.Location = new System.Drawing.Point(65, 59);
-            this.velocityTextBox.Name = "velocityTextBox";
-            this.velocityTextBox.Size = new System.Drawing.Size(131, 20);
-            this.velocityTextBox.TabIndex = 6;
-            // 
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(42, 86);
+            this.cancelButton.Location = new System.Drawing.Point(42, 61);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 7;
@@ -98,7 +80,7 @@
             // 
             // closeButton
             // 
-            this.closeButton.Location = new System.Drawing.Point(123, 86);
+            this.closeButton.Location = new System.Drawing.Point(123, 61);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
             this.closeButton.TabIndex = 8;
@@ -112,11 +94,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(210, 121);
+            this.ClientSize = new System.Drawing.Size(210, 96);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.closeButton);
-            this.Controls.Add(this.velocityTextBox);
-            this.Controls.Add(this.velocityLabel);
             this.Controls.Add(this.positionLabel);
             this.Controls.Add(this.positionTextBox);
             this.Controls.Add(this.nameLabel);
@@ -136,8 +116,6 @@
         private System.Windows.Forms.TextBox positionTextBox;
         private System.Windows.Forms.Label nameLabel;
         private System.Windows.Forms.TextBox nameTextBox;
-        private System.Windows.Forms.Label velocityLabel;
-        private System.Windows.Forms.TextBox velocityTextBox;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button closeButton;
     }

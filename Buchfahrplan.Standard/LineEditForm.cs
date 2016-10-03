@@ -22,7 +22,6 @@ namespace Buchfahrplan.Standard
 
             stationListView.Columns.Add("Bahnhof");
             stationListView.Columns.Add("Position");
-            stationListView.Columns.Add("Höchstgeschwindigkeit");
         }
 
         public void Init(IInfo info)
@@ -42,8 +41,7 @@ namespace Buchfahrplan.Standard
             {
                 stationListView.Items.Add(new ListViewItem(new[] { 
                     station.Name,                     
-                    station.Kilometre.ToString(),
-                    station.MaxVelocity.ToString() })
+                    station.Kilometre.ToString() })
                     { Tag = station });
             }
         }

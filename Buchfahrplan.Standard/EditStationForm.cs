@@ -22,7 +22,6 @@ namespace Buchfahrplan.Standard
         {
             Text = "Station bearbeiten";
             nameTextBox.Text = station.Name;
-            velocityTextBox.Text = station.MaxVelocity.ToString();
             positionTextBox.Text = station.Kilometre.ToString();
             NewStation = station;
         }
@@ -33,7 +32,7 @@ namespace Buchfahrplan.Standard
         {
             string name = nameTextBox.Text;
             float pos = 0f;
-            int velocity = 0;
+            //TODO: Kein try/catch
             try
             {
                 pos = Convert.ToSingle(positionTextBox.Text);
@@ -44,30 +43,18 @@ namespace Buchfahrplan.Standard
                 return;
             }
 
-            try
-            {
-                velocity = Convert.ToInt32(velocityTextBox.Text);                
-            }
-            catch
-            {
-                MessageBox.Show("Vmax: FEHLER Die eingegebene Zeichenfolge ist kein valider Wert für eine Ganzzahl!");
-                return;
-            }
-
             if (NewStation == null)
             {
                 NewStation = new Station()
                 {
                     Name = name,
                     Kilometre = pos,
-                    MaxVelocity = velocity
                 };
             }
             else
             {
                 NewStation.Name = name;
                 NewStation.Kilometre = pos;
-                NewStation.MaxVelocity = velocity;
             }
 
             DialogResult = DialogResult.OK;

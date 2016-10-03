@@ -14,8 +14,6 @@ namespace Buchfahrplan.Shared
 
         public float Kilometre { get; set; }
 
-        public int MaxVelocity { get; set; }
-
         public Station() : base()
         {
             

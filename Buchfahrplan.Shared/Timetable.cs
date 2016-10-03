@@ -32,8 +32,8 @@ namespace Buchfahrplan.Shared
         {
             Timetable t = new Timetable();
             t.Name = "ATal - BTal";
-            Station a = new Station() { Name = "ATal", Kilometre = 0.0f, MaxVelocity = 60 };
-            Station b = new Station() { Name = "BTal", Kilometre = 1.0f, MaxVelocity = 100 };
+            Station a = new Station() { Name = "ATal", Kilometre = 0.0f };
+            Station b = new Station() { Name = "BTal", Kilometre = 1.0f };
             Train tr = new Train() { Name = "P 01", Locomotive = "211" };
             tr.Line = "ATal - BTal";
             tr.Direction = true;
