@@ -49,6 +49,10 @@ namespace Buchfahrplan
             saveToolStripMenuItem.Enabled = fileState.Opened;
 
             FileStateChanged?.Invoke(this, new FileStateChangedEventArgs(fileState));
+
+            Text = "Buchfahrplan - " 
+                + (fileState.FileName != null ? (Path.GetFileName(fileState.FileName) + " ") : "") 
+                + (fileState.Saved ? "" : "*");
         }
 
         public event EventHandler<FileStateChangedEventArgs> FileStateChanged;
@@ -69,12 +73,7 @@ namespace Buchfahrplan
 
             saveFileDialog.Filter = string.Join("|", exporters.Select(ex => ex.Filter));
             openFileDialog.Filter = string.Join("|", importers.Select(im => im.Filter));
-        }
-
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Save();
-        }
+        }        
 
         private void Open()
         {
@@ -106,15 +105,11 @@ namespace Buchfahrplan
                 if (export.Reoppenable)
                 {
                     fileState.Saved = true;
+                    fileState.FileName = saveFileDialog.FileName;
                     OnFileStateChanged();
                 }
             }
-        }
-
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Open();
-        }
+        }        
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -128,10 +123,7 @@ namespace Buchfahrplan
         #region IInfo
         dynamic IInfo.Menu
         {
-            get
-            {
-                return menuStrip;
-            }
+            get { return menuStrip; }
         }
 
         public dynamic ShowDialog(dynamic form)
@@ -147,7 +139,7 @@ namespace Buchfahrplan
         public void RestoreTimetable()
         {
             Timetable = timetableBackup;
-            timetableBackup = null;
+            ClearBackup();
         }
 
         public void ClearBackup()
@@ -156,14 +148,10 @@ namespace Buchfahrplan
         }
 
         public void RegisterExport(IExport export)
-        {
-            exporters.Add(export);
-        }
+            => exporters.Add(export);
 
         public void RegisterImport(IImport import)
-        {
-            importers.Add(import);
-        }
+            => importers.Add(import);
         #endregion
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -187,5 +175,11 @@ namespace Buchfahrplan
             MessageBox.Show($"Fahrplan{nl}{nl}© 2015-2016 Manuel Huber{nl}https://www.manuelhu.de{nl}https://github.com/ManuelHu",
                 "Buchfahrplan Info", MessageBoxButtons.OK, MessageBoxIcon.Information);            
         }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+            => Save();
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+            => Open();
     }
 }
