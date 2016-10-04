@@ -47,6 +47,7 @@ namespace Buchfahrplan.Standard
                 { Tag = entry.Key });
             }
             listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
         }        
 
         private void NewMeta()

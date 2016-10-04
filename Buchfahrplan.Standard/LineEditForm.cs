@@ -44,6 +44,9 @@ namespace Buchfahrplan.Standard
                     station.Kilometre.ToString() })
                 { Tag = station });
             }
+
+            listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
         }
 
         private void EditStation(bool message = true)

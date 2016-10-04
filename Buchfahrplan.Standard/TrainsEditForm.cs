@@ -17,6 +17,9 @@ namespace Buchfahrplan.Standard
         public TrainsEditForm()
         {
             InitializeComponent();
+
+            InitListView(topListView);
+            InitListView(bottomListView);
         }
 
         public void Init(IInfo info)
@@ -44,6 +47,7 @@ namespace Buchfahrplan.Standard
                 { Tag = train });
             }
             view.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            view.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
         }
 
         private void InitListView(ListView view)
@@ -51,13 +55,7 @@ namespace Buchfahrplan.Standard
             view.Columns.Add("Zugnummer");
             view.Columns.Add("Strecke");
             view.Columns.Add("Tfz");
-            view.Columns.Add("Verkehrstage");            
-        }
-
-        private void TrainsEditForm_Load(object sender, EventArgs e)
-        {
-            InitListView(topListView);
-            InitListView(bottomListView);
+            view.Columns.Add("Verkehrstage");
         }
 
         private void DeleteTrain(ListView view, bool direction)

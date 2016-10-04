@@ -97,7 +97,6 @@
             this.Name = "TrainColorForm";
             this.ShowInTaskbar = false;
             this.Text = "Zugdarstellung ändern";
-            this.Load += new System.EventHandler(this.TrainColorForm_Load);
             this.ResumeLayout(false);
 
         }

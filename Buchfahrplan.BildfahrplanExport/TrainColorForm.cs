@@ -23,6 +23,11 @@ namespace Buchfahrplan.BildfahrplanExport
         public TrainColorForm()
         {
             InitializeComponent();
+
+            trainListView.Columns.Add("Zugnummer");
+            trainListView.Columns.Add("Farbe");
+            trainListView.Columns.Add("Linienstärke");
+            trainListView.Columns.Add("Zug zeichnen");
         }
 
         public void Init(IInfo info)
@@ -48,14 +53,8 @@ namespace Buchfahrplan.BildfahrplanExport
                     train.GetMeta("Draw", drawTrain)})
                 { Tag = train });
             }
-        }
 
-        private void TrainColorForm_Load(object sender, EventArgs e)
-        {
-            trainListView.Columns.Add("Zugnummer");
-            trainListView.Columns.Add("Farbe");
-            trainListView.Columns.Add("Linienstärke");
-            trainListView.Columns.Add("Zug zeichnen");
+            trainListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             trainListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
         }
 

@@ -276,7 +276,6 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Text = "Züge bearbeiten...";
-            this.Load += new System.EventHandler(this.TrainsEditForm_Load);
             this.mainTableLayoutPanel.ResumeLayout(false);
             this.topContentPanel.ResumeLayout(false);
             this.bottomContentPanel.ResumeLayout(false);
