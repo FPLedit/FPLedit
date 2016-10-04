@@ -21,10 +21,7 @@ namespace Buchfahrplan
 
         public FileState FileState
         {
-            get
-            {
-                return fileState;
-            }
+            get { return fileState; }
             set
             {
                 if (value != fileState)

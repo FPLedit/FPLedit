@@ -44,6 +44,7 @@
             this.listView.TabIndex = 0;
             this.listView.UseCompatibleStateImageBehavior = false;
             this.listView.View = System.Windows.Forms.View.Details;
+            this.listView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listView_MouseDoubleClick);
             // 
             // cancelButton
             // 
@@ -116,6 +117,7 @@
             this.Controls.Add(this.listView);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "MetaEdit";
+            this.ShowInTaskbar = false;
             this.Text = "Meta Editor";
             this.ResumeLayout(false);
 

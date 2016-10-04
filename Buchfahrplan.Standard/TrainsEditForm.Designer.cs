@@ -132,6 +132,7 @@
             this.topListView.TabIndex = 8;
             this.topListView.UseCompatibleStateImageBehavior = false;
             this.topListView.View = System.Windows.Forms.View.Details;
+            this.topListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.topListView_MouseDoubleClick);
             // 
             // bottomContentPanel
             // 
@@ -170,6 +171,7 @@
             this.bottomListView.TabIndex = 28;
             this.bottomListView.UseCompatibleStateImageBehavior = false;
             this.bottomListView.View = System.Windows.Forms.View.Details;
+            this.bottomListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.bottomListView_MouseDoubleClick);
             // 
             // topActionsPanel
             // 

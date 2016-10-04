@@ -59,6 +59,22 @@ namespace Buchfahrplan.BildfahrplanExport
             trainListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
         }
 
+        private void EditColor(bool message = true)
+        {
+            if (trainListView.SelectedItems.Count > 0)
+            {
+                ListViewItem item = trainListView.Items[trainListView.SelectedIndices[0]];
+                Train train = tt.Trains[tt.Trains.IndexOf((Train)item.Tag)];
+
+                TrainColorEditForm tcef = new TrainColorEditForm();
+                tcef.Initialize(train);
+                if (tcef.ShowDialog() == DialogResult.OK)
+                    UpdateTrains();
+            }
+            else if (message)
+                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zugdarstellung ändern");
+        }
+
         private void cancelButton_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
@@ -74,19 +90,9 @@ namespace Buchfahrplan.BildfahrplanExport
         }
 
         private void editButton_Click(object sender, EventArgs e)
-        {
-            if (trainListView.SelectedItems.Count > 0)
-            {
-                ListViewItem item = trainListView.Items[trainListView.SelectedIndices[0]];
-                Train train = tt.Trains[tt.Trains.IndexOf((Train)item.Tag)];
+            => EditColor();
 
-                TrainColorEditForm tcef = new TrainColorEditForm();
-                tcef.Initialize(train);
-                if (tcef.ShowDialog() == DialogResult.OK)
-                    UpdateTrains();
-            }
-            else
-                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zugdarstellung ändern");
-        }
+        private void trainListView_MouseDoubleClick(object sender, MouseEventArgs e)
+            => EditColor(false);
     }
 }

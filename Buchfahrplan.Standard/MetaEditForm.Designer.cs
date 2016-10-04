@@ -103,6 +103,8 @@
             this.Controls.Add(this.keyTextBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "MetaEditForm";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Neue Eigenschaft";
             this.ResumeLayout(false);
             this.PerformLayout();

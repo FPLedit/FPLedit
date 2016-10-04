@@ -14,7 +14,7 @@ namespace Buchfahrplan.Standard
     public partial class LineEditForm : Form
     {
         private IInfo info;
-        private Timetable tt;        
+        private Timetable tt;
 
         public LineEditForm()
         {
@@ -34,15 +34,83 @@ namespace Buchfahrplan.Standard
         }
 
         private void UpdateStations()
-        {            
+        {
             listView.Items.Clear();
 
             foreach (var station in tt.Stations.OrderBy(s => s.Kilometre))
             {
-                listView.Items.Add(new ListViewItem(new[] { 
-                    station.Name,                     
+                listView.Items.Add(new ListViewItem(new[] {
+                    station.Name,
                     station.Kilometre.ToString() })
-                    { Tag = station });
+                { Tag = station });
+            }
+        }
+
+        private void EditStation(bool message = true)
+        {
+            if (listView.SelectedItems.Count > 0)
+            {
+                ListViewItem item = listView.Items[listView.SelectedIndices[0]];
+                Station oldStation = tt.Stations[tt.Stations.IndexOf((Station)item.Tag)];
+
+                NewStationForm nsf = new NewStationForm();
+                nsf.Initialize(oldStation);
+                if (nsf.ShowDialog() == DialogResult.OK)
+                    UpdateStations();
+            }
+            else if (message)
+                MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Station bearbeiten");
+        }
+
+        private void EditMeta()
+        {
+            if (listView.SelectedItems.Count > 0)
+            {
+                ListViewItem item = listView.Items[listView.SelectedIndices[0]];
+                Station station = tt.Stations[tt.Stations.IndexOf((Station)item.Tag)];
+
+                MetaEdit mef = new MetaEdit();
+                mef.Initialize(station);
+                if (mef.ShowDialog() == DialogResult.OK)
+                    UpdateStations();
+            }
+            else
+                MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Stations-Metadaten bearbeiten");
+        }
+
+        private void DeleteStation()
+        {
+            if (listView.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Station löschen");
+                return;
+            }
+
+            if (listView.SelectedItems.Count > 0)
+            {
+                ListViewItem item = listView.Items[listView.SelectedIndices[0]];
+                tt.Stations.Remove((Station)item.Tag);
+
+                UpdateStations();
+            }
+        }
+
+        private void NewStation()
+        {
+            NewStationForm nsf = new NewStationForm();
+            if (nsf.ShowDialog() == DialogResult.OK)
+            {
+                Station sta = nsf.NewStation;
+
+                tt.Stations.Add(sta);
+
+                foreach (var t in tt.Trains)
+                {
+                    t.Arrivals.Add(sta, new TimeSpan());
+                    t.Departures.Add(sta, new TimeSpan());
+                }
+
+                UpdateStations();
             }
         }
 
@@ -62,82 +130,21 @@ namespace Buchfahrplan.Standard
         }
 
         private void editButton_Click(object sender, EventArgs e)
-        {
-            if (listView.SelectedItems.Count == 0)
-            {
-                MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Station bearbeiten");
-                return;
-            }
-
-            if (listView.SelectedItems.Count > 0)
-            {
-                ListViewItem item = listView.Items[listView.SelectedIndices[0]];
-                Station oldStation = tt.Stations[tt.Stations.IndexOf((Station)item.Tag)];
-
-                NewStationForm nsf = new NewStationForm();
-                nsf.Initialize(oldStation);
-                if (nsf.ShowDialog() == DialogResult.OK)
-                    UpdateStations();
-            }
-        }
+            => EditStation();
 
         private void deleteButton_Click(object sender, EventArgs e)
-        {
-            if (listView.SelectedItems.Count == 0)
-            {
-                MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Station löschen");
-                return;
-            }
-
-            if (listView.SelectedItems.Count > 0)
-            {
-                ListViewItem item = listView.Items[listView.SelectedIndices[0]];
-                tt.Stations.Remove((Station)item.Tag);
-
-                UpdateStations();
-            }
-        }
+            => DeleteStation();
 
         private void newButton_Click(object sender, EventArgs e)
-        {
-            NewStationForm nsf = new NewStationForm();
-            if (nsf.ShowDialog() == DialogResult.OK)
-            {
-                Station sta = nsf.NewStation;
-
-                tt.Stations.Add(sta);
-
-                foreach (var t in tt.Trains)
-                {
-                    t.Arrivals.Add(sta, new TimeSpan());
-                    t.Departures.Add(sta, new TimeSpan());
-                }
-
-                UpdateStations();
-            }
-        }
+            => NewStation();
 
         private void editButton_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Middle)
-            {
-                if (listView.SelectedItems.Count == 0)
-                {
-                    MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Stations-Metadaten bearbeiten");
-                    return;
-                }
-
-                if (listView.SelectedItems.Count > 0)
-                {
-                    ListViewItem item = listView.Items[listView.SelectedIndices[0]];
-                    Station station = tt.Stations[tt.Stations.IndexOf((Station)item.Tag)];
-
-                    MetaEdit mef = new MetaEdit();
-                    mef.Initialize(station);
-                    if (mef.ShowDialog() == DialogResult.OK)
-                        UpdateStations();
-                }
-            }
+                EditMeta();
         }
+
+        private void listView_MouseDoubleClick(object sender, MouseEventArgs e)
+            => EditStation(false);
     }
 }

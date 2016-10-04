@@ -47,6 +47,48 @@ namespace Buchfahrplan.Standard
                 { Tag = entry.Key });
             }
             listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+        }        
+
+        private void NewMeta()
+        {
+            MetaEditForm mef = new MetaEditForm();
+            if (mef.ShowDialog() == DialogResult.OK)
+            {
+                entity.Metadata[mef.Meta.Key] = mef.Meta.Value;
+                UpdateView();
+            }
+        }
+
+        private void EditMeta(bool message = true)
+        {
+            if (listView.SelectedItems.Count > 0)
+            {
+                ListViewItem item = listView.Items[listView.SelectedIndices[0]];
+                string key = (string)item.Tag;
+
+                MetaEditForm mef = new MetaEditForm();
+                mef.Initialize(new KeyValuePair<string, string>(key, entity.Metadata[key]));
+                if (mef.ShowDialog() == DialogResult.OK)
+                {
+                    entity.Metadata[mef.Meta.Key] = mef.Meta.Value;
+                    UpdateView();
+                }
+            }
+            else if (message)
+                MessageBox.Show("Zuerst muss eine Eigenschaft ausgewählt werden!", "Eigenschaft bearbeiten");
+        }
+
+        private void DeleteMeta()
+        {
+            if (listView.SelectedItems.Count > 0)
+            {
+                ListViewItem item = listView.Items[listView.SelectedIndices[0]];
+                entity.Metadata.Remove((string)item.Tag);
+
+                UpdateView();
+            }
+            else
+                MessageBox.Show("Zuerst muss eine Eigenschaft ausgewählt werden!", "Eigenschaft löschen");
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -62,54 +104,16 @@ namespace Buchfahrplan.Standard
             Close();
         }
 
-        private void newButton_Click(object sender, EventArgs e)
-        {
-            MetaEditForm mef = new MetaEditForm();
-            if (mef.ShowDialog() == DialogResult.OK)
-            {
-                entity.Metadata[mef.Meta.Key] = mef.Meta.Value;
-                UpdateView();
-            }
-        }
-
         private void editButton_Click(object sender, EventArgs e)
-        {
-            if (listView.SelectedItems.Count == 0)
-            {
-                MessageBox.Show("Zuerst muss eine Eigenschaft ausgewählt werden!", "Eigenschaft bearbeiten");
-                return;
-            }
+            => EditMeta();
 
-            if (listView.SelectedItems.Count > 0)
-            {
-                ListViewItem item = listView.Items[listView.SelectedIndices[0]];
-                string key = (string)item.Tag;
+        private void listView_MouseDoubleClick(object sender, MouseEventArgs e)
+            => EditMeta(false);
 
-                MetaEditForm mef = new MetaEditForm();
-                mef.Initialize(new KeyValuePair<string, string>(key, entity.Metadata[key]));
-                if (mef.ShowDialog() == DialogResult.OK)
-                {
-                    entity.Metadata[mef.Meta.Key] = mef.Meta.Value;
-                    UpdateView();
-                }                    
-            }
-        }
+        private void newButton_Click(object sender, EventArgs e)
+            => NewMeta();
 
         private void deleteButton_Click(object sender, EventArgs e)
-        {
-            if (listView.SelectedItems.Count == 0)
-            {
-                MessageBox.Show("Zuerst muss eine Eigenschaft ausgewählt werden!", "Eigenschaft löschen");
-                return;
-            }
-
-            if (listView.SelectedItems.Count > 0)
-            {
-                ListViewItem item = listView.Items[listView.SelectedIndices[0]];
-                entity.Metadata.Remove((string)item.Tag);
-
-                UpdateView();
-            }
-        }
+            => DeleteMeta();
     }
 }

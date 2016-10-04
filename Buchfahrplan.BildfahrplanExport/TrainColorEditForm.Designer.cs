@@ -118,6 +118,7 @@
             this.Controls.Add(this.colorWidthLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "TrainColorEditForm";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Zugdarstellung ändern";
             this.ResumeLayout(false);

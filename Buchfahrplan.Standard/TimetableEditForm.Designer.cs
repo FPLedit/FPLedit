@@ -179,6 +179,7 @@
             this.Controls.Add(this.closeButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "TimetableEditForm";
+            this.ShowInTaskbar = false;
             this.Text = "Fahrplan bearbeiten";
             this.mainTableLayoutPanel.ResumeLayout(false);
             this.topPanel.ResumeLayout(false);

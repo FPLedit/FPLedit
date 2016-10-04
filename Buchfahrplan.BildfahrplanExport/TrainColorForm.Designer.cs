@@ -46,6 +46,7 @@
             this.trainListView.TabIndex = 0;
             this.trainListView.UseCompatibleStateImageBehavior = false;
             this.trainListView.View = System.Windows.Forms.View.Details;
+            this.trainListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.trainListView_MouseDoubleClick);
             // 
             // cancelButton
             // 
@@ -94,6 +95,7 @@
             this.Controls.Add(this.trainListView);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "TrainColorForm";
+            this.ShowInTaskbar = false;
             this.Text = "Zugdarstellung ändern";
             this.Load += new System.EventHandler(this.TrainColorForm_Load);
             this.ResumeLayout(false);

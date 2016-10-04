@@ -73,7 +73,7 @@ namespace Buchfahrplan.Standard
                 MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug löschen");
         }
 
-        private void EditTrain(ListView view, bool direction)
+        private void EditTrain(ListView view, bool direction, bool message = true)
         {
             if (view.SelectedItems.Count > 0)
             {
@@ -85,7 +85,7 @@ namespace Buchfahrplan.Standard
                 if (tef.ShowDialog() == DialogResult.OK)
                     UpdateListView(view, direction);
             }
-            else
+            else if (message)
                 MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug bearbeiten");
         }
 
@@ -162,5 +162,11 @@ namespace Buchfahrplan.Standard
             if (e.Button == MouseButtons.Middle)
                 EditMeta(bottomListView, BOTTOM_DIRECTION);
         }
+
+        private void bottomListView_MouseDoubleClick(object sender, MouseEventArgs e)
+            => EditTrain(bottomListView, BOTTOM_DIRECTION, false);
+
+        private void topListView_MouseDoubleClick(object sender, MouseEventArgs e)
+            => EditTrain(topListView, TOP_DIRECTION, false);
     }
 }
