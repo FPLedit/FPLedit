@@ -74,10 +74,18 @@ namespace Buchfahrplan
 
         private void Open()
         {
+            if (!fileState.Saved && fileState.Opened)
+            {
+                DialogResult res = NotifyChanged();
+                if (res == DialogResult.Yes)
+                    Save();
+                if (res == DialogResult.Cancel)
+                    return;
+            }
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 IImport import = importers[openFileDialog.FilterIndex - 1];
-                logger.Log("Öffne Datei...");
+                logger.Log("Öffne Datei " + openFileDialog.FileName);
                 Timetable = import.Import(openFileDialog.FileName, logger);
                 if (Timetable == null)
                     return;
@@ -94,7 +102,7 @@ namespace Buchfahrplan
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
                 IExport export = exporters[saveFileDialog.FilterIndex - 1];
-                logger.Log("Speichere...");
+                logger.Log("Speichere Datei " + saveFileDialog.FileName);
                 bool ret = export.Export(Timetable, saveFileDialog.FileName, logger);
                 if (ret == false)
                     return;
@@ -106,15 +114,24 @@ namespace Buchfahrplan
                     OnFileStateChanged();
                 }
             }
-        }        
+        }
 
-        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        private void New()
         {
+            if (!fileState.Saved && fileState.Opened)
+            {
+                DialogResult res = NotifyChanged();
+                if (res == DialogResult.Yes)
+                    Save();
+                if (res == DialogResult.Cancel)
+                    return;
+            }
             Timetable = new Timetable();
             fileState.Opened = true;
             fileState.Saved = false;
             fileState.FileName = null;
             OnFileStateChanged();
+            logger.Log("Neue Datei erstellt");
         }
 
         #region IInfo
@@ -151,11 +168,28 @@ namespace Buchfahrplan
             => importers.Add(import);
         #endregion
 
+        private void Info()
+        {
+            string nl = Environment.NewLine;
+            MessageBox.Show($"Fahrplan{nl}{nl}© 2015-2016 Manuel Huber{nl}https://www.manuelhu.de{nl}https://github.com/ManuelHu",
+                "Buchfahrplan Info",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+        }
+
+        private DialogResult NotifyChanged()
+        {
+            return MessageBox.Show("Wollen Sie die Änderungen speichern?", 
+                "Buchfahrplan",
+                MessageBoxButtons.YesNoCancel,
+                MessageBoxIcon.Question);
+        }
+
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (!fileState.Saved && fileState.Opened)
             {
-                DialogResult res = MessageBox.Show("Wollen Sie die Änderungen speichern?", "Buchfahrplan", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                DialogResult res = NotifyChanged();
                 if (res == DialogResult.Yes)
                 {
                     e.Cancel = true;
@@ -166,12 +200,11 @@ namespace Buchfahrplan
             }
         }
 
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+            => New();
+
         private void infoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            string nl = Environment.NewLine;
-            MessageBox.Show($"Fahrplan{nl}{nl}© 2015-2016 Manuel Huber{nl}https://www.manuelhu.de{nl}https://github.com/ManuelHu",
-                "Buchfahrplan Info", MessageBoxButtons.OK, MessageBoxIcon.Information);            
-        }
+            => Info();
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
             => Save();
