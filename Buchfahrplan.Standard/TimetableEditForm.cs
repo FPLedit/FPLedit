@@ -29,8 +29,8 @@ namespace Buchfahrplan.Standard
             this.info = info;
             info.BackupTimetable();
 
-            topFromToLabel.Text = "Züge " + info.Timetable.GetLineName(TOP_DIRECTION);
-            bottomFromToLabel.Text = "Züge " + info.Timetable.GetLineName(BOTTOM_DIRECTION);
+            topLineLabel.Text = "Züge " + info.Timetable.GetLineName(TOP_DIRECTION);
+            bottomLineLabel.Text = "Züge " + info.Timetable.GetLineName(BOTTOM_DIRECTION);
 
             InitializeGridView(topDataGridView, TOP_DIRECTION);
             InitializeGridView(bottomDataGridView, BOTTOM_DIRECTION);

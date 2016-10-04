@@ -19,8 +19,8 @@ namespace Buchfahrplan.Standard
         {
             InitializeComponent();
 
-            listView1.Columns.Add("Key");
-            listView1.Columns.Add("Value");
+            listView.Columns.Add("Key");
+            listView.Columns.Add("Value");
         }
 
         public void Initialize(Meta meta)
@@ -35,20 +35,18 @@ namespace Buchfahrplan.Standard
 
         private void UpdateView()
         {
-            listView1.Items.Clear();
+            listView.Items.Clear();
 
             foreach (var entry in entity.Metadata)
             {
-                listView1.Items.Add(new ListViewItem(new[]
+                listView.Items.Add(new ListViewItem(new[]
                 {
                     entry.Key,
                     entry.Value
                 })
-                {
-                    Tag = entry.Key
-                });
+                { Tag = entry.Key });
             }
-            listView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -76,15 +74,15 @@ namespace Buchfahrplan.Standard
 
         private void editButton_Click(object sender, EventArgs e)
         {
-            if (listView1.SelectedItems.Count == 0)
+            if (listView.SelectedItems.Count == 0)
             {
                 MessageBox.Show("Zuerst muss eine Eigenschaft ausgewählt werden!", "Eigenschaft bearbeiten");
                 return;
             }
 
-            if (listView1.SelectedItems.Count > 0)
+            if (listView.SelectedItems.Count > 0)
             {
-                ListViewItem item = listView1.Items[listView1.SelectedIndices[0]];
+                ListViewItem item = listView.Items[listView.SelectedIndices[0]];
                 string key = (string)item.Tag;
 
                 MetaEditForm mef = new MetaEditForm();
@@ -99,15 +97,15 @@ namespace Buchfahrplan.Standard
 
         private void deleteButton_Click(object sender, EventArgs e)
         {
-            if (listView1.SelectedItems.Count == 0)
+            if (listView.SelectedItems.Count == 0)
             {
                 MessageBox.Show("Zuerst muss eine Eigenschaft ausgewählt werden!", "Eigenschaft löschen");
                 return;
             }
 
-            if (listView1.SelectedItems.Count > 0)
+            if (listView.SelectedItems.Count > 0)
             {
-                ListViewItem item = listView1.Items[listView1.SelectedIndices[0]];
+                ListViewItem item = listView.Items[listView.SelectedIndices[0]];
                 entity.Metadata.Remove((string)item.Tag);
 
                 UpdateView();

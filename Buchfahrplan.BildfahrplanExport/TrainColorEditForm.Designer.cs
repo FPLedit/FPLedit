@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.nameLabel = new System.Windows.Forms.Label();
+            this.colorWidthLabel = new System.Windows.Forms.Label();
             this.cancelButton = new System.Windows.Forms.Button();
             this.closeButton = new System.Windows.Forms.Button();
             this.colorComboBox = new System.Windows.Forms.ComboBox();
@@ -37,14 +37,14 @@
             this.layoutTextBox1 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
-            // nameLabel
+            // colorWidthLabel
             // 
-            this.nameLabel.AutoSize = true;
-            this.nameLabel.Location = new System.Drawing.Point(12, 9);
-            this.nameLabel.Name = "nameLabel";
-            this.nameLabel.Size = new System.Drawing.Size(94, 13);
-            this.nameLabel.TabIndex = 7;
-            this.nameLabel.Text = "Linienfarbe, stärke";
+            this.colorWidthLabel.AutoSize = true;
+            this.colorWidthLabel.Location = new System.Drawing.Point(12, 9);
+            this.colorWidthLabel.Name = "colorWidthLabel";
+            this.colorWidthLabel.Size = new System.Drawing.Size(94, 13);
+            this.colorWidthLabel.TabIndex = 7;
+            this.colorWidthLabel.Text = "Linienfarbe, stärke";
             // 
             // cancelButton
             // 
@@ -115,7 +115,7 @@
             this.Controls.Add(this.colorComboBox);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.closeButton);
-            this.Controls.Add(this.nameLabel);
+            this.Controls.Add(this.colorWidthLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "TrainColorEditForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -126,7 +126,7 @@
         }
 
         #endregion
-        private System.Windows.Forms.Label nameLabel;
+        private System.Windows.Forms.Label colorWidthLabel;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button closeButton;
         private System.Windows.Forms.ComboBox colorComboBox;

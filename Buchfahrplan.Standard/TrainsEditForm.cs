@@ -25,10 +25,10 @@ namespace Buchfahrplan.Standard
             tt = info.Timetable;
             info.BackupTimetable();
 
-            topFromToLabel.Text = "Züge " + tt.GetLineName(TOP_DIRECTION);
-            bottomFromToLabel.Text = "Züge " + tt.GetLineName(BOTTOM_DIRECTION);
-            UpdateListView(topTrainListView, TOP_DIRECTION);
-            UpdateListView(bottomTrainListView, BOTTOM_DIRECTION);
+            topLineLabel.Text = "Züge " + tt.GetLineName(TOP_DIRECTION);
+            bottomLineLabel.Text = "Züge " + tt.GetLineName(BOTTOM_DIRECTION);
+            UpdateListView(topListView, TOP_DIRECTION);
+            UpdateListView(bottomListView, BOTTOM_DIRECTION);
         }
 
         private void UpdateListView(ListView view, bool direction)
@@ -56,8 +56,8 @@ namespace Buchfahrplan.Standard
 
         private void TrainsEditForm_Load(object sender, EventArgs e)
         {
-            InitListView(topTrainListView);
-            InitListView(bottomTrainListView);
+            InitListView(topListView);
+            InitListView(bottomListView);
         }
 
         private void DeleteTrain(ListView view, bool direction)
@@ -82,8 +82,7 @@ namespace Buchfahrplan.Standard
 
                 TrainEditForm tef = new TrainEditForm();
                 tef.Initialize(train);
-                DialogResult res = tef.ShowDialog();
-                if (res == DialogResult.OK)
+                if (tef.ShowDialog() == DialogResult.OK)
                     UpdateListView(view, direction);
             }
             else
@@ -94,8 +93,7 @@ namespace Buchfahrplan.Standard
         {
             TrainEditForm tef = new TrainEditForm();
             tef.Initialize(direction);
-            DialogResult res = tef.ShowDialog();
-            if (res == DialogResult.OK)
+            if (tef.ShowDialog() == DialogResult.OK)
             {
                 Train tra = tef.NewTrain;
                 tra.InitializeStations(tt);
@@ -114,8 +112,7 @@ namespace Buchfahrplan.Standard
 
                 MetaEdit mef = new MetaEdit();
                 mef.Initialize(train);
-                DialogResult res = mef.ShowDialog();
-                if (res == DialogResult.OK)
+                if (mef.ShowDialog() == DialogResult.OK)
                     UpdateListView(view, direction);
             }
             else
@@ -136,34 +133,34 @@ namespace Buchfahrplan.Standard
             Close();
         } 
 
-        private void topNewTrainButton_Click(object sender, EventArgs e)
-            => NewTrain(topTrainListView, TOP_DIRECTION);
+        private void topNewButton_Click(object sender, EventArgs e)
+            => NewTrain(topListView, TOP_DIRECTION);
 
-        private void topEditTrainButton_Click(object sender, EventArgs e)
-            => EditTrain(topTrainListView, TOP_DIRECTION);
+        private void topEditButton_Click(object sender, EventArgs e)
+            => EditTrain(topListView, TOP_DIRECTION);
 
-        private void topDeleteTrainButton_Click(object sender, EventArgs e)
-            => DeleteTrain(topTrainListView, TOP_DIRECTION);
+        private void topDeleteButton_Click(object sender, EventArgs e)
+            => DeleteTrain(topListView, TOP_DIRECTION);
 
-        private void bottomNewTrainButton_Click(object sender, EventArgs e)
-            => NewTrain(bottomTrainListView, BOTTOM_DIRECTION);
+        private void bottomNewButton_Click(object sender, EventArgs e)
+            => NewTrain(bottomListView, BOTTOM_DIRECTION);
 
-        private void bottomEditTrainButton_Click(object sender, EventArgs e)
-            => EditTrain(bottomTrainListView, BOTTOM_DIRECTION);
+        private void bottomEditButton_Click(object sender, EventArgs e)
+            => EditTrain(bottomListView, BOTTOM_DIRECTION);
 
-        private void bottomDeleteTrainButton_Click(object sender, EventArgs e)
-            => DeleteTrain(bottomTrainListView, BOTTOM_DIRECTION);
+        private void bottomDeleteButton_Click(object sender, EventArgs e)
+            => DeleteTrain(bottomListView, BOTTOM_DIRECTION);
 
-        private void topEditTrainButton_MouseDown(object sender, MouseEventArgs e)
+        private void topEditButton_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Middle)
-                EditMeta(topTrainListView, TOP_DIRECTION);
+                EditMeta(topListView, TOP_DIRECTION);
         }
 
-        private void bottomEditTrainButton_MouseDown(object sender, MouseEventArgs e)
+        private void bottomEditButton_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Middle)
-                EditMeta(bottomTrainListView, BOTTOM_DIRECTION);
+                EditMeta(bottomListView, BOTTOM_DIRECTION);
         }
     }
 }

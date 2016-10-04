@@ -18,10 +18,7 @@ namespace Buchfahrplan.Standard
 
         public bool Reoppenable
         {
-            get
-            {
-                return true;
-            }
+            get { return true; }
         }
 
         public bool Export(Timetable tt, string filename, ILog logger)

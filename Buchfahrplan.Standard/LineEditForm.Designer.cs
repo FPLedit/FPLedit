@@ -28,62 +28,62 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.stationListView = new System.Windows.Forms.ListView();
-            this.editStationButton = new System.Windows.Forms.Button();
-            this.deleteStationButton = new System.Windows.Forms.Button();
-            this.newStationButton = new System.Windows.Forms.Button();
+            this.listView = new System.Windows.Forms.ListView();
+            this.editButton = new System.Windows.Forms.Button();
+            this.deleteButton = new System.Windows.Forms.Button();
+            this.newButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.closeButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // stationListView
+            // listView
             // 
-            this.stationListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.listView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.stationListView.FullRowSelect = true;
-            this.stationListView.HideSelection = false;
-            this.stationListView.Location = new System.Drawing.Point(12, 12);
-            this.stationListView.MultiSelect = false;
-            this.stationListView.Name = "stationListView";
-            this.stationListView.Size = new System.Drawing.Size(524, 282);
-            this.stationListView.TabIndex = 8;
-            this.stationListView.UseCompatibleStateImageBehavior = false;
-            this.stationListView.View = System.Windows.Forms.View.Details;
+            this.listView.FullRowSelect = true;
+            this.listView.HideSelection = false;
+            this.listView.Location = new System.Drawing.Point(12, 12);
+            this.listView.MultiSelect = false;
+            this.listView.Name = "listView";
+            this.listView.Size = new System.Drawing.Size(524, 282);
+            this.listView.TabIndex = 8;
+            this.listView.UseCompatibleStateImageBehavior = false;
+            this.listView.View = System.Windows.Forms.View.Details;
             // 
-            // editStationButton
+            // editButton
             // 
-            this.editStationButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.editStationButton.Location = new System.Drawing.Point(542, 41);
-            this.editStationButton.Name = "editStationButton";
-            this.editStationButton.Size = new System.Drawing.Size(102, 23);
-            this.editStationButton.TabIndex = 17;
-            this.editStationButton.Text = "Station bearbeiten";
-            this.editStationButton.UseVisualStyleBackColor = true;
-            this.editStationButton.Click += new System.EventHandler(this.editStationButton_Click);
-            this.editStationButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.editStationButton_MouseDown);
+            this.editButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.editButton.Location = new System.Drawing.Point(542, 41);
+            this.editButton.Name = "editButton";
+            this.editButton.Size = new System.Drawing.Size(102, 23);
+            this.editButton.TabIndex = 17;
+            this.editButton.Text = "Station bearbeiten";
+            this.editButton.UseVisualStyleBackColor = true;
+            this.editButton.Click += new System.EventHandler(this.editButton_Click);
+            this.editButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.editButton_MouseDown);
             // 
-            // deleteStationButton
+            // deleteButton
             // 
-            this.deleteStationButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.deleteStationButton.Location = new System.Drawing.Point(542, 70);
-            this.deleteStationButton.Name = "deleteStationButton";
-            this.deleteStationButton.Size = new System.Drawing.Size(102, 23);
-            this.deleteStationButton.TabIndex = 19;
-            this.deleteStationButton.Text = "Station löschen";
-            this.deleteStationButton.UseVisualStyleBackColor = true;
-            this.deleteStationButton.Click += new System.EventHandler(this.deleteStationButton_Click);
+            this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.deleteButton.Location = new System.Drawing.Point(542, 70);
+            this.deleteButton.Name = "deleteButton";
+            this.deleteButton.Size = new System.Drawing.Size(102, 23);
+            this.deleteButton.TabIndex = 19;
+            this.deleteButton.Text = "Station löschen";
+            this.deleteButton.UseVisualStyleBackColor = true;
+            this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
             // 
-            // newStationButton
+            // newButton
             // 
-            this.newStationButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.newStationButton.Location = new System.Drawing.Point(542, 12);
-            this.newStationButton.Name = "newStationButton";
-            this.newStationButton.Size = new System.Drawing.Size(102, 23);
-            this.newStationButton.TabIndex = 20;
-            this.newStationButton.Text = "Neue Station";
-            this.newStationButton.UseVisualStyleBackColor = true;
-            this.newStationButton.Click += new System.EventHandler(this.newStationButton_Click);
+            this.newButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.newButton.Location = new System.Drawing.Point(542, 12);
+            this.newButton.Name = "newButton";
+            this.newButton.Size = new System.Drawing.Size(102, 23);
+            this.newButton.TabIndex = 20;
+            this.newButton.Text = "Neue Station";
+            this.newButton.UseVisualStyleBackColor = true;
+            this.newButton.Click += new System.EventHandler(this.newButton_Click);
             // 
             // cancelButton
             // 
@@ -117,10 +117,10 @@
             this.ClientSize = new System.Drawing.Size(656, 335);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.closeButton);
-            this.Controls.Add(this.newStationButton);
-            this.Controls.Add(this.deleteStationButton);
-            this.Controls.Add(this.editStationButton);
-            this.Controls.Add(this.stationListView);
+            this.Controls.Add(this.newButton);
+            this.Controls.Add(this.deleteButton);
+            this.Controls.Add(this.editButton);
+            this.Controls.Add(this.listView);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "LineEditForm";
             this.ShowIcon = false;
@@ -132,10 +132,10 @@
 
         #endregion
 
-        private System.Windows.Forms.ListView stationListView;
-        private System.Windows.Forms.Button editStationButton;
-        private System.Windows.Forms.Button deleteStationButton;
-        private System.Windows.Forms.Button newStationButton;
+        private System.Windows.Forms.ListView listView;
+        private System.Windows.Forms.Button editButton;
+        private System.Windows.Forms.Button deleteButton;
+        private System.Windows.Forms.Button newButton;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button closeButton;
     }

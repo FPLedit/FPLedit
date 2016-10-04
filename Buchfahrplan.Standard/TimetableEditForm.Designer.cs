@@ -30,17 +30,17 @@
         {
             this.cancelButton = new System.Windows.Forms.Button();
             this.closeButton = new System.Windows.Forms.Button();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.topFromToLabel = new System.Windows.Forms.Label();
+            this.mainTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.topPanel = new System.Windows.Forms.Panel();
+            this.topLineLabel = new System.Windows.Forms.Label();
             this.topDataGridView = new System.Windows.Forms.DataGridView();
-            this.bottomFromToLabel = new System.Windows.Forms.Label();
+            this.bottomPanel = new System.Windows.Forms.Panel();
+            this.bottomLineLabel = new System.Windows.Forms.Label();
             this.bottomDataGridView = new System.Windows.Forms.DataGridView();
-            this.tableLayoutPanel1.SuspendLayout();
-            this.panel1.SuspendLayout();
-            this.panel2.SuspendLayout();
+            this.mainTableLayoutPanel.SuspendLayout();
+            this.topPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.topDataGridView)).BeginInit();
+            this.bottomPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bottomDataGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -68,57 +68,45 @@
             this.closeButton.UseVisualStyleBackColor = true;
             this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
             // 
-            // tableLayoutPanel1
+            // mainTableLayoutPanel
             // 
-            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.mainTableLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.panel2, 0, 1);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 12);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(826, 585);
-            this.tableLayoutPanel1.TabIndex = 29;
+            this.mainTableLayoutPanel.ColumnCount = 1;
+            this.mainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.mainTableLayoutPanel.Controls.Add(this.topPanel, 0, 0);
+            this.mainTableLayoutPanel.Controls.Add(this.bottomPanel, 0, 1);
+            this.mainTableLayoutPanel.Location = new System.Drawing.Point(12, 12);
+            this.mainTableLayoutPanel.Name = "mainTableLayoutPanel";
+            this.mainTableLayoutPanel.RowCount = 2;
+            this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.mainTableLayoutPanel.Size = new System.Drawing.Size(826, 585);
+            this.mainTableLayoutPanel.TabIndex = 29;
             // 
-            // panel1
+            // topPanel
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.topPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.Controls.Add(this.topFromToLabel);
-            this.panel1.Controls.Add(this.topDataGridView);
-            this.panel1.Location = new System.Drawing.Point(3, 3);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(820, 286);
-            this.panel1.TabIndex = 0;
+            this.topPanel.Controls.Add(this.topLineLabel);
+            this.topPanel.Controls.Add(this.topDataGridView);
+            this.topPanel.Location = new System.Drawing.Point(3, 3);
+            this.topPanel.Name = "topPanel";
+            this.topPanel.Size = new System.Drawing.Size(820, 286);
+            this.topPanel.TabIndex = 0;
             // 
-            // panel2
+            // topLineLabel
             // 
-            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.topLineLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel2.Controls.Add(this.bottomFromToLabel);
-            this.panel2.Controls.Add(this.bottomDataGridView);
-            this.panel2.Location = new System.Drawing.Point(3, 295);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(820, 287);
-            this.panel2.TabIndex = 1;
-            // 
-            // topFromToLabel
-            // 
-            this.topFromToLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.topFromToLabel.Location = new System.Drawing.Point(3, 0);
-            this.topFromToLabel.Name = "topFromToLabel";
-            this.topFromToLabel.Size = new System.Drawing.Size(814, 15);
-            this.topFromToLabel.TabIndex = 33;
-            this.topFromToLabel.Text = "Züge von ... nach ...";
-            this.topFromToLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.topLineLabel.Location = new System.Drawing.Point(3, 0);
+            this.topLineLabel.Name = "topLineLabel";
+            this.topLineLabel.Size = new System.Drawing.Size(814, 15);
+            this.topLineLabel.TabIndex = 33;
+            this.topLineLabel.Text = "Züge von ... nach ...";
+            this.topLineLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // topDataGridView
             // 
@@ -138,16 +126,28 @@
             this.topDataGridView.Size = new System.Drawing.Size(814, 268);
             this.topDataGridView.TabIndex = 32;
             // 
-            // bottomFromToLabel
+            // bottomPanel
             // 
-            this.bottomFromToLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.bottomPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.bottomFromToLabel.Location = new System.Drawing.Point(3, 0);
-            this.bottomFromToLabel.Name = "bottomFromToLabel";
-            this.bottomFromToLabel.Size = new System.Drawing.Size(814, 15);
-            this.bottomFromToLabel.TabIndex = 30;
-            this.bottomFromToLabel.Text = "Züge von ... nach ...";
-            this.bottomFromToLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.bottomPanel.Controls.Add(this.bottomLineLabel);
+            this.bottomPanel.Controls.Add(this.bottomDataGridView);
+            this.bottomPanel.Location = new System.Drawing.Point(3, 295);
+            this.bottomPanel.Name = "bottomPanel";
+            this.bottomPanel.Size = new System.Drawing.Size(820, 287);
+            this.bottomPanel.TabIndex = 1;
+            // 
+            // bottomLineLabel
+            // 
+            this.bottomLineLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.bottomLineLabel.Location = new System.Drawing.Point(3, 0);
+            this.bottomLineLabel.Name = "bottomLineLabel";
+            this.bottomLineLabel.Size = new System.Drawing.Size(814, 15);
+            this.bottomLineLabel.TabIndex = 30;
+            this.bottomLineLabel.Text = "Züge von ... nach ...";
+            this.bottomLineLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // bottomDataGridView
             // 
@@ -174,16 +174,16 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(850, 638);
-            this.Controls.Add(this.tableLayoutPanel1);
+            this.Controls.Add(this.mainTableLayoutPanel);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.closeButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "TimetableEditForm";
             this.Text = "Fahrplan bearbeiten";
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
+            this.mainTableLayoutPanel.ResumeLayout(false);
+            this.topPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.topDataGridView)).EndInit();
+            this.bottomPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.bottomDataGridView)).EndInit();
             this.ResumeLayout(false);
 
@@ -192,12 +192,12 @@
         #endregion
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button closeButton;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Label topFromToLabel;
+        private System.Windows.Forms.TableLayoutPanel mainTableLayoutPanel;
+        private System.Windows.Forms.Panel topPanel;
+        private System.Windows.Forms.Panel bottomPanel;
+        private System.Windows.Forms.Label topLineLabel;
         private System.Windows.Forms.DataGridView topDataGridView;
-        private System.Windows.Forms.Label bottomFromToLabel;
+        private System.Windows.Forms.Label bottomLineLabel;
         private System.Windows.Forms.DataGridView bottomDataGridView;
     }
 }

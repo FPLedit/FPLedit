@@ -20,8 +20,8 @@ namespace Buchfahrplan.Standard
         {
             InitializeComponent();
 
-            stationListView.Columns.Add("Bahnhof");
-            stationListView.Columns.Add("Position");
+            listView.Columns.Add("Bahnhof");
+            listView.Columns.Add("Position");
         }
 
         public void Init(IInfo info)
@@ -35,11 +35,11 @@ namespace Buchfahrplan.Standard
 
         private void UpdateStations()
         {            
-            stationListView.Items.Clear();
+            listView.Items.Clear();
 
             foreach (var station in tt.Stations.OrderBy(s => s.Kilometre))
             {
-                stationListView.Items.Add(new ListViewItem(new[] { 
+                listView.Items.Add(new ListViewItem(new[] { 
                     station.Name,                     
                     station.Kilometre.ToString() })
                     { Tag = station });
@@ -61,17 +61,17 @@ namespace Buchfahrplan.Standard
             Close();
         }
 
-        private void editStationButton_Click(object sender, EventArgs e)
+        private void editButton_Click(object sender, EventArgs e)
         {
-            if (stationListView.SelectedItems.Count == 0)
+            if (listView.SelectedItems.Count == 0)
             {
                 MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Station bearbeiten");
                 return;
             }
 
-            if (stationListView.SelectedItems.Count > 0)
+            if (listView.SelectedItems.Count > 0)
             {
-                ListViewItem item = stationListView.Items[stationListView.SelectedIndices[0]];
+                ListViewItem item = listView.Items[listView.SelectedIndices[0]];
                 Station oldStation = tt.Stations[tt.Stations.IndexOf((Station)item.Tag)];
 
                 NewStationForm nsf = new NewStationForm();
@@ -81,24 +81,24 @@ namespace Buchfahrplan.Standard
             }
         }
 
-        private void deleteStationButton_Click(object sender, EventArgs e)
+        private void deleteButton_Click(object sender, EventArgs e)
         {
-            if (stationListView.SelectedItems.Count == 0)
+            if (listView.SelectedItems.Count == 0)
             {
                 MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Station löschen");
                 return;
             }
 
-            if (stationListView.SelectedItems.Count > 0)
+            if (listView.SelectedItems.Count > 0)
             {
-                ListViewItem item = stationListView.Items[stationListView.SelectedIndices[0]];
+                ListViewItem item = listView.Items[listView.SelectedIndices[0]];
                 tt.Stations.Remove((Station)item.Tag);
 
                 UpdateStations();
             }
         }
 
-        private void newStationButton_Click(object sender, EventArgs e)
+        private void newButton_Click(object sender, EventArgs e)
         {
             NewStationForm nsf = new NewStationForm();
             if (nsf.ShowDialog() == DialogResult.OK)
@@ -117,19 +117,19 @@ namespace Buchfahrplan.Standard
             }
         }
 
-        private void editStationButton_MouseDown(object sender, MouseEventArgs e)
+        private void editButton_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Middle)
             {
-                if (stationListView.SelectedItems.Count == 0)
+                if (listView.SelectedItems.Count == 0)
                 {
                     MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Stations-Metadaten bearbeiten");
                     return;
                 }
 
-                if (stationListView.SelectedItems.Count > 0)
+                if (listView.SelectedItems.Count > 0)
                 {
-                    ListViewItem item = stationListView.Items[stationListView.SelectedIndices[0]];
+                    ListViewItem item = listView.Items[listView.SelectedIndices[0]];
                     Station station = tt.Stations[tt.Stations.IndexOf((Station)item.Tag)];
 
                     MetaEdit mef = new MetaEdit();

@@ -30,26 +30,26 @@
         {
             this.closeButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.topFromToLabel = new System.Windows.Forms.Label();
-            this.topTrainListView = new System.Windows.Forms.ListView();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.bottomFromToLabel = new System.Windows.Forms.Label();
-            this.bottomTrainListView = new System.Windows.Forms.ListView();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.topDeleteTrainButton = new System.Windows.Forms.Button();
-            this.topEditTrainButton = new System.Windows.Forms.Button();
-            this.topNewTrainButton = new System.Windows.Forms.Button();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.bottomDeleteTrainButton = new System.Windows.Forms.Button();
-            this.bottomEditTrainButton = new System.Windows.Forms.Button();
-            this.bottomNewTrainButton = new System.Windows.Forms.Button();
-            this.tableLayoutPanel1.SuspendLayout();
-            this.panel1.SuspendLayout();
-            this.panel2.SuspendLayout();
-            this.panel3.SuspendLayout();
-            this.panel4.SuspendLayout();
+            this.mainTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.topContentPanel = new System.Windows.Forms.Panel();
+            this.topLineLabel = new System.Windows.Forms.Label();
+            this.topListView = new System.Windows.Forms.ListView();
+            this.bottomContentPanel = new System.Windows.Forms.Panel();
+            this.bottomLineLabel = new System.Windows.Forms.Label();
+            this.bottomListView = new System.Windows.Forms.ListView();
+            this.topActionsPanel = new System.Windows.Forms.Panel();
+            this.topDeleteButton = new System.Windows.Forms.Button();
+            this.topEditButton = new System.Windows.Forms.Button();
+            this.topNewButton = new System.Windows.Forms.Button();
+            this.bottomActionsPanel = new System.Windows.Forms.Panel();
+            this.bottomDeleteButton = new System.Windows.Forms.Button();
+            this.bottomEditButton = new System.Windows.Forms.Button();
+            this.bottomNewButton = new System.Windows.Forms.Button();
+            this.mainTableLayoutPanel.SuspendLayout();
+            this.topContentPanel.SuspendLayout();
+            this.bottomContentPanel.SuspendLayout();
+            this.topActionsPanel.SuspendLayout();
+            this.bottomActionsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // closeButton
@@ -75,189 +75,189 @@
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
-            // tableLayoutPanel1
+            // mainTableLayoutPanel
             // 
-            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.mainTableLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.panel2, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.panel3, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.panel4, 1, 1);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 12);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(806, 499);
-            this.tableLayoutPanel1.TabIndex = 7;
+            this.mainTableLayoutPanel.ColumnCount = 2;
+            this.mainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.mainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.mainTableLayoutPanel.Controls.Add(this.topContentPanel, 0, 0);
+            this.mainTableLayoutPanel.Controls.Add(this.bottomContentPanel, 0, 1);
+            this.mainTableLayoutPanel.Controls.Add(this.topActionsPanel, 1, 0);
+            this.mainTableLayoutPanel.Controls.Add(this.bottomActionsPanel, 1, 1);
+            this.mainTableLayoutPanel.Location = new System.Drawing.Point(12, 12);
+            this.mainTableLayoutPanel.Name = "mainTableLayoutPanel";
+            this.mainTableLayoutPanel.RowCount = 2;
+            this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.mainTableLayoutPanel.Size = new System.Drawing.Size(806, 499);
+            this.mainTableLayoutPanel.TabIndex = 7;
             // 
-            // panel1
+            // topContentPanel
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.topContentPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.Controls.Add(this.topFromToLabel);
-            this.panel1.Controls.Add(this.topTrainListView);
-            this.panel1.Location = new System.Drawing.Point(3, 3);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(680, 243);
-            this.panel1.TabIndex = 0;
+            this.topContentPanel.Controls.Add(this.topLineLabel);
+            this.topContentPanel.Controls.Add(this.topListView);
+            this.topContentPanel.Location = new System.Drawing.Point(3, 3);
+            this.topContentPanel.Name = "topContentPanel";
+            this.topContentPanel.Size = new System.Drawing.Size(680, 243);
+            this.topContentPanel.TabIndex = 0;
             // 
-            // topFromToLabel
+            // topLineLabel
             // 
-            this.topFromToLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.topLineLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.topFromToLabel.Location = new System.Drawing.Point(3, 0);
-            this.topFromToLabel.Name = "topFromToLabel";
-            this.topFromToLabel.Size = new System.Drawing.Size(674, 15);
-            this.topFromToLabel.TabIndex = 27;
-            this.topFromToLabel.Text = "Züge von ... nach ...";
-            this.topFromToLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.topLineLabel.Location = new System.Drawing.Point(3, 0);
+            this.topLineLabel.Name = "topLineLabel";
+            this.topLineLabel.Size = new System.Drawing.Size(674, 15);
+            this.topLineLabel.TabIndex = 27;
+            this.topLineLabel.Text = "Züge von ... nach ...";
+            this.topLineLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // topTrainListView
+            // topListView
             // 
-            this.topTrainListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.topListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.topTrainListView.FullRowSelect = true;
-            this.topTrainListView.HideSelection = false;
-            this.topTrainListView.Location = new System.Drawing.Point(0, 18);
-            this.topTrainListView.MultiSelect = false;
-            this.topTrainListView.Name = "topTrainListView";
-            this.topTrainListView.Size = new System.Drawing.Size(677, 222);
-            this.topTrainListView.TabIndex = 8;
-            this.topTrainListView.UseCompatibleStateImageBehavior = false;
-            this.topTrainListView.View = System.Windows.Forms.View.Details;
+            this.topListView.FullRowSelect = true;
+            this.topListView.HideSelection = false;
+            this.topListView.Location = new System.Drawing.Point(0, 18);
+            this.topListView.MultiSelect = false;
+            this.topListView.Name = "topListView";
+            this.topListView.Size = new System.Drawing.Size(677, 222);
+            this.topListView.TabIndex = 8;
+            this.topListView.UseCompatibleStateImageBehavior = false;
+            this.topListView.View = System.Windows.Forms.View.Details;
             // 
-            // panel2
+            // bottomContentPanel
             // 
-            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.bottomContentPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel2.Controls.Add(this.bottomFromToLabel);
-            this.panel2.Controls.Add(this.bottomTrainListView);
-            this.panel2.Location = new System.Drawing.Point(3, 252);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(680, 244);
-            this.panel2.TabIndex = 1;
+            this.bottomContentPanel.Controls.Add(this.bottomLineLabel);
+            this.bottomContentPanel.Controls.Add(this.bottomListView);
+            this.bottomContentPanel.Location = new System.Drawing.Point(3, 252);
+            this.bottomContentPanel.Name = "bottomContentPanel";
+            this.bottomContentPanel.Size = new System.Drawing.Size(680, 244);
+            this.bottomContentPanel.TabIndex = 1;
             // 
-            // bottomFromToLabel
+            // bottomLineLabel
             // 
-            this.bottomFromToLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.bottomLineLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.bottomFromToLabel.Location = new System.Drawing.Point(3, 0);
-            this.bottomFromToLabel.Name = "bottomFromToLabel";
-            this.bottomFromToLabel.Size = new System.Drawing.Size(671, 15);
-            this.bottomFromToLabel.TabIndex = 29;
-            this.bottomFromToLabel.Text = "Züge von ... nach ...";
-            this.bottomFromToLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.bottomLineLabel.Location = new System.Drawing.Point(3, 0);
+            this.bottomLineLabel.Name = "bottomLineLabel";
+            this.bottomLineLabel.Size = new System.Drawing.Size(671, 15);
+            this.bottomLineLabel.TabIndex = 29;
+            this.bottomLineLabel.Text = "Züge von ... nach ...";
+            this.bottomLineLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // bottomTrainListView
+            // bottomListView
             // 
-            this.bottomTrainListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.bottomListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.bottomTrainListView.FullRowSelect = true;
-            this.bottomTrainListView.HideSelection = false;
-            this.bottomTrainListView.Location = new System.Drawing.Point(6, 18);
-            this.bottomTrainListView.MultiSelect = false;
-            this.bottomTrainListView.Name = "bottomTrainListView";
-            this.bottomTrainListView.Size = new System.Drawing.Size(671, 223);
-            this.bottomTrainListView.TabIndex = 28;
-            this.bottomTrainListView.UseCompatibleStateImageBehavior = false;
-            this.bottomTrainListView.View = System.Windows.Forms.View.Details;
+            this.bottomListView.FullRowSelect = true;
+            this.bottomListView.HideSelection = false;
+            this.bottomListView.Location = new System.Drawing.Point(6, 18);
+            this.bottomListView.MultiSelect = false;
+            this.bottomListView.Name = "bottomListView";
+            this.bottomListView.Size = new System.Drawing.Size(671, 223);
+            this.bottomListView.TabIndex = 28;
+            this.bottomListView.UseCompatibleStateImageBehavior = false;
+            this.bottomListView.View = System.Windows.Forms.View.Details;
             // 
-            // panel3
+            // topActionsPanel
             // 
-            this.panel3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.topActionsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel3.Controls.Add(this.topDeleteTrainButton);
-            this.panel3.Controls.Add(this.topEditTrainButton);
-            this.panel3.Controls.Add(this.topNewTrainButton);
-            this.panel3.Location = new System.Drawing.Point(689, 3);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(114, 243);
-            this.panel3.TabIndex = 2;
+            this.topActionsPanel.Controls.Add(this.topDeleteButton);
+            this.topActionsPanel.Controls.Add(this.topEditButton);
+            this.topActionsPanel.Controls.Add(this.topNewButton);
+            this.topActionsPanel.Location = new System.Drawing.Point(689, 3);
+            this.topActionsPanel.Name = "topActionsPanel";
+            this.topActionsPanel.Size = new System.Drawing.Size(114, 243);
+            this.topActionsPanel.TabIndex = 2;
             // 
-            // topDeleteTrainButton
+            // topDeleteButton
             // 
-            this.topDeleteTrainButton.Location = new System.Drawing.Point(3, 76);
-            this.topDeleteTrainButton.Name = "topDeleteTrainButton";
-            this.topDeleteTrainButton.Size = new System.Drawing.Size(108, 23);
-            this.topDeleteTrainButton.TabIndex = 2;
-            this.topDeleteTrainButton.Text = "Zug löschen";
-            this.topDeleteTrainButton.UseVisualStyleBackColor = true;
-            this.topDeleteTrainButton.Click += new System.EventHandler(this.topDeleteTrainButton_Click);
+            this.topDeleteButton.Location = new System.Drawing.Point(3, 76);
+            this.topDeleteButton.Name = "topDeleteButton";
+            this.topDeleteButton.Size = new System.Drawing.Size(108, 23);
+            this.topDeleteButton.TabIndex = 2;
+            this.topDeleteButton.Text = "Zug löschen";
+            this.topDeleteButton.UseVisualStyleBackColor = true;
+            this.topDeleteButton.Click += new System.EventHandler(this.topDeleteButton_Click);
             // 
-            // topEditTrainButton
+            // topEditButton
             // 
-            this.topEditTrainButton.Location = new System.Drawing.Point(3, 47);
-            this.topEditTrainButton.Name = "topEditTrainButton";
-            this.topEditTrainButton.Size = new System.Drawing.Size(108, 23);
-            this.topEditTrainButton.TabIndex = 1;
-            this.topEditTrainButton.Text = "Zug bearbeiten";
-            this.topEditTrainButton.UseVisualStyleBackColor = true;
-            this.topEditTrainButton.Click += new System.EventHandler(this.topEditTrainButton_Click);
-            this.topEditTrainButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.topEditTrainButton_MouseDown);
+            this.topEditButton.Location = new System.Drawing.Point(3, 47);
+            this.topEditButton.Name = "topEditButton";
+            this.topEditButton.Size = new System.Drawing.Size(108, 23);
+            this.topEditButton.TabIndex = 1;
+            this.topEditButton.Text = "Zug bearbeiten";
+            this.topEditButton.UseVisualStyleBackColor = true;
+            this.topEditButton.Click += new System.EventHandler(this.topEditButton_Click);
+            this.topEditButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.topEditButton_MouseDown);
             // 
-            // topNewTrainButton
+            // topNewButton
             // 
-            this.topNewTrainButton.Location = new System.Drawing.Point(3, 18);
-            this.topNewTrainButton.Name = "topNewTrainButton";
-            this.topNewTrainButton.Size = new System.Drawing.Size(108, 23);
-            this.topNewTrainButton.TabIndex = 0;
-            this.topNewTrainButton.Text = "Neuer Zug...";
-            this.topNewTrainButton.UseVisualStyleBackColor = true;
-            this.topNewTrainButton.Click += new System.EventHandler(this.topNewTrainButton_Click);
+            this.topNewButton.Location = new System.Drawing.Point(3, 18);
+            this.topNewButton.Name = "topNewButton";
+            this.topNewButton.Size = new System.Drawing.Size(108, 23);
+            this.topNewButton.TabIndex = 0;
+            this.topNewButton.Text = "Neuer Zug...";
+            this.topNewButton.UseVisualStyleBackColor = true;
+            this.topNewButton.Click += new System.EventHandler(this.topNewButton_Click);
             // 
-            // panel4
+            // bottomActionsPanel
             // 
-            this.panel4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.bottomActionsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel4.Controls.Add(this.bottomDeleteTrainButton);
-            this.panel4.Controls.Add(this.bottomEditTrainButton);
-            this.panel4.Controls.Add(this.bottomNewTrainButton);
-            this.panel4.Location = new System.Drawing.Point(689, 252);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(114, 244);
-            this.panel4.TabIndex = 3;
+            this.bottomActionsPanel.Controls.Add(this.bottomDeleteButton);
+            this.bottomActionsPanel.Controls.Add(this.bottomEditButton);
+            this.bottomActionsPanel.Controls.Add(this.bottomNewButton);
+            this.bottomActionsPanel.Location = new System.Drawing.Point(689, 252);
+            this.bottomActionsPanel.Name = "bottomActionsPanel";
+            this.bottomActionsPanel.Size = new System.Drawing.Size(114, 244);
+            this.bottomActionsPanel.TabIndex = 3;
             // 
-            // bottomDeleteTrainButton
+            // bottomDeleteButton
             // 
-            this.bottomDeleteTrainButton.Location = new System.Drawing.Point(3, 76);
-            this.bottomDeleteTrainButton.Name = "bottomDeleteTrainButton";
-            this.bottomDeleteTrainButton.Size = new System.Drawing.Size(108, 23);
-            this.bottomDeleteTrainButton.TabIndex = 5;
-            this.bottomDeleteTrainButton.Text = "Zug löschen";
-            this.bottomDeleteTrainButton.UseVisualStyleBackColor = true;
-            this.bottomDeleteTrainButton.Click += new System.EventHandler(this.bottomDeleteTrainButton_Click);
+            this.bottomDeleteButton.Location = new System.Drawing.Point(3, 76);
+            this.bottomDeleteButton.Name = "bottomDeleteButton";
+            this.bottomDeleteButton.Size = new System.Drawing.Size(108, 23);
+            this.bottomDeleteButton.TabIndex = 5;
+            this.bottomDeleteButton.Text = "Zug löschen";
+            this.bottomDeleteButton.UseVisualStyleBackColor = true;
+            this.bottomDeleteButton.Click += new System.EventHandler(this.bottomDeleteButton_Click);
             // 
-            // bottomEditTrainButton
+            // bottomEditButton
             // 
-            this.bottomEditTrainButton.Location = new System.Drawing.Point(3, 47);
-            this.bottomEditTrainButton.Name = "bottomEditTrainButton";
-            this.bottomEditTrainButton.Size = new System.Drawing.Size(108, 23);
-            this.bottomEditTrainButton.TabIndex = 4;
-            this.bottomEditTrainButton.Text = "Zug bearbeiten";
-            this.bottomEditTrainButton.UseVisualStyleBackColor = true;
-            this.bottomEditTrainButton.Click += new System.EventHandler(this.bottomEditTrainButton_Click);
-            this.bottomEditTrainButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.bottomEditTrainButton_MouseDown);
+            this.bottomEditButton.Location = new System.Drawing.Point(3, 47);
+            this.bottomEditButton.Name = "bottomEditButton";
+            this.bottomEditButton.Size = new System.Drawing.Size(108, 23);
+            this.bottomEditButton.TabIndex = 4;
+            this.bottomEditButton.Text = "Zug bearbeiten";
+            this.bottomEditButton.UseVisualStyleBackColor = true;
+            this.bottomEditButton.Click += new System.EventHandler(this.bottomEditButton_Click);
+            this.bottomEditButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.bottomEditButton_MouseDown);
             // 
-            // bottomNewTrainButton
+            // bottomNewButton
             // 
-            this.bottomNewTrainButton.Location = new System.Drawing.Point(3, 18);
-            this.bottomNewTrainButton.Name = "bottomNewTrainButton";
-            this.bottomNewTrainButton.Size = new System.Drawing.Size(108, 23);
-            this.bottomNewTrainButton.TabIndex = 3;
-            this.bottomNewTrainButton.Text = "Neuer Zug...";
-            this.bottomNewTrainButton.UseVisualStyleBackColor = true;
-            this.bottomNewTrainButton.Click += new System.EventHandler(this.bottomNewTrainButton_Click);
+            this.bottomNewButton.Location = new System.Drawing.Point(3, 18);
+            this.bottomNewButton.Name = "bottomNewButton";
+            this.bottomNewButton.Size = new System.Drawing.Size(108, 23);
+            this.bottomNewButton.TabIndex = 3;
+            this.bottomNewButton.Text = "Neuer Zug...";
+            this.bottomNewButton.UseVisualStyleBackColor = true;
+            this.bottomNewButton.Click += new System.EventHandler(this.bottomNewButton_Click);
             // 
             // TrainsEditForm
             // 
@@ -266,7 +266,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(830, 552);
-            this.Controls.Add(this.tableLayoutPanel1);
+            this.Controls.Add(this.mainTableLayoutPanel);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.closeButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
@@ -275,11 +275,11 @@
             this.ShowInTaskbar = false;
             this.Text = "Züge bearbeiten...";
             this.Load += new System.EventHandler(this.TrainsEditForm_Load);
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
-            this.panel4.ResumeLayout(false);
+            this.mainTableLayoutPanel.ResumeLayout(false);
+            this.topContentPanel.ResumeLayout(false);
+            this.bottomContentPanel.ResumeLayout(false);
+            this.topActionsPanel.ResumeLayout(false);
+            this.bottomActionsPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -288,20 +288,20 @@
 
         private System.Windows.Forms.Button closeButton;
         private System.Windows.Forms.Button cancelButton;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.ListView topTrainListView;
-        private System.Windows.Forms.Label topFromToLabel;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Label bottomFromToLabel;
-        private System.Windows.Forms.ListView bottomTrainListView;
-        private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.Button topDeleteTrainButton;
-        private System.Windows.Forms.Button topEditTrainButton;
-        private System.Windows.Forms.Button topNewTrainButton;
-        private System.Windows.Forms.Button bottomDeleteTrainButton;
-        private System.Windows.Forms.Button bottomEditTrainButton;
-        private System.Windows.Forms.Button bottomNewTrainButton;
+        private System.Windows.Forms.TableLayoutPanel mainTableLayoutPanel;
+        private System.Windows.Forms.Panel topContentPanel;
+        private System.Windows.Forms.ListView topListView;
+        private System.Windows.Forms.Label topLineLabel;
+        private System.Windows.Forms.Panel bottomContentPanel;
+        private System.Windows.Forms.Label bottomLineLabel;
+        private System.Windows.Forms.ListView bottomListView;
+        private System.Windows.Forms.Panel topActionsPanel;
+        private System.Windows.Forms.Panel bottomActionsPanel;
+        private System.Windows.Forms.Button topDeleteButton;
+        private System.Windows.Forms.Button topEditButton;
+        private System.Windows.Forms.Button topNewButton;
+        private System.Windows.Forms.Button bottomDeleteButton;
+        private System.Windows.Forms.Button bottomEditButton;
+        private System.Windows.Forms.Button bottomNewButton;
     }
 }

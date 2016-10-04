@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.listView = new System.Windows.Forms.ListView();
             this.cancelButton = new System.Windows.Forms.Button();
             this.closeButton = new System.Windows.Forms.Button();
             this.newButton = new System.Windows.Forms.Button();
@@ -36,14 +36,14 @@
             this.editButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // listView1
+            // listView
             // 
-            this.listView1.Location = new System.Drawing.Point(12, 12);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(353, 376);
-            this.listView1.TabIndex = 0;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView.Location = new System.Drawing.Point(12, 12);
+            this.listView.Name = "listView";
+            this.listView.Size = new System.Drawing.Size(353, 376);
+            this.listView.TabIndex = 0;
+            this.listView.UseCompatibleStateImageBehavior = false;
+            this.listView.View = System.Windows.Forms.View.Details;
             // 
             // cancelButton
             // 
@@ -113,7 +113,7 @@
             this.Controls.Add(this.editButton);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.closeButton);
-            this.Controls.Add(this.listView1);
+            this.Controls.Add(this.listView);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "MetaEdit";
             this.Text = "Meta Editor";
@@ -123,7 +123,7 @@
 
         #endregion
 
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ListView listView;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button closeButton;
         private System.Windows.Forms.Button newButton;
