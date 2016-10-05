@@ -5,6 +5,10 @@ using System.Linq;
 using System.Collections.Generic;
 using Buchfahrplan.Shared;
 using System.ComponentModel;
+using System.Net;
+using System.Xml;
+using System.Diagnostics;
+using System.Drawing;
 
 namespace Buchfahrplan
 {
@@ -60,7 +64,7 @@ namespace Buchfahrplan
             exporters = new List<IExport>();
             importers = new List<IImport>();
 
-            fileState = new FileState();
+            fileState = new FileState();            
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -70,7 +74,7 @@ namespace Buchfahrplan
 
             saveFileDialog.Filter = string.Join("|", exporters.Select(ex => ex.Filter));
             openFileDialog.Filter = string.Join("|", importers.Select(im => im.Filter));
-        }        
+        }
 
         private void Open()
         {
@@ -168,10 +172,50 @@ namespace Buchfahrplan
             => importers.Add(import);
         #endregion
 
-        private void Info()
+        private void VersionCheck()
         {
+            WebClient wc = new WebClient();
+            try
+            {
+                string ret = wc.DownloadString(string.Format(SettingsManager.Get("CheckUrl"), GetVersion()));
+                if (ret != "")
+                {
+                    XmlDocument doc = new XmlDocument();
+                    doc.LoadXml(ret);
+
+                    XmlNode ver = doc.DocumentElement.SelectSingleNode("/info/version");
+                    XmlNode url = doc.DocumentElement.SelectSingleNode("/info/url");
+
+                    string nl = Environment.NewLine;
+                    DialogResult res = MessageBox.Show($"Eine neue Programmversion ({ver.InnerText}) ist verfügbar!{nl}{nl}Jetzt zur Download-Seite wechseln, um die neue Version herunterzuladen?",
+                        "Neue Buchfahrplan-Version verfügbar", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+
+                    if (res == DialogResult.Yes)
+                        Process.Start(url.InnerText);
+                }
+                else
+                {
+                    MessageBox.Show($"Sie benutzen bereits die aktuelle Version!",
+                        "Auf neue Version prüfen");
+                }
+            }
+            catch
+            {
+                MessageBox.Show($"Verbindung mit dem Server fehlgeschlagen!",
+                    "Auf neue Version prüfen");
+            }
+        }
+
+        private string GetVersion()
+        {
+            return "alpha";
+        }
+
+        private void Info()
+        {            
             string nl = Environment.NewLine;
-            MessageBox.Show($"Fahrplan{nl}{nl}© 2015-2016 Manuel Huber{nl}https://www.manuelhu.de{nl}https://github.com/ManuelHu",
+            string version = GetVersion() + " (Zur Überprüfung auf aktuellere Programmversionen bitte den Menüpunkt \"Auf neue Version prüfen\" verwenden)"; //TODO
+            MessageBox.Show($"Fahrplan{nl}{nl}Version {version}{nl}{nl}© 2015-2016 Manuel Huber{nl}https://www.manuelhu.de{nl}https://github.com/ManuelHu",
                 "Buchfahrplan Info",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
@@ -211,5 +255,8 @@ namespace Buchfahrplan
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
             => Open();
+
+        private void checkVersionToolStripMenuItem_Click(object sender, EventArgs e)
+            => VersionCheck();
     }
 }
