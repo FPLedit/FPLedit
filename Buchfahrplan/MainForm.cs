@@ -20,6 +20,7 @@ namespace Buchfahrplan
 
         private List<IExport> exporters;
         private List<IImport> importers;
+        private IExport lastExport;
 
         private FileState fileState;
 
@@ -47,7 +48,7 @@ namespace Buchfahrplan
             fileState.LineCreated = Timetable?.Stations.Count > 0;
             fileState.TrainsCreated = Timetable?.Trains.Count > 0;
 
-            saveToolStripMenuItem.Enabled = fileState.Opened;
+            saveToolStripMenuItem.Enabled = saveAsToolStripMenuItem.Enabled = fileState.Opened;
 
             FileStateChanged?.Invoke(this, new FileStateChangedEventArgs(fileState));
 
@@ -82,7 +83,7 @@ namespace Buchfahrplan
             {
                 DialogResult res = NotifyChanged();
                 if (res == DialogResult.Yes)
-                    Save();
+                    Save(false);
                 if (res == DialogResult.Cancel)
                     return;
             }
@@ -101,23 +102,36 @@ namespace Buchfahrplan
             }
         }
 
-        private void Save()
+        private void Save(bool forceSaveAs)
         {
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            IExport export = lastExport;
+            string filename = fileState.FileName;
+
+            bool saveAs = forceSaveAs || export == null || filename == null || filename == "";
+
+            if (saveAs)
             {
-                IExport export = exporters[saveFileDialog.FilterIndex - 1];
-                logger.Log("Speichere Datei " + saveFileDialog.FileName);
-                bool ret = export.Export(Timetable, saveFileDialog.FileName, logger);
-                if (ret == false)
-                    return;
-                logger.Log("Speichern erfolgreich abgeschlossen!");
-                if (export.Reoppenable)
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    fileState.Saved = true;
-                    fileState.FileName = saveFileDialog.FileName;
-                    OnFileStateChanged();
+                    export = exporters[saveFileDialog.FilterIndex - 1];
+                    filename = saveFileDialog.FileName;
                 }
+                else
+                    return;
             }
+
+            logger.Log("Speichere Datei " + filename);
+            bool ret = export.Export(Timetable, filename, logger);
+            if (ret == false)
+                return;
+            logger.Log("Speichern erfolgreich abgeschlossen!");
+            if (export.Reoppenable)
+            {
+                fileState.Saved = true;
+                fileState.FileName = filename;
+                OnFileStateChanged();
+            }
+            lastExport = export.Reoppenable ? export : null;
         }
 
         private void New()
@@ -126,7 +140,7 @@ namespace Buchfahrplan
             {
                 DialogResult res = NotifyChanged();
                 if (res == DialogResult.Yes)
-                    Save();
+                    Save(false);
                 if (res == DialogResult.Cancel)
                     return;
             }
@@ -237,7 +251,7 @@ namespace Buchfahrplan
                 if (res == DialogResult.Yes)
                 {
                     e.Cancel = true;
-                    Save();
+                    Save(false);
                 }
                 else if (res == DialogResult.Cancel)
                     e.Cancel = true;
@@ -251,12 +265,15 @@ namespace Buchfahrplan
             => Info();
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
-            => Save();
+            => Save(false);
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
             => Open();
 
         private void checkVersionToolStripMenuItem_Click(object sender, EventArgs e)
             => VersionCheck();
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+            => Save(true);
     }
 }

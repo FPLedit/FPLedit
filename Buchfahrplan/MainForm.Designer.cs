@@ -36,9 +36,10 @@
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkVersionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.logger = new Buchfahrplan.LogTextBox();
-            this.checkVersionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -58,6 +59,7 @@
             this.newToolStripMenuItem,
             this.openToolStripMenuItem,
             this.saveToolStripMenuItem,
+            this.saveAsToolStripMenuItem,
             this.toolStripSeparator1,
             this.infoToolStripMenuItem,
             this.checkVersionToolStripMenuItem});
@@ -99,6 +101,13 @@
             this.infoToolStripMenuItem.Text = "Info";
             this.infoToolStripMenuItem.Click += new System.EventHandler(this.infoToolStripMenuItem_Click);
             // 
+            // checkVersionToolStripMenuItem
+            // 
+            this.checkVersionToolStripMenuItem.Name = "checkVersionToolStripMenuItem";
+            this.checkVersionToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.checkVersionToolStripMenuItem.Text = "Auf neue Version Prüfen";
+            this.checkVersionToolStripMenuItem.Click += new System.EventHandler(this.checkVersionToolStripMenuItem_Click);
+            // 
             // logger
             // 
             this.logger.BackColor = System.Drawing.Color.White;
@@ -110,12 +119,13 @@
             this.logger.Size = new System.Drawing.Size(441, 237);
             this.logger.TabIndex = 2;
             // 
-            // checkVersionToolStripMenuItem
+            // saveAsToolStripMenuItem
             // 
-            this.checkVersionToolStripMenuItem.Name = "checkVersionToolStripMenuItem";
-            this.checkVersionToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.checkVersionToolStripMenuItem.Text = "Auf neue Version Prüfen";
-            this.checkVersionToolStripMenuItem.Click += new System.EventHandler(this.checkVersionToolStripMenuItem_Click);
+            this.saveAsToolStripMenuItem.Enabled = false;
+            this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.saveAsToolStripMenuItem.Text = "Speichern unter";
+            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -150,6 +160,7 @@
         private System.Windows.Forms.ToolStripMenuItem infoToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem checkVersionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
     }
 }
 
