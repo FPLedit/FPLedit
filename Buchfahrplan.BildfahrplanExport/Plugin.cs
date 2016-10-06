@@ -85,7 +85,7 @@ namespace Buchfahrplan.BildfahrplanExport
             last = renderer.GetTimeByHeight(true, last.HasValue ? last.Value : info.Timetable.GetMetaTimeSpan("StartTime", new TimeSpan(0, 0, 0)), height);
             renderer.Draw(e.Graphics);
 
-            if (last.Value < info.Timetable.GetMetaTimeSpan("EndTime", new TimeSpan(1, 0, 0, 0)))
+            if (last.Value < info.Timetable.GetMeta("EndTime", new TimeSpan(1, 0, 0, 0), s => TimeSpan.Parse(s == "24:00" ? "1.00:00" : s)))
                 e.HasMorePages = true;
             else
                 last = null;

@@ -271,7 +271,7 @@ namespace Buchfahrplan.BildfahrplanExport
                 if (h >= height)
                 {
                     endTime = last;
-                    var meta = tt.GetMeta("EndTime", new TimeSpan(24, 0, 0), TimeSpan.Parse);
+                    var meta = tt.GetMeta("EndTime", new TimeSpan(24, 0, 0), s => TimeSpan.Parse(s == "24:00" ? "1.00:00" : s));
                     if (endTime > meta)
                     {
                         endTime = meta;

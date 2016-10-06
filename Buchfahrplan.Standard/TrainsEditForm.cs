@@ -90,7 +90,7 @@ namespace Buchfahrplan.Standard
         private void NewTrain(ListView view, bool direction)
         {
             TrainEditForm tef = new TrainEditForm();
-            tef.Initialize(direction);
+            tef.Initialize(info.Timetable, direction);
             if (tef.ShowDialog() == DialogResult.OK)
             {
                 Train tra = tef.NewTrain;

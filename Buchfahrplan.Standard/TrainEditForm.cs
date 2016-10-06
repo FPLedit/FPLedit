@@ -33,9 +33,10 @@ namespace Buchfahrplan.Standard
             Text = "Zug bearbeiten";
         }
 
-        public void Initialize(bool direction)
+        public void Initialize(Timetable tt, bool direction)
         {
             this.direction = direction;
+            lineTextBox.Text = tt.GetLineName(direction);
         }
 
         private void closeButton_Click(object sender, EventArgs e)
