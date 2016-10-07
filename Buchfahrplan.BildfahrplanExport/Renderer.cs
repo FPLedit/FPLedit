@@ -191,6 +191,9 @@ namespace Buchfahrplan.BildfahrplanExport
 
                 for (int i = 0; i < points.Count; i += 2)
                 {
+                    if (points.Count <= i + 1)
+                        continue;
+
                     g.DrawLine(new Pen(color, tWidth), points[i], points[i + 1]);
 
                     if (points[i].X == points[i + 1].X)
