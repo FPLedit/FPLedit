@@ -19,9 +19,19 @@ namespace Buchfahrplan
             this.BackColor = Color.White;
         }
 
-        public void Log(string message)
+        public void Error(string message)
+        {
+            this.Text += "Fehler: " + message + Environment.NewLine;
+        }
+
+        public void Info(string message)
         {
             this.Text += message + Environment.NewLine;
+        }
+
+        public void Warning(string message)
+        {
+            this.Text += "Warnung: " + message + Environment.NewLine;
         }
     }
 }

@@ -7,6 +7,10 @@ namespace Buchfahrplan.Shared
 {
     public interface ILog
     {
-        void Log(string message);
+        void Error(string message);
+
+        void Warning(string message);
+
+        void Info(string message);
     }
 }

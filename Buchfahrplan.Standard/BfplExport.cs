@@ -30,7 +30,7 @@ namespace Buchfahrplan.Standard
             }
             catch (Exception ex)
             {
-                logger.Log("BfplExport: Error: " + ex.Message);
+                logger.Error("BfplExport: " + ex.Message);
                 return false;
             }
         }

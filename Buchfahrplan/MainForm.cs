@@ -90,11 +90,11 @@ namespace Buchfahrplan
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 IImport import = importers[openFileDialog.FilterIndex - 1];
-                logger.Log("Öffne Datei " + openFileDialog.FileName);
+                logger.Info("Öffne Datei " + openFileDialog.FileName);
                 Timetable = import.Import(openFileDialog.FileName, logger);
                 if (Timetable == null)
                     return;
-                logger.Log("Datei erfolgeich geöffnet!");
+                logger.Info("Datei erfolgeich geöffnet!");                
                 fileState.Opened = true;
                 fileState.Saved = true;
                 fileState.FileName = openFileDialog.FileName;
@@ -120,11 +120,11 @@ namespace Buchfahrplan
                     return;
             }
 
-            logger.Log("Speichere Datei " + filename);
+            logger.Info("Speichere Datei " + filename);
             bool ret = export.Export(Timetable, filename, logger);
             if (ret == false)
                 return;
-            logger.Log("Speichern erfolgreich abgeschlossen!");
+            logger.Info("Speichern erfolgreich abgeschlossen!");
             if (export.Reoppenable)
             {
                 fileState.Saved = true;
@@ -149,7 +149,7 @@ namespace Buchfahrplan
             fileState.Saved = false;
             fileState.FileName = null;
             OnFileStateChanged();
-            logger.Log("Neue Datei erstellt");
+            logger.Info("Neue Datei erstellt");
         }
 
         #region IInfo

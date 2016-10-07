@@ -7,9 +7,19 @@ namespace Buchfahrplan.Shared
 {
     public class ConsoleLogger : ILog
     {
-        public void Log(string message)
+        public void Error(string message)
+        {
+            Console.WriteLine("Fehler: " + message);
+        }
+
+        public void Info(string message)
         {
             Console.WriteLine(message);
+        }
+
+        public void Warning(string message)
+        {
+            Console.WriteLine("Warnung; " + message);
         }
     }
 }

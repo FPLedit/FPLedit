@@ -86,7 +86,7 @@ namespace Buchfahrplan.JTrainGraphImport
             }
             catch (Exception ex)
             {
-                logger.Log("JTrainGraphImporter: Error: " + ex.Message);
+                logger.Error("JTrainGraphImporter: " + ex.Message);
                 return null;
             }
         }

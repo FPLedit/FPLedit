@@ -24,7 +24,7 @@ namespace Buchfahrplan.Standard
             }
             catch (Exception ex)
             {
-                logger.Log("BfplImport: Error: " + ex.Message);
+                logger.Error("BfplImport: " + ex.Message);
                 return null;
             }
         }
