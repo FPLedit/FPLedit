@@ -10,9 +10,12 @@ namespace Buchfahrplan.Standard
 
         private bool direction;
 
+        private CheckBox[] daysBoxes;
+
         public TrainEditForm()
         {
             InitializeComponent();
+            daysBoxes = new[] { mondayCheckBox, tuesdayCheckBox, wednesdayCheckBox, thursdayCheckBox, fridayCheckBox, saturdayCheckBox, sundayCheckBox };
         }
 
         public TrainEditForm(Train train) : this()
@@ -23,13 +26,9 @@ namespace Buchfahrplan.Standard
             direction = train.Direction;
             locomotiveTextBox.Text = train.Locomotive;
 
-            mondayCheckBox.Checked = Train.Days[0];
-            tuesdayCheckBox.Checked = Train.Days[1];
-            wednesdayCheckBox.Checked = Train.Days[2];
-            thursdayCheckBox.Checked = Train.Days[3];
-            fridayCheckBox.Checked = Train.Days[4];
-            saturdayCheckBox.Checked = Train.Days[5];
-            sundayCheckBox.Checked = Train.Days[6];
+            for (int i = 0; i < Train.Days.Length; i++)
+                daysBoxes[i].Checked = Train.Days[i];
+
             Text = "Zug bearbeiten";
         }
 
@@ -48,13 +47,9 @@ namespace Buchfahrplan.Standard
             Train.Line = lineTextBox.Text;
             Train.Locomotive = locomotiveTextBox.Text;
             Train.Direction = direction;
-            Train.Days[0] = mondayCheckBox.Checked;
-            Train.Days[1] = tuesdayCheckBox.Checked;
-            Train.Days[2] = wednesdayCheckBox.Checked;
-            Train.Days[3] = thursdayCheckBox.Checked;
-            Train.Days[4] = fridayCheckBox.Checked;
-            Train.Days[5] = saturdayCheckBox.Checked;
-            Train.Days[6] = sundayCheckBox.Checked;
+
+            for (int i = 0; i < daysBoxes.Length; i++)
+                Train.Days[i] = daysBoxes[i].Checked;
 
             DialogResult = DialogResult.OK;
             Close();
