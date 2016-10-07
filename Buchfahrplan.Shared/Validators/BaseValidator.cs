@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Buchfahrplan.Standard.Validators
+namespace Buchfahrplan.Shared.Validators
 {
-    internal abstract class BaseValidator : Component
+    public abstract class BaseValidator : Component
     {
         private TextBox control;
         private ErrorProvider provider;

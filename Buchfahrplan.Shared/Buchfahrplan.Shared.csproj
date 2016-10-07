@@ -34,6 +34,8 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -55,6 +57,15 @@
     <Compile Include="TimeSpanExtensions.cs" />
     <Compile Include="Timetable.cs" />
     <Compile Include="Train.cs" />
+    <Compile Include="Validators\BaseValidator.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Validators\NotEmptyValidator.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Validators\NumberValidator.cs">
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

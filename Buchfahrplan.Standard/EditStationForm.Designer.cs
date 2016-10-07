@@ -34,8 +34,8 @@
             this.nameTextBox = new System.Windows.Forms.TextBox();
             this.cancelButton = new System.Windows.Forms.Button();
             this.closeButton = new System.Windows.Forms.Button();
-            this.positionValidator = new Buchfahrplan.Standard.Validators.NumberValidator();
-            this.nameValidator = new Buchfahrplan.Standard.Validators.NotEmptyValidator();
+            this.positionValidator = new Buchfahrplan.Shared.Validators.NumberValidator();
+            this.nameValidator = new Buchfahrplan.Shared.Validators.NotEmptyValidator();
             this.SuspendLayout();
             // 
             // positionLabel
@@ -130,7 +130,7 @@
         private System.Windows.Forms.TextBox nameTextBox;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button closeButton;
-        private Validators.NumberValidator positionValidator;
-        private Validators.NotEmptyValidator nameValidator;
+        private Shared.Validators.NumberValidator positionValidator;
+        private Shared.Validators.NotEmptyValidator nameValidator;
     }
 }

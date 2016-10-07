@@ -34,7 +34,7 @@
             this.valueTextBox = new System.Windows.Forms.TextBox();
             this.keyLabel = new System.Windows.Forms.Label();
             this.keyTextBox = new System.Windows.Forms.TextBox();
-            this.keyValidator = new Buchfahrplan.Standard.Validators.NotEmptyValidator();
+            this.keyValidator = new Buchfahrplan.Shared.Validators.NotEmptyValidator();
             this.SuspendLayout();
             // 
             // cancelButton
@@ -125,6 +125,6 @@
         private System.Windows.Forms.TextBox valueTextBox;
         private System.Windows.Forms.Label keyLabel;
         private System.Windows.Forms.TextBox keyTextBox;
-        private Validators.NotEmptyValidator keyValidator;
+        private Shared.Validators.NotEmptyValidator keyValidator;
     }
 }

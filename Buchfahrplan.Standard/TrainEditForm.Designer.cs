@@ -44,7 +44,7 @@
             this.wednesdayCheckBox = new System.Windows.Forms.CheckBox();
             this.tuesdayCheckBox = new System.Windows.Forms.CheckBox();
             this.mondayCheckBox = new System.Windows.Forms.CheckBox();
-            this.nameValidator = new Buchfahrplan.Standard.Validators.NotEmptyValidator();
+            this.nameValidator = new Buchfahrplan.Shared.Validators.NotEmptyValidator();
             this.daysGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -267,6 +267,6 @@
         private System.Windows.Forms.CheckBox wednesdayCheckBox;
         private System.Windows.Forms.CheckBox tuesdayCheckBox;
         private System.Windows.Forms.CheckBox mondayCheckBox;
-        private Validators.NotEmptyValidator nameValidator;
+        private Shared.Validators.NotEmptyValidator nameValidator;
     }
 }

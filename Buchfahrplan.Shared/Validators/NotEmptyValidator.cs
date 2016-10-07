@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Buchfahrplan.Standard.Validators
+namespace Buchfahrplan.Shared.Validators
 {
-    internal sealed class NotEmptyValidator : BaseValidator
+    public sealed class NotEmptyValidator : BaseValidator
     {
         public NotEmptyValidator() : base()
         {
