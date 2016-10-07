@@ -34,6 +34,7 @@
             this.valueTextBox = new System.Windows.Forms.TextBox();
             this.keyLabel = new System.Windows.Forms.Label();
             this.keyTextBox = new System.Windows.Forms.TextBox();
+            this.keyValidator = new Buchfahrplan.Standard.Validators.NotEmptyValidator();
             this.SuspendLayout();
             // 
             // cancelButton
@@ -88,6 +89,11 @@
             this.keyTextBox.Size = new System.Drawing.Size(131, 20);
             this.keyTextBox.TabIndex = 10;
             // 
+            // keyValidator
+            // 
+            this.keyValidator.Control = this.keyTextBox;
+            this.keyValidator.ErrorMessage = "Bitte einen Key eingeben!";
+            // 
             // MetaEditForm
             // 
             this.AcceptButton = this.closeButton;
@@ -119,5 +125,6 @@
         private System.Windows.Forms.TextBox valueTextBox;
         private System.Windows.Forms.Label keyLabel;
         private System.Windows.Forms.TextBox keyTextBox;
+        private Validators.NotEmptyValidator keyValidator;
     }
 }

@@ -44,6 +44,7 @@
             this.wednesdayCheckBox = new System.Windows.Forms.CheckBox();
             this.tuesdayCheckBox = new System.Windows.Forms.CheckBox();
             this.mondayCheckBox = new System.Windows.Forms.CheckBox();
+            this.nameValidator = new Buchfahrplan.Standard.Validators.NotEmptyValidator();
             this.daysGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -215,6 +216,11 @@
             this.mondayCheckBox.Text = "Mo";
             this.mondayCheckBox.UseVisualStyleBackColor = true;
             // 
+            // nameValidator
+            // 
+            this.nameValidator.Control = this.nameTextBox;
+            this.nameValidator.ErrorMessage = "Bitte einen Namen eingeben!";
+            // 
             // TrainEditForm
             // 
             this.AcceptButton = this.closeButton;
@@ -261,5 +267,6 @@
         private System.Windows.Forms.CheckBox wednesdayCheckBox;
         private System.Windows.Forms.CheckBox tuesdayCheckBox;
         private System.Windows.Forms.CheckBox mondayCheckBox;
+        private Validators.NotEmptyValidator nameValidator;
     }
 }

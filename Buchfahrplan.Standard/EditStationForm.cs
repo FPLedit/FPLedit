@@ -31,22 +31,25 @@ namespace Buchfahrplan.Standard
         private void closeButton_Click(object sender, EventArgs e)
         {
             string name = nameTextBox.Text;
-            float pos;
-            if (!float.TryParse(positionTextBox.Text, out pos))
-                MessageBox.Show("Position (km): FEHLER Die eingegebene Zeichenfolge ist kein valider Wert für eine Kommazahl!");
+
+            if (!positionValidator.Valid || !nameValidator.Valid)
+            {
+                MessageBox.Show("Bitte erst alle Fehler beheben!");
+                return;
+            }
 
             if (Station == null)
             {
                 Station = new Station()
                 {
                     Name = name,
-                    Kilometre = pos,
+                    Kilometre = float.Parse(positionTextBox.Text),
                 };
             }
             else
             {
                 Station.Name = name;
-                Station.Kilometre = pos;
+                Station.Kilometre = float.Parse(positionTextBox.Text);
             }
 
             DialogResult = DialogResult.OK;

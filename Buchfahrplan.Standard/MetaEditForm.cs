@@ -31,6 +31,12 @@ namespace Buchfahrplan.Standard
             string key = keyTextBox.Text;
             string value = valueTextBox.Text;
 
+            if (!keyValidator.Valid)
+            {
+                MessageBox.Show("Bitte erst alle Fehler beheben!");
+                return;
+            }
+
             Meta = new KeyValuePair<string, string>(key, value);
 
             DialogResult = DialogResult.OK;

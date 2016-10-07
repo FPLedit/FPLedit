@@ -88,6 +88,15 @@
     <Compile Include="TrainsEditForm.Designer.cs">
       <DependentUpon>TrainsEditForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Validators\BaseValidator.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Validators\NotEmptyValidator.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Validators\NumberValidator.cs">
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="EditStationForm.resx">

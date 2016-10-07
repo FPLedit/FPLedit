@@ -43,6 +43,12 @@ namespace Buchfahrplan.Standard
             if (Train == null)
                 Train = new Train();
 
+            if (!nameValidator.Valid)
+            {
+                MessageBox.Show("Bitte erst alle Fehler beheben!");
+                return;
+            }
+
             Train.Name = nameTextBox.Text;
             Train.Line = lineTextBox.Text;
             Train.Locomotive = locomotiveTextBox.Text;
