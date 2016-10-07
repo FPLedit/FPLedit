@@ -1,4 +1,5 @@
-﻿using Buchfahrplan.Shared;
+﻿using Buchfahrplan.BildfahrplanExport;
+using Buchfahrplan.Shared;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,7 +13,7 @@ namespace Buchfahrplan.BuchfahrplanHtmlExport
     public class Plugin : IPlugin
     {
         private IInfo info;
-        private ToolStripItem showItem;
+        private ToolStripItem showItem, velocityItem;
 
         public void Init(IInfo info)
         {
@@ -26,11 +27,23 @@ namespace Buchfahrplan.BuchfahrplanHtmlExport
             showItem = item.DropDownItems.Add("Anzeigen");
             showItem.Enabled = false;
             showItem.Click += ShowItem_Click;
+
+            velocityItem = item.DropDownItems.Add("Höchstgeschwindigkeiten ändern");
+            velocityItem.Enabled = false;
+            velocityItem.Click += VelocityItem_Click;
+        }
+
+        private void VelocityItem_Click(object sender, EventArgs e)
+        {
+            StationVelocityForm svf = new StationVelocityForm();
+            svf.Init(info);
+            if (info.ShowDialog(svf) == DialogResult.OK)
+                info.SetUnsaved();
         }
 
         private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)
         {
-            showItem.Enabled = e.FileState.Opened;
+            showItem.Enabled = velocityItem.Enabled = e.FileState.Opened;
         }
 
         private void ShowItem_Click(object sender, EventArgs e)
