@@ -24,7 +24,7 @@ namespace Buchfahrplan.Standard
             listView.Columns.Add("Position");
         }
 
-        public void Init(IInfo info)
+        public LineEditForm(IInfo info) : this()
         {
             this.info = info;
             tt = info.Timetable;
@@ -56,8 +56,7 @@ namespace Buchfahrplan.Standard
                 ListViewItem item = listView.Items[listView.SelectedIndices[0]];
                 Station oldStation = tt.Stations[tt.Stations.IndexOf((Station)item.Tag)];
 
-                NewStationForm nsf = new NewStationForm();
-                nsf.Initialize(oldStation);
+                EditStationForm nsf = new EditStationForm(oldStation);
                 if (nsf.ShowDialog() == DialogResult.OK)
                     UpdateStations();
             }
@@ -72,8 +71,7 @@ namespace Buchfahrplan.Standard
                 ListViewItem item = listView.Items[listView.SelectedIndices[0]];
                 Station station = tt.Stations[tt.Stations.IndexOf((Station)item.Tag)];
 
-                MetaEdit mef = new MetaEdit();
-                mef.Initialize(station);
+                MetaEdit mef = new MetaEdit(station);
                 if (mef.ShowDialog() == DialogResult.OK)
                     UpdateStations();
             }
@@ -100,10 +98,10 @@ namespace Buchfahrplan.Standard
 
         private void NewStation()
         {
-            NewStationForm nsf = new NewStationForm();
+            EditStationForm nsf = new EditStationForm();
             if (nsf.ShowDialog() == DialogResult.OK)
             {
-                Station sta = nsf.NewStation;
+                Station sta = nsf.Station;
 
                 tt.Stations.Add(sta);
 

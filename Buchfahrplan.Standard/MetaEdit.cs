@@ -23,7 +23,7 @@ namespace Buchfahrplan.Standard
             listView.Columns.Add("Value");
         }
 
-        public void Initialize(Meta meta)
+        public MetaEdit(Meta meta) : this()
         {
             entity = meta;
             metaBackup = new Dictionary<string, string>(meta.Metadata);
@@ -67,8 +67,7 @@ namespace Buchfahrplan.Standard
                 ListViewItem item = listView.Items[listView.SelectedIndices[0]];
                 string key = (string)item.Tag;
 
-                MetaEditForm mef = new MetaEditForm();
-                mef.Initialize(new KeyValuePair<string, string>(key, entity.Metadata[key]));
+                MetaEditForm mef = new MetaEditForm(new KeyValuePair<string, string>(key, entity.Metadata[key]));
                 if (mef.ShowDialog() == DialogResult.OK)
                 {
                     entity.Metadata[mef.Meta.Key] = mef.Meta.Value;

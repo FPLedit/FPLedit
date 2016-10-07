@@ -18,7 +18,7 @@ namespace Buchfahrplan.Standard
             InitializeComponent();
         }
 
-        public void Initialize(KeyValuePair<string, string> meta)
+        public MetaEditForm(KeyValuePair<string, string> meta) : this()
         {
             Meta = meta;
             Text = "Eigenschaft bearbeiten";

@@ -45,8 +45,7 @@ namespace Buchfahrplan.Standard
         {
             if (e.Button == MouseButtons.Middle)
             {
-                MetaEdit mef = new MetaEdit();
-                mef.Initialize(info.Timetable);
+                MetaEdit mef = new MetaEdit(info.Timetable);
                 if (mef.ShowDialog() == DialogResult.OK)
                     info.SetUnsaved();
             }
@@ -54,24 +53,21 @@ namespace Buchfahrplan.Standard
 
         private void EditTimetableItem_Click(object sender, EventArgs e)
         {
-            var ttEdit = new TimetableEditForm();
-            ttEdit.Init(info);
+            var ttEdit = new TimetableEditForm(info);
             if (ttEdit.ShowDialog() == DialogResult.OK)
                 info.SetUnsaved();
         }
 
         private void EditTrainsItem_Click(object sender, EventArgs e)
         {
-            var trEdit = new TrainsEditForm();
-            trEdit.Init(info);
+            var trEdit = new TrainsEditForm(info);
             if (trEdit.ShowDialog() == DialogResult.OK)
                 info.SetUnsaved();
         }
 
         private void EditLineItem_Click(object sender, EventArgs e)
         {
-            var liEdit = new LineEditForm();
-            liEdit.Init(info);
+            var liEdit = new LineEditForm(info);
             if (liEdit.ShowDialog() == DialogResult.OK)
                 info.SetUnsaved();
         }

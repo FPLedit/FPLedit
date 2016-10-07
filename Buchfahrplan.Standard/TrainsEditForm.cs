@@ -22,7 +22,7 @@ namespace Buchfahrplan.Standard
             InitListView(bottomListView);
         }
 
-        public void Init(IInfo info)
+        public TrainsEditForm(IInfo info) : this()
         {
             this.info = info;
             tt = info.Timetable;
@@ -78,8 +78,7 @@ namespace Buchfahrplan.Standard
                 ListViewItem item = view.Items[view.SelectedIndices[0]];
                 Train train = tt.Trains[tt.Trains.IndexOf((Train)item.Tag)];
 
-                TrainEditForm tef = new TrainEditForm();
-                tef.Initialize(train);
+                TrainEditForm tef = new TrainEditForm(train);
                 if (tef.ShowDialog() == DialogResult.OK)
                     UpdateListView(view, direction);
             }
@@ -89,11 +88,10 @@ namespace Buchfahrplan.Standard
 
         private void NewTrain(ListView view, bool direction)
         {
-            TrainEditForm tef = new TrainEditForm();
-            tef.Initialize(info.Timetable, direction);
+            TrainEditForm tef = new TrainEditForm(info.Timetable, direction);
             if (tef.ShowDialog() == DialogResult.OK)
             {
-                Train tra = tef.NewTrain;
+                Train tra = tef.Train;
                 tra.InitializeStations(tt);
                 tt.Trains.Add(tra);
 
@@ -108,8 +106,7 @@ namespace Buchfahrplan.Standard
                 ListViewItem item = view.Items[view.SelectedIndices[0]];
                 Train train = tt.Trains[tt.Trains.IndexOf((Train)item.Tag)];
 
-                MetaEdit mef = new MetaEdit();
-                mef.Initialize(train);
+                MetaEdit mef = new MetaEdit(train);
                 if (mef.ShowDialog() == DialogResult.OK)
                     UpdateListView(view, direction);
             }

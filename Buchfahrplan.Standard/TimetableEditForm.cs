@@ -24,7 +24,7 @@ namespace Buchfahrplan.Standard
             InitializeComponent();
         }
 
-        public void Init(IInfo info)
+        public TimetableEditForm(IInfo info) : this()
         {
             this.info = info;
             info.BackupTimetable();

@@ -11,22 +11,22 @@ using System.Windows.Forms;
 
 namespace Buchfahrplan.Standard
 {
-    public partial class NewStationForm : Form
+    public partial class EditStationForm : Form
     {
-        public NewStationForm()
+        public EditStationForm()
         {
             InitializeComponent();
         }
 
-        public void Initialize(Station station)
+        public EditStationForm(Station station) : this()
         {
             Text = "Station bearbeiten";
             nameTextBox.Text = station.Name;
             positionTextBox.Text = station.Kilometre.ToString();
-            NewStation = station;
+            Station = station;
         }
 
-        public Station NewStation { get; set; }
+        public Station Station { get; set; }
 
         private void closeButton_Click(object sender, EventArgs e)
         {
@@ -35,9 +35,9 @@ namespace Buchfahrplan.Standard
             if (!float.TryParse(positionTextBox.Text, out pos))
                 MessageBox.Show("Position (km): FEHLER Die eingegebene Zeichenfolge ist kein valider Wert für eine Kommazahl!");
 
-            if (NewStation == null)
+            if (Station == null)
             {
-                NewStation = new Station()
+                Station = new Station()
                 {
                     Name = name,
                     Kilometre = pos,
@@ -45,8 +45,8 @@ namespace Buchfahrplan.Standard
             }
             else
             {
-                NewStation.Name = name;
-                NewStation.Kilometre = pos;
+                Station.Name = name;
+                Station.Kilometre = pos;
             }
 
             DialogResult = DialogResult.OK;

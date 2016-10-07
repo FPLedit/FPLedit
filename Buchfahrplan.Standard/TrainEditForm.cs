@@ -6,7 +6,7 @@ namespace Buchfahrplan.Standard
 {
     public partial class TrainEditForm : Form
     {
-        public Train NewTrain { get; set; }
+        public Train Train { get; set; }
 
         private bool direction;
 
@@ -15,25 +15,25 @@ namespace Buchfahrplan.Standard
             InitializeComponent();
         }
 
-        public void Initialize(Train train)
+        public TrainEditForm(Train train) : this()
         {
-            NewTrain = train;
+            Train = train;
             nameTextBox.Text = train.Name;
             lineTextBox.Text = train.Line;
             direction = train.Direction;
             locomotiveTextBox.Text = train.Locomotive;
 
-            mondayCheckBox.Checked = NewTrain.Days[0];
-            tuesdayCheckBox.Checked = NewTrain.Days[1];
-            wednesdayCheckBox.Checked = NewTrain.Days[2];
-            thursdayCheckBox.Checked = NewTrain.Days[3];
-            fridayCheckBox.Checked = NewTrain.Days[4];
-            saturdayCheckBox.Checked = NewTrain.Days[5];
-            sundayCheckBox.Checked = NewTrain.Days[6];
+            mondayCheckBox.Checked = Train.Days[0];
+            tuesdayCheckBox.Checked = Train.Days[1];
+            wednesdayCheckBox.Checked = Train.Days[2];
+            thursdayCheckBox.Checked = Train.Days[3];
+            fridayCheckBox.Checked = Train.Days[4];
+            saturdayCheckBox.Checked = Train.Days[5];
+            sundayCheckBox.Checked = Train.Days[6];
             Text = "Zug bearbeiten";
         }
 
-        public void Initialize(Timetable tt, bool direction)
+        public TrainEditForm(Timetable tt, bool direction) : this()
         {
             this.direction = direction;
             lineTextBox.Text = tt.GetLineName(direction);
@@ -41,20 +41,20 @@ namespace Buchfahrplan.Standard
 
         private void closeButton_Click(object sender, EventArgs e)
         {
-            if (NewTrain == null)
-                NewTrain = new Train();
+            if (Train == null)
+                Train = new Train();
 
-            NewTrain.Name = nameTextBox.Text;
-            NewTrain.Line = lineTextBox.Text;
-            NewTrain.Locomotive = locomotiveTextBox.Text;
-            NewTrain.Direction = direction;
-            NewTrain.Days[0] = mondayCheckBox.Checked;
-            NewTrain.Days[1] = tuesdayCheckBox.Checked;
-            NewTrain.Days[2] = wednesdayCheckBox.Checked;
-            NewTrain.Days[3] = thursdayCheckBox.Checked;
-            NewTrain.Days[4] = fridayCheckBox.Checked;
-            NewTrain.Days[5] = saturdayCheckBox.Checked;
-            NewTrain.Days[6] = sundayCheckBox.Checked;
+            Train.Name = nameTextBox.Text;
+            Train.Line = lineTextBox.Text;
+            Train.Locomotive = locomotiveTextBox.Text;
+            Train.Direction = direction;
+            Train.Days[0] = mondayCheckBox.Checked;
+            Train.Days[1] = tuesdayCheckBox.Checked;
+            Train.Days[2] = wednesdayCheckBox.Checked;
+            Train.Days[3] = thursdayCheckBox.Checked;
+            Train.Days[4] = fridayCheckBox.Checked;
+            Train.Days[5] = saturdayCheckBox.Checked;
+            Train.Days[6] = sundayCheckBox.Checked;
 
             DialogResult = DialogResult.OK;
             Close();

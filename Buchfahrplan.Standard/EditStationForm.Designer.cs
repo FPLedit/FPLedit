@@ -1,6 +1,6 @@
 ﻿namespace Buchfahrplan.Standard
 {
-    partial class NewStationForm
+    partial class EditStationForm
     {
         /// <summary>
         /// Required designer variable.
