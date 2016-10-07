@@ -3,7 +3,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Buchfahrplan.BildfahrplanExport
+namespace Buchfahrplan.BuchfahrplanExport
 {
     public partial class StationVelocityEditForm : Form
     {

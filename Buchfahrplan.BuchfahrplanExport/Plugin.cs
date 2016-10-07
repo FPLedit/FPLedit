@@ -1,5 +1,4 @@
-﻿using Buchfahrplan.BildfahrplanExport;
-using Buchfahrplan.Shared;
+﻿using Buchfahrplan.Shared;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Buchfahrplan.BuchfahrplanHtmlExport
+namespace Buchfahrplan.BuchfahrplanExport
 {
     public class Plugin : IPlugin
     {

@@ -1,4 +1,4 @@
-﻿namespace Buchfahrplan.BildfahrplanExport
+﻿namespace Buchfahrplan.BuchfahrplanExport
 {
     partial class StationVelocityEditForm
     {

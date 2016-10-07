@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace Buchfahrplan.BuchfahrplanHtmlExport
+namespace Buchfahrplan.BuchfahrplanExport
 {
     public class HtmlExport : IExport
     {
@@ -30,7 +30,7 @@ namespace Buchfahrplan.BuchfahrplanHtmlExport
         public HtmlExport()
         {
             var assembly = Assembly.GetAssembly(GetType());
-            var resourceName = "Buchfahrplan.BuchfahrplanHtmlExport.Template.tmpl";
+            var resourceName = "Buchfahrplan.BuchfahrplanExport.Template.tmpl";
 
 
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))

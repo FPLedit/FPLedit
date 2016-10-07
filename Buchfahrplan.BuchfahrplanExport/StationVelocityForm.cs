@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Buchfahrplan.BildfahrplanExport
+namespace Buchfahrplan.BuchfahrplanExport
 {
     public partial class StationVelocityForm : Form
     {

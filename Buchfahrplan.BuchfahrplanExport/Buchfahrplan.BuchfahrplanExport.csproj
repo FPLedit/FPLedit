@@ -7,8 +7,8 @@
     <ProjectGuid>{B8BA56BA-15FC-4D2E-8929-FDD6C6E13B5A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Buchfahrplan.BuchfahrplanHtmlExport</RootNamespace>
-    <AssemblyName>Buchfahrplan.BuchfahrplanHtmlExport</AssemblyName>
+    <RootNamespace>Buchfahrplan.BuchfahrplanExport</RootNamespace>
+    <AssemblyName>Buchfahrplan.BuchfahrplanExport</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
