@@ -23,6 +23,12 @@ namespace Buchfahrplan.BuchfahrplanExport
 
         private void closeButton_Click(object sender, EventArgs e)
         {
+            if (!velocityValidator.Valid)
+            {
+                MessageBox.Show("Bitte erst alle Fehler beheben!");
+                return;
+            }
+
             DialogResult = DialogResult.OK;
 
             Station.Metadata["MaxVelocity"] = velocityTextBox.Text;

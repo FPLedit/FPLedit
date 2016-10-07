@@ -32,6 +32,7 @@
             this.cancelButton = new System.Windows.Forms.Button();
             this.closeButton = new System.Windows.Forms.Button();
             this.velocityTextBox = new System.Windows.Forms.TextBox();
+            this.velocityValidator = new Buchfahrplan.Shared.Validators.NumberValidator();
             this.SuspendLayout();
             // 
             // velocityLabel
@@ -70,6 +71,11 @@
             this.velocityTextBox.Size = new System.Drawing.Size(121, 20);
             this.velocityTextBox.TabIndex = 15;
             // 
+            // velocityValidator
+            // 
+            this.velocityValidator.Control = this.velocityTextBox;
+            this.velocityValidator.ErrorMessage = "Bitte eine Zahl als Geschwindigkeit angeben!";
+            // 
             // StationVelocityEditForm
             // 
             this.AcceptButton = this.closeButton;
@@ -96,5 +102,6 @@
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button closeButton;
         private System.Windows.Forms.TextBox velocityTextBox;
+        private Shared.Validators.NumberValidator velocityValidator;
     }
 }

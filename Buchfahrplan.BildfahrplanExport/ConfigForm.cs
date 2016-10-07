@@ -100,6 +100,12 @@ namespace Buchfahrplan.BildfahrplanExport
 
         private void closeButton_Click(object sender, EventArgs e)
         {
+            if (!heightPerHourValidator.Valid)
+            {
+                MessageBox.Show("Bitte erst alle Fehler beheben!");
+                return;
+            }
+
             tt.Metadata["BgColor"] = (string)bgColorComboBox.SelectedItem;
 
             tt.Metadata["TimeColor"] = (string)timeColorComboBox.SelectedItem;

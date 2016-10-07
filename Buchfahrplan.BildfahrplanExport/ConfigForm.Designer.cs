@@ -66,6 +66,7 @@
             this.includeKilometreCheckBox = new System.Windows.Forms.CheckBox();
             this.layoutTextBox3 = new System.Windows.Forms.TextBox();
             this.drawStationNamesCheckBox = new System.Windows.Forms.CheckBox();
+            this.heightPerHourValidator = new Buchfahrplan.Shared.Validators.NumberValidator();
             this.SuspendLayout();
             // 
             // cancelButton
@@ -410,6 +411,11 @@
             this.drawStationNamesCheckBox.Text = "Stationsnamen anzeigen";
             this.drawStationNamesCheckBox.UseVisualStyleBackColor = true;
             // 
+            // heightPerHourValidator
+            // 
+            this.heightPerHourValidator.Control = this.heightPerHourTextBox;
+            this.heightPerHourValidator.ErrorMessage = "Bitte eine Zahl angeben!";
+            // 
             // ConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -502,5 +508,6 @@
         private System.Windows.Forms.CheckBox includeKilometreCheckBox;
         private System.Windows.Forms.TextBox layoutTextBox3;
         private System.Windows.Forms.CheckBox drawStationNamesCheckBox;
+        private Shared.Validators.NumberValidator heightPerHourValidator;
     }
 }
