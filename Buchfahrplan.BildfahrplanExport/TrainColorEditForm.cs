@@ -20,7 +20,7 @@ namespace Buchfahrplan.BildfahrplanExport
             drawCheckBox.Checked = true;
         }
 
-        public void Initialize(Train train)
+        public TrainColorEditForm(Train train) : this()
         {
             Train = train;
 

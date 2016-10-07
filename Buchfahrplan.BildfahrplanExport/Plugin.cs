@@ -59,8 +59,7 @@ namespace Buchfahrplan.BildfahrplanExport
 
         private void TrainColorItem_Click(object sender, EventArgs e)
         {
-            TrainColorForm tcf = new TrainColorForm();
-            tcf.Init(info);
+            TrainColorForm tcf = new TrainColorForm(info);
             if (tcf.ShowDialog() == DialogResult.OK)
                 info.SetUnsaved();            
         }
@@ -93,8 +92,7 @@ namespace Buchfahrplan.BildfahrplanExport
 
         private void ConfigItem_Click(object sender, EventArgs e)
         {
-            ConfigForm cnf = new ConfigForm();
-            cnf.Init(info.Timetable);
+            ConfigForm cnf = new ConfigForm(info.Timetable);
             if (info.ShowDialog(cnf) == DialogResult.OK)
                 info.SetUnsaved();
         }

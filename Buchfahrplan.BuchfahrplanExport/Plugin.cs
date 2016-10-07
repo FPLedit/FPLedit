@@ -34,8 +34,7 @@ namespace Buchfahrplan.BuchfahrplanExport
 
         private void VelocityItem_Click(object sender, EventArgs e)
         {
-            StationVelocityForm svf = new StationVelocityForm();
-            svf.Init(info);
+            StationVelocityForm svf = new StationVelocityForm(info);
             if (info.ShowDialog(svf) == DialogResult.OK)
                 info.SetUnsaved();
         }

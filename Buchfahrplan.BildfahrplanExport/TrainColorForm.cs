@@ -30,7 +30,7 @@ namespace Buchfahrplan.BildfahrplanExport
             trainListView.Columns.Add("Zug zeichnen");
         }
 
-        public void Init(IInfo info)
+        public TrainColorForm(IInfo info) : this()
         {
             this.info = info;
             tt = info.Timetable;
@@ -65,8 +65,7 @@ namespace Buchfahrplan.BildfahrplanExport
                 ListViewItem item = trainListView.Items[trainListView.SelectedIndices[0]];
                 Train train = tt.Trains[tt.Trains.IndexOf((Train)item.Tag)];
 
-                TrainColorEditForm tcef = new TrainColorEditForm();
-                tcef.Initialize(train);
+                TrainColorEditForm tcef = new TrainColorEditForm(train);
                 if (tcef.ShowDialog() == DialogResult.OK)
                     UpdateTrains();
             }

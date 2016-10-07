@@ -49,8 +49,7 @@ namespace Buchfahrplan.BildfahrplanExport
 
         private void preferencesButton_Click(object sender, EventArgs e)
         {
-            ConfigForm cnf = new ConfigForm();
-            cnf.Init(tt);
+            ConfigForm cnf = new ConfigForm(tt);
             cnf.ShowDialog();
             ValueChanged?.Invoke(this, new EventArgs());
         }

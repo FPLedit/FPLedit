@@ -70,7 +70,7 @@ namespace Buchfahrplan.BildfahrplanExport
             endTimeTextBox.Text = "24:00";
         }
 
-        public void Init(Timetable tt)
+        public ConfigForm(Timetable tt) : this()
         {
             this.tt = tt;
             bgColorComboBox.SelectedItem = tt.GetMeta("BgColor", (string)bgColorComboBox.SelectedItem);

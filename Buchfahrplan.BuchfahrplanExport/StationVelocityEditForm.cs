@@ -14,7 +14,7 @@ namespace Buchfahrplan.BuchfahrplanExport
             InitializeComponent();
         }
 
-        public void Initialize(Station station)
+        public StationVelocityEditForm(Station station) : this()
         {
             Station = station;
 

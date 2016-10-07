@@ -26,7 +26,7 @@ namespace Buchfahrplan.BuchfahrplanExport
             listView.Columns.Add("Vmax");
         }
 
-        public void Init(IInfo info)
+        public StationVelocityForm(IInfo info) : this()
         {
             this.info = info;
             tt = info.Timetable;
@@ -56,8 +56,7 @@ namespace Buchfahrplan.BuchfahrplanExport
                 ListViewItem item = listView.Items[listView.SelectedIndices[0]];
                 Station train = tt.Stations[tt.Stations.IndexOf((Station)item.Tag)];
 
-                StationVelocityEditForm vef = new StationVelocityEditForm();
-                vef.Initialize(train);
+                StationVelocityEditForm vef = new StationVelocityEditForm(train);
                 if (vef.ShowDialog() == DialogResult.OK)
                     UpdateStations();                
             }
