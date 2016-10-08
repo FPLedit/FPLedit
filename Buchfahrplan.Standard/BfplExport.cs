@@ -13,7 +13,7 @@ namespace FPLedit.Standard
         {
             get
             {
-                return "Buchfahrplan Datei (*.bfpl)|*.bfpl";
+                return "FPLedit Datei (*.bfpl)|*.bfpl";
             }
         }
 

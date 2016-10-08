@@ -52,7 +52,7 @@ namespace FPLedit
 
             FileStateChanged?.Invoke(this, new FileStateChangedEventArgs(fileState));
 
-            Text = "Buchfahrplan - " 
+            Text = "FPLedit - " 
                 + (fileState.FileName != null ? (Path.GetFileName(fileState.FileName) + " ") : "") 
                 + (fileState.Saved ? "" : "*");
         }
@@ -202,7 +202,7 @@ namespace FPLedit
 
                     string nl = Environment.NewLine;
                     DialogResult res = MessageBox.Show($"Eine neue Programmversion ({ver.InnerText}) ist verfügbar!{nl}{nl}Jetzt zur Download-Seite wechseln, um die neue Version herunterzuladen?",
-                        "Neue Buchfahrplan-Version verfügbar", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+                        "Neue FPLedit-Version verfügbar", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
 
                     if (res == DialogResult.Yes)
                         Process.Start(url.InnerText);
@@ -229,8 +229,8 @@ namespace FPLedit
         {            
             string nl = Environment.NewLine;
             string version = GetVersion() + " (Zur Überprüfung auf aktuellere Programmversionen bitte den Menüpunkt \"Auf neue Version prüfen\" verwenden)"; //TODO
-            MessageBox.Show($"Fahrplan{nl}{nl}Version {version}{nl}{nl}© 2015-2016 Manuel Huber{nl}https://www.manuelhu.de{nl}https://github.com/ManuelHu",
-                "Buchfahrplan Info",
+            MessageBox.Show($"FPLedit{nl}{nl}Version {version}{nl}{nl}© 2015-2016 Manuel Huber{nl}https://www.manuelhu.de{nl}https://github.com/ManuelHu",
+                "FPLedit Info",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
         }
@@ -238,7 +238,7 @@ namespace FPLedit
         private DialogResult NotifyChanged()
         {
             return MessageBox.Show("Wollen Sie die Änderungen speichern?", 
-                "Buchfahrplan",
+                "FPLedit",
                 MessageBoxButtons.YesNoCancel,
                 MessageBoxIcon.Question);
         }

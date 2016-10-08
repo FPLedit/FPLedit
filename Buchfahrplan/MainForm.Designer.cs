@@ -138,7 +138,7 @@
             this.Icon = global::FPLedit.Properties.Resources.programm;
             this.MainMenuStrip = this.menuStrip;
             this.Name = "MainForm";
-            this.Text = "Buchfahrplan";
+            this.Text = "FPLedit";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip.ResumeLayout(false);
