@@ -13,7 +13,7 @@ namespace FPLedit.Standard
         {
             get
             {
-                return "Buchfahrplan Datei (*.bfpl)|*.xfpl";
+                return "Buchfahrplan Datei (*.bfpl)|*.bfpl";
             }
         }
 
@@ -24,21 +24,6 @@ namespace FPLedit.Standard
 
         public bool Export(Timetable tt, string filename, ILog logger)
         {
-            /*try
-            {
-                tt.SaveToFile(filename);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                logger.Error("BfplExport: " + ex.Message);
-                return false;
-            }*/
-            using (FileStream stream = File.Open(filename, FileMode.OpenOrCreate))
-            {
-                tt.SaveToStream(stream);
-                return true;
-            }
             try
             {
                 using (FileStream stream = File.Open(filename, FileMode.OpenOrCreate))

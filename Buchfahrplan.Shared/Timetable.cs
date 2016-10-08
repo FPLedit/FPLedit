@@ -13,7 +13,6 @@ namespace FPLedit.Shared
     [Serializable]
     public sealed class Timetable : Meta
     {
-        public const string VERSION = "1.0";
         public const string MAGIC = "BFPL/1.1";
 
         public string Name { get; set; }
@@ -27,7 +26,6 @@ namespace FPLedit.Shared
             Stations = new List<Station>();
             Trains = new List<Train>();
 
-            Metadata["Version"] = VERSION;
             Name = "";
         }
 
@@ -59,22 +57,6 @@ namespace FPLedit.Shared
             t.Trains.Add(t2);
 
             return t;
-        }
-
-        public void SaveToFile(string filename)
-        {            
-            using (FileStream stream = File.Open(filename, FileMode.OpenOrCreate))
-            {
-                BinaryFormatter formatter = new BinaryFormatter();
-                try
-                {
-                    formatter.Serialize(stream, this);
-                }
-                catch (SerializationException e)
-                {
-                    throw new Exception("Ein Fehler ist beim Speichern der Datei aufgetreten: " + e.Message);
-                }
-            }
         }
 
         public static Timetable Deserialize(BinaryReader reader)
@@ -143,30 +125,6 @@ namespace FPLedit.Shared
                 return Deserialize(reader);
         }
 
-        public static Timetable OpenFromFile(string filename)
-        {
-            Timetable tt;
-
-            using (FileStream stream = File.Open(filename, FileMode.Open))
-            {
-                BinaryFormatter formatter = new BinaryFormatter();
-                formatter.Binder = new OldNamespaceBinder();
-                try
-                {
-                    tt = (Timetable)formatter.Deserialize(stream);
-                }
-                catch (SerializationException e)
-                {
-                    throw new Exception("Ein Fehler ist beim Öffnen der Datei aufgetreten: " + e.Message);
-                }
-            }
-
-            if (tt.GetMeta("Version", "") != VERSION)
-                throw new Exception("Ein Fehler ist beim Öffnen der Datei aufgetreten: Falsche Dateiversion");
-
-            return tt;
-        }
-
         public List<Station> GetStationsOrderedByDirection(bool direction)
         {
             return (direction ?
@@ -196,36 +154,6 @@ namespace FPLedit.Shared
                 stream.Seek(0, SeekOrigin.Begin);
                 return (Timetable)formatter.Deserialize(stream);
             }
-        }
-    }
-
-    sealed class OldNamespaceBinder : SerializationBinder
-    {
-        public override Type BindToType(string asssembly, string type)
-        {
-            if (asssembly == "Buchfahrplan.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null")
-            {
-                asssembly = Assembly.GetAssembly(GetType()).FullName;
-                type = type.Replace("Buchfahrplan.", "FPLedit.");
-                return Type.GetType(type + ", " + asssembly);
-            }
-
-            string[] types = new[]
-            {
-                "System.Collections.Generic.List`1[[Buchfahrplan.Shared.Station, Buchfahrplan.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-                "System.Collections.Generic.List`1[[Buchfahrplan.Shared.Train, Buchfahrplan.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-                "System.Collections.Generic.Dictionary`2[[Buchfahrplan.Shared.Station, Buchfahrplan.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.TimeSpan, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]",
-                "System.Collections.Generic.ObjectEqualityComparer`1[[Buchfahrplan.Shared.Station, Buchfahrplan.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-                "System.Collections.Generic.KeyValuePair`2[[Buchfahrplan.Shared.Station, Buchfahrplan.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.TimeSpan, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"
-            };
-
-            if (types.Contains(type))
-            {
-                type = type.Replace("Buchfahrplan.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", Assembly.GetAssembly(GetType()).FullName)
-                    .Replace("Buchfahrplan.", "FPLedit.");
-                return Type.GetType(type + ", " + asssembly);
-            }
-            return null;
         }
     }
 }

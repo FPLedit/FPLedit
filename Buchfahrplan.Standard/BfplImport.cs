@@ -13,21 +13,12 @@ namespace FPLedit.Standard
         {
             get
             {
-                return "Buchfahrplan Dateien (*.bfpl)|*.xfpl";
+                return "Buchfahrplan Dateien (*.bfpl)|*.bfpl";
             }
         }
 
         public Timetable Import(string filename, ILog logger)
         {
-            /*try
-            {
-                return Timetable.OpenFromFile(filename);
-            }
-            catch (Exception ex)
-            {
-                logger.Error("BfplImport: " + ex.Message);
-                return null;
-            }*/
             try
             {
                 using (FileStream stream = File.Open(filename, FileMode.Open))
