@@ -1,11 +1,11 @@
-﻿using Buchfahrplan.Shared;
+﻿using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace Buchfahrplan.BuchfahrplanExport
+namespace FPLedit.BuchfahrplanExport
 {
     public class HtmlExport : IExport
     {
@@ -29,7 +29,7 @@ namespace Buchfahrplan.BuchfahrplanExport
         private string LoadResource(string filename)
         {
             var assembly = Assembly.GetAssembly(GetType());
-            var resourceName = "Buchfahrplan.BuchfahrplanExport."+filename;
+            var resourceName = "FPLedit.BuchfahrplanExport." + filename;
 
 
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))

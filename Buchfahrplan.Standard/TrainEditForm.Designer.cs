@@ -1,4 +1,4 @@
-﻿namespace Buchfahrplan.Standard
+﻿namespace FPLedit.Standard
 {
     partial class TrainEditForm
     {
@@ -44,7 +44,7 @@
             this.wednesdayCheckBox = new System.Windows.Forms.CheckBox();
             this.tuesdayCheckBox = new System.Windows.Forms.CheckBox();
             this.mondayCheckBox = new System.Windows.Forms.CheckBox();
-            this.nameValidator = new Buchfahrplan.Shared.Validators.NotEmptyValidator();
+            this.nameValidator = new FPLedit.Shared.Validators.NotEmptyValidator();
             this.daysGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 

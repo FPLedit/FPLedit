@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buchfahrplan", "Buchfahrplan\Buchfahrplan.csproj", "{2809F962-DC06-4740-8AD0-0981891446DA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit", "Buchfahrplan\FPLedit.csproj", "{2809F962-DC06-4740-8AD0-0981891446DA}"
 	ProjectSection(ProjectDependencies) = postProject
 		{0959C902-8FCE-4125-A8F0-2D5A06EB890C} = {0959C902-8FCE-4125-A8F0-2D5A06EB890C}
 		{77EE9755-CE3E-4B7B-AEF1-474B228E7B50} = {77EE9755-CE3E-4B7B-AEF1-474B228E7B50}
@@ -11,19 +11,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buchfahrplan", "Buchfahrpla
 		{B8BA56BA-15FC-4D2E-8929-FDD6C6E13B5A} = {B8BA56BA-15FC-4D2E-8929-FDD6C6E13B5A}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buchfahrplan.Shared", "Buchfahrplan.Shared\Buchfahrplan.Shared.csproj", "{CE38D005-22B2-4B15-80BA-614F038240FD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Shared", "Buchfahrplan.Shared\FPLedit.Shared.csproj", "{CE38D005-22B2-4B15-80BA-614F038240FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buchfahrplan.BuchfahrplanExport", "Buchfahrplan.BuchfahrplanExport\Buchfahrplan.BuchfahrplanExport.csproj", "{B8BA56BA-15FC-4D2E-8929-FDD6C6E13B5A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.BuchfahrplanExport", "Buchfahrplan.BuchfahrplanExport\FPLedit.BuchfahrplanExport.csproj", "{B8BA56BA-15FC-4D2E-8929-FDD6C6E13B5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buchfahrplan.JTrainGraphImport", "Buchfahrplan.JTrainGraphImport\Buchfahrplan.JTrainGraphImport.csproj", "{0959C902-8FCE-4125-A8F0-2D5A06EB890C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.JTrainGraphImport", "Buchfahrplan.JTrainGraphImport\FPLedit.JTrainGraphImport.csproj", "{0959C902-8FCE-4125-A8F0-2D5A06EB890C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Import", "Import", "{67D8D2A6-E712-4DE5-A5C1-4E0961A41486}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Export", "Export", "{5A859144-0558-4FEB-965B-BFD83D9336A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buchfahrplan.BildfahrplanExport", "Buchfahrplan.BildfahrplanExport\Buchfahrplan.BildfahrplanExport.csproj", "{77EE9755-CE3E-4B7B-AEF1-474B228E7B50}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.BildfahrplanExport", "Buchfahrplan.BildfahrplanExport\FPLedit.BildfahrplanExport.csproj", "{77EE9755-CE3E-4B7B-AEF1-474B228E7B50}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buchfahrplan.Standard", "Buchfahrplan.Standard\Buchfahrplan.Standard.csproj", "{18F6EC68-60B0-4D31-9643-746EB8860C3D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Standard", "Buchfahrplan.Standard\FPLedit.Standard.csproj", "{18F6EC68-60B0-4D31-9643-746EB8860C3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

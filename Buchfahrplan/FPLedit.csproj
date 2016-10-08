@@ -7,8 +7,8 @@
     <ProjectGuid>{2809F962-DC06-4740-8AD0-0981891446DA}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Buchfahrplan</RootNamespace>
-    <AssemblyName>Buchfahrplan</AssemblyName>
+    <RootNamespace>FPLedit</RootNamespace>
+    <AssemblyName>FPLedit</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <PublishUrl>publish\</PublishUrl>
@@ -126,9 +126,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Buchfahrplan.Shared\Buchfahrplan.Shared.csproj">
+    <ProjectReference Include="..\Buchfahrplan.Shared\FPLedit.Shared.csproj">
       <Project>{ce38d005-22b2-4b15-80ba-614f038240fd}</Project>
-      <Name>Buchfahrplan.Shared</Name>
+      <Name>FPLedit.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

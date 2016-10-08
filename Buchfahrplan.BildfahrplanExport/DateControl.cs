@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Buchfahrplan.Shared;
+using FPLedit.Shared;
 
-namespace Buchfahrplan.BildfahrplanExport
+namespace FPLedit.BildfahrplanExport
 {
     public partial class DateControl : UserControl
     {

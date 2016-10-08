@@ -1,4 +1,4 @@
-﻿using Buchfahrplan.Shared;
+﻿using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Buchfahrplan.BildfahrplanExport
+namespace FPLedit.BildfahrplanExport
 {
     public class BitmapExport : IExport
     {

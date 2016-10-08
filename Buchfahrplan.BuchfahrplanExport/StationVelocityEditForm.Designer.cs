@@ -1,4 +1,4 @@
-﻿namespace Buchfahrplan.BuchfahrplanExport
+﻿namespace FPLedit.BuchfahrplanExport
 {
     partial class StationVelocityEditForm
     {
@@ -32,7 +32,7 @@
             this.cancelButton = new System.Windows.Forms.Button();
             this.closeButton = new System.Windows.Forms.Button();
             this.velocityTextBox = new System.Windows.Forms.TextBox();
-            this.velocityValidator = new Buchfahrplan.Shared.Validators.NumberValidator();
+            this.velocityValidator = new FPLedit.Shared.Validators.NumberValidator();
             this.SuspendLayout();
             // 
             // velocityLabel

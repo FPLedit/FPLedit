@@ -7,7 +7,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Buchfahrplan.Shared
+namespace FPLedit.Shared
 {
     [Serializable]
     public sealed class Timetable : Meta

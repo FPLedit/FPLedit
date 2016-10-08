@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Buchfahrplan.Shared
+namespace FPLedit.Shared
 {
     [Serializable]
     public sealed class Train : Meta

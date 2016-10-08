@@ -1,4 +1,4 @@
-﻿namespace Buchfahrplan.Standard
+﻿namespace FPLedit.Standard
 {
     partial class TimetableEditForm
     {

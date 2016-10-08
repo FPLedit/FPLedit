@@ -1,4 +1,4 @@
-﻿using Buchfahrplan.Shared;
+﻿using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Buchfahrplan
+namespace FPLedit
 {
     /// <summary>
     /// Stammt vom Projekt OctoAwesome, http://octoawesome.net, wurde aber abgeändert

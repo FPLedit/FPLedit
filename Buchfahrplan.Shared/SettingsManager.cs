@@ -3,7 +3,7 @@ using System.Configuration;
 using System.Linq;
 using System.Reflection;
 
-namespace Buchfahrplan.Shared
+namespace FPLedit.Shared
 {
     /// <summary>
     /// Verwaltet die Anwendungseinstellungen.

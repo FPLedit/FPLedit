@@ -3,14 +3,14 @@ using System.IO;
 using System.Windows.Forms;
 using System.Linq;
 using System.Collections.Generic;
-using Buchfahrplan.Shared;
+using FPLedit.Shared;
 using System.ComponentModel;
 using System.Net;
 using System.Xml;
 using System.Diagnostics;
 using System.Drawing;
 
-namespace Buchfahrplan
+namespace FPLedit
 {
     public partial class MainForm : Form, IInfo
     {        

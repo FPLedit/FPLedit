@@ -1,4 +1,4 @@
-﻿using Buchfahrplan.Shared;
+﻿using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Buchfahrplan
+namespace FPLedit
 {
     public partial class LogTextBox : TextBox, ILog
     {

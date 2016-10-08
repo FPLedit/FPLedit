@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace Buchfahrplan.Shared
+namespace FPLedit.Shared
 {
     public static class TimeSpanExtensions
     {

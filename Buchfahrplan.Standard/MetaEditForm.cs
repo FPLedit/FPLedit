@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Buchfahrplan.Standard
+namespace FPLedit.Standard
 {
     public partial class MetaEditForm : Form
     {

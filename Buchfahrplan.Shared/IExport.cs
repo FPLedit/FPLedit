@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Buchfahrplan.Shared
+namespace FPLedit.Shared
 {
     public interface IExport
     {

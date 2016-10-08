@@ -1,4 +1,4 @@
-﻿namespace Buchfahrplan.Standard
+﻿namespace FPLedit.Standard
 {
     partial class EditStationForm
     {
@@ -34,8 +34,8 @@
             this.nameTextBox = new System.Windows.Forms.TextBox();
             this.cancelButton = new System.Windows.Forms.Button();
             this.closeButton = new System.Windows.Forms.Button();
-            this.positionValidator = new Buchfahrplan.Shared.Validators.NumberValidator();
-            this.nameValidator = new Buchfahrplan.Shared.Validators.NotEmptyValidator();
+            this.positionValidator = new FPLedit.Shared.Validators.NumberValidator();
+            this.nameValidator = new FPLedit.Shared.Validators.NotEmptyValidator();
             this.SuspendLayout();
             // 
             // positionLabel

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Buchfahrplan.Shared;
+using FPLedit.Shared;
 
-namespace Buchfahrplan.Standard
+namespace FPLedit.Standard
 {
     public partial class TrainsEditForm : Form
     {

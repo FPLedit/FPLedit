@@ -1,9 +1,9 @@
-﻿using Buchfahrplan.Shared;
+﻿using FPLedit.Shared;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Buchfahrplan.BuchfahrplanExport
+namespace FPLedit.BuchfahrplanExport
 {
     public partial class StationVelocityEditForm : Form
     {

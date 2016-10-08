@@ -1,4 +1,4 @@
-﻿using Buchfahrplan.Shared;
+﻿using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Buchfahrplan.Standard
+namespace FPLedit.Standard
 {
     public class Plugin : IPlugin
     {

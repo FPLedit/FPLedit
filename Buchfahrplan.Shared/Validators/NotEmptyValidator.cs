@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Buchfahrplan.Shared.Validators
+namespace FPLedit.Shared.Validators
 {
     public sealed class NotEmptyValidator : BaseValidator
     {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Buchfahrplan.Shared.Validators
+namespace FPLedit.Shared.Validators
 {
     public abstract class BaseValidator : Component
     {

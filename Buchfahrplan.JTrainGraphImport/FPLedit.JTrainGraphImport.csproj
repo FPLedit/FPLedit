@@ -7,8 +7,8 @@
     <ProjectGuid>{0959C902-8FCE-4125-A8F0-2D5A06EB890C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Buchfahrplan.JTrainGraphImport</RootNamespace>
-    <AssemblyName>Buchfahrplan.JTrainGraphImport</AssemblyName>
+    <RootNamespace>FPLedit.JTrainGraphImport</RootNamespace>
+    <AssemblyName>FPLedit.JTrainGraphImport</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -47,9 +47,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Buchfahrplan.Shared\Buchfahrplan.Shared.csproj">
+    <ProjectReference Include="..\Buchfahrplan.Shared\FPLedit.Shared.csproj">
       <Project>{ce38d005-22b2-4b15-80ba-614f038240fd}</Project>
-      <Name>Buchfahrplan.Shared</Name>
+      <Name>FPLedit.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

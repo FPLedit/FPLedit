@@ -1,4 +1,4 @@
-﻿namespace Buchfahrplan.Standard
+﻿namespace FPLedit.Standard
 {
     partial class MetaEditForm
     {
@@ -34,7 +34,7 @@
             this.valueTextBox = new System.Windows.Forms.TextBox();
             this.keyLabel = new System.Windows.Forms.Label();
             this.keyTextBox = new System.Windows.Forms.TextBox();
-            this.keyValidator = new Buchfahrplan.Shared.Validators.NotEmptyValidator();
+            this.keyValidator = new FPLedit.Shared.Validators.NotEmptyValidator();
             this.SuspendLayout();
             // 
             // cancelButton

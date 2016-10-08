@@ -1,4 +1,4 @@
-﻿using Buchfahrplan.Shared;
+﻿using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
-namespace Buchfahrplan.JTrainGraphImport
+namespace FPLedit.JTrainGraphImport
 {
     public class JTrainGraphImport : IImport
     {

@@ -1,4 +1,4 @@
-﻿namespace Buchfahrplan.BildfahrplanExport
+﻿namespace FPLedit.BildfahrplanExport
 {
     partial class ConfigForm
     {
@@ -66,7 +66,7 @@
             this.includeKilometreCheckBox = new System.Windows.Forms.CheckBox();
             this.layoutTextBox3 = new System.Windows.Forms.TextBox();
             this.drawStationNamesCheckBox = new System.Windows.Forms.CheckBox();
-            this.heightPerHourValidator = new Buchfahrplan.Shared.Validators.NumberValidator();
+            this.heightPerHourValidator = new FPLedit.Shared.Validators.NumberValidator();
             this.SuspendLayout();
             // 
             // cancelButton

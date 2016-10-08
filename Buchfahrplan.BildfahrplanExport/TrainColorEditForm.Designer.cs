@@ -1,4 +1,4 @@
-﻿namespace Buchfahrplan.BildfahrplanExport
+﻿namespace FPLedit.BildfahrplanExport
 {
     partial class TrainColorEditForm
     {

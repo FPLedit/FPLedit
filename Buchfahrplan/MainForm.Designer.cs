@@ -1,4 +1,4 @@
-﻿namespace Buchfahrplan
+﻿namespace FPLedit
 {
     partial class MainForm
     {
@@ -39,7 +39,7 @@
             this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkVersionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.logger = new Buchfahrplan.LogTextBox();
+            this.logger = new FPLedit.LogTextBox();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -135,7 +135,7 @@
             this.ClientSize = new System.Drawing.Size(441, 261);
             this.Controls.Add(this.logger);
             this.Controls.Add(this.menuStrip);
-            this.Icon = global::Buchfahrplan.Properties.Resources.programm;
+            this.Icon = global::FPLedit.Properties.Resources.programm;
             this.MainMenuStrip = this.menuStrip;
             this.Name = "MainForm";
             this.Text = "Buchfahrplan";

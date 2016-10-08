@@ -1,8 +1,8 @@
-﻿using Buchfahrplan.Shared;
+﻿using FPLedit.Shared;
 using System;
 using System.Windows.Forms;
 
-namespace Buchfahrplan.Standard
+namespace FPLedit.Standard
 {
     public partial class TrainEditForm : Form
     {
