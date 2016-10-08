@@ -1,6 +1,7 @@
 ﻿using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -12,15 +13,27 @@ namespace FPLedit.Standard
         {
             get
             {
-                return "Buchfahrplan Dateien (*.bfpl)|*.bfpl";
+                return "Buchfahrplan Dateien (*.bfpl)|*.xfpl";
             }
         }
 
         public Timetable Import(string filename, ILog logger)
         {
-            try
+            /*try
             {
                 return Timetable.OpenFromFile(filename);
+            }
+            catch (Exception ex)
+            {
+                logger.Error("BfplImport: " + ex.Message);
+                return null;
+            }*/
+            try
+            {
+                using (FileStream stream = File.Open(filename, FileMode.Open))
+                {
+                    return Timetable.OpenFromStream(stream);
+                }
             }
             catch (Exception ex)
             {

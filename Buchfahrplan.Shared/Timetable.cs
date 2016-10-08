@@ -14,6 +14,7 @@ namespace FPLedit.Shared
     public sealed class Timetable : Meta
     {
         public const string VERSION = "1.0";
+        public const string MAGIC = "BFPL/1.1";
 
         public string Name { get; set; }
 
@@ -27,6 +28,7 @@ namespace FPLedit.Shared
             Trains = new List<Train>();
 
             Metadata["Version"] = VERSION;
+            Name = "";
         }
 
         public static Timetable GenerateTestTimetable()
@@ -73,6 +75,72 @@ namespace FPLedit.Shared
                     throw new Exception("Ein Fehler ist beim Speichern der Datei aufgetreten: " + e.Message);
                 }
             }
+        }
+
+        public static Timetable Deserialize(BinaryReader reader)
+        {
+            Timetable res = new Timetable();
+
+            string magic = reader.ReadString();
+            if (magic != MAGIC)
+                throw new Exception("Ein Fehler ist beim Öffnen der Datei aufgetreten: Falsche Dateiversion");
+
+            res.Name = reader.ReadString();
+            res.Metadata = DeserializeMeta(reader);
+
+            var stations = new Dictionary<int, Station>();
+            int sta_count = reader.ReadInt32();
+            for (int i = 0; i < sta_count; i++)
+            {
+                int id = reader.ReadInt32();
+                var sta = Station.Deserialize(reader);
+                stations.Add(id, sta);
+                res.Stations.Add(sta);
+            }
+
+            int tra_count = reader.ReadInt32();
+            for (int i = 0; i < tra_count; i++)
+            {
+                var tr = Train.Deserialize(reader, stations);
+                res.Trains.Add(tr);
+            }
+
+            return res;
+        }
+
+        public void Serialize(BinaryWriter writer)
+        {
+            writer.Write(MAGIC);
+            Name = "";
+            writer.Write(Name);
+            SerializeMeta(writer);
+
+            var stations = new Dictionary<Station, int>();
+            writer.Write(Stations.Count);
+            int i = 0;
+            foreach (var sta in Stations)
+            {
+                writer.Write(i); // STA_UNIQ_ID
+                sta.Serialize(writer);
+                stations.Add(sta, i);
+                i++;
+            }
+
+            writer.Write(Trains.Count);
+            foreach (var tra in Trains)
+                tra.Serialize(writer, stations);
+        }
+
+        public void SaveToStream(Stream stream)
+        {
+            using (BinaryWriter writer = new BinaryWriter(stream))
+                Serialize(writer);
+        }
+
+        public static Timetable OpenFromStream(Stream stream)
+        {
+            using (BinaryReader reader = new BinaryReader(stream))
+                return Deserialize(reader);
         }
 
         public static Timetable OpenFromFile(string filename)
