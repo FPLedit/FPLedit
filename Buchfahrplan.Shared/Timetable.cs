@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
@@ -81,8 +82,9 @@ namespace FPLedit.Shared
             using (FileStream stream = File.Open(filename, FileMode.Open))
             {
                 BinaryFormatter formatter = new BinaryFormatter();
+                formatter.Binder = new OldNamespaceBinder();
                 try
-                {                    
+                {
                     tt = (Timetable)formatter.Deserialize(stream);
                 }
                 catch (SerializationException e)
@@ -127,5 +129,35 @@ namespace FPLedit.Shared
                 return (Timetable)formatter.Deserialize(stream);
             }
         }
-    }    
+    }
+
+    sealed class OldNamespaceBinder : SerializationBinder
+    {
+        public override Type BindToType(string asssembly, string type)
+        {
+            if (asssembly == "Buchfahrplan.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null")
+            {
+                asssembly = Assembly.GetAssembly(GetType()).FullName;
+                type = type.Replace("Buchfahrplan.", "FPLedit.");
+                return Type.GetType(type + ", " + asssembly);
+            }
+
+            string[] types = new[]
+            {
+                "System.Collections.Generic.List`1[[Buchfahrplan.Shared.Station, Buchfahrplan.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+                "System.Collections.Generic.List`1[[Buchfahrplan.Shared.Train, Buchfahrplan.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+                "System.Collections.Generic.Dictionary`2[[Buchfahrplan.Shared.Station, Buchfahrplan.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.TimeSpan, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]",
+                "System.Collections.Generic.ObjectEqualityComparer`1[[Buchfahrplan.Shared.Station, Buchfahrplan.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+                "System.Collections.Generic.KeyValuePair`2[[Buchfahrplan.Shared.Station, Buchfahrplan.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.TimeSpan, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"
+            };
+
+            if (types.Contains(type))
+            {
+                type = type.Replace("Buchfahrplan.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", Assembly.GetAssembly(GetType()).FullName)
+                    .Replace("Buchfahrplan.", "FPLedit.");
+                return Type.GetType(type + ", " + asssembly);
+            }
+            return null;
+        }
+    }
 }
