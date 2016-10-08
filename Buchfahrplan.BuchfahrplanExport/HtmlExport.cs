@@ -13,32 +13,28 @@ namespace Buchfahrplan.BuchfahrplanExport
 
         public string Filter
         {
-            get
-            {
-                return "Buchfahrplan als HTML Datei (*.html)|*.html";
-            }
+            get { return "Buchfahrplan als HTML Datei (*.html)|*.html"; }
         }
 
         public bool Reoppenable
         {
-            get
-            {
-                return false;
-            }
+            get { return false; }
         }
 
         public HtmlExport()
         {
+            template = new Template(LoadResource("Templates.Main"), LoadResource("Templates.Line"), LoadResource("Templates.Train"));
+        }
+
+        private string LoadResource(string filename)
+        {
             var assembly = Assembly.GetAssembly(GetType());
-            var resourceName = "Buchfahrplan.BuchfahrplanExport.Template.tmpl";
+            var resourceName = "Buchfahrplan.BuchfahrplanExport."+filename;
 
 
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             using (StreamReader reader = new StreamReader(stream))
-            {
-                string content = reader.ReadToEnd();
-                template = new Template(DecompressFromString(content));
-            }
+                return reader.ReadToEnd();
         }
 
         public bool Export(Timetable timetable, string filename, ILog logger)
@@ -72,40 +68,6 @@ namespace Buchfahrplan.BuchfahrplanExport
             return res;
         }
 
-        public Dictionary<string, string> DecompressFromString(string content)
-        {
-            string sep = "////////////";
-            string file = "";
-            string filecont = "";
-            Dictionary<string, string> files = new Dictionary<string, string>();
-
-            using (StringReader sr = new StringReader(content))
-            {
-                string line;
-                while ((line = sr.ReadLine()) != null)
-                {
-                    if (line.StartsWith(sep))
-                    {
-                        if (file != "")
-                        {
-                            files.Add(file, filecont);
-                            file = "";
-                            filecont = "";
-                        }
-                        file = line.Trim('/');
-                    }
-                    else
-                    {
-                        filecont += line + Environment.NewLine;
-                    }
-                }
-                if (file != "")
-                    files.Add(file, filecont);
-            }
-
-            return files;
-        }
-
         private class Template
         {
             public string GlobalTemplate { get; private set; }
@@ -114,11 +76,11 @@ namespace Buchfahrplan.BuchfahrplanExport
 
             public string LineTemplate { get; private set; }
 
-            public Template(Dictionary<string, string> filetable)
+            public Template(string glob, string line, string train)
             {
-                GlobalTemplate = filetable["GLOB_TEMPLATE"];
-                TrainTemplate = filetable["TRAIN_TEMPLATE"];
-                LineTemplate = filetable["LINE_TEMPLATE"];
+                GlobalTemplate = glob;
+                TrainTemplate = train;
+                LineTemplate = line;
             }
         }
     }

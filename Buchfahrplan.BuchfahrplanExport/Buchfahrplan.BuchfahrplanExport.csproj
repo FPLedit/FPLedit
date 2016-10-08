@@ -57,6 +57,7 @@
     <Compile Include="StationVelocityEditForm.Designer.cs">
       <DependentUpon>StationVelocityEditForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Templates\Main" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Buchfahrplan.Shared\Buchfahrplan.Shared.csproj">
@@ -65,13 +66,18 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Template.tmpl" />
     <EmbeddedResource Include="StationVelocityForm.resx">
       <DependentUpon>StationVelocityForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StationVelocityEditForm.resx">
       <DependentUpon>StationVelocityEditForm.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Templates\Line" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Templates\Train" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
