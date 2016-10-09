@@ -126,8 +126,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Buchfahrplan.Shared\FPLedit.Shared.csproj">
-      <Project>{ce38d005-22b2-4b15-80ba-614f038240fd}</Project>
+    <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj">
+      <Project>{CE38D005-22B2-4B15-80BA-614F038240FD}</Project>
       <Name>FPLedit.Shared</Name>
     </ProjectReference>
   </ItemGroup>
