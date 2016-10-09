@@ -9,6 +9,7 @@ using System.Net;
 using System.Xml;
 using System.Diagnostics;
 using System.Drawing;
+using System.Reflection;
 
 namespace FPLedit
 {
@@ -222,7 +223,7 @@ namespace FPLedit
 
         private string GetVersion()
         {
-            return "alpha";
+            return FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
         }
 
         private void Info()
