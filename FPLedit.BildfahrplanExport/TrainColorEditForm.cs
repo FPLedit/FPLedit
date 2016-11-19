@@ -13,7 +13,7 @@ namespace FPLedit.BildfahrplanExport
         {
             InitializeComponent();
 
-            colorComboBox.Items.AddRange(colors);
+            colorComboBox.Items.AddRange(ColorHelper.ColorNames);
             colorComboBox.SelectedItem = "Black";
             for (int i = 1; i <= 5; i++) widthComboBox.Items.Add(i.ToString());
             widthComboBox.SelectedItem = "1";
@@ -38,21 +38,5 @@ namespace FPLedit.BildfahrplanExport
             Train.Metadata["Draw"] = drawCheckBox.Checked.ToString();        
             Close();
         }
-
-        private string[] colors = new[]
-        {
-            "Black",
-            "Gray",
-            "White",
-            "Red",
-            "Orange",
-            "Yellow",
-            "Blue",
-            "LightBlue",
-            "Green",
-            "DrakGreen",
-            "Brown",
-            "Magenta"
-        };
     }
 }

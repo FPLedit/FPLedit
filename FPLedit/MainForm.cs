@@ -71,7 +71,8 @@ namespace FPLedit
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            foreach (var plugin in ExtensionManager.Plugins)
+            var extensionManager = new ExtensionManager();
+            foreach (var plugin in extensionManager.EnabledPlugins)
                 plugin.Init(this);
 
             saveFileDialog.Filter = string.Join("|", exporters.Select(ex => ex.Filter));

@@ -11,54 +11,59 @@ namespace FPLedit
     /// <summary>
     /// Stammt vom Projekt OctoAwesome, http://octoawesome.net, wurde aber abgeändert
     /// </summary>
-    public static class ExtensionManager
+    public class ExtensionManager
     {
-        private static List<IPlugin> plugins;
-        public static List<IPlugin> Plugins
+        public List<IPlugin> EnabledPlugins { get; private set; }
+
+        public List<IPlugin> DisabledPlugins { get; private set; }
+
+        public ExtensionManager()
         {
-            get
+            List<Assembly> assemblies = new List<Assembly>();
+            DirectoryInfo dir = new DirectoryInfo(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
+
+            foreach (var file in dir.GetFiles("*.dll"))
             {
-                if (plugins != null)
-                    return plugins;
-
-                List<Assembly> assemblies = new List<Assembly>();
-                DirectoryInfo dir = new DirectoryInfo(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
-
-                foreach (var file in dir.GetFiles("*.dll"))
+                try
                 {
-                    try
-                    {
-                        var assembly = Assembly.LoadFile(file.FullName);
-                        assemblies.Add(assembly);
-                    }
-                    catch
-                    {
-                    }
+                    var assembly = Assembly.LoadFile(file.FullName);
+                    assemblies.Add(assembly);
                 }
-
-                List<IPlugin> result = new List<IPlugin>();
-                foreach (var assembly in assemblies)
+                catch
                 {
-                    try
-                    {
-                        foreach (var type in assembly.GetTypes())
-                        {
-                            if (!type.IsClass) continue;
-                            if (!type.IsPublic) continue;
-                            if (type.IsAbstract) continue;
-                            if (type == typeof(IPlugin)) continue;
+                }
+            }
 
-                            if (typeof(IPlugin).IsAssignableFrom(type))
-                                result.Add((IPlugin)Activator.CreateInstance(type));
+            List<IPlugin> result = new List<IPlugin>();
+            foreach (var assembly in assemblies)
+            {
+                try
+                {
+                    foreach (var type in assembly.GetTypes())
+                    {
+                        if (!type.IsClass) continue;
+                        if (!type.IsPublic) continue;
+                        if (type.IsAbstract) continue;
+                        if (type == typeof(IPlugin)) continue;                        
+
+                        if (typeof(IPlugin).IsAssignableFrom(type))
+                        {
+                            IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
+
+                            bool enabled = true; //TODO: lookup config
+
+                            if (enabled)
+                                EnabledPlugins.Add(plugin);
+                            else
+                                DisabledPlugins.Add(plugin);
                         }
                     }
-                    catch
-                    {
-                    }
                 }
-                plugins = result;
-                return result;
+                catch
+                {
+                }
             }
+            EnabledPlugins = result;
         }
     }
 }

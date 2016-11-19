@@ -20,10 +20,10 @@ namespace FPLedit.BildfahrplanExport
         {
             InitializeComponent();
 
-            bgColorComboBox.Items.AddRange(colors);
-            stationColorComboBox.Items.AddRange(colors);
-            timeColorComboBox.Items.AddRange(colors);
-            trainColorComboBox.Items.AddRange(colors);
+            bgColorComboBox.Items.AddRange(ColorHelper.ColorNames);
+            stationColorComboBox.Items.AddRange(ColorHelper.ColorNames);
+            timeColorComboBox.Items.AddRange(ColorHelper.ColorNames);
+            trainColorComboBox.Items.AddRange(ColorHelper.ColorNames);
 
             string[] fontFamilies = new InstalledFontCollection().Families.Select(f => f.Name).ToArray();
             stationFontComboBox.Items.AddRange(fontFamilies);
@@ -131,22 +131,6 @@ namespace FPLedit.BildfahrplanExport
             tt.Metadata["StartTime"] = startTimeTextBox.Text;
             tt.Metadata["EndTime"] = endTimeTextBox.Text;
         }
-
-        private string[] colors = new[]
-        {
-            "Black",
-            "Gray",
-            "White",
-            "Red",
-            "Orange",
-            "Yellow",
-            "Blue",
-            "LightBlue",
-            "Green",
-            "DrakGreen",
-            "Brown",
-            "Magenta"
-        };
 
         private void defaultValuesButton_Click(object sender, EventArgs e)
         {
