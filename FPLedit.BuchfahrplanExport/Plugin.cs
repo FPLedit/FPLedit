@@ -14,6 +14,11 @@ namespace FPLedit.BuchfahrplanExport
         private IInfo info;
         private ToolStripItem showItem, velocityItem;
 
+        public string Name
+        {
+            get { return "Exporter für Buchfahrpläne"; }
+        }
+
         public void Init(IInfo info)
         {
             this.info = info;

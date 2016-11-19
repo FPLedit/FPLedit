@@ -9,6 +9,11 @@ namespace FPLedit.JTrainGraphImport
 {
     public class Plugin : IPlugin
     {
+        public string Name
+        {
+            get { return "Importer für jTrainGraph"; }
+        }
+
         public void Init(IInfo info)
         {
             info.RegisterImport(new JTrainGraphImport());

@@ -13,6 +13,11 @@ namespace FPLedit.Standard
 {
     public class Plugin : IPlugin
     {
+        public string Name
+        {
+            get { return "Standarderweiterung"; }
+        }
+
         private IInfo info;
         private ToolStripItem editLineItem, editTrainsItem, editTimetableItem;
 

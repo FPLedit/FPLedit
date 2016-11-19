@@ -40,6 +40,7 @@
             this.checkVersionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.logger = new FPLedit.LogTextBox();
+            this.extensionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -62,7 +63,8 @@
             this.saveAsToolStripMenuItem,
             this.toolStripSeparator1,
             this.infoToolStripMenuItem,
-            this.checkVersionToolStripMenuItem});
+            this.checkVersionToolStripMenuItem,
+            this.extensionsToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.fileToolStripMenuItem.Text = "Datei";
@@ -128,6 +130,13 @@
             this.logger.Size = new System.Drawing.Size(441, 237);
             this.logger.TabIndex = 2;
             // 
+            // extensionsToolStripMenuItem
+            // 
+            this.extensionsToolStripMenuItem.Name = "extensionsToolStripMenuItem";
+            this.extensionsToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.extensionsToolStripMenuItem.Text = "Erweiterungen";
+            this.extensionsToolStripMenuItem.Click += new System.EventHandler(this.extensionsToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -162,6 +171,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem checkVersionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem extensionsToolStripMenuItem;
     }
 }
 

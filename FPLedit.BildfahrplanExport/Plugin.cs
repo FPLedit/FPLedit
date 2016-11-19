@@ -22,6 +22,11 @@ namespace FPLedit.BildfahrplanExport
         private TimeSpan? last;
         private DateControl dtc;
 
+        public string Name
+        {
+            get { return "Exporter für Bildfahrpläne"; }
+        }
+
         public void Init(IInfo info)
         {
             this.info = info;

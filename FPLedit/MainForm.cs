@@ -25,6 +25,8 @@ namespace FPLedit
 
         private FileState fileState;
 
+        private ExtensionManager extensionManager;
+
         public FileState FileState
         {
             get { return fileState; }
@@ -71,12 +73,12 @@ namespace FPLedit
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            var extensionManager = new ExtensionManager();
+            extensionManager = new ExtensionManager();
             foreach (var plugin in extensionManager.EnabledPlugins)
                 plugin.Init(this);
 
             saveFileDialog.Filter = string.Join("|", exporters.Select(ex => ex.Filter));
-            openFileDialog.Filter = string.Join("|", importers.Select(im => im.Filter));
+            openFileDialog.Filter = string.Join("|", importers.Select(im => im.Filter));            
         }
 
         private void Open()
@@ -279,5 +281,10 @@ namespace FPLedit
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
             => Save(true);
+
+        private void extensionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            (new ExtensionsForm(extensionManager)).ShowDialog();
+        }
     }
 }

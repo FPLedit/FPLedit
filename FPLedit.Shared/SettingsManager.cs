@@ -33,6 +33,23 @@ namespace FPLedit.Shared
         }
 
         /// <summary>
+        /// Gibt den Wert einer Einstellung zurück.
+        /// </summary>
+        /// <param name="key">Der Schlüssel der Einstellung.</param>
+        /// <param name="defaultValue">Der Standardwert</param>
+        /// <returns>Der Wert der Einstellung oder, falls dieser nicht vorhanden ist, der Standardwert.</returns>
+        public static string Get(string key, string defaultValue)
+        {
+            if (KeyExists(key))
+            {
+                var config = ConfigurationManager.OpenExeConfiguration(Assembly.GetEntryAssembly().Location);
+                return config.AppSettings.Settings[key].Value;
+            }
+            else
+                return defaultValue;
+        }
+
+        /// <summary>
         /// Überprüft, ob die angegebene Einstellung existeiert.
         /// </summary>
         /// <param name="key">Der Schlüssel der Einstellung.</param>

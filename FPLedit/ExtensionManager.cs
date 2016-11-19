@@ -34,7 +34,12 @@ namespace FPLedit
                 }
             }
 
-            List<IPlugin> result = new List<IPlugin>();
+            EnabledPlugins = new List<IPlugin>();
+            DisabledPlugins = new List<IPlugin>();
+
+            string[] enabledExtensions = SettingsManager.Get("EnabledExtensions", "").Split(';');
+            bool enableAll = enabledExtensions.Length < 0;
+
             foreach (var assembly in assemblies)
             {
                 try
@@ -50,7 +55,7 @@ namespace FPLedit
                         {
                             IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
 
-                            bool enabled = true; //TODO: lookup config
+                            bool enabled = enableAll || enabledExtensions.Contains(type.FullName); //TODO: lookup config
 
                             if (enabled)
                                 EnabledPlugins.Add(plugin);
@@ -63,7 +68,6 @@ namespace FPLedit
                 {
                 }
             }
-            EnabledPlugins = result;
         }
     }
 }
