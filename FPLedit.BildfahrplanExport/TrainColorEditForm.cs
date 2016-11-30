@@ -24,8 +24,8 @@ namespace FPLedit.BildfahrplanExport
         {
             Train = train;
 
-            colorComboBox.SelectedItem = train.GetMeta("Color", (string)colorComboBox.SelectedItem);
-            widthComboBox.SelectedItem = train.GetMeta("Width", (string)widthComboBox.SelectedItem);
+            colorComboBox.SelectedItem = train.GetMeta("Color", (string)colorComboBox.SelectedItem, ColorHelper.NameFromHex);
+            widthComboBox.SelectedItem = train.GetMeta("Width", (string)widthComboBox.SelectedItem, ColorHelper.NameFromHex);
             drawCheckBox.Checked = train.GetMetaBool("Draw", drawCheckBox.Checked);
         }
 
@@ -33,7 +33,7 @@ namespace FPLedit.BildfahrplanExport
         {
             DialogResult = DialogResult.OK;
 
-            Train.Metadata["Color"] = (string)colorComboBox.SelectedItem;
+            Train.Metadata["Color"] = ColorHelper.HexFromName((string)colorComboBox.SelectedItem);
             Train.Metadata["Width"] = (string)widthComboBox.SelectedItem;
             Train.Metadata["Draw"] = drawCheckBox.Checked.ToString();        
             Close();

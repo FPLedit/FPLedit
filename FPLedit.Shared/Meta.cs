@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -45,6 +46,11 @@ namespace FPLedit.Shared
         public bool GetMetaBool(string key, bool defaultValue)
         {
             return GetMeta(key, defaultValue, bool.Parse);
+        }
+
+        public Color GetMetaColor(string key, Color defaultValue)
+        {
+            return GetMeta(key, defaultValue, ColorHelper.ColorFromHex);
         }
 
         public TimeSpan GetMetaTimeSpan(string key, TimeSpan defaultValue)

@@ -73,10 +73,11 @@ namespace FPLedit.BildfahrplanExport
         public ConfigForm(Timetable tt) : this()
         {
             this.tt = tt;
-            bgColorComboBox.SelectedItem = tt.GetMeta("BgColor", (string)bgColorComboBox.SelectedItem);
-            timeColorComboBox.SelectedItem = tt.GetMeta("TimeColor", (string)timeColorComboBox.SelectedItem);
-            trainColorComboBox.SelectedItem = tt.GetMeta("TrainColor", (string)trainColorComboBox.SelectedItem);
-            stationColorComboBox.SelectedItem = tt.GetMeta("StationColor", (string)stationColorComboBox.SelectedItem);
+            bgColorComboBox.SelectedItem = tt.GetMeta("BgColor", (string)bgColorComboBox.SelectedItem, ColorHelper.NameFromHex);
+            timeColorComboBox.SelectedItem = tt.GetMeta("TimeColor", (string)timeColorComboBox.SelectedItem, ColorHelper.NameFromHex);
+            trainColorComboBox.SelectedItem = tt.GetMeta("TrainColor", (string)trainColorComboBox.SelectedItem, ColorHelper.NameFromHex);
+            stationColorComboBox.SelectedItem = tt.GetMeta("StationColor", (string)stationColorComboBox.SelectedItem, ColorHelper.NameFromHex);
+
             hourTimeWidthComboBox.SelectedItem = tt.GetMeta("HourTimeWidth", (string)hourTimeWidthComboBox.SelectedItem);
             minuteTimeWidthComboBox.SelectedItem = tt.GetMeta("MinuteTimeWidth", (string)minuteTimeWidthComboBox.SelectedItem);
             trainWidthComboBox.SelectedItem = tt.GetMeta("TrainWidth", (string)trainWidthComboBox.SelectedItem);
@@ -106,11 +107,11 @@ namespace FPLedit.BildfahrplanExport
                 return;
             }
 
-            tt.Metadata["BgColor"] = (string)bgColorComboBox.SelectedItem;
+            tt.Metadata["BgColor"] = ColorHelper.HexFromName((string)bgColorComboBox.SelectedItem);
+            tt.Metadata["TimeColor"] = ColorHelper.HexFromName((string)timeColorComboBox.SelectedItem);
+            tt.Metadata["TrainColor"] = ColorHelper.HexFromName((string)trainColorComboBox.SelectedItem);
+            tt.Metadata["StationColor"] = ColorHelper.HexFromName((string)stationColorComboBox.SelectedItem);
 
-            tt.Metadata["TimeColor"] = (string)timeColorComboBox.SelectedItem;
-            tt.Metadata["TrainColor"] = (string)trainColorComboBox.SelectedItem;
-            tt.Metadata["StationColor"] = (string)stationColorComboBox.SelectedItem;
             tt.Metadata["HourTimeWidth"] = (string)hourTimeWidthComboBox.SelectedItem;
             tt.Metadata["MinuteTimeWidth"] = (string)minuteTimeWidthComboBox.SelectedItem;
             tt.Metadata["TrainWidth"] = (string)trainWidthComboBox.SelectedItem;

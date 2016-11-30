@@ -49,10 +49,10 @@ namespace FPLedit.BildfahrplanExport
 
         public void Init()
         {
-            trainColor = tt.GetMeta("TrainColor", trainColor, Color.FromName);
-            timeColor = tt.GetMeta("TimeColor", timeColor, Color.FromName);
-            backgroundColor = tt.GetMeta("BgColor", backgroundColor, Color.FromName);
-            stationColor = tt.GetMeta("StationColor", stationColor, Color.FromName);
+            trainColor = tt.GetMetaColor("TrainColor", trainColor);
+            timeColor = tt.GetMetaColor("TimeColor", timeColor);
+            backgroundColor = tt.GetMetaColor("BgColor", backgroundColor);
+            stationColor = tt.GetMetaColor("StationColor", stationColor);
             trainWidth = tt.GetMetaInt("TrainWidth", trainWidth);
             stationWidth = tt.GetMetaInt("StationWidth", stationWidth);
             hourTimeWidth = tt.GetMetaInt("HourTimeWidth", hourTimeWidth);
@@ -147,8 +147,8 @@ namespace FPLedit.BildfahrplanExport
                 if (!train.GetMeta("Draw", true, bool.Parse))
                     continue;
 
-                Color color = train.GetMeta("Color", trainColor, Color.FromName);
-                int tWidth = train.GetMeta("Width", trainWidth, int.Parse);
+                Color color = train.GetMetaColor("Color", trainColor);
+                int tWidth = train.GetMetaInt("Width", trainWidth);
                 List<PointF> points = new List<PointF>();
                 foreach (var sta in stations)
                 {

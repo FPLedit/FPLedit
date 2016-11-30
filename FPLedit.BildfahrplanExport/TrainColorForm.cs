@@ -16,7 +16,7 @@ namespace FPLedit.BildfahrplanExport
         private IInfo info;
         private Timetable tt;
 
-        private string trainColor = "Black";
+        private Color trainColor = Color.Black;
         private string trainWidth = "1";
         private string drawTrain = "True";
 
@@ -36,7 +36,7 @@ namespace FPLedit.BildfahrplanExport
             tt = info.Timetable;
             info.BackupTimetable();
 
-            trainColor = tt.GetMeta("TrainColor", trainColor);
+            trainColor = tt.GetMetaColor("TrainColor", trainColor);
             trainWidth = tt.GetMeta("TrainWidth", trainWidth);
             UpdateTrains();
         }
@@ -48,7 +48,7 @@ namespace FPLedit.BildfahrplanExport
             {
                 trainListView.Items.Add(new ListViewItem(new[] {
                     train.Name,
-                    train.GetMeta("Color", trainColor),
+                    ColorHelper.NameFromColor(train.GetMetaColor("Color", trainColor)),
                     train.GetMeta("Width", trainWidth),
                     train.GetMeta("Draw", drawTrain)})
                 { Tag = train });

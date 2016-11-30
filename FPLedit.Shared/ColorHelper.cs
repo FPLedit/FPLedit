@@ -10,17 +10,17 @@ namespace FPLedit.Shared
     {
         private static Dictionary<string, string> Colors = new Dictionary<string, string>()
         {
-            ["Black"] = "#000000",
-            ["Gray"] = "#808080",
-            ["White"] = "#FFFFFF",
-            ["Red"] = "#FF0000",
+            ["Schwarz"] = "#000000",
+            ["Grau"] = "#808080",
+            ["Weiß"] = "#FFFFFF",
+            ["Rot"] = "#FF0000",
             ["Orange"] = "#FFA500",
-            ["Yellow"] = "#FFFF00",
-            ["Blue"] = "#0000FF",
-            ["LightBlue"] = "#ADD8E6",
-            ["Green"] = "#008000",
-            ["DarkGreen"] = "#006400",
-            ["Brown"] = "#A52A2A",
+            ["Gelb"] = "#FFFF00",
+            ["Blau"] = "#0000FF",
+            ["Hellblau"] = "#ADD8E6",
+            ["Grün"] = "#008000",
+            ["Dunkelgrün"] = "#006400",
+            ["Braun"] = "#A52A2A",
             ["Magenta"] = "#FF00FF",
         };
 
@@ -29,7 +29,6 @@ namespace FPLedit.Shared
             get { return Colors.Keys.ToArray(); }
         }
 
-
         public static string NameFromHex(string hex)
         {
             return Colors.FirstOrDefault(c => c.Value == hex).Key ?? hex;
@@ -37,7 +36,7 @@ namespace FPLedit.Shared
 
         public static string HexFromName(string name)
         {
-            return Colors.FirstOrDefault(c => c.Key == name).Key ?? name;
+            return Colors.FirstOrDefault(c => c.Key == name).Value ?? name;
         }
 
         public static Color ColorFromHex(string hex)
@@ -48,6 +47,11 @@ namespace FPLedit.Shared
         public static Color ColorFromName(string name)
         {
             return ColorFromHex(HexFromName(name));
+        }
+
+        public static string NameFromColor(Color c)
+        {
+            return NameFromHex(ColorTranslator.ToHtml(c));
         }
     }
 }
