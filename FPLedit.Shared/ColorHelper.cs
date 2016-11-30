@@ -51,7 +51,8 @@ namespace FPLedit.Shared
 
         public static string NameFromColor(Color c)
         {
-            return NameFromHex(ColorTranslator.ToHtml(c));
+            return NameFromHex(string.Format("#{0:X2}{1:X2}{2:X2}",
+                c.R, c.G, c.B));
         }
     }
 }

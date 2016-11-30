@@ -8,13 +8,14 @@ namespace FPLedit.BildfahrplanExport
     public partial class TrainColorEditForm : Form
     {
         public Train Train { get; set; }
+        private Color trainColor = Color.Black;
 
         public TrainColorEditForm()
         {
             InitializeComponent();
-
+                        
             colorComboBox.Items.AddRange(ColorHelper.ColorNames);
-            colorComboBox.SelectedItem = "Black";
+            colorComboBox.SelectedItem = ColorHelper.NameFromColor(trainColor);
             for (int i = 1; i <= 5; i++) widthComboBox.Items.Add(i.ToString());
             widthComboBox.SelectedItem = "1";
             drawCheckBox.Checked = true;
