@@ -231,14 +231,9 @@ namespace FPLedit
 
         private void Info()
         {            
-            string nl = Environment.NewLine;
-            string version = GetVersion() + " (Zur Überprüfung auf aktuellere Programmversionen bitte den Menüpunkt \"Auf neue Version prüfen\" verwenden)"; //TODO
-
-            string license = $"FPledit darf zu nicht-kommerziellen und kommerziellen Zwecken kostenlos heruntergeladen und verwendet werden. Die Weitergabe des Programms darf nur unentgeltlich und nicht-öffentlich geschehen. Wenn das Programm oder damit generierte Fahrpläne kommerziell genutzt  werden, bitte ich Sie mir einen Hinweis zu senden.{nl}{nl}Da dieses Programm kostenlos verteilt wird haftet der Autor nicht für mögliche Schäden durch die Verwendung des Programms.";
-
-            string info = $"FPLedit{nl}{nl}Version {version}{nl}{nl}© 2015-2016 Manuel Huber{nl}https://www.manuelhu.de{nl}{nl}{license}";
-
-            MessageBox.Show(info, "FPLedit Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            string info = string.Format(Properties.Resources.Info, GetVersion());
+            (new InfoForm()).ShowDialog();
+            //MessageBox.Show(info, "FPLedit Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private DialogResult NotifyChanged()

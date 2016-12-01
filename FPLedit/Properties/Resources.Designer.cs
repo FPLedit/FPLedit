@@ -61,6 +61,24 @@ namespace FPLedit.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die FPLedit
+        ///
+        ///Version {version}
+        ///
+        ///© 2015-2016 Manuel Huber
+        ///https://www.manuelhu.de
+        ///
+        ///FPledit darf zu nicht-kommerziellen und kommerziellen Zwecken kostenlos heruntergeladen und verwendet werden. Die Weitergabe des Programms darf nur unentgeltlich und nicht-öffentlich geschehen. Wenn das Programm oder damit generierte Fahrpläne kommerziell genutzt  werden, bitte ich Sie mir einen Hinweis zu senden.
+        ///
+        ///Da dieses Programm kostenlos verteilt wird haftet der Autor nicht für mögliche Schäden durch die Verwendung  [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string Info {
+            get {
+                return ResourceManager.GetString("Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Icon ähnlich wie (Symbol).
         /// </summary>
         internal static System.Drawing.Icon programm {
