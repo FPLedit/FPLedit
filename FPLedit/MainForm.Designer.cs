@@ -37,10 +37,9 @@
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.checkVersionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.extensionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.logger = new FPLedit.LogTextBox();
-            this.extensionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -63,7 +62,6 @@
             this.saveAsToolStripMenuItem,
             this.toolStripSeparator1,
             this.infoToolStripMenuItem,
-            this.checkVersionToolStripMenuItem,
             this.extensionsToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
@@ -72,14 +70,14 @@
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.newToolStripMenuItem.Text = "Neu";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.openToolStripMenuItem.Text = "Öffnen...";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
@@ -88,7 +86,7 @@
             this.saveToolStripMenuItem.Enabled = false;
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.saveToolStripMenuItem.Text = "Speichern...";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -96,28 +94,28 @@
             // 
             this.saveAsToolStripMenuItem.Enabled = false;
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.saveAsToolStripMenuItem.Text = "Speichern unter";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(198, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(174, 6);
             // 
             // infoToolStripMenuItem
             // 
             this.infoToolStripMenuItem.Name = "infoToolStripMenuItem";
-            this.infoToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.infoToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.infoToolStripMenuItem.Text = "Info";
             this.infoToolStripMenuItem.Click += new System.EventHandler(this.infoToolStripMenuItem_Click);
             // 
-            // checkVersionToolStripMenuItem
+            // extensionsToolStripMenuItem
             // 
-            this.checkVersionToolStripMenuItem.Name = "checkVersionToolStripMenuItem";
-            this.checkVersionToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.checkVersionToolStripMenuItem.Text = "Auf neue Version Prüfen";
-            this.checkVersionToolStripMenuItem.Click += new System.EventHandler(this.checkVersionToolStripMenuItem_Click);
+            this.extensionsToolStripMenuItem.Name = "extensionsToolStripMenuItem";
+            this.extensionsToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.extensionsToolStripMenuItem.Text = "Erweiterungen";
+            this.extensionsToolStripMenuItem.Click += new System.EventHandler(this.extensionsToolStripMenuItem_Click);
             // 
             // logger
             // 
@@ -129,13 +127,6 @@
             this.logger.ReadOnly = true;
             this.logger.Size = new System.Drawing.Size(441, 237);
             this.logger.TabIndex = 2;
-            // 
-            // extensionsToolStripMenuItem
-            // 
-            this.extensionsToolStripMenuItem.Name = "extensionsToolStripMenuItem";
-            this.extensionsToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.extensionsToolStripMenuItem.Text = "Erweiterungen";
-            this.extensionsToolStripMenuItem.Click += new System.EventHandler(this.extensionsToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -169,7 +160,6 @@
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem infoToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem checkVersionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem extensionsToolStripMenuItem;
     }

@@ -1,13 +1,16 @@
-﻿using System;
+﻿using FPLedit.Shared;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace FPLedit
 {
@@ -17,14 +20,54 @@ namespace FPLedit
         {
             InitializeComponent();
 
-            string info = string.Format(Properties.Resources.Info, 
-                FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion);
-            label1.Text = info;
+            licenseLabel.Text = Properties.Resources.Info;
+
+            versionLabel.Text = versionLabel.Text.Replace("{version}", GetVersion());
+        }        
+
+        private string GetVersion()
+        {
+            return FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
         }
 
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void VersionCheck()
         {
-            Process.Start("https://fahrplan.manuelhu.de/");
+            WebClient wc = new WebClient();
+            wc.DownloadStringAsync(new Uri(string.Format(SettingsManager.Get("CheckUrl"), GetVersion())));
+            wc.DownloadStringCompleted += (s, e) =>
+            {
+                if (e.Error == null && e.Result != "")
+                {
+                    XmlDocument doc = new XmlDocument();
+                    doc.LoadXml(e.Result);
+
+                    XmlNode ver = doc.DocumentElement.SelectSingleNode("/info/version");
+                    XmlNode url = doc.DocumentElement.SelectSingleNode("/info/url");
+
+                    string nl = Environment.NewLine;
+                    DialogResult res = MessageBox.Show($"Eine neue Programmversion ({ver.InnerText}) ist verfügbar!{nl}{nl}Jetzt zur Download-Seite wechseln, um die neue Version herunterzuladen?",
+                        "Neue FPLedit-Version verfügbar", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+
+                    if (res == DialogResult.Yes)
+                        Process.Start(url.InnerText);
+                }
+                else if (e.Error == null)
+                {
+                    MessageBox.Show($"Sie benutzen bereits die aktuelle Version!",
+                        "Auf neue Version prüfen");
+                }
+                else
+                {
+                    MessageBox.Show($"Verbindung mit dem Server fehlgeschlagen!",
+                "Auf neue Version prüfen");
+                }
+            };
         }
+
+        private void websiteLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+            => Process.Start("https://fahrplan.manuelhu.de/");
+
+        private void checkButton_Click(object sender, EventArgs e)
+            => VersionCheck();
     }
 }

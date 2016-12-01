@@ -188,52 +188,11 @@ namespace FPLedit
 
         public void RegisterImport(IImport import)
             => importers.Add(import);
-        #endregion
-
-        private void VersionCheck()
-        {
-            WebClient wc = new WebClient();
-            try
-            {
-                string ret = wc.DownloadString(string.Format(SettingsManager.Get("CheckUrl"), GetVersion()));
-                if (ret != "")
-                {
-                    XmlDocument doc = new XmlDocument();
-                    doc.LoadXml(ret);
-
-                    XmlNode ver = doc.DocumentElement.SelectSingleNode("/info/version");
-                    XmlNode url = doc.DocumentElement.SelectSingleNode("/info/url");
-
-                    string nl = Environment.NewLine;
-                    DialogResult res = MessageBox.Show($"Eine neue Programmversion ({ver.InnerText}) ist verfügbar!{nl}{nl}Jetzt zur Download-Seite wechseln, um die neue Version herunterzuladen?",
-                        "Neue FPLedit-Version verfügbar", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
-
-                    if (res == DialogResult.Yes)
-                        Process.Start(url.InnerText);
-                }
-                else
-                {
-                    MessageBox.Show($"Sie benutzen bereits die aktuelle Version!",
-                        "Auf neue Version prüfen");
-                }
-            }
-            catch
-            {
-                MessageBox.Show($"Verbindung mit dem Server fehlgeschlagen!",
-                    "Auf neue Version prüfen");
-            }
-        }
-
-        private string GetVersion()
-        {
-            return FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
-        }
+        #endregion        
 
         private void Info()
         {            
-            string info = string.Format(Properties.Resources.Info, GetVersion());
             (new InfoForm()).ShowDialog();
-            //MessageBox.Show(info, "FPLedit Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private DialogResult NotifyChanged()
@@ -271,15 +230,10 @@ namespace FPLedit
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
             => Open();
 
-        private void checkVersionToolStripMenuItem_Click(object sender, EventArgs e)
-            => VersionCheck();
-
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
             => Save(true);
 
         private void extensionsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            (new ExtensionsForm(extensionManager)).ShowDialog();
-        }
+            => (new ExtensionsForm(extensionManager)).ShowDialog();
     }
 }
