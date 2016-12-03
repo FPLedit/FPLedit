@@ -205,6 +205,8 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "ExtensionsForm";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "Erweiterungen";
             this.Load += new System.EventHandler(this.ExtensionsForm_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
