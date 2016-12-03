@@ -47,7 +47,7 @@ namespace FPLedit.Standard
                 { Tag = train });
             }
             view.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-            view.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            view.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);            
         }
 
         private void InitListView(ListView view)
@@ -80,7 +80,12 @@ namespace FPLedit.Standard
 
                 TrainEditForm tef = new TrainEditForm(train);
                 if (tef.ShowDialog() == DialogResult.OK)
+                {
                     UpdateListView(view, direction);
+                    var changedItem = view.Items.OfType<ListViewItem>().Where(i => i.Tag == train).First();
+                    changedItem.Selected = true;
+                    changedItem.EnsureVisible();
+                }
             }
             else if (message)
                 MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug bearbeiten");
@@ -96,6 +101,9 @@ namespace FPLedit.Standard
                 tt.Trains.Add(tra);
 
                 UpdateListView(view, direction);
+                var changedItem = view.Items.OfType<ListViewItem>().Where(i => i.Tag == tra).First();
+                changedItem.Selected = true;
+                changedItem.EnsureVisible();
             }
         }
 
@@ -108,7 +116,12 @@ namespace FPLedit.Standard
 
                 MetaEdit mef = new MetaEdit(train);
                 if (mef.ShowDialog() == DialogResult.OK)
+                {
                     UpdateListView(view, direction);
+                    var changedItem = view.Items.OfType<ListViewItem>().Where(i => i.Tag == train).First();
+                    changedItem.Selected = true;
+                    changedItem.EnsureVisible();
+                }
             }
             else
                 MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug-Metadaten bearbeiten");

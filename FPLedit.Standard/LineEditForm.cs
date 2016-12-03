@@ -54,11 +54,16 @@ namespace FPLedit.Standard
             if (listView.SelectedItems.Count > 0)
             {
                 ListViewItem item = listView.Items[listView.SelectedIndices[0]];
-                Station oldStation = tt.Stations[tt.Stations.IndexOf((Station)item.Tag)];
+                Station station = tt.Stations[tt.Stations.IndexOf((Station)item.Tag)];
 
-                EditStationForm nsf = new EditStationForm(oldStation);
+                EditStationForm nsf = new EditStationForm(station);
                 if (nsf.ShowDialog() == DialogResult.OK)
+                {
                     UpdateStations();
+                    var changedItem = listView.Items.OfType<ListViewItem>().Where(i => i.Tag == station).First();
+                    changedItem.Selected = true;
+                    changedItem.EnsureVisible();
+                }
             }
             else if (message)
                 MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Station bearbeiten");
@@ -73,7 +78,12 @@ namespace FPLedit.Standard
 
                 MetaEdit mef = new MetaEdit(station);
                 if (mef.ShowDialog() == DialogResult.OK)
+                {
                     UpdateStations();
+                    var changedItem = listView.Items.OfType<ListViewItem>().Where(i => i.Tag == station).First();
+                    changedItem.Selected = true;
+                    changedItem.EnsureVisible();
+                }
             }
             else
                 MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Stations-Metadaten bearbeiten");
@@ -81,12 +91,6 @@ namespace FPLedit.Standard
 
         private void DeleteStation()
         {
-            if (listView.SelectedItems.Count == 0)
-            {
-                MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Station löschen");
-                return;
-            }
-
             if (listView.SelectedItems.Count > 0)
             {
                 ListViewItem item = listView.Items[listView.SelectedIndices[0]];
@@ -94,6 +98,8 @@ namespace FPLedit.Standard
 
                 UpdateStations();
             }
+            else
+                MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Station löschen");
         }
 
         private void NewStation()
@@ -112,6 +118,9 @@ namespace FPLedit.Standard
                 }
 
                 UpdateStations();
+                var changedItem = listView.Items.OfType<ListViewItem>().Where(i => i.Tag == sta).First();
+                changedItem.Selected = true;
+                changedItem.EnsureVisible();
             }
         }
 

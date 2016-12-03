@@ -57,6 +57,9 @@ namespace FPLedit.Standard
             {
                 entity.Metadata[mef.Meta.Key] = mef.Meta.Value;
                 UpdateView();
+                var changedItem = listView.Items.OfType<ListViewItem>().Where(i => (string)i.Tag == mef.Meta.Key).First();
+                changedItem.Selected = true;
+                changedItem.EnsureVisible();
             }
         }
 
@@ -72,6 +75,9 @@ namespace FPLedit.Standard
                 {
                     entity.Metadata[mef.Meta.Key] = mef.Meta.Value;
                     UpdateView();
+                    var changedItem = listView.Items.OfType<ListViewItem>().Where(i => (string)i.Tag == mef.Meta.Key).First();
+                    changedItem.Selected = true;
+                    changedItem.EnsureVisible();
                 }
             }
             else if (message)
