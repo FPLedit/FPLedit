@@ -101,18 +101,18 @@ namespace FPLedit.JTrainGraphImport
 
         private Dictionary<string, string> colors = new Dictionary<string, string>()
         {
-            ["schwarz"] = "Black",
-            ["grau"] = "Gray",
-            ["weiß"] = "White",
-            ["rot"] = "Red",
-            ["orange"] = "Orange",
-            ["gelb"] = "Yellow",
-            ["blau"] = "Blue",
-            ["hellblau"] = "LightBlue",
-            ["grün"] = "Green",
-            ["dunkelgrün"] = "DrakGreen",
-            ["braun"] = "Brown",
-            ["magenta"] = "Magenta"
+            ["schwarz"] = "#000000",
+            ["grau"] = "#808080",
+            ["weiß"] = "#FFFFFF",
+            ["rot"] = "#FF0000",
+            ["orange"] = "#FFA500",
+            ["gelb"] = "#FFFF00",
+            ["blau"] = "#0000FF",
+            ["hellblau"] = "#ADD8E6",
+            ["grün"] = "#008000",
+            ["dunkelgrün"] = "#006400",
+            ["braun"] = "#A52A2A",
+            ["magenta"] = "#FF00FF"
         };
     }
 }
