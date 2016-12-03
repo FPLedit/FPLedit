@@ -32,6 +32,7 @@ namespace FPLedit
 
         private void VersionCheck()
         {
+            checkButton.Enabled = false;
             WebClient wc = new WebClient();
             wc.DownloadStringAsync(new Uri(string.Format(SettingsManager.Get("CheckUrl"), GetVersion())));
             wc.DownloadStringCompleted += (s, e) =>
@@ -44,22 +45,30 @@ namespace FPLedit
                     XmlNode ver = doc.DocumentElement.SelectSingleNode("/info/version");
                     XmlNode url = doc.DocumentElement.SelectSingleNode("/info/url");
 
-                    string nl = Environment.NewLine;
-                    DialogResult res = MessageBox.Show($"Eine neue Programmversion ({ver.InnerText}) ist verfügbar!{nl}{nl}Jetzt zur Download-Seite wechseln, um die neue Version herunterzuladen?",
-                        "Neue FPLedit-Version verfügbar", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+                    Version appVersion = new Version(GetVersion());
+                    Version onlineVersion = new Version(ver.InnerText);
 
-                    if (res == DialogResult.Yes)
-                        Process.Start(url.InnerText);
-                }
-                else if (e.Error == null)
-                {
-                    MessageBox.Show($"Sie benutzen bereits die aktuelle Version!",
+                    bool newAvailable = appVersion.CompareTo(onlineVersion) < 0;
+
+                    if (newAvailable)
+                    {
+                        string nl = Environment.NewLine;
+                        DialogResult res = MessageBox.Show($"Eine neue Programmversion ({ver.InnerText}) ist verfügbar!{nl}{nl}Jetzt zur Download-Seite wechseln, um die neue Version herunterzuladen?",
+                            "Neue FPLedit-Version verfügbar", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+
+                        if (res == DialogResult.Yes)
+                            Process.Start(url.InnerText);
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Sie benutzen bereits die aktuelle Version!",
                         "Auf neue Version prüfen");
+                    }
                 }
                 else
                 {
                     MessageBox.Show($"Verbindung mit dem Server fehlgeschlagen!",
-                "Auf neue Version prüfen");
+                        "Auf neue Version prüfen");
                 }
             };
         }
