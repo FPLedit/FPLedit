@@ -36,6 +36,7 @@
             this.licensePanel = new System.Windows.Forms.Panel();
             this.licenseLabel = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
+            this.dokuLabel = new System.Windows.Forms.Label();
             this.licenseGroupBox.SuspendLayout();
             this.licensePanel.SuspendLayout();
             this.SuspendLayout();
@@ -43,7 +44,7 @@
             // websiteLinkLabel
             // 
             this.websiteLinkLabel.AutoSize = true;
-            this.websiteLinkLabel.Location = new System.Drawing.Point(15, 62);
+            this.websiteLinkLabel.Location = new System.Drawing.Point(94, 62);
             this.websiteLinkLabel.Name = "websiteLinkLabel";
             this.websiteLinkLabel.Size = new System.Drawing.Size(145, 13);
             this.websiteLinkLabel.TabIndex = 1;
@@ -118,6 +119,15 @@
             this.button1.Text = "Schließen";
             this.button1.UseVisualStyleBackColor = true;
             // 
+            // dokuLabel
+            // 
+            this.dokuLabel.AutoSize = true;
+            this.dokuLabel.Location = new System.Drawing.Point(15, 62);
+            this.dokuLabel.Name = "dokuLabel";
+            this.dokuLabel.Size = new System.Drawing.Size(82, 13);
+            this.dokuLabel.TabIndex = 7;
+            this.dokuLabel.Text = "Dokumentation:";
+            // 
             // InfoForm
             // 
             this.AcceptButton = this.button1;
@@ -125,6 +135,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.button1;
             this.ClientSize = new System.Drawing.Size(358, 324);
+            this.Controls.Add(this.dokuLabel);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.licenseGroupBox);
             this.Controls.Add(this.copyrightLabel);
@@ -133,6 +144,8 @@
             this.Controls.Add(this.websiteLinkLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "InfoForm";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "FPLedit Info";
             this.licenseGroupBox.ResumeLayout(false);
@@ -152,5 +165,6 @@
         private System.Windows.Forms.Panel licensePanel;
         private System.Windows.Forms.Label licenseLabel;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label dokuLabel;
     }
 }
