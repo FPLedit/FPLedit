@@ -22,16 +22,19 @@ namespace FPLedit
         public void Error(string message)
         {
             this.Text += "Fehler: " + message + Environment.NewLine;
+            this.Select(0, 0);
         }
 
         public void Info(string message)
         {
             this.Text += message + Environment.NewLine;
+            this.Select(0, 0);
         }
 
         public void Warning(string message)
         {
             this.Text += "Warnung: " + message + Environment.NewLine;
+            this.Select(0, 0);
         }
     }
 }

@@ -5,11 +5,7 @@ using System.Linq;
 using System.Collections.Generic;
 using FPLedit.Shared;
 using System.ComponentModel;
-using System.Net;
-using System.Xml;
-using System.Diagnostics;
 using System.Drawing;
-using System.Reflection;
 
 namespace FPLedit
 {
