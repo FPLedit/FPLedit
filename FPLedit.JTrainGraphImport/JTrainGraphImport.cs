@@ -64,7 +64,7 @@ namespace FPLedit.JTrainGraphImport
                         i++;
                     }
 
-                    bool dir = GetDirection(ar, dp, stas.First(), stas.Last());
+                    bool dir = GetDirection(ar, dp);
                     trs.Add(new Train()
                     {
                         Name = name,
@@ -91,13 +91,12 @@ namespace FPLedit.JTrainGraphImport
             }
         }
 
-        private bool GetDirection(Dictionary<Station, TimeSpan> ar, Dictionary<Station, TimeSpan> dp, Station first, Station last)
+        private bool GetDirection(Dictionary<Station, TimeSpan> ar, Dictionary<Station, TimeSpan> dp)
         {
-            TimeSpan firsttime = ar.ContainsKey(first) ? ar.First().Value : dp.First().Value;
-            TimeSpan lasttime = ar.ContainsKey(last) ? ar.Last().Value : dp.Last().Value;
-
-            return firsttime > lasttime;
-        }        
+            float? lastArrival = ar.OrderBy(a => a.Value).LastOrDefault().Key?.Kilometre;
+            float? firstDeparture = dp.OrderBy(d => d.Value).FirstOrDefault().Key?.Kilometre;
+            return firstDeparture > lastArrival;
+        }
 
         private Dictionary<string, string> colors = new Dictionary<string, string>()
         {
