@@ -29,46 +29,189 @@ namespace FPLedit.BuchfahrplanExport
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("\r\n<!DOCTYPE html>\r\n<html>\r\n\t<head>\r\n\t\t<meta charset=\"utf-8\">\r\n\t\t<style>\r\n\t\t.tfz {" +
-                    "\r\n\t\t\tpadding-top:1px;\r\n\t\t\tpadding-right:1px;\r\n\t\t\tpadding-left:1px;\r\n\t\t\tcolor:bla" +
-                    "ck;\r\n\t\t\tfont-size:11.0pt;\r\n\t\t\tfont-weight:400;\r\n\t\t\tfont-style:normal;\r\n\t\t\ttext-d" +
-                    "ecoration:none;\r\n\t\t\tfont-family:\"Alte DIN 1451 Mittelschrift\", sans-serif;\r\n\t\t\tt" +
-                    "ext-align:general;\r\n\t\t\tvertical-align:bottom;\r\n\t\t\twhite-space:nowrap;\r\n\t\t}\r\n\t\tta" +
-                    "ble {\r\n\t\t\tborder-collapse: collapse;\r\n\t\t\ttable-layout:fixed;\r\n\t\t\twidth:454pt;\r\n\t" +
-                    "\t\tpage-break-before:always;\r\n\t\t\tmargin-left:auto;\r\n\t\t\tmargin-right:auto;\r\n\t\t}\r\n\t" +
-                    "\t.trainname {\r\n\t\t\theight:19.5pt;\r\n\t\t\tpadding-top:1px;\r\n\t\t\tpadding-right:1px;\r\n\t\t" +
-                    "\tpadding-left:1px;\r\n\t\t\tcolor:black;\r\n\t\t\tfont-size:15.0pt;\r\n\t\t\tfont-weight:400;\r\n" +
-                    "\t\t\tfont-style:normal;\r\n\t\t\ttext-decoration:none;\r\n\t\t\tfont-family:\"Alte DIN 1451 M" +
-                    "ittelschrift\", sans-serif;\r\n\t\t\ttext-align:center;\r\n\t\t\tvertical-align:middle;\r\n\t\t" +
-                    "\twhite-space:nowrap;\t\t\t\r\n\t\t}\r\n\t\t.linename {\r\n\t\t\tpadding-top:1px;\r\n\t\t\tpadding-rig" +
-                    "ht:1px;\r\n\t\t\tpadding-left:1px;\r\n\t\t\tcolor:black;\r\n\t\t\tfont-size:12.0pt;\r\n\t\t\tfont-we" +
-                    "ight:400;\r\n\t\t\tfont-style:normal;\r\n\t\t\ttext-decoration:none;\r\n\t\t\tfont-family:\"Alte" +
-                    " DIN 1451 Mittelschrift\", sans-serif;\r\n\t\t\ttext-align:center;\r\n\t\t\tvertical-align:" +
-                    "middle;\r\n\t\t\twhite-space:nowrap;\r\n\t\t}\r\n\t\t.spaltennummer {\r\n\t\t\tpadding-top:1px;\r\n\t" +
-                    "\t\tpadding-right:1px;\r\n\t\t\tpadding-left:1px;\r\n\t\t\tcolor:black;\r\n\t\t\tfont-size:11.0pt" +
-                    ";\r\n\t\t\tfont-weight:400;\r\n\t\t\tfont-style:normal;\r\n\t\t\ttext-decoration:none;\r\n\t\t\tfont" +
-                    "-family:\"Alte DIN 1451 Mittelschrift\", sans-serif;\r\n\t\t\ttext-align:center;\r\n\t\t\tve" +
-                    "rtical-align:top;\r\n\t\t\tborder-top:1.5pt solid windowtext;\r\n\t\t\tborder-right:1.5pt " +
-                    "solid windowtext;\r\n\t\t\tborder-bottom:.5pt solid windowtext;\r\n\t\t\tborder-left:1.5pt" +
-                    " solid windowtext;\r\n\t\t\twhite-space:nowrap;\r\n\t\t}\r\n\t\t.spaltenkopf\r\n\t\t{\r\n\t\t\tpadding" +
-                    "-top:1px;\r\n\t\t\tpadding-right:1px;\r\n\t\t\tpadding-left:1px;\r\n\t\t\tcolor:black;\r\n\t\t\tfont" +
-                    "-size:11.0pt;\r\n\t\t\tfont-weight:400;\r\n\t\t\tfont-style:normal;\r\n\t\t\ttext-decoration:no" +
-                    "ne;\r\n\t\t\tfont-family:\"Alte DIN 1451 Mittelschrift\", sans-serif;\r\n\t\t\ttext-align:ce" +
-                    "nter;\r\n\t\t\tvertical-align:top;\r\n\t\t\tborder-top:.5pt solid windowtext;\r\n\t\t\tborder-r" +
-                    "ight:1.5pt solid windowtext;\r\n\t\t\tborder-bottom:1.5pt solid windowtext;\r\n\t\t\tborde" +
-                    "r-left:1.5pt solid windowtext;\r\n\t\t\twhite-space:normal;\r\n\t\t}\r\n\t\t.zug {\r\n\t\t\tpaddin" +
-                    "g-top:1px;\r\n\t\t\tpadding-right:1px;\r\n\t\t\tpadding-left:1px;\r\n\t\t\tcolor:black;\r\n\t\t\tfon" +
-                    "t-size:11.0pt;\r\n\t\t\tfont-weight:400;\r\n\t\t\tfont-style:normal;\r\n\t\t\ttext-decoration:n" +
-                    "one;\r\n\t\t\tfont-family:\"Alte DIN 1451 Mittelschrift\", sans-serif;\r\n\t\t\ttext-align:c" +
-                    "enter;\r\n\t\t\tvertical-align:top;\r\n\t\t\tborder-top:none;\r\n\t\t\tborder-right:1.5pt solid" +
-                    " windowtext;\r\n\t\t\tborder-bottom:none;border-left:1.5pt solid windowtext;\r\n\t\t\twhit" +
-                    "e-space:nowrap;\r\n\t\t}\r\n\t\t.tabellenende {\r\n\t\t\tpadding-top:1px;\r\n\t\t\tpadding-right:1" +
-                    "px;\r\n\t\t\tpadding-left:1px;\r\n\t\t\tcolor:black;\r\n\t\t\tfont-size:11.0pt;\r\n\t\t\tfont-weight" +
-                    ":400;\r\n\t\t\tfont-style:normal;\r\n\t\t\ttext-decoration:none;\r\n\t\t\tfont-family:\"Alte DIN" +
-                    " 1451 Mittelschrift\", sans-serif;\r\n\t\t\ttext-align:center;\r\n\t\t\tvertical-align:top;" +
-                    "\r\n\t\t\tborder-top:none;\r\n\t\t\tborder-right:1.5pt solid windowtext;\r\n\t\t\tborder-bottom" +
-                    ":1.5pt solid windowtext;\r\n\t\t\tborder-left:1.5pt solid windowtext;\r\n\t\t\twhite-space" +
-                    ":nowrap;\r\n\t\t}\r\n\t\t</style>\r\n\t</head>\r\n\t<body>\r\n\t\t<div>\r\n\t\t\t");
+            this.Write(@"
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset=""utf-8"">
+		<style>
+		.tfz {
+			padding-top:1px;
+			padding-right:1px;
+			padding-left:1px;
+			color:black;
+			font-size:11.0pt;
+			font-weight:400;
+			font-style:normal;
+			text-decoration:none;
+			font-family:");
+            
+            #line 22 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\BuchfahrplanTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(font));
+            
+            #line default
+            #line hidden
+            this.Write(@", sans-serif;
+			text-align:general;
+			vertical-align:bottom;
+			white-space:nowrap;
+		}
+		table {
+			border-collapse: collapse;
+			table-layout:fixed;
+			width:454pt;
+			page-break-before:always;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		.trainname {
+			height:19.5pt;
+			padding-top:1px;
+			padding-right:1px;
+			padding-left:1px;
+			color:black;
+			font-size:15.0pt;
+			font-weight:400;
+			font-style:normal;
+			text-decoration:none;
+			font-family:");
+            
+            #line 45 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\BuchfahrplanTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(font));
+            
+            #line default
+            #line hidden
+            this.Write(@", sans-serif;
+			text-align:center;
+			vertical-align:middle;
+			white-space:nowrap;			
+		}
+		.linename {
+			padding-top:1px;
+			padding-right:1px;
+			padding-left:1px;
+			color:black;
+			font-size:12.0pt;
+			font-weight:400;
+			font-style:normal;
+			text-decoration:none;
+			font-family:");
+            
+            #line 59 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\BuchfahrplanTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(font));
+            
+            #line default
+            #line hidden
+            this.Write(@", sans-serif;
+			text-align:center;
+			vertical-align:middle;
+			white-space:nowrap;
+		}
+		.spaltennummer {
+			padding-top:1px;
+			padding-right:1px;
+			padding-left:1px;
+			color:black;
+			font-size:11.0pt;
+			font-weight:400;
+			font-style:normal;
+			text-decoration:none;
+			font-family:");
+            
+            #line 73 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\BuchfahrplanTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(font));
+            
+            #line default
+            #line hidden
+            this.Write(@", sans-serif;
+			text-align:center;
+			vertical-align:top;
+			border-top:1.5pt solid black;
+			border-right:1.5pt solid black;
+			border-bottom:.5pt solid black;
+			border-left:1.5pt solid black;
+			white-space:nowrap;
+		}
+		.spaltenkopf
+		{
+			padding-top:1px;
+			padding-right:1px;
+			padding-left:1px;
+			color:black;
+			font-size:11.0pt;
+			font-weight:400;
+			font-style:normal;
+			text-decoration:none;
+			font-family:");
+            
+            #line 92 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\BuchfahrplanTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(font));
+            
+            #line default
+            #line hidden
+            this.Write(@", sans-serif;
+			text-align:center;
+			vertical-align:top;
+			border-top:.5pt solid black;
+			border-right:1.5pt solid black;
+			border-bottom:1.5pt solid black;
+			border-left:1.5pt solid black;
+			white-space:normal;
+		}
+		.zug {
+			padding-top:1px;
+			padding-right:1px;
+			padding-left:1px;
+			color:black;
+			font-size:11.0pt;
+			font-weight:400;
+			font-style:normal;
+			text-decoration:none;
+			font-family:");
+            
+            #line 110 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\BuchfahrplanTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(font));
+            
+            #line default
+            #line hidden
+            this.Write(@", sans-serif;
+			text-align:center;
+			vertical-align:top;
+			border-top:none;
+			border-right:1.5pt solid black;
+			border-bottom:none;border-left:1.5pt solid black;
+			white-space:nowrap;
+		}
+		.tabellenende {
+			padding-top:1px;
+			padding-right:1px;
+			padding-left:1px;
+			color:black;
+			font-size:11.0pt;
+			font-weight:400;
+			font-style:normal;
+			text-decoration:none;
+			font-family:");
+            
+            #line 127 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\BuchfahrplanTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(font));
+            
+            #line default
+            #line hidden
+            this.Write(@", sans-serif;
+			text-align:center;
+			vertical-align:top;
+			border-top:none;
+			border-right:1.5pt solid black;
+			border-bottom:1.5pt solid black;
+			border-left:1.5pt solid black;
+			white-space:nowrap;
+		}
+		</style>
+	</head>
+	<body>
+		<div>
+			");
             
             #line 140 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\BuchfahrplanTemplate.tt"
  foreach (Train tra in tt.Trains) { 

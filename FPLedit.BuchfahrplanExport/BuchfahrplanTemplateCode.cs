@@ -9,13 +9,12 @@ namespace FPLedit.BuchfahrplanExport
     partial class BuchfahrplanTemplate
     {
         private Timetable tt;
-
-        public const bool TOP_DIRECTION = false;
-        public const bool BOTTOM_DIRECTION = true;
+        private string font;
 
         public BuchfahrplanTemplate(Timetable tt)
         {
             this.tt = tt;
+            font = tt.GetMeta("BuchfahrplanFont", "\"Alte DIN 1451 Mittelschrift\"");
         }
     }
 }
