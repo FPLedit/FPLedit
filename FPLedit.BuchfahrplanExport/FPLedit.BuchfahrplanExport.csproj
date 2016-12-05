@@ -42,6 +42,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuchfahrplanTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BuchfahrplanTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BuchfahrplanTemplateCode.cs" />
     <Compile Include="HtmlExport.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -57,7 +63,6 @@
     <Compile Include="StationVelocityEditForm.Designer.cs">
       <DependentUpon>StationVelocityEditForm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Templates\Main" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj">
@@ -74,10 +79,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Templates\Line" />
+    <Content Include="BuchfahrplanTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>BuchfahrplanTemplate.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Templates\Train" />
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

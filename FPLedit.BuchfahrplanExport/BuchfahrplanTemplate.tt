@@ -1,4 +1,11 @@
-﻿<!DOCTYPE html>
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="FPLedit.Shared" #>
+
+<!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="utf-8">
@@ -130,7 +137,76 @@
 	</head>
 	<body>
 		<div>
-			{0}			
+			<# foreach (Train tra in tt.Trains) { #>
+			<table>
+				<col width=80 span=2>
+				<col width=285>
+				<col width=80 span=2>
+				<tr>
+					<td colspan=5 class=trainname><#= tra.Name #></td>
+				</tr>
+				<tr>
+					<td colspan=5 class=linename><#= tra.Line #></td>
+				</tr>
+				<tr>
+					<td class=tfz>Tfz <#= tra.Locomotive #></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td class=spaltennummer>0</td>
+					<td class=spaltennummer>1</td>
+					<td class=spaltennummer>2</td>
+					<td class=spaltennummer>3</td>
+					<td class=spaltennummer>4</td>
+				</tr>
+				<tr height=133> 
+					<td class=spaltenkopf>Lage<br>der<br>Betriebs-<br>stelle<br><br>(km)</td>
+					<td class=spaltenkopf>Höchst-<br>Geschwin-<br>digkeit<br><br><br>(km/h)</td>
+					<td class=spaltenkopf>Betriebsstellen,<br>ständige Langsamfahrstellen,<br>verkürzter Vorsignalabstand</td>
+					<td class=spaltenkopf>Ankunft</td><td class=spaltenkopf>Abfahrt<br>oder Durch-<br>fahrt</td>
+				</tr>
+				<# foreach (var s in tt.GetStationsOrderedByDirection(tra.Direction)) { #>
+				<tr height=21>
+					<td class=zug><#= s.Kilometre.ToString("0.0") #></td>
+					<td class=zug><#= s.GetMetaInt("MaxVelocity", 0).ToString("#") #></td>
+					<td class=zug><#= s.Name #></td>
+					<td class=zug><#= tra.Arrivals.ContainsKey(s) ? tra.Arrivals[s].ToShortTimeString() : "" #></td>
+					<td class=zug><#= tra.Departures.ContainsKey(s) ? tra.Departures[s].ToShortTimeString() : "" #></td>
+				</tr>
+				<# } #>
+				<tr height=21>
+					<td class=tabellenende></td>
+					<td class=tabellenende></td>
+					<td class=tabellenende></td>
+					<td class=tabellenende></td>
+					<td class=tabellenende></td>
+				</tr>
+				<tr height=21>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr height=21>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr height=21>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</table>
+			<# } #>
 		</div>
 	</body>
 </html>

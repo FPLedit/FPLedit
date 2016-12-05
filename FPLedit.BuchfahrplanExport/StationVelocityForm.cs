@@ -42,7 +42,7 @@ namespace FPLedit.BuchfahrplanExport
                 listView.Items.Add(new ListViewItem(new[] {
                     station.Name,
                     station.GetMeta("MaxVelocity", velocity),
-                }) { Tag = station });
+                }) { Tag = station });                
             }
 
             listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
@@ -54,11 +54,17 @@ namespace FPLedit.BuchfahrplanExport
             if (listView.SelectedItems.Count > 0)
             {
                 ListViewItem item = listView.Items[listView.SelectedIndices[0]];
-                Station train = tt.Stations[tt.Stations.IndexOf((Station)item.Tag)];
+                Station station = tt.Stations[tt.Stations.IndexOf((Station)item.Tag)];
 
-                StationVelocityEditForm vef = new StationVelocityEditForm(train);
+                StationVelocityEditForm vef = new StationVelocityEditForm(station);
                 if (vef.ShowDialog() == DialogResult.OK)
-                    UpdateStations();                
+                {
+                    UpdateStations();
+                    var changedItem = listView.Items.OfType<ListViewItem>().Where(i => i.Tag == station).First();
+                    changedItem.Selected = true;
+                    changedItem.EnsureVisible();
+                }
+
             }
             else if (message)
                 MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Höchstgeschwindigkeit ändern");
