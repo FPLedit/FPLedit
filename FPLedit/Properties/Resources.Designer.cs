@@ -61,16 +61,8 @@ namespace FPLedit.Properties {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die FPLedit
-        ///
-        ///Version {version}
-        ///
-        ///© 2015-2016 Manuel Huber
-        ///https://www.manuelhu.de
-        ///
-        ///FPledit darf zu nicht-kommerziellen und kommerziellen Zwecken kostenlos heruntergeladen und verwendet werden. Die Weitergabe des Programms darf nur unentgeltlich und nicht-öffentlich geschehen. Wenn das Programm oder damit generierte Fahrpläne kommerziell genutzt  werden, bitte ich Sie mir einen Hinweis zu senden.
-        ///
-        ///Da dieses Programm kostenlos verteilt wird haftet der Autor nicht für mögliche Schäden durch die Verwendung  [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die FPledit darf für den nicht-kommerziellen Gebrauch (dies schließt die Veröffentlichung damit erstellter Fahrpläne auf privaten Websites ausdrücklich ein) kostenlos heruntergeladen und verwendet werden. Die Weitergabe oder Bereitstellung des Programms über eine öffentliche Plattform oder gegen Entgelt ist nur nach vorheriger Zustimmung des Programmautors gestattet. Verweisen Sie bitte stattdessen auf die offizielle Website des Programms.
+        ///Eine kommerzielle Nutzung des Programms bedarf meiner vorherigen Zustim [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string Info {
             get {

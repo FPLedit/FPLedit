@@ -19,58 +19,41 @@ namespace FPLedit
         public InfoForm()
         {
             InitializeComponent();
+            UpdateManager mg = new UpdateManager();
 
             licenseLabel.Text = Properties.Resources.Info;
 
-            versionLabel.Text = versionLabel.Text.Replace("{version}", GetVersion());
-        }        
-
-        private string GetVersion()
-        {
-            return FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
+            versionLabel.Text = versionLabel.Text.Replace("{version}", mg.GetCurrentVersion().ToString());
         }
 
         private void VersionCheck()
         {
-            checkButton.Enabled = false;
-            WebClient wc = new WebClient();
-            wc.DownloadStringAsync(new Uri(string.Format(SettingsManager.Get("CheckUrl"), GetVersion())));
-            wc.DownloadStringCompleted += (s, e) =>
+            UpdateManager mg = new UpdateManager();
+            mg.CheckResult = vi =>
             {
-                if (e.Error == null && e.Result != "")
+                if (vi != null)
                 {
-                    XmlDocument doc = new XmlDocument();
-                    doc.LoadXml(e.Result);
+                    string nl = Environment.NewLine;
+                    DialogResult res = MessageBox.Show($"Eine neue Programmversion ({vi.Version.ToString()}) ist verfügbar!{nl}{nl}Jetzt zur Download-Seite wechseln, um die neue Version herunterzuladen?",
+                        "Neue FPLedit-Version verfügbar", MessageBoxButtons.YesNo);
 
-                    XmlNode ver = doc.DocumentElement.SelectSingleNode("/info/version");
-                    XmlNode url = doc.DocumentElement.SelectSingleNode("/info/url");
-
-                    Version appVersion = new Version(GetVersion());
-                    Version onlineVersion = new Version(ver.InnerText);
-
-                    bool newAvailable = appVersion.CompareTo(onlineVersion) < 0;
-
-                    if (newAvailable)
-                    {
-                        string nl = Environment.NewLine;
-                        DialogResult res = MessageBox.Show($"Eine neue Programmversion ({ver.InnerText}) ist verfügbar!{nl}{nl}Jetzt zur Download-Seite wechseln, um die neue Version herunterzuladen?",
-                            "Neue FPLedit-Version verfügbar", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
-
-                        if (res == DialogResult.Yes)
-                            Process.Start(url.InnerText);
-                    }
-                    else
-                    {
-                        MessageBox.Show($"Sie benutzen bereits die aktuelle Version!",
-                        "Auf neue Version prüfen");
-                    }
+                    if (res == DialogResult.Yes)
+                        Process.Start(vi.DownloadUrl);
                 }
                 else
                 {
-                    MessageBox.Show($"Verbindung mit dem Server fehlgeschlagen!",
+                    MessageBox.Show($"Sie benutzen bereits die aktuelle Version!",
                         "Auf neue Version prüfen");
                 }
             };
+            mg.CheckError = ex =>
+            {
+                MessageBox.Show($"Verbindung mit dem Server fehlgeschlagen!",
+                    "Auf neue Version prüfen");
+            };
+
+            mg.CheckAsync();
+            checkButton.Enabled = false;
         }
 
         private void websiteLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
