@@ -39,7 +39,7 @@
             this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.extensionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.logger = new FPLedit.LogTextBox();
+            this.logTextBox = new FPLedit.LogTextBox();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -117,23 +117,23 @@
             this.extensionsToolStripMenuItem.Text = "Erweiterungen";
             this.extensionsToolStripMenuItem.Click += new System.EventHandler(this.extensionsToolStripMenuItem_Click);
             // 
-            // logger
+            // logTextBox
             // 
-            this.logger.BackColor = System.Drawing.Color.White;
-            this.logger.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.logger.Location = new System.Drawing.Point(0, 24);
-            this.logger.Multiline = true;
-            this.logger.Name = "logger";
-            this.logger.ReadOnly = true;
-            this.logger.Size = new System.Drawing.Size(441, 237);
-            this.logger.TabIndex = 2;
+            this.logTextBox.BackColor = System.Drawing.Color.White;
+            this.logTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.logTextBox.Location = new System.Drawing.Point(0, 24);
+            this.logTextBox.Multiline = true;
+            this.logTextBox.Name = "logTextBox";
+            this.logTextBox.ReadOnly = true;
+            this.logTextBox.Size = new System.Drawing.Size(441, 237);
+            this.logTextBox.TabIndex = 2;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(441, 261);
-            this.Controls.Add(this.logger);
+            this.Controls.Add(this.logTextBox);
             this.Controls.Add(this.menuStrip);
             this.Icon = global::FPLedit.Properties.Resources.programm;
             this.MainMenuStrip = this.menuStrip;
@@ -156,7 +156,7 @@
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
-        private LogTextBox logger;
+        private LogTextBox logTextBox;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem infoToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;

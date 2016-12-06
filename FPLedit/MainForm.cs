@@ -23,6 +23,8 @@ namespace FPLedit
 
         private ExtensionManager extensionManager;
 
+        private MultipleLogger logger;
+
         public FileState FileState
         {
             get { return fileState; }
@@ -64,7 +66,10 @@ namespace FPLedit
             exporters = new List<IExport>();
             importers = new List<IImport>();
 
-            fileState = new FileState();            
+            fileState = new FileState();
+            logger = new MultipleLogger();
+            logger.Loggers.Add(logTextBox);
+            //logger.Loggers.Add(new ConsoleLogger());
         }
 
         private void Form1_Load(object sender, EventArgs e)

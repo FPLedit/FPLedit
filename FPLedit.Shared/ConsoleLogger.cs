@@ -19,7 +19,7 @@ namespace FPLedit.Shared
 
         public void Warning(string message)
         {
-            Console.WriteLine("Warnung; " + message);
+            Console.WriteLine("Warnung: " + message);
         }
     }
 }
