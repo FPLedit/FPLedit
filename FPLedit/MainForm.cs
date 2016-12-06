@@ -68,13 +68,33 @@ namespace FPLedit
         }
 
         private void Form1_Load(object sender, EventArgs e)
-        {
+        {   
+            // Extensions laden & initialisieren (=> Initialisiert Importer/Exporter)
             extensionManager = new ExtensionManager();
             foreach (var plugin in extensionManager.EnabledPlugins)
                 plugin.Init(this);
 
             saveFileDialog.Filter = string.Join("|", exporters.Select(ex => ex.Filter));
-            openFileDialog.Filter = string.Join("|", importers.Select(im => im.Filter));            
+            openFileDialog.Filter = string.Join("|", importers.Select(im => im.Filter));
+
+            // Parameter Fpledit.exe [Importer] [Dateiname]
+            string[] args = Environment.GetCommandLineArgs();
+            if (args.Length >= 3)
+            {
+                var import = importers.FirstOrDefault(i => i.GetType().FullName == args[1]);
+                if (import != null && File.Exists(args[2]))
+                {
+                    logger.Info("Öffne Datei " + openFileDialog.FileName);
+                    Timetable = import.Import(args[2], logger);
+                    if (Timetable == null)
+                        return;
+                    logger.Info("Datei erfolgeich geöffnet!");
+                    fileState.Opened = true;
+                    fileState.Saved = true;
+                    fileState.FileName = args[2];
+                    OnFileStateChanged();
+                }
+            }
         }
 
         private void Open()
