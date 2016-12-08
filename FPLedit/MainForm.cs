@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using FPLedit.Shared;
 using System.ComponentModel;
 using System.Drawing;
+using FPLedit.Shared.Logger;
 
 namespace FPLedit
 {
