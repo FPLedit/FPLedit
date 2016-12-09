@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace FPLedit.BildfahrplanExport
         {
             get
             {
-                return "Bildfahrplan als Bitmap (*.bmp)|*.bmp";
+                return "Bildfahrplan als PNG (*.png)|*.png";
             }
         }
 
@@ -34,7 +35,7 @@ namespace FPLedit.BildfahrplanExport
                 Bitmap bmp = new Bitmap(1000, renderer.GetHeight());
                 using (var g = Graphics.FromImage(bmp))
                     renderer.Draw(g);
-                bmp.Save(filename);
+                bmp.Save(filename, ImageFormat.Png);
                 return true;
             }
             catch
