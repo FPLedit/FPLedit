@@ -21,7 +21,7 @@ namespace FPLedit
             InitializeComponent();
             UpdateManager mg = new UpdateManager();
 
-            licenseLabel.Text = Properties.Resources.Info;
+            textBox1.Text = Properties.Resources.Info;
 
             versionLabel.Text = versionLabel.Text.Replace("{version}", mg.GetCurrentVersion().ToString());
         }

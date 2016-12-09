@@ -33,12 +33,10 @@
             this.checkButton = new System.Windows.Forms.Button();
             this.copyrightLabel = new System.Windows.Forms.Label();
             this.licenseGroupBox = new System.Windows.Forms.GroupBox();
-            this.licensePanel = new System.Windows.Forms.Panel();
-            this.licenseLabel = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.dokuLabel = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.licenseGroupBox.SuspendLayout();
-            this.licensePanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // websiteLinkLabel
@@ -82,32 +80,14 @@
             // 
             // licenseGroupBox
             // 
-            this.licenseGroupBox.Controls.Add(this.licensePanel);
+            this.licenseGroupBox.Controls.Add(this.textBox1);
             this.licenseGroupBox.Location = new System.Drawing.Point(12, 94);
             this.licenseGroupBox.Name = "licenseGroupBox";
+            this.licenseGroupBox.Padding = new System.Windows.Forms.Padding(7);
             this.licenseGroupBox.Size = new System.Drawing.Size(334, 179);
             this.licenseGroupBox.TabIndex = 5;
             this.licenseGroupBox.TabStop = false;
             this.licenseGroupBox.Text = "Lizenz / Hinweise";
-            // 
-            // licensePanel
-            // 
-            this.licensePanel.AutoScroll = true;
-            this.licensePanel.Controls.Add(this.licenseLabel);
-            this.licensePanel.Location = new System.Drawing.Point(6, 19);
-            this.licensePanel.Name = "licensePanel";
-            this.licensePanel.Size = new System.Drawing.Size(322, 154);
-            this.licensePanel.TabIndex = 2;
-            // 
-            // licenseLabel
-            // 
-            this.licenseLabel.AutoSize = true;
-            this.licenseLabel.Location = new System.Drawing.Point(3, 0);
-            this.licenseLabel.MaximumSize = new System.Drawing.Size(290, 0);
-            this.licenseLabel.Name = "licenseLabel";
-            this.licenseLabel.Size = new System.Drawing.Size(66, 13);
-            this.licenseLabel.TabIndex = 0;
-            this.licenseLabel.Text = "licenseLabel";
             // 
             // button1
             // 
@@ -127,6 +107,19 @@
             this.dokuLabel.Size = new System.Drawing.Size(82, 13);
             this.dokuLabel.TabIndex = 7;
             this.dokuLabel.Text = "Dokumentation:";
+            // 
+            // textBox1
+            // 
+            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox1.Cursor = System.Windows.Forms.Cursors.Default;
+            this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBox1.Location = new System.Drawing.Point(7, 20);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBox1.Size = new System.Drawing.Size(320, 152);
+            this.textBox1.TabIndex = 0;
             // 
             // InfoForm
             // 
@@ -149,8 +142,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "FPLedit Info";
             this.licenseGroupBox.ResumeLayout(false);
-            this.licensePanel.ResumeLayout(false);
-            this.licensePanel.PerformLayout();
+            this.licenseGroupBox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -162,9 +154,8 @@
         private System.Windows.Forms.Button checkButton;
         private System.Windows.Forms.Label copyrightLabel;
         private System.Windows.Forms.GroupBox licenseGroupBox;
-        private System.Windows.Forms.Panel licensePanel;
-        private System.Windows.Forms.Label licenseLabel;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label dokuLabel;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
