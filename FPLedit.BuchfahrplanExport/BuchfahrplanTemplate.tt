@@ -91,12 +91,13 @@
 			border-bottom:1.5pt solid black;
 			border-left:1.5pt solid black;
 		}
+		<#= additionalCss #>
 		</style>
 	</head>
 	<body>
 		<div>
 			<# foreach (Train tra in tt.Trains) { #>
-			<table>
+			<table id="<#= HtmlId(tra.Name) #>">
 				<col style="width:80px;" span=2>
 				<col style="width:285px;">
 				<col style="width:80px;" span=2>
