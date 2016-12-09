@@ -78,7 +78,7 @@ namespace FPLedit.BildfahrplanExport
             g.Clear(backgroundColor);
 
             if (width == 0) width = g.VisibleClipBounds.Width;
-            if (height == 0) height = g.VisibleClipBounds.Height;
+            if (height == 0) height = GetHeight();
 
             if (!marginsCalced)
             {
@@ -108,7 +108,7 @@ namespace FPLedit.BildfahrplanExport
                 hour = !hour;
             }
 
-            g.ExcludeClip(new Rectangle(0, GetHeight() - (int)marginBottom, (int)width, (int)(height - GetHeight() + marginBottom))); // Unterer Rand nicht bemalbar
+            g.ExcludeClip(new Rectangle(0, GetHeight() - (int)marginBottom, (int)width, (int)marginBottom + 200)); // Unterer Rand nicht bemalbar (200: Konstante für Page Margins)
 
             // Stationenaufteilung
             var stations = tt.Stations.OrderBy(s => s.Kilometre);

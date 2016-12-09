@@ -73,6 +73,7 @@ namespace FPLedit.BildfahrplanExport
         {            
             doc = new PrintDocument();
             doc.PrintPage += Doc_PrintPage;
+            doc.DocumentName = "Bildfahrplan generiert mit FPLedit";
             PrintDialog dlg = new PrintDialog();
             dlg.AllowCurrentPage = false;
             dlg.AllowPrintToFile = false;
