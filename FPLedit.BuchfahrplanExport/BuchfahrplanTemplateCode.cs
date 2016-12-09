@@ -21,7 +21,7 @@ namespace FPLedit.BuchfahrplanExport
 
         private string HtmlId(string text)
         {
-            return text.Replace("#", "")
+            return "train-" + text.Replace("#", "")
                 .Replace(" ", "-")
                 .Replace(".", "-")
                 .Replace(":", "-")
