@@ -17,24 +17,37 @@ namespace FPLedit
             this.Multiline = true;
             this.ReadOnly = true;
             this.BackColor = Color.White;
+            this.ScrollBars = ScrollBars.Vertical;
         }
 
         public void Error(string message)
         {
             this.Text += "Fehler: " + message + Environment.NewLine;
-            this.Select(0, 0);
+            this.ScrollToEnd();
         }
 
         public void Info(string message)
         {
             this.Text += message + Environment.NewLine;
-            this.Select(0, 0);
+            this.ScrollToEnd();
         }
 
         public void Warning(string message)
         {
             this.Text += "Warnung: " + message + Environment.NewLine;
-            this.Select(0, 0);
+            this.ScrollToEnd();
+        }
+
+        protected override void OnLostFocus(EventArgs e)
+        {
+            this.ScrollToEnd();
+            base.OnLostFocus(e);
+        }
+
+        private void ScrollToEnd()
+        {
+            this.Select(this.Text.Length, 0);
+            this.ScrollToCaret();
         }
     }
 }
