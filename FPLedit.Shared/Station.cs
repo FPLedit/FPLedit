@@ -34,21 +34,5 @@ namespace FPLedit.Shared
             else
                 return Name;
         }
-
-        public static Station Deserialize(BinaryReader reader)
-        {
-            var res = new Station();
-            res.Name = reader.ReadString();
-            res.Kilometre = reader.ReadSingle();
-            res.Metadata = DeserializeMeta(reader);
-            return res;
-        }
-
-        public void Serialize(BinaryWriter writer)
-        {
-            writer.Write(Name);
-            writer.Write(Kilometre);
-            SerializeMeta(writer);
-        }
     }
 }

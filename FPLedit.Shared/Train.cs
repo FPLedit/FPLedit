@@ -90,62 +90,6 @@ namespace FPLedit.Shared
         public string DaysToString()
         {
             return DaysToString(Days);
-        }
-
-        public static Train Deserialize(BinaryReader reader, Dictionary<int, Station> stations)
-        {
-            Train res = new Train();
-            res.Name = reader.ReadString();
-            res.Locomotive = reader.ReadString();
-            res.Direction = reader.ReadBoolean();
-            res.Line = reader.ReadString();
-            res.Days = ParseDays(reader.ReadString());
-            res.Metadata = DeserializeMeta(reader);
-
-            int arr_count = reader.ReadInt32();
-            for (int i = 0; i < arr_count; i++)
-            {
-                int sta_id = reader.ReadInt32();
-                Station sta = stations[sta_id];
-                string time_str = reader.ReadString();
-                TimeSpan time = TimeSpan.Parse(time_str);
-                res.Arrivals.Add(sta, time);
-            }
-
-            int dep_count = reader.ReadInt32();
-            for (int i = 0; i < dep_count; i++)
-            {
-                int sta_id = reader.ReadInt32();
-                Station sta = stations[sta_id];
-                string time_str = reader.ReadString();
-                TimeSpan time = TimeSpan.Parse(time_str);
-                res.Departures.Add(sta, time);
-            }
-            return res;
-        }
-
-        public void Serialize(BinaryWriter writer, Dictionary<Station, int> stations)
-        {
-            writer.Write(Name);
-            writer.Write(Locomotive);
-            writer.Write(Direction);
-            writer.Write(Line);
-            writer.Write(DaysToBinString());
-            SerializeMeta(writer);
-
-            writer.Write(Arrivals.Count);
-            foreach (var item in Arrivals)
-            {
-                writer.Write(stations[item.Key]);
-                writer.Write(item.Value.ToString());
-            }
-
-            writer.Write(Departures.Count);
-            foreach (var item in Departures)
-            {
-                writer.Write(stations[item.Key]);
-                writer.Write(item.Value.ToString());
-            }
-        }
+        }        
     }
 }

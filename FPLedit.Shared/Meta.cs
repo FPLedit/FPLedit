@@ -57,28 +57,5 @@ namespace FPLedit.Shared
         {
             return GetMeta(key, defaultValue, TimeSpan.Parse);
         }
-
-        public static Dictionary<string, string> DeserializeMeta(BinaryReader reader)
-        {
-            var res = new Dictionary<string, string>();
-            int count = reader.ReadInt32();
-            for (int i = 0; i < count; i++)
-            {
-                string key = reader.ReadString();
-                string value = reader.ReadString();
-                res.Add(key, value);
-            }
-            return res;
-        }
-
-        public void SerializeMeta(BinaryWriter writer)
-        {
-            writer.Write(Metadata.Count);
-            foreach (var pair in Metadata)
-            {
-                writer.Write(pair.Key);
-                writer.Write(pair.Value);
-            }
-        }
     }
 }

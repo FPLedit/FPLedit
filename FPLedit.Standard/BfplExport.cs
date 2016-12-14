@@ -28,7 +28,8 @@ namespace FPLedit.Standard
             {
                 using (FileStream stream = File.Open(filename, FileMode.OpenOrCreate))
                 {
-                    tt.SaveToStream(stream);
+                    using (BinaryWriter writer = new BinaryWriter(stream))
+                        SerializeTimetable(writer, tt);
                     return true;
                 }                
             }
@@ -36,6 +37,64 @@ namespace FPLedit.Standard
             {
                 logger.Error("BfplExport: " + ex.Message);
                 return false;
+            }
+        }
+
+        public void SerializeTimetable(BinaryWriter writer, Timetable tt)
+        {
+            writer.Write(Timetable.MAGIC);
+            tt.Name = "";
+            writer.Write(tt.Name);
+            SerializeMeta(writer, tt);
+
+            var stations = new Dictionary<Station, int>();
+            writer.Write(tt.Stations.Count);
+            int i = 0;
+            foreach (var sta in tt.Stations)
+            {
+                writer.Write(i); // STA_UNIQ_ID
+
+                writer.Write(sta.Name);
+                writer.Write(sta.Kilometre);
+                SerializeMeta(writer, sta);
+
+                stations.Add(sta, i);
+                i++;
+            }
+
+            writer.Write(tt.Trains.Count);
+            foreach (var tra in tt.Trains)
+            {
+                writer.Write(tra.Name);
+                writer.Write(tra.Locomotive);
+                writer.Write(tra.Direction);
+                writer.Write(tra.Line);
+                writer.Write(tra.DaysToBinString());
+                SerializeMeta(writer, tra);
+
+                writer.Write(tra.Arrivals.Count);
+                foreach (var item in tra.Arrivals)
+                {
+                    writer.Write(stations[item.Key]);
+                    writer.Write(item.Value.ToString());
+                }
+
+                writer.Write(tra.Departures.Count);
+                foreach (var item in tra.Departures)
+                {
+                    writer.Write(stations[item.Key]);
+                    writer.Write(item.Value.ToString());
+                }
+            }
+        }
+
+        public void SerializeMeta(BinaryWriter writer, Meta m)
+        {
+            writer.Write(m.Metadata.Count);
+            foreach (var pair in m.Metadata)
+            {
+                writer.Write(pair.Key);
+                writer.Write(pair.Value);
             }
         }
     }
