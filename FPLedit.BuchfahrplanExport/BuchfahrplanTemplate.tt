@@ -130,7 +130,7 @@
 				<# foreach (var s in tt.GetStationsOrderedByDirection(tra.Direction)) { #>
 				<tr>
 					<td class="zug"><#= s.Kilometre.ToString("0.0") #></td>
-					<td class="zug"><#= s.GetMetaInt("MaxVelocity", 0).ToString("#") #></td>
+					<td class="zug"><#= s.GetMeta<int>("MaxVelocity", 0, int.Parse).ToString("#") #></td>
 					<td class="zug"><#= s.Name #></td>
 					<td class="zug"><#= tra.Arrivals.ContainsKey(s) ? tra.Arrivals[s].ToShortTimeString() : "" #></td>
 					<td class="zug"><#= tra.Departures.ContainsKey(s) ? tra.Departures[s].ToShortTimeString() : "" #></td>

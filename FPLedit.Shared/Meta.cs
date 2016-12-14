@@ -10,13 +10,26 @@ namespace FPLedit.Shared
     [Serializable]
     public abstract class Meta
     {
+        [Obsolete]
         public Dictionary<string, string> Metadata { get; set; }
+
+        private Dictionary<string, string> Attributes { get; set; }
 
         public Meta()
         {
+#pragma warning disable CS0612
             Metadata = new Dictionary<string, string>();
+#pragma warning restore CS0612
+            Attributes = new Dictionary<string, string>();
         }
 
+        [Obsolete]
+        public void SetMeta(string key, string value)
+        {
+            Metadata[key] = value;
+        }
+
+        [Obsolete]
         public string GetMeta(string key, string defaultValue)
         {
             if (Metadata.ContainsKey(key))
@@ -25,6 +38,7 @@ namespace FPLedit.Shared
                 return defaultValue;
         }
 
+        [Obsolete]
         public T GetMeta<T>(string key, T defaultValue, Func<string, T> func)
         {
             if (Metadata.ContainsKey(key))
@@ -33,7 +47,14 @@ namespace FPLedit.Shared
                 return defaultValue;
         }
 
-        public int GetMetaInt(string key, int defaultValue)
+        public T GetAttribute<T>(string key, T defaultValue = default(T))
+        {
+            if (Attributes.ContainsKey(key))
+                return (T)Convert.ChangeType(Attributes[key], typeof(T));
+            return default(T);
+        }
+
+        /*public int GetMetaInt(string key, int defaultValue)
         {
             return GetMeta(key, defaultValue, int.Parse);
         }
@@ -56,6 +77,6 @@ namespace FPLedit.Shared
         public TimeSpan GetMetaTimeSpan(string key, TimeSpan defaultValue)
         {
             return GetMeta(key, defaultValue, TimeSpan.Parse);
-        }
+        }*/
     }
 }

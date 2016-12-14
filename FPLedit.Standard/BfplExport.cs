@@ -90,12 +90,14 @@ namespace FPLedit.Standard
 
         public void SerializeMeta(BinaryWriter writer, Meta m)
         {
+#pragma warning disable CS0612
             writer.Write(m.Metadata.Count);
             foreach (var pair in m.Metadata)
             {
                 writer.Write(pair.Key);
                 writer.Write(pair.Value);
             }
+#pragma warning restore CS0612
         }
     }
 }

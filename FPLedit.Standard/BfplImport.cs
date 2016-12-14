@@ -43,7 +43,9 @@ namespace FPLedit.Standard
                 throw new Exception("Ein Fehler ist beim Öffnen der Datei aufgetreten: Falsche Dateiversion");
 
             res.Name = reader.ReadString();
+#pragma warning disable CS0612
             res.Metadata = DeserializeMeta(reader);
+#pragma warning restore CS0612
 
             var stations = new Dictionary<int, Station>();
             int sta_count = reader.ReadInt32();
@@ -73,7 +75,9 @@ namespace FPLedit.Standard
             res.Direction = reader.ReadBoolean();
             res.Line = reader.ReadString();
             res.Days = Train.ParseDays(reader.ReadString());
+#pragma warning disable CS0612
             res.Metadata = DeserializeMeta(reader);
+#pragma warning restore CS0612
 
             int arr_count = reader.ReadInt32();
             for (int i = 0; i < arr_count; i++)
@@ -102,7 +106,9 @@ namespace FPLedit.Standard
             var res = new Station();
             res.Name = reader.ReadString();
             res.Kilometre = reader.ReadSingle();
+#pragma warning disable CS0612
             res.Metadata = DeserializeMeta(reader);
+#pragma warning restore CS0612
             return res;
         }
 

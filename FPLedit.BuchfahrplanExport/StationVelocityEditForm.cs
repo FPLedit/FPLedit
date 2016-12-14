@@ -31,7 +31,7 @@ namespace FPLedit.BuchfahrplanExport
 
             DialogResult = DialogResult.OK;
 
-            Station.Metadata["MaxVelocity"] = velocityTextBox.Text;
+            Station.SetMeta("MaxVelocity", velocityTextBox.Text);
             Close();
         }
     }
