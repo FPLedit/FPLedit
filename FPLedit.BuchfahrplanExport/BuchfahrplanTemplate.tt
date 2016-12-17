@@ -132,8 +132,13 @@
 					<td class="zug"><#= s.Kilometre.ToString("0.0") #></td>
 					<td class="zug"><#= s.GetAttribute<int>("vmax", 0).ToString("#") #></td>
 					<td class="zug"><#= s.Name #></td>
-					<td class="zug"><#= tra.Arrivals.ContainsKey(s) ? tra.Arrivals[s].ToShortTimeString() : "" #></td>
-					<td class="zug"><#= tra.Departures.ContainsKey(s) ? tra.Departures[s].ToShortTimeString() : "" #></td>
+					<#
+					var ardp = tra.ArrDeps[s];
+					var ar = ardp.Arrival.ToShortTimeString();
+					var dp = ardp.Departure.ToShortTimeString();
+					#>
+					<td class="zug"><#= ar != "00:00" ? ar : "" #></td>
+					<td class="zug"><#= dp != "00:00" ? dp : "" #></td>
 				</tr>
 				<# } #>
 				<tr>

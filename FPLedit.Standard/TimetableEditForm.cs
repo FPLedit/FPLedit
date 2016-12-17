@@ -51,11 +51,21 @@ namespace FPLedit.Standard
             {
                 DataGridViewRow trainRow = view.Rows[view.Rows.Add()];
 
-                foreach (var sta in tra.Arrivals.Keys)
+                foreach (var sta in tra.ArrDeps.Keys)
+                {
+                    var ar = tra.ArrDeps[sta].Arrival.ToShortTimeString();
+                    var dp = tra.ArrDeps[sta].Departure.ToShortTimeString();
+                    if (ar != "00:00")
+                        trainRow.Cells[sta.Name + "ar"].Value = ar;
+                    if (dp != "00:00")
+                        trainRow.Cells[sta.Name + "dp"].Value = dp;
+                }
+
+                /*foreach (var sta in tra.Arrivals.Keys)
                     trainRow.Cells[sta.Name + "ar"].Value = tra.Arrivals[sta].ToShortTimeString();
 
                 foreach (var sta in tra.Departures.Keys)
-                    trainRow.Cells[sta.Name + "dp"].Value = tra.Departures[sta].ToShortTimeString();
+                    trainRow.Cells[sta.Name + "dp"].Value = tra.Departures[sta].ToShortTimeString();*/
 
                 trainRow.Tag = tra;
                 trainRow.HeaderCell = new DataGridViewRowHeaderCell() { Value = tra.Name };
@@ -70,8 +80,8 @@ namespace FPLedit.Standard
 
         private bool UpdateTrainDataFromGrid(Train train, DataGridView view)
         {
-            var ar = new Dictionary<Station, TimeSpan>();
-            var dp = new Dictionary<Station, TimeSpan>();
+            var ars = new Dictionary<Station, TimeSpan>();
+            var dps = new Dictionary<Station, TimeSpan>();
 
             foreach (DataGridViewRow row in view.Rows)
             {
@@ -89,7 +99,7 @@ namespace FPLedit.Standard
                         if ((string)cellAr.Value != "" && cellAr.Value != null)
                         {
                             TimeSpan tsAr = TimeSpan.Parse((string)cellAr.Value);
-                            ar.Add(sta, tsAr);
+                            ars.Add(sta, tsAr);
                         }
                     }
 
@@ -100,13 +110,21 @@ namespace FPLedit.Standard
                         if ((string)cellDp.Value != "" && cellDp.Value != null)
                         {
                             TimeSpan tsDp = TimeSpan.Parse((string)cellDp.Value);
-                            dp.Add(sta, tsDp);
+                            dps.Add(sta, tsDp);
                         }
                     }
                 }
 
-                train.Arrivals = ar;
-                train.Departures = dp;
+                t.ArrDeps.Clear();
+                foreach (var station in info.Timetable.Stations)
+                {
+                    var ardp = new ArrDep();
+                    if (ars.ContainsKey(station))
+                        ardp.Arrival = ars[station];
+                    if (dps.ContainsKey(station))
+                        ardp.Departure = dps[station];
+                    t.ArrDeps[station] = ardp;
+                }
                 return true;
             }
 

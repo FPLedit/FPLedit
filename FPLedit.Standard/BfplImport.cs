@@ -79,6 +79,9 @@ namespace FPLedit.Standard
             res.Days = days;
             res.Locomotive = tfz;
 
+            var ars = new Dictionary<Station, TimeSpan>();
+            var dps = new Dictionary<Station, TimeSpan>();
+
             int arr_count = reader.ReadInt32();
             for (int i = 0; i < arr_count; i++)
             {
@@ -86,7 +89,7 @@ namespace FPLedit.Standard
                 Station sta = stations[sta_id];
                 string time_str = reader.ReadString();
                 TimeSpan time = TimeSpan.Parse(time_str);
-                res.Arrivals.Add(sta, time);
+                ars.Add(sta, time);
             }
 
             int dep_count = reader.ReadInt32();
@@ -96,7 +99,17 @@ namespace FPLedit.Standard
                 Station sta = stations[sta_id];
                 string time_str = reader.ReadString();
                 TimeSpan time = TimeSpan.Parse(time_str);
-                res.Departures.Add(sta, time);
+                dps.Add(sta, time);
+            }
+
+            foreach (var station in stations.Values)
+            {
+                var ardp = new ArrDep();
+                if (ars.ContainsKey(station))
+                    ardp.Arrival = ars[station];
+                if (dps.ContainsKey(station))
+                    ardp.Departure = dps[station];
+                res.ArrDeps[station] = ardp;
             }
             return res;
         }
@@ -130,5 +143,5 @@ namespace FPLedit.Standard
             ["MaxVelocity"] = "vmax",
             //TODO: jTG hinzufügen
         };
-    }    
+    }
 }

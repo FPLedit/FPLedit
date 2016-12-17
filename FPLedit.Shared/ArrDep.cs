@@ -5,9 +5,11 @@ using System.Text;
 
 namespace FPLedit.Shared
 {
+    [Serializable]
     public struct ArrDep
     {
-        public TimeSpan Arrival;
-        public TimeSpan Depature;
+        public TimeSpan Arrival { get; set; }
+
+        public TimeSpan Departure { get; set; }
     }
 }

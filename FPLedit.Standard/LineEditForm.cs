@@ -113,8 +113,9 @@ namespace FPLedit.Standard
 
                 foreach (var t in tt.Trains)
                 {
-                    t.Arrivals.Add(sta, new TimeSpan());
-                    t.Departures.Add(sta, new TimeSpan());
+                    //t.Arrivals.Add(sta, new TimeSpan());
+                    //t.Departures.Add(sta, new TimeSpan());
+                    t.ArrDeps.Add(sta, new ArrDep());
                 }
 
                 UpdateStations();

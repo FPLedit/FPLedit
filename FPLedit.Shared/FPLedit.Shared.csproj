@@ -59,6 +59,7 @@
     <Compile Include="TimeSpanExtensions.cs" />
     <Compile Include="Timetable.cs" />
     <Compile Include="Train.cs" />
+    <Compile Include="TrainDirection.cs" />
     <Compile Include="Validators\BaseValidator.cs">
       <SubType>Component</SubType>
     </Compile>

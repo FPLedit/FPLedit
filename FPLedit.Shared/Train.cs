@@ -26,9 +26,9 @@ namespace FPLedit.Shared
 
         public string Line { get; set; }
 
-        public Dictionary<Station, TimeSpan> Arrivals { get; set; }
+        //public Dictionary<Station, TimeSpan> Arrivals { get; set; }
 
-        public Dictionary<Station, TimeSpan> Departures { get; set; }
+        //public Dictionary<Station, TimeSpan> Departures { get; set; }
 
         public Dictionary<Station, ArrDep> ArrDeps { get; set; }
 
@@ -36,7 +36,7 @@ namespace FPLedit.Shared
         {
             get
             {
-                return GetAttribute<string>("tfz");
+                return GetAttribute<string>("tfz", "");
             }
             set
             {
@@ -62,8 +62,9 @@ namespace FPLedit.Shared
 
         public Train() : base()
         {
-            Arrivals = new Dictionary<Station, TimeSpan>();
-            Departures = new Dictionary<Station, TimeSpan>();
+            //Arrivals = new Dictionary<Station, TimeSpan>();
+            //Departures = new Dictionary<Station, TimeSpan>();
+            ArrDeps = new Dictionary<Station, ArrDep>();
             Line = "";
         }
 
@@ -73,7 +74,7 @@ namespace FPLedit.Shared
                 .Skip(1); // Remove first station (only departure)
 
             foreach (var sta in stas)
-                Arrivals.Add(sta, new TimeSpan());
+                ArrDeps.Add(sta, new ArrDep());
         }
 
         [DebuggerStepThrough]
@@ -117,24 +118,5 @@ namespace FPLedit.Shared
         {
             return DaysToString(Days);
         }        
-    }
-
-    public enum TrainDirection
-    {
-        ti, // false
-        ta  // true
-    }
-
-    public static class TrainDirectionExt
-    {
-        public static void Set(this TrainDirection td, bool b)
-        {
-            td = b ? TrainDirection.ta : TrainDirection.ti;
-        }
-
-        public static bool Get(this TrainDirection td)
-        {
-            return td == TrainDirection.ta;
-        }
-    }
+    }    
 }

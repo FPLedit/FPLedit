@@ -17,6 +17,7 @@ namespace FPLedit.JTrainGraphImport
         public void Init(IInfo info)
         {
             info.RegisterImport(new JTrainGraphImport());
+            info.RegisterExport(new JTrainGraphExport());
         }
     }
 }

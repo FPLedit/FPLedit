@@ -45,20 +45,24 @@ namespace FPLedit.JTrainGraphImport
                 foreach (var train in trains.Elements())
                 {
                     string name = train.Attribute("name").Value;
-                    Dictionary<Station, TimeSpan> ar = new Dictionary<Station, TimeSpan>();
-                    Dictionary<Station, TimeSpan> dp = new Dictionary<Station, TimeSpan>();
-                    Dictionary<string, string> md = new Dictionary<string, string>();
+                    //Dictionary<Station, TimeSpan> ar = new Dictionary<Station, TimeSpan>();
+                    //Dictionary<Station, TimeSpan> dp = new Dictionary<Station, TimeSpan>();
+                    //Dictionary<string, string> md = new Dictionary<string, string>();
+                    Dictionary<Station, ArrDep> ardps = new Dictionary<Station, ArrDep>();
 
                     //bool[] days = Train.ParseDays(train.Attribute("d").Value);
 
                     int i = 0;
                     foreach (var time in train.Elements())
                     {
+                        ArrDep ardp = new ArrDep();
                         if (time.Attribute("a").Value != "")
-                            ar.Add(stas.ElementAt(i), TimeSpan.Parse(time.Attribute("a").Value));
+                            ardp.Arrival = TimeSpan.Parse(time.Attribute("a").Value);
+                            //ar.Add(stas.ElementAt(i), TimeSpan.Parse(time.Attribute("a").Value));
 
                         if (time.Attribute("d").Value != "")
-                            dp.Add(stas.ElementAt(i), TimeSpan.Parse(time.Attribute("d").Value));
+                            ardp.Departure = TimeSpan.Parse(time.Attribute("d").Value);
+                        ardps[stas.ElementAt(i)] = ardp;
                         i++;
                     }
 
@@ -71,8 +75,9 @@ namespace FPLedit.JTrainGraphImport
                     {
                         //Name = name,
                         Attributes = trAtts,
-                        Arrivals = ar,
-                        Departures = dp,
+                        //Arrivals = ar,
+                        //Departures = dp,
+                        ArrDeps = ardps,
                         Direction = dir,
                         //Days = days,
                         Line = dir.Get() ? line2 : line1
