@@ -10,12 +10,12 @@ using System.Windows.Forms;
 
 namespace FPLedit.Standard
 {
-    public partial class MetaEdit : Form
+    public partial class AttributeEdit : Form
     {
         private Entity entity;
         private Dictionary<string, string> attrBackup;
 
-        public MetaEdit()
+        public AttributeEdit()
         {
             InitializeComponent();
 
@@ -23,7 +23,7 @@ namespace FPLedit.Standard
             listView.Columns.Add("Value");
         }
 
-        public MetaEdit(Entity ent) : this()
+        public AttributeEdit(Entity ent) : this()
         {
             entity = ent;
             attrBackup = new Dictionary<string, string>(ent.Attributes);
@@ -52,7 +52,7 @@ namespace FPLedit.Standard
 
         private void NewMeta()
         {
-            MetaEditForm mef = new MetaEditForm();
+            AttributeEditForm mef = new AttributeEditForm();
             if (mef.ShowDialog() == DialogResult.OK)
             {
                 entity.Attributes[mef.Meta.Key] = mef.Meta.Value;
@@ -70,7 +70,7 @@ namespace FPLedit.Standard
                 ListViewItem item = listView.Items[listView.SelectedIndices[0]];
                 string key = (string)item.Tag;
 
-                MetaEditForm mef = new MetaEditForm(new KeyValuePair<string, string>(key, entity.Attributes[key]));
+                AttributeEditForm mef = new AttributeEditForm(new KeyValuePair<string, string>(key, entity.Attributes[key]));
                 if (mef.ShowDialog() == DialogResult.OK)
                 {
                     entity.Attributes[mef.Meta.Key] = mef.Meta.Value;

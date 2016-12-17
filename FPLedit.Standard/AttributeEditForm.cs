@@ -9,16 +9,16 @@ using System.Windows.Forms;
 
 namespace FPLedit.Standard
 {
-    public partial class MetaEditForm : Form
+    public partial class AttributeEditForm : Form
     {
         public KeyValuePair<string, string> Meta { get; set; }
 
-        public MetaEditForm()
+        public AttributeEditForm()
         {
             InitializeComponent();
         }
 
-        public MetaEditForm(KeyValuePair<string, string> meta) : this()
+        public AttributeEditForm(KeyValuePair<string, string> meta) : this()
         {
             Meta = meta;
             Text = "Eigenschaft bearbeiten";

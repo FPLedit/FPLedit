@@ -114,7 +114,7 @@ namespace FPLedit.Standard
                 ListViewItem item = view.Items[view.SelectedIndices[0]];
                 Train train = tt.Trains[tt.Trains.IndexOf((Train)item.Tag)];
 
-                MetaEdit mef = new MetaEdit(train);
+                AttributeEdit mef = new AttributeEdit(train);
                 if (mef.ShowDialog() == DialogResult.OK)
                 {
                     UpdateListView(view, direction);

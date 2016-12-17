@@ -50,7 +50,7 @@ namespace FPLedit.Standard
         {
             if (e.Button == MouseButtons.Middle)
             {
-                MetaEdit mef = new MetaEdit(info.Timetable);
+                AttributeEdit mef = new AttributeEdit(info.Timetable);
                 if (mef.ShowDialog() == DialogResult.OK)
                     info.SetUnsaved();
             }

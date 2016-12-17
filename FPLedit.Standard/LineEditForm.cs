@@ -76,7 +76,7 @@ namespace FPLedit.Standard
                 ListViewItem item = listView.Items[listView.SelectedIndices[0]];
                 Station station = tt.Stations[tt.Stations.IndexOf((Station)item.Tag)];
 
-                MetaEdit mef = new MetaEdit(station);
+                AttributeEdit mef = new AttributeEdit(station);
                 if (mef.ShowDialog() == DialogResult.OK)
                 {
                     UpdateStations();

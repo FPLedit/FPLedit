@@ -44,7 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArrDep.cs" />
-    <Compile Include="ColorHelper.cs" />
     <Compile Include="Logger\ConsoleLogger.cs" />
     <Compile Include="FileState.cs" />
     <Compile Include="IExport.cs" />
@@ -52,7 +51,7 @@
     <Compile Include="IInfo.cs" />
     <Compile Include="ILog.cs" />
     <Compile Include="IPlugin.cs" />
-    <Compile Include="Meta.cs" />
+    <Compile Include="Entity.cs" />
     <Compile Include="Logger\MultipleLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SettingsManager.cs" />

@@ -1,6 +1,6 @@
 ﻿namespace FPLedit.Standard
 {
-    partial class MetaEdit
+    partial class AttributeEdit
     {
         /// <summary>
         /// Required designer variable.
