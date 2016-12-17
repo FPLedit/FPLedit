@@ -10,9 +10,19 @@ using System.Threading.Tasks;
 namespace FPLedit.Shared
 {
     [Serializable]
-    public sealed class Train : Meta
+    public sealed class Train : Entity
     {
-        public string Name { get; set; }
+        public string Name
+        {
+            get
+            {
+                return GetAttribute<string>("name");
+            }
+            set
+            {
+                SetAttribute("name", value);
+            }
+        }
 
         public string Line { get; set; }
 
@@ -20,26 +30,47 @@ namespace FPLedit.Shared
 
         public Dictionary<Station, TimeSpan> Departures { get; set; }
 
-        public string Locomotive { get; set; }
+        public Dictionary<Station, ArrDep> ArrDeps { get; set; }
 
-        public bool Direction { get; set; }
+        public string Locomotive
+        {
+            get
+            {
+                return GetAttribute<string>("tfz");
+            }
+            set
+            {
+                SetAttribute("tfz", value);
+            }
+        }
 
-        public bool[] Days { get; set; }
+        public TrainDirection Direction { get; set; }
+
+        public bool[] Days
+        {
+            get
+            {
+                var d = GetAttribute<string>("d", "1111111");
+                return ParseDays(d);
+            }
+            set
+            {
+                var d = DaysToBinString(value);
+                SetAttribute("d", d);
+            }
+        }
 
         public Train() : base()
         {
             Arrivals = new Dictionary<Station, TimeSpan>();
             Departures = new Dictionary<Station, TimeSpan>();
-            Days = new bool[7];
-            Name = "";
-            Locomotive = "";
             Line = "";
         }
 
         public void InitializeStations(Timetable tt)
         {
             var stas = tt.GetStationsOrderedByDirection(Direction)
-                .Skip(1); // Remove first station (only departure)            
+                .Skip(1); // Remove first station (only departure)
 
             foreach (var sta in stas)
                 Arrivals.Add(sta, new TimeSpan());
@@ -68,11 +99,6 @@ namespace FPLedit.Shared
             return ret;
         }
 
-        public string DaysToBinString()
-        {
-            return DaysToBinString(Days);
-        }
-
         public static string DaysToString(bool[] days)
         {
             string[] str = new string[7];
@@ -91,5 +117,24 @@ namespace FPLedit.Shared
         {
             return DaysToString(Days);
         }        
+    }
+
+    public enum TrainDirection
+    {
+        ti, // false
+        ta  // true
+    }
+
+    public static class TrainDirectionExt
+    {
+        public static void Set(this TrainDirection td, bool b)
+        {
+            td = b ? TrainDirection.ta : TrainDirection.ti;
+        }
+
+        public static bool Get(this TrainDirection td)
+        {
+            return td == TrainDirection.ta;
+        }
     }
 }

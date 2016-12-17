@@ -42,10 +42,9 @@ namespace FPLedit.Standard
             if (magic != Timetable.MAGIC)
                 throw new Exception("Ein Fehler ist beim Öffnen der Datei aufgetreten: Falsche Dateiversion");
 
-            res.Name = reader.ReadString();
-#pragma warning disable CS0612
-            res.Metadata = DeserializeMeta(reader);
-#pragma warning restore CS0612
+            var name = reader.ReadString();
+            res.Attributes = DeserializeAttributes(reader);
+            res.Name = name;
 
             var stations = new Dictionary<int, Station>();
             int sta_count = reader.ReadInt32();
@@ -70,14 +69,15 @@ namespace FPLedit.Standard
         public Train DeserializeTrain(BinaryReader reader, Dictionary<int, Station> stations)
         {
             Train res = new Train();
-            res.Name = reader.ReadString();
-            res.Locomotive = reader.ReadString();
-            res.Direction = reader.ReadBoolean();
+            var name = reader.ReadString();
+            var tfz = reader.ReadString();
+            res.Direction = reader.ReadBoolean() ? TrainDirection.ta : TrainDirection.ti;
             res.Line = reader.ReadString();
-            res.Days = Train.ParseDays(reader.ReadString());
-#pragma warning disable CS0612
-            res.Metadata = DeserializeMeta(reader);
-#pragma warning restore CS0612
+            var days = Train.ParseDays(reader.ReadString());
+            res.Attributes = DeserializeAttributes(reader);
+            res.Name = name;
+            res.Days = days;
+            res.Locomotive = tfz;
 
             int arr_count = reader.ReadInt32();
             for (int i = 0; i < arr_count; i++)
@@ -104,15 +104,15 @@ namespace FPLedit.Standard
         public Station DeserializeStation(BinaryReader reader)
         {
             var res = new Station();
-            res.Name = reader.ReadString();
-            res.Kilometre = reader.ReadSingle();
-#pragma warning disable CS0612
-            res.Metadata = DeserializeMeta(reader);
-#pragma warning restore CS0612
+            var name = reader.ReadString();
+            var km = reader.ReadSingle();
+            res.Attributes = DeserializeAttributes(reader);
+            res.Name = name;
+            res.Kilometre = km;
             return res;
         }
 
-        public Dictionary<string, string> DeserializeMeta(BinaryReader reader)
+        public Dictionary<string, string> DeserializeAttributes(BinaryReader reader)
         {
             var res = new Dictionary<string, string>();
             int count = reader.ReadInt32();
@@ -122,7 +122,13 @@ namespace FPLedit.Standard
                 string value = reader.ReadString();
                 res.Add(key, value);
             }
-            return res;
+            return res.Where(kvp => AttrMap.ContainsKey(kvp.Key)).ToDictionary(kvp => AttrMap[kvp.Key], kvp => kvp.Value);
         }
-    }
+
+        private Dictionary<string, string> AttrMap = new Dictionary<string, string>()
+        {
+            ["MaxVelocity"] = "vmax",
+            //TODO: jTG hinzufügen
+        };
+    }    
 }

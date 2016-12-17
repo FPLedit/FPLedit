@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace FPLedit.Shared
 {
     [Serializable]
-    public sealed class Timetable : Meta
+    public sealed class Timetable : Entity
     {
         public const string MAGIC = "BFPL/1.1";
 
@@ -29,14 +29,14 @@ namespace FPLedit.Shared
             Name = "";
         }        
 
-        public List<Station> GetStationsOrderedByDirection(bool direction)
+        public List<Station> GetStationsOrderedByDirection(TrainDirection direction)
         {
-            return (direction ?
+            return (direction.Get() ?
                 Stations.OrderByDescending(s => s.Kilometre)
                 : Stations.OrderBy(s => s.Kilometre)).ToList();
         }
 
-        public string GetLineName(bool direction)
+        public string GetLineName(TrainDirection direction)
         {
             string first = GetStationsOrderedByDirection(direction).First().Name;
             string last = GetStationsOrderedByDirection(direction).Last().Name;
@@ -46,7 +46,7 @@ namespace FPLedit.Shared
 
         public override string ToString()
         {
-            return GetLineName(true);
+            return GetLineName(TrainDirection.ta);
         }
 
         public Timetable Clone()

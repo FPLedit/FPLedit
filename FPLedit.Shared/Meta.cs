@@ -8,20 +8,30 @@ using System.Text;
 namespace FPLedit.Shared
 {
     [Serializable]
-    public abstract class Meta
+    public abstract class Entity
     {
-        [Obsolete]
-        public Dictionary<string, string> Metadata { get; set; }
+        public Dictionary<string, string> Attributes { get; set; }
 
-        private Dictionary<string, string> Attributes { get; set; }
-
-        public Meta()
+        public Entity()
         {
-#pragma warning disable CS0612
-            Metadata = new Dictionary<string, string>();
-#pragma warning restore CS0612
+            //Metadata = new Dictionary<string, string>();
             Attributes = new Dictionary<string, string>();
         }
+        
+        public T GetAttribute<T>(string key, T defaultValue = default(T))
+        {
+            if (Attributes.ContainsKey(key))
+                return (T)Convert.ChangeType(Attributes[key], typeof(T));
+            return defaultValue;
+        }
+
+        public void SetAttribute(string key, string value)
+        {
+            Attributes[key] = value;
+        }
+
+        /*[Obsolete]
+        public Dictionary<string, string> Metadata { get; set; }
 
         [Obsolete]
         public void SetMeta(string key, string value)
@@ -47,14 +57,7 @@ namespace FPLedit.Shared
                 return defaultValue;
         }
 
-        public T GetAttribute<T>(string key, T defaultValue = default(T))
-        {
-            if (Attributes.ContainsKey(key))
-                return (T)Convert.ChangeType(Attributes[key], typeof(T));
-            return default(T);
-        }
-
-        /*public int GetMetaInt(string key, int defaultValue)
+        public int GetMetaInt(string key, int defaultValue)
         {
             return GetMeta(key, defaultValue, int.Parse);
         }

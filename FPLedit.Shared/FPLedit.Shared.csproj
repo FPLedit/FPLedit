@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrDep.cs" />
     <Compile Include="ColorHelper.cs" />
     <Compile Include="Logger\ConsoleLogger.cs" />
     <Compile Include="FileState.cs" />

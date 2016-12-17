@@ -7,7 +7,7 @@ using System.Text;
 
 namespace FPLedit.Standard
 {
-    public class BfplExport : IExport
+    /*public class BfplExport : IExport
     {
         public string Filter
         {
@@ -88,7 +88,7 @@ namespace FPLedit.Standard
             }
         }
 
-        public void SerializeMeta(BinaryWriter writer, Meta m)
+        public void SerializeMeta(BinaryWriter writer, Entity m)
         {
 #pragma warning disable CS0612
             writer.Write(m.Metadata.Count);
@@ -99,5 +99,5 @@ namespace FPLedit.Standard
             }
 #pragma warning restore CS0612
         }
-    }
+    }*/
 }

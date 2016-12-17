@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -9,30 +10,36 @@ using System.Threading.Tasks;
 namespace FPLedit.Shared
 {
     [Serializable]
-    public sealed class Station : Meta
+    public sealed class Station : Entity
     {
-        public string Name { get; set; }
-
-        public float Kilometre { get; set; }
-
-        public Station()
+        public string Name
         {
-            Name = "";
+            get
+            {
+                return GetAttribute<string>("name", "");
+            }
+            set
+            {
+                SetAttribute("name", value);
+            }
+        }
+
+        public float Kilometre
+        {
+            get
+            {
+                return float.Parse(GetAttribute("km", "0.0"), CultureInfo.InvariantCulture);
+            }
+            set
+            {
+                SetAttribute("km", value.ToString(CultureInfo.InvariantCulture));
+            }
         }
 
         [DebuggerStepThrough]
         public override string ToString()
         {
-            return ToString(true);
-        }
-
-        [DebuggerStepThrough]
-        public string ToString(bool includeKilometre)
-        {
-            if (includeKilometre)
-                return Name + " [" + Kilometre + "]";
-            else
-                return Name;
+            return Name + " [" + Kilometre + "]";
         }
     }
 }

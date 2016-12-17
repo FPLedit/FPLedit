@@ -122,7 +122,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "MetaEdit";
             this.ShowInTaskbar = false;
-            this.Text = "Meta Editor";
+            this.Text = "Attribut-Editor";
             this.ResumeLayout(false);
 
         }

@@ -11,8 +11,8 @@ namespace FPLedit.Standard
         private IInfo info;
         private Timetable tt;
 
-        private const bool TOP_DIRECTION = false;
-        private const bool BOTTOM_DIRECTION = true;
+        private const TrainDirection TOP_DIRECTION = TrainDirection.ti;
+        private const TrainDirection BOTTOM_DIRECTION = TrainDirection.ta;
 
         public TrainsEditForm()
         {
@@ -34,7 +34,7 @@ namespace FPLedit.Standard
             UpdateListView(bottomListView, BOTTOM_DIRECTION);
         }
 
-        private void UpdateListView(ListView view, bool direction)
+        private void UpdateListView(ListView view, TrainDirection direction)
         {
             view.Items.Clear();
             foreach (var train in tt.Trains.Where(o => o.Direction == direction))
@@ -58,7 +58,7 @@ namespace FPLedit.Standard
             view.Columns.Add("Verkehrstage");
         }
 
-        private void DeleteTrain(ListView view, bool direction)
+        private void DeleteTrain(ListView view, TrainDirection direction)
         {
             if (view.SelectedItems.Count > 0)
             {
@@ -71,7 +71,7 @@ namespace FPLedit.Standard
                 MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug löschen");
         }
 
-        private void EditTrain(ListView view, bool direction, bool message = true)
+        private void EditTrain(ListView view, TrainDirection direction, bool message = true)
         {
             if (view.SelectedItems.Count > 0)
             {
@@ -91,7 +91,7 @@ namespace FPLedit.Standard
                 MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug bearbeiten");
         }
 
-        private void NewTrain(ListView view, bool direction)
+        private void NewTrain(ListView view, TrainDirection direction)
         {
             TrainEditForm tef = new TrainEditForm(info.Timetable, direction);
             if (tef.ShowDialog() == DialogResult.OK)
@@ -107,7 +107,7 @@ namespace FPLedit.Standard
             }
         }
 
-        private void EditMeta(ListView view, bool direction)
+        private void EditMeta(ListView view, TrainDirection direction)
         {
             if (view.SelectedItems.Count > 0)
             {

@@ -8,7 +8,7 @@ namespace FPLedit.Standard
     {
         public Train Train { get; set; }
 
-        private bool direction;
+        private TrainDirection direction;
 
         private CheckBox[] daysBoxes;
 
@@ -32,7 +32,7 @@ namespace FPLedit.Standard
             Text = "Zug bearbeiten";
         }
 
-        public TrainEditForm(Timetable tt, bool direction) : this()
+        public TrainEditForm(Timetable tt, TrainDirection direction) : this()
         {
             this.direction = direction;
             lineTextBox.Text = tt.GetLineName(direction);

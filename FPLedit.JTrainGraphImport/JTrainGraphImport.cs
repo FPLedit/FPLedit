@@ -28,11 +28,13 @@ namespace FPLedit.JTrainGraphImport
 
                 XElement stations = el.Element("stations");
                 foreach (var station in stations.Elements())
-                {
+                {                    
+                    var staAtts = station.Attributes().ToDictionary(a => a.Name.LocalName, a => (string)a);
                     stas.Add(new Station()
                     {
-                        Name = station.Attribute("name").Value,
-                        Kilometre = float.Parse(station.Attribute("km").Value, CultureInfo.InvariantCulture)
+                        /*Name = station.Attribute("name").Value,
+                        Kilometre = float.Parse(station.Attribute("km").Value, CultureInfo.InvariantCulture)*/
+                        Attributes = staAtts,
                     });
                 }
 
@@ -47,11 +49,7 @@ namespace FPLedit.JTrainGraphImport
                     Dictionary<Station, TimeSpan> dp = new Dictionary<Station, TimeSpan>();
                     Dictionary<string, string> md = new Dictionary<string, string>();
 
-                    bool[] days = Train.ParseDays(train.Attribute("d").Value);
-
-                    string color = colors.ContainsKey(train.Attribute("cl").Value) ? colors[train.Attribute("cl").Value] : null;
-                    if (color != null)
-                        md.Add("Color", color);
+                    //bool[] days = Train.ParseDays(train.Attribute("d").Value);
 
                     int i = 0;
                     foreach (var time in train.Elements())
@@ -64,22 +62,29 @@ namespace FPLedit.JTrainGraphImport
                         i++;
                     }
 
-                    bool dir = GetDirection(ar, dp);
+                    var trAtts = train.Attributes().ToDictionary(a => a.Name.LocalName, a => (string)a);
+
+                    //bool dir = GetDirection(ar, dp);
+
+                    var dir = train.Name.LocalName == "ti" ? TrainDirection.ti : TrainDirection.ta;
                     trs.Add(new Train()
                     {
-                        Name = name,
+                        //Name = name,
+                        Attributes = trAtts,
                         Arrivals = ar,
                         Departures = dp,
                         Direction = dir,
-                        Days = days,
-                        Line = dir ? line2 : line1,
-                        Metadata = md
+                        //Days = days,
+                        Line = dir.Get() ? line2 : line1
                     });
                 }
 
+                var ttAtts = el.Attributes().ToDictionary(a => a.Name.LocalName, a => (string)a);
+
                 return new Timetable()
                 {
-                    Name = el.Attribute("name").Value,
+                    //Name = el.Attribute("name").Value,
+                    Attributes = ttAtts,
                     Stations = stas,
                     Trains = trs
                 };
@@ -91,27 +96,11 @@ namespace FPLedit.JTrainGraphImport
             }
         }
 
-        private bool GetDirection(Dictionary<Station, TimeSpan> ar, Dictionary<Station, TimeSpan> dp)
+        /*private bool GetDirection(Dictionary<Station, TimeSpan> ar, Dictionary<Station, TimeSpan> dp)
         {
             float? lastArrival = ar.OrderBy(a => a.Value).LastOrDefault().Key?.Kilometre;
             float? firstDeparture = dp.OrderBy(d => d.Value).FirstOrDefault().Key?.Kilometre;
             return firstDeparture > lastArrival;
-        }
-
-        private Dictionary<string, string> colors = new Dictionary<string, string>()
-        {
-            ["schwarz"] = "#000000",
-            ["grau"] = "#808080",
-            ["weiß"] = "#FFFFFF",
-            ["rot"] = "#FF0000",
-            ["orange"] = "#FFA500",
-            ["gelb"] = "#FFFF00",
-            ["blau"] = "#0000FF",
-            ["hellblau"] = "#ADD8E6",
-            ["grün"] = "#008000",
-            ["dunkelgrün"] = "#006400",
-            ["braun"] = "#A52A2A",
-            ["magenta"] = "#FF00FF"
-        };
+        }*/
     }
 }

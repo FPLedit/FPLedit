@@ -16,8 +16,8 @@ namespace FPLedit.Standard
     {
         private IInfo info;
 
-        private const bool TOP_DIRECTION = false;
-        private const bool BOTTOM_DIRECTION = true;
+        private const TrainDirection TOP_DIRECTION = TrainDirection.ti;
+        private const TrainDirection BOTTOM_DIRECTION = TrainDirection.ta;
 
         public TimetableEditForm()
         {
@@ -36,7 +36,7 @@ namespace FPLedit.Standard
             InitializeGridView(bottomDataGridView, BOTTOM_DIRECTION);
         }
 
-        private void InitializeGridView(DataGridView view, bool direction)
+        private void InitializeGridView(DataGridView view, TrainDirection direction)
         {
             var stations = info.Timetable.GetStationsOrderedByDirection(direction);
             foreach (var sta in stations)

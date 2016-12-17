@@ -12,8 +12,8 @@ namespace FPLedit.Standard
 {
     public partial class MetaEdit : Form
     {
-        //private Meta entity;
-        //private Dictionary<string, string> metaBackup;
+        private Entity entity;
+        private Dictionary<string, string> attrBackup;
 
         public MetaEdit()
         {
@@ -23,78 +23,78 @@ namespace FPLedit.Standard
             listView.Columns.Add("Value");
         }
 
-        public MetaEdit(Meta meta) : this()
+        public MetaEdit(Entity ent) : this()
         {
-            //entity = meta;
-            //metaBackup = new Dictionary<string, string>(meta.Metadata);
+            entity = ent;
+            attrBackup = new Dictionary<string, string>(ent.Attributes);
 
-            //Text = "Metadaten-Editor: " + meta.GetType().Name + "/" + meta.ToString();
+            Text = "Attribut-Editor: " + ent.GetType().Name + "/" + ent.ToString();
 
-            //UpdateView();
+            UpdateView();
         }
 
         private void UpdateView()
         {
-            //listView.Items.Clear();
+            listView.Items.Clear();
 
-            //foreach (var entry in entity.Metadata)
-            //{
-            //    listView.Items.Add(new ListViewItem(new[]
-            //    {
-            //        entry.Key,
-            //        entry.Value
-            //    })
-            //    { Tag = entry.Key });
-            //}
-            //listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-            //listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            foreach (var entry in entity.Attributes)
+            {
+                listView.Items.Add(new ListViewItem(new[]
+                {
+                    entry.Key,
+                    entry.Value
+                })
+                { Tag = entry.Key });
+            }
+            listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
         }        
 
         private void NewMeta()
         {
-            //MetaEditForm mef = new MetaEditForm();
-            //if (mef.ShowDialog() == DialogResult.OK)
-            //{
-            //    entity.Metadata[mef.Meta.Key] = mef.Meta.Value;
-            //    UpdateView();
-            //    var changedItem = listView.Items.OfType<ListViewItem>().Where(i => (string)i.Tag == mef.Meta.Key).First();
-            //    changedItem.Selected = true;
-            //    changedItem.EnsureVisible();
-            //}
+            MetaEditForm mef = new MetaEditForm();
+            if (mef.ShowDialog() == DialogResult.OK)
+            {
+                entity.Attributes[mef.Meta.Key] = mef.Meta.Value;
+                UpdateView();
+                var changedItem = listView.Items.OfType<ListViewItem>().Where(i => (string)i.Tag == mef.Meta.Key).First();
+                changedItem.Selected = true;
+                changedItem.EnsureVisible();
+            }
         }
 
         private void EditMeta(bool message = true)
         {
-            //if (listView.SelectedItems.Count > 0)
-            //{
-            //    ListViewItem item = listView.Items[listView.SelectedIndices[0]];
-            //    string key = (string)item.Tag;
+            if (listView.SelectedItems.Count > 0)
+            {
+                ListViewItem item = listView.Items[listView.SelectedIndices[0]];
+                string key = (string)item.Tag;
 
-            //    MetaEditForm mef = new MetaEditForm(new KeyValuePair<string, string>(key, entity.Metadata[key]));
-            //    if (mef.ShowDialog() == DialogResult.OK)
-            //    {
-            //        entity.Metadata[mef.Meta.Key] = mef.Meta.Value;
-            //        UpdateView();
-            //        var changedItem = listView.Items.OfType<ListViewItem>().Where(i => (string)i.Tag == mef.Meta.Key).First();
-            //        changedItem.Selected = true;
-            //        changedItem.EnsureVisible();
-            //    }
-            //}
-            //else if (message)
-            //    MessageBox.Show("Zuerst muss eine Eigenschaft ausgewählt werden!", "Eigenschaft bearbeiten");
+                MetaEditForm mef = new MetaEditForm(new KeyValuePair<string, string>(key, entity.Attributes[key]));
+                if (mef.ShowDialog() == DialogResult.OK)
+                {
+                    entity.Attributes[mef.Meta.Key] = mef.Meta.Value;
+                    UpdateView();
+                    var changedItem = listView.Items.OfType<ListViewItem>().Where(i => (string)i.Tag == mef.Meta.Key).First();
+                    changedItem.Selected = true;
+                    changedItem.EnsureVisible();
+                }
+            }
+            else if (message)
+                MessageBox.Show("Zuerst muss eine Eigenschaft ausgewählt werden!", "Eigenschaft bearbeiten");
         }
 
         private void DeleteMeta()
         {
-            //if (listView.SelectedItems.Count > 0)
-            //{
-            //    ListViewItem item = listView.Items[listView.SelectedIndices[0]];
-            //    entity.Metadata.Remove((string)item.Tag);
+            if (listView.SelectedItems.Count > 0)
+            {
+                ListViewItem item = listView.Items[listView.SelectedIndices[0]];
+                entity.Attributes.Remove((string)item.Tag);
 
-            //    UpdateView();
-            //}
-            //else
-            //    MessageBox.Show("Zuerst muss eine Eigenschaft ausgewählt werden!", "Eigenschaft löschen");
+                UpdateView();
+            }
+            else
+                MessageBox.Show("Zuerst muss eine Eigenschaft ausgewählt werden!", "Eigenschaft löschen");
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -106,7 +106,7 @@ namespace FPLedit.Standard
         private void cancelButton_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
-            //entity.Metadata = metaBackup;
+            entity.Attributes = attrBackup;
             Close();
         }
 

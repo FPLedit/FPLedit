@@ -26,7 +26,7 @@ namespace FPLedit.Standard
             this.info = info;
             info.FileStateChanged += Info_FileStateChanged;
 
-            info.RegisterExport(new BfplExport());
+            //info.RegisterExport(new BfplExport());
             info.RegisterImport(new BfplImport());
 
             ToolStripMenuItem item = new ToolStripMenuItem("Bearbeiten");

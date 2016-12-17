@@ -41,7 +41,7 @@ namespace FPLedit.BuchfahrplanExport
             {
                 listView.Items.Add(new ListViewItem(new[] {
                     station.Name,
-                    station.GetMeta("MaxVelocity", velocity),
+                    station.GetAttribute<string>("vmax", velocity),
                 }) { Tag = station });                
             }
 
