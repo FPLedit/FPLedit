@@ -61,12 +61,6 @@ namespace FPLedit.Standard
                         trainRow.Cells[sta.Name + "dp"].Value = dp;
                 }
 
-                /*foreach (var sta in tra.Arrivals.Keys)
-                    trainRow.Cells[sta.Name + "ar"].Value = tra.Arrivals[sta].ToShortTimeString();
-
-                foreach (var sta in tra.Departures.Keys)
-                    trainRow.Cells[sta.Name + "dp"].Value = tra.Departures[sta].ToShortTimeString();*/
-
                 trainRow.Tag = tra;
                 trainRow.HeaderCell = new DataGridViewRowHeaderCell() { Value = tra.Name };
             }

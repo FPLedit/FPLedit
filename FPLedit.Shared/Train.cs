@@ -26,10 +26,6 @@ namespace FPLedit.Shared
 
         public string Line { get; set; }
 
-        //public Dictionary<Station, TimeSpan> Arrivals { get; set; }
-
-        //public Dictionary<Station, TimeSpan> Departures { get; set; }
-
         public Dictionary<Station, ArrDep> ArrDeps { get; set; }
 
         public string Locomotive
@@ -62,8 +58,6 @@ namespace FPLedit.Shared
 
         public Train() : base()
         {
-            //Arrivals = new Dictionary<Station, TimeSpan>();
-            //Departures = new Dictionary<Station, TimeSpan>();
             ArrDeps = new Dictionary<Station, ArrDep>();
             Line = "";
         }
