@@ -62,7 +62,10 @@ namespace FPLedit.Standard
                 var tr = DeserializeTrain(reader, stations);
                 res.Trains.Add(tr);
             }
-
+            
+            foreach (var attr in timetableDefaultAttrs)
+                if (!res.Attributes.ContainsKey(attr.Key))
+                    res.Attributes[attr.Key] = attr.Value;
             return res;
         }
 
@@ -111,6 +114,10 @@ namespace FPLedit.Standard
                     ardp.Departure = dps[station];
                 res.ArrDeps[station] = ardp;
             }
+            
+            foreach (var attr in trainDefaultAttrs)
+                if (!res.Attributes.ContainsKey(attr.Key))
+                    res.Attributes[attr.Key] = attr.Value;
             return res;
         }
 
@@ -122,6 +129,10 @@ namespace FPLedit.Standard
             res.Attributes = DeserializeAttributes(reader);
             res.Name = name;
             res.Kilometre = km;
+            
+            foreach (var attr in stationDefaultAttrs)
+                if (!res.Attributes.ContainsKey(attr.Key))
+                    res.Attributes[attr.Key] = attr.Value;
             return res;
         }
 
@@ -135,13 +146,58 @@ namespace FPLedit.Standard
                 string value = reader.ReadString();
                 res.Add(key, value);
             }
-            return res.Where(kvp => AttrMap.ContainsKey(kvp.Key)).ToDictionary(kvp => AttrMap[kvp.Key], kvp => kvp.Value);
+            return res.Where(kvp => upgradeAttrMap.ContainsKey(kvp.Key)).ToDictionary(kvp => upgradeAttrMap[kvp.Key], kvp => kvp.Value);
         }
 
-        private Dictionary<string, string> AttrMap = new Dictionary<string, string>()
+        private Dictionary<string, string> upgradeAttrMap = new Dictionary<string, string>()
         {
             ["MaxVelocity"] = "vmax",
             //TODO: jTG hinzufügen
+        };
+
+        Dictionary<string, string> timetableDefaultAttrs = new Dictionary<string, string>()
+        {
+            ["version"] = "008",
+            ["name"] = "",
+            ["tMin"] = "330",
+            ["tMax"] = "1410",
+            ["d"] = "1111111",
+            ["bgC"] = "weiß",
+            ["sFont"] = "font(SansSerif;0;12)",
+            ["trFont"] = "font(SansSerif;0;12)",
+            ["hFont"] = "font(SansSerif;0;12)",
+            ["tFont"] = "font(SansSerif;0;12)",
+            ["sHor"] = "false",
+            ["sLine"] = "0",
+            ["shKm"] = "true",
+            ["sStation"] = "-1",
+            ["eStation"] = "-1",
+            ["cNr"] = "1",
+            ["exW"] = "-1",
+            ["exH"] = "-1",
+            ["shV"] = "true", // StationLines
+        };
+
+        Dictionary<string, string> trainDefaultAttrs = new Dictionary<string, string>()
+        {
+            ["name"] = "",
+            ["cm"] = "",
+            ["cl"] = "schwarz",
+            ["sh"] = "true",
+            ["sz"] = "1",
+            ["sy"] = "0",
+            ["d"] = "1111111",
+            ["id"] = "",
+        };
+
+        Dictionary<string, string> stationDefaultAttrs = new Dictionary<string, string>()
+        {
+            ["name"] = "",
+            ["km"] = "0.0",
+            ["cl"] = "schwarz",
+            ["sh"] = "true",
+            ["sz"] = "1",
+            ["sy"] = "0",
         };
     }
 }
