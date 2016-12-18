@@ -7,8 +7,8 @@
     <ProjectGuid>{0959C902-8FCE-4125-A8F0-2D5A06EB890C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FPLedit.JTrainGraphImport</RootNamespace>
-    <AssemblyName>FPLedit.JTrainGraphImport</AssemblyName>
+    <RootNamespace>FPLedit.BfplImport</RootNamespace>
+    <AssemblyName>FPLedit.BfplImport</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -42,8 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JTrainGraphExport.cs" />
-    <Compile Include="JTrainGraphImport.cs" />
+    <Compile Include="BfplExport.cs" />
+    <Compile Include="BfplImport.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

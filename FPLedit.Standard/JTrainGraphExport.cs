@@ -6,7 +6,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace FPLedit.JTrainGraphImport
+namespace FPLedit.Standard
 {
     public class JTrainGraphExport : IExport
     {

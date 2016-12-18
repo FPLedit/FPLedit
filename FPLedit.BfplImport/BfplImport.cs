@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace FPLedit.Standard
+namespace FPLedit.BfplImport
 {
     public class BfplImport : IImport
     {

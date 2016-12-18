@@ -6,7 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
-namespace FPLedit.JTrainGraphImport
+namespace FPLedit.Standard
 {
     public class JTrainGraphImport : IImport
     {

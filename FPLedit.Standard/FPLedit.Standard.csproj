@@ -42,14 +42,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BfplExport.cs" />
-    <Compile Include="BfplImport.cs" />
     <Compile Include="EditStationForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="EditStationForm.Designer.cs">
       <DependentUpon>EditStationForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="JTrainGraphExport.cs" />
+    <Compile Include="JTrainGraphImport.cs" />
     <Compile Include="LineEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
