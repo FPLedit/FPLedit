@@ -62,10 +62,18 @@ namespace FPLedit.BfplImport
                 var tr = DeserializeTrain(reader, stations);
                 res.Trains.Add(tr);
             }
-            
-            foreach (var attr in timetableDefaultAttrs)
-                if (!res.Attributes.ContainsKey(attr.Key))
-                    res.Attributes[attr.Key] = attr.Value;
+
+            var attrs = new Dictionary<string, string>(timetableDefaultAttrs);
+            foreach (var key in timetableDefaultAttrs.Keys)
+                if (res.Attributes.ContainsKey(key))
+                    attrs[key] = res.Attributes[key];
+
+            var add = res.Attributes.Where(kvp => !attrs.ContainsKey(kvp.Key));
+            foreach (var a in add)
+                attrs[a.Key] = a.Value;
+
+            res.Attributes = attrs;
+
             return res;
         }
 
@@ -114,10 +122,18 @@ namespace FPLedit.BfplImport
                     ardp.Departure = dps[station];
                 res.ArrDeps[station] = ardp;
             }
-            
-            foreach (var attr in trainDefaultAttrs)
-                if (!res.Attributes.ContainsKey(attr.Key))
-                    res.Attributes[attr.Key] = attr.Value;
+
+            var attrs = new Dictionary<string, string>(trainDefaultAttrs);
+            foreach (var key in trainDefaultAttrs.Keys)
+                if (res.Attributes.ContainsKey(key))
+                    attrs[key] = res.Attributes[key];
+
+            var add = res.Attributes.Where(kvp => !attrs.ContainsKey(kvp.Key));
+            foreach (var a in add)
+                attrs[a.Key] = a.Value;
+
+            res.Attributes = attrs;
+
             return res;
         }
 
@@ -129,10 +145,18 @@ namespace FPLedit.BfplImport
             res.Attributes = DeserializeAttributes(reader);
             res.Name = name;
             res.Kilometre = km;
-            
-            foreach (var attr in stationDefaultAttrs)
-                if (!res.Attributes.ContainsKey(attr.Key))
-                    res.Attributes[attr.Key] = attr.Value;
+
+            var attrs = new Dictionary<string, string>(stationDefaultAttrs);
+            foreach (var key in stationDefaultAttrs.Keys)
+                if (res.Attributes.ContainsKey(key))
+                    attrs[key] = res.Attributes[key];
+
+            var add = res.Attributes.Where(kvp => !attrs.ContainsKey(kvp.Key));
+            foreach (var a in add)
+                attrs[a.Key] = a.Value;
+
+            res.Attributes = attrs;
+
             return res;
         }
 

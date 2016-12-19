@@ -32,7 +32,7 @@ namespace FPLedit.Shared
             }
             set
             {
-                SetAttribute("km", value.ToString(CultureInfo.InvariantCulture));
+                SetAttribute("km", value.ToString("0.0", CultureInfo.InvariantCulture));
             }
         }
 
