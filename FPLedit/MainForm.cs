@@ -80,7 +80,7 @@ namespace FPLedit
             foreach (var plugin in extensionManager.EnabledPlugins)
                 plugin.Init(this);
 
-            saveFileDialog.Filter = string.Join("|", exporters.Select(ex => ex.Filter));
+            saveFileDialog.Filter = string.Join("|", exporters.OrderByDescending(ex => ex.Reoppenable).Select(ex => ex.Filter));
             openFileDialog.Filter = string.Join("|", importers.Select(im => im.Filter));
 
             // Parameter Fpledit.exe [Importer] [Dateiname]

@@ -68,7 +68,7 @@
     <Compile Include="AttributeEditForm.Designer.cs">
       <DependentUpon>AttributeEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Plugin.cs" />
+    <Compile Include="EditorPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TimetableEditForm.cs">
       <SubType>Form</SubType>
@@ -88,6 +88,7 @@
     <Compile Include="TrainsEditForm.Designer.cs">
       <DependentUpon>TrainsEditForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="TypePlugin.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="EditStationForm.resx">

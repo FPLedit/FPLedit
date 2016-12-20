@@ -11,11 +11,11 @@ using System.Windows.Forms;
 
 namespace FPLedit.Standard
 {
-    public class Plugin : IPlugin
+    public class EditorPlugin : IPlugin
     {
         public string Name
         {
-            get { return "Standarderweiterung"; }
+            get { return "Fahrplan-Editoren"; }
         }
 
         private IInfo info;
@@ -24,10 +24,7 @@ namespace FPLedit.Standard
         public void Init(IInfo info)
         {
             this.info = info;
-            info.FileStateChanged += Info_FileStateChanged;
-
-            info.RegisterImport(new JTrainGraphImport());
-            info.RegisterExport(new JTrainGraphExport());
+            info.FileStateChanged += Info_FileStateChanged;            
 
             ToolStripMenuItem item = new ToolStripMenuItem("Bearbeiten");
             info.Menu.Items.AddRange(new[] { item });
