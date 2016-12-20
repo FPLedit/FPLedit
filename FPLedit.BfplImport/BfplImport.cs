@@ -34,7 +34,7 @@ namespace FPLedit.BfplImport
             }
         }
 
-        public Timetable DeserializeTimetable(BinaryReader reader)
+        private Timetable DeserializeTimetable(BinaryReader reader)
         {
             Timetable res = new Timetable();
 
@@ -43,7 +43,7 @@ namespace FPLedit.BfplImport
                 throw new Exception("Ein Fehler ist beim Öffnen der Datei aufgetreten: Falsche Dateiversion");
 
             var name = reader.ReadString();
-            res.Attributes = DeserializeAttributes(reader);
+            res.Attributes = DeserializeAttributes(reader, EntityType.Timetable);
             res.Name = name;
 
             var stations = new Dictionary<int, Station>();
@@ -77,7 +77,7 @@ namespace FPLedit.BfplImport
             return res;
         }
 
-        public Train DeserializeTrain(BinaryReader reader, Dictionary<int, Station> stations)
+        private Train DeserializeTrain(BinaryReader reader, Dictionary<int, Station> stations)
         {
             Train res = new Train();
             var name = reader.ReadString();
@@ -85,7 +85,7 @@ namespace FPLedit.BfplImport
             res.Direction = reader.ReadBoolean() ? TrainDirection.ta : TrainDirection.ti;
             res.Line = reader.ReadString();
             var days = Train.ParseDays(reader.ReadString());
-            res.Attributes = DeserializeAttributes(reader);
+            res.Attributes = DeserializeAttributes(reader, EntityType.Train);
             res.Name = name;
             res.Days = days;
             res.Locomotive = tfz;
@@ -137,12 +137,12 @@ namespace FPLedit.BfplImport
             return res;
         }
 
-        public Station DeserializeStation(BinaryReader reader)
+        private Station DeserializeStation(BinaryReader reader)
         {
             var res = new Station();
             var name = reader.ReadString();
             var km = reader.ReadSingle();
-            res.Attributes = DeserializeAttributes(reader);
+            res.Attributes = DeserializeAttributes(reader, EntityType.Station);
             res.Name = name;
             res.Kilometre = km;
 
@@ -160,7 +160,7 @@ namespace FPLedit.BfplImport
             return res;
         }
 
-        public Dictionary<string, string> DeserializeAttributes(BinaryReader reader)
+        private Dictionary<string, string> DeserializeAttributes(BinaryReader reader, EntityType type)
         {
             var res = new Dictionary<string, string>();
             int count = reader.ReadInt32();
@@ -170,14 +170,8 @@ namespace FPLedit.BfplImport
                 string value = reader.ReadString();
                 res.Add(key, value);
             }
-            return res.Where(kvp => upgradeAttrMap.ContainsKey(kvp.Key)).ToDictionary(kvp => upgradeAttrMap[kvp.Key], kvp => kvp.Value);
+            return UpgradeMeta.Upgrade(type, res);
         }
-
-        private Dictionary<string, string> upgradeAttrMap = new Dictionary<string, string>()
-        {
-            ["MaxVelocity"] = "vmax",
-            //TODO: jTG hinzufügen
-        };
 
         Dictionary<string, string> timetableDefaultAttrs = new Dictionary<string, string>()
         {
@@ -223,5 +217,12 @@ namespace FPLedit.BfplImport
             ["sz"] = "1",
             ["sy"] = "0",
         };
+    }
+
+    enum EntityType
+    {
+        Train,
+        Timetable,
+        Station
     }
 }

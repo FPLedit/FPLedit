@@ -14,7 +14,7 @@ namespace FPLedit.Standard
         {
             get
             {
-                return "jTrainGraph Fahrplan Dateien (*.fpl)|*.xml";
+                return "jTrainGraph Fahrplan Dateien (*.fpl)|*.fpl";
             }
         }
 
