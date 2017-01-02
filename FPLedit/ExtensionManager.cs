@@ -58,9 +58,9 @@ namespace FPLedit
                             bool enabled = enableAll || enabledExtensions.Contains(type.FullName); //TODO: lookup config
 
                             if (enabled)
-                                EnabledPlugins.Add(plugin);
+                                EnabledPlugins.Add(new PluginContainer(plugin));
                             else
-                                DisabledPlugins.Add(plugin);
+                                DisabledPlugins.Add(new PluginContainer(plugin));
                         }
                     }
                 }
