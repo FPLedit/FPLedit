@@ -26,40 +26,53 @@ namespace FPLedit.Standard
             }
         }
 
+        private XElement BuildNode(XMLEntity node)
+        {
+            XElement elm = new XElement(node.XName);
+            foreach (var attr in node.Attributes)
+                elm.SetAttributeValue(attr.Key, attr.Value);
+            foreach (var ch in node.Children)
+                elm.Add(BuildNode(ch));
+            return elm;
+        }
+
         public bool Export(Timetable tt, string filename, ILog logger)
         {
-            XElement ttElm = new XElement("jTrainGraph_timetable");
-            foreach (var attr in tt.Attributes)
-                ttElm.SetAttributeValue(attr.Key, attr.Value);
+            var ttElm = BuildNode(tt);
 
-            XElement stasElm = new XElement("stations");
-            ttElm.Add(stasElm);
-            foreach (var sta in tt.Stations)
-            {
-                XElement staElm = new XElement("sta");
-                foreach (var attr in sta.Attributes)
-                    staElm.SetAttributeValue(attr.Key, attr.Value);
-                stasElm.Add(staElm);
-            }
 
-            XElement trasElement = new XElement("trains");
-            ttElm.Add(trasElement);
-            foreach (var tra in tt.Trains)
-            {
-                XElement traElm = new XElement(tra.Direction.ToString());
-                foreach (var attr in tra.Attributes)
-                    traElm.SetAttributeValue(attr.Key, attr.Value);
-                foreach (var ardep in tra.ArrDeps)
-                {
-                    var tElm = new XElement("t");
-                    var ar = ardep.Value.Arrival.ToShortTimeString();
-                    var dp = ardep.Value.Departure.ToShortTimeString();
-                    tElm.SetAttributeValue("a", ar != "00:00" ? ar : "");
-                    tElm.SetAttributeValue("d", dp != "00:00" ? dp : "");
-                    traElm.Add(tElm);
-                }
-                trasElement.Add(traElm);
-            }
+            //XElement ttElm = new XElement("jTrainGraph_timetable");
+            //foreach (var attr in tt.Attributes)
+            //    ttElm.SetAttributeValue(attr.Key, attr.Value);
+
+            //XElement stasElm = new XElement("stations");
+            //ttElm.Add(stasElm);
+            //foreach (var sta in tt.Stations)
+            //{
+            //    XElement staElm = new XElement("sta");
+            //    foreach (var attr in sta.Attributes)
+            //        staElm.SetAttributeValue(attr.Key, attr.Value);
+            //    stasElm.Add(staElm);
+            //}
+
+            //XElement trasElement = new XElement("trains");
+            //ttElm.Add(trasElement);
+            //foreach (var tra in tt.Trains)
+            //{
+            //    XElement traElm = new XElement(tra.Direction.ToString());
+            //    foreach (var attr in tra.Attributes)
+            //        traElm.SetAttributeValue(attr.Key, attr.Value);
+            //    foreach (var ardep in tra.ArrDeps)
+            //    {
+            //        var tElm = new XElement("t");
+            //        var ar = ardep.Value.Arrival.ToShortTimeString();
+            //        var dp = ardep.Value.Departure.ToShortTimeString();
+            //        tElm.SetAttributeValue("a", ar != "00:00" ? ar : "");
+            //        tElm.SetAttributeValue("d", dp != "00:00" ? dp : "");
+            //        traElm.Add(tElm);
+            //    }
+            //    trasElement.Add(traElm);
+            //}
 
             using (var writer = new XmlTextWriter(filename, new UTF8Encoding(false)))
             {

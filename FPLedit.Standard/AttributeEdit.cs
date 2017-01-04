@@ -12,7 +12,7 @@ namespace FPLedit.Standard
 {
     public partial class AttributeEdit : Form
     {
-        private Entity entity;
+        private XMLEntity entity;
         private Dictionary<string, string> attrBackup;
 
         public AttributeEdit()
@@ -23,7 +23,7 @@ namespace FPLedit.Standard
             listView.Columns.Add("Value");
         }
 
-        public AttributeEdit(Entity ent) : this()
+        public AttributeEdit(XMLEntity ent) : this()
         {
             entity = ent;
             attrBackup = new Dictionary<string, string>(ent.Attributes);

@@ -55,7 +55,7 @@ namespace FPLedit
                         {
                             IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
 
-                            bool enabled = enableAll || enabledExtensions.Contains(type.FullName); //TODO: lookup config
+                            bool enabled = enableAll || enabledExtensions.Contains(type.FullName);
 
                             if (enabled)
                                 EnabledPlugins.Add(new PluginContainer(plugin));

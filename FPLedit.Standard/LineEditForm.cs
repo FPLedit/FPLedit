@@ -40,7 +40,7 @@ namespace FPLedit.Standard
             foreach (var station in tt.Stations.OrderBy(s => s.Kilometre))
             {
                 listView.Items.Add(new ListViewItem(new[] {
-                    station.Name,
+                    station.SName,
                     station.Kilometre.ToString() })
                 { Tag = station });
             }

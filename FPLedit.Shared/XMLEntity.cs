@@ -4,17 +4,37 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 
 namespace FPLedit.Shared
 {
     [Serializable]
-    public abstract class Entity
+    public class XMLEntity
     {
+        [NonSerialized]
+        public XElement el;
+
+        public string XName { get; set; }
+
         public Dictionary<string, string> Attributes { get; set; }
 
-        public Entity()
+        public List<XMLEntity> Children { get; set; }
+
+        public XMLEntity(string xname)
         {
+            XName = xname;
             Attributes = new Dictionary<string, string>();
+            Children = new List<XMLEntity>();
+        }
+
+        public XMLEntity(XElement el)
+        {
+            this.el = el;
+            XName = el.Name.LocalName;
+            Attributes = el.Attributes().ToDictionary(a => a.Name.LocalName, a => (string)a);
+            Children = new List<XMLEntity>();
+            foreach (var c in el.Elements())
+                Children.Add(new XMLEntity(c));
         }
         
         public T GetAttribute<T>(string key, T defaultValue = default(T))

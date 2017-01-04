@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.Shared
 {
     [Serializable]
-    public sealed class Train : Entity
+    public sealed class Train : XMLEntity
     {
-        public string Name
+        public string TName
         {
             get
             {
@@ -23,8 +19,6 @@ namespace FPLedit.Shared
                 SetAttribute("name", value);
             }
         }
-
-        public string Line { get; set; }
 
         public Dictionary<Station, ArrDep> ArrDeps { get; set; }
 
@@ -40,7 +34,13 @@ namespace FPLedit.Shared
             }
         }
 
-        public TrainDirection Direction { get; set; }
+        public TrainDirection Direction
+        {
+            get
+            {
+                return XName == "ti" ? TrainDirection.ti : TrainDirection.ta;
+            }
+        }
 
         public bool[] Days
         {
@@ -56,10 +56,27 @@ namespace FPLedit.Shared
             }
         }
 
-        public Train() : base()
+        public Train(TrainDirection dir) : base(dir.ToString())
+        {
+
+        }
+
+        public Train(XMLEntity en, List<Station> stas) : base(en.el)
         {
             ArrDeps = new Dictionary<Station, ArrDep>();
-            Line = "";
+
+            int i = 0;
+            foreach (var time in en.Children.Where(x => x.XName == "t"))
+            {
+                ArrDep ardp = new ArrDep();
+                if (time.GetAttribute("a", "") != "")
+                    ardp.Arrival = TimeSpan.Parse(time.GetAttribute<string>("a"));
+
+                if (time.GetAttribute("d", "") != "")
+                    ardp.Departure = TimeSpan.Parse(time.GetAttribute<string>("d"));
+                ArrDeps[stas.ElementAt(i)] = ardp;
+                i++;
+            }
         }
 
         public void InitializeStations(Timetable tt)
@@ -74,7 +91,7 @@ namespace FPLedit.Shared
         [DebuggerStepThrough]
         public override string ToString()
         {
-            return Name;
+            return TName;
         }
 
         public static bool[] ParseDays(string binary)
@@ -111,6 +128,6 @@ namespace FPLedit.Shared
         public string DaysToString()
         {
             return DaysToString(Days);
-        }        
+        }
     }    
 }

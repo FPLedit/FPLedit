@@ -21,7 +21,7 @@ namespace FPLedit.Standard
         public EditStationForm(Station station) : this()
         {
             Text = "Station bearbeiten";
-            nameTextBox.Text = station.Name;
+            nameTextBox.Text = station.SName;
             positionTextBox.Text = station.Kilometre.ToString();
             Station = station;
         }
@@ -39,18 +39,9 @@ namespace FPLedit.Standard
             }
 
             if (Station == null)
-            {
-                Station = new Station()
-                {
-                    Name = name,
-                    Kilometre = float.Parse(positionTextBox.Text),
-                };
-            }
-            else
-            {
-                Station.Name = name;
-                Station.Kilometre = float.Parse(positionTextBox.Text);
-            }
+                Station = new Station();
+            Station.SName = name;
+            Station.Kilometre = float.Parse(positionTextBox.Text);
 
             DialogResult = DialogResult.OK;
             Close();

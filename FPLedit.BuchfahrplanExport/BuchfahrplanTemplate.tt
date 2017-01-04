@@ -97,15 +97,15 @@
 	<body>
 		<div>
 			<# foreach (Train tra in tt.Trains) { #>
-			<table id="<#= HtmlId(tra.Name) #>">
+			<table id="<#= HtmlId(tra.TName) #>">
 				<col style="width:80px;" span=2>
 				<col style="width:285px;">
 				<col style="width:80px;" span=2>
 				<tr>
-					<td colspan=5 class="trainname"><#= tra.Name #></td>
+					<td colspan=5 class="trainname"><#= tra.TName #></td>
 				</tr>
 				<tr>
-					<td colspan=5 class="linename"><#= tra.Line #></td>
+					<td colspan=5 class="linename"><#= tt.GetLineName(tra.Direction) #></td>
 				</tr>
 				<tr>
 					<td class=tfz>Tfz <#= tra.Locomotive #></td>
@@ -131,7 +131,7 @@
 				<tr>
 					<td class="zug"><#= s.Kilometre.ToString("0.0") #></td>
 					<td class="zug"><#= s.GetAttribute<int>("vmax", 0).ToString("#") #></td>
-					<td class="zug"><#= s.Name #></td>
+					<td class="zug"><#= s.SName #></td>
 					<#
 					var ardp = tra.ArrDeps[s];
 					var ar = ardp.Arrival.ToShortTimeString();

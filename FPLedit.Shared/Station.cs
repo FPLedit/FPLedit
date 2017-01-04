@@ -1,18 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.Shared
 {
     [Serializable]
-    public sealed class Station : Entity
+    public sealed class Station : XMLEntity
     {
-        public string Name
+        public Station(XMLEntity en) : base(en.el)
+        {
+
+        }
+
+        public Station() : base("sta")
+        {
+
+        }
+
+        public string SName
         {
             get
             {
@@ -39,7 +44,7 @@ namespace FPLedit.Shared
         [DebuggerStepThrough]
         public override string ToString()
         {
-            return Name + " [" + Kilometre + "]";
+            return SName + " [" + Kilometre + "]";
         }
     }
 }

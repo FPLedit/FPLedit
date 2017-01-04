@@ -40,8 +40,8 @@ namespace FPLedit.Standard
             foreach (var train in tt.Trains.Where(o => o.Direction == direction))
             {
                 view.Items.Add(new ListViewItem(new[] {
-                    train.Name,
-                    train.Line,
+                    train.TName,
+                    //train.Line,
                     train.Locomotive,
                     train.DaysToString() })
                 { Tag = train });
@@ -53,7 +53,7 @@ namespace FPLedit.Standard
         private void InitListView(ListView view)
         {
             view.Columns.Add("Zugnummer");
-            view.Columns.Add("Strecke");
+            //view.Columns.Add("Strecke");
             view.Columns.Add("Tfz");
             view.Columns.Add("Verkehrstage");
         }

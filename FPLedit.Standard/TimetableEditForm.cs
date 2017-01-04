@@ -42,9 +42,9 @@ namespace FPLedit.Standard
             foreach (var sta in stations)
             {
                 if (stations.First() != sta)
-                    view.Columns.Add(sta.Name + "ar", sta.Name + " an");
+                    view.Columns.Add(sta.SName + "ar", sta.SName + " an");
                 if (stations.Last() != sta)
-                    view.Columns.Add(sta.Name + "dp", sta.Name + " ab");
+                    view.Columns.Add(sta.SName + "dp", sta.SName + " ab");
             }
 
             foreach (var tra in info.Timetable.Trains.Where(t => t.Direction == direction))
@@ -56,13 +56,13 @@ namespace FPLedit.Standard
                     var ar = tra.ArrDeps[sta].Arrival.ToShortTimeString();
                     var dp = tra.ArrDeps[sta].Departure.ToShortTimeString();
                     if (ar != "00:00")
-                        trainRow.Cells[sta.Name + "ar"].Value = ar;
+                        trainRow.Cells[sta.SName + "ar"].Value = ar;
                     if (dp != "00:00")
-                        trainRow.Cells[sta.Name + "dp"].Value = dp;
+                        trainRow.Cells[sta.SName + "dp"].Value = dp;
                 }
 
                 trainRow.Tag = tra;
-                trainRow.HeaderCell = new DataGridViewRowHeaderCell() { Value = tra.Name };
+                trainRow.HeaderCell = new DataGridViewRowHeaderCell() { Value = tra.TName };
             }
 
             foreach (DataGridViewColumn column in view.Columns)
@@ -86,9 +86,9 @@ namespace FPLedit.Standard
 
                 foreach (var sta in info.Timetable.Stations)
                 {
-                    if (view.Columns.Contains(sta.Name + "ar"))
+                    if (view.Columns.Contains(sta.SName + "ar"))
                     {
-                        DataGridViewCell cellAr = row.Cells[sta.Name + "ar"];
+                        DataGridViewCell cellAr = row.Cells[sta.SName + "ar"];
 
                         if ((string)cellAr.Value != "" && cellAr.Value != null)
                         {
@@ -97,9 +97,9 @@ namespace FPLedit.Standard
                         }
                     }
 
-                    if (view.Columns.Contains(sta.Name + "dp"))
+                    if (view.Columns.Contains(sta.SName + "dp"))
                     {
-                        DataGridViewCell cellDp = row.Cells[sta.Name + "dp"];
+                        DataGridViewCell cellDp = row.Cells[sta.SName + "dp"];
 
                         if ((string)cellDp.Value != "" && cellDp.Value != null)
                         {

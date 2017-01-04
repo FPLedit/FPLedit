@@ -9,6 +9,8 @@ namespace FPLedit.BfplImport
 {
     public class BfplImport : IImport
     {
+        public const string MAGIC = "BFPL/1.1"; // letzte "Magic number" des BFPL-Formats
+
         public string Filter
         {
             get
@@ -39,12 +41,12 @@ namespace FPLedit.BfplImport
             Timetable res = new Timetable();
 
             string magic = reader.ReadString();
-            if (magic != Timetable.MAGIC)
+            if (magic != MAGIC)
                 throw new Exception("Ein Fehler ist beim Öffnen der Datei aufgetreten: Falsche Dateiversion");
 
             var name = reader.ReadString();
             res.Attributes = DeserializeAttributes(reader, EntityType.Timetable);
-            res.Name = name;
+            res.TTName = name;
 
             var stations = new Dictionary<int, Station>();
             int sta_count = reader.ReadInt32();
@@ -78,15 +80,16 @@ namespace FPLedit.BfplImport
         }
 
         private Train DeserializeTrain(BinaryReader reader, Dictionary<int, Station> stations)
-        {
-            Train res = new Train();
+        {            
             var name = reader.ReadString();
             var tfz = reader.ReadString();
-            res.Direction = reader.ReadBoolean() ? TrainDirection.ta : TrainDirection.ti;
-            res.Line = reader.ReadString();
+            var dir = reader.ReadBoolean() ? TrainDirection.ta : TrainDirection.ti;
+            //res.Line = reader.ReadString();
+            reader.ReadString(); // Line nicht mehr im Model
+            Train res = new Train(dir);
             var days = Train.ParseDays(reader.ReadString());
             res.Attributes = DeserializeAttributes(reader, EntityType.Train);
-            res.Name = name;
+            res.TName = name;
             res.Days = days;
             res.Locomotive = tfz;
 
@@ -143,7 +146,7 @@ namespace FPLedit.BfplImport
             var name = reader.ReadString();
             var km = reader.ReadSingle();
             res.Attributes = DeserializeAttributes(reader, EntityType.Station);
-            res.Name = name;
+            res.SName = name;
             res.Kilometre = km;
 
             var attrs = new Dictionary<string, string>(stationDefaultAttrs);

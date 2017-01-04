@@ -9,6 +9,7 @@ using System.Windows.Forms;
 
 namespace FPLedit.jTrainGraphStarter
 {
+#if DEBUG
     public class Plugin : IPlugin
     {
         IInfo info;
@@ -50,4 +51,5 @@ namespace FPLedit.jTrainGraphStarter
             info.Reload();
         }
     }
+#endif
 }

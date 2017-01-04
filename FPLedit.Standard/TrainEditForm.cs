@@ -8,8 +8,6 @@ namespace FPLedit.Standard
     {
         public Train Train { get; set; }
 
-        private TrainDirection direction;
-
         private CheckBox[] daysBoxes;
 
         public TrainEditForm()
@@ -21,9 +19,7 @@ namespace FPLedit.Standard
         public TrainEditForm(Train train) : this()
         {
             Train = train;
-            nameTextBox.Text = train.Name;
-            lineTextBox.Text = train.Line;
-            direction = train.Direction;
+            nameTextBox.Text = train.TName;
             locomotiveTextBox.Text = train.Locomotive;
 
             for (int i = 0; i < Train.Days.Length; i++)
@@ -34,25 +30,19 @@ namespace FPLedit.Standard
 
         public TrainEditForm(Timetable tt, TrainDirection direction) : this()
         {
-            this.direction = direction;
-            lineTextBox.Text = tt.GetLineName(direction);
+            Train = new Train(direction);
         }
 
         private void closeButton_Click(object sender, EventArgs e)
         {
-            if (Train == null)
-                Train = new Train();
-
             if (!nameValidator.Valid)
             {
                 MessageBox.Show("Bitte erst alle Fehler beheben!");
                 return;
             }
 
-            Train.Name = nameTextBox.Text;
-            Train.Line = lineTextBox.Text;
+            Train.TName = nameTextBox.Text;
             Train.Locomotive = locomotiveTextBox.Text;
-            Train.Direction = direction;
 
             for (int i = 0; i < daysBoxes.Length; i++)
                 Train.Days[i] = daysBoxes[i].Checked;

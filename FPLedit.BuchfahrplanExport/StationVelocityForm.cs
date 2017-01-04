@@ -40,7 +40,7 @@ namespace FPLedit.BuchfahrplanExport
             foreach (var station in tt.Stations)
             {
                 listView.Items.Add(new ListViewItem(new[] {
-                    station.Name,
+                    station.SName,
                     station.GetAttribute<string>("vmax", velocity),
                 }) { Tag = station });                
             }
