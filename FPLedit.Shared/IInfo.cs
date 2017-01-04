@@ -8,7 +8,11 @@ namespace FPLedit.Shared
 {
     public interface IInfo
     {
-        Timetable Timetable { get; set; }
+        Timetable Timetable { get; set; }        
+
+        FileState FileState { get; set; }
+
+        void SetUnsaved();
 
         void BackupTimetable();
 
@@ -16,19 +20,21 @@ namespace FPLedit.Shared
 
         void ClearBackup();
 
-        FileState FileState { get; set; }
-
-        void SetUnsaved();
-
-        dynamic Menu { get; }
-
-        dynamic ShowDialog(dynamic form);
-
-        event EventHandler<FileStateChangedEventArgs> FileStateChanged;
-
         void RegisterExport(IExport export);
 
         void RegisterImport(IImport import);
+
+        void Open();
+
+        void Save(bool forceSaveAs);
+
+        void Reload();
+
+        dynamic Menu { get; }
+
+        ILog Logger { get; }
+
+        event EventHandler<FileStateChangedEventArgs> FileStateChanged;        
     }
 
     public class FileStateChangedEventArgs : EventArgs

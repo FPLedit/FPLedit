@@ -41,7 +41,7 @@ namespace FPLedit.BuchfahrplanExport
         private void VelocityItem_Click(object sender, EventArgs e)
         {
             StationVelocityForm svf = new StationVelocityForm(info);
-            if (info.ShowDialog(svf) == DialogResult.OK)
+            if (svf.ShowDialog() == DialogResult.OK)
                 info.SetUnsaved();
         }
 

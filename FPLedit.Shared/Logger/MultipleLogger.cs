@@ -14,6 +14,12 @@ namespace FPLedit.Shared.Logger
             Loggers = new List<ILog>();
         }
 
+        public MultipleLogger(params ILog[] logger)
+        {
+            Loggers = new List<ILog>();
+            Loggers.AddRange(logger);
+        }
+
         public void Error(string message)
         {
             foreach (var log in Loggers)

@@ -37,14 +37,14 @@ namespace FPLedit
             {
                 enabledListView.Items.Add(new ListViewItem(ext.Name)
                 {
-                    Tag = ext.GetType().FullName,
+                    Tag = ext.Plugin.GetType().FullName,
                 });
             }
 
             foreach (var ext in manager.DisabledPlugins)
                 disabledListView.Items.Add(new ListViewItem(ext.Name)
                 {
-                    Tag = ext.GetType().FullName,
+                    Tag = ext.Plugin.GetType().FullName,
                 });
         }
 

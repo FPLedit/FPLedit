@@ -19,12 +19,13 @@ namespace FPLedit
         private List<IExport> exporters;
         private List<IImport> importers;
         private IExport lastExport;
+        private IImport lastImport;
 
         private FileState fileState;
 
         private ExtensionManager extensionManager;
 
-        private MultipleLogger logger;
+        public ILog Logger { get; private set; }
 
         public FileState FileState
         {
@@ -68,8 +69,7 @@ namespace FPLedit
             importers = new List<IImport>();
 
             fileState = new FileState();
-            logger = new MultipleLogger();
-            logger.Loggers.Add(logTextBox);
+            Logger = new MultipleLogger(logTextBox);
             //logger.Loggers.Add(new ConsoleLogger());
         }
 
@@ -90,11 +90,11 @@ namespace FPLedit
                 var import = importers.FirstOrDefault(i => i.GetType().FullName == args[1]);
                 if (import != null && File.Exists(args[2]))
                 {
-                    logger.Info("Öffne Datei " + openFileDialog.FileName);
-                    Timetable = import.Import(args[2], logger);
+                    Logger.Info("Öffne Datei " + openFileDialog.FileName);
+                    Timetable = import.Import(args[2], Logger);
                     if (Timetable == null)
                         return;
-                    logger.Info("Datei erfolgeich geöffnet!");
+                    Logger.Info("Datei erfolgeich geöffnet!");
                     fileState.Opened = true;
                     fileState.Saved = true;
                     fileState.FileName = args[2];
@@ -103,7 +103,7 @@ namespace FPLedit
             }
         }
 
-        private void Open()
+        public void Open()
         {
             if (!fileState.Saved && fileState.Opened)
             {
@@ -116,11 +116,12 @@ namespace FPLedit
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 IImport import = importers[openFileDialog.FilterIndex - 1];
-                logger.Info("Öffne Datei " + openFileDialog.FileName);
-                Timetable = import.Import(openFileDialog.FileName, logger);
+                lastImport = import;
+                Logger.Info("Öffne Datei " + openFileDialog.FileName);
+                Timetable = import.Import(openFileDialog.FileName, Logger);
                 if (Timetable == null)
                     return;
-                logger.Info("Datei erfolgeich geöffnet!");                
+                Logger.Info("Datei erfolgeich geöffnet!");
                 fileState.Opened = true;
                 fileState.Saved = true;
                 fileState.FileName = openFileDialog.FileName;
@@ -128,7 +129,7 @@ namespace FPLedit
             }
         }
 
-        private void Save(bool forceSaveAs)
+        public void Save(bool forceSaveAs)
         {
             IExport export = lastExport;
             string filename = fileState.FileName;
@@ -146,11 +147,11 @@ namespace FPLedit
                     return;
             }
 
-            logger.Info("Speichere Datei " + filename);
-            bool ret = export.Export(Timetable, filename, logger);
+            Logger.Info("Speichere Datei " + filename);
+            bool ret = export.Export(Timetable, filename, Logger);
             if (ret == false)
                 return;
-            logger.Info("Speichern erfolgreich abgeschlossen!");
+            Logger.Info("Speichern erfolgreich abgeschlossen!");
             if (export.Reoppenable)
             {
                 fileState.Saved = true;
@@ -158,6 +159,18 @@ namespace FPLedit
                 OnFileStateChanged();
             }
             lastExport = export.Reoppenable ? export : null;
+        }
+
+        public void Reload()
+        {            
+            Logger.Info("Öffne Datei " + fileState.FileName);
+            Timetable = lastImport.Import(fileState.FileName, Logger);
+            if (Timetable == null)
+                return;
+            Logger.Info("Datei erfolgeich geöffnet!");
+            fileState.Opened = true;
+            fileState.Saved = true;
+            OnFileStateChanged();
         }
 
         private void New()
@@ -175,18 +188,13 @@ namespace FPLedit
             fileState.Saved = false;
             fileState.FileName = null;
             OnFileStateChanged();
-            logger.Info("Neue Datei erstellt");
+            Logger.Info("Neue Datei erstellt");
         }
 
         #region IInfo
         dynamic IInfo.Menu
         {
             get { return menuStrip; }
-        }
-
-        public dynamic ShowDialog(dynamic form)
-        {
-            return form.ShowDialog();
         }
 
         public void BackupTimetable()

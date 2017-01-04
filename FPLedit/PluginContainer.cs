@@ -6,13 +6,13 @@ using System.Text;
 
 namespace FPLedit
 {
-    class PluginContainer : IPlugin
+    public class PluginContainer : IPlugin
     {
-        IPlugin plg;
+        public IPlugin Plugin { get; private set; }
 
         public PluginContainer(IPlugin plugin)
         {
-            plg = plugin;
+            Plugin = plugin;
         }
 
         public string Name
@@ -20,7 +20,7 @@ namespace FPLedit
             get
             {
                 try {
-                    return plg.Name;
+                    return Plugin.Name;
                 }
                 catch {
                     return "<Fehler beim Laden>";
@@ -31,10 +31,10 @@ namespace FPLedit
         public void Init(IInfo info)
         {
             try {
-                plg.Init(info);
+                Plugin.Init(info);
             }
             catch {
-                //TODO: Log
+                info.Logger.Error("Fehler beim Initialisieren einer Erweiterung!");
             }
         }
     }

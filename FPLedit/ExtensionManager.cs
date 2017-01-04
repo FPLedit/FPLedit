@@ -13,9 +13,9 @@ namespace FPLedit
     /// </summary>
     public class ExtensionManager
     {
-        public List<IPlugin> EnabledPlugins { get; private set; }
+        public List<PluginContainer> EnabledPlugins { get; private set; }
 
-        public List<IPlugin> DisabledPlugins { get; private set; }
+        public List<PluginContainer> DisabledPlugins { get; private set; }
 
         public ExtensionManager()
         {
@@ -34,8 +34,8 @@ namespace FPLedit
                 }
             }
 
-            EnabledPlugins = new List<IPlugin>();
-            DisabledPlugins = new List<IPlugin>();
+            EnabledPlugins = new List<PluginContainer>();
+            DisabledPlugins = new List<PluginContainer>();
 
             string[] enabledExtensions = SettingsManager.Get("EnabledExtensions", "").Split(';');
             bool enableAll = enabledExtensions.Length < 0;
