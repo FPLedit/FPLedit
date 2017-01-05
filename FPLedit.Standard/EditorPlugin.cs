@@ -40,18 +40,6 @@ namespace FPLedit.Standard
             editTimetableItem = item.DropDownItems.Add("Fahrplan bearbeiten...");
             editTimetableItem.Enabled = false;
             editTimetableItem.Click += EditTimetableItem_Click;
-            editTimetableItem.MouseDown += EditTimetableItem_MouseDown;
-        }
-
-        private void EditTimetableItem_MouseDown(object sender, MouseEventArgs e)
-        {
-            //TODO: Remove meta editor
-            //if (e.Button == MouseButtons.Middle)
-            //{
-            //    AttributeEdit mef = new AttributeEdit(info.Timetable);
-            //    if (mef.ShowDialog() == DialogResult.OK)
-            //        info.SetUnsaved();
-            //}
         }
 
         private void EditTimetableItem_Click(object sender, EventArgs e)

@@ -62,7 +62,6 @@
             this.editButton.Text = "Station bearbeiten";
             this.editButton.UseVisualStyleBackColor = true;
             this.editButton.Click += new System.EventHandler(this.editButton_Click);
-            this.editButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.editButton_MouseDown);
             // 
             // deleteButton
             // 

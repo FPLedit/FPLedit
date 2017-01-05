@@ -205,7 +205,6 @@
             this.topEditButton.Text = "Zug bearbeiten";
             this.topEditButton.UseVisualStyleBackColor = true;
             this.topEditButton.Click += new System.EventHandler(this.topEditButton_Click);
-            this.topEditButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.topEditButton_MouseDown);
             // 
             // topNewButton
             // 
@@ -249,7 +248,6 @@
             this.bottomEditButton.Text = "Zug bearbeiten";
             this.bottomEditButton.UseVisualStyleBackColor = true;
             this.bottomEditButton.Click += new System.EventHandler(this.bottomEditButton_Click);
-            this.bottomEditButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.bottomEditButton_MouseDown);
             // 
             // bottomNewButton
             // 

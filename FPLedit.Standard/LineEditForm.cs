@@ -69,27 +69,6 @@ namespace FPLedit.Standard
                 MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Station bearbeiten");
         }
 
-        private void EditMeta()
-        {
-            //TODO: Remove meta editor
-            //if (listView.SelectedItems.Count > 0)
-            //{
-            //    ListViewItem item = listView.Items[listView.SelectedIndices[0]];
-            //    Station station = tt.Stations[tt.Stations.IndexOf((Station)item.Tag)];
-
-            //    AttributeEdit mef = new AttributeEdit(station);
-            //    if (mef.ShowDialog() == DialogResult.OK)
-            //    {
-            //        UpdateStations();
-            //        var changedItem = listView.Items.OfType<ListViewItem>().Where(i => i.Tag == station).First();
-            //        changedItem.Selected = true;
-            //        changedItem.EnsureVisible();
-            //    }
-            //}
-            //else
-            //    MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Stations-Metadaten bearbeiten");
-        }
-
         private void DeleteStation()
         {
             if (listView.SelectedItems.Count > 0)
@@ -145,12 +124,6 @@ namespace FPLedit.Standard
 
         private void newButton_Click(object sender, EventArgs e)
             => NewStation();
-
-        private void editButton_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Middle)
-                EditMeta();
-        }
 
         private void listView_MouseDoubleClick(object sender, MouseEventArgs e)
             => EditStation(false);

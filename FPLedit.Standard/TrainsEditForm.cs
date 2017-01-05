@@ -108,27 +108,6 @@ namespace FPLedit.Standard
             }
         }
 
-        private void EditMeta(ListView view, TrainDirection direction)
-        {
-            //TODO: Remove meta editor
-            //if (view.SelectedItems.Count > 0)
-            //{
-            //    ListViewItem item = view.Items[view.SelectedIndices[0]];
-            //    Train train = tt.Trains[tt.Trains.IndexOf((Train)item.Tag)];
-
-            //    AttributeEdit mef = new AttributeEdit(train);
-            //    if (mef.ShowDialog() == DialogResult.OK)
-            //    {
-            //        UpdateListView(view, direction);
-            //        var changedItem = view.Items.OfType<ListViewItem>().Where(i => i.Tag == train).First();
-            //        changedItem.Selected = true;
-            //        changedItem.EnsureVisible();
-            //    }
-            //}
-            //else
-            //    MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug-Metadaten bearbeiten");
-        }
-
         private void closeButton_Click(object sender, EventArgs e)
         {
             info.ClearBackup();
@@ -160,18 +139,6 @@ namespace FPLedit.Standard
 
         private void bottomDeleteButton_Click(object sender, EventArgs e)
             => DeleteTrain(bottomListView, BOTTOM_DIRECTION);
-
-        private void topEditButton_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Middle)
-                EditMeta(topListView, TOP_DIRECTION);
-        }
-
-        private void bottomEditButton_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Middle)
-                EditMeta(bottomListView, BOTTOM_DIRECTION);
-        }
 
         private void bottomListView_MouseDoubleClick(object sender, MouseEventArgs e)
             => EditTrain(bottomListView, BOTTOM_DIRECTION, false);
