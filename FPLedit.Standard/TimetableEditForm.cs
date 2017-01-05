@@ -75,9 +75,6 @@ namespace FPLedit.Standard
 
         private bool UpdateTrainDataFromGrid(Train train, DataGridView view)
         {
-            var ars = new Dictionary<Station, TimeSpan>();
-            var dps = new Dictionary<Station, TimeSpan>();
-
             foreach (DataGridViewRow row in view.Rows)
             {
                 Train t = (Train)row.Tag;
@@ -85,9 +82,9 @@ namespace FPLedit.Standard
                 if (t != train)
                     continue;
 
-                //TODO: Merge two loop blocks
                 foreach (var sta in info.Timetable.Stations)
                 {
+                    ArrDep ardp = new ArrDep(); 
                     if (view.Columns.Contains(sta.SName + "ar"))
                     {
                         DataGridViewCell cellAr = row.Cells[sta.SName + "ar"];
@@ -95,7 +92,7 @@ namespace FPLedit.Standard
                         if ((string)cellAr.Value != "" && cellAr.Value != null)
                         {
                             TimeSpan tsAr = TimeSpan.Parse((string)cellAr.Value);
-                            ars.Add(sta, tsAr);
+                            ardp.Arrival = tsAr;
                         }
                     }
 
@@ -106,18 +103,10 @@ namespace FPLedit.Standard
                         if ((string)cellDp.Value != "" && cellDp.Value != null)
                         {
                             TimeSpan tsDp = TimeSpan.Parse((string)cellDp.Value);
-                            dps.Add(sta, tsDp);
+                            ardp.Departure = tsDp;
                         }
                     }
-                }
 
-                foreach (var sta in info.Timetable.Stations)
-                {
-                    var ardp = new ArrDep();
-                    if (ars.ContainsKey(sta))
-                        ardp.Arrival = ars[sta];
-                    if (dps.ContainsKey(sta))
-                        ardp.Departure = dps[sta];
                     t.SetArrDep(sta, ardp);
                 }
                 return true;

@@ -14,8 +14,6 @@ namespace FPLedit.Shared
         [NonSerialized]
         public XElement el;
 
-        //public Timetable _parent;
-
         public string XName { get; set; }
 
         public Dictionary<string, string> Attributes { get; set; }
@@ -25,7 +23,6 @@ namespace FPLedit.Shared
         public XMLEntity(string xname, Timetable tt)
         {
             XName = xname;
-            //_parent = tt;
             Attributes = new Dictionary<string, string>();
             Children = new List<XMLEntity>();
         }
@@ -33,7 +30,6 @@ namespace FPLedit.Shared
         public XMLEntity(XElement el, Timetable tt)
         {
             this.el = el;
-            //_parent = tt;
             XName = el.Name.LocalName;
             Attributes = el.Attributes().ToDictionary(a => a.Name.LocalName, a => (string)a);
             Children = new List<XMLEntity>();
