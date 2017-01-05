@@ -5,9 +5,9 @@ using System.Globalization;
 namespace FPLedit.Shared
 {
     [Serializable]
-    public sealed class Station : XMLEntity
+    public sealed class Station : Entity
     {
-        public Station(XMLEntity en, Timetable tt) : base(en.el, tt)
+        public Station(XMLEntity en, Timetable tt) : base(en, tt)
         {
 
         }

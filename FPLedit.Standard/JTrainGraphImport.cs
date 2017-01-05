@@ -58,7 +58,8 @@ namespace FPLedit.Standard
 
             //var ttAtts = el.Attributes().ToDictionary(a => a.Name.LocalName, a => (string)a);
 
-            return new Timetable(el);
+            XMLEntity en = new XMLEntity(el, null);
+            return new Timetable(en);
                 //{
                 //    //Attributes = ttAtts,
                 //    //Stations = stas,

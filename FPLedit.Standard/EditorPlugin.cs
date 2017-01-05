@@ -45,12 +45,13 @@ namespace FPLedit.Standard
 
         private void EditTimetableItem_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Middle)
-            {
-                AttributeEdit mef = new AttributeEdit(info.Timetable);
-                if (mef.ShowDialog() == DialogResult.OK)
-                    info.SetUnsaved();
-            }
+            //TODO: Remove meta editor
+            //if (e.Button == MouseButtons.Middle)
+            //{
+            //    AttributeEdit mef = new AttributeEdit(info.Timetable);
+            //    if (mef.ShowDialog() == DialogResult.OK)
+            //        info.SetUnsaved();
+            //}
         }
 
         private void EditTimetableItem_Click(object sender, EventArgs e)

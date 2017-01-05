@@ -71,22 +71,23 @@ namespace FPLedit.Standard
 
         private void EditMeta()
         {
-            if (listView.SelectedItems.Count > 0)
-            {
-                ListViewItem item = listView.Items[listView.SelectedIndices[0]];
-                Station station = tt.Stations[tt.Stations.IndexOf((Station)item.Tag)];
+            //TODO: Remove meta editor
+            //if (listView.SelectedItems.Count > 0)
+            //{
+            //    ListViewItem item = listView.Items[listView.SelectedIndices[0]];
+            //    Station station = tt.Stations[tt.Stations.IndexOf((Station)item.Tag)];
 
-                AttributeEdit mef = new AttributeEdit(station);
-                if (mef.ShowDialog() == DialogResult.OK)
-                {
-                    UpdateStations();
-                    var changedItem = listView.Items.OfType<ListViewItem>().Where(i => i.Tag == station).First();
-                    changedItem.Selected = true;
-                    changedItem.EnsureVisible();
-                }
-            }
-            else
-                MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Stations-Metadaten bearbeiten");
+            //    AttributeEdit mef = new AttributeEdit(station);
+            //    if (mef.ShowDialog() == DialogResult.OK)
+            //    {
+            //        UpdateStations();
+            //        var changedItem = listView.Items.OfType<ListViewItem>().Where(i => i.Tag == station).First();
+            //        changedItem.Selected = true;
+            //        changedItem.EnsureVisible();
+            //    }
+            //}
+            //else
+            //    MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Stations-Metadaten bearbeiten");
         }
 
         private void DeleteStation()

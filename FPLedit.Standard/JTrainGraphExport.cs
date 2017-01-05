@@ -38,7 +38,7 @@ namespace FPLedit.Standard
 
         public bool Export(Timetable tt, string filename, ILog logger)
         {
-            var ttElm = BuildNode(tt);
+            var ttElm = BuildNode(tt.XMLEntity);
 
 
             //XElement ttElm = new XElement("jTrainGraph_timetable");

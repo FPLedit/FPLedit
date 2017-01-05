@@ -6,7 +6,7 @@ using System.Linq;
 namespace FPLedit.Shared
 {
     [Serializable]
-    public sealed class Train : XMLEntity
+    public sealed class Train : Entity
     {
         public string TName
         {
@@ -101,7 +101,7 @@ namespace FPLedit.Shared
         {
         }
 
-        public Train(XMLEntity en, Timetable tt) : base(en.el, tt)
+        public Train(XMLEntity en, Timetable tt) : base(en, tt)
         {
         }
 

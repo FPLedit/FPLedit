@@ -8,7 +8,7 @@ using System.Xml.Linq;
 namespace FPLedit.Shared
 {
     [Serializable]
-    public sealed class Timetable : XMLEntity
+    public sealed class Timetable : Entity
     {
         public string TTName
         {
@@ -36,7 +36,7 @@ namespace FPLedit.Shared
             Children.Add(new XMLEntity("trains", this));
         }
 
-        public Timetable(XElement el) : base(el, null) // Root without parent
+        public Timetable(XMLEntity en) : base(en, null) // Root without parent
         {
             Stations = new List<Station>();
             foreach(var c in Children.First(x => x.XName == "stations").Children.
