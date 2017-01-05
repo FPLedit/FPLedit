@@ -61,7 +61,7 @@ namespace FPLedit.BfplImport
             int tra_count = reader.ReadInt32();
             for (int i = 0; i < tra_count; i++)
             {
-                var tr = DeserializeTrain(reader, stations);
+                var tr = DeserializeTrain(reader, stations, res);
                 res.Trains.Add(tr);
             }
 
@@ -79,15 +79,15 @@ namespace FPLedit.BfplImport
             return res;
         }
 
-        private Train DeserializeTrain(BinaryReader reader, Dictionary<int, Station> stations)
+        private Train DeserializeTrain(BinaryReader reader, Dictionary<int, Station> stations, Timetable tt)
         {            
             var name = reader.ReadString();
             var tfz = reader.ReadString();
             var dir = reader.ReadBoolean() ? TrainDirection.ta : TrainDirection.ti;
             //res.Line = reader.ReadString();
             reader.ReadString(); // Line nicht mehr im Model
-            Train res = new Train(dir);
-            var days = Train.ParseDays(reader.ReadString());
+            Train res = new Train(dir, tt);
+            var days = DaysHelper.ParseDays(reader.ReadString());
             res.Attributes = DeserializeAttributes(reader, EntityType.Train);
             res.TName = name;
             res.Days = days;
@@ -123,7 +123,7 @@ namespace FPLedit.BfplImport
                     ardp.Arrival = ars[station];
                 if (dps.ContainsKey(station))
                     ardp.Departure = dps[station];
-                res.ArrDeps[station] = ardp;
+                res.AddArrDep(station, ardp);
             }
 
             var attrs = new Dictionary<string, string>(trainDefaultAttrs);

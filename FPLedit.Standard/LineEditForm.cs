@@ -112,11 +112,7 @@ namespace FPLedit.Standard
                 tt.Stations.Add(sta);
 
                 foreach (var t in tt.Trains)
-                {
-                    //t.Arrivals.Add(sta, new TimeSpan());
-                    //t.Departures.Add(sta, new TimeSpan());
-                    t.ArrDeps.Add(sta, new ArrDep());
-                }
+                    t.AddArrDep(sta, new ArrDep());
 
                 UpdateStations();
                 var changedItem = listView.Items.OfType<ListViewItem>().Where(i => i.Tag == sta).First();

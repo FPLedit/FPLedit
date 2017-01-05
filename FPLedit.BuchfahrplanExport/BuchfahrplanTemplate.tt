@@ -133,7 +133,7 @@
 					<td class="zug"><#= s.GetAttribute<int>("vmax", 0).ToString("#") #></td>
 					<td class="zug"><#= s.SName #></td>
 					<#
-					var ardp = tra.ArrDeps[s];
+					var ardp = tra.GetArrDep(s);
 					var ar = ardp.Arrival.ToShortTimeString();
 					var dp = ardp.Departure.ToShortTimeString();
 					#>

@@ -30,6 +30,10 @@ namespace FPLedit.Shared
         {
             Stations = new List<Station>();
             Trains = new List<Train>();
+
+            SetAttribute("version", "008");
+            Children.Add(new XMLEntity("stations"));
+            Children.Add(new XMLEntity("trains"));
         }
 
         public Timetable(XElement el) : base(el)
@@ -42,7 +46,7 @@ namespace FPLedit.Shared
             Trains = new List<Train>();
             foreach (var c in Children.First(x => x.XName == "trains").Children.
                 Where(x => x.XName == "ti" || x.XName == "ta")) // Filtert andere Elemente
-                Trains.Add(new Train(c, Stations));
+                Trains.Add(new Train(c, Stations, this));
         }
 
         public List<Station> GetStationsOrderedByDirection(TrainDirection direction)

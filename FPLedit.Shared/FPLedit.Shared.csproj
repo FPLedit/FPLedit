@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArrDep.cs" />
+    <Compile Include="DaysHelper.cs" />
     <Compile Include="Logger\ConsoleLogger.cs" />
     <Compile Include="FileState.cs" />
     <Compile Include="IExport.cs" />

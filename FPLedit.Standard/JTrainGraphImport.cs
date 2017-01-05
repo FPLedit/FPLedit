@@ -22,19 +22,11 @@ namespace FPLedit.Standard
         {
             //try
             //{
+
+
                 //List<Station> stas = new List<Station>();
                 //List<Train> trs = new List<Train>();
                 XElement el = XElement.Load(filename);
-
-            /*XElement stations = el.Element("stations");
-            foreach (var station in stations.Elements())
-            {                    
-                var staAtts = station.Attributes().ToDictionary(a => a.Name.LocalName, a => (string)a);
-                stas.Add(new Station()
-                {
-                    Attributes = staAtts,
-                });
-            }*/
 
             //XElement trains = el.Element("trains");
             //foreach (var train in trains.Elements())
@@ -66,12 +58,15 @@ namespace FPLedit.Standard
 
             //var ttAtts = el.Attributes().ToDictionary(a => a.Name.LocalName, a => (string)a);
 
-            return new Timetable(el)
-                {
-                    //Attributes = ttAtts,
-                    //Stations = stas,
-                    //Trains = trs
-                };
+            return new Timetable(el);
+                //{
+                //    //Attributes = ttAtts,
+                //    //Stations = stas,
+                //    //Trains = trs
+                //};
+
+
+
             //}
             //catch (Exception ex)
             //{

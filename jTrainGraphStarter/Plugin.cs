@@ -30,6 +30,7 @@ namespace FPLedit.jTrainGraphStarter
             info.Menu.Items.AddRange(new[] { item });
             var showItem = item.DropDownItems.Add("Anzeigen");
             //showItem.Enabled = false;
+            //TODO: Filestate dependant
             showItem.Click += (s, e) => Start();
         }
 
@@ -37,6 +38,7 @@ namespace FPLedit.jTrainGraphStarter
         {
             info.Save(false);
 
+            //TODO: Appsettings
             string javapath = @"C:\ProgramData\Oracle\Java\javapath\java.exe";
             string jtgPath = @"F:\Software\GrafischerFahrplan\jTrainGraph_201\jTrainGraph_201.jar";
             string jtgFolder = Path.GetDirectoryName(jtgPath);

@@ -51,10 +51,11 @@ namespace FPLedit.Standard
             {
                 DataGridViewRow trainRow = view.Rows[view.Rows.Add()];
 
-                foreach (var sta in tra.ArrDeps.Keys)
+                foreach (var sta in info.Timetable.Stations)
                 {
-                    var ar = tra.ArrDeps[sta].Arrival.ToShortTimeString();
-                    var dp = tra.ArrDeps[sta].Departure.ToShortTimeString();
+                    var ardp = tra.GetArrDep(sta);
+                    var ar = ardp.Arrival.ToShortTimeString();
+                    var dp = ardp.Departure.ToShortTimeString();
                     if (ar != "00:00")
                         trainRow.Cells[sta.SName + "ar"].Value = ar;
                     if (dp != "00:00")
@@ -84,6 +85,7 @@ namespace FPLedit.Standard
                 if (t != train)
                     continue;
 
+                //TODO: Merge two loop blocks
                 foreach (var sta in info.Timetable.Stations)
                 {
                     if (view.Columns.Contains(sta.SName + "ar"))
@@ -109,15 +111,14 @@ namespace FPLedit.Standard
                     }
                 }
 
-                t.ArrDeps.Clear();
-                foreach (var station in info.Timetable.Stations)
+                foreach (var sta in info.Timetable.Stations)
                 {
                     var ardp = new ArrDep();
-                    if (ars.ContainsKey(station))
-                        ardp.Arrival = ars[station];
-                    if (dps.ContainsKey(station))
-                        ardp.Departure = dps[station];
-                    t.ArrDeps[station] = ardp;
+                    if (ars.ContainsKey(sta))
+                        ardp.Arrival = ars[sta];
+                    if (dps.ContainsKey(sta))
+                        ardp.Departure = dps[sta];
+                    t.SetArrDep(sta, ardp);
                 }
                 return true;
             }

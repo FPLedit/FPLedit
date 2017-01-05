@@ -233,7 +233,7 @@ namespace FPLedit.BuchfahrplanExport
             
             #line 135 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\BuchfahrplanTemplate.tt"
 
-					var ardp = tra.ArrDeps[s];
+					var ardp = tra.GetArrDep(s);
 					var ar = ardp.Arrival.ToShortTimeString();
 					var dp = ardp.Departure.ToShortTimeString();
 					

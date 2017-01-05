@@ -8,6 +8,8 @@ namespace FPLedit.Shared
     [Serializable]
     public sealed class Train : XMLEntity
     {
+        private Timetable _parent;
+
         public string TName
         {
             get
@@ -20,7 +22,52 @@ namespace FPLedit.Shared
             }
         }
 
-        public Dictionary<Station, ArrDep> ArrDeps { get; set; }
+        //private Dictionary<Station, ArrDep> ArrDeps { get; set; }
+
+        public void AddArrDep(Station sta, ArrDep ardp)
+        {
+            var stas = _parent.Stations.OrderBy(s => s.Kilometre).ToList();
+            var idx = stas.IndexOf(sta);
+
+            var ar = ardp.Arrival.ToShortTimeString();
+            var dp = ardp.Departure.ToShortTimeString();
+            
+            var tElm = new XMLEntity("t");
+            tElm.SetAttribute("a", ar != "00:00" ? ar : "");
+            tElm.SetAttribute("d", dp != "00:00" ? dp : "");
+            Children.Insert(idx, tElm);
+        }
+
+        public void SetArrDep(Station sta, ArrDep ardp)
+        {
+            var stas = _parent.Stations.OrderBy(s => s.Kilometre).ToList();
+            var idx = stas.IndexOf(sta);
+            var tElm = Children.Where(x => x.XName == "t").ToList()[idx];
+
+            var ar = ardp.Arrival.ToShortTimeString();
+            var dp = ardp.Departure.ToShortTimeString();
+            tElm.SetAttribute("a", ar != "00:00" ? ar : "");
+            tElm.SetAttribute("d", dp != "00:00" ? dp : "");
+
+            //ArrDeps[sta] = ardp;
+        }
+
+        public ArrDep GetArrDep(Station sta)
+        {
+            var stas = _parent.Stations.OrderBy(s => s.Kilometre).ToList();
+            var idx = stas.IndexOf(sta);
+            var tElm = Children.Where(x => x.XName == "t").ToList()[idx];
+
+            ArrDep ardp = new ArrDep();
+
+            if (tElm.GetAttribute("a", "") != "")
+                ardp.Arrival = TimeSpan.Parse(tElm.GetAttribute<string>("a"));
+
+            if (tElm.GetAttribute("d", "") != "")
+                ardp.Departure = TimeSpan.Parse(tElm.GetAttribute<string>("d"));
+
+            return ardp;
+        }
 
         public string Locomotive
         {
@@ -47,46 +94,48 @@ namespace FPLedit.Shared
             get
             {
                 var d = GetAttribute<string>("d", "1111111");
-                return ParseDays(d);
+                return DaysHelper.ParseDays(d);
             }
             set
             {
-                var d = DaysToBinString(value);
+                var d = DaysHelper.DaysToBinString(value);
                 SetAttribute("d", d);
             }
         }
 
-        public Train(TrainDirection dir) : base(dir.ToString())
+        public Train(TrainDirection dir, Timetable tt) : base(dir.ToString())
         {
-
+            _parent = tt;
         }
 
-        public Train(XMLEntity en, List<Station> stas) : base(en.el)
+        public Train(XMLEntity en, List<Station> stas, Timetable tt) : base(en.el)
         {
-            ArrDeps = new Dictionary<Station, ArrDep>();
+            _parent = tt;
+            //ArrDeps = new Dictionary<Station, ArrDep>();
 
-            int i = 0;
-            foreach (var time in en.Children.Where(x => x.XName == "t"))
-            {
-                ArrDep ardp = new ArrDep();
-                if (time.GetAttribute("a", "") != "")
-                    ardp.Arrival = TimeSpan.Parse(time.GetAttribute<string>("a"));
+            //TODO: Serialize back into xml
+            //int i = 0;
+            //foreach (var time in en.Children.Where(x => x.XName == "t"))
+            //{
+            //    ArrDep ardp = new ArrDep();
+            //    if (time.GetAttribute("a", "") != "")
+            //        ardp.Arrival = TimeSpan.Parse(time.GetAttribute<string>("a"));
 
-                if (time.GetAttribute("d", "") != "")
-                    ardp.Departure = TimeSpan.Parse(time.GetAttribute<string>("d"));
-                ArrDeps[stas.ElementAt(i)] = ardp;
-                i++;
-            }
+            //    if (time.GetAttribute("d", "") != "")
+            //        ardp.Departure = TimeSpan.Parse(time.GetAttribute<string>("d"));
+            //    SetArrDep(stas.ElementAt(i), ardp);
+            //    i++;
+            //}
         }
 
-        public void InitializeStations(Timetable tt)
-        {
-            var stas = tt.GetStationsOrderedByDirection(Direction)
-                .Skip(1); // Remove first station (only departure)
+        //public void InitializeStations(Timetable tt)
+        //{
+        //    var stas = tt.GetStationsOrderedByDirection(Direction)
+        //        .Skip(1); // Remove first station (only departure)
 
-            foreach (var sta in stas)
-                ArrDeps.Add(sta, new ArrDep());
-        }
+        //    foreach (var sta in tt.Stations)
+        //        AddArrDep(sta, new ArrDep());
+        //}
 
         [DebuggerStepThrough]
         public override string ToString()
@@ -94,40 +143,10 @@ namespace FPLedit.Shared
             return TName;
         }
 
-        public static bool[] ParseDays(string binary)
-        {
-            bool[] days = new bool[7];
-            char[] chars = binary.ToCharArray();
-            for (int i = 0; i < chars.Length; i++)
-                days[i] = chars[i] == '1';
-            return days;
-        }
-
-        public static string DaysToBinString(bool[] days)
-        {
-            string ret = "";
-            for (int i = 0; i < days.Length; i++)
-                ret += days[i] ? "1" : "0";
-            return ret;
-        }
-
-        public static string DaysToString(bool[] days)
-        {
-            string[] str = new string[7];
-            str[0] = days[0] ? "Montag" : null;
-            str[1] = days[1] ? "Dienstag" : null;
-            str[2] = days[2] ? "Mittwoch" : null;
-            str[3] = days[3] ? "Donnerstag" : null;
-            str[4] = days[4] ? "Freitag" : null;
-            str[5] = days[5] ? "Samstag" : null;
-            str[6] = days[6] ? "Sonntag" : null;
-
-            return string.Join(", ", str.Where(o => o != null));
-        }
-
+        [DebuggerStepThrough]
         public string DaysToString()
         {
-            return DaysToString(Days);
+            return DaysHelper.DaysToString(Days);
         }
     }    
 }

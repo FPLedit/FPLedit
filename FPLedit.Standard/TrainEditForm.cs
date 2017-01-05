@@ -30,7 +30,7 @@ namespace FPLedit.Standard
 
         public TrainEditForm(Timetable tt, TrainDirection direction) : this()
         {
-            Train = new Train(direction);
+            Train = new Train(direction, tt);
         }
 
         private void closeButton_Click(object sender, EventArgs e)

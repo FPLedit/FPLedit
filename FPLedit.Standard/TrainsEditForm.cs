@@ -97,7 +97,8 @@ namespace FPLedit.Standard
             if (tef.ShowDialog() == DialogResult.OK)
             {
                 Train tra = tef.Train;
-                tra.InitializeStations(tt);
+                foreach (var sta in tt.Stations)
+                    tra.AddArrDep(sta, new ArrDep());
                 tt.Trains.Add(tra);
 
                 UpdateListView(view, direction);

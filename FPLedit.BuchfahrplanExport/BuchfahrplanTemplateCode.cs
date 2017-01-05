@@ -16,7 +16,8 @@ namespace FPLedit.BuchfahrplanExport
         {
             this.tt = tt;
             font = tt.GetAttribute("bFont", "\"Alte DIN 1451 Mittelschrift\"");
-            //additionalCss = tt.GetMeta("BuchfahrplanCSS", ""); //TODO: auf Dateinamen umstellen!
+            //additionalCss = tt.GetMeta("BuchfahrplanCSS", ""); 
+            //TODO: Own Data Structure
             additionalCss = "";
         }
 
