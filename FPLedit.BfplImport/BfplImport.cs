@@ -84,7 +84,6 @@ namespace FPLedit.BfplImport
             var name = reader.ReadString();
             var tfz = reader.ReadString();
             var dir = reader.ReadBoolean() ? TrainDirection.ta : TrainDirection.ti;
-            //res.Line = reader.ReadString();
             reader.ReadString(); // Line nicht mehr im Model
             Train res = new Train(dir, tt);
             var days = DaysHelper.ParseDays(reader.ReadString());

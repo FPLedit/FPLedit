@@ -22,8 +22,6 @@ namespace FPLedit.Shared
             }
         }
 
-        //private Dictionary<Station, ArrDep> ArrDeps { get; set; }
-
         public void AddArrDep(Station sta, ArrDep ardp)
         {
             var stas = _parent.Stations.OrderBy(s => s.Kilometre).ToList();
@@ -48,8 +46,6 @@ namespace FPLedit.Shared
             var dp = ardp.Departure.ToShortTimeString();
             tElm.SetAttribute("a", ar != "00:00" ? ar : "");
             tElm.SetAttribute("d", dp != "00:00" ? dp : "");
-
-            //ArrDeps[sta] = ardp;
         }
 
         public ArrDep GetArrDep(Station sta)
@@ -111,31 +107,7 @@ namespace FPLedit.Shared
         public Train(XMLEntity en, List<Station> stas, Timetable tt) : base(en.el)
         {
             _parent = tt;
-            //ArrDeps = new Dictionary<Station, ArrDep>();
-
-            //TODO: Serialize back into xml
-            //int i = 0;
-            //foreach (var time in en.Children.Where(x => x.XName == "t"))
-            //{
-            //    ArrDep ardp = new ArrDep();
-            //    if (time.GetAttribute("a", "") != "")
-            //        ardp.Arrival = TimeSpan.Parse(time.GetAttribute<string>("a"));
-
-            //    if (time.GetAttribute("d", "") != "")
-            //        ardp.Departure = TimeSpan.Parse(time.GetAttribute<string>("d"));
-            //    SetArrDep(stas.ElementAt(i), ardp);
-            //    i++;
-            //}
         }
-
-        //public void InitializeStations(Timetable tt)
-        //{
-        //    var stas = tt.GetStationsOrderedByDirection(Direction)
-        //        .Skip(1); // Remove first station (only departure)
-
-        //    foreach (var sta in tt.Stations)
-        //        AddArrDep(sta, new ArrDep());
-        //}
 
         [DebuggerStepThrough]
         public override string ToString()
