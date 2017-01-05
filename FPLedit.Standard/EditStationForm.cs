@@ -13,9 +13,16 @@ namespace FPLedit.Standard
 {
     public partial class EditStationForm : Form
     {
+        Timetable _parent;
+
         public EditStationForm()
         {
             InitializeComponent();
+        }
+
+        public EditStationForm(Timetable tt) : this()
+        {
+            _parent = tt;
         }
 
         public EditStationForm(Station station) : this()
@@ -39,7 +46,7 @@ namespace FPLedit.Standard
             }
 
             if (Station == null)
-                Station = new Station();
+                Station = new Station(_parent);
             Station.SName = name;
             Station.Kilometre = float.Parse(positionTextBox.Text);
 

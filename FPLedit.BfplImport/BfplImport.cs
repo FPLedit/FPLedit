@@ -53,7 +53,7 @@ namespace FPLedit.BfplImport
             for (int i = 0; i < sta_count; i++)
             {
                 int id = reader.ReadInt32();
-                var sta = DeserializeStation(reader);
+                var sta = DeserializeStation(reader, res);
                 stations.Add(id, sta);
                 res.Stations.Add(sta);
             }
@@ -139,9 +139,9 @@ namespace FPLedit.BfplImport
             return res;
         }
 
-        private Station DeserializeStation(BinaryReader reader)
+        private Station DeserializeStation(BinaryReader reader, Timetable tt)
         {
-            var res = new Station();
+            var res = new Station(tt);
             var name = reader.ReadString();
             var km = reader.ReadSingle();
             res.Attributes = DeserializeAttributes(reader, EntityType.Station);

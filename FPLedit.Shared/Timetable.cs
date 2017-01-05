@@ -26,27 +26,27 @@ namespace FPLedit.Shared
 
         public List<Train> Trains { get; set; }
 
-        public Timetable() : base("jTrainGraph_timetable")
+        public Timetable() : base("jTrainGraph_timetable", null) // Root without parent
         {
             Stations = new List<Station>();
             Trains = new List<Train>();
 
             SetAttribute("version", "008");
-            Children.Add(new XMLEntity("stations"));
-            Children.Add(new XMLEntity("trains"));
+            Children.Add(new XMLEntity("stations", this));
+            Children.Add(new XMLEntity("trains", this));
         }
 
-        public Timetable(XElement el) : base(el)
+        public Timetable(XElement el) : base(el, null) // Root without parent
         {
             Stations = new List<Station>();
             foreach(var c in Children.First(x => x.XName == "stations").Children.
                 Where(x => x.XName == "sta")) // Filtert andere Elemente
-                Stations.Add(new Station(c));
+                Stations.Add(new Station(c, this));
 
             Trains = new List<Train>();
             foreach (var c in Children.First(x => x.XName == "trains").Children.
                 Where(x => x.XName == "ti" || x.XName == "ta")) // Filtert andere Elemente
-                Trains.Add(new Train(c, Stations, this));
+                Trains.Add(new Train(c, this));
         }
 
         public List<Station> GetStationsOrderedByDirection(TrainDirection direction)

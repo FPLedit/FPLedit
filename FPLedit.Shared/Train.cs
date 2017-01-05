@@ -8,8 +8,6 @@ namespace FPLedit.Shared
     [Serializable]
     public sealed class Train : XMLEntity
     {
-        private Timetable _parent;
-
         public string TName
         {
             get
@@ -30,7 +28,7 @@ namespace FPLedit.Shared
             var ar = ardp.Arrival.ToShortTimeString();
             var dp = ardp.Departure.ToShortTimeString();
             
-            var tElm = new XMLEntity("t");
+            var tElm = new XMLEntity("t", _parent);
             tElm.SetAttribute("a", ar != "00:00" ? ar : "");
             tElm.SetAttribute("d", dp != "00:00" ? dp : "");
             Children.Insert(idx, tElm);
@@ -99,14 +97,12 @@ namespace FPLedit.Shared
             }
         }
 
-        public Train(TrainDirection dir, Timetable tt) : base(dir.ToString())
+        public Train(TrainDirection dir, Timetable tt) : base(dir.ToString(), tt)
         {
-            _parent = tt;
         }
 
-        public Train(XMLEntity en, List<Station> stas, Timetable tt) : base(en.el)
+        public Train(XMLEntity en, Timetable tt) : base(en.el, tt)
         {
-            _parent = tt;
         }
 
         [DebuggerStepThrough]

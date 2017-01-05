@@ -104,7 +104,7 @@ namespace FPLedit.Standard
 
         private void NewStation()
         {
-            EditStationForm nsf = new EditStationForm();
+            EditStationForm nsf = new EditStationForm(tt);
             if (nsf.ShowDialog() == DialogResult.OK)
             {
                 Station sta = nsf.Station;

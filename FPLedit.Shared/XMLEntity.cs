@@ -14,27 +14,31 @@ namespace FPLedit.Shared
         [NonSerialized]
         public XElement el;
 
+        public Timetable _parent;
+
         public string XName { get; set; }
 
         public Dictionary<string, string> Attributes { get; set; }
 
         public List<XMLEntity> Children { get; set; }
 
-        public XMLEntity(string xname)
+        public XMLEntity(string xname, Timetable tt)
         {
             XName = xname;
+            _parent = tt;
             Attributes = new Dictionary<string, string>();
             Children = new List<XMLEntity>();
         }
 
-        public XMLEntity(XElement el)
+        public XMLEntity(XElement el, Timetable tt)
         {
             this.el = el;
+            _parent = tt;
             XName = el.Name.LocalName;
             Attributes = el.Attributes().ToDictionary(a => a.Name.LocalName, a => (string)a);
             Children = new List<XMLEntity>();
             foreach (var c in el.Elements())
-                Children.Add(new XMLEntity(c));
+                Children.Add(new XMLEntity(c, tt));
         }
         
         public T GetAttribute<T>(string key, T defaultValue = default(T))

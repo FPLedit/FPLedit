@@ -7,12 +7,12 @@ namespace FPLedit.Shared
     [Serializable]
     public sealed class Station : XMLEntity
     {
-        public Station(XMLEntity en) : base(en.el)
+        public Station(XMLEntity en, Timetable tt) : base(en.el, tt)
         {
 
         }
 
-        public Station() : base("sta")
+        public Station(Timetable tt) : base("sta", tt)
         {
 
         }
