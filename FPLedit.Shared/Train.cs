@@ -28,7 +28,7 @@ namespace FPLedit.Shared
             var ar = ardp.Arrival.ToShortTimeString();
             var dp = ardp.Departure.ToShortTimeString();
             
-            var tElm = new XMLEntity("t", _parent);
+            var tElm = new XMLEntity("t");
             tElm.SetAttribute("a", ar != "00:00" ? ar : "");
             tElm.SetAttribute("d", dp != "00:00" ? dp : "");
             Children.Insert(idx, tElm);

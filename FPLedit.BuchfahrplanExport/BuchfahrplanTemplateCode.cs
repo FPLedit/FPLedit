@@ -9,16 +9,20 @@ namespace FPLedit.BuchfahrplanExport
     partial class BuchfahrplanTemplate
     {
         private Timetable tt;
-        private string font;
-        private string additionalCss;
+        private string font = "\"Alte DIN 1451 Mittelschrift\"";
+        private string additionalCss = "";
 
         public BuchfahrplanTemplate(Timetable tt)
         {
             this.tt = tt;
-            font = tt.GetAttribute("bFont", "\"Alte DIN 1451 Mittelschrift\"");
-            //additionalCss = tt.GetMeta("BuchfahrplanCSS", ""); 
-            //TODO: Own Data Structure
-            additionalCss = "";
+            var dataEn = tt.Children.FirstOrDefault(x => x.XName == "bfpl_attrs");
+
+            if (dataEn != null)
+            {
+                var data = new BFPL_Data(dataEn, tt);
+                font = data.Font;
+                additionalCss = data.Css ?? "";
+            }
         }
 
         private string HtmlId(string text)

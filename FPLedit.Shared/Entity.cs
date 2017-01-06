@@ -53,7 +53,7 @@ namespace FPLedit.Shared
 
         public Entity(string xn, Timetable tt)
         {
-            XMLEntity = new XMLEntity(xn, tt);
+            XMLEntity = new XMLEntity(xn);
             _parent = tt;
         }
 

@@ -32,8 +32,8 @@ namespace FPLedit.Shared
             Trains = new List<Train>();
 
             SetAttribute("version", "008");
-            Children.Add(new XMLEntity("stations", this));
-            Children.Add(new XMLEntity("trains", this));
+            Children.Add(new XMLEntity("stations"));
+            Children.Add(new XMLEntity("trains"));
         }
 
         public Timetable(XMLEntity en) : base(en, null) // Root without parent

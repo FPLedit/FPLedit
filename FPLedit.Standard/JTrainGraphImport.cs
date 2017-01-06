@@ -14,7 +14,7 @@ namespace FPLedit.Standard
         {
             get
             {
-                return "jTrainGraph Fahrplan Dateien (*.fpl)|*.fpl";
+                return "jTrainGraph Fahrplan Dateien (*.fpl)|*.fpl";//TODO: Remove jTrainGraph
             }
         }
 
@@ -58,7 +58,7 @@ namespace FPLedit.Standard
 
             //var ttAtts = el.Attributes().ToDictionary(a => a.Name.LocalName, a => (string)a);
 
-            XMLEntity en = new XMLEntity(el, null);
+            XMLEntity en = new XMLEntity(el);
             return new Timetable(en);
                 //{
                 //    //Attributes = ttAtts,
@@ -67,7 +67,7 @@ namespace FPLedit.Standard
                 //};
 
 
-
+            //TODO: re-enable try-catch
             //}
             //catch (Exception ex)
             //{

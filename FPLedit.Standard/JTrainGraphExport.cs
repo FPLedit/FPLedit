@@ -14,7 +14,7 @@ namespace FPLedit.Standard
         {
             get
             {
-                return "jTrainGraph Fahrplan Dateien (*.fpl)|*.fpl";
+                return "jTrainGraph Fahrplan Dateien (*.fpl)|*.fpl"; //TODO: Remove jTrainGraph
             }
         }
 
@@ -29,6 +29,8 @@ namespace FPLedit.Standard
         private XElement BuildNode(XMLEntity node)
         {
             XElement elm = new XElement(node.XName);
+            if (node.Value != null)
+                elm.SetValue(node.Value);
             foreach (var attr in node.Attributes)
                 elm.SetAttributeValue(attr.Key, attr.Value);
             foreach (var ch in node.Children)

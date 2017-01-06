@@ -20,21 +20,24 @@ namespace FPLedit.Shared
 
         public List<XMLEntity> Children { get; set; }
 
-        public XMLEntity(string xname, Timetable tt)
+        public string Value { get; set; }
+
+        public XMLEntity(string xname)
         {
             XName = xname;
             Attributes = new Dictionary<string, string>();
             Children = new List<XMLEntity>();
         }
 
-        public XMLEntity(XElement el, Timetable tt)
+        public XMLEntity(XElement el)
         {
             this.el = el;
             XName = el.Name.LocalName;
             Attributes = el.Attributes().ToDictionary(a => a.Name.LocalName, a => (string)a);
             Children = new List<XMLEntity>();
-            foreach (var c in el.Elements())
-                Children.Add(new XMLEntity(c, tt));
+            Value = el.Nodes().OfType<XText>().FirstOrDefault()?.Value;
+            foreach (var c in el.Nodes().OfType<XElement>())
+                Children.Add(new XMLEntity(c));
         }
         
         public T GetAttribute<T>(string key, T defaultValue = default(T))
