@@ -14,7 +14,7 @@ namespace FPLedit.Standard
         {
             get
             {
-                return "jTrainGraph Fahrplan Dateien (*.fpl)|*.fpl"; //TODO: Remove jTrainGraph
+                return "Fahrplan Dateien (*.fpl)|*.fpl";
             }
         }
 
@@ -40,48 +40,23 @@ namespace FPLedit.Standard
 
         public bool Export(Timetable tt, string filename, ILog logger)
         {
-            var ttElm = BuildNode(tt.XMLEntity);
-
-
-            //XElement ttElm = new XElement("jTrainGraph_timetable");
-            //foreach (var attr in tt.Attributes)
-            //    ttElm.SetAttributeValue(attr.Key, attr.Value);
-
-            //XElement stasElm = new XElement("stations");
-            //ttElm.Add(stasElm);
-            //foreach (var sta in tt.Stations)
-            //{
-            //    XElement staElm = new XElement("sta");
-            //    foreach (var attr in sta.Attributes)
-            //        staElm.SetAttributeValue(attr.Key, attr.Value);
-            //    stasElm.Add(staElm);
-            //}
-
-            //XElement trasElement = new XElement("trains");
-            //ttElm.Add(trasElement);
-            //foreach (var tra in tt.Trains)
-            //{
-            //    XElement traElm = new XElement(tra.Direction.ToString());
-            //    foreach (var attr in tra.Attributes)
-            //        traElm.SetAttributeValue(attr.Key, attr.Value);
-            //    foreach (var ardep in tra.ArrDeps)
-            //    {
-            //        var tElm = new XElement("t");
-            //        var ar = ardep.Value.Arrival.ToShortTimeString();
-            //        var dp = ardep.Value.Departure.ToShortTimeString();
-            //        tElm.SetAttributeValue("a", ar != "00:00" ? ar : "");
-            //        tElm.SetAttributeValue("d", dp != "00:00" ? dp : "");
-            //        traElm.Add(tElm);
-            //    }
-            //    trasElement.Add(traElm);
-            //}
-
-            using (var writer = new XmlTextWriter(filename, new UTF8Encoding(false)))
+            try
             {
-                writer.Formatting = Formatting.Indented;
-                ttElm.Save(writer);
+                var ttElm = BuildNode(tt.XMLEntity);
+
+                using (var writer = new XmlTextWriter(filename, new UTF8Encoding(false)))
+                {
+                    writer.Formatting = Formatting.Indented;
+                    ttElm.Save(writer);
+                }
+                return true;
             }
-            return true;
+            catch (Exception ex)
+            {
+                logger.Error("JTrainGraphExport: " + ex.Message);
+                return false;
+            }
+            
         }
     }
 }
