@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Xml.Linq;
 
 namespace FPLedit.Shared
 {
     [Serializable]
     public sealed class Timetable : Entity
     {
+        XMLEntity sElm, tElm;
+
         public string TTName
         {
             get
@@ -22,31 +24,42 @@ namespace FPLedit.Shared
             }
         }
 
-        public List<Station> Stations { get; set; }
+        private List<Station> stations;
+        private List<Train> trains;
 
-        public List<Train> Trains { get; set; }
+        public List<Station> Stations
+        {
+            get { return stations; }
+        }
+
+        public List<Train> Trains
+        {
+            get { return trains; }
+        }
 
         public Timetable() : base("jTrainGraph_timetable", null) // Root without parent
         {
-            Stations = new List<Station>();
-            Trains = new List<Train>();
+            stations = new List<Station>();
+            trains = new List<Train>();
 
             SetAttribute("version", "008");
-            Children.Add(new XMLEntity("stations"));
-            Children.Add(new XMLEntity("trains"));
+            sElm = new XMLEntity("stations");
+            tElm = new XMLEntity("trains");
+            Children.Add(sElm);
+            Children.Add(tElm);
         }
 
         public Timetable(XMLEntity en) : base(en, null) // Root without parent
         {
-            Stations = new List<Station>();
-            foreach(var c in Children.First(x => x.XName == "stations").Children.
-                Where(x => x.XName == "sta")) // Filtert andere Elemente
-                Stations.Add(new Station(c, this));
+            stations = new List<Station>();
+            sElm = Children.First(x => x.XName == "stations");
+            foreach (var c in sElm.Children.Where(x => x.XName == "sta")) // Filtert andere Elemente
+                stations.Add(new Station(c, this));
 
-            Trains = new List<Train>();
-            foreach (var c in Children.First(x => x.XName == "trains").Children.
-                Where(x => x.XName == "ti" || x.XName == "ta")) // Filtert andere Elemente
-                Trains.Add(new Train(c, this));
+            trains = new List<Train>();
+            tElm = Children.First(x => x.XName == "trains");
+            foreach (var c in tElm.Children.Where(x => x.XName == "ti" || x.XName == "ta")) // Filtert andere Elemente
+                trains.Add(new Train(c, this));
         }
 
         public List<Station> GetStationsOrderedByDirection(TrainDirection direction)
@@ -78,6 +91,30 @@ namespace FPLedit.Shared
                 stream.Seek(0, SeekOrigin.Begin);
                 return (Timetable)formatter.Deserialize(stream);
             }
+        }
+
+        public void AddStation(Station sta)
+        {
+            stations.Add(sta);
+            sElm.Children.Add(sta.XMLEntity);
+        }
+
+        public void RemoveStation(Station sta)
+        {
+            stations.Remove(sta);
+            sElm.Children.Remove(sta.XMLEntity);
+        }
+
+        public void AddTrain(Train tra)
+        {
+            trains.Add(tra);
+            tElm.Children.Add(tra.XMLEntity);
+        }
+
+        public void RemoveTrain(Train tra)
+        {
+            trains.Remove(tra);
+            tElm.Children.Remove(tra.XMLEntity);
         }
     }
 }

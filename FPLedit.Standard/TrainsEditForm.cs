@@ -63,7 +63,7 @@ namespace FPLedit.Standard
             if (view.SelectedItems.Count > 0)
             {
                 ListViewItem item = view.Items[view.SelectedIndices[0]];
-                tt.Trains.Remove((Train)item.Tag);
+                tt.RemoveTrain((Train)item.Tag);
 
                 UpdateListView(view, direction);
             }
@@ -99,7 +99,7 @@ namespace FPLedit.Standard
                 Train tra = tef.Train;
                 foreach (var sta in tt.Stations)
                     tra.AddArrDep(sta, new ArrDep());
-                tt.Trains.Add(tra);
+                tt.AddTrain(tra);
 
                 UpdateListView(view, direction);
                 var changedItem = view.Items.OfType<ListViewItem>().Where(i => i.Tag == tra).First();

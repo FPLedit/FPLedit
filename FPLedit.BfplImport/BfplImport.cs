@@ -55,14 +55,14 @@ namespace FPLedit.BfplImport
                 int id = reader.ReadInt32();
                 var sta = DeserializeStation(reader, res);
                 stations.Add(id, sta);
-                res.Stations.Add(sta);
+                res.AddStation(sta);
             }
 
             int tra_count = reader.ReadInt32();
             for (int i = 0; i < tra_count; i++)
             {
                 var tr = DeserializeTrain(reader, stations, res);
-                res.Trains.Add(tr);
+                res.AddTrain(tr);
             }
 
             var attrs = new Dictionary<string, string>(timetableDefaultAttrs);

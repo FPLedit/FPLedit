@@ -74,7 +74,7 @@ namespace FPLedit.Standard
             if (listView.SelectedItems.Count > 0)
             {
                 ListViewItem item = listView.Items[listView.SelectedIndices[0]];
-                tt.Stations.Remove((Station)item.Tag);
+                tt.RemoveStation((Station)item.Tag);
 
                 UpdateStations();
             }
@@ -89,7 +89,7 @@ namespace FPLedit.Standard
             {
                 Station sta = nsf.Station;
 
-                tt.Stations.Add(sta);
+                tt.AddStation(sta);
 
                 foreach (var t in tt.Trains)
                     t.AddArrDep(sta, new ArrDep());
