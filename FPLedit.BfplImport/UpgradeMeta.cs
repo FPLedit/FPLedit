@@ -35,12 +35,7 @@ namespace FPLedit.BfplImport
 
         static Dictionary<string, string> UpgradeTimetable(Dictionary<string, string> meta)
         {
-            var upgradeMap = new Dictionary<string, string>()
-            {
-                ["BuchfahrplanFont"] = "bFont",
-            };
-
-            var upgraded = meta.Where(kvp => upgradeMap.ContainsKey(kvp.Key)).ToDictionary(kvp => upgradeMap[kvp.Key], kvp => kvp.Value);
+            var upgraded = new Dictionary<string, string>();
 
             string o;
             if (meta.TryGetValue("StartTime", out o))
