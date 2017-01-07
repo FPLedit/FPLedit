@@ -130,7 +130,7 @@
 				<# foreach (var s in tt.GetStationsOrderedByDirection(tra.Direction)) { #>
 				<tr>
 					<td class="zug"><#= s.Kilometre.ToString("0.0") #></td>
-					<td class="zug"><#= s.GetAttribute<int>("vmax", 0).ToString("#") #></td>
+					<td class="zug"><#= s.GetAttribute<int>("fpl-vmax", 0).ToString("#") #></td>
 					<td class="zug"><#= s.SName #></td>
 					<#
 					var ardp = tra.GetArrDep(s);

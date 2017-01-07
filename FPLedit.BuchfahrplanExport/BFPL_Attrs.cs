@@ -6,7 +6,7 @@ using System.Text;
 
 namespace FPLedit.BuchfahrplanExport
 {
-    public class BFPL_Data : Entity
+    public class BFPL_Attrs : Entity
     {
         public string Font
         {
@@ -39,12 +39,12 @@ namespace FPLedit.BuchfahrplanExport
         }
 
 
-        public BFPL_Data(string xn, Timetable tt) : base(xn, tt)
+        public BFPL_Attrs(Timetable tt) : base("bfpl_attrs", tt)
         {
 
         }
 
-        public BFPL_Data(XMLEntity en, Timetable tt) : base(en, tt)
+        public BFPL_Attrs(XMLEntity en, Timetable tt) : base(en, tt)
         {
 
         }

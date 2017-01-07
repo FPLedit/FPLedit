@@ -19,7 +19,7 @@ namespace FPLedit.BuchfahrplanExport
 
             if (dataEn != null)
             {
-                var data = new BFPL_Data(dataEn, tt);
+                var data = new BFPL_Attrs(dataEn, tt);
                 font = data.Font;
                 additionalCss = data.Css ?? "";
             }

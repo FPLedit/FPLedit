@@ -42,7 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BFPL_Data.cs" />
+    <Compile Include="BFPL_Attrs.cs" />
     <Compile Include="BuchfahrplanTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

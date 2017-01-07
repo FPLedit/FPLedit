@@ -13,30 +13,37 @@ namespace FPLedit.jTrainGraphStarter
     public class Plugin : IPlugin
     {
         IInfo info;
+        ToolStripItem startItem;
 
         public string Name
         {
             get
             {
-                throw new NotImplementedException();
+                return "Starter für jTrainGraph";
             }
         }
 
         public void Init(IInfo info)
         {
             this.info = info;
+            info.FileStateChanged += Info_FileStateChanged;
 
-            ToolStripMenuItem item = new ToolStripMenuItem("jTG");
+            var item = new ToolStripMenuItem("jTG");
             info.Menu.Items.AddRange(new[] { item });
-            var showItem = item.DropDownItems.Add("Anzeigen");
-            //showItem.Enabled = false;
-            //TODO: Filestate dependant
-            showItem.Click += (s, e) => Start();
+            startItem = item.DropDownItems.Add("jTG Starten");
+            startItem.Enabled = false;
+            startItem.Click += (s, e) => Start();
+        }
+
+        private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)
+        {
+            startItem.Enabled = e.FileState.Opened;
         }
 
         public void Start()
         {
             info.Save(false);
+            info.Logger.Info("NUR FÜR TESTZWECKE!");
 
             //TODO: Appsettings
             string javapath = @"C:\ProgramData\Oracle\Java\javapath\java.exe";

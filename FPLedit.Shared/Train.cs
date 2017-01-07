@@ -67,11 +67,11 @@ namespace FPLedit.Shared
         {
             get
             {
-                return GetAttribute<string>("tfz", "");
+                return GetAttribute<string>("fpl-tfz", "");
             }
             set
             {
-                SetAttribute("tfz", value);
+                SetAttribute("fpl-tfz", value);
             }
         }
 

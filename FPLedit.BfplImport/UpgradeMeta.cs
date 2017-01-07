@@ -95,7 +95,7 @@ namespace FPLedit.BfplImport
         {
             var upgradeMap = new Dictionary<string, string>()
             {
-                ["MaxVelocity"] = "vmax",
+                ["MaxVelocity"] = "fpl-vmax",
             };
 
             return meta.Where(kvp => upgradeMap.ContainsKey(kvp.Key)).ToDictionary(kvp => upgradeMap[kvp.Key], kvp => kvp.Value);
