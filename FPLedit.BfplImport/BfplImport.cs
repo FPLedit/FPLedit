@@ -15,7 +15,7 @@ namespace FPLedit.BfplImport
         {
             get
             {
-                return "FPLedit Dateien (*.bfpl)|*.bfpl";
+                return "Alte FPLedit Dateien (*.bfpl)|*.bfpl";
             }
         }
 

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 
-namespace FPLedit.Standard
+namespace FPLedit.Shared.Filetypes
 {
-    public class JTrainGraphImport : IImport
+    public class XMLImport : IImport
     {
         public string Filter
         {

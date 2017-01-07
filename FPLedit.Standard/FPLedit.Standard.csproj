@@ -48,8 +48,6 @@
     <Compile Include="EditStationForm.Designer.cs">
       <DependentUpon>EditStationForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="JTrainGraphExport.cs" />
-    <Compile Include="JTrainGraphImport.cs" />
     <Compile Include="LineEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -76,7 +74,6 @@
     <Compile Include="TrainsEditForm.Designer.cs">
       <DependentUpon>TrainsEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="TypePlugin.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="EditStationForm.resx">

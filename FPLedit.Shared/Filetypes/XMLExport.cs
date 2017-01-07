@@ -6,9 +6,9 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace FPLedit.Standard
+namespace FPLedit.Shared.Filetypes
 {
-    public class JTrainGraphExport : IExport
+    public class XMLExport : IExport
     {
         public string Filter
         {

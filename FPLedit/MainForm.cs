@@ -7,19 +7,21 @@ using FPLedit.Shared;
 using System.ComponentModel;
 using System.Drawing;
 using FPLedit.Shared.Logger;
+using FPLedit.Shared.Filetypes;
 
 namespace FPLedit
 {
     public partial class MainForm : Form, IInfo
-    {        
+    {
         public Timetable Timetable { get; set; }
 
         private Timetable timetableBackup = null;
 
         private List<IExport> exporters;
         private List<IImport> importers;
-        private IExport lastExport;
-        private IImport lastImport;
+
+        private IImport open;
+        private IExport save;
 
         private FileState fileState;
 
@@ -51,12 +53,12 @@ namespace FPLedit
             fileState.LineCreated = Timetable?.Stations.Count > 0;
             fileState.TrainsCreated = Timetable?.Trains.Count > 0;
 
-            saveToolStripMenuItem.Enabled = saveAsToolStripMenuItem.Enabled = fileState.Opened;
+            saveToolStripMenuItem.Enabled = saveAsToolStripMenuItem.Enabled = exportToolStripMenuItem.Enabled = fileState.Opened;
 
             FileStateChanged?.Invoke(this, new FileStateChangedEventArgs(fileState));
 
-            Text = "FPLedit - " 
-                + (fileState.FileName != null ? (Path.GetFileName(fileState.FileName) + " ") : "") 
+            Text = "FPLedit - "
+                + (fileState.FileName != null ? (Path.GetFileName(fileState.FileName) + " ") : "")
                 + (fileState.Saved ? "" : "*");
         }
 
@@ -68,38 +70,57 @@ namespace FPLedit
             exporters = new List<IExport>();
             importers = new List<IImport>();
 
+            open = new XMLImport();
+            save = new XMLExport();
+
             fileState = new FileState();
             Logger = new MultipleLogger(logTextBox);
             //logger.Loggers.Add(new ConsoleLogger());
         }
 
         private void Form1_Load(object sender, EventArgs e)
-        {   
+        {
             // Extensions laden & initialisieren (=> Initialisiert Importer/Exporter)
             extensionManager = new ExtensionManager();
             foreach (var plugin in extensionManager.EnabledPlugins)
                 plugin.Init(this);
 
-            saveFileDialog.Filter = string.Join("|", exporters.OrderByDescending(ex => ex.Reoppenable).Select(ex => ex.Filter));
-            openFileDialog.Filter = string.Join("|", importers.Select(im => im.Filter));
+            saveFileDialog.Filter = save.Filter;
+            openFileDialog.Filter = open.Filter;
 
-            // Parameter Fpledit.exe [Importer] [Dateiname]
+            exportFileDialog.Filter = string.Join("|", exporters.OrderByDescending(ex => ex.Reoppenable).Select(ex => ex.Filter));
+            importFileDialog.Filter = string.Join("|", importers.Select(im => im.Filter));
+
+            // Parameter Fpledit.exe [Dateiname]
             string[] args = Environment.GetCommandLineArgs();
-            if (args.Length >= 3)
+            if (args.Length >= 2 && File.Exists(args[2]))
+                InternalOpen(args[2]);
+        }
+
+        #region FileHandling
+
+        public void Import()
+        {
+            if (!fileState.Saved && fileState.Opened)
             {
-                var import = importers.FirstOrDefault(i => i.GetType().FullName == args[1]);
-                if (import != null && File.Exists(args[2]))
-                {
-                    Logger.Info("Öffne Datei " + openFileDialog.FileName);
-                    Timetable = import.Import(args[2], Logger);
-                    if (Timetable == null)
-                        return;
-                    Logger.Info("Datei erfolgeich geöffnet!");
-                    fileState.Opened = true;
-                    fileState.Saved = true;
-                    fileState.FileName = args[2];
-                    OnFileStateChanged();
-                }
+                DialogResult res = NotifyChanged();
+                if (res == DialogResult.Yes)
+                    Save(false);
+                if (res == DialogResult.Cancel)
+                    return;
+            }
+            if (importFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                IImport import = importers[importFileDialog.FilterIndex - 1];
+                Logger.Info("Öffne Datei " + importFileDialog.FileName);
+                Timetable = import.Import(importFileDialog.FileName, Logger);
+                if (Timetable == null)
+                    return;
+                Logger.Info("Datei erfolgeich geöffnet!");
+                fileState.Opened = true;
+                fileState.Saved = true;
+                fileState.FileName = importFileDialog.FileName;
+                OnFileStateChanged();
             }
         }
 
@@ -114,63 +135,74 @@ namespace FPLedit
                     return;
             }
             if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                IImport import = importers[openFileDialog.FilterIndex - 1];
-                lastImport = import;
-                Logger.Info("Öffne Datei " + openFileDialog.FileName);
-                Timetable = import.Import(openFileDialog.FileName, Logger);
-                if (Timetable == null)
-                    return;
-                Logger.Info("Datei erfolgeich geöffnet!");
-                fileState.Opened = true;
-                fileState.Saved = true;
-                fileState.FileName = openFileDialog.FileName;
-                OnFileStateChanged();
-            }
+                InternalOpen(openFileDialog.FileName);
         }
 
-        public void Save(bool forceSaveAs)
+        private void InternalOpen(string filename)
         {
-            IExport export = lastExport;
-            string filename = fileState.FileName;
-
-            bool saveAs = forceSaveAs || export == null || filename == null || filename == "";
-
-            if (saveAs)
-            {
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    export = exporters[saveFileDialog.FilterIndex - 1];
-                    filename = saveFileDialog.FileName;
-                }
-                else
-                    return;
-            }
-
-            Logger.Info("Speichere Datei " + filename);
-            bool ret = export.Export(Timetable, filename, Logger);
-            if (ret == false)
-                return;
-            Logger.Info("Speichern erfolgreich abgeschlossen!");
-            if (export.Reoppenable)
-            {
-                fileState.Saved = true;
-                fileState.FileName = filename;
-                OnFileStateChanged();
-            }
-            lastExport = export.Reoppenable ? export : null;
-        }
-
-        public void Reload()
-        {            
-            Logger.Info("Öffne Datei " + fileState.FileName);
-            Timetable = lastImport.Import(fileState.FileName, Logger);
+            Logger.Info("Öffne Datei " + filename);
+            Timetable = open.Import(filename, Logger);
             if (Timetable == null)
                 return;
             Logger.Info("Datei erfolgeich geöffnet!");
             fileState.Opened = true;
             fileState.Saved = true;
+            fileState.FileName = filename;
             OnFileStateChanged();
+        }
+
+        public void Export()
+        {
+            if (exportFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                IExport export = exporters[exportFileDialog.FilterIndex - 1];
+                string filename = exportFileDialog.FileName;
+
+                Logger.Info("Speichere Datei " + filename);
+                bool ret = export.Export(Timetable, filename, Logger);
+                if (ret == false)
+                    return;
+                Logger.Info("Speichern erfolgreich abgeschlossen!");
+                if (export.Reoppenable)
+                {
+                    fileState.Saved = true;
+                    fileState.FileName = filename;
+                    OnFileStateChanged();
+                }
+            }
+        }
+
+        public void Save(bool forceSaveAs)
+        {
+            string filename = fileState.FileName;
+
+            bool saveAs = forceSaveAs || filename == null || filename == "";
+
+            if (saveAs)
+            {
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                    filename = saveFileDialog.FileName;
+                else
+                    return;
+            }
+            InternalSave(filename);            
+        }
+
+        private void InternalSave(string filename)
+        {
+            Logger.Info("Speichere Datei " + filename);
+            bool ret = save.Export(Timetable, filename, Logger);
+            if (ret == false)
+                return;
+            Logger.Info("Speichern erfolgreich abgeschlossen!");
+            fileState.Saved = true;
+            fileState.FileName = filename;
+            OnFileStateChanged();
+        }
+
+        public void Reload()
+        {
+            InternalOpen(fileState.FileName);
         }
 
         private void New()
@@ -190,6 +222,8 @@ namespace FPLedit
             OnFileStateChanged();
             Logger.Info("Neue Datei erstellt");
         }
+
+        #endregion
 
         #region IInfo
         dynamic IInfo.Menu
@@ -221,13 +255,13 @@ namespace FPLedit
         #endregion        
 
         private void Info()
-        {            
+        {
             (new InfoForm()).ShowDialog();
         }
 
         private DialogResult NotifyChanged()
         {
-            return MessageBox.Show("Wollen Sie die Änderungen speichern?", 
+            return MessageBox.Show("Wollen Sie die Änderungen speichern?",
                 "FPLedit",
                 MessageBoxButtons.YesNoCancel,
                 MessageBoxIcon.Question);
@@ -248,6 +282,8 @@ namespace FPLedit
             }
         }
 
+        #region Events
+
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
             => New();
 
@@ -265,5 +301,13 @@ namespace FPLedit
 
         private void extensionsToolStripMenuItem_Click(object sender, EventArgs e)
             => (new ExtensionsForm(extensionManager)).ShowDialog();
+
+        private void importToolStripMenuItem_Click(object sender, EventArgs e)
+            => Import();
+
+        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
+            => Export();
+
+        #endregion
     }
 }
