@@ -53,7 +53,7 @@ namespace FPLedit.Shared.Filetypes
             }
             catch (Exception ex)
             {
-                logger.Error("JTrainGraphExport: " + ex.Message);
+                logger.Error("XMLExport: " + ex.Message);
                 return false;
             }
             

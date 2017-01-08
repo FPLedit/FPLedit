@@ -24,12 +24,12 @@ namespace FPLedit.Shared.Filetypes
 
                 XMLEntity en = new XMLEntity(el);
                 return new Timetable(en);
-        }
+            }
             catch (Exception ex)
             {
-                logger.Error("JTrainGraphImporter: " + ex.Message);
+                logger.Error("XMLImporter: " + ex.Message);
                 return null;
             }
-}
+        }
     }
 }

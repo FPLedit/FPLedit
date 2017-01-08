@@ -9,11 +9,10 @@ using System.Windows.Forms;
 
 namespace FPLedit.jTrainGraphStarter
 {
-#if DEBUG
     public class Plugin : IPlugin
     {
         IInfo info;
-        ToolStripItem startItem;
+        ToolStripItem startItem, settingsItem;
 
         public string Name
         {
@@ -30,9 +29,13 @@ namespace FPLedit.jTrainGraphStarter
 
             var item = new ToolStripMenuItem("jTG");
             info.Menu.Items.AddRange(new[] { item });
+
             startItem = item.DropDownItems.Add("jTG Starten");
             startItem.Enabled = false;
             startItem.Click += (s, e) => Start();
+
+            settingsItem = item.DropDownItems.Add("Einstellungen");
+            settingsItem.Click += (s, e) => (new SettingsForm()).ShowDialog();
         }
 
         private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)
@@ -42,23 +45,37 @@ namespace FPLedit.jTrainGraphStarter
 
         public void Start()
         {
-            info.Save(false);
-            info.Logger.Info("NUR FÜR TESTZWECKE!");
+            DialogResult res = MessageBox.Show("Dies speichert die Fahrplandatei am letzten Speicherort und öffnet dann jTrainGraph (>= 2.02). Nachdem Sie die Arbeit in jTrainGraph beendet haben, speichern Sie damit die Datei und schließen das jTG-Hauptfenster, damit werden die Änderungen übernommen. Aktion fortsetzen?",
+                "jTrainGraph starten", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
-            //TODO: Appsettings
-            string javapath = @"C:\ProgramData\Oracle\Java\javapath\java.exe";
-            string jtgPath = @"F:\Software\GrafischerFahrplan\jTrainGraph_201\jTrainGraph_201.jar";
+            if (res != DialogResult.Yes)
+                return;
+
+            info.Save(false);
+
+            string javapath = SettingsManager.Get("jTGStarter.javapath", "java");
+            string jtgPath = SettingsManager.Get("jTGStarter.jtgpath", "jTrainGraph_202.jar");
+
             string jtgFolder = Path.GetDirectoryName(jtgPath);
 
             Process p = new Process();
             p.StartInfo.FileName = javapath;
             p.StartInfo.WorkingDirectory = jtgFolder;
             p.StartInfo.Arguments = "-jar " + jtgPath + " \""+info.FileState.FileName+"\"";
-            p.Start();
-            p.WaitForExit();
 
-            info.Reload();
+            try
+            {
+                p.Start();
+                info.Logger.Info("Wartet darauf, dass jTG beendet wird...");
+                p.WaitForExit();
+                info.Logger.Info("jTG beendet!");
+
+                info.Reload();
+            }
+            catch (Exception e)
+            {
+                info.Logger.Error("jTrainGraphStarter: " + e.Message);
+            }
         }
     }
-#endif
 }
