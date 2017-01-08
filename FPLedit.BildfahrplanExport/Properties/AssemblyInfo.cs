@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Manuel Huber")]
 [assembly: AssemblyProduct("FPLedit")]
-[assembly: AssemblyCopyright("Copyright © 2016 Manuel Huber")]
+[assembly: AssemblyCopyright("Copyright © 2016-2017 Manuel Huber")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -35,4 +35,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.0.0")] // Do not change
 [assembly: AssemblyFileVersion("1.0.3.0")] // File Version -> increment for fixes
 
+//HINT: Version verändert sich nicht mehr
 [assembly: AssemblyInformationalVersion("1.0.3")] // Display Version
