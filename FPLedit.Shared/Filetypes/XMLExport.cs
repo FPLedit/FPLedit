@@ -18,14 +18,6 @@ namespace FPLedit.Shared.Filetypes
             }
         }
 
-        public bool Reoppenable
-        {
-            get
-            {
-                return true;
-            }
-        }
-
         private XElement BuildNode(XMLEntity node)
         {
             XElement elm = new XElement(node.XName);

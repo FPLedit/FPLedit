@@ -88,7 +88,7 @@ namespace FPLedit
             saveFileDialog.Filter = save.Filter;
             openFileDialog.Filter = open.Filter;
 
-            exportFileDialog.Filter = string.Join("|", exporters.OrderByDescending(ex => ex.Reoppenable).Select(ex => ex.Filter));
+            exportFileDialog.Filter = string.Join("|", exporters.Select(ex => ex.Filter));
             importFileDialog.Filter = string.Join("|", importers.Select(im => im.Filter));
 
             // Parameter Fpledit.exe [Dateiname]
@@ -163,12 +163,6 @@ namespace FPLedit
                 if (ret == false)
                     return;
                 Logger.Info("Speichern erfolgreich abgeschlossen!");
-                if (export.Reoppenable)
-                {
-                    fileState.Saved = true;
-                    fileState.FileName = filename;
-                    OnFileStateChanged();
-                }
             }
         }
 

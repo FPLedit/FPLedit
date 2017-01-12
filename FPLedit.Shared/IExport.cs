@@ -11,7 +11,5 @@ namespace FPLedit.Shared
         bool Export(Timetable tt, string filename, ILog logger);
 
         string Filter { get; }
-
-        bool Reoppenable { get; }
     }
 }

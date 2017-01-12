@@ -15,11 +15,6 @@ namespace FPLedit.BuchfahrplanExport
             get { return "Buchfahrplan als HTML Datei (*.html)|*.html"; }
         }
 
-        public bool Reoppenable
-        {
-            get { return false; }
-        }
-
         public bool Export(Timetable timetable, string filename, ILog logger)
         {
             BuchfahrplanTemplate templ = new BuchfahrplanTemplate(timetable);
