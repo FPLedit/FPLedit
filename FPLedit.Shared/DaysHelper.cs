@@ -27,13 +27,13 @@ namespace FPLedit.Shared
         public static string DaysToString(bool[] days)
         {
             string[] str = new string[7];
-            str[0] = days[0] ? "Montag" : null;
-            str[1] = days[1] ? "Dienstag" : null;
-            str[2] = days[2] ? "Mittwoch" : null;
-            str[3] = days[3] ? "Donnerstag" : null;
-            str[4] = days[4] ? "Freitag" : null;
-            str[5] = days[5] ? "Samstag" : null;
-            str[6] = days[6] ? "Sonntag" : null;
+            str[0] = days[0] ? "Mo" : null;
+            str[1] = days[1] ? "Di" : null;
+            str[2] = days[2] ? "Mi" : null;
+            str[3] = days[3] ? "Do" : null;
+            str[4] = days[4] ? "Fr" : null;
+            str[5] = days[5] ? "Sa" : null;
+            str[6] = days[6] ? "So" : null;
 
             return string.Join(", ", str.Where(o => o != null));
         }        

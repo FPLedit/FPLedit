@@ -27,10 +27,10 @@ namespace FPLedit.jTrainGraphStarter
             this.info = info;
             info.FileStateChanged += Info_FileStateChanged;
 
-            var item = new ToolStripMenuItem("jTG");
+            var item = new ToolStripMenuItem("jTrainGraph");
             info.Menu.Items.AddRange(new[] { item });
 
-            startItem = item.DropDownItems.Add("jTG Starten");
+            startItem = item.DropDownItems.Add("jTrainGraph Starten");
             startItem.Enabled = false;
             startItem.Click += (s, e) => Start();
 
@@ -45,7 +45,7 @@ namespace FPLedit.jTrainGraphStarter
 
         public void Start()
         {
-            DialogResult res = MessageBox.Show("Dies speichert die Fahrplandatei am letzten Speicherort und öffnet dann jTrainGraph (>= 2.02). Nachdem Sie die Arbeit in jTrainGraph beendet haben, speichern Sie damit die Datei und schließen das jTG-Hauptfenster, damit werden die Änderungen übernommen. Aktion fortsetzen?",
+            DialogResult res = MessageBox.Show("Dies speichert die Fahrplandatei am letzten Speicherort und öffnet dann jTrainGraph (>= 2.02). Nachdem Sie die Arbeit in jTrainGraph beendet haben, speichern Sie damit die Datei und schließen das jTrainGraph-Hauptfenster, damit werden die Änderungen übernommen. Aktion fortsetzen?",
                 "jTrainGraph starten", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
             if (res != DialogResult.Yes)
@@ -66,9 +66,9 @@ namespace FPLedit.jTrainGraphStarter
             try
             {
                 p.Start();
-                info.Logger.Info("Wartet darauf, dass jTG beendet wird...");
+                info.Logger.Info("Wartet darauf, dass jTrainGraph beendet wird...");
                 p.WaitForExit();
-                info.Logger.Info("jTG beendet!");
+                info.Logger.Info("jTrainGraph beendet! Lade Datei neu...");
 
                 info.Reload();
             }

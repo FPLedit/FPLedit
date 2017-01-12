@@ -176,7 +176,7 @@ namespace FPLedit
         {
             string filename = fileState.FileName;
 
-            bool saveAs = forceSaveAs || filename == null || filename == "";
+            bool saveAs = forceSaveAs || filename == null || filename == "" || Path.GetExtension(filename) != ".fpl";
 
             if (saveAs)
             {

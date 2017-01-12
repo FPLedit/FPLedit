@@ -45,13 +45,12 @@
             this.label1.Size = new System.Drawing.Size(55, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Java-Pfad";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // javaPathTextBox
             // 
             this.javaPathTextBox.Location = new System.Drawing.Point(157, 12);
             this.javaPathTextBox.Name = "javaPathTextBox";
-            this.javaPathTextBox.Size = new System.Drawing.Size(158, 20);
+            this.javaPathTextBox.Size = new System.Drawing.Size(242, 20);
             this.javaPathTextBox.TabIndex = 1;
             // 
             // label2
@@ -67,20 +66,20 @@
             // 
             this.jtgPathTextBox.Location = new System.Drawing.Point(157, 43);
             this.jtgPathTextBox.Name = "jtgPathTextBox";
-            this.jtgPathTextBox.Size = new System.Drawing.Size(158, 20);
+            this.jtgPathTextBox.Size = new System.Drawing.Size(242, 20);
             this.jtgPathTextBox.TabIndex = 3;
             // 
             // label3
             // 
             this.label3.Location = new System.Drawing.Point(12, 75);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(390, 82);
+            this.label3.Size = new System.Drawing.Size(387, 82);
             this.label3.TabIndex = 4;
             this.label3.Text = resources.GetString("label3.Text");
             // 
             // closeButton
             // 
-            this.closeButton.Location = new System.Drawing.Point(327, 151);
+            this.closeButton.Location = new System.Drawing.Point(324, 145);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
             this.closeButton.TabIndex = 5;
@@ -93,7 +92,7 @@
             this.AcceptButton = this.closeButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(414, 186);
+            this.ClientSize = new System.Drawing.Size(411, 180);
             this.Controls.Add(this.closeButton);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.jtgPathTextBox);

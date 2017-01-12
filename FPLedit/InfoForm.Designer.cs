@@ -33,9 +33,9 @@
             this.checkButton = new System.Windows.Forms.Button();
             this.copyrightLabel = new System.Windows.Forms.Label();
             this.licenseGroupBox = new System.Windows.Forms.GroupBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.dokuLabel = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.licenseGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -76,7 +76,7 @@
             this.copyrightLabel.Name = "copyrightLabel";
             this.copyrightLabel.Size = new System.Drawing.Size(140, 13);
             this.copyrightLabel.TabIndex = 4;
-            this.copyrightLabel.Text = "© 2015-2016 Manuel Huber";
+            this.copyrightLabel.Text = "© 2015-2017 Manuel Huber";
             // 
             // licenseGroupBox
             // 
@@ -88,6 +88,19 @@
             this.licenseGroupBox.TabIndex = 5;
             this.licenseGroupBox.TabStop = false;
             this.licenseGroupBox.Text = "Lizenz / Hinweise";
+            // 
+            // textBox1
+            // 
+            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox1.Cursor = System.Windows.Forms.Cursors.Default;
+            this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBox1.Location = new System.Drawing.Point(7, 20);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBox1.Size = new System.Drawing.Size(320, 152);
+            this.textBox1.TabIndex = 0;
             // 
             // button1
             // 
@@ -107,19 +120,6 @@
             this.dokuLabel.Size = new System.Drawing.Size(82, 13);
             this.dokuLabel.TabIndex = 7;
             this.dokuLabel.Text = "Dokumentation:";
-            // 
-            // textBox1
-            // 
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox1.Cursor = System.Windows.Forms.Cursors.Default;
-            this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox1.Location = new System.Drawing.Point(7, 20);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(320, 152);
-            this.textBox1.TabIndex = 0;
             // 
             // InfoForm
             // 
