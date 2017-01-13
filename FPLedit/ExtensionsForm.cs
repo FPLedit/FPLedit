@@ -27,7 +27,7 @@ namespace FPLedit
         private void closeButton_Click(object sender, EventArgs e)
         {
             string newActivated = string.Join(";", enabledListView.Items.Cast<ListViewItem>().Select(i => (string)i.Tag).ToArray());
-            SettingsManager.Set("EnabledExtensions", newActivated);
+            SettingsManager.Set("extmgr.enabled", newActivated);
             Close();
         }
 

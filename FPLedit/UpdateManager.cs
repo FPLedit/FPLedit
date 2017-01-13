@@ -20,7 +20,7 @@ namespace FPLedit
 
         public UpdateManager()
         {
-            CheckUrl = SettingsManager.Get("CheckUrl");
+            CheckUrl = SettingsManager.Get("updater.url");
         }
 
         public Version GetCurrentVersion()

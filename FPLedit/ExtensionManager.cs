@@ -37,7 +37,7 @@ namespace FPLedit
             EnabledPlugins = new List<PluginContainer>();
             DisabledPlugins = new List<PluginContainer>();
 
-            string[] enabledExtensions = SettingsManager.Get("EnabledExtensions", "").Split(';');
+            string[] enabledExtensions = SettingsManager.Get("extmgr.enabled", "").Split(';');
             bool enableAll = enabledExtensions.Length < 0;
 
             foreach (var assembly in assemblies)

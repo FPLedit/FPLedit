@@ -32,13 +32,18 @@ namespace FPLedit.Shared.Filetypes
 
         public bool Export(Timetable tt, string filename, ILog logger)
         {
+            bool debug = bool.Parse(SettingsManager.Get("xml.indent", "False"));
+#if DEBUG
+            debug = true;
+#endif
             try
             {
                 var ttElm = BuildNode(tt.XMLEntity);
 
                 using (var writer = new XmlTextWriter(filename, new UTF8Encoding(false)))
                 {
-                    writer.Formatting = Formatting.Indented;
+                    if (debug)
+                        writer.Formatting = Formatting.Indented;
                     ttElm.Save(writer);
                 }
                 return true;
