@@ -115,6 +115,19 @@ namespace FPLedit.Standard
             return false;
         }
 
+        private void ValidateCell(DataGridView view, DataGridViewCellValidatingEventArgs e)
+        {
+            TimeSpan ts;
+            if (e.FormattedValue == null || (string)e.FormattedValue == "")
+                return;
+
+            if (!TimeSpan.TryParse((string)e.FormattedValue, out ts))
+            {
+                MessageBox.Show("Formatierungsfehler: Zeit muss im Format hh:mm vorliegen!");
+                e.Cancel = true;
+            }
+        }
+
         private void closeButton_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
@@ -133,6 +146,12 @@ namespace FPLedit.Standard
             info.RestoreTimetable();
 
             Close();
-        }
+        }        
+
+        private void topDataGridView_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+            => ValidateCell(topDataGridView, e);
+
+        private void bottomDataGridView_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+            => ValidateCell(bottomDataGridView, e);
     }
 }

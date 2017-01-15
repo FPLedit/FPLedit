@@ -125,6 +125,7 @@
             this.topDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.topDataGridView.Size = new System.Drawing.Size(814, 268);
             this.topDataGridView.TabIndex = 32;
+            this.topDataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.topDataGridView_CellValidating);
             // 
             // bottomPanel
             // 
@@ -166,6 +167,7 @@
             this.bottomDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.bottomDataGridView.Size = new System.Drawing.Size(820, 266);
             this.bottomDataGridView.TabIndex = 29;
+            this.bottomDataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.bottomDataGridView_CellValidating);
             // 
             // TimetableEditForm
             // 
