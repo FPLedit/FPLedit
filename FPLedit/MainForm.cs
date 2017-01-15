@@ -91,10 +91,18 @@ namespace FPLedit
             exportFileDialog.Filter = string.Join("|", exporters.Select(ex => ex.Filter));
             importFileDialog.Filter = string.Join("|", importers.Select(im => im.Filter));
 
-            // Parameter Fpledit.exe [Dateiname]
+            // Parameter: Fpledit.exe [Dateiname]
             string[] args = Environment.GetCommandLineArgs();
             if (args.Length >= 2 && File.Exists(args[2]))
                 InternalOpen(args[2]);
+
+            // Hilfe Menü nach den Erweiterungen zusammenbasteln
+            var helpItem = new ToolStripMenuItem("Hilfe");
+            this.menuStrip.Items.AddRange(new[] { helpItem });            
+            var extItem = helpItem.DropDownItems.Add("Erweiterungen");
+            extItem.Click += (s, ev) => (new ExtensionsForm(extensionManager)).ShowDialog();
+            var infoItem = helpItem.DropDownItems.Add("Info");
+            infoItem.Click += (s, ev) => (new InfoForm()).ShowDialog();
         }
 
         #region FileHandling
@@ -248,11 +256,6 @@ namespace FPLedit
             => importers.Add(import);
         #endregion        
 
-        private void Info()
-        {
-            (new InfoForm()).ShowDialog();
-        }
-
         private DialogResult NotifyChanged()
         {
             return MessageBox.Show("Wollen Sie die Änderungen speichern?",
@@ -281,9 +284,6 @@ namespace FPLedit
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
             => New();
 
-        private void infoToolStripMenuItem_Click(object sender, EventArgs e)
-            => Info();
-
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
             => Save(false);
 
@@ -292,9 +292,6 @@ namespace FPLedit
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
             => Save(true);
-
-        private void extensionsToolStripMenuItem_Click(object sender, EventArgs e)
-            => (new ExtensionsForm(extensionManager)).ShowDialog();
 
         private void importToolStripMenuItem_Click(object sender, EventArgs e)
             => Import();
