@@ -18,9 +18,10 @@ namespace FPLedit.Standard
 
         public TrainEditForm(Train train) : this()
         {
-            Train = train;
+            Train = train;           
             nameTextBox.Text = train.TName;
-            locomotiveTextBox.Text = train.Locomotive;
+            locomotiveComboBox.Text = train.Locomotive;
+            locomotiveComboBox.Items.AddRange(train._parent.GetAllTfzs());
 
             for (int i = 0; i < Train.Days.Length; i++)
                 daysBoxes[i].Checked = Train.Days[i];
@@ -31,6 +32,7 @@ namespace FPLedit.Standard
         public TrainEditForm(Timetable tt, TrainDirection direction) : this()
         {
             Train = new Train(direction, tt);
+            locomotiveComboBox.Items.AddRange(tt.GetAllTfzs());
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -42,7 +44,7 @@ namespace FPLedit.Standard
             }
 
             Train.TName = nameTextBox.Text;
-            Train.Locomotive = locomotiveTextBox.Text;
+            Train.Locomotive = locomotiveComboBox.Text;
 
             for (int i = 0; i < daysBoxes.Length; i++)
                 Train.Days[i] = daysBoxes[i].Checked;

@@ -29,15 +29,15 @@ namespace FPLedit.Standard
             ToolStripMenuItem item = new ToolStripMenuItem("Bearbeiten");
             info.Menu.Items.AddRange(new[] { item });
 
-            editLineItem = item.DropDownItems.Add("Strecke bearbeiten...");
+            editLineItem = item.DropDownItems.Add("Strecke bearbeiten");
             editLineItem.Enabled = false;
             editLineItem.Click += EditLineItem_Click;
 
-            editTrainsItem = item.DropDownItems.Add("Züge bearbeiten...");
+            editTrainsItem = item.DropDownItems.Add("Züge bearbeiten");
             editTrainsItem.Enabled = false;
             editTrainsItem.Click += EditTrainsItem_Click;
 
-            editTimetableItem = item.DropDownItems.Add("Fahrplan bearbeiten...");
+            editTimetableItem = item.DropDownItems.Add("Fahrplan bearbeiten");
             editTimetableItem.Enabled = false;
             editTimetableItem.Click += EditTimetableItem_Click;
         }

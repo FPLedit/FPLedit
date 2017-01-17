@@ -212,7 +212,7 @@
             this.topNewButton.Name = "topNewButton";
             this.topNewButton.Size = new System.Drawing.Size(108, 23);
             this.topNewButton.TabIndex = 0;
-            this.topNewButton.Text = "Neuer Zug...";
+            this.topNewButton.Text = "Neuer Zug";
             this.topNewButton.UseVisualStyleBackColor = true;
             this.topNewButton.Click += new System.EventHandler(this.topNewButton_Click);
             // 
@@ -255,7 +255,7 @@
             this.bottomNewButton.Name = "bottomNewButton";
             this.bottomNewButton.Size = new System.Drawing.Size(108, 23);
             this.bottomNewButton.TabIndex = 3;
-            this.bottomNewButton.Text = "Neuer Zug...";
+            this.bottomNewButton.Text = "Neuer Zug";
             this.bottomNewButton.UseVisualStyleBackColor = true;
             this.bottomNewButton.Click += new System.EventHandler(this.bottomNewButton_Click);
             // 
@@ -273,7 +273,7 @@
             this.Name = "TrainsEditForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.Text = "Züge bearbeiten...";
+            this.Text = "Züge bearbeiten";
             this.mainTableLayoutPanel.ResumeLayout(false);
             this.topContentPanel.ResumeLayout(false);
             this.bottomContentPanel.ResumeLayout(false);

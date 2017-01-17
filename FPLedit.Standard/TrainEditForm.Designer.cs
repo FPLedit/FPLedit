@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.locomotiveTextBox = new System.Windows.Forms.TextBox();
             this.locomotiveLabel = new System.Windows.Forms.Label();
             this.nameLabel = new System.Windows.Forms.Label();
             this.nameTextBox = new System.Windows.Forms.TextBox();
@@ -42,16 +41,10 @@
             this.wednesdayCheckBox = new System.Windows.Forms.CheckBox();
             this.tuesdayCheckBox = new System.Windows.Forms.CheckBox();
             this.mondayCheckBox = new System.Windows.Forms.CheckBox();
+            this.locomotiveComboBox = new System.Windows.Forms.ComboBox();
             this.nameValidator = new FPLedit.Shared.Validators.NotEmptyValidator();
             this.daysGroupBox.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // locomotiveTextBox
-            // 
-            this.locomotiveTextBox.Location = new System.Drawing.Point(65, 32);
-            this.locomotiveTextBox.Name = "locomotiveTextBox";
-            this.locomotiveTextBox.Size = new System.Drawing.Size(131, 20);
-            this.locomotiveTextBox.TabIndex = 12;
             // 
             // locomotiveLabel
             // 
@@ -198,6 +191,14 @@
             this.mondayCheckBox.Text = "Mo";
             this.mondayCheckBox.UseVisualStyleBackColor = true;
             // 
+            // locomotiveComboBox
+            // 
+            this.locomotiveComboBox.FormattingEnabled = true;
+            this.locomotiveComboBox.Location = new System.Drawing.Point(64, 32);
+            this.locomotiveComboBox.Name = "locomotiveComboBox";
+            this.locomotiveComboBox.Size = new System.Drawing.Size(132, 21);
+            this.locomotiveComboBox.TabIndex = 23;
+            // 
             // nameValidator
             // 
             this.nameValidator.Control = this.nameTextBox;
@@ -210,10 +211,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(212, 169);
+            this.Controls.Add(this.locomotiveComboBox);
             this.Controls.Add(this.daysGroupBox);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.closeButton);
-            this.Controls.Add(this.locomotiveTextBox);
             this.Controls.Add(this.locomotiveLabel);
             this.Controls.Add(this.nameLabel);
             this.Controls.Add(this.nameTextBox);
@@ -230,8 +231,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox locomotiveTextBox;
         private System.Windows.Forms.Label locomotiveLabel;
         private System.Windows.Forms.Label nameLabel;
         private System.Windows.Forms.TextBox nameTextBox;
@@ -246,5 +245,6 @@
         private System.Windows.Forms.CheckBox tuesdayCheckBox;
         private System.Windows.Forms.CheckBox mondayCheckBox;
         private Shared.Validators.NotEmptyValidator nameValidator;
+        private System.Windows.Forms.ComboBox locomotiveComboBox;
     }
 }

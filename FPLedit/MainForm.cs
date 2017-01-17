@@ -50,7 +50,7 @@ namespace FPLedit
 
         private void OnFileStateChanged()
         {
-            fileState.LineCreated = Timetable?.Stations.Count > 0;
+            fileState.LineCreated = Timetable?.Stations.Count > 1; // Mind. 2 Bahnhöfe
             fileState.TrainsCreated = Timetable?.Trains.Count > 0;
 
             saveToolStripMenuItem.Enabled = saveAsToolStripMenuItem.Enabled = exportToolStripMenuItem.Enabled = fileState.Opened;

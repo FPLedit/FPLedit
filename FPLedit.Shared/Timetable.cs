@@ -116,5 +116,14 @@ namespace FPLedit.Shared
             trains.Remove(tra);
             tElm.Children.Remove(tra.XMLEntity);
         }
+
+        public string[] GetAllTfzs()
+        {
+            return Trains
+                .Select(t => t.Locomotive)
+                .Distinct()
+                .Where(s => s != "")
+                .ToArray();
+        }
     }
 }
