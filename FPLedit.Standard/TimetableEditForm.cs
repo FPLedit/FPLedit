@@ -121,7 +121,14 @@ namespace FPLedit.Standard
             if (e.FormattedValue == null || (string)e.FormattedValue == "")
                 return;
 
-            if (!TimeSpan.TryParse((string)e.FormattedValue, out ts))
+            string val = (string)e.FormattedValue;
+            if (val.Length == 4 && char.IsDigit(val[0]) && char.IsDigit(val[1]) && char.IsDigit(val[2]) && char.IsDigit(val[3]))
+            {
+                val = val.Substring(0, 2) + ":" + val.Substring(2, 2);
+                view.EditingControl.Text = val;
+            }
+
+            if (!TimeSpan.TryParse(val, out ts))
             {
                 MessageBox.Show("Formatierungsfehler: Zeit muss im Format hh:mm vorliegen!");
                 e.Cancel = true;

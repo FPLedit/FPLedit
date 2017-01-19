@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Drawing;
 using FPLedit.Shared.Logger;
 using FPLedit.Shared.Filetypes;
+using System.Diagnostics;
 
 namespace FPLedit
 {
@@ -101,9 +102,11 @@ namespace FPLedit
             this.menuStrip.Items.AddRange(new[] { helpItem });            
             var extItem = helpItem.DropDownItems.Add("Erweiterungen");
             extItem.Click += (s, ev) => (new ExtensionsForm(extensionManager)).ShowDialog();
+            var docItem = helpItem.DropDownItems.Add("Online Hilfe");
+            docItem.Click += (s, ev) => Process.Start("https://fahrplan.manuelhu.de/");
             var infoItem = helpItem.DropDownItems.Add("Info");
             infoItem.Click += (s, ev) => (new InfoForm()).ShowDialog();
-        }
+        }        
 
         #region FileHandling
 
