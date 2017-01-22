@@ -63,6 +63,15 @@ namespace FPLedit.Shared
             return ardp;
         }
 
+        public void RemoveArrDep(Station sta)
+        {
+            var stas = _parent.Stations.OrderBy(s => s.Kilometre).ToList();
+            var idx = stas.IndexOf(sta);
+            var tElm = Children.Where(x => x.XName == "t").ToList()[idx];
+
+            Children.Remove(tElm);
+        }
+
         public string Locomotive
         {
             get
@@ -111,10 +120,5 @@ namespace FPLedit.Shared
             return TName;
         }
 
-        [DebuggerStepThrough]
-        public string DaysToString()
-        {
-            return DaysHelper.DaysToString(Days);
-        }
     }    
 }

@@ -43,7 +43,7 @@ namespace FPLedit.Standard
                     train.TName,
                     //train.Line,
                     train.Locomotive,
-                    train.DaysToString() })
+                    DaysHelper.DaysToString(train.Days) })
                 { Tag = train });
             }
             view.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);

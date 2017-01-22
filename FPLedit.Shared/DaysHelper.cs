@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -7,6 +8,7 @@ namespace FPLedit.Shared
 {
     public class DaysHelper
     {
+        [DebuggerStepThrough]
         public static bool[] ParseDays(string binary)
         {
             bool[] days = new bool[7];
@@ -16,6 +18,7 @@ namespace FPLedit.Shared
             return days;
         }
 
+        [DebuggerStepThrough]
         public static string DaysToBinString(bool[] days)
         {
             string ret = "";
@@ -24,6 +27,7 @@ namespace FPLedit.Shared
             return ret;
         }
 
+        [DebuggerStepThrough]
         public static string DaysToString(bool[] days)
         {
             string[] str = new string[7];

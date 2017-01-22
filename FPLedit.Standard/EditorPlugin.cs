@@ -67,7 +67,7 @@ namespace FPLedit.Standard
         {
             editLineItem.Enabled = e.FileState.Opened;
             editTrainsItem.Enabled = e.FileState.Opened && e.FileState.LineCreated;
-            editTimetableItem.Enabled = e.FileState.Opened && e.FileState.TrainsCreated;
+            editTimetableItem.Enabled = e.FileState.Opened && e.FileState.LineCreated && e.FileState.TrainsCreated;
         }
     }
 }

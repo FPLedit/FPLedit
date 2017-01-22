@@ -96,11 +96,32 @@ namespace FPLedit.Shared
         public void AddStation(Station sta)
         {
             stations.Add(sta);
-            sElm.Children.Add(sta.XMLEntity);
+            stations = stations.OrderBy(s => s.Kilometre).ToList();
+            var idx = stations.IndexOf(sta); // Index vorläufig ermitteln
+
+            // Es können ja noch andere Nodes in den Children sein.
+            if (idx != 0)
+            {
+                var staBefore = stations[idx - 1];
+                idx = sElm.Children.IndexOf(staBefore.XMLEntity) + 1;
+            }
+            else if (stations.Count > idx + 1)
+            {
+                var staAfter = stations[idx + 1];
+                idx = sElm.Children.IndexOf(staAfter.XMLEntity); // Davor einfügen
+            }
+            sElm.Children.Insert(idx, sta.XMLEntity);
+
+            // Auch bei allen Zügen hinzufügen
+            foreach (var t in Trains)
+                t.AddArrDep(sta, new ArrDep());
         }
 
         public void RemoveStation(Station sta)
         {
+            foreach (var train in Trains)
+                train.RemoveArrDep(sta);
+
             stations.Remove(sta);
             sElm.Children.Remove(sta.XMLEntity);
         }

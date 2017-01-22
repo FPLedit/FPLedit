@@ -91,9 +91,6 @@ namespace FPLedit.Standard
 
                 tt.AddStation(sta);
 
-                foreach (var t in tt.Trains)
-                    t.AddArrDep(sta, new ArrDep());
-
                 UpdateStations();
                 var changedItem = listView.Items.OfType<ListViewItem>().Where(i => i.Tag == sta).First();
                 changedItem.Selected = true;
