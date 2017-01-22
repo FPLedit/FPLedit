@@ -38,13 +38,13 @@ namespace FPLedit.Standard
 
         private void InitializeGridView(DataGridView view, TrainDirection direction)
         {
-            var stations = info.Timetable.GetStationsOrderedByDirection(direction);
-            foreach (var sta in stations)
+            var stas = info.Timetable.GetStationsOrderedByDirection(direction);
+            foreach (var sta in stas)
             {
-                if (stations.First() != sta)
-                    view.Columns.Add(sta.SName + "ar", sta.SName + " an");
-                if (stations.Last() != sta)
-                    view.Columns.Add(sta.SName + "dp", sta.SName + " ab");
+                if (stas.First() != sta)
+                    view.Columns.Add(stas.IndexOf(sta) + "ar", sta.SName + " an");
+                if (stas.Last() != sta)
+                    view.Columns.Add(stas.IndexOf(sta) + "dp", sta.SName + " ab");
             }
 
             foreach (var tra in info.Timetable.Trains.Where(t => t.Direction == direction))
@@ -57,9 +57,9 @@ namespace FPLedit.Standard
                     var ar = ardp.Arrival.ToShortTimeString();
                     var dp = ardp.Departure.ToShortTimeString();
                     if (ar != "00:00")
-                        trainRow.Cells[sta.SName + "ar"].Value = ar;
+                        trainRow.Cells[stas.IndexOf(sta) + "ar"].Value = ar;
                     if (dp != "00:00")
-                        trainRow.Cells[sta.SName + "dp"].Value = dp;
+                        trainRow.Cells[stas.IndexOf(sta) + "dp"].Value = dp;
                 }
 
                 trainRow.Tag = tra;
@@ -82,12 +82,13 @@ namespace FPLedit.Standard
                 if (t != train)
                     continue;
 
-                foreach (var sta in info.Timetable.Stations)
+                var stas = info.Timetable.GetStationsOrderedByDirection(train.Direction);
+                foreach (var sta in stas)
                 {
-                    ArrDep ardp = new ArrDep(); 
-                    if (view.Columns.Contains(sta.SName + "ar"))
+                    ArrDep ardp = new ArrDep();
+                    if (view.Columns.Contains(stas.IndexOf(sta) + "ar"))
                     {
-                        DataGridViewCell cellAr = row.Cells[sta.SName + "ar"];
+                        DataGridViewCell cellAr = row.Cells[stas.IndexOf(sta) + "ar"];
 
                         if ((string)cellAr.Value != "" && cellAr.Value != null)
                         {
@@ -96,9 +97,9 @@ namespace FPLedit.Standard
                         }
                     }
 
-                    if (view.Columns.Contains(sta.SName + "dp"))
+                    if (view.Columns.Contains(stas.IndexOf(sta) + "dp"))
                     {
-                        DataGridViewCell cellDp = row.Cells[sta.SName + "dp"];
+                        DataGridViewCell cellDp = row.Cells[stas.IndexOf(sta) + "dp"];
 
                         if ((string)cellDp.Value != "" && cellDp.Value != null)
                         {
@@ -140,8 +141,11 @@ namespace FPLedit.Standard
             DialogResult = DialogResult.OK;
 
             foreach (var t in info.Timetable.Trains)
-                if (!(UpdateTrainDataFromGrid(t, topDataGridView) || UpdateTrainDataFromGrid(t, bottomDataGridView)))
+            {
+                if ((t.Direction == TOP_DIRECTION && !UpdateTrainDataFromGrid(t, topDataGridView))
+                    || (t.Direction == BOTTOM_DIRECTION && !UpdateTrainDataFromGrid(t, bottomDataGridView)))
                     throw new Exception("In der Anwendung ist ein interner Fehler aufgetreten!");
+            }
 
             info.ClearBackup();
             Close();
@@ -153,7 +157,7 @@ namespace FPLedit.Standard
             info.RestoreTimetable();
 
             Close();
-        }        
+        }
 
         private void topDataGridView_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
             => ValidateCell(topDataGridView, e);
