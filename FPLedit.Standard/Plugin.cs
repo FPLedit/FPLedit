@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace FPLedit.Standard
 {
-    public class EditorPlugin : IPlugin
+    public class Plugin : IPlugin
     {
         public string Name
         {

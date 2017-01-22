@@ -54,7 +54,7 @@
     <Compile Include="LineEditForm.Designer.cs">
       <DependentUpon>LineEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="EditorPlugin.cs" />
+    <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TimetableEditForm.cs">
       <SubType>Form</SubType>
