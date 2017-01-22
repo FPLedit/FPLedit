@@ -117,15 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="label3.Text" xml:space="preserve">
-    <value>Hinweise:
-
-* Java-Pfad: Unter Windows: javaw.exe, Linux: java
-* jTrainGraph-Datei: Anwendungsdatei von jTrainGraph (jTrainGraph_xxx.jar, wobei xxx &gt;= 202)
-* Weitere Hinweise: https://fahrplan.manuelhu.de/
-
-
-
-</value>
-  </data>
 </root>

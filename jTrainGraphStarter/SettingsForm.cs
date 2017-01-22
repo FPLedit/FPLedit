@@ -49,5 +49,11 @@ namespace FPLedit.jTrainGraphStarter
             SettingsManager.Set("jTGStarter.jtgpath", jtgPathTextBox.Text);
             Close();
         }
+
+        private void docLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+            => Process.Start("https://fahrplan.manuelhu.de/bildfahrplaene/");
+
+        private void downloadLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+            => Process.Start("http://kinzigtalbahn.bplaced.net/homepage/programme.html");
     }
 }

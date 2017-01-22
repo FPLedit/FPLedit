@@ -75,7 +75,7 @@ namespace FPLedit.jTrainGraphStarter
             catch (Exception e)
             {
                 info.Logger.Error("jTrainGraphStarter: " + e.Message);
-                info.Logger.Error("Möglicherweise ist das jTrainGraphStarter Plugin falsch konfiguriert!");
+                info.Logger.Error("Möglicherweise ist das jTrainGraphStarter Plugin falsch konfiguriert! Zur Konfiguration siehe jTrainGraph > Einstellungen");
             }
         }
     }

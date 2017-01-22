@@ -28,13 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
             this.label1 = new System.Windows.Forms.Label();
             this.javaPathTextBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.jtgPathTextBox = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
+            this.generalDocLabel = new System.Windows.Forms.Label();
             this.closeButton = new System.Windows.Forms.Button();
+            this.downloadLinkLabel = new System.Windows.Forms.LinkLabel();
+            this.docLinkLabel = new System.Windows.Forms.LinkLabel();
+            this.jTGDocLabel = new System.Windows.Forms.Label();
+            this.javaDocLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -56,7 +59,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 46);
+            this.label2.Location = new System.Drawing.Point(12, 61);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(132, 13);
             this.label2.TabIndex = 2;
@@ -64,22 +67,22 @@
             // 
             // jtgPathTextBox
             // 
-            this.jtgPathTextBox.Location = new System.Drawing.Point(157, 43);
+            this.jtgPathTextBox.Location = new System.Drawing.Point(157, 58);
             this.jtgPathTextBox.Name = "jtgPathTextBox";
-            this.jtgPathTextBox.Size = new System.Drawing.Size(242, 20);
+            this.jtgPathTextBox.Size = new System.Drawing.Size(240, 20);
             this.jtgPathTextBox.TabIndex = 3;
             // 
-            // label3
+            // generalDocLabel
             // 
-            this.label3.Location = new System.Drawing.Point(12, 75);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(387, 82);
-            this.label3.TabIndex = 4;
-            this.label3.Text = resources.GetString("label3.Text");
+            this.generalDocLabel.Location = new System.Drawing.Point(10, 112);
+            this.generalDocLabel.Name = "generalDocLabel";
+            this.generalDocLabel.Size = new System.Drawing.Size(387, 50);
+            this.generalDocLabel.TabIndex = 4;
+            this.generalDocLabel.Text = "Weitere Hinweise:\r\n\r\nWenn Sie jTrainGraph noch gar nicht installiert haben:\r\n\r\n";
             // 
             // closeButton
             // 
-            this.closeButton.Location = new System.Drawing.Point(324, 145);
+            this.closeButton.Location = new System.Drawing.Point(324, 158);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
             this.closeButton.TabIndex = 5;
@@ -87,14 +90,56 @@
             this.closeButton.UseVisualStyleBackColor = true;
             this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
             // 
+            // downloadLinkLabel
+            // 
+            this.downloadLinkLabel.AutoSize = true;
+            this.downloadLinkLabel.Location = new System.Drawing.Point(267, 138);
+            this.downloadLinkLabel.Name = "downloadLinkLabel";
+            this.downloadLinkLabel.Size = new System.Drawing.Size(130, 13);
+            this.downloadLinkLabel.TabIndex = 6;
+            this.downloadLinkLabel.TabStop = true;
+            this.downloadLinkLabel.Text = "jTrainGraph herunterladen";
+            this.downloadLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.downloadLinkLabel_LinkClicked);
+            // 
+            // docLinkLabel
+            // 
+            this.docLinkLabel.AutoSize = true;
+            this.docLinkLabel.Location = new System.Drawing.Point(99, 112);
+            this.docLinkLabel.Name = "docLinkLabel";
+            this.docLinkLabel.Size = new System.Drawing.Size(161, 13);
+            this.docLinkLabel.TabIndex = 7;
+            this.docLinkLabel.TabStop = true;
+            this.docLinkLabel.Text = "Dokumentation zu diesem Plugin";
+            this.docLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.docLinkLabel_LinkClicked);
+            // 
+            // jTGDocLabel
+            // 
+            this.jTGDocLabel.Location = new System.Drawing.Point(156, 81);
+            this.jTGDocLabel.Name = "jTGDocLabel";
+            this.jTGDocLabel.Size = new System.Drawing.Size(243, 31);
+            this.jTGDocLabel.TabIndex = 8;
+            this.jTGDocLabel.Text = "Anwendungsdatei von jTrainGraph (jTrainGraph_xxx.jar, wobei xxx >= 202)";
+            // 
+            // javaDocLabel
+            // 
+            this.javaDocLabel.Location = new System.Drawing.Point(156, 35);
+            this.javaDocLabel.Name = "javaDocLabel";
+            this.javaDocLabel.Size = new System.Drawing.Size(243, 20);
+            this.javaDocLabel.TabIndex = 9;
+            this.javaDocLabel.Text = "i.d.R: Windows: javaw.exe, Linux: java";
+            // 
             // SettingsForm
             // 
             this.AcceptButton = this.closeButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(411, 180);
+            this.ClientSize = new System.Drawing.Size(411, 193);
+            this.Controls.Add(this.javaDocLabel);
+            this.Controls.Add(this.jTGDocLabel);
+            this.Controls.Add(this.docLinkLabel);
+            this.Controls.Add(this.downloadLinkLabel);
             this.Controls.Add(this.closeButton);
-            this.Controls.Add(this.label3);
+            this.Controls.Add(this.generalDocLabel);
             this.Controls.Add(this.jtgPathTextBox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.javaPathTextBox);
@@ -116,7 +161,11 @@
         private System.Windows.Forms.TextBox javaPathTextBox;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox jtgPathTextBox;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label generalDocLabel;
         private System.Windows.Forms.Button closeButton;
+        private System.Windows.Forms.LinkLabel downloadLinkLabel;
+        private System.Windows.Forms.LinkLabel docLinkLabel;
+        private System.Windows.Forms.Label jTGDocLabel;
+        private System.Windows.Forms.Label javaDocLabel;
     }
 }
