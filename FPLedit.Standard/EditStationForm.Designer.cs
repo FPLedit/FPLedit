@@ -44,7 +44,7 @@
             this.positionLabel.Location = new System.Drawing.Point(12, 41);
             this.positionLabel.Name = "positionLabel";
             this.positionLabel.Size = new System.Drawing.Size(51, 13);
-            this.positionLabel.TabIndex = 3;
+            this.positionLabel.TabIndex = 2;
             this.positionLabel.Text = "Pos. (km)";
             // 
             // positionTextBox
@@ -52,7 +52,7 @@
             this.positionTextBox.Location = new System.Drawing.Point(70, 38);
             this.positionTextBox.Name = "positionTextBox";
             this.positionTextBox.Size = new System.Drawing.Size(131, 20);
-            this.positionTextBox.TabIndex = 4;
+            this.positionTextBox.TabIndex = 3;
             // 
             // nameLabel
             // 
@@ -60,7 +60,7 @@
             this.nameLabel.Location = new System.Drawing.Point(12, 15);
             this.nameLabel.Name = "nameLabel";
             this.nameLabel.Size = new System.Drawing.Size(35, 13);
-            this.nameLabel.TabIndex = 1;
+            this.nameLabel.TabIndex = 0;
             this.nameLabel.Text = "Name";
             // 
             // nameTextBox
@@ -68,7 +68,7 @@
             this.nameTextBox.Location = new System.Drawing.Point(70, 12);
             this.nameTextBox.Name = "nameTextBox";
             this.nameTextBox.Size = new System.Drawing.Size(131, 20);
-            this.nameTextBox.TabIndex = 2;
+            this.nameTextBox.TabIndex = 1;
             // 
             // cancelButton
             // 
@@ -76,7 +76,7 @@
             this.cancelButton.Location = new System.Drawing.Point(47, 67);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 7;
+            this.cancelButton.TabIndex = 5;
             this.cancelButton.Text = "Abbrechen";
             this.cancelButton.UseVisualStyleBackColor = true;
             // 
@@ -85,7 +85,7 @@
             this.closeButton.Location = new System.Drawing.Point(126, 67);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
-            this.closeButton.TabIndex = 8;
+            this.closeButton.TabIndex = 4;
             this.closeButton.Text = "OK";
             this.closeButton.UseVisualStyleBackColor = true;
             this.closeButton.Click += new System.EventHandler(this.closeButton_Click);

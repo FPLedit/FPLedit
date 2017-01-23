@@ -47,7 +47,7 @@
             this.listView.MultiSelect = false;
             this.listView.Name = "listView";
             this.listView.Size = new System.Drawing.Size(524, 282);
-            this.listView.TabIndex = 8;
+            this.listView.TabIndex = 0;
             this.listView.UseCompatibleStateImageBehavior = false;
             this.listView.View = System.Windows.Forms.View.Details;
             this.listView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listView_MouseDoubleClick);
@@ -58,7 +58,7 @@
             this.editButton.Location = new System.Drawing.Point(542, 41);
             this.editButton.Name = "editButton";
             this.editButton.Size = new System.Drawing.Size(102, 23);
-            this.editButton.TabIndex = 17;
+            this.editButton.TabIndex = 2;
             this.editButton.Text = "Station bearbeiten";
             this.editButton.UseVisualStyleBackColor = true;
             this.editButton.Click += new System.EventHandler(this.editButton_Click);
@@ -69,7 +69,7 @@
             this.deleteButton.Location = new System.Drawing.Point(542, 70);
             this.deleteButton.Name = "deleteButton";
             this.deleteButton.Size = new System.Drawing.Size(102, 23);
-            this.deleteButton.TabIndex = 19;
+            this.deleteButton.TabIndex = 3;
             this.deleteButton.Text = "Station löschen";
             this.deleteButton.UseVisualStyleBackColor = true;
             this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
@@ -80,7 +80,7 @@
             this.newButton.Location = new System.Drawing.Point(542, 12);
             this.newButton.Name = "newButton";
             this.newButton.Size = new System.Drawing.Size(102, 23);
-            this.newButton.TabIndex = 20;
+            this.newButton.TabIndex = 1;
             this.newButton.Text = "Neue Station";
             this.newButton.UseVisualStyleBackColor = true;
             this.newButton.Click += new System.EventHandler(this.newButton_Click);
@@ -92,7 +92,7 @@
             this.cancelButton.Location = new System.Drawing.Point(488, 300);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 22;
+            this.cancelButton.TabIndex = 5;
             this.cancelButton.Text = "Abbrechen";
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
@@ -103,7 +103,7 @@
             this.closeButton.Location = new System.Drawing.Point(569, 300);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
-            this.closeButton.TabIndex = 21;
+            this.closeButton.TabIndex = 4;
             this.closeButton.Text = "Schließen";
             this.closeButton.UseVisualStyleBackColor = true;
             this.closeButton.Click += new System.EventHandler(this.closeButton_Click);

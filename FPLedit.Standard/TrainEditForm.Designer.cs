@@ -52,7 +52,7 @@
             this.locomotiveLabel.Location = new System.Drawing.Point(12, 35);
             this.locomotiveLabel.Name = "locomotiveLabel";
             this.locomotiveLabel.Size = new System.Drawing.Size(22, 13);
-            this.locomotiveLabel.TabIndex = 11;
+            this.locomotiveLabel.TabIndex = 2;
             this.locomotiveLabel.Text = "Tfz";
             // 
             // nameLabel
@@ -61,7 +61,7 @@
             this.nameLabel.Location = new System.Drawing.Point(12, 9);
             this.nameLabel.Name = "nameLabel";
             this.nameLabel.Size = new System.Drawing.Size(35, 13);
-            this.nameLabel.TabIndex = 7;
+            this.nameLabel.TabIndex = 0;
             this.nameLabel.Text = "Name";
             // 
             // nameTextBox
@@ -69,7 +69,7 @@
             this.nameTextBox.Location = new System.Drawing.Point(65, 6);
             this.nameTextBox.Name = "nameTextBox";
             this.nameTextBox.Size = new System.Drawing.Size(131, 20);
-            this.nameTextBox.TabIndex = 8;
+            this.nameTextBox.TabIndex = 1;
             // 
             // cancelButton
             // 
@@ -77,7 +77,7 @@
             this.cancelButton.Location = new System.Drawing.Point(44, 133);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 13;
+            this.cancelButton.TabIndex = 6;
             this.cancelButton.Text = "Abbrechen";
             this.cancelButton.UseVisualStyleBackColor = true;
             // 
@@ -86,7 +86,7 @@
             this.closeButton.Location = new System.Drawing.Point(125, 133);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
-            this.closeButton.TabIndex = 14;
+            this.closeButton.TabIndex = 5;
             this.closeButton.Text = "Schließen";
             this.closeButton.UseVisualStyleBackColor = true;
             this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
@@ -103,7 +103,7 @@
             this.daysGroupBox.Location = new System.Drawing.Point(12, 58);
             this.daysGroupBox.Name = "daysGroupBox";
             this.daysGroupBox.Size = new System.Drawing.Size(188, 69);
-            this.daysGroupBox.TabIndex = 22;
+            this.daysGroupBox.TabIndex = 4;
             this.daysGroupBox.TabStop = false;
             this.daysGroupBox.Text = "Verkehrstage";
             // 
@@ -115,7 +115,7 @@
             this.sundayCheckBox.Location = new System.Drawing.Point(99, 44);
             this.sundayCheckBox.Name = "sundayCheckBox";
             this.sundayCheckBox.Size = new System.Drawing.Size(39, 17);
-            this.sundayCheckBox.TabIndex = 28;
+            this.sundayCheckBox.TabIndex = 6;
             this.sundayCheckBox.Text = "So";
             this.sundayCheckBox.UseVisualStyleBackColor = true;
             // 
@@ -127,7 +127,7 @@
             this.saturdayCheckBox.Location = new System.Drawing.Point(52, 44);
             this.saturdayCheckBox.Name = "saturdayCheckBox";
             this.saturdayCheckBox.Size = new System.Drawing.Size(39, 17);
-            this.saturdayCheckBox.TabIndex = 27;
+            this.saturdayCheckBox.TabIndex = 5;
             this.saturdayCheckBox.Text = "Sa";
             this.saturdayCheckBox.UseVisualStyleBackColor = true;
             // 
@@ -139,7 +139,7 @@
             this.fridayCheckBox.Location = new System.Drawing.Point(5, 44);
             this.fridayCheckBox.Name = "fridayCheckBox";
             this.fridayCheckBox.Size = new System.Drawing.Size(35, 17);
-            this.fridayCheckBox.TabIndex = 26;
+            this.fridayCheckBox.TabIndex = 4;
             this.fridayCheckBox.Text = "Fr";
             this.fridayCheckBox.UseVisualStyleBackColor = true;
             // 
@@ -151,7 +151,7 @@
             this.thursdayCheckBox.Location = new System.Drawing.Point(146, 21);
             this.thursdayCheckBox.Name = "thursdayCheckBox";
             this.thursdayCheckBox.Size = new System.Drawing.Size(40, 17);
-            this.thursdayCheckBox.TabIndex = 25;
+            this.thursdayCheckBox.TabIndex = 3;
             this.thursdayCheckBox.Text = "Do";
             this.thursdayCheckBox.UseVisualStyleBackColor = true;
             // 
@@ -163,7 +163,7 @@
             this.wednesdayCheckBox.Location = new System.Drawing.Point(99, 21);
             this.wednesdayCheckBox.Name = "wednesdayCheckBox";
             this.wednesdayCheckBox.Size = new System.Drawing.Size(37, 17);
-            this.wednesdayCheckBox.TabIndex = 24;
+            this.wednesdayCheckBox.TabIndex = 2;
             this.wednesdayCheckBox.Text = "Mi";
             this.wednesdayCheckBox.UseVisualStyleBackColor = true;
             // 
@@ -175,7 +175,7 @@
             this.tuesdayCheckBox.Location = new System.Drawing.Point(52, 21);
             this.tuesdayCheckBox.Name = "tuesdayCheckBox";
             this.tuesdayCheckBox.Size = new System.Drawing.Size(36, 17);
-            this.tuesdayCheckBox.TabIndex = 23;
+            this.tuesdayCheckBox.TabIndex = 1;
             this.tuesdayCheckBox.Text = "Di";
             this.tuesdayCheckBox.UseVisualStyleBackColor = true;
             // 
@@ -187,7 +187,7 @@
             this.mondayCheckBox.Location = new System.Drawing.Point(5, 21);
             this.mondayCheckBox.Name = "mondayCheckBox";
             this.mondayCheckBox.Size = new System.Drawing.Size(41, 17);
-            this.mondayCheckBox.TabIndex = 22;
+            this.mondayCheckBox.TabIndex = 0;
             this.mondayCheckBox.Text = "Mo";
             this.mondayCheckBox.UseVisualStyleBackColor = true;
             // 
@@ -197,7 +197,7 @@
             this.locomotiveComboBox.Location = new System.Drawing.Point(64, 32);
             this.locomotiveComboBox.Name = "locomotiveComboBox";
             this.locomotiveComboBox.Size = new System.Drawing.Size(132, 21);
-            this.locomotiveComboBox.TabIndex = 23;
+            this.locomotiveComboBox.TabIndex = 3;
             // 
             // nameValidator
             // 

@@ -75,7 +75,7 @@
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(228, 370);
-            this.panel1.TabIndex = 2;
+            this.panel1.TabIndex = 0;
             // 
             // disabledListView
             // 
@@ -85,7 +85,7 @@
             this.disabledListView.Location = new System.Drawing.Point(4, 16);
             this.disabledListView.Name = "disabledListView";
             this.disabledListView.Size = new System.Drawing.Size(221, 350);
-            this.disabledListView.TabIndex = 2;
+            this.disabledListView.TabIndex = 1;
             this.disabledListView.UseCompatibleStateImageBehavior = false;
             this.disabledListView.View = System.Windows.Forms.View.List;
             // 
@@ -95,7 +95,7 @@
             this.label1.Location = new System.Drawing.Point(3, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(58, 13);
-            this.label1.TabIndex = 1;
+            this.label1.TabIndex = 0;
             this.label1.Text = "Deaktiviert";
             // 
             // panel2
@@ -106,7 +106,7 @@
             this.panel2.Location = new System.Drawing.Point(287, 3);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(229, 370);
-            this.panel2.TabIndex = 3;
+            this.panel2.TabIndex = 1;
             // 
             // enabledListView
             // 
@@ -116,7 +116,7 @@
             this.enabledListView.Location = new System.Drawing.Point(3, 16);
             this.enabledListView.Name = "enabledListView";
             this.enabledListView.Size = new System.Drawing.Size(221, 350);
-            this.enabledListView.TabIndex = 3;
+            this.enabledListView.TabIndex = 1;
             this.enabledListView.UseCompatibleStateImageBehavior = false;
             this.enabledListView.View = System.Windows.Forms.View.List;
             // 
@@ -126,7 +126,7 @@
             this.label2.Location = new System.Drawing.Point(3, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(45, 13);
-            this.label2.TabIndex = 2;
+            this.label2.TabIndex = 0;
             this.label2.Text = "Aktiviert";
             // 
             // tableLayoutPanel2
@@ -142,7 +142,7 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 62F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(44, 370);
-            this.tableLayoutPanel2.TabIndex = 4;
+            this.tableLayoutPanel2.TabIndex = 2;
             // 
             // panel3
             // 
@@ -159,7 +159,7 @@
             this.activateButton.Location = new System.Drawing.Point(0, 31);
             this.activateButton.Name = "activateButton";
             this.activateButton.Size = new System.Drawing.Size(38, 24);
-            this.activateButton.TabIndex = 5;
+            this.activateButton.TabIndex = 1;
             this.activateButton.Text = ">";
             this.activateButton.UseVisualStyleBackColor = true;
             this.activateButton.Click += new System.EventHandler(this.activateButton_Click);
@@ -169,7 +169,7 @@
             this.deactivateButton.Location = new System.Drawing.Point(0, 2);
             this.deactivateButton.Name = "deactivateButton";
             this.deactivateButton.Size = new System.Drawing.Size(38, 24);
-            this.deactivateButton.TabIndex = 4;
+            this.deactivateButton.TabIndex = 0;
             this.deactivateButton.Text = "<";
             this.deactivateButton.UseVisualStyleBackColor = true;
             this.deactivateButton.Click += new System.EventHandler(this.deactivateButton_Click);

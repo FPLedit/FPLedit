@@ -62,7 +62,7 @@
             this.label2.Location = new System.Drawing.Point(12, 61);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(132, 13);
-            this.label2.TabIndex = 2;
+            this.label2.TabIndex = 3;
             this.label2.Text = "Pfad zur jTrainGraph-Datei";
             // 
             // jtgPathTextBox
@@ -70,14 +70,14 @@
             this.jtgPathTextBox.Location = new System.Drawing.Point(157, 58);
             this.jtgPathTextBox.Name = "jtgPathTextBox";
             this.jtgPathTextBox.Size = new System.Drawing.Size(240, 20);
-            this.jtgPathTextBox.TabIndex = 3;
+            this.jtgPathTextBox.TabIndex = 4;
             // 
             // generalDocLabel
             // 
             this.generalDocLabel.Location = new System.Drawing.Point(10, 112);
             this.generalDocLabel.Name = "generalDocLabel";
             this.generalDocLabel.Size = new System.Drawing.Size(387, 50);
-            this.generalDocLabel.TabIndex = 4;
+            this.generalDocLabel.TabIndex = 6;
             this.generalDocLabel.Text = "Weitere Hinweise:\r\n\r\nWenn Sie jTrainGraph noch gar nicht installiert haben:\r\n\r\n";
             // 
             // closeButton
@@ -85,7 +85,7 @@
             this.closeButton.Location = new System.Drawing.Point(324, 158);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
-            this.closeButton.TabIndex = 5;
+            this.closeButton.TabIndex = 9;
             this.closeButton.Text = "Schließen";
             this.closeButton.UseVisualStyleBackColor = true;
             this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
@@ -96,7 +96,7 @@
             this.downloadLinkLabel.Location = new System.Drawing.Point(267, 138);
             this.downloadLinkLabel.Name = "downloadLinkLabel";
             this.downloadLinkLabel.Size = new System.Drawing.Size(130, 13);
-            this.downloadLinkLabel.TabIndex = 6;
+            this.downloadLinkLabel.TabIndex = 8;
             this.downloadLinkLabel.TabStop = true;
             this.downloadLinkLabel.Text = "jTrainGraph herunterladen";
             this.downloadLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.downloadLinkLabel_LinkClicked);
@@ -117,7 +117,7 @@
             this.jTGDocLabel.Location = new System.Drawing.Point(156, 81);
             this.jTGDocLabel.Name = "jTGDocLabel";
             this.jTGDocLabel.Size = new System.Drawing.Size(243, 31);
-            this.jTGDocLabel.TabIndex = 8;
+            this.jTGDocLabel.TabIndex = 5;
             this.jTGDocLabel.Text = "Anwendungsdatei von jTrainGraph (jTrainGraph_xxx.jar, wobei xxx >= 202)";
             // 
             // javaDocLabel
@@ -125,7 +125,7 @@
             this.javaDocLabel.Location = new System.Drawing.Point(156, 35);
             this.javaDocLabel.Name = "javaDocLabel";
             this.javaDocLabel.Size = new System.Drawing.Size(243, 20);
-            this.javaDocLabel.TabIndex = 9;
+            this.javaDocLabel.TabIndex = 2;
             this.javaDocLabel.Text = "i.d.R: Windows: javaw.exe, Linux: java";
             // 
             // SettingsForm

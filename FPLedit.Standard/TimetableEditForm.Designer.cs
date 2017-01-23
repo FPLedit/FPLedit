@@ -51,7 +51,7 @@
             this.cancelButton.Location = new System.Drawing.Point(683, 603);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 24;
+            this.cancelButton.TabIndex = 2;
             this.cancelButton.Text = "Abbrechen";
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
@@ -63,7 +63,7 @@
             this.closeButton.Location = new System.Drawing.Point(763, 603);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
-            this.closeButton.TabIndex = 23;
+            this.closeButton.TabIndex = 1;
             this.closeButton.Text = "Schließen";
             this.closeButton.UseVisualStyleBackColor = true;
             this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
@@ -83,7 +83,7 @@
             this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.mainTableLayoutPanel.Size = new System.Drawing.Size(826, 585);
-            this.mainTableLayoutPanel.TabIndex = 29;
+            this.mainTableLayoutPanel.TabIndex = 0;
             // 
             // topPanel
             // 
@@ -104,7 +104,7 @@
             this.topLineLabel.Location = new System.Drawing.Point(3, 0);
             this.topLineLabel.Name = "topLineLabel";
             this.topLineLabel.Size = new System.Drawing.Size(814, 15);
-            this.topLineLabel.TabIndex = 33;
+            this.topLineLabel.TabIndex = 0;
             this.topLineLabel.Text = "Züge von ... nach ...";
             this.topLineLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -124,7 +124,7 @@
             this.topDataGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.topDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.topDataGridView.Size = new System.Drawing.Size(814, 268);
-            this.topDataGridView.TabIndex = 32;
+            this.topDataGridView.TabIndex = 1;
             this.topDataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.topDataGridView_CellValidating);
             // 
             // bottomPanel
@@ -146,7 +146,7 @@
             this.bottomLineLabel.Location = new System.Drawing.Point(3, 0);
             this.bottomLineLabel.Name = "bottomLineLabel";
             this.bottomLineLabel.Size = new System.Drawing.Size(814, 15);
-            this.bottomLineLabel.TabIndex = 30;
+            this.bottomLineLabel.TabIndex = 0;
             this.bottomLineLabel.Text = "Züge von ... nach ...";
             this.bottomLineLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -166,7 +166,7 @@
             this.bottomDataGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.bottomDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.bottomDataGridView.Size = new System.Drawing.Size(820, 266);
-            this.bottomDataGridView.TabIndex = 29;
+            this.bottomDataGridView.TabIndex = 1;
             this.bottomDataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.bottomDataGridView_CellValidating);
             // 
             // TimetableEditForm

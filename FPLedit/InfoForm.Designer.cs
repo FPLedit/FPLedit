@@ -46,7 +46,7 @@
             this.websiteLinkLabel.Location = new System.Drawing.Point(94, 62);
             this.websiteLinkLabel.Name = "websiteLinkLabel";
             this.websiteLinkLabel.Size = new System.Drawing.Size(145, 13);
-            this.websiteLinkLabel.TabIndex = 1;
+            this.websiteLinkLabel.TabIndex = 4;
             this.websiteLinkLabel.TabStop = true;
             this.websiteLinkLabel.Text = "https://fahrplan.manuelhu.de";
             this.websiteLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.websiteLinkLabel_LinkClicked);
@@ -57,7 +57,7 @@
             this.versionLabel.Location = new System.Drawing.Point(15, 17);
             this.versionLabel.Name = "versionLabel";
             this.versionLabel.Size = new System.Drawing.Size(87, 13);
-            this.versionLabel.TabIndex = 2;
+            this.versionLabel.TabIndex = 0;
             this.versionLabel.Text = "Version {version}";
             // 
             // checkButton
@@ -65,7 +65,7 @@
             this.checkButton.Location = new System.Drawing.Point(207, 12);
             this.checkButton.Name = "checkButton";
             this.checkButton.Size = new System.Drawing.Size(139, 23);
-            this.checkButton.TabIndex = 3;
+            this.checkButton.TabIndex = 1;
             this.checkButton.Text = "Auf neue Version prüfen";
             this.checkButton.UseVisualStyleBackColor = true;
             this.checkButton.Click += new System.EventHandler(this.checkButton_Click);
@@ -76,7 +76,7 @@
             this.copyrightLabel.Location = new System.Drawing.Point(15, 47);
             this.copyrightLabel.Name = "copyrightLabel";
             this.copyrightLabel.Size = new System.Drawing.Size(140, 13);
-            this.copyrightLabel.TabIndex = 4;
+            this.copyrightLabel.TabIndex = 2;
             this.copyrightLabel.Text = "© 2015-2017 Manuel Huber";
             // 
             // licenseGroupBox
@@ -109,7 +109,7 @@
             this.closeButton.Location = new System.Drawing.Point(271, 319);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
-            this.closeButton.TabIndex = 6;
+            this.closeButton.TabIndex = 7;
             this.closeButton.Text = "Schließen";
             this.closeButton.UseVisualStyleBackColor = true;
             this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
@@ -120,7 +120,7 @@
             this.dokuLabel.Location = new System.Drawing.Point(15, 62);
             this.dokuLabel.Name = "dokuLabel";
             this.dokuLabel.Size = new System.Drawing.Size(82, 13);
-            this.dokuLabel.TabIndex = 7;
+            this.dokuLabel.TabIndex = 3;
             this.dokuLabel.Text = "Dokumentation:";
             // 
             // updateCheckBox
@@ -128,7 +128,7 @@
             this.updateCheckBox.Location = new System.Drawing.Point(12, 279);
             this.updateCheckBox.Name = "updateCheckBox";
             this.updateCheckBox.Size = new System.Drawing.Size(334, 32);
-            this.updateCheckBox.TabIndex = 8;
+            this.updateCheckBox.TabIndex = 6;
             this.updateCheckBox.Text = "Automatische Überprüfung auf Updates beim Programmstart aktivieren. (Dabei wird I" +
     "hre IP-Adresse an den Server übermittelt)";
             this.updateCheckBox.UseVisualStyleBackColor = true;

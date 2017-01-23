@@ -41,7 +41,7 @@
             this.velocityLabel.Location = new System.Drawing.Point(12, 15);
             this.velocityLabel.Name = "velocityLabel";
             this.velocityLabel.Size = new System.Drawing.Size(117, 13);
-            this.velocityLabel.TabIndex = 7;
+            this.velocityLabel.TabIndex = 0;
             this.velocityLabel.Text = "Höchstgeschwindigkeit";
             // 
             // cancelButton
@@ -50,7 +50,7 @@
             this.cancelButton.Location = new System.Drawing.Point(100, 38);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 13;
+            this.cancelButton.TabIndex = 3;
             this.cancelButton.Text = "Abbrechen";
             this.cancelButton.UseVisualStyleBackColor = true;
             // 
@@ -59,7 +59,7 @@
             this.closeButton.Location = new System.Drawing.Point(181, 38);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
-            this.closeButton.TabIndex = 14;
+            this.closeButton.TabIndex = 2;
             this.closeButton.Text = "Schließen";
             this.closeButton.UseVisualStyleBackColor = true;
             this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
@@ -69,7 +69,7 @@
             this.velocityTextBox.Location = new System.Drawing.Point(135, 12);
             this.velocityTextBox.Name = "velocityTextBox";
             this.velocityTextBox.Size = new System.Drawing.Size(121, 20);
-            this.velocityTextBox.TabIndex = 15;
+            this.velocityTextBox.TabIndex = 1;
             // 
             // velocityValidator
             // 

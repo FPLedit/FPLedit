@@ -58,7 +58,7 @@
             this.closeButton.Location = new System.Drawing.Point(743, 517);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
-            this.closeButton.TabIndex = 5;
+            this.closeButton.TabIndex = 2;
             this.closeButton.Text = "Schließen";
             this.closeButton.UseVisualStyleBackColor = true;
             this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
@@ -70,7 +70,7 @@
             this.cancelButton.Location = new System.Drawing.Point(662, 517);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 6;
+            this.cancelButton.TabIndex = 3;
             this.cancelButton.Text = "Abbrechen";
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
@@ -93,7 +93,7 @@
             this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.mainTableLayoutPanel.Size = new System.Drawing.Size(806, 499);
-            this.mainTableLayoutPanel.TabIndex = 7;
+            this.mainTableLayoutPanel.TabIndex = 1;
             // 
             // topContentPanel
             // 
@@ -129,7 +129,7 @@
             this.topListView.MultiSelect = false;
             this.topListView.Name = "topListView";
             this.topListView.Size = new System.Drawing.Size(677, 222);
-            this.topListView.TabIndex = 8;
+            this.topListView.TabIndex = 1;
             this.topListView.UseCompatibleStateImageBehavior = false;
             this.topListView.View = System.Windows.Forms.View.Details;
             this.topListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.topListView_MouseDoubleClick);
@@ -144,7 +144,7 @@
             this.bottomContentPanel.Location = new System.Drawing.Point(3, 252);
             this.bottomContentPanel.Name = "bottomContentPanel";
             this.bottomContentPanel.Size = new System.Drawing.Size(680, 244);
-            this.bottomContentPanel.TabIndex = 1;
+            this.bottomContentPanel.TabIndex = 2;
             // 
             // bottomLineLabel
             // 
@@ -184,7 +184,7 @@
             this.topActionsPanel.Location = new System.Drawing.Point(689, 3);
             this.topActionsPanel.Name = "topActionsPanel";
             this.topActionsPanel.Size = new System.Drawing.Size(114, 243);
-            this.topActionsPanel.TabIndex = 2;
+            this.topActionsPanel.TabIndex = 1;
             // 
             // topDeleteButton
             // 

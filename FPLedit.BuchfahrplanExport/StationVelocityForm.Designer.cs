@@ -55,7 +55,7 @@
             this.cancelButton.Location = new System.Drawing.Point(351, 458);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 8;
+            this.cancelButton.TabIndex = 3;
             this.cancelButton.Text = "Abbrechen";
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
@@ -66,7 +66,7 @@
             this.closeButton.Location = new System.Drawing.Point(432, 458);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
-            this.closeButton.TabIndex = 7;
+            this.closeButton.TabIndex = 2;
             this.closeButton.Text = "Schließen";
             this.closeButton.UseVisualStyleBackColor = true;
             this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
@@ -77,7 +77,7 @@
             this.editButton.Location = new System.Drawing.Point(351, 12);
             this.editButton.Name = "editButton";
             this.editButton.Size = new System.Drawing.Size(156, 41);
-            this.editButton.TabIndex = 17;
+            this.editButton.TabIndex = 1;
             this.editButton.Text = "Höchstgeschwindigkeit bearbeiten";
             this.editButton.UseVisualStyleBackColor = true;
             this.editButton.Click += new System.EventHandler(this.editButton_Click);

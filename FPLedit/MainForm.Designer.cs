@@ -133,7 +133,7 @@
             this.logTextBox.ReadOnly = true;
             this.logTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.logTextBox.Size = new System.Drawing.Size(504, 284);
-            this.logTextBox.TabIndex = 2;
+            this.logTextBox.TabIndex = 1;
             // 
             // MainForm
             // 
