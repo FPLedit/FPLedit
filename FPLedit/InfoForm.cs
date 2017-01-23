@@ -22,8 +22,8 @@ namespace FPLedit
             UpdateManager mg = new UpdateManager();
 
             textBox1.Text = Properties.Resources.Info;
-
             versionLabel.Text = versionLabel.Text.Replace("{version}", mg.GetCurrentVersion().ToString());
+            updateCheckBox.Checked = bool.Parse(SettingsManager.Get("updater.auto", "false"));
         }
 
         private void VersionCheck()
@@ -61,5 +61,8 @@ namespace FPLedit
 
         private void checkButton_Click(object sender, EventArgs e)
             => VersionCheck();
+
+        private void closeButton_Click(object sender, EventArgs e)
+            => SettingsManager.Set("updater.auto", updateCheckBox.Checked.ToString());
     }
 }

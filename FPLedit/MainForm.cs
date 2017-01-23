@@ -99,14 +99,14 @@ namespace FPLedit
 
             // Hilfe Menü nach den Erweiterungen zusammenbasteln
             var helpItem = new ToolStripMenuItem("Hilfe");
-            this.menuStrip.Items.AddRange(new[] { helpItem });            
+            this.menuStrip.Items.AddRange(new[] { helpItem });
             var extItem = helpItem.DropDownItems.Add("Erweiterungen");
             extItem.Click += (s, ev) => (new ExtensionsForm(extensionManager)).ShowDialog();
             var docItem = helpItem.DropDownItems.Add("Online Hilfe");
             docItem.Click += (s, ev) => Process.Start("https://fahrplan.manuelhu.de/");
             var infoItem = helpItem.DropDownItems.Add("Info");
             infoItem.Click += (s, ev) => (new InfoForm()).ShowDialog();
-        }        
+        }
 
         #region FileHandling
 
@@ -190,7 +190,7 @@ namespace FPLedit
                 else
                     return;
             }
-            InternalSave(filename);            
+            InternalSave(filename);
         }
 
         private void InternalSave(string filename)
@@ -303,5 +303,29 @@ namespace FPLedit
             => Export();
 
         #endregion
+
+        private void AutoUpdate_Check(object sender, EventArgs e)
+        {
+            if (SettingsManager.Get("updater.auto", "") == "")
+            {
+                var res = MessageBox.Show("FPLedit kann automatisch bei jedem Programmstart nach einer aktuelleren Version suchen. Dabei wird nur die IP-Adresse Ihres Computers übermittelt.", "Automatische Updateprüfung", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                SettingsManager.Set("updater.auto", (res == DialogResult.Yes).ToString());
+            }
+
+            bool doCheck = bool.Parse(SettingsManager.Get("updater.auto"));
+            if (!doCheck)
+                return;
+
+            UpdateManager mg = new UpdateManager();
+            mg.CheckResult = vi =>
+            {
+                if (vi != null)
+                    Logger.Info($"Eine neue Programmversion ({vi.Version.ToString()}) ist verfügbar! Hier herunterladen: {vi.DownloadUrl}");
+                else
+                    Logger.Info($"Sie benutzen die aktuelleste Version von FPLedit ({mg.GetCurrentVersion().ToString()})!");
+            };
+
+            mg.CheckAsync();
+        }
     }
 }

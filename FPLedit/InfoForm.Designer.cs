@@ -34,8 +34,9 @@
             this.copyrightLabel = new System.Windows.Forms.Label();
             this.licenseGroupBox = new System.Windows.Forms.GroupBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.closeButton = new System.Windows.Forms.Button();
             this.dokuLabel = new System.Windows.Forms.Label();
+            this.updateCheckBox = new System.Windows.Forms.CheckBox();
             this.licenseGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -102,15 +103,16 @@
             this.textBox1.Size = new System.Drawing.Size(320, 152);
             this.textBox1.TabIndex = 0;
             // 
-            // button1
+            // closeButton
             // 
-            this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button1.Location = new System.Drawing.Point(270, 289);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 6;
-            this.button1.Text = "Schließen";
-            this.button1.UseVisualStyleBackColor = true;
+            this.closeButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.closeButton.Location = new System.Drawing.Point(271, 319);
+            this.closeButton.Name = "closeButton";
+            this.closeButton.Size = new System.Drawing.Size(75, 23);
+            this.closeButton.TabIndex = 6;
+            this.closeButton.Text = "Schließen";
+            this.closeButton.UseVisualStyleBackColor = true;
+            this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
             // 
             // dokuLabel
             // 
@@ -121,15 +123,26 @@
             this.dokuLabel.TabIndex = 7;
             this.dokuLabel.Text = "Dokumentation:";
             // 
+            // updateCheckBox
+            // 
+            this.updateCheckBox.Location = new System.Drawing.Point(12, 279);
+            this.updateCheckBox.Name = "updateCheckBox";
+            this.updateCheckBox.Size = new System.Drawing.Size(334, 32);
+            this.updateCheckBox.TabIndex = 8;
+            this.updateCheckBox.Text = "Automatische Überprüfung auf Updates beim Programmstart aktivieren. (Dabei wird I" +
+    "hre IP-Adresse an den Server übermittelt)";
+            this.updateCheckBox.UseVisualStyleBackColor = true;
+            // 
             // InfoForm
             // 
-            this.AcceptButton = this.button1;
+            this.AcceptButton = this.closeButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.button1;
-            this.ClientSize = new System.Drawing.Size(358, 324);
+            this.CancelButton = this.closeButton;
+            this.ClientSize = new System.Drawing.Size(358, 354);
+            this.Controls.Add(this.updateCheckBox);
             this.Controls.Add(this.dokuLabel);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.closeButton);
             this.Controls.Add(this.licenseGroupBox);
             this.Controls.Add(this.copyrightLabel);
             this.Controls.Add(this.checkButton);
@@ -154,8 +167,9 @@
         private System.Windows.Forms.Button checkButton;
         private System.Windows.Forms.Label copyrightLabel;
         private System.Windows.Forms.GroupBox licenseGroupBox;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button closeButton;
         private System.Windows.Forms.Label dokuLabel;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.CheckBox updateCheckBox;
     }
 }
