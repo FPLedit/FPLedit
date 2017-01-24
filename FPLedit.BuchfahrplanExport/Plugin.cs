@@ -13,7 +13,7 @@ namespace FPLedit.BuchfahrplanExport
     public class Plugin : IPlugin
     {
         private IInfo info;
-        private ToolStripItem showItem, velocityItem;
+        private ToolStripItem showItem, velocityItem, settingsItem;
 
         public string Name
         {
@@ -36,6 +36,17 @@ namespace FPLedit.BuchfahrplanExport
             velocityItem = item.DropDownItems.Add("Höchstgeschwindigkeiten ändern");
             velocityItem.Enabled = false;
             velocityItem.Click += VelocityItem_Click;
+
+            settingsItem = item.DropDownItems.Add("Buchfahrplaneinstellungen");
+            settingsItem.Enabled = false;
+            settingsItem.Click += SettingsItem_Click;
+        }
+
+        private void SettingsItem_Click(object sender, EventArgs e)
+        {
+            SettingsForm sf = new SettingsForm(info.Timetable);
+            if (sf.ShowDialog() == DialogResult.OK)
+                info.SetUnsaved();
         }
 
         private void VelocityItem_Click(object sender, EventArgs e)
@@ -47,7 +58,7 @@ namespace FPLedit.BuchfahrplanExport
 
         private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)
         {
-            showItem.Enabled = velocityItem.Enabled = e.FileState.Opened;
+            showItem.Enabled = velocityItem.Enabled = settingsItem.Enabled = e.FileState.Opened;
         }
 
         private void ShowItem_Click(object sender, EventArgs e)

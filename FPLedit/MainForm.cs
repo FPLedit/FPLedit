@@ -230,6 +230,53 @@ namespace FPLedit
 
         #endregion
 
+        private DialogResult NotifyChanged()
+        {
+            return MessageBox.Show("Wollen Sie die Änderungen speichern?",
+                "FPLedit",
+                MessageBoxButtons.YesNoCancel,
+                MessageBoxIcon.Question);
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!fileState.Saved && fileState.Opened)
+            {
+                DialogResult res = NotifyChanged();
+                if (res == DialogResult.Yes)
+                {
+                    e.Cancel = true;
+                    Save(false);
+                }
+                else if (res == DialogResult.Cancel)
+                    e.Cancel = true;
+            }
+        }
+
+        private void AutoUpdate_Check(object sender, EventArgs e)
+        {
+            if (SettingsManager.Get("updater.auto", "") == "")
+            {
+                var res = MessageBox.Show("FPLedit kann automatisch bei jedem Programmstart nach einer aktuelleren Version suchen. Dabei wird nur die IP-Adresse Ihres Computers übermittelt.", "Automatische Updateprüfung", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                SettingsManager.Set("updater.auto", (res == DialogResult.Yes).ToString());
+            }
+
+            bool doCheck = bool.Parse(SettingsManager.Get("updater.auto"));
+            if (!doCheck)
+                return;
+
+            UpdateManager mg = new UpdateManager();
+            mg.CheckResult = vi =>
+            {
+                if (vi != null)
+                    Logger.Info($"Eine neue Programmversion ({vi.Version.ToString()}) ist verfügbar! Hier herunterladen: {vi.DownloadUrl}");
+                else
+                    Logger.Info($"Sie benutzen die aktuelleste Version von FPLedit ({mg.GetCurrentVersion().ToString()})!");
+            };
+
+            mg.CheckAsync();
+        }
+
         #region IInfo
         dynamic IInfo.Menu
         {
@@ -257,30 +304,7 @@ namespace FPLedit
 
         public void RegisterImport(IImport import)
             => importers.Add(import);
-        #endregion        
-
-        private DialogResult NotifyChanged()
-        {
-            return MessageBox.Show("Wollen Sie die Änderungen speichern?",
-                "FPLedit",
-                MessageBoxButtons.YesNoCancel,
-                MessageBoxIcon.Question);
-        }
-
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (!fileState.Saved && fileState.Opened)
-            {
-                DialogResult res = NotifyChanged();
-                if (res == DialogResult.Yes)
-                {
-                    e.Cancel = true;
-                    Save(false);
-                }
-                else if (res == DialogResult.Cancel)
-                    e.Cancel = true;
-            }
-        }
+        #endregion
 
         #region Events
 
@@ -303,29 +327,5 @@ namespace FPLedit
             => Export();
 
         #endregion
-
-        private void AutoUpdate_Check(object sender, EventArgs e)
-        {
-            if (SettingsManager.Get("updater.auto", "") == "")
-            {
-                var res = MessageBox.Show("FPLedit kann automatisch bei jedem Programmstart nach einer aktuelleren Version suchen. Dabei wird nur die IP-Adresse Ihres Computers übermittelt.", "Automatische Updateprüfung", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                SettingsManager.Set("updater.auto", (res == DialogResult.Yes).ToString());
-            }
-
-            bool doCheck = bool.Parse(SettingsManager.Get("updater.auto"));
-            if (!doCheck)
-                return;
-
-            UpdateManager mg = new UpdateManager();
-            mg.CheckResult = vi =>
-            {
-                if (vi != null)
-                    Logger.Info($"Eine neue Programmversion ({vi.Version.ToString()}) ist verfügbar! Hier herunterladen: {vi.DownloadUrl}");
-                else
-                    Logger.Info($"Sie benutzen die aktuelleste Version von FPLedit ({mg.GetCurrentVersion().ToString()})!");
-            };
-
-            mg.CheckAsync();
-        }
     }
 }
