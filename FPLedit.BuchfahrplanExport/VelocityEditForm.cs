@@ -5,16 +5,16 @@ using System.Windows.Forms;
 
 namespace FPLedit.BuchfahrplanExport
 {
-    public partial class StationVelocityEditForm : Form
+    public partial class VelocityEditForm : Form
     {
         public Station Station { get; set; }
 
-        public StationVelocityEditForm()
+        public VelocityEditForm()
         {
             InitializeComponent();
         }
 
-        public StationVelocityEditForm(Station station) : this()
+        public VelocityEditForm(Station station) : this()
         {
             Station = station;
 

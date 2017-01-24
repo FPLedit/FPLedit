@@ -1,6 +1,6 @@
 ﻿namespace FPLedit.BuchfahrplanExport
 {
-    partial class StationVelocityForm
+    partial class VelocityForm
     {
         /// <summary>
         /// Required designer variable.

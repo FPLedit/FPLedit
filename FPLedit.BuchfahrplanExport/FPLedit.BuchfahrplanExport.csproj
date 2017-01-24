@@ -58,17 +58,17 @@
     <Compile Include="SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="StationVelocityForm.cs">
+    <Compile Include="VelocityForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StationVelocityForm.Designer.cs">
-      <DependentUpon>StationVelocityForm.cs</DependentUpon>
+    <Compile Include="VelocityForm.Designer.cs">
+      <DependentUpon>VelocityForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="StationVelocityEditForm.cs">
+    <Compile Include="VelocityEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StationVelocityEditForm.Designer.cs">
-      <DependentUpon>StationVelocityEditForm.cs</DependentUpon>
+    <Compile Include="VelocityEditForm.Designer.cs">
+      <DependentUpon>VelocityEditForm.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -81,11 +81,11 @@
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StationVelocityForm.resx">
-      <DependentUpon>StationVelocityForm.cs</DependentUpon>
+    <EmbeddedResource Include="VelocityForm.resx">
+      <DependentUpon>VelocityForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StationVelocityEditForm.resx">
-      <DependentUpon>StationVelocityEditForm.cs</DependentUpon>
+    <EmbeddedResource Include="VelocityEditForm.resx">
+      <DependentUpon>VelocityEditForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

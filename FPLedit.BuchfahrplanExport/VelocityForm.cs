@@ -11,14 +11,14 @@ using System.Windows.Forms;
 
 namespace FPLedit.BuchfahrplanExport
 {
-    public partial class StationVelocityForm : Form
+    public partial class VelocityForm : Form
     {
         private IInfo info;
         private Timetable tt;
 
         private string velocity = "";
 
-        public StationVelocityForm()
+        public VelocityForm()
         {
             InitializeComponent();
 
@@ -26,7 +26,7 @@ namespace FPLedit.BuchfahrplanExport
             listView.Columns.Add("Vmax");
         }
 
-        public StationVelocityForm(IInfo info) : this()
+        public VelocityForm(IInfo info) : this()
         {
             this.info = info;
             tt = info.Timetable;
@@ -56,7 +56,7 @@ namespace FPLedit.BuchfahrplanExport
                 ListViewItem item = listView.Items[listView.SelectedIndices[0]];
                 Station station = tt.Stations[tt.Stations.IndexOf((Station)item.Tag)];
 
-                StationVelocityEditForm vef = new StationVelocityEditForm(station);
+                VelocityEditForm vef = new VelocityEditForm(station);
                 if (vef.ShowDialog() == DialogResult.OK)
                 {
                     UpdateStations();
