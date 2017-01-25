@@ -19,10 +19,16 @@ namespace FPLedit.BuchfahrplanExport
             Station = station;
 
             velocityTextBox.Text = station.GetAttribute("fpl-vmax", velocityTextBox.Text);
+
+            positionTextBox.Text = station.Kilometre.ToString();
+            positionTextBox.Enabled = false;
+            nameTextBox.Text = station.SName;
+            nameTextBox.Enabled = false;
         }
 
         private void closeButton_Click(object sender, EventArgs e)
         {
+            //TODO: Allow empty velocity
             if (!velocityValidator.Valid)
             {
                 MessageBox.Show("Bitte erst alle Fehler beheben!");

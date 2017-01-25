@@ -22,7 +22,8 @@ namespace FPLedit.BuchfahrplanExport
         {
             InitializeComponent();
 
-            listView.Columns.Add("Station");
+            listView.Columns.Add("km");
+            listView.Columns.Add("Name");
             listView.Columns.Add("Vmax");
         }
 
@@ -36,14 +37,31 @@ namespace FPLedit.BuchfahrplanExport
 
         private void UpdateStations()
         {
+            
             listView.Items.Clear();
             foreach (var station in tt.Stations)
             {
                 listView.Items.Add(new ListViewItem(new[] {
+                    station.Kilometre.ToString(),
                     station.SName,
                     station.GetAttribute<string>("fpl-vmax", velocity),
                 }) { Tag = station });                
             }
+
+            var attrsEn = tt.Children.FirstOrDefault(x => x.XName == "bfpl_attrs");                
+            if (attrsEn != null)
+            {
+                var attrs = new BFPL_Attrs(attrsEn,tt);
+                foreach (var point in attrs.Points.OrderBy(p => p.Kilometre))
+                {
+                    listView.Items.Add(new ListViewItem(new[] {
+                    point.Kilometre.ToString(),
+                    point.PName,
+                    point.GetAttribute<string>("fpl-vmax", velocity),
+                })
+                    { Tag = point });
+                }
+            }            
 
             listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
@@ -54,15 +72,19 @@ namespace FPLedit.BuchfahrplanExport
             if (listView.SelectedItems.Count > 0)
             {
                 ListViewItem item = listView.Items[listView.SelectedIndices[0]];
-                Station station = tt.Stations[tt.Stations.IndexOf((Station)item.Tag)];
 
-                VelocityEditForm vef = new VelocityEditForm(station);
-                if (vef.ShowDialog() == DialogResult.OK)
+                if (item.GetType() == typeof(Station))
                 {
-                    UpdateStations();
-                    var changedItem = listView.Items.OfType<ListViewItem>().Where(i => i.Tag == station).First();
-                    changedItem.Selected = true;
-                    changedItem.EnsureVisible();
+                    Station station = tt.Stations[tt.Stations.IndexOf((Station)item.Tag)];
+
+                    VelocityEditForm vef = new VelocityEditForm(station);
+                    if (vef.ShowDialog() == DialogResult.OK)
+                    {
+                        UpdateStations();
+                        var changedItem = listView.Items.OfType<ListViewItem>().Where(i => i.Tag == station).First();
+                        changedItem.Selected = true;
+                        changedItem.EnsureVisible();
+                    }
                 }
 
             }

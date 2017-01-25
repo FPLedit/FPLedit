@@ -7,6 +7,8 @@ namespace FPLedit.BuchfahrplanExport
 {
     public class BFPL_Attrs : Entity
     {
+        public List<BFPL_Point> Points { get; private set; }
+
         public string Font
         {
             get
@@ -45,7 +47,9 @@ namespace FPLedit.BuchfahrplanExport
 
         public BFPL_Attrs(XMLEntity en, Timetable tt) : base(en, tt)
         {
-
+            Points = new List<BFPL_Point>();
+            foreach (var c in en.Children.Where(x => x.XName == "p")) // Filtert andere Elemente
+                Points.Add(new BFPL_Point(c, _parent));
         }
     }
 }
