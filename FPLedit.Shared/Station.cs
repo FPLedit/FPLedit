@@ -5,6 +5,7 @@ using System.Globalization;
 namespace FPLedit.Shared
 {
     [Serializable]
+    [DebuggerDisplay("{SName} [{Kilometre}]")]
     public sealed class Station : Entity
     {
         public Station(XMLEntity en, Timetable tt) : base(en, tt)
@@ -39,12 +40,6 @@ namespace FPLedit.Shared
             {
                 SetAttribute("km", value.ToString("0.0", CultureInfo.InvariantCulture));
             }
-        }
-
-        [DebuggerStepThrough]
-        public override string ToString()
-        {
-            return SName + " [" + Kilometre + "]";
         }
     }
 }

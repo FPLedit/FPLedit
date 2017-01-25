@@ -6,6 +6,7 @@ using System.Linq;
 namespace FPLedit.Shared
 {
     [Serializable]
+    [DebuggerDisplay("{TName}")]
     public sealed class Train : Entity
     {
         public string TName
@@ -18,59 +19,7 @@ namespace FPLedit.Shared
             {
                 SetAttribute("name", value);
             }
-        }
-
-        public void AddArrDep(Station sta, ArrDep ardp)
-        {
-            var stas = _parent.Stations.OrderBy(s => s.Kilometre).ToList();
-            var idx = stas.IndexOf(sta);
-
-            var ar = ardp.Arrival.ToShortTimeString();
-            var dp = ardp.Departure.ToShortTimeString();
-            
-            var tElm = new XMLEntity("t");
-            tElm.SetAttribute("a", ar != "00:00" ? ar : "");
-            tElm.SetAttribute("d", dp != "00:00" ? dp : "");
-            Children.Insert(idx, tElm);
-        }
-
-        public void SetArrDep(Station sta, ArrDep ardp)
-        {
-            var stas = _parent.Stations.OrderBy(s => s.Kilometre).ToList();
-            var idx = stas.IndexOf(sta);
-            var tElm = Children.Where(x => x.XName == "t").ToList()[idx];
-
-            var ar = ardp.Arrival.ToShortTimeString();
-            var dp = ardp.Departure.ToShortTimeString();
-            tElm.SetAttribute("a", ar != "00:00" ? ar : "");
-            tElm.SetAttribute("d", dp != "00:00" ? dp : "");
-        }
-
-        public ArrDep GetArrDep(Station sta)
-        {
-            var stas = _parent.Stations.OrderBy(s => s.Kilometre).ToList();
-            var idx = stas.IndexOf(sta);
-            var tElm = Children.Where(x => x.XName == "t").ToList()[idx];
-
-            ArrDep ardp = new ArrDep();
-
-            if (tElm.GetAttribute("a", "") != "")
-                ardp.Arrival = TimeSpan.Parse(tElm.GetAttribute<string>("a"));
-
-            if (tElm.GetAttribute("d", "") != "")
-                ardp.Departure = TimeSpan.Parse(tElm.GetAttribute<string>("d"));
-
-            return ardp;
-        }
-
-        public void RemoveArrDep(Station sta)
-        {
-            var stas = _parent.Stations.OrderBy(s => s.Kilometre).ToList();
-            var idx = stas.IndexOf(sta);
-            var tElm = Children.Where(x => x.XName == "t").ToList()[idx];
-
-            Children.Remove(tElm);
-        }
+        }                
 
         public string Locomotive
         {
@@ -114,11 +63,58 @@ namespace FPLedit.Shared
         {
         }
 
-        [DebuggerStepThrough]
-        public override string ToString()
+        #region Time Handling
+        public void AddArrDep(Station sta, ArrDep ardp)
         {
-            return TName;
+            var stas = _parent.Stations.OrderBy(s => s.Kilometre).ToList();
+            var idx = stas.IndexOf(sta);
+
+            var ar = ardp.Arrival.ToShortTimeString();
+            var dp = ardp.Departure.ToShortTimeString();
+
+            var tElm = new XMLEntity("t");
+            tElm.SetAttribute("a", ar != "00:00" ? ar : "");
+            tElm.SetAttribute("d", dp != "00:00" ? dp : "");
+            Children.Insert(idx, tElm);
         }
 
+        public void SetArrDep(Station sta, ArrDep ardp)
+        {
+            var stas = _parent.Stations.OrderBy(s => s.Kilometre).ToList();
+            var idx = stas.IndexOf(sta);
+            var tElm = Children.Where(x => x.XName == "t").ToList()[idx];
+
+            var ar = ardp.Arrival.ToShortTimeString();
+            var dp = ardp.Departure.ToShortTimeString();
+            tElm.SetAttribute("a", ar != "00:00" ? ar : "");
+            tElm.SetAttribute("d", dp != "00:00" ? dp : "");
+        }
+
+        public ArrDep GetArrDep(Station sta)
+        {
+            var stas = _parent.Stations.OrderBy(s => s.Kilometre).ToList();
+            var idx = stas.IndexOf(sta);
+            var tElm = Children.Where(x => x.XName == "t").ToList()[idx];
+
+            ArrDep ardp = new ArrDep();
+
+            if (tElm.GetAttribute("a", "") != "")
+                ardp.Arrival = TimeSpan.Parse(tElm.GetAttribute<string>("a"));
+
+            if (tElm.GetAttribute("d", "") != "")
+                ardp.Departure = TimeSpan.Parse(tElm.GetAttribute<string>("d"));
+
+            return ardp;
+        }
+
+        public void RemoveArrDep(Station sta)
+        {
+            var stas = _parent.Stations.OrderBy(s => s.Kilometre).ToList();
+            var idx = stas.IndexOf(sta);
+            var tElm = Children.Where(x => x.XName == "t").ToList()[idx];
+
+            Children.Remove(tElm);
+        }
+        #endregion
     }    
 }
