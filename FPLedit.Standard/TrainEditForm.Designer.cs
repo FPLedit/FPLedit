@@ -43,6 +43,8 @@
             this.mondayCheckBox = new System.Windows.Forms.CheckBox();
             this.locomotiveComboBox = new System.Windows.Forms.ComboBox();
             this.nameValidator = new FPLedit.Shared.Validators.NotEmptyValidator();
+            this.commentTextBox = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.daysGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -66,27 +68,27 @@
             // 
             // nameTextBox
             // 
-            this.nameTextBox.Location = new System.Drawing.Point(65, 6);
+            this.nameTextBox.Location = new System.Drawing.Point(78, 6);
             this.nameTextBox.Name = "nameTextBox";
-            this.nameTextBox.Size = new System.Drawing.Size(131, 20);
+            this.nameTextBox.Size = new System.Drawing.Size(135, 20);
             this.nameTextBox.TabIndex = 1;
             // 
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(44, 133);
+            this.cancelButton.Location = new System.Drawing.Point(57, 161);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 6;
+            this.cancelButton.TabIndex = 7;
             this.cancelButton.Text = "Abbrechen";
             this.cancelButton.UseVisualStyleBackColor = true;
             // 
             // closeButton
             // 
-            this.closeButton.Location = new System.Drawing.Point(125, 133);
+            this.closeButton.Location = new System.Drawing.Point(138, 161);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
-            this.closeButton.TabIndex = 5;
+            this.closeButton.TabIndex = 8;
             this.closeButton.Text = "Schließen";
             this.closeButton.UseVisualStyleBackColor = true;
             this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
@@ -100,10 +102,10 @@
             this.daysGroupBox.Controls.Add(this.wednesdayCheckBox);
             this.daysGroupBox.Controls.Add(this.tuesdayCheckBox);
             this.daysGroupBox.Controls.Add(this.mondayCheckBox);
-            this.daysGroupBox.Location = new System.Drawing.Point(12, 58);
+            this.daysGroupBox.Location = new System.Drawing.Point(12, 85);
             this.daysGroupBox.Name = "daysGroupBox";
-            this.daysGroupBox.Size = new System.Drawing.Size(188, 69);
-            this.daysGroupBox.TabIndex = 4;
+            this.daysGroupBox.Size = new System.Drawing.Size(201, 69);
+            this.daysGroupBox.TabIndex = 6;
             this.daysGroupBox.TabStop = false;
             this.daysGroupBox.Text = "Verkehrstage";
             // 
@@ -194,9 +196,9 @@
             // locomotiveComboBox
             // 
             this.locomotiveComboBox.FormattingEnabled = true;
-            this.locomotiveComboBox.Location = new System.Drawing.Point(64, 32);
+            this.locomotiveComboBox.Location = new System.Drawing.Point(78, 32);
             this.locomotiveComboBox.Name = "locomotiveComboBox";
-            this.locomotiveComboBox.Size = new System.Drawing.Size(132, 21);
+            this.locomotiveComboBox.Size = new System.Drawing.Size(135, 21);
             this.locomotiveComboBox.TabIndex = 3;
             // 
             // nameValidator
@@ -204,13 +206,31 @@
             this.nameValidator.Control = this.nameTextBox;
             this.nameValidator.ErrorMessage = "Bitte einen Namen eingeben!";
             // 
+            // commentTextBox
+            // 
+            this.commentTextBox.Location = new System.Drawing.Point(78, 59);
+            this.commentTextBox.Name = "commentTextBox";
+            this.commentTextBox.Size = new System.Drawing.Size(135, 20);
+            this.commentTextBox.TabIndex = 5;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 62);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(60, 13);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Kommentar";
+            // 
             // TrainEditForm
             // 
             this.AcceptButton = this.closeButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(212, 169);
+            this.ClientSize = new System.Drawing.Size(225, 196);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.commentTextBox);
             this.Controls.Add(this.locomotiveComboBox);
             this.Controls.Add(this.daysGroupBox);
             this.Controls.Add(this.cancelButton);
@@ -246,5 +266,7 @@
         private System.Windows.Forms.CheckBox mondayCheckBox;
         private Shared.Validators.NotEmptyValidator nameValidator;
         private System.Windows.Forms.ComboBox locomotiveComboBox;
+        private System.Windows.Forms.TextBox commentTextBox;
+        private System.Windows.Forms.Label label1;
     }
 }

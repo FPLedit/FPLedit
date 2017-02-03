@@ -43,11 +43,12 @@ namespace FPLedit.Standard
                     train.TName,
                     //train.Line,
                     train.Locomotive,
-                    DaysHelper.DaysToString(train.Days) })
+                    DaysHelper.DaysToString(train.Days),
+                    train.Comment })
                 { Tag = train });
             }
             view.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-            view.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);            
+            view.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
         }
 
         private void InitListView(ListView view)
@@ -56,6 +57,7 @@ namespace FPLedit.Standard
             //view.Columns.Add("Strecke");
             view.Columns.Add("Tfz");
             view.Columns.Add("Verkehrstage");
+            view.Columns.Add("Kommentar");
         }
 
         private void DeleteTrain(ListView view, TrainDirection direction)

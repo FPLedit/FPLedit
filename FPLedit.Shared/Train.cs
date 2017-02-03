@@ -33,6 +33,18 @@ namespace FPLedit.Shared
             }
         }
 
+        public string Comment
+        {
+            get
+            {
+                return GetAttribute<string>("cm", "");
+            }
+            set
+            {
+                SetAttribute("cm", value);
+            }
+        }
+
         public TrainDirection Direction
         {
             get

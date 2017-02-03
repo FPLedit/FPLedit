@@ -22,6 +22,7 @@ namespace FPLedit.Standard
             nameTextBox.Text = train.TName;
             locomotiveComboBox.Text = train.Locomotive;
             locomotiveComboBox.Items.AddRange(train._parent.GetAllTfzs());
+            commentTextBox.Text = train.Comment;
 
             for (int i = 0; i < Train.Days.Length; i++)
                 daysBoxes[i].Checked = Train.Days[i];
@@ -45,6 +46,7 @@ namespace FPLedit.Standard
 
             Train.TName = nameTextBox.Text;
             Train.Locomotive = locomotiveComboBox.Text;
+            Train.Comment = commentTextBox.Text;
 
             for (int i = 0; i < daysBoxes.Length; i++)
                 Train.Days[i] = daysBoxes[i].Checked;
