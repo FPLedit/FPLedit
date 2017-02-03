@@ -41,7 +41,7 @@
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.exportFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.importFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.logTextBox = new FPLedit.LogTextBox();
+            this.logTextBox = new FPLedit.LogControl();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -128,10 +128,7 @@
             this.logTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.logTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.logTextBox.Location = new System.Drawing.Point(0, 24);
-            this.logTextBox.Multiline = true;
             this.logTextBox.Name = "logTextBox";
-            this.logTextBox.ReadOnly = true;
-            this.logTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.logTextBox.Size = new System.Drawing.Size(504, 284);
             this.logTextBox.TabIndex = 1;
             // 
@@ -164,7 +161,6 @@
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
-        private LogTextBox logTextBox;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
         private System.Windows.Forms.SaveFileDialog exportFileDialog;
@@ -172,6 +168,7 @@
         private System.Windows.Forms.ToolStripMenuItem importToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog importFileDialog;
+        private LogControl logTextBox;
     }
 }
 
