@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.BildfahrplanExport"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Standard", "FPLedit.Standard\FPLedit.Standard.csproj", "{18F6EC68-60B0-4D31-9643-746EB8860C3D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.jTrainGraphStarter", "jTrainGraphStarter\FPLedit.jTrainGraphStarter.csproj", "{0B7A9395-3318-41A1-85D3-EECA6A868FA7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.jTrainGraphStarter", "FPLedit.jTrainGraphStarter\FPLedit.jTrainGraphStarter.csproj", "{0B7A9395-3318-41A1-85D3-EECA6A868FA7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
