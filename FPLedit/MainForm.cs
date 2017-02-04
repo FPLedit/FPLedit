@@ -105,7 +105,7 @@ namespace FPLedit
                     var itm = lastFilesToolStripMenuItem.DropDownItems.Add(lf);
                     itm.Click += (s, a) =>
                     {
-                        if (!OpenNotify())
+                        if (!NotifyIfUnsaved())
                             return;
                         InternalOpen(lf);
                     };
@@ -134,14 +134,8 @@ namespace FPLedit
 
         public void Import()
         {
-            if (!fileState.Saved && fileState.Opened)
-            {
-                DialogResult res = NotifyChanged();
-                if (res == DialogResult.Yes)
-                    Save(false);
-                if (res == DialogResult.Cancel)
-                    return;
-            }
+            if (!NotifyIfUnsaved())
+                return;
             if (importFileDialog.ShowDialog() == DialogResult.OK)
             {
                 IImport import = importers[importFileDialog.FilterIndex - 1];
@@ -159,23 +153,10 @@ namespace FPLedit
 
         public void Open()
         {
-            if (!OpenNotify())
+            if (!NotifyIfUnsaved())
                 return;
             if (openFileDialog.ShowDialog() == DialogResult.OK)
                 InternalOpen(openFileDialog.FileName);
-        }
-
-        private bool OpenNotify()
-        {
-            if (!fileState.Saved && fileState.Opened)
-            {
-                DialogResult res = NotifyChanged();
-                if (res == DialogResult.Yes)
-                    Save(false);
-                else if (res == DialogResult.Cancel)
-                    return false;
-            }
-            return true;
         }
 
         private void InternalOpen(string filename)
@@ -249,14 +230,8 @@ namespace FPLedit
 
         private void New()
         {
-            if (!fileState.Saved && fileState.Opened)
-            {
-                DialogResult res = NotifyChanged();
-                if (res == DialogResult.Yes)
-                    Save(false);
-                if (res == DialogResult.Cancel)
-                    return;
-            }
+            if (!NotifyIfUnsaved())
+                return;
             Timetable = new Timetable();
             fileState.Opened = true;
             fileState.Saved = false;
@@ -265,31 +240,31 @@ namespace FPLedit
             Logger.Info("Neue Datei erstellt");
         }
 
-        #endregion
-
-        private DialogResult NotifyChanged() //TODO: NotifyIfChanged
+        private bool NotifyIfUnsaved()
         {
-            return MessageBox.Show("Wollen Sie die Änderungen speichern?",
-                "FPLedit",
-                MessageBoxButtons.YesNoCancel,
-                MessageBoxIcon.Question);
+            if (!fileState.Saved && fileState.Opened)
+            {
+                DialogResult res = MessageBox.Show("Wollen Sie die Änderungen speichern?",
+                    "FPLedit",
+                    MessageBoxButtons.YesNoCancel,
+                    MessageBoxIcon.Question);
+
+                if (res == DialogResult.Yes)
+                    Save(false);
+                else if (res == DialogResult.Cancel)
+                    return false;
+            }
+            return true;
         }
 
+        #endregion
+        
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (enable_last)
                 SettingsManager.Set("files.last", string.Join(";", lastFiles));
-            if (!fileState.Saved && fileState.Opened)
-            {
-                DialogResult res = NotifyChanged();
-                if (res == DialogResult.Yes)
-                {
-                    e.Cancel = true; //TODO: Use OpenNotify / NotifyChanged
-                    Save(false);
-                }
-                else if (res == DialogResult.Cancel)
-                    e.Cancel = true;
-            }
+            if (!NotifyIfUnsaved())
+                e.Cancel = true;
         }
 
         private void AutoUpdate_Check(object sender, EventArgs e)
