@@ -42,6 +42,7 @@
             this.exportFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.importFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.logTextBox = new FPLedit.LogTextBox();
+            this.lastFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -62,6 +63,7 @@
             this.openToolStripMenuItem,
             this.saveToolStripMenuItem,
             this.saveAsToolStripMenuItem,
+            this.lastFilesToolStripMenuItem,
             this.toolStripSeparator2,
             this.importToolStripMenuItem,
             this.exportToolStripMenuItem});
@@ -135,6 +137,12 @@
             this.logTextBox.Size = new System.Drawing.Size(504, 284);
             this.logTextBox.TabIndex = 1;
             // 
+            // lastFilesToolStripMenuItem
+            // 
+            this.lastFilesToolStripMenuItem.Name = "lastFilesToolStripMenuItem";
+            this.lastFilesToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.lastFilesToolStripMenuItem.Text = "Letzte Dateien";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -172,6 +180,7 @@
         private System.Windows.Forms.ToolStripMenuItem importToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog importFileDialog;
+        private System.Windows.Forms.ToolStripMenuItem lastFilesToolStripMenuItem;
     }
 }
 

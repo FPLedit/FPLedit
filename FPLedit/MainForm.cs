@@ -28,6 +28,9 @@ namespace FPLedit
 
         private ExtensionManager extensionManager;
 
+        private List<string> lastFiles;
+        private bool enable_last = true;
+
         public ILog Logger { get; private set; }
 
         public FileState FileState
@@ -92,6 +95,25 @@ namespace FPLedit
             exportFileDialog.Filter = string.Join("|", exporters.Select(ex => ex.Filter));
             importFileDialog.Filter = string.Join("|", importers.Select(im => im.Filter));
 
+            // Zuletzt geöffnete Dateien anzeigen
+            enable_last = bool.Parse(SettingsManager.Get("files.save-last", "true"));
+            if (enable_last)
+            {
+                lastFiles = SettingsManager.Get("files.last", "").Split(';').Where(s => s != "").Reverse().ToList();
+                foreach (var lf in lastFiles)
+                {
+                    var itm = lastFilesToolStripMenuItem.DropDownItems.Add(lf);
+                    itm.Click += (s, a) =>
+                    {
+                        if (!OpenNotify())
+                            return;
+                        InternalOpen(lf);
+                    };
+                }
+            }
+            else
+                lastFilesToolStripMenuItem.Visible = false;
+
             // Parameter: Fpledit.exe [Dateiname]
             string[] args = Environment.GetCommandLineArgs();
             if (args.Length >= 2 && File.Exists(args[2]))
@@ -137,16 +159,23 @@ namespace FPLedit
 
         public void Open()
         {
+            if (!OpenNotify())
+                return;
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+                InternalOpen(openFileDialog.FileName);
+        }
+
+        private bool OpenNotify()
+        {
             if (!fileState.Saved && fileState.Opened)
             {
                 DialogResult res = NotifyChanged();
                 if (res == DialogResult.Yes)
                     Save(false);
-                if (res == DialogResult.Cancel)
-                    return;
+                else if (res == DialogResult.Cancel)
+                    return false;
             }
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-                InternalOpen(openFileDialog.FileName);
+            return true;
         }
 
         private void InternalOpen(string filename)
@@ -160,6 +189,14 @@ namespace FPLedit
             fileState.Saved = true;
             fileState.FileName = filename;
             OnFileStateChanged();
+
+            if (enable_last)
+            {
+                lastFiles.RemoveAll(s => s == filename); // Doppelte Dateinamen verhindern
+                lastFiles.Add(filename);
+                if (lastFiles.Count > 3) // Überlauf
+                    lastFiles.RemoveAt(0);
+            }
         }
 
         public void Export()
@@ -230,7 +267,7 @@ namespace FPLedit
 
         #endregion
 
-        private DialogResult NotifyChanged()
+        private DialogResult NotifyChanged() //TODO: NotifyIfChanged
         {
             return MessageBox.Show("Wollen Sie die Änderungen speichern?",
                 "FPLedit",
@@ -240,12 +277,14 @@ namespace FPLedit
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (enable_last)
+                SettingsManager.Set("files.last", string.Join(";", lastFiles));
             if (!fileState.Saved && fileState.Opened)
             {
                 DialogResult res = NotifyChanged();
                 if (res == DialogResult.Yes)
                 {
-                    e.Cancel = true;
+                    e.Cancel = true; //TODO: Use OpenNotify / NotifyChanged
                     Save(false);
                 }
                 else if (res == DialogResult.Cancel)
