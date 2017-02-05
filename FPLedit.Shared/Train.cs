@@ -19,7 +19,7 @@ namespace FPLedit.Shared
             {
                 SetAttribute("name", value);
             }
-        }                
+        }
 
         public string Locomotive
         {
@@ -128,5 +128,5 @@ namespace FPLedit.Shared
             Children.Remove(tElm);
         }
         #endregion
-    }    
+    }
 }

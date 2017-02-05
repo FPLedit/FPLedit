@@ -49,7 +49,7 @@ namespace FPLedit
                         if (!type.IsClass) continue;
                         if (!type.IsPublic) continue;
                         if (type.IsAbstract) continue;
-                        if (type == typeof(IPlugin)) continue;                        
+                        if (type == typeof(IPlugin)) continue;
 
                         if (typeof(IPlugin).IsAssignableFrom(type))
                         {

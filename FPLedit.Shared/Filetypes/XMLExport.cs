@@ -53,7 +53,6 @@ namespace FPLedit.Shared.Filetypes
                 logger.Error("XMLExport: " + ex.Message);
                 return false;
             }
-            
         }
     }
 }

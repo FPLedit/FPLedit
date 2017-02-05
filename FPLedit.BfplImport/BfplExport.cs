@@ -31,7 +31,7 @@ namespace FPLedit.BfplImport
                     using (BinaryWriter writer = new BinaryWriter(stream))
                         SerializeTimetable(writer, tt);
                     return true;
-                }                
+                }
             }
             catch (Exception ex)
             {

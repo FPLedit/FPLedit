@@ -18,7 +18,7 @@ namespace FPLedit.Standard
 
         public TrainEditForm(Train train) : this()
         {
-            Train = train;           
+            Train = train;
             nameTextBox.Text = train.TName;
             locomotiveComboBox.Text = train.Locomotive;
             locomotiveComboBox.Items.AddRange(train._parent.GetAllTfzs());

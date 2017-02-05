@@ -122,7 +122,7 @@ namespace FPLedit.Standard
             DialogResult = DialogResult.Cancel;
             info.RestoreTimetable();
             Close();
-        } 
+        }
 
         private void topNewButton_Click(object sender, EventArgs e)
             => NewTrain(topListView, TOP_DIRECTION);

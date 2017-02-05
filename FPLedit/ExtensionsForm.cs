@@ -12,7 +12,7 @@ namespace FPLedit
 {
     public partial class ExtensionsForm : Form
     {
-        ExtensionManager manager;        
+        ExtensionManager manager;
 
         public ExtensionsForm()
         {

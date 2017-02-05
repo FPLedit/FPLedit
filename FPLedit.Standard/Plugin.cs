@@ -24,7 +24,7 @@ namespace FPLedit.Standard
         public void Init(IInfo info)
         {
             this.info = info;
-            info.FileStateChanged += Info_FileStateChanged;            
+            info.FileStateChanged += Info_FileStateChanged;
 
             ToolStripMenuItem item = new ToolStripMenuItem("Bearbeiten");
             info.Menu.Items.AddRange(new[] { item });

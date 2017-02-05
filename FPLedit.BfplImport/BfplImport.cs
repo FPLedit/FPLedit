@@ -80,7 +80,7 @@ namespace FPLedit.BfplImport
         }
 
         private Train DeserializeTrain(BinaryReader reader, Dictionary<int, Station> stations, Timetable tt)
-        {            
+        {
             var name = reader.ReadString();
             var tfz = reader.ReadString();
             var dir = reader.ReadBoolean() ? TrainDirection.ta : TrainDirection.ti;

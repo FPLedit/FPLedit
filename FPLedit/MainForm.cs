@@ -258,7 +258,7 @@ namespace FPLedit
         }
 
         #endregion
-        
+
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (enable_last)

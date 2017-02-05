@@ -39,7 +39,7 @@ namespace FPLedit.Shared
             foreach (var c in el.Nodes().OfType<XElement>())
                 Children.Add(new XMLEntity(c));
         }
-        
+
         public T GetAttribute<T>(string key, T defaultValue = default(T))
         {
             if (Attributes.ContainsKey(key))

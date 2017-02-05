@@ -8,7 +8,7 @@ namespace FPLedit.Shared
 {
     public interface IInfo
     {
-        Timetable Timetable { get; set; }        
+        Timetable Timetable { get; set; }
 
         FileState FileState { get; set; }
 
@@ -34,16 +34,16 @@ namespace FPLedit.Shared
 
         ILog Logger { get; }
 
-        event EventHandler<FileStateChangedEventArgs> FileStateChanged;        
+        event EventHandler<FileStateChangedEventArgs> FileStateChanged;
     }
 
     public class FileStateChangedEventArgs : EventArgs
     {
         public FileState FileState { get; private set; }
-   
+
         public FileStateChangedEventArgs(FileState state)
         {
             FileState = state;
         }
-    }    
+    }
 }

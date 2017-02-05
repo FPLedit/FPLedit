@@ -8,7 +8,7 @@ namespace FPLedit.Shared
     public interface IImport
     {
         Timetable Import(string filename, ILog logger);
-        
+
         string Filter { get; }
     }
 }

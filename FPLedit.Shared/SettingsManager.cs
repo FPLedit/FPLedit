@@ -11,7 +11,7 @@ namespace FPLedit.Shared
     public static class SettingsManager
     {
         private static Dictionary<string, string> defaults = new Dictionary<string, string>();
-        
+
         /// <summary>
         /// Gibt den Wert einer Einstellung zurück.
         /// </summary>

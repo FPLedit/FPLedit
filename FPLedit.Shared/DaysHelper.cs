@@ -40,6 +40,6 @@ namespace FPLedit.Shared
             str[6] = days[6] ? "So" : null;
 
             return string.Join(", ", str.Where(o => o != null));
-        }        
+        }
     }
 }
