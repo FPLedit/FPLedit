@@ -7,12 +7,16 @@ namespace FPLedit.Shared.Validators
 {
     public sealed class NumberValidator : BaseValidator
     {
+        public bool AllowEmpty { get; set; }
+
         public NumberValidator() : base()
         {
         }
 
         internal override bool IsValid()
         {
+            if (AllowEmpty && Control.Text == "")
+                return true;
             float num;
             return float.TryParse(Control.Text, out num);
         }

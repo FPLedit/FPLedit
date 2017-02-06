@@ -51,5 +51,18 @@ namespace FPLedit.BuchfahrplanExport
             foreach (var c in en.Children.Where(x => x.XName == "p")) // Filtert andere Elemente
                 Points.Add(new BFPL_Point(c, _parent));
         }
+
+        public void AddPoint(BFPL_Point p)
+        {
+            Points.Add(p);
+            //TODO: Maybe sort by position
+            XMLEntity.Children.Add(p.XMLEntity);
+        }
+
+        public void RemovePoint(BFPL_Point p)
+        {
+            Points.Remove(p);
+            XMLEntity.Children.Remove(p.XMLEntity);
+        }
     }
 }
