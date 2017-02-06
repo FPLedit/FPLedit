@@ -128,7 +128,7 @@ namespace FPLedit.BuchfahrplanExport
 
             }
             else if (message)
-                MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Höchstgeschwindigkeit ändern");
+                MessageBox.Show("Zuerst muss eine Zeile ausgewählt werden!", "Höchstgeschwindigkeit ändern");
         }
 
         private void RemovePoint(bool message = true)
@@ -138,9 +138,7 @@ namespace FPLedit.BuchfahrplanExport
                 ListViewItem item = listView.Items[listView.SelectedIndices[0]];
 
                 if (item.Tag.GetType() == typeof(Station))
-                {
-                    throw new NotSupportedException("Bhanhöfe können nicht gelöscht werden!");
-                }
+                    throw new NotSupportedException("Bahnhöfe können nicht gelöscht werden!");
                 else if (item.Tag.GetType() == typeof(BFPL_Point))
                 {
                     BFPL_Point point = (BFPL_Point)item.Tag;
@@ -151,7 +149,7 @@ namespace FPLedit.BuchfahrplanExport
 
             }
             else if (message)
-                MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Löschen"); //TODO: Find better name than station
+                MessageBox.Show("Zuerst muss eine Zeile ausgewählt werden!", "Löschen");
         }
 
         private void SelectPoint()

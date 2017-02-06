@@ -26,7 +26,7 @@ namespace FPLedit.BuchfahrplanExport
             }
         }
 
-        private string HtmlId(string name, string prefix)
+        private string HtmlName(string name, string prefix)
         {
             return prefix + name.Replace("#", "")
                 .Replace(" ", "-")
@@ -35,7 +35,7 @@ namespace FPLedit.BuchfahrplanExport
                 .ToLower();
         }
 
-        private List<object> GetStations(TrainDirection dir)
+        private List<Entity> GetStations(TrainDirection dir)
         {
             var kms = new List<float>();
             if (attrs != null)
@@ -46,7 +46,7 @@ namespace FPLedit.BuchfahrplanExport
             kms.AddRange(skms);
             var okms = kms.OrderBy(k => k);
 
-            List<object> objs = new List<object>();
+            List<Entity> objs = new List<Entity>();
             foreach (var km in okms)
             {
                 bool stationExists = skms.Contains(km);
@@ -62,7 +62,7 @@ namespace FPLedit.BuchfahrplanExport
                 }
             }
 
-            Func<object, float> order = o =>
+            Func<Entity, float> order = o =>
             {
                 float km = -1;
                 if (o.GetType() == typeof(Station))
