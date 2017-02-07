@@ -1,8 +1,4 @@
 ﻿<#@ template language="C#" #>
-<#@ assembly name="System.Core" #>
-<#@ import namespace="System.Linq" #>
-<#@ import namespace="System.Text" #>
-<#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="FPLedit.Shared" #>
 
 <!DOCTYPE html>
@@ -34,7 +30,7 @@
 			font-family:<#= font #>, sans-serif;
 			text-align:general;
 			vertical-align:bottom;
-		}		
+		}
 		.trainname {
 			height:19.5pt;
 			font-size:15.0pt;
@@ -97,7 +93,7 @@
 	<body>
 		<div>
 			<# foreach (Train tra in tt.Trains) { #>
-			<table id="<#= HtmlId(tra.TName) #>">
+			<table id="<#= HtmlName(tra.TName, "train-") #>">
 				<col style="width:80px;" span=2>
 				<col style="width:285px;">
 				<col style="width:80px;" span=2>
@@ -127,8 +123,11 @@
 					<td class="spaltenkopf">Betriebsstellen,<br>ständige Langsamfahrstellen,<br>verkürzter Vorsignalabstand</td>
 					<td class="spaltenkopf">Ankunft</td><td class=spaltenkopf>Abfahrt<br>oder Durch-<br>fahrt</td>
 				</tr>
-				<# foreach (var s in tt.GetStationsOrderedByDirection(tra.Direction)) { #>
-				<tr>
+				<# foreach (var entity in GetStations(tra.Direction)) { #>
+				<tr class="<#= HtmlName(entity.GetAttribute("name", ""), "station-") #>">
+					<#
+					if (entity.GetType() == typeof(Station)) {
+						Station s = (Station)entity; #>
 					<td class="zug"><#= s.Kilometre.ToString("0.0") #></td>
 					<td class="zug"><#= s.GetAttribute<int>("fpl-vmax", 0).ToString("#") #></td>
 					<td class="zug"><#= s.SName #></td>
@@ -139,6 +138,15 @@
 					#>
 					<td class="zug"><#= ar != "00:00" ? ar : "" #></td>
 					<td class="zug"><#= dp != "00:00" ? dp : "" #></td>
+
+					<# } else {
+						BFPL_Point p = (BFPL_Point)entity; #>
+					<td class="zug"><#= p.Kilometre.ToString("0.0") #></td>
+					<td class="zug"><#= p.GetAttribute<int>("fpl-vmax", 0).ToString("#") #></td>
+					<td class="zug"><#= p.PName #></td>
+					<td class="zug"></td>
+					<td class="zug"></td>
+					<# } #>
 				</tr>
 				<# } #>
 				<tr>

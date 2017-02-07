@@ -9,9 +9,19 @@ namespace FPLedit.BuchfahrplanExport
     {
         public Station Station { get; set; }
 
+        public BFPL_Point Point { get; set; }
+
+        private bool isPoint = false;
+
         public VelocityEditForm()
         {
             InitializeComponent();
+        }
+
+        public VelocityEditForm(Timetable tt) : this()
+        {
+            Point = new BFPL_Point(tt);
+            isPoint = true;
         }
 
         public VelocityEditForm(Station station) : this()
@@ -19,11 +29,27 @@ namespace FPLedit.BuchfahrplanExport
             Station = station;
 
             velocityTextBox.Text = station.GetAttribute("fpl-vmax", velocityTextBox.Text);
+
+            positionTextBox.Text = station.Kilometre.ToString();
+            positionTextBox.Enabled = false;
+            nameTextBox.Text = station.SName;
+            nameTextBox.Enabled = false;
+        }
+
+        public VelocityEditForm(BFPL_Point point) : this()
+        {
+            Point = point;
+            isPoint = true;
+
+            velocityTextBox.Text = point.GetAttribute("fpl-vmax", velocityTextBox.Text);
+
+            positionTextBox.Text = point.Kilometre.ToString();
+            nameTextBox.Text = point.PName;
         }
 
         private void closeButton_Click(object sender, EventArgs e)
         {
-            if (!velocityValidator.Valid)
+            if (!velocityValidator.Valid || !positionValidator.Valid)
             {
                 MessageBox.Show("Bitte erst alle Fehler beheben!");
                 return;
@@ -31,7 +57,16 @@ namespace FPLedit.BuchfahrplanExport
 
             DialogResult = DialogResult.OK;
 
-            Station.SetAttribute("fpl-vmax", velocityTextBox.Text);
+            if (isPoint)
+            {
+                Point.SetAttribute("fpl-vmax", velocityTextBox.Text);
+                Point.Kilometre = float.Parse(positionTextBox.Text);
+                Point.PName = nameTextBox.Text;
+            }
+            else
+            {
+                Station.SetAttribute("fpl-vmax", velocityTextBox.Text);
+            }
             Close();
         }
     }
