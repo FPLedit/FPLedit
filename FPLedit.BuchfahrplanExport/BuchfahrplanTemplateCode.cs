@@ -72,7 +72,7 @@ namespace FPLedit.BuchfahrplanExport
                 return km;
             };
 
-            return (dir.Get() ?
+            return (dir == TrainDirection.ta ?
                 objs.OrderByDescending(order)
                 : objs.OrderBy(order)).ToList();
         }

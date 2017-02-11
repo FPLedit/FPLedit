@@ -13,23 +13,5 @@ namespace FPLedit.Shared
         {
             return span.ToString(@"hh\:mm");
         }
-
-        [DebuggerStepThrough]
-        public static int GetHours(this TimeSpan span)
-        {
-            return ((span.Days * 24) + span.Hours);
-        }
-
-        [DebuggerStepThrough]
-        public static int GetMinutes(this TimeSpan span)
-        {
-            return ((span.Days * 24) + span.Hours) * 60 + span.Minutes;
-        }
-
-        [DebuggerStepThrough]
-        public static int GetSeconds(this TimeSpan span)
-        {
-            return (((span.Days * 24) + span.Hours) * 60 + span.Minutes) * 60 + span.Seconds;
-        }
     }
 }

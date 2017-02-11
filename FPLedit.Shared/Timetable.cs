@@ -64,7 +64,7 @@ namespace FPLedit.Shared
 
         public List<Station> GetStationsOrderedByDirection(TrainDirection direction)
         {
-            return (direction.Get() ?
+            return (direction == TrainDirection.ta ?
                 Stations.OrderByDescending(s => s.Kilometre)
                 : Stations.OrderBy(s => s.Kilometre)).ToList();
         }

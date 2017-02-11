@@ -11,9 +11,6 @@ namespace FPLedit.Shared
     [Serializable]
     public sealed class XMLEntity
     {
-        [NonSerialized]
-        public XElement el;
-
         public string XName { get; set; }
 
         public Dictionary<string, string> Attributes { get; set; }
@@ -31,7 +28,6 @@ namespace FPLedit.Shared
 
         public XMLEntity(XElement el)
         {
-            this.el = el;
             XName = el.Name.LocalName;
             Attributes = el.Attributes().ToDictionary(a => a.Name.LocalName, a => (string)a);
             Children = new List<XMLEntity>();
