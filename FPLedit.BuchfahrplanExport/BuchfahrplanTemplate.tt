@@ -89,8 +89,28 @@
 		}
 		<#= additionalCss #>
 		</style>
+		<# if (tryoutConsole) { #>
+		<style id="tryoutcss">
+		</style>
+		<style>
+		#tryout-console {
+			position:absolute;
+			top: 10px;
+			right: 10px;
+			border: 1px solid black;
+			padding: 10px;
+		}
+		</style>
+		<# } #>
 	</head>
 	<body>
+		<# if (tryoutConsole) {#>
+		<div id="tryout-console">
+		<textarea id="tryout-ta" cols="50" rows="20"></textarea><br>
+		<button onclick="document.getElementById('tryoutcss').innerText=document.getElementById('tryout-ta').value;">CSS setzen!</button><br>
+		<a href="#" onclick="document.getElementById('tryout-console').style.display='none';return false;">CSS Konsole verstecken</a>
+		</div>
+		<# } #>
 		<div>
 			<# foreach (Train tra in tt.Trains) { #>
 			<table id="<#= HtmlName(tra.TName, "train-") #>">
