@@ -65,7 +65,12 @@ namespace FPLedit.BuchfahrplanExport
         {
             HtmlExport exp = new HtmlExport();
             string path = Path.Combine(Path.GetTempPath(), "buchfahrplan.html");
-            exp.Export(info.Timetable, path, new ConsoleLogger());
+
+            bool tryoutConsole = bool.Parse(SettingsManager.Get("bfpl.console", "false"));
+            if (tryoutConsole)
+                exp.ExportTryoutConsole(info.Timetable, path, info.Logger);
+            else
+                exp.Export(info.Timetable, path, info.Logger);
             Process.Start(path);
         }
     }

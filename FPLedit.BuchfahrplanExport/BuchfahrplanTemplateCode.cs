@@ -11,9 +11,10 @@ namespace FPLedit.BuchfahrplanExport
         private Timetable tt;
         private string font = "\"Alte DIN 1451 Mittelschrift\"";
         private string additionalCss = "";
+        private bool tryoutConsole = false;
         private BFPL_Attrs attrs;
 
-        public BuchfahrplanTemplate(Timetable tt)
+        public BuchfahrplanTemplate(Timetable tt, bool tryoutConsole)
         {
             this.tt = tt;
             var attrsEn = tt.Children.FirstOrDefault(x => x.XName == "bfpl_attrs");
@@ -24,6 +25,8 @@ namespace FPLedit.BuchfahrplanExport
                 font = attrs.Font;
                 additionalCss = attrs.Css ?? "";
             }
+
+            this.tryoutConsole = tryoutConsole;
         }
 
         private string HtmlName(string name, string prefix)
