@@ -44,7 +44,7 @@
   <ItemGroup>
     <Compile Include="BFPL_Attrs.cs" />
     <Compile Include="BFPL_Point.cs" />
-    <Compile Include="BuchfahrplanTemplate1.cs">
+    <Compile Include="BuchfahrplanTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>BuchfahrplanTemplate.tt</DependentUpon>
@@ -92,7 +92,7 @@
   <ItemGroup>
     <Content Include="BuchfahrplanTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>BuchfahrplanTemplate1.cs</LastGenOutput>
+      <LastGenOutput>BuchfahrplanTemplate.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <ItemGroup>

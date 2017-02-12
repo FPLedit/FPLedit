@@ -42,6 +42,8 @@ namespace FPLedit.BuchfahrplanExport
         {
             string[] fontFamilies = new InstalledFontCollection().Families.Select(f => f.Name).ToArray();
             fontComboBox.Items.AddRange(fontFamilies);
+
+            consoleCheckBox.Checked = bool.Parse(SettingsManager.Get("bfpl.console", "false"));
         }
 
         private void cssHelpLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -67,6 +69,9 @@ namespace FPLedit.BuchfahrplanExport
         {
             data.Font = fontComboBox.Text;
             data.Css = cssTextBox.Text;
+
+            SettingsManager.Set("bfpl.console", consoleCheckBox.Checked.ToString());
+
             Close();
         }
     }

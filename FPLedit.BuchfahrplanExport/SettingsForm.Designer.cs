@@ -36,6 +36,7 @@
             this.cancelButton = new System.Windows.Forms.Button();
             this.closeButton = new System.Windows.Forms.Button();
             this.cssHelpLinkLabel = new System.Windows.Forms.LinkLabel();
+            this.consoleCheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // fontComboBox
@@ -89,20 +90,20 @@
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(388, 256);
+            this.cancelButton.Location = new System.Drawing.Point(388, 277);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 7;
+            this.cancelButton.TabIndex = 8;
             this.cancelButton.Text = "Abbrechen";
             this.cancelButton.UseVisualStyleBackColor = true;
             // 
             // closeButton
             // 
             this.closeButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.closeButton.Location = new System.Drawing.Point(469, 256);
+            this.closeButton.Location = new System.Drawing.Point(469, 277);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
-            this.closeButton.TabIndex = 6;
+            this.closeButton.TabIndex = 7;
             this.closeButton.Text = "Schließen";
             this.closeButton.UseVisualStyleBackColor = true;
             this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
@@ -118,13 +119,24 @@
             this.cssHelpLinkLabel.Text = "Hilfe zu CSS";
             this.cssHelpLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.cssHelpLinkLabel_LinkClicked);
             // 
+            // consoleCheckBox
+            // 
+            this.consoleCheckBox.AutoSize = true;
+            this.consoleCheckBox.Location = new System.Drawing.Point(146, 254);
+            this.consoleCheckBox.Name = "consoleCheckBox";
+            this.consoleCheckBox.Size = new System.Drawing.Size(334, 17);
+            this.consoleCheckBox.TabIndex = 6;
+            this.consoleCheckBox.Text = "CSS-Test-Konsole bei Vorschau aktivieren (Gilt für alle Fahrpläne)";
+            this.consoleCheckBox.UseVisualStyleBackColor = true;
+            // 
             // SettingsForm
             // 
             this.AcceptButton = this.closeButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(556, 291);
+            this.ClientSize = new System.Drawing.Size(556, 312);
+            this.Controls.Add(this.consoleCheckBox);
             this.Controls.Add(this.cssHelpLinkLabel);
             this.Controls.Add(this.closeButton);
             this.Controls.Add(this.cancelButton);
@@ -154,5 +166,6 @@
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button closeButton;
         private System.Windows.Forms.LinkLabel cssHelpLinkLabel;
+        private System.Windows.Forms.CheckBox consoleCheckBox;
     }
 }

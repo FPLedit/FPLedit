@@ -99,6 +99,7 @@
 			right: 10px;
 			border: 1px solid black;
 			padding: 10px;
+			background-color: white !important;
 		}
 		</style>
 		<# } #>
@@ -106,9 +107,10 @@
 	<body>
 		<# if (tryoutConsole) {#>
 		<div id="tryout-console">
-		<textarea id="tryout-ta" cols="50" rows="20"></textarea><br>
-		<button onclick="document.getElementById('tryoutcss').innerText=document.getElementById('tryout-ta').value;">CSS setzen!</button><br>
-		<a href="#" onclick="document.getElementById('tryout-console').style.display='none';return false;">CSS Konsole verstecken</a>
+			Hier können Sie CSS-Code eingeben und testen:<br>
+			<textarea id="tryout-ta" cols="50" rows="20"><#= additionalCss #></textarea><br>
+			<button onclick="document.getElementById('tryoutcss').innerText=document.getElementById('tryout-ta').value;">CSS setzen!</button><br>
+			<a href="#" onclick="document.getElementById('tryout-console').style.display='none';return false;">CSS Konsole schließen</a>
 		</div>
 		<# } #>
 		<div>
