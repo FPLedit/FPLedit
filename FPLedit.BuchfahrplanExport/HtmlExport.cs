@@ -17,7 +17,15 @@ namespace FPLedit.BuchfahrplanExport
 
         public bool Export(Timetable timetable, string filename, ILog logger)
         {
-            BuchfahrplanTemplate templ = new BuchfahrplanTemplate(timetable);
+            BuchfahrplanTemplate templ = new BuchfahrplanTemplate(timetable, false);
+            string cont = templ.TransformText();
+            File.WriteAllText(filename, cont);
+            return true;
+        }
+
+        public bool ExportTryoutConsole(Timetable timetable, string filename, ILog logger)
+        {
+            BuchfahrplanTemplate templ = new BuchfahrplanTemplate(timetable, true);
             string cont = templ.TransformText();
             File.WriteAllText(filename, cont);
             return true;
