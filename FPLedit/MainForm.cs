@@ -78,7 +78,7 @@ namespace FPLedit
             Logger = new MultipleLogger(logTextBox);
             //logger.Loggers.Add(new ConsoleLogger());
             for (int i = 0; i <= 20;i++)
-                Logger.Error("AWranung"+i.ToString());
+                Logger.Error("AWranungseseseseses 1eseseseseseseseseseseseseseseses 2eseseseseseseseseseses 3eseseseseseseseses 4esesesesesesee"+i.ToString());
         }
 
         private void Form1_Load(object sender, EventArgs e)

@@ -1,6 +1,7 @@
 ﻿using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -38,11 +39,12 @@ namespace FPLedit
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            var h = e.Graphics.MeasureString("H", this.Font);
+            var h = e.Graphics.MeasureString("H", this.Font); // typischer Großbuchstabe
             scroll.Minimum = 0;
             scroll.Maximum = strings.Count;
 
-            float y = 0;
+            float y = this.Padding.Top;
+            float x = this.Padding.Left;
             for (int i = drawIndex; i < strings.Count; i++)
             {
                 var dimens = e.Graphics.MeasureString(strings[i].Text, this.Font);
@@ -50,15 +52,19 @@ namespace FPLedit
 
                 //if (selected)
                 //    e.Graphics.FillRectangle(new SolidBrush(SystemColors.Highlight), 0, y, dimens.Width, dimens.Height);
-                e.Graphics.DrawString(strings[i].Text, this.Font, strings[i].Brush, 0, y);
+
+
+                e.Graphics.DrawString(strings[i].Text, this.Font, strings[i].Brush, x, y);
+
+
                 y += h.Height + 3;
-                if (scrollToEnd && y > Height)
+                if (scrollToEnd && y > Height - this.Padding.Bottom)
                 {
                     drawIndex++;
                     scroll.Value = drawIndex;
                     this.Invalidate();
                     return;
-                }                
+                }
             }
             if (scrollToEnd && y <= Height)
                 scrollToEnd = false;
@@ -85,7 +91,7 @@ namespace FPLedit
             }
             if (e.Control && e.KeyCode == Keys.C)
                 CopyAll();
-            
+
             base.OnPreviewKeyDown(e);
         }
 
@@ -101,8 +107,9 @@ namespace FPLedit
             drawIndex += -(e.Delta / 120);
             if (drawIndex < 0)
                 drawIndex = 0;
-            if (drawIndex > scroll.Maximum)
-                drawIndex = scroll.Maximum;
+            var max = scroll.Maximum - scroll.LargeChange + 1;
+            if (drawIndex > max)
+                drawIndex = max;
             scroll.Value = drawIndex;
 
             if (idxBefore != drawIndex)
@@ -122,7 +129,26 @@ namespace FPLedit
 
         private void Write(string message, Brush b)
         {
-            strings.Add(new Line(message, b));
+            var origWordCount = message.Split(' ').Length;
+            string text = message;
+            bool exit = false;
+            var max = Width - Padding.Left - Padding.Right;
+            while (TextRenderer.MeasureText(text, Font).Width > max && !exit)
+            {
+                string[] words = text.Split(' ');
+
+                text = string.Join(" ", words.Take(words.Length - 1));
+                if (words.Length == 1)
+                {
+                    text = message;
+                    exit = true;
+                }
+            }
+            var textWordCount = text.Split(' ').Length;
+
+            strings.Add(new Line(text, b));
+            if (textWordCount < origWordCount && !exit)
+                Write(message.Replace(text, "").Trim(), b);
             scrollToEnd = true;
             Invalidate();
         }
@@ -149,7 +175,7 @@ namespace FPLedit
         //        return;
         //    mouseCur = e.Location;
         //    Invalidate();
-            
+
         //    base.OnMouseMove(e);
         //}
 
