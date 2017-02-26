@@ -30,7 +30,7 @@ namespace FPLedit.Shared
 
             var ar = ardp.Arrival.ToShortTimeString();
             var dp = ardp.Departure.ToShortTimeString();
-            
+
             var tElm = new XMLEntity("t");
             tElm.SetAttribute("a", ar != "00:00" ? ar : "");
             tElm.SetAttribute("d", dp != "00:00" ? dp : "");
@@ -94,6 +94,18 @@ namespace FPLedit.Shared
             get
             {
                 return XName == "ti" ? TrainDirection.ti : TrainDirection.ta;
+            }
+        }
+
+        public string Comment
+        {
+            get
+            {
+                return GetAttribute<string>("cm", "");
+            }
+            set
+            {
+                SetAttribute("cm", value);
             }
         }
 
