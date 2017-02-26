@@ -20,6 +20,8 @@ namespace FPLedit.Shared
             }
         }
 
+        #region Handling der Fahrtzeiteneinträge
+
         public void AddArrDep(Station sta, ArrDep ardp)
         {
             var stas = _parent.Stations.OrderBy(s => s.Kilometre).ToList();
@@ -27,11 +29,11 @@ namespace FPLedit.Shared
 
             var ar = ardp.Arrival.ToShortTimeString();
             var dp = ardp.Departure.ToShortTimeString();
-            
+
             var tElm = new XMLEntity("t");
             tElm.SetAttribute("a", ar != "00:00" ? ar : "");
             tElm.SetAttribute("d", dp != "00:00" ? dp : "");
-            Children.Insert(idx, tElm);
+            Children.Insert(idx, tElm);  //TODO: evtl. andere Elementtypen berücksichtigen? aber wie?
         }
 
         public void SetArrDep(Station sta, ArrDep ardp)
@@ -71,6 +73,8 @@ namespace FPLedit.Shared
 
             Children.Remove(tElm);
         }
+
+        #endregion
 
         public string Locomotive
         {
@@ -112,6 +116,8 @@ namespace FPLedit.Shared
 
         public Train(XMLEntity en, Timetable tt) : base(en, tt)
         {
+            if (Children.Where(x => x.XName == "t").Count() > tt.Stations.Count)
+                throw new Exception("Zu viele Fahrtzeiteneinträge im Vergleich zur Stationsanzahl!");
         }
 
         [DebuggerStepThrough]
@@ -120,5 +126,5 @@ namespace FPLedit.Shared
             return TName;
         }
 
-    }    
+    }
 }
