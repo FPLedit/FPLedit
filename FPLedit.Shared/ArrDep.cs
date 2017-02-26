@@ -5,6 +5,7 @@ using System.Text;
 
 namespace FPLedit.Shared
 {
+    // Schöner deutscher Begriff: Fahrtzeiteintrag
     [Serializable]
     public struct ArrDep
     {

@@ -21,61 +21,8 @@ namespace FPLedit.Shared
             }
         }
 
-        public string Locomotive
-        {
-            get
-            {
-                return GetAttribute<string>("fpl-tfz", "");
-            }
-            set
-            {
-                SetAttribute("fpl-tfz", value);
-            }
-        }
+        #region Handling der Fahrtzeiteneinträge
 
-        public string Comment
-        {
-            get
-            {
-                return GetAttribute<string>("cm", "");
-            }
-            set
-            {
-                SetAttribute("cm", value);
-            }
-        }
-
-        public TrainDirection Direction
-        {
-            get
-            {
-                return XName == "ti" ? TrainDirection.ti : TrainDirection.ta;
-            }
-        }
-
-        public bool[] Days
-        {
-            get
-            {
-                var d = GetAttribute<string>("d", "1111111");
-                return DaysHelper.ParseDays(d);
-            }
-            set
-            {
-                var d = DaysHelper.DaysToBinString(value);
-                SetAttribute("d", d);
-            }
-        }
-
-        public Train(TrainDirection dir, Timetable tt) : base(dir.ToString(), tt)
-        {
-        }
-
-        public Train(XMLEntity en, Timetable tt) : base(en, tt)
-        {
-        }
-
-        #region Time Handling
         public void AddArrDep(Station sta, ArrDep ardp)
         {
             var stas = _parent.Stations.OrderBy(s => s.Kilometre).ToList();
@@ -83,7 +30,7 @@ namespace FPLedit.Shared
 
             var ar = ardp.Arrival.ToShortTimeString();
             var dp = ardp.Departure.ToShortTimeString();
-
+            
             var tElm = new XMLEntity("t");
             tElm.SetAttribute("a", ar != "00:00" ? ar : "");
             tElm.SetAttribute("d", dp != "00:00" ? dp : "");
@@ -127,6 +74,58 @@ namespace FPLedit.Shared
 
             Children.Remove(tElm);
         }
+
         #endregion
+
+        public string Locomotive
+        {
+            get
+            {
+                return GetAttribute<string>("fpl-tfz", "");
+            }
+            set
+            {
+                SetAttribute("fpl-tfz", value);
+            }
+        }
+
+        public TrainDirection Direction
+        {
+            get
+            {
+                return XName == "ti" ? TrainDirection.ti : TrainDirection.ta;
+            }
+        }
+
+        public bool[] Days
+        {
+            get
+            {
+                var d = GetAttribute<string>("d", "1111111");
+                return DaysHelper.ParseDays(d);
+            }
+            set
+            {
+                var d = DaysHelper.DaysToBinString(value);
+                SetAttribute("d", d);
+            }
+        }
+
+        public Train(TrainDirection dir, Timetable tt) : base(dir.ToString(), tt)
+        {
+        }
+
+        public Train(XMLEntity en, Timetable tt) : base(en, tt)
+        {
+            if (Children.Where(x => x.XName == "t").Count() > tt.Stations.Count)
+                throw new Exception("Zu viele Fahrtzeiteneinträge im Vergleich zur Stationsanzahl!");
+        }
+
+        [DebuggerStepThrough]
+        public override string ToString()
+        {
+            return TName;
+        }
+
     }
 }
