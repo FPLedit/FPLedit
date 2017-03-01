@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace FPLedit.BuchfahrplanExport
 {
@@ -25,17 +26,21 @@ namespace FPLedit.BuchfahrplanExport
         {
             get
             {
-                return Children.FirstOrDefault(x => x.XName == "css")?.Value;
+                var val = Children.FirstOrDefault(x => x.XName == "css")?.Value ?? "";
+                var bytes = Convert.FromBase64String(val);
+                return Encoding.UTF8.GetString(bytes);
             }
             set
             {
+                var bytes = Encoding.UTF8.GetBytes(value);
+
                 var elm = Children.FirstOrDefault(x => x.XName == "css");
                 if (elm == null)
                 {
                     elm = new XMLEntity("css");
                     Children.Add(elm);
                 }
-                elm.Value = value;
+                elm.Value = Convert.ToBase64String(bytes);
             }
         }
 
