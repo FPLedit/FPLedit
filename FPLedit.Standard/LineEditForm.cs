@@ -1,4 +1,5 @@
 ﻿using FPLedit.Shared;
+using FPLedit.Shared.Filetypes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -47,6 +48,7 @@ namespace FPLedit.Standard
 
             listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            loadLineButton.Enabled = tt.Stations.Count == 0;
         }
 
         private void EditStation(bool message = true)
@@ -98,6 +100,26 @@ namespace FPLedit.Standard
             }
         }
 
+        private void LoadLine()
+        {
+            if (tt.Stations.Count != 0)
+                return;
+
+            var import = new XMLImport();
+
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = import.Filter;
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                var ntt = import.Import(ofd.FileName, info.Logger);
+                foreach (var station in ntt.Stations)
+                    tt.AddStation(station);
+            }
+
+            UpdateStations();
+        }
+
         private void closeButton_Click(object sender, EventArgs e)
         {
             info.ClearBackup();
@@ -124,5 +146,8 @@ namespace FPLedit.Standard
 
         private void listView_MouseDoubleClick(object sender, MouseEventArgs e)
             => EditStation(false);
+
+        private void loadLineButton_Click(object sender, EventArgs e)
+            => LoadLine();
     }
 }

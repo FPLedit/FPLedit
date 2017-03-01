@@ -34,6 +34,7 @@
             this.newButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.closeButton = new System.Windows.Forms.Button();
+            this.loadLineButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listView
@@ -108,6 +109,17 @@
             this.closeButton.UseVisualStyleBackColor = true;
             this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
             // 
+            // loadLineButton
+            // 
+            this.loadLineButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.loadLineButton.Location = new System.Drawing.Point(542, 128);
+            this.loadLineButton.Name = "loadLineButton";
+            this.loadLineButton.Size = new System.Drawing.Size(102, 23);
+            this.loadLineButton.TabIndex = 6;
+            this.loadLineButton.Text = "Strecke laden";
+            this.loadLineButton.UseVisualStyleBackColor = true;
+            this.loadLineButton.Click += new System.EventHandler(this.loadLineButton_Click);
+            // 
             // LineEditForm
             // 
             this.AcceptButton = this.closeButton;
@@ -115,6 +127,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(656, 335);
+            this.Controls.Add(this.loadLineButton);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.closeButton);
             this.Controls.Add(this.newButton);
@@ -138,5 +151,6 @@
         private System.Windows.Forms.Button newButton;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button closeButton;
+        private System.Windows.Forms.Button loadLineButton;
     }
 }
