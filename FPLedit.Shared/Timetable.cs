@@ -95,6 +95,7 @@ namespace FPLedit.Shared
 
         public void AddStation(Station sta)
         {
+            sta._parent = this;
             stations.Add(sta);
             stations = stations.OrderBy(s => s.Kilometre).ToList();
             var idx = stations.IndexOf(sta); // Index vorläufig ermitteln
@@ -122,18 +123,21 @@ namespace FPLedit.Shared
             foreach (var train in Trains)
                 train.RemoveArrDep(sta);
 
+            sta._parent = null;
             stations.Remove(sta);
             sElm.Children.Remove(sta.XMLEntity);
         }
 
         public void AddTrain(Train tra)
         {
+            tra._parent = this;
             trains.Add(tra);
             tElm.Children.Add(tra.XMLEntity);
         }
 
         public void RemoveTrain(Train tra)
         {
+            tra._parent = null;
             trains.Remove(tra);
             tElm.Children.Remove(tra.XMLEntity);
         }

@@ -10,7 +10,7 @@ namespace FPLedit.Shared
     {
         public XMLEntity XMLEntity { get; private set; }
 
-        public Timetable _parent { get; private set; }
+        public Timetable _parent { get; set; }
 
         public string XName
         {
