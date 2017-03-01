@@ -47,6 +47,7 @@
     <Compile Include="DaysHelper.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Filetypes\XMLExport.cs" />
+    <Compile Include="Filetypes\XMLStationsImport.cs" />
     <Compile Include="Filetypes\XMLImport.cs" />
     <Compile Include="Logger\ConsoleLogger.cs" />
     <Compile Include="FileState.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="IInfo.cs" />
     <Compile Include="ILog.cs" />
     <Compile Include="IPlugin.cs" />
+    <Compile Include="StationsList.cs" />
     <Compile Include="XMLEntity.cs" />
     <Compile Include="Logger\MultipleLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

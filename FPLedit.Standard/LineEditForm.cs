@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -105,13 +106,15 @@ namespace FPLedit.Standard
             if (tt.Stations.Count != 0)
                 return;
 
-            var import = new XMLImport();
+            IImport timport = new XMLImport();
+            IImport simport = new XMLStationsImport();
 
             OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = import.Filter;
+            ofd.Filter = timport.Filter + "|" + simport.Filter;
 
             if (ofd.ShowDialog() == DialogResult.OK)
             {
+                IImport import = Path.GetExtension(ofd.FileName) == ".fpl" ? timport : simport;
                 var ntt = import.Import(ofd.FileName, info.Logger);
                 foreach (var station in ntt.Stations)
                     tt.AddStation(station);
