@@ -22,7 +22,7 @@ namespace FPLedit.jTrainGraphStarter
         private void SettingsForm_Load(object sender, EventArgs e)
         {
             javaPathTextBox.Text = SettingsManager.Get("jTGStarter.javapath", "java");
-            jtgPathTextBox.Text = SettingsManager.Get("jTGStarter.jtgpath", "jTrainGraph_202.jar");
+            jtgPathTextBox.Text = SettingsManager.Get("jTGStarter.jtgpath", "jTrainGraph_203.jar");
         }
 
         private void closeButton_Click(object sender, EventArgs e)

@@ -54,7 +54,7 @@ namespace FPLedit.jTrainGraphStarter
             info.Save(false);
 
             string javapath = SettingsManager.Get("jTGStarter.javapath", "java");
-            string jtgPath = SettingsManager.Get("jTGStarter.jtgpath", "jTrainGraph_202.jar");
+            string jtgPath = SettingsManager.Get("jTGStarter.jtgpath", "jTrainGraph_203.jar");
 
             string jtgFolder = Path.GetDirectoryName(jtgPath);
 
