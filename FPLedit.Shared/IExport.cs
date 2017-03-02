@@ -8,7 +8,7 @@ namespace FPLedit.Shared
 {
     public interface IExport
     {
-        bool Export(Timetable tt, string filename, ILog logger);
+        bool Export(Timetable tt, string filename, IInfo info);
 
         string Filter { get; }
     }

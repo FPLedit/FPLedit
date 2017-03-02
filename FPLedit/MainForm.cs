@@ -188,7 +188,7 @@ namespace FPLedit
                 string filename = exportFileDialog.FileName;
 
                 Logger.Info("Speichere Datei " + filename);
-                bool ret = export.Export(Timetable, filename, Logger);
+                bool ret = export.Export(Timetable, filename, this);
                 if (ret == false)
                     return;
                 Logger.Info("Speichern erfolgreich abgeschlossen!");
@@ -214,7 +214,7 @@ namespace FPLedit
         private void InternalSave(string filename)
         {
             Logger.Info("Speichere Datei " + filename);
-            bool ret = save.Export(Timetable, filename, Logger);
+            bool ret = save.Export(Timetable, filename, this);
             if (ret == false)
                 return;
             Logger.Info("Speichern erfolgreich abgeschlossen!");

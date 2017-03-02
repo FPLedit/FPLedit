@@ -30,7 +30,7 @@ namespace FPLedit.Shared.Filetypes
             return elm;
         }
 
-        public bool Export(Timetable tt, string filename, ILog logger)
+        public bool Export(Timetable tt, string filename, IInfo info)
         {
             bool debug = bool.Parse(SettingsManager.Get("xml.indent", "False"));
 #if DEBUG
@@ -50,7 +50,7 @@ namespace FPLedit.Shared.Filetypes
             }
             catch (Exception ex)
             {
-                logger.Error("XMLExport: " + ex.Message);
+                info.Logger.Error("XMLExport: " + ex.Message);
                 return false;
             }
         }
