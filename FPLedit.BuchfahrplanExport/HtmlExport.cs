@@ -11,7 +11,6 @@ namespace FPLedit.BuchfahrplanExport
 {
     public class HtmlExport : IExport
     {
-
         public string Filter
         {
             get { return "Buchfahrplan als HTML Datei (*.html)|*.html"; }
@@ -19,54 +18,77 @@ namespace FPLedit.BuchfahrplanExport
 
         public bool Export(Timetable timetable, string filename, IInfo info)
         {
-            var attrsEn = timetable.Children.FirstOrDefault(x => x.XName == "bfpl_attrs");
-
-            if (attrsEn != null)
-            {
-                var attrs = new BFPL_Attrs(attrsEn, timetable);
-                var css = attrs.Css ?? "";
-
-                var pattern = "@import\\s+(url\\()?['\"]([\\w\\-. ]+)['\"](\\))?[\\w, ]*;";
-                MatchCollection matches = Regex.Matches(css, pattern);
-
-                var srcDir = Path.GetDirectoryName(info.FileState.FileName);
-                css = Regex.Replace(css, pattern, m =>
-                {
-                    var fn = m.Groups[2].Value;
-                    var src = Path.Combine(srcDir, fn);
-                    if (!File.Exists(src))
-                        return "";
-                    return File.ReadAllText(src);
-                });
-
-
-                //var fns = matches.OfType<Match>().Select(m => m.Groups[2].Value).Distinct();
-
-                //var destDir = Path.GetDirectoryName(filename);
-                //var srcDir = Path.GetDirectoryName(info.FileState.FileName);
-                //foreach (var fn in fns)
-                //{
-                //    var dest = Path.Combine(destDir, fn);
-                //    var src = Path.Combine(srcDir, fn);
-                //    if (!File.Exists(src))
-                //        continue;
-                //    File.Copy(src, dest);
-                //}
-            }
-
+            IncludeImports(timetable, info);
 
             BuchfahrplanTemplate templ = new BuchfahrplanTemplate(timetable, false);
             string cont = templ.TransformText();
             File.WriteAllText(filename, cont);
+
+            RecoverCss(timetable);
+
             return true;
         }
 
         public bool ExportTryoutConsole(Timetable timetable, string filename, IInfo info)
         {
+            IncludeImports(timetable, info);
+
             BuchfahrplanTemplate templ = new BuchfahrplanTemplate(timetable, true);
             string cont = templ.TransformText();
             File.WriteAllText(filename, cont);
+
+            RecoverCss(timetable);
+
             return true;
+        }
+
+        private bool recover_css = false;
+        private string old_css;
+
+        private void RecoverCss(Timetable tt)
+        {
+            if (!recover_css)
+                return;
+
+            var attrsEn = tt.Children.FirstOrDefault(x => x.XName == "bfpl_attrs");
+
+            if (attrsEn != null)
+            {
+                var attrs = new BFPL_Attrs(attrsEn, tt);
+                attrs.Css = old_css;
+            }
+
+            old_css = null;
+            recover_css = false;
+        }
+
+        private void IncludeImports(Timetable tt, IInfo info)
+        {
+            var attrsEn = tt.Children.FirstOrDefault(x => x.XName == "bfpl_attrs");
+
+            if (attrsEn != null)
+            {
+                var attrs = new BFPL_Attrs(attrsEn, tt);
+                old_css = attrs.Css ?? "";
+
+                var pattern = "@import\\s+(url\\()?['\"]([\\w\\-.\\/ ]+)['\"](\\))?[\\w, ]*;";
+                MatchCollection matches = Regex.Matches(old_css, pattern);
+
+                var srcDir = Path.GetDirectoryName(info.FileState.FileName);
+                List<string> srcs = new List<string>();
+                var new_css = Regex.Replace(old_css, pattern, m =>
+                {
+                    var fn = m.Groups[2].Value;
+                    var src = Path.Combine(srcDir, fn);
+                    if (!File.Exists(src) || srcs.Contains(src))
+                        return "";
+                    srcs.Add(src);
+                    return File.ReadAllText(src);
+                });
+
+                attrs.Css = new_css.Trim();
+                recover_css = true;
+            }
         }
     }
 }
