@@ -26,7 +26,7 @@ namespace FPLedit.BuchfahrplanExport
         {
             get
             {
-                var val = Children.FirstOrDefault(x => x.XName == "css")?.Value;
+                var val = Children.FirstOrDefault(x => x.XName == "css")?.Value ?? "";
                 var bytes = Convert.FromBase64String(val);
                 return Encoding.UTF8.GetString(bytes);
             }
