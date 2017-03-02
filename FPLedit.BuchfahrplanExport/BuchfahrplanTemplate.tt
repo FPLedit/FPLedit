@@ -151,7 +151,7 @@
 					if (entity.GetType() == typeof(Station)) {
 						Station s = (Station)entity; #>
 					<td class="zug"><#= s.Kilometre.ToString("0.0") #></td>
-					<td class="zug"><#= s.GetAttribute<int>("fpl-vmax", 0).ToString("#") #></td>
+					<td class="zug"><#= s.GetAttribute("fpl-vmax", "") #></td>
 					<td class="zug"><#= s.SName #></td>
 					<#
 					var ardp = tra.GetArrDep(s);
@@ -164,7 +164,7 @@
 					<# } else {
 						BFPL_Point p = (BFPL_Point)entity; #>
 					<td class="zug"><#= p.Kilometre.ToString("0.0") #></td>
-					<td class="zug"><#= p.GetAttribute<int>("fpl-vmax", 0).ToString("#") #></td>
+					<td class="zug"><#= p.GetAttribute("fpl-vmax", "") #></td>
 					<td class="zug"><#= p.PName #></td>
 					<td class="zug"></td>
 					<td class="zug"></td>

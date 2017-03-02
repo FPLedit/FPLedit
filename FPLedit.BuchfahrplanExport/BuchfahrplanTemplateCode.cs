@@ -22,7 +22,8 @@ namespace FPLedit.BuchfahrplanExport
             if (attrsEn != null)
             {
                 attrs = new BFPL_Attrs(attrsEn, tt);
-                font = attrs.Font;
+                if (attrs.Font != "")
+                    font = attrs.Font;
                 additionalCss = attrs.Css ?? "";
             }
 

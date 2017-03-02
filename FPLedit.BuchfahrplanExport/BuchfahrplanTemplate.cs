@@ -273,7 +273,7 @@ namespace FPLedit.BuchfahrplanExport
             this.Write("</td>\r\n\t\t\t\t\t<td class=\"zug\">");
             
             #line 154 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\BuchfahrplanTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(s.GetAttribute<int>("fpl-vmax", 0).ToString("#")));
+            this.Write(this.ToStringHelper.ToStringWithCulture(s.GetAttribute("fpl-vmax", "")));
             
             #line default
             #line hidden
@@ -327,7 +327,7 @@ namespace FPLedit.BuchfahrplanExport
             this.Write("</td>\r\n\t\t\t\t\t<td class=\"zug\">");
             
             #line 167 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\BuchfahrplanTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(p.GetAttribute<int>("fpl-vmax", 0).ToString("#")));
+            this.Write(this.ToStringHelper.ToStringWithCulture(p.GetAttribute("fpl-vmax", "")));
             
             #line default
             #line hidden
