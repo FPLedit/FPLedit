@@ -116,8 +116,8 @@ namespace FPLedit
 
             // Parameter: Fpledit.exe [Dateiname]
             string[] args = Environment.GetCommandLineArgs();
-            if (args.Length >= 2 && File.Exists(args[2]))
-                InternalOpen(args[2]);
+            if (args.Length >= 2 && File.Exists(args[1]))
+                InternalOpen(args[1]);
 
             // Hilfe Menü nach den Erweiterungen zusammenbasteln
             var helpItem = new ToolStripMenuItem("Hilfe");
