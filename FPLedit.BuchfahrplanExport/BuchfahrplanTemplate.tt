@@ -11,10 +11,12 @@
 			border-collapse: collapse;
 			table-layout:fixed;
 			width:454pt;
-			page-break-before:always;
 			margin-left:auto;
 			margin-right:auto;
 			margin-bottom:65px;
+		}
+		table:not(.first) {
+			page-break-before:always;
 		}
 		td {
 			padding-top:1px;
@@ -87,6 +89,11 @@
 			border-bottom:1.5pt solid black;
 			border-left:1.5pt solid black;
 		}
+		@media print {
+			@page {
+				margin: 0;
+			}
+		}
 		<#= additionalCss #>
 		</style>
 		<# if (tryoutConsole) { #>
@@ -114,8 +121,11 @@
 		</div>
 		<# } #>
 		<div>
-			<# foreach (Train tra in tt.Trains) { #>
-			<table id="<#= HtmlName(tra.TName, "train-") #>">
+			<#
+			bool first = true; // No pagebreak before first train
+			foreach (Train tra in tt.Trains) { #>
+			<table id="<#= HtmlName(tra.TName, "train-") #>" class="<#= first ? "first" : "" #>">
+				<# first = false; #>
 				<col style="width:80px;" span=2>
 				<col style="width:285px;">
 				<col style="width:80px;" span=2>
