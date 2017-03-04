@@ -18,26 +18,34 @@ namespace FPLedit.BuchfahrplanExport
 
         public bool Export(Timetable timetable, string filename, IInfo info)
         {
-            IncludeImports(timetable, info);
+            bool enable_atimports = bool.Parse(SettingsManager.Get("bfpl.beta_atimports", "false"));
+
+            if (enable_atimports)
+                IncludeImports(timetable, info);
 
             BuchfahrplanTemplate templ = new BuchfahrplanTemplate(timetable, false);
             string cont = templ.TransformText();
             File.WriteAllText(filename, cont);
 
-            RecoverCss(timetable);
+            if (enable_atimports)
+                RecoverCss(timetable);
 
             return true;
         }
 
         public bool ExportTryoutConsole(Timetable timetable, string filename, IInfo info)
         {
-            IncludeImports(timetable, info);
+            bool enable_atimports = bool.Parse(SettingsManager.Get("bfpl.beta_atimports", "false"));
+
+            if (enable_atimports)
+                IncludeImports(timetable, info);
 
             BuchfahrplanTemplate templ = new BuchfahrplanTemplate(timetable, true);
             string cont = templ.TransformText();
             File.WriteAllText(filename, cont);
 
-            RecoverCss(timetable);
+            if (enable_atimports)
+                RecoverCss(timetable);
 
             return true;
         }
@@ -71,7 +79,7 @@ namespace FPLedit.BuchfahrplanExport
                 var attrs = new BFPL_Attrs(attrsEn, tt);
                 old_css = attrs.Css ?? "";
 
-                var pattern = "@import\\s+(url\\()?['\"]([\\w\\-.\\/ ]+)['\"](\\))?[\\w, ]*;";
+                var pattern = "@import\\s+(url\\()?['\"]([\\w\\-.\\/\\\\: ]+)['\"](\\))?[\\w, ]*;";
                 MatchCollection matches = Regex.Matches(old_css, pattern);
 
                 var srcDir = Path.GetDirectoryName(info.FileState.FileName);
@@ -79,7 +87,7 @@ namespace FPLedit.BuchfahrplanExport
                 var new_css = Regex.Replace(old_css, pattern, m =>
                 {
                     var fn = m.Groups[2].Value;
-                    var src = Path.Combine(srcDir, fn);
+                    var src = Path.GetFullPath(Path.Combine(srcDir, fn));
                     if (!File.Exists(src) || srcs.Contains(src))
                         return "";
                     srcs.Add(src);
