@@ -1,7 +1,9 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 
@@ -13,12 +15,22 @@ namespace FPLedit.Installer
         {
             if (Environment.OSVersion.Platform != PlatformID.Win32NT)
             {
-                MessageBox.Show("This installer works only on Windows!");
+                MessageBox.Show("Dieses Installationsprogramm funktioniert nur auf Windows!", "FPLedit Installationsprogramm");
                 return;
             }
 
-            if (MessageBox.Show("Would you like FPLedit as file handler for .fpl?", "FPLedit Installer", MessageBoxButtons.YesNo) == DialogResult.No)
+            if (MessageBox.Show("Wollen Sie .fpl-Dateien standradmäßig per Doppelklick mit FPLedit öffnen?" + Environment.NewLine + Environment.NewLine +
+                "Ein späteres Verschieben der FPLedit-Programmdateien führt zum Nichtfuktionieren dieser Funktion; dann muss sie neu eingerichtet werden!",
+                "FPLedit Installationsprogramm", MessageBoxButtons.YesNo) == DialogResult.No)
                 return;
+
+            var exe = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "FPLedit.exe");
+
+            if (!File.Exists(exe))
+            {
+                MessageBox.Show("FPLedit-Programmdatei nicht gefunden!" + Environment.NewLine + "Pfad: " + exe);
+                return;
+            }
 
             RegistryKey ckey = Registry
                 .ClassesRoot
@@ -27,7 +39,7 @@ namespace FPLedit.Installer
                 .CreateSubKey("open")
                 .CreateSubKey("command");
 
-            ckey.SetValue("", "\"F:\\VS-Projects\\Buchfahrplan\\Buchfahrplan\\bin\\Debug\\FPLedit.exe\" \"%1\"");
+            ckey.SetValue("", "\"" + exe + "\" \"%1\"");
             ckey.Close();
 
             RegistryKey fkey = Registry
@@ -36,7 +48,31 @@ namespace FPLedit.Installer
             fkey.SetValue("", "fpledit_fpl_file");
             fkey.Close();
 
-            MessageBox.Show("Installed succesfully!");
+            MessageBox.Show("Installation erfolgreich!", "FPLedit Installationsprogramm");
+        }
+
+        public void Uninstall()
+        {
+            if (Environment.OSVersion.Platform != PlatformID.Win32NT)
+            {
+                MessageBox.Show("Dieses Installationsprogramm funktioniert nur auf Windows!", "FPLedit Installationsprogramm");
+                return;
+            }
+
+            if (MessageBox.Show("Wollen Sie die Verknüpfung von .fpl-Dateien mit FPLedit aufheben?",
+                "FPLedit Installationsprogramm", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
+
+            Registry.ClassesRoot.DeleteSubKeyTree("fpledit_fpl_file");
+            Registry.ClassesRoot.DeleteSubKeyTree(".fpl");
+
+            MessageBox.Show("Deinstallation erfolgreich!", "FPLedit Installationsprogramm");
+        }
+
+        public bool IsInstalled()
+        {
+            var key = Registry.ClassesRoot.OpenSubKey("fpledit_fpl_file");
+            return key != null;
         }
     }
 }

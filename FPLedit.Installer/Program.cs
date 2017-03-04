@@ -11,12 +11,16 @@ namespace FPLedit.Installer
         /// Der Haupteinstiegspunkt für die Anwendung.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
-            (new Installer()).Install();
-            //Application.EnableVisualStyles();
-            //Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new Form1());
+            Application.EnableVisualStyles();
+
+            var inst = new Installer();
+
+            if (args.Contains("/uninstall") || inst.IsInstalled())
+                inst.Uninstall();
+            else
+                inst.Install();
         }
     }
 }
