@@ -68,9 +68,9 @@ namespace FPLedit.BuchfahrplanExport
 
             bool tryoutConsole = bool.Parse(SettingsManager.Get("bfpl.console", "false"));
             if (tryoutConsole)
-                exp.ExportTryoutConsole(info.Timetable, path, info.Logger);
+                exp.ExportTryoutConsole(info.Timetable, path, info);
             else
-                exp.Export(info.Timetable, path, info.Logger);
+                exp.Export(info.Timetable, path, info);
             Process.Start(path);
         }
     }
