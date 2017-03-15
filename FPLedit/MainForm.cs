@@ -283,7 +283,7 @@ namespace FPLedit
             mg.CheckResult = vi =>
             {
                 if (vi != null)
-                    Logger.Info($"Eine neue Programmversion ({vi.Version.ToString()}) ist verfügbar! Hier herunterladen: {vi.DownloadUrl}");
+                    Logger.Info($"Eine neue Programmversion ({vi.NewVersion.ToString()}) ist verfügbar! {vi.Description ?? ""} Hier herunterladen: {vi.DownloadUrl}");
                 else
                     Logger.Info($"Sie benutzen die aktuelleste Version von FPLedit ({mg.GetCurrentVersion().ToString()})!");
             };

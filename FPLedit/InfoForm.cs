@@ -34,7 +34,7 @@ namespace FPLedit
                 if (vi != null)
                 {
                     string nl = Environment.NewLine;
-                    DialogResult res = MessageBox.Show($"Eine neue Programmversion ({vi.Version.ToString()}) ist verfügbar!{nl}{nl}Jetzt zur Download-Seite wechseln, um die neue Version herunterzuladen?",
+                    DialogResult res = MessageBox.Show($"Eine neue Programmversion ({vi.NewVersion.ToString()}) ist verfügbar!{nl}{vi.Description ?? ""}{nl}Jetzt zur Download-Seite wechseln, um die neue Version herunterzuladen?",
                         "Neue FPLedit-Version verfügbar", MessageBoxButtons.YesNo);
 
                     if (res == DialogResult.Yes)

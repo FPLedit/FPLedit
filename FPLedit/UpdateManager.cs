@@ -36,11 +36,13 @@ namespace FPLedit
 
             XmlNode ver = doc.DocumentElement.SelectSingleNode("/info/version");
             XmlNode url = doc.DocumentElement.SelectSingleNode("/info/url");
+            XmlNode dsc = doc.DocumentElement.SelectSingleNode("/info/description");
 
             return new VersionInfo()
             {
                 DownloadUrl = url.InnerText,
-                Version = new Version(ver.InnerText),
+                NewVersion = new Version(ver.InnerText),
+                Description = dsc?.InnerText,
             };
         }
 
@@ -58,7 +60,7 @@ namespace FPLedit
                 if (e.Error == null && e.Result != "")
                 {
                     VersionInfo info = GetVersioninfoFromXml(e.Result);
-                    bool newAvailable = IsNewVersion(info.Version);
+                    bool newAvailable = IsNewVersion(info.NewVersion);
 
                     if (newAvailable)
                         CheckResult?.Invoke(info);
@@ -73,7 +75,8 @@ namespace FPLedit
         public class VersionInfo
         {
             public string DownloadUrl;
-            public Version Version;
+            public Version NewVersion;
+            public string Description;
         }
     }
 }
