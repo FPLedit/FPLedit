@@ -21,8 +21,7 @@ namespace FPLedit.BfplImport
         {
             var upgraded = new Dictionary<string, string>();
 
-            string o;
-            if (meta.TryGetValue("Color", out o))
+            if (meta.TryGetValue("Color", out string o))
                 upgraded["cl"] = UpgradeColor(o, "schwarz");
             if (meta.TryGetValue("Draw", out o))
                 upgraded["sh"] = o.ToLower();
@@ -36,8 +35,7 @@ namespace FPLedit.BfplImport
         {
             var upgraded = new Dictionary<string, string>();
 
-            string o;
-            if (meta.TryGetValue("StartTime", out o))
+            if (meta.TryGetValue("StartTime", out string o))
                 upgraded["tMin"] = UpgradeTime(o);
             if (meta.TryGetValue("EndTime", out o))
                 upgraded["tMax"] = UpgradeTime(o);

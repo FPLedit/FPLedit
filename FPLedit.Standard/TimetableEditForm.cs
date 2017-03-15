@@ -118,7 +118,6 @@ namespace FPLedit.Standard
 
         private void ValidateCell(DataGridView view, DataGridViewCellValidatingEventArgs e)
         {
-            TimeSpan ts;
             if (e.FormattedValue == null || (string)e.FormattedValue == "")
                 return;
 
@@ -129,7 +128,7 @@ namespace FPLedit.Standard
                 view.EditingControl.Text = val;
             }
 
-            if (!TimeSpan.TryParse(val, out ts))
+            if (!TimeSpan.TryParse(val, out TimeSpan ts))
             {
                 MessageBox.Show("Formatierungsfehler: Zeit muss im Format hh:mm vorliegen!");
                 e.Cancel = true;

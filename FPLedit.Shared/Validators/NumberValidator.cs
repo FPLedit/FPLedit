@@ -17,8 +17,7 @@ namespace FPLedit.Shared.Validators
         {
             if (AllowEmpty && Control.Text == "")
                 return true;
-            float num;
-            return float.TryParse(Control.Text, out num);
+            return float.TryParse(Control.Text, out float num);
         }
     }
 }
