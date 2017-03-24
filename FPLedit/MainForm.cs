@@ -78,7 +78,7 @@ namespace FPLedit
             save = new XMLExport();
 
             fileState = new FileState();
-            Logger = new MultipleLogger(logTextBox);
+            Logger = new MultipleLogger(logTextBox, new TempLogger());
             //logger.Loggers.Add(new ConsoleLogger());
         }
 

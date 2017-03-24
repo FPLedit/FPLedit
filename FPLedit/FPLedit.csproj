@@ -95,6 +95,7 @@
     <Compile Include="PluginContainer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TempLogger.cs" />
     <Compile Include="UpdateManager.cs" />
     <Content Include="Info.txt" />
     <Content Include="programm.ico" />
