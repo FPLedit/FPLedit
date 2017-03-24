@@ -13,6 +13,7 @@ namespace FPLedit
     {
         List<Line> strings = new List<Line>();
         private VScrollBar vScrollBar1;
+        private TextBox txt;
         private int drawIndex = 0;
         private VScrollBar scroll;
         private bool scrollToEnd = false;
@@ -24,11 +25,26 @@ namespace FPLedit
             scroll.Scroll += Scroll_Scroll;
             this.Controls.Add(scroll);
 
+            txt = new TextBox();
+            txt.Visible = false;
+            txt.ReadOnly = true;
+            txt.Multiline = true;
+            txt.BackColor = Color.White;
+            txt.ScrollBars = ScrollBars.Vertical;
+            txt.Dock = DockStyle.Fill;
+            txt.DoubleClick += (s, e) =>
+            {
+                SwitchMode();
+            };
+            txt.LostFocus += (s, e) => SwitchMode();
+            this.Controls.Add(txt);
+
             var menu = new ContextMenuStrip();
             var itm = menu.Items.Add("Alles Kopieren");
             itm.Click += (s, e) => CopyAll();
             this.ContextMenuStrip = menu;
             this.DoubleBuffered = true;
+            this.DoubleClick += (s, e) => SwitchMode();
         }
 
         private void Scroll_Scroll(object sender, ScrollEventArgs e)
@@ -117,6 +133,12 @@ namespace FPLedit
             base.OnMouseWheel(e);
         }
 
+        private void SwitchMode()
+        {
+            txt.Visible = !txt.Visible;
+            scroll.Visible = !scroll.Visible;
+        }
+
         #region Log
         public void Error(string message)
             => Write(message, Brushes.Red);
@@ -129,6 +151,8 @@ namespace FPLedit
 
         private void Write(string message, Brush b)
         {
+            txt.Text += message + Environment.NewLine;
+
             var origWordCount = message.Split(' ').Length;
             string text = message;
             bool exit = false;
