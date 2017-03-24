@@ -79,7 +79,6 @@ namespace FPLedit
 
             fileState = new FileState();
             Logger = new MultipleLogger(logTextBox);
-            //logger.Loggers.Add(new ConsoleLogger());
         }
 
         private void Form1_Load(object sender, EventArgs e)
