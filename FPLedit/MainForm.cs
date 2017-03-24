@@ -77,8 +77,12 @@ namespace FPLedit
             fileState = new FileState();
             Logger = new MultipleLogger(logTextBox);
             //logger.Loggers.Add(new ConsoleLogger());
-            for (int i = 0; i <= 20;i++)
-                Logger.Error("AWranungseseseseses 1eseseseseseseseseseseseseseseses 2eseseseseseseseseseses 3eseseseseseseseses 4esesesesesesee"+i.ToString());
+            for (int i = 0; i <= 5; i++)
+            {
+                Logger.Error("Fehler" + i.ToString());
+                Logger.Info("Info" + i.ToString());
+                Logger.Warning("Warnung" + i.ToString());
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
