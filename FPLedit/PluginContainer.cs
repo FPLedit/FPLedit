@@ -23,7 +23,7 @@ namespace FPLedit
                     return Plugin.Name;
                 }
                 catch {
-                    return "<Fehler beim Laden>";
+                    return "<" + Plugin.GetType().FullName + ">";
                 }
             }
         }
@@ -34,7 +34,7 @@ namespace FPLedit
                 Plugin.Init(info);
             }
             catch {
-                info.Logger.Error("Fehler beim Initialisieren einer Erweiterung!");
+                info.Logger.Error("Fehler beim Initialisieren einer Erweiterung: " + Plugin.GetType().FullName);
             }
         }
     }

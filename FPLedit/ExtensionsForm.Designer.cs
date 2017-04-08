@@ -64,7 +64,7 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(519, 376);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(473, 190);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // panel1
@@ -74,7 +74,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(228, 370);
+            this.panel1.Size = new System.Drawing.Size(205, 184);
             this.panel1.TabIndex = 0;
             // 
             // disabledListView
@@ -84,7 +84,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.disabledListView.Location = new System.Drawing.Point(4, 16);
             this.disabledListView.Name = "disabledListView";
-            this.disabledListView.Size = new System.Drawing.Size(221, 350);
+            this.disabledListView.Size = new System.Drawing.Size(198, 164);
             this.disabledListView.TabIndex = 1;
             this.disabledListView.UseCompatibleStateImageBehavior = false;
             this.disabledListView.View = System.Windows.Forms.View.List;
@@ -103,9 +103,9 @@
             this.panel2.Controls.Add(this.enabledListView);
             this.panel2.Controls.Add(this.label2);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(287, 3);
+            this.panel2.Location = new System.Drawing.Point(264, 3);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(229, 370);
+            this.panel2.Size = new System.Drawing.Size(206, 184);
             this.panel2.TabIndex = 1;
             // 
             // enabledListView
@@ -115,7 +115,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.enabledListView.Location = new System.Drawing.Point(3, 16);
             this.enabledListView.Name = "enabledListView";
-            this.enabledListView.Size = new System.Drawing.Size(221, 350);
+            this.enabledListView.Size = new System.Drawing.Size(198, 164);
             this.enabledListView.TabIndex = 1;
             this.enabledListView.UseCompatibleStateImageBehavior = false;
             this.enabledListView.View = System.Windows.Forms.View.List;
@@ -135,13 +135,13 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Controls.Add(this.panel3, 0, 1);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(237, 3);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(214, 3);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 3;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 62F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(44, 370);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(44, 184);
             this.tableLayoutPanel2.TabIndex = 2;
             // 
             // panel3
@@ -149,7 +149,7 @@
             this.panel3.Controls.Add(this.activateButton);
             this.panel3.Controls.Add(this.deactivateButton);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel3.Location = new System.Drawing.Point(3, 157);
+            this.panel3.Location = new System.Drawing.Point(3, 64);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(38, 56);
             this.panel3.TabIndex = 0;
@@ -177,7 +177,7 @@
             // closeButton
             // 
             this.closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.closeButton.Location = new System.Drawing.Point(456, 394);
+            this.closeButton.Location = new System.Drawing.Point(410, 208);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
             this.closeButton.TabIndex = 1;
@@ -189,7 +189,7 @@
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(70, 399);
+            this.label3.Location = new System.Drawing.Point(24, 213);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(380, 13);
             this.label3.TabIndex = 2;
@@ -199,7 +199,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(543, 429);
+            this.ClientSize = new System.Drawing.Size(497, 243);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.closeButton);
             this.Controls.Add(this.tableLayoutPanel1);
