@@ -32,7 +32,7 @@ namespace FPLedit
             txt.Dock = DockStyle.Fill;
             this.Controls.Add(txt);
 
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT && bool.Parse(SettingsManager.Get("log.coloured", "True")))
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
                 SwitchMode(Mode.RTF);
             else
                 SwitchMode(Mode.Plain);
