@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 
-namespace FPLedit.BuchfahrplanExport
+namespace FPLedit.BuchfahrplanExport.Model
 {
     [Serializable]
     [DebuggerDisplay("{PName} [{Kilometre}]")]

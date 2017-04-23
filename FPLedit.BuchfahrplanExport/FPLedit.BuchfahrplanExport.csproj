@@ -42,8 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BFPL_Attrs.cs" />
-    <Compile Include="BFPL_Point.cs" />
+    <Compile Include="Model\BFPL_Attrs.cs" />
+    <Compile Include="Model\BFPL_Point.cs" />
     <Compile Include="BuchfahrplanTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

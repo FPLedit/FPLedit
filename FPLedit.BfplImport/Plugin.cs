@@ -11,7 +11,7 @@ namespace FPLedit.BfplImport
     {
         public string Name
         {
-            get { return "Importer für bfpl-Dateien"; }
+            get { return "Importer für alte BFPL-Dateien"; }
         }
 
         public void Init(IInfo info)

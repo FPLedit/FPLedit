@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace FPLedit.BuchfahrplanExport
+namespace FPLedit.BuchfahrplanExport.Model
 {
     public class BFPL_Attrs : Entity
     {
