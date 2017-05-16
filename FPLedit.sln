@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit", "FPLedit\FPLedit.csproj", "{2809F962-DC06-4740-8AD0-0981891446DA}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -18,8 +18,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.BfplImport", "FPLedit.BfplImport\FPLedit.BfplImport.csproj", "{0959C902-8FCE-4125-A8F0-2D5A06EB890C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", "{5A859144-0558-4FEB-965B-BFD83D9336A9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.BildfahrplanExport", "FPLedit.BildfahrplanExport\FPLedit.BildfahrplanExport.csproj", "{77EE9755-CE3E-4B7B-AEF1-474B228E7B50}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Standard", "FPLedit.Standard\FPLedit.Standard.csproj", "{18F6EC68-60B0-4D31-9643-746EB8860C3D}"
 EndProject
@@ -49,10 +47,6 @@ Global
 		{0959C902-8FCE-4125-A8F0-2D5A06EB890C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0959C902-8FCE-4125-A8F0-2D5A06EB890C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0959C902-8FCE-4125-A8F0-2D5A06EB890C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{77EE9755-CE3E-4B7B-AEF1-474B228E7B50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{77EE9755-CE3E-4B7B-AEF1-474B228E7B50}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{77EE9755-CE3E-4B7B-AEF1-474B228E7B50}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{77EE9755-CE3E-4B7B-AEF1-474B228E7B50}.Release|Any CPU.Build.0 = Release|Any CPU
 		{18F6EC68-60B0-4D31-9643-746EB8860C3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{18F6EC68-60B0-4D31-9643-746EB8860C3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18F6EC68-60B0-4D31-9643-746EB8860C3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -72,7 +66,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{B8BA56BA-15FC-4D2E-8929-FDD6C6E13B5A} = {5A859144-0558-4FEB-965B-BFD83D9336A9}
 		{0959C902-8FCE-4125-A8F0-2D5A06EB890C} = {5A859144-0558-4FEB-965B-BFD83D9336A9}
-		{77EE9755-CE3E-4B7B-AEF1-474B228E7B50} = {5A859144-0558-4FEB-965B-BFD83D9336A9}
 		{0B7A9395-3318-41A1-85D3-EECA6A868FA7} = {5A859144-0558-4FEB-965B-BFD83D9336A9}
 	EndGlobalSection
 EndGlobal
