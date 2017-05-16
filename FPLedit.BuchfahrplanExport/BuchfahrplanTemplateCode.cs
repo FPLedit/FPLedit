@@ -12,13 +12,7 @@ namespace FPLedit.BuchfahrplanExport
         private Timetable tt;
         private string font = "\"Alte DIN 1451 Mittelschrift\"";
         private string additionalCss = "";
-        private bool tryoutConsole = false;
         private BFPL_Attrs attrs;
-
-        public BuchfahrplanTemplate(bool tryoutConsole)
-        {
-            this.tryoutConsole = tryoutConsole;
-        }
 
         private string HtmlName(string name, string prefix)
         {

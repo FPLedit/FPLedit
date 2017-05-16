@@ -1,4 +1,5 @@
 ﻿using FPLedit.BuchfahrplanExport.Model;
+using FPLedit.BuchfahrplanExport.Properties;
 using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
@@ -17,15 +18,19 @@ namespace FPLedit.BuchfahrplanExport
             get { return "Buchfahrplan als HTML Datei (*.html)|*.html"; }
         }
 
-        public bool Export(Timetable timetable, string filename, IInfo info)
+        private bool Exp(Timetable timetable, string filename, IInfo info, bool tryout_console)
         {
             bool enable_atimports = bool.Parse(SettingsManager.Get("bfpl.beta_atimports", "false"));
 
             if (enable_atimports)
                 IncludeImports(timetable, info);
 
-            IBfplTemplate tmpl = new BuchfahrplanTemplate(false);
+            IBfplTemplate tmpl = new BuchfahrplanTemplate();
             string cont = tmpl.GetTranformedText(timetable);
+
+            if (tryout_console)
+                cont += Resources.TryoutScript;
+
             File.WriteAllText(filename, cont);
 
             if (enable_atimports)
@@ -33,23 +38,12 @@ namespace FPLedit.BuchfahrplanExport
 
             return true;
         }
+
+        public bool Export(Timetable timetable, string filename, IInfo info)
+            => Exp(timetable, filename, info, false);
 
         public bool ExportTryoutConsole(Timetable timetable, string filename, IInfo info)
-        {
-            bool enable_atimports = bool.Parse(SettingsManager.Get("bfpl.beta_atimports", "false"));
-
-            if (enable_atimports)
-                IncludeImports(timetable, info);
-
-            IBfplTemplate tmpl = new BuchfahrplanTemplate(true);
-            string cont = tmpl.GetTranformedText(timetable);
-            File.WriteAllText(filename, cont);
-
-            if (enable_atimports)
-                RecoverCss(timetable);
-
-            return true;
-        }
+            => Exp(timetable, filename, info, true);
 
         private bool recover_css = false;
         private string old_css;
