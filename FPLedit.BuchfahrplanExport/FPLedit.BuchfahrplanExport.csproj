@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IBfplTemplate.cs" />
     <Compile Include="Model\BFPL_Attrs.cs" />
     <Compile Include="Model\BFPL_Point.cs" />
     <Compile Include="BuchfahrplanTemplate.cs">

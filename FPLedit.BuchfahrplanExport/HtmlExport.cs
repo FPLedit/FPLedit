@@ -1,4 +1,5 @@
-﻿using FPLedit.Shared;
+﻿using FPLedit.BuchfahrplanExport.Model;
+using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -23,8 +24,8 @@ namespace FPLedit.BuchfahrplanExport
             if (enable_atimports)
                 IncludeImports(timetable, info);
 
-            BuchfahrplanTemplate templ = new BuchfahrplanTemplate(timetable, false);
-            string cont = templ.TransformText();
+            IBfplTemplate tmpl = new BuchfahrplanTemplate(false);
+            string cont = tmpl.GetTranformedText(timetable);
             File.WriteAllText(filename, cont);
 
             if (enable_atimports)
@@ -40,8 +41,8 @@ namespace FPLedit.BuchfahrplanExport
             if (enable_atimports)
                 IncludeImports(timetable, info);
 
-            BuchfahrplanTemplate templ = new BuchfahrplanTemplate(timetable, true);
-            string cont = templ.TransformText();
+            IBfplTemplate tmpl = new BuchfahrplanTemplate(true);
+            string cont = tmpl.GetTranformedText(timetable);
             File.WriteAllText(filename, cont);
 
             if (enable_atimports)

@@ -7,7 +7,7 @@ using System.Text;
 
 namespace FPLedit.BuchfahrplanExport
 {
-    partial class BuchfahrplanTemplate
+    partial class BuchfahrplanTemplate : IBfplTemplate
     {
         private Timetable tt;
         private string font = "\"Alte DIN 1451 Mittelschrift\"";
@@ -15,19 +15,8 @@ namespace FPLedit.BuchfahrplanExport
         private bool tryoutConsole = false;
         private BFPL_Attrs attrs;
 
-        public BuchfahrplanTemplate(Timetable tt, bool tryoutConsole)
+        public BuchfahrplanTemplate(bool tryoutConsole)
         {
-            this.tt = tt;
-            var attrsEn = tt.Children.FirstOrDefault(x => x.XName == "bfpl_attrs");
-
-            if (attrsEn != null)
-            {
-                attrs = new BFPL_Attrs(attrsEn, tt);
-                if (attrs.Font != "")
-                    font = attrs.Font;
-                additionalCss = attrs.Css ?? "";
-            }
-
             this.tryoutConsole = tryoutConsole;
         }
 
@@ -80,6 +69,22 @@ namespace FPLedit.BuchfahrplanExport
             return (dir == TrainDirection.ta ?
                 objs.OrderByDescending(order)
                 : objs.OrderBy(order)).ToList();
+        }
+
+        public string GetTranformedText(Timetable tt)
+        {
+            this.tt = tt;
+            var attrsEn = tt.Children.FirstOrDefault(x => x.XName == "bfpl_attrs");
+
+            if (attrsEn != null)
+            {
+                attrs = new BFPL_Attrs(attrsEn, tt);
+                if (attrs.Font != "")
+                    font = attrs.Font;
+                additionalCss = attrs.Css ?? "";
+            }
+
+            return TransformText();
         }
     }
 }

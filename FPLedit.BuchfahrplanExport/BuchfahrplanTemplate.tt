@@ -1,5 +1,6 @@
 ﻿<#@ template language="C#" #>
 <#@ import namespace="FPLedit.Shared" #>
+<#@ import namespace="FPLedit.BuchfahrplanExport.Model" #>
 
 <!DOCTYPE html>
 <html>
