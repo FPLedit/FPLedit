@@ -59,13 +59,21 @@ namespace FPLedit
             {
                 if (e.Error == null && e.Result != "")
                 {
-                    VersionInfo info = GetVersioninfoFromXml(e.Result);
-                    bool newAvailable = IsNewVersion(info.NewVersion);
+                    try
+                    {
+                        VersionInfo info = GetVersioninfoFromXml(e.Result);
+                        bool newAvailable = IsNewVersion(info.NewVersion);
 
-                    if (newAvailable)
-                        CheckResult?.Invoke(info);
-                    else
-                        CheckResult?.Invoke(null);
+                        if (newAvailable)
+                            CheckResult?.Invoke(info);
+                        else
+                            CheckResult?.Invoke(null);
+                    }
+                    catch (XmlException ex)
+                    {
+                        // Fehler im XML-Dokument
+                        CheckError?.Invoke(ex);
+                    }
                 }
                 else
                     CheckError?.Invoke(e.Error);
