@@ -22,6 +22,7 @@ namespace FPLedit
             rtf.ScrollBars = RichTextBoxScrollBars.ForcedVertical;
             rtf.ReadOnly = true;
             rtf.BackColor = Color.White;
+            rtf.LinkClicked += (s, e) => Process.Start(e.LinkText);
             this.Controls.Add(rtf);
 
             txt = new TextBox();
