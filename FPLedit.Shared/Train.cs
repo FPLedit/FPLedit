@@ -75,6 +75,23 @@ namespace FPLedit.Shared
             Children.Remove(tElm);
         }
 
+        public void RemovedOrphanedTimes()
+        {
+            // Räumt verwaiste Zeiten auf (z.B. Ankunftszeit im Startbahnhof)
+            var stas = _parent.GetStationsOrderedByDirection(Direction);
+            var fs = stas.First();
+            var ls = stas.Last();
+
+            var fa = GetArrDep(fs);
+            var la = GetArrDep(ls);
+
+            fa.Arrival = default(TimeSpan);
+            la.Departure = default(TimeSpan);
+
+            SetArrDep(fs, fa);
+            SetArrDep(ls, la);
+        }
+
         #endregion
 
         public string Locomotive

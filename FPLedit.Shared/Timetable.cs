@@ -123,9 +123,18 @@ namespace FPLedit.Shared
             foreach (var train in Trains)
                 train.RemoveArrDep(sta);
 
+            var needsCleanup = stations.First() == sta || stations.Last() == sta;
+
             sta._parent = null;
             stations.Remove(sta);
             sElm.Children.Remove(sta.XMLEntity);
+
+            if (!needsCleanup)
+                return;
+
+            // Wenn Endstationen gelöscht werden könnten sonst korrupte Dateien entstehen!
+            foreach (var train in Trains)
+                train.RemovedOrphanedTimes();
         }
 
         public void AddTrain(Train tra)
