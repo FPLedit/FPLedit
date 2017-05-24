@@ -18,7 +18,7 @@ namespace FPLedit.BuchfahrplanExport
             {
                 var attrs = new BFPL_Attrs(attrsEn, tt);
                 if (attrs.Template != "")
-                    name = attrs.Template.Replace("$std", "FPLedit.BuchfahrplanExport.Templates");
+                    name = ExpandName(attrs.Template);
             }
 
             var templates = GetAvailableTemplates();
@@ -38,6 +38,16 @@ namespace FPLedit.BuchfahrplanExport
                 .ToArray();
 
             return tmpls;
+        }
+
+        public string ExpandName(string name)
+        {
+            return name.Replace("$std", "FPLedit.BuchfahrplanExport.Templates");
+        }
+
+        public string ReduceName(string name)
+        {
+            return name.Replace("FPLedit.BuchfahrplanExport.Templates", "$std");
         }
     }
 }
