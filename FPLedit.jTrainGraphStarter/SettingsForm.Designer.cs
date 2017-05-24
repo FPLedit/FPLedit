@@ -76,13 +76,15 @@
             // 
             this.generalDocLabel.Location = new System.Drawing.Point(10, 112);
             this.generalDocLabel.Name = "generalDocLabel";
-            this.generalDocLabel.Size = new System.Drawing.Size(387, 50);
+            this.generalDocLabel.Size = new System.Drawing.Size(387, 81);
             this.generalDocLabel.TabIndex = 6;
-            this.generalDocLabel.Text = "Weitere Hinweise:\r\n\r\nWenn Sie jTrainGraph noch gar nicht installiert haben:\r\n\r\n";
+            this.generalDocLabel.Text = "Weitere Hinweise:\r\n\r\nWenn Sie jTrainGraph noch gar nicht installiert haben:\r\n\r\nWe" +
+    "nn jTrainGraph in der *.exe-Variante verwendet wird, dann bitte den Java-Pfad le" +
+    "er lassen!";
             // 
             // closeButton
             // 
-            this.closeButton.Location = new System.Drawing.Point(324, 158);
+            this.closeButton.Location = new System.Drawing.Point(324, 187);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
             this.closeButton.TabIndex = 9;
@@ -118,7 +120,7 @@
             this.jTGDocLabel.Name = "jTGDocLabel";
             this.jTGDocLabel.Size = new System.Drawing.Size(243, 31);
             this.jTGDocLabel.TabIndex = 5;
-            this.jTGDocLabel.Text = "Anwendungsdatei von jTrainGraph (jTrainGraph_xxx.jar, wobei xxx >= 202)";
+            this.jTGDocLabel.Text = "Anwendungsdatei von jTrainGraph (jTrainGraph_xxx.jar/exe, wobei xxx >= 202)";
             // 
             // javaDocLabel
             // 
@@ -133,7 +135,7 @@
             this.AcceptButton = this.closeButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(411, 193);
+            this.ClientSize = new System.Drawing.Size(411, 217);
             this.Controls.Add(this.javaDocLabel);
             this.Controls.Add(this.jTGDocLabel);
             this.Controls.Add(this.docLinkLabel);

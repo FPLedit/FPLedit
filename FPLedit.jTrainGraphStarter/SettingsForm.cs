@@ -21,21 +21,29 @@ namespace FPLedit.jTrainGraphStarter
 
         private void SettingsForm_Load(object sender, EventArgs e)
         {
-            javaPathTextBox.Text = SettingsManager.Get("jTGStarter.javapath", "java");
+            javaPathTextBox.Text = SettingsManager.Get("jTGStarter.javapath", "");
             jtgPathTextBox.Text = SettingsManager.Get("jTGStarter.jtgpath", "jTrainGraph_203.jar");
         }
 
         private void closeButton_Click(object sender, EventArgs e)
         {
-            bool jtgexists = File.Exists(jtgPathTextBox.Text);
+            bool needsJava = javaPathTextBox.Text.Trim() != "";
 
-            bool javaexists = true;
-            try { Process.Start(javaPathTextBox.Text); }
-            catch { javaexists = false; }
+            bool jtgexists = false, javaexists = true;
+
+            if (needsJava)
+            {
+                jtgexists = File.Exists(jtgPathTextBox.Text);
+                javaexists = ExecutableExists(javaPathTextBox.Text);
+            }
+            else
+            {
+                jtgexists = ExecutableExists(jtgPathTextBox.Text);
+            }
 
             if (!javaexists || !jtgexists)
             {
-                string text = "";
+                var text = "";
                 if (!jtgexists)
                     text += "Die angegebene Datei für jTrainGraph wurde nicht gefunden. ";
                 if (!javaexists)
@@ -48,6 +56,19 @@ namespace FPLedit.jTrainGraphStarter
             SettingsManager.Set("jTGStarter.javapath", javaPathTextBox.Text);
             SettingsManager.Set("jTGStarter.jtgpath", jtgPathTextBox.Text);
             Close();
+        }
+
+        private bool ExecutableExists(string path)
+        {
+            bool exists = true;
+            try
+            {
+                var p = Process.Start(path);
+                p.Kill();
+            }
+            catch { exists = false; }
+
+            return exists;
         }
 
         private void docLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
