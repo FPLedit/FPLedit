@@ -25,7 +25,7 @@ namespace FPLedit.BuchfahrplanExport
             if (enable_atimports)
                 IncludeImports(timetable, info);
 
-            IBfplTemplate tmpl = new BuchfahrplanTemplate();
+            IBfplTemplate tmpl = new Templates.BuchfahrplanTemplate();
             string cont = tmpl.GetTranformedText(timetable);
 
             if (tryout_console)
