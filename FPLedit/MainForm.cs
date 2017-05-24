@@ -84,7 +84,7 @@ namespace FPLedit
         private void Form1_Load(object sender, EventArgs e)
         {
             // Extensions laden & initialisieren (=> Initialisiert Importer/Exporter)
-            extensionManager = new ExtensionManager();
+            extensionManager = new ExtensionManager(Logger);
             foreach (var plugin in extensionManager.EnabledPlugins)
                 plugin.Init(this);
 

@@ -17,7 +17,7 @@ namespace FPLedit
 
         public List<PluginContainer> DisabledPlugins { get; private set; }
 
-        public ExtensionManager()
+        public ExtensionManager(ILog log)
         {
             List<Assembly> assemblies = new List<Assembly>();
             DirectoryInfo dir = new DirectoryInfo(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
@@ -26,8 +26,12 @@ namespace FPLedit
             {
                 try
                 {
-                    var assembly = Assembly.LoadFile(file.FullName);
+                    var assembly = Assembly.LoadFrom(file.FullName);
                     assemblies.Add(assembly);
+                }
+                catch (FileLoadException ex)
+                {
+                    log.Warning("Erweiterung " + file.Name + " konnte nicht geladen werden, bitte überprüfen ob diese noch geblockt ist!");
                 }
                 catch
                 {
