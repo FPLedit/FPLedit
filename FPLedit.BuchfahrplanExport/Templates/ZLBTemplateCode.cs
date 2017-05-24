@@ -7,14 +7,14 @@ using System.Text;
 
 namespace FPLedit.BuchfahrplanExport.Templates
 {
-    partial class BuchfahrplanTemplate : IBfplTemplate
+    partial class ZLBTemplate : IBfplTemplate
     {
         private Timetable tt;
         private string font = "\"Alte DIN 1451 Mittelschrift\"";
         private string additionalCss = "";
         private BFPL_Attrs attrs;
 
-        public string Name => "Standard-Buchfahrplan";
+        public string Name => "Vorlage für den Zugleitbetrieb";
 
         private string HtmlName(string name, string prefix)
         {

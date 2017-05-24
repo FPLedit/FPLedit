@@ -42,9 +42,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BfplTemplateChooser.cs" />
     <Compile Include="IBfplTemplate.cs" />
     <Compile Include="Model\BFPL_Attrs.cs" />
     <Compile Include="Model\BFPL_Point.cs" />
+    <Compile Include="Templates\ZLBTemplateCode.cs" />
+    <Compile Include="Templates\ZLBTemplate.cs">
+      <DependentUpon>ZLBTemplate.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Templates\BuchfahrplanTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -100,6 +107,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Templates\ZLBTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>ZLBTemplate.cs</LastGenOutput>
+    </Content>
     <Content Include="Templates\BuchfahrplanTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>BuchfahrplanTemplate.cs</LastGenOutput>

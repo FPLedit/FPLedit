@@ -14,36 +14,22 @@ namespace FPLedit.BuchfahrplanExport.Model
     {
         public BFPL_Point(XMLEntity en, Timetable tt) : base(en, tt)
         {
-
         }
 
         public BFPL_Point(Timetable tt) : base("p", tt)
         {
-
         }
 
         public string PName
         {
-            get
-            {
-                return GetAttribute<string>("name", "");
-            }
-            set
-            {
-                SetAttribute("name", value);
-            }
+            get => GetAttribute<string>("name", "");
+            set => SetAttribute("name", value);
         }
 
         public float Kilometre
         {
-            get
-            {
-                return float.Parse(GetAttribute("km", "0.0"), CultureInfo.InvariantCulture);
-            }
-            set
-            {
-                SetAttribute("km", value.ToString("0.0", CultureInfo.InvariantCulture));
-            }
+            get => float.Parse(GetAttribute("km", "0.0"), CultureInfo.InvariantCulture);
+            set => SetAttribute("km", value.ToString("0.0", CultureInfo.InvariantCulture));
         }
     }
 }
