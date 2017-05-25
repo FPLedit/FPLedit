@@ -339,6 +339,9 @@ namespace FPLedit
         private void exportToolStripMenuItem_Click(object sender, EventArgs e)
             => Export();
 
+        private void quitToolStripMenuItem_Click(object sender, EventArgs e)
+            => Close();
+
         #endregion
     }
 }

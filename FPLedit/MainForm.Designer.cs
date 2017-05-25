@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -36,6 +35,7 @@
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lastFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -43,7 +43,8 @@
             this.exportFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.importFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.logTextBox = new FPLedit.LogControl();
-            this.lastFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -67,7 +68,9 @@
             this.lastFilesToolStripMenuItem,
             this.toolStripSeparator2,
             this.importToolStripMenuItem,
-            this.exportToolStripMenuItem});
+            this.exportToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.quitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.fileToolStripMenuItem.Text = "Datei";
@@ -104,6 +107,12 @@
             this.saveAsToolStripMenuItem.Text = "Speichern unter";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
+            // lastFilesToolStripMenuItem
+            // 
+            this.lastFilesToolStripMenuItem.Name = "lastFilesToolStripMenuItem";
+            this.lastFilesToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.lastFilesToolStripMenuItem.Text = "Letzte Dateien";
+            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
@@ -136,11 +145,17 @@
             this.logTextBox.Size = new System.Drawing.Size(504, 284);
             this.logTextBox.TabIndex = 1;
             // 
-            // lastFilesToolStripMenuItem
+            // toolStripSeparator1
             // 
-            this.lastFilesToolStripMenuItem.Name = "lastFilesToolStripMenuItem";
-            this.lastFilesToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
-            this.lastFilesToolStripMenuItem.Text = "Letzte Dateien";
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(172, 6);
+            // 
+            // quitToolStripMenuItem
+            // 
+            this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
+            this.quitToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.quitToolStripMenuItem.Text = "Beenden";
+            this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -180,6 +195,8 @@
         private System.Windows.Forms.OpenFileDialog importFileDialog;
         private LogControl logTextBox;
         private System.Windows.Forms.ToolStripMenuItem lastFilesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
     }
 }
 
