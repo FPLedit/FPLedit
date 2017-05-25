@@ -16,6 +16,9 @@
 			margin-right:auto;
 			margin-bottom:65px;
 		}
+		body {
+			font-family:<#= font #>, serif;
+		}
 		table:not(.first) {
 			page-break-before:always;
 		}
@@ -29,32 +32,23 @@
 		}
 		.tfz {
 			font-weight:400;
-			font-style:normal;
-			font-family:<#= font #>, sans-serif;
-			text-align:general;
 			vertical-align:bottom;
 		}
 		.trainname {
 			height:19.5pt;
 			font-size:15.0pt;
-			font-weight:400;
-			font-style:normal;
-			font-family:<#= font #>, sans-serif;
+			font-weight:bold;
 			text-align:center;
 			vertical-align:middle;
 		}
 		.linename {
 			font-size:12.0pt;
-			font-weight:400;
-			font-style:normal;
-			font-family:<#= font #>, sans-serif;
+			font-weight:bold;
 			text-align:center;
 			vertical-align:middle;
 		}
 		.spaltennummer {
 			font-weight:400;
-			font-style:normal;
-			font-family:<#= font #>, sans-serif;
 			text-align:center;
 			vertical-align:top;
 			border-top:1.5pt solid black;
@@ -63,10 +57,8 @@
 			border-left:1.5pt solid black;
 		}
 		.spaltenkopf {
-			height: 130px;
+			height: 120px;
 			font-weight:400;
-			font-style:normal;
-			font-family:<#= font #>, sans-serif;
 			text-align:center;
 			vertical-align:top;
 			border-top:.5pt solid black;
@@ -74,21 +66,22 @@
 			border-bottom:1.5pt solid black;
 			border-left:1.5pt solid black;
 		}
+		.spaltenkopf.klein {
+			font-size:0.7em;
+		}
 		.zug {
 			height: 19px;
 			font-weight:400;
-			font-style:normal;
-			font-family:<#= font #>, sans-serif;
 			text-align:center;
 			vertical-align:top;
 			border-right:1.5pt solid black;
 			border-left:1.5pt solid black;
 		}
-		.tabellenende {
-			height: 18px;
-			border-right:1.5pt solid black;
-			border-bottom:1.5pt solid black;
-			border-left:1.5pt solid black;
+		td.first {
+			border-left:none;
+		}
+		td.last {
+			border-right:none;
 		}
 		@media print {
 			@page {
@@ -107,43 +100,57 @@
 			foreach (Train tra in tt.Trains) { #>
 			<table id="<#= HtmlName(tra.TName, "train-") #>" class="<#= first ? "first" : "" #>">
 				<# first = false; #>
-				<col style="width:80px;" span=2>
-				<col style="width:285px;">
-				<col style="width:80px;" span=2>
+				<col style="width:50px;">
+				<col style="width:50px;">
+				<col style="width:200px;">
+				<col style="width:62px;">
+				<col style="width:50px;">
+				<col style="width:50px;">
 				<tr>
-					<td colspan=5 class="trainname">ZLB <#= tra.TName #></td>
+					<td colspan=9 class="trainname"><#= tra.TName #></td>
 				</tr>
 				<tr>
-					<td colspan=5 class="linename"><#= tt.GetLineName(tra.Direction) #></td>
+					<td colspan=9 class="linename"><#= tt.GetLineName(tra.Direction) #></td>
 				</tr>
 				<tr>
-					<td class=tfz>Tfz <#= tra.Locomotive #></td>
+					<td class=tfz>Zlok <#= tra.Locomotive #></td>
 					<td></td>
 					<td></td>
 					<td></td>
 					<td></td>
 				</tr>
+				<tr></tr>
 				<tr>
-					<td class="spaltennummer">0</td>
-					<td class="spaltennummer">1</td>
+					<td class="spaltennummer first">1</td>
 					<td class="spaltennummer">2</td>
 					<td class="spaltennummer">3</td>
 					<td class="spaltennummer">4</td>
+					<td class="spaltennummer">5</td>
+					<td class="spaltennummer">6</td>
+					<td class="spaltennummer">7</td>
+					<td class="spaltennummer">8</td>
+					<td class="spaltennummer last">9</td>
 				</tr>
 				<tr>
-					<td class="spaltenkopf">Lage<br>der<br>Betriebs-<br>stelle<br><br>(km)</td>
-					<td class="spaltenkopf">Höchst-<br>Geschwin-<br>digkeit<br><br><br>(km/h)</td>
-					<td class="spaltenkopf">Betriebsstellen,<br>ständige Langsamfahrstellen,<br>verkürzter Vorsignalabstand</td>
-					<td class="spaltenkopf">Ankunft</td><td class=spaltenkopf>Abfahrt<br>oder Durch-<br>fahrt</td>
+					<td class="spaltenkopf klein first">Lage<br>der<br>Betriebs-<br>stelle<br><br>km</td>
+					<td class="spaltenkopf klein">Höchst-<br>ge-<br>schwin-<br>digkeit<br><br>km/h</td>
+					<td class="spaltenkopf">Betriebsstellen,<br>ständige Langsam-<br>fahrstellen,<br>verkürzter<br>Vorsignalabstand</td>
+					<td class="spaltenkopf klein">An der<br>Trapeztafel<br>hält Zug</td>
+					<td class="spaltenkopf">An-<br>kunft</td>
+					<td class="spaltenkopf">Ab-<br>fahrt</td>
+					<td class="spaltenkopf klein">Kreu-<br>zung<br>mit Zug</td>
+					<td class="spaltenkopf klein">über-<br>holt<br>&mdash;<br>wird<br>über-<br>holt<br>durch<br>Zug</td>
+					<td class="spaltenkopf klein last">Zuglauf-<br>meldung<br>durch</td>
 				</tr>
 				<# foreach (var entity in GetStations(tra.Direction)) { #>
 				<tr class="<#= HtmlName(entity.GetAttribute("name", ""), "station-") #>">
 					<#
 					if (entity.GetType() == typeof(Station)) {
 						Station s = (Station)entity; #>
-					<td class="zug"><#= s.Kilometre.ToString("0.0") #></td>
+					<td class="zug first"><#= s.Kilometre.ToString("0.0") #></td>
 					<td class="zug"><#= s.GetAttribute("fpl-vmax", "") #></td>
 					<td class="zug"><#= s.SName #></td>
+					<td class="zug"><!--Trapeztafel--></td>
 					<#
 					var ardp = tra.GetArrDep(s);
 					var ar = ardp.Arrival.ToShortTimeString();
@@ -151,24 +158,24 @@
 					#>
 					<td class="zug"><#= ar != "00:00" ? ar : "" #></td>
 					<td class="zug"><#= dp != "00:00" ? dp : "" #></td>
+					<td class="zug"><!--Kreuzung--></td>
+					<td class="zug"><!--überholt--></td>
+					<td class="zug last"><!--Zuglaufmeldung--></td>
 
 					<# } else {
 						BFPL_Point p = (BFPL_Point)entity; #>
-					<td class="zug"><#= p.Kilometre.ToString("0.0") #></td>
+					<td class="zug first"><#= p.Kilometre.ToString("0.0") #></td>
 					<td class="zug"><#= p.GetAttribute("fpl-vmax", "") #></td>
 					<td class="zug"><#= p.PName #></td>
+					<td class="zug"><!--Trapeztafel--></td>
 					<td class="zug"></td>
 					<td class="zug"></td>
+					<td class="zug"><!--Kreuzung--></td>
+					<td class="zug"><!--überholt--></td>
+					<td class="zug last"><!--Zuglaufmeldung--></td>
 					<# } #>
 				</tr>
 				<# } #>
-				<tr>
-					<td class="tabellenende"></td>
-					<td class="tabellenende"></td>
-					<td class="tabellenende"></td>
-					<td class="tabellenende"></td>
-					<td class="tabellenende"></td>
-				</tr>
 			</table>
 			<# } #>
 		</div>

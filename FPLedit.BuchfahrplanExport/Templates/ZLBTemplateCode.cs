@@ -10,7 +10,7 @@ namespace FPLedit.BuchfahrplanExport.Templates
     partial class ZLBTemplate : IBfplTemplate
     {
         private Timetable tt;
-        private string font = "\"Alte DIN 1451 Mittelschrift\"";
+        private string font = "serif";
         private string additionalCss = "";
         private BFPL_Attrs attrs;
 
