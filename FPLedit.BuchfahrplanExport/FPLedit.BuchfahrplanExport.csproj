@@ -46,6 +46,7 @@
     <Compile Include="IBfplTemplate.cs" />
     <Compile Include="Model\BFPL_Attrs.cs" />
     <Compile Include="Model\BFPL_Point.cs" />
+    <Compile Include="Templates\TemplateHelper.cs" />
     <Compile Include="Templates\ZLBTemplateCode.cs" />
     <Compile Include="Templates\ZLBTemplate.cs">
       <DependentUpon>ZLBTemplate.tt</DependentUpon>

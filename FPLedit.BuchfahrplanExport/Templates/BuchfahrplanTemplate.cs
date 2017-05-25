@@ -165,7 +165,7 @@ namespace FPLedit.BuchfahrplanExport.Templates
             this.Write("\t\t\t<table id=\"");
             
             #line 108 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\BuchfahrplanTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(HtmlName(tra.TName, "train-")));
+            this.Write(this.ToStringHelper.ToStringWithCulture(helper.HtmlName(tra.TName, "train-")));
             
             #line default
             #line hidden
@@ -227,14 +227,14 @@ namespace FPLedit.BuchfahrplanExport.Templates
 				");
             
             #line 139 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\BuchfahrplanTemplate.tt"
- foreach (var entity in GetStations(tra.Direction)) { 
+ foreach (var entity in helper.GetStations(tra.Direction)) { 
             
             #line default
             #line hidden
             this.Write("\t\t\t\t<tr class=\"");
             
             #line 140 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\BuchfahrplanTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(HtmlName(entity.GetAttribute("name", ""), "station-")));
+            this.Write(this.ToStringHelper.ToStringWithCulture(helper.HtmlName(entity.GetAttribute("name", ""), "station-")));
             
             #line default
             #line hidden
