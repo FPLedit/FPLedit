@@ -78,9 +78,9 @@
             this.generalDocLabel.Name = "generalDocLabel";
             this.generalDocLabel.Size = new System.Drawing.Size(387, 81);
             this.generalDocLabel.TabIndex = 6;
-            this.generalDocLabel.Text = "Weitere Hinweise:\r\n\r\nWenn Sie jTrainGraph noch gar nicht installiert haben:\r\n\r\nWe" +
-    "nn jTrainGraph in der *.exe-Variante verwendet wird, dann bitte den Java-Pfad le" +
-    "er lassen!";
+            this.generalDocLabel.Text = "Weitere Hinweise:\r\n\r\nWenn Sie jTrainGraph noch gar nicht installiert haben:\r\n\r\nAu" +
+    "ch wenn jTrainGraph in der *.exe-Variante verwendet wird bitte den Java-Pfad aus" +
+    "füllen!";
             // 
             // closeButton
             // 

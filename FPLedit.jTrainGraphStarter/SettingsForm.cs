@@ -27,19 +27,8 @@ namespace FPLedit.jTrainGraphStarter
 
         private void closeButton_Click(object sender, EventArgs e)
         {
-            bool needsJava = javaPathTextBox.Text.Trim() != "";
-
-            bool jtgexists = false, javaexists = true;
-
-            if (needsJava)
-            {
-                jtgexists = File.Exists(jtgPathTextBox.Text);
-                javaexists = ExecutableExists(javaPathTextBox.Text);
-            }
-            else
-            {
-                jtgexists = ExecutableExists(jtgPathTextBox.Text);
-            }
+            bool jtgexists = File.Exists(jtgPathTextBox.Text) || ExecutableExists(jtgPathTextBox.Text);
+            bool javaexists = ExecutableExists(javaPathTextBox.Text);
 
             if (!javaexists || !jtgexists)
             {

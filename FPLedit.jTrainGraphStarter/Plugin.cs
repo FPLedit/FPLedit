@@ -53,23 +53,15 @@ namespace FPLedit.jTrainGraphStarter
 
             info.Save(false);
 
-            string javapath = SettingsManager.Get("jTGStarter.javapath", "");
+            string javapath = SettingsManager.Get("jTGStarter.javapath", "java");
             string jtgPath = SettingsManager.Get("jTGStarter.jtgpath", "jTrainGraph_203.jar");
 
             string jtgFolder = Path.GetDirectoryName(jtgPath);
 
             Process p = new Process();
             p.StartInfo.WorkingDirectory = jtgFolder;
-            if (javapath != "") // Java-Modus
-            {
-                p.StartInfo.FileName = javapath;
-                p.StartInfo.Arguments = "-jar " + jtgPath + " \"" + info.FileState.FileName + "\"";
-            }
-            else // Standalone-exe-Modus
-            {
-                p.StartInfo.FileName = jtgPath;
-                p.StartInfo.Arguments = " \"" + info.FileState.FileName + "\"";
-            }
+            p.StartInfo.FileName = javapath;
+            p.StartInfo.Arguments = "-jar \"" + jtgPath + "\" \"" + info.FileState.FileName + "\"";
 
             try
             {
