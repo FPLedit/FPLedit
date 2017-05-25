@@ -11,14 +11,8 @@ namespace FPLedit.Shared
     {
         public string TName
         {
-            get
-            {
-                return GetAttribute<string>("name");
-            }
-            set
-            {
-                SetAttribute("name", value);
-            }
+            get => GetAttribute<string>("name");
+            set => SetAttribute("name", value);
         }
 
         #region Handling der Fahrtzeiteneinträge
@@ -34,6 +28,7 @@ namespace FPLedit.Shared
             var tElm = new XMLEntity("t");
             tElm.SetAttribute("a", ar != "00:00" ? ar : "");
             tElm.SetAttribute("d", dp != "00:00" ? dp : "");
+            tElm.SetAttribute("fpl-tr", ardp.TrapeztafelHalt ? "1" : "0");
             Children.Insert(idx, tElm);
         }
 
@@ -47,6 +42,7 @@ namespace FPLedit.Shared
             var dp = ardp.Departure.ToShortTimeString();
             tElm.SetAttribute("a", ar != "00:00" ? ar : "");
             tElm.SetAttribute("d", dp != "00:00" ? dp : "");
+            tElm.SetAttribute("fpl-tr", ardp.TrapeztafelHalt ? "1" : "0");
         }
 
         public ArrDep GetArrDep(Station sta)
@@ -62,6 +58,9 @@ namespace FPLedit.Shared
 
             if (tElm.GetAttribute("d", "") != "")
                 ardp.Departure = TimeSpan.Parse(tElm.GetAttribute<string>("d"));
+
+            if (tElm.GetAttribute("fpl-tr", "") != "")
+                ardp.TrapeztafelHalt = Convert.ToBoolean(tElm.GetAttribute<int>("fpl-tr"));
 
             return ardp;
         }
@@ -96,34 +95,16 @@ namespace FPLedit.Shared
 
         public string Locomotive
         {
-            get
-            {
-                return GetAttribute<string>("fpl-tfz", "");
-            }
-            set
-            {
-                SetAttribute("fpl-tfz", value);
-            }
+            get => GetAttribute<string>("fpl-tfz", "");
+            set => SetAttribute("fpl-tfz", value);
         }
 
-        public TrainDirection Direction
-        {
-            get
-            {
-                return XName == "ti" ? TrainDirection.ti : TrainDirection.ta;
-            }
-        }
+        public TrainDirection Direction => XName == "ti" ? TrainDirection.ti : TrainDirection.ta;
 
         public string Comment
         {
-            get
-            {
-                return GetAttribute<string>("cm", "");
-            }
-            set
-            {
-                SetAttribute("cm", value);
-            }
+            get => GetAttribute<string>("cm", "");
+            set => SetAttribute("cm", value);
         }
 
         public bool[] Days
@@ -152,9 +133,6 @@ namespace FPLedit.Shared
 
         [DebuggerStepThrough]
         public override string ToString()
-        {
-            return TName;
-        }
-
+            => TName;
     }
 }

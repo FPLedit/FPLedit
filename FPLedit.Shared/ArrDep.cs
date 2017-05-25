@@ -12,5 +12,7 @@ namespace FPLedit.Shared
         public TimeSpan Arrival { get; set; }
 
         public TimeSpan Departure { get; set; }
+
+        public bool TrapeztafelHalt { get; set; }
     }
 }
