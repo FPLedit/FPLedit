@@ -62,5 +62,44 @@ namespace FPLedit.BuchfahrplanExport.Templates
                 objs.OrderByDescending(order)
                 : objs.OrderBy(order)).ToList();
         }
+
+        public string Kreuzt(Train ot, Station s)
+            => IntersectTrains(ot, s, true);
+
+        public string Ueberholt(Train ot, Station s)
+            => IntersectTrains(ot, s, false);
+
+        private string IntersectTrains(Train ot, Station s, bool kreuzung)
+        {
+            TimeSpan start = ot.GetArrDep(s).Arrival;
+            TimeSpan end = ot.GetArrDep(s).Departure;
+
+            if (start == TimeSpan.Zero || end == TimeSpan.Zero)
+                return "";
+
+            Func<Train, bool> pred = (t => t.Direction == ot.Direction); // Überholung
+            if (kreuzung)
+                pred = (t => t.Direction != ot.Direction); // Kreuzung
+
+            foreach (var train in TT.Trains.Where(pred))
+            {
+                if (train == ot)
+                    continue;
+
+                TimeSpan start2 = train.GetArrDep(s).Arrival;
+                TimeSpan end2 = train.GetArrDep(s).Departure;
+
+                if (start2 == TimeSpan.Zero || end2 == TimeSpan.Zero)
+                    continue;
+
+                var st = start < start2 ? start2 : start;
+                var en = end < end2 ? end : end2;
+                var crossing = st < en ? true : false;
+
+                return train.TName;
+            }
+
+            return "";
+        }
     }
 }

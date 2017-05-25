@@ -158,8 +158,8 @@
 					#>
 					<td class="zug"><#= ar != "00:00" ? ar : "" #></td>
 					<td class="zug"><#= dp != "00:00" ? dp : "" #></td>
-					<td class="zug"><!--Kreuzung--></td>
-					<td class="zug"><!--überholt--></td>
+					<td class="zug"><!--Kreuzung--><#= helper.Kreuzt(tra, s) #></td>
+					<td class="zug"><!--überholt--><#= helper.Ueberholt(tra, s) #></td>
 					<td class="zug last"><!--Zuglaufmeldung--></td>
 
 					<# } else {
@@ -170,8 +170,8 @@
 					<td class="zug"><!--Trapeztafel--></td>
 					<td class="zug"></td>
 					<td class="zug"></td>
-					<td class="zug"><!--Kreuzung--></td>
-					<td class="zug"><!--überholt--></td>
+					<td class="zug"><!--Kreuzung, bleibt leer--></td>
+					<td class="zug"><!--überholt, bleibt leer--></td>
 					<td class="zug last"><!--Zuglaufmeldung--></td>
 					<# } #>
 				</tr>

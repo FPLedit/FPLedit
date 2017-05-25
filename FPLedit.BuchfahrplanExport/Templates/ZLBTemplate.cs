@@ -281,8 +281,21 @@ namespace FPLedit.BuchfahrplanExport.Templates
             
             #line default
             #line hidden
-            this.Write("</td>\r\n\t\t\t\t\t<td class=\"zug\"><!--Kreuzung--></td>\r\n\t\t\t\t\t<td class=\"zug\"><!--überho" +
-                    "lt--></td>\r\n\t\t\t\t\t<td class=\"zug last\"><!--Zuglaufmeldung--></td>\r\n\r\n\t\t\t\t\t");
+            this.Write("</td>\r\n\t\t\t\t\t<td class=\"zug\"><!--Kreuzung-->");
+            
+            #line 161 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(helper.Kreuzt(tra, s)));
+            
+            #line default
+            #line hidden
+            this.Write("</td>\r\n\t\t\t\t\t<td class=\"zug\"><!--überholt-->");
+            
+            #line 162 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(helper.Ueberholt(tra, s)));
+            
+            #line default
+            #line hidden
+            this.Write("</td>\r\n\t\t\t\t\t<td class=\"zug last\"><!--Zuglaufmeldung--></td>\r\n\r\n\t\t\t\t\t");
             
             #line 165 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
  } else {
@@ -311,10 +324,14 @@ namespace FPLedit.BuchfahrplanExport.Templates
             
             #line default
             #line hidden
-            this.Write("</td>\r\n\t\t\t\t\t<td class=\"zug\"><!--Trapeztafel--></td>\r\n\t\t\t\t\t<td class=\"zug\"></td>\r\n" +
-                    "\t\t\t\t\t<td class=\"zug\"></td>\r\n\t\t\t\t\t<td class=\"zug\"><!--Kreuzung--></td>\r\n\t\t\t\t\t<td " +
-                    "class=\"zug\"><!--überholt--></td>\r\n\t\t\t\t\t<td class=\"zug last\"><!--Zuglaufmeldung--" +
-                    "></td>\r\n\t\t\t\t\t");
+            this.Write(@"</td>
+					<td class=""zug""><!--Trapeztafel--></td>
+					<td class=""zug""></td>
+					<td class=""zug""></td>
+					<td class=""zug""><!--Kreuzung, bleibt leer--></td>
+					<td class=""zug""><!--überholt, bleibt leer--></td>
+					<td class=""zug last""><!--Zuglaufmeldung--></td>
+					");
             
             #line 176 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
  } 
