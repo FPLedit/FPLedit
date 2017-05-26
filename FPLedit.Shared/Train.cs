@@ -79,6 +79,10 @@ namespace FPLedit.Shared
         {
             // Räumt verwaiste Zeiten auf (z.B. Ankunftszeit im Startbahnhof)
             var stas = _parent.GetStationsOrderedByDirection(Direction);
+
+            if (stas.Count == 0) // Die letzte Station wurde gelöscht
+                return;
+
             var fs = stas.First();
             var ls = stas.Last();
 
