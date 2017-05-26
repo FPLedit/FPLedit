@@ -270,6 +270,7 @@
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.closeButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+            this.KeyPreview = true;
             this.Name = "TrainsEditForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;

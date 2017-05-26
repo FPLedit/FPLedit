@@ -1,5 +1,6 @@
 ﻿using FPLedit.Shared;
 using System;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace FPLedit.Standard
@@ -14,6 +15,26 @@ namespace FPLedit.Standard
         {
             InitializeComponent();
             daysBoxes = new[] { mondayCheckBox, tuesdayCheckBox, wednesdayCheckBox, thursdayCheckBox, fridayCheckBox, saturdayCheckBox, sundayCheckBox };
+
+            KeyDown += (s, e) =>
+            {
+                if (!e.Control)
+                    return;
+
+                if (new[] { Keys.A, Keys.W, Keys.S, Keys.D0, Keys.NumPad0 }.Contains(e.KeyCode))
+                {
+                    daysBoxes.All(c => { c.Checked = false; return true; });
+                    e.Handled = true;
+                }
+                if (e.KeyCode == Keys.A)
+                    daysBoxes.All(c => c.Checked = true);
+                else if (e.KeyCode == Keys.W && e.Shift)
+                    daysBoxes.Take(5).All(c => c.Checked = true);
+                else if (e.KeyCode == Keys.W)
+                    daysBoxes.Take(6).All(c => c.Checked = true);
+                else if (e.KeyCode == Keys.S)
+                    daysBoxes.Last().Checked = true;
+            };
         }
 
         public TrainEditForm(Train train) : this()

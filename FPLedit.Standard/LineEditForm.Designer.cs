@@ -135,6 +135,7 @@
             this.Controls.Add(this.editButton);
             this.Controls.Add(this.listView);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+            this.KeyPreview = true;
             this.Name = "LineEditForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;

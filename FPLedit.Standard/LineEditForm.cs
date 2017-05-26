@@ -32,6 +32,18 @@ namespace FPLedit.Standard
             tt = info.Timetable;
             info.BackupTimetable();
 
+            KeyDown += (s, e) =>
+            {
+                if (e.KeyCode == Keys.Delete)
+                    DeleteStation(false);
+                else if (e.KeyCode == Keys.L && e.Control)
+                    LoadLine();
+                else if (e.KeyCode == Keys.B && e.Control)
+                    EditStation(false);
+                else if (e.KeyCode == Keys.N && e.Control)
+                    NewStation();
+            };
+
             UpdateStations();
         }
 
@@ -72,7 +84,7 @@ namespace FPLedit.Standard
                 MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Station bearbeiten");
         }
 
-        private void DeleteStation()
+        private void DeleteStation(bool message = true)
         {
             if (listView.SelectedItems.Count > 0)
             {
@@ -81,7 +93,7 @@ namespace FPLedit.Standard
 
                 UpdateStations();
             }
-            else
+            else if (message)
                 MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Station löschen");
         }
 

@@ -32,6 +32,33 @@ namespace FPLedit.Standard
             bottomLineLabel.Text = "Züge " + tt.GetLineName(BOTTOM_DIRECTION);
             UpdateListView(topListView, TOP_DIRECTION);
             UpdateListView(bottomListView, BOTTOM_DIRECTION);
+
+            KeyDown += (s, e) =>
+            {
+                ListView active = null;
+                TrainDirection dir = default(TrainDirection);
+
+                if (ActiveControl == topListView)
+                {
+                    active = topListView;
+                    dir = TOP_DIRECTION;
+                }
+                if (ActiveControl == bottomListView)
+                {
+                    active = bottomListView;
+                    dir = BOTTOM_DIRECTION;
+                }
+
+                if (active == null)
+                    return;
+
+                if (e.KeyCode == Keys.Delete)
+                    DeleteTrain(active, dir, false);
+                else if (e.KeyCode == Keys.B && e.Control)
+                    EditTrain(active, dir, false);
+                else if (e.KeyCode == Keys.N && e.Control)
+                    NewTrain(active, dir);
+            };
         }
 
         private void UpdateListView(ListView view, TrainDirection direction)
@@ -60,7 +87,7 @@ namespace FPLedit.Standard
             view.Columns.Add("Kommentar");
         }
 
-        private void DeleteTrain(ListView view, TrainDirection direction)
+        private void DeleteTrain(ListView view, TrainDirection direction, bool message = true)
         {
             if (view.SelectedItems.Count > 0)
             {
@@ -69,7 +96,7 @@ namespace FPLedit.Standard
 
                 UpdateListView(view, direction);
             }
-            else
+            else if (message)
                 MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug löschen");
         }
 
