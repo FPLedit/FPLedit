@@ -42,15 +42,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BfplTemplateChooser.cs" />
     <Compile Include="IBfplTemplate.cs" />
     <Compile Include="Model\BFPL_Attrs.cs" />
     <Compile Include="Model\BFPL_Point.cs" />
-    <Compile Include="BuchfahrplanTemplate.cs">
+    <Compile Include="Templates\TemplateHelper.cs" />
+    <Compile Include="Templates\ZLBTemplateCode.cs" />
+    <Compile Include="Templates\ZLBTemplate.cs">
+      <DependentUpon>ZLBTemplate.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Templates\BuchfahrplanTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>BuchfahrplanTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Include="BuchfahrplanTemplateCode.cs" />
+    <Compile Include="Templates\BuchfahrplanTemplateCode.cs" />
     <Compile Include="HtmlExport.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -59,22 +67,22 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SettingsForm.cs">
+    <Compile Include="Forms\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SettingsForm.Designer.cs">
+    <Compile Include="Forms\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="VelocityForm.cs">
+    <Compile Include="Forms\VelocityForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="VelocityForm.Designer.cs">
+    <Compile Include="Forms\VelocityForm.Designer.cs">
       <DependentUpon>VelocityForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="VelocityEditForm.cs">
+    <Compile Include="Forms\VelocityEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="VelocityEditForm.Designer.cs">
+    <Compile Include="Forms\VelocityEditForm.Designer.cs">
       <DependentUpon>VelocityEditForm.cs</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -89,18 +97,22 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="SettingsForm.resx">
+    <EmbeddedResource Include="Forms\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="VelocityForm.resx">
+    <EmbeddedResource Include="Forms\VelocityForm.resx">
       <DependentUpon>VelocityForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="VelocityEditForm.resx">
+    <EmbeddedResource Include="Forms\VelocityEditForm.resx">
       <DependentUpon>VelocityEditForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BuchfahrplanTemplate.tt">
+    <Content Include="Templates\ZLBTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>ZLBTemplate.cs</LastGenOutput>
+    </Content>
+    <Content Include="Templates\BuchfahrplanTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>BuchfahrplanTemplate.cs</LastGenOutput>
     </Content>

@@ -16,14 +16,19 @@ namespace FPLedit.BuchfahrplanExport
     public partial class SettingsForm : Form
     {
         private BFPL_Attrs data;
+        private BfplTemplateChooser chooser;
 
         public SettingsForm()
         {
             InitializeComponent();
+            chooser = new BfplTemplateChooser();
         }
 
         public SettingsForm(Timetable tt) : this()
         {
+            var templates = chooser.GetAvailableTemplates().Select(t => t.Name).ToArray();
+            templateComboBox.Items.AddRange(templates);
+
             var dataEn = tt.Children.FirstOrDefault(x => x.XName == "bfpl_attrs");
 
             if (dataEn != null)
@@ -31,6 +36,10 @@ namespace FPLedit.BuchfahrplanExport
                 data = new BFPL_Attrs(dataEn, tt);
                 fontComboBox.Text = data.Font;
                 cssTextBox.Text = data.Css ?? "";
+
+                var typeName = chooser.ExpandName(data.Template);
+                var tmpl = chooser.GetAvailableTemplates().FirstOrDefault(t => t.GetType().FullName == typeName) ?? new Templates.BuchfahrplanTemplate();
+                templateComboBox.Text = tmpl.Name;
             }
             else
             {
@@ -51,9 +60,7 @@ namespace FPLedit.BuchfahrplanExport
             => Process.Start("https://fahrplan.manuelhu.de/buchfahrplaene/css/");
 
         private void fontComboBox_TextChanged(object sender, EventArgs e)
-        {
-            exampleLabel.Font = new Font(fontComboBox.Text, 10);
-        }
+             => exampleLabel.Font = new Font(fontComboBox.Text, 10);
 
         private void cssTextBox_KeyDown(object sender, KeyEventArgs e)
         {
@@ -70,6 +77,10 @@ namespace FPLedit.BuchfahrplanExport
         {
             data.Font = fontComboBox.Text;
             data.Css = cssTextBox.Text;
+
+            var tmpl_idx = templateComboBox.SelectedIndex;
+            var tmpl = chooser.GetAvailableTemplates()[tmpl_idx];
+            data.Template = chooser.ReduceName(tmpl.GetType().FullName);
 
             SettingsManager.Set("bfpl.console", consoleCheckBox.Checked.ToString());
 

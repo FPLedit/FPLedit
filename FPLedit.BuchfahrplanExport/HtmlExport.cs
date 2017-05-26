@@ -13,14 +13,13 @@ namespace FPLedit.BuchfahrplanExport
 {
     public class HtmlExport : IExport
     {
-        public string Filter
-        {
-            get { return "Buchfahrplan als HTML Datei (*.html)|*.html"; }
-        }
+        public string Filter => "Buchfahrplan als HTML Datei (*.html)|*.html";
 
         private bool Exp(Timetable timetable, string filename, IInfo info, bool tryout_console)
         {
-            IBfplTemplate tmpl = new BuchfahrplanTemplate();
+            BfplTemplateChooser chooser = new BfplTemplateChooser();
+
+            IBfplTemplate tmpl = chooser.GetTemplate(timetable);
             string cont = tmpl.GetTranformedText(timetable);
 
             if (tryout_console)

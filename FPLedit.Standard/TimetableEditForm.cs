@@ -19,6 +19,8 @@ namespace FPLedit.Standard
         private const TrainDirection TOP_DIRECTION = TrainDirection.ti;
         private const TrainDirection BOTTOM_DIRECTION = TrainDirection.ta;
 
+        private DataGridView focused;
+
         public TimetableEditForm()
         {
             InitializeComponent();
@@ -34,6 +36,18 @@ namespace FPLedit.Standard
 
             InitializeGridView(topDataGridView, TOP_DIRECTION);
             InitializeGridView(bottomDataGridView, BOTTOM_DIRECTION);
+
+            KeyDown += (s, e) =>
+            {
+                if (e.KeyCode == Keys.T)
+                {
+                    e.Handled = true;
+                    if (ActiveControl == topDataGridView)
+                        Trapez(topDataGridView);
+                    else if (ActiveControl == bottomDataGridView)
+                        Trapez(bottomDataGridView);
+                }
+            };
         }
 
         private void InitializeGridView(DataGridView view, TrainDirection direction)
@@ -60,6 +74,12 @@ namespace FPLedit.Standard
                         trainRow.Cells[stas.IndexOf(sta) + "ar"].Value = ar;
                     if (dp != "00:00")
                         trainRow.Cells[stas.IndexOf(sta) + "dp"].Value = dp;
+                    if (stas.First() != sta)
+                    {
+                        var cell = trainRow.Cells[stas.IndexOf(sta) + "ar"];
+                        cell.Tag = ardp.TrapeztafelHalt;
+                        cell.Style.BackColor = ardp.TrapeztafelHalt ? Color.LightGray : Color.White;
+                    }
                 }
 
                 trainRow.Tag = tra;
@@ -71,6 +91,22 @@ namespace FPLedit.Standard
                 column.AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
                 column.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
+
+            view.GotFocus += (s, e) => focused = view;
+
+            view.SelectionChanged += (s, e) =>
+            {
+                if (view.SelectedCells.Count != 0)
+                {
+                    var cell = view.SelectedCells[0];
+                    trapeztafelToggle.Enabled = cell.ColumnIndex != 0 && cell.ColumnIndex % 2 != 0;
+
+                    var tr = false;
+                    if (cell.Tag != null)
+                        tr = (bool)cell.Tag;
+                    trapeztafelToggle.Checked = tr;
+                }
+            };
         }
 
         private bool UpdateTrainDataFromGrid(Train train, DataGridView view)
@@ -94,6 +130,8 @@ namespace FPLedit.Standard
                         {
                             TimeSpan tsAr = TimeSpan.Parse((string)cellAr.Value);
                             ardp.Arrival = tsAr;
+                            if (cellAr.Tag != null)
+                                ardp.TrapeztafelHalt = (bool)cellAr.Tag;
                         }
                     }
 
@@ -105,6 +143,8 @@ namespace FPLedit.Standard
                         {
                             TimeSpan tsDp = TimeSpan.Parse((string)cellDp.Value);
                             ardp.Departure = tsDp;
+                            if (cellDp.Tag != null)
+                                ardp.TrapeztafelHalt = (bool)cellDp.Tag;
                         }
                     }
 
@@ -133,6 +173,38 @@ namespace FPLedit.Standard
                 MessageBox.Show("Formatierungsfehler: Zeit muss im Format hh:mm vorliegen!");
                 e.Cancel = true;
             }
+        }
+
+        private void Trapez(DataGridView view)
+        {
+            var cells = view.SelectedCells;
+            if (cells.Count == 0)
+                return;
+
+            var cell = cells[0];
+            if (cell.ColumnIndex == 0 || cell.ColumnIndex % 2 == 0)
+                return;
+
+            if (cell.Style.BackColor == Color.LightGray)
+            {
+                cell.Style.BackColor = Color.White;
+                cell.Tag = false; // Halt vor Trapeztafel: Nein
+                trapeztafelToggle.Checked = false;
+            }
+            else
+            {
+                cell.Style.BackColor = Color.LightGray;
+                cell.Tag = true; // Halt vor Trapeztafel: Ja
+                trapeztafelToggle.Checked = true;
+            }
+        }
+
+        private void trapeztafelToggle_Click(object sender, EventArgs e)
+        {
+            if (focused == topDataGridView)
+                Trapez(topDataGridView);
+            else if (focused == bottomDataGridView)
+                Trapez(bottomDataGridView);
         }
 
         private void closeButton_Click(object sender, EventArgs e)

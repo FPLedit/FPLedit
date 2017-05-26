@@ -12,14 +12,14 @@ namespace FPLedit.BuchfahrplanExport.Model
 
         public string Font
         {
-            get
-            {
-                return GetAttribute("font", "");
-            }
-            set
-            {
-                SetAttribute("font", value);
-            }
+            get => GetAttribute("font", "");
+            set => SetAttribute("font", value);
+        }
+
+        public string Template
+        {
+            get => GetAttribute("tmpl", "");
+            set => SetAttribute("tmpl", value);
         }
 
         public string Css

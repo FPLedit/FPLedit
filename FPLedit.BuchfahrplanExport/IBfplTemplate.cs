@@ -8,6 +8,7 @@ namespace FPLedit.BuchfahrplanExport
 {
     public interface IBfplTemplate
     {
+        string Name { get; }
         string GetTranformedText(Timetable tt);
     }
 }

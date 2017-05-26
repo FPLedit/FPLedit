@@ -105,7 +105,7 @@
 			<#
 			bool first = true; // No pagebreak before first train
 			foreach (Train tra in tt.Trains) { #>
-			<table id="<#= HtmlName(tra.TName, "train-") #>" class="<#= first ? "first" : "" #>">
+			<table id="<#= helper.HtmlName(tra.TName, "train-") #>" class="<#= first ? "first" : "" #>">
 				<# first = false; #>
 				<col style="width:80px;" span=2>
 				<col style="width:285px;">
@@ -136,8 +136,8 @@
 					<td class="spaltenkopf">Betriebsstellen,<br>ständige Langsamfahrstellen,<br>verkürzter Vorsignalabstand</td>
 					<td class="spaltenkopf">Ankunft</td><td class=spaltenkopf>Abfahrt<br>oder Durch-<br>fahrt</td>
 				</tr>
-				<# foreach (var entity in GetStations(tra.Direction)) { #>
-				<tr class="<#= HtmlName(entity.GetAttribute("name", ""), "station-") #>">
+				<# foreach (var entity in helper.GetStations(tra.Direction)) { #>
+				<tr class="<#= helper.HtmlName(entity.GetAttribute("name", ""), "station-") #>">
 					<#
 					if (entity.GetType() == typeof(Station)) {
 						Station s = (Station)entity; #>
