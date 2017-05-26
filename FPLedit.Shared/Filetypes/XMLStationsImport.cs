@@ -8,13 +8,7 @@ namespace FPLedit.Shared.Filetypes
 {
     public class XMLStationsImport : IImport
     {
-        public string Filter
-        {
-            get
-            {
-                return "Streckendateien (*.str)|*.str";
-            }
-        }
+        public string Filter => "Streckendateien (*.str)|*.str";
 
         public Timetable Import(string filename, ILog logger)
         {

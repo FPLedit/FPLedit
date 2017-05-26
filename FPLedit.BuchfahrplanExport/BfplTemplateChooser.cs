@@ -16,7 +16,7 @@ namespace FPLedit.BuchfahrplanExport
             var name = "";
             if (attrsEn != null)
             {
-                var attrs = new BFPL_Attrs(attrsEn, tt);
+                var attrs = new BfplAttrs(attrsEn, tt);
                 if (attrs.Template != "")
                     name = ExpandName(attrs.Template);
             }

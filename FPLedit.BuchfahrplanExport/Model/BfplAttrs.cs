@@ -6,9 +6,9 @@ using System.Text;
 
 namespace FPLedit.BuchfahrplanExport.Model
 {
-    public class BFPL_Attrs : Entity
+    public class BfplAttrs : Entity
     {
-        public List<BFPL_Point> Points { get; private set; }
+        public List<BfplPoint> Points { get; private set; }
 
         public string Font
         {
@@ -45,26 +45,24 @@ namespace FPLedit.BuchfahrplanExport.Model
         }
 
 
-        public BFPL_Attrs(Timetable tt) : base("bfpl_attrs", tt)
+        public BfplAttrs(Timetable tt) : base("bfpl_attrs", tt)
         {
-
         }
 
-        public BFPL_Attrs(XMLEntity en, Timetable tt) : base(en, tt)
+        public BfplAttrs(XMLEntity en, Timetable tt) : base(en, tt)
         {
-            Points = new List<BFPL_Point>();
+            Points = new List<BfplPoint>();
             foreach (var c in en.Children.Where(x => x.XName == "p")) // Filtert andere Elemente
-                Points.Add(new BFPL_Point(c, _parent));
+                Points.Add(new BfplPoint(c, _parent));
         }
 
-        public void AddPoint(BFPL_Point p)
+        public void AddPoint(BfplPoint p)
         {
             Points.Add(p);
-            //TODO: Maybe sort by position?
             XMLEntity.Children.Add(p.XMLEntity);
         }
 
-        public void RemovePoint(BFPL_Point p)
+        public void RemovePoint(BfplPoint p)
         {
             Points.Remove(p);
             XMLEntity.Children.Remove(p.XMLEntity);

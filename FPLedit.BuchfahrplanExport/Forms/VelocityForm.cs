@@ -16,7 +16,7 @@ namespace FPLedit.BuchfahrplanExport
     {
         private IInfo info;
         private Timetable tt;
-        private BFPL_Attrs attrs;
+        private BfplAttrs attrs;
 
         private string defaultVelocity = "";
 
@@ -36,7 +36,7 @@ namespace FPLedit.BuchfahrplanExport
 
             var attrsEn = tt.Children.FirstOrDefault(x => x.XName == "bfpl_attrs");
             if (attrsEn != null)
-                attrs = new BFPL_Attrs(attrsEn, tt);
+                attrs = new BfplAttrs(attrsEn, tt);
 
             info.BackupTimetable();
             UpdateStations();
@@ -71,7 +71,7 @@ namespace FPLedit.BuchfahrplanExport
                 }
                 else if (attrs != null)
                 {
-                    BFPL_Point point = attrs.Points.First(p => p.Kilometre == km);
+                    BfplPoint point = attrs.Points.First(p => p.Kilometre == km);
                     listView.Items.Add(new ListViewItem(new[] {
                             point.Kilometre.ToString(),
                             point.PName,
@@ -115,9 +115,9 @@ namespace FPLedit.BuchfahrplanExport
                         item.EnsureVisible();
                     }
                 }
-                else if (item.Tag.GetType() == typeof(BFPL_Point))
+                else if (item.Tag.GetType() == typeof(BfplPoint))
                 {
-                    BFPL_Point point = (BFPL_Point)item.Tag;
+                    BfplPoint point = (BfplPoint)item.Tag;
                     VelocityEditForm vef = new VelocityEditForm(point);
                     if (vef.ShowDialog() == DialogResult.OK)
                     {
@@ -140,9 +140,9 @@ namespace FPLedit.BuchfahrplanExport
 
                 if (item.Tag.GetType() == typeof(Station))
                     throw new NotSupportedException("Bahnhöfe können nicht gelöscht werden!");
-                else if (item.Tag.GetType() == typeof(BFPL_Point))
+                else if (item.Tag.GetType() == typeof(BfplPoint))
                 {
-                    BFPL_Point point = (BFPL_Point)item.Tag;
+                    BfplPoint point = (BfplPoint)item.Tag;
                     if (attrs != null)
                         attrs.RemovePoint(point);
                     UpdateStations();
@@ -159,7 +159,7 @@ namespace FPLedit.BuchfahrplanExport
             {
                 ListViewItem item = listView.Items[listView.SelectedIndices[0]];
 
-                deleteButton.Enabled = (item.Tag.GetType() == typeof(BFPL_Point));
+                deleteButton.Enabled = (item.Tag.GetType() == typeof(BfplPoint));
             }
         }
 

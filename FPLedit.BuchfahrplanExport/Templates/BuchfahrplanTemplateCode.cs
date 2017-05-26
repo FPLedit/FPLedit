@@ -12,7 +12,7 @@ namespace FPLedit.BuchfahrplanExport.Templates
         private Timetable tt;
         private string font = "\"Alte DIN 1451 Mittelschrift\"";
         private string additionalCss = "";
-        private BFPL_Attrs attrs;
+        private BfplAttrs attrs;
 
         public string Name => "Standard-Buchfahrplan";
 
@@ -26,7 +26,7 @@ namespace FPLedit.BuchfahrplanExport.Templates
 
             if (attrsEn != null)
             {
-                attrs = new BFPL_Attrs(attrsEn, tt);
+                attrs = new BfplAttrs(attrsEn, tt);
                 if (attrs.Font != "")
                     font = attrs.Font;
                 additionalCss = attrs.Css ?? "";

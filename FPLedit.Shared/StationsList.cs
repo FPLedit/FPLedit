@@ -11,10 +11,7 @@ namespace FPLedit.Shared
     {
         private List<Station> stations;
 
-        public ReadOnlyCollection<Station> Stations
-        {
-            get { return stations.AsReadOnly(); }
-        }
+        public ReadOnlyCollection<Station> Stations => stations.AsReadOnly();
 
         public StationsList() : base("jTrainGraph_stations", null) // Root without parent
         {

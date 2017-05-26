@@ -9,14 +9,9 @@ namespace FPLedit.BfplImport
 {
     public class Plugin : IPlugin
     {
-        public string Name
-        {
-            get { return "Importer für alte BFPL-Dateien"; }
-        }
+        public string Name => "Importer für alte BFPL-Dateien";
 
         public void Init(IInfo info)
-        {
-            info.RegisterImport(new BfplImport());
-        }
+            => info.RegisterImport(new BfplImport());
     }
 }

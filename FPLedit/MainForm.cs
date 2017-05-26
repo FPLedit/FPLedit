@@ -291,10 +291,7 @@ namespace FPLedit
         }
 
         #region IInfo
-        dynamic IInfo.Menu
-        {
-            get { return menuStrip; }
-        }
+        dynamic IInfo.Menu => menuStrip;
 
         public void BackupTimetable()
         {

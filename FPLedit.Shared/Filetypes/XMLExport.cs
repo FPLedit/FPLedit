@@ -10,13 +10,7 @@ namespace FPLedit.Shared.Filetypes
 {
     public class XMLExport : IExport
     {
-        public string Filter
-        {
-            get
-            {
-                return "Fahrplan Dateien (*.fpl)|*.fpl";
-            }
-        }
+        public string Filter => "Fahrplan Dateien (*.fpl)|*.fpl";
 
         private XElement BuildNode(XMLEntity node)
         {

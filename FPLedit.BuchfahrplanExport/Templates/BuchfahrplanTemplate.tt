@@ -153,7 +153,7 @@
 					<td class="zug"><#= dp != "00:00" ? dp : "" #></td>
 
 					<# } else {
-						BFPL_Point p = (BFPL_Point)entity; #>
+						BfplPoint p = (BfplPoint)entity; #>
 					<td class="zug"><#= p.Kilometre.ToString("0.0") #></td>
 					<td class="zug"><#= p.GetAttribute("fpl-vmax", "") #></td>
 					<td class="zug"><#= p.PName #></td>

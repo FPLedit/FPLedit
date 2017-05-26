@@ -9,14 +9,14 @@ using System.Text;
 namespace FPLedit.BuchfahrplanExport.Model
 {
     [Serializable]
-    [DebuggerDisplay("{PName} [{Kilometre}]")]
-    public sealed class BFPL_Point : Entity
+    [DebuggerDisplay("Point {PName} [{Kilometre}]")]
+    public sealed class BfplPoint : Entity
     {
-        public BFPL_Point(XMLEntity en, Timetable tt) : base(en, tt)
+        public BfplPoint(XMLEntity en, Timetable tt) : base(en, tt)
         {
         }
 
-        public BFPL_Point(Timetable tt) : base("p", tt)
+        public BfplPoint(Timetable tt) : base("p", tt)
         {
         }
 

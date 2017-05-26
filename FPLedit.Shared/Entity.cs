@@ -14,41 +14,20 @@ namespace FPLedit.Shared
 
         public string XName
         {
-            get
-            {
-                return XMLEntity.XName;
-            }
-
-            set
-            {
-                XMLEntity.XName = value;
-            }
+            get => XMLEntity.XName;
+            set => XMLEntity.XName = value;
         }
 
         public Dictionary<string, string> Attributes
         {
-            get
-            {
-                return XMLEntity.Attributes;
-            }
-
-            set
-            {
-                XMLEntity.Attributes = value;
-            }
+            get => XMLEntity.Attributes;
+            set => XMLEntity.Attributes = value;
         }
 
         public List<XMLEntity> Children
         {
-            get
-            {
-                return XMLEntity.Children;
-            }
-
-            set
-            {
-                XMLEntity.Children = value;
-            }
+            get => XMLEntity.Children;
+            set => XMLEntity.Children = value;
         }
 
         public Entity(string xn, Timetable tt)

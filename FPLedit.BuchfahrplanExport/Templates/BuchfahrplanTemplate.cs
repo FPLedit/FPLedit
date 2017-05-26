@@ -297,7 +297,7 @@ namespace FPLedit.BuchfahrplanExport.Templates
             
             #line 155 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\BuchfahrplanTemplate.tt"
  } else {
-						BFPL_Point p = (BFPL_Point)entity; 
+						BfplPoint p = (BfplPoint)entity; 
             
             #line default
             #line hidden

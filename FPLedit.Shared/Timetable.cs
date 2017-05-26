@@ -14,28 +14,16 @@ namespace FPLedit.Shared
 
         public string TTName
         {
-            get
-            {
-                return GetAttribute<string>("name", "");
-            }
-            set
-            {
-                SetAttribute("name", value);
-            }
+            get => GetAttribute<string>("name", "");
+            set => SetAttribute("name", value);
         }
 
         private List<Station> stations;
         private List<Train> trains;
 
-        public List<Station> Stations
-        {
-            get { return stations; }
-        }
+        public List<Station> Stations => stations;
 
-        public List<Train> Trains
-        {
-            get { return trains; }
-        }
+        public List<Train> Trains => trains;
 
         public Timetable() : base("jTrainGraph_timetable", null) // Root without parent
         {

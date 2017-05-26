@@ -15,7 +15,7 @@ namespace FPLedit.BuchfahrplanExport
 {
     public partial class SettingsForm : Form
     {
-        private BFPL_Attrs data;
+        private BfplAttrs data;
         private BfplTemplateChooser chooser;
 
         public SettingsForm()
@@ -33,7 +33,7 @@ namespace FPLedit.BuchfahrplanExport
 
             if (dataEn != null)
             {
-                data = new BFPL_Attrs(dataEn, tt);
+                data = new BfplAttrs(dataEn, tt);
                 fontComboBox.Text = data.Font;
                 cssTextBox.Text = data.Css ?? "";
 
@@ -43,7 +43,7 @@ namespace FPLedit.BuchfahrplanExport
             }
             else
             {
-                data = new BFPL_Attrs(tt);
+                data = new BfplAttrs(tt);
                 tt.Children.Add(data.XMLEntity);
             }
         }

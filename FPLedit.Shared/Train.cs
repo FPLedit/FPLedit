@@ -113,16 +113,8 @@ namespace FPLedit.Shared
 
         public bool[] Days
         {
-            get
-            {
-                var d = GetAttribute<string>("d", "1111111");
-                return DaysHelper.ParseDays(d);
-            }
-            set
-            {
-                var d = DaysHelper.DaysToBinString(value);
-                SetAttribute("d", d);
-            }
+            get => DaysHelper.ParseDays(GetAttribute("d", "1111111"));
+            set => SetAttribute("d", DaysHelper.DaysToBinString(value));
         }
 
         public Train(TrainDirection dir, Timetable tt) : base(dir.ToString(), tt)

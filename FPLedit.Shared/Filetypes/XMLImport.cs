@@ -8,13 +8,7 @@ namespace FPLedit.Shared.Filetypes
 {
     public class XMLImport : IImport
     {
-        public string Filter
-        {
-            get
-            {
-                return "Fahrplan Dateien (*.fpl)|*.fpl";
-            }
-        }
+        public string Filter => "Fahrplan Dateien (*.fpl)|*.fpl";
 
         public Timetable Import(string filename, ILog logger)
         {

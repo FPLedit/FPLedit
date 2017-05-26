@@ -14,13 +14,7 @@ namespace FPLedit.jTrainGraphStarter
         IInfo info;
         ToolStripItem startItem, settingsItem;
 
-        public string Name
-        {
-            get
-            {
-                return "Starter für jTrainGraph";
-            }
-        }
+        public string Name => "Starter für jTrainGraph";
 
         public void Init(IInfo info)
         {

@@ -11,13 +11,7 @@ namespace FPLedit.BfplImport
     {
         public const string MAGIC = "BFPL/1.1"; // letzte "Magic number" des BFPL-Formats
 
-        public string Filter
-        {
-            get
-            {
-                return "Alte FPLedit Dateien (*.bfpl)|*.bfpl";
-            }
-        }
+        public string Filter                => "Alte FPLedit Dateien (*.bfpl)|*.bfpl";
 
         public Timetable Import(string filename, ILog logger)
         {

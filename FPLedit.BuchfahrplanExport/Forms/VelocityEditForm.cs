@@ -10,7 +10,7 @@ namespace FPLedit.BuchfahrplanExport
     {
         public Station Station { get; set; }
 
-        public BFPL_Point Point { get; set; }
+        public BfplPoint Point { get; set; }
 
         private bool isPoint = false;
 
@@ -21,7 +21,7 @@ namespace FPLedit.BuchfahrplanExport
 
         public VelocityEditForm(Timetable tt) : this()
         {
-            Point = new BFPL_Point(tt);
+            Point = new BfplPoint(tt);
             isPoint = true;
         }
 
@@ -37,7 +37,7 @@ namespace FPLedit.BuchfahrplanExport
             nameTextBox.Enabled = false;
         }
 
-        public VelocityEditForm(BFPL_Point point) : this()
+        public VelocityEditForm(BfplPoint point) : this()
         {
             Point = point;
             isPoint = true;

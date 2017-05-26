@@ -9,7 +9,7 @@ namespace FPLedit.BuchfahrplanExport.Templates
 {
     public class TemplateHelper
     {
-        public BFPL_Attrs Attrs { get; set; }
+        public BfplAttrs Attrs { get; set; }
         public Timetable TT { get; set; }
 
         public string HtmlName(string name, string prefix)
@@ -43,7 +43,7 @@ namespace FPLedit.BuchfahrplanExport.Templates
                 }
                 else if (Attrs != null)
                 {
-                    BFPL_Point point = Attrs.Points.First(p => p.Kilometre == km);
+                    BfplPoint point = Attrs.Points.First(p => p.Kilometre == km);
                     objs.Add(point);
                 }
             }
@@ -53,8 +53,8 @@ namespace FPLedit.BuchfahrplanExport.Templates
                 float km = -1;
                 if (o.GetType() == typeof(Station))
                     km = ((Station)o).Kilometre;
-                else if (o.GetType() == typeof(BFPL_Point))
-                    km = ((BFPL_Point)o).Kilometre;
+                else if (o.GetType() == typeof(BfplPoint))
+                    km = ((BfplPoint)o).Kilometre;
                 return km;
             };
 
