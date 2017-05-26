@@ -64,18 +64,36 @@ namespace FPLedit.BuchfahrplanExport.Templates
         }
 
         public string Kreuzt(Train ot, Station s)
-            => IntersectTrains(ot, s, true);
+            => IntersectTrains(ot, s, true)?.TName ?? "";
 
         public string Ueberholt(Train ot, Station s)
-            => IntersectTrains(ot, s, false);
+            => IntersectTrains(ot, s, false)?.TName ?? "";
 
-        private string IntersectTrains(Train ot, Station s, bool kreuzung)
+        public string TrapezHalt(Train ot, Station s)
+        {
+            var it = IntersectTrains(ot, s, true);
+            if (it == null)
+                return "";
+
+            var oth = ot.GetArrDep(s).TrapeztafelHalt;
+            var ith = it.GetArrDep(s).TrapeztafelHalt;
+
+            if (oth && !ith)
+                return ot.TName;
+            if (ith && !oth)
+                return it.TName;
+            if (ith && oth)
+                return ot.TName;
+            return "";
+        }
+
+        private Train IntersectTrains(Train ot, Station s, bool kreuzung)
         {
             TimeSpan start = ot.GetArrDep(s).Arrival;
             TimeSpan end = ot.GetArrDep(s).Departure;
 
             if (start == TimeSpan.Zero || end == TimeSpan.Zero)
-                return "";
+                return null;
 
             Func<Train, bool> pred = (t => t.Direction == ot.Direction); // Überholung
             if (kreuzung)
@@ -96,10 +114,10 @@ namespace FPLedit.BuchfahrplanExport.Templates
                 var en = end < end2 ? end : end2;
                 var crossing = st < en ? true : false;
 
-                return train.TName;
+                return train;
             }
 
-            return "";
+            return null;
         }
     }
 }

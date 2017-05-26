@@ -66,6 +66,7 @@ namespace FPLedit.BuchfahrplanExport.Templates
 		.tfz {
 			font-weight:400;
 			vertical-align:bottom;
+			padding-bottom:30px;
 		}
 		.trainname {
 			height:19.5pt;
@@ -84,20 +85,17 @@ namespace FPLedit.BuchfahrplanExport.Templates
 			font-weight:400;
 			text-align:center;
 			vertical-align:top;
-			border-top:1.5pt solid black;
-			border-right:1.5pt solid black;
+			border:1.5pt solid black;
 			border-bottom:.5pt solid black;
-			border-left:1.5pt solid black;
+			border-top:2.5pt solid black;
 		}
 		.spaltenkopf {
 			height: 120px;
 			font-weight:400;
 			text-align:center;
 			vertical-align:top;
+			border:1.5pt solid black;
 			border-top:.5pt solid black;
-			border-right:1.5pt solid black;
-			border-bottom:1.5pt solid black;
-			border-left:1.5pt solid black;
 		}
 		.spaltenkopf.klein {
 			font-size:0.7em;
@@ -125,14 +123,14 @@ namespace FPLedit.BuchfahrplanExport.Templates
 		<style id=""add-css"">
 			");
             
-            #line 93 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
+            #line 91 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(additionalCss));
             
             #line default
             #line hidden
             this.Write("\r\n\t\t</style>\r\n\t</head>\r\n\t<body>\r\n\t\t<div>\r\n\t\t\t");
             
-            #line 98 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
+            #line 96 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
 
 			bool first = true; // No pagebreak before first train
 			foreach (Train tra in tt.Trains) { 
@@ -141,21 +139,21 @@ namespace FPLedit.BuchfahrplanExport.Templates
             #line hidden
             this.Write("\t\t\t<table id=\"");
             
-            #line 101 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
+            #line 99 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(helper.HtmlName(tra.TName, "train-")));
             
             #line default
             #line hidden
             this.Write("\" class=\"");
             
-            #line 101 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
+            #line 99 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(first ? "first" : ""));
             
             #line default
             #line hidden
             this.Write("\">\r\n\t\t\t\t");
             
-            #line 102 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
+            #line 100 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
  first = false; 
             
             #line default
@@ -164,32 +162,27 @@ namespace FPLedit.BuchfahrplanExport.Templates
                     "th:200px;\">\r\n\t\t\t\t<col style=\"width:62px;\">\r\n\t\t\t\t<col style=\"width:50px;\">\r\n\t\t\t\t<" +
                     "col style=\"width:50px;\">\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<td colspan=9 class=\"trainname\">");
             
-            #line 110 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
+            #line 108 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(tra.TName));
             
             #line default
             #line hidden
             this.Write("</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<td colspan=9 class=\"linename\">");
             
-            #line 113 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
+            #line 111 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(tt.GetLineName(tra.Direction)));
             
             #line default
             #line hidden
             this.Write("</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<td class=tfz>Zlok ");
             
-            #line 116 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
+            #line 114 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(tra.Locomotive));
             
             #line default
             #line hidden
             this.Write(@"</td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
 				</tr>
-				<tr></tr>
 				<tr>
 					<td class=""spaltennummer first"">1</td>
 					<td class=""spaltennummer"">2</td>
@@ -214,21 +207,21 @@ namespace FPLedit.BuchfahrplanExport.Templates
 				</tr>
 				");
             
-            #line 145 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
+            #line 138 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
  foreach (var entity in helper.GetStations(tra.Direction)) { 
             
             #line default
             #line hidden
             this.Write("\t\t\t\t<tr class=\"");
             
-            #line 146 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
+            #line 139 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(helper.HtmlName(entity.GetAttribute("name", ""), "station-")));
             
             #line default
             #line hidden
             this.Write("\">\r\n\t\t\t\t\t");
             
-            #line 147 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
+            #line 140 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
 
 					if (entity.GetType() == typeof(Station)) {
 						Station s = (Station)entity; 
@@ -237,28 +230,35 @@ namespace FPLedit.BuchfahrplanExport.Templates
             #line hidden
             this.Write("\t\t\t\t\t<td class=\"zug first\">");
             
-            #line 150 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
+            #line 143 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(s.Kilometre.ToString("0.0")));
             
             #line default
             #line hidden
             this.Write("</td>\r\n\t\t\t\t\t<td class=\"zug\">");
             
-            #line 151 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
+            #line 144 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(s.GetAttribute("fpl-vmax", "")));
             
             #line default
             #line hidden
             this.Write("</td>\r\n\t\t\t\t\t<td class=\"zug\">");
             
-            #line 152 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
+            #line 145 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(s.SName));
             
             #line default
             #line hidden
-            this.Write("</td>\r\n\t\t\t\t\t<td class=\"zug\"><!--Trapeztafel--></td>\r\n\t\t\t\t\t");
+            this.Write("</td>\r\n\t\t\t\t\t<td class=\"zug\"><!--Trapeztafel-->");
             
-            #line 154 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
+            #line 146 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(helper.TrapezHalt(tra, s)));
+            
+            #line default
+            #line hidden
+            this.Write("</td>\r\n\t\t\t\t\t");
+            
+            #line 147 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
 
 					var ardp = tra.GetArrDep(s);
 					var ar = ardp.Arrival.ToShortTimeString();
@@ -269,35 +269,35 @@ namespace FPLedit.BuchfahrplanExport.Templates
             #line hidden
             this.Write("\t\t\t\t\t<td class=\"zug\">");
             
-            #line 159 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
+            #line 152 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ar != "00:00" ? ar : ""));
             
             #line default
             #line hidden
             this.Write("</td>\r\n\t\t\t\t\t<td class=\"zug\">");
             
-            #line 160 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
+            #line 153 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dp != "00:00" ? dp : ""));
             
             #line default
             #line hidden
             this.Write("</td>\r\n\t\t\t\t\t<td class=\"zug\"><!--Kreuzung-->");
             
-            #line 161 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
+            #line 154 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(helper.Kreuzt(tra, s)));
             
             #line default
             #line hidden
             this.Write("</td>\r\n\t\t\t\t\t<td class=\"zug\"><!--überholt-->");
             
-            #line 162 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
+            #line 155 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(helper.Ueberholt(tra, s)));
             
             #line default
             #line hidden
             this.Write("</td>\r\n\t\t\t\t\t<td class=\"zug last\"><!--Zuglaufmeldung--></td>\r\n\r\n\t\t\t\t\t");
             
-            #line 165 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
+            #line 158 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
  } else {
 						BFPL_Point p = (BFPL_Point)entity; 
             
@@ -305,27 +305,27 @@ namespace FPLedit.BuchfahrplanExport.Templates
             #line hidden
             this.Write("\t\t\t\t\t<td class=\"zug first\">");
             
-            #line 167 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
+            #line 160 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(p.Kilometre.ToString("0.0")));
             
             #line default
             #line hidden
             this.Write("</td>\r\n\t\t\t\t\t<td class=\"zug\">");
             
-            #line 168 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
+            #line 161 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(p.GetAttribute("fpl-vmax", "")));
             
             #line default
             #line hidden
             this.Write("</td>\r\n\t\t\t\t\t<td class=\"zug\">");
             
-            #line 169 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
+            #line 162 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(p.PName));
             
             #line default
             #line hidden
             this.Write(@"</td>
-					<td class=""zug""><!--Trapeztafel--></td>
+					<td class=""zug""><!--Trapeztafel, bleibt mehr--></td>
 					<td class=""zug""></td>
 					<td class=""zug""></td>
 					<td class=""zug""><!--Kreuzung, bleibt leer--></td>
@@ -333,21 +333,21 @@ namespace FPLedit.BuchfahrplanExport.Templates
 					<td class=""zug last""><!--Zuglaufmeldung--></td>
 					");
             
-            #line 176 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
+            #line 169 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\t\t\t\t</tr>\r\n\t\t\t\t");
             
-            #line 178 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
+            #line 171 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\t\t\t</table>\r\n\t\t\t");
             
-            #line 180 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
+            #line 173 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
  } 
             
             #line default
