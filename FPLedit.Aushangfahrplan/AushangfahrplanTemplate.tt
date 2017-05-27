@@ -1,0 +1,132 @@
+﻿<#@ template language="C#" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="FPLedit.Shared" #>
+
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+<style>
+body {
+	color:black;
+	font-size:16px;
+}
+table {
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 50px;
+	border: 0;
+	border-collapse:collapse;
+	border-bottom:3px solid #000;
+	page-break-after: always;
+}
+p {
+	font-size:20.0pt;
+	text-align:center;
+	margin: 0;
+	font-weight: normal;
+}
+.title {
+	font-size: 60px;
+	letter-spacing: 1.5px;
+}
+.station {
+	font-size: 16px;
+	font-family: "Arial";
+	font-stretch: condensed;
+	font-weight: bold;
+}
+td {
+	padding-top:8px;
+	padding-right:3px;
+	padding-left:3px;
+	vertical-align:middle;
+}
+.train-row {
+	height:21px;
+	border-top:1px solid #000;
+}
+.train-row ~ .train-row {
+	border-top:.5px dotted #000;
+}
+.time {
+	text-align:center;
+	width: 200px;
+	border-right: .5px solid #000;
+}
+.name {
+	text-align:center;
+	width: 76px;
+}
+.dir {
+	border-top: 3px solid #000;
+	border-right: 3px solid #000;
+	border-bottom: .5px dotted #000;
+	text-align: center;
+	font-weight:bold;
+}
+.dir ~ .dir {
+	border-right: 0;
+}
+.time + .name:not(:last-child) {
+	border-right:3px solid #000;
+}
+</style>
+</head>
+<body>
+	<# foreach (var sta in tt.Stations) { #>
+	<p class="station">Bahnhof <#= sta.SName #></p>
+	<p class="title">Abfahrt</p>
+	<p class="heading">der Züge in der Richtung nach</p>
+	<#
+		var fs = tt.Stations.First();
+		var ls = tt.Stations.Last();
+	#>
+	<table>
+		<tr>
+			<td colspan="2" class="dir"><#= fs != sta ? fs.SName : "" #></td>
+			<td colspan="2" class="dir"><#= ls != sta ? ls.SName : "" #></td>
+		</tr>
+		<#
+			var trainsA = tt.Trains.Where(t => t.Direction == TrainDirection.ta).ToArray();
+			var trainsB = tt.Trains.Where(t => t.Direction == TrainDirection.ti).ToArray();
+			int count = Math.Max(trainsA.Length, trainsB.Length);
+		#>
+		<tr>
+			<# if (fs != sta) { #>
+				<td class="time">Zeit</td>
+				<td class="name">Zug-Nr</td>
+			<# } else { #>
+				<td class="time"></td>
+				<td class="name"></td>
+			<# } #>
+			<# if (ls != sta) { #>
+				<td class="time">Zeit</td>
+				<td class="name">Zug-Nr</td>
+			<# } else { #>
+				<td class="time"></td>
+				<td class="name"></td>
+			<# } #>
+		</tr>
+		<# for (int i = 0; i < count; i++) { #>
+		<tr class="train-row">
+			<# if (fs != sta) { #>
+				<td class="time"><#= trainsA.Count() > i ? GetTimeString(trainsA[i].GetArrDep(sta).Departure) : "" #></td>
+				<td class="name"><#= trainsA.Count() > i ? trainsA[i].TName : "" #></td>
+			<# } else { #>
+				<td class="time"></td>
+				<td class="name"></td>
+			<# } #>
+			<# if (ls != sta) { #>
+				<td class="time"><#= trainsB.Count() > i ? GetTimeString(trainsB[i].GetArrDep(sta).Departure) : "" #></td>
+				<td class="name"><#= trainsB.Count() > i ? trainsB[i].TName : "" #></td>
+			<# } else { #>
+				<td class="time"></td>
+				<td class="name"></td>
+			<# } #>
+		</tr>
+		<# } #>
+	</table>
+	<# } #>
+</body>
+</html>
