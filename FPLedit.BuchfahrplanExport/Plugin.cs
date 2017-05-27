@@ -55,8 +55,8 @@ namespace FPLedit.BuchfahrplanExport
 
         private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)
         {
-            //TODO: Bug wenn Strecke gelöscht wurde...
-            showItem.Enabled = velocityItem.Enabled = settingsItem.Enabled = e.FileState.Opened;
+            velocityItem.Enabled = settingsItem.Enabled = e.FileState.Opened;
+            showItem.Enabled = e.FileState.LineCreated;
         }
 
         private void ShowItem_Click(object sender, EventArgs e)
