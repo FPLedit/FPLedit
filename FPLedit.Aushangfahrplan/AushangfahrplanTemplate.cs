@@ -143,8 +143,8 @@ td {
             
             #line 90 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\AushangfahrplanTemplate.tt"
 
-			var trainsA = tt.Trains.Where(t => t.Direction == TrainDirection.ta).ToArray();
-			var trainsB = tt.Trains.Where(t => t.Direction == TrainDirection.ti).ToArray();
+			var trainsA = GetTrainsByDir(TrainDirection.ta, sta);
+			var trainsB = GetTrainsByDir(TrainDirection.ti, sta);
 			int count = Math.Max(trainsA.Length, trainsB.Length);
 		
             
@@ -209,14 +209,14 @@ td {
             this.Write("\t\t\t\t<td class=\"time\">");
             
             #line 114 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\AushangfahrplanTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(trainsA.Count() > i ? GetTimeString(trainsA[i].GetArrDep(sta).Departure) : ""));
+            this.Write(this.ToStringHelper.ToStringWithCulture(TimeString(trainsA, sta, i)));
             
             #line default
             #line hidden
             this.Write("</td>\r\n\t\t\t\t<td class=\"name\">");
             
             #line 115 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\AushangfahrplanTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(trainsA.Count() > i ? trainsA[i].TName : ""));
+            this.Write(this.ToStringHelper.ToStringWithCulture(NameString(trainsA, i)));
             
             #line default
             #line hidden
@@ -244,14 +244,14 @@ td {
             this.Write("\t\t\t\t<td class=\"time\">");
             
             #line 121 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\AushangfahrplanTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(trainsB.Count() > i ? GetTimeString(trainsB[i].GetArrDep(sta).Departure) : ""));
+            this.Write(this.ToStringHelper.ToStringWithCulture(TimeString(trainsB, sta, i)));
             
             #line default
             #line hidden
             this.Write("</td>\r\n\t\t\t\t<td class=\"name\">");
             
             #line 122 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\AushangfahrplanTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(trainsB.Count() > i ? trainsB[i].TName : ""));
+            this.Write(this.ToStringHelper.ToStringWithCulture(NameString(trainsB, i)));
             
             #line default
             #line hidden

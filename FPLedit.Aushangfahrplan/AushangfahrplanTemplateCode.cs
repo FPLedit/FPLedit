@@ -15,9 +15,22 @@ namespace FPLedit.AushangfahrplanExport
             this.tt = tt;
         }
 
-        public string GetTimeString(TimeSpan t)
+        private string GetTimeString(TimeSpan t)
         {
             return t.Hours.ToString()+"<sup>" + t.Minutes.ToString("00")+"</sup>";
         }
+
+        private Train[] GetTrainsByDir(TrainDirection dir, Station sta)
+        {
+            return tt.Trains.Where(t => t.Direction == dir)
+                .Where(t => t.GetArrDep(sta).Departure != default(TimeSpan))
+                .ToArray();
+        }
+
+        private string TimeString(Train[] trains, Station sta, int i)
+            => trains.Count() > i ? GetTimeString(trains[i].GetArrDep(sta).Departure) : "";
+
+        private string NameString(Train[] trains, int i)
+            => trains.Count() > i ? trains[i].TName : "";
     }
 }
