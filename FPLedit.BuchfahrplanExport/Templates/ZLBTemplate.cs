@@ -97,7 +97,7 @@ namespace FPLedit.BuchfahrplanExport.Templates
 			border:1.5pt solid black;
 			border-top:.5pt solid black;
 		}
-		.spaltenkopf.klein {
+		.klein {
 			font-size:0.7em;
 		}
 		.zug {
@@ -249,7 +249,7 @@ namespace FPLedit.BuchfahrplanExport.Templates
             
             #line default
             #line hidden
-            this.Write("</td>\r\n\t\t\t\t\t<td class=\"zug\"><!--Trapeztafel-->");
+            this.Write("</td>\r\n\t\t\t\t\t<td class=\"zug klein\"><!--Trapeztafel-->");
             
             #line 146 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(helper.TrapezHalt(tra, s)));
@@ -281,14 +281,14 @@ namespace FPLedit.BuchfahrplanExport.Templates
             
             #line default
             #line hidden
-            this.Write("</td>\r\n\t\t\t\t\t<td class=\"zug\"><!--Kreuzung-->");
+            this.Write("</td>\r\n\t\t\t\t\t<td class=\"zug klein\"><!--Kreuzung-->");
             
             #line 154 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(helper.Kreuzt(tra, s)));
             
             #line default
             #line hidden
-            this.Write("</td>\r\n\t\t\t\t\t<td class=\"zug\"><!--überholt-->");
+            this.Write("</td>\r\n\t\t\t\t\t<td class=\"zug klein\"><!--überholt-->");
             
             #line 155 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(helper.Ueberholt(tra, s)));
@@ -325,11 +325,11 @@ namespace FPLedit.BuchfahrplanExport.Templates
             #line default
             #line hidden
             this.Write(@"</td>
-					<td class=""zug""><!--Trapeztafel, bleibt mehr--></td>
+					<td class=""zug klein""><!--Trapeztafel, bleibt mehr--></td>
 					<td class=""zug""></td>
 					<td class=""zug""></td>
-					<td class=""zug""><!--Kreuzung, bleibt leer--></td>
-					<td class=""zug""><!--überholt, bleibt leer--></td>
+					<td class=""zug klein""><!--Kreuzung, bleibt leer--></td>
+					<td class=""zug klein""><!--überholt, bleibt leer--></td>
 					<td class=""zug last""><!--Zuglaufmeldung--></td>
 					");
             

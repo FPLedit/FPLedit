@@ -114,7 +114,8 @@ namespace FPLedit.BuchfahrplanExport.Templates
                 var en = end < end2 ? end : end2;
                 var crossing = st < en ? true : false;
 
-                return train;
+                if (crossing)
+                    return train;
             }
 
             return null;

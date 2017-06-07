@@ -64,7 +64,7 @@
 			border:1.5pt solid black;
 			border-top:.5pt solid black;
 		}
-		.spaltenkopf.klein {
+		.klein {
 			font-size:0.7em;
 		}
 		.zug {
@@ -143,7 +143,7 @@
 					<td class="zug first"><#= s.Kilometre.ToString("0.0") #></td>
 					<td class="zug"><#= s.GetAttribute("fpl-vmax", "") #></td>
 					<td class="zug"><#= s.SName #></td>
-					<td class="zug"><!--Trapeztafel--><#= helper.TrapezHalt(tra, s) #></td>
+					<td class="zug klein"><!--Trapeztafel--><#= helper.TrapezHalt(tra, s) #></td>
 					<#
 					var ardp = tra.GetArrDep(s);
 					var ar = ardp.Arrival.ToShortTimeString();
@@ -151,8 +151,8 @@
 					#>
 					<td class="zug"><#= ar != "00:00" ? ar : "" #></td>
 					<td class="zug"><#= dp != "00:00" ? dp : "" #></td>
-					<td class="zug"><!--Kreuzung--><#= helper.Kreuzt(tra, s) #></td>
-					<td class="zug"><!--überholt--><#= helper.Ueberholt(tra, s) #></td>
+					<td class="zug klein"><!--Kreuzung--><#= helper.Kreuzt(tra, s) #></td>
+					<td class="zug klein"><!--überholt--><#= helper.Ueberholt(tra, s) #></td>
 					<td class="zug last"><!--Zuglaufmeldung--></td>
 
 					<# } else {
@@ -160,11 +160,11 @@
 					<td class="zug first"><#= p.Kilometre.ToString("0.0") #></td>
 					<td class="zug"><#= p.GetAttribute("fpl-vmax", "") #></td>
 					<td class="zug"><#= p.PName #></td>
-					<td class="zug"><!--Trapeztafel, bleibt mehr--></td>
+					<td class="zug klein"><!--Trapeztafel, bleibt mehr--></td>
 					<td class="zug"></td>
 					<td class="zug"></td>
-					<td class="zug"><!--Kreuzung, bleibt leer--></td>
-					<td class="zug"><!--überholt, bleibt leer--></td>
+					<td class="zug klein"><!--Kreuzung, bleibt leer--></td>
+					<td class="zug klein"><!--überholt, bleibt leer--></td>
 					<td class="zug last"><!--Zuglaufmeldung--></td>
 					<# } #>
 				</tr>
