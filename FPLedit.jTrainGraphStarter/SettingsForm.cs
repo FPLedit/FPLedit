@@ -23,6 +23,7 @@ namespace FPLedit.jTrainGraphStarter
         {
             javaPathTextBox.Text = SettingsManager.Get("jTGStarter.javapath", "");
             jtgPathTextBox.Text = SettingsManager.Get("jTGStarter.jtgpath", "jTrainGraph_203.jar");
+            messageCheckBox.Checked = !bool.Parse(SettingsManager.Get("jTGStarter.show-message", "true"));
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -42,6 +43,7 @@ namespace FPLedit.jTrainGraphStarter
                     return;
             }
 
+            SettingsManager.Set("jTGStarter.show-message", (!messageCheckBox.Checked).ToString());
             SettingsManager.Set("jTGStarter.javapath", javaPathTextBox.Text);
             SettingsManager.Set("jTGStarter.jtgpath", jtgPathTextBox.Text);
             Close();

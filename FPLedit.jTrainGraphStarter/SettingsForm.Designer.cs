@@ -38,6 +38,7 @@
             this.docLinkLabel = new System.Windows.Forms.LinkLabel();
             this.jTGDocLabel = new System.Windows.Forms.Label();
             this.javaDocLabel = new System.Windows.Forms.Label();
+            this.messageCheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -84,7 +85,7 @@
             // 
             // closeButton
             // 
-            this.closeButton.Location = new System.Drawing.Point(324, 187);
+            this.closeButton.Location = new System.Drawing.Point(324, 193);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
             this.closeButton.TabIndex = 9;
@@ -130,12 +131,23 @@
             this.javaDocLabel.TabIndex = 2;
             this.javaDocLabel.Text = "i.d.R: Windows: javaw.exe, Linux: java";
             // 
+            // messageCheckBox
+            // 
+            this.messageCheckBox.AutoSize = true;
+            this.messageCheckBox.Location = new System.Drawing.Point(13, 199);
+            this.messageCheckBox.Name = "messageCheckBox";
+            this.messageCheckBox.Size = new System.Drawing.Size(290, 17);
+            this.messageCheckBox.TabIndex = 10;
+            this.messageCheckBox.Text = "Warnhinweis nicht bei jedem jTrainGraph-Start anzeigen";
+            this.messageCheckBox.UseVisualStyleBackColor = true;
+            // 
             // SettingsForm
             // 
             this.AcceptButton = this.closeButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(411, 217);
+            this.ClientSize = new System.Drawing.Size(411, 228);
+            this.Controls.Add(this.messageCheckBox);
             this.Controls.Add(this.javaDocLabel);
             this.Controls.Add(this.jTGDocLabel);
             this.Controls.Add(this.docLinkLabel);
@@ -169,5 +181,6 @@
         private System.Windows.Forms.LinkLabel docLinkLabel;
         private System.Windows.Forms.Label jTGDocLabel;
         private System.Windows.Forms.Label javaDocLabel;
+        private System.Windows.Forms.CheckBox messageCheckBox;
     }
 }
