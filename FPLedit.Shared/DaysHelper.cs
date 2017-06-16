@@ -66,6 +66,7 @@ namespace FPLedit.Shared
             return false;
         }
 
+        [DebuggerStepThrough]
         public static bool[] IntersectingDays(bool[] daysA, bool[] daysB)
         {
             var res = new bool[7];

@@ -95,7 +95,7 @@ namespace FPLedit
             importFileDialog.Filter = string.Join("|", importers.Select(im => im.Filter));
 
             // Zuletzt geöffnete Dateien anzeigen
-            enable_last = bool.Parse(SettingsManager.Get("files.save-last", "true"));
+            enable_last = SettingsManager.Get("files.save-last", true);
             if (enable_last)
             {
                 lastFiles = SettingsManager.Get("files.last", "").Split(';').Where(s => s != "").Reverse().ToList();
@@ -271,10 +271,10 @@ namespace FPLedit
             if (SettingsManager.Get("updater.auto", "") == "")
             {
                 var res = MessageBox.Show("FPLedit kann automatisch bei jedem Programmstart nach einer aktuelleren Version suchen. Dabei wird nur die IP-Adresse Ihres Computers übermittelt.", "Automatische Updateprüfung", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                SettingsManager.Set("updater.auto", (res == DialogResult.Yes).ToString());
+                SettingsManager.Set("updater.auto", (res == DialogResult.Yes));
             }
 
-            bool doCheck = bool.Parse(SettingsManager.Get("updater.auto"));
+            bool doCheck = SettingsManager.Get<bool>("updater.auto");
             if (!doCheck)
                 return;
 

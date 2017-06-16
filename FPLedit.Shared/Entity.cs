@@ -43,13 +43,9 @@ namespace FPLedit.Shared
         }
 
         public T GetAttribute<T>(string key, T defaultValue = default(T))
-        {
-            return XMLEntity.GetAttribute<T>(key, defaultValue);
-        }
+            => XMLEntity.GetAttribute<T>(key, defaultValue);
 
         public void SetAttribute(string key, string value)
-        {
-            XMLEntity.SetAttribute(key, value);
-        }
+            => XMLEntity.SetAttribute(key, value);
     }
 }

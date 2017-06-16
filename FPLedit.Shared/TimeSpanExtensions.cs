@@ -10,8 +10,6 @@ namespace FPLedit.Shared
     {
         [DebuggerStepThrough]
         public static string ToShortTimeString(this TimeSpan span)
-        {
-            return span.ToString(@"hh\:mm");
-        }
+            => span.ToString(@"hh\:mm");
     }
 }

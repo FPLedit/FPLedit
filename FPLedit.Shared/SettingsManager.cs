@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
@@ -10,27 +11,16 @@ namespace FPLedit.Shared
     /// </summary>
     public static class SettingsManager
     {
-        private static Dictionary<string, string> defaults = new Dictionary<string, string>();
+        private static Configuration GetConfig()
+            => ConfigurationManager.OpenExeConfiguration(Assembly.GetEntryAssembly().Location);
 
         /// <summary>
         /// Gibt den Wert einer Einstellung zurück.
         /// </summary>
         /// <param name="key">Der Schlüssel der Einstellung.</param>
-        /// <returns>Der Wert der Einstellung oder, falls dieser nicht vorhanden ist, der Standardwert.</returns>
-        public static string Get(string key)
-        {
-            if (KeyExists(key))
-            {
-                var config = ConfigurationManager.OpenExeConfiguration(Assembly.GetEntryAssembly().Location);
-                return config.AppSettings.Settings[key].Value;
-            }
-            else if (defaults.ContainsKey(key))
-            {
-                return defaults[key];
-            }
-            else
-                return null;
-        }
+        /// <returns>Der Wert der Einstellung oder, falls dieser nicht vorhanden ist, null.</returns>
+        public static T Get<T>(string key)
+            => Get(key, default(T));
 
         /// <summary>
         /// Gibt den Wert einer Einstellung zurück.
@@ -38,12 +28,14 @@ namespace FPLedit.Shared
         /// <param name="key">Der Schlüssel der Einstellung.</param>
         /// <param name="defaultValue">Der Standardwert</param>
         /// <returns>Der Wert der Einstellung oder, falls dieser nicht vorhanden ist, der Standardwert.</returns>
-        public static string Get(string key, string defaultValue)
+        public static T Get<T>(string key, T defaultValue)
         {
             if (KeyExists(key))
             {
-                var config = ConfigurationManager.OpenExeConfiguration(Assembly.GetEntryAssembly().Location);
-                return config.AppSettings.Settings[key].Value;
+                var config = GetConfig();
+                var val = config.AppSettings.Settings[key].Value;
+
+                return (T)Convert.ChangeType(val, typeof(T));
             }
             else
                 return defaultValue;
@@ -56,7 +48,7 @@ namespace FPLedit.Shared
         /// <returns></returns>
         public static bool KeyExists(string key)
         {
-            var config = ConfigurationManager.OpenExeConfiguration(Assembly.GetEntryAssembly().Location);
+            var config = GetConfig();
             return config.AppSettings.Settings.AllKeys.Contains(key);
         }
 
@@ -67,7 +59,7 @@ namespace FPLedit.Shared
         /// <param name="value">Der Wert der Einstellung.</param>
         public static void Set(string key, string value)
         {
-            var config = ConfigurationManager.OpenExeConfiguration(Assembly.GetEntryAssembly().Location);
+            var config = GetConfig();
             if (config.AppSettings.Settings.AllKeys.Contains(key))
                 config.AppSettings.Settings[key].Value = value;
             else
@@ -76,13 +68,11 @@ namespace FPLedit.Shared
         }
 
         /// <summary>
-        /// Setzt den Standardwert für eine Einstellung.
+        /// Setzt den Wert einer Eigenschaft.
         /// </summary>
         /// <param name="key">Der Schlüssel der Einstellung.</param>
-        /// <param name="value">Der neue Standardwert.</param>
-        public static void SetDefault(string key, string value)
-        {
-            defaults[key] = value;
-        }
+        /// <param name="value">Der Wert der Einstellung.</param>
+        public static void Set(string key, bool value)
+            => Set(key, value.ToString());
     }
 }

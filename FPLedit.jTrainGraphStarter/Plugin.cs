@@ -39,7 +39,7 @@ namespace FPLedit.jTrainGraphStarter
 
         public void Start()
         {
-            bool showMessage = bool.Parse(SettingsManager.Get("jTGStarter.show-message", "true"));
+            bool showMessage = SettingsManager.Get("jTGStarter.show-message", true);
 
             if (showMessage)
             {

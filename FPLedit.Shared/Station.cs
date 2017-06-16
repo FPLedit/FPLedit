@@ -18,7 +18,7 @@ namespace FPLedit.Shared
 
         public string SName
         {
-            get => GetAttribute<string>("name", "");
+            get => GetAttribute("name", "");
             set => SetAttribute("name", value);
         }
 
