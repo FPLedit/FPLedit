@@ -20,7 +20,7 @@ namespace FPLedit
 
         public UpdateManager()
         {
-            CheckUrl = SettingsManager.Get("updater.url");
+            CheckUrl = SettingsManager.Get("updater.url", "https://fahrplan.manuelhu.de/versioninfo.xml");
         }
 
         public Version GetCurrentVersion()

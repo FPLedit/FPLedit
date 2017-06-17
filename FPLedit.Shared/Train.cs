@@ -99,7 +99,7 @@ namespace FPLedit.Shared
 
         public string Locomotive
         {
-            get => GetAttribute<string>("fpl-tfz", "");
+            get => GetAttribute("fpl-tfz", "");
             set => SetAttribute("fpl-tfz", value);
         }
 
@@ -107,7 +107,7 @@ namespace FPLedit.Shared
 
         public string Comment
         {
-            get => GetAttribute<string>("cm", "");
+            get => GetAttribute("cm", "");
             set => SetAttribute("cm", value);
         }
 

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+VisualStudioVersion = 15.0.26430.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit", "FPLedit\FPLedit.csproj", "{2809F962-DC06-4740-8AD0-0981891446DA}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -25,6 +25,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.jTrainGraphStarter", "FPLedit.jTrainGraphStarter\FPLedit.jTrainGraphStarter.csproj", "{0B7A9395-3318-41A1-85D3-EECA6A868FA7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Installer", "FPLedit.Installer\FPLedit.Installer.csproj", "{9A1DE03B-E601-495F-9C21-F67E20D6FD18}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build_scripts", "build_scripts", "{A63B9FD7-0C3A-4C99-905C-52C85CA8D2E0}"
+	ProjectSection(SolutionItems) = preProject
+		build_scripts\build-release.csx = build_scripts\build-release.csx
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.AushangfahrplanExport", "FPLedit.Aushangfahrplan\FPLedit.AushangfahrplanExport.csproj", "{C9D85138-EABB-47C1-8765-0F204E81FA5C}"
 EndProject

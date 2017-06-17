@@ -39,11 +39,16 @@ namespace FPLedit.jTrainGraphStarter
 
         public void Start()
         {
-            DialogResult res = MessageBox.Show("Dies speichert die Fahrplandatei am letzten Speicherort und öffnet dann jTrainGraph (>= 2.02). Nachdem Sie die Arbeit in jTrainGraph beendet haben, speichern Sie damit die Datei und schließen das jTrainGraph-Hauptfenster, damit werden die Änderungen übernommen. Aktion fortsetzen?",
-                "jTrainGraph starten", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            bool showMessage = SettingsManager.Get("jTGStarter.show-message", true);
 
-            if (res != DialogResult.Yes)
-                return;
+            if (showMessage)
+            {
+                DialogResult res = MessageBox.Show("Dies speichert die Fahrplandatei am letzten Speicherort und öffnet dann jTrainGraph (>= 2.02). Nachdem Sie die Arbeit in jTrainGraph beendet haben, speichern Sie damit die Datei und schließen das jTrainGraph-Hauptfenster, damit werden die Änderungen übernommen. Aktion fortsetzen?"+Environment.NewLine+Environment.NewLine+"Diese Meldung kann unter jTrainGraph > Einstellungen deaktiviert werden.",
+                    "jTrainGraph starten", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                if (res != DialogResult.Yes)
+                    return;
+            }
 
             info.Save(false);
 

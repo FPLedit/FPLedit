@@ -26,7 +26,7 @@ namespace FPLedit.Shared.Filetypes
 
         public bool Export(Timetable tt, string filename, IInfo info)
         {
-            bool debug = bool.Parse(SettingsManager.Get("xml.indent", "False"));
+            bool debug = SettingsManager.Get<bool>("xml.indent");
 #if DEBUG
             debug = true;
 #endif

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -14,7 +15,7 @@ namespace FPLedit.Shared
 
         public string TTName
         {
-            get => GetAttribute<string>("name", "");
+            get => GetAttribute("name", "");
             set => SetAttribute("name", value);
         }
 
@@ -59,15 +60,8 @@ namespace FPLedit.Shared
 
         public string GetLineName(TrainDirection direction)
         {
-            string first = GetStationsOrderedByDirection(direction).First().SName;
-            string last = GetStationsOrderedByDirection(direction).Last().SName;
-
-            return first + " - " + last;
-        }
-
-        public override string ToString()
-        {
-            return GetLineName(TrainDirection.ta);
+            var stas = GetStationsOrderedByDirection(direction);
+            return stas.First().SName + " - " + stas.Last().SName;
         }
 
         public Timetable Clone()
@@ -80,6 +74,8 @@ namespace FPLedit.Shared
                 return (Timetable)formatter.Deserialize(stream);
             }
         }
+
+        #region Hilfsmethoden für andere Entitäten
 
         public void AddStation(Station sta)
         {
@@ -139,6 +135,8 @@ namespace FPLedit.Shared
             tElm.Children.Remove(tra.XMLEntity);
         }
 
+        #endregion
+
         public string[] GetAllTfzs()
         {
             return Trains
@@ -147,5 +145,9 @@ namespace FPLedit.Shared
                 .Where(s => s != "")
                 .ToArray();
         }
+
+        [DebuggerStepThrough]
+        public override string ToString()
+            => GetLineName(TrainDirection.ta);
     }
 }

@@ -28,18 +28,52 @@ namespace FPLedit.Shared
         }
 
         [DebuggerStepThrough]
-        public static string DaysToString(bool[] days)
+        public static string DaysToString(bool[] days, bool veryShort = false)
         {
             string[] str = new string[7];
-            str[0] = days[0] ? "Mo" : null;
-            str[1] = days[1] ? "Di" : null;
-            str[2] = days[2] ? "Mi" : null;
-            str[3] = days[3] ? "Do" : null;
-            str[4] = days[4] ? "Fr" : null;
-            str[5] = days[5] ? "Sa" : null;
-            str[6] = days[6] ? "So" : null;
+            if (!veryShort) {
+                str[0] = days[0] ? "Mo" : null;
+                str[1] = days[1] ? "Di" : null;
+                str[2] = days[2] ? "Mi" : null;
+                str[3] = days[3] ? "Do" : null;
+                str[4] = days[4] ? "Fr" : null;
+                str[5] = days[5] ? "Sa" : null;
+                str[6] = days[6] ? "So" : null;
+            }
+            else
+            {
+                if (days.All(d => d == true)) // Mo - So
+                    return "";
+                if (days.Take(6).All(d => d == true) && !days[6]) // Mo - Sa => W
+                    return "W";
+                if (days.Take(5).All(d => d == true) && !days[5] && !days[6]) // Mo - Fr => W (Sa)
+                    return "W (Sa)";
+                if (days.Take(6).All(d => d == false) && days[6]) // So
+                    return "So";
+                return DaysToString(days);
+            }
 
             return string.Join(", ", str.Where(o => o != null));
+        }
+
+        [DebuggerStepThrough]
+        public static bool IntersectDays(bool[] daysA, bool[] daysB)
+        {
+            for (int i = 0; i < 7; i++)
+                if (daysA[i] && daysB[i])
+                    return true;
+
+            return false;
+        }
+
+        [DebuggerStepThrough]
+        public static bool[] IntersectingDays(bool[] daysA, bool[] daysB)
+        {
+            var res = new bool[7];
+            for (int i = 0; i < 7; i++)
+                if (daysA[i] && daysB[i])
+                    res[i] = true;
+            return res;
         }
     }
 }

@@ -18,14 +18,10 @@ namespace FPLedit.Shared
         public string FileName;
 
         public static bool operator !=(FileState s1, FileState s2)
-        {
-            return !s1.Equals(s2);
-        }
+            => !s1.Equals(s2);
 
         public static bool operator ==(FileState s1, FileState s2)
-        {
-            return s1.Equals(s2);
-        }
+            => s1.Equals(s2);
 
         public override bool Equals(object obj)
         {

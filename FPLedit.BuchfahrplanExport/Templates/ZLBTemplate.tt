@@ -64,8 +64,9 @@
 			border:1.5pt solid black;
 			border-top:.5pt solid black;
 		}
-		.spaltenkopf.klein {
+		.klein {
 			font-size:0.7em;
+			white-space: normal;
 		}
 		.zug {
 			height: 19px;
@@ -74,6 +75,10 @@
 			vertical-align:top;
 			border-right:1.5pt solid black;
 			border-left:1.5pt solid black;
+		}
+		.trapez-tt {
+			border: 1px solid black;
+			padding: 2px;
 		}
 		td.first {
 			border-left:none;
@@ -143,7 +148,7 @@
 					<td class="zug first"><#= s.Kilometre.ToString("0.0") #></td>
 					<td class="zug"><#= s.GetAttribute("fpl-vmax", "") #></td>
 					<td class="zug"><#= s.SName #></td>
-					<td class="zug"><!--Trapeztafel--><#= helper.TrapezHalt(tra, s) #></td>
+					<td class="zug klein"><!--Trapeztafel--><#= helper.TrapezHalt(tra, s) #></td>
 					<#
 					var ardp = tra.GetArrDep(s);
 					var ar = ardp.Arrival.ToShortTimeString();
@@ -151,21 +156,21 @@
 					#>
 					<td class="zug"><#= ar != "00:00" ? ar : "" #></td>
 					<td class="zug"><#= dp != "00:00" ? dp : "" #></td>
-					<td class="zug"><!--Kreuzung--><#= helper.Kreuzt(tra, s) #></td>
-					<td class="zug"><!--überholt--><#= helper.Ueberholt(tra, s) #></td>
-					<td class="zug last"><!--Zuglaufmeldung--></td>
+					<td class="zug klein"><!--Kreuzung--><#= helper.Kreuzt(tra, s) #></td>
+					<td class="zug klein"><!--überholt--><#= helper.Ueberholt(tra, s) #></td>
+					<td class="zug klein last"><!--Zuglaufmeldung--></td>
 
 					<# } else {
 						BfplPoint p = (BfplPoint)entity; #>
 					<td class="zug first"><#= p.Kilometre.ToString("0.0") #></td>
 					<td class="zug"><#= p.GetAttribute("fpl-vmax", "") #></td>
 					<td class="zug"><#= p.PName #></td>
-					<td class="zug"><!--Trapeztafel, bleibt mehr--></td>
+					<td class="zug klein"><!--Trapeztafel, bleibt mehr--></td>
 					<td class="zug"></td>
 					<td class="zug"></td>
-					<td class="zug"><!--Kreuzung, bleibt leer--></td>
-					<td class="zug"><!--überholt, bleibt leer--></td>
-					<td class="zug last"><!--Zuglaufmeldung--></td>
+					<td class="zug klein"><!--Kreuzung, bleibt leer--></td>
+					<td class="zug klein"><!--überholt, bleibt leer--></td>
+					<td class="zug klein last"><!--Zuglaufmeldung--></td>
 					<# } #>
 				</tr>
 				<# } #>

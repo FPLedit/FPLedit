@@ -64,10 +64,20 @@ namespace FPLedit.BuchfahrplanExport.Templates
         }
 
         public string Kreuzt(Train ot, Station s)
-            => IntersectTrains(ot, s, true)?.TName ?? "";
+        {
+            var t = IntersectTrains(ot, s, true);
+            if (t == null)
+                return "";
+            return t.TName + " " + IntersectDaysSt(ot, t);
+        }
 
         public string Ueberholt(Train ot, Station s)
-            => IntersectTrains(ot, s, false)?.TName ?? "";
+        {
+            var t = IntersectTrains(ot, s, true);
+            if (t == null)
+                return "";
+            return t.TName + " " + IntersectDaysSt(ot, t);
+        }
 
         public string TrapezHalt(Train ot, Station s)
         {
@@ -79,13 +89,16 @@ namespace FPLedit.BuchfahrplanExport.Templates
             var ith = it.GetArrDep(s).TrapeztafelHalt;
 
             if (oth && !ith)
-                return ot.TName;
+                return "<span class=\"trapez-tt\">" + ot.TName + "</span> " + IntersectDaysSt(ot, it);
             if (ith && !oth)
-                return it.TName;
+                return it.TName + " " + IntersectDaysSt(ot, it);
             if (ith && oth)
-                return ot.TName;
+                return "<span class=\"trapez-tt\">" + ot.TName + "</span> " + IntersectDaysSt(ot, it);
             return "";
         }
+
+        private string IntersectDaysSt(Train ot, Train t)
+            => DaysHelper.DaysToString(DaysHelper.IntersectingDays(ot.Days, t.Days), true);
 
         private Train IntersectTrains(Train ot, Station s, bool kreuzung)
         {
@@ -114,7 +127,8 @@ namespace FPLedit.BuchfahrplanExport.Templates
                 var en = end < end2 ? end : end2;
                 var crossing = st < en ? true : false;
 
-                return train;
+                if (crossing && DaysHelper.IntersectDays(ot.Days, train.Days))
+                    return train;
             }
 
             return null;

@@ -53,7 +53,7 @@ namespace FPLedit.BuchfahrplanExport
             string[] fontFamilies = new InstalledFontCollection().Families.Select(f => f.Name).ToArray();
             fontComboBox.Items.AddRange(fontFamilies);
 
-            consoleCheckBox.Checked = bool.Parse(SettingsManager.Get("bfpl.console", "false"));
+            consoleCheckBox.Checked = SettingsManager.Get<bool>("bfpl.console");
         }
 
         private void cssHelpLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -82,7 +82,7 @@ namespace FPLedit.BuchfahrplanExport
             var tmpl = chooser.GetAvailableTemplates()[tmpl_idx];
             data.Template = chooser.ReduceName(tmpl.GetType().FullName);
 
-            SettingsManager.Set("bfpl.console", consoleCheckBox.Checked.ToString());
+            SettingsManager.Set("bfpl.console", consoleCheckBox.Checked);
 
             Close();
         }

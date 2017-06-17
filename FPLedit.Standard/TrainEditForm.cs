@@ -68,9 +68,7 @@ namespace FPLedit.Standard
             Train.TName = nameTextBox.Text;
             Train.Locomotive = locomotiveComboBox.Text;
             Train.Comment = commentTextBox.Text;
-
-            for (int i = 0; i < daysBoxes.Length; i++)
-                Train.Days[i] = daysBoxes[i].Checked;
+            Train.Days = daysBoxes.Select(b => b.Checked).ToArray();
 
             DialogResult = DialogResult.OK;
             Close();
