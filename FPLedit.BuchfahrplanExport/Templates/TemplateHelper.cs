@@ -73,7 +73,7 @@ namespace FPLedit.BuchfahrplanExport.Templates
 
         public string Ueberholt(Train ot, Station s)
         {
-            var t = IntersectTrains(ot, s, true);
+            var t = IntersectTrains(ot, s, false);
             if (t == null)
                 return "";
             return t.TName + " " + IntersectDaysSt(ot, t);
