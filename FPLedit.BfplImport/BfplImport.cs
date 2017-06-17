@@ -11,7 +11,7 @@ namespace FPLedit.BfplImport
     {
         public const string MAGIC = "BFPL/1.1"; // letzte "Magic number" des BFPL-Formats
 
-        public string Filter                => "Alte FPLedit Dateien (*.bfpl)|*.bfpl";
+        public string Filter => "Alte FPLedit Dateien (*.bfpl)|*.bfpl";
 
         public Timetable Import(string filename, ILog logger)
         {
@@ -59,16 +59,7 @@ namespace FPLedit.BfplImport
                 res.AddTrain(tr);
             }
 
-            var attrs = new Dictionary<string, string>(timetableDefaultAttrs);
-            foreach (var key in timetableDefaultAttrs.Keys)
-                if (res.Attributes.ContainsKey(key))
-                    attrs[key] = res.Attributes[key];
-
-            var add = res.Attributes.Where(kvp => !attrs.ContainsKey(kvp.Key));
-            foreach (var a in add)
-                attrs[a.Key] = a.Value;
-
-            res.Attributes = attrs;
+            res.Attributes["version"] = "008";
 
             return res;
         }
@@ -119,17 +110,6 @@ namespace FPLedit.BfplImport
                 res.AddArrDep(station, ardp);
             }
 
-            var attrs = new Dictionary<string, string>(trainDefaultAttrs);
-            foreach (var key in trainDefaultAttrs.Keys)
-                if (res.Attributes.ContainsKey(key))
-                    attrs[key] = res.Attributes[key];
-
-            var add = res.Attributes.Where(kvp => !attrs.ContainsKey(kvp.Key));
-            foreach (var a in add)
-                attrs[a.Key] = a.Value;
-
-            res.Attributes = attrs;
-
             return res;
         }
 
@@ -141,17 +121,6 @@ namespace FPLedit.BfplImport
             res.Attributes = DeserializeAttributes(reader, EntityType.Station);
             res.SName = name;
             res.Kilometre = km;
-
-            var attrs = new Dictionary<string, string>(stationDefaultAttrs);
-            foreach (var key in stationDefaultAttrs.Keys)
-                if (res.Attributes.ContainsKey(key))
-                    attrs[key] = res.Attributes[key];
-
-            var add = res.Attributes.Where(kvp => !attrs.ContainsKey(kvp.Key));
-            foreach (var a in add)
-                attrs[a.Key] = a.Value;
-
-            res.Attributes = attrs;
 
             return res;
         }
@@ -168,51 +137,6 @@ namespace FPLedit.BfplImport
             }
             return UpgradeMeta.Upgrade(type, res);
         }
-
-        Dictionary<string, string> timetableDefaultAttrs = new Dictionary<string, string>()
-        {
-            ["version"] = "008",
-            ["name"] = "",
-            ["tMin"] = "330",
-            ["tMax"] = "1410",
-            ["d"] = "1111111",
-            ["bgC"] = "weiß",
-            ["sFont"] = "font(SansSerif;0;12)",
-            ["trFont"] = "font(SansSerif;0;12)",
-            ["hFont"] = "font(SansSerif;0;12)",
-            ["tFont"] = "font(SansSerif;0;12)",
-            ["sHor"] = "false",
-            ["sLine"] = "0",
-            ["shKm"] = "true",
-            ["sStation"] = "-1",
-            ["eStation"] = "-1",
-            ["cNr"] = "1",
-            ["exW"] = "-1",
-            ["exH"] = "-1",
-            ["shV"] = "true", // StationLines
-        };
-
-        Dictionary<string, string> trainDefaultAttrs = new Dictionary<string, string>()
-        {
-            ["name"] = "",
-            ["cm"] = "",
-            ["cl"] = "schwarz",
-            ["sh"] = "true",
-            ["sz"] = "1",
-            ["sy"] = "0",
-            ["d"] = "1111111",
-            ["id"] = "",
-        };
-
-        Dictionary<string, string> stationDefaultAttrs = new Dictionary<string, string>()
-        {
-            ["name"] = "",
-            ["km"] = "0.0",
-            ["cl"] = "schwarz",
-            ["sh"] = "true",
-            ["sz"] = "1",
-            ["sy"] = "0",
-        };
     }
 
     enum EntityType
