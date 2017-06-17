@@ -20,7 +20,8 @@ namespace FPLedit
         public ExtensionManager(ILog log)
         {
             List<Assembly> assemblies = new List<Assembly>();
-            DirectoryInfo dir = new DirectoryInfo(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
+            var path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            DirectoryInfo dir = new DirectoryInfo(path);
 
             foreach (var file in dir.GetFiles("*.dll"))
             {
@@ -29,7 +30,7 @@ namespace FPLedit
                     var assembly = Assembly.LoadFrom(file.FullName);
                     assemblies.Add(assembly);
                 }
-                catch (FileLoadException ex)
+                catch (FileLoadException)
                 {
                     log.Warning("Erweiterung " + file.Name + " konnte nicht geladen werden, bitte überprüfen ob diese noch geblockt ist!");
                 }
@@ -42,7 +43,6 @@ namespace FPLedit
             DisabledPlugins = new List<PluginContainer>();
 
             string[] enabledExtensions = SettingsManager.Get("extmgr.enabled", "").Split(';');
-            bool enableAll = enabledExtensions.Length < 0;
 
             foreach (var assembly in assemblies)
             {
@@ -50,22 +50,20 @@ namespace FPLedit
                 {
                     foreach (var type in assembly.GetTypes())
                     {
-                        if (!type.IsClass) continue;
-                        if (!type.IsPublic) continue;
-                        if (type.IsAbstract) continue;
-                        if (type == typeof(IPlugin)) continue;
+                        if (!type.IsClass || !type.IsPublic || type.IsAbstract || type == typeof(IPlugin))
+                            continue;
 
-                        if (typeof(IPlugin).IsAssignableFrom(type))
-                        {
-                            IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
+                        if (!typeof(IPlugin).IsAssignableFrom(type))
+                            continue;
 
-                            bool enabled = enableAll || enabledExtensions.Contains(type.FullName);
+                        IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
 
-                            if (enabled)
-                                EnabledPlugins.Add(new PluginContainer(plugin));
-                            else
-                                DisabledPlugins.Add(new PluginContainer(plugin));
-                        }
+                        bool enabled = enabledExtensions.Contains(type.FullName);
+
+                        if (enabled)
+                            EnabledPlugins.Add(new PluginContainer(plugin));
+                        else
+                            DisabledPlugins.Add(new PluginContainer(plugin));
                     }
                 }
                 catch
