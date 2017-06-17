@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.locomotiveLabel = new System.Windows.Forms.Label();
             this.nameLabel = new System.Windows.Forms.Label();
             this.nameTextBox = new System.Windows.Forms.TextBox();
             this.cancelButton = new System.Windows.Forms.Button();
@@ -41,21 +40,19 @@
             this.wednesdayCheckBox = new System.Windows.Forms.CheckBox();
             this.tuesdayCheckBox = new System.Windows.Forms.CheckBox();
             this.mondayCheckBox = new System.Windows.Forms.CheckBox();
-            this.locomotiveComboBox = new System.Windows.Forms.ComboBox();
             this.nameValidator = new FPLedit.Shared.Validators.NotEmptyValidator();
             this.commentTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lastTextBox = new System.Windows.Forms.TextBox();
+            this.lastLabel = new System.Windows.Forms.Label();
+            this.mbrTextBox = new System.Windows.Forms.TextBox();
+            this.mbrLabel = new System.Windows.Forms.Label();
+            this.locomotiveComboBox = new System.Windows.Forms.ComboBox();
+            this.locomotiveLabel = new System.Windows.Forms.Label();
             this.daysGroupBox.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // locomotiveLabel
-            // 
-            this.locomotiveLabel.AutoSize = true;
-            this.locomotiveLabel.Location = new System.Drawing.Point(12, 35);
-            this.locomotiveLabel.Name = "locomotiveLabel";
-            this.locomotiveLabel.Size = new System.Drawing.Size(22, 13);
-            this.locomotiveLabel.TabIndex = 2;
-            this.locomotiveLabel.Text = "Tfz";
             // 
             // nameLabel
             // 
@@ -76,7 +73,7 @@
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(57, 161);
+            this.cancelButton.Location = new System.Drawing.Point(57, 238);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 7;
@@ -85,7 +82,7 @@
             // 
             // closeButton
             // 
-            this.closeButton.Location = new System.Drawing.Point(138, 161);
+            this.closeButton.Location = new System.Drawing.Point(138, 238);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
             this.closeButton.TabIndex = 8;
@@ -102,9 +99,9 @@
             this.daysGroupBox.Controls.Add(this.wednesdayCheckBox);
             this.daysGroupBox.Controls.Add(this.tuesdayCheckBox);
             this.daysGroupBox.Controls.Add(this.mondayCheckBox);
-            this.daysGroupBox.Location = new System.Drawing.Point(12, 85);
+            this.daysGroupBox.Location = new System.Drawing.Point(15, 161);
             this.daysGroupBox.Name = "daysGroupBox";
-            this.daysGroupBox.Size = new System.Drawing.Size(201, 69);
+            this.daysGroupBox.Size = new System.Drawing.Size(198, 69);
             this.daysGroupBox.TabIndex = 6;
             this.daysGroupBox.TabStop = false;
             this.daysGroupBox.Text = "Verkehrstage";
@@ -193,14 +190,6 @@
             this.mondayCheckBox.Text = "Mo";
             this.mondayCheckBox.UseVisualStyleBackColor = true;
             // 
-            // locomotiveComboBox
-            // 
-            this.locomotiveComboBox.FormattingEnabled = true;
-            this.locomotiveComboBox.Location = new System.Drawing.Point(78, 32);
-            this.locomotiveComboBox.Name = "locomotiveComboBox";
-            this.locomotiveComboBox.Size = new System.Drawing.Size(135, 21);
-            this.locomotiveComboBox.TabIndex = 3;
-            // 
             // nameValidator
             // 
             this.nameValidator.Control = this.nameTextBox;
@@ -208,7 +197,7 @@
             // 
             // commentTextBox
             // 
-            this.commentTextBox.Location = new System.Drawing.Point(78, 59);
+            this.commentTextBox.Location = new System.Drawing.Point(78, 32);
             this.commentTextBox.Name = "commentTextBox";
             this.commentTextBox.Size = new System.Drawing.Size(135, 20);
             this.commentTextBox.TabIndex = 5;
@@ -216,11 +205,75 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 62);
+            this.label1.Location = new System.Drawing.Point(12, 35);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(60, 13);
             this.label1.TabIndex = 4;
             this.label1.Text = "Kommentar";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.lastTextBox);
+            this.groupBox1.Controls.Add(this.lastLabel);
+            this.groupBox1.Controls.Add(this.mbrTextBox);
+            this.groupBox1.Controls.Add(this.mbrLabel);
+            this.groupBox1.Controls.Add(this.locomotiveComboBox);
+            this.groupBox1.Controls.Add(this.locomotiveLabel);
+            this.groupBox1.Location = new System.Drawing.Point(15, 58);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(198, 97);
+            this.groupBox1.TabIndex = 15;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Erweiterte Eigenschaften (für Bfpl)";
+            // 
+            // lastTextBox
+            // 
+            this.lastTextBox.Location = new System.Drawing.Point(63, 72);
+            this.lastTextBox.Name = "lastTextBox";
+            this.lastTextBox.Size = new System.Drawing.Size(129, 20);
+            this.lastTextBox.TabIndex = 20;
+            // 
+            // lastLabel
+            // 
+            this.lastLabel.AutoSize = true;
+            this.lastLabel.Location = new System.Drawing.Point(6, 75);
+            this.lastLabel.Name = "lastLabel";
+            this.lastLabel.Size = new System.Drawing.Size(27, 13);
+            this.lastLabel.TabIndex = 19;
+            this.lastLabel.Text = "Last";
+            // 
+            // mbrTextBox
+            // 
+            this.mbrTextBox.Location = new System.Drawing.Point(63, 46);
+            this.mbrTextBox.Name = "mbrTextBox";
+            this.mbrTextBox.Size = new System.Drawing.Size(129, 20);
+            this.mbrTextBox.TabIndex = 18;
+            // 
+            // mbrLabel
+            // 
+            this.mbrLabel.AutoSize = true;
+            this.mbrLabel.Location = new System.Drawing.Point(6, 49);
+            this.mbrLabel.Name = "mbrLabel";
+            this.mbrLabel.Size = new System.Drawing.Size(25, 13);
+            this.mbrLabel.TabIndex = 17;
+            this.mbrLabel.Text = "Mbr";
+            // 
+            // locomotiveComboBox
+            // 
+            this.locomotiveComboBox.FormattingEnabled = true;
+            this.locomotiveComboBox.Location = new System.Drawing.Point(63, 19);
+            this.locomotiveComboBox.Name = "locomotiveComboBox";
+            this.locomotiveComboBox.Size = new System.Drawing.Size(129, 21);
+            this.locomotiveComboBox.TabIndex = 16;
+            // 
+            // locomotiveLabel
+            // 
+            this.locomotiveLabel.AutoSize = true;
+            this.locomotiveLabel.Location = new System.Drawing.Point(6, 22);
+            this.locomotiveLabel.Name = "locomotiveLabel";
+            this.locomotiveLabel.Size = new System.Drawing.Size(22, 13);
+            this.locomotiveLabel.TabIndex = 15;
+            this.locomotiveLabel.Text = "Tfz";
             // 
             // TrainEditForm
             // 
@@ -228,14 +281,13 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(225, 196);
+            this.ClientSize = new System.Drawing.Size(229, 273);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.commentTextBox);
-            this.Controls.Add(this.locomotiveComboBox);
             this.Controls.Add(this.daysGroupBox);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.closeButton);
-            this.Controls.Add(this.locomotiveLabel);
             this.Controls.Add(this.nameLabel);
             this.Controls.Add(this.nameTextBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -246,13 +298,14 @@
             this.Text = "Neuen Zug erstellen";
             this.daysGroupBox.ResumeLayout(false);
             this.daysGroupBox.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.Label locomotiveLabel;
         private System.Windows.Forms.Label nameLabel;
         private System.Windows.Forms.TextBox nameTextBox;
         private System.Windows.Forms.Button cancelButton;
@@ -266,8 +319,14 @@
         private System.Windows.Forms.CheckBox tuesdayCheckBox;
         private System.Windows.Forms.CheckBox mondayCheckBox;
         private Shared.Validators.NotEmptyValidator nameValidator;
-        private System.Windows.Forms.ComboBox locomotiveComboBox;
         private System.Windows.Forms.TextBox commentTextBox;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.TextBox lastTextBox;
+        private System.Windows.Forms.Label lastLabel;
+        private System.Windows.Forms.TextBox mbrTextBox;
+        private System.Windows.Forms.Label mbrLabel;
+        private System.Windows.Forms.ComboBox locomotiveComboBox;
+        private System.Windows.Forms.Label locomotiveLabel;
     }
 }

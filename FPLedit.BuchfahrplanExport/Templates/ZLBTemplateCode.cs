@@ -35,5 +35,12 @@ namespace FPLedit.BuchfahrplanExport.Templates
 
             return TransformText();
         }
+
+        private string OptAttr(string caption, string value)
+        {
+            if (value != null && value != "")
+                return caption + " " + value;
+            return "";
+        }
     }
 }

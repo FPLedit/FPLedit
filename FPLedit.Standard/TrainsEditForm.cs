@@ -68,8 +68,9 @@ namespace FPLedit.Standard
             {
                 view.Items.Add(new ListViewItem(new[] {
                     train.TName,
-                    //train.Line,
                     train.Locomotive,
+                    train.Mbr,
+                    train.Last,
                     DaysHelper.DaysToString(train.Days),
                     train.Comment })
                 { Tag = train });
@@ -81,8 +82,9 @@ namespace FPLedit.Standard
         private void InitListView(ListView view)
         {
             view.Columns.Add("Zugnummer");
-            //view.Columns.Add("Strecke");
             view.Columns.Add("Tfz");
+            view.Columns.Add("Mbr");
+            view.Columns.Add("Last");
             view.Columns.Add("Verkehrstage");
             view.Columns.Add("Kommentar");
         }

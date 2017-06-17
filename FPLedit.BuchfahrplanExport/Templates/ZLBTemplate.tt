@@ -8,7 +8,7 @@
 		<meta charset="utf-8">
 		<title>Buchfahrplan generiert von FPLedit</title>
 		<style>
-		table {
+		table:not(.tfz-table) {
 			border-collapse: collapse;
 			table-layout:fixed;
 			width:454pt;
@@ -34,6 +34,18 @@
 			font-weight:400;
 			vertical-align:bottom;
 			padding-bottom:30px;
+		}
+		.tfz-table {
+			width: 100%;
+		}
+		.tfz-table td {
+			width: 33%;
+		}
+		.tfz-table td:nth-child(2) {
+			text-align: center;
+		}
+		.tfz-table td:nth-child(3) {
+			text-align: right;
 		}
 		.trainname {
 			height:19.5pt;
@@ -116,7 +128,13 @@
 					<td colspan=9 class="linename"><#= tt.GetLineName(tra.Direction) #></td>
 				</tr>
 				<tr>
-					<td class=tfz>Zlok <#= tra.Locomotive #></td>
+					<td class="tfz" colspan="9">
+					<table class="tfz-table"><tr>
+					<td><#= OptAttr("Zlok", tra.Locomotive) #></td>
+					<td><#= OptAttr("Last", tra.Last) #></td>
+					<td><#= OptAttr("Mbr", tra.Mbr) #></td>
+					</tr></table>
+					</td>
 				</tr>
 				<tr>
 					<td class="spaltennummer first">1</td>

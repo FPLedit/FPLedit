@@ -103,6 +103,18 @@ namespace FPLedit.Shared
             set => SetAttribute("fpl-tfz", value);
         }
 
+        public string Mbr
+        {
+            get => GetAttribute("fpl-mbr", "");
+            set => SetAttribute("fpl-mbr", value);
+        }
+
+        public string Last
+        {
+            get => GetAttribute("fpl-last", "");
+            set => SetAttribute("fpl-last", value);
+        }
+
         public TrainDirection Direction => XName == "ti" ? TrainDirection.ti : TrainDirection.ta;
 
         public string Comment
