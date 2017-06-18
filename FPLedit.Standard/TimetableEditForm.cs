@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -21,9 +20,13 @@ namespace FPLedit.Standard
 
         private DataGridView focused;
 
+        private Font fb, fn;
+
         public TimetableEditForm()
         {
             InitializeComponent();
+            fb = new Font(DefaultFont, FontStyle.Bold);
+            fn = new Font(DefaultFont, FontStyle.Regular);
         }
 
         public TimetableEditForm(IInfo info) : this()
@@ -42,10 +45,12 @@ namespace FPLedit.Standard
                 if (e.KeyCode == Keys.T)
                 {
                     e.Handled = true;
-                    if (ActiveControl == topDataGridView)
-                        Trapez(topDataGridView);
-                    else if (ActiveControl == bottomDataGridView)
-                        Trapez(bottomDataGridView);
+                    ViewDependantAction(Trapez);
+                }
+                else if (e.KeyCode == Keys.Z)
+                {
+                    e.Handled = true;
+                    ViewDependantAction(Zuglaufmeldung);
                 }
             };
         }
@@ -65,6 +70,7 @@ namespace FPLedit.Standard
             {
                 DataGridViewRow trainRow = view.Rows[view.Rows.Add()];
 
+                var fb = new Font(DefaultFont, FontStyle.Bold);
                 foreach (var sta in info.Timetable.Stations)
                 {
                     var ardp = tra.GetArrDep(sta);
@@ -77,8 +83,10 @@ namespace FPLedit.Standard
                     if (stas.First() != sta)
                     {
                         var cell = trainRow.Cells[stas.IndexOf(sta) + "ar"];
-                        cell.Tag = ardp.TrapeztafelHalt;
+                        cell.Tag = new Tuple<bool, string>(ardp.TrapeztafelHalt, ardp.Zuglaufmeldung);
                         cell.Style.BackColor = ardp.TrapeztafelHalt ? Color.LightGray : Color.White;
+                        if (ardp.Zuglaufmeldung != null && ardp.Zuglaufmeldung != "")
+                            cell.Style.Font = fb;
                     }
                 }
 
@@ -99,11 +107,14 @@ namespace FPLedit.Standard
                 if (view.SelectedCells.Count != 0)
                 {
                     var cell = view.SelectedCells[0];
-                    trapeztafelToggle.Enabled = cell.ColumnIndex != 0 && cell.ColumnIndex % 2 != 0;
+                    trapeztafelToggle.Enabled = zlmButton.Enabled = cell.ColumnIndex != 0 && cell.ColumnIndex % 2 != 0;
 
                     var tr = false;
                     if (cell.Tag != null)
-                        tr = (bool)cell.Tag;
+                    {
+                        var val = (Tuple<bool, string>)cell.Tag;
+                        tr = val.Item1;
+                    }
                     trapeztafelToggle.Checked = tr;
                 }
             };
@@ -131,7 +142,11 @@ namespace FPLedit.Standard
                             TimeSpan tsAr = TimeSpan.Parse((string)cellAr.Value);
                             ardp.Arrival = tsAr;
                             if (cellAr.Tag != null)
-                                ardp.TrapeztafelHalt = (bool)cellAr.Tag;
+                            {
+                                var val = (Tuple<bool, string>)cellAr.Tag;
+                                ardp.TrapeztafelHalt = val.Item1;
+                                ardp.Zuglaufmeldung = val.Item2;
+                            }
                         }
                     }
 
@@ -144,7 +159,7 @@ namespace FPLedit.Standard
                             TimeSpan tsDp = TimeSpan.Parse((string)cellDp.Value);
                             ardp.Departure = tsDp;
                             if (cellDp.Tag != null)
-                                ardp.TrapeztafelHalt = (bool)cellDp.Tag;
+                                throw new Exception("Keine Abfahrtszelle darf einen Trapeztafelhalt/Zugalufmeldungseintrag enthalten!");
                         }
                     }
 
@@ -185,26 +200,40 @@ namespace FPLedit.Standard
             if (cell.ColumnIndex == 0 || cell.ColumnIndex % 2 == 0)
                 return;
 
-            if (cell.Style.BackColor == Color.LightGray)
-            {
-                cell.Style.BackColor = Color.White;
-                cell.Tag = false; // Halt vor Trapeztafel: Nein
-                trapeztafelToggle.Checked = false;
-            }
-            else
-            {
-                cell.Style.BackColor = Color.LightGray;
-                cell.Tag = true; // Halt vor Trapeztafel: Ja
-                trapeztafelToggle.Checked = true;
-            }
+            var val = (Tuple<bool, string>)cell.Tag;
+            var trapez = !(val?.Item1 ?? false);
+            cell.Tag = new Tuple<bool, string>(trapez, val?.Item2 ?? "");
+
+            cell.Style.BackColor = trapez ? Color.LightGray : Color.White;
+            trapeztafelToggle.Checked = trapez;
         }
 
-        private void trapeztafelToggle_Click(object sender, EventArgs e)
+        private void Zuglaufmeldung(DataGridView view)
+        {
+            var cells = view.SelectedCells;
+            if (cells.Count == 0)
+                return;
+
+            var cell = cells[0];
+            if (cell.ColumnIndex == 0 || cell.ColumnIndex % 2 == 0)
+                return;
+
+            var val = (Tuple<bool, string>)cell.Tag;
+            var zlmDialog = new ZlmEditForm(val?.Item2 ?? "");
+            if (zlmDialog.ShowDialog() != DialogResult.OK)
+                return;
+
+            cell.Tag = new Tuple<bool, string>(val?.Item1 ?? false, zlmDialog.Zlm);
+
+            cell.Style.Font = zlmDialog.Zlm != "" ? fb : fn;
+        }
+
+        private void ViewDependantAction(Action<DataGridView> action)
         {
             if (focused == topDataGridView)
-                Trapez(topDataGridView);
+                action(topDataGridView);
             else if (focused == bottomDataGridView)
-                Trapez(bottomDataGridView);
+                action(bottomDataGridView);
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -229,6 +258,12 @@ namespace FPLedit.Standard
 
             Close();
         }
+
+        private void trapeztafelToggle_Click(object sender, EventArgs e)
+            => ViewDependantAction(Trapez);
+
+        private void zlmButton_Click(object sender, EventArgs e)
+            => ViewDependantAction(Zuglaufmeldung);
 
         private void topDataGridView_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
             => ValidateCell(topDataGridView, e);

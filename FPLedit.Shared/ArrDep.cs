@@ -14,5 +14,7 @@ namespace FPLedit.Shared
         public TimeSpan Departure { get; set; }
 
         public bool TrapeztafelHalt { get; set; }
+
+        public string Zuglaufmeldung { get; set; }
     }
 }

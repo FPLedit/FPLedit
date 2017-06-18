@@ -29,6 +29,7 @@ namespace FPLedit.Shared
             tElm.SetAttribute("a", ar != "00:00" ? ar : "");
             tElm.SetAttribute("d", dp != "00:00" ? dp : "");
             tElm.SetAttribute("fpl-tr", ardp.TrapeztafelHalt ? "1" : "0");
+            tElm.SetAttribute("fpl-zlm", ardp.Zuglaufmeldung);
             Children.Insert(idx, tElm);
         }
 
@@ -43,6 +44,7 @@ namespace FPLedit.Shared
             tElm.SetAttribute("a", ar != "00:00" ? ar : "");
             tElm.SetAttribute("d", dp != "00:00" ? dp : "");
             tElm.SetAttribute("fpl-tr", ardp.TrapeztafelHalt ? "1" : "0");
+            tElm.SetAttribute("fpl-zlm", ardp.Zuglaufmeldung);
         }
 
         public ArrDep GetArrDep(Station sta)
@@ -61,6 +63,8 @@ namespace FPLedit.Shared
 
             if (tElm.GetAttribute("fpl-tr", "") != "")
                 ardp.TrapeztafelHalt = Convert.ToBoolean(tElm.GetAttribute<int>("fpl-tr"));
+            if (tElm.GetAttribute("fpl-zlm", "") != "")
+                ardp.Zuglaufmeldung = tElm.GetAttribute<string>("fpl-zlm");
 
             return ardp;
         }

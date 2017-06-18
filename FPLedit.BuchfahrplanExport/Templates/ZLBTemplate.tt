@@ -171,12 +171,13 @@
 					var ardp = tra.GetArrDep(s);
 					var ar = ardp.Arrival.ToShortTimeString();
 					var dp = ardp.Departure.ToShortTimeString();
+					var zlm = ardp.Zuglaufmeldung;
 					#>
 					<td class="zug"><#= ar != "00:00" ? ar : "" #></td>
 					<td class="zug"><#= dp != "00:00" ? dp : "" #></td>
 					<td class="zug klein"><!--Kreuzung--><#= helper.Kreuzt(tra, s) #></td>
 					<td class="zug klein"><!--überholt--><#= helper.Ueberholt(tra, s) #></td>
-					<td class="zug klein last"><!--Zuglaufmeldung--></td>
+					<td class="zug klein last"><#= zlm ?? "" #><!--Zuglaufmeldung--></td>
 
 					<# } else {
 						BfplPoint p = (BfplPoint)entity; #>

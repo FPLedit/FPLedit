@@ -79,6 +79,12 @@
     <Compile Include="TrainsEditForm.Designer.cs">
       <DependentUpon>TrainsEditForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ZlmEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ZlmEditForm.Designer.cs">
+      <DependentUpon>ZlmEditForm.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="EditStationForm.resx">
@@ -100,6 +106,9 @@
     <EmbeddedResource Include="TrainsEditForm.resx">
       <DependentUpon>TrainsEditForm.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ZlmEditForm.resx">
+      <DependentUpon>ZlmEditForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
