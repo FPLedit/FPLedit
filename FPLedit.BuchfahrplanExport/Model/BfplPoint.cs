@@ -9,8 +9,8 @@ using System.Text;
 namespace FPLedit.BuchfahrplanExport.Model
 {
     [Serializable]
-    [DebuggerDisplay("Point {PName} [{Kilometre}]")]
-    public sealed class BfplPoint : Entity
+    [DebuggerDisplay("Point {SName} [{Kilometre}]")]
+    public sealed class BfplPoint : Entity, IStation
     {
         public BfplPoint(XMLEntity en, Timetable tt) : base(en, tt)
         {
@@ -20,9 +20,9 @@ namespace FPLedit.BuchfahrplanExport.Model
         {
         }
 
-        public string PName
+        public string SName
         {
-            get => GetAttribute<string>("name", "");
+            get => GetAttribute("name", "");
             set => SetAttribute("name", value);
         }
 
@@ -30,6 +30,12 @@ namespace FPLedit.BuchfahrplanExport.Model
         {
             get => float.Parse(GetAttribute("km", "0.0"), CultureInfo.InvariantCulture);
             set => SetAttribute("km", value.ToString("0.0", CultureInfo.InvariantCulture));
+        }
+
+        public int Wellenlinien
+        {
+            get => GetAttribute("fpl-wl", 0);
+            set => SetAttribute("fpl-wl", value.ToString());
         }
     }
 }

@@ -47,5 +47,8 @@ namespace FPLedit.Shared
 
         public void SetAttribute(string key, string value)
             => XMLEntity.SetAttribute(key, value);
+
+        public void RemoveAttribute(string key)
+            => XMLEntity.RemoveAttribute(key);
     }
 }

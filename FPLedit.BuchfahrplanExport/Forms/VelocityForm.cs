@@ -46,39 +46,19 @@ namespace FPLedit.BuchfahrplanExport
         {
             listView.Items.Clear();
 
-            var kms = new List<float>();
+            List<IStation> points = new List<IStation>();
+            points.AddRange(tt.Stations);
             if (attrs != null)
-                kms = attrs.Points.Select(p => p.Kilometre).ToList();
+                points.AddRange(attrs.Points);
 
-            var skms = tt.Stations.Select(s => s.Kilometre).ToList();
-
-            kms.AddRange(skms);
-            var okms = kms.OrderBy(k => k);
-
-            foreach (var km in okms)
+            foreach (var p in points.OrderBy(o => o.Kilometre))
             {
-                bool stationExists = skms.Contains(km);
-                if (stationExists)
-                {
-                    Station sta = tt.Stations.First(s => s.Kilometre == km);
-
-                    listView.Items.Add(new ListViewItem(new[] {
-                            sta.Kilometre.ToString(),
-                            sta.SName,
-                            sta.GetAttribute<string>("fpl-vmax", defaultVelocity),
-                        })
-                    { Tag = sta });
-                }
-                else if (attrs != null)
-                {
-                    BfplPoint point = attrs.Points.First(p => p.Kilometre == km);
-                    listView.Items.Add(new ListViewItem(new[] {
-                            point.Kilometre.ToString(),
-                            point.PName,
-                            point.GetAttribute<string>("fpl-vmax", defaultVelocity),
-                        })
-                    { Tag = point });
-                }
+                listView.Items.Add(new ListViewItem(new[] {
+                    p.Kilometre.ToString(),
+                    p.SName,
+                    p.GetAttribute("fpl-vmax", defaultVelocity),
+                })
+                { Tag = p });
             }
 
             listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
@@ -177,7 +157,7 @@ namespace FPLedit.BuchfahrplanExport
             Close();
         }
 
-        #region events
+        #region Events
         private void editButton_Click(object sender, EventArgs e)
             => EditVmax();
 

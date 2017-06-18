@@ -45,7 +45,7 @@ namespace FPLedit.BuchfahrplanExport
             velocityTextBox.Text = point.GetAttribute("fpl-vmax", velocityTextBox.Text);
 
             positionTextBox.Text = point.Kilometre.ToString();
-            nameTextBox.Text = point.PName;
+            nameTextBox.Text = point.SName;
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -62,7 +62,7 @@ namespace FPLedit.BuchfahrplanExport
             {
                 Point.SetAttribute("fpl-vmax", velocityTextBox.Text);
                 Point.Kilometre = float.Parse(positionTextBox.Text);
-                Point.PName = nameTextBox.Text;
+                Point.SName = nameTextBox.Text;
             }
             else
             {

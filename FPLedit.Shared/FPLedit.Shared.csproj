@@ -49,6 +49,7 @@
     <Compile Include="Filetypes\XMLExport.cs" />
     <Compile Include="Filetypes\XMLStationsImport.cs" />
     <Compile Include="Filetypes\XMLImport.cs" />
+    <Compile Include="IStation.cs" />
     <Compile Include="Logger\ConsoleLogger.cs" />
     <Compile Include="FileState.cs" />
     <Compile Include="IExport.cs" />

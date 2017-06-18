@@ -21,46 +21,18 @@ namespace FPLedit.BuchfahrplanExport.Templates
                 .ToLower();
         }
 
-        public List<Entity> GetStations(TrainDirection dir)
+        public List<IStation> GetStations(TrainDirection dir)
         {
-            var kms = new List<float>();
+            List<IStation> points = new List<IStation>();
+            points.AddRange(TT.Stations);
             if (Attrs != null)
-                kms = Attrs.Points.Select(p => p.Kilometre).ToList();
+                points.AddRange(Attrs.Points);
 
-            var skms = TT.Stations.Select(s => s.Kilometre).ToList();
+            var oPoints = (dir == TrainDirection.ta ?
+                points.OrderByDescending(o => o.Kilometre)
+                : points.OrderBy(o => o.Kilometre));
 
-            kms.AddRange(skms);
-            var okms = kms.OrderBy(k => k);
-
-            List<Entity> objs = new List<Entity>();
-            foreach (var km in okms)
-            {
-                bool stationExists = skms.Contains(km);
-                if (stationExists)
-                {
-                    Station sta = TT.Stations.First(s => s.Kilometre == km);
-                    objs.Add(sta);
-                }
-                else if (Attrs != null)
-                {
-                    BfplPoint point = Attrs.Points.First(p => p.Kilometre == km);
-                    objs.Add(point);
-                }
-            }
-
-            Func<Entity, float> order = o =>
-            {
-                float km = -1;
-                if (o.GetType() == typeof(Station))
-                    km = ((Station)o).Kilometre;
-                else if (o.GetType() == typeof(BfplPoint))
-                    km = ((BfplPoint)o).Kilometre;
-                return km;
-            };
-
-            return (dir == TrainDirection.ta ?
-                objs.OrderByDescending(order)
-                : objs.OrderBy(order)).ToList();
+            return oPoints.ToList();
         }
 
         public string Kreuzt(Train ot, Station s)

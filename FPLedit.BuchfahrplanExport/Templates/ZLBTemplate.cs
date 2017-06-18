@@ -180,7 +180,7 @@ namespace FPLedit.BuchfahrplanExport.Templates
             this.Write("\t\t\t\t<tr class=\"");
             
             #line 162 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(helper.HtmlName(entity.GetAttribute("name", ""), "station-")));
+            this.Write(this.ToStringHelper.ToStringWithCulture(helper.HtmlName(entity.SName, "station-")));
             
             #line default
             #line hidden
@@ -293,12 +293,12 @@ namespace FPLedit.BuchfahrplanExport.Templates
             this.Write("</td>\r\n\t\t\t\t\t<td class=\"zug\">");
             
             #line 186 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(p.PName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(p.SName));
             
             #line default
             #line hidden
             this.Write(@"</td>
-					<td class=""zug klein""><!--Trapeztafel, bleibt mehr--></td>
+					<td class=""zug klein""><!--Trapeztafel, bleibt leer--></td>
 					<td class=""zug""></td>
 					<td class=""zug""></td>
 					<td class=""zug klein""><!--Kreuzung, bleibt leer--></td>

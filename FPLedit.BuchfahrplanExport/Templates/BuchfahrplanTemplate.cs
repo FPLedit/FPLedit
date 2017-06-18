@@ -234,7 +234,7 @@ namespace FPLedit.BuchfahrplanExport.Templates
             this.Write("\t\t\t\t<tr class=\"");
             
             #line 140 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\BuchfahrplanTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(helper.HtmlName(entity.GetAttribute("name", ""), "station-")));
+            this.Write(this.ToStringHelper.ToStringWithCulture(helper.HtmlName(entity.SName, "station-")));
             
             #line default
             #line hidden
@@ -318,7 +318,7 @@ namespace FPLedit.BuchfahrplanExport.Templates
             this.Write("</td>\r\n\t\t\t\t\t<td class=\"zug\">");
             
             #line 159 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\BuchfahrplanTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(p.PName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(p.SName));
             
             #line default
             #line hidden

@@ -159,7 +159,7 @@
 					<td class="spaltenkopf klein last">Zuglauf-<br>meldung<br>durch</td>
 				</tr>
 				<# foreach (var entity in helper.GetStations(tra.Direction)) { #>
-				<tr class="<#= helper.HtmlName(entity.GetAttribute("name", ""), "station-") #>">
+				<tr class="<#= helper.HtmlName(entity.SName, "station-") #>">
 					<#
 					if (entity.GetType() == typeof(Station)) {
 						Station s = (Station)entity; #>
@@ -183,8 +183,8 @@
 						BfplPoint p = (BfplPoint)entity; #>
 					<td class="zug first"><#= p.Kilometre.ToString("0.0") #></td>
 					<td class="zug"><#= p.GetAttribute("fpl-vmax", "") #></td>
-					<td class="zug"><#= p.PName #></td>
-					<td class="zug klein"><!--Trapeztafel, bleibt mehr--></td>
+					<td class="zug"><#= p.SName #></td>
+					<td class="zug klein"><!--Trapeztafel, bleibt leer--></td>
 					<td class="zug"></td>
 					<td class="zug"></td>
 					<td class="zug klein"><!--Kreuzung, bleibt leer--></td>

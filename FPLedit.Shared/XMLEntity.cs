@@ -47,5 +47,10 @@ namespace FPLedit.Shared
         {
             Attributes[key] = value;
         }
+
+        public void RemoveAttribute(string key)
+        {
+            Attributes.Remove(key);
+        }
     }
 }
