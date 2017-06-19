@@ -35,6 +35,13 @@ namespace FPLedit.BuchfahrplanExport.Templates
             return oPoints.ToList();
         }
 
+        public string OptAttr(string caption, string value)
+        {
+            if (value != null && value != "")
+                return caption + " " + value;
+            return "";
+        }
+
         public string Kreuzt(Train ot, Station s)
         {
             var t = IntersectTrains(ot, s, true);

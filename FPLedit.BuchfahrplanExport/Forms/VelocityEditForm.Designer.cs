@@ -38,6 +38,8 @@
             this.nameLabel = new System.Windows.Forms.Label();
             this.velocityValidator = new FPLedit.Shared.Validators.NumberValidator();
             this.positionValidator = new FPLedit.Shared.Validators.NumberValidator();
+            this.wellenComboBox = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // velocityLabel
@@ -52,19 +54,19 @@
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(109, 89);
+            this.cancelButton.Location = new System.Drawing.Point(109, 117);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 7;
+            this.cancelButton.TabIndex = 9;
             this.cancelButton.Text = "Abbrechen";
             this.cancelButton.UseVisualStyleBackColor = true;
             // 
             // closeButton
             // 
-            this.closeButton.Location = new System.Drawing.Point(190, 89);
+            this.closeButton.Location = new System.Drawing.Point(190, 117);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
-            this.closeButton.TabIndex = 6;
+            this.closeButton.TabIndex = 8;
             this.closeButton.Text = "Schließen";
             this.closeButton.UseVisualStyleBackColor = true;
             this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
@@ -120,13 +122,33 @@
             this.positionValidator.Control = this.positionTextBox;
             this.positionValidator.ErrorMessage = "Bitte eine Zahl als Position eingeben!";
             // 
+            // wellenComboBox
+            // 
+            this.wellenComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.wellenComboBox.FormattingEnabled = true;
+            this.wellenComboBox.Location = new System.Drawing.Point(135, 90);
+            this.wellenComboBox.Name = "wellenComboBox";
+            this.wellenComboBox.Size = new System.Drawing.Size(130, 21);
+            this.wellenComboBox.TabIndex = 7;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 93);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(64, 13);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "Wellenlinien";
+            // 
             // VelocityEditForm
             // 
             this.AcceptButton = this.closeButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(277, 124);
+            this.ClientSize = new System.Drawing.Size(277, 154);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.wellenComboBox);
             this.Controls.Add(this.nameLabel);
             this.Controls.Add(this.positionLabel);
             this.Controls.Add(this.nameTextBox);
@@ -156,5 +178,7 @@
         private System.Windows.Forms.Label positionLabel;
         private System.Windows.Forms.Label nameLabel;
         private Shared.Validators.NumberValidator positionValidator;
+        private System.Windows.Forms.ComboBox wellenComboBox;
+        private System.Windows.Forms.Label label1;
     }
 }

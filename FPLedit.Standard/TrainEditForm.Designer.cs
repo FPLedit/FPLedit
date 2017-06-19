@@ -85,7 +85,7 @@
             this.closeButton.Location = new System.Drawing.Point(138, 238);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
-            this.closeButton.TabIndex = 8;
+            this.closeButton.TabIndex = 6;
             this.closeButton.Text = "Schließen";
             this.closeButton.UseVisualStyleBackColor = true;
             this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
@@ -102,7 +102,7 @@
             this.daysGroupBox.Location = new System.Drawing.Point(15, 161);
             this.daysGroupBox.Name = "daysGroupBox";
             this.daysGroupBox.Size = new System.Drawing.Size(198, 69);
-            this.daysGroupBox.TabIndex = 6;
+            this.daysGroupBox.TabIndex = 5;
             this.daysGroupBox.TabStop = false;
             this.daysGroupBox.Text = "Verkehrstage";
             // 
@@ -200,7 +200,7 @@
             this.commentTextBox.Location = new System.Drawing.Point(78, 32);
             this.commentTextBox.Name = "commentTextBox";
             this.commentTextBox.Size = new System.Drawing.Size(135, 20);
-            this.commentTextBox.TabIndex = 5;
+            this.commentTextBox.TabIndex = 3;
             // 
             // label1
             // 
@@ -208,7 +208,7 @@
             this.label1.Location = new System.Drawing.Point(12, 35);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(60, 13);
-            this.label1.TabIndex = 4;
+            this.label1.TabIndex = 2;
             this.label1.Text = "Kommentar";
             // 
             // groupBox1
@@ -222,7 +222,7 @@
             this.groupBox1.Location = new System.Drawing.Point(15, 58);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(198, 97);
-            this.groupBox1.TabIndex = 15;
+            this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Erweiterte Eigenschaften (für Bfpl)";
             // 
@@ -231,7 +231,7 @@
             this.lastTextBox.Location = new System.Drawing.Point(63, 72);
             this.lastTextBox.Name = "lastTextBox";
             this.lastTextBox.Size = new System.Drawing.Size(129, 20);
-            this.lastTextBox.TabIndex = 20;
+            this.lastTextBox.TabIndex = 5;
             // 
             // lastLabel
             // 
@@ -239,7 +239,7 @@
             this.lastLabel.Location = new System.Drawing.Point(6, 75);
             this.lastLabel.Name = "lastLabel";
             this.lastLabel.Size = new System.Drawing.Size(27, 13);
-            this.lastLabel.TabIndex = 19;
+            this.lastLabel.TabIndex = 4;
             this.lastLabel.Text = "Last";
             // 
             // mbrTextBox
@@ -247,7 +247,7 @@
             this.mbrTextBox.Location = new System.Drawing.Point(63, 46);
             this.mbrTextBox.Name = "mbrTextBox";
             this.mbrTextBox.Size = new System.Drawing.Size(129, 20);
-            this.mbrTextBox.TabIndex = 18;
+            this.mbrTextBox.TabIndex = 3;
             // 
             // mbrLabel
             // 
@@ -255,7 +255,7 @@
             this.mbrLabel.Location = new System.Drawing.Point(6, 49);
             this.mbrLabel.Name = "mbrLabel";
             this.mbrLabel.Size = new System.Drawing.Size(25, 13);
-            this.mbrLabel.TabIndex = 17;
+            this.mbrLabel.TabIndex = 2;
             this.mbrLabel.Text = "Mbr";
             // 
             // locomotiveComboBox
@@ -264,7 +264,7 @@
             this.locomotiveComboBox.Location = new System.Drawing.Point(63, 19);
             this.locomotiveComboBox.Name = "locomotiveComboBox";
             this.locomotiveComboBox.Size = new System.Drawing.Size(129, 21);
-            this.locomotiveComboBox.TabIndex = 16;
+            this.locomotiveComboBox.TabIndex = 1;
             // 
             // locomotiveLabel
             // 
@@ -272,7 +272,7 @@
             this.locomotiveLabel.Location = new System.Drawing.Point(6, 22);
             this.locomotiveLabel.Name = "locomotiveLabel";
             this.locomotiveLabel.Size = new System.Drawing.Size(22, 13);
-            this.locomotiveLabel.TabIndex = 15;
+            this.locomotiveLabel.TabIndex = 0;
             this.locomotiveLabel.Text = "Tfz";
             // 
             // TrainEditForm

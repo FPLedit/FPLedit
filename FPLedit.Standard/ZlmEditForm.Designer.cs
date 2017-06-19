@@ -39,7 +39,7 @@
             this.zlmTextBox.Location = new System.Drawing.Point(131, 12);
             this.zlmTextBox.Name = "zlmTextBox";
             this.zlmTextBox.Size = new System.Drawing.Size(198, 20);
-            this.zlmTextBox.TabIndex = 0;
+            this.zlmTextBox.TabIndex = 1;
             // 
             // cancelButton
             // 
@@ -48,7 +48,7 @@
             this.cancelButton.Location = new System.Drawing.Point(174, 43);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 4;
+            this.cancelButton.TabIndex = 3;
             this.cancelButton.Text = "Abbrechen";
             this.cancelButton.UseVisualStyleBackColor = true;
             // 
@@ -59,7 +59,7 @@
             this.closeButton.Location = new System.Drawing.Point(254, 43);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
-            this.closeButton.TabIndex = 3;
+            this.closeButton.TabIndex = 2;
             this.closeButton.Text = "Schließen";
             this.closeButton.UseVisualStyleBackColor = true;
             this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
@@ -70,7 +70,7 @@
             this.label1.Location = new System.Drawing.Point(12, 15);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(113, 13);
-            this.label1.TabIndex = 5;
+            this.label1.TabIndex = 0;
             this.label1.Text = "Zuglaufmeldung durch";
             // 
             // ZlmEditForm

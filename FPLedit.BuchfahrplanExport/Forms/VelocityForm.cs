@@ -27,6 +27,7 @@ namespace FPLedit.BuchfahrplanExport
             listView.Columns.Add("km");
             listView.Columns.Add("Name");
             listView.Columns.Add("Vmax");
+            listView.Columns.Add("Wellenlinien");
         }
 
         public VelocityForm(IInfo info) : this()
@@ -57,6 +58,7 @@ namespace FPLedit.BuchfahrplanExport
                     p.Kilometre.ToString(),
                     p.SName,
                     p.GetAttribute("fpl-vmax", defaultVelocity),
+                    p.Wellenlinien.ToString(),
                 })
                 { Tag = p });
             }

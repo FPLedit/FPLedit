@@ -6,6 +6,7 @@ using System.Windows.Forms;
 
 namespace FPLedit.BuchfahrplanExport
 {
+    //TODO: Refactor
     public partial class VelocityEditForm : Form
     {
         public Station Station { get; set; }
@@ -17,6 +18,10 @@ namespace FPLedit.BuchfahrplanExport
         public VelocityEditForm()
         {
             InitializeComponent();
+
+            for (int i = 0; i < 4; i++)
+                wellenComboBox.Items.Add(i.ToString());
+            wellenComboBox.SelectedIndex = 0;
         }
 
         public VelocityEditForm(Timetable tt) : this()
@@ -35,6 +40,7 @@ namespace FPLedit.BuchfahrplanExport
             positionTextBox.Enabled = false;
             nameTextBox.Text = station.SName;
             nameTextBox.Enabled = false;
+            wellenComboBox.SelectedItem = station.Wellenlinien.ToString();
         }
 
         public VelocityEditForm(BfplPoint point) : this()
@@ -46,6 +52,7 @@ namespace FPLedit.BuchfahrplanExport
 
             positionTextBox.Text = point.Kilometre.ToString();
             nameTextBox.Text = point.SName;
+            wellenComboBox.SelectedItem = point.Wellenlinien.ToString();
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -63,10 +70,12 @@ namespace FPLedit.BuchfahrplanExport
                 Point.SetAttribute("fpl-vmax", velocityTextBox.Text);
                 Point.Kilometre = float.Parse(positionTextBox.Text);
                 Point.SName = nameTextBox.Text;
+                Point.Wellenlinien = int.Parse((string)wellenComboBox.SelectedItem);
             }
             else
             {
                 Station.SetAttribute("fpl-vmax", velocityTextBox.Text);
+                Station.Wellenlinien = int.Parse((string)wellenComboBox.SelectedItem);
             }
             Close();
         }

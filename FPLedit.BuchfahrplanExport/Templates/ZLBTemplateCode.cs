@@ -36,11 +36,23 @@ namespace FPLedit.BuchfahrplanExport.Templates
             return TransformText();
         }
 
-        private string OptAttr(string caption, string value)
+        private string GetWelle(ref int counter, IStation sta, Train tra)
         {
-            if (value != null && value != "")
-                return caption + " " + value;
-            return "";
+            if (counter > 0)
+            {
+                counter--;
+                return "";
+            }
+            else if (sta.Wellenlinien != 0)
+            {
+                var w = sta.Wellenlinien;
+                var stas = helper.GetStations(tra.Direction);
+                stas = stas.Skip(stas.IndexOf(sta)).ToList();
+                counter = stas.TakeWhile(s => s.Wellenlinien == w).Count();
+                return $"<td class=\"zug welle welle{w}\" rowspan=\"{counter--}\"></td>";
+            }
+
+            return "<td class=\"zug welle\"></td>";
         }
     }
 }
