@@ -8,7 +8,7 @@
 		<meta charset="utf-8">
 		<title>Buchfahrplan generiert von FPLedit</title>
 		<style>
-		table {
+		table:not(.tfz-table) {
 			border-collapse: collapse;
 			table-layout:fixed;
 			width:454pt;
@@ -33,6 +33,18 @@
 			font-family:<#= font #>, sans-serif;
 			text-align:general;
 			vertical-align:bottom;
+		}
+		.tfz-table {
+			width: 100%;
+		}
+		.tfz-table td {
+			width: 33%;
+		}
+		.tfz-table td:nth-child(2) {
+			text-align: center;
+		}
+		.tfz-table td:nth-child(3) {
+			text-align: right;
 		}
 		.trainname {
 			height:19.5pt;
@@ -95,6 +107,31 @@
 				margin: 0;
 			}
 		}
+
+		.stat {
+			border-right:none;
+			padding-left: 20px;
+		}
+		.welle {
+			border-left:none;
+			background-repeat: repeat-y;
+			background-position: right 2px top;
+		}
+		.welle1 {
+			/*background-image: url(drawing.svg);*/
+			background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iNG1tIiB3aWR0aD0iMm1tIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA3LjA4NjYxNDIgMTQuMTczMjI4Ij4NCjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAgLTEwMzguMikiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIxcHgiIGZpbGw9Im5vbmUiPg0KPHBhdGggZD0ibS0wLjAzMTU2NyAxMDQ1LjMgNy4xMDI2IDcuMDcxMSIvPg0KPHBhdGggZD0ibTcuMDU1MyAxMDM4LjItNy4xMDI2IDcuMDcxMSIvPg0KPC9nPg0KPC9zdmc+DQo=);
+			background-size: 5px 9.5px;
+		}
+		.welle2 {
+			/*background-image: url(drawing2.svg);*/
+			background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iNG1tIiB3aWR0aD0iNG1tIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAxNC4xNzMyMjkgMTQuMTczMjI4Ij4NCjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAgLTEwMzguMikiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIxcHgiIGZpbGw9Im5vbmUiPg0KPHBhdGggZD0ibS0wLjAzMTU2NyAxMDQ1LjMgNy4xMDI2IDcuMDcxMSIvPg0KPHBhdGggZD0ibTcuMDU1MyAxMDM4LjItNy4xMDI2IDcuMDcxMSIvPg0KPHBhdGggZD0ibTcuMDU2NCAxMDQ1LjMgNy4xMDI2IDcuMDcxMSIvPg0KPHBhdGggZD0ibTE0LjE0MyAxMDM4LjItNy4xMDI2IDcuMDcxMSIvPg0KPC9nPg0KPC9zdmc+DQo=);
+			background-size: 10px 9.5px;
+		}
+		.welle3 {
+			/*background-image: url(drawing3.svg);*/
+			background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iNG1tIiB3aWR0aD0iNm1tIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAyMS4yNTk4NDMgMTQuMTczMjI4Ij4NCjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAgLTEwMzguMikiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIxcHgiIGZpbGw9Im5vbmUiPg0KPHBhdGggZD0ibS0wLjAzMTU2NyAxMDQ1LjMgNy4xMDI2IDcuMDcxMSIvPg0KPHBhdGggZD0ibTcuMDU1MyAxMDM4LjItNy4xMDI2IDcuMDcxMSIvPg0KPHBhdGggZD0ibTcuMDU2NCAxMDQ1LjMgNy4xMDI2IDcuMDcxMSIvPg0KPHBhdGggZD0ibTE0LjE0MyAxMDM4LjItNy4xMDI2IDcuMDcxMSIvPg0KPHBhdGggZD0ibTE0LjEzNCAxMDQ1LjMgNy4xMDI2IDcuMDcxMSIvPg0KPHBhdGggZD0ibTIxLjIyMSAxMDM4LjItNy4xMDI2IDcuMDcxMSIvPg0KPC9nPg0KPC9zdmc+);
+			background-size: 15px 9.5px;
+		}
 		</style>
 		<style id="add-css">
 			<#= additionalCss #>
@@ -108,42 +145,48 @@
 			<table id="<#= helper.HtmlName(tra.TName, "train-") #>" class="<#= first ? "first" : "" #>">
 				<# first = false; #>
 				<col style="width:80px;" span=2>
-				<col style="width:285px;">
+				<col style="width:265px;">
+				<col style="width:20px;"><!-- Welle -->
 				<col style="width:80px;" span=2>
 				<tr>
-					<td colspan=5 class="trainname"><#= tra.TName #></td>
+					<td colspan=6 class="trainname"><#= tra.TName #></td>
 				</tr>
 				<tr>
-					<td colspan=5 class="linename"><#= tt.GetLineName(tra.Direction) #></td>
+					<td colspan=6 class="linename"><#= tt.GetLineName(tra.Direction) #></td>
 				</tr>
 				<tr>
-					<td class=tfz>Tfz <#= tra.Locomotive #></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
+					<td class="tfz" colspan="9">
+					<table class="tfz-table"><tr>
+					<td><#= helper.OptAttr("Zlok", tra.Locomotive) #></td>
+					<td><#= helper.OptAttr("Last", tra.Last) #></td>
+					<td><#= helper.OptAttr("Mbr", tra.Mbr) #></td>
+					</tr></table>
+					</td>
 				</tr>
 				<tr>
 					<td class="spaltennummer">0</td>
 					<td class="spaltennummer">1</td>
-					<td class="spaltennummer">2</td>
+					<td class="spaltennummer" colspan="2">2</td>
 					<td class="spaltennummer">3</td>
 					<td class="spaltennummer">4</td>
 				</tr>
 				<tr>
 					<td class="spaltenkopf">Lage<br>der<br>Betriebs-<br>stelle<br><br>(km)</td>
 					<td class="spaltenkopf">Höchst-<br>Geschwin-<br>digkeit<br><br><br>(km/h)</td>
-					<td class="spaltenkopf">Betriebsstellen,<br>ständige Langsamfahrstellen,<br>verkürzter Vorsignalabstand</td>
+					<td class="spaltenkopf" colspan="2">Betriebsstellen,<br>ständige Langsamfahrstellen,<br>verkürzter Vorsignalabstand</td>
 					<td class="spaltenkopf">Ankunft</td><td class=spaltenkopf>Abfahrt<br>oder Durch-<br>fahrt</td>
 				</tr>
-				<# foreach (var entity in helper.GetStations(tra.Direction)) { #>
+				<#
+				int rs_counter = 0;
+				foreach (var entity in helper.GetStations(tra.Direction)) { #>
 				<tr class="<#= helper.HtmlName(entity.SName, "station-") #>">
 					<#
 					if (entity.GetType() == typeof(Station)) {
 						Station s = (Station)entity; #>
 					<td class="zug"><#= s.Kilometre.ToString("0.0") #></td>
 					<td class="zug"><#= s.GetAttribute("fpl-vmax", "") #></td>
-					<td class="zug"><#= s.SName #></td>
+					<td class="zug stat"><#= s.SName #></td>
+					<#= GetWelle(ref rs_counter, entity, tra) #>
 					<#
 					var ardp = tra.GetArrDep(s);
 					var ar = ardp.Arrival.ToShortTimeString();
@@ -156,7 +199,8 @@
 						BfplPoint p = (BfplPoint)entity; #>
 					<td class="zug"><#= p.Kilometre.ToString("0.0") #></td>
 					<td class="zug"><#= p.GetAttribute("fpl-vmax", "") #></td>
-					<td class="zug"><#= p.SName #></td>
+					<td class="zug stat"><#= p.SName #></td>
+					<#= GetWelle(ref rs_counter, entity, tra) #>
 					<td class="zug"></td>
 					<td class="zug"></td>
 					<# } #>
@@ -165,7 +209,8 @@
 				<tr>
 					<td class="tabellenende"></td>
 					<td class="tabellenende"></td>
-					<td class="tabellenende"></td>
+					<td class="tabellenende stat"></td>
+					<td class="tabellenende welle"></td>
 					<td class="tabellenende"></td>
 					<td class="tabellenende"></td>
 				</tr>
