@@ -108,6 +108,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\WellenCss.txt" />
     <Content Include="Templates\ZLBTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>ZLBTemplate.cs</LastGenOutput>

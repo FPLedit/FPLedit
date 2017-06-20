@@ -72,7 +72,7 @@ namespace FPLedit.BuchfahrplanExport
             VelocityEditForm vef = new VelocityEditForm(tt);
             if (vef.ShowDialog() == DialogResult.OK)
             {
-                var point = vef.Point;
+                var point = (BfplPoint)vef.Station;
                 if (attrs != null)
                     attrs.AddPoint(point);
                 UpdateStations();
@@ -85,30 +85,15 @@ namespace FPLedit.BuchfahrplanExport
             {
                 ListViewItem item = listView.Items[listView.SelectedIndices[0]];
 
-                if (item.Tag.GetType() == typeof(Station))
-                {
-                    Station station = (Station)item.Tag;
+                var sta = (IStation)item.Tag;
 
-                    VelocityEditForm vef = new VelocityEditForm(station);
-                    if (vef.ShowDialog() == DialogResult.OK)
-                    {
-                        UpdateStations();
-                        item.Selected = true;
-                        item.EnsureVisible();
-                    }
-                }
-                else if (item.Tag.GetType() == typeof(BfplPoint))
+                VelocityEditForm vef = new VelocityEditForm(sta);
+                if (vef.ShowDialog() == DialogResult.OK)
                 {
-                    BfplPoint point = (BfplPoint)item.Tag;
-                    VelocityEditForm vef = new VelocityEditForm(point);
-                    if (vef.ShowDialog() == DialogResult.OK)
-                    {
-                        UpdateStations();
-                        item.Selected = true;
-                        item.EnsureVisible();
-                    }
+                    UpdateStations();
+                    item.Selected = true;
+                    item.EnsureVisible();
                 }
-
             }
             else if (message)
                 MessageBox.Show("Zuerst muss eine Zeile ausgewählt werden!", "Höchstgeschwindigkeit ändern");

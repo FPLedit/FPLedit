@@ -6,12 +6,9 @@ using System.Windows.Forms;
 
 namespace FPLedit.BuchfahrplanExport
 {
-    //TODO: Refactor
     public partial class VelocityEditForm : Form
     {
-        public Station Station { get; set; }
-
-        public BfplPoint Point { get; set; }
+        public IStation Station { get; set; }
 
         private bool isPoint = false;
 
@@ -26,33 +23,26 @@ namespace FPLedit.BuchfahrplanExport
 
         public VelocityEditForm(Timetable tt) : this()
         {
-            Point = new BfplPoint(tt);
+            Station = new BfplPoint(tt);
             isPoint = true;
         }
 
-        public VelocityEditForm(Station station) : this()
+        public VelocityEditForm(IStation sta) : this()
         {
-            Station = station;
+            Station = sta;
 
-            velocityTextBox.Text = station.GetAttribute("fpl-vmax", velocityTextBox.Text);
+            velocityTextBox.Text = sta.GetAttribute("fpl-vmax", velocityTextBox.Text);
+            positionTextBox.Text = sta.Kilometre.ToString();
+            nameTextBox.Text = sta.SName;
+            wellenComboBox.SelectedItem = sta.Wellenlinien.ToString();
 
-            positionTextBox.Text = station.Kilometre.ToString();
-            positionTextBox.Enabled = false;
-            nameTextBox.Text = station.SName;
-            nameTextBox.Enabled = false;
-            wellenComboBox.SelectedItem = station.Wellenlinien.ToString();
-        }
-
-        public VelocityEditForm(BfplPoint point) : this()
-        {
-            Point = point;
             isPoint = true;
-
-            velocityTextBox.Text = point.GetAttribute("fpl-vmax", velocityTextBox.Text);
-
-            positionTextBox.Text = point.Kilometre.ToString();
-            nameTextBox.Text = point.SName;
-            wellenComboBox.SelectedItem = point.Wellenlinien.ToString();
+            if (sta.GetType() == typeof(Station))
+            {
+                positionTextBox.Enabled = false;
+                nameTextBox.Enabled = false;
+                isPoint = false;
+            }
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -65,17 +55,13 @@ namespace FPLedit.BuchfahrplanExport
 
             DialogResult = DialogResult.OK;
 
+            Station.SetAttribute("fpl-vmax", velocityTextBox.Text);
+            Station.Wellenlinien = int.Parse((string)wellenComboBox.SelectedItem);
+
             if (isPoint)
             {
-                Point.SetAttribute("fpl-vmax", velocityTextBox.Text);
-                Point.Kilometre = float.Parse(positionTextBox.Text);
-                Point.SName = nameTextBox.Text;
-                Point.Wellenlinien = int.Parse((string)wellenComboBox.SelectedItem);
-            }
-            else
-            {
-                Station.SetAttribute("fpl-vmax", velocityTextBox.Text);
-                Station.Wellenlinien = int.Parse((string)wellenComboBox.SelectedItem);
+                Station.Kilometre = float.Parse(positionTextBox.Text);
+                Station.SName = nameTextBox.Text;
             }
             Close();
         }

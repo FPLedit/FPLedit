@@ -62,10 +62,8 @@ namespace FPLedit.BuchfahrplanExport.Properties {
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die &lt;script&gt;
-        ///
-        ///var console = `&lt;style id=&quot;tryoutcss&quot;&gt;
-        ///&lt;/style&gt;
-        ///&lt;style&gt;
+        ///// CSS-Tryout-Console , generiert von FPLedit
+        ///var tryout_code = `&lt;style&gt;
         ///#tryout-console {
         ///	position:absolute;
         ///	top: 10px;
@@ -78,11 +76,31 @@ namespace FPLedit.BuchfahrplanExport.Properties {
         ///&lt;div id=&quot;tryout-console&quot;&gt;
         ///	Hier können Sie CSS-Code eingeben und testen:&lt;br&gt;
         ///	&lt;textarea id=&quot;tryout-ta&quot; cols=&quot;50&quot; rows=&quot;20&quot;&gt;&lt;#= additionalCss #&gt;&lt;/textarea&gt;&lt;br&gt;
-        ///	&lt;button onclick=&quot;document.getElementById(&apos;tryoutcss&apos;).innerText=document.getElementById(&apos;tryout-ta&apos;).value;&quot;&gt;CSS set [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///	&lt;button onclick=&quot;add_css.innerHTML = tryout_textarea.value;&quot;&gt;CSS setzen!&lt;/button&gt;&lt;br&gt;
+        ///	&lt;a href=&quot;#&quot; o [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string TryoutScript {
             get {
                 return ResourceManager.GetString("TryoutScript", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die .stat {
+        ///	border-right:none;
+        ///	padding-left: 20px;
+        ///}
+        ///.welle {
+        ///	border-left:none;
+        ///	background-repeat: repeat-y;
+        ///	background-position: right 2px top;
+        ///}
+        ///.welle1 {
+        ///	background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iNG1tIiB3aWR0aD0iMm1tIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA3LjA4NjYxNDIgMTQuMTczMjI4Ij4NCjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAgLTEwMzguMikiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIxcHgiIGZpbGw9Im5vbmUiPg0KPHBhdGggZD0ibS0wLjAzMTU2NyAxMDQ [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string WellenCss {
+            get {
+                return ResourceManager.GetString("WellenCss", resourceCulture);
             }
         }
     }

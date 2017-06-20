@@ -1,6 +1,7 @@
 ﻿<#@ template language="C#" #>
 <#@ import namespace="FPLedit.Shared" #>
 <#@ import namespace="FPLedit.BuchfahrplanExport.Model" #>
+<#@ import namespace="FPLedit.BuchfahrplanExport.Properties" #>
 
 <!DOCTYPE html>
 <html>
@@ -104,30 +105,7 @@
 			}
 		}
 
-		.stat {
-			border-right:none;
-			padding-left: 20px;
-		}
-		.welle {
-			border-left:none;
-			background-repeat: repeat-y;
-			background-position: right 2px top;
-		}
-		.welle1 {
-			/*background-image: url(drawing.svg);*/
-			background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iNG1tIiB3aWR0aD0iMm1tIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA3LjA4NjYxNDIgMTQuMTczMjI4Ij4NCjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAgLTEwMzguMikiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIxcHgiIGZpbGw9Im5vbmUiPg0KPHBhdGggZD0ibS0wLjAzMTU2NyAxMDQ1LjMgNy4xMDI2IDcuMDcxMSIvPg0KPHBhdGggZD0ibTcuMDU1MyAxMDM4LjItNy4xMDI2IDcuMDcxMSIvPg0KPC9nPg0KPC9zdmc+DQo=);
-			background-size: 5px 9.5px;
-		}
-		.welle2 {
-			/*background-image: url(drawing2.svg);*/
-			background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iNG1tIiB3aWR0aD0iNG1tIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAxNC4xNzMyMjkgMTQuMTczMjI4Ij4NCjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAgLTEwMzguMikiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIxcHgiIGZpbGw9Im5vbmUiPg0KPHBhdGggZD0ibS0wLjAzMTU2NyAxMDQ1LjMgNy4xMDI2IDcuMDcxMSIvPg0KPHBhdGggZD0ibTcuMDU1MyAxMDM4LjItNy4xMDI2IDcuMDcxMSIvPg0KPHBhdGggZD0ibTcuMDU2NCAxMDQ1LjMgNy4xMDI2IDcuMDcxMSIvPg0KPHBhdGggZD0ibTE0LjE0MyAxMDM4LjItNy4xMDI2IDcuMDcxMSIvPg0KPC9nPg0KPC9zdmc+DQo=);
-			background-size: 10px 9.5px;
-		}
-		.welle3 {
-			/*background-image: url(drawing3.svg);*/
-			background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iNG1tIiB3aWR0aD0iNm1tIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAyMS4yNTk4NDMgMTQuMTczMjI4Ij4NCjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAgLTEwMzguMikiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIxcHgiIGZpbGw9Im5vbmUiPg0KPHBhdGggZD0ibS0wLjAzMTU2NyAxMDQ1LjMgNy4xMDI2IDcuMDcxMSIvPg0KPHBhdGggZD0ibTcuMDU1MyAxMDM4LjItNy4xMDI2IDcuMDcxMSIvPg0KPHBhdGggZD0ibTcuMDU2NCAxMDQ1LjMgNy4xMDI2IDcuMDcxMSIvPg0KPHBhdGggZD0ibTE0LjE0MyAxMDM4LjItNy4xMDI2IDcuMDcxMSIvPg0KPHBhdGggZD0ibTE0LjEzNCAxMDQ1LjMgNy4xMDI2IDcuMDcxMSIvPg0KPHBhdGggZD0ibTIxLjIyMSAxMDM4LjItNy4xMDI2IDcuMDcxMSIvPg0KPC9nPg0KPC9zdmc+);
-			background-size: 15px 9.5px;
-		}
+		<#= Resources.WellenCss #>
 		</style>
 		<style id="add-css">
 			<#= additionalCss #>
@@ -188,37 +166,32 @@
 				int rs_counter = 0;
 				foreach (var entity in helper.GetStations(tra.Direction)) { #>
 				<tr class="<#= helper.HtmlName(entity.SName, "station-") #>">
+					<td class="zug first"><#= entity.Kilometre.ToString("0.0") #></td>
+					<td class="zug"><#= entity.GetAttribute("fpl-vmax", "") #></td>
+					<td class="zug stat"><#= entity.SName #></td>
+					<#= GetWelle(ref rs_counter, entity, tra) #>
+
 					<#
 					if (entity.GetType() == typeof(Station)) {
-						Station s = (Station)entity; #>
-					<td class="zug first"><#= s.Kilometre.ToString("0.0") #></td>
-					<td class="zug"><#= s.GetAttribute("fpl-vmax", "") #></td>
-					<td class="zug stat"><#= s.SName #></td>
-					<#= GetWelle(ref rs_counter, entity, tra) #>
-					<td class="zug klein"><!--Trapeztafel--><#= helper.TrapezHalt(tra, s) #></td>
-					<#
-					var ardp = tra.GetArrDep(s);
-					var ar = ardp.Arrival.ToShortTimeString();
-					var dp = ardp.Departure.ToShortTimeString();
-					var zlm = ardp.Zuglaufmeldung;
+						Station s = (Station)entity;
+						var ardp = tra.GetArrDep(s);
+						var ar = ardp.Arrival.ToShortTimeString();
+						var dp = ardp.Departure.ToShortTimeString();
+						var zlm = ardp.Zuglaufmeldung;
 					#>
+					<td class="zug klein"><#= helper.TrapezHalt(tra, s) #></td>
 					<td class="zug"><#= ar != "00:00" ? ar : "" #></td>
 					<td class="zug"><#= dp != "00:00" ? dp : "" #></td>
-					<td class="zug klein"><!--Kreuzung--><#= helper.Kreuzt(tra, s) #></td>
-					<td class="zug klein"><!--überholt--><#= helper.Ueberholt(tra, s) #></td>
-					<td class="zug klein last"><#= zlm ?? "" #><!--Zuglaufmeldung--></td>
+					<td class="zug klein"><#= helper.Kreuzt(tra, s) #></td>
+					<td class="zug klein"><#= helper.Ueberholt(tra, s) #></td>
+					<td class="zug klein last"><#= zlm ?? "" #></td>
 
-					<# } else {
-						BfplPoint p = (BfplPoint)entity; #>
-					<td class="zug first"><#= p.Kilometre.ToString("0.0") #></td>
-					<td class="zug"><#= p.GetAttribute("fpl-vmax", "") #></td>
-					<td class="zug stat"><#= p.SName #></td>
-					<#= GetWelle(ref rs_counter, entity, tra) #>
-					<td class="zug klein"><!--Trapeztafel, bleibt leer--></td>
+					<# } else { #>
+					<td class="zug klein"><!--Trapeztafel--></td>
 					<td class="zug"></td>
 					<td class="zug"></td>
-					<td class="zug klein"><!--Kreuzung, bleibt leer--></td>
-					<td class="zug klein"><!--überholt, bleibt leer--></td>
+					<td class="zug klein"><!--Kreuzung--></td>
+					<td class="zug klein"><!--überholt--></td>
 					<td class="zug klein last"><!--Zuglaufmeldung--></td>
 					<# } #>
 				</tr>
