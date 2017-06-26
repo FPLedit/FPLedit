@@ -130,7 +130,7 @@ namespace FPLedit.Standard
                 var ntt = import.Import(ofd.FileName, info.Logger);
                 foreach (var station in ntt.Stations)
                     tt.AddStation(station);
-                ntt = null; // ntt will be destroyed by decoupling stations, do not use afterwards!
+                // ntt will be destroyed by decoupling stations, do not use afterwards!
             }
 
             UpdateStations();

@@ -9,6 +9,12 @@ var tryout_code = `<style>
 	padding: 10px;
 	background-color: white !important;
 }
+
+@media print {
+	#tryout-console {
+		display: none;
+	}
+}
 </style>
 <div id="tryout-console">
 	Hier können Sie CSS-Code eingeben und testen:<br>
