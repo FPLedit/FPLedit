@@ -41,14 +41,33 @@ namespace FPLedit.Shared
         public Timetable(XMLEntity en) : base(en, null) // Root without parent
         {
             stations = new List<Station>();
-            sElm = Children.First(x => x.XName == "stations");
-            foreach (var c in sElm.Children.Where(x => x.XName == "sta")) // Filtert andere Elemente
-                stations.Add(new Station(c, this));
+            sElm = Children.FirstOrDefault(x => x.XName == "stations");
+            if (sElm != null)
+            {
+                foreach (var c in sElm.Children.Where(x => x.XName == "sta")) // Filtert andere Elemente
+                    stations.Add(new Station(c, this));
+            }
+            else
+            {
+                sElm = new XMLEntity("stations");
+                Children.Add(sElm);
+            }
 
             trains = new List<Train>();
-            tElm = Children.First(x => x.XName == "trains");
-            foreach (var c in tElm.Children.Where(x => x.XName == "ti" || x.XName == "ta")) // Filtert andere Elemente
-                trains.Add(new Train(c, this));
+            tElm = Children.FirstOrDefault(x => x.XName == "trains");
+            if (sElm == null && tElm != null)
+                throw new Exception("Kein <stations>-Element vorhanden, dafür aber <trains>!");
+
+            if (tElm != null)
+            {
+                foreach (var c in tElm.Children.Where(x => x.XName == "ti" || x.XName == "ta")) // Filtert andere Elemente
+                    trains.Add(new Train(c, this));
+            }
+            else
+            {
+                tElm = new XMLEntity("trains");
+                Children.Add(tElm);
+            }
         }
 
         public List<Station> GetStationsOrderedByDirection(TrainDirection direction)
