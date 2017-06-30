@@ -49,6 +49,7 @@
     <Compile Include="AfplTemplateCode.cs" />
     <Compile Include="HtmlExport.cs" />
     <Compile Include="Model\AfplAttrs.cs" />
+    <Compile Include="Model\Rule.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

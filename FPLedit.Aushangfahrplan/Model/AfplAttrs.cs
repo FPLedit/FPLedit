@@ -42,10 +42,16 @@ namespace FPLedit.AushangfahrplanExport.Model
         //    }
         //}
 
-        public string Pattern
+        public string TrainPatterns
         {
-            get => GetAttribute("p", "");
-            set => SetAttribute("p", value);
+            get => GetAttribute("tp", "");
+            set => SetAttribute("tp", value);
+        }
+
+        public string StationPatterns
+        {
+            get => GetAttribute("sp", "");
+            set => SetAttribute("sp", value);
         }
 
         public AfplAttrs(Timetable tt) : base("afpl_attrs", tt)

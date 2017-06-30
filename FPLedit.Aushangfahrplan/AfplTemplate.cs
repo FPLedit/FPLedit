@@ -103,7 +103,7 @@ td {
 	");
             
             #line 77 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\AfplTemplate.tt"
- foreach (var sta in tt.Stations) { 
+ foreach (var sta in GetStations()) { 
             
             #line default
             #line hidden
@@ -143,8 +143,8 @@ td {
             
             #line 90 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\AfplTemplate.tt"
 
-			var trainsA = GetTrainsByDir(TrainDirection.ta, sta);
-			var trainsB = GetTrainsByDir(TrainDirection.ti, sta);
+			var trainsA = GetTrains(TrainDirection.ta, sta);
+			var trainsB = GetTrains(TrainDirection.ti, sta);
 			int count = Math.Max(trainsA.Length, trainsB.Length);
 		
             

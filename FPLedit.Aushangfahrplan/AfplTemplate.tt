@@ -74,7 +74,7 @@ td {
 </style>
 </head>
 <body>
-	<# foreach (var sta in tt.Stations) { #>
+	<# foreach (var sta in GetStations()) { #>
 	<p class="station">Bahnhof <#= sta.SName #></p>
 	<p class="title">Abfahrt</p>
 	<p class="heading">der Züge in der Richtung nach</p>
@@ -88,8 +88,8 @@ td {
 			<td colspan="2" class="dir"><#= ls != sta ? ls.SName : "" #></td>
 		</tr>
 		<#
-			var trainsA = GetTrainsByDir(TrainDirection.ta, sta);
-			var trainsB = GetTrainsByDir(TrainDirection.ti, sta);
+			var trainsA = GetTrains(TrainDirection.ta, sta);
+			var trainsB = GetTrains(TrainDirection.ti, sta);
 			int count = Math.Max(trainsA.Length, trainsB.Length);
 		#>
 		<tr>
