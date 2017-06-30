@@ -13,10 +13,7 @@ namespace FPLedit.Standard
 {
     public class Plugin : IPlugin
     {
-        public string Name
-        {
-            get { return "Fahrplan-Editoren"; }
-        }
+        public string Name => "Fahrplan-Editoren";
 
         private IInfo info;
         private ToolStripItem editLineItem, editTrainsItem, editTimetableItem;

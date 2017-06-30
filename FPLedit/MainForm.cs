@@ -71,11 +71,15 @@ namespace FPLedit
         public MainForm()
         {
             InitializeComponent();
-            exporters = new List<IExport>();
+
+            // Eingebaute Dateiformate initialisieren
+            exporters = new List<IExport>(new[] { new CleanedXMLExport() });
             importers = new List<IImport>();
 
             open = new XMLImport();
             save = new XMLExport();
+            saveFileDialog.Filter = save.Filter;
+            openFileDialog.Filter = open.Filter;
 
             fileState = new FileState();
             Logger = new MultipleLogger(logTextBox);
@@ -87,9 +91,6 @@ namespace FPLedit
             extensionManager = new ExtensionManager(Logger);
             foreach (var plugin in extensionManager.EnabledPlugins)
                 plugin.Init(this);
-
-            saveFileDialog.Filter = save.Filter;
-            openFileDialog.Filter = open.Filter;
 
             exportFileDialog.Filter = string.Join("|", exporters.Select(ex => ex.Filter));
             importFileDialog.Filter = string.Join("|", importers.Select(im => im.Filter));
