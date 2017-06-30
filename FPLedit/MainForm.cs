@@ -95,6 +95,11 @@ namespace FPLedit
             exportFileDialog.Filter = string.Join("|", exporters.Select(ex => ex.Filter));
             importFileDialog.Filter = string.Join("|", importers.Select(im => im.Filter));
 
+            // Letzten Exporter auswählen
+            int exporter_idx = SettingsManager.Get("exporter.last", -1);
+            if (exporter_idx > -1 && exporters.Count > exporter_idx)
+                exportFileDialog.FilterIndex = exporter_idx + 1;
+
             // Zuletzt geöffnete Dateien anzeigen
             enable_last = SettingsManager.Get("files.save-last", true);
             if (enable_last)
@@ -192,6 +197,7 @@ namespace FPLedit
                 if (ret == false)
                     return;
                 Logger.Info("Speichern erfolgreich abgeschlossen!");
+                SettingsManager.Set("exporter.last", exportFileDialog.FilterIndex - 1);
             }
         }
 

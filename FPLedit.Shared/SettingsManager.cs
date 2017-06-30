@@ -74,5 +74,13 @@ namespace FPLedit.Shared
         /// <param name="value">Der Wert der Einstellung.</param>
         public static void Set(string key, bool value)
             => Set(key, value.ToString());
+
+        /// <summary>
+        /// Setzt den Wert einer Eigenschaft.
+        /// </summary>
+        /// <param name="key">Der Schlüssel der Einstellung.</param>
+        /// <param name="value">Der Wert der Einstellung.</param>
+        public static void Set(string key, int value)
+            => Set(key, value.ToString());
     }
 }
