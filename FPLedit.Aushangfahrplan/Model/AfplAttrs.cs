@@ -48,12 +48,20 @@ namespace FPLedit.AushangfahrplanExport.Model
             set => SetAttribute("p", value);
         }
 
-        public AfplAttrs(Timetable tt) : base("bfpl_attrs", tt)
+        public AfplAttrs(Timetable tt) : base("afpl_attrs", tt)
         {
         }
 
         public AfplAttrs(XMLEntity en, Timetable tt) : base(en, tt)
         {
+        }
+
+        public static AfplAttrs GetAttrs(Timetable tt)
+        {
+            var attrsEn = tt.Children.FirstOrDefault(x => x.XName == "afpl_attrs");
+            if (attrsEn != null)
+                return new AfplAttrs(attrsEn, tt);
+            return null;
         }
     }
 }

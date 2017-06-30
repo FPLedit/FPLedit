@@ -35,9 +35,7 @@ namespace FPLedit.BuchfahrplanExport
             this.info = info;
             tt = info.Timetable;
 
-            var attrsEn = tt.Children.FirstOrDefault(x => x.XName == "bfpl_attrs");
-            if (attrsEn != null)
-                attrs = new BfplAttrs(attrsEn, tt);
+            attrs = BfplAttrs.GetAttrs(tt);
 
             info.BackupTimetable();
             UpdateStations();

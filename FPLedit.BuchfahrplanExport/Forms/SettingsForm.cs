@@ -15,7 +15,7 @@ namespace FPLedit.BuchfahrplanExport
 {
     public partial class SettingsForm : Form
     {
-        private BfplAttrs data;
+        private BfplAttrs attrs;
         private BfplTemplateChooser chooser;
 
         public SettingsForm()
@@ -29,22 +29,20 @@ namespace FPLedit.BuchfahrplanExport
             var templates = chooser.GetAvailableTemplates().Select(t => t.Name).ToArray();
             templateComboBox.Items.AddRange(templates);
 
-            var dataEn = tt.Children.FirstOrDefault(x => x.XName == "bfpl_attrs");
-
-            if (dataEn != null)
+            attrs = BfplAttrs.GetAttrs(tt);
+            if (attrs != null)
             {
-                data = new BfplAttrs(dataEn, tt);
-                fontComboBox.Text = data.Font;
-                cssTextBox.Text = data.Css ?? "";
+                fontComboBox.Text = attrs.Font;
+                cssTextBox.Text = attrs.Css ?? "";
 
-                var typeName = chooser.ExpandName(data.Template);
+                var typeName = chooser.ExpandName(attrs.Template);
                 var tmpl = chooser.GetAvailableTemplates().FirstOrDefault(t => t.GetType().FullName == typeName) ?? new Templates.BuchfahrplanTemplate();
                 templateComboBox.Text = tmpl.Name;
             }
             else
             {
-                data = new BfplAttrs(tt);
-                tt.Children.Add(data.XMLEntity);
+                attrs = new BfplAttrs(tt);
+                tt.Children.Add(attrs.XMLEntity);
             }
         }
 
@@ -75,12 +73,12 @@ namespace FPLedit.BuchfahrplanExport
 
         private void closeButton_Click(object sender, EventArgs e)
         {
-            data.Font = fontComboBox.Text;
-            data.Css = cssTextBox.Text;
+            attrs.Font = fontComboBox.Text;
+            attrs.Css = cssTextBox.Text;
 
             var tmpl_idx = templateComboBox.SelectedIndex;
             var tmpl = chooser.GetAvailableTemplates()[tmpl_idx];
-            data.Template = chooser.ReduceName(tmpl.GetType().FullName);
+            attrs.Template = chooser.ReduceName(tmpl.GetType().FullName);
 
             SettingsManager.Set("bfpl.console", consoleCheckBox.Checked);
 

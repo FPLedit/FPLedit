@@ -22,11 +22,10 @@ namespace FPLedit.BuchfahrplanExport.Templates
         {
             this.tt = tt;
             helper.TT = tt;
-            var attrsEn = tt.Children.FirstOrDefault(x => x.XName == "bfpl_attrs");
 
-            if (attrsEn != null)
+            attrs = BfplAttrs.GetAttrs(tt);
+            if (attrs != null)
             {
-                attrs = new BfplAttrs(attrsEn, tt);
                 if (attrs.Font != "")
                     font = attrs.Font;
                 additionalCss = attrs.Css ?? "";

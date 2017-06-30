@@ -56,6 +56,14 @@ namespace FPLedit.BuchfahrplanExport.Model
                 Points.Add(new BfplPoint(c, _parent));
         }
 
+        public static BfplAttrs GetAttrs(Timetable tt)
+        {
+            var attrsEn = tt.Children.FirstOrDefault(x => x.XName == "bfpl_attrs");
+            if (attrsEn != null)
+                return new BfplAttrs(attrsEn, tt);
+            return null;
+        }
+
         public void AddPoint(BfplPoint p)
         {
             Points.Add(p);
