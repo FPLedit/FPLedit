@@ -6,11 +6,11 @@ using System.Text;
 
 namespace FPLedit.AushangfahrplanExport
 {
-    partial class AushangfahrplanTemplate
+    partial class AfplTemplate
     {
         private Timetable tt;
 
-        public AushangfahrplanTemplate(Timetable tt)
+        public AfplTemplate(Timetable tt)
         {
             this.tt = tt;
         }

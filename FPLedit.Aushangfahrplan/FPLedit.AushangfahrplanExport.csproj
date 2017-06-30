@@ -41,13 +41,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AushangfahrplanTemplate.cs">
+    <Compile Include="AfplTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>AushangfahrplanTemplate.tt</DependentUpon>
+      <DependentUpon>AfplTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Include="AushangfahrplanTemplateCode.cs" />
+    <Compile Include="AfplTemplateCode.cs" />
     <Compile Include="HtmlExport.cs" />
+    <Compile Include="Model\AfplAttrs.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -58,9 +59,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AushangfahrplanTemplate.tt">
+    <Content Include="AfplTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>AushangfahrplanTemplate.cs</LastGenOutput>
+      <LastGenOutput>AfplTemplate.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <ItemGroup>

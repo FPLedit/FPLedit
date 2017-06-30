@@ -13,7 +13,7 @@ namespace FPLedit.AushangfahrplanExport
 
         public bool Export(Timetable tt, string filename, IInfo info)
         {
-            AushangfahrplanTemplate templ = new AushangfahrplanTemplate(tt);
+            AfplTemplate templ = new AfplTemplate(tt);
             string cont = templ.TransformText();
             File.WriteAllText(filename, cont);
 
