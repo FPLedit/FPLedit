@@ -68,8 +68,8 @@ namespace FPLedit.Standard
         {
             if (listView.SelectedItems.Count > 0)
             {
-                ListViewItem item = listView.Items[listView.SelectedIndices[0]]; //TODO: Refactor
-                Station station = tt.Stations[tt.Stations.IndexOf((Station)item.Tag)];
+                ListViewItem item = listView.SelectedItems[0];
+                Station station = (Station)item.Tag;
 
                 EditStationForm nsf = new EditStationForm(station);
                 if (nsf.ShowDialog() == DialogResult.OK)
@@ -88,7 +88,7 @@ namespace FPLedit.Standard
         {
             if (listView.SelectedItems.Count > 0)
             {
-                ListViewItem item = listView.Items[listView.SelectedIndices[0]];
+                ListViewItem item = listView.SelectedItems[0];
                 tt.RemoveStation((Station)item.Tag);
 
                 UpdateStations();

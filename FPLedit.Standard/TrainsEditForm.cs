@@ -93,7 +93,7 @@ namespace FPLedit.Standard
         {
             if (view.SelectedItems.Count > 0)
             {
-                ListViewItem item = view.Items[view.SelectedIndices[0]];
+                ListViewItem item = view.SelectedItems[0];
                 tt.RemoveTrain((Train)item.Tag);
 
                 UpdateListView(view, direction);
@@ -106,8 +106,8 @@ namespace FPLedit.Standard
         {
             if (view.SelectedItems.Count > 0)
             {
-                ListViewItem item = view.Items[view.SelectedIndices[0]];
-                Train train = tt.Trains[tt.Trains.IndexOf((Train)item.Tag)];
+                ListViewItem item = view.SelectedItems[0];
+                Train train = (Train)item.Tag;
 
                 TrainEditForm tef = new TrainEditForm(train);
                 if (tef.ShowDialog() == DialogResult.OK)
