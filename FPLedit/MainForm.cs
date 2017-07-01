@@ -321,6 +321,14 @@ namespace FPLedit
 
         public void RegisterImport(IImport import)
             => importers.Add(import);
+
+        public string GetTemp(string filename)
+        {
+            var dirpath = Path.Combine(Path.GetTempPath(), "fpledit");
+            if (!Directory.Exists(dirpath))
+                Directory.CreateDirectory(dirpath);
+            return Path.Combine(dirpath, filename);
+        }
         #endregion
 
         #region Events

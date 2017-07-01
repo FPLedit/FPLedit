@@ -62,7 +62,7 @@ namespace FPLedit.BuchfahrplanExport
         private void ShowItem_Click(object sender, EventArgs e)
         {
             HtmlExport exp = new HtmlExport();
-            string path = Path.Combine(Path.GetTempPath(), "buchfahrplan.html");
+            string path = info.GetTemp("buchfahrplan.html");
 
             bool tryoutConsole = SettingsManager.Get<bool>("bfpl.console");
             if (tryoutConsole)

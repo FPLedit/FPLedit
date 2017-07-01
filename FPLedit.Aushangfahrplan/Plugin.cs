@@ -38,7 +38,7 @@ namespace FPLedit.AushangfahrplanExport
         private void ShowItem_Click(object sender, EventArgs e)
         {
             HtmlExport exp = new HtmlExport();
-            string path = Path.Combine(Path.GetTempPath(), "aushangfahrplan.html");
+            string path = info.GetTemp("aushangfahrplan.html");
 
             exp.Export(info.Timetable, path, info);
             Process.Start(path);

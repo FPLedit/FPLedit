@@ -24,11 +24,14 @@ namespace FPLedit.Shared
 
         void RegisterImport(IImport import);
 
+        // FileHandling
         void Open();
 
         void Save(bool forceSaveAs);
 
         void Reload();
+
+        string GetTemp(string filename);
 
         dynamic Menu { get; }
 
