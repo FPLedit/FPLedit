@@ -1,4 +1,5 @@
-﻿using FPLedit.Shared;
+﻿using FPLedit.AushangfahrplanExport.Forms;
+using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,7 +13,7 @@ namespace FPLedit.AushangfahrplanExport
     public class Plugin : IPlugin
     {
         private IInfo info;
-        private ToolStripItem showItem;
+        private ToolStripItem showItem, settingsItem;
 
         public string Name => "Exporter für Aushangfahrpläne";
 
@@ -28,6 +29,10 @@ namespace FPLedit.AushangfahrplanExport
             showItem = item.DropDownItems.Add("Anzeigen");
             showItem.Enabled = false;
             showItem.Click += ShowItem_Click;
+
+            settingsItem = item.DropDownItems.Add("Aushangfahrplan-Darstellung");
+            settingsItem.Enabled = false;
+            settingsItem.Click += SettingsItem_Click;
         }
 
         private void ShowItem_Click(object sender, EventArgs e)
@@ -39,8 +44,16 @@ namespace FPLedit.AushangfahrplanExport
             Process.Start(path);
         }
 
+        private void SettingsItem_Click(object sender, EventArgs e)
+        {
+            SettingsForm sf = new SettingsForm(info.Timetable);
+            if (sf.ShowDialog() == DialogResult.OK)
+                info.SetUnsaved();
+        }
+
         private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)
         {
+            settingsItem.Enabled = e.FileState.Opened;
             showItem.Enabled = e.FileState.LineCreated;
         }
     }
