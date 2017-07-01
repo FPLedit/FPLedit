@@ -70,6 +70,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\build_scripts\VersionInfo.cs">
+      <Link>Properties\VersionInfo.cs</Link>
+    </Compile>
     <Compile Include="ExtensionManager.cs" />
     <Compile Include="ExtensionsForm.cs">
       <SubType>Form</SubType>
