@@ -15,7 +15,7 @@ namespace FPLedit.Shared.Logger
         {
             filename = info.GetTemp("fpledit_log.txt");
 
-            if (new FileInfo(filename).Length > 10240) // > 10KB
+            if (File.Exists(filename) && new FileInfo(filename).Length > 10240) // > 10KB
                 File.Delete(filename);
 
             Write("FPLedit Programmstart", "INFO");

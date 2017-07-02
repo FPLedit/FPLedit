@@ -82,7 +82,11 @@ namespace FPLedit
             openFileDialog.Filter = open.Filter;
 
             fileState = new FileState();
-            Logger = new MultipleLogger(logTextBox, new TempLogger(this));
+
+            if (SettingsManager.Get("log.enable-file", false))
+                Logger = new MultipleLogger(logTextBox, new TempLogger(this));
+            else
+                Logger = new MultipleLogger(logTextBox);
         }
 
         private void Form1_Load(object sender, EventArgs e)
