@@ -1,11 +1,11 @@
-﻿using FPLedit.BuchfahrplanExport.Model;
+﻿using FPLedit.Buchfahrplan.Model;
 using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace FPLedit.BuchfahrplanExport.Templates
+namespace FPLedit.Buchfahrplan.Templates
 {
     partial class BuchfahrplanTemplate : IBfplTemplate
     {

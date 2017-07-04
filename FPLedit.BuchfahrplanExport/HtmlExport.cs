@@ -1,5 +1,5 @@
-﻿using FPLedit.BuchfahrplanExport.Model;
-using FPLedit.BuchfahrplanExport.Properties;
+﻿using FPLedit.Buchfahrplan.Model;
+using FPLedit.Buchfahrplan.Properties;
 using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace FPLedit.BuchfahrplanExport
+namespace FPLedit.Buchfahrplan
 {
     public class HtmlExport : IExport
     {

@@ -1,4 +1,4 @@
-﻿namespace FPLedit.AushangfahrplanExport.Forms
+﻿namespace FPLedit.Aushangfahrplan.Forms
 {
     partial class FilterForm
     {

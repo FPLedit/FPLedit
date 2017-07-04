@@ -1,11 +1,11 @@
-﻿using FPLedit.AushangfahrplanExport.Model;
+﻿using FPLedit.Aushangfahrplan.Model;
 using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace FPLedit.AushangfahrplanExport.Templates
+namespace FPLedit.Aushangfahrplan.Templates
 {
     partial class AfplTemplate : IAfplTemplate
     {

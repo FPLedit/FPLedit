@@ -8,14 +8,14 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace FPLedit.BuchfahrplanExport
+namespace FPLedit.Buchfahrplan
 {
     public class Plugin : IPlugin
     {
         private IInfo info;
         private ToolStripItem showItem, velocityItem, settingsItem;
 
-        public string Name => "Exporter für Buchfahrpläne";
+        public string Name => "Modul für Buchfahrpläne";
 
         public void Init(IInfo info)
         {

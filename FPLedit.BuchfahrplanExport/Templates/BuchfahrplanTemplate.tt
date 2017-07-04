@@ -1,7 +1,7 @@
 ﻿<#@ template language="C#" #>
 <#@ import namespace="FPLedit.Shared" #>
-<#@ import namespace="FPLedit.BuchfahrplanExport.Model" #>
-<#@ import namespace="FPLedit.BuchfahrplanExport.Properties" #>
+<#@ import namespace="FPLedit.Buchfahrplan.Model" #>
+<#@ import namespace="FPLedit.Buchfahrplan.Properties" #>
 
 <!DOCTYPE html>
 <html>

@@ -1,9 +1,9 @@
-﻿using FPLedit.AushangfahrplanExport.Model;
+﻿using FPLedit.Aushangfahrplan.Model;
 using FPLedit.Shared;
 using System;
 using System.Linq;
 
-namespace FPLedit.AushangfahrplanExport.Templates
+namespace FPLedit.Aushangfahrplan.Templates
 {
     public class TemplateHelper
     {

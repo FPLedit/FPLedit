@@ -1,4 +1,4 @@
-﻿namespace FPLedit.BuchfahrplanExport
+﻿namespace FPLedit.Buchfahrplan
 {
     partial class VelocityForm
     {

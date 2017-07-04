@@ -7,7 +7,7 @@
 //     der Code neu generiert wird.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace FPLedit.AushangfahrplanExport.Templates
+namespace FPLedit.Aushangfahrplan.Templates
 {
     using System.Linq;
     using FPLedit.Shared;

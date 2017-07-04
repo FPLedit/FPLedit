@@ -1,4 +1,4 @@
-﻿using FPLedit.AushangfahrplanExport.Forms;
+﻿using FPLedit.Aushangfahrplan.Forms;
 using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace FPLedit.AushangfahrplanExport
+namespace FPLedit.Aushangfahrplan
 {
     public class Plugin : IPlugin
     {

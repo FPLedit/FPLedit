@@ -1,4 +1,4 @@
-﻿namespace FPLedit.AushangfahrplanExport
+﻿namespace FPLedit.Aushangfahrplan
 {
     partial class SettingsForm
     {

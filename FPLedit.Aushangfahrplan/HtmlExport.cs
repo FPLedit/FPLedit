@@ -1,5 +1,4 @@
-﻿using FPLedit.AushangfahrplanExport.Properties;
-using FPLedit.AushangfahrplanExport.Templates;
+﻿using FPLedit.Aushangfahrplan.Properties;
 using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
@@ -7,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace FPLedit.AushangfahrplanExport
+namespace FPLedit.Aushangfahrplan
 {
     public class HtmlExport : IExport
     {

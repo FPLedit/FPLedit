@@ -1,4 +1,4 @@
-﻿using FPLedit.AushangfahrplanExport.Model;
+﻿using FPLedit.Aushangfahrplan.Model;
 using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace FPLedit.AushangfahrplanExport.Forms
+namespace FPLedit.Aushangfahrplan.Forms
 {
     public partial class FilterForm : Form
     {

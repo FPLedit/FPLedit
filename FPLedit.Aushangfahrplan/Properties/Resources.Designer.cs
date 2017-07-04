@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FPLedit.AushangfahrplanExport.Properties {
+namespace FPLedit.Aushangfahrplan.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace FPLedit.AushangfahrplanExport.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FPLedit.AushangfahrplanExport.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FPLedit.Aushangfahrplan.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

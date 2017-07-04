@@ -1,4 +1,4 @@
-﻿using FPLedit.BuchfahrplanExport.Model;
+﻿using FPLedit.Buchfahrplan.Model;
 using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FPLedit.BuchfahrplanExport
+namespace FPLedit.Buchfahrplan
 {
     public partial class VelocityForm : Form
     {

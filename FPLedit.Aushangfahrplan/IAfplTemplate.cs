@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace FPLedit.AushangfahrplanExport
+namespace FPLedit.Aushangfahrplan
 {
     public interface IAfplTemplate
     {

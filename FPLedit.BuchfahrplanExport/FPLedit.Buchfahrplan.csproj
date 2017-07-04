@@ -4,13 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C9D85138-EABB-47C1-8765-0F204E81FA5C}</ProjectGuid>
+    <ProjectGuid>{B8BA56BA-15FC-4D2E-8929-FDD6C6E13B5A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FPLedit.AushangfahrplanExport</RootNamespace>
-    <AssemblyName>FPLedit.AushangfahrplanExport</AssemblyName>
+    <RootNamespace>FPLedit.Buchfahrplan</RootNamespace>
+    <AssemblyName>FPLedit.Buchfahrplan</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,75 +45,85 @@
     <Compile Include="..\build_scripts\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="AfplTemplateChooser.cs" />
+    <Compile Include="BfplTemplateChooser.cs" />
+    <Compile Include="IBfplTemplate.cs" />
+    <Compile Include="Model\BfplAttrs.cs" />
+    <Compile Include="Model\BfplPoint.cs" />
+    <Compile Include="Templates\TemplateHelper.cs" />
+    <Compile Include="Templates\ZLBTemplateCode.cs" />
+    <Compile Include="Templates\ZLBTemplate.cs">
+      <DependentUpon>ZLBTemplate.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Templates\BuchfahrplanTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BuchfahrplanTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\BuchfahrplanTemplateCode.cs" />
+    <Compile Include="HtmlExport.cs" />
+    <Compile Include="Plugin.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Templates\AfplTemplate.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AfplTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Templates\AfplTemplateCode.cs" />
-    <Compile Include="Forms\EditPatternForm.cs">
+    <Compile Include="Forms\VelocityForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\EditPatternForm.Designer.cs">
-      <DependentUpon>EditPatternForm.cs</DependentUpon>
+    <Compile Include="Forms\VelocityForm.Designer.cs">
+      <DependentUpon>VelocityForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FilterForm.cs">
+    <Compile Include="Forms\VelocityEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FilterForm.Designer.cs">
-      <DependentUpon>FilterForm.cs</DependentUpon>
+    <Compile Include="Forms\VelocityEditForm.Designer.cs">
+      <DependentUpon>VelocityEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="HtmlExport.cs" />
-    <Compile Include="IAfplTemplate.cs" />
-    <Compile Include="Model\AfplAttrs.cs" />
-    <Compile Include="Model\Rule.cs" />
-    <Compile Include="Plugin.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Templates\TemplateHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj">
-      <Project>{CE38D005-22B2-4B15-80BA-614F038240FD}</Project>
+      <Project>{ce38d005-22b2-4b15-80ba-614f038240fd}</Project>
       <Name>FPLedit.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\TryoutScript.txt" />
-    <Content Include="Templates\AfplTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>AfplTemplate.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <EmbeddedResource Include="Forms\EditPatternForm.resx">
-      <DependentUpon>EditPatternForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FilterForm.resx">
-      <DependentUpon>FilterForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SettingsForm.resx">
-      <DependentUpon>SettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SettingsForm.resx">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\VelocityForm.resx">
+      <DependentUpon>VelocityForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\VelocityEditForm.resx">
+      <DependentUpon>VelocityEditForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\WellenCss.txt" />
+    <Content Include="Templates\ZLBTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>ZLBTemplate.cs</LastGenOutput>
+    </Content>
+    <Content Include="Templates\BuchfahrplanTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>BuchfahrplanTemplate.cs</LastGenOutput>
+    </Content>
+    <Content Include="Resources\TryoutScript.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -7,11 +7,11 @@
 //     der Code neu generiert wird.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace FPLedit.BuchfahrplanExport.Templates
+namespace FPLedit.Buchfahrplan.Templates
 {
     using FPLedit.Shared;
-    using FPLedit.BuchfahrplanExport.Model;
-    using FPLedit.BuchfahrplanExport.Properties;
+    using FPLedit.Buchfahrplan.Model;
+    using FPLedit.Buchfahrplan.Properties;
     using System;
     
     /// <summary>
