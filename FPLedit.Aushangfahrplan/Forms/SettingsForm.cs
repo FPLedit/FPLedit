@@ -4,147 +4,85 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace FPLedit.AushangfahrplanExport.Forms
+namespace FPLedit.AushangfahrplanExport
 {
     public partial class SettingsForm : Form
     {
         private AfplAttrs attrs;
-
-        private List<string> trainPatterns, stationPatterns;
+        private AfplTemplateChooser chooser;
 
         public SettingsForm()
         {
             InitializeComponent();
+            chooser = new AfplTemplateChooser();
         }
 
-        public SettingsForm(Timetable tt): this()
+        public SettingsForm(Timetable tt) : this()
         {
-            trainPattListView.Columns.Add("Typ");
-            trainPattListView.Columns.Add("Suchwert");
-
-            stationPattListView.Columns.Add("Typ");
-            stationPattListView.Columns.Add("Suchwert");
+            var templates = chooser.GetAvailableTemplates().Select(t => t.Name).ToArray();
+            templateComboBox.Items.AddRange(templates);
 
             attrs = AfplAttrs.GetAttrs(tt);
             if (attrs != null)
             {
-                trainPatterns = attrs.TrainPatterns.Split('|').Where(p => p != "").ToList();
-                stationPatterns = attrs.StationPatterns.Split('|').Where(p => p != "").ToList();
+                fontComboBox.Text = attrs.Font;
+                cssTextBox.Text = attrs.Css ?? "";
 
-                UpdateListView(trainPattListView, trainPatterns);
-                UpdateListView(stationPattListView, stationPatterns);
+                var typeName = chooser.ExpandName(attrs.Template);
+                var tmpl = chooser.GetAvailableTemplates().FirstOrDefault(t => t.GetType().FullName == typeName) ?? new Templates.AfplTemplate();
+                templateComboBox.Text = tmpl.Name;
             }
             else
             {
                 attrs = new AfplAttrs(tt);
                 tt.Children.Add(attrs.XMLEntity);
-
-                trainPatterns = new List<string>();
-                stationPatterns = new List<string>();
             }
         }
 
-        private void UpdateListView(ListView view, List<string> patterns)
+        private void SettingsForm_Load(object sender, EventArgs e)
         {
-            view.Items.Clear();
-            foreach (var pattern in patterns)
-            {
-                var type = TypeDescription(pattern[0]);
-                var rest = pattern.Substring(1);
-                view.Items.Add(new ListViewItem(new[] { type, rest }));
-            }
+            string[] fontFamilies = new InstalledFontCollection().Families.Select(f => f.Name).ToArray();
+            fontComboBox.Items.AddRange(fontFamilies);
+
+            consoleCheckBox.Checked = SettingsManager.Get<bool>("afpl.console");
         }
 
-        private void DeleteEntry(ListView view, List<string> patterns, bool message = true)
+        private void cssHelpLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+            => Process.Start("https://fahrplan.manuelhu.de/buchfahrplaene/css/");
+
+        private void fontComboBox_TextChanged(object sender, EventArgs e)
+             => exampleLabel.Font = new Font(fontComboBox.Text, 10);
+
+        private void cssTextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            if (view.SelectedItems.Count > 0)
+            // Tab-Width anpassen
+            int tabWidth = 4;
+            if (e.KeyCode == Keys.Tab)
             {
-                int idx = view.SelectedIndices[0];
-                patterns.RemoveAt(idx);
-                UpdateListView(view, patterns);
-            }
-            else if (message)
-                MessageBox.Show("Zuerst muss eine Regel ausgewählt werden!", "Reegel löschen");
-        }
-
-        private void EditEntry(ListView view, List<string> patterns, string property, bool message=true)
-        {
-            if (view.SelectedItems.Count > 0)
-            {
-                int idx = view.SelectedIndices[0];
-
-                var epf = new EditPatternForm(patterns[idx], property);
-                if (epf.ShowDialog() == DialogResult.OK)
-                {
-                    patterns[idx] = epf.Pattern;
-                    UpdateListView(view, patterns);
-                }
-            }
-            else if (message)
-                MessageBox.Show("Zuerst muss eine Regel ausgewählt werden!", "Regel bearbeiten");
-        }
-
-        private void AddEntry(ListView view, List<string> patterns, string property)
-        {
-            var epf = new EditPatternForm(property);
-            if (epf.ShowDialog() == DialogResult.OK)
-            {
-                patterns.Add(epf.Pattern);
-                UpdateListView(view, patterns);
+                cssTextBox.SelectedText = new string(' ', tabWidth);
+                e.SuppressKeyPress = true;
             }
         }
-
-        private string TypeDescription(char type)
-        {
-            switch (type)
-            {
-                case '^':
-                    return "beginnt mit";
-                case '$':
-                    return "endet mit";
-                case ' ':
-                    return "enthält";
-                case '=':
-                    return "ist";
-                default:
-                    return "";
-            }
-        }
-
-        #region Events
-
-        private void addTrainPattButton_Click(object sender, EventArgs e)
-            => AddEntry(trainPattListView, trainPatterns, "Zugname");
-
-        private void editTrainPattButton_Click(object sender, EventArgs e)
-            => EditEntry(trainPattListView, trainPatterns, "Zugname");
-
-        private void deleteTrainPattButton_Click(object sender, EventArgs e)
-            => DeleteEntry(trainPattListView, trainPatterns);
-
-        private void addStationPattButton_Click(object sender, EventArgs e)
-            => AddEntry(stationPattListView, stationPatterns, "Stationsname");
-
-        private void editStationPattButton_Click(object sender, EventArgs e)
-            => EditEntry(stationPattListView, stationPatterns, "Stationsname");
 
         private void closeButton_Click(object sender, EventArgs e)
         {
-            attrs.TrainPatterns = string.Join("|", trainPatterns.ToArray());
-            attrs.StationPatterns = string.Join("|", stationPatterns.ToArray());
+            attrs.Font = fontComboBox.Text;
+            attrs.Css = cssTextBox.Text;
 
-            DialogResult = DialogResult.OK;
+            var tmpl_idx = templateComboBox.SelectedIndex;
+            var tmpl = chooser.GetAvailableTemplates()[tmpl_idx];
+            attrs.Template = chooser.ReduceName(tmpl.GetType().FullName);
+
+            SettingsManager.Set("afpl.console", consoleCheckBox.Checked);
+
             Close();
         }
-
-        private void deleteStationPattButton_Click(object sender, EventArgs e)
-            => DeleteEntry(stationPattListView, stationPatterns);
-
-        #endregion
     }
 }

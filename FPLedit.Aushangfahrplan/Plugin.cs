@@ -13,9 +13,9 @@ namespace FPLedit.AushangfahrplanExport
     public class Plugin : IPlugin
     {
         private IInfo info;
-        private ToolStripItem showItem, settingsItem;
+        private ToolStripItem showItem, filterItem, settingsItem;
 
-        public string Name => "Exporter für Aushangfahrpläne";
+        public string Name => "Modul für Aushangfahrpläne";
 
         public void Init(IInfo info)
         {
@@ -30,7 +30,11 @@ namespace FPLedit.AushangfahrplanExport
             showItem.Enabled = false;
             showItem.Click += ShowItem_Click;
 
-            settingsItem = item.DropDownItems.Add("Aushangfahrplan-Darstellung");
+            filterItem = item.DropDownItems.Add("Filterregeln");
+            filterItem.Enabled = false;
+            filterItem.Click += FilterItem_Click;
+
+            settingsItem = item.DropDownItems.Add("Darstellung");
             settingsItem.Enabled = false;
             settingsItem.Click += SettingsItem_Click;
         }
@@ -38,10 +42,22 @@ namespace FPLedit.AushangfahrplanExport
         private void ShowItem_Click(object sender, EventArgs e)
         {
             HtmlExport exp = new HtmlExport();
-            string path = info.GetTemp("aushangfahrplan.html");
+            string path = info.GetTemp("afpl.html");
 
-            exp.Export(info.Timetable, path, info);
+            bool tryoutConsole = SettingsManager.Get<bool>("afpl.console");
+            if (tryoutConsole)
+                exp.ExportTryoutConsole(info.Timetable, path, info);
+            else
+                exp.Export(info.Timetable, path, info);
+
             Process.Start(path);
+        }
+
+        private void FilterItem_Click(object sender, EventArgs e)
+        {
+            FilterForm ff = new FilterForm(info.Timetable);
+            if (ff.ShowDialog() == DialogResult.OK)
+                info.SetUnsaved();
         }
 
         private void SettingsItem_Click(object sender, EventArgs e)
@@ -53,7 +69,7 @@ namespace FPLedit.AushangfahrplanExport
 
         private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)
         {
-            settingsItem.Enabled = e.FileState.Opened;
+            filterItem.Enabled = settingsItem.Enabled = e.FileState.Opened;
             showItem.Enabled = e.FileState.LineCreated;
         }
     }

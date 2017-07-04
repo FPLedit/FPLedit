@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.fontComboBox = new System.Windows.Forms.ComboBox();
             this.cssTextBox = new System.Windows.Forms.TextBox();
             this.fontLabel = new System.Windows.Forms.Label();
@@ -40,8 +39,6 @@
             this.consoleCheckBox = new System.Windows.Forms.CheckBox();
             this.templateComboBox = new System.Windows.Forms.ComboBox();
             this.templateLabel = new System.Windows.Forms.Label();
-            this.iBfplTemplateBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            ((System.ComponentModel.ISupportInitialize)(this.iBfplTemplateBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // fontComboBox
@@ -152,10 +149,6 @@
             this.templateLabel.TabIndex = 0;
             this.templateLabel.Text = "Buchfahrplan-Vorlage";
             // 
-            // iBfplTemplateBindingSource
-            // 
-            this.iBfplTemplateBindingSource.DataSource = typeof(FPLedit.BuchfahrplanExport.IBfplTemplate);
-            // 
             // SettingsForm
             // 
             this.AcceptButton = this.closeButton;
@@ -181,7 +174,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Buchfahrplaneinstellungen";
             this.Load += new System.EventHandler(this.SettingsForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.iBfplTemplateBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -199,6 +191,5 @@
         private System.Windows.Forms.CheckBox consoleCheckBox;
         private System.Windows.Forms.ComboBox templateComboBox;
         private System.Windows.Forms.Label templateLabel;
-        private System.Windows.Forms.BindingSource iBfplTemplateBindingSource;
     }
 }

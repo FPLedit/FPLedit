@@ -1,4 +1,6 @@
-﻿using FPLedit.Shared;
+﻿using FPLedit.AushangfahrplanExport.Properties;
+using FPLedit.AushangfahrplanExport.Templates;
+using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,13 +13,25 @@ namespace FPLedit.AushangfahrplanExport
     {
         public string Filter => "Aushangfahrplan als HTML Datei (*.html)|*.html";
 
-        public bool Export(Timetable tt, string filename, IInfo info)
+        private bool Exp(Timetable tt, string filename, IInfo info, bool tryout_console)
         {
-            AfplTemplate templ = new AfplTemplate(tt);
-            string cont = templ.TransformText();
+            var chooser = new AfplTemplateChooser();
+
+            IAfplTemplate templ = chooser.GetTemplate(tt);
+            string cont = templ.GetTranformedText(tt);
+
+            if (tryout_console)
+                cont += Resources.TryoutScript;
+
             File.WriteAllText(filename, cont);
 
             return true;
         }
+
+        public bool Export(Timetable tt, string filename, IInfo info)
+            => Exp(tt, filename, info, false);
+
+        public bool ExportTryoutConsole(Timetable tt, string filename, IInfo info)
+            => Exp(tt, filename, info, true);
     }
 }
