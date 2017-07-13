@@ -68,16 +68,14 @@ namespace FPLedit.Standard
         {
             if (listView.SelectedItems.Count > 0)
             {
-                ListViewItem item = listView.SelectedItems[0];
+                var item = listView.SelectedItems[0];
                 Station station = (Station)item.Tag;
 
                 EditStationForm nsf = new EditStationForm(station);
                 if (nsf.ShowDialog() == DialogResult.OK)
                 {
-                    UpdateStations();
-                    var changedItem = listView.Items.OfType<ListViewItem>().Where(i => i.Tag == station).First();
-                    changedItem.Selected = true;
-                    changedItem.EnsureVisible();
+                    item.SubItems[0].Text = station.SName;
+                    item.SubItems[1].Text = station.Kilometre.ToString();
                 }
             }
             else if (message)
@@ -91,7 +89,7 @@ namespace FPLedit.Standard
                 ListViewItem item = listView.SelectedItems[0];
                 tt.RemoveStation((Station)item.Tag);
 
-                UpdateStations();
+                listView.Items.Remove(item);
             }
             else if (message)
                 MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Station löschen");
@@ -105,11 +103,13 @@ namespace FPLedit.Standard
                 Station sta = nsf.Station;
 
                 tt.AddStation(sta);
+                var item = listView.Items.Add(new ListViewItem(new[] {
+                    sta.SName,
+                    sta.Kilometre.ToString() })
+                { Tag = sta });
 
-                UpdateStations();
-                var changedItem = listView.Items.OfType<ListViewItem>().Where(i => i.Tag == sta).First();
-                changedItem.Selected = true;
-                changedItem.EnsureVisible();
+                item.EnsureVisible();
+                item.Selected = true;
             }
         }
 

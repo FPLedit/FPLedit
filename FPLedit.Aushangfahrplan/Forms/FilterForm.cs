@@ -66,7 +66,10 @@ namespace FPLedit.Aushangfahrplan.Forms
             {
                 int idx = view.SelectedIndices[0];
                 patterns.RemoveAt(idx);
-                UpdateListView(view, patterns);
+
+                //TODO: Refactor; use itm.Index?
+                var itm = view.SelectedItems[0];
+                view.Items.Remove(itm);
             }
             else if (message)
                 MessageBox.Show("Zuerst muss eine Regel ausgewählt werden!", "Reegel löschen");
@@ -82,7 +85,10 @@ namespace FPLedit.Aushangfahrplan.Forms
                 if (epf.ShowDialog() == DialogResult.OK)
                 {
                     patterns[idx] = epf.Pattern;
-                    UpdateListView(view, patterns);
+                    var itm = view.SelectedItems[0];
+
+                    itm.SubItems[0].Text = TypeDescription(epf.Pattern[0]);
+                    itm.SubItems[1].Text = epf.Pattern.Substring(1);
                 }
             }
             else if (message)
@@ -95,7 +101,10 @@ namespace FPLedit.Aushangfahrplan.Forms
             if (epf.ShowDialog() == DialogResult.OK)
             {
                 patterns.Add(epf.Pattern);
-                UpdateListView(view, patterns);
+
+                var type = TypeDescription(epf.Pattern[0]);
+                var rest = epf.Pattern.Substring(1);
+                view.Items.Add(new ListViewItem(new[] { type, rest }));
             }
         }
 

@@ -70,14 +70,21 @@ namespace FPLedit.Buchfahrplan
             VelocityEditForm vef = new VelocityEditForm(tt);
             if (vef.ShowDialog() == DialogResult.OK)
             {
-                var point = (BfplPoint)vef.Station;
+                var p = (BfplPoint)vef.Station;
                 if (attrs != null)
-                    attrs.AddPoint(point);
-                UpdateStations();
+                    attrs.AddPoint(p);
+
+                listView.Items.Add(new ListViewItem(new[] {
+                    p.Kilometre.ToString(),
+                    p.SName,
+                    p.GetAttribute("fpl-vmax", defaultVelocity),
+                    p.Wellenlinien.ToString(),
+                })
+                { Tag = p });
             }
         }
 
-        private void EditVmax(bool message = true)
+        private void EditPoint(bool message = true)
         {
             if (listView.SelectedItems.Count > 0)
             {
@@ -88,9 +95,13 @@ namespace FPLedit.Buchfahrplan
                 VelocityEditForm vef = new VelocityEditForm(sta);
                 if (vef.ShowDialog() == DialogResult.OK)
                 {
-                    UpdateStations();
-                    item.Selected = true;
-                    item.EnsureVisible();
+                    item.SubItems[0].Text = sta.Kilometre.ToString();
+                    item.SubItems[1].Text = sta.SName;
+                    item.SubItems[2].Text = sta.GetAttribute("fpl-vmax", defaultVelocity);
+                    item.SubItems[3].Text = sta.Wellenlinien.ToString();
+
+                    listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                    listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
                 }
             }
             else if (message)
@@ -110,7 +121,8 @@ namespace FPLedit.Buchfahrplan
                     BfplPoint point = (BfplPoint)item.Tag;
                     if (attrs != null)
                         attrs.RemovePoint(point);
-                    UpdateStations();
+
+                    listView.Items.Remove(item);
                 }
 
             }
@@ -144,10 +156,10 @@ namespace FPLedit.Buchfahrplan
 
         #region Events
         private void editButton_Click(object sender, EventArgs e)
-            => EditVmax();
+            => EditPoint();
 
         private void trainListView_MouseDoubleClick(object sender, MouseEventArgs e)
-            => EditVmax(false);
+            => EditPoint(false);
 
         private void addButton_Click(object sender, EventArgs e)
             => AddPoint();
