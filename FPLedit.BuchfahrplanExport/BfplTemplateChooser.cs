@@ -41,13 +41,9 @@ namespace FPLedit.Buchfahrplan
         }
 
         public string ExpandName(string name)
-        {
-            return name.Replace("$std", "FPLedit.BuchfahrplanExport.Templates");
-        }
+            => name.Replace("$std", "FPLedit.BuchfahrplanExport.Templates");
 
         public string ReduceName(string name)
-        {
-            return name.Replace("FPLedit.BuchfahrplanExport.Templates", "$std");
-        }
+            => name.Replace("FPLedit.BuchfahrplanExport.Templates", "$std");
     }
 }

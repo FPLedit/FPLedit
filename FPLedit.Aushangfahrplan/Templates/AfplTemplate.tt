@@ -10,6 +10,7 @@
 body {
 	color:black;
 	font-size:16px;
+	font-family: <#= font #>, sans-serif;
 }
 table {
 	margin-left: auto;
@@ -32,7 +33,7 @@ p {
 }
 .station {
 	font-size: 16px;
-	font-family: "<#= font #>", sans-serif;
+	font-family: Arial, sans-serif;
 	font-stretch: condensed;
 	font-weight: bold;
 }
@@ -58,6 +59,9 @@ td {
 	text-align:center;
 	width: 76px;
 }
+.time:not(.header), .name:not(.header) {
+	font-family: serif;
+}
 .dir {
 	border-top: 3px solid #000;
 	border-right: 3px solid #000;
@@ -79,7 +83,7 @@ td {
 <body>
 	<# foreach (var sta in helper.GetStations()) { #>
 	<p class="station">Bahnhof <#= sta.SName #></p>
-	<p class="title">Abfahrt</p>
+	<p class="title"><#= abfahrtSVG #></p>
 	<p class="heading">der Züge in der Richtung nach</p>
 	<#
 		var fs = tt.Stations.First();
@@ -94,18 +98,19 @@ td {
 			var trainsA = helper.GetTrains(TrainDirection.ta, sta);
 			var trainsB = helper.GetTrains(TrainDirection.ti, sta);
 			int count = Math.Max(trainsA.Length, trainsB.Length);
+			//count = Math.Max(count, 20);
 		#>
 		<tr>
 			<# if (fs != sta) { #>
-				<td class="time">Zeit</td>
-				<td class="name">Zug-Nr</td>
+				<td class="time header">Zeit</td>
+				<td class="name header">Zug-Nr</td>
 			<# } else { #>
 				<td class="time"></td>
 				<td class="name"></td>
 			<# } #>
 			<# if (ls != sta) { #>
-				<td class="time">Zeit</td>
-				<td class="name">Zug-Nr</td>
+				<td class="time header">Zeit</td>
+				<td class="name header">Zug-Nr</td>
 			<# } else { #>
 				<td class="time"></td>
 				<td class="name"></td>

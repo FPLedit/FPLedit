@@ -11,7 +11,7 @@ namespace FPLedit.Aushangfahrplan
     {
         public IAfplTemplate GetTemplate(Timetable tt)
         {
-            var attrsEn = tt.Children.FirstOrDefault(x => x.XName == "bfpl_attrs");
+            var attrsEn = tt.Children.FirstOrDefault(x => x.XName == "afpl_attrs");
 
             var name = "";
             if (attrsEn != null)
@@ -41,13 +41,9 @@ namespace FPLedit.Aushangfahrplan
         }
 
         public string ExpandName(string name)
-        {
-            return name.Replace("$std", "FPLedit.AushangfahrplanExport.Templates");
-        }
+            => name.Replace("$std", typeof(Templates.AfplTemplate).Namespace);
 
         public string ReduceName(string name)
-        {
-            return name.Replace("FPLedit.AushangfahrplanExport.Templates", "$std");
-        }
+            => name.Replace(typeof(Templates.AfplTemplate).Namespace, "$std");
     }
 }

@@ -27,15 +27,15 @@ namespace FPLedit.Aushangfahrplan.Templates
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write(@"
-<!doctype html>
-<html>
-	<head>
-		<meta charset=""utf-8"">
-<style>
-body {
-	color:black;
-	font-size:16px;
+            this.Write("\r\n<!doctype html>\r\n<html>\r\n\t<head>\r\n\t\t<meta charset=\"utf-8\">\r\n<style>\r\nbody {\r\n\tc" +
+                    "olor:black;\r\n\tfont-size:16px;\r\n\tfont-family: ");
+            
+            #line 13 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(font));
+            
+            #line default
+            #line hidden
+            this.Write(@", sans-serif;
 }
 table {
 	margin-left: auto;
@@ -58,14 +58,7 @@ p {
 }
 .station {
 	font-size: 16px;
-	font-family: """);
-            
-            #line 35 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(font));
-            
-            #line default
-            #line hidden
-            this.Write(@""", sans-serif;
+	font-family: Arial, sans-serif;
 	font-stretch: condensed;
 	font-weight: bold;
 }
@@ -91,6 +84,9 @@ td {
 	text-align:center;
 	width: 76px;
 }
+.time:not(.header), .name:not(.header) {
+	font-family: serif;
+}
 .dir {
 	border-top: 3px solid #000;
 	border-right: 3px solid #000;
@@ -108,29 +104,35 @@ td {
 <style id=""add-css"">
 	");
             
-            #line 76 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
+            #line 80 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(additionalCss));
             
             #line default
             #line hidden
             this.Write("\r\n</style>\r\n</head>\r\n<body>\r\n\t");
             
-            #line 80 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
+            #line 84 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
  foreach (var sta in helper.GetStations()) { 
             
             #line default
             #line hidden
             this.Write("\t<p class=\"station\">Bahnhof ");
             
-            #line 81 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
+            #line 85 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(sta.SName));
             
             #line default
             #line hidden
-            this.Write("</p>\r\n\t<p class=\"title\">Abfahrt</p>\r\n\t<p class=\"heading\">der Züge in der Richtung" +
-                    " nach</p>\r\n\t");
+            this.Write("</p>\r\n\t<p class=\"title\">");
             
-            #line 84 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
+            #line 86 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(abfahrtSVG));
+            
+            #line default
+            #line hidden
+            this.Write("</p>\r\n\t<p class=\"heading\">der Züge in der Richtung nach</p>\r\n\t");
+            
+            #line 88 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
 
 		var fs = tt.Stations.First();
 		var ls = tt.Stations.Last();
@@ -140,158 +142,161 @@ td {
             #line hidden
             this.Write("\t<table>\r\n\t\t<tr>\r\n\t\t\t<td colspan=\"2\" class=\"dir\">");
             
-            #line 90 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
+            #line 94 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(fs != sta ? fs.SName : ""));
             
             #line default
             #line hidden
             this.Write("</td>\r\n\t\t\t<td colspan=\"2\" class=\"dir\">");
             
-            #line 91 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
+            #line 95 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ls != sta ? ls.SName : ""));
             
             #line default
             #line hidden
             this.Write("</td>\r\n\t\t</tr>\r\n\t\t");
             
-            #line 93 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
+            #line 97 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
 
 			var trainsA = helper.GetTrains(TrainDirection.ta, sta);
 			var trainsB = helper.GetTrains(TrainDirection.ti, sta);
 			int count = Math.Max(trainsA.Length, trainsB.Length);
+			//count = Math.Max(count, 20);
 		
             
             #line default
             #line hidden
             this.Write("\t\t<tr>\r\n\t\t\t");
             
-            #line 99 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
+            #line 104 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
  if (fs != sta) { 
             
             #line default
             #line hidden
-            this.Write("\t\t\t\t<td class=\"time\">Zeit</td>\r\n\t\t\t\t<td class=\"name\">Zug-Nr</td>\r\n\t\t\t");
+            this.Write("\t\t\t\t<td class=\"time header\">Zeit</td>\r\n\t\t\t\t<td class=\"name header\">Zug-Nr</td>\r\n\t" +
+                    "\t\t");
             
-            #line 102 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
+            #line 107 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
  } else { 
             
             #line default
             #line hidden
             this.Write("\t\t\t\t<td class=\"time\"></td>\r\n\t\t\t\t<td class=\"name\"></td>\r\n\t\t\t");
             
-            #line 105 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
+            #line 110 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\t\t\t");
             
-            #line 106 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
+            #line 111 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
  if (ls != sta) { 
             
             #line default
             #line hidden
-            this.Write("\t\t\t\t<td class=\"time\">Zeit</td>\r\n\t\t\t\t<td class=\"name\">Zug-Nr</td>\r\n\t\t\t");
+            this.Write("\t\t\t\t<td class=\"time header\">Zeit</td>\r\n\t\t\t\t<td class=\"name header\">Zug-Nr</td>\r\n\t" +
+                    "\t\t");
             
-            #line 109 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
+            #line 114 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
  } else { 
             
             #line default
             #line hidden
             this.Write("\t\t\t\t<td class=\"time\"></td>\r\n\t\t\t\t<td class=\"name\"></td>\r\n\t\t\t");
             
-            #line 112 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
+            #line 117 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\t\t</tr>\r\n\t\t");
             
-            #line 114 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
+            #line 119 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
  for (int i = 0; i < count; i++) { 
             
             #line default
             #line hidden
             this.Write("\t\t<tr class=\"train-row\">\r\n\t\t\t");
             
-            #line 116 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
+            #line 121 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
  if (fs != sta) { 
             
             #line default
             #line hidden
             this.Write("\t\t\t\t<td class=\"time\">");
             
-            #line 117 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
+            #line 122 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TimeString(trainsA, sta, i)));
             
             #line default
             #line hidden
             this.Write("</td>\r\n\t\t\t\t<td class=\"name\">");
             
-            #line 118 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
+            #line 123 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(NameString(trainsA, i)));
             
             #line default
             #line hidden
             this.Write("</td>\r\n\t\t\t");
             
-            #line 119 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
+            #line 124 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
  } else { 
             
             #line default
             #line hidden
             this.Write("\t\t\t\t<td class=\"time\"></td>\r\n\t\t\t\t<td class=\"name\"></td>\r\n\t\t\t");
             
-            #line 122 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
+            #line 127 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\t\t\t");
             
-            #line 123 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
+            #line 128 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
  if (ls != sta) { 
             
             #line default
             #line hidden
             this.Write("\t\t\t\t<td class=\"time\">");
             
-            #line 124 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
+            #line 129 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TimeString(trainsB, sta, i)));
             
             #line default
             #line hidden
             this.Write("</td>\r\n\t\t\t\t<td class=\"name\">");
             
-            #line 125 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
+            #line 130 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(NameString(trainsB, i)));
             
             #line default
             #line hidden
             this.Write("</td>\r\n\t\t\t");
             
-            #line 126 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
+            #line 131 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
  } else { 
             
             #line default
             #line hidden
             this.Write("\t\t\t\t<td class=\"time\"></td>\r\n\t\t\t\t<td class=\"name\"></td>\r\n\t\t\t");
             
-            #line 129 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
+            #line 134 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\t\t</tr>\r\n\t\t");
             
-            #line 131 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
+            #line 136 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\t</table>\r\n\t");
             
-            #line 133 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
+            #line 138 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
  } 
             
             #line default

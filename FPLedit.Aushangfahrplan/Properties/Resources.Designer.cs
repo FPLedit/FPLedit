@@ -61,6 +61,17 @@ namespace FPLedit.Aushangfahrplan.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;svg xmlns:rdf=&quot;http://www.w3.org/1999/02/22-rdf-syntax-ns#&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; height=&quot;17.858mm&quot; width=&quot;96.157mm&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 340.71493 63.276046&quot;&gt;
+        ///&lt;g transform=&quot;translate(-1.7856 -1.0716)&quot; stroke=&quot;#000&quot; stroke-width=&quot;.25&quot; fill=&quot;#b24315&quot;&gt;
+        ///&lt;path d=&quot;m37.713 1.3708c-0.075-0.1265-0.75-0.2361-1.062-0.1298-7.227 2.46-17.664 2.5891-20.971 2.7426-1.06-0.1349-1.718-0.3251-1.939 0.4879-0.95164 3.4987 0.20793 6.9768 3.379 6.8466 1.4645-0.0601 3.3757-0.84609 3.3026 1.515l-12.352 41.172 [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string abfahrt_text {
+            get {
+                return ResourceManager.GetString("abfahrt_text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die &lt;script&gt;
         ///// CSS-Tryout-Console , generiert von FPLedit
         ///var tryout_code = `&lt;style&gt;

@@ -35,8 +35,7 @@ namespace FPLedit.Aushangfahrplan
                 fontComboBox.Text = attrs.Font;
                 cssTextBox.Text = attrs.Css ?? "";
 
-                var typeName = chooser.ExpandName(attrs.Template);
-                var tmpl = chooser.GetAvailableTemplates().FirstOrDefault(t => t.GetType().FullName == typeName) ?? new Templates.AfplTemplate();
+                var tmpl = chooser.GetTemplate(tt);
                 templateComboBox.Text = tmpl.Name;
             }
             else

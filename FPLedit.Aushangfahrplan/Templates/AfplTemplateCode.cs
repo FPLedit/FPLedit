@@ -12,13 +12,18 @@ namespace FPLedit.Aushangfahrplan.Templates
         private Timetable tt;
         private string font = "Arial";
         private string additionalCss = "";
+        private string abfahrtSVG;
 
-        public string Name => "Standard (DRG aus Malsch)";
+        protected bool useSVG = false;
+
+        public virtual string Name => "Standard (DRG aus Malsch)";
 
         private TemplateHelper helper;
 
-        public string GetTranformedText(Timetable tt)
+        public virtual string GetTranformedText(Timetable tt)
         {
+            abfahrtSVG = useSVG ? Properties.Resources.abfahrt_text : "Abfahrt";
+
             this.tt = tt;
             helper = new TemplateHelper(tt);
 
@@ -33,13 +38,26 @@ namespace FPLedit.Aushangfahrplan.Templates
             return TransformText();
         }
 
+        public string GetDays(Train t)
+            => DaysHelper.DaysToString(t.Days, true);
+
         private string GetTimeString(TimeSpan t)
             => t.Hours.ToString() + "<sup>" + t.Minutes.ToString("00") + "</sup>";
 
         private string TimeString(Train[] trains, Station sta, int i)
-            => trains.Count() > i ? GetTimeString(trains[i].GetArrDep(sta).Departure) : "";
+            => trains.Count() > i ? GetTimeString(trains[i].GetArrDep(sta).Departure) + " " + GetDays(trains[i]) : "";
 
         private string NameString(Train[] trains, int i)
             => trains.Count() > i ? trains[i].TName : "";
+    }
+
+    public class SvgAfplTemplate : AfplTemplate, IAfplTemplate
+    {
+        public override string Name => "Wie Standard, mit Schriftzug \"Abfahrt\" in Originalschrift";
+
+        public SvgAfplTemplate()
+        {
+            useSVG = true;
+        }
     }
 }

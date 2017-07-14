@@ -89,6 +89,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\abfahrt-text.svg" />
     <Content Include="Resources\TryoutScript.txt" />
     <Content Include="Templates\AfplTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
