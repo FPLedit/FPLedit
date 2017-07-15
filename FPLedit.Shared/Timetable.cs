@@ -140,8 +140,12 @@ namespace FPLedit.Shared
                 train.RemovedOrphanedTimes();
         }
 
-        public void AddTrain(Train tra)
+        public void AddTrain(Train tra, bool hasArDeps = false)
         {
+            if (!hasArDeps)
+                foreach (var sta in Stations)
+                    tra.AddArrDep(sta, new ArrDep());
+
             tra._parent = this;
             trains.Add(tra);
             tElm.Children.Add(tra.XMLEntity);

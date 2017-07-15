@@ -36,7 +36,7 @@ namespace FPLedit.BfplImport
 
             string magic = reader.ReadString();
             if (magic != MAGIC)
-                throw new Exception("Ein Fehler ist beim Öffnen der Datei aufgetreten: Falsche Dateiversion");
+                throw new Exception("Falsche Dateiversion!");
 
             var name = reader.ReadString();
             res.Attributes = DeserializeAttributes(reader, EntityType.Timetable);
@@ -56,7 +56,7 @@ namespace FPLedit.BfplImport
             for (int i = 0; i < tra_count; i++)
             {
                 var tr = DeserializeTrain(reader, stations, res);
-                res.AddTrain(tr);
+                res.AddTrain(tr, true);
             }
 
             res.Attributes["version"] = "008";

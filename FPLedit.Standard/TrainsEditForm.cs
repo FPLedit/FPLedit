@@ -127,13 +127,10 @@ namespace FPLedit.Standard
             TrainEditForm tef = new TrainEditForm(info.Timetable, direction);
             if (tef.ShowDialog() == DialogResult.OK)
             {
-                Train tra = tef.Train;
-                foreach (var sta in tt.Stations)
-                    tra.AddArrDep(sta, new ArrDep());
-                tt.AddTrain(tra);
+                tt.AddTrain(tef.Train);
 
                 UpdateListView(view, direction);
-                var changedItem = view.Items.OfType<ListViewItem>().Where(i => i.Tag == tra).First();
+                var changedItem = view.Items.OfType<ListViewItem>().Where(i => i.Tag == tef.Train).First();
                 changedItem.Selected = true;
                 changedItem.EnsureVisible();
             }
