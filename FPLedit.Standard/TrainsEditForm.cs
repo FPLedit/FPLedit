@@ -65,16 +65,8 @@ namespace FPLedit.Standard
         {
             view.Items.Clear();
             foreach (var train in tt.Trains.Where(o => o.Direction == direction))
-            {
-                view.Items.Add(new ListViewItem(new[] {
-                    train.TName,
-                    train.Locomotive,
-                    train.Mbr,
-                    train.Last,
-                    DaysHelper.DaysToString(train.Days),
-                    train.Comment })
-                { Tag = train });
-            }
+                view.Items.Add(CreateItem(train));
+
             view.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             view.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
         }
@@ -96,7 +88,7 @@ namespace FPLedit.Standard
                 ListViewItem item = view.SelectedItems[0];
                 tt.RemoveTrain((Train)item.Tag);
 
-                UpdateListView(view, direction);
+                view.Items.Remove(item);
             }
             else if (message)
                 MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug löschen");
@@ -112,10 +104,15 @@ namespace FPLedit.Standard
                 TrainEditForm tef = new TrainEditForm(train);
                 if (tef.ShowDialog() == DialogResult.OK)
                 {
-                    UpdateListView(view, direction);
-                    var changedItem = view.Items.OfType<ListViewItem>().Where(i => i.Tag == train).First();
-                    changedItem.Selected = true;
-                    changedItem.EnsureVisible();
+                    item.SubItems[0].Text = train.TName;
+                    item.SubItems[1].Text = train.Locomotive;
+                    item.SubItems[2].Text = train.Mbr;
+                    item.SubItems[3].Text = train.Last;
+                    item.SubItems[4].Text = DaysHelper.DaysToString(train.Days);
+                    item.SubItems[5].Text = train.Comment;
+
+                    view.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                    view.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
                 }
             }
             else if (message)
@@ -129,11 +126,23 @@ namespace FPLedit.Standard
             {
                 tt.AddTrain(tef.Train);
 
-                UpdateListView(view, direction);
-                var changedItem = view.Items.OfType<ListViewItem>().Where(i => i.Tag == tef.Train).First();
-                changedItem.Selected = true;
-                changedItem.EnsureVisible();
+                var item = view.Items.Add(CreateItem(tef.Train));
+
+                item.Selected = true;
+                item.EnsureVisible();
             }
+        }
+
+        private ListViewItem CreateItem(Train t)
+        {
+            return new ListViewItem(new[] {
+                    t.TName,
+                    t.Locomotive,
+                    t.Mbr,
+                    t.Last,
+                    DaysHelper.DaysToString(t.Days),
+                    t.Comment })
+                    { Tag = t };
         }
 
         private void closeButton_Click(object sender, EventArgs e)
