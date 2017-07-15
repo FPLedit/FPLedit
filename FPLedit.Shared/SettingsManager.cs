@@ -82,5 +82,16 @@ namespace FPLedit.Shared
         /// <param name="value">Der Wert der Einstellung.</param>
         public static void Set(string key, int value)
             => Set(key, value.ToString());
+
+        /// <summary>
+        /// Entfernt eine Einstellung aus der Konfiguration.
+        /// </summary>
+        /// <param name="key">Der Schlüssel der Einstellung.</param>
+        public static void Remove(string key)
+        {
+            var config = GetConfig();
+            config.AppSettings.Settings.Remove(key);
+            config.Save(ConfigurationSaveMode.Modified, false);
+        }
     }
 }

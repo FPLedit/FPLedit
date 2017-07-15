@@ -40,7 +40,6 @@
             this.activateButton = new System.Windows.Forms.Button();
             this.deactivateButton = new System.Windows.Forms.Button();
             this.closeButton = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -185,22 +184,11 @@
             this.closeButton.UseVisualStyleBackColor = true;
             this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
             // 
-            // label3
-            // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(24, 213);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(380, 13);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "Hinweis: Die Änderungen treten erst nach dem nächsten Programmstart in Kraft";
-            // 
             // ExtensionsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(497, 243);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.closeButton);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
@@ -217,7 +205,6 @@
             this.tableLayoutPanel2.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -235,6 +222,5 @@
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Button activateButton;
         private System.Windows.Forms.Button deactivateButton;
-        private System.Windows.Forms.Label label3;
     }
 }

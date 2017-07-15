@@ -12,7 +12,7 @@ using System.Diagnostics;
 
 namespace FPLedit
 {
-    public partial class MainForm : Form, IInfo
+    public partial class MainForm : Form, IInfo, IRestartable
     {
         public Timetable Timetable { get; set; }
 
@@ -123,16 +123,19 @@ namespace FPLedit
             else
                 lastFilesToolStripMenuItem.Visible = false;
 
-            // Parameter: Fpledit.exe [Dateiname]
+            // Parameter: Fpledit.exe [Dateiname] ODER Datei aus Restart
             string[] args = Environment.GetCommandLineArgs();
-            if (args.Length >= 2 && File.Exists(args[1]))
-                InternalOpen(args[1]);
+            string fn = args.Length >= 2 ? args[1] : null;
+            fn = SettingsManager.Get("restart.file", fn);
+            if (fn != null && File.Exists(fn))
+                InternalOpen(fn);
+            SettingsManager.Remove("restart.file");
 
             // Hilfe Menü nach den Erweiterungen zusammenbasteln
             var helpItem = new ToolStripMenuItem("Hilfe");
             this.menuStrip.Items.AddRange(new[] { helpItem });
             var extItem = helpItem.DropDownItems.Add("Erweiterungen");
-            extItem.Click += (s, ev) => (new ExtensionsForm(extensionManager)).ShowDialog();
+            extItem.Click += (s, ev) => (new ExtensionsForm(extensionManager, this)).ShowDialog();
             var docItem = helpItem.DropDownItems.Add("Online Hilfe");
             docItem.Click += (s, ev) => Process.Start("https://fahrplan.manuelhu.de/");
             var infoItem = helpItem.DropDownItems.Add("Info");
@@ -265,6 +268,16 @@ namespace FPLedit
                     return false;
             }
             return true;
+        }
+
+        public void RestartWithCurrentFile()
+        {
+            if (!NotifyIfUnsaved())
+                return;
+            this.FormClosing -= MainForm_FormClosing;
+            if (fileState.Opened)
+                SettingsManager.Set("restart.file", fileState.FileName);
+            Application.Restart();
         }
 
         #endregion

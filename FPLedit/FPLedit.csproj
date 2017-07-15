@@ -86,6 +86,7 @@
     <Compile Include="InfoForm.Designer.cs">
       <DependentUpon>InfoForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="IRestartable.cs" />
     <Compile Include="LogControl.cs">
       <SubType>Component</SubType>
     </Compile>
