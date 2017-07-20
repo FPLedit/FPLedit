@@ -22,7 +22,7 @@ table {
 	page-break-after: always;
 }
 p {
-	font-size:20.0pt;
+	font-size:20px;
 	text-align:center;
 	margin: 0;
 	font-weight: normal;
@@ -33,8 +33,11 @@ p {
 }
 .station {
 	font-size: 16px;
-	font-family: Arial, sans-serif;
 	font-stretch: condensed;
+	font-weight: bold;
+}
+.heading {
+	margin-bottom: 5px;
 	font-weight: bold;
 }
 td {
@@ -48,16 +51,19 @@ td {
 	border-top:1px solid #000;
 }
 .train-row ~ .train-row {
-	border-top:.5px dotted #000;
+	border-top:1px solid #000;
 }
 .time {
 	text-align:center;
 	width: 200px;
-	border-right: .5px solid #000;
+	border-right: 2px solid #000;
 }
 .name {
 	text-align:center;
 	width: 76px;
+}
+.header {
+	border-bottom: 2px solid #000;
 }
 .time:not(.header), .name:not(.header) {
 	font-family: serif;
@@ -65,7 +71,7 @@ td {
 .dir {
 	border-top: 3px solid #000;
 	border-right: 3px solid #000;
-	border-bottom: .5px dotted #000;
+	border-bottom: 1px solid #000;
 	text-align: center;
 	font-weight:bold;
 }
@@ -105,15 +111,15 @@ td {
 				<td class="time header">Zeit</td>
 				<td class="name header">Zug-Nr</td>
 			<# } else { #>
-				<td class="time"></td>
-				<td class="name"></td>
+				<td class="time header"></td>
+				<td class="name header"></td>
 			<# } #>
 			<# if (ls != sta) { #>
 				<td class="time header">Zeit</td>
 				<td class="name header">Zug-Nr</td>
 			<# } else { #>
-				<td class="time"></td>
-				<td class="name"></td>
+				<td class="time header"></td>
+				<td class="name header"></td>
 			<# } #>
 		</tr>
 		<# for (int i = 0; i < count; i++) { #>

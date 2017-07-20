@@ -64,11 +64,8 @@ namespace FPLedit.Aushangfahrplan.Forms
         {
             if (view.SelectedItems.Count > 0)
             {
-                int idx = view.SelectedIndices[0];
-                patterns.RemoveAt(idx);
-
-                //TODO: Refactor; use itm.Index?
                 var itm = view.SelectedItems[0];
+                patterns.RemoveAt(itm.Index);
                 view.Items.Remove(itm);
             }
             else if (message)
@@ -79,13 +76,12 @@ namespace FPLedit.Aushangfahrplan.Forms
         {
             if (view.SelectedItems.Count > 0)
             {
-                int idx = view.SelectedIndices[0];
+                var itm = view.SelectedItems[0];
 
-                var epf = new EditPatternForm(patterns[idx], property);
+                var epf = new EditPatternForm(patterns[itm.Index], property);
                 if (epf.ShowDialog() == DialogResult.OK)
                 {
-                    patterns[idx] = epf.Pattern;
-                    var itm = view.SelectedItems[0];
+                    patterns[itm.Index] = epf.Pattern;
 
                     itm.SubItems[0].Text = TypeDescription(epf.Pattern[0]);
                     itm.SubItems[1].Text = epf.Pattern.Substring(1);
