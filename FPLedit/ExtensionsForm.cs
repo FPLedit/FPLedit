@@ -13,15 +13,16 @@ namespace FPLedit
     public partial class ExtensionsForm : Form
     {
         private ExtensionManager manager;
-        private bool modified = false;
         private IRestartable restartable;
+
+        private static List<PluginInfo> enabledPlugins;
 
         public ExtensionsForm()
         {
             InitializeComponent();
         }
 
-        public ExtensionsForm(ExtensionManager mg, IRestartable restartable) : this()
+        internal ExtensionsForm(ExtensionManager mg, IRestartable restartable) : this()
         {
             manager = mg;
             this.restartable = restartable;
@@ -29,10 +30,9 @@ namespace FPLedit
 
         private void closeButton_Click(object sender, EventArgs e)
         {
-            if (modified)
+            if (manager.EnabledModified)
             {
-                string newActivated = string.Join(";", enabledListView.Items.Cast<ListViewItem>().Select(i => (string)i.Tag).ToArray());
-                SettingsManager.Set("extmgr.enabled", newActivated);
+                manager.WriteConfig();
 
                 var res = MessageBox.Show("Die Änderungen treten erst nach dem nächsten Programmstart in Kraft. Möchten sie das Programm jetzt neu starten?", "FPLedit", MessageBoxButtons.YesNo);
                 if (res == DialogResult.Yes)
@@ -43,10 +43,13 @@ namespace FPLedit
 
         private void ExtensionsForm_Load(object sender, EventArgs e)
         {
-            foreach (var ext in manager.EnabledPlugins)
+            var enabled_plgs = manager.Plugins.Where(p => p.Enabled);
+            var disabled_plgs = manager.Plugins.Where(p => !p.Enabled);
+
+            foreach (var plg in enabled_plgs)
             {
-                enabledListView.Items.Add(new ListViewItem(ext.Name)
-                    { Tag = ext.Plugin.GetType().FullName });
+                enabledListView.Items.Add(new ListViewItem(plg.Name)
+                    { Tag = plg });
             }
             enabledListView.GotFocus += (s, a) =>
             {
@@ -54,10 +57,10 @@ namespace FPLedit
                 activateButton.Enabled = false;
             };
 
-            foreach (var ext in manager.DisabledPlugins)
+            foreach (var plg in disabled_plgs)
             {
-                disabledListView.Items.Add(new ListViewItem(ext.Name)
-                    { Tag = ext.Plugin.GetType().FullName });
+                disabledListView.Items.Add(new ListViewItem(plg.Name)
+                    { Tag = plg });
             }
             disabledListView.GotFocus += (s, a) =>
             {
@@ -74,7 +77,8 @@ namespace FPLedit
                 enabledListView.Items.Remove(item);
                 disabledListView.Items.Add(item);
                 disabledListView.SelectedIndices.Clear();
-                modified = true;
+
+                manager.Deactivate((PluginInfo)item.Tag);
             }
         }
 
@@ -86,7 +90,8 @@ namespace FPLedit
                 disabledListView.Items.Remove(item);
                 enabledListView.Items.Add(item);
                 enabledListView.SelectedIndices.Clear();
-                modified = true;
+
+                manager.Activate((PluginInfo)item.Tag);
             }
         }
     }

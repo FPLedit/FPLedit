@@ -62,6 +62,7 @@
     <Compile Include="ILog.cs" />
     <Compile Include="IPlugin.cs" />
     <Compile Include="Logger\TempLogger.cs" />
+    <Compile Include="PluginAttribute.cs" />
     <Compile Include="StationsList.cs" />
     <Compile Include="XMLEntity.cs" />
     <Compile Include="Logger\MultipleLogger.cs" />

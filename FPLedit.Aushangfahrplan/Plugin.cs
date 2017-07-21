@@ -10,12 +10,11 @@ using System.Windows.Forms;
 
 namespace FPLedit.Aushangfahrplan
 {
+    [Plugin("Modul für Aushangfahrpläne")]
     public class Plugin : IPlugin
     {
         private IInfo info;
         private ToolStripItem showItem, filterItem, settingsItem;
-
-        public string Name => "Modul für Aushangfahrpläne";
 
         public void Init(IInfo info)
         {

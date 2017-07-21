@@ -8,18 +8,17 @@ using System.Text;
 
 namespace FPLedit
 {
-    /// <summary>
-    /// Stammt vom Projekt OctoAwesome, http://octoawesome.net, wurde aber abgeändert
-    /// </summary>
-    public class ExtensionManager
+    internal class ExtensionManager
     {
-        public List<PluginContainer> EnabledPlugins { get; private set; }
+        public List<PluginInfo> Plugins { get; private set; }
 
-        public List<PluginContainer> DisabledPlugins { get; private set; }
+        public bool EnabledModified { get; private set; }
 
         public ExtensionManager(ILog log)
         {
-            List<Assembly> assemblies = new List<Assembly>();
+            Plugins = new List<PluginInfo>();
+            var enabledPlugins = SettingsManager.Get("extmgr.enabled", "").Split(';');
+
             var path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             DirectoryInfo dir = new DirectoryInfo(path);
 
@@ -28,7 +27,33 @@ namespace FPLedit
                 try
                 {
                     var assembly = Assembly.LoadFrom(file.FullName);
-                    assemblies.Add(assembly);
+
+                    foreach (var type in assembly.GetTypes())
+                    {
+                        if (!type.IsClass || !type.IsPublic || type.IsAbstract || type == typeof(IPlugin))
+                            continue;
+
+                        if (!typeof(IPlugin).IsAssignableFrom(type))
+                            continue;
+
+                        if (type.GetCustomAttributes(typeof(PluginAttribute), false).Length != 1)
+                            continue;
+
+                        bool enabled = enabledPlugins.Contains(type.FullName);
+
+                        if (enabled)
+                        {
+                            IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
+
+                            var info = new PluginInfo(plugin);
+                            Plugins.Add(info);
+                        }
+                        else
+                        {
+                            var info = new PluginInfo(type);
+                            Plugins.Add(info);
+                        }
+                    }
                 }
                 catch (FileLoadException)
                 {
@@ -38,38 +63,27 @@ namespace FPLedit
                 {
                 }
             }
+        }
 
-            EnabledPlugins = new List<PluginContainer>();
-            DisabledPlugins = new List<PluginContainer>();
+        public void Activate(PluginInfo info)
+        {
+            if (info.Enabled)
+                return;
+            info.Enabled = true;
+            EnabledModified = true;
+        }
 
-            string[] enabledExtensions = SettingsManager.Get("extmgr.enabled", "").Split(';');
+        public void Deactivate(PluginInfo info)
+        {
+            if (!info.Enabled)
+                return;
+            info.Enabled = false;
+            EnabledModified = true;
+        }
 
-            foreach (var assembly in assemblies)
-            {
-                try
-                {
-                    foreach (var type in assembly.GetTypes())
-                    {
-                        if (!type.IsClass || !type.IsPublic || type.IsAbstract || type == typeof(IPlugin))
-                            continue;
-
-                        if (!typeof(IPlugin).IsAssignableFrom(type))
-                            continue;
-
-                        IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
-
-                        bool enabled = enabledExtensions.Contains(type.FullName);
-
-                        if (enabled)
-                            EnabledPlugins.Add(new PluginContainer(plugin));
-                        else
-                            DisabledPlugins.Add(new PluginContainer(plugin));
-                    }
-                }
-                catch
-                {
-                }
-            }
+        public void WriteConfig()
+        {
+            SettingsManager.Set("extmgr.enabled", string.Join(";", Plugins.Where(p => p.Enabled).Select(p => p.FullName)));
         }
     }
 }

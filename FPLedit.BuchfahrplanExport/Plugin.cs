@@ -10,12 +10,11 @@ using System.Windows.Forms;
 
 namespace FPLedit.Buchfahrplan
 {
+    [Plugin("Modul für Buchfahrpläne")]
     public class Plugin : IPlugin
     {
         private IInfo info;
         private ToolStripItem showItem, velocityItem, settingsItem;
-
-        public string Name => "Modul für Buchfahrpläne";
 
         public void Init(IInfo info)
         {

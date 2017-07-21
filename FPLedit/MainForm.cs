@@ -93,8 +93,9 @@ namespace FPLedit
         {
             // Extensions laden & initialisieren (=> Initialisiert Importer/Exporter)
             extensionManager = new ExtensionManager(Logger);
-            foreach (var plugin in extensionManager.EnabledPlugins)
-                plugin.Init(this);
+            var enabled_plgs = extensionManager.Plugins.Where(p => p.Enabled);
+            foreach (var plugin in enabled_plgs)
+                plugin.TryInit(this);
 
             exportFileDialog.Filter = string.Join("|", exporters.Select(ex => ex.Filter));
             importFileDialog.Filter = string.Join("|", importers.Select(im => im.Filter));

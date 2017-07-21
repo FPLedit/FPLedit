@@ -8,7 +8,5 @@ namespace FPLedit.Shared
     public interface IPlugin
     {
         void Init(IInfo info);
-
-        string Name { get; }
     }
 }

@@ -9,12 +9,11 @@ using System.Windows.Forms;
 
 namespace FPLedit.jTrainGraphStarter
 {
+    [Plugin("Starter für jTrainGraph")]
     public class Plugin : IPlugin
     {
         IInfo info;
         ToolStripItem startItem, settingsItem;
-
-        public string Name => "Starter für jTrainGraph";
 
         public void Init(IInfo info)
         {

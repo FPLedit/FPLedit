@@ -11,10 +11,9 @@ using System.Windows.Forms;
 
 namespace FPLedit.Standard
 {
+    [Plugin("Fahrplan-Editoren")]
     public class Plugin : IPlugin
     {
-        public string Name => "Fahrplan-Editoren";
-
         private IInfo info;
         private ToolStripItem editLineItem, editTrainsItem, editTimetableItem;
 
