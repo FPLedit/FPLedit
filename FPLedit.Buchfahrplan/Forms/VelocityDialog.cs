@@ -14,6 +14,7 @@ namespace FPLedit.Buchfahrplan.Forms
 
         public void Show(IInfo info)
         {
+            info.StageUndoStep();
             VelocityForm svf = new VelocityForm(info);
             if (svf.ShowDialog() == DialogResult.OK)
                 info.SetUnsaved();

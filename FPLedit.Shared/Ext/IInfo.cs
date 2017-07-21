@@ -33,6 +33,12 @@ namespace FPLedit.Shared
 
         string GetTemp(string filename);
 
+        void Undo();
+
+        void StageUndoStep();
+
+        void AddUndoStep();
+
         dynamic Menu { get; }
 
         ILog Logger { get; }

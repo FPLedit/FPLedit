@@ -15,6 +15,8 @@ namespace FPLedit.Shared
 
         public bool TrainsCreated;
 
+        public bool CanGoBack;
+
         public string FileName;
 
         public override bool Equals(object obj)
@@ -25,7 +27,8 @@ namespace FPLedit.Shared
             FileState s = (FileState)obj;
 
             return (s.Opened == Opened) && (s.Saved == Saved)
-                && (s.LineCreated == LineCreated) && (s.TrainsCreated == TrainsCreated);
+                && (s.LineCreated == LineCreated) && (s.TrainsCreated == TrainsCreated)
+                && (s.CanGoBack == CanGoBack);
         }
     }
 }

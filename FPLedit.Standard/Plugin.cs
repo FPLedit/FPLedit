@@ -2,10 +2,6 @@
 using FPLedit.Shared.Ui;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Printing;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -16,7 +12,7 @@ namespace FPLedit.Standard
     public class Plugin : IPlugin
     {
         private IInfo info;
-        private ToolStripItem editLineItem, editTrainsItem, editTimetableItem, designItem, filterItem;
+        private ToolStripItem editLineItem, editTrainsItem, editTimetableItem, designItem, filterItem, undoItem;
         private ToolStripMenuItem eitem, pitem;
         private int dialogOffset;
 
@@ -34,30 +30,43 @@ namespace FPLedit.Standard
             eitem = new ToolStripMenuItem("Bearbeiten");
             info.Menu.Items.Add(eitem);
 
+            undoItem = eitem.DropDownItems.Add("Rückgängig");
+            undoItem.Enabled = false;
+            undoItem.Click += (s,e) => info.Undo();
+
+            eitem.DropDownItems.Add(new ToolStripSeparator());
+
             editLineItem = eitem.DropDownItems.Add("Strecke bearbeiten");
             editLineItem.Enabled = false;
-            editLineItem.Click += EditLineItem_Click;
+            editLineItem.Click += (s, e) => ShowForm(new LineEditForm(info));
 
             editTrainsItem = eitem.DropDownItems.Add("Züge bearbeiten");
             editTrainsItem.Enabled = false;
-            editTrainsItem.Click += EditTrainsItem_Click;
+            editTrainsItem.Click += (s, e) => ShowForm(new TrainsEditForm(info));
 
             editTimetableItem = eitem.DropDownItems.Add("Fahrplan bearbeiten");
             editTimetableItem.Enabled = false;
-            editTimetableItem.Click += EditTimetableItem_Click;
+            editTimetableItem.Click += (s, e) => ShowForm(new TimetableEditForm(info));
 
             eitem.DropDownItems.Add(new ToolStripSeparator());
 
             designItem = eitem.DropDownItems.Add("Fahrplandarstellung");
             designItem.Enabled = false;
-            designItem.Click += DesignItem_Click;
+            designItem.Click += (s, e) => ShowForm(new DesignableForm(info));
 
             filterItem = eitem.DropDownItems.Add("Filterregeln");
             filterItem.Enabled = false;
-            filterItem.Click += FilterItem_Click;
+            filterItem.Click += (s, e) => ShowForm(new FilterForm(info));
 
             pitem = new ToolStripMenuItem("Vorschau");
             info.Menu.Items.Add(pitem);
+        }
+
+        private void ShowForm(Form form)
+        {
+            info.StageUndoStep();
+            if (form.ShowDialog() == DialogResult.OK)
+                info.SetUnsaved();
         }
 
         private void Info_ExtensionsLoaded(object sender, EventArgs e)
@@ -89,41 +98,6 @@ namespace FPLedit.Standard
             hasDesignables = info.GetRegistered<IDesignableUiProxy>().Length > 0;
         }
 
-        private void FilterItem_Click(object sender, EventArgs e)
-        {
-            var ff = new FilterForm(info);
-            if (ff.ShowDialog() == DialogResult.OK)
-                info.SetUnsaved();
-        }
-
-        private void DesignItem_Click(object sender, EventArgs e)
-        {
-            var df = new DesignableForm(info);
-            if (df.ShowDialog() == DialogResult.OK)
-                info.SetUnsaved();
-        }
-
-        private void EditTimetableItem_Click(object sender, EventArgs e)
-        {
-            var ttEdit = new TimetableEditForm(info);
-            if (ttEdit.ShowDialog() == DialogResult.OK)
-                info.SetUnsaved();
-        }
-
-        private void EditTrainsItem_Click(object sender, EventArgs e)
-        {
-            var trEdit = new TrainsEditForm(info);
-            if (trEdit.ShowDialog() == DialogResult.OK)
-                info.SetUnsaved();
-        }
-
-        private void EditLineItem_Click(object sender, EventArgs e)
-        {
-            var liEdit = new LineEditForm(info);
-            if (liEdit.ShowDialog() == DialogResult.OK)
-                info.SetUnsaved();
-        }
-
         private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)
         {
             editLineItem.Enabled = e.FileState.Opened;
@@ -131,6 +105,7 @@ namespace FPLedit.Standard
             editTimetableItem.Enabled = e.FileState.Opened && e.FileState.LineCreated && e.FileState.TrainsCreated;
             designItem.Enabled = e.FileState.Opened && hasDesignables;
             filterItem.Enabled = e.FileState.Opened && hasFilterables;
+            undoItem.Enabled = e.FileState.CanGoBack;
 
             foreach (ToolStripItem ddi in pitem.DropDownItems)
                 ddi.Enabled = e.FileState.Opened && e.FileState.LineCreated;

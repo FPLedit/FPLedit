@@ -23,6 +23,7 @@ namespace FPLedit
         private FileState fileState;
 
         private ExtensionManager extensionManager;
+        private UndoManager undo;
 
         private List<string> lastFiles;
         private bool enable_last = true;
@@ -50,6 +51,7 @@ namespace FPLedit
 
         public void SetUnsaved()
         {
+            AddUndoStep();
             fileState.Saved = false;
             OnFileStateChanged();
         }
@@ -58,6 +60,7 @@ namespace FPLedit
         {
             fileState.LineCreated = Timetable?.Stations.Count > 1; // Mind. 2 Bahnhöfe
             fileState.TrainsCreated = Timetable?.Trains.Count > 0;
+            fileState.CanGoBack = undo.CanGoBack;
 
             saveToolStripMenuItem.Enabled = saveAsToolStripMenuItem.Enabled = exportToolStripMenuItem.Enabled = fileState.Opened;
 
@@ -94,6 +97,9 @@ namespace FPLedit
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            // Rückgängig initialiseren
+            undo = new UndoManager();
+
             // Extensions laden & initialisieren (=> Initialisiert Importer/Exporter)
             extensionManager = new ExtensionManager(Logger, Settings);
             var enabled_plgs = extensionManager.Plugins.Where(p => p.Enabled);
@@ -170,6 +176,7 @@ namespace FPLedit
                 fileState.Saved = true;
                 fileState.FileName = importFileDialog.FileName;
                 OnFileStateChanged();
+                ClearHistory();
             }
         }
 
@@ -192,6 +199,7 @@ namespace FPLedit
             fileState.Saved = true;
             fileState.FileName = filename;
             OnFileStateChanged();
+            ClearHistory();
 
             if (enable_last)
             {
@@ -248,9 +256,7 @@ namespace FPLedit
         }
 
         public void Reload()
-        {
-            InternalOpen(fileState.FileName);
-        }
+            => InternalOpen(fileState.FileName);
 
         private void New()
         {
@@ -261,6 +267,7 @@ namespace FPLedit
             fileState.Saved = false;
             fileState.FileName = null;
             OnFileStateChanged();
+            ClearHistory();
             Logger.Info("Neue Datei erstellt");
         }
 
@@ -289,6 +296,30 @@ namespace FPLedit
             if (fileState.Opened)
                 Settings.Set("restart.file", fileState.FileName);
             Application.Restart();
+        }
+
+        public void Undo()
+        {
+            if (undo.CanGoBack)
+                Timetable = undo.Undo();
+            OnFileStateChanged();
+        }
+
+        public void StageUndoStep()
+        {
+            undo.StageUndoStep(Timetable);
+        }
+
+        public void AddUndoStep()
+        {
+            undo.AddUndoStep();
+            OnFileStateChanged();
+        }
+
+        private void ClearHistory()
+        {
+            undo.ClearHistory();
+            OnFileStateChanged();
         }
 
         #endregion
@@ -327,6 +358,7 @@ namespace FPLedit
             ClearTemp();
         }
 
+        #region Updates
         private void AutoUpdate_Check(object sender, EventArgs e)
         {
             if (Settings.Get("updater.auto", "") == "")
@@ -351,6 +383,7 @@ namespace FPLedit
 
             mg.CheckAsync();
         }
+        #endregion
 
         #region IInfo
         dynamic IInfo.Menu => menuStrip;
