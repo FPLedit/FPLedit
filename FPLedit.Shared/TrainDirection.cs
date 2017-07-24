@@ -7,7 +7,7 @@ namespace FPLedit.Shared
 {
     public enum TrainDirection
     {
-        ti,
-        ta
+        ti, // train in
+        ta  // train against
     }
 }

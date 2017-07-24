@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace FPLedit.Shared.Logger
+namespace FPLedit.Logger
 {
     public class TempLogger : ILog
     {

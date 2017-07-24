@@ -90,6 +90,9 @@
     <Compile Include="LogControl.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Logger\ConsoleLogger.cs" />
+    <Compile Include="Logger\MultipleLogger.cs" />
+    <Compile Include="Logger\TempLogger.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

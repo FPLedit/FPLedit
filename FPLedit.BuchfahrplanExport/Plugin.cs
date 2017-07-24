@@ -1,5 +1,4 @@
 ﻿using FPLedit.Shared;
-using FPLedit.Shared.Logger;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -24,7 +23,8 @@ namespace FPLedit.Buchfahrplan
             info.RegisterExport(new HtmlExport());
 
             ToolStripMenuItem item = new ToolStripMenuItem("Buchfahrplan");
-            info.Menu.Items.AddRange(new[] { item });
+            info.Menu.Items.Add(item);
+
             showItem = item.DropDownItems.Add("Anzeigen");
             showItem.Enabled = false;
             showItem.Click += ShowItem_Click;

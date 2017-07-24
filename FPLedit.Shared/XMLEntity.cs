@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -9,6 +10,7 @@ using System.Xml.Linq;
 namespace FPLedit.Shared
 {
     [Serializable]
+    [DebuggerDisplay("Name: {XName}, Children: {Childen.Count)")]
     public sealed class XMLEntity
     {
         public string XName { get; set; }

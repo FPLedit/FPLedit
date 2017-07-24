@@ -195,6 +195,7 @@
             this.Name = "ExtensionsForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Erweiterungen";
             this.Load += new System.EventHandler(this.ExtensionsForm_Load);
             this.tableLayoutPanel1.ResumeLayout(false);

@@ -46,9 +46,9 @@ namespace FPLedit
             {
                 plugin.Init(info);
             }
-            catch
+            catch (Exception ex)
             {
-                info.Logger.Error("Fehler beim Initialisieren einer Erweiterung: " + plugin.GetType().FullName);
+                info.Logger.Error("Fehler beim Initialisieren einer Erweiterung: " + plugin.GetType().FullName + ": " + ex.Message);
             }
         }
     }

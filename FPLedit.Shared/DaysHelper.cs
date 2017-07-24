@@ -6,7 +6,7 @@ using System.Text;
 
 namespace FPLedit.Shared
 {
-    public class DaysHelper
+    public static class DaysHelper
     {
         [DebuggerStepThrough]
         public static bool[] ParseDays(string binary)

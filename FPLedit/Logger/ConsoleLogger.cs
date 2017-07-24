@@ -1,9 +1,10 @@
-﻿using System;
+﻿using FPLedit.Shared;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace FPLedit.Shared.Logger
+namespace FPLedit.Logger
 {
     public class ConsoleLogger : ILog
     {

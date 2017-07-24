@@ -23,7 +23,7 @@ namespace FPLedit.Standard
             info.FileStateChanged += Info_FileStateChanged;
 
             ToolStripMenuItem item = new ToolStripMenuItem("Bearbeiten");
-            info.Menu.Items.AddRange(new[] { item });
+            info.Menu.Items.Add(item);
 
             editLineItem = item.DropDownItems.Add("Strecke bearbeiten");
             editLineItem.Enabled = false;

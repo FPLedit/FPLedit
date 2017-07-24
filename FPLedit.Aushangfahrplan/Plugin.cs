@@ -24,7 +24,7 @@ namespace FPLedit.Aushangfahrplan
             info.RegisterExport(new HtmlExport());
 
             ToolStripMenuItem item = new ToolStripMenuItem("Aushangfahrplan");
-            info.Menu.Items.AddRange(new[] { item });
+            info.Menu.Items.Add(item);
             showItem = item.DropDownItems.Add("Anzeigen");
             showItem.Enabled = false;
             showItem.Click += ShowItem_Click;

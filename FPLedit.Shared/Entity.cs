@@ -6,7 +6,7 @@ using System.Text;
 namespace FPLedit.Shared
 {
     [Serializable]
-    public class Entity
+    public abstract class Entity : IEntity
     {
         public XMLEntity XMLEntity { get; private set; }
 

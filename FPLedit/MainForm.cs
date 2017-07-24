@@ -6,16 +6,14 @@ using System.Collections.Generic;
 using FPLedit.Shared;
 using System.ComponentModel;
 using System.Drawing;
-using FPLedit.Shared.Logger;
 using FPLedit.Shared.Filetypes;
 using System.Diagnostics;
+using FPLedit.Logger;
 
 namespace FPLedit
 {
     public partial class MainForm : Form, IInfo, IRestartable
     {
-        public Timetable Timetable { get; set; }
-
         private Timetable timetableBackup = null;
 
         private List<IExport> exporters;
@@ -31,7 +29,11 @@ namespace FPLedit
         private List<string> lastFiles;
         private bool enable_last = true;
 
+        public Timetable Timetable { get; set; }
+
         public ILog Logger { get; private set; }
+
+        #region FileState
 
         public FileState FileState
         {
@@ -67,6 +69,8 @@ namespace FPLedit
         }
 
         public event EventHandler<FileStateChangedEventArgs> FileStateChanged;
+
+        #endregion
 
         public MainForm()
         {

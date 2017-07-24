@@ -9,6 +9,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace FPLedit.Shared
 {
     [Serializable]
+    [DebuggerDisplay("{TTName}")]
     public sealed class Timetable : Entity
     {
         XMLEntity sElm, tElm;
