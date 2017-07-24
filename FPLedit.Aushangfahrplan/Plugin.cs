@@ -43,7 +43,7 @@ namespace FPLedit.Aushangfahrplan
             HtmlExport exp = new HtmlExport();
             string path = info.GetTemp("afpl.html");
 
-            bool tryoutConsole = SettingsManager.Get<bool>("afpl.console");
+            bool tryoutConsole = info.Settings.Get<bool>("afpl.console");
             if (tryoutConsole)
                 exp.ExportTryoutConsole(info.Timetable, path, info);
             else
@@ -61,7 +61,7 @@ namespace FPLedit.Aushangfahrplan
 
         private void SettingsItem_Click(object sender, EventArgs e)
         {
-            SettingsForm sf = new SettingsForm(info.Timetable);
+            SettingsForm sf = new SettingsForm(info.Timetable, info.Settings);
             if (sf.ShowDialog() == DialogResult.OK)
                 info.SetUnsaved();
         }

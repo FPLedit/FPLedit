@@ -40,7 +40,7 @@ namespace FPLedit.Buchfahrplan
 
         private void SettingsItem_Click(object sender, EventArgs e)
         {
-            SettingsForm sf = new SettingsForm(info.Timetable);
+            SettingsForm sf = new SettingsForm(info.Timetable, info.Settings);
             if (sf.ShowDialog() == DialogResult.OK)
                 info.SetUnsaved();
         }
@@ -63,7 +63,7 @@ namespace FPLedit.Buchfahrplan
             HtmlExport exp = new HtmlExport();
             string path = info.GetTemp("buchfahrplan.html");
 
-            bool tryoutConsole = SettingsManager.Get<bool>("bfpl.console");
+            bool tryoutConsole = info.Settings.Get<bool>("bfpl.console");
             if (tryoutConsole)
                 exp.ExportTryoutConsole(info.Timetable, path, info);
             else

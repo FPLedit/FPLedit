@@ -28,7 +28,7 @@ namespace FPLedit.jTrainGraphStarter
             startItem.Click += (s, e) => Start();
 
             settingsItem = item.DropDownItems.Add("Einstellungen");
-            settingsItem.Click += (s, e) => (new SettingsForm()).ShowDialog();
+            settingsItem.Click += (s, e) => (new SettingsForm(info.Settings)).ShowDialog();
         }
 
         private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)
@@ -38,7 +38,7 @@ namespace FPLedit.jTrainGraphStarter
 
         public void Start()
         {
-            bool showMessage = SettingsManager.Get("jTGStarter.show-message", true);
+            bool showMessage = info.Settings.Get("jTGStarter.show-message", true);
 
             if (showMessage)
             {
@@ -51,8 +51,8 @@ namespace FPLedit.jTrainGraphStarter
 
             info.Save(false);
 
-            string javapath = SettingsManager.Get("jTGStarter.javapath", "java");
-            string jtgPath = SettingsManager.Get("jTGStarter.jtgpath", "jTrainGraph_203.jar");
+            string javapath = info.Settings.Get("jTGStarter.javapath", "java");
+            string jtgPath = info.Settings.Get("jTGStarter.jtgpath", "jTrainGraph_203.jar");
 
             string jtgFolder = Path.GetDirectoryName(jtgPath);
 

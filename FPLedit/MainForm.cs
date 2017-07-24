@@ -33,6 +33,8 @@ namespace FPLedit
 
         public ILog Logger { get; private set; }
 
+        public ISettings Settings { get; private set; }
+
         #region FileState
 
         public FileState FileState
@@ -76,6 +78,8 @@ namespace FPLedit
         {
             InitializeComponent();
 
+            Settings = new Settings();
+
             // Eingebaute Dateiformate initialisieren
             exporters = new List<IExport>(new[] { new CleanedXMLExport() });
             importers = new List<IImport>();
@@ -87,7 +91,7 @@ namespace FPLedit
 
             fileState = new FileState();
 
-            if (SettingsManager.Get("log.enable-file", false))
+            if (Settings.Get("log.enable-file", false))
                 Logger = new MultipleLogger(logTextBox, new TempLogger(this));
             else
                 Logger = new MultipleLogger(logTextBox);
@@ -96,7 +100,7 @@ namespace FPLedit
         private void Form1_Load(object sender, EventArgs e)
         {
             // Extensions laden & initialisieren (=> Initialisiert Importer/Exporter)
-            extensionManager = new ExtensionManager(Logger);
+            extensionManager = new ExtensionManager(Logger, Settings);
             var enabled_plgs = extensionManager.Plugins.Where(p => p.Enabled);
             foreach (var plugin in enabled_plgs)
                 plugin.TryInit(this);
@@ -105,15 +109,15 @@ namespace FPLedit
             importFileDialog.Filter = string.Join("|", importers.Select(im => im.Filter));
 
             // Letzten Exporter auswählen
-            int exporter_idx = SettingsManager.Get("exporter.last", -1);
+            int exporter_idx = Settings.Get("exporter.last", -1);
             if (exporter_idx > -1 && exporters.Count > exporter_idx)
                 exportFileDialog.FilterIndex = exporter_idx + 1;
 
             // Zuletzt geöffnete Dateien anzeigen
-            enable_last = SettingsManager.Get("files.save-last", true);
+            enable_last = Settings.Get("files.save-last", true);
             if (enable_last)
             {
-                lastFiles = SettingsManager.Get("files.last", "").Split(';').Where(s => s != "").Reverse().ToList();
+                lastFiles = Settings.Get("files.last", "").Split(';').Where(s => s != "").Reverse().ToList();
                 foreach (var lf in lastFiles)
                 {
                     var itm = lastFilesToolStripMenuItem.DropDownItems.Add(lf);
@@ -131,10 +135,10 @@ namespace FPLedit
             // Parameter: Fpledit.exe [Dateiname] ODER Datei aus Restart
             string[] args = Environment.GetCommandLineArgs();
             string fn = args.Length >= 2 ? args[1] : null;
-            fn = SettingsManager.Get("restart.file", fn);
+            fn = Settings.Get("restart.file", fn);
             if (fn != null && File.Exists(fn))
                 InternalOpen(fn);
-            SettingsManager.Remove("restart.file");
+            Settings.Remove("restart.file");
 
             // Hilfe Menü nach den Erweiterungen zusammenbasteln
             var helpItem = new ToolStripMenuItem("Hilfe");
@@ -144,7 +148,7 @@ namespace FPLedit
             var docItem = helpItem.DropDownItems.Add("Online Hilfe");
             docItem.Click += (s, ev) => Process.Start("https://fahrplan.manuelhu.de/");
             var infoItem = helpItem.DropDownItems.Add("Info");
-            infoItem.Click += (s, ev) => (new InfoForm()).ShowDialog();
+            infoItem.Click += (s, ev) => (new InfoForm(Settings)).ShowDialog();
         }
 
         #region FileHandling
@@ -209,7 +213,7 @@ namespace FPLedit
                 if (ret == false)
                     return;
                 Logger.Info("Speichern erfolgreich abgeschlossen!");
-                SettingsManager.Set("exporter.last", exportFileDialog.FilterIndex - 1);
+                Settings.Set("exporter.last", exportFileDialog.FilterIndex - 1);
             }
         }
 
@@ -281,7 +285,7 @@ namespace FPLedit
                 return;
             this.FormClosing -= MainForm_FormClosing;
             if (fileState.Opened)
-                SettingsManager.Set("restart.file", fileState.FileName);
+                Settings.Set("restart.file", fileState.FileName);
             Application.Restart();
         }
 
@@ -290,24 +294,23 @@ namespace FPLedit
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (enable_last)
-                SettingsManager.Set("files.last", string.Join(";", lastFiles));
+                Settings.Set("files.last", string.Join(";", lastFiles));
             if (!NotifyIfUnsaved())
                 e.Cancel = true;
         }
 
         private void AutoUpdate_Check(object sender, EventArgs e)
         {
-            if (SettingsManager.Get("updater.auto", "") == "")
+            if (Settings.Get("updater.auto", "") == "")
             {
                 var res = MessageBox.Show("FPLedit kann automatisch bei jedem Programmstart nach einer aktuelleren Version suchen. Dabei wird nur die IP-Adresse Ihres Computers übermittelt.", "Automatische Updateprüfung", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                SettingsManager.Set("updater.auto", (res == DialogResult.Yes));
+                Settings.Set("updater.auto", (res == DialogResult.Yes));
             }
 
-            bool doCheck = SettingsManager.Get<bool>("updater.auto");
-            if (!doCheck)
+            UpdateManager mg = new UpdateManager(Settings);
+            if (!mg.AutoUpdateEnabled)
                 return;
 
-            UpdateManager mg = new UpdateManager();
             mg.CheckResult = vi =>
             {
                 if (vi != null)

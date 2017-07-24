@@ -16,19 +16,24 @@ namespace FPLedit
 {
     public partial class InfoForm : Form
     {
-        public InfoForm()
+        private UpdateManager mg;
+
+        private InfoForm()
         {
             InitializeComponent();
-            UpdateManager mg = new UpdateManager();
+        }
+
+        public InfoForm(ISettings settings) : this()
+        {
+            mg = new UpdateManager(settings);
 
             textBox1.Text = Properties.Resources.Info;
             versionLabel.Text = versionLabel.Text.Replace("{version}", mg.GetCurrentVersion().ToString());
-            updateCheckBox.Checked = SettingsManager.Get<bool>("updater.auto");
+            updateCheckBox.Checked = mg.AutoUpdateEnabled;
         }
 
         private void VersionCheck()
         {
-            UpdateManager mg = new UpdateManager();
             mg.CheckResult = vi =>
             {
                 if (vi != null)
@@ -63,6 +68,6 @@ namespace FPLedit
             => VersionCheck();
 
         private void closeButton_Click(object sender, EventArgs e)
-            => SettingsManager.Set("updater.auto", updateCheckBox.Checked);
+            => mg.AutoUpdateEnabled = updateCheckBox.Checked;
     }
 }

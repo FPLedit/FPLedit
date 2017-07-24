@@ -15,17 +15,19 @@ namespace FPLedit.Aushangfahrplan
 {
     public partial class SettingsForm : Form
     {
+        private ISettings settings;
         private AfplAttrs attrs;
         private AfplTemplateChooser chooser;
 
-        public SettingsForm()
+        private SettingsForm()
         {
             InitializeComponent();
             chooser = new AfplTemplateChooser();
         }
 
-        public SettingsForm(Timetable tt) : this()
+        public SettingsForm(Timetable tt, ISettings settings) : this()
         {
+            this.settings = settings;
             var templates = chooser.GetAvailableTemplates().Select(t => t.Name).ToArray();
             templateComboBox.Items.AddRange(templates);
 
@@ -50,7 +52,7 @@ namespace FPLedit.Aushangfahrplan
             string[] fontFamilies = new InstalledFontCollection().Families.Select(f => f.Name).ToArray();
             fontComboBox.Items.AddRange(fontFamilies);
 
-            consoleCheckBox.Checked = SettingsManager.Get<bool>("afpl.console");
+            consoleCheckBox.Checked = settings.Get<bool>("afpl.console");
         }
 
         private void cssHelpLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -79,7 +81,7 @@ namespace FPLedit.Aushangfahrplan
             var tmpl = chooser.GetAvailableTemplates()[tmpl_idx];
             attrs.Template = chooser.ReduceName(tmpl.GetType().FullName);
 
-            SettingsManager.Set("afpl.console", consoleCheckBox.Checked);
+            settings.Set("afpl.console", consoleCheckBox.Checked);
 
             Close();
         }

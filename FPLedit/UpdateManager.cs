@@ -18,9 +18,18 @@ namespace FPLedit
 
         public Action<Exception> CheckError { get; set; }
 
-        public UpdateManager()
+        public bool AutoUpdateEnabled
         {
-            CheckUrl = SettingsManager.Get("updater.url", "https://fahrplan.manuelhu.de/versioninfo.xml");
+            get => settings.Get<bool>("updater.auto");
+            set => settings.Set("updater.auto", value);
+        }
+
+        private ISettings settings;
+
+        public UpdateManager(ISettings settings)
+        {
+            this.settings = settings;
+            CheckUrl = settings.Get("updater.url", "https://fahrplan.manuelhu.de/versioninfo.xml");
         }
 
         public Version GetCurrentVersion()

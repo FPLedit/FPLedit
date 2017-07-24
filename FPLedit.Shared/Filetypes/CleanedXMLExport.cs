@@ -52,7 +52,7 @@ namespace FPLedit.Shared.Filetypes
             if (res == DialogResult.No)
                 return false;
 
-            bool debug = SettingsManager.Get<bool>("xml.indent");
+            bool debug = info.Settings.Get<bool>("xml.indent");
 #if DEBUG
             debug = true;
 #endif

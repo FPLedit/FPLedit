@@ -15,17 +15,19 @@ namespace FPLedit.Buchfahrplan
 {
     public partial class SettingsForm : Form
     {
+        private ISettings settings;
         private BfplAttrs attrs;
         private BfplTemplateChooser chooser;
 
-        public SettingsForm()
+        private SettingsForm()
         {
             InitializeComponent();
             chooser = new BfplTemplateChooser();
         }
 
-        public SettingsForm(Timetable tt) : this()
+        public SettingsForm(Timetable tt, ISettings settings) : this()
         {
+            this.settings = settings;
             var templates = chooser.GetAvailableTemplates().Select(t => t.Name).ToArray();
             templateComboBox.Items.AddRange(templates);
 
@@ -50,7 +52,7 @@ namespace FPLedit.Buchfahrplan
             string[] fontFamilies = new InstalledFontCollection().Families.Select(f => f.Name).ToArray();
             fontComboBox.Items.AddRange(fontFamilies);
 
-            consoleCheckBox.Checked = SettingsManager.Get<bool>("bfpl.console");
+            consoleCheckBox.Checked = settings.Get<bool>("bfpl.console");
         }
 
         private void cssHelpLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -79,7 +81,7 @@ namespace FPLedit.Buchfahrplan
             var tmpl = chooser.GetAvailableTemplates()[tmpl_idx];
             attrs.Template = chooser.ReduceName(tmpl.GetType().FullName);
 
-            SettingsManager.Set("bfpl.console", consoleCheckBox.Checked);
+            settings.Set("bfpl.console", consoleCheckBox.Checked);
 
             Close();
         }

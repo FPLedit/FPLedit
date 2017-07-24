@@ -14,16 +14,23 @@ namespace FPLedit.jTrainGraphStarter
 {
     public partial class SettingsForm : Form
     {
-        public SettingsForm()
+        private ISettings settings;
+
+        private SettingsForm()
         {
             InitializeComponent();
         }
 
+        public SettingsForm(ISettings settings) : this()
+        {
+            this.settings = settings;
+        }
+
         private void SettingsForm_Load(object sender, EventArgs e)
         {
-            javaPathTextBox.Text = SettingsManager.Get("jTGStarter.javapath", "");
-            jtgPathTextBox.Text = SettingsManager.Get("jTGStarter.jtgpath", "jTrainGraph_203.jar");
-            messageCheckBox.Checked = !SettingsManager.Get("jTGStarter.show-message", true);
+            javaPathTextBox.Text = settings.Get("jTGStarter.javapath", "");
+            jtgPathTextBox.Text = settings.Get("jTGStarter.jtgpath", "jTrainGraph_203.jar");
+            messageCheckBox.Checked = !settings.Get("jTGStarter.show-message", true);
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -43,9 +50,9 @@ namespace FPLedit.jTrainGraphStarter
                     return;
             }
 
-            SettingsManager.Set("jTGStarter.show-message", !messageCheckBox.Checked);
-            SettingsManager.Set("jTGStarter.javapath", javaPathTextBox.Text);
-            SettingsManager.Set("jTGStarter.jtgpath", jtgPathTextBox.Text);
+            settings.Set("jTGStarter.show-message", !messageCheckBox.Checked);
+            settings.Set("jTGStarter.javapath", javaPathTextBox.Text);
+            settings.Set("jTGStarter.jtgpath", jtgPathTextBox.Text);
             Close();
         }
 

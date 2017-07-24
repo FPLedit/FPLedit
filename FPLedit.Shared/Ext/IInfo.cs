@@ -37,6 +37,8 @@ namespace FPLedit.Shared
 
         ILog Logger { get; }
 
+        ISettings Settings { get; }
+
         event EventHandler<FileStateChangedEventArgs> FileStateChanged;
     }
 

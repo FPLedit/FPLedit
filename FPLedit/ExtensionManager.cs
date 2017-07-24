@@ -14,10 +14,13 @@ namespace FPLedit
 
         public bool EnabledModified { get; private set; }
 
-        public ExtensionManager(ILog log)
+        private ISettings settings;
+
+        public ExtensionManager(ILog log, ISettings settings)
         {
             Plugins = new List<PluginInfo>();
-            var enabledPlugins = SettingsManager.Get("extmgr.enabled", "").Split(';');
+            this.settings = settings;
+            var enabledPlugins = settings.Get("extmgr.enabled", "").Split(';');
 
             var path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             DirectoryInfo dir = new DirectoryInfo(path);
@@ -83,7 +86,7 @@ namespace FPLedit
 
         public void WriteConfig()
         {
-            SettingsManager.Set("extmgr.enabled", string.Join(";", Plugins.Where(p => p.Enabled).Select(p => p.FullName)));
+            settings.Set("extmgr.enabled", string.Join(";", Plugins.Where(p => p.Enabled).Select(p => p.FullName)));
         }
     }
 }
