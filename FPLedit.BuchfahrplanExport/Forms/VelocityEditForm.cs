@@ -31,7 +31,7 @@ namespace FPLedit.Buchfahrplan
         {
             Station = sta;
 
-            velocityTextBox.Text = sta.GetAttribute("fpl-vmax", velocityTextBox.Text);
+            velocityTextBox.Text = sta.Vmax;
             positionTextBox.Text = sta.Kilometre.ToString();
             nameTextBox.Text = sta.SName;
             wellenComboBox.SelectedItem = sta.Wellenlinien.ToString();

@@ -167,7 +167,7 @@
 				foreach (var entity in helper.GetStations(tra.Direction)) { #>
 				<tr class="<#= helper.HtmlName(entity.SName, "station-") #>">
 					<td class="zug first"><#= entity.Kilometre.ToString("0.0") #></td>
-					<td class="zug"><#= entity.GetAttribute("fpl-vmax", "") #></td>
+					<td class="zug"><#= entity.Vmax #></td>
 					<td class="zug stat"><#= entity.SName #></td>
 					<#= GetWelle(ref rs_counter, entity, tra) #>
 
@@ -188,8 +188,8 @@
 
 					<# } else { #>
 					<td class="zug klein"><!--Trapeztafel--></td>
-					<td class="zug"></td>
-					<td class="zug"></td>
+					<td class="zug"></td><!-- Ankunft -->
+					<td class="zug"></td><!-- Abfahrt -->
 					<td class="zug klein"><!--Kreuzung--></td>
 					<td class="zug klein"><!--überholt--></td>
 					<td class="zug klein last"><!--Zuglaufmeldung--></td>

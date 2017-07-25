@@ -18,7 +18,7 @@ namespace FPLedit.Buchfahrplan.Templates
 
         private readonly TemplateHelper helper = new TemplateHelper();
 
-        public string GetTranformedText(Timetable tt)
+        public string GetResult(Timetable tt)
         {
             this.tt = tt;
             helper.TT = tt;

@@ -20,7 +20,7 @@ namespace FPLedit.Buchfahrplan
             BfplTemplateChooser chooser = new BfplTemplateChooser();
 
             IBfplTemplate tmpl = chooser.GetTemplate(timetable);
-            string cont = tmpl.GetTranformedText(timetable);
+            string cont = tmpl.GetResult(timetable);
 
             if (tryout_console)
                 cont += Resources.TryoutScript;

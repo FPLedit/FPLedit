@@ -12,5 +12,7 @@ namespace FPLedit.Shared
         float Kilometre { get; set; }
 
         int Wellenlinien { get; set; }
+
+        string Vmax { get; set; }
     }
 }

@@ -20,7 +20,7 @@ namespace FPLedit.Aushangfahrplan.Templates
 
         private TemplateHelper helper;
 
-        public virtual string GetTranformedText(Timetable tt)
+        public virtual string GetResult(Timetable tt)
         {
             abfahrtSVG = useSVG ? Properties.Resources.abfahrt_text : "Abfahrt";
 

@@ -17,7 +17,7 @@ namespace FPLedit.Aushangfahrplan
             var chooser = new AfplTemplateChooser();
 
             IAfplTemplate templ = chooser.GetTemplate(tt);
-            string cont = templ.GetTranformedText(tt);
+            string cont = templ.GetResult(tt);
 
             if (tryout_console)
                 cont += Resources.TryoutScript;

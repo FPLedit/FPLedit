@@ -290,7 +290,7 @@ namespace FPLedit.Buchfahrplan.Templates
             this.Write("</td>\r\n\t\t\t\t\t<td class=\"zug\">");
             
             #line 162 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\BuchfahrplanTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(entity.GetAttribute("fpl-vmax", "")));
+            this.Write(this.ToStringHelper.ToStringWithCulture(entity.Vmax));
             
             #line default
             #line hidden

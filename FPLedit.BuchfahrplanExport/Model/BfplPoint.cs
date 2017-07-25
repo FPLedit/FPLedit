@@ -37,5 +37,11 @@ namespace FPLedit.Buchfahrplan.Model
             get => GetAttribute("fpl-wl", 0);
             set => SetAttribute("fpl-wl", value.ToString());
         }
+
+        public string Vmax
+        {
+            get => GetAttribute("fpl-vmax", "");
+            set => SetAttribute("fpl-vmax", value);
+        }
     }
 }

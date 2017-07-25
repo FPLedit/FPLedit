@@ -18,8 +18,6 @@ namespace FPLedit.Buchfahrplan
         private Timetable tt;
         private BfplAttrs attrs;
 
-        private string defaultVelocity = "";
-
         public VelocityForm()
         {
             InitializeComponent();
@@ -51,15 +49,7 @@ namespace FPLedit.Buchfahrplan
                 points.AddRange(attrs.Points);
 
             foreach (var p in points.OrderBy(o => o.Kilometre))
-            {
-                listView.Items.Add(new ListViewItem(new[] {
-                    p.Kilometre.ToString(),
-                    p.SName,
-                    p.GetAttribute("fpl-vmax", defaultVelocity),
-                    p.Wellenlinien.ToString(),
-                })
-                { Tag = p });
-            }
+                AddPointToList(p);
 
             listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
@@ -73,15 +63,19 @@ namespace FPLedit.Buchfahrplan
                 var p = (BfplPoint)vef.Station;
                 if (attrs != null)
                     attrs.AddPoint(p);
-
-                listView.Items.Add(new ListViewItem(new[] {
-                    p.Kilometre.ToString(),
-                    p.SName,
-                    p.GetAttribute("fpl-vmax", defaultVelocity),
-                    p.Wellenlinien.ToString(),
-                })
-                { Tag = p });
+                AddPointToList(p);
             }
+        }
+
+        private void AddPointToList(IStation s)
+        {
+            listView.Items.Add(new ListViewItem(new[] {
+                s.Kilometre.ToString(),
+                s.SName,
+                s.Vmax,
+                s.Wellenlinien.ToString(),
+            })
+            { Tag = s });
         }
 
         private void EditPoint(bool message = true)
@@ -97,7 +91,7 @@ namespace FPLedit.Buchfahrplan
                 {
                     item.SubItems[0].Text = sta.Kilometre.ToString();
                     item.SubItems[1].Text = sta.SName;
-                    item.SubItems[2].Text = sta.GetAttribute("fpl-vmax", defaultVelocity);
+                    item.SubItems[2].Text = sta.Vmax;
                     item.SubItems[3].Text = sta.Wellenlinien.ToString();
 
                     listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);

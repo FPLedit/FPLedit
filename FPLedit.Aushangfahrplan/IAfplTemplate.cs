@@ -9,6 +9,6 @@ namespace FPLedit.Aushangfahrplan
     public interface IAfplTemplate
     {
         string Name { get; }
-        string GetTranformedText(Timetable tt);
+        string GetResult(Timetable tt);
     }
 }

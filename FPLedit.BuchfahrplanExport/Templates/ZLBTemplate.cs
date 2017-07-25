@@ -210,7 +210,7 @@ namespace FPLedit.Buchfahrplan.Templates
             this.Write("</td>\r\n\t\t\t\t\t<td class=\"zug\">");
             
             #line 170 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.BuchfahrplanExport\Templates\ZLBTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(entity.GetAttribute("fpl-vmax", "")));
+            this.Write(this.ToStringHelper.ToStringWithCulture(entity.Vmax));
             
             #line default
             #line hidden
@@ -292,8 +292,8 @@ namespace FPLedit.Buchfahrplan.Templates
             #line default
             #line hidden
             this.Write(@"					<td class=""zug klein""><!--Trapeztafel--></td>
-					<td class=""zug""></td>
-					<td class=""zug""></td>
+					<td class=""zug""></td><!-- Ankunft -->
+					<td class=""zug""></td><!-- Abfahrt -->
 					<td class=""zug klein""><!--Kreuzung--></td>
 					<td class=""zug klein""><!--überholt--></td>
 					<td class=""zug klein last""><!--Zuglaufmeldung--></td>
