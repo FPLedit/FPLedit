@@ -9,6 +9,11 @@ namespace FPLedit.Buchfahrplan
 {
     internal class BfplTemplateChooser
     {
+        public BfplTemplateChooser(IInfo info)
+        {
+            AvailableTemplates = info.GetRegistered<IBfplTemplate>();
+        }
+
         public IBfplTemplate GetTemplate(Timetable tt)
         {
             var attrsEn = tt.Children.FirstOrDefault(x => x.XName == "bfpl_attrs");
@@ -21,29 +26,16 @@ namespace FPLedit.Buchfahrplan
                     name = ExpandName(attrs.Template);
             }
 
-            var templates = GetAvailableTemplates();
-
-            return templates.FirstOrDefault(t => t.GetType().FullName == name)
+            return AvailableTemplates.FirstOrDefault(t => t.GetType().FullName == name)
                 ?? new Templates.BuchfahrplanTemplate();
         }
 
-        public IBfplTemplate[] GetAvailableTemplates()
-        {
-            var orig_type = typeof(IBfplTemplate);
-
-            var tmpls = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(a => a.GetTypes())
-                .Where(t => orig_type.IsAssignableFrom(t) && orig_type != t)
-                .Select(t => (IBfplTemplate)Activator.CreateInstance(t))
-                .ToArray();
-
-            return tmpls;
-        }
+        public IBfplTemplate[] AvailableTemplates { get; private set; }
 
         public string ExpandName(string name)
-            => name.Replace("$std", "FPLedit.BuchfahrplanExport.Templates");
+            => name.Replace("$std", typeof(Templates.BuchfahrplanTemplate).Namespace);
 
         public string ReduceName(string name)
-            => name.Replace("FPLedit.BuchfahrplanExport.Templates", "$std");
+            => name.Replace(typeof(Templates.BuchfahrplanTemplate).Namespace, "$std");
     }
 }

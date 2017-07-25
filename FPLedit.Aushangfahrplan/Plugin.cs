@@ -21,7 +21,9 @@ namespace FPLedit.Aushangfahrplan
             this.info = info;
             info.FileStateChanged += Info_FileStateChanged;
 
-            info.RegisterExport(new HtmlExport());
+            info.Register<IExport>(new HtmlExport());
+            info.Register<IAfplTemplate>(new Templates.AfplTemplate());
+            info.Register<IAfplTemplate>(new Templates.SvgAfplTemplate());
 
             ToolStripMenuItem item = new ToolStripMenuItem("Aushangfahrplan");
             info.Menu.Items.Add(item);
@@ -61,7 +63,7 @@ namespace FPLedit.Aushangfahrplan
 
         private void SettingsItem_Click(object sender, EventArgs e)
         {
-            SettingsForm sf = new SettingsForm(info.Timetable, info.Settings);
+            SettingsForm sf = new SettingsForm(info.Timetable, info);
             if (sf.ShowDialog() == DialogResult.OK)
                 info.SetUnsaved();
         }

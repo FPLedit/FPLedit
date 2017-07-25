@@ -9,6 +9,11 @@ namespace FPLedit.Aushangfahrplan
 {
     internal class AfplTemplateChooser
     {
+        public AfplTemplateChooser(IInfo info)
+        {
+            AvailableTemplates = info.GetRegistered<IAfplTemplate>();
+        }
+
         public IAfplTemplate GetTemplate(Timetable tt)
         {
             var attrsEn = tt.Children.FirstOrDefault(x => x.XName == "afpl_attrs");
@@ -21,24 +26,11 @@ namespace FPLedit.Aushangfahrplan
                     name = ExpandName(attrs.Template);
             }
 
-            var templates = GetAvailableTemplates();
-
-            return templates.FirstOrDefault(t => t.GetType().FullName == name)
+            return AvailableTemplates.FirstOrDefault(t => t.GetType().FullName == name)
                 ?? new Templates.AfplTemplate();
         }
 
-        public IAfplTemplate[] GetAvailableTemplates()
-        {
-            var orig_type = typeof(IAfplTemplate);
-
-            var tmpls = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(a => a.GetTypes())
-                .Where(t => orig_type.IsAssignableFrom(t) && orig_type != t)
-                .Select(t => (IAfplTemplate)Activator.CreateInstance(t))
-                .ToArray();
-
-            return tmpls;
-        }
+        public IAfplTemplate[] AvailableTemplates { get; private set; }
 
         public string ExpandName(string name)
             => name.Replace("$std", typeof(Templates.AfplTemplate).Namespace);

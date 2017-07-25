@@ -22,6 +22,8 @@ namespace FPLedit.Standard
             this.info = info;
             info.FileStateChanged += Info_FileStateChanged;
 
+            info.Register<IExport>(new Shared.Filetypes.CleanedXMLExport());
+
             ToolStripMenuItem item = new ToolStripMenuItem("Bearbeiten");
             info.Menu.Items.Add(item);
 

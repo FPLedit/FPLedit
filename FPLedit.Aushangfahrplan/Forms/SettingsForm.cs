@@ -22,13 +22,13 @@ namespace FPLedit.Aushangfahrplan
         private SettingsForm()
         {
             InitializeComponent();
-            chooser = new AfplTemplateChooser();
         }
 
-        public SettingsForm(Timetable tt, ISettings settings) : this()
+        public SettingsForm(Timetable tt, IInfo info) : this()
         {
-            this.settings = settings;
-            var templates = chooser.GetAvailableTemplates().Select(t => t.Name).ToArray();
+            settings = info.Settings;
+            chooser = new AfplTemplateChooser(info);
+            var templates = chooser.AvailableTemplates.Select(t => t.Name).ToArray();
             templateComboBox.Items.AddRange(templates);
 
             attrs = AfplAttrs.GetAttrs(tt);
@@ -78,7 +78,7 @@ namespace FPLedit.Aushangfahrplan
             attrs.Css = cssTextBox.Text;
 
             var tmpl_idx = templateComboBox.SelectedIndex;
-            var tmpl = chooser.GetAvailableTemplates()[tmpl_idx];
+            var tmpl = chooser.AvailableTemplates[tmpl_idx];
             attrs.Template = chooser.ReduceName(tmpl.GetType().FullName);
 
             settings.Set("afpl.console", consoleCheckBox.Checked);

@@ -14,7 +14,7 @@ namespace FPLedit.Aushangfahrplan
 
         private bool Exp(Timetable tt, string filename, IInfo info, bool tryout_console)
         {
-            var chooser = new AfplTemplateChooser();
+            var chooser = new AfplTemplateChooser(info);
 
             IAfplTemplate templ = chooser.GetTemplate(tt);
             string cont = templ.GetResult(tt);

@@ -16,9 +16,7 @@ namespace FPLedit
     {
         private Timetable timetableBackup = null;
 
-        private List<IExport> exporters;
-        private List<IImport> importers;
-
+        private Dictionary<Type, List<object>> registerStore = new Dictionary<Type, List<object>>();
         private IImport open;
         private IExport save;
 
@@ -80,10 +78,6 @@ namespace FPLedit
 
             Settings = new Settings();
 
-            // Eingebaute Dateiformate initialisieren
-            exporters = new List<IExport>(new[] { new CleanedXMLExport() });
-            importers = new List<IImport>();
-
             open = new XMLImport();
             save = new XMLExport();
             saveFileDialog.Filter = save.Filter;
@@ -105,12 +99,15 @@ namespace FPLedit
             foreach (var plugin in enabled_plgs)
                 plugin.TryInit(this);
 
+            var exporters = GetRegistered<IExport>();
+            var importers = GetRegistered<IImport>();
+
             exportFileDialog.Filter = string.Join("|", exporters.Select(ex => ex.Filter));
             importFileDialog.Filter = string.Join("|", importers.Select(im => im.Filter));
 
             // Letzten Exporter auswählen
             int exporter_idx = Settings.Get("exporter.last", -1);
-            if (exporter_idx > -1 && exporters.Count > exporter_idx)
+            if (exporter_idx > -1 && exporters.Length > exporter_idx)
                 exportFileDialog.FilterIndex = exporter_idx + 1;
 
             // Zuletzt geöffnete Dateien anzeigen
@@ -159,6 +156,7 @@ namespace FPLedit
                 return;
             if (importFileDialog.ShowDialog() == DialogResult.OK)
             {
+                var importers = GetRegistered<IImport>();
                 IImport import = importers[importFileDialog.FilterIndex - 1];
                 Logger.Info("Öffne Datei " + importFileDialog.FileName);
                 Timetable = import.Import(importFileDialog.FileName, Logger);
@@ -205,6 +203,7 @@ namespace FPLedit
         {
             if (exportFileDialog.ShowDialog() == DialogResult.OK)
             {
+                var exporters = GetRegistered<IExport>();
                 IExport export = exporters[exportFileDialog.FilterIndex - 1];
                 string filename = exportFileDialog.FileName;
 
@@ -341,11 +340,20 @@ namespace FPLedit
             timetableBackup = null;
         }
 
-        public void RegisterExport(IExport export)
-            => exporters.Add(export);
+        public void Register<T>(T obj)
+        {
+            Type t = typeof(T);
+            if (!registerStore.ContainsKey(t))
+                registerStore.Add(typeof(T), new List<object>());
+            registerStore[t].Add(obj);
+        }
 
-        public void RegisterImport(IImport import)
-            => importers.Add(import);
+        public T[] GetRegistered<T>()
+        {
+            List<object> res;
+            registerStore.TryGetValue(typeof(T), out res);
+            return res?.Select(o => (T)o).ToArray() ?? new T[0];
+        }
 
         public string GetTemp(string filename)
         {

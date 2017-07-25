@@ -20,9 +20,9 @@ namespace FPLedit.Shared
 
         void ClearBackup();
 
-        void RegisterExport(IExport export);
+        void Register<T>(T obj);
 
-        void RegisterImport(IImport import);
+        T[] GetRegistered<T>();
 
         // FileHandling
         void Open();

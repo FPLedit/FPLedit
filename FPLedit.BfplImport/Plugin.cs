@@ -11,6 +11,6 @@ namespace FPLedit.BfplImport
     public class Plugin : IPlugin
     {
         public void Init(IInfo info)
-            => info.RegisterImport(new BfplImport());
+            => info.Register<IImport>(new BfplImport());
     }
 }

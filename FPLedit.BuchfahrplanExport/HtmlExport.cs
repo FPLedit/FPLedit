@@ -17,7 +17,7 @@ namespace FPLedit.Buchfahrplan
 
         private bool Exp(Timetable timetable, string filename, IInfo info, bool tryout_console)
         {
-            BfplTemplateChooser chooser = new BfplTemplateChooser();
+            BfplTemplateChooser chooser = new BfplTemplateChooser(info);
 
             IBfplTemplate tmpl = chooser.GetTemplate(timetable);
             string cont = tmpl.GetResult(timetable);

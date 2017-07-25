@@ -15,6 +15,7 @@ namespace FPLedit.Shared.Filetypes
         private string[] node_names = new[]
         {
             "bfpl_attrs",   // Buchfahrplaneigenschaften
+            "afpl_attrs",   // Aushangfahrplaneigenschaften
         };
 
         private string[] attrs_names = new[]
