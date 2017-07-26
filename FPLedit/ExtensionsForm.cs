@@ -51,6 +51,7 @@ namespace FPLedit
                 enabledListView.Items.Add(new ListViewItem(plg.Name)
                     { Tag = plg });
             }
+            enabledListView.SelectedIndexChanged += (s, a) => ItemSelected(enabledListView);
             enabledListView.GotFocus += (s, a) =>
             {
                 deactivateButton.Enabled = true;
@@ -62,11 +63,23 @@ namespace FPLedit
                 disabledListView.Items.Add(new ListViewItem(plg.Name)
                     { Tag = plg });
             }
+            disabledListView.SelectedIndexChanged += (s, a) => ItemSelected(disabledListView);
             disabledListView.GotFocus += (s, a) =>
             {
                 deactivateButton.Enabled = false;
                 activateButton.Enabled = true;
             };
+        }
+
+        private void ItemSelected(ListView lv)
+        {
+            if (lv.SelectedItems.Count == 0)
+                return;
+            var plg = lv.SelectedItems[0].Tag as PluginInfo;
+            if (plg.Author != null)
+                infoLabel.Text = "Autor: " + plg.Author;
+            else
+                infoLabel.Text = "";
         }
 
         private void deactivateButton_Click(object sender, EventArgs e)
@@ -77,6 +90,7 @@ namespace FPLedit
                 enabledListView.Items.Remove(item);
                 disabledListView.Items.Add(item);
                 disabledListView.SelectedIndices.Clear();
+                infoLabel.Text = "";
 
                 manager.Deactivate((PluginInfo)item.Tag);
             }
@@ -90,6 +104,7 @@ namespace FPLedit
                 disabledListView.Items.Remove(item);
                 enabledListView.Items.Add(item);
                 enabledListView.SelectedIndices.Clear();
+                infoLabel.Text = "";
 
                 manager.Activate((PluginInfo)item.Tag);
             }

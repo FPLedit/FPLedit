@@ -52,9 +52,10 @@
             // 
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem});
+            this.menuStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(582, 24);
+            this.menuStrip.Size = new System.Drawing.Size(582, 23);
             this.menuStrip.TabIndex = 0;
             this.menuStrip.Text = "menuStrip";
             // 
@@ -72,7 +73,7 @@
             this.toolStripSeparator1,
             this.quitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 19);
             this.fileToolStripMenuItem.Text = "Datei";
             // 
             // newToolStripMenuItem
@@ -151,10 +152,10 @@
             this.logTextBox.BackColor = System.Drawing.Color.White;
             this.logTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.logTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.logTextBox.Location = new System.Drawing.Point(0, 24);
+            this.logTextBox.Location = new System.Drawing.Point(0, 23);
             this.logTextBox.Name = "logTextBox";
             this.logTextBox.Padding = new System.Windows.Forms.Padding(2);
-            this.logTextBox.Size = new System.Drawing.Size(582, 317);
+            this.logTextBox.Size = new System.Drawing.Size(582, 318);
             this.logTextBox.TabIndex = 1;
             // 
             // MainForm

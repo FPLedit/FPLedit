@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace FPLedit.jTrainGraphStarter
 {
-    [Plugin("Starter für jTrainGraph")]
+    [Plugin("Starter für jTrainGraph", Author = "Manuel Huber")]
     public class Plugin : IPlugin
     {
         IInfo info;

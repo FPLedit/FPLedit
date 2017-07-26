@@ -11,6 +11,12 @@ namespace FPLedit.Shared
         private string _name;
         public string Name => _name;
 
+        public string Author { get; set; }
+
+        public string Web { get; set; }
+
+        public string Version { get; set; }
+
         public PluginAttribute(string name)
         {
             _name = name;

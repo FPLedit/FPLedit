@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.BfplImport
 {
-    [Plugin("Importer für alte BFPL-Dateien")]
+    [Plugin("Importer für alte BFPL-Dateien", Author = "Manuel Huber")]
     public class Plugin : IPlugin
     {
         public void Init(IInfo info)

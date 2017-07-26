@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace FPLedit.Buchfahrplan
 {
-    [Plugin("Modul für Buchfahrpläne")]
+    [Plugin("Modul für Buchfahrpläne", Author = "Manuel Huber")]
     public class Plugin : IPlugin
     {
         private IInfo info;
@@ -24,7 +24,7 @@ namespace FPLedit.Buchfahrplan
             info.Register<IBfplTemplate>(new Templates.BuchfahrplanTemplate());
             info.Register<IBfplTemplate>(new Templates.ZLBTemplate());
 
-            ToolStripMenuItem item = new ToolStripMenuItem("Buchfahrplan");
+            var item = new ToolStripMenuItem("Buchfahrplan");
             info.Menu.Items.Add(item);
 
             showItem = item.DropDownItems.Add("Anzeigen");

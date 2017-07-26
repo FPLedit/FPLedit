@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace FPLedit.Standard
 {
-    [Plugin("Fahrplan-Editoren")]
+    [Plugin("Fahrplan-Editoren", Author = "Manuel Huber")]
     public class Plugin : IPlugin
     {
         private IInfo info;
@@ -24,7 +24,7 @@ namespace FPLedit.Standard
 
             info.Register<IExport>(new Shared.Filetypes.CleanedXMLExport());
 
-            ToolStripMenuItem item = new ToolStripMenuItem("Bearbeiten");
+            var item = new ToolStripMenuItem("Bearbeiten");
             info.Menu.Items.Add(item);
 
             editLineItem = item.DropDownItems.Add("Strecke bearbeiten");

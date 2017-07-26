@@ -67,6 +67,8 @@ namespace FPLedit
             rtf.AppendText(msg);
             msg = msg.Trim();
             var idx = rtf.Find(msg);
+            if (idx == -1)
+                return;
             rtf.Select(idx, msg.Length);
             rtf.SelectionColor = c;
             rtf.Select(rtf.Text.Length, 0);

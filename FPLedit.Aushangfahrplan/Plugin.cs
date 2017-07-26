@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace FPLedit.Aushangfahrplan
 {
-    [Plugin("Modul für Aushangfahrpläne")]
+    [Plugin("Modul für Aushangfahrpläne", Author = "Manuel Huber")]
     public class Plugin : IPlugin
     {
         private IInfo info;
@@ -25,7 +25,7 @@ namespace FPLedit.Aushangfahrplan
             info.Register<IAfplTemplate>(new Templates.AfplTemplate());
             info.Register<IAfplTemplate>(new Templates.SvgAfplTemplate());
 
-            ToolStripMenuItem item = new ToolStripMenuItem("Aushangfahrplan");
+            var item = new ToolStripMenuItem("Aushangfahrplan");
             info.Menu.Items.Add(item);
             showItem = item.DropDownItems.Add("Anzeigen");
             showItem.Enabled = false;
