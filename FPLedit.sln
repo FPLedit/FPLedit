@@ -14,7 +14,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit", "FPLedit\FPLedit.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Shared", "FPLedit.Shared\FPLedit.Shared.csproj", "{CE38D005-22B2-4B15-80BA-614F038240FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Buchfahrplan", "FPLedit.BuchfahrplanExport\FPLedit.Buchfahrplan.csproj", "{B8BA56BA-15FC-4D2E-8929-FDD6C6E13B5A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Buchfahrplan", "FPLedit.Buchfahrplan\FPLedit.Buchfahrplan.csproj", "{B8BA56BA-15FC-4D2E-8929-FDD6C6E13B5A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.BfplImport", "FPLedit.BfplImport\FPLedit.BfplImport.csproj", "{0959C902-8FCE-4125-A8F0-2D5A06EB890C}"
 EndProject
