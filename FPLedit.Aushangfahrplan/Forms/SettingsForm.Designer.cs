@@ -39,6 +39,9 @@
             this.consoleCheckBox = new System.Windows.Forms.CheckBox();
             this.templateComboBox = new System.Windows.Forms.ComboBox();
             this.templateLabel = new System.Windows.Forms.Label();
+            this.hwfontComboBox = new System.Windows.Forms.ComboBox();
+            this.hwexampleLabel = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // fontComboBox
@@ -55,18 +58,18 @@
             this.cssTextBox.AcceptsReturn = true;
             this.cssTextBox.AcceptsTab = true;
             this.cssTextBox.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cssTextBox.Location = new System.Drawing.Point(146, 66);
+            this.cssTextBox.Location = new System.Drawing.Point(146, 96);
             this.cssTextBox.Multiline = true;
             this.cssTextBox.Name = "cssTextBox";
             this.cssTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.cssTextBox.Size = new System.Drawing.Size(310, 209);
+            this.cssTextBox.Size = new System.Drawing.Size(310, 179);
             this.cssTextBox.TabIndex = 7;
             this.cssTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cssTextBox_KeyDown);
             // 
             // fontLabel
             // 
             this.fontLabel.AutoSize = true;
-            this.fontLabel.Location = new System.Drawing.Point(12, 41);
+            this.fontLabel.Location = new System.Drawing.Point(12, 42);
             this.fontLabel.Name = "fontLabel";
             this.fontLabel.Size = new System.Drawing.Size(121, 13);
             this.fontLabel.TabIndex = 2;
@@ -74,7 +77,7 @@
             // 
             // cssLabel
             // 
-            this.cssLabel.Location = new System.Drawing.Point(12, 69);
+            this.cssLabel.Location = new System.Drawing.Point(12, 99);
             this.cssLabel.Name = "cssLabel";
             this.cssLabel.Size = new System.Drawing.Size(128, 54);
             this.cssLabel.TabIndex = 5;
@@ -113,7 +116,7 @@
             // cssHelpLinkLabel
             // 
             this.cssHelpLinkLabel.AutoSize = true;
-            this.cssHelpLinkLabel.Location = new System.Drawing.Point(12, 110);
+            this.cssHelpLinkLabel.Location = new System.Drawing.Point(12, 137);
             this.cssHelpLinkLabel.Name = "cssHelpLinkLabel";
             this.cssHelpLinkLabel.Size = new System.Drawing.Size(66, 13);
             this.cssHelpLinkLabel.TabIndex = 6;
@@ -149,6 +152,33 @@
             this.templateLabel.TabIndex = 0;
             this.templateLabel.Text = "Aushangfahrplan-Vorlage";
             // 
+            // hwfontComboBox
+            // 
+            this.hwfontComboBox.FormattingEnabled = true;
+            this.hwfontComboBox.Location = new System.Drawing.Point(146, 69);
+            this.hwfontComboBox.Name = "hwfontComboBox";
+            this.hwfontComboBox.Size = new System.Drawing.Size(310, 21);
+            this.hwfontComboBox.TabIndex = 11;
+            this.hwfontComboBox.TextChanged += new System.EventHandler(this.hwfontComboBox_TextChanged);
+            // 
+            // hwexampleLabel
+            // 
+            this.hwexampleLabel.AutoSize = true;
+            this.hwexampleLabel.Location = new System.Drawing.Point(462, 72);
+            this.hwexampleLabel.Name = "hwexampleLabel";
+            this.hwexampleLabel.Size = new System.Drawing.Size(43, 13);
+            this.hwexampleLabel.TabIndex = 12;
+            this.hwexampleLabel.Text = "Beispiel";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 72);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(98, 13);
+            this.label1.TabIndex = 13;
+            this.label1.Text = "Schriftart in Tabelle";
+            // 
             // SettingsForm
             // 
             this.AcceptButton = this.closeButton;
@@ -156,6 +186,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(556, 341);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.hwexampleLabel);
+            this.Controls.Add(this.hwfontComboBox);
             this.Controls.Add(this.templateLabel);
             this.Controls.Add(this.templateComboBox);
             this.Controls.Add(this.consoleCheckBox);
@@ -191,5 +224,8 @@
         private System.Windows.Forms.CheckBox consoleCheckBox;
         private System.Windows.Forms.ComboBox templateComboBox;
         private System.Windows.Forms.Label templateLabel;
+        private System.Windows.Forms.ComboBox hwfontComboBox;
+        private System.Windows.Forms.Label hwexampleLabel;
+        private System.Windows.Forms.Label label1;
     }
 }

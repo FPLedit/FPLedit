@@ -10,7 +10,7 @@
 body {
 	color:black;
 	font-size:16px;
-	font-family: <#= font #>, sans-serif;
+	font-family: "<#= font #>", sans-serif;
 }
 table {
 	margin-left: auto;
@@ -66,7 +66,7 @@ td {
 	border-bottom: 2px solid #000;
 }
 .time:not(.header), .name:not(.header) {
-	font-family: serif;
+	font-family: "<#= hwFont #>", serif;
 }
 .dir {
 	border-top: 3px solid #000;

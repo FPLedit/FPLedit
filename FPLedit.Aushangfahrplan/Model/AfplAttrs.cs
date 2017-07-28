@@ -14,6 +14,12 @@ namespace FPLedit.Aushangfahrplan.Model
             set => SetAttribute("font", value);
         }
 
+        public string HwFont
+        {
+            get => GetAttribute("hwfont", "");
+            set => SetAttribute("hwfont", value);
+        }
+
         public string Css
         {
             get

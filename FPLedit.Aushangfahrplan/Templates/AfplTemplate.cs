@@ -28,14 +28,14 @@ namespace FPLedit.Aushangfahrplan.Templates
         public virtual string TransformText()
         {
             this.Write("\r\n<!doctype html>\r\n<html>\r\n\t<head>\r\n\t\t<meta charset=\"utf-8\">\r\n<style>\r\nbody {\r\n\tc" +
-                    "olor:black;\r\n\tfont-size:16px;\r\n\tfont-family: ");
+                    "olor:black;\r\n\tfont-size:16px;\r\n\tfont-family: \"");
             
             #line 13 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(font));
             
             #line default
             #line hidden
-            this.Write(@", sans-serif;
+            this.Write(@""", sans-serif;
 }
 table {
 	margin-left: auto;
@@ -91,7 +91,14 @@ td {
 	border-bottom: 2px solid #000;
 }
 .time:not(.header), .name:not(.header) {
-	font-family: serif;
+	font-family: """);
+            
+            #line 69 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Aushangfahrplan\Templates\AfplTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(hwFont));
+            
+            #line default
+            #line hidden
+            this.Write(@""", serif;
 }
 .dir {
 	border-top: 3px solid #000;

@@ -11,6 +11,7 @@ namespace FPLedit.Aushangfahrplan.Templates
     {
         private Timetable tt;
         private string font = "Arial";
+        private string hwFont = "serif";
         private string additionalCss = "";
         private string abfahrtSVG;
 
@@ -32,6 +33,8 @@ namespace FPLedit.Aushangfahrplan.Templates
             {
                 if (attrs.Font != "")
                     font = attrs.Font;
+                if (attrs.HwFont != "")
+                    hwFont = attrs.HwFont;
                 additionalCss = attrs.Css ?? "";
             }
 

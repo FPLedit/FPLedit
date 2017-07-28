@@ -51,6 +51,7 @@ namespace FPLedit.Aushangfahrplan
         {
             string[] fontFamilies = new InstalledFontCollection().Families.Select(f => f.Name).ToArray();
             fontComboBox.Items.AddRange(fontFamilies);
+            hwfontComboBox.Items.AddRange(fontFamilies);
 
             consoleCheckBox.Checked = settings.Get<bool>("afpl.console");
         }
@@ -59,7 +60,10 @@ namespace FPLedit.Aushangfahrplan
             => Process.Start("https://fahrplan.manuelhu.de/buchfahrplaene/css/");
 
         private void fontComboBox_TextChanged(object sender, EventArgs e)
-             => exampleLabel.Font = new Font(fontComboBox.Text, 10);
+            => exampleLabel.Font = new Font(fontComboBox.Text, 10);
+
+        private void hwfontComboBox_TextChanged(object sender, EventArgs e)
+            => hwexampleLabel.Font = new Font(hwfontComboBox.Text, 10);
 
         private void cssTextBox_KeyDown(object sender, KeyEventArgs e)
         {
@@ -75,6 +79,7 @@ namespace FPLedit.Aushangfahrplan
         private void closeButton_Click(object sender, EventArgs e)
         {
             attrs.Font = fontComboBox.Text;
+            attrs.HwFont = hwfontComboBox.Text;
             attrs.Css = cssTextBox.Text;
 
             var tmpl_idx = templateComboBox.SelectedIndex;
