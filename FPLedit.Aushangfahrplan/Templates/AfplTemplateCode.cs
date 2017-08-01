@@ -38,6 +38,7 @@ namespace FPLedit.Aushangfahrplan.Templates
                 additionalCss = attrs.Css ?? "";
             }
 
+            GenerationEnvironment = null; //BUGFIX: Clear last build
             return TransformText();
         }
 

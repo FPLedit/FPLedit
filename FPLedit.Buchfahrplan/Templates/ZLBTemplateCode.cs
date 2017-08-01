@@ -32,6 +32,7 @@ namespace FPLedit.Buchfahrplan.Templates
                 helper.Attrs = attrs;
             }
 
+            GenerationEnvironment = null; //BUGFIX: Clear last build
             return TransformText();
         }
 
