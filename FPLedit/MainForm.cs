@@ -40,7 +40,7 @@ namespace FPLedit
             get { return fileState; }
             set
             {
-                if (value != fileState)
+                if (!value.Equals(fileState))
                 {
                     fileState = value;
                     OnFileStateChanged();

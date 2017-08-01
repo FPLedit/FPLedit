@@ -274,6 +274,7 @@
             this.Name = "TrainsEditForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Züge bearbeiten";
             this.mainTableLayoutPanel.ResumeLayout(false);
             this.topContentPanel.ResumeLayout(false);

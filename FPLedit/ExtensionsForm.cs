@@ -15,8 +15,6 @@ namespace FPLedit
         private ExtensionManager manager;
         private IRestartable restartable;
 
-        private static List<PluginInfo> enabledPlugins;
-
         public ExtensionsForm()
         {
             InitializeComponent();

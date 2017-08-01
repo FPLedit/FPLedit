@@ -156,10 +156,12 @@
 				</tr>
 				<#
 				int rs_counter = 0;
+				string last_vmax = "";
 				foreach (var entity in helper.GetStations(tra.Direction)) { #>
 				<tr class="<#= helper.HtmlName(entity.SName, "station-") #>">
 					<td class="zug"><#= entity.Kilometre.ToString("0.0") #></td>
-					<td class="zug"><#= entity.Vmax #></td>
+					<td class="zug"><#= entity.Vmax == last_vmax ? "" : entity.Vmax #></td>
+					<# last_vmax = entity.Vmax; #>
 					<td class="zug stat"><#= entity.SName #></td>
 					<#= GetWelle(ref rs_counter, entity, tra) #>
 

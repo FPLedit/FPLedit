@@ -88,6 +88,15 @@ namespace FPLedit.Standard
                         if (ardp.Zuglaufmeldung != null && ardp.Zuglaufmeldung != "")
                             cell.Style.Font = fb;
                     }
+                    else
+                    {
+                        var cell = trainRow.Cells[stas.IndexOf(sta) + "dp"];
+                        if (ardp.TrapeztafelHalt)
+                            throw new Exception("Die erste Station darf keinen Trapeztafelhalt beinhalten!");
+                        cell.Tag = new Tuple<bool, string>(false, ardp.Zuglaufmeldung);
+                        if (ardp.Zuglaufmeldung != null && ardp.Zuglaufmeldung != "")
+                            cell.Style.Font = fb;
+                    }
                 }
 
                 trainRow.Tag = tra;
@@ -107,7 +116,8 @@ namespace FPLedit.Standard
                 if (view.SelectedCells.Count != 0)
                 {
                     var cell = view.SelectedCells[0];
-                    trapeztafelToggle.Enabled = zlmButton.Enabled = cell.ColumnIndex != 0 && cell.ColumnIndex % 2 != 0;
+                    trapeztafelToggle.Enabled = cell.ColumnIndex % 2 != 0;
+                    zlmButton.Enabled = cell.ColumnIndex == 0 || cell.ColumnIndex % 2 != 0;
 
                     var tr = false;
                     if (cell.Tag != null)
@@ -158,7 +168,14 @@ namespace FPLedit.Standard
                         {
                             TimeSpan tsDp = TimeSpan.Parse((string)cellDp.Value);
                             ardp.Departure = tsDp;
-                            if (cellDp.Tag != null)
+                            if (cellDp.Tag != null && sta == stas.First())
+                            {
+                                var val = (Tuple<bool, string>)cellDp.Tag;
+                                if (ardp.TrapeztafelHalt)
+                                    throw new Exception("Die erste Station darf keinen Trapeztafelhalt beinhalten!");
+                                ardp.Zuglaufmeldung = val.Item2;
+                            }
+                            else if (cellDp.Tag != null)
                                 throw new Exception("Keine Abfahrtszelle darf einen Trapeztafelhalt/Zugalufmeldungseintrag enthalten!");
                         }
                     }
@@ -197,7 +214,8 @@ namespace FPLedit.Standard
                 return;
 
             var cell = cells[0];
-            if (cell.ColumnIndex == 0 || cell.ColumnIndex % 2 == 0)
+            // Trapeztafelhalt darf nur bei Ankünften sein
+            if (cell.ColumnIndex % 2 == 0)
                 return;
 
             var val = (Tuple<bool, string>)cell.Tag;
@@ -215,7 +233,8 @@ namespace FPLedit.Standard
                 return;
 
             var cell = cells[0];
-            if (cell.ColumnIndex == 0 || cell.ColumnIndex % 2 == 0)
+            // Zuglaufmeldungen dürfen auch bei Abfahrt am ersten Bahnhof sein
+            if (cell.ColumnIndex != 0 && cell.ColumnIndex % 2 == 0)
                 return;
 
             var val = (Tuple<bool, string>)cell.Tag;

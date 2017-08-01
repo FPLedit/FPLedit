@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.15
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit", "FPLedit\FPLedit.csproj", "{2809F962-DC06-4740-8AD0-0981891446DA}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -65,11 +65,11 @@ Global
 		{0B7A9395-3318-41A1-85D3-EECA6A868FA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B7A9395-3318-41A1-85D3-EECA6A868FA7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9A1DE03B-E601-495F-9C21-F67E20D6FD18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9A1DE03B-E601-495F-9C21-F67E20D6FD18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A1DE03B-E601-495F-9C21-F67E20D6FD18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9D85138-EABB-47C1-8765-0F204E81FA5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C9D85138-EABB-47C1-8765-0F204E81FA5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9D85138-EABB-47C1-8765-0F204E81FA5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9D85138-EABB-47C1-8765-0F204E81FA5C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

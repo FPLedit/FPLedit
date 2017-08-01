@@ -210,6 +210,7 @@
             this.KeyPreview = true;
             this.Name = "TimetableEditForm";
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Fahrplan bearbeiten";
             this.mainTableLayoutPanel.ResumeLayout(false);
             this.topPanel.ResumeLayout(false);

@@ -2,11 +2,12 @@
  * FPLedit Release-Prozess
  * Erstellt aus einem Ordner mit Kompilaten eine ZIP-Datei
  * Aufruf mit Pfad zum Ordner der Kompilate
- * Version 0.1 / (c) Manuel Huber 2017
+ * Version 0.2 / (c) Manuel Huber 2017
  */
 
 #r "System.IO.Compression.FileSystem.dll"
 
+using System;
 using System.IO;
 using System.Diagnostics;
 using System.IO.Compression;
@@ -42,7 +43,8 @@ foreach (var f in files) {
  * TASK: Build new license file
  */
 Console.WriteLine("Generiere neue README-Datei");
-var license = string.Format(GetLicenseTemplate(), version);
+var year = DateTime.Now.Year;
+var license = string.Format(GetLicenseTemplate(), version, year);
 var license_path = Path.Combine(output_path, "README_LICENSE.txt");
 File.WriteAllText(license_path, license);
 
@@ -60,13 +62,13 @@ if (File.Exists(result_path)) {
 ZipFile.CreateFromDirectory(output_path, result_path);
 Console.WriteLine("ZIP-Datei {0} erstellt!\n", result_path);
 
-Console.WriteLine("Post-Build abgeschlossen!");
+Console.WriteLine("Post-Build erfolgreich abgeschlossen!");
 
 
 string GetLicenseTemplate()
  => @"FPLedit Version {0}
 
-(c) 2015-2017 Manuel Huber
+(c) 2015-{1} Manuel Huber
 https://fahrplan.manuelhu.de/
 
 FPledit darf für den nicht-kommerziellen Gebrauch (dies schließt die

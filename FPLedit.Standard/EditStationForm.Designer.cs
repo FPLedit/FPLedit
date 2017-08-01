@@ -92,6 +92,7 @@
             // 
             // positionValidator
             // 
+            this.positionValidator.AllowEmpty = false;
             this.positionValidator.Control = this.positionTextBox;
             this.positionValidator.ErrorMessage = "Bitte eine Zahl als Position eingeben!";
             // 
@@ -115,6 +116,7 @@
             this.Controls.Add(this.nameTextBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "EditStationForm";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Neue Station erstellen";
             this.ResumeLayout(false);
