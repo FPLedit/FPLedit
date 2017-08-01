@@ -33,6 +33,18 @@ namespace FPLedit
             txt.Dock = DockStyle.Fill;
             this.Controls.Add(txt);
 
+            var mn = new ContextMenuStrip();
+            var itm = mn.Items.Add("Log leeren");
+            itm.Click += (s, e) =>
+            {
+                if (mode == Mode.Plain)
+                    txt.Clear();
+                else
+                    rtf.Clear();
+            };
+            txt.ContextMenuStrip = mn;
+            rtf.ContextMenuStrip = mn;
+
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
                 SwitchMode(Mode.RTF);
             else
