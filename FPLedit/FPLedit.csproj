@@ -105,7 +105,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="UpdateManager.cs" />
-    <Content Include="Info.txt" />
     <Content Include="programm.ico" />
     <EmbeddedResource Include="ExtensionsForm.resx">
       <DependentUpon>ExtensionsForm.cs</DependentUpon>
@@ -166,8 +165,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName) == Release (
-  "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\Roslyn\csi.exe"  "$(SolutionDir)build_scripts\build-release.csx" $(TargetDir)
+    <PostBuildEvent>set csi="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\Roslyn\csi.exe"
+if $(ConfigurationName) == Release (
+  %25csi%25  "$(SolutionDir)build_scripts\build-release.csx" $(TargetDir)
+  %25csi%25  "$(SolutionDir)build_scripts\build-source.csx" $(SolutionDir) $(TargetDir)
 )</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
