@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -22,8 +23,13 @@ namespace FPLedit.Standard
 
         private Font fb, fn;
 
+        private Regex verifyRegex;
+        private TimeNormalizer normalizer;
+
         public TimetableEditForm()
         {
+            normalizer = new TimeNormalizer();
+
             InitializeComponent();
             fb = new Font(DefaultFont, FontStyle.Bold);
             fn = new Font(DefaultFont, FontStyle.Regular);
@@ -190,21 +196,19 @@ namespace FPLedit.Standard
 
         private void ValidateCell(DataGridView view, DataGridViewCellValidatingEventArgs e)
         {
-            if (e.FormattedValue == null || (string)e.FormattedValue == "")
+            string val = (string)e.FormattedValue;
+            if (val == null || val == "")
                 return;
 
-            string val = (string)e.FormattedValue;
-            if (val.Length == 4 && char.IsDigit(val[0]) && char.IsDigit(val[1]) && char.IsDigit(val[2]) && char.IsDigit(val[3]))
+            val = normalizer.Normalize(val);
+            if (val != null)
             {
-                val = val.Substring(0, 2) + ":" + val.Substring(2, 2);
                 view.EditingControl.Text = val;
+                return;
             }
 
-            if (!TimeSpan.TryParse(val, out TimeSpan ts))
-            {
-                MessageBox.Show("Formatierungsfehler: Zeit muss im Format hh:mm vorliegen!");
-                e.Cancel = true;
-            }
+            MessageBox.Show("Formatierungsfehler: Zeit muss im Format hh:mm, h:mm, h:m, hh:mm, h:, :m, hhmm, hmm oder mm vorliegen!");
+            e.Cancel = true;
         }
 
         private void Trapez(DataGridView view)

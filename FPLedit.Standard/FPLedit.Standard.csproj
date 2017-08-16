@@ -64,6 +64,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="TimeNormalizer.cs" />
     <Compile Include="TimetableEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
