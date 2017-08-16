@@ -10,7 +10,7 @@ using System.Xml.Linq;
 namespace FPLedit.Shared
 {
     [Serializable]
-    [DebuggerDisplay("Name: {XName}, Children: {Childen.Count)")]
+    [DebuggerDisplay("Name: {XName}, Children: {Children.Count}")]
     public sealed class XMLEntity
     {
         public string XName { get; set; }

@@ -290,6 +290,30 @@ namespace FPLedit
 
         #endregion
 
+        #region Drag'n'Drop
+        private void MainForm_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.None;
+            if (!e.Data.GetDataPresent(DataFormats.FileDrop))
+                return;
+
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (files.Length == 1 && files[0].EndsWith(".fpl"))
+                e.Effect = DragDropEffects.Copy;
+        }
+
+        private void MainForm_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (files.Length != 1 || !files[0].EndsWith(".fpl"))
+                return;
+
+            if (!NotifyIfUnsaved())
+                return;
+            InternalOpen(files[0]);
+        }
+        #endregion
+
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (enable_last)

@@ -173,6 +173,7 @@
             // 
             // trapeztafelToggle
             // 
+            this.trapeztafelToggle.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.trapeztafelToggle.Appearance = System.Windows.Forms.Appearance.Button;
             this.trapeztafelToggle.Image = global::FPLedit.Standard.Properties.Resources.trapeztafel;
             this.trapeztafelToggle.Location = new System.Drawing.Point(12, 599);
@@ -186,6 +187,7 @@
             // 
             // zlmButton
             // 
+            this.zlmButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.zlmButton.Location = new System.Drawing.Point(92, 599);
             this.zlmButton.Name = "zlmButton";
             this.zlmButton.Size = new System.Drawing.Size(119, 38);
