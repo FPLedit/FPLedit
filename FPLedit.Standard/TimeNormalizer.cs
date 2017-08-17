@@ -12,8 +12,9 @@ namespace FPLedit.Standard
 
         public TimeNormalizer()
         {
-            //                        hh:mm, h:mm, h:m, hh:m, h:, :m      hhmm, hmm, mm
-            verifyRegex = new Regex(@"(?:(?<hr>\d{1,2})?:(?<min>\d{1,2})?)|(?:(?<hr>\d{1,2})?(?<min>\d{2}))", RegexOptions.Compiled);
+            //                        hh:mm, h:mm, h:m, hh:m, h:, :m           hhmm, hmm, mm
+            verifyRegex = new Regex(@"^ (?<hr>\d{1,2})? : (?<min>\d{1,2})? $ | ^ (?<hr>\d{1,2})? (?<min>\d{2}) $",
+                RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
         }
 
         public string Normalize(string input)

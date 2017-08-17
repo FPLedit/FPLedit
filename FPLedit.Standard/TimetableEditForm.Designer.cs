@@ -127,6 +127,7 @@
             this.topDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.topDataGridView.Size = new System.Drawing.Size(814, 266);
             this.topDataGridView.TabIndex = 1;
+            this.topDataGridView.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.topDataGridView_CellFormatting);
             this.topDataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.topDataGridView_CellValidating);
             // 
             // bottomPanel
@@ -169,6 +170,7 @@
             this.bottomDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.bottomDataGridView.Size = new System.Drawing.Size(820, 263);
             this.bottomDataGridView.TabIndex = 1;
+            this.bottomDataGridView.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.bottomDataGridView_CellFormatting);
             this.bottomDataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.bottomDataGridView_CellValidating);
             // 
             // trapeztafelToggle

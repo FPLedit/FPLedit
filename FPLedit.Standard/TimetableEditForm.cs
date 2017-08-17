@@ -23,7 +23,6 @@ namespace FPLedit.Standard
 
         private Font fb, fn;
 
-        private Regex verifyRegex;
         private TimeNormalizer normalizer;
 
         public TimetableEditForm()
@@ -63,6 +62,7 @@ namespace FPLedit.Standard
 
         private void InitializeGridView(DataGridView view, TrainDirection direction)
         {
+            view.SuspendLayout();
             var stas = info.Timetable.GetStationsOrderedByDirection(direction);
             foreach (var sta in stas)
             {
@@ -134,6 +134,8 @@ namespace FPLedit.Standard
                     trapeztafelToggle.Checked = tr;
                 }
             };
+
+            view.ResumeLayout();
         }
 
         private bool UpdateTrainDataFromGrid(Train train, DataGridView view)
@@ -153,9 +155,9 @@ namespace FPLedit.Standard
                     {
                         DataGridViewCell cellAr = row.Cells[stas.IndexOf(sta) + "ar"];
 
-                        if ((string)cellAr.Value != "" && cellAr.Value != null)
+                        if ((string)cellAr.FormattedValue != "" && cellAr.FormattedValue != null)
                         {
-                            TimeSpan tsAr = TimeSpan.Parse((string)cellAr.Value);
+                            TimeSpan tsAr = TimeSpan.Parse((string)cellAr.FormattedValue);
                             ardp.Arrival = tsAr;
                             if (cellAr.Tag != null)
                             {
@@ -170,9 +172,9 @@ namespace FPLedit.Standard
                     {
                         DataGridViewCell cellDp = row.Cells[stas.IndexOf(sta) + "dp"];
 
-                        if ((string)cellDp.Value != "" && cellDp.Value != null)
+                        if ((string)cellDp.FormattedValue != "" && cellDp.FormattedValue != null)
                         {
-                            TimeSpan tsDp = TimeSpan.Parse((string)cellDp.Value);
+                            TimeSpan tsDp = TimeSpan.Parse((string)cellDp.FormattedValue);
                             ardp.Departure = tsDp;
                             if (cellDp.Tag != null && sta == stas.First())
                             {
@@ -194,7 +196,7 @@ namespace FPLedit.Standard
             return false;
         }
 
-        private void ValidateCell(DataGridView view, DataGridViewCellValidatingEventArgs e)
+        private void ValidatingCell(DataGridView view, DataGridViewCellValidatingEventArgs e)
         {
             string val = (string)e.FormattedValue;
             if (val == null || val == "")
@@ -203,12 +205,27 @@ namespace FPLedit.Standard
             val = normalizer.Normalize(val);
             if (val != null)
             {
-                view.EditingControl.Text = val;
+                if (view.EditingControl != null)
+                    view.EditingControl.Text = val;
                 return;
             }
 
             MessageBox.Show("Formatierungsfehler: Zeit muss im Format hh:mm, h:mm, h:m, hh:mm, h:, :m, hhmm, hmm oder mm vorliegen!");
             e.Cancel = true;
+        }
+
+        private void FormatCell(DataGridViewCellFormattingEventArgs e)
+        {
+            string val = (string)e.Value;
+            if (val == null || val == "")
+                return;
+
+            val = normalizer.Normalize(val);
+            if (val != null)
+            {
+                e.Value = val;
+                e.FormattingApplied = true;
+            }
         }
 
         private void Trapez(DataGridView view)
@@ -282,6 +299,8 @@ namespace FPLedit.Standard
             Close();
         }
 
+        #region Events
+
         private void trapeztafelToggle_Click(object sender, EventArgs e)
             => ViewDependantAction(Trapez);
 
@@ -289,9 +308,17 @@ namespace FPLedit.Standard
             => ViewDependantAction(Zuglaufmeldung);
 
         private void topDataGridView_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
-            => ValidateCell(topDataGridView, e);
+            => ValidatingCell(topDataGridView, e);
+
+        private void topDataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+            => FormatCell(e);
 
         private void bottomDataGridView_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
-            => ValidateCell(bottomDataGridView, e);
+            => ValidatingCell(bottomDataGridView, e);
+
+        private void bottomDataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+            => FormatCell(e);
+
+        #endregion
     }
 }
