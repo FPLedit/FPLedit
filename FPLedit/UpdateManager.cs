@@ -16,6 +16,8 @@ namespace FPLedit
 
         public Action<VersionInfo> CheckResult { get; set; }
 
+        public Action<string> TextResult { get; set; }
+
         public Action<Exception> CheckError { get; set; }
 
         public bool AutoUpdateEnabled
@@ -46,12 +48,14 @@ namespace FPLedit
             XmlNode ver = doc.DocumentElement.SelectSingleNode("/info/version");
             XmlNode url = doc.DocumentElement.SelectSingleNode("/info/url");
             XmlNode dsc = doc.DocumentElement.SelectSingleNode("/info/description");
+            XmlNode txt = doc.DocumentElement.SelectSingleNode("/info/text");
 
             return new VersionInfo()
             {
                 DownloadUrl = url.InnerText,
                 NewVersion = new Version(ver.InnerText),
                 Description = dsc?.InnerText,
+                Text = txt?.InnerText,
             };
         }
 
@@ -77,6 +81,9 @@ namespace FPLedit
                             CheckResult?.Invoke(info);
                         else
                             CheckResult?.Invoke(null);
+
+                        if (info.Text != null)
+                            TextResult?.Invoke(info.Text);
                     }
                     catch (XmlException ex)
                     {
@@ -94,6 +101,7 @@ namespace FPLedit
             public string DownloadUrl;
             public Version NewVersion;
             public string Description;
+            public string Text;
         }
     }
 }

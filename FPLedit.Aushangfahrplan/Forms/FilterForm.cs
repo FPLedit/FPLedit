@@ -140,8 +140,8 @@ namespace FPLedit.Aushangfahrplan.Forms
 
         private void closeButton_Click(object sender, EventArgs e)
         {
-            attrs.TrainPatterns = string.Join("|", trainPatterns.ToArray());
-            attrs.StationPatterns = string.Join("|", stationPatterns.ToArray());
+            attrs.TrainPatterns = string.Join("|", trainPatterns);
+            attrs.StationPatterns = string.Join("|", stationPatterns);
 
             DialogResult = DialogResult.OK;
             Close();

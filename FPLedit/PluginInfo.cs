@@ -16,6 +16,10 @@ namespace FPLedit
 
         public string Author { get; private set; }
 
+        public string Version { get; set; }
+
+        public string Url { get; set; }
+
         public string FullName { get; private set; }
 
         public PluginInfo(IPlugin plugin)
@@ -40,6 +44,8 @@ namespace FPLedit
                 return "<Fehler beim Laden>";
             var a = attrs[0] as PluginAttribute;
             Author = a.Author;
+            Version = a.Version;
+            Url = a.Web;
             return a.Name;
         }
 

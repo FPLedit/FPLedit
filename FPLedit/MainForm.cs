@@ -342,6 +342,8 @@ namespace FPLedit
                     Logger.Info($"Sie benutzen die aktuelleste Version von FPLedit ({mg.GetCurrentVersion().ToString()})!");
             };
 
+            mg.TextResult = t => Logger.Info(t);
+
             mg.CheckAsync();
         }
 
