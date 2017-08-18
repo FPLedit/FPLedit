@@ -30,7 +30,11 @@ namespace FPLedit.Shared
 
         public XMLEntity(XElement el)
         {
+            if (el.Name.Namespace != XNamespace.None)
+                throw new NotSupportedException("Dateien mit XML-Namensräumen werden nicht unterstützt!");
             XName = el.Name.LocalName;
+            if (!el.Attributes().All(a => a.Name.Namespace == XNamespace.None))
+                throw new NotSupportedException("Dateien mit XML-Namensräumen werden nicht unterstützt!");
             Attributes = el.Attributes().ToDictionary(a => a.Name.LocalName, a => (string)a);
             Children = new List<XMLEntity>();
             Value = el.Nodes().OfType<XText>().FirstOrDefault()?.Value;
