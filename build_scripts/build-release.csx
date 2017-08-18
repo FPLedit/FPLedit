@@ -6,7 +6,7 @@
  */
 
 #r "System.IO.Compression.FileSystem.dll"
-#load "license.csx"
+#load "includes.csx"
 
 using System;
 using System.IO;
