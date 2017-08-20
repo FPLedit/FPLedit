@@ -47,7 +47,7 @@
             this.listView.Location = new System.Drawing.Point(12, 12);
             this.listView.MultiSelect = false;
             this.listView.Name = "listView";
-            this.listView.Size = new System.Drawing.Size(524, 282);
+            this.listView.Size = new System.Drawing.Size(376, 282);
             this.listView.TabIndex = 0;
             this.listView.UseCompatibleStateImageBehavior = false;
             this.listView.View = System.Windows.Forms.View.Details;
@@ -56,7 +56,7 @@
             // editButton
             // 
             this.editButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.editButton.Location = new System.Drawing.Point(542, 41);
+            this.editButton.Location = new System.Drawing.Point(394, 41);
             this.editButton.Name = "editButton";
             this.editButton.Size = new System.Drawing.Size(102, 23);
             this.editButton.TabIndex = 2;
@@ -67,7 +67,7 @@
             // deleteButton
             // 
             this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.deleteButton.Location = new System.Drawing.Point(542, 70);
+            this.deleteButton.Location = new System.Drawing.Point(394, 70);
             this.deleteButton.Name = "deleteButton";
             this.deleteButton.Size = new System.Drawing.Size(102, 23);
             this.deleteButton.TabIndex = 3;
@@ -78,7 +78,7 @@
             // newButton
             // 
             this.newButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.newButton.Location = new System.Drawing.Point(542, 12);
+            this.newButton.Location = new System.Drawing.Point(394, 12);
             this.newButton.Name = "newButton";
             this.newButton.Size = new System.Drawing.Size(102, 23);
             this.newButton.TabIndex = 1;
@@ -90,7 +90,7 @@
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(488, 300);
+            this.cancelButton.Location = new System.Drawing.Point(340, 300);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 5;
@@ -101,7 +101,7 @@
             // closeButton
             // 
             this.closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.closeButton.Location = new System.Drawing.Point(569, 300);
+            this.closeButton.Location = new System.Drawing.Point(421, 300);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
             this.closeButton.TabIndex = 4;
@@ -112,7 +112,7 @@
             // loadLineButton
             // 
             this.loadLineButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.loadLineButton.Location = new System.Drawing.Point(542, 128);
+            this.loadLineButton.Location = new System.Drawing.Point(394, 128);
             this.loadLineButton.Name = "loadLineButton";
             this.loadLineButton.Size = new System.Drawing.Size(102, 23);
             this.loadLineButton.TabIndex = 6;
@@ -126,7 +126,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(656, 335);
+            this.ClientSize = new System.Drawing.Size(508, 335);
             this.Controls.Add(this.loadLineButton);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.closeButton);

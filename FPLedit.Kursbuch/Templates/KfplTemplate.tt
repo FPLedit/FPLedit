@@ -1,0 +1,148 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="FPLedit.Shared" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+body {
+	font-family:"KBZiffern",sans-serif;
+}
+table {
+	border-collapse:
+	collapse;
+	border:none;
+	margin-bottom: 20px;
+}
+.heading {
+	text-align:center;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:8.0pt;
+	margin-left:0cm;
+	line-height:107%;
+	font-size:11.0pt;
+}
+.kmcap {
+	border:solid black 1.0pt;
+	padding:0;
+}
+.kmcap p {
+	font-size:9pt;
+	text-align:center;
+}
+.caption.top {
+	border-top:solid black 1.0pt;
+}
+.caption.bottom {
+	border-bottom:solid black 1.0pt;
+}
+.caption {
+	border-right:solid black 1.5pt;
+	padding:0;
+}
+.caption p {
+	margin: 0;
+	line-height:107%;
+	font-size:8.0pt;
+	text-align:right;
+	line-height:normal;
+}
+.tn {
+	border-top:solid black 1.5pt;
+	border-right:solid black 1.0pt;
+	padding: 0 3px 0 3px;
+	text-align:center;
+}
+.kl {
+	border-bottom:solid black 1pt;
+	border-right:solid black 1.0pt;
+	padding: 0 3px 0 3px;
+	text-align:center;
+}
+.ti {
+	border-right:solid black 1.0pt;
+	padding: 0 3px 0 3px;
+	text-align:center;
+}
+.ti.last {
+	border-bottom:solid black 1.5pt;
+}
+.sta {
+	border-right:solid black 1.5pt;
+	padding: 0 3px 0 3px;
+}
+.tn span, .kl span, .ti span {
+	margin: 0;
+	font-size:8.0pt;
+	line-height:normal;
+}
+.sta span, .km span {
+	margin: 0;
+	line-height:107%;
+	font-size:9.0pt;
+	line-height:normal;
+}
+.sta.last, .km.last {
+	border-bottom:solid black 1pt;
+}
+.km {
+	border-left:solid black 1.0pt;
+	border-right:solid black 1.0pt;
+	padding:0;
+}
+</style>
+</head>
+
+<body>
+<div>
+
+<p class="heading">
+	<span style='font-family:"Arial Black",sans-serif;font-weight:900; letter-spacing:-.5pt'>280 d <#= tt.GetLineName(TOP_DIRECTION) #> </span>
+	<span style='letter-spacing:.5pt'>und zurück</span>
+</p>
+<# foreach (var direction in new[] { TOP_DIRECTION, BOTTOM_DIRECTION }) {
+	var trains = tt.Trains.Where(o => o.Direction == direction);
+	var stations = tt.GetStationsOrderedByDirection(direction);
+#>
+<table cellspacing=0 cellpadding=0>
+	<tr>
+		<td class="kmcap" rowspan=2><p>km</span></td>
+		<td class="caption top"><p><span>Zug Nr.</span></p></td>
+		<# foreach (var t in tt.Trains) {#>
+		<td class="tn"><span><#= Sign(t) #><#= t.TName.Replace(" ", "&nbsp;") #></span></td>
+		<# } #>
+	</tr>
+	<tr>
+		<td class="caption bottom"><p><span>Klasse   </span></p></td>
+		<# foreach (var t in trains) {#>
+		<td class="kl"><span>2. oG</span></td>
+		<# } #>
+	</tr>
+	<# foreach (var sta in stations) { #>
+	<tr>
+		<# var last = stations.Last() == sta ? " last" : ""; #>
+		<td class="km<#= last #>"><span><#= sta.Kilometre.ToString("0.0") #></span></td>
+		<td class="sta<#= last #>"><span><#= sta.SName.Replace(" ", "&nbsp;") #></span></td>
+
+		<# foreach (var t in trains) {
+			var time = t.GetArrDep(sta).Departure.ToString(@"hh\:mm");
+			if (time == "") time =  t.GetArrDep(sta).Arrival.ToString(@"hh\:mm");
+			if (time == "") time = "...";
+		#>
+		<td class="ti<#= last #>"><span><#= time #></span></td>
+		<# } #>
+	</tr>
+	<# } #>
+</table>
+<# } #>
+</div>
+
+</body>
+
+</html>
