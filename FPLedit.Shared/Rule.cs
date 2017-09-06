@@ -13,19 +13,19 @@ namespace FPLedit.Shared
     //    "=..." -> gleich
     public class FilterRule
     {
-        private string pattern;
+        public string Pattern { get; private set; }
 
         public FilterRule(string pattern)
         {
-            this.pattern = pattern;
+            this.Pattern = pattern;
             if (pattern.Length < 2)
                 throw new ArgumentException("Zu kurzes Pattern!");
         }
 
         public bool Matches(string s)
         {
-            var type = pattern[0];
-            var rest = pattern.Substring(1);
+            var type = Pattern[0];
+            var rest = Pattern.Substring(1);
 
             switch(type)
             {
@@ -38,7 +38,7 @@ namespace FPLedit.Shared
                 case '$':
                     return s.EndsWith(rest);
                 default:
-                    throw new Exception("Unbekannter Regel-Typ: " + pattern);
+                    throw new Exception("Unbekannter Regel-Typ: " + Pattern);
             }
         }
 

@@ -184,7 +184,7 @@ namespace FPLedit.Buchfahrplan.Templates
             #line 120 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Buchfahrplan\Templates\BuchfahrplanTemplate.tt"
 
 			bool first = true; // No pagebreak before first train
-			foreach (Train tra in tt.Trains) { 
+			foreach (Train tra in helper.GetTrains()) { 
             
             #line default
             #line hidden

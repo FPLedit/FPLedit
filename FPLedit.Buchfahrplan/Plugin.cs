@@ -25,6 +25,7 @@ namespace FPLedit.Buchfahrplan
             info.Register<IDesignableUiProxy>(new SettingsControlProxy());
             info.Register<IBfplTemplate>(new Templates.BuchfahrplanTemplate());
             info.Register<IBfplTemplate>(new Templates.ZLBTemplate());
+            info.Register<IFilterableUi>(new Forms.FilterableHandler());
 
             var item = new ToolStripMenuItem("Buchfahrplan");
             info.Menu.Items.Add(item);

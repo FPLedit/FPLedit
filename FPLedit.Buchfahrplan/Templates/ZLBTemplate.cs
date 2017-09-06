@@ -89,7 +89,7 @@ namespace FPLedit.Buchfahrplan.Templates
             #line 116 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Buchfahrplan\Templates\ZLBTemplate.tt"
 
 			bool first = true; // No pagebreak before first train
-			foreach (Train tra in tt.Trains) { 
+			foreach (Train tra in helper.GetTrains()) { 
             
             #line default
             #line hidden

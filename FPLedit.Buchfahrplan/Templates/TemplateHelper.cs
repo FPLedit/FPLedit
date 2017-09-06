@@ -1,5 +1,6 @@
 ﻿using FPLedit.Buchfahrplan.Model;
 using FPLedit.Shared;
+using FPLedit.Shared.Ui;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,12 @@ namespace FPLedit.Buchfahrplan.Templates
     {
         public BfplAttrs Attrs { get; set; }
         public Timetable TT { get; set; }
+        private IFilterableUi filterable;
+
+        public TemplateHelper()
+        {
+            filterable = new Forms.FilterableHandler();
+        }
 
         public string HtmlName(string name, string prefix)
         {
@@ -24,7 +31,8 @@ namespace FPLedit.Buchfahrplan.Templates
         public List<IStation> GetStations(TrainDirection dir)
         {
             List<IStation> points = new List<IStation>();
-            points.AddRange(TT.Stations);
+            var fstations = TT.Stations.Where(s => filterable.LoadStationRules(TT).All(r => !r.Matches(s))); // Filter
+            points.AddRange(fstations);
             if (Attrs != null)
                 points.AddRange(Attrs.Points);
 
@@ -33,6 +41,12 @@ namespace FPLedit.Buchfahrplan.Templates
                 : points.OrderBy(o => o.Kilometre));
 
             return oPoints.ToList();
+        }
+
+        public Train[] GetTrains()
+        {
+            return TT.Trains.Where(t => filterable.LoadTrainRules(TT).All(r => !r.Matches(t)))
+                .ToArray();
         }
 
         public string OptAttr(string caption, string value)

@@ -1,4 +1,4 @@
-﻿namespace FPLedit.Aushangfahrplan.Forms
+﻿namespace FPLedit.Standard
 {
     partial class EditPatternForm
     {
@@ -37,9 +37,9 @@
             this.closeButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
+            //
             // startsWithRadioButton
-            // 
+            //
             this.startsWithRadioButton.AutoSize = true;
             this.startsWithRadioButton.Checked = true;
             this.startsWithRadioButton.Location = new System.Drawing.Point(15, 34);
@@ -49,9 +49,9 @@
             this.startsWithRadioButton.TabStop = true;
             this.startsWithRadioButton.Text = "beginnt mit";
             this.startsWithRadioButton.UseVisualStyleBackColor = true;
-            // 
+            //
             // endsWithRadioButton
-            // 
+            //
             this.endsWithRadioButton.AutoSize = true;
             this.endsWithRadioButton.Location = new System.Drawing.Point(106, 34);
             this.endsWithRadioButton.Name = "endsWithRadioButton";
@@ -60,9 +60,9 @@
             this.endsWithRadioButton.TabStop = true;
             this.endsWithRadioButton.Text = "endet mit";
             this.endsWithRadioButton.UseVisualStyleBackColor = true;
-            // 
+            //
             // containsRadioButton
-            // 
+            //
             this.containsRadioButton.AutoSize = true;
             this.containsRadioButton.Location = new System.Drawing.Point(15, 57);
             this.containsRadioButton.Name = "containsRadioButton";
@@ -71,9 +71,9 @@
             this.containsRadioButton.TabStop = true;
             this.containsRadioButton.Text = "enthält";
             this.containsRadioButton.UseVisualStyleBackColor = true;
-            // 
+            //
             // equalsRadioButton
-            // 
+            //
             this.equalsRadioButton.AutoSize = true;
             this.equalsRadioButton.Location = new System.Drawing.Point(106, 57);
             this.equalsRadioButton.Name = "equalsRadioButton";
@@ -82,25 +82,25 @@
             this.equalsRadioButton.TabStop = true;
             this.equalsRadioButton.Text = "ist";
             this.equalsRadioButton.UseVisualStyleBackColor = true;
-            // 
+            //
             // propertyLabel
-            // 
+            //
             this.propertyLabel.AutoSize = true;
             this.propertyLabel.Location = new System.Drawing.Point(12, 9);
             this.propertyLabel.Name = "propertyLabel";
             this.propertyLabel.Size = new System.Drawing.Size(90, 13);
             this.propertyLabel.TabIndex = 0;
             this.propertyLabel.Text = "{EIGENSCHAFT}";
-            // 
+            //
             // searchTextBox
-            // 
+            //
             this.searchTextBox.Location = new System.Drawing.Point(15, 80);
             this.searchTextBox.Name = "searchTextBox";
             this.searchTextBox.Size = new System.Drawing.Size(159, 20);
             this.searchTextBox.TabIndex = 1;
-            // 
+            //
             // closeButton
-            // 
+            //
             this.closeButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.closeButton.Location = new System.Drawing.Point(102, 122);
             this.closeButton.Name = "closeButton";
@@ -109,9 +109,9 @@
             this.closeButton.Text = "Schließen";
             this.closeButton.UseVisualStyleBackColor = true;
             this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
-            // 
+            //
             // cancelButton
-            // 
+            //
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancelButton.Location = new System.Drawing.Point(21, 122);
             this.cancelButton.Name = "cancelButton";
@@ -120,9 +120,9 @@
             this.cancelButton.Text = "Abbrechen";
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
-            // 
+            //
             // EditPatternForm
-            // 
+            //
             this.AcceptButton = this.closeButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;

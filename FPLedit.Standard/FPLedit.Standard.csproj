@@ -51,11 +51,23 @@
     <Compile Include="DesignableForm.Designer.cs">
       <DependentUpon>DesignableForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="EditPatternForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditPatternForm.Designer.cs">
+      <DependentUpon>EditPatternForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="EditStationForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="EditStationForm.Designer.cs">
       <DependentUpon>EditStationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FilterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FilterForm.Designer.cs">
+      <DependentUpon>FilterForm.cs</DependentUpon>
     </Compile>
     <Compile Include="LineEditForm.cs">
       <SubType>Form</SubType>
@@ -100,8 +112,14 @@
     <EmbeddedResource Include="DesignableForm.resx">
       <DependentUpon>DesignableForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="EditPatternForm.resx">
+      <DependentUpon>EditPatternForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="EditStationForm.resx">
       <DependentUpon>EditStationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FilterForm.resx">
+      <DependentUpon>FilterForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LineEditForm.resx">
       <DependentUpon>LineEditForm.cs</DependentUpon>

@@ -45,6 +45,7 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="AfplTemplateChooser.cs" />
+    <Compile Include="Forms\FilterableHandler.cs" />
     <Compile Include="Forms\SettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -63,18 +64,6 @@
       <DependentUpon>AfplTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Templates\AfplTemplateCode.cs" />
-    <Compile Include="Forms\EditPatternForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\EditPatternForm.Designer.cs">
-      <DependentUpon>EditPatternForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\FilterForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FilterForm.Designer.cs">
-      <DependentUpon>FilterForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="HtmlExport.cs" />
     <Compile Include="IAfplTemplate.cs" />
     <Compile Include="Model\AfplAttrs.cs" />
@@ -104,12 +93,6 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="Forms\EditPatternForm.resx">
-      <DependentUpon>EditPatternForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FilterForm.resx">
-      <DependentUpon>FilterForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

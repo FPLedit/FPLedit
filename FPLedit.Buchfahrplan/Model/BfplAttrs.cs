@@ -44,6 +44,18 @@ namespace FPLedit.Buchfahrplan.Model
             }
         }
 
+        public string TrainPatterns
+        {
+            get => GetAttribute("tp", "");
+            set => SetAttribute("tp", value);
+        }
+
+        public string StationPatterns
+        {
+            get => GetAttribute("sp", "");
+            set => SetAttribute("sp", value);
+        }
+
 
         public BfplAttrs(Timetable tt) : base("bfpl_attrs", tt)
         {

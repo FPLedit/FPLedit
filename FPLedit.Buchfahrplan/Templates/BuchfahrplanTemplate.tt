@@ -119,7 +119,7 @@
 		<div>
 			<#
 			bool first = true; // No pagebreak before first train
-			foreach (Train tra in tt.Trains) { #>
+			foreach (Train tra in helper.GetTrains()) { #>
 			<table id="<#= helper.HtmlName(tra.TName, "train-") #>" class="<#= first ? "first" : "" #>">
 				<# first = false; #>
 				<col style="width:80px;" span=2>

@@ -15,19 +15,10 @@ namespace FPLedit.Aushangfahrplan.Templates
         {
             TT = tt;
 
-            trules = new FilterRule[0];
-            srules = new FilterRule[0];
-            var attrs = AfplAttrs.GetAttrs(tt);
-            if (attrs != null)
-            {
-                trules = attrs.TrainPatterns.Split('|')
-                    .Where(p => p != "")
-                    .Select(p => new FilterRule(p)).ToArray();
+            var filterable = new Forms.FilterableHandler();
 
-                srules = attrs.StationPatterns.Split('|')
-                    .Where(p => p != "")
-                    .Select(p => new FilterRule(p)).ToArray();
-            }
+            trules = filterable.LoadTrainRules(tt).ToArray();
+            srules = filterable.LoadTrainRules(tt).ToArray();
         }
 
         public Station[] GetStations()

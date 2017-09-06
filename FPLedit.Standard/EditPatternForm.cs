@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace FPLedit.Aushangfahrplan.Forms
+namespace FPLedit.Standard
 {
     public partial class EditPatternForm : Form
     {
@@ -43,6 +43,13 @@ namespace FPLedit.Aushangfahrplan.Forms
 
         private void closeButton_Click(object sender, EventArgs e)
         {
+            if (searchTextBox.Text.Length == 0)
+            {
+                MessageBox.Show("Bitte einen Suchwert eingeben!");
+                DialogResult = DialogResult.Cancel;
+                return;
+            }
+
             DialogResult = DialogResult.OK;
 
             char type;

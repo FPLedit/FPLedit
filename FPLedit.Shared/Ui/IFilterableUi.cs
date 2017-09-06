@@ -9,6 +9,10 @@ namespace FPLedit.Shared.Ui
     {
         string DisplayName { get; }
 
-        void SaveFilter(List<FilterRule> stationRules, List<FilterRule> trainRules);
+        void SaveFilter(Timetable tt, List<FilterRule> stationRules, List<FilterRule> trainRules);
+
+        List<FilterRule> LoadTrainRules(Timetable tt);
+
+        List<FilterRule> LoadStationRules(Timetable tt);
     }
 }
