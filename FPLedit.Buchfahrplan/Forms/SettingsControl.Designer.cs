@@ -1,6 +1,6 @@
 ﻿namespace FPLedit.Buchfahrplan
 {
-    partial class SettingsForm
+    partial class SettingsControl
     {
         /// <summary>
         /// Required designer variable.
@@ -33,8 +33,6 @@
             this.fontLabel = new System.Windows.Forms.Label();
             this.cssLabel = new System.Windows.Forms.Label();
             this.exampleLabel = new System.Windows.Forms.Label();
-            this.cancelButton = new System.Windows.Forms.Button();
-            this.closeButton = new System.Windows.Forms.Button();
             this.cssHelpLinkLabel = new System.Windows.Forms.LinkLabel();
             this.consoleCheckBox = new System.Windows.Forms.CheckBox();
             this.templateComboBox = new System.Windows.Forms.ComboBox();
@@ -89,27 +87,6 @@
             this.exampleLabel.TabIndex = 4;
             this.exampleLabel.Text = "Beispiel";
             // 
-            // cancelButton
-            // 
-            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(388, 306);
-            this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 10;
-            this.cancelButton.Text = "Abbrechen";
-            this.cancelButton.UseVisualStyleBackColor = true;
-            // 
-            // closeButton
-            // 
-            this.closeButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.closeButton.Location = new System.Drawing.Point(469, 306);
-            this.closeButton.Name = "closeButton";
-            this.closeButton.Size = new System.Drawing.Size(75, 23);
-            this.closeButton.TabIndex = 9;
-            this.closeButton.Text = "Schließen";
-            this.closeButton.UseVisualStyleBackColor = true;
-            this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
-            // 
             // cssHelpLinkLabel
             // 
             this.cssHelpLinkLabel.AutoSize = true;
@@ -149,30 +126,21 @@
             this.templateLabel.TabIndex = 0;
             this.templateLabel.Text = "Buchfahrplan-Vorlage";
             // 
-            // SettingsForm
+            // SettingsControl
             // 
-            this.AcceptButton = this.closeButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(556, 341);
             this.Controls.Add(this.templateLabel);
             this.Controls.Add(this.templateComboBox);
             this.Controls.Add(this.consoleCheckBox);
             this.Controls.Add(this.cssHelpLinkLabel);
-            this.Controls.Add(this.closeButton);
-            this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.exampleLabel);
             this.Controls.Add(this.cssLabel);
             this.Controls.Add(this.fontLabel);
             this.Controls.Add(this.cssTextBox);
             this.Controls.Add(this.fontComboBox);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "SettingsForm";
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Buchfahrplaneinstellungen";
+            this.Name = "SettingsControl";
+            this.Size = new System.Drawing.Size(556, 306);
             this.Load += new System.EventHandler(this.SettingsForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -185,8 +153,6 @@
         private System.Windows.Forms.Label fontLabel;
         private System.Windows.Forms.Label cssLabel;
         private System.Windows.Forms.Label exampleLabel;
-        private System.Windows.Forms.Button cancelButton;
-        private System.Windows.Forms.Button closeButton;
         private System.Windows.Forms.LinkLabel cssHelpLinkLabel;
         private System.Windows.Forms.CheckBox consoleCheckBox;
         private System.Windows.Forms.ComboBox templateComboBox;

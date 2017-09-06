@@ -46,6 +46,7 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="BfplTemplateChooser.cs" />
+    <Compile Include="Forms\SettingsControlProxy.cs" />
     <Compile Include="IBfplTemplate.cs" />
     <Compile Include="Model\BfplAttrs.cs" />
     <Compile Include="Model\BfplPoint.cs" />
@@ -70,11 +71,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SettingsForm.cs">
-      <SubType>Form</SubType>
+    <Compile Include="Forms\SettingsControl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forms\SettingsForm.Designer.cs">
-      <DependentUpon>SettingsForm.cs</DependentUpon>
+    <Compile Include="Forms\SettingsControl.Designer.cs">
+      <DependentUpon>SettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\VelocityForm.cs">
       <SubType>Form</SubType>
@@ -101,8 +102,8 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SettingsForm.resx">
-      <DependentUpon>SettingsForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\SettingsControl.resx">
+      <DependentUpon>SettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\VelocityForm.resx">
       <DependentUpon>VelocityForm.cs</DependentUpon>

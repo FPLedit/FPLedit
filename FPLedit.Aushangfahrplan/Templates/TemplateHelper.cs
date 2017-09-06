@@ -9,24 +9,24 @@ namespace FPLedit.Aushangfahrplan.Templates
     {
         public Timetable TT { get; private set; }
 
-        private Rule[] trules, srules;
+        private FilterRule[] trules, srules;
 
         public TemplateHelper(Timetable tt)
         {
             TT = tt;
 
-            trules = new Rule[0];
-            srules = new Rule[0];
+            trules = new FilterRule[0];
+            srules = new FilterRule[0];
             var attrs = AfplAttrs.GetAttrs(tt);
             if (attrs != null)
             {
                 trules = attrs.TrainPatterns.Split('|')
                     .Where(p => p != "")
-                    .Select(p => new Rule(p)).ToArray();
+                    .Select(p => new FilterRule(p)).ToArray();
 
                 srules = attrs.StationPatterns.Split('|')
                     .Where(p => p != "")
-                    .Select(p => new Rule(p)).ToArray();
+                    .Select(p => new FilterRule(p)).ToArray();
             }
         }
 

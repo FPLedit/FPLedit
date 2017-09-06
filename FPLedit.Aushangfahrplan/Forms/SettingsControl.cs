@@ -1,30 +1,31 @@
-﻿using FPLedit.Aushangfahrplan.Model;
-using FPLedit.Shared;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Text;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using FPLedit.Shared;
+using FPLedit.Aushangfahrplan.Model;
+using System.Drawing.Text;
+using System.Diagnostics;
+using FPLedit.Shared.Ui;
 
-namespace FPLedit.Aushangfahrplan
+namespace FPLedit.Aushangfahrplan.Forms
 {
-    public partial class SettingsForm : Form
+    public partial class SettingsControl : UserControl, ISaveHandler
     {
         private ISettings settings;
         private AfplAttrs attrs;
         private AfplTemplateChooser chooser;
 
-        private SettingsForm()
+        private SettingsControl()
         {
             InitializeComponent();
         }
 
-        public SettingsForm(Timetable tt, IInfo info) : this()
+        public SettingsControl(Timetable tt, IInfo info) : this()
         {
             settings = info.Settings;
             chooser = new AfplTemplateChooser(info);
@@ -47,7 +48,7 @@ namespace FPLedit.Aushangfahrplan
             }
         }
 
-        private void SettingsForm_Load(object sender, EventArgs e)
+        private void SettingsControl_Load(object sender, EventArgs e)
         {
             string[] fontFamilies = new InstalledFontCollection().Families.Select(f => f.Name).ToArray();
             fontComboBox.Items.AddRange(fontFamilies);
@@ -60,7 +61,7 @@ namespace FPLedit.Aushangfahrplan
             => Process.Start("https://fahrplan.manuelhu.de/aushangfahrplaene/css/");
 
         private void fontComboBox_TextChanged(object sender, EventArgs e)
-            => exampleLabel.Font = new Font(fontComboBox.Text, 10);
+           => exampleLabel.Font = new Font(fontComboBox.Text, 10);
 
         private void hwfontComboBox_TextChanged(object sender, EventArgs e)
             => hwexampleLabel.Font = new Font(hwfontComboBox.Text, 10);
@@ -76,7 +77,7 @@ namespace FPLedit.Aushangfahrplan
             }
         }
 
-        private void closeButton_Click(object sender, EventArgs e)
+        public void Save()
         {
             attrs.Font = fontComboBox.Text;
             attrs.HwFont = hwfontComboBox.Text;
@@ -87,8 +88,6 @@ namespace FPLedit.Aushangfahrplan
             attrs.Template = chooser.ReduceName(tmpl.GetType().FullName);
 
             settings.Set("afpl.console", consoleCheckBox.Checked);
-
-            Close();
         }
     }
 }

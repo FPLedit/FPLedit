@@ -45,6 +45,12 @@
     <Compile Include="..\build_scripts\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="DesignableForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DesignableForm.Designer.cs">
+      <DependentUpon>DesignableForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="EditStationForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -91,6 +97,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="DesignableForm.resx">
+      <DependentUpon>DesignableForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="EditStationForm.resx">
       <DependentUpon>EditStationForm.cs</DependentUpon>
     </EmbeddedResource>

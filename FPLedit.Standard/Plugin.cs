@@ -15,7 +15,7 @@ namespace FPLedit.Standard
     public class Plugin : IPlugin
     {
         private IInfo info;
-        private ToolStripItem editLineItem, editTrainsItem, editTimetableItem;
+        private ToolStripItem editLineItem, editTrainsItem, editTimetableItem, designItem;
 
         public void Init(IInfo info)
         {
@@ -38,6 +38,17 @@ namespace FPLedit.Standard
             editTimetableItem = item.DropDownItems.Add("Fahrplan bearbeiten");
             editTimetableItem.Enabled = false;
             editTimetableItem.Click += EditTimetableItem_Click;
+
+            item.DropDownItems.Add(new ToolStripSeparator());
+
+            designItem = item.DropDownItems.Add("Fahrplandarstellung");
+            designItem.Enabled = false;
+            designItem.Click += DesignItem_Click;
+        }
+
+        private void DesignItem_Click(object sender, EventArgs e)
+        {
+            new DesignableForm(info).ShowDialog();
         }
 
         private void EditTimetableItem_Click(object sender, EventArgs e)
@@ -63,7 +74,7 @@ namespace FPLedit.Standard
 
         private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)
         {
-            editLineItem.Enabled = e.FileState.Opened;
+            editLineItem.Enabled = designItem.Enabled = e.FileState.Opened;
             editTrainsItem.Enabled = e.FileState.Opened && e.FileState.LineCreated;
             editTimetableItem.Enabled = e.FileState.Opened && e.FileState.LineCreated && e.FileState.TrainsCreated;
         }

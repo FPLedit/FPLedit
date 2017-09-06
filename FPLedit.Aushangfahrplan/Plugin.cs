@@ -1,5 +1,6 @@
 ﻿using FPLedit.Aushangfahrplan.Forms;
 using FPLedit.Shared;
+using FPLedit.Shared.Ui;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,7 +15,7 @@ namespace FPLedit.Aushangfahrplan
     public class Plugin : IPlugin
     {
         private IInfo info;
-        private ToolStripItem showItem, filterItem, settingsItem;
+        private ToolStripItem showItem, filterItem;
 
         public void Init(IInfo info)
         {
@@ -24,6 +25,7 @@ namespace FPLedit.Aushangfahrplan
             info.Register<IExport>(new HtmlExport());
             info.Register<IAfplTemplate>(new Templates.AfplTemplate());
             info.Register<IAfplTemplate>(new Templates.SvgAfplTemplate());
+            info.Register<IDesignableUiProxy>(new SettingsControlProxy());
 
             var item = new ToolStripMenuItem("Aushangfahrplan");
             info.Menu.Items.Add(item);
@@ -34,10 +36,6 @@ namespace FPLedit.Aushangfahrplan
             filterItem = item.DropDownItems.Add("Filterregeln");
             filterItem.Enabled = false;
             filterItem.Click += FilterItem_Click;
-
-            settingsItem = item.DropDownItems.Add("Darstellung");
-            settingsItem.Enabled = false;
-            settingsItem.Click += SettingsItem_Click;
         }
 
         private void ShowItem_Click(object sender, EventArgs e)
@@ -61,16 +59,9 @@ namespace FPLedit.Aushangfahrplan
                 info.SetUnsaved();
         }
 
-        private void SettingsItem_Click(object sender, EventArgs e)
-        {
-            SettingsForm sf = new SettingsForm(info.Timetable, info);
-            if (sf.ShowDialog() == DialogResult.OK)
-                info.SetUnsaved();
-        }
-
         private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)
         {
-            filterItem.Enabled = settingsItem.Enabled = e.FileState.Opened;
+            filterItem.Enabled = e.FileState.Opened;
             showItem.Enabled = e.FileState.LineCreated;
         }
     }

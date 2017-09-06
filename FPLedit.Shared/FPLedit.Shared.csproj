@@ -53,6 +53,8 @@
     <Compile Include="Filetypes\XMLExport.cs" />
     <Compile Include="Filetypes\XMLStationsImport.cs" />
     <Compile Include="Filetypes\XMLImport.cs" />
+    <Compile Include="Rule.cs" />
+    <Compile Include="Ui\IDesignableUiProxy.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="IStation.cs" />
     <Compile Include="Ext\FileState.cs" />
@@ -63,6 +65,10 @@
     <Compile Include="Ext\IPlugin.cs" />
     <Compile Include="Ext\PluginAttribute.cs" />
     <Compile Include="StationsList.cs" />
+    <Compile Include="Ui\IDisplayable.cs" />
+    <Compile Include="Ui\IFilterableUi.cs" />
+    <Compile Include="Ui\ISaveHandler.cs" />
+    <Compile Include="Ui\ISettingsUiProxy.cs" />
     <Compile Include="XMLEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Station.cs" />

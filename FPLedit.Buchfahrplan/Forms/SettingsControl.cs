@@ -1,5 +1,6 @@
 ﻿using FPLedit.Buchfahrplan.Model;
 using FPLedit.Shared;
+using FPLedit.Shared.Ui;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,18 +14,20 @@ using System.Windows.Forms;
 
 namespace FPLedit.Buchfahrplan
 {
-    public partial class SettingsForm : Form
+    public partial class SettingsControl : UserControl, ISaveHandler
     {
         private ISettings settings;
         private BfplAttrs attrs;
         private BfplTemplateChooser chooser;
 
-        private SettingsForm()
+        public string DisplayName => "Buchfahrplan";
+
+        private SettingsControl()
         {
             InitializeComponent();
         }
 
-        public SettingsForm(Timetable tt, IInfo info) : this()
+        public SettingsControl(Timetable tt, IInfo info) : this()
         {
             settings = info.Settings;
             chooser = new BfplTemplateChooser(info);
@@ -72,7 +75,7 @@ namespace FPLedit.Buchfahrplan
             }
         }
 
-        private void closeButton_Click(object sender, EventArgs e)
+        public void Save()
         {
             attrs.Font = fontComboBox.Text;
             attrs.Css = cssTextBox.Text;
@@ -82,8 +85,6 @@ namespace FPLedit.Buchfahrplan
             attrs.Template = chooser.ReduceName(tmpl.GetType().FullName);
 
             settings.Set("bfpl.console", consoleCheckBox.Checked);
-
-            Close();
         }
     }
 }

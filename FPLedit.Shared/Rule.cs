@@ -4,18 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace FPLedit.Aushangfahrplan.Model
+namespace FPLedit.Shared
 {
     // Pattern:
     //    " ..." -> enthält
     //    "^..." -> beginnt mit
     //    "$..." -> endet mit
     //    "=..." -> gleich
-    internal class Rule
+    public class FilterRule
     {
         private string pattern;
 
-        public Rule(string pattern)
+        public FilterRule(string pattern)
         {
             this.pattern = pattern;
             if (pattern.Length < 2)

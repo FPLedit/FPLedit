@@ -1,4 +1,5 @@
 ﻿using FPLedit.Shared;
+using FPLedit.Shared.Ui;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,7 +14,7 @@ namespace FPLedit.Buchfahrplan
     public class Plugin : IPlugin
     {
         private IInfo info;
-        private ToolStripItem showItem, velocityItem, settingsItem;
+        private ToolStripItem showItem, velocityItem;
 
         public void Init(IInfo info)
         {
@@ -21,6 +22,7 @@ namespace FPLedit.Buchfahrplan
             info.FileStateChanged += Info_FileStateChanged;
 
             info.Register<IExport>(new HtmlExport());
+            info.Register<IDesignableUiProxy>(new SettingsControlProxy());
             info.Register<IBfplTemplate>(new Templates.BuchfahrplanTemplate());
             info.Register<IBfplTemplate>(new Templates.ZLBTemplate());
 
@@ -34,17 +36,6 @@ namespace FPLedit.Buchfahrplan
             velocityItem = item.DropDownItems.Add("Höchstgeschwindigkeiten ändern");
             velocityItem.Enabled = false;
             velocityItem.Click += VelocityItem_Click;
-
-            settingsItem = item.DropDownItems.Add("Buchfahrplaneinstellungen");
-            settingsItem.Enabled = false;
-            settingsItem.Click += SettingsItem_Click;
-        }
-
-        private void SettingsItem_Click(object sender, EventArgs e)
-        {
-            SettingsForm sf = new SettingsForm(info.Timetable, info);
-            if (sf.ShowDialog() == DialogResult.OK)
-                info.SetUnsaved();
         }
 
         private void VelocityItem_Click(object sender, EventArgs e)
@@ -56,7 +47,7 @@ namespace FPLedit.Buchfahrplan
 
         private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)
         {
-            velocityItem.Enabled = settingsItem.Enabled = e.FileState.Opened;
+            velocityItem.Enabled = e.FileState.Opened;
             showItem.Enabled = e.FileState.LineCreated;
         }
 
