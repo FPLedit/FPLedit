@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AfplTemplateChooser.cs" />
+    <Compile Include="Forms\Preview.cs" />
     <Compile Include="HtmlExport.cs" />
     <Compile Include="IAfplTemplate.cs" />
     <Compile Include="Model\KfplAttrs.cs" />
@@ -62,7 +63,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Forms\" />
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>

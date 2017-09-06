@@ -18,7 +18,7 @@ namespace FPLedit.Aushangfahrplan.Templates
             var filterable = new Forms.FilterableHandler();
 
             trules = filterable.LoadTrainRules(tt).ToArray();
-            srules = filterable.LoadTrainRules(tt).ToArray();
+            srules = filterable.LoadStationRules(tt).ToArray();
         }
 
         public Station[] GetStations()

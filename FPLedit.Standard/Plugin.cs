@@ -1,4 +1,5 @@
 ﻿using FPLedit.Shared;
+using FPLedit.Shared.Ui;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,6 +17,7 @@ namespace FPLedit.Standard
     {
         private IInfo info;
         private ToolStripItem editLineItem, editTrainsItem, editTimetableItem, designItem, filterItem;
+        private ToolStripMenuItem pitem;
 
         public void Init(IInfo info)
         {
@@ -47,7 +49,11 @@ namespace FPLedit.Standard
 
             filterItem = item.DropDownItems.Add("Filterregeln");
             filterItem.Enabled = false;
-            filterItem.Click += FilterItem_Click; ;
+            filterItem.Click += FilterItem_Click;
+
+            pitem = new ToolStripMenuItem("Vorschau");
+            info.Menu.Items.Add(pitem);
+            pitem.Enabled = false;
         }
 
         private void FilterItem_Click(object sender, EventArgs e)
@@ -81,11 +87,24 @@ namespace FPLedit.Standard
                 info.SetUnsaved();
         }
 
+        bool loaded = false;
         private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)
         {
             editLineItem.Enabled = designItem.Enabled = filterItem.Enabled = e.FileState.Opened;
-            editTrainsItem.Enabled = e.FileState.Opened && e.FileState.LineCreated;
+            editTrainsItem.Enabled = pitem.Enabled = e.FileState.Opened && e.FileState.LineCreated;
             editTimetableItem.Enabled = e.FileState.Opened && e.FileState.LineCreated && e.FileState.TrainsCreated;
+
+            if (!loaded)
+            {
+                var previewables = info.GetRegistered<IPreviewable>();
+                foreach (var prev in previewables)
+                {
+                    var itm = pitem.DropDownItems.Add(prev.DisplayName);
+                    //itm.Enabled = false;
+                    itm.Click += (s, ev) => prev.Show(info);
+                }
+            }
+            loaded = true;
         }
     }
 }

@@ -65,7 +65,7 @@
     <Compile Include="Ext\IPlugin.cs" />
     <Compile Include="Ext\PluginAttribute.cs" />
     <Compile Include="StationsList.cs" />
-    <Compile Include="Ui\IDisplayable.cs" />
+    <Compile Include="Ui\IPreviewable.cs" />
     <Compile Include="Ui\IFilterableUi.cs" />
     <Compile Include="Ui\ISaveHandler.cs" />
     <Compile Include="Ui\ISettingsUiProxy.cs" />

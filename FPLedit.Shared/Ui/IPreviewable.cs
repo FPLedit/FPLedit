@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FPLedit.Shared.Ui
 {
-    public interface IDisplayable
+    public interface IPreviewable
     {
         string DisplayName { get; }
 

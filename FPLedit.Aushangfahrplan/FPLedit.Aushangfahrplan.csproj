@@ -46,6 +46,7 @@
     </Compile>
     <Compile Include="AfplTemplateChooser.cs" />
     <Compile Include="Forms\FilterableHandler.cs" />
+    <Compile Include="Forms\Preview.cs" />
     <Compile Include="Forms\SettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

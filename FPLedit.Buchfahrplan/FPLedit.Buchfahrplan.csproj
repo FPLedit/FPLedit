@@ -47,6 +47,7 @@
     </Compile>
     <Compile Include="BfplTemplateChooser.cs" />
     <Compile Include="Forms\FilterableHandler.cs" />
+    <Compile Include="Forms\Preview.cs" />
     <Compile Include="Forms\SettingsControlProxy.cs" />
     <Compile Include="IBfplTemplate.cs" />
     <Compile Include="Model\BfplAttrs.cs" />
