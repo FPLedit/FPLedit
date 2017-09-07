@@ -21,6 +21,7 @@ namespace FPLedit.Standard
         private int dialogOffset;
 
         private IEditingDialog[] dialogs;
+        private bool hasFilterables, hasDesignables;
 
         public void Init(IInfo info)
         {
@@ -62,6 +63,9 @@ namespace FPLedit.Standard
         private void Info_ExtensionsLoaded(object sender, EventArgs e)
         {
             var previewables = info.GetRegistered<IPreviewable>();
+            if (previewables.Length == 0)
+                pitem.Visible = false;
+
             foreach (var prev in previewables)
             {
                 var itm = pitem.DropDownItems.Add(prev.DisplayName);
@@ -80,18 +84,23 @@ namespace FPLedit.Standard
                 itm.Enabled = dialog.IsEnabled(info);
                 itm.Click += (s, ev) => dialog.Show(info);
             }
+
+            hasFilterables = info.GetRegistered<IFilterableUi>().Length > 0;
+            hasDesignables = info.GetRegistered<IDesignableUiProxy>().Length > 0;
         }
 
         private void FilterItem_Click(object sender, EventArgs e)
         {
-            new FilterForm(info).ShowDialog();
-            //TODO: SetUnsaved
+            var ff = new FilterForm(info);
+            if (ff.ShowDialog() == DialogResult.OK)
+                info.SetUnsaved();
         }
 
         private void DesignItem_Click(object sender, EventArgs e)
         {
-            new DesignableForm(info).ShowDialog();
-            //TODO: SetUnsaved
+            var df = new DesignableForm(info);
+            if (df.ShowDialog() == DialogResult.OK)
+                info.SetUnsaved();
         }
 
         private void EditTimetableItem_Click(object sender, EventArgs e)
@@ -117,9 +126,11 @@ namespace FPLedit.Standard
 
         private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)
         {
-            editLineItem.Enabled = designItem.Enabled = filterItem.Enabled = e.FileState.Opened;
+            editLineItem.Enabled = e.FileState.Opened;
             editTrainsItem.Enabled = e.FileState.Opened && e.FileState.LineCreated;
             editTimetableItem.Enabled = e.FileState.Opened && e.FileState.LineCreated && e.FileState.TrainsCreated;
+            designItem.Enabled = e.FileState.Opened && hasDesignables;
+            filterItem.Enabled = e.FileState.Opened && hasFilterables;
 
             foreach (ToolStripItem ddi in pitem.DropDownItems)
                 ddi.Enabled = e.FileState.Opened && e.FileState.LineCreated;

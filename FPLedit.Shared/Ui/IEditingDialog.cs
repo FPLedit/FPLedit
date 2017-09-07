@@ -9,8 +9,6 @@ namespace FPLedit.Shared.Ui
     {
         string DisplayName { get; }
 
-        object GroupObject { get; }
-
         void Show(IInfo info);
 
         bool IsEnabled(IInfo info);

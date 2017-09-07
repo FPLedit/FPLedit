@@ -12,8 +12,6 @@ namespace FPLedit.Buchfahrplan.Forms
     {
         public string DisplayName => "Höchstgeschwindigkeiten ändern";
 
-        public object GroupObject => new object();
-
         public void Show(IInfo info)
         {
             VelocityForm svf = new VelocityForm(info);
