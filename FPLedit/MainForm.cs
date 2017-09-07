@@ -69,6 +69,7 @@ namespace FPLedit
         }
 
         public event EventHandler<FileStateChangedEventArgs> FileStateChanged;
+        public event EventHandler ExtensionsLoaded;
 
         #endregion
 
@@ -146,6 +147,8 @@ namespace FPLedit
             docItem.Click += (s, ev) => Process.Start("https://fahrplan.manuelhu.de/");
             var infoItem = helpItem.DropDownItems.Add("Info");
             infoItem.Click += (s, ev) => (new InfoForm(Settings)).ShowDialog();
+
+            ExtensionsLoaded?.Invoke(this, new EventArgs());
         }
 
         #region FileHandling

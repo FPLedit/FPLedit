@@ -40,6 +40,8 @@ namespace FPLedit.Shared
         ISettings Settings { get; }
 
         event EventHandler<FileStateChangedEventArgs> FileStateChanged;
+
+        event EventHandler ExtensionsLoaded;
     }
 
     public class FileStateChangedEventArgs : EventArgs
