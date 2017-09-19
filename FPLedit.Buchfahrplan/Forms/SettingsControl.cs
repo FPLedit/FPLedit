@@ -39,15 +39,15 @@ namespace FPLedit.Buchfahrplan
             {
                 fontComboBox.Text = attrs.Font;
                 cssTextBox.Text = attrs.Css ?? "";
-
-                var tmpl = chooser.GetTemplate(tt);
-                templateComboBox.Text = tmpl.Name;
             }
             else
             {
                 attrs = new BfplAttrs(tt);
                 tt.Children.Add(attrs.XMLEntity);
             }
+
+            var tmpl = chooser.GetTemplate(tt);
+            templateComboBox.Text = tmpl.Name;
         }
 
         private void SettingsForm_Load(object sender, EventArgs e)
@@ -81,8 +81,11 @@ namespace FPLedit.Buchfahrplan
             attrs.Css = cssTextBox.Text;
 
             var tmpl_idx = templateComboBox.SelectedIndex;
-            var tmpl = chooser.AvailableTemplates[tmpl_idx];
-            attrs.Template = chooser.ReduceName(tmpl.GetType().FullName);
+            if (tmpl_idx != -1)
+            {
+                var tmpl = chooser.AvailableTemplates[tmpl_idx];
+                attrs.Template = chooser.ReduceName(tmpl.GetType().FullName);
+            }
 
             settings.Set("bfpl.console", consoleCheckBox.Checked);
         }
