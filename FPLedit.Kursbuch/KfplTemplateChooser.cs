@@ -7,16 +7,16 @@ using System.Text;
 
 namespace FPLedit.Kursbuch
 {
-    internal class AfplTemplateChooser
+    internal class KfplTemplateChooser
     {
-        public AfplTemplateChooser(IInfo info)
+        public KfplTemplateChooser(IInfo info)
         {
             AvailableTemplates = info.GetRegistered<IKfplTemplate>();
         }
 
         public IKfplTemplate GetTemplate(Timetable tt)
         {
-            var attrsEn = tt.Children.FirstOrDefault(x => x.XName == "afpl_attrs");
+            var attrsEn = tt.Children.FirstOrDefault(x => x.XName == "kfpl_attrs");
 
             var name = "";
             if (attrsEn != null)

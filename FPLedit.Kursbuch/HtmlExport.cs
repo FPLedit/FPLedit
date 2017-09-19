@@ -9,11 +9,11 @@ namespace FPLedit.Kursbuch
 {
     public class HtmlExport : IExport
     {
-        public string Filter => "Aushangfahrplan als HTML Datei (*.html)|*.html";
+        public string Filter => "Tabellenfahrplan/Kursbuch als HTML Datei (*.html)|*.html";
 
         private bool Exp(Timetable tt, string filename, IInfo info, bool tryout_console)
         {
-            var chooser = new AfplTemplateChooser(info);
+            var chooser = new KfplTemplateChooser(info);
 
             IKfplTemplate templ = chooser.GetTemplate(tt);
             string cont = templ.GetResult(tt);

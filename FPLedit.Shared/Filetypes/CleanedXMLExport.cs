@@ -16,6 +16,7 @@ namespace FPLedit.Shared.Filetypes
         {
             "bfpl_attrs",   // Buchfahrplaneigenschaften
             "afpl_attrs",   // Aushangfahrplaneigenschaften
+            "kfpl_attrs",   // Kursbucheigenschaften
         };
 
         private string[] attrs_names = new[]

@@ -16,9 +16,9 @@ namespace FPLedit.Kursbuch.Forms
         public void Show(IInfo info)
         {
             HtmlExport exp = new HtmlExport();
-            string path = info.GetTemp("afpl.html");
+            string path = info.GetTemp("kfpl.html");
 
-            bool tryoutConsole = info.Settings.Get<bool>("afpl.console");
+            bool tryoutConsole = info.Settings.Get<bool>("kfpl.console");
             if (tryoutConsole)
                 exp.ExportTryoutConsole(info.Timetable, path, info);
             else

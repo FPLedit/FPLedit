@@ -14,11 +14,17 @@ namespace FPLedit.Kursbuch.Model
             set => SetAttribute("font", value);
         }
 
-        //public string HwFont
-        //{
-        //    get => GetAttribute("hwfont", "");
-        //    set => SetAttribute("hwfont", value);
-        //}
+        public string HeFont
+        {
+            get => GetAttribute("hefont", "");
+            set => SetAttribute("hefont", value);
+        }
+
+        public string Kbs
+        {
+            get => GetAttribute("kbsn", "");
+            set => SetAttribute("kbsn", value);
+        }
 
         public string Css
         {

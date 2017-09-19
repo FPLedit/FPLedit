@@ -42,10 +42,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AfplTemplateChooser.cs" />
+    <Compile Include="..\build_scripts\VersionInfo.cs">
+      <Link>Properties\VersionInfo.cs</Link>
+    </Compile>
+    <Compile Include="Forms\SettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\SettingsControl.Designer.cs">
+      <DependentUpon>SettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SettingsControlProxy.cs" />
+    <Compile Include="KfplTemplateChooser.cs" />
+    <Compile Include="Forms\FilterableHandler.cs" />
     <Compile Include="Forms\Preview.cs" />
     <Compile Include="HtmlExport.cs" />
-    <Compile Include="IAfplTemplate.cs" />
+    <Compile Include="IKfplTemplate.cs" />
     <Compile Include="Model\KfplAttrs.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -55,6 +66,7 @@
       <DependentUpon>KfplTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Templates\KfplTemplateCode.cs" />
+    <Compile Include="Templates\TemplateHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj">
@@ -73,6 +85,11 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\SettingsControl.resx">
+      <DependentUpon>SettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

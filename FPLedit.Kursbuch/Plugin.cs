@@ -20,7 +20,10 @@ namespace FPLedit.Kursbuch
         {
             this.info = info;
 
+            info.Register<IKfplTemplate>(new Templates.KfplTemplate());
             info.Register<IPreviewable>(new Preview());
+            info.Register<IFilterableUi>(new FilterableHandler());
+            info.Register<IDesignableUiProxy>(new SettingsControlProxy());
         }
     }
 }
