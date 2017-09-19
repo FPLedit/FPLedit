@@ -16,6 +16,8 @@
 			collapse;
 			border:none;
 			margin-bottom: 20px;
+			margin-left: auto;
+			margin-right: auto;
 		}
 		.heading {
 			text-align:center;
@@ -140,7 +142,6 @@
 			<# } #>
 		</tr>
 		<#
-		bool hadTime = false;
 		foreach (var sta in stations) { #>
 		<tr>
 			<# var last = stations.Last() == sta ? " last" : ""; #>

@@ -19,7 +19,7 @@ namespace FPLedit.Kursbuch.Templates
         private const TrainDirection TOP_DIRECTION = TrainDirection.ti;
         private const TrainDirection BOTTOM_DIRECTION = TrainDirection.ta;
 
-        public string Name => "Standardvorlage";
+        public string Name => "Standardvorlage (DB-Kursbuch)";
 
         private TemplateHelper helper;
 
