@@ -32,6 +32,7 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.closeButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
+            this.expertCheckBox = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -80,6 +81,18 @@
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
+            // expertCheckBox
+            // 
+            this.expertCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.expertCheckBox.AutoSize = true;
+            this.expertCheckBox.Location = new System.Drawing.Point(12, 322);
+            this.expertCheckBox.Name = "expertCheckBox";
+            this.expertCheckBox.Size = new System.Drawing.Size(238, 17);
+            this.expertCheckBox.TabIndex = 15;
+            this.expertCheckBox.Text = "Expertenmodus (CSS-Bearbeitung) aktivieren";
+            this.expertCheckBox.UseVisualStyleBackColor = true;
+            this.expertCheckBox.CheckedChanged += new System.EventHandler(this.expertCheckBox_CheckedChanged);
+            // 
             // DesignableForm
             // 
             this.AcceptButton = this.closeButton;
@@ -88,6 +101,7 @@
             this.AutoScroll = true;
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(641, 353);
+            this.Controls.Add(this.expertCheckBox);
             this.Controls.Add(this.closeButton);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.tabControl1);
@@ -99,6 +113,7 @@
             this.Load += new System.EventHandler(this.DesignableForm_Load);
             this.tabControl1.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -108,5 +123,6 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.Button closeButton;
         private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.CheckBox expertCheckBox;
     }
 }

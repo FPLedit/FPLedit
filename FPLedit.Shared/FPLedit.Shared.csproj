@@ -66,6 +66,7 @@
     <Compile Include="Ext\PluginAttribute.cs" />
     <Compile Include="StationsList.cs" />
     <Compile Include="Ui\IEditingDialog.cs" />
+    <Compile Include="Ui\IExpertHandler.cs" />
     <Compile Include="Ui\IPreviewable.cs" />
     <Compile Include="Ui\IFilterableUi.cs" />
     <Compile Include="Ui\ISaveHandler.cs" />

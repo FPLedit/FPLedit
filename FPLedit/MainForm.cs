@@ -323,6 +323,8 @@ namespace FPLedit
                 Settings.Set("files.last", string.Join(";", lastFiles));
             if (!NotifyIfUnsaved())
                 e.Cancel = true;
+
+            ClearTemp();
         }
 
         private void AutoUpdate_Check(object sender, EventArgs e)
@@ -390,6 +392,13 @@ namespace FPLedit
             if (!Directory.Exists(dirpath))
                 Directory.CreateDirectory(dirpath);
             return Path.Combine(dirpath, filename);
+        }
+
+        private void ClearTemp()
+        {
+            var dirpath = Path.Combine(Path.GetTempPath(), "fpledit");
+            if (Directory.Exists(dirpath))
+                Directory.Delete(dirpath, true);
         }
         #endregion
 

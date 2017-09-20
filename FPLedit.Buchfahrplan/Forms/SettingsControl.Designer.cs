@@ -42,7 +42,7 @@
             // fontComboBox
             // 
             this.fontComboBox.FormattingEnabled = true;
-            this.fontComboBox.Location = new System.Drawing.Point(146, 39);
+            this.fontComboBox.Location = new System.Drawing.Point(154, 43);
             this.fontComboBox.Name = "fontComboBox";
             this.fontComboBox.Size = new System.Drawing.Size(310, 21);
             this.fontComboBox.TabIndex = 3;
@@ -53,7 +53,7 @@
             this.cssTextBox.AcceptsReturn = true;
             this.cssTextBox.AcceptsTab = true;
             this.cssTextBox.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cssTextBox.Location = new System.Drawing.Point(146, 66);
+            this.cssTextBox.Location = new System.Drawing.Point(154, 70);
             this.cssTextBox.Multiline = true;
             this.cssTextBox.Name = "cssTextBox";
             this.cssTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -64,7 +64,7 @@
             // fontLabel
             // 
             this.fontLabel.AutoSize = true;
-            this.fontLabel.Location = new System.Drawing.Point(12, 41);
+            this.fontLabel.Location = new System.Drawing.Point(20, 45);
             this.fontLabel.Name = "fontLabel";
             this.fontLabel.Size = new System.Drawing.Size(128, 13);
             this.fontLabel.TabIndex = 2;
@@ -72,7 +72,7 @@
             // 
             // cssLabel
             // 
-            this.cssLabel.Location = new System.Drawing.Point(12, 69);
+            this.cssLabel.Location = new System.Drawing.Point(20, 73);
             this.cssLabel.Name = "cssLabel";
             this.cssLabel.Size = new System.Drawing.Size(128, 54);
             this.cssLabel.TabIndex = 5;
@@ -81,7 +81,7 @@
             // exampleLabel
             // 
             this.exampleLabel.AutoSize = true;
-            this.exampleLabel.Location = new System.Drawing.Point(462, 42);
+            this.exampleLabel.Location = new System.Drawing.Point(470, 46);
             this.exampleLabel.Name = "exampleLabel";
             this.exampleLabel.Size = new System.Drawing.Size(43, 13);
             this.exampleLabel.TabIndex = 4;
@@ -90,7 +90,7 @@
             // cssHelpLinkLabel
             // 
             this.cssHelpLinkLabel.AutoSize = true;
-            this.cssHelpLinkLabel.Location = new System.Drawing.Point(12, 110);
+            this.cssHelpLinkLabel.Location = new System.Drawing.Point(20, 114);
             this.cssHelpLinkLabel.Name = "cssHelpLinkLabel";
             this.cssHelpLinkLabel.Size = new System.Drawing.Size(66, 13);
             this.cssHelpLinkLabel.TabIndex = 6;
@@ -101,7 +101,7 @@
             // consoleCheckBox
             // 
             this.consoleCheckBox.AutoSize = true;
-            this.consoleCheckBox.Location = new System.Drawing.Point(146, 281);
+            this.consoleCheckBox.Location = new System.Drawing.Point(154, 285);
             this.consoleCheckBox.Name = "consoleCheckBox";
             this.consoleCheckBox.Size = new System.Drawing.Size(334, 17);
             this.consoleCheckBox.TabIndex = 8;
@@ -112,7 +112,7 @@
             // 
             this.templateComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.templateComboBox.FormattingEnabled = true;
-            this.templateComboBox.Location = new System.Drawing.Point(146, 12);
+            this.templateComboBox.Location = new System.Drawing.Point(154, 16);
             this.templateComboBox.Name = "templateComboBox";
             this.templateComboBox.Size = new System.Drawing.Size(310, 21);
             this.templateComboBox.TabIndex = 1;
@@ -120,7 +120,7 @@
             // templateLabel
             // 
             this.templateLabel.AutoSize = true;
-            this.templateLabel.Location = new System.Drawing.Point(12, 15);
+            this.templateLabel.Location = new System.Drawing.Point(20, 19);
             this.templateLabel.Name = "templateLabel";
             this.templateLabel.Size = new System.Drawing.Size(109, 13);
             this.templateLabel.TabIndex = 0;
@@ -130,6 +130,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Controls.Add(this.templateLabel);
             this.Controls.Add(this.templateComboBox);
             this.Controls.Add(this.consoleCheckBox);
@@ -140,7 +142,7 @@
             this.Controls.Add(this.cssTextBox);
             this.Controls.Add(this.fontComboBox);
             this.Name = "SettingsControl";
-            this.Size = new System.Drawing.Size(556, 306);
+            this.Size = new System.Drawing.Size(516, 305);
             this.Load += new System.EventHandler(this.SettingsForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

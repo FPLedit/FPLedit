@@ -15,11 +15,13 @@ namespace FPLedit.Standard
     {
         private IInfo info;
         private List<ISaveHandler> saveHandlers;
+        private List<IExpertHandler> expertHandlers;
 
         private DesignableForm()
         {
             InitializeComponent();
             saveHandlers = new List<ISaveHandler>();
+            expertHandlers = new List<IExpertHandler>();
         }
 
         public DesignableForm(IInfo info) : this()
@@ -45,13 +47,19 @@ namespace FPLedit.Standard
 
                 if (c is ISaveHandler sh)
                     saveHandlers.Add(sh);
+                if (c is IExpertHandler eh)
+                    expertHandlers.Add(eh);
             }
 
             tabControl1.ResumeLayout();
+
+            expertCheckBox.Checked = info.Settings.Get<bool>("std.expert");
+            expertCheckBox_CheckedChanged(this, null);
         }
 
         private void closeButton_Click(object sender, EventArgs e)
         {
+            info.Settings.Set("std.expert", expertCheckBox.Checked);
             saveHandlers.ForEach(sh => sh.Save());
             Close();
         }
@@ -59,6 +67,11 @@ namespace FPLedit.Standard
         private void cancelButton_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void expertCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            expertHandlers.ForEach(eh => eh.SetExpertMode(expertCheckBox.Checked));
         }
     }
 }

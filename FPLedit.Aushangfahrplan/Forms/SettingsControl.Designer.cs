@@ -160,6 +160,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Controls.Add(this.label1);
             this.Controls.Add(this.hwexampleLabel);
             this.Controls.Add(this.hwfontComboBox);
@@ -173,7 +175,7 @@
             this.Controls.Add(this.cssTextBox);
             this.Controls.Add(this.fontComboBox);
             this.Name = "SettingsControl";
-            this.Size = new System.Drawing.Size(551, 313);
+            this.Size = new System.Drawing.Size(516, 305);
             this.Load += new System.EventHandler(this.SettingsControl_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

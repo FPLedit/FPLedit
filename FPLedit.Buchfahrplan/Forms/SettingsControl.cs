@@ -14,7 +14,7 @@ using System.Windows.Forms;
 
 namespace FPLedit.Buchfahrplan
 {
-    public partial class SettingsControl : UserControl, ISaveHandler
+    public partial class SettingsControl : UserControl, ISaveHandler, IExpertHandler
     {
         private ISettings settings;
         private BfplAttrs attrs;
@@ -88,6 +88,11 @@ namespace FPLedit.Buchfahrplan
             }
 
             settings.Set("bfpl.console", consoleCheckBox.Checked);
+        }
+
+        public void SetExpertMode(bool enabled)
+        {
+            cssTextBox.Visible = cssLabel.Visible = cssHelpLinkLabel.Visible = consoleCheckBox.Visible = enabled;
         }
     }
 }

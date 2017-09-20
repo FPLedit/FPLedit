@@ -14,7 +14,7 @@ using FPLedit.Shared.Ui;
 
 namespace FPLedit.Kursbuch.Forms
 {
-    public partial class SettingsControl : UserControl, ISaveHandler
+    public partial class SettingsControl : UserControl, ISaveHandler, IExpertHandler
     {
         private ISettings settings;
         private KfplAttrs attrs;
@@ -93,6 +93,11 @@ namespace FPLedit.Kursbuch.Forms
             }
 
             settings.Set("kfpl.console", consoleCheckBox.Checked);
+        }
+
+        public void SetExpertMode(bool enabled)
+        {
+            cssTextBox.Visible = cssLabel.Visible = cssHelpLinkLabel.Visible = consoleCheckBox.Visible = enabled;
         }
     }
 }

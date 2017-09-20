@@ -14,7 +14,7 @@ using FPLedit.Shared.Ui;
 
 namespace FPLedit.Aushangfahrplan.Forms
 {
-    public partial class SettingsControl : UserControl, ISaveHandler
+    public partial class SettingsControl : UserControl, ISaveHandler, IExpertHandler
     {
         private ISettings settings;
         private AfplAttrs attrs;
@@ -91,6 +91,11 @@ namespace FPLedit.Aushangfahrplan.Forms
             }
 
             settings.Set("afpl.console", consoleCheckBox.Checked);
+        }
+
+        public void SetExpertMode(bool enabled)
+        {
+            cssTextBox.Visible = cssLabel.Visible = cssHelpLinkLabel.Visible = consoleCheckBox.Visible = enabled;
         }
     }
 }
