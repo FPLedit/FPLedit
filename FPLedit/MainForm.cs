@@ -16,7 +16,6 @@ namespace FPLedit
     {
         private Timetable timetableBackup = null;
 
-        private Dictionary<Type, List<object>> registerStore = new Dictionary<Type, List<object>>();
         private IImport open;
         private IExport save;
 
@@ -24,6 +23,7 @@ namespace FPLedit
 
         private ExtensionManager extensionManager;
         private UndoManager undo;
+        private RegisterStore registry;
 
         private List<string> lastFiles;
         private bool enable_last = true;
@@ -81,6 +81,8 @@ namespace FPLedit
             InitializeComponent();
 
             Settings = new Settings();
+            undo = new UndoManager();
+            registry = new RegisterStore();
 
             open = new XMLImport();
             save = new XMLExport();
@@ -97,17 +99,30 @@ namespace FPLedit
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            // Rückgängig initialiseren
-            undo = new UndoManager();
-
             // Extensions laden & initialisieren (=> Initialisiert Importer/Exporter)
             extensionManager = new ExtensionManager(Logger, Settings);
             var enabled_plgs = extensionManager.Plugins.Where(p => p.Enabled);
             foreach (var plugin in enabled_plgs)
                 plugin.TryInit(this);
 
-            var exporters = GetRegistered<IExport>();
-            var importers = GetRegistered<IImport>();
+            InitializeExportImport();
+            InitializeMenus();
+
+            ExtensionsLoaded?.Invoke(this, new EventArgs());
+
+            // Parameter: Fpledit.exe [Dateiname] ODER Datei aus Restart
+            string[] args = Environment.GetCommandLineArgs();
+            string fn = args.Length >= 2 ? args[1] : null;
+            fn = Settings.Get("restart.file", fn);
+            if (fn != null && File.Exists(fn))
+                InternalOpen(fn);
+            Settings.Remove("restart.file");
+        }
+
+        private void InitializeExportImport()
+        {
+            var exporters = registry.GetRegistered<IExport>();
+            var importers = registry.GetRegistered<IImport>();
 
             exportFileDialog.Filter = string.Join("|", exporters.Select(ex => ex.Filter));
             importFileDialog.Filter = string.Join("|", importers.Select(im => im.Filter));
@@ -116,7 +131,10 @@ namespace FPLedit
             int exporter_idx = Settings.Get("exporter.last", -1);
             if (exporter_idx > -1 && exporters.Length > exporter_idx)
                 exportFileDialog.FilterIndex = exporter_idx + 1;
+        }
 
+        private void InitializeMenus()
+        {
             // Zuletzt geöffnete Dateien anzeigen
             enable_last = Settings.Get("files.save-last", true);
             if (enable_last)
@@ -136,14 +154,6 @@ namespace FPLedit
             else
                 lastFilesToolStripMenuItem.Visible = false;
 
-            // Parameter: Fpledit.exe [Dateiname] ODER Datei aus Restart
-            string[] args = Environment.GetCommandLineArgs();
-            string fn = args.Length >= 2 ? args[1] : null;
-            fn = Settings.Get("restart.file", fn);
-            if (fn != null && File.Exists(fn))
-                InternalOpen(fn);
-            Settings.Remove("restart.file");
-
             // Hilfe Menü nach den Erweiterungen zusammenbasteln
             var helpItem = new ToolStripMenuItem("Hilfe");
             this.menuStrip.Items.AddRange(new[] { helpItem });
@@ -153,13 +163,11 @@ namespace FPLedit
             docItem.Click += (s, ev) => Process.Start("https://fahrplan.manuelhu.de/");
             var infoItem = helpItem.DropDownItems.Add("Info");
             infoItem.Click += (s, ev) => (new InfoForm(Settings)).ShowDialog();
-
-            ExtensionsLoaded?.Invoke(this, new EventArgs());
         }
 
         #region FileHandling
 
-        public void Import()
+        private void Import()
         {
             if (!NotifyIfUnsaved())
                 return;
@@ -180,6 +188,23 @@ namespace FPLedit
             }
         }
 
+        private void Export()
+        {
+            if (exportFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                var exporters = GetRegistered<IExport>();
+                IExport export = exporters[exportFileDialog.FilterIndex - 1];
+                string filename = exportFileDialog.FileName;
+
+                Logger.Info("Speichere Datei " + filename);
+                bool ret = export.Export(Timetable, filename, this);
+                if (ret == false)
+                    return;
+                Logger.Info("Speichern erfolgreich abgeschlossen!");
+                Settings.Set("exporter.last", exportFileDialog.FilterIndex - 1);
+            }
+        }
+
         public void Open()
         {
             if (!NotifyIfUnsaved())
@@ -187,6 +212,9 @@ namespace FPLedit
             if (openFileDialog.ShowDialog() == DialogResult.OK)
                 InternalOpen(openFileDialog.FileName);
         }
+
+        public void Reload()
+            => InternalOpen(fileState.FileName);
 
         private void InternalOpen(string filename)
         {
@@ -207,23 +235,6 @@ namespace FPLedit
                 lastFiles.Add(filename);
                 if (lastFiles.Count > 3) // Überlauf
                     lastFiles.RemoveAt(0);
-            }
-        }
-
-        public void Export()
-        {
-            if (exportFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                var exporters = GetRegistered<IExport>();
-                IExport export = exporters[exportFileDialog.FilterIndex - 1];
-                string filename = exportFileDialog.FileName;
-
-                Logger.Info("Speichere Datei " + filename);
-                bool ret = export.Export(Timetable, filename, this);
-                if (ret == false)
-                    return;
-                Logger.Info("Speichern erfolgreich abgeschlossen!");
-                Settings.Set("exporter.last", exportFileDialog.FilterIndex - 1);
             }
         }
 
@@ -255,9 +266,6 @@ namespace FPLedit
             OnFileStateChanged();
         }
 
-        public void Reload()
-            => InternalOpen(fileState.FileName);
-
         private void New()
         {
             if (!NotifyIfUnsaved())
@@ -275,15 +283,13 @@ namespace FPLedit
         {
             if (!fileState.Saved && fileState.Opened)
             {
-                DialogResult res = MessageBox.Show("Wollen Sie die Änderungen speichern?",
-                    "FPLedit",
-                    MessageBoxButtons.YesNoCancel,
-                    MessageBoxIcon.Question);
+                DialogResult res = MessageBox.Show("Wollen Sie die noch nicht gespeicherten Änderungen speichern?",
+                    "FPLedit", MessageBoxButtons.YesNoCancel);
 
+                if (res == DialogResult.Cancel)
+                    return false;
                 if (res == DialogResult.Yes)
                     Save(false);
-                else if (res == DialogResult.Cancel)
-                    return false;
             }
             return true;
         }
@@ -296,30 +302,6 @@ namespace FPLedit
             if (fileState.Opened)
                 Settings.Set("restart.file", fileState.FileName);
             Application.Restart();
-        }
-
-        public void Undo()
-        {
-            if (undo.CanGoBack)
-                Timetable = undo.Undo();
-            OnFileStateChanged();
-        }
-
-        public void StageUndoStep()
-        {
-            undo.StageUndoStep(Timetable);
-        }
-
-        public void AddUndoStep()
-        {
-            undo.AddUndoStep();
-            OnFileStateChanged();
-        }
-
-        private void ClearHistory()
-        {
-            undo.ClearHistory();
-            OnFileStateChanged();
         }
 
         #endregion
@@ -358,7 +340,7 @@ namespace FPLedit
             ClearTemp();
         }
 
-        #region Updates
+        #region AutoUpdates
         private void AutoUpdate_Check(object sender, EventArgs e)
         {
             if (Settings.Get("updater.auto", "") == "")
@@ -385,8 +367,28 @@ namespace FPLedit
         }
         #endregion
 
-        #region IInfo
-        dynamic IInfo.Menu => menuStrip;
+        #region Backup & Undo
+        public void Undo()
+        {
+            if (undo.CanGoBack)
+                Timetable = undo.Undo();
+            OnFileStateChanged();
+        }
+
+        public void StageUndoStep()
+            => undo.StageUndoStep(Timetable);
+
+        public void AddUndoStep()
+        {
+            undo.AddUndoStep();
+            OnFileStateChanged();
+        }
+
+        private void ClearHistory()
+        {
+            undo.ClearHistory();
+            OnFileStateChanged();
+        }
 
         public void BackupTimetable()
         {
@@ -403,21 +405,16 @@ namespace FPLedit
         {
             timetableBackup = null;
         }
+        #endregion
+
+        #region IInfo
+        dynamic IInfo.Menu => menuStrip;
 
         public void Register<T>(T obj)
-        {
-            Type t = typeof(T);
-            if (!registerStore.ContainsKey(t))
-                registerStore.Add(typeof(T), new List<object>());
-            registerStore[t].Add(obj);
-        }
+            => registry.Register<T>(obj);
 
         public T[] GetRegistered<T>()
-        {
-            List<object> res;
-            registerStore.TryGetValue(typeof(T), out res);
-            return res?.Select(o => (T)o).ToArray() ?? new T[0];
-        }
+            => registry.GetRegistered<T>();
 
         public string GetTemp(string filename)
         {

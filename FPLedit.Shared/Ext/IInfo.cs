@@ -10,7 +10,7 @@ namespace FPLedit.Shared
     {
         Timetable Timetable { get; set; }
 
-        FileState FileState { get; set; }
+        FileState FileState { get; }
 
         void SetUnsaved();
 
@@ -20,6 +20,7 @@ namespace FPLedit.Shared
 
         void ClearBackup();
 
+        // Regsitry
         void Register<T>(T obj);
 
         T[] GetRegistered<T>();
@@ -33,6 +34,7 @@ namespace FPLedit.Shared
 
         string GetTemp(string filename);
 
+        // Undo
         void Undo();
 
         void StageUndoStep();
