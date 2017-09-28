@@ -44,7 +44,7 @@
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.exportFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.importFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.lineRenderer1 = new FPLedit.LineRenderer();
+            this.lineRenderer = new FPLedit.LineRenderer();
             this.logTextBox = new FPLedit.LogControl();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -148,14 +148,14 @@
             this.quitToolStripMenuItem.Text = "Beenden";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
             // 
-            // lineRenderer1
+            // lineRenderer
             // 
-            this.lineRenderer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lineRenderer1.Location = new System.Drawing.Point(0, 23);
-            this.lineRenderer1.Name = "lineRenderer1";
-            this.lineRenderer1.Size = new System.Drawing.Size(849, 374);
-            this.lineRenderer1.TabIndex = 2;
-            this.lineRenderer1.Text = "lineRenderer1";
+            this.lineRenderer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lineRenderer.Location = new System.Drawing.Point(0, 23);
+            this.lineRenderer.Name = "lineRenderer";
+            this.lineRenderer.Size = new System.Drawing.Size(849, 374);
+            this.lineRenderer.TabIndex = 2;
+            this.lineRenderer.Text = "lineRenderer1";
             // 
             // logTextBox
             // 
@@ -174,7 +174,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(849, 482);
-            this.Controls.Add(this.lineRenderer1);
+            this.Controls.Add(this.lineRenderer);
             this.Controls.Add(this.logTextBox);
             this.Controls.Add(this.menuStrip);
             this.Icon = global::FPLedit.Properties.Resources.programm;
@@ -212,7 +212,7 @@
         private System.Windows.Forms.ToolStripMenuItem lastFilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
-        private LineRenderer lineRenderer1;
+        private LineRenderer lineRenderer;
     }
 }
 

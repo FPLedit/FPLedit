@@ -11,21 +11,41 @@ namespace FPLedit
     internal class LineRenderer : Control
     {
         private List<Station> stas;
+        private List<Panel> panels = new List<Panel>();
         private int markedStation;
         private Font font;
+        private Button btn;
 
         public event EventHandler<MouseEventArgs> StationClicked;
         public event EventHandler<MouseEventArgs> StationDoubleClicked;
+        public event EventHandler NewButtonClicked;
 
         public LineRenderer()
         {
             this.DoubleBuffered = true;
             font = new Font(Font.FontFamily, 8);
+
+            btn = new Button()
+            {
+                Text = "Neue Station",
+                AutoSize = true,
+                Location = new Point(10, 10),
+                Enabled = false,
+            };
+            this.Controls.Add(btn);
+            btn.Click += (s, e) => NewButtonClicked?.Invoke(btn, null);
         }
 
         public void SetLine(List<Station> stas)
         {
+            if (stas != null)
+                btn.Enabled = true;
             this.stas = stas;
+            this.Invalidate();
+        }
+
+        public void UpdateLine()
+        {
             this.Invalidate();
         }
 
@@ -33,14 +53,18 @@ namespace FPLedit
         {
             this.SuspendLayout();
             e.Graphics.Clear(Color.White);
-            this.Controls.Clear();
+            foreach (var p in panels)
+                this.Controls.Remove(p);
+            panels.Clear();
+
+
             if (stas == null || stas.Count == 0)
                 return;
 
             var w = ClientSize.Width - 80; // 10px Padding on each side
-            var d = w / (stas.Count -1);
+            var d = w / Math.Max(stas.Count - 1, 1);
             var x = 40;
-            var y = 20;
+            var y = 50;
             foreach (var sta in stas)
             {
                 var cont = e.Graphics.BeginContainer();
@@ -56,6 +80,7 @@ namespace FPLedit
                 p.MouseDoubleClick += (s, args) => StationDoubleClicked?.Invoke(sta, args);
                 p.MouseClick += (s, args) => StationClicked?.Invoke(sta, args);
                 Controls.Add(p);
+                panels.Add(p);
 
                 x += d;
                 if (stas.Last() != sta)
