@@ -144,6 +144,9 @@
       <DependentUpon>InfoForm.cs</DependentUpon>
     </Compile>
     <Compile Include="IRestartable.cs" />
+    <Compile Include="LineRenderer.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="LogControl.cs">
       <SubType>Component</SubType>
     </Compile>

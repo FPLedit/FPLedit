@@ -74,6 +74,8 @@ namespace FPLedit
             Text = "FPLedit - "
                 + (fileState.FileName != null ? (Path.GetFileName(fileState.FileName) + " ") : "")
                 + (fileState.Saved ? "" : "*");
+
+            lineRenderer1.SetLine(Timetable?.Stations);
         }
 
         public event EventHandler<FileStateChangedEventArgs> FileStateChanged;

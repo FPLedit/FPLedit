@@ -10,7 +10,7 @@ namespace FPLedit.Shared
 {
     [Serializable]
     [DebuggerDisplay("{TTName}")]
-    public sealed class Timetable : Entity
+    public sealed class Timetable : Entity, ITimetable
     {
         XMLEntity sElm, tElm;
 
@@ -138,7 +138,7 @@ namespace FPLedit.Shared
 
             // Wenn Endstationen gelöscht werden könnten sonst korrupte Dateien entstehen!
             foreach (var train in Trains)
-                train.RemovedOrphanedTimes();
+                train.RemoveOrphanedTimes();
         }
 
         public void AddTrain(Train tra, bool hasArDeps = false)

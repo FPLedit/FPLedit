@@ -53,6 +53,8 @@
     <Compile Include="Filetypes\XMLExport.cs" />
     <Compile Include="Filetypes\XMLStationsImport.cs" />
     <Compile Include="Filetypes\XMLImport.cs" />
+    <Compile Include="ITimetable.cs" />
+    <Compile Include="ITrain.cs" />
     <Compile Include="Rule.cs" />
     <Compile Include="Templating\ITemplate.cs" />
     <Compile Include="Templating\ITemplateProxy.cs" />

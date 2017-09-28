@@ -44,6 +44,7 @@
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.exportFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.importFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.lineRenderer1 = new FPLedit.LineRenderer();
             this.logTextBox = new FPLedit.LogControl();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -55,7 +56,7 @@
             this.menuStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(582, 23);
+            this.menuStrip.Size = new System.Drawing.Size(849, 23);
             this.menuStrip.TabIndex = 0;
             this.menuStrip.Text = "menuStrip";
             // 
@@ -147,15 +148,24 @@
             this.quitToolStripMenuItem.Text = "Beenden";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
             // 
+            // lineRenderer1
+            // 
+            this.lineRenderer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lineRenderer1.Location = new System.Drawing.Point(0, 23);
+            this.lineRenderer1.Name = "lineRenderer1";
+            this.lineRenderer1.Size = new System.Drawing.Size(849, 374);
+            this.lineRenderer1.TabIndex = 2;
+            this.lineRenderer1.Text = "lineRenderer1";
+            // 
             // logTextBox
             // 
             this.logTextBox.BackColor = System.Drawing.Color.White;
-            this.logTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.logTextBox.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.logTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.logTextBox.Location = new System.Drawing.Point(0, 23);
+            this.logTextBox.Location = new System.Drawing.Point(0, 397);
             this.logTextBox.Name = "logTextBox";
             this.logTextBox.Padding = new System.Windows.Forms.Padding(2);
-            this.logTextBox.Size = new System.Drawing.Size(582, 318);
+            this.logTextBox.Size = new System.Drawing.Size(849, 85);
             this.logTextBox.TabIndex = 1;
             // 
             // MainForm
@@ -163,7 +173,8 @@
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(582, 341);
+            this.ClientSize = new System.Drawing.Size(849, 482);
+            this.Controls.Add(this.lineRenderer1);
             this.Controls.Add(this.logTextBox);
             this.Controls.Add(this.menuStrip);
             this.Icon = global::FPLedit.Properties.Resources.programm;
@@ -201,6 +212,7 @@
         private System.Windows.Forms.ToolStripMenuItem lastFilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
+        private LineRenderer lineRenderer1;
     }
 }
 

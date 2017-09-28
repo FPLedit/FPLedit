@@ -7,7 +7,7 @@ namespace FPLedit.Shared
 {
     [Serializable]
     [DebuggerDisplay("{TName}")]
-    public sealed class Train : Entity
+    public sealed class Train : Entity, ITrain
     {
         public string TName
         {
@@ -78,7 +78,7 @@ namespace FPLedit.Shared
             Children.Remove(tElm);
         }
 
-        public void RemovedOrphanedTimes()
+        public void RemoveOrphanedTimes()
         {
             // Räumt verwaiste Zeiten auf (z.B. Ankunftszeit im Startbahnhof)
             var stas = _parent.GetStationsOrderedByDirection(Direction);
