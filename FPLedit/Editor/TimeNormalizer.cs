@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace FPLedit.Standard
+namespace FPLedit.Editor
 {
     internal class TimeNormalizer
     {

@@ -1,4 +1,4 @@
-﻿namespace FPLedit.Standard
+﻿namespace FPLedit.Editor
 {
     partial class EditStationForm
     {

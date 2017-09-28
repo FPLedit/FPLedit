@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FPLedit.Standard
+namespace FPLedit.Editor
 {
     public partial class EditStationForm : Form
     {

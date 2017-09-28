@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace FPLedit.Standard
+namespace FPLedit.Editor
 {
     public partial class DesignableForm : Form
     {

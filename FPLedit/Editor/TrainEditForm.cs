@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace FPLedit.Standard
+namespace FPLedit.Editor
 {
     public partial class TrainEditForm : Form
     {

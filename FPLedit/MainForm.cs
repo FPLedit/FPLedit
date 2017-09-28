@@ -100,6 +100,8 @@ namespace FPLedit
         private void Form1_Load(object sender, EventArgs e)
         {
             // Extensions laden & initialisieren (=> Initialisiert Importer/Exporter)
+            new Editor.EditorPlugin().Init(this);
+
             extensionManager = new ExtensionManager(Logger, Settings);
             var enabled_plgs = extensionManager.Plugins.Where(p => p.Enabled);
             foreach (var plugin in enabled_plgs)

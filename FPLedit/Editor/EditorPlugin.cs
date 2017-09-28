@@ -6,10 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace FPLedit.Standard
+namespace FPLedit.Editor
 {
     [Plugin("Fahrplan-Editoren", Author = "Manuel Huber")]
-    public class Plugin : IPlugin
+    public class EditorPlugin : IPlugin
     {
         private IInfo info;
         private ToolStripItem editLineItem, editTrainsItem, editTimetableItem, designItem, filterItem, undoItem;

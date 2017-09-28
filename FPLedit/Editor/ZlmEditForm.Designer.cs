@@ -1,4 +1,4 @@
-﻿namespace FPLedit.Standard
+﻿namespace FPLedit.Editor
 {
     partial class ZlmEditForm
     {
@@ -33,16 +33,16 @@
             this.closeButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
+            //
             // zlmTextBox
-            // 
+            //
             this.zlmTextBox.Location = new System.Drawing.Point(131, 12);
             this.zlmTextBox.Name = "zlmTextBox";
             this.zlmTextBox.Size = new System.Drawing.Size(198, 20);
             this.zlmTextBox.TabIndex = 1;
-            // 
+            //
             // cancelButton
-            // 
+            //
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancelButton.Location = new System.Drawing.Point(174, 43);
@@ -51,9 +51,9 @@
             this.cancelButton.TabIndex = 3;
             this.cancelButton.Text = "Abbrechen";
             this.cancelButton.UseVisualStyleBackColor = true;
-            // 
+            //
             // closeButton
-            // 
+            //
             this.closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.closeButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.closeButton.Location = new System.Drawing.Point(254, 43);
@@ -63,18 +63,18 @@
             this.closeButton.Text = "Schließen";
             this.closeButton.UseVisualStyleBackColor = true;
             this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
-            // 
+            //
             // label1
-            // 
+            //
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 15);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(113, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Zuglaufmeldung durch";
-            // 
+            //
             // ZlmEditForm
-            // 
+            //
             this.AcceptButton = this.closeButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
