@@ -1,4 +1,5 @@
-﻿using FPLedit.Shared;
+﻿using FPLedit.Kursbuch.Properties;
+using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,8 +19,8 @@ namespace FPLedit.Kursbuch
             IKfplTemplate templ = chooser.GetTemplate(tt);
             string cont = templ.GetResult(tt);
 
-            //if (tryout_console)
-            //    cont += Resources.TryoutScript;
+            if (tryout_console)
+                cont += Resources.TryoutScript;
 
             File.WriteAllText(filename, cont);
 
