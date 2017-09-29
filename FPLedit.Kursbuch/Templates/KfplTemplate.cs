@@ -68,42 +68,42 @@ namespace FPLedit.Kursbuch.Templates
                     "order-bottom:solid black 1.0pt;\r\n\t\t}\r\n\t\t.caption {\r\n\t\t\tborder-right:solid black " +
                     "1.5pt;\r\n\t\t\tpadding:0;\r\n\t\t}\r\n\t\t.caption p {\r\n\t\t\tmargin: 0;\r\n\t\t\tline-height:107%;\r" +
                     "\n\t\t\tfont-size:8.0pt;\r\n\t\t\ttext-align:right;\r\n\t\t\tline-height:normal;\r\n\t\t}\r\n\t\t.tn {" +
-                    "\r\n\t\t\tborder-top:solid black 1.5pt;\r\n\t\t\tborder-right:solid black 1.0pt;\r\n\t\t\tpaddi" +
-                    "ng: 0 3px 0 3px;\r\n\t\t\ttext-align:center;\r\n\t\t}\r\n\t\t.kl {\r\n\t\t\tborder-bottom:solid bl" +
-                    "ack 1pt;\r\n\t\t\tborder-right:solid black 1.0pt;\r\n\t\t\tpadding: 0 3px 0 3px;\r\n\t\t\ttext-" +
-                    "align:center;\r\n\t\t}\r\n\t\t.ti {\r\n\t\t\tborder-right:solid black 1.0pt;\r\n\t\t\tpadding: 0 3" +
-                    "px 0 3px;\r\n\t\t\ttext-align:center;\r\n\t\t}\r\n\t\t.ti.last {\r\n\t\t\tborder-bottom:solid blac" +
-                    "k 1.5pt;\r\n\t\t}\r\n\t\t.sta {\r\n\t\t\tborder-right:solid black 1.5pt;\r\n\t\t\tpadding: 0 3px 0" +
-                    " 3px;\r\n\t\t}\r\n\t\t.tn span, .kl span, .ti span {\r\n\t\t\tmargin: 0;\r\n\t\t\tfont-size:8.0pt;" +
-                    "\r\n\t\t\tline-height:normal;\r\n\t\t}\r\n\t\t.sta span, .km span {\r\n\t\t\tmargin: 0;\r\n\t\t\tline-h" +
-                    "eight:107%;\r\n\t\t\tfont-size:9.0pt;\r\n\t\t\tline-height:normal;\r\n\t\t}\r\n\t\t.sta.last, .km." +
-                    "last {\r\n\t\t\tborder-bottom:solid black 1pt;\r\n\t\t}\r\n\t\t.last-t {\r\n\t\t\tborder-right:sol" +
-                    "id black 1.5pt;\r\n\t\t}\r\n\t\t.km {\r\n\t\t\tborder-left:solid black 1.0pt;\r\n\t\t\tborder-righ" +
-                    "t:solid black 1.0pt;\r\n\t\t\tpadding:0;\r\n\t\t}\r\n\t\t</style>\r\n\t\t<style id=\"add-css\">\r\n\t\t" +
-                    "\t");
+                    "\r\n\t\t\tborder-top:solid black 1.5pt;\r\n\t\t\tborder-right:solid black 1.0pt;\r\n\t\t\tborde" +
+                    "r-bottom:solid black 1pt; /* entfernen, wenn Klassen hinzugefügt */\r\n\t\t\tpadding:" +
+                    " 0 3px 0 3px;\r\n\t\t\ttext-align:center;\r\n\t\t}\r\n\t\t.kl {\r\n\t\t\tborder-bottom:solid black" +
+                    " 1pt;\r\n\t\t\tborder-right:solid black 1.0pt;\r\n\t\t\tpadding: 0 3px 0 3px;\r\n\t\t\ttext-ali" +
+                    "gn:center;\r\n\t\t}\r\n\t\t.ti {\r\n\t\t\tborder-right:solid black 1.0pt;\r\n\t\t\tpadding: 0 3px " +
+                    "0 3px;\r\n\t\t\ttext-align:center;\r\n\t\t}\r\n\t\t.ti.last {\r\n\t\t\tborder-bottom:solid black 1" +
+                    ".5pt;\r\n\t\t}\r\n\t\t.sta {\r\n\t\t\tborder-right:solid black 1.5pt;\r\n\t\t\tpadding: 0 3px 0 3p" +
+                    "x;\r\n\t\t}\r\n\t\t.tn span, .kl span, .ti span {\r\n\t\t\tmargin: 0;\r\n\t\t\tfont-size:8.0pt;\r\n\t" +
+                    "\t\tline-height:normal;\r\n\t\t}\r\n\t\t.sta span, .km span {\r\n\t\t\tmargin: 0;\r\n\t\t\tline-heig" +
+                    "ht:107%;\r\n\t\t\tfont-size:9.0pt;\r\n\t\t\tline-height:normal;\r\n\t\t}\r\n\t\t.sta.last, .km.las" +
+                    "t {\r\n\t\t\tborder-bottom:solid black 1pt;\r\n\t\t}\r\n\t\t.last-t {\r\n\t\t\tborder-right:solid " +
+                    "black 1.5pt;\r\n\t\t}\r\n\t\t.km {\r\n\t\t\tborder-left:solid black 1.0pt;\r\n\t\t\tborder-right:s" +
+                    "olid black 1.0pt;\r\n\t\t\tpadding:0;\r\n\t\t}\r\n\t\t</style>\r\n\t\t<style id=\"add-css\">\r\n\t\t\t");
             
-            #line 112 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
+            #line 113 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(additionalCss));
             
             #line default
             #line hidden
             this.Write("\r\n\t\t</style>\r\n\t</head>\r\n\r\n\t<body>\r\n\t<p class=\"heading\">\r\n\t\t<span class=\"line\">");
             
-            #line 118 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
+            #line 119 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(kbs));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 118 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
+            #line 119 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(tt.GetLineName(TOP_DIRECTION)));
             
             #line default
             #line hidden
             this.Write(" </span>\r\n\t\t<span class=\"back\">und zurück</span>\r\n\t</p>\r\n\t");
             
-            #line 121 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
+            #line 122 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
 	var dirs = new[] { TOP_DIRECTION, BOTTOM_DIRECTION };
 		foreach (var direction in dirs) {
 		var trains = helper.GetTrains(direction);
@@ -112,11 +112,15 @@ namespace FPLedit.Kursbuch.Templates
             
             #line default
             #line hidden
-            this.Write("\t<table cellspacing=\"0\" cellpadding=\"0\">\r\n\t\t<tr>\r\n\t\t\t<td class=\"kmcap\" rowspan=\"2" +
-                    "\"><p>km</span></td>\r\n\t\t\t<td class=\"caption top\"><p><span>Zug Nr.</span></p></td>" +
-                    "\r\n\t\t\t");
+            this.Write(@"	<table cellspacing=""0"" cellpadding=""0"">
+		<tr>
+			<!-- rowspan=""2"" wenn Klassen hinzugefügt -->
+			<td class=""kmcap""><p>km</td>
+			<!-- bottom entfernen, wenn Klassen hinzugefügt -->
+			<td class=""caption top bottom""><p><span>Zug Nr.</span></p></td>
+			");
             
-            #line 130 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
+            #line 133 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
  foreach (var t in trains) {
 				var lastt = trains.Last() == t ? " last-t" : "";
 			
@@ -125,35 +129,35 @@ namespace FPLedit.Kursbuch.Templates
             #line hidden
             this.Write("\t\t\t\t<td class=\"tn");
             
-            #line 133 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
+            #line 136 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(lastt));
             
             #line default
             #line hidden
             this.Write("\"><span>");
             
-            #line 133 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
+            #line 136 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Sign(t)));
             
             #line default
             #line hidden
             
-            #line 133 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
+            #line 136 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(t.TName.Replace(" ", "&nbsp;")));
             
             #line default
             #line hidden
             this.Write("</span></td>\r\n\t\t\t");
             
-            #line 134 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
+            #line 137 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
  } 
             
             #line default
             #line hidden
-            this.Write("\t\t</tr>\r\n\t\t<tr>\r\n\t\t\t<td class=\"caption bottom\"><p><span>Klasse</span></p></td>\r\n\t" +
-                    "\t\t");
+            this.Write("\t\t</tr>\r\n\t\t<!--<tr>\r\n\t\t\t<td class=\"caption bottom\"><p><span>Klasse</span></p></td" +
+                    ">\r\n\t\t\t");
             
-            #line 138 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
+            #line 141 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
  foreach (var t in trains) {
 				var lastt = trains.Last() == t ? " last-t" : "";
 			
@@ -162,21 +166,21 @@ namespace FPLedit.Kursbuch.Templates
             #line hidden
             this.Write("\t\t\t<td class=\"kl");
             
-            #line 141 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
+            #line 144 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(lastt));
             
             #line default
             #line hidden
             this.Write("\"><span>2. oG</span></td>\r\n\t\t\t");
             
-            #line 142 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
+            #line 145 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
  } 
             
             #line default
             #line hidden
-            this.Write("\t\t</tr>\r\n\t\t");
+            this.Write("\t\t</tr>-->\r\n\t\t");
             
-            #line 144 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
+            #line 147 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
 
 		foreach (var sta in stations) { 
             
@@ -184,42 +188,42 @@ namespace FPLedit.Kursbuch.Templates
             #line hidden
             this.Write("\t\t<tr>\r\n\t\t\t");
             
-            #line 147 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
+            #line 150 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
  var last = stations.Last() == sta ? " last" : ""; 
             
             #line default
             #line hidden
             this.Write("\t\t\t<td class=\"km");
             
-            #line 148 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
+            #line 151 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(last));
             
             #line default
             #line hidden
             this.Write("\"><span>");
             
-            #line 148 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
+            #line 151 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(sta.Kilometre.ToString("0.0")));
             
             #line default
             #line hidden
             this.Write("</span></td>\r\n\t\t\t<td class=\"sta");
             
-            #line 149 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
+            #line 152 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(last));
             
             #line default
             #line hidden
             this.Write("\"><span>");
             
-            #line 149 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
+            #line 152 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(sta.SName.Replace(" ", "&nbsp;")));
             
             #line default
             #line hidden
             this.Write("</span></td>\r\n\r\n\t\t\t");
             
-            #line 151 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
+            #line 154 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
  foreach (var t in trains) {
 				var times = "";
 				var time = t.GetArrDep(sta).Departure;
@@ -233,35 +237,35 @@ namespace FPLedit.Kursbuch.Templates
             #line hidden
             this.Write("\t\t\t<td class=\"ti");
             
-            #line 159 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
+            #line 162 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(last));
             
             #line default
             #line hidden
             this.Write("\"><span>");
             
-            #line 159 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
+            #line 162 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(times));
             
             #line default
             #line hidden
             this.Write("</span></td>\r\n\t\t\t");
             
-            #line 160 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
+            #line 163 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\t\t</tr>\r\n\t\t");
             
-            #line 162 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
+            #line 165 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\t</table>\r\n\t");
             
-            #line 164 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
+            #line 167 "F:\VS-Projects\Buchfahrplan\Buchfahrplan\FPLedit.Kursbuch\Templates\KfplTemplate.tt"
  } 
             
             #line default

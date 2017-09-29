@@ -102,7 +102,7 @@ namespace FPLedit
             // Extensions laden & initialisieren (=> Initialisiert Importer/Exporter)
             new Editor.EditorPlugin().Init(this);
 
-            extensionManager = new ExtensionManager(Logger, Settings);
+            extensionManager = new ExtensionManager(Logger, Settings, new UpdateManager(Settings));
             var enabled_plgs = extensionManager.Plugins.Where(p => p.Enabled);
             foreach (var plugin in enabled_plgs)
                 plugin.TryInit(this);

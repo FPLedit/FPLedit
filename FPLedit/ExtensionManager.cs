@@ -16,11 +16,12 @@ namespace FPLedit
 
         private ISettings settings;
 
-        public ExtensionManager(ILog log, ISettings settings)
+        public ExtensionManager(ILog log, ISettings settings, UpdateManager updateMgr)
         {
             Plugins = new List<PluginInfo>();
             this.settings = settings;
             var enabledPlugins = settings.Get("extmgr.enabled", "").Split(';');
+            var currentVersion = updateMgr.GetCurrentVersion();
 
             var path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             DirectoryInfo dir = new DirectoryInfo(path);
@@ -39,10 +40,16 @@ namespace FPLedit
                         if (!typeof(IPlugin).IsAssignableFrom(type))
                             continue;
 
-                        if (type.GetCustomAttributes(typeof(PluginAttribute), false).Length != 1)
+                        object[] attribs = attribs = type.GetCustomAttributes(typeof(PluginAttribute), false);
+                        if (attribs.Length != 1)
                             continue;
 
                         bool enabled = enabledPlugins.Contains(type.FullName);
+                        var minVer = ((PluginAttribute)attribs[0]).MinVer;
+                        if (Version.TryParse(minVer, out Version res))
+                            if (currentVersion.CompareTo(res) > 0)
+                                continue; // Inkompatible Erweiterung
+
 
                         if (enabled)
                         {

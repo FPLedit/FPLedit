@@ -8,8 +8,9 @@ namespace FPLedit.Shared
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public class PluginAttribute : Attribute
     {
-        private string _name;
+        private string _name, _minVer;
         public string Name => _name;
+        public string MinVer => _minVer;
 
         public string Author { get; set; }
 
@@ -17,9 +18,10 @@ namespace FPLedit.Shared
 
         public string Version { get; set; }
 
-        public PluginAttribute(string name)
+        public PluginAttribute(string name, string minVer)
         {
             _name = name;
+            _minVer = minVer;
         }
     }
 }

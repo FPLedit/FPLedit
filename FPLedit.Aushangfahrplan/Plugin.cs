@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace FPLedit.Aushangfahrplan
 {
-    [Plugin("Modul für Aushangfahrpläne", Author = "Manuel Huber")]
+    [Plugin("Modul für Aushangfahrpläne", "1.5.0", Author = "Manuel Huber")]
     public class Plugin : IPlugin
     {
         private IInfo info;

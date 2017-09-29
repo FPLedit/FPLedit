@@ -58,7 +58,7 @@ namespace FPLedit.Aushangfahrplan.Forms
         }
 
         private void cssHelpLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-            => Process.Start("https://fahrplan.manuelhu.de/aushangfahrplaene/css/");
+            => Process.Start("https://fahrplan.manuelhu.de/dev/css/");
 
         private void fontComboBox_TextChanged(object sender, EventArgs e)
            => exampleLabel.Font = new Font(fontComboBox.Text, 10);

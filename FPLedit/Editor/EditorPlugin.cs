@@ -8,12 +8,12 @@ using System.Windows.Forms;
 
 namespace FPLedit.Editor
 {
-    [Plugin("Fahrplan-Editoren", Author = "Manuel Huber")]
+    //[Plugin("Fahrplan-Editoren", "1.5.0", Author = "Manuel Huber")]
     public class EditorPlugin : IPlugin
     {
         private IInfo info;
-        private ToolStripItem editLineItem, editTrainsItem, editTimetableItem, designItem, filterItem, undoItem;
-        private ToolStripMenuItem eitem, pitem;
+        private ToolStripItem editLineItem, editTrainsItem, editTimetableItem, designItem, filterItem;
+        private ToolStripMenuItem eitem, pitem, undoItem;
         private int dialogOffset;
 
         private IEditingDialog[] dialogs;
@@ -30,7 +30,8 @@ namespace FPLedit.Editor
             eitem = new ToolStripMenuItem("Bearbeiten");
             info.Menu.Items.Add(eitem);
 
-            undoItem = eitem.DropDownItems.Add("Rückgängig");
+            undoItem = (ToolStripMenuItem)eitem.DropDownItems.Add("Rückgängig");
+            undoItem.ShortcutKeys = Keys.Control | Keys.Z;
             undoItem.Enabled = false;
             undoItem.Click += (s,e) => info.Undo();
 
