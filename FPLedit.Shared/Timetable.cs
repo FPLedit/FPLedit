@@ -88,7 +88,7 @@ namespace FPLedit.Shared
             if (Type == TimetableType.Network)
             {
                 nextStaId = stations.Max(s => s.Id);
-                nextRtId = stations.SelectMany(s => s.Routes).Max();
+                nextRtId = stations.SelectMany(s => s.Routes).DefaultIfEmpty().Max();
             }
         }
 

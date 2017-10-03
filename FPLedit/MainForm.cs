@@ -75,7 +75,7 @@ namespace FPLedit
                 + (fileState.FileName != null ? (Path.GetFileName(fileState.FileName) + " ") : "")
                 + (fileState.Saved ? "" : "*");
 
-            lineRenderer.SetLine(Timetable?.Stations);
+            lineRenderer.SetLine(Timetable);
         }
 
         public event EventHandler<FileStateChangedEventArgs> FileStateChanged;
@@ -114,7 +114,7 @@ namespace FPLedit
                 Editor.EditStationForm nsf = new Editor.EditStationForm((Station)s);
                 if (nsf.ShowDialog() == DialogResult.OK)
                 {
-                    lineRenderer.SetLine(Timetable?.Stations);
+                    lineRenderer.SetLine(Timetable);
                     SetUnsaved();
                 }
             };
@@ -128,7 +128,8 @@ namespace FPLedit
                 strip.Show(MousePosition);
                 itm.Click += (se, ar) => {
                     undo.StageUndoStep(Timetable);
-                    Timetable.RemoveStation((Station)s); lineRenderer.SetLine(Timetable?.Stations);
+                    Timetable.RemoveStation((Station)s);
+                    lineRenderer.SetLine(Timetable);
                     SetUnsaved();
                 };
             };
@@ -139,6 +140,12 @@ namespace FPLedit
                 if (nsf.ShowDialog() == DialogResult.OK)
                 {
                     Station sta = nsf.Station;
+                    if (Timetable.Type == TimetableType.Network)
+                    {
+                        var r = sta.Routes.ToList();
+                        r.Add(0);
+                        sta.Routes = r.ToArray();
+                    }
                     Timetable.AddStation(sta);
                     SetUnsaved();
                 }
@@ -328,7 +335,7 @@ namespace FPLedit
         {
             if (!NotifyIfUnsaved())
                 return;
-            Timetable = new Timetable();
+            Timetable = new Timetable(TimetableType.Network); //TODO: Art wählbar
             fileState.Opened = true;
             fileState.Saved = false;
             fileState.FileName = null;

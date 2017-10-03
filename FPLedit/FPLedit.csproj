@@ -144,7 +144,7 @@
       <DependentUpon>InfoForm.cs</DependentUpon>
     </Compile>
     <Compile Include="IRestartable.cs" />
-    <Compile Include="LineRenderer.cs">
+    <Compile Include="NewEditor\LineRenderer.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="LogControl.cs">
@@ -180,6 +180,7 @@
     <Compile Include="Templating\Template.cs" />
     <Compile Include="Templating\TemplateHost.cs" />
     <Compile Include="Templating\TemplateManager.cs" />
+    <Compile Include="NewEditor\StaPosReader.cs" />
     <Compile Include="UndoManager.cs" />
     <Compile Include="UpdateManager.cs" />
     <Content Include="Resources\trapeztafel.png" />
