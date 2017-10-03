@@ -14,6 +14,10 @@ namespace FPLedit.Shared
     {
         XMLEntity sElm, tElm;
 
+        public TimetableType Type { get; private set; }
+        private int nextStaId = 0;
+        private int nextRtId = 0;
+
         public string TTName
         {
             get => GetAttribute("name", "");
@@ -27,20 +31,30 @@ namespace FPLedit.Shared
 
         public List<Train> Trains => trains;
 
-        public Timetable() : base("jTrainGraph_timetable", null) // Root without parent
+        public Timetable() : this(TimetableType.Linear)
         {
+
+        }
+
+        public Timetable(TimetableType type) : base("jTrainGraph_timetable", null) // Root without parent
+        {
+            Type = type;
             stations = new List<Station>();
             trains = new List<Train>();
 
-            SetAttribute("version", "008");
+            SetAttribute("version", type == TimetableType.Network ? "100" : "008"); // version="100" nicht kompatibel mit jTrainGraph
             sElm = new XMLEntity("stations");
             tElm = new XMLEntity("trains");
             Children.Add(sElm);
             Children.Add(tElm);
         }
 
-        public Timetable(XMLEntity en) : base(en, null) // Root without parent
+        public Timetable(XMLEntity en, TimetableType type) : base(en, null)
         {
+            Type = type;
+            if (type == TimetableType.Network && en.GetAttribute<string>("version") != "100")
+                throw new Exception("Falsche Versionsummer für Netzwerk-Fahrplandatei!");
+
             stations = new List<Station>();
             sElm = Children.FirstOrDefault(x => x.XName == "stations");
             if (sElm != null)
@@ -61,7 +75,8 @@ namespace FPLedit.Shared
 
             if (tElm != null)
             {
-                foreach (var c in tElm.Children.Where(x => x.XName == "ti" || x.XName == "ta")) // Filtert andere Elemente
+                var directions = Enum.GetNames(typeof(TrainDirection));
+                foreach (var c in tElm.Children.Where(x => directions.Contains(x.XName))) // Filtert andere Elemente
                     trains.Add(new Train(c, this));
             }
             else
@@ -69,10 +84,22 @@ namespace FPLedit.Shared
                 tElm = new XMLEntity("trains");
                 Children.Add(tElm);
             }
+
+            if (Type == TimetableType.Network)
+            {
+                nextStaId = stations.Max(s => s.Id);
+                nextRtId = stations.SelectMany(s => s.Routes).Max();
+            }
+        }
+
+        public Timetable(XMLEntity en) : this(en, TimetableType.Linear) // Root without parent
+        {
         }
 
         public List<Station> GetStationsOrderedByDirection(TrainDirection direction)
         {
+            if (Type == TimetableType.Network)
+                throw new NotSupportedException("Netzwerk-Fahrpläne haben keine Richtung!");
             return (direction == TrainDirection.ta ?
                 Stations.OrderByDescending(s => s.Kilometre)
                 : Stations.OrderBy(s => s.Kilometre)).ToList();
@@ -80,6 +107,8 @@ namespace FPLedit.Shared
 
         public string GetLineName(TrainDirection direction)
         {
+            if (Type == TimetableType.Network)
+                throw new NotSupportedException("Netzwerk-Fahrpläne haben keine Richtung!");
             var stas = GetStationsOrderedByDirection(direction);
             return stas.First().SName + " - " + stas.Last().SName;
         }
@@ -99,6 +128,10 @@ namespace FPLedit.Shared
 
         public void AddStation(Station sta)
         {
+            // Neue Id an Station vergeben
+            if (Type == TimetableType.Network)
+                sta.Id = nextStaId++;
+
             sta._parent = this;
             stations.Add(sta);
             stations = stations.OrderBy(s => s.Kilometre).ToList();
@@ -122,8 +155,23 @@ namespace FPLedit.Shared
                 t.AddArrDep(sta, new ArrDep());
         }
 
+        // "Eröffnet" eine neue Strecke zwischen zwei Bahnhöfen
+        public void AddRoute(Station s1, Station s2)
+        {
+            if (Type == TimetableType.Linear)
+                throw new NotSupportedException("Lineare Strecken haben keine Routen!");
+            var idx = nextRtId++;
+            var r1 = s1.Routes.ToList();
+            var r2 = s2.Routes.ToList();
+            r1.Add(idx);
+            r2.Add(idx);
+            s1.Routes = r1.ToArray();
+            s2.Routes = r2.ToArray();
+        }
+
         public void RemoveStation(Station sta)
         {
+            //TODO: Notify about removal
             foreach (var train in Trains)
                 train.RemoveArrDep(sta);
 
@@ -141,9 +189,16 @@ namespace FPLedit.Shared
                 train.RemoveOrphanedTimes();
         }
 
+        public Station GetStationById(int id)
+        {
+            if (Type == TimetableType.Linear)
+                throw new NotSupportedException("Lineare Strecken haben Stations-Ids!");
+            return stations.FirstOrDefault(s => s.Id == id);
+        }
+
         public void AddTrain(Train tra, bool hasArDeps = false)
         {
-            if (!hasArDeps)
+            if (!hasArDeps && Type == TimetableType.Linear)
                 foreach (var sta in Stations)
                     tra.AddArrDep(sta, new ArrDep());
 

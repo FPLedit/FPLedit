@@ -5,10 +5,9 @@ using System.Text;
 
 namespace FPLedit.Shared
 {
-    public enum TrainDirection
+    public enum TimetableType
     {
-        ti, // train in
-        ta,  // train against
-        tr // Allgemeiner Zug im Graph
+        Linear,
+        Network
     }
 }

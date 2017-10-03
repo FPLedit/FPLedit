@@ -69,6 +69,33 @@ namespace FPLedit.Shared
             return ardp;
         }
 
+        public Dictionary<Station, ArrDep> GetArrDeps()
+        {
+            if (_parent.Type == TimetableType.Linear)
+                throw new NotSupportedException("Lineare Fahrpläne haben keine Station-Ids!");
+
+            var ret = new Dictionary<Station, ArrDep>();
+            var tElm = Children.Where(x => x.XName == "t").ToList();
+            foreach (var t in tElm)
+            {
+                ArrDep ardp = new ArrDep();
+                var sta = _parent.GetStationById(t.GetAttribute<int>("fpl-id"));
+
+                if (t.GetAttribute("a", "") != "")
+                    ardp.Arrival = TimeSpan.Parse(t.GetAttribute<string>("a"));
+
+                if (t.GetAttribute("d", "") != "")
+                    ardp.Departure = TimeSpan.Parse(t.GetAttribute<string>("d"));
+
+                if (t.GetAttribute("fpl-tr", "") != "")
+                    ardp.TrapeztafelHalt = Convert.ToBoolean(t.GetAttribute<int>("fpl-tr"));
+                if (t.GetAttribute("fpl-zlm", "") != "")
+                    ardp.Zuglaufmeldung = t.GetAttribute<string>("fpl-zlm");
+                ret.Add(sta, ardp);
+            }
+            return ret;
+        }
+
         public void RemoveArrDep(Station sta)
         {
             var stas = _parent.Stations.OrderBy(s => s.Kilometre).ToList();
@@ -119,7 +146,7 @@ namespace FPLedit.Shared
             set => SetAttribute("fpl-last", value);
         }
 
-        public TrainDirection Direction => XName == "ti" ? TrainDirection.ti : TrainDirection.ta;
+        public TrainDirection Direction => (TrainDirection)Enum.Parse(typeof(TrainDirection), XName);
 
         public string Comment
         {
@@ -135,6 +162,10 @@ namespace FPLedit.Shared
 
         public Train(TrainDirection dir, Timetable tt) : base(dir.ToString(), tt)
         {
+            if (tt.Type == TimetableType.Network && dir != TrainDirection.tr)
+                throw new NotSupportedException("Netzwerk-Fahrpläne haben keine gerichteten Züge");
+            else if (tt.Type == TimetableType.Linear && dir == TrainDirection.tr)
+                throw new NotSupportedException("Lineare Fahrpläne haben haben nur gerichtete Züge");
         }
 
         public Train(XMLEntity en, Timetable tt) : base(en, tt)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 
 namespace FPLedit.Shared
 {
@@ -38,6 +39,40 @@ namespace FPLedit.Shared
         {
             get => GetAttribute("fpl-vmax", "");
             set => SetAttribute("fpl-vmax", value);
+        }
+
+        public int Id
+        {
+            get
+            {
+                if (_parent.Type == TimetableType.Linear)
+                    throw new NotSupportedException("Lineare Strecken haben keine Bahnhofs-Ids");
+                return GetAttribute<int>("fpl-id");
+            }
+            set
+            {
+                if (_parent.Type == TimetableType.Linear)
+                    throw new NotSupportedException("Lineare Strecken haben keine Bahnhofs-Ids");
+                SetAttribute("fpl-id", value.ToString());
+            }
+        }
+
+        public int[] Routes
+        {
+            get
+            {
+                if (_parent.Type == TimetableType.Linear)
+                    throw new NotSupportedException("Lineare Strecken haben keine Routen-Ids");
+                return GetAttribute("fpl-rt", "")
+                    .Split(',')
+                    .Select(s => int.Parse(s)).ToArray();
+            }
+            set
+            {
+                if (_parent.Type == TimetableType.Linear)
+                    throw new NotSupportedException("Lineare Strecken haben keine Routen-Ids");
+                SetAttribute("fpl-rt", string.Join(",", value));
+            }
         }
     }
 }

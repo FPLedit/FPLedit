@@ -2,8 +2,10 @@
 
 namespace FPLedit.Shared
 {
+    //TODO: Neue Methoden vom Timetable hier eintragen
     public interface ITimetable
     {
+        TimetableType Type { get; }
         List<Station> Stations { get; }
         List<Train> Trains { get; }
         string TTName { get; set; }
