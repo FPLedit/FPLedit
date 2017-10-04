@@ -144,6 +144,12 @@
       <DependentUpon>InfoForm.cs</DependentUpon>
     </Compile>
     <Compile Include="IRestartable.cs" />
+    <Compile Include="NewEditor\LineEditingControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="NewEditor\LineEditingControl.Designer.cs">
+      <DependentUpon>LineEditingControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="NewEditor\LineRenderer.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -169,6 +175,7 @@
     </Compile>
     <Compile Include="RegisterStore.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="NewEditor\StaPosHandler.cs" />
     <Compile Include="TemplatesForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -221,6 +228,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewEditor\LineEditingControl.resx">
+      <DependentUpon>LineEditingControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

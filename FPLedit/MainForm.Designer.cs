@@ -44,8 +44,8 @@
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.exportFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.importFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.lineRenderer = new FPLedit.LineRenderer();
             this.logTextBox = new FPLedit.LogControl();
+            this.lineEditingControl1 = new FPLedit.NewEditor.LineEditingControl();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -148,15 +148,6 @@
             this.quitToolStripMenuItem.Text = "Beenden";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
             // 
-            // lineRenderer
-            // 
-            this.lineRenderer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lineRenderer.Location = new System.Drawing.Point(0, 23);
-            this.lineRenderer.Name = "lineRenderer";
-            this.lineRenderer.Size = new System.Drawing.Size(849, 374);
-            this.lineRenderer.TabIndex = 2;
-            this.lineRenderer.Text = "lineRenderer1";
-            // 
             // logTextBox
             // 
             this.logTextBox.BackColor = System.Drawing.Color.White;
@@ -168,13 +159,21 @@
             this.logTextBox.Size = new System.Drawing.Size(849, 85);
             this.logTextBox.TabIndex = 1;
             // 
+            // lineEditingControl1
+            // 
+            this.lineEditingControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lineEditingControl1.Location = new System.Drawing.Point(0, 23);
+            this.lineEditingControl1.Name = "lineEditingControl1";
+            this.lineEditingControl1.Size = new System.Drawing.Size(849, 374);
+            this.lineEditingControl1.TabIndex = 2;
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(849, 482);
-            this.Controls.Add(this.lineRenderer);
+            this.Controls.Add(this.lineEditingControl1);
             this.Controls.Add(this.logTextBox);
             this.Controls.Add(this.menuStrip);
             this.Icon = global::FPLedit.Properties.Resources.programm;
@@ -212,7 +211,7 @@
         private System.Windows.Forms.ToolStripMenuItem lastFilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
-        private LineRenderer lineRenderer;
+        private NewEditor.LineEditingControl lineEditingControl1;
     }
 }
 

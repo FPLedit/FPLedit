@@ -74,8 +74,6 @@ namespace FPLedit
             Text = "FPLedit - "
                 + (fileState.FileName != null ? (Path.GetFileName(fileState.FileName) + " ") : "")
                 + (fileState.Saved ? "" : "*");
-
-            lineRenderer.SetLine(Timetable);
         }
 
         public event EventHandler<FileStateChangedEventArgs> FileStateChanged;
@@ -87,11 +85,10 @@ namespace FPLedit
         {
             InitializeComponent();
 
-            InitializeNewEditing();
-
             Settings = new Settings();
             undo = new UndoManager();
             registry = new RegisterStore();
+            lineEditingControl1.Initialize(this);
 
             open = new XMLImport();
             save = new XMLExport();
@@ -104,52 +101,6 @@ namespace FPLedit
                 Logger = new MultipleLogger(logTextBox, new TempLogger(this));
             else
                 Logger = new MultipleLogger(logTextBox);
-        }
-
-        private void InitializeNewEditing()
-        {
-            lineRenderer.StationDoubleClicked += (s, e) =>
-            {
-                undo.StageUndoStep(Timetable);
-                Editor.EditStationForm nsf = new Editor.EditStationForm((Station)s);
-                if (nsf.ShowDialog() == DialogResult.OK)
-                {
-                    lineRenderer.SetLine(Timetable);
-                    SetUnsaved();
-                }
-            };
-            lineRenderer.StationClicked += (s, e) =>
-            {
-                if (e.Button != MouseButtons.Right)
-                    return;
-
-                var strip = new ContextMenuStrip();
-                var itm = strip.Items.Add("Löschen");
-                strip.Show(MousePosition);
-                itm.Click += (se, ar) => {
-                    undo.StageUndoStep(Timetable);
-                    Timetable.RemoveStation((Station)s);
-                    lineRenderer.SetLine(Timetable);
-                    SetUnsaved();
-                };
-            };
-            lineRenderer.NewButtonClicked += (s, e) =>
-            {
-                undo.StageUndoStep(Timetable);
-                Editor.EditStationForm nsf = new Editor.EditStationForm(Timetable);
-                if (nsf.ShowDialog() == DialogResult.OK)
-                {
-                    Station sta = nsf.Station;
-                    if (Timetable.Type == TimetableType.Network)
-                    {
-                        var r = sta.Routes.ToList();
-                        r.Add(0);
-                        sta.Routes = r.ToArray();
-                    }
-                    Timetable.AddStation(sta);
-                    SetUnsaved();
-                }
-            };
         }
 
         private void Form1_Load(object sender, EventArgs e)

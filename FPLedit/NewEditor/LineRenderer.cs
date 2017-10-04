@@ -10,39 +10,33 @@ namespace FPLedit
 {
     internal class LineRenderer : Control
     {
+        private Timetable tt;
         private List<Panel> panels = new List<Panel>();
-        private int markedStation;
         private Font font;
-        private Button btn;
+        private Pen linePen;
 
+        private StaPosHandler handler;
         private Dictionary<Station, Point> stapos;
         private List<List<Station>> routes;
 
         public event EventHandler<MouseEventArgs> StationClicked;
         public event EventHandler<MouseEventArgs> StationDoubleClicked;
-        public event EventHandler NewButtonClicked;
+
+        private const int OFFSET_X = 20;
+        private const int OFFSET_Y = 50;
 
         public LineRenderer()
         {
             this.DoubleBuffered = true;
             font = new Font(Font.FontFamily, 8);
-
-            btn = new Button()
-            {
-                Text = "Neue Station",
-                AutoSize = true,
-                Location = new Point(10, 10),
-                Enabled = false,
-            };
-            this.Controls.Add(btn);
-            btn.Click += (s, e) => NewButtonClicked?.Invoke(btn, null);
+            linePen = new Pen(Color.Black, 2.0f);
+            handler = new StaPosHandler();
         }
 
         public void SetLine(Timetable tt)
         {
-            if (tt != null)
-                btn.Enabled = true;
-            else
+            this.tt = tt;
+            if (tt == null)
             {
                 routes = null;
                 this.Invalidate();
@@ -54,7 +48,7 @@ namespace FPLedit
                 routes = new List<List<Station>>();
                 routes.Add(tt.Stations);
 
-                stapos = new StaPosReader().GenerateLinearPoints(tt, ClientSize.Width);
+                stapos = handler.GenerateLinearPoints(tt, ClientSize.Width);
             }
             else
             {
@@ -66,7 +60,7 @@ namespace FPLedit
                     routes.Add(rt);
                 }
 
-                stapos = new StaPosReader().LoadNetworkPoints(tt);
+                stapos = handler.LoadNetworkPoints(tt);
             }
 
             this.Invalidate();
@@ -89,8 +83,8 @@ namespace FPLedit
             if (routes == null || routes.Count == 0)
                 return;
 
-            var xOffset = 40;
-            var yOffset = 50;
+            var xOffset = OFFSET_X;
+            var yOffset = OFFSET_Y;
 
             foreach (var r in routes)
             {
@@ -110,14 +104,27 @@ namespace FPLedit
 
                     e.Graphics.EndContainer(cont);
 
-                    var p = new Panel() { Location = new Point(x - 5, y - 5), Size = new Size(10, 10), BackColor = Color.Gray };
+                    var p = new Panel() {
+                        Location = new Point(x - 5, y - 5),
+                        Size = new Size(10, 10),
+                        BackColor = Color.Gray,
+                        Tag = sta,
+                    };
                     p.MouseDoubleClick += (s, args) => StationDoubleClicked?.Invoke(sta, args);
                     p.MouseClick += (s, args) => StationClicked?.Invoke(sta, args);
+
+                    // Drag'n'Drop-Events
+                    p.MouseDown += (s, args) => {
+                        draggedControl = (Control)s;
+                        Cursor.Current = Cursors.SizeAll;
+                    };
+                    p.MouseMove += (s, args) => this.OnMouseMove(args);
+                    p.MouseUp += (s, args) => this.OnMouseUp(args);
                     Controls.Add(p);
                     panels.Add(p);
 
                     if (lastP.HasValue)
-                        e.Graphics.DrawLine(Pens.Black, x, y, xOffset + lastP.Value.X, yOffset + lastP.Value.Y);
+                        e.Graphics.DrawLine(linePen, x, y, xOffset + lastP.Value.X, yOffset + lastP.Value.Y);
                     lastP = pos;
                 }
             }
@@ -131,5 +138,47 @@ namespace FPLedit
             this.Invalidate();
             base.OnResize(e);
         }
+
+        #region Drag'n'Drop
+        private Control draggedControl;
+        private bool hasDragged = false;
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            if (draggedControl != null)
+            {
+                var p = PointToClient(MousePosition);
+
+                //Not getting out of bounds
+                if (p.X < 0)
+                    p.X = 0;
+                if (p.Y < 0)
+                    p.Y = 0;
+                if (p.X > ClientSize.Width)
+                    p.X = ClientSize.Width;
+                if (p.Y > ClientSize.Height)
+                    p.Y = ClientSize.Height;
+
+                draggedControl.Location = p;
+                stapos[(Station)draggedControl.Tag] = new Point(p.X - OFFSET_X, p.Y - OFFSET_Y);
+                hasDragged = true;
+                Refresh();
+            }
+            base.OnMouseMove(e);
+        }
+
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            if (draggedControl != null)
+            {
+                draggedControl = null;
+                Cursor.Current = Cursors.Default;
+                handler.WriteStapos(tt, stapos);
+                if (hasDragged)
+                    Refresh();
+                hasDragged = false;
+            }
+            base.OnMouseUp(e);
+        }
+        #endregion
     }
 }
