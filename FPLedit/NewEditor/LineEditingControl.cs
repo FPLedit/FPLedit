@@ -19,6 +19,25 @@ namespace FPLedit.NewEditor
             InitializeComponent();
         }
 
+        private IndexedItem[] GetLineNames(Timetable tt)
+        {
+            var routes = new List<IndexedItem>();
+
+            if (tt.Type == TimetableType.Network)
+            {
+                var routesIndices = tt.Stations.SelectMany(s => s.Routes).Distinct();
+                foreach (var ri in routesIndices)
+                {
+                    var rt = tt.Stations.Where(s => s.Routes.Contains(ri)).OrderBy(s => s.Kilometre).ToList();
+                    var text = (rt.FirstOrDefault()?.SName ?? "") + " - " + (rt.LastOrDefault()?.SName ?? "");
+                    routes.Add(new IndexedItem(text, ri));
+                }
+            }
+            else
+                routes.Add(new IndexedItem("<Standard>", 0));
+            return routes.ToArray();
+        }
+
         public void Initialize(IInfo info)
         {
             this.info = info;
@@ -26,7 +45,18 @@ namespace FPLedit.NewEditor
             {
                 lineRenderer.SetLine(info.Timetable);
                 newButton.Enabled = e.FileState.Opened;
+
+                if (e.FileState.LineCreated)
+                {
+                    var routes = GetLineNames(info.Timetable);
+                    comboBox1.Items.Clear();
+                    comboBox1.Items.AddRange(routes);
+                    comboBox1.SelectedIndex = 0;
+                }
             };
+
+            comboBox1.SelectedIndexChanged += (s, e)
+                => lineRenderer.SelectedRoute = ((IndexedItem)comboBox1.SelectedItem).Index;
 
             lineRenderer.StationDoubleClicked += (s, e) =>
             {
@@ -65,7 +95,7 @@ namespace FPLedit.NewEditor
                         var handler = new StaPosHandler();
                         handler.SetMiddlePos(0, sta, info.Timetable);
                         var r = sta.Routes.ToList();
-                        r.Add(0);
+                        r.Add(lineRenderer.SelectedRoute);
                         sta.Routes = r.ToArray();
                         lineRenderer.SetLine(info.Timetable);
                     }
@@ -73,6 +103,23 @@ namespace FPLedit.NewEditor
                     info.SetUnsaved();
                 }
             };
+        }
+    }
+
+    internal class IndexedItem
+    {
+        public string Text { get; set; }
+        public int Index { get; set; }
+
+        public IndexedItem(string text, int idx)
+        {
+            Text = text;
+            Index = idx;
+        }
+
+        public override string ToString()
+        {
+            return Text;
         }
     }
 }

@@ -15,6 +15,13 @@ namespace FPLedit
         private Font font;
         private Pen linePen;
 
+        private int _selectedRoute = 0;
+        public int SelectedRoute
+        {
+            get => _selectedRoute;
+            set { _selectedRoute = value; this.Invalidate(); }
+        }
+
         private StaPosHandler handler;
         private Dictionary<Station, Point> stapos;
         private List<List<Station>> routes;
@@ -88,6 +95,10 @@ namespace FPLedit
 
             foreach (var r in routes)
             {
+                var pen = linePen;
+                //TODO: Möglicherweise stimmen indices der Liste nicht mit den indices in der Datei überein.
+                if (routes.IndexOf(r) == SelectedRoute)
+                    pen = new Pen(Color.Red, 2);
                 Point? lastP = null;
                 foreach (var sta in r)
                 {
@@ -104,7 +115,8 @@ namespace FPLedit
 
                     e.Graphics.EndContainer(cont);
 
-                    var p = new Panel() {
+                    var p = new Panel()
+                    {
                         Location = new Point(x - 5, y - 5),
                         Size = new Size(10, 10),
                         BackColor = Color.Gray,
@@ -114,7 +126,8 @@ namespace FPLedit
                     p.MouseClick += (s, args) => StationClicked?.Invoke(sta, args);
 
                     // Drag'n'Drop-Events
-                    p.MouseDown += (s, args) => {
+                    p.MouseDown += (s, args) =>
+                    {
                         draggedControl = (Control)s;
                         Cursor.Current = Cursors.SizeAll;
                     };
@@ -124,7 +137,7 @@ namespace FPLedit
                     panels.Add(p);
 
                     if (lastP.HasValue)
-                        e.Graphics.DrawLine(linePen, x, y, xOffset + lastP.Value.X, yOffset + lastP.Value.Y);
+                        e.Graphics.DrawLine(pen, x, y, xOffset + lastP.Value.X, yOffset + lastP.Value.Y);
                     lastP = pos;
                 }
             }

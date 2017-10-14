@@ -30,12 +30,13 @@
         {
             this.newButton = new System.Windows.Forms.Button();
             this.lineRenderer = new FPLedit.LineRenderer();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // newButton
             // 
             this.newButton.Enabled = false;
-            this.newButton.Location = new System.Drawing.Point(3, 3);
+            this.newButton.Location = new System.Drawing.Point(131, 2);
             this.newButton.Name = "newButton";
             this.newButton.Size = new System.Drawing.Size(86, 23);
             this.newButton.TabIndex = 1;
@@ -53,11 +54,21 @@
             this.lineRenderer.TabIndex = 0;
             this.lineRenderer.Text = "lineRenderer1";
             // 
+            // comboBox1
+            // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(4, 4);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 21);
+            this.comboBox1.TabIndex = 2;
+            // 
             // LineEditingControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.newButton);
             this.Controls.Add(this.lineRenderer);
             this.Name = "LineEditingControl";
@@ -70,5 +81,6 @@
 
         private LineRenderer lineRenderer;
         private System.Windows.Forms.Button newButton;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }
