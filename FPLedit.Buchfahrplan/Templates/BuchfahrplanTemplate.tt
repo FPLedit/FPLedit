@@ -3,6 +3,10 @@
 <#@ import namespace="FPLedit.Buchfahrplan.Model" #>
 <#@ import namespace="FPLedit.Buchfahrplan.Properties" #>
 
+<# string Test() {
+return "";
+} #>
+
 <!DOCTYPE html>
 <html>
 	<head>

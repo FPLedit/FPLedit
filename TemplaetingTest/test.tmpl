@@ -1,0 +1,22 @@
+﻿<#@ import System.Reflection #>
+<#@ import FPLedit.Shared #>
+<#@ assembly FPLedit.Shared.dll #>
+
+<#@ define int Test(int y) {
+	return y + 200;
+} #>
+
+<# string classname = "Test"; // test
+	string s = "test";
+#>
+
+public class <#= classname #>
+{
+   public <#= classname #><#= s #> ()
+   {
+   }
+   <# for (int i=0; i< 2 ; i++)
+   { #>
+      <#= Test(i) #>
+   <# } #>
+}
