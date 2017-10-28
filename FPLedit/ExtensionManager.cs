@@ -47,7 +47,7 @@ namespace FPLedit
                         bool enabled = enabledPlugins.Contains(type.FullName);
                         var minVer = ((PluginAttribute)attribs[0]).MinVer;
                         if (Version.TryParse(minVer, out Version res))
-                            if (currentVersion.CompareTo(res) > 0)
+                            if (currentVersion.CompareTo(res) < 0)
                                 continue; // Inkompatible Erweiterung
 
 
