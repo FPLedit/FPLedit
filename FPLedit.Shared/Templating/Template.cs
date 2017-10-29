@@ -7,13 +7,13 @@ using System.Text.RegularExpressions;
 namespace FPLedit.Shared.Templating
 {
     // Based on: https://www.codeproject.com/Articles/15728/Write-your-own-Code-Generator-or-Template-Engine-i
-    public class Template
+    public class Template : ITemplate
     {
         private string code;
         private List<string> usings;
         private List<string> assemblyReferences;
         private string functions;
-        private string templateDeclaration;
+        public string TemplateType { get; private set; }
 
         private string _codeCache;
 
@@ -22,20 +22,22 @@ namespace FPLedit.Shared.Templating
         public Template(string code)
         {
             this.code = code + "<##>";
-            usings =  new List<string>() { "System", "System.IO", "System.Text", "FPLedit.Shared" };
+            usings = new List<string>() { "System", "System.IO", "System.Text", "FPLedit.Shared" };
             assemblyReferences = new List<string>();
+
+            BuildCodeCache();
         }
 
         #region Parser
 
-        public string GetParsedResult()
+        private void BuildCodeCache()
         {
-            if (_codeCache == null)
-            {
-                var body = GetMethodBody();
-                string usingsCode = string.Join("", usings.Distinct().Select(u => $"using {u};{nl}"));
+            if (_codeCache != null)
+                return;
+            var body = GetMethodBody();
+            string usingsCode = string.Join("", usings.Distinct().Select(u => $"using {u};{nl}"));
 
-                _codeCache = $@"{usingsCode}
+            _codeCache = $@"{usingsCode}
 namespace FPLedit.Shared.Templating
 {{
 	public class TemplateParser
@@ -57,8 +59,6 @@ namespace FPLedit.Shared.Templating
 		{functions}
 	}}
 }}";
-            }
-            return _codeCache;
         }
 
 
@@ -106,9 +106,9 @@ namespace FPLedit.Shared.Templating
 
         private string TemplateDefinition(Match m)
         {
-            if (templateDeclaration != null)
-                throw new Exception("Nur eine fpledit-template-type-Deirektive pro Vorlage erlaubt!");
-            templateDeclaration = m.Groups[1].ToString().Trim();
+            if (TemplateType != null)
+                throw new Exception("Nur eine fpledit-template-type-Direktive pro Vorlage erlaubt!");
+            TemplateType = m.Groups[1].ToString().Trim();
             return "";
         }
 
@@ -140,7 +140,7 @@ namespace FPLedit.Shared.Templating
             {
                 if (lnAt > -1)
                     // Catch the plain text write out to the Response Stream as is - fix up for quotes
-                    builder.Append("builder.Append(@\"" + code.Substring(lnLast, lnAt - lnLast).Replace("\"", "\"\"") + "\");"+ nl);
+                    builder.Append("builder.Append(@\"" + code.Substring(lnLast, lnAt - lnLast).Replace("\"", "\"\"") + "\");" + nl);
 
                 // Find end tag
                 lnAt2 = code.IndexOf("#>", lnAt);
@@ -165,11 +165,13 @@ namespace FPLedit.Shared.Templating
         {
             try
             {
-                string code = GetParsedResult().Trim();
-                if (templateDeclaration == null)
+                BuildCodeCache(); // Ensure that we have code to compile
+
+                if (TemplateType == null)
                     throw new Exception("Keine fpledit-template-type-Deirektive vorhanden!");
+
                 Compiler engine = new Compiler();
-                return engine.RunTemplate(code, assemblyReferences.ToArray(), tt);
+                return engine.RunTemplate(_codeCache, assemblyReferences.ToArray(), tt);
             }
             catch (Exception ex)
             {

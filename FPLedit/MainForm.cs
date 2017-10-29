@@ -9,6 +9,7 @@ using System.Drawing;
 using FPLedit.Shared.Filetypes;
 using System.Diagnostics;
 using FPLedit.Logger;
+using FPLedit.Shared.Templating;
 
 namespace FPLedit
 {
@@ -21,6 +22,7 @@ namespace FPLedit
 
         private FileState fileState;
 
+        private TemplateManager templateManager;
         private ExtensionManager extensionManager;
         private UndoManager undo;
         private RegisterStore registry;
@@ -110,6 +112,13 @@ namespace FPLedit
             InitializeExportImport();
             InitializeMenus();
 
+            // Vorlagen laden
+            templateManager = new TemplateManager(registry);
+            templateManager.LoadTemplates();
+
+            //TODO: Remove testcase
+            var res = templateManager.GetTemplates("bfpl")[0].GenerateResult(Timetable);
+
             ExtensionsLoaded?.Invoke(this, new EventArgs());
 
             // Parameter: Fpledit.exe [Dateiname] ODER Datei aus Restart
@@ -119,9 +128,6 @@ namespace FPLedit
             if (fn != null && File.Exists(fn))
                 InternalOpen(fn);
             Settings.Remove("restart.file");
-
-            //TODO: Remove test
-            new TemplateHost().Run("test.tmpl", Timetable);
         }
 
         private void InitializeExportImport()
@@ -414,6 +420,8 @@ namespace FPLedit
 
         #region IInfo
         dynamic IInfo.Menu => menuStrip;
+
+        public ITemplateManager TemplateManager => templateManager;
 
         public void Register<T>(T obj)
             => registry.Register<T>(obj);

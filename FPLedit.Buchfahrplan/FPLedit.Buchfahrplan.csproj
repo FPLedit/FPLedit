@@ -54,6 +54,7 @@
     <Compile Include="Model\BfplAttrs.cs" />
     <Compile Include="Model\BfplPoint.cs" />
     <Compile Include="Templates\TemplateHelper.cs" />
+    <Compile Include="Templates\TestTemplate.cs" />
     <Compile Include="Templates\ZLBTemplateCode.cs" />
     <Compile Include="Templates\ZLBTemplate.cs">
       <DependentUpon>ZLBTemplate.tt</DependentUpon>
@@ -129,6 +130,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Templates\test.tmpl" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

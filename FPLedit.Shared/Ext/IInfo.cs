@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FPLedit.Shared.Templating;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -46,6 +47,8 @@ namespace FPLedit.Shared
         ILog Logger { get; }
 
         ISettings Settings { get; }
+
+        ITemplateManager TemplateManager { get; }
 
         event EventHandler<FileStateChangedEventArgs> FileStateChanged;
 

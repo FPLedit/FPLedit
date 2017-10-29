@@ -10,24 +10,35 @@ using System.Windows.Forms;
 
 namespace FPLedit
 {
-    internal class TemplateHost
+    internal class TemplateHost : ITemplate
     {
-        public string Run(string fn, Timetable tt)
+        private const string MSG_TITLE = "FPLedit - Templatefehler";
+
+        private Template tmpl;
+
+        public TemplateHost(string content)
         {
-            Template tmpl = new Template(File.ReadAllText(fn));
+            //TODO: Hier den Check auf validen TemplateType durchführen, nicht im Template!
+            tmpl = new Template(content);
+        }
+
+        public string TemplateType => tmpl.TemplateType;
+
+        public string GenerateResult(Timetable tt)
+        {
             try
             {
                 var result = tmpl.GenerateResult(tt);
-                MessageBox.Show(result);
                 return result;
             }
             catch (TargetInvocationException ex)
             {
-                MessageBox.Show("Laufzeitfehler im Template: " + ex.InnerException.Message, "FPLedit - Templatefehler", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //TODO: Umstellen auf Logger
+                MessageBox.Show("Laufzeitfehler im Template: " + ex.InnerException.Message, MSG_TITLE, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "FPLedit - Templatefehler", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, MSG_TITLE, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return null;
         }

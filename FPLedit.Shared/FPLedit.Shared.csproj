@@ -55,6 +55,9 @@
     <Compile Include="Filetypes\XMLImport.cs" />
     <Compile Include="Rule.cs" />
     <Compile Include="Templating\Compiler.cs" />
+    <Compile Include="Templating\ITemplate.cs" />
+    <Compile Include="Templating\ITemplateProxy.cs" />
+    <Compile Include="Templating\ITemplateManager.cs" />
     <Compile Include="Templating\Template.cs" />
     <Compile Include="Ui\IDesignableUiProxy.cs" />
     <Compile Include="IEntity.cs" />

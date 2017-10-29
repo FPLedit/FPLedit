@@ -1,4 +1,5 @@
 ﻿using FPLedit.Shared;
+using FPLedit.Shared.Templating;
 using FPLedit.Shared.Ui;
 using System;
 
@@ -20,6 +21,8 @@ namespace FPLedit.Buchfahrplan
             info.Register<IFilterableUi>(new Forms.FilterableHandler());
             info.Register<IPreviewable>(new Forms.Preview());
             info.Register<IEditingDialog>(new Forms.VelocityDialogProxy());
+
+            info.Register<ITemplateProxy>(new Templates.TestTemplate());
         }
     }
 }
