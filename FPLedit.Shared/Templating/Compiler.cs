@@ -5,14 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace TemplaetingTest.Templating
+namespace FPLedit.Shared.Templating
 {
     internal class Compiler
     {
-        public string RunTemplate(string code, string[] references)
+        public string RunTemplate(string code, string[] references, Timetable tt)
         {
             Assembly assembly = GetAssembly(code, references);
-            return InvokeTemplate(assembly);
+            return InvokeTemplate(assembly, tt);
         }
 
         private Assembly GetAssembly(string code, string[] references)
@@ -42,15 +42,15 @@ namespace TemplaetingTest.Templating
             return results.CompiledAssembly;
         }
 
-        private string InvokeTemplate(Assembly assembly)
+        private string InvokeTemplate(Assembly assembly, Timetable tt)
         {
             foreach (Type type in assembly.GetTypes())
             {
                 var mi = type.GetMethod("Render", BindingFlags.Public | BindingFlags.Static);
-                if (mi != null && mi.GetParameters().Length == 0)
-                    return (string)mi.Invoke(null, null);
+                if (mi != null && mi.GetParameters().Length == 1)
+                    return (string)mi.Invoke(null, new object[] { tt });
             }
             return null;
-        }
+         }
     }
 }

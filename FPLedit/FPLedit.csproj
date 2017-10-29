@@ -166,6 +166,7 @@
     </Compile>
     <Compile Include="RegisterStore.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="TemplateHost.cs" />
     <Compile Include="UndoManager.cs" />
     <Compile Include="UpdateManager.cs" />
     <Content Include="Resources\trapeztafel.png" />
@@ -221,6 +222,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="test.tmpl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

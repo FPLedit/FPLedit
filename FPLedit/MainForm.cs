@@ -119,6 +119,9 @@ namespace FPLedit
             if (fn != null && File.Exists(fn))
                 InternalOpen(fn);
             Settings.Remove("restart.file");
+
+            //TODO: Remove test
+            new TemplateHost().Run("test.tmpl", Timetable);
         }
 
         private void InitializeExportImport()

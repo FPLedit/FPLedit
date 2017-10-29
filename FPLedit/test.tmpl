@@ -1,4 +1,5 @@
-﻿<#@ import System.Reflection #>
+﻿<#@ fpledit-template-type bfpl #>
+<#@ import System.Reflection #>
 <#@ import FPLedit.Shared #>
 <#@ assembly FPLedit.Shared.dll #>
 
@@ -12,7 +13,7 @@
 
 public class <#= classname #>
 {
-   public <#= classname #><#= s #> ()
+   public <#= s #> ()
    {
    }
    <# for (int i=0; i< 2 ; i++)

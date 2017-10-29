@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using System.Text.RegularExpressions;
-using TemplaetingTest.Templating;
 
 namespace FPLedit.Shared.Templating
 {
     // Based on: https://www.codeproject.com/Articles/15728/Write-your-own-Code-Generator-or-Template-Engine-i
-    internal class Template
+    public class Template
     {
         private string code;
         private List<string> usings;
         private List<string> assemblyReferences;
         private string functions;
+        private string templateDeclaration;
+
+        private string _codeCache;
 
         private readonly string nl = Environment.NewLine;
 
@@ -28,31 +30,35 @@ namespace FPLedit.Shared.Templating
 
         public string GetParsedResult()
         {
-            string usingsCode = string.Join("", usings.Distinct().Select(u => $"using {u};{nl}"));
+            if (_codeCache == null)
+            {
+                var body = GetMethodBody();
+                string usingsCode = string.Join("", usings.Distinct().Select(u => $"using {u};{nl}"));
 
-            string classCode = $@"{ usingsCode }
+                _codeCache = $@"{usingsCode}
 namespace FPLedit.Shared.Templating
 {{
 	public class TemplateParser
 	{{
-		public static string Render()
+		public static string Render(Timetable tt)
 		{{
-			return new TemplateParser().InternalRender();
+			return new TemplateParser().InternalRender(tt);
 		}}
 
-		private string InternalRender()
+		private string InternalRender(Timetable tt)
 		{{
 			StringBuilder builder = new StringBuilder();
 
-			{ GetMethodBody() }
+			{body}
 
 			return builder.ToString();
 		}}
 
-		{ functions }
+		{functions}
 	}}
 }}";
-            return classCode;
+            }
+            return _codeCache;
         }
 
 
@@ -66,6 +72,7 @@ namespace FPLedit.Shared.Templating
             mainCode = Regex.Replace(mainCode, @"<#@\s*assembly(.*?)#>", AddAssembly, ro);
             mainCode = Regex.Replace(mainCode, @"<#@\s*import(.*?)#>", AddImport, ro);
             mainCode = Regex.Replace(mainCode, @"<#@\s*define([\S\s]*?)#>", DefineFunction, rom);
+            mainCode = Regex.Replace(mainCode, @"<#@\s*fpledit-template-type(.*?)#>", TemplateDefinition, rom);
             mainCode = mainCode.Trim('\r', '\n', ' ', '\t');
 
             mainCode = ParseScript(mainCode);
@@ -94,6 +101,14 @@ namespace FPLedit.Shared.Templating
         {
             string fun = m.Groups[1].ToString().Trim();
             functions += fun + nl;
+            return "";
+        }
+
+        private string TemplateDefinition(Match m)
+        {
+            if (templateDeclaration != null)
+                throw new Exception("Nur eine fpledit-template-type-Deirektive pro Vorlage erlaubt!");
+            templateDeclaration = m.Groups[1].ToString().Trim();
             return "";
         }
 
@@ -146,13 +161,15 @@ namespace FPLedit.Shared.Templating
 
         #endregion
 
-        public string GenerateResult()
+        public string GenerateResult(Timetable tt)
         {
             try
             {
                 string code = GetParsedResult().Trim();
+                if (templateDeclaration == null)
+                    throw new Exception("Keine fpledit-template-type-Deirektive vorhanden!");
                 Compiler engine = new Compiler();
-                return engine.RunTemplate(code, assemblyReferences.ToArray());
+                return engine.RunTemplate(code, assemblyReferences.ToArray(), tt);
             }
             catch (Exception ex)
             {
