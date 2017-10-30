@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 namespace FPLedit.Shared.Templating
 {
     // Based on: https://www.codeproject.com/Articles/15728/Write-your-own-Code-Generator-or-Template-Engine-i
-    public class Template : ITemplate
+    internal class Template : ITemplate
     {
         private string code;
         private List<string> usings;
@@ -166,9 +166,6 @@ namespace FPLedit.Shared.Templating
             try
             {
                 BuildCodeCache(); // Ensure that we have code to compile
-
-                if (TemplateType == null)
-                    throw new Exception("Keine fpledit-template-type-Deirektive vorhanden!");
 
                 Compiler engine = new Compiler();
                 return engine.RunTemplate(_codeCache, assemblyReferences.ToArray(), tt);

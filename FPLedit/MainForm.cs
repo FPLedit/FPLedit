@@ -3,13 +3,14 @@ using System.IO;
 using System.Windows.Forms;
 using System.Linq;
 using System.Collections.Generic;
-using FPLedit.Shared;
 using System.ComponentModel;
 using System.Drawing;
-using FPLedit.Shared.Filetypes;
 using System.Diagnostics;
 using FPLedit.Logger;
+using FPLedit.Shared;
+using FPLedit.Shared.Filetypes;
 using FPLedit.Shared.Templating;
+using FPLedit.Templating;
 
 namespace FPLedit
 {
@@ -113,7 +114,7 @@ namespace FPLedit
             InitializeMenus();
 
             // Vorlagen laden
-            templateManager = new TemplateManager(registry);
+            templateManager = new TemplateManager(registry, Logger);
             templateManager.LoadTemplates();
 
             //TODO: Remove testcase

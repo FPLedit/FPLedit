@@ -166,8 +166,10 @@
     </Compile>
     <Compile Include="RegisterStore.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="TemplateHost.cs" />
-    <Compile Include="TemplateManager.cs" />
+    <Compile Include="Templating\Compiler.cs" />
+    <Compile Include="Templating\Template.cs" />
+    <Compile Include="Templating\TemplateHost.cs" />
+    <Compile Include="Templating\TemplateManager.cs" />
     <Compile Include="UndoManager.cs" />
     <Compile Include="UpdateManager.cs" />
     <Content Include="Resources\trapeztafel.png" />

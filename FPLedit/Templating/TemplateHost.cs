@@ -8,18 +8,22 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 
-namespace FPLedit
+namespace FPLedit.Templating
 {
     internal class TemplateHost : ITemplate
     {
         private const string MSG_TITLE = "FPLedit - Templatefehler";
 
         private Template tmpl;
+        private ILog logger;
 
-        public TemplateHost(string content)
+        public TemplateHost(string content, ILog log)
         {
-            //TODO: Hier den Check auf validen TemplateType durchführen, nicht im Template!
             tmpl = new Template(content);
+            logger = log;
+
+            if (tmpl.TemplateType == null)
+                logger.Warning("Keine valide Template-Deklaration gefunden! Das Template steht deshalb nicht zur Verfügung!");
         }
 
         public string TemplateType => tmpl.TemplateType;
