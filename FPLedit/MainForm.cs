@@ -118,7 +118,9 @@ namespace FPLedit
             templateManager.LoadTemplates();
 
             //TODO: Remove testcase
-            var res = templateManager.GetTemplates("bfpl")[0].GenerateResult(Timetable);
+            var t = templateManager.GetTemplates("bfpl")[0];
+            for (int i = 0; i < 1000; i++)
+                t.GenerateResult(Timetable);
 
             ExtensionsLoaded?.Invoke(this, new EventArgs());
 

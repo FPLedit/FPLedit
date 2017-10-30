@@ -5,6 +5,9 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using FPLedit.Shared.Templating;
 using FPLedit.Shared;
+using System.Security;
+using System.Security.Permissions;
+using System.Security.Policy;
 
 namespace FPLedit.Templating
 {
@@ -175,13 +178,33 @@ namespace FPLedit.Shared.Templating
             {
                 BuildCodeCache(); // Ensure that we have code to compile
 
-                Compiler engine = new Compiler();
-                return engine.RunTemplate(_codeCache, assemblyReferences.ToArray(), tt);
+                // Start compiler in another AppDomain
+                //TODO: evtl. Sicherheitsmaßnahmen
+                AppDomain domain = AppDomain.CreateDomain("tmpl-run-domain");
+                domain.SetData("tt", tt);
+                domain.SetData("code", _codeCache);
+                domain.SetData("refs", assemblyReferences.ToArray());
+                domain.DoCallBack(CompileInAppDomain);
+                var ret = (string)domain.GetData("ret");
+                AppDomain.Unload(domain);
+
+                return ret;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+        }
+
+        private static void CompileInAppDomain()
+        {
+            var tt = (Timetable)AppDomain.CurrentDomain.GetData("tt");
+            var code = (string)AppDomain.CurrentDomain.GetData("code");
+            var refs = (string[])AppDomain.CurrentDomain.GetData("refs");
+
+            Compiler engine = new Compiler();
+            var ret = engine.RunTemplate(code, refs, tt);
+            AppDomain.CurrentDomain.SetData("ret", ret);
         }
     }
 }

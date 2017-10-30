@@ -23,6 +23,8 @@
 } #>
 
 <#
+return "test";
+
 string font = "\"Alte DIN 1451 Mittelschrift\"";
 string additionalCss = "";
 // Initialisierung
@@ -35,6 +37,8 @@ if (attrs != null)
         font = attrs.Font;
     additionalCss = attrs.Css ?? "";
 }
+
+return "";
 #>
 
 <!DOCTYPE html>

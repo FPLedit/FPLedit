@@ -12,6 +12,7 @@ namespace FPLedit
         /// Der Haupteinstiegspunkt für die Anwendung.
         /// </summary>
         [STAThread]
+        [LoaderOptimization(LoaderOptimization.MultiDomainHost)] // Hopefully it doesn't break any things
         static void Main()
         {
             Application.EnableVisualStyles();
