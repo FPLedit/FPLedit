@@ -10,13 +10,15 @@ namespace FPLedit.Buchfahrplan.Templates
 {
     public class TemplateHelper
     {
-        public BfplAttrs Attrs { get; set; }
-        public Timetable TT { get; set; }
+        private BfplAttrs attrs;
+        private Timetable tt;
         private IFilterableUi filterable;
 
-        public TemplateHelper()
+        public TemplateHelper(Timetable tt)
         {
             filterable = new Forms.FilterableHandler();
+            this.tt = tt;
+            attrs = BfplAttrs.GetAttrs(tt);
         }
 
         public string HtmlName(string name, string prefix)
@@ -31,10 +33,10 @@ namespace FPLedit.Buchfahrplan.Templates
         public List<IStation> GetStations(TrainDirection dir)
         {
             List<IStation> points = new List<IStation>();
-            var fstations = TT.Stations.Where(s => filterable.LoadStationRules(TT).All(r => !r.Matches(s))); // Filter
+            var fstations = tt.Stations.Where(s => filterable.LoadStationRules(tt).All(r => !r.Matches(s))); // Filter
             points.AddRange(fstations);
-            if (Attrs != null)
-                points.AddRange(Attrs.Points);
+            if (attrs != null)
+                points.AddRange(attrs.Points);
 
             var oPoints = (dir == TrainDirection.ta ?
                 points.OrderByDescending(o => o.Kilometre)
@@ -45,7 +47,7 @@ namespace FPLedit.Buchfahrplan.Templates
 
         public Train[] GetTrains()
         {
-            return TT.Trains.Where(t => filterable.LoadTrainRules(TT).All(r => !r.Matches(t)))
+            return tt.Trains.Where(t => filterable.LoadTrainRules(tt).All(r => !r.Matches(t)))
                 .ToArray();
         }
 
@@ -105,7 +107,7 @@ namespace FPLedit.Buchfahrplan.Templates
             if (kreuzung)
                 pred = (t => t.Direction != ot.Direction); // Kreuzung
 
-            foreach (var train in TT.Trains.Where(pred))
+            foreach (var train in tt.Trains.Where(pred))
             {
                 if (train == ot)
                     continue;

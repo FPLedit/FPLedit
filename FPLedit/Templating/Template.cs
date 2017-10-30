@@ -22,7 +22,7 @@ namespace FPLedit.Shared.Templating
         public Template(string code)
         {
             this.code = code + "<##>";
-            usings = new List<string>() { "System", "System.IO", "System.Text", "FPLedit.Shared" };
+            usings = new List<string>() { "System", "System.Collections.Generic", "System.Text", "System.Linq", "FPLedit.Shared" };
             assemblyReferences = new List<string>();
 
             BuildCodeCache();

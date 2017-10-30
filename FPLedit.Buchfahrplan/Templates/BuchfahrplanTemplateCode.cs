@@ -16,12 +16,12 @@ namespace FPLedit.Buchfahrplan.Templates
 
         public string Name => "Standard-Buchfahrplan";
 
-        private readonly TemplateHelper helper = new TemplateHelper();
+        private TemplateHelper helper;
 
         public string GetResult(Timetable tt)
         {
             this.tt = tt;
-            helper.TT = tt;
+            helper = new TemplateHelper(tt);
 
             attrs = BfplAttrs.GetAttrs(tt);
             if (attrs != null)
@@ -29,7 +29,6 @@ namespace FPLedit.Buchfahrplan.Templates
                 if (attrs.Font != "")
                     font = attrs.Font;
                 additionalCss = attrs.Css ?? "";
-                helper.Attrs = attrs;
             }
 
             GenerationEnvironment = null; //BUGFIX: Clear last build

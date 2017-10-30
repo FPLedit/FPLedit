@@ -1,11 +1,12 @@
-﻿using Microsoft.CSharp;
+﻿using FPLedit.Shared;
+using Microsoft.CSharp;
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace FPLedit.Shared.Templating
+namespace FPLedit.Templating
 {
     internal class Compiler
     {
@@ -27,6 +28,8 @@ namespace FPLedit.Shared.Templating
             };
 
             cparams.ReferencedAssemblies.Add("mscorlib.dll");
+            cparams.ReferencedAssemblies.Add("System.Core.dll");
+            cparams.ReferencedAssemblies.Add("FPLedit.Shared.dll");
             cparams.ReferencedAssemblies.AddRange(references);
 
             var results = provider.CompileAssemblyFromSource(cparams, code);

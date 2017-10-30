@@ -13,13 +13,11 @@ namespace FPLedit.Buchfahrplan.Templates
         public string GetTemplateCode()
         {
             var a = Assembly.GetAssembly(GetType());
-            string name = "FPLedit.Buchfahrplan.Templates.test.tmpl";
+            string name = "FPLedit.Buchfahrplan.Templates.StdTemplate.tmpl";
 
             using (var stream = a.GetManifestResourceStream(name))
             using (var sr = new StreamReader(stream))
-            {
                 return sr.ReadToEnd();
-            }
         }
     }
 }
