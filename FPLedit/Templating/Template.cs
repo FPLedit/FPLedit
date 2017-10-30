@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using System.Text.RegularExpressions;
+using FPLedit.Shared.Templating;
+using FPLedit.Shared;
 
-namespace FPLedit.Shared.Templating
+namespace FPLedit.Templating
 {
     // Based on: https://www.codeproject.com/Articles/15728/Write-your-own-Code-Generator-or-Template-Engine-i
     internal class Template : ITemplate
@@ -14,6 +16,7 @@ namespace FPLedit.Shared.Templating
         private List<string> assemblyReferences;
         private string functions;
         public string TemplateType { get; private set; }
+        public string TemplateName { get; private set; }
 
         private string _codeCache;
 
@@ -72,7 +75,7 @@ namespace FPLedit.Shared.Templating
             mainCode = Regex.Replace(mainCode, @"<#@\s*assembly(.*?)#>", AddAssembly, ro);
             mainCode = Regex.Replace(mainCode, @"<#@\s*import(.*?)#>", AddImport, ro);
             mainCode = Regex.Replace(mainCode, @"<#@\s*define([\S\s]*?)#>", DefineFunction, rom);
-            mainCode = Regex.Replace(mainCode, @"<#@\s*fpledit-template-type(.*?)#>", TemplateDefinition, rom);
+            mainCode = Regex.Replace(mainCode, @"<#@\s*fpledit-template(.*?)#>", TemplateDefinition, rom);
             mainCode = mainCode.Trim('\r', '\n', ' ', '\t');
 
             mainCode = ParseScript(mainCode);
@@ -107,8 +110,13 @@ namespace FPLedit.Shared.Templating
         private string TemplateDefinition(Match m)
         {
             if (TemplateType != null)
-                throw new Exception("Nur eine fpledit-template-type-Direktive pro Vorlage erlaubt!");
-            TemplateType = m.Groups[1].ToString().Trim();
+                throw new Exception("Nur eine fpledit-template-Direktive pro Vorlage erlaubt!");
+            var args = m.Groups[1].ToString().Trim();
+            var tparams = ArgsParser.ParseArgs(args);
+            if (!tparams.ContainsKey("type") || !tparams.ContainsKey("name"))
+                throw new Exception("Fehlende Angabe type oder name in der fpledit-template-Direktive!");
+            TemplateType = tparams["type"];
+            TemplateName = tparams["name"];
             return "";
         }
 

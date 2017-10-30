@@ -4,6 +4,8 @@
     {
         string TemplateType { get; }
 
+        string TemplateName { get; }
+
         string GenerateResult(Timetable tt);
     }
 }

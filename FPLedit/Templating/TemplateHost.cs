@@ -28,6 +28,8 @@ namespace FPLedit.Templating
 
         public string TemplateType => tmpl.TemplateType;
 
+        public string TemplateName => tmpl.TemplateName;
+
         public string GenerateResult(Timetable tt)
         {
             try
