@@ -16,6 +16,8 @@ namespace FPLedit
 {
     public partial class MainForm : Form, IInfo, IRestartable
     {
+        private const string TEMPLATE_PATH = "templates";
+
         private Timetable timetableBackup = null;
 
         private IImport open;
@@ -115,7 +117,7 @@ namespace FPLedit
 
             // Vorlagen laden
             templateManager = new TemplateManager(registry, Logger);
-            templateManager.LoadTemplates("templates");
+            templateManager.LoadTemplates(TEMPLATE_PATH);
 
 
             ExtensionsLoaded?.Invoke(this, new EventArgs());
@@ -169,6 +171,9 @@ namespace FPLedit
             this.menuStrip.Items.AddRange(new[] { helpItem });
             var extItem = helpItem.DropDownItems.Add("Erweiterungen");
             extItem.Click += (s, ev) => (new ExtensionsForm(extensionManager, this)).ShowDialog();
+            var tmplItem = helpItem.DropDownItems.Add("Vorlagen");
+            tmplItem.Click += (s, ev) => (new TemplatesForm(templateManager, TEMPLATE_PATH)).ShowDialog();
+            helpItem.DropDownItems.Add(new ToolStripSeparator());
             var docItem = helpItem.DropDownItems.Add("Online Hilfe");
             docItem.Click += (s, ev) => Process.Start("https://fahrplan.manuelhu.de/");
             var infoItem = helpItem.DropDownItems.Add("Info");

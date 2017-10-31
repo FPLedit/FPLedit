@@ -8,6 +8,8 @@
 
         string Identifier { get; }
 
+        string TemplateSource { get; }
+
         string GenerateResult(Timetable tt);
     }
 }

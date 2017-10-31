@@ -18,9 +18,11 @@ namespace FPLedit.Templating
         private List<string> usings;
         private List<string> assemblyReferences;
         private string functions;
+
         public string TemplateType { get; private set; }
         public string TemplateName { get; private set; }
         public string Identifier => throw new NotSupportedException();
+        public string TemplateSource => code;
 
         private string _codeCache;
 

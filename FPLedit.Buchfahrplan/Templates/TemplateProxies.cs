@@ -10,7 +10,7 @@ namespace FPLedit.Buchfahrplan.Templates
 {
     public class StdTemplate : ITemplateProxy
     {
-        public string TemplateIdentifier => "builtin:FPLedit.Buchfahrplan/Templates/StdTemplate.tmpl";
+        public string TemplateIdentifier => "builtin:FPLedit.Buchfahrplan/Templates/StdTemplate.fpltmpl";
 
         public string GetTemplateCode()
         {
@@ -25,7 +25,7 @@ namespace FPLedit.Buchfahrplan.Templates
 
     public class ZlbTemplate : ITemplateProxy
     {
-        public string TemplateIdentifier => "builtin:FPLedit.Buchfahrplan/Templates/ZlbTemplate.tmpl";
+        public string TemplateIdentifier => "builtin:FPLedit.Buchfahrplan/Templates/ZlbTemplate.fpltmpl";
 
         public string GetTemplateCode()
         {

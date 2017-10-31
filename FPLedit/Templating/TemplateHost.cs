@@ -23,6 +23,8 @@ namespace FPLedit.Templating
 
         public string Identifier { get; }
 
+        public string TemplateSource => tmpl.TemplateSource;
+
         public TemplateHost(string content, string identifier, ILog log)
         {
             tmpl = new Template(content);

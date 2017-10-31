@@ -28,7 +28,6 @@ namespace FPLedit.Templating
             templates = instances.Select(t => new TemplateHost(t.GetTemplateCode(), t.TemplateIdentifier, logger)).ToList();
 
             // Weitere Templates aus Dateien laden
-            //TODO: Aktivieren/Deaktivieren, vgl. Extensions
             var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), templateRoot);
             var info = new DirectoryInfo(path);
             if (!info.Exists)
@@ -42,9 +41,10 @@ namespace FPLedit.Templating
             }
         }
 
+        public ITemplate[] GetTemplates()
+            => templates.ToArray();
+
         public ITemplate[] GetTemplates(string type)
-        {
-            return templates.Where(t => t.TemplateType == type).ToArray();
-        }
+            => templates.Where(t => t.TemplateType == type).ToArray();
     }
 }
