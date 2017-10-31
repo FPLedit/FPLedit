@@ -54,19 +54,7 @@
     <Compile Include="Model\BfplAttrs.cs" />
     <Compile Include="Model\BfplPoint.cs" />
     <Compile Include="Templates\TemplateHelper.cs" />
-    <Compile Include="Templates\TestTemplate.cs" />
-    <Compile Include="Templates\ZLBTemplateCode.cs" />
-    <Compile Include="Templates\ZLBTemplate.cs">
-      <DependentUpon>ZLBTemplate.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Templates\BuchfahrplanTemplate.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>BuchfahrplanTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Templates\BuchfahrplanTemplateCode.cs" />
+    <Compile Include="Templates\TemplateProxies.cs" />
     <Compile Include="HtmlExport.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -118,21 +106,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\WellenCss.css" />
-    <Content Include="Templates\ZLBTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>ZLBTemplate.cs</LastGenOutput>
-    </Content>
-    <Content Include="Templates\BuchfahrplanTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>BuchfahrplanTemplate.cs</LastGenOutput>
-    </Content>
     <Content Include="Resources\TryoutScript.txt" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Templates\StdTemplate.tmpl" />
+    <EmbeddedResource Include="Templates\StdTemplate.fpltmpl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Templates\ZlbTemplate.fpltmpl" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

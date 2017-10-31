@@ -115,12 +115,8 @@ namespace FPLedit
 
             // Vorlagen laden
             templateManager = new TemplateManager(registry, Logger);
-            templateManager.LoadTemplates();
+            templateManager.LoadTemplates("templates");
 
-            //TODO: Remove testcase
-            var t = templateManager.GetTemplates("bfpl")[0];
-            for (int i = 0; i < 1000; i++)
-                t.GenerateResult(Timetable);
 
             ExtensionsLoaded?.Invoke(this, new EventArgs());
 

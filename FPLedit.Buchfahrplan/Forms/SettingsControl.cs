@@ -31,7 +31,7 @@ namespace FPLedit.Buchfahrplan
         {
             settings = info.Settings;
             chooser = new BfplTemplateChooser(info);
-            var templates = chooser.AvailableTemplates.Select(t => t.Name).ToArray();
+            var templates = chooser.AvailableTemplates.Select(t => t.TemplateName).ToArray();
             templateComboBox.Items.AddRange(templates);
 
             attrs = BfplAttrs.GetAttrs(tt);
@@ -47,7 +47,7 @@ namespace FPLedit.Buchfahrplan
             }
 
             var tmpl = chooser.GetTemplate(tt);
-            templateComboBox.Text = tmpl.Name;
+            templateComboBox.Text = tmpl.TemplateName;
         }
 
         private void SettingsForm_Load(object sender, EventArgs e)
@@ -84,7 +84,7 @@ namespace FPLedit.Buchfahrplan
             if (tmpl_idx != -1)
             {
                 var tmpl = chooser.AvailableTemplates[tmpl_idx];
-                attrs.Template = chooser.ReduceName(tmpl.GetType().FullName);
+                attrs.Template = tmpl.Identifier;
             }
 
             settings.Set("bfpl.console", consoleCheckBox.Checked);

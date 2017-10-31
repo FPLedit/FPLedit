@@ -17,34 +17,35 @@ namespace FPLedit.Templating
         private Template tmpl;
         private ILog logger;
 
-        public TemplateHost(string content, ILog log)
+        public string TemplateType => tmpl.TemplateType;
+
+        public string TemplateName => tmpl.TemplateName;
+
+        public string Identifier { get; }
+
+        public TemplateHost(string content, string identifier, ILog log)
         {
             tmpl = new Template(content);
             logger = log;
+            Identifier = identifier;
 
             if (tmpl.TemplateType == null)
                 logger.Warning("Keine valide Template-Deklaration gefunden! Das Template steht deshalb nicht zur Verfügung!");
         }
 
-        public string TemplateType => tmpl.TemplateType;
-
-        public string TemplateName => tmpl.TemplateName;
-
         public string GenerateResult(Timetable tt)
         {
             try
             {
-                var result = tmpl.GenerateResult(tt);
-                return result;
+                return tmpl.GenerateResult(tt);
             }
             catch (TargetInvocationException ex)
             {
-                //TODO: Umstellen auf Logger
-                MessageBox.Show("Laufzeitfehler im Template: " + ex.InnerException.Message, MSG_TITLE, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                logger.Error("Laufzeitfehler im Template " + Identifier + ": " + ex.InnerException.Message);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, MSG_TITLE, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                logger.Error("Fehler im Template " + Identifier + ": " + ex.Message);
             }
             return null;
         }

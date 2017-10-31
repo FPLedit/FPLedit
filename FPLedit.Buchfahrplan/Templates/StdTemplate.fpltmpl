@@ -1,7 +1,41 @@
-﻿<#@ template language="C#" #>
-<#@ import namespace="FPLedit.Shared" #>
-<#@ import namespace="FPLedit.Buchfahrplan.Model" #>
-<#@ import namespace="FPLedit.Buchfahrplan.Properties" #>
+﻿<#@ fpledit-template type="bfpl" name="Standard-Buchfahrplan" #>
+<#@ assembly FPLedit.Buchfahrplan.dll #>
+<#@ import FPLedit.Buchfahrplan.Templates #>
+<#@ import FPLedit.Buchfahrplan.Model #>
+
+<#@ define string GetWelle(ref int counter, IStation sta, Train tra, TemplateHelper helper)
+{
+    if (counter > 0)
+    {
+        counter--;
+        return "";
+    }
+    else if (sta.Wellenlinien != 0)
+    {
+        var w = sta.Wellenlinien;
+        var stas = helper.GetStations(tra.Direction);
+        stas = stas.Skip(stas.IndexOf(sta)).ToList();
+        counter = stas.TakeWhile(s => s.Wellenlinien == w).Count();
+        return "<td class=\"zug welle welle"+w+"\" rowspan=\"" + (counter--) +"\"></td>";
+    }
+
+    return "<td class=\"zug welle\"></td>";
+} #>
+
+<#
+string font = "\"Alte DIN 1451 Mittelschrift\"";
+string additionalCss = "";
+// Initialisierung
+TemplateHelper helper = new TemplateHelper(tt);
+
+BfplAttrs attrs = BfplAttrs.GetAttrs(tt);
+if (attrs != null)
+{
+    if (attrs.Font != "")
+        font = attrs.Font;
+    additionalCss = attrs.Css ?? "";
+}
+#>
 
 <!DOCTYPE html>
 <html>
@@ -109,7 +143,7 @@
 			}
 		}
 
-		<#= Resources.WellenCss #>
+		<#= FPLedit.Buchfahrplan.Properties.Resources.WellenCss #>
 		</style>
 		<style id="add-css">
 			<#= additionalCss #>
@@ -163,7 +197,7 @@
 					<td class="zug"><#= entity.Vmax == last_vmax ? "" : entity.Vmax #></td>
 					<# last_vmax = entity.Vmax; #>
 					<td class="zug stat"><#= entity.SName #></td>
-					<#= GetWelle(ref rs_counter, entity, tra) #>
+					<#= GetWelle(ref rs_counter, entity, tra, helper) #>
 
 					<#
 					if (entity.GetType() == typeof(Station)) {

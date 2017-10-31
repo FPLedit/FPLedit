@@ -1,13 +1,12 @@
 ﻿using FPLedit.Buchfahrplan.Model;
 using FPLedit.Buchfahrplan.Properties;
 using FPLedit.Shared;
+using FPLedit.Shared.Templating;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text.RegularExpressions;
 
 namespace FPLedit.Buchfahrplan
 {
@@ -19,8 +18,8 @@ namespace FPLedit.Buchfahrplan
         {
             BfplTemplateChooser chooser = new BfplTemplateChooser(info);
 
-            IBfplTemplate tmpl = chooser.GetTemplate(timetable);
-            string cont = tmpl.GetResult(timetable);
+            ITemplate tmpl = chooser.GetTemplate(timetable);
+            string cont = tmpl.GenerateResult(timetable);
 
             if (tryout_console)
                 cont += Resources.TryoutScript;

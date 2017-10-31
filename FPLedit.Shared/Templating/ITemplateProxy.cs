@@ -2,6 +2,8 @@
 {
     public interface ITemplateProxy
     {
+        string TemplateIdentifier { get; }
+
         string GetTemplateCode();
     }
 }

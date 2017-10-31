@@ -16,13 +16,12 @@ namespace FPLedit.Buchfahrplan
 
             info.Register<IExport>(new HtmlExport());
             info.Register<IDesignableUiProxy>(new SettingsControlProxy());
-            info.Register<IBfplTemplate>(new Templates.BuchfahrplanTemplate());
-            info.Register<IBfplTemplate>(new Templates.ZLBTemplate());
             info.Register<IFilterableUi>(new Forms.FilterableHandler());
             info.Register<IPreviewable>(new Forms.Preview());
             info.Register<IEditingDialog>(new Forms.VelocityDialogProxy());
 
-            info.Register<ITemplateProxy>(new Templates.TestTemplate());
+            info.Register<ITemplateProxy>(new Templates.StdTemplate());
+            info.Register<ITemplateProxy>(new Templates.ZlbTemplate());
         }
     }
 }

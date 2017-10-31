@@ -20,6 +20,7 @@ namespace FPLedit.Templating
         private string functions;
         public string TemplateType { get; private set; }
         public string TemplateName { get; private set; }
+        public string Identifier => throw new NotSupportedException();
 
         private string _codeCache;
 

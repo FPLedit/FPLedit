@@ -6,6 +6,8 @@
 
         string TemplateName { get; }
 
+        string Identifier { get; }
+
         string GenerateResult(Timetable tt);
     }
 }
