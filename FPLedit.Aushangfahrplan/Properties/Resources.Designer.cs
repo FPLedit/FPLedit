@@ -19,10 +19,10 @@ namespace FPLedit.Aushangfahrplan.Properties {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace FPLedit.Aushangfahrplan.Properties {
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FPLedit.Aushangfahrplan.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace FPLedit.Aushangfahrplan.Properties {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -65,7 +65,7 @@ namespace FPLedit.Aushangfahrplan.Properties {
         ///&lt;g transform=&quot;translate(-1.7856 -1.0716)&quot; stroke=&quot;#000&quot; stroke-width=&quot;.25&quot; fill=&quot;#b24315&quot;&gt;
         ///&lt;path d=&quot;m37.713 1.3708c-0.075-0.1265-0.75-0.2361-1.062-0.1298-7.227 2.46-17.664 2.5891-20.971 2.7426-1.06-0.1349-1.718-0.3251-1.939 0.4879-0.95164 3.4987 0.20793 6.9768 3.379 6.8466 1.4645-0.0601 3.3757-0.84609 3.3026 1.515l-12.352 41.172 [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
-        internal static string abfahrt_text {
+        public static string abfahrt_text {
             get {
                 return ResourceManager.GetString("abfahrt_text", resourceCulture);
             }
@@ -95,7 +95,7 @@ namespace FPLedit.Aushangfahrplan.Properties {
         ///	&lt;textarea id=&quot;tryout-ta&quot; cols=&quot;50&quot; rows=&quot;20&quot;&gt;&lt;#= additionalCss #&gt;&lt;/textarea&gt;&lt;br&gt;
         ///	&lt;button onclick=&quot;add_css.innerHTML = t [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
-        internal static string TryoutScript {
+        public static string TryoutScript {
             get {
                 return ResourceManager.GetString("TryoutScript", resourceCulture);
             }

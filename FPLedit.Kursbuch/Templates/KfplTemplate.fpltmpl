@@ -1,6 +1,37 @@
-﻿<#@ template language="C#" #>
-<#@ import namespace="System.Linq" #>
-<#@ assembly name="FPLedit.Shared" #>
+﻿<#@ fpledit-template type="kfpl" name="Standardvorlage (DB-Kursbuch)" #>
+<#@ assembly FPLedit.Kursbuch.dll #>
+<#@ import FPLedit.Kursbuch.Templates #>
+<#@ import FPLedit.Kursbuch.Model #>
+
+<#@ define string Sign(Train t)
+{
+    return "";
+}
+#>
+
+<#
+string kbs = "";
+string font = "Arial"; //TODO: KBZiffern
+string heFont = "\"Arial Black\"";
+string additionalCss = "";
+
+TrainDirection TOP_DIRECTION = TrainDirection.ti;
+TrainDirection BOTTOM_DIRECTION = TrainDirection.ta;
+
+TemplateHelper helper = new TemplateHelper(tt);
+
+KfplAttrs attrs = KfplAttrs.GetAttrs(tt);
+if (attrs != null)
+{
+    if (attrs.Font != "")
+        font = attrs.Font;
+    if (attrs.HeFont != "")
+        heFont = attrs.HeFont;
+    additionalCss = attrs.Css ?? "";
+    if (attrs.Kbs != "")
+        kbs = attrs.Kbs;
+}
+#>
 
 <!doctype html>
 <html>

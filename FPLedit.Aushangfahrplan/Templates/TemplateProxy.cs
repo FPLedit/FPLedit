@@ -2,16 +2,16 @@
 using System.IO;
 using System.Reflection;
 
-namespace FPLedit.Buchfahrplan.Templates
+namespace FPLedit.Aushangfahrplan.Templates
 {
-    public class StdTemplate : ITemplateProxy
+    internal class StdTemplateProxy : ITemplateProxy
     {
-        public string TemplateIdentifier => "builtin:FPLedit.Buchfahrplan/Templates/StdTemplate.fpltmpl";
+        public string TemplateIdentifier => "builtin:FPLedit.Aushangfahrplan/Templates/AfplTemplate.fpltmpl";
 
         public string GetTemplateCode()
         {
             var a = Assembly.GetAssembly(GetType());
-            string name = "FPLedit.Buchfahrplan.Templates.StdTemplate.fpltmpl";
+            string name = "FPLedit.Aushangfahrplan.Templates.AfplTemplate.fpltmpl";
 
             using (var stream = a.GetManifestResourceStream(name))
             using (var sr = new StreamReader(stream))
@@ -19,14 +19,14 @@ namespace FPLedit.Buchfahrplan.Templates
         }
     }
 
-    public class ZlbTemplate : ITemplateProxy
+    internal class SvgTemplateProxy : ITemplateProxy
     {
-        public string TemplateIdentifier => "builtin:FPLedit.Buchfahrplan/Templates/ZlbTemplate.fpltmpl";
+        public string TemplateIdentifier => "builtin:FPLedit.Aushangfahrplan/Templates/SvgTemplate.fpltmpl";
 
         public string GetTemplateCode()
         {
             var a = Assembly.GetAssembly(GetType());
-            string name = "FPLedit.Buchfahrplan.Templates.ZlbTemplate.fpltmpl";
+            string name = "FPLedit.Aushangfahrplan.Templates.SvgTemplate.fpltmpl";
 
             using (var stream = a.GetManifestResourceStream(name))
             using (var sr = new StreamReader(stream))

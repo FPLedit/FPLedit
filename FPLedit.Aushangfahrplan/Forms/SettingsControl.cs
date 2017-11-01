@@ -29,7 +29,7 @@ namespace FPLedit.Aushangfahrplan.Forms
         {
             settings = info.Settings;
             chooser = new AfplTemplateChooser(info);
-            var templates = chooser.AvailableTemplates.Select(t => t.Name).ToArray();
+            var templates = chooser.AvailableTemplates.Select(t => t.TemplateName).ToArray();
             templateComboBox.Items.AddRange(templates);
 
             attrs = AfplAttrs.GetAttrs(tt);
@@ -45,7 +45,7 @@ namespace FPLedit.Aushangfahrplan.Forms
             }
 
             var tmpl = chooser.GetTemplate(tt);
-            templateComboBox.Text = tmpl.Name;
+            templateComboBox.Text = tmpl.TemplateName;
         }
 
         private void SettingsControl_Load(object sender, EventArgs e)
@@ -87,7 +87,7 @@ namespace FPLedit.Aushangfahrplan.Forms
             if (tmpl_idx != -1)
             {
                 var tmpl = chooser.AvailableTemplates[tmpl_idx];
-                attrs.Template = chooser.ReduceName(tmpl.GetType().FullName);
+                attrs.Template = tmpl.Identifier;
             }
 
             settings.Set("afpl.console", consoleCheckBox.Checked);

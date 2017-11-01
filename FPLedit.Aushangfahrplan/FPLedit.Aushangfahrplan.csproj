@@ -59,18 +59,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Templates\AfplTemplate.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AfplTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Templates\AfplTemplateCode.cs" />
     <Compile Include="HtmlExport.cs" />
-    <Compile Include="IAfplTemplate.cs" />
     <Compile Include="Model\AfplAttrs.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Templates\TemplateHelper.cs" />
+    <Compile Include="Templates\TemplateProxy.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj">
@@ -84,18 +78,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\abfahrt-text.svg" />
     <Content Include="Resources\TryoutScript.txt" />
-    <Content Include="Templates\AfplTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
+    <EmbeddedResource Include="Templates\AfplTemplate.fpltmpl">
       <LastGenOutput>AfplTemplate.cs</LastGenOutput>
-    </Content>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Templates\SvgTemplate.fpltmpl">
+      <LastGenOutput>AfplTemplate.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>

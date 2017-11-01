@@ -1,9 +1,7 @@
 ﻿using FPLedit.Kursbuch.Model;
 using FPLedit.Shared;
-using System;
-using System.Collections.Generic;
+using FPLedit.Shared.Templating;
 using System.Linq;
-using System.Text;
 
 namespace FPLedit.Kursbuch
 {
@@ -11,10 +9,10 @@ namespace FPLedit.Kursbuch
     {
         public KfplTemplateChooser(IInfo info)
         {
-            AvailableTemplates = info.GetRegistered<IKfplTemplate>();
+            AvailableTemplates = info.TemplateManager.GetTemplates("kfpl");
         }
 
-        public IKfplTemplate GetTemplate(Timetable tt)
+        public ITemplate GetTemplate(Timetable tt)
         {
             var attrsEn = tt.Children.FirstOrDefault(x => x.XName == "kfpl_attrs");
 
@@ -23,19 +21,16 @@ namespace FPLedit.Kursbuch
             {
                 var attrs = new KfplAttrs(attrsEn, tt);
                 if (attrs.Template != "")
-                    name = ExpandName(attrs.Template);
+                    name = attrs.Template;
             }
 
-            return AvailableTemplates.FirstOrDefault(t => t.GetType().FullName == name)
-                ?? new Templates.KfplTemplate();
+            return GetTemplateByName(name) ??
+                GetTemplateByName("builtin:FPLedit.Kursbuch/Templates/KfplTemplate.fpltmpl");
         }
 
-        public IKfplTemplate[] AvailableTemplates { get; private set; }
+        private ITemplate GetTemplateByName(string name)
+            => AvailableTemplates.FirstOrDefault(t => t.Identifier == name);
 
-        public string ExpandName(string name)
-            => name.Replace("$std", typeof(Templates.KfplTemplate).Namespace);
-
-        public string ReduceName(string name)
-            => name.Replace(typeof(Templates.KfplTemplate).Namespace, "$std");
+        public ITemplate[] AvailableTemplates { get; private set; }
     }
 }

@@ -25,7 +25,7 @@ namespace FPLedit.Buchfahrplan
             }
 
             return GetTemplateByName(name) ??
-                GetTemplateByName("builtin:FPLedit.Buchfahrplan/Templates/StdTemplate.tmpl");
+                GetTemplateByName("builtin:FPLedit.Buchfahrplan/Templates/StdTemplate.fpltmpl");
         }
 
         private ITemplate GetTemplateByName(string name)

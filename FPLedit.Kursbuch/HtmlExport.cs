@@ -1,5 +1,6 @@
 ﻿using FPLedit.Kursbuch.Properties;
 using FPLedit.Shared;
+using FPLedit.Shared.Templating;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,8 +17,8 @@ namespace FPLedit.Kursbuch
         {
             var chooser = new KfplTemplateChooser(info);
 
-            IKfplTemplate templ = chooser.GetTemplate(tt);
-            string cont = templ.GetResult(tt);
+            ITemplate templ = chooser.GetTemplate(tt);
+            string cont = templ.GenerateResult(tt);
 
             if (tryout_console)
                 cont += Resources.TryoutScript;

@@ -1,6 +1,42 @@
-﻿<#@ template language="C#" #>
-<#@ import namespace="System.Linq" #>
-<#@ import namespace="FPLedit.Shared" #>
+﻿<#@ fpledit-template type="afpl" name="Standard (DRG aus Malsch)" #>
+<#@ assembly FPLedit.Aushangfahrplan.dll #>
+<#@ import FPLedit.Aushangfahrplan.Templates #>
+<#@ import FPLedit.Aushangfahrplan.Model #>
+
+<#@ define string GetDays(Train t) {
+	return DaysHelper.DaysToString(t.Days, true);
+} #>
+
+<#@ define string GetTimeString(TimeSpan t) {
+	return t.Hours.ToString() + "<sup>" + t.Minutes.ToString("00") + "</sup>";
+} #>
+
+<#@ define string TimeString(Train[] trains, Station sta, int i) {
+	return trains.Count() > i ? GetTimeString(trains[i].GetArrDep(sta).Departure) + " " + GetDays(trains[i]) : "";
+} #>
+
+<#@ define string NameString(Train[] trains, int i) {
+	return trains.Count() > i ? trains[i].TName : "";
+} #>
+
+<#
+string font = "Arial";
+string hwFont = "serif";
+string additionalCss = "";
+string abfahrtSVG = "Abfahrt";
+
+TemplateHelper helper = new TemplateHelper(tt);
+
+AfplAttrs attrs = AfplAttrs.GetAttrs(tt);
+if (attrs != null)
+{
+    if (attrs.Font != "")
+        font = attrs.Font;
+    if (attrs.HwFont != "")
+        hwFont = attrs.HwFont;
+    additionalCss = attrs.Css ?? "";
+}
+#>
 
 <!doctype html>
 <html>

@@ -56,7 +56,6 @@
     <Compile Include="Forms\FilterableHandler.cs" />
     <Compile Include="Forms\Preview.cs" />
     <Compile Include="HtmlExport.cs" />
-    <Compile Include="IKfplTemplate.cs" />
     <Compile Include="Model\KfplAttrs.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -65,12 +64,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Templates\KfplTemplate.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>KfplTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Templates\KfplTemplateCode.cs" />
+    <Compile Include="Templates\TemplateProxy.cs" />
     <Compile Include="Templates\TemplateHelper.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -82,10 +76,9 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="Resources\TryoutScript.txt" />
-    <Content Include="Templates\KfplTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>KfplTemplate.cs</LastGenOutput>
-    </Content>
+    <EmbeddedResource Include="Templates\KfplTemplate.fpltmpl">
+      <LastGenOutput>KfplTemplate1.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

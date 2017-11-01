@@ -1,5 +1,7 @@
 ﻿using FPLedit.Kursbuch.Forms;
+using FPLedit.Kursbuch.Templates;
 using FPLedit.Shared;
+using FPLedit.Shared.Templating;
 using FPLedit.Shared.Ui;
 using System;
 using System.Collections.Generic;
@@ -20,10 +22,11 @@ namespace FPLedit.Kursbuch
         {
             this.info = info;
 
-            info.Register<IKfplTemplate>(new Templates.KfplTemplate());
             info.Register<IPreviewable>(new Preview());
             info.Register<IFilterableUi>(new FilterableHandler());
             info.Register<IDesignableUiProxy>(new SettingsControlProxy());
+
+            info.Register<ITemplateProxy>(new TemplateProxy());
         }
     }
 }

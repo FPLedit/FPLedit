@@ -1,5 +1,6 @@
 ﻿using FPLedit.Aushangfahrplan.Model;
 using FPLedit.Shared;
+using FPLedit.Shared.Templating;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +12,10 @@ namespace FPLedit.Aushangfahrplan
     {
         public AfplTemplateChooser(IInfo info)
         {
-            AvailableTemplates = info.GetRegistered<IAfplTemplate>();
+            AvailableTemplates = info.TemplateManager.GetTemplates("afpl");
         }
 
-        public IAfplTemplate GetTemplate(Timetable tt)
+        public ITemplate GetTemplate(Timetable tt)
         {
             var attrsEn = tt.Children.FirstOrDefault(x => x.XName == "afpl_attrs");
 
@@ -23,19 +24,16 @@ namespace FPLedit.Aushangfahrplan
             {
                 var attrs = new AfplAttrs(attrsEn, tt);
                 if (attrs.Template != "")
-                    name = ExpandName(attrs.Template);
+                    name = attrs.Template;
             }
 
-            return AvailableTemplates.FirstOrDefault(t => t.GetType().FullName == name)
-                ?? new Templates.AfplTemplate();
+            return GetTemplateByName(name) ??
+                GetTemplateByName("builtin:FPLedit.Aushangfahrplan/Templates/AfplTemplate.fpltmpl");
         }
 
-        public IAfplTemplate[] AvailableTemplates { get; private set; }
+        private ITemplate GetTemplateByName(string name)
+            => AvailableTemplates.FirstOrDefault(t => t.Identifier == name);
 
-        public string ExpandName(string name)
-            => name.Replace("$std", typeof(Templates.AfplTemplate).Namespace);
-
-        public string ReduceName(string name)
-            => name.Replace(typeof(Templates.AfplTemplate).Namespace, "$std");
+        public ITemplate[] AvailableTemplates { get; private set; }
     }
 }

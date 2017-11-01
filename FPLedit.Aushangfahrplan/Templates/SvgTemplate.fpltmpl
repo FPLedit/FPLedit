@@ -1,0 +1,182 @@
+﻿<#@ fpledit-template type="afpl" name="Wie Standard, mit Schriftzug \"Abfahrt\" in Originalschrift" #>
+<#@ assembly FPLedit.Aushangfahrplan.dll #>
+<#@ import FPLedit.Aushangfahrplan.Templates #>
+<#@ import FPLedit.Aushangfahrplan.Model #>
+
+<#@ define string GetDays(Train t) {
+	return DaysHelper.DaysToString(t.Days, true);
+} #>
+
+<#@ define string GetTimeString(TimeSpan t) {
+	return t.Hours.ToString() + "<sup>" + t.Minutes.ToString("00") + "</sup>";
+} #>
+
+<#@ define string TimeString(Train[] trains, Station sta, int i) {
+	return trains.Count() > i ? GetTimeString(trains[i].GetArrDep(sta).Departure) + " " + GetDays(trains[i]) : "";
+} #>
+
+<#@ define string NameString(Train[] trains, int i) {
+	return trains.Count() > i ? trains[i].TName : "";
+} #>
+
+<#
+string font = "Arial";
+string hwFont = "serif";
+string additionalCss = "";
+string abfahrtSVG = FPLedit.Aushangfahrplan.Properties.Resources.abfahrt_text;
+
+TemplateHelper helper = new TemplateHelper(tt);
+
+AfplAttrs attrs = AfplAttrs.GetAttrs(tt);
+if (attrs != null)
+{
+    if (attrs.Font != "")
+        font = attrs.Font;
+    if (attrs.HwFont != "")
+        hwFont = attrs.HwFont;
+    additionalCss = attrs.Css ?? "";
+}
+#>
+
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+<style>
+body {
+	color:black;
+	font-size:16px;
+	font-family: "<#= font #>", sans-serif;
+}
+table {
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 50px;
+	border: 0;
+	border-collapse:collapse;
+	border-bottom:3px solid #000;
+	page-break-after: always;
+}
+p {
+	font-size:20px;
+	text-align:center;
+	margin: 0;
+	font-weight: normal;
+}
+.title {
+	font-size: 60px;
+	letter-spacing: 1.5px;
+}
+.station {
+	font-size: 16px;
+	font-stretch: condensed;
+	font-weight: bold;
+}
+.heading {
+	margin-bottom: 5px;
+	font-weight: bold;
+}
+td {
+	padding-top:8px;
+	padding-right:3px;
+	padding-left:3px;
+	vertical-align:middle;
+}
+.train-row {
+	height:21px;
+	border-top:1px solid #000;
+}
+.train-row ~ .train-row {
+	border-top:1px solid #000;
+}
+.time {
+	text-align:center;
+	width: 200px;
+	border-right: 2px solid #000;
+}
+.name {
+	text-align:center;
+	width: 76px;
+}
+.header {
+	border-bottom: 2px solid #000;
+}
+.time:not(.header), .name:not(.header) {
+	font-family: "<#= hwFont #>", serif;
+}
+.dir {
+	border-top: 3px solid #000;
+	border-right: 3px solid #000;
+	border-bottom: 1px solid #000;
+	text-align: center;
+	font-weight:bold;
+}
+.dir ~ .dir {
+	border-right: 0;
+}
+.time + .name:not(:last-child) {
+	border-right:3px solid #000;
+}
+</style>
+<style id="add-css">
+	<#= additionalCss #>
+</style>
+</head>
+<body>
+	<# foreach (var sta in helper.GetStations()) { #>
+	<p class="station">Bahnhof <#= sta.SName #></p>
+	<p class="title"><#= abfahrtSVG #></p>
+	<p class="heading">der Züge in der Richtung nach</p>
+	<#
+		var fs = tt.Stations.First();
+		var ls = tt.Stations.Last();
+	#>
+	<table>
+		<tr>
+			<td colspan="2" class="dir"><#= fs != sta ? fs.SName : "" #></td>
+			<td colspan="2" class="dir"><#= ls != sta ? ls.SName : "" #></td>
+		</tr>
+		<#
+			var trainsA = helper.GetTrains(TrainDirection.ta, sta);
+			var trainsB = helper.GetTrains(TrainDirection.ti, sta);
+			int count = Math.Max(trainsA.Length, trainsB.Length);
+			//count = Math.Max(count, 20);
+		#>
+		<tr>
+			<# if (fs != sta) { #>
+				<td class="time header">Zeit</td>
+				<td class="name header">Zug-Nr</td>
+			<# } else { #>
+				<td class="time header"></td>
+				<td class="name header"></td>
+			<# } #>
+			<# if (ls != sta) { #>
+				<td class="time header">Zeit</td>
+				<td class="name header">Zug-Nr</td>
+			<# } else { #>
+				<td class="time header"></td>
+				<td class="name header"></td>
+			<# } #>
+		</tr>
+		<# for (int i = 0; i < count; i++) { #>
+		<tr class="train-row">
+			<# if (fs != sta) { #>
+				<td class="time"><#= TimeString(trainsA, sta, i) #></td>
+				<td class="name"><#= NameString(trainsA, i) #></td>
+			<# } else { #>
+				<td class="time"></td>
+				<td class="name"></td>
+			<# } #>
+			<# if (ls != sta) { #>
+				<td class="time"><#= TimeString(trainsB, sta, i) #></td>
+				<td class="name"><#= NameString(trainsB, i) #></td>
+			<# } else { #>
+				<td class="time"></td>
+				<td class="name"></td>
+			<# } #>
+		</tr>
+		<# } #>
+	</table>
+	<# } #>
+</body>
+</html>

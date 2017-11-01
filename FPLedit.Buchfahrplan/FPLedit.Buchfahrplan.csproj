@@ -50,7 +50,6 @@
     <Compile Include="Forms\Preview.cs" />
     <Compile Include="Forms\SettingsControlProxy.cs" />
     <Compile Include="Forms\VelocityDialog.cs" />
-    <Compile Include="IBfplTemplate.cs" />
     <Compile Include="Model\BfplAttrs.cs" />
     <Compile Include="Model\BfplPoint.cs" />
     <Compile Include="Templates\TemplateHelper.cs" />
