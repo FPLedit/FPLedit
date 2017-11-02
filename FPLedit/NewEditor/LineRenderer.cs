@@ -24,7 +24,7 @@ namespace FPLedit
 
         private StaPosHandler handler;
         private Dictionary<Station, Point> stapos;
-        private List<List<Station>> routes;
+        private List<Route> routes;
 
         public event EventHandler<MouseEventArgs> StationClicked;
         public event EventHandler<MouseEventArgs> StationDoubleClicked;
@@ -50,25 +50,11 @@ namespace FPLedit
                 return;
             }
 
+            routes = tt.GetRoutes();
             if (tt.Type == TimetableType.Linear)
-            {
-                routes = new List<List<Station>>();
-                routes.Add(tt.Stations);
-
                 stapos = handler.GenerateLinearPoints(tt, ClientSize.Width);
-            }
             else
-            {
-                var routesIndices = tt.Stations.SelectMany(s => s.Routes).Distinct();
-                routes = new List<List<Station>>();
-                foreach (var ri in routesIndices)
-                {
-                    var rt = tt.Stations.Where(s => s.Routes.Contains(ri)).ToList();
-                    routes.Add(rt);
-                }
-
                 stapos = handler.LoadNetworkPoints(tt);
-            }
 
             this.Invalidate();
         }
@@ -86,7 +72,6 @@ namespace FPLedit
                 this.Controls.Remove(p);
             panels.Clear();
 
-
             if (routes == null || routes.Count == 0)
                 return;
 
@@ -96,11 +81,10 @@ namespace FPLedit
             foreach (var r in routes)
             {
                 var pen = linePen;
-                //TODO: Möglicherweise stimmen indices der Liste nicht mit den indices in der Datei überein.
-                if (routes.IndexOf(r) == SelectedRoute)
+                if (r.Index == SelectedRoute)
                     pen = new Pen(Color.Red, 2);
                 Point? lastP = null;
-                foreach (var sta in r)
+                foreach (var sta in r.GetOrderedStations())
                 {
                     var pos = stapos[sta];
                     var x = xOffset + pos.X;
@@ -110,7 +94,8 @@ namespace FPLedit
                     e.Graphics.TranslateTransform(x + 6, y + 7);
                     e.Graphics.RotateTransform(60);
 
-                    var text = sta.SName + " (" + sta.Kilometre.ToString("0.0") + ")";
+                    var km = sta.Positions.GetPosition(r.Index).Value;
+                    var text = sta.SName + " (" + km.ToString("0.0") + ")";
                     e.Graphics.DrawString(text, font, Brushes.Black, new Point(0, 0));
 
                     e.Graphics.EndContainer(cont);

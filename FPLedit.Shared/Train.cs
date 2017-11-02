@@ -19,7 +19,8 @@ namespace FPLedit.Shared
 
         public void AddArrDep(Station sta, ArrDep ardp)
         {
-            var stas = _parent.Stations.OrderBy(s => s.Kilometre).ToList();
+            //TODO: Laufwege, LinearKilometre hier nur vorläufig
+            var stas = _parent.Stations.OrderBy(s => s.LinearKilometre).ToList();
             var idx = stas.IndexOf(sta);
 
             var ar = ardp.Arrival.ToShortTimeString();
@@ -35,7 +36,8 @@ namespace FPLedit.Shared
 
         public void SetArrDep(Station sta, ArrDep ardp)
         {
-            var stas = _parent.Stations.OrderBy(s => s.Kilometre).ToList();
+            //TODO: Laufwege, LinearKilometre hier nur vorläufig
+            var stas = _parent.Stations.OrderBy(s => s.LinearKilometre).ToList();
             var idx = stas.IndexOf(sta);
             var tElm = Children.Where(x => x.XName == "t").ToList()[idx];
 
@@ -49,7 +51,8 @@ namespace FPLedit.Shared
 
         public ArrDep GetArrDep(Station sta)
         {
-            var stas = _parent.Stations.OrderBy(s => s.Kilometre).ToList();
+            //TODO: Laufwege, LinearKilometre hier nur vorläufig
+            var stas = _parent.Stations.OrderBy(s => s.LinearKilometre).ToList();
             var idx = stas.IndexOf(sta);
             var tElm = Children.Where(x => x.XName == "t").ToList()[idx];
 
@@ -98,7 +101,8 @@ namespace FPLedit.Shared
 
         public void RemoveArrDep(Station sta)
         {
-            var stas = _parent.Stations.OrderBy(s => s.Kilometre).ToList();
+            //TODO: Laufwege, LinearKilometre hier nur vorläufig
+            var stas = _parent.Stations.OrderBy(s => s.LinearKilometre).ToList();
             var idx = stas.IndexOf(sta);
             var tElm = Children.Where(x => x.XName == "t").ToList()[idx];
 

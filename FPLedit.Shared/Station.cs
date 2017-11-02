@@ -23,10 +23,15 @@ namespace FPLedit.Shared
             set => SetAttribute("name", value);
         }
 
-        public float Kilometre
+        public float LinearKilometre
         {
-            get => float.Parse(GetAttribute("km", "0.0"), CultureInfo.InvariantCulture);
-            set => SetAttribute("km", value.ToString("0.0", CultureInfo.InvariantCulture));
+            get => Positions.GetPosition(0).Value;
+            set => Positions.SetPosition(0, value);
+        }
+
+        public PositionCollection Positions
+        {
+            get => new PositionCollection(this, _parent);
         }
 
         public int Wellenlinien

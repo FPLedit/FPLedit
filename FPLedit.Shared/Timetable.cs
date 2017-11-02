@@ -101,8 +101,8 @@ namespace FPLedit.Shared
             if (Type == TimetableType.Network)
                 throw new NotSupportedException("Netzwerk-Fahrpläne haben keine Richtung!");
             return (direction == TrainDirection.ta ?
-                Stations.OrderByDescending(s => s.Kilometre)
-                : Stations.OrderBy(s => s.Kilometre)).ToList();
+                Stations.OrderByDescending(s => s.LinearKilometre)
+                : Stations.OrderBy(s => s.LinearKilometre)).ToList();
         }
 
         public string GetLineName(TrainDirection direction)
@@ -134,39 +134,30 @@ namespace FPLedit.Shared
 
             sta._parent = this;
             stations.Add(sta);
-            stations = stations.OrderBy(s => s.Kilometre).ToList();
-            var idx = stations.IndexOf(sta); // Index vorläufig ermitteln
+            if (Type == TimetableType.Linear)
+            {
+                stations = stations.OrderBy(s => s.LinearKilometre).ToList();
+                var idx = stations.IndexOf(sta); // Index vorläufig ermitteln
 
-            // Es können ja noch andere Nodes in den Children sein.
-            if (idx != 0)
-            {
-                var staBefore = stations[idx - 1];
-                idx = sElm.Children.IndexOf(staBefore.XMLEntity) + 1;
+                // Es können ja noch andere Nodes in den Children sein.
+                if (idx != 0)
+                {
+                    var staBefore = stations[idx - 1];
+                    idx = sElm.Children.IndexOf(staBefore.XMLEntity) + 1;
+                }
+                else if (stations.Count > idx + 1)
+                {
+                    var staAfter = stations[idx + 1];
+                    idx = sElm.Children.IndexOf(staAfter.XMLEntity); // Davor einfügen
+                }
+                sElm.Children.Insert(idx, sta.XMLEntity);
             }
-            else if (stations.Count > idx + 1)
-            {
-                var staAfter = stations[idx + 1];
-                idx = sElm.Children.IndexOf(staAfter.XMLEntity); // Davor einfügen
-            }
-            sElm.Children.Insert(idx, sta.XMLEntity);
+            else
+                sElm.Children.Add(sta.XMLEntity);
 
             // Auch bei allen Zügen hinzufügen
             foreach (var t in Trains)
                 t.AddArrDep(sta, new ArrDep());
-        }
-
-        // "Eröffnet" eine neue Strecke zwischen zwei Bahnhöfen
-        public void AddRoute(Station s1, Station s2)
-        {
-            if (Type == TimetableType.Linear)
-                throw new NotSupportedException("Lineare Strecken haben keine Routen!");
-            var idx = nextRtId++;
-            var r1 = s1.Routes.ToList();
-            var r2 = s2.Routes.ToList();
-            r1.Add(idx);
-            r2.Add(idx);
-            s1.Routes = r1.ToArray();
-            s2.Routes = r2.ToArray();
         }
 
         public void RemoveStation(Station sta)
@@ -214,6 +205,45 @@ namespace FPLedit.Shared
             tElm.Children.Remove(tra.XMLEntity);
         }
 
+        #endregion
+
+        #region Hilfsmethoden für Routen
+        // "Eröffnet" eine neue Strecke zwischen zwei Bahnhöfen
+        public void AddRoute(Station s1, Station s2)
+        {
+            if (Type == TimetableType.Linear)
+                throw new NotSupportedException("Lineare Strecken haben keine Routen!");
+            //TODO: Zusätzliche Kilometerangabe
+            var idx = nextRtId++;
+            var r1 = s1.Routes.ToList();
+            var r2 = s2.Routes.ToList();
+            r1.Add(idx);
+            r2.Add(idx);
+            s1.Routes = r1.ToArray();
+            s2.Routes = r2.ToArray();
+        }
+
+        public List<Route> GetRoutes()
+        {
+            var routes = new List<Route>();
+            if (Type == TimetableType.Network)
+            {
+                var routesIndices = Stations.SelectMany(s => s.Routes).Distinct();
+                foreach (var ri in routesIndices)
+                    routes.Add(GetRoute(ri));
+            }
+            else
+            {
+                routes.Add(new Route() { Index = 0, Stations = Stations });
+            }
+            return routes;
+        }
+
+        public Route GetRoute(int index)
+        {
+            var stas = Stations.Where(s => s.Routes.Contains(index)).ToList();
+            return new Route() { Index = index, Stations = stas };
+        }
         #endregion
 
         public string[] GetAllTfzs()

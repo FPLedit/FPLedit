@@ -14,23 +14,26 @@ namespace FPLedit.Editor
     public partial class EditStationForm : Form
     {
         Timetable _parent;
+        int route;
 
         public EditStationForm()
         {
             InitializeComponent();
         }
 
-        public EditStationForm(Timetable tt) : this()
+        public EditStationForm(Timetable tt, int route) : this()
         {
             _parent = tt;
+            this.route = route;
         }
 
-        public EditStationForm(Station station) : this()
+        public EditStationForm(Station station, int route) : this()
         {
             Text = "Station bearbeiten";
             nameTextBox.Text = station.SName;
-            positionTextBox.Text = station.Kilometre.ToString();
+            positionTextBox.Text = station.Positions.GetPosition(route).Value.ToString("0.0");
             Station = station;
+            this.route = route;
         }
 
         public Station Station { get; set; }
@@ -48,7 +51,7 @@ namespace FPLedit.Editor
             if (Station == null)
                 Station = new Station(_parent);
             Station.SName = name;
-            Station.Kilometre = float.Parse(positionTextBox.Text);
+            Station.Positions.SetPosition(route, float.Parse(positionTextBox.Text));
 
             DialogResult = DialogResult.OK;
             Close();

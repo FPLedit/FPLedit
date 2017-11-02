@@ -30,7 +30,9 @@ namespace FPLedit.Editor
         {
             this.info = info;
             tt = info.Timetable;
-            info.BackupTimetable();
+            if (info.Timetable.Type == TimetableType.Network)
+                throw new InvalidOperationException("LineEditForm läuft nur mit linearren Fahrplan-Dateien!");
+                info.BackupTimetable();
 
             KeyDown += (s, e) =>
             {
@@ -51,11 +53,11 @@ namespace FPLedit.Editor
         {
             listView.Items.Clear();
 
-            foreach (var station in tt.Stations.OrderBy(s => s.Kilometre))
+            foreach (var station in tt.Stations.OrderBy(s => s.LinearKilometre))
             {
                 listView.Items.Add(new ListViewItem(new[] {
                     station.SName,
-                    station.Kilometre.ToString() })
+                    station.LinearKilometre.ToString() })
                 { Tag = station });
             }
 
@@ -71,11 +73,11 @@ namespace FPLedit.Editor
                 var item = listView.SelectedItems[0];
                 Station station = (Station)item.Tag;
 
-                EditStationForm nsf = new EditStationForm(station);
+                EditStationForm nsf = new EditStationForm(station, 0);
                 if (nsf.ShowDialog() == DialogResult.OK)
                 {
                     item.SubItems[0].Text = station.SName;
-                    item.SubItems[1].Text = station.Kilometre.ToString();
+                    item.SubItems[1].Text = station.LinearKilometre.ToString();
                 }
             }
             else if (message)
@@ -97,7 +99,7 @@ namespace FPLedit.Editor
 
         private void NewStation()
         {
-            EditStationForm nsf = new EditStationForm(tt);
+            EditStationForm nsf = new EditStationForm(tt, 0);
             if (nsf.ShowDialog() == DialogResult.OK)
             {
                 Station sta = nsf.Station;
@@ -105,7 +107,7 @@ namespace FPLedit.Editor
                 tt.AddStation(sta);
                 var item = listView.Items.Add(new ListViewItem(new[] {
                     sta.SName,
-                    sta.Kilometre.ToString() })
+                    sta.LinearKilometre.ToString() })
                 { Tag = sta });
 
                 item.EnsureVisible();

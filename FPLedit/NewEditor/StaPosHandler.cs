@@ -52,10 +52,11 @@ namespace FPLedit
             }
         }
 
-        public void SetMiddlePos(int line, Station m, Timetable tt)
+        public void SetMiddlePos(int route, Station m, Timetable tt)
         {
-            var s1 = GetStationBefore(line, m.Kilometre, tt);
-            var s2 = GetStationAfter(line, m.Kilometre, tt);
+            var km = m.Positions.GetPosition(route).Value;
+            var s1 = GetStationBefore(route, km, tt);
+            var s2 = GetStationAfter(route, km, tt);
 
             Point pm;
             if (s1 == null && s2 == null)
@@ -85,12 +86,12 @@ namespace FPLedit
 
         Station GetStationBefore(int route, float km, Timetable tt)
         {
-            return tt.Stations.LastOrDefault(s => s.Routes.Contains(route) && s.Kilometre < km);
+            return tt.Stations.LastOrDefault(s => s.Routes.Contains(route) && s.Positions.GetPosition(route) < km);
         }
 
         Station GetStationAfter(int route, float km, Timetable tt)
         {
-            return tt.Stations.FirstOrDefault(s => s.Routes.Contains(route) && s.Kilometre > km);
+            return tt.Stations.FirstOrDefault(s => s.Routes.Contains(route) && s.Positions.GetPosition(route) > km);
         }
     }
 }

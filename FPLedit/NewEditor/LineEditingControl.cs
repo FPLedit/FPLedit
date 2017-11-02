@@ -13,6 +13,7 @@ namespace FPLedit.NewEditor
     public partial class LineEditingControl : UserControl
     {
         private IInfo info;
+        private int selectedRoute = 0; //TODO: Use actual index
 
         public LineEditingControl()
         {
@@ -25,12 +26,10 @@ namespace FPLedit.NewEditor
 
             if (tt.Type == TimetableType.Network)
             {
-                var routesIndices = tt.Stations.SelectMany(s => s.Routes).Distinct();
-                foreach (var ri in routesIndices)
+                var rt = tt.GetRoutes();
+                foreach (var route in rt)
                 {
-                    var rt = tt.Stations.Where(s => s.Routes.Contains(ri)).OrderBy(s => s.Kilometre).ToList();
-                    var text = (rt.FirstOrDefault()?.SName ?? "") + " - " + (rt.LastOrDefault()?.SName ?? "");
-                    routes.Add(new IndexedItem(text, ri));
+                    routes.Add(new IndexedItem(route.GetRouteName(), route.Index));
                 }
             }
             else
@@ -55,13 +54,16 @@ namespace FPLedit.NewEditor
                 }
             };
 
-            comboBox1.SelectedIndexChanged += (s, e)
-                => lineRenderer.SelectedRoute = ((IndexedItem)comboBox1.SelectedItem).Index;
+            comboBox1.SelectedIndexChanged += (s, e) =>
+            {
+                selectedRoute = ((IndexedItem)comboBox1.SelectedItem).Index;
+                lineRenderer.SelectedRoute = selectedRoute;
+            };
 
             lineRenderer.StationDoubleClicked += (s, e) =>
             {
                 info.StageUndoStep();
-                Editor.EditStationForm nsf = new Editor.EditStationForm((Station)s);
+                Editor.EditStationForm nsf = new Editor.EditStationForm((Station)s, selectedRoute);
                 if (nsf.ShowDialog() == DialogResult.OK)
                 {
                     lineRenderer.SetLine(info.Timetable);
@@ -86,21 +88,21 @@ namespace FPLedit.NewEditor
             newButton.Click += (s, e) =>
             {
                 info.StageUndoStep();
-                Editor.EditStationForm nsf = new Editor.EditStationForm(info.Timetable);
+                Editor.EditStationForm nsf = new Editor.EditStationForm(info.Timetable, selectedRoute);
                 if (nsf.ShowDialog() == DialogResult.OK)
                 {
                     Station sta = nsf.Station;
                     if (info.Timetable.Type == TimetableType.Network)
                     {
                         var handler = new StaPosHandler();
-                        handler.SetMiddlePos(0, sta, info.Timetable);
+                        handler.SetMiddlePos(selectedRoute, sta, info.Timetable);
                         var r = sta.Routes.ToList();
                         r.Add(lineRenderer.SelectedRoute);
                         sta.Routes = r.ToArray();
-                        lineRenderer.SetLine(info.Timetable);
                     }
                     info.Timetable.AddStation(sta);
                     info.SetUnsaved();
+                    lineRenderer.SetLine(info.Timetable);
                 }
             };
         }
