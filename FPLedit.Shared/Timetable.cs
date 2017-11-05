@@ -209,18 +209,20 @@ namespace FPLedit.Shared
 
         #region Hilfsmethoden für Routen
         // "Eröffnet" eine neue Strecke zwischen zwei Bahnhöfen
-        public void AddRoute(Station s1, Station s2)
+        public void AddRoute(Station s_old, Station s_new, float old_add_km, float new_km)
         {
             if (Type == TimetableType.Linear)
                 throw new NotSupportedException("Lineare Strecken haben keine Routen!");
             //TODO: Zusätzliche Kilometerangabe
-            var idx = nextRtId++;
-            var r1 = s1.Routes.ToList();
-            var r2 = s2.Routes.ToList();
+            var idx = ++nextRtId;
+            var r1 = s_old.Routes.ToList();
+            var r2 = s_new.Routes.ToList();
             r1.Add(idx);
             r2.Add(idx);
-            s1.Routes = r1.ToArray();
-            s2.Routes = r2.ToArray();
+            s_old.Routes = r1.ToArray();
+            s_new.Routes = r2.ToArray();
+            s_old.Positions.SetPosition(idx, old_add_km);
+            s_new.Positions.SetPosition(idx, new_km);
         }
 
         public List<Route> GetRoutes()

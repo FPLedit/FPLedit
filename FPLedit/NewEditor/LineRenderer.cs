@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -28,9 +29,14 @@ namespace FPLedit
 
         public event EventHandler<MouseEventArgs> StationClicked;
         public event EventHandler<MouseEventArgs> StationDoubleClicked;
+        public event EventHandler NewRouteAdded;
 
         private const int OFFSET_X = 20;
         private const int OFFSET_Y = 50;
+
+        private Station tmp_sta;
+        private float tmp_km;
+        private bool addMode => tmp_sta != null;
 
         public LineRenderer()
         {
@@ -38,6 +44,8 @@ namespace FPLedit
             font = new Font(Font.FontFamily, 8);
             linePen = new Pen(Color.Black, 2.0f);
             handler = new StaPosHandler();
+
+            this.MouseDown += (s, e) => PlaceStation();
         }
 
         public void SetLine(Timetable tt)
@@ -61,6 +69,7 @@ namespace FPLedit
 
         public void UpdateLine()
         {
+            this.SetLine(tt);
             this.Invalidate();
         }
 
@@ -75,7 +84,6 @@ namespace FPLedit
             if (routes == null || routes.Count == 0)
                 return;
 
-            var xOffset = OFFSET_X;
             var yOffset = OFFSET_Y;
 
             foreach (var r in routes)
@@ -87,7 +95,7 @@ namespace FPLedit
                 foreach (var sta in r.GetOrderedStations())
                 {
                     var pos = stapos[sta];
-                    var x = xOffset + pos.X;
+                    var x = OFFSET_X + pos.X;
                     var y = yOffset + pos.Y;
 
                     var cont = e.Graphics.BeginContainer();
@@ -107,23 +115,49 @@ namespace FPLedit
                         BackColor = Color.Gray,
                         Tag = sta,
                     };
-                    p.MouseDoubleClick += (s, args) => StationDoubleClicked?.Invoke(sta, args);
-                    p.MouseClick += (s, args) => StationClicked?.Invoke(sta, args);
-
-                    // Drag'n'Drop-Events
-                    p.MouseDown += (s, args) =>
+                    if (!addMode)
                     {
-                        draggedControl = (Control)s;
-                        Cursor.Current = Cursors.SizeAll;
-                    };
-                    p.MouseMove += (s, args) => this.OnMouseMove(args);
-                    p.MouseUp += (s, args) => this.OnMouseUp(args);
+                        p.MouseDoubleClick += (s, args) => StationDoubleClicked?.Invoke(sta, args);
+                        p.MouseClick += (s, args) => StationClicked?.Invoke(sta, args);
+
+                        // Drag'n'Drop-Events
+                        p.MouseDown += (s, args) =>
+                        {
+                            draggedControl = (Control)s;
+                            Cursor.Current = Cursors.SizeAll;
+                        };
+                        p.MouseMove += (s, args) => this.OnMouseMove(args);
+                        p.MouseUp += (s, args) => this.OnMouseUp(args);
+                    }
+                    else
+                        p.MouseClick += (s, args) => ConnectAddStation(sta);
                     Controls.Add(p);
                     panels.Add(p);
 
                     if (lastP.HasValue)
-                        e.Graphics.DrawLine(pen, x, y, xOffset + lastP.Value.X, yOffset + lastP.Value.Y);
+                        e.Graphics.DrawLine(pen, x, y, OFFSET_X + lastP.Value.X, yOffset + lastP.Value.Y);
                     lastP = pos;
+                }
+            }
+
+            if (tmp_sta != null)
+            {
+                if (stapos.TryGetValue(tmp_sta, out Point pos))
+                {
+                    var x = OFFSET_X + pos.X;
+                    var y = yOffset + pos.Y;
+
+                    var p = new Panel()
+                    {
+                        Location = new Point(x - 5, y - 5),
+                        Size = new Size(10, 10),
+                        BackColor = Color.DarkCyan,
+                        Tag = tmp_sta,
+                    };
+                    Controls.Add(p);
+                    panels.Add(p);
+
+                    e.Graphics.DrawLine(linePen, new Point(x, y), PointToClient(MousePosition));
                 }
             }
 
@@ -136,6 +170,42 @@ namespace FPLedit
             this.Invalidate();
             base.OnResize(e);
         }
+
+        #region AddMode
+        private void ConnectAddStation(Station sta)
+        {
+            tt.AddRoute(sta, tmp_sta, 0, tmp_km);
+            tt.AddStation(tmp_sta);
+            handler.WriteStapos(tt, stapos);
+            tmp_sta = null;
+
+            NewRouteAdded?.Invoke(this, new EventArgs());
+            UpdateLine();
+        }
+
+        public void StartAddStation(Station rawSta, float km)
+        {
+            tmp_sta = rawSta;
+            tmp_km = km;
+
+            // Setze Cursor auf Plus-Symbol
+            Cursor = new Cursor(new MemoryStream(Properties.Resources.AddCursor));
+        }
+
+        private void PlaceStation()
+        {
+            if (tmp_sta == null || stapos.TryGetValue(tmp_sta, out Point p))
+                return;
+
+            Cursor = DefaultCursor;
+            var point = PointToClient(MousePosition);
+            point.X -= OFFSET_X;
+            point.Y -= OFFSET_Y;
+            stapos[tmp_sta] = point;
+
+            Refresh();
+        }
+        #endregion
 
         #region Drag'n'Drop
         private Control draggedControl;
@@ -161,6 +231,8 @@ namespace FPLedit
                 hasDragged = true;
                 Refresh();
             }
+            if (tmp_sta != null)
+                Refresh();
             base.OnMouseMove(e);
         }
 

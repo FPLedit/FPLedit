@@ -20,7 +20,7 @@ namespace FPLedit.NewEditor
             InitializeComponent();
         }
 
-        private IndexedItem[] GetLineNames(Timetable tt)
+        private IndexedItem[] GetRouteNames(Timetable tt)
         {
             var routes = new List<IndexedItem>();
 
@@ -28,13 +28,19 @@ namespace FPLedit.NewEditor
             {
                 var rt = tt.GetRoutes();
                 foreach (var route in rt)
-                {
                     routes.Add(new IndexedItem(route.GetRouteName(), route.Index));
-                }
             }
             else
                 routes.Add(new IndexedItem("<Standard>", 0));
             return routes.ToArray();
+        }
+
+        private void ReloadRouteNames()
+        {
+            var routes = GetRouteNames(info.Timetable);
+            routesComboBox.Items.Clear();
+            routesComboBox.Items.AddRange(routes);
+            routesComboBox.SelectedIndex = 0;
         }
 
         public void Initialize(IInfo info)
@@ -43,20 +49,17 @@ namespace FPLedit.NewEditor
             info.FileStateChanged += (s, e) =>
             {
                 lineRenderer.SetLine(info.Timetable);
-                newButton.Enabled = e.FileState.Opened;
+                newButton.Enabled = routesComboBox.Enabled = newLineButton.Enabled = e.FileState.Opened;
 
                 if (e.FileState.LineCreated)
-                {
-                    var routes = GetLineNames(info.Timetable);
-                    comboBox1.Items.Clear();
-                    comboBox1.Items.AddRange(routes);
-                    comboBox1.SelectedIndex = 0;
-                }
+                    ReloadRouteNames();
+
+                newLineButton.Visible = routesComboBox.Visible = info.Timetable.Type == TimetableType.Network;
             };
 
-            comboBox1.SelectedIndexChanged += (s, e) =>
+            routesComboBox.SelectedIndexChanged += (s, e) =>
             {
-                selectedRoute = ((IndexedItem)comboBox1.SelectedItem).Index;
+                selectedRoute = ((IndexedItem)routesComboBox.SelectedItem).Index;
                 lineRenderer.SelectedRoute = selectedRoute;
             };
 
@@ -85,10 +88,11 @@ namespace FPLedit.NewEditor
                     info.SetUnsaved();
                 };
             };
+            lineRenderer.NewRouteAdded += (s, args) => ReloadRouteNames();
             newButton.Click += (s, e) =>
             {
                 info.StageUndoStep();
-                Editor.EditStationForm nsf = new Editor.EditStationForm(info.Timetable, selectedRoute);
+                var nsf = new Editor.EditStationForm(info.Timetable, selectedRoute);
                 if (nsf.ShowDialog() == DialogResult.OK)
                 {
                     Station sta = nsf.Station;
@@ -103,6 +107,16 @@ namespace FPLedit.NewEditor
                     info.Timetable.AddStation(sta);
                     info.SetUnsaved();
                     lineRenderer.SetLine(info.Timetable);
+                }
+            };
+            newLineButton.Click += (s, e) =>
+            {
+                info.StageUndoStep();
+                var nlf = new NewLineStationForm(info.Timetable);
+                if (nlf.ShowDialog() == DialogResult.OK)
+                {
+                    lineRenderer.StartAddStation(nlf.Station, nlf.Position);
+                    info.SetUnsaved();
                 }
             };
         }

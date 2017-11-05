@@ -144,6 +144,12 @@
       <DependentUpon>InfoForm.cs</DependentUpon>
     </Compile>
     <Compile Include="IRestartable.cs" />
+    <Compile Include="NewEditor\NewLineStationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewEditor\NewLineStationForm.Designer.cs">
+      <DependentUpon>NewLineStationForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="NewEditor\LineEditingControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -190,6 +196,7 @@
     <Compile Include="NewEditor\StaPosReader.cs" />
     <Compile Include="UndoManager.cs" />
     <Compile Include="UpdateManager.cs" />
+    <Content Include="Resources\AddCursor.cur" />
     <Content Include="Resources\trapeztafel.png" />
     <Content Include="Resources\programm.ico" />
     <EmbeddedResource Include="Editor\DesignableForm.resx">
@@ -228,6 +235,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewEditor\NewLineStationForm.resx">
+      <DependentUpon>NewLineStationForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="NewEditor\LineEditingControl.resx">
       <DependentUpon>LineEditingControl.cs</DependentUpon>
