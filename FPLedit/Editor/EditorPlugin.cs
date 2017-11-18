@@ -37,7 +37,7 @@ namespace FPLedit.Editor
 
             eitem.DropDownItems.Add(new ToolStripSeparator());
 
-            editLineItem = eitem.DropDownItems.Add("Strecke bearbeiten");
+            editLineItem = eitem.DropDownItems.Add("Strecke bearbeiten (alt)");
             editLineItem.Enabled = false;
             editLineItem.Click += (s, e) => ShowForm(new LineEditForm(info));
 
@@ -116,6 +116,10 @@ namespace FPLedit.Editor
                 var elem = eitem.DropDownItems[dialogOffset + i];
                 elem.Enabled = dialogs[i].IsEnabled(info);
             }
+
+            //TODO: Übergangslösung, überdenken
+            if (info.Timetable != null && info.Timetable.Type == TimetableType.Network)
+                editLineItem.Visible = false;
         }
     }
 }

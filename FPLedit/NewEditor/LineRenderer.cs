@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace FPLedit
+namespace FPLedit.NewEditor
 {
     internal class LineRenderer : Control
     {
@@ -51,18 +51,14 @@ namespace FPLedit
         public void SetLine(Timetable tt)
         {
             this.tt = tt;
-            if (tt == null)
+            routes = tt?.GetRoutes();
+            if (tt != null)
             {
-                routes = null;
-                this.Invalidate();
-                return;
+                if (tt.Type == TimetableType.Linear)
+                    stapos = handler.GenerateLinearPoints(tt, ClientSize.Width);
+                else
+                    stapos = handler.LoadNetworkPoints(tt);
             }
-
-            routes = tt.GetRoutes();
-            if (tt.Type == TimetableType.Linear)
-                stapos = handler.GenerateLinearPoints(tt, ClientSize.Width);
-            else
-                stapos = handler.LoadNetworkPoints(tt);
 
             this.Invalidate();
         }
@@ -76,15 +72,17 @@ namespace FPLedit
         protected override void OnPaint(PaintEventArgs e)
         {
             this.SuspendLayout();
+            // Reset
             e.Graphics.Clear(Color.White);
             foreach (var p in panels)
                 this.Controls.Remove(p);
             panels.Clear();
 
+            DrawStatus(e.Graphics);
+            DrawBorder(e.Graphics);
+
             if (routes == null || routes.Count == 0)
                 return;
-
-            var yOffset = OFFSET_Y;
 
             foreach (var r in routes)
             {
@@ -96,7 +94,7 @@ namespace FPLedit
                 {
                     var pos = stapos[sta];
                     var x = OFFSET_X + pos.X;
-                    var y = yOffset + pos.Y;
+                    var y = OFFSET_Y + pos.Y;
 
                     var cont = e.Graphics.BeginContainer();
                     e.Graphics.TranslateTransform(x + 6, y + 7);
@@ -115,27 +113,16 @@ namespace FPLedit
                         BackColor = Color.Gray,
                         Tag = sta,
                     };
-                    if (!addMode)
-                    {
-                        p.MouseDoubleClick += (s, args) => StationDoubleClicked?.Invoke(sta, args);
-                        p.MouseClick += (s, args) => StationClicked?.Invoke(sta, args);
 
-                        // Drag'n'Drop-Events
-                        p.MouseDown += (s, args) =>
-                        {
-                            draggedControl = (Control)s;
-                            Cursor.Current = Cursors.SizeAll;
-                        };
-                        p.MouseMove += (s, args) => this.OnMouseMove(args);
-                        p.MouseUp += (s, args) => this.OnMouseUp(args);
-                    }
-                    else
-                        p.MouseClick += (s, args) => ConnectAddStation(sta);
+                    // Wire events
+                    if (!addMode) ApplyNormalMode(p, sta);
+                    else ApplyAddMode(p, sta);
+
                     Controls.Add(p);
                     panels.Add(p);
 
                     if (lastP.HasValue)
-                        e.Graphics.DrawLine(pen, x, y, OFFSET_X + lastP.Value.X, yOffset + lastP.Value.Y);
+                        e.Graphics.DrawLine(pen, x, y, OFFSET_X + lastP.Value.X, OFFSET_Y + lastP.Value.Y);
                     lastP = pos;
                 }
             }
@@ -145,7 +132,7 @@ namespace FPLedit
                 if (stapos.TryGetValue(tmp_sta, out Point pos))
                 {
                     var x = OFFSET_X + pos.X;
-                    var y = yOffset + pos.Y;
+                    var y = OFFSET_Y + pos.Y;
 
                     var p = new Panel()
                     {
@@ -165,13 +152,50 @@ namespace FPLedit
             base.OnPaint(e);
         }
 
+        private void DrawStatus(Graphics g)
+        {
+            string todo = addMode ? "Klicken, um Station hinzuzufügen und diese mit einer bestehenden Station zu verbinden" : "Streckennetz Bearbeiten";
+            var size = g.MeasureString(todo, font);
+            var point = new PointF(ClientSize.Width - size.Width, ClientSize.Height - size.Height);
+            g.FillRectangle(Brushes.Turquoise, new RectangleF(point, size));
+            g.DrawString(todo, font, Brushes.Black, point);
+        }
+
+        private void DrawBorder(Graphics g)
+        {
+            var pen = new Pen(Brushes.Black) { DashPattern = new[] { 2f, 2f, 2f, 2f } };
+            g.DrawLine(pen, Point.Empty, new Point(ClientSize.Width, 0));
+        }
+
         protected override void OnResize(EventArgs e)
         {
             this.Invalidate();
             base.OnResize(e);
         }
 
+        #region Normal Mode
+        private void ApplyNormalMode(Panel p, Station sta)
+        {
+            p.MouseDoubleClick += (s, e) => StationDoubleClicked?.Invoke(sta, e);
+            p.MouseClick += (s, e) => StationClicked?.Invoke(sta, e);
+
+            // Drag'n'Drop-Events
+            p.MouseDown += (s, e) =>
+            {
+                draggedControl = (Control)s;
+                Cursor.Current = Cursors.SizeAll;
+            };
+            p.MouseMove += (s, e) => this.OnMouseMove(e);
+            p.MouseUp += (s, e) => this.OnMouseUp(e);
+        }
+        #endregion
+
         #region AddMode
+        private void ApplyAddMode(Panel p, Station sta)
+        {
+            p.MouseClick += (s, args) => ConnectAddStation(sta);
+        }
+
         private void ConnectAddStation(Station sta)
         {
             tt.AddRoute(sta, tmp_sta, 0, tmp_km);

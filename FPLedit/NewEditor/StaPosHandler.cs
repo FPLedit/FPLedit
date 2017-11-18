@@ -84,14 +84,12 @@ namespace FPLedit
             m.SetAttribute("fpl-pos", val);
         }
 
-        Station GetStationBefore(int route, float km, Timetable tt)
-        {
-            return tt.Stations.LastOrDefault(s => s.Routes.Contains(route) && s.Positions.GetPosition(route) < km);
-        }
+        private Station GetStationBefore(int route, float km, Timetable tt)
+            => tt.Stations.LastOrDefault(s =>
+                s.Routes.Contains(route) && s.Positions.GetPosition(route) < km);
 
         Station GetStationAfter(int route, float km, Timetable tt)
-        {
-            return tt.Stations.FirstOrDefault(s => s.Routes.Contains(route) && s.Positions.GetPosition(route) > km);
-        }
+            => tt.Stations.FirstOrDefault(s =>
+                s.Routes.Contains(route) && s.Positions.GetPosition(route) > km);
     }
 }
