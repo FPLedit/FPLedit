@@ -33,7 +33,7 @@ namespace FPLedit.Editor
             undoItem = (ToolStripMenuItem)eitem.DropDownItems.Add("Rückgängig");
             undoItem.ShortcutKeys = Keys.Control | Keys.Z;
             undoItem.Enabled = false;
-            undoItem.Click += (s,e) => info.Undo();
+            undoItem.Click += (s, e) => info.Undo();
 
             eitem.DropDownItems.Add(new ToolStripSeparator());
 
@@ -43,7 +43,12 @@ namespace FPLedit.Editor
 
             editTrainsItem = eitem.DropDownItems.Add("Züge bearbeiten");
             editTrainsItem.Enabled = false;
-            editTrainsItem.Click += (s, e) => ShowForm(new TrainsEditForm(info));
+
+            editTrainsItem.Click += (s, e) => {
+                if (info.Timetable.Type == TimetableType.Linear)
+                    ShowForm(new TrainsEditForm(info));
+                else ShowForm(new FPLedit.NewEditor.TrainsEditingForm(info));
+            };
 
             editTimetableItem = eitem.DropDownItems.Add("Fahrplan bearbeiten");
             editTimetableItem.Enabled = false;

@@ -48,7 +48,7 @@ namespace FPLedit.NewEditor
             this.info = info;
             info.FileStateChanged += (s, e) =>
             {
-                lineRenderer.SetLine(info.Timetable);
+                lineRenderer.SetTimetable(info.Timetable);
                 newButton.Enabled = routesComboBox.Enabled = newLineButton.Enabled = e.FileState.Opened;
 
                 if (e.FileState.LineCreated)
@@ -69,7 +69,7 @@ namespace FPLedit.NewEditor
                 Editor.EditStationForm nsf = new Editor.EditStationForm((Station)s, selectedRoute);
                 if (nsf.ShowDialog() == DialogResult.OK)
                 {
-                    lineRenderer.SetLine(info.Timetable);
+                    lineRenderer.SetTimetable(info.Timetable);
                     info.SetUnsaved();
                 }
             };
@@ -84,7 +84,7 @@ namespace FPLedit.NewEditor
                 itm.Click += (se, ar) => {
                     info.StageUndoStep();
                     info.Timetable.RemoveStation((Station)s);
-                    lineRenderer.SetLine(info.Timetable);
+                    lineRenderer.SetTimetable(info.Timetable);
                     info.SetUnsaved();
                 };
             };
@@ -106,7 +106,7 @@ namespace FPLedit.NewEditor
                     }
                     info.Timetable.AddStation(sta);
                     info.SetUnsaved();
-                    lineRenderer.SetLine(info.Timetable);
+                    lineRenderer.SetTimetable(info.Timetable);
                 }
             };
             newLineButton.Click += (s, e) =>

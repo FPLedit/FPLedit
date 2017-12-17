@@ -16,12 +16,33 @@ namespace FPLedit.NewEditor
         private Font font;
         private Pen linePen;
 
+        private bool _stationMovingEnabled = true;
+        public bool StationMovingEnabled
+        {
+            get => _stationMovingEnabled;
+            set { _stationMovingEnabled = value; Refresh(); }
+        }
+        private string _fixedStatusString = null;
+        public string FixedStatusString
+        {
+            get => _fixedStatusString;
+            set { _fixedStatusString = value; Refresh(); }
+        }
+        private bool _disableTopBorder = false;
+        public bool DisableTopBorder
+        {
+            get => _disableTopBorder;
+            set { _disableTopBorder = value; Refresh(); }
+        }
         private int _selectedRoute = 0;
         public int SelectedRoute
         {
             get => _selectedRoute;
             set { _selectedRoute = value; this.Invalidate(); }
         }
+        private List<Station> _highlightedStations = new List<Station>();
+        public List<Station> HighlightedStations { get => _highlightedStations; }
+
 
         private StaPosHandler handler;
         private Dictionary<Station, Point> stapos;
@@ -48,7 +69,7 @@ namespace FPLedit.NewEditor
             this.MouseDown += (s, e) => PlaceStation();
         }
 
-        public void SetLine(Timetable tt)
+        public void SetTimetable(Timetable tt)
         {
             this.tt = tt;
             routes = tt?.GetRoutes();
@@ -63,12 +84,13 @@ namespace FPLedit.NewEditor
             this.Invalidate();
         }
 
-        public void UpdateLine()
+        public void ReloadTimetable()
         {
-            this.SetLine(tt);
+            this.SetTimetable(tt);
             this.Invalidate();
         }
 
+        #region Drawing
         protected override void OnPaint(PaintEventArgs e)
         {
             this.SuspendLayout();
@@ -110,7 +132,7 @@ namespace FPLedit.NewEditor
                     {
                         Location = new Point(x - 5, y - 5),
                         Size = new Size(10, 10),
-                        BackColor = Color.Gray,
+                        BackColor = HighlightedStations.Contains(sta) ? Color.Red : Color.Gray,
                         Tag = sta,
                     };
 
@@ -154,15 +176,18 @@ namespace FPLedit.NewEditor
 
         private void DrawStatus(Graphics g)
         {
-            string todo = addMode ? "Klicken, um Station hinzuzufügen und diese mit einer bestehenden Station zu verbinden" : "Streckennetz Bearbeiten";
-            var size = g.MeasureString(todo, font);
+            string status = addMode ? "Klicken, um Station hinzuzufügen und diese mit einer bestehenden Station zu verbinden" : "Streckennetz Bearbeiten";
+            status = FixedStatusString ?? status;
+            var size = g.MeasureString(status, font);
             var point = new PointF(ClientSize.Width - size.Width, ClientSize.Height - size.Height);
             g.FillRectangle(Brushes.Turquoise, new RectangleF(point, size));
-            g.DrawString(todo, font, Brushes.Black, point);
+            g.DrawString(status, font, Brushes.Black, point);
         }
 
         private void DrawBorder(Graphics g)
         {
+            if (DisableTopBorder)
+                return;
             var pen = new Pen(Brushes.Black) { DashPattern = new[] { 2f, 2f, 2f, 2f } };
             g.DrawLine(pen, Point.Empty, new Point(ClientSize.Width, 0));
         }
@@ -172,6 +197,7 @@ namespace FPLedit.NewEditor
             this.Invalidate();
             base.OnResize(e);
         }
+        #endregion
 
         #region Normal Mode
         private void ApplyNormalMode(Panel p, Station sta)
@@ -180,13 +206,16 @@ namespace FPLedit.NewEditor
             p.MouseClick += (s, e) => StationClicked?.Invoke(sta, e);
 
             // Drag'n'Drop-Events
-            p.MouseDown += (s, e) =>
+            if (StationMovingEnabled)
             {
-                draggedControl = (Control)s;
-                Cursor.Current = Cursors.SizeAll;
-            };
-            p.MouseMove += (s, e) => this.OnMouseMove(e);
-            p.MouseUp += (s, e) => this.OnMouseUp(e);
+                p.MouseDown += (s, e) =>
+                {
+                    draggedControl = (Control)s;
+                    Cursor.Current = Cursors.SizeAll;
+                };
+                p.MouseMove += (s, e) => this.OnMouseMove(e);
+                p.MouseUp += (s, e) => this.OnMouseUp(e);
+            }
         }
         #endregion
 
@@ -204,7 +233,7 @@ namespace FPLedit.NewEditor
             tmp_sta = null;
 
             NewRouteAdded?.Invoke(this, new EventArgs());
-            UpdateLine();
+            ReloadTimetable();
         }
 
         public void StartAddStation(Station rawSta, float km)
@@ -236,7 +265,7 @@ namespace FPLedit.NewEditor
         private bool hasDragged = false;
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            if (draggedControl != null)
+            if (StationMovingEnabled && draggedControl != null)
             {
                 var p = PointToClient(MousePosition);
 
@@ -262,7 +291,7 @@ namespace FPLedit.NewEditor
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            if (draggedControl != null)
+            if (StationMovingEnabled && draggedControl != null)
             {
                 draggedControl = null;
                 Cursor.Current = Cursors.Default;

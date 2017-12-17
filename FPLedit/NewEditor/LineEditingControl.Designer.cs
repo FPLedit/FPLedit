@@ -36,9 +36,9 @@
             this.lineRenderer = new FPLedit.NewEditor.LineRenderer();
             this.toolbarFlowLayoutPanel.SuspendLayout();
             this.SuspendLayout();
-            //
+            // 
             // newButton
-            //
+            // 
             this.newButton.Enabled = false;
             this.newButton.Location = new System.Drawing.Point(130, 3);
             this.newButton.Name = "newButton";
@@ -46,9 +46,9 @@
             this.newButton.TabIndex = 1;
             this.newButton.Text = "Neue Station";
             this.newButton.UseVisualStyleBackColor = true;
-            //
+            // 
             // routesComboBox
-            //
+            // 
             this.routesComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.routesComboBox.Enabled = false;
             this.routesComboBox.FormattingEnabled = true;
@@ -56,9 +56,9 @@
             this.routesComboBox.Name = "routesComboBox";
             this.routesComboBox.Size = new System.Drawing.Size(121, 21);
             this.routesComboBox.TabIndex = 2;
-            //
+            // 
             // newLineButton
-            //
+            // 
             this.newLineButton.Enabled = false;
             this.newLineButton.Location = new System.Drawing.Point(230, 3);
             this.newLineButton.Name = "newLineButton";
@@ -66,9 +66,9 @@
             this.newLineButton.TabIndex = 3;
             this.newLineButton.Text = "Neue Strecke";
             this.newLineButton.UseVisualStyleBackColor = true;
-            //
+            // 
             // toolbarFlowLayoutPanel
-            //
+            // 
             this.toolbarFlowLayoutPanel.Controls.Add(this.routesComboBox);
             this.toolbarFlowLayoutPanel.Controls.Add(this.newButton);
             this.toolbarFlowLayoutPanel.Controls.Add(this.dividerPanel);
@@ -78,29 +78,30 @@
             this.toolbarFlowLayoutPanel.Name = "toolbarFlowLayoutPanel";
             this.toolbarFlowLayoutPanel.Size = new System.Drawing.Size(618, 33);
             this.toolbarFlowLayoutPanel.TabIndex = 4;
-            //
+            // 
             // dividerPanel
-            //
+            // 
             this.dividerPanel.BackColor = System.Drawing.Color.Gray;
             this.dividerPanel.Location = new System.Drawing.Point(222, 3);
             this.dividerPanel.Name = "dividerPanel";
             this.dividerPanel.Size = new System.Drawing.Size(2, 23);
             this.dividerPanel.TabIndex = 4;
-            //
+            // 
             // lineRenderer
-            //
-            this.lineRenderer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.lineRenderer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lineRenderer.Location = new System.Drawing.Point(0, 39);
             this.lineRenderer.Name = "lineRenderer";
             this.lineRenderer.SelectedRoute = 0;
             this.lineRenderer.Size = new System.Drawing.Size(618, 285);
+            this.lineRenderer.StationMovingEnabled = true;
             this.lineRenderer.TabIndex = 0;
             this.lineRenderer.Text = "lineRenderer1";
-            //
+            // 
             // LineEditingControl
-            //
+            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
