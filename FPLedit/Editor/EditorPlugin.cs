@@ -124,7 +124,10 @@ namespace FPLedit.Editor
 
             //TODO: Übergangslösung, überdenken
             if (info.Timetable != null && info.Timetable.Type == TimetableType.Network)
+            {
                 editLineItem.Visible = false;
+                editTimetableItem.Visible = false;
+            }
         }
     }
 }

@@ -101,6 +101,7 @@
             this.editTimetableButton.TabIndex = 3;
             this.editTimetableButton.Text = "Fahrplan bearbeiten";
             this.editTimetableButton.UseVisualStyleBackColor = true;
+            this.editTimetableButton.Click += new System.EventHandler(this.editTimetableButton_Click);
             // 
             // topDeleteButton
             // 

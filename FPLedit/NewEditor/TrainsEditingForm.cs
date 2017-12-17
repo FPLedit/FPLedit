@@ -101,6 +101,19 @@ namespace FPLedit.NewEditor
                 MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug bearbeiten");
         }
 
+        private void EditTimetable(ListView view, bool message = true)
+        {
+            if (view.SelectedItems.Count > 0)
+            {
+                var train = (Train)view.SelectedItems[0].Tag;
+
+                TrainTimetableEditor tte = new TrainTimetableEditor(info, train);
+                tte.ShowDialog();
+            }
+            else if (message)
+                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug-Fahrplan bearbeiten");
+        }
+
         private void NewTrain(ListView view)
         {
             var trf = new TrainSelectRouteForm(info);
@@ -110,7 +123,7 @@ namespace FPLedit.NewEditor
             TrainEditForm tef = new TrainEditForm(info.Timetable, TrainDirection.tr);
             if (tef.ShowDialog() == DialogResult.OK)
             {
-                //TODO: Route setzen
+                tef.Train.AddAllArrDeps(trf.TrainRoute);
                 tt.AddTrain(tef.Train);
 
                 var item = view.Items.Add(CreateItem(tef.Train));
@@ -140,18 +153,15 @@ namespace FPLedit.NewEditor
         }
 
         private void topNewButton_Click(object sender, EventArgs e)
-        {
-            NewTrain(topListView);
-        }
+            => NewTrain(topListView);
 
         private void topEditButton_Click(object sender, EventArgs e)
-        {
-            EditTrain(topListView);
-        }
+            => EditTrain(topListView);
 
         private void topDeleteButton_Click(object sender, EventArgs e)
-        {
-            DeleteTrain(topListView);
-        }
+            => DeleteTrain(topListView);
+
+        private void editTimetableButton_Click(object sender, EventArgs e)
+            => EditTimetable(topListView);
     }
 }

@@ -156,7 +156,7 @@ namespace FPLedit.Shared
                 sElm.Children.Add(sta.XMLEntity);
 
             // Auch bei allen Zügen hinzufügen
-            foreach (var t in Trains)
+            foreach (var t in Trains) //TODO: Umschreiben auf Laufwege
                 t.AddArrDep(sta, new ArrDep());
         }
 

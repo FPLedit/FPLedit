@@ -17,6 +17,39 @@ namespace FPLedit.Shared
 
         #region Handling der Fahrtzeiteneinträge
 
+        public void AddAllArrDeps(List<Station> path)
+        {
+            if (_parent.Type != TimetableType.Network)
+                throw new Exception("Netzwerk-Fahrpläne haben keine Laufwege!");
+            foreach (var sta in path)
+            {
+                var tElm = new XMLEntity("t");
+                tElm.SetAttribute("fpl-id", sta.Id.ToString());
+                tElm.SetAttribute("a", "");
+                tElm.SetAttribute("d", "");
+                tElm.SetAttribute("fpl-tr", "0");
+                tElm.SetAttribute("fpl-zlm", "");
+                Children.Add(tElm);
+            }
+        }
+
+        public List<Station> GetPath()
+        {
+            if (_parent.Type == TimetableType.Network)
+            {
+                List<Station> ret = new List<Station>();
+                var tElems = Children.Where(x => x.XName == "t").ToList();
+                foreach (var tElm in tElems)
+                {
+                    var sta = _parent.Stations.FirstOrDefault(s => s.Id == tElm.GetAttribute<int>("fpl-id"));
+                    ret.Add(sta);
+                }
+                return ret;
+            }
+            else
+                return _parent.GetStationsOrderedByDirection(Direction);
+        }
+
         public void AddArrDep(Station sta, ArrDep ardp)
         {
             //TODO: Laufwege, LinearKilometre hier nur vorläufig
@@ -36,10 +69,16 @@ namespace FPLedit.Shared
 
         public void SetArrDep(Station sta, ArrDep ardp)
         {
-            //TODO: Laufwege, LinearKilometre hier nur vorläufig
-            var stas = _parent.Stations.OrderBy(s => s.LinearKilometre).ToList();
-            var idx = stas.IndexOf(sta);
-            var tElm = Children.Where(x => x.XName == "t").ToList()[idx];
+            var tElems = Children.Where(x => x.XName == "t").ToList();
+            XMLEntity tElm;
+            if (_parent.Type == TimetableType.Linear)
+            {
+                var stas = _parent.Stations.OrderBy(s => s.LinearKilometre).ToList();
+                var idx = stas.IndexOf(sta);
+                tElm = tElems[idx];
+            }
+            else
+                tElm = tElems.First(t => t.GetAttribute<int>("fpl-id") == sta.Id);
 
             var ar = ardp.Arrival.ToShortTimeString();
             var dp = ardp.Departure.ToShortTimeString();
@@ -51,10 +90,16 @@ namespace FPLedit.Shared
 
         public ArrDep GetArrDep(Station sta)
         {
-            //TODO: Laufwege, LinearKilometre hier nur vorläufig
-            var stas = _parent.Stations.OrderBy(s => s.LinearKilometre).ToList();
-            var idx = stas.IndexOf(sta);
-            var tElm = Children.Where(x => x.XName == "t").ToList()[idx];
+            var tElems = Children.Where(x => x.XName == "t").ToList();
+            XMLEntity tElm;
+            if (_parent.Type == TimetableType.Linear)
+            {
+                var stas = _parent.Stations.OrderBy(s => s.LinearKilometre).ToList();
+                var idx = stas.IndexOf(sta);
+                tElm = tElems[idx];
+            }
+            else
+                tElm = tElems.First(t => t.GetAttribute<int>("fpl-id") == sta.Id);
 
             ArrDep ardp = new ArrDep();
 
@@ -101,16 +146,23 @@ namespace FPLedit.Shared
 
         public void RemoveArrDep(Station sta)
         {
-            //TODO: Laufwege, LinearKilometre hier nur vorläufig
-            var stas = _parent.Stations.OrderBy(s => s.LinearKilometre).ToList();
-            var idx = stas.IndexOf(sta);
-            var tElm = Children.Where(x => x.XName == "t").ToList()[idx];
+            var tElems = Children.Where(x => x.XName == "t").ToList();
+            XMLEntity tElm;
+            if (_parent.Type == TimetableType.Linear)
+            {
+                var stas = _parent.Stations.OrderBy(s => s.LinearKilometre).ToList();
+                var idx = stas.IndexOf(sta);
+                tElm = tElems[idx];
+            }
+            else
+                tElm = tElems.First(t => t.GetAttribute<int>("fpl-id") == sta.Id);
 
             Children.Remove(tElm);
         }
 
         public void RemoveOrphanedTimes()
         {
+            //TODO: Umschreiben auf Laufwege
             // Räumt verwaiste Zeiten auf (z.B. Ankunftszeit im Startbahnhof)
             var stas = _parent.GetStationsOrderedByDirection(Direction);
 
