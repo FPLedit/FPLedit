@@ -8,16 +8,17 @@ using System.Windows.Forms;
 
 namespace FPLedit.Editor
 {
-    //[Plugin("Fahrplan-Editoren", "1.5.0", Author = "Manuel Huber")]
     public class EditorPlugin : IPlugin
     {
         private IInfo info;
-        private ToolStripItem editLineItem, editTrainsItem, editTimetableItem, designItem, filterItem;
-        private ToolStripMenuItem eitem, pitem, undoItem;
-        private int dialogOffset;
 
+        private int dialogOffset;
         private IEditingDialog[] dialogs;
         private bool hasFilterables, hasDesignables;
+
+        private ToolStripItem editLineItem, editTimetableItem; // Type="Network"
+        private ToolStripItem editTrainsItem, designItem, filterItem; // Type="Both"
+        private ToolStripMenuItem editRoot, previewRoot, undoItem; // Type="Both"
 
         public void Init(IInfo info)
         {
@@ -25,47 +26,47 @@ namespace FPLedit.Editor
             info.FileStateChanged += Info_FileStateChanged;
             info.ExtensionsLoaded += Info_ExtensionsLoaded;
 
-            info.Register<IExport>(new Shared.Filetypes.CleanedXMLExport());
+            info.Register<IExport>(new FPLedit.Shared.Filetypes.CleanedXMLExport());
 
-            eitem = new ToolStripMenuItem("Bearbeiten");
-            info.Menu.Items.Add(eitem);
+            editRoot = new ToolStripMenuItem("Bearbeiten");
+            info.Menu.Items.Add(editRoot);
 
-            undoItem = (ToolStripMenuItem)eitem.DropDownItems.Add("Rückgängig");
+            undoItem = (ToolStripMenuItem)editRoot.DropDownItems.Add("Rückgängig");
             undoItem.ShortcutKeys = Keys.Control | Keys.Z;
             undoItem.Enabled = false;
             undoItem.Click += (s, e) => info.Undo();
 
-            eitem.DropDownItems.Add(new ToolStripSeparator());
+            editRoot.DropDownItems.Add(new ToolStripSeparator());
 
-            editLineItem = eitem.DropDownItems.Add("Strecke bearbeiten (alt)");
+            editLineItem = editRoot.DropDownItems.Add("Strecke bearbeiten (tabellarisch)");
             editLineItem.Enabled = false;
-            editLineItem.Click += (s, e) => ShowForm(new LineEditForm(info));
+            editLineItem.Click += (s, e) => ShowForm(new Linear.LineEditForm(info));
+            //TODO: Update lineRenderer
 
-            editTrainsItem = eitem.DropDownItems.Add("Züge bearbeiten");
+            editTrainsItem = editRoot.DropDownItems.Add("Züge bearbeiten");
             editTrainsItem.Enabled = false;
-
             editTrainsItem.Click += (s, e) => {
                 if (info.Timetable.Type == TimetableType.Linear)
-                    ShowForm(new TrainsEditForm(info));
-                else ShowForm(new FPLedit.NewEditor.TrainsEditingForm(info));
+                    ShowForm(new Linear.TrainsEditForm(info));
+                else ShowForm(new Network.TrainsEditingForm(info));
             };
 
-            editTimetableItem = eitem.DropDownItems.Add("Fahrplan bearbeiten");
+            editTimetableItem = editRoot.DropDownItems.Add("Fahrplan bearbeiten");
             editTimetableItem.Enabled = false;
-            editTimetableItem.Click += (s, e) => ShowForm(new TimetableEditForm(info));
+            editTimetableItem.Click += (s, e) => ShowForm(new Linear.TimetableEditForm(info));
 
-            eitem.DropDownItems.Add(new ToolStripSeparator());
+            editRoot.DropDownItems.Add(new ToolStripSeparator());
 
-            designItem = eitem.DropDownItems.Add("Fahrplandarstellung");
+            designItem = editRoot.DropDownItems.Add("Fahrplandarstellung");
             designItem.Enabled = false;
             designItem.Click += (s, e) => ShowForm(new DesignableForm(info));
 
-            filterItem = eitem.DropDownItems.Add("Filterregeln");
+            filterItem = editRoot.DropDownItems.Add("Filterregeln");
             filterItem.Enabled = false;
             filterItem.Click += (s, e) => ShowForm(new FilterForm(info));
 
-            pitem = new ToolStripMenuItem("Vorschau");
-            info.Menu.Items.Add(pitem);
+            previewRoot = new ToolStripMenuItem("Vorschau");
+            info.Menu.Items.Add(previewRoot);
         }
 
         private void ShowForm(Form form)
@@ -79,23 +80,23 @@ namespace FPLedit.Editor
         {
             var previewables = info.GetRegistered<IPreviewable>();
             if (previewables.Length == 0)
-                pitem.Visible = false;
+                previewRoot.Visible = false;
 
             foreach (var prev in previewables)
             {
-                var itm = pitem.DropDownItems.Add(prev.DisplayName);
+                var itm = previewRoot.DropDownItems.Add(prev.DisplayName);
                 itm.Enabled = false;
                 itm.Click += (s, ev) => prev.Show(info);
             }
 
             dialogs = info.GetRegistered<IEditingDialog>();
             if (dialogs.Length > 0)
-                eitem.DropDownItems.Add(new ToolStripSeparator());
+                editRoot.DropDownItems.Add(new ToolStripSeparator());
 
-            dialogOffset = eitem.DropDownItems.Count;
+            dialogOffset = editRoot.DropDownItems.Count;
             foreach (var dialog in dialogs)
             {
-                var itm = eitem.DropDownItems.Add(dialog.DisplayName);
+                var itm = editRoot.DropDownItems.Add(dialog.DisplayName);
                 itm.Enabled = dialog.IsEnabled(info);
                 itm.Click += (s, ev) => dialog.Show(info);
             }
@@ -113,16 +114,16 @@ namespace FPLedit.Editor
             filterItem.Enabled = e.FileState.Opened && hasFilterables;
             undoItem.Enabled = e.FileState.CanGoBack;
 
-            foreach (ToolStripItem ddi in pitem.DropDownItems)
+            foreach (ToolStripItem ddi in previewRoot.DropDownItems)
                 ddi.Enabled = e.FileState.Opened && e.FileState.LineCreated;
 
             for (int i = 0; i < dialogs.Length; i++)
             {
-                var elem = eitem.DropDownItems[dialogOffset + i];
+                var elem = editRoot.DropDownItems[dialogOffset + i];
                 elem.Enabled = dialogs[i].IsEnabled(info);
             }
 
-            //TODO: Übergangslösung, überdenken
+            // Im Netzwerk-Modus nicht verwendete Menü-Einträge ausblenden
             if (info.Timetable != null && info.Timetable.Type == TimetableType.Network)
             {
                 editLineItem.Visible = false;

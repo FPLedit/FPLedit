@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FPLedit.Editor
+namespace FPLedit.Editor.Linear
 {
     public partial class LineEditForm : Form
     {

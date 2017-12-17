@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace FPLedit.NewEditor
+namespace FPLedit.Editor.Network
 {
     internal class LineRenderer : Control
     {

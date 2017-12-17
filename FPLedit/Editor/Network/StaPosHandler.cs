@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace FPLedit
+namespace FPLedit.Editor.Network
 {
     internal class StaPosHandler
     {

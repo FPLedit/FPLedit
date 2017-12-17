@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using FPLedit.Shared;
 
-namespace FPLedit.NewEditor
+namespace FPLedit.Editor.Network
 {
     public partial class LineEditingControl : UserControl
     {

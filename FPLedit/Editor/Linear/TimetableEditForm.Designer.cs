@@ -1,4 +1,4 @@
-﻿namespace FPLedit.Editor
+﻿namespace FPLedit.Editor.Linear
 {
     partial class TimetableEditForm
     {

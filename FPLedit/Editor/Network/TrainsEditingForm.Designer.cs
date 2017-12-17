@@ -1,4 +1,4 @@
-﻿namespace FPLedit.NewEditor
+﻿namespace FPLedit.Editor.Network
 {
     partial class TrainsEditingForm
     {
@@ -41,16 +41,16 @@
             this.mainTableLayoutPanel.SuspendLayout();
             this.topActionsPanel.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // nameValidator
-            // 
+            //
             this.nameValidator.Control = null;
             this.nameValidator.ErrorMessage = "Bitte einen Namen eingeben!";
-            // 
+            //
             // mainTableLayoutPanel
-            // 
-            this.mainTableLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.mainTableLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mainTableLayoutPanel.ColumnCount = 2;
             this.mainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -63,11 +63,11 @@
             this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.mainTableLayoutPanel.Size = new System.Drawing.Size(800, 425);
             this.mainTableLayoutPanel.TabIndex = 2;
-            // 
+            //
             // topListView
-            // 
-            this.topListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.topListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.topListView.FullRowSelect = true;
             this.topListView.HideSelection = false;
@@ -78,11 +78,11 @@
             this.topListView.TabIndex = 4;
             this.topListView.UseCompatibleStateImageBehavior = false;
             this.topListView.View = System.Windows.Forms.View.Details;
-            // 
+            //
             // topActionsPanel
-            // 
-            this.topActionsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.topActionsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.topActionsPanel.Controls.Add(this.editTimetableButton);
             this.topActionsPanel.Controls.Add(this.topDeleteButton);
@@ -92,9 +92,9 @@
             this.topActionsPanel.Name = "topActionsPanel";
             this.topActionsPanel.Size = new System.Drawing.Size(114, 419);
             this.topActionsPanel.TabIndex = 1;
-            // 
+            //
             // editTimetableButton
-            // 
+            //
             this.editTimetableButton.Location = new System.Drawing.Point(3, 131);
             this.editTimetableButton.Name = "editTimetableButton";
             this.editTimetableButton.Size = new System.Drawing.Size(108, 41);
@@ -102,9 +102,9 @@
             this.editTimetableButton.Text = "Fahrplan bearbeiten";
             this.editTimetableButton.UseVisualStyleBackColor = true;
             this.editTimetableButton.Click += new System.EventHandler(this.editTimetableButton_Click);
-            // 
+            //
             // topDeleteButton
-            // 
+            //
             this.topDeleteButton.Location = new System.Drawing.Point(0, 61);
             this.topDeleteButton.Name = "topDeleteButton";
             this.topDeleteButton.Size = new System.Drawing.Size(108, 23);
@@ -112,9 +112,9 @@
             this.topDeleteButton.Text = "Zug löschen";
             this.topDeleteButton.UseVisualStyleBackColor = true;
             this.topDeleteButton.Click += new System.EventHandler(this.topDeleteButton_Click);
-            // 
+            //
             // topEditButton
-            // 
+            //
             this.topEditButton.Location = new System.Drawing.Point(0, 32);
             this.topEditButton.Name = "topEditButton";
             this.topEditButton.Size = new System.Drawing.Size(108, 23);
@@ -122,9 +122,9 @@
             this.topEditButton.Text = "Zug bearbeiten";
             this.topEditButton.UseVisualStyleBackColor = true;
             this.topEditButton.Click += new System.EventHandler(this.topEditButton_Click);
-            // 
+            //
             // topNewButton
-            // 
+            //
             this.topNewButton.Location = new System.Drawing.Point(0, 3);
             this.topNewButton.Name = "topNewButton";
             this.topNewButton.Size = new System.Drawing.Size(108, 23);
@@ -132,9 +132,9 @@
             this.topNewButton.Text = "Neuer Zug";
             this.topNewButton.UseVisualStyleBackColor = true;
             this.topNewButton.Click += new System.EventHandler(this.topNewButton_Click);
-            // 
+            //
             // cancelButton
-            // 
+            //
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancelButton.Location = new System.Drawing.Point(656, 443);
@@ -144,9 +144,9 @@
             this.cancelButton.Text = "Abbrechen";
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
-            // 
+            //
             // closeButton
-            // 
+            //
             this.closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.closeButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.closeButton.Location = new System.Drawing.Point(737, 443);
@@ -156,9 +156,9 @@
             this.closeButton.Text = "Schließen";
             this.closeButton.UseVisualStyleBackColor = true;
             this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
-            // 
+            //
             // TrainsEditingForm
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(824, 478);

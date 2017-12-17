@@ -98,18 +98,18 @@
     <Compile Include="Editor\FilterForm.Designer.cs">
       <DependentUpon>FilterForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Editor\LineEditForm.cs">
+    <Compile Include="Editor\Linear\LineEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Editor\LineEditForm.Designer.cs">
+    <Compile Include="Editor\Linear\LineEditForm.Designer.cs">
       <DependentUpon>LineEditForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Editor\EditorPlugin.cs" />
     <Compile Include="Editor\TimeNormalizer.cs" />
-    <Compile Include="Editor\TimetableEditForm.cs">
+    <Compile Include="Editor\Linear\TimetableEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Editor\TimetableEditForm.Designer.cs">
+    <Compile Include="Editor\Linear\TimetableEditForm.Designer.cs">
       <DependentUpon>TimetableEditForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Editor\TrainEditForm.cs">
@@ -118,10 +118,10 @@
     <Compile Include="Editor\TrainEditForm.Designer.cs">
       <DependentUpon>TrainEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Editor\TrainsEditForm.cs">
+    <Compile Include="Editor\Linear\TrainsEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Editor\TrainsEditForm.Designer.cs">
+    <Compile Include="Editor\Linear\TrainsEditForm.Designer.cs">
       <DependentUpon>TrainsEditForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Editor\ZlmEditForm.cs">
@@ -144,19 +144,19 @@
       <DependentUpon>InfoForm.cs</DependentUpon>
     </Compile>
     <Compile Include="IRestartable.cs" />
-    <Compile Include="NewEditor\NewLineStationForm.cs">
+    <Compile Include="Editor\Network\NewLineStationForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="NewEditor\NewLineStationForm.Designer.cs">
+    <Compile Include="Editor\Network\NewLineStationForm.Designer.cs">
       <DependentUpon>NewLineStationForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="NewEditor\LineEditingControl.cs">
+    <Compile Include="Editor\Network\LineEditingControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="NewEditor\LineEditingControl.Designer.cs">
+    <Compile Include="Editor\Network\LineEditingControl.Designer.cs">
       <DependentUpon>LineEditingControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="NewEditor\LineRenderer.cs">
+    <Compile Include="Editor\Network\LineRenderer.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="LogControl.cs">
@@ -171,22 +171,22 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="NewEditor\TrainsEditingForm.cs">
+    <Compile Include="Editor\Network\TrainsEditingForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="NewEditor\TrainsEditingForm.Designer.cs">
+    <Compile Include="Editor\Network\TrainsEditingForm.Designer.cs">
       <DependentUpon>TrainsEditingForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="NewEditor\TrainSelectRouteForm.cs">
+    <Compile Include="Editor\Network\TrainSelectRouteForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="NewEditor\TrainSelectRouteForm.Designer.cs">
+    <Compile Include="Editor\Network\TrainSelectRouteForm.Designer.cs">
       <DependentUpon>TrainSelectRouteForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="NewEditor\TrainTimetableEditor.cs">
+    <Compile Include="Editor\Network\TrainTimetableEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="NewEditor\TrainTimetableEditor.Designer.cs">
+    <Compile Include="Editor\Network\TrainTimetableEditor.Designer.cs">
       <DependentUpon>TrainTimetableEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="PluginInfo.cs" />
@@ -212,6 +212,7 @@
     <Compile Include="Templating\TemplateHost.cs" />
     <Compile Include="Templating\TemplateManager.cs" />
     <Compile Include="NewEditor\StaPosReader.cs" />
+    <Compile Include="Editor\Network\StaPosHandler.cs" />
     <Compile Include="UndoManager.cs" />
     <Compile Include="UpdateManager.cs" />
     <Content Include="Resources\AddCursor.cur" />
@@ -229,16 +230,16 @@
     <EmbeddedResource Include="Editor\FilterForm.resx">
       <DependentUpon>FilterForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Editor\LineEditForm.resx">
+    <EmbeddedResource Include="Editor\Linear\LineEditForm.resx">
       <DependentUpon>LineEditForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Editor\TimetableEditForm.resx">
+    <EmbeddedResource Include="Editor\Linear\TimetableEditForm.resx">
       <DependentUpon>TimetableEditForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Editor\TrainEditForm.resx">
       <DependentUpon>TrainEditForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Editor\TrainsEditForm.resx">
+    <EmbeddedResource Include="Editor\Linear\TrainsEditForm.resx">
       <DependentUpon>TrainsEditForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -254,19 +255,19 @@
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="NewEditor\NewLineStationForm.resx">
+    <EmbeddedResource Include="Editor\Network\NewLineStationForm.resx">
       <DependentUpon>NewLineStationForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="NewEditor\LineEditingControl.resx">
+    <EmbeddedResource Include="Editor\Network\LineEditingControl.resx">
       <DependentUpon>LineEditingControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="NewEditor\TrainsEditingForm.resx">
+    <EmbeddedResource Include="Editor\Network\TrainsEditingForm.resx">
       <DependentUpon>TrainsEditingForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="NewEditor\TrainSelectRouteForm.resx">
+    <EmbeddedResource Include="Editor\Network\TrainSelectRouteForm.resx">
       <DependentUpon>TrainSelectRouteForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="NewEditor\TrainTimetableEditor.resx">
+    <EmbeddedResource Include="Editor\Network\TrainTimetableEditor.resx">
       <DependentUpon>TrainTimetableEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -315,6 +316,7 @@
       <Name>FPLedit.Shared</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>set csi="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\Roslyn\csi.exe"

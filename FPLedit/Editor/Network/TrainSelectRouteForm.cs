@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace FPLedit.NewEditor
+namespace FPLedit.Editor.Network
 {
     public partial class TrainSelectRouteForm : Form
     {

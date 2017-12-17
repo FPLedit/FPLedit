@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using FPLedit.Shared;
 
-namespace FPLedit.Editor
+namespace FPLedit.Editor.Linear
 {
     public partial class TrainsEditForm : Form
     {

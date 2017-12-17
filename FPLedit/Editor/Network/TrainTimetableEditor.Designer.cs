@@ -1,4 +1,4 @@
-﻿namespace FPLedit.NewEditor
+﻿namespace FPLedit.Editor.Network
 {
     partial class TrainTimetableEditor
     {
