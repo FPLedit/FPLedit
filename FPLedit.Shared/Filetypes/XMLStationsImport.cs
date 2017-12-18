@@ -20,7 +20,7 @@ namespace FPLedit.Shared.Filetypes
                 var list = new StationsList(en);
                 var tt = new Timetable();
                 foreach (var i in list.Stations)
-                    tt.AddStation(i);
+                    tt.AddStation(i, 0);
                 return tt;
             }
             catch (Exception ex)

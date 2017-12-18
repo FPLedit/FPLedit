@@ -10,7 +10,7 @@
         string Mbr { get; set; }
         string TName { get; set; }
 
-        void AddArrDep(Station sta, ArrDep ardp);
+        void AddArrDep(Station sta, ArrDep ardp, int route);
         ArrDep GetArrDep(Station sta);
         void RemoveArrDep(Station sta);
         void RemoveOrphanedTimes();

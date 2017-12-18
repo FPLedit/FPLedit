@@ -29,6 +29,18 @@ namespace FPLedit.Editor.Network
             info.BackupTimetable();
 
             UpdateListView(topListView);
+
+            KeyDown += (s, e) =>
+            {
+                if (e.KeyCode == Keys.Delete)
+                    DeleteTrain(topListView, false);
+                else if ((e.KeyCode == Keys.T && e.Control))
+                    EditTimetable(topListView);
+                else if ((e.KeyCode == Keys.B && e.Control) || (e.KeyCode == Keys.Enter))
+                    EditTrain(topListView, false);
+                else if (e.KeyCode == Keys.N && e.Control)
+                    NewTrain(topListView);
+            };
         }
 
         private void UpdateListView(ListView view)

@@ -54,7 +54,7 @@ namespace FPLedit.Editor.Linear
 
                 if (e.KeyCode == Keys.Delete)
                     DeleteTrain(active, dir, false);
-                else if (e.KeyCode == Keys.B && e.Control)
+                else if ((e.KeyCode == Keys.B && e.Control) || (e.KeyCode == Keys.Enter))
                     EditTrain(active, dir, false);
                 else if (e.KeyCode == Keys.N && e.Control)
                     NewTrain(active, dir);

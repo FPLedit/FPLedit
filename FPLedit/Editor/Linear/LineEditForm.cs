@@ -104,7 +104,7 @@ namespace FPLedit.Editor.Linear
             {
                 Station sta = nsf.Station;
 
-                tt.AddStation(sta);
+                tt.AddStation(sta, 0);
                 var item = listView.Items.Add(new ListViewItem(new[] {
                     sta.SName,
                     sta.LinearKilometre.ToString() })
@@ -131,7 +131,7 @@ namespace FPLedit.Editor.Linear
                 IImport import = Path.GetExtension(ofd.FileName) == ".fpl" ? timport : simport;
                 var ntt = import.Import(ofd.FileName, info.Logger);
                 foreach (var station in ntt.Stations)
-                    tt.AddStation(station);
+                    tt.AddStation(station, 0);
                 // ntt will be destroyed by decoupling stations, do not use afterwards!
             }
 

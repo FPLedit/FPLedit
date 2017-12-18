@@ -104,7 +104,7 @@ namespace FPLedit.Editor.Network
                         r.Add(lineRenderer.SelectedRoute);
                         sta.Routes = r.ToArray();
                     }
-                    info.Timetable.AddStation(sta);
+                    info.Timetable.AddStation(sta, selectedRoute);
                     info.SetUnsaved();
                     lineRenderer.SetTimetable(info.Timetable);
                 }

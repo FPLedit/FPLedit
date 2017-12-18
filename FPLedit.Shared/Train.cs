@@ -50,11 +50,30 @@ namespace FPLedit.Shared
                 return _parent.GetStationsOrderedByDirection(Direction);
         }
 
-        public void AddArrDep(Station sta, ArrDep ardp)
+        public void AddArrDep(Station sta, ArrDep ardp, int route)
         {
-            //TODO: Laufwege, LinearKilometre hier nur vorläufig
-            var stas = _parent.Stations.OrderBy(s => s.LinearKilometre).ToList();
-            var idx = stas.IndexOf(sta);
+            int idx = -1;
+            if (_parent.Type == TimetableType.Linear)
+            {
+                var stas = _parent.Stations.OrderBy(s => s.LinearKilometre).ToList();
+                idx = stas.IndexOf(sta);
+            }
+            else
+            {
+                var r = _parent.GetRoute(route).GetOrderedStations();
+                var i1 = r.IndexOf(sta);
+                var p = GetPath();
+                Station prev = null, next = null;
+                if (r.ElementAtOrDefault(i1 - 1) != null)
+                    prev = r.ElementAtOrDefault(i1 - 1);
+                if (r.ElementAtOrDefault(i1 + 1) != null)
+                    next = r.ElementAtOrDefault(i1 + 1);
+
+                if (prev != null && p.Contains(prev) && next != null && p.Contains(next))
+                    idx = p.IndexOf(prev) + 1;
+                else
+                    return; // Betrifft diesen Zug nicht
+            }
 
             var ar = ardp.Arrival.ToShortTimeString();
             var dp = ardp.Departure.ToShortTimeString();
@@ -64,6 +83,8 @@ namespace FPLedit.Shared
             tElm.SetAttribute("d", dp != "00:00" ? dp : "");
             tElm.SetAttribute("fpl-tr", ardp.TrapeztafelHalt ? "1" : "0");
             tElm.SetAttribute("fpl-zlm", ardp.Zuglaufmeldung);
+            if (_parent.Type == TimetableType.Network)
+                tElm.SetAttribute("fpl-id", sta.Id.ToString());
             Children.Insert(idx, tElm);
         }
 
@@ -155,16 +176,17 @@ namespace FPLedit.Shared
                 tElm = tElems[idx];
             }
             else
-                tElm = tElems.First(t => t.GetAttribute<int>("fpl-id") == sta.Id);
+                tElm = tElems.FirstOrDefault(t => t.GetAttribute<int>("fpl-id") == sta.Id);
 
             Children.Remove(tElm);
         }
 
         public void RemoveOrphanedTimes()
         {
-            //TODO: Umschreiben auf Laufwege
             // Räumt verwaiste Zeiten auf (z.B. Ankunftszeit im Startbahnhof)
-            var stas = _parent.GetStationsOrderedByDirection(Direction);
+            var stas = _parent.Type == TimetableType.Linear
+                ? _parent.GetStationsOrderedByDirection(Direction)
+                : GetPath();
 
             if (stas.Count == 0) // Die letzte Station wurde gelöscht
                 return;

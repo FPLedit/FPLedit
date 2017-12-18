@@ -126,7 +126,7 @@ namespace FPLedit.Shared
 
         #region Hilfsmethoden für andere Entitäten
 
-        public void AddStation(Station sta)
+        public void AddStation(Station sta, int route)
         {
             // Neue Id an Station vergeben
             if (Type == TimetableType.Network)
@@ -156,8 +156,8 @@ namespace FPLedit.Shared
                 sElm.Children.Add(sta.XMLEntity);
 
             // Auch bei allen Zügen hinzufügen
-            foreach (var t in Trains) //TODO: Umschreiben auf Laufwege
-                t.AddArrDep(sta, new ArrDep());
+            foreach (var t in Trains)
+                t.AddArrDep(sta, new ArrDep(), route);
         }
 
         public void RemoveStation(Station sta)
@@ -172,7 +172,7 @@ namespace FPLedit.Shared
             stations.Remove(sta);
             sElm.Children.Remove(sta.XMLEntity);
 
-            if (!needsCleanup)
+            if (!needsCleanup && Type == TimetableType.Linear)
                 return;
 
             // Wenn Endstationen gelöscht werden könnten sonst korrupte Dateien entstehen!
@@ -191,7 +191,7 @@ namespace FPLedit.Shared
         {
             if (!hasArDeps && Type == TimetableType.Linear)
                 foreach (var sta in Stations)
-                    tra.AddArrDep(sta, new ArrDep());
+                    tra.AddArrDep(sta, new ArrDep(), 0);
 
             tra._parent = this;
             trains.Add(tra);
@@ -209,7 +209,7 @@ namespace FPLedit.Shared
 
         #region Hilfsmethoden für Routen
         // "Eröffnet" eine neue Strecke zwischen zwei Bahnhöfen
-        public void AddRoute(Station s_old, Station s_new, float old_add_km, float new_km)
+        public int AddRoute(Station s_old, Station s_new, float old_add_km, float new_km)
         {
             if (Type == TimetableType.Linear)
                 throw new NotSupportedException("Lineare Strecken haben keine Routen!");
@@ -223,6 +223,7 @@ namespace FPLedit.Shared
             s_new.Routes = r2.ToArray();
             s_old.Positions.SetPosition(idx, old_add_km);
             s_new.Positions.SetPosition(idx, new_km);
+            return idx;
         }
 
         public List<Route> GetRoutes()

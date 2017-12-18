@@ -10,7 +10,7 @@ namespace FPLedit.Shared
         List<Train> Trains { get; }
         string TTName { get; set; }
 
-        void AddStation(Station sta);
+        void AddStation(Station sta, int route);
         void AddTrain(Train tra, bool hasArDeps = false);
         Timetable Clone();
         string[] GetAllTfzs();

@@ -227,8 +227,8 @@ namespace FPLedit.Editor.Network
 
         private void ConnectAddStation(Station sta)
         {
-            tt.AddRoute(sta, tmp_sta, 0, tmp_km);
-            tt.AddStation(tmp_sta);
+            var rtIdx = tt.AddRoute(sta, tmp_sta, 0, tmp_km);
+            tt.AddStation(tmp_sta, rtIdx);
             handler.WriteStapos(tt, stapos);
             tmp_sta = null;
 
