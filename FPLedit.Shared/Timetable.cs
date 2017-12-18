@@ -12,6 +12,8 @@ namespace FPLedit.Shared
     [DebuggerDisplay("{TTName}")]
     public sealed class Timetable : Entity, ITimetable
     {
+        public const int LINEAR_ROUTE_ID = 0;
+
         XMLEntity sElm, tElm;
 
         public TimetableType Type { get; private set; }
@@ -136,6 +138,7 @@ namespace FPLedit.Shared
             stations.Add(sta);
             if (Type == TimetableType.Linear)
             {
+                route = LINEAR_ROUTE_ID;
                 stations = stations.OrderBy(s => s.LinearKilometre).ToList();
                 var idx = stations.IndexOf(sta); // Index vorläufig ermitteln
 
@@ -183,7 +186,7 @@ namespace FPLedit.Shared
         public Station GetStationById(int id)
         {
             if (Type == TimetableType.Linear)
-                throw new NotSupportedException("Lineare Strecken haben Stations-Ids!");
+                throw new NotSupportedException("Lineare Strecken haben keine Stations-Ids!");
             return stations.FirstOrDefault(s => s.Id == id);
         }
 
@@ -191,7 +194,7 @@ namespace FPLedit.Shared
         {
             if (!hasArDeps && Type == TimetableType.Linear)
                 foreach (var sta in Stations)
-                    tra.AddArrDep(sta, new ArrDep(), 0);
+                    tra.AddArrDep(sta, new ArrDep(), LINEAR_ROUTE_ID);
 
             tra._parent = this;
             trains.Add(tra);
@@ -236,9 +239,7 @@ namespace FPLedit.Shared
                     routes.Add(GetRoute(ri));
             }
             else
-            {
-                routes.Add(new Route() { Index = 0, Stations = Stations });
-            }
+                routes.Add(new Route() { Index = LINEAR_ROUTE_ID, Stations = Stations });
             return routes;
         }
 

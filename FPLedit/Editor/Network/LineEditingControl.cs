@@ -31,7 +31,7 @@ namespace FPLedit.Editor.Network
                     routes.Add(new IndexedItem(route.GetRouteName(), route.Index));
             }
             else
-                routes.Add(new IndexedItem("<Standard>", 0));
+                routes.Add(new IndexedItem("<Standard>", Timetable.LINEAR_ROUTE_ID));
             return routes.ToArray();
         }
 

@@ -58,7 +58,7 @@
     <Compile Include="Pathfinder.cs" />
     <Compile Include="PositionCollection.cs" />
     <Compile Include="Route.cs" />
-    <Compile Include="Rule.cs" />
+    <Compile Include="FilterRule.cs" />
     <Compile Include="TimetableType.cs" />
     <Compile Include="Templating\ITemplate.cs" />
     <Compile Include="Templating\ITemplateProxy.cs" />

@@ -51,15 +51,13 @@ namespace FPLedit.Shared
         private void ParseLinear()
         {
             var toParse = sta.GetAttribute("km", "0.0");
-            positions.Add(0, float.Parse(toParse, CultureInfo.InvariantCulture));
+            positions.Add(Timetable.LINEAR_ROUTE_ID, float.Parse(toParse, CultureInfo.InvariantCulture));
         }
 
         private void Write()
         {
             if (type == TimetableType.Linear)
-            {
-                sta.SetAttribute("km", GetPosition(0).Value.ToString("0.0", CultureInfo.InvariantCulture));
-            }
+                sta.SetAttribute("km", GetPosition(Timetable.LINEAR_ROUTE_ID).Value.ToString("0.0", CultureInfo.InvariantCulture));
             else
             {
                 var posStrings = positions.Select(kvp => kvp.Key.ToString() + ":" + kvp.Value.ToString("0.0", CultureInfo.InvariantCulture));

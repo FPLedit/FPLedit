@@ -25,8 +25,8 @@ namespace FPLedit.Shared
 
         public float LinearKilometre
         {
-            get => Positions.GetPosition(0).Value;
-            set => Positions.SetPosition(0, value);
+            get => Positions.GetPosition(Timetable.LINEAR_ROUTE_ID).Value;
+            set => Positions.SetPosition(Timetable.LINEAR_ROUTE_ID, value);
         }
 
         public PositionCollection Positions
