@@ -19,7 +19,7 @@ namespace FPLedit.Editor.Network
         private TrainsEditingForm()
         {
             InitializeComponent();
-            InitListView(topListView);
+            InitListView(listView);
         }
 
         public TrainsEditingForm(IInfo info) : this()
@@ -28,18 +28,20 @@ namespace FPLedit.Editor.Network
             tt = info.Timetable;
             info.BackupTimetable();
 
-            UpdateListView(topListView);
+            UpdateListView(listView);
 
             KeyDown += (s, e) =>
             {
                 if (e.KeyCode == Keys.Delete)
-                    DeleteTrain(topListView, false);
+                    DeleteTrain(listView, false);
                 else if ((e.KeyCode == Keys.T && e.Control))
-                    EditTimetable(topListView);
+                    EditTimetable(listView);
+                else if ((e.KeyCode == Keys.C && e.Control))
+                    CopyTrain(listView);
                 else if ((e.KeyCode == Keys.B && e.Control) || (e.KeyCode == Keys.Enter))
-                    EditTrain(topListView, false);
+                    EditTrain(listView, false);
                 else if (e.KeyCode == Keys.N && e.Control)
-                    NewTrain(topListView);
+                    NewTrain(listView);
             };
         }
 
@@ -126,6 +128,21 @@ namespace FPLedit.Editor.Network
                 MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug-Fahrplan bearbeiten");
         }
 
+        private void CopyTrain(ListView view, bool message = true)
+        {
+            if (view.SelectedItems.Count > 0)
+            {
+                var train = (Train)view.SelectedItems[0].Tag;
+
+                var tcf = new TrainCopyDialog(train, info.Timetable);
+                tcf.ShowDialog();
+
+                UpdateListView(view);
+            }
+            else if (message)
+                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug kopieren");
+        }
+
         private void NewTrain(ListView view)
         {
             var trf = new TrainSelectRouteForm(info);
@@ -145,11 +162,6 @@ namespace FPLedit.Editor.Network
             }
         }
 
-        private void TrainsEditingForm_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void closeButton_Click(object sender, EventArgs e)
         {
             info.ClearBackup();
@@ -165,15 +177,18 @@ namespace FPLedit.Editor.Network
         }
 
         private void topNewButton_Click(object sender, EventArgs e)
-            => NewTrain(topListView);
+            => NewTrain(listView);
 
         private void topEditButton_Click(object sender, EventArgs e)
-            => EditTrain(topListView);
+            => EditTrain(listView);
 
         private void topDeleteButton_Click(object sender, EventArgs e)
-            => DeleteTrain(topListView);
+            => DeleteTrain(listView);
 
         private void editTimetableButton_Click(object sender, EventArgs e)
-            => EditTimetable(topListView);
+            => EditTimetable(listView);
+
+        private void copyButton_Click(object sender, EventArgs e)
+            => CopyTrain(listView);
     }
 }

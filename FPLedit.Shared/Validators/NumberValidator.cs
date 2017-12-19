@@ -9,6 +9,8 @@ namespace FPLedit.Shared.Validators
     {
         public bool AllowEmpty { get; set; }
 
+        public bool UseInt { get; set; }
+
         public NumberValidator() : base()
         {
         }
@@ -17,7 +19,9 @@ namespace FPLedit.Shared.Validators
         {
             if (AllowEmpty && Control.Text == "")
                 return true;
-            return float.TryParse(Control.Text, out float num);
+            if (!UseInt)
+                return float.TryParse(Control.Text, out var f);
+            return int.TryParse(Control.Text, out var i);
         }
     }
 }

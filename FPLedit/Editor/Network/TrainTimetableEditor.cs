@@ -120,8 +120,8 @@ namespace FPLedit.Editor.Network
                 if (view.SelectedCells.Count != 0)
                 {
                     var cell = view.SelectedCells[0];
-                    trapeztafelToggle.Enabled = cell.ColumnIndex % 2 == 0;
-                    zlmButton.Enabled = cell.RowIndex == 0 || cell.ColumnIndex % 2 == 0;
+                    trapeztafelToggle.Enabled = cell.ColumnIndex % 2 == 0 && cell.RowIndex != 0;
+                    zlmButton.Enabled = cell.RowIndex == 0 ^ cell.ColumnIndex % 2 == 0;
 
                     var tr = false;
                     if (cell.Tag != null)
