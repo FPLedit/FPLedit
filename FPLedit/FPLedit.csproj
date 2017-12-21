@@ -206,7 +206,6 @@
     </Compile>
     <Compile Include="RegisterStore.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="NewEditor\StaPosHandler.cs" />
     <Compile Include="TemplatesForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -218,7 +217,6 @@
     <Compile Include="Templating\Template.cs" />
     <Compile Include="Templating\TemplateHost.cs" />
     <Compile Include="Templating\TemplateManager.cs" />
-    <Compile Include="NewEditor\StaPosReader.cs" />
     <Compile Include="Editor\Network\StaPosHandler.cs" />
     <Compile Include="UndoManager.cs" />
     <Compile Include="UpdateManager.cs" />

@@ -15,6 +15,8 @@ namespace FPLedit.Shared
 
         void SetUnsaved();
 
+        void NotifyLineChanged();
+
         void BackupTimetable();
 
         void RestoreTimetable();

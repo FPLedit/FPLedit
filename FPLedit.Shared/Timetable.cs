@@ -165,7 +165,6 @@ namespace FPLedit.Shared
 
         public void RemoveStation(Station sta)
         {
-            //TODO: Notify about removal
             foreach (var train in Trains)
                 train.RemoveArrDep(sta);
 
@@ -216,7 +215,6 @@ namespace FPLedit.Shared
         {
             if (Type == TimetableType.Linear)
                 throw new NotSupportedException("Lineare Strecken haben keine Routen!");
-            //TODO: Zusätzliche Kilometerangabe
             var idx = ++nextRtId;
             var r1 = s_old.Routes.ToList();
             var r2 = s_new.Routes.ToList();
@@ -229,7 +227,7 @@ namespace FPLedit.Shared
             return idx;
         }
 
-        public List<Route> GetRoutes()
+        public Route[] GetRoutes()
         {
             var routes = new List<Route>();
             if (Type == TimetableType.Network)
@@ -240,7 +238,7 @@ namespace FPLedit.Shared
             }
             else
                 routes.Add(new Route() { Index = LINEAR_ROUTE_ID, Stations = Stations });
-            return routes;
+            return routes.ToArray();
         }
 
         public Route GetRoute(int index)

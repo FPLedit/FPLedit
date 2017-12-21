@@ -6,7 +6,7 @@ using System.Linq;
 namespace FPLedit.Shared
 {
     [Serializable]
-    [DebuggerDisplay("{SName} [{Kilometre}]")]
+    [DebuggerDisplay("{SName} [Linear: {LinearKilometre}]")]
     public sealed class Station : Entity, IStation
     {
         public Station(XMLEntity en, Timetable tt) : base(en, tt)
