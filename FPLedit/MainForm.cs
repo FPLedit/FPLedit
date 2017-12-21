@@ -79,6 +79,9 @@ namespace FPLedit
         public event EventHandler<FileStateChangedEventArgs> FileStateChanged;
         public event EventHandler ExtensionsLoaded;
 
+        public void NotifyLineChanged()
+            => OnFileStateChanged();
+
         #endregion
 
         public MainForm()
@@ -282,11 +285,11 @@ namespace FPLedit
             OnFileStateChanged();
         }
 
-        private void New()
+        private void New(TimetableType type)
         {
             if (!NotifyIfUnsaved())
                 return;
-            Timetable = new Timetable(TimetableType.Network); //TODO: Art wählbar
+            Timetable = new Timetable(type);
             fileState.Opened = true;
             fileState.Saved = false;
             fileState.FileName = null;
@@ -452,9 +455,6 @@ namespace FPLedit
 
         #region Events
 
-        private void newToolStripMenuItem_Click(object sender, EventArgs e)
-            => New();
-
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
             => Save(false);
 
@@ -472,6 +472,12 @@ namespace FPLedit
 
         private void quitToolStripMenuItem_Click(object sender, EventArgs e)
             => Close();
+
+        private void linearNewToolStripMenuItem_Click(object sender, EventArgs e)
+            => New(TimetableType.Linear);
+
+        private void networkNewToolStripMenuItem_Click(object sender, EventArgs e)
+            => New(TimetableType.Network);
 
         #endregion
     }

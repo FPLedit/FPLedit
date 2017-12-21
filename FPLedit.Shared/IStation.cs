@@ -9,7 +9,9 @@ namespace FPLedit.Shared
     {
         string SName { get; set; }
 
-        //float Kilometre { get; set; }
+        float LinearKilometre { get; set; }
+
+        PositionCollection Positions { get; }
 
         int Wellenlinien { get; set; }
 

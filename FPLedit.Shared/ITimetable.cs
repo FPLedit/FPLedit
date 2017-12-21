@@ -2,7 +2,6 @@
 
 namespace FPLedit.Shared
 {
-    //TODO: Neue Methoden vom Timetable hier eintragen
     public interface ITimetable
     {
         TimetableType Type { get; }
@@ -12,12 +11,17 @@ namespace FPLedit.Shared
 
         void AddStation(Station sta, int route);
         void AddTrain(Train tra, bool hasArDeps = false);
+        void RemoveStation(Station sta);
+        void RemoveTrain(Train tra);
+
+        int AddRoute(Station s_old, Station s_new, float old_add_km, float new_km);
+        Route GetRoute(int index);
+        Route[] GetRoutes();
+        Station GetStationById(int id);
+
         Timetable Clone();
         string[] GetAllTfzs();
         string GetLineName(TrainDirection direction);
         List<Station> GetStationsOrderedByDirection(TrainDirection direction);
-        void RemoveStation(Station sta);
-        void RemoveTrain(Train tra);
-        string ToString();
     }
 }

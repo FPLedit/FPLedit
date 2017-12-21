@@ -13,7 +13,7 @@ namespace FPLedit.Editor.Network
     public partial class LineEditingControl : UserControl
     {
         private IInfo info;
-        private int selectedRoute = 0; //TODO: Use actual index
+        private int selectedRoute = 0;
 
         public LineEditingControl()
         {
@@ -48,7 +48,7 @@ namespace FPLedit.Editor.Network
             this.info = info;
             info.FileStateChanged += (s, e) =>
             {
-                lineRenderer.SetTimetable(info.Timetable);
+                ReloadTimetable();
                 newButton.Enabled = routesComboBox.Enabled = newLineButton.Enabled = e.FileState.Opened;
 
                 if (e.FileState.LineCreated)
@@ -69,7 +69,7 @@ namespace FPLedit.Editor.Network
                 Editor.EditStationForm nsf = new Editor.EditStationForm((Station)s, selectedRoute);
                 if (nsf.ShowDialog() == DialogResult.OK)
                 {
-                    lineRenderer.SetTimetable(info.Timetable);
+                    ReloadTimetable();
                     info.SetUnsaved();
                 }
             };
@@ -84,7 +84,7 @@ namespace FPLedit.Editor.Network
                 itm.Click += (se, ar) => {
                     info.StageUndoStep();
                     info.Timetable.RemoveStation((Station)s);
-                    lineRenderer.SetTimetable(info.Timetable);
+                    ReloadTimetable();
                     info.SetUnsaved();
                 };
             };
@@ -106,7 +106,7 @@ namespace FPLedit.Editor.Network
                     }
                     info.Timetable.AddStation(sta, selectedRoute);
                     info.SetUnsaved();
-                    lineRenderer.SetTimetable(info.Timetable);
+                    ReloadTimetable();
                 }
             };
             newLineButton.Click += (s, e) =>
@@ -119,6 +119,11 @@ namespace FPLedit.Editor.Network
                     info.SetUnsaved();
                 }
             };
+        }
+
+        public void ReloadTimetable()
+        {
+            lineRenderer.SetTimetable(info.Timetable);
         }
     }
 

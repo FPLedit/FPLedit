@@ -8,11 +8,11 @@ namespace FPLedit.Shared
 {
     public class PositionCollection
     {
-        private Station sta;
+        private IStation sta;
         private Dictionary<int, float> positions;
         private TimetableType type;
 
-        public PositionCollection(Station s, Timetable tt)
+        public PositionCollection(IStation s, Timetable tt)
         {
             sta = s;
             positions = new Dictionary<int, float>();

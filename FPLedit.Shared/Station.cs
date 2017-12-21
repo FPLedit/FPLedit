@@ -6,7 +6,7 @@ using System.Linq;
 namespace FPLedit.Shared
 {
     [Serializable]
-    [DebuggerDisplay("{SName} [{Kilometre}]")]
+    [DebuggerDisplay("{SName} [Linear: {LinearKilometre}]")]
     public sealed class Station : Entity, IStation
     {
         public Station(XMLEntity en, Timetable tt) : base(en, tt)
@@ -30,9 +30,8 @@ namespace FPLedit.Shared
         }
 
         public PositionCollection Positions
-        {
-            get => new PositionCollection(this, _parent);
-        }
+            => new PositionCollection(this, _parent);
+
 
         public int Wellenlinien
         {

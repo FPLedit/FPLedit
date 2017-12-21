@@ -40,12 +40,16 @@ namespace FPLedit.Editor
 
             editLineItem = editRoot.DropDownItems.Add("Strecke bearbeiten (tabellarisch)");
             editLineItem.Enabled = false;
-            editLineItem.Click += (s, e) => ShowForm(new Linear.LineEditForm(info));
-            //TODO: Update lineRenderer
+            editLineItem.Click += (s, e) =>
+            {
+                info.NotifyLineChanged();
+                ShowForm(new Linear.LineEditForm(info));
+            };
 
             editTrainsItem = editRoot.DropDownItems.Add("Züge bearbeiten");
             editTrainsItem.Enabled = false;
-            editTrainsItem.Click += (s, e) => {
+            editTrainsItem.Click += (s, e) =>
+            {
                 if (info.Timetable.Type == TimetableType.Linear)
                     ShowForm(new Linear.TrainsEditForm(info));
                 else ShowForm(new Network.TrainsEditingForm(info));

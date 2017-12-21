@@ -46,7 +46,7 @@ namespace FPLedit.Editor.Network
 
         private StaPosHandler handler;
         private Dictionary<Station, Point> stapos;
-        private List<Route> routes;
+        private Route[] routes;
 
         public event EventHandler<MouseEventArgs> StationClicked;
         public event EventHandler<MouseEventArgs> StationDoubleClicked;
@@ -103,7 +103,7 @@ namespace FPLedit.Editor.Network
             DrawStatus(e.Graphics);
             DrawBorder(e.Graphics);
 
-            if (routes == null || routes.Count == 0)
+            if (routes == null || routes.Length == 0)
                 return;
 
             foreach (var r in routes)

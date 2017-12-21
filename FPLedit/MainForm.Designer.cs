@@ -32,6 +32,8 @@
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.linearNewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.networkNewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,8 +46,8 @@
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.exportFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.importFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.logTextBox = new FPLedit.LogControl();
             this.lineEditingControl1 = new FPLedit.Editor.Network.LineEditingControl();
+            this.logTextBox = new FPLedit.LogControl();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             //
@@ -79,10 +81,26 @@
             //
             // newToolStripMenuItem
             //
+            this.newToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.linearNewToolStripMenuItem,
+            this.networkNewToolStripMenuItem});
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
             this.newToolStripMenuItem.Text = "Neu";
-            this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
+            //
+            // linearNewToolStripMenuItem
+            //
+            this.linearNewToolStripMenuItem.Name = "linearNewToolStripMenuItem";
+            this.linearNewToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.linearNewToolStripMenuItem.Text = "Lineare Strecke";
+            this.linearNewToolStripMenuItem.Click += new System.EventHandler(this.linearNewToolStripMenuItem_Click);
+            //
+            // networkNewToolStripMenuItem
+            //
+            this.networkNewToolStripMenuItem.Name = "networkNewToolStripMenuItem";
+            this.networkNewToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.networkNewToolStripMenuItem.Text = "Netzwerk-Fahrplan";
+            this.networkNewToolStripMenuItem.Click += new System.EventHandler(this.networkNewToolStripMenuItem_Click);
             //
             // openToolStripMenuItem
             //
@@ -148,6 +166,15 @@
             this.quitToolStripMenuItem.Text = "Beenden";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
             //
+            // lineEditingControl1
+            //
+            this.lineEditingControl1.BackColor = System.Drawing.Color.White;
+            this.lineEditingControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lineEditingControl1.Location = new System.Drawing.Point(0, 23);
+            this.lineEditingControl1.Name = "lineEditingControl1";
+            this.lineEditingControl1.Size = new System.Drawing.Size(849, 374);
+            this.lineEditingControl1.TabIndex = 2;
+            //
             // logTextBox
             //
             this.logTextBox.BackColor = System.Drawing.Color.White;
@@ -158,14 +185,6 @@
             this.logTextBox.Padding = new System.Windows.Forms.Padding(2);
             this.logTextBox.Size = new System.Drawing.Size(849, 85);
             this.logTextBox.TabIndex = 1;
-            //
-            // lineEditingControl1
-            //
-            this.lineEditingControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lineEditingControl1.Location = new System.Drawing.Point(0, 23);
-            this.lineEditingControl1.Name = "lineEditingControl1";
-            this.lineEditingControl1.Size = new System.Drawing.Size(849, 374);
-            this.lineEditingControl1.TabIndex = 2;
             //
             // MainForm
             //
@@ -212,6 +231,8 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
         private Editor.Network.LineEditingControl lineEditingControl1;
+        private System.Windows.Forms.ToolStripMenuItem linearNewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem networkNewToolStripMenuItem;
     }
 }
 
