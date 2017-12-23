@@ -18,11 +18,14 @@ namespace FPLedit.Buchfahrplan.Forms
             string path = info.GetTemp("buchfahrplan.html");
 
             bool tryoutConsole = info.Settings.Get<bool>("bfpl.console");
+            bool success = false;
             if (tryoutConsole)
-                exp.ExportTryoutConsole(info.Timetable, path, info);
+                success = exp.ExportTryoutConsole(info.Timetable, path, info);
             else
-                exp.Export(info.Timetable, path, info);
-            Process.Start(path);
+                success = exp.Export(info.Timetable, path, info);
+
+            if (success)
+                Process.Start(path);
         }
     }
 }

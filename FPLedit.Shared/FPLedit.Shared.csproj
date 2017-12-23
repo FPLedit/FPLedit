@@ -79,6 +79,7 @@
     <Compile Include="Ui\IExpertHandler.cs" />
     <Compile Include="Ui\IPreviewable.cs" />
     <Compile Include="Ui\IFilterableUi.cs" />
+    <Compile Include="Ui\IRouteAction.cs" />
     <Compile Include="Ui\ISaveHandler.cs" />
     <Compile Include="Ui\ISettingsUiProxy.cs" />
     <Compile Include="XMLEntity.cs" />

@@ -11,6 +11,7 @@ namespace FPLedit.Buchfahrplan
         public IStation Station { get; set; }
 
         private bool isPoint = false;
+        private int route;
 
         public VelocityEditForm()
         {
@@ -21,18 +22,23 @@ namespace FPLedit.Buchfahrplan
             wellenComboBox.SelectedIndex = 0;
         }
 
-        public VelocityEditForm(Timetable tt) : this()
+        public VelocityEditForm(Timetable tt, int route) : this()
         {
             Station = new BfplPoint(tt);
+            // Add route if it's a network timetbale
+            if (tt.Type == TimetableType.Network)
+                Station.Routes = new int[] { route };
             isPoint = true;
+            this.route = route;
         }
 
-        public VelocityEditForm(IStation sta) : this()
+        public VelocityEditForm(IStation sta, int route) : this()
         {
             Station = sta;
+            this.route = route;
 
             velocityTextBox.Text = sta.Vmax;
-            positionTextBox.Text = sta.Kilometre.ToString();
+            positionTextBox.Text = sta.Positions.GetPosition(route).ToString();
             nameTextBox.Text = sta.SName;
             wellenComboBox.SelectedItem = sta.Wellenlinien.ToString();
 
@@ -60,7 +66,7 @@ namespace FPLedit.Buchfahrplan
 
             if (isPoint)
             {
-                Station.Kilometre = float.Parse(positionTextBox.Text);
+                Station.Positions.SetPosition(route, float.Parse(positionTextBox.Text));
                 Station.SName = nameTextBox.Text;
             }
             Close();

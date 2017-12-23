@@ -32,8 +32,8 @@
             this.routesComboBox = new System.Windows.Forms.ComboBox();
             this.newLineButton = new System.Windows.Forms.Button();
             this.toolbarFlowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.dividerPanel = new System.Windows.Forms.Panel();
             this.lineRenderer = new FPLedit.Editor.Network.LineRenderer();
+            this.dividerPanel1 = new FPLedit.Editor.Network.DividerPanel();
             this.toolbarFlowLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             //
@@ -71,7 +71,7 @@
             //
             this.toolbarFlowLayoutPanel.Controls.Add(this.routesComboBox);
             this.toolbarFlowLayoutPanel.Controls.Add(this.newButton);
-            this.toolbarFlowLayoutPanel.Controls.Add(this.dividerPanel);
+            this.toolbarFlowLayoutPanel.Controls.Add(this.dividerPanel1);
             this.toolbarFlowLayoutPanel.Controls.Add(this.newLineButton);
             this.toolbarFlowLayoutPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.toolbarFlowLayoutPanel.Location = new System.Drawing.Point(0, 0);
@@ -79,19 +79,13 @@
             this.toolbarFlowLayoutPanel.Size = new System.Drawing.Size(618, 33);
             this.toolbarFlowLayoutPanel.TabIndex = 4;
             //
-            // dividerPanel
-            //
-            this.dividerPanel.BackColor = System.Drawing.Color.Gray;
-            this.dividerPanel.Location = new System.Drawing.Point(222, 3);
-            this.dividerPanel.Name = "dividerPanel";
-            this.dividerPanel.Size = new System.Drawing.Size(2, 23);
-            this.dividerPanel.TabIndex = 4;
-            //
             // lineRenderer
             //
             this.lineRenderer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.lineRenderer.DisableTopBorder = false;
+            this.lineRenderer.FixedStatusString = null;
             this.lineRenderer.Location = new System.Drawing.Point(0, 39);
             this.lineRenderer.Name = "lineRenderer";
             this.lineRenderer.SelectedRoute = 0;
@@ -99,6 +93,14 @@
             this.lineRenderer.StationMovingEnabled = true;
             this.lineRenderer.TabIndex = 0;
             this.lineRenderer.Text = "lineRenderer1";
+            //
+            // dividerPanel1
+            //
+            this.dividerPanel1.BackColor = System.Drawing.Color.Gray;
+            this.dividerPanel1.Location = new System.Drawing.Point(222, 3);
+            this.dividerPanel1.Name = "dividerPanel1";
+            this.dividerPanel1.Size = new System.Drawing.Size(2, 23);
+            this.dividerPanel1.TabIndex = 4;
             //
             // LineEditingControl
             //
@@ -121,6 +123,6 @@
         private System.Windows.Forms.ComboBox routesComboBox;
         private System.Windows.Forms.Button newLineButton;
         private System.Windows.Forms.FlowLayoutPanel toolbarFlowLayoutPanel;
-        private System.Windows.Forms.Panel dividerPanel;
+        private DividerPanel dividerPanel1;
     }
 }

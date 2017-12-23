@@ -30,19 +30,38 @@ namespace FPLedit.Buchfahrplan.Templates
                 .ToLower();
         }
 
-        public List<IStation> GetStations(TrainDirection dir)
+        public List<IStation> GetStations(Train train)
         {
             List<IStation> points = new List<IStation>();
-            var fstations = tt.Stations.Where(s => filterable.LoadStationRules(tt).All(r => !r.Matches(s))); // Filter
+            var fstations = train.GetPath().Where(s => filterable.LoadStationRules(tt).All(r => !r.Matches(s))); // Filter
             points.AddRange(fstations);
-            if (attrs != null)
-                points.AddRange(attrs.Points);
 
-            var oPoints = (dir == TrainDirection.ta ?
-                points.OrderByDescending(o => o.Kilometre)
-                : points.OrderBy(o => o.Kilometre));
+            var p = attrs?.Points ?? new List<BfplPoint>();
+            for (int i = 0; i < points.Count; i++)
+            {
+                var sta0 = points[i];
+                if (sta0 == points.Last())
+                    break; // Hier ist die Strecke zuende
+                var sta1 = points[i + 1];
 
-            return oPoints.ToList();
+                int route = Timetable.LINEAR_ROUTE_ID;
+                if (tt.Type == TimetableType.Network)
+                {
+                    var routes = sta0.Routes.Where(r => sta1.Routes.Contains(r)).ToArray();
+                    if (routes.Length > 1 || routes.Length == 0)
+                        throw new Exception("Zwei Stationen können nicht mehr als eine/keine Route gemeinsam haben!");
+                    route = routes[0];
+                }
+
+                var maxPos = Math.Max(sta0.Positions.GetPosition(route).Value, sta1.Positions.GetPosition(route).Value);
+                var minPos = Math.Min(sta0.Positions.GetPosition(route).Value, sta1.Positions.GetPosition(route).Value);
+
+                var p1 = tt.Type == TimetableType.Network ? p.Where(po => po.Routes.Contains(route)) : p;
+                var pointsBetween = p1.Where(po => po.Positions.GetPosition(route) > minPos && po.Positions.GetPosition(route) < maxPos);
+                points.InsertRange(points.IndexOf(sta0) + 1, pointsBetween);
+            }
+
+            return points;
         }
 
         public Train[] GetTrains()

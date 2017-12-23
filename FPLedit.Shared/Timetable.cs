@@ -115,6 +115,12 @@ namespace FPLedit.Shared
             return stas.First().SName + " - " + stas.Last().SName;
         }
 
+        public string GetLineName(Train t)
+        {
+            var path = t.GetPath();
+            return path.First().SName + " - " + path.Last().SName;
+        }
+
         public Timetable Clone()
         {
             using (MemoryStream stream = new MemoryStream())

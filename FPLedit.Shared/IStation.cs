@@ -16,5 +16,7 @@ namespace FPLedit.Shared
         int Wellenlinien { get; set; }
 
         string Vmax { get; set; }
+
+        int[] Routes { get; set; }
     }
 }

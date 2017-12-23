@@ -44,6 +44,7 @@ namespace FPLedit.Templating
             catch (TargetInvocationException ex)
             {
                 logger.Error("Laufzeitfehler im Template " + Identifier + ": " + ex.InnerException.Message);
+                logger.Error("[StackTrace]: " + ex.InnerException.StackTrace);
             }
             catch (Exception ex)
             {

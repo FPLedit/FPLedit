@@ -13,7 +13,7 @@
     else if (sta.Wellenlinien != 0)
     {
         var w = sta.Wellenlinien;
-        var stas = helper.GetStations(tra.Direction);
+        var stas = helper.GetStations(tra);
         stas = stas.Skip(stas.IndexOf(sta)).ToList();
         counter = stas.TakeWhile(s => s.Wellenlinien == w).Count();
         return string.Format("<td class=\"zug welle welle{0}\" rowspan=\"{1}\"></td>", w, counter--);
@@ -200,9 +200,19 @@ if (attrs != null)
 				<#
 				int rs_counter = 0;
 				string last_vmax = "";
-				foreach (var entity in helper.GetStations(tra.Direction)) { #>
+				var stations = helper.GetStations(tra);
+				int route = Timetable.LINEAR_ROUTE_ID;
+				foreach (var entity in stations) {
+				#>
 				<tr class="<#= helper.HtmlName(entity.SName, "station-") #>">
-					<td class="zug first"><#= entity.Kilometre.ToString("0.0") #></td>
+					<#
+						if (entity != stations.Last() && tt.Type == TimetableType.Network) {
+							var sta1 = stations[stations.IndexOf(entity) + 1];
+							route = entity.Routes.Where(r => sta1.Routes.Contains(r)).ToArray()[0];
+						}
+						var pos = entity.Positions.GetPosition(route);
+					#>
+					<td class="zug first"><#= pos.HasValue ? pos.Value.ToString("0.0") : "" #></td>
 					<td class="zug"><#= entity.Vmax == last_vmax ? "" : entity.Vmax #></td>
 					<# last_vmax = entity.Vmax; #>
 					<td class="zug stat"><#= entity.SName #></td>

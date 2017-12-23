@@ -8,14 +8,14 @@ using System.Windows.Forms;
 
 namespace FPLedit.Buchfahrplan.Forms
 {
-    public class VelocityDialogProxy : IEditingDialog
+    public class VelocityDialogProxy : IRouteAction
     {
         public string DisplayName => "Höchstgeschwindigkeiten ändern";
 
-        public void Show(IInfo info)
+        public void Show(IInfo info, Route route)
         {
             info.StageUndoStep();
-            VelocityForm svf = new VelocityForm(info);
+            VelocityForm svf = new VelocityForm(info, route);
             if (svf.ShowDialog() == DialogResult.OK)
                 info.SetUnsaved();
         }

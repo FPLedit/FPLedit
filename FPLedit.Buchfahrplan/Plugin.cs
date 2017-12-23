@@ -18,7 +18,7 @@ namespace FPLedit.Buchfahrplan
             info.Register<IDesignableUiProxy>(new SettingsControlProxy());
             info.Register<IFilterableUi>(new Forms.FilterableHandler());
             info.Register<IPreviewable>(new Forms.Preview());
-            info.Register<IEditingDialog>(new Forms.VelocityDialogProxy());
+            info.Register<IRouteAction>(new Forms.VelocityDialogProxy());
 
             info.Register<ITemplateProxy>(new Templates.StdTemplate());
             info.Register<ITemplateProxy>(new Templates.ZlbTemplate());

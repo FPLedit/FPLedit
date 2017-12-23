@@ -22,6 +22,7 @@ namespace FPLedit.Shared
         Timetable Clone();
         string[] GetAllTfzs();
         string GetLineName(TrainDirection direction);
+        string GetLineName(Train train);
         List<Station> GetStationsOrderedByDirection(TrainDirection direction);
     }
 }
