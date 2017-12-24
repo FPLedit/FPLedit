@@ -70,11 +70,10 @@ namespace FPLedit.Aushangfahrplan.Templates
             {
                 var p = t.GetPath();
                 var ardeps = t.GetArrDeps();
-                var nSta = p.Where(s => stasAfter.Contains(s))
-                    .FirstOrDefault(s => ardeps[s].Arrival != default(TimeSpan) || ardeps[s].Departure != default(TimeSpan));
+                var nSta = p.Where(s => stasAfter.Contains(s)).FirstOrDefault(s => ardeps[s].HasMinOneTimeSet);
                 if (nSta == null)
                     return false;
-                var time = ardeps[nSta].Arrival == default(TimeSpan) ? ardeps[nSta].Departure : ardeps[nSta].Arrival;
+                var time = ardeps[nSta].FirstSetTime;
                 return time > ardeps[sta].Departure;
             }).ToArray();
         }

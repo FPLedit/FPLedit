@@ -20,6 +20,9 @@ namespace FPLedit.Kursbuch
             ITemplate templ = chooser.GetTemplate(tt);
             string cont = templ.GenerateResult(tt);
 
+            if (cont == null)
+                return false;
+
             if (tryout_console)
                 cont += Resources.TryoutScript;
 
