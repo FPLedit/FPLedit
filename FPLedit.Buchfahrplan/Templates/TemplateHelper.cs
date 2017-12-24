@@ -59,8 +59,8 @@ namespace FPLedit.Buchfahrplan.Templates
                 var p1 = tt.Type == TimetableType.Network ? p.Where(po => po.Routes.Contains(route)) : p;
                 var pointsBetween = p1.Where(po => po.Positions.GetPosition(route) > minPos && po.Positions.GetPosition(route) < maxPos);
                 points.InsertRange(points.IndexOf(sta0) + 1, pointsBetween);
+                i += pointsBetween.Count();
             }
-
             return points;
         }
 

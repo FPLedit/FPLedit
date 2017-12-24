@@ -78,7 +78,11 @@ namespace FPLedit.Buchfahrplan.Model
         }
 
         public BfplPoint[] GetPoints(int route)
-            => Points.Where(p => p.Routes.Contains(route)).ToArray();
+        {
+            if (_parent.Type == TimetableType.Linear && route == Timetable.LINEAR_ROUTE_ID)
+                return Points.ToArray();
+            return Points.Where(p => p.Routes.Contains(route)).ToArray();
+        }
 
         public void AddPoint(BfplPoint p)
         {

@@ -249,6 +249,8 @@ namespace FPLedit.Shared
 
         public Route GetRoute(int index)
         {
+            if (Type == TimetableType.Linear && index == LINEAR_ROUTE_ID)
+                return new Route() { Index = LINEAR_ROUTE_ID, Stations = Stations };
             var stas = Stations.Where(s => s.Routes.Contains(index)).ToList();
             return new Route() { Index = index, Stations = stas };
         }
