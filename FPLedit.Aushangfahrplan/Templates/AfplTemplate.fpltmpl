@@ -128,13 +128,13 @@ td {
 	<p class="title"><#= abfahrtSVG #></p>
 	<p class="heading">der Züge in der Richtung nach</p>
 	<#
-		var fs = tt.Stations.First();
-		var ls = tt.Stations.Last();
+		var fss = helper.GetStationsInDir(TrainDirection.ta, sta);
+		var lss = helper.GetStationsInDir(TrainDirection.ti, sta);
 	#>
 	<table>
 		<tr>
-			<td colspan="2" class="dir"><#= fs != sta ? fs.SName : "" #></td>
-			<td colspan="2" class="dir"><#= ls != sta ? ls.SName : "" #></td>
+			<td colspan="2" class="dir"><#= string.Join("/", fss.Select(s => s.SName)) #></td>
+			<td colspan="2" class="dir"><#= string.Join("/", lss.Select(s => s.SName)) #></td>
 		</tr>
 		<#
 			var trainsA = helper.GetTrains(TrainDirection.ta, sta);
@@ -143,14 +143,14 @@ td {
 			//count = Math.Max(count, 20);
 		#>
 		<tr>
-			<# if (fs != sta) { #>
+			<# if (fss.Count() > 0) { #>
 				<td class="time header">Zeit</td>
 				<td class="name header">Zug-Nr</td>
 			<# } else { #>
 				<td class="time header"></td>
 				<td class="name header"></td>
 			<# } #>
-			<# if (ls != sta) { #>
+			<# if (lss.Count() > 0) { #>
 				<td class="time header">Zeit</td>
 				<td class="name header">Zug-Nr</td>
 			<# } else { #>
@@ -160,14 +160,14 @@ td {
 		</tr>
 		<# for (int i = 0; i < count; i++) { #>
 		<tr class="train-row">
-			<# if (fs != sta) { #>
+			<# if (fss.Count() > 0) { #>
 				<td class="time"><#= TimeString(trainsA, sta, i) #></td>
 				<td class="name"><#= NameString(trainsA, i) #></td>
 			<# } else { #>
 				<td class="time"></td>
 				<td class="name"></td>
 			<# } #>
-			<# if (ls != sta) { #>
+			<# if (lss.Count() > 0) { #>
 				<td class="time"><#= TimeString(trainsB, sta, i) #></td>
 				<td class="name"><#= NameString(trainsB, i) #></td>
 			<# } else { #>

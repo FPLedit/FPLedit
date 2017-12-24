@@ -60,13 +60,20 @@ namespace FPLedit
 
         #region Log
         public void Error(string message)
-            => Write(message, Color.Red);
+            => WriteMl(message, Color.Red);
 
         public void Warning(string message)
-            => Write(message, Color.Orange);
+            => WriteMl(message, Color.Orange);
 
         public void Info(string message)
-            => Write(message, Color.Black);
+            => WriteMl(message, Color.Black);
+
+        private void WriteMl(string message, Color c)
+        {
+            var lines = message.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var l in lines)
+                Write(l, c);
+        }
 
         private void Write(string message, Color c)
         {

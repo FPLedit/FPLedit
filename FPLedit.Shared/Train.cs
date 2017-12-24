@@ -140,15 +140,14 @@ namespace FPLedit.Shared
 
         public Dictionary<Station, ArrDep> GetArrDeps()
         {
-            if (_parent.Type == TimetableType.Linear)
-                throw new NotSupportedException("Lineare Fahrpläne haben keine Station-Ids!");
-
             var ret = new Dictionary<Station, ArrDep>();
             var tElm = Children.Where(x => x.XName == "t").ToList();
             foreach (var t in tElm)
             {
                 ArrDep ardp = new ArrDep();
-                var sta = _parent.GetStationById(t.GetAttribute<int>("fpl-id"));
+                var sta = _parent.Type == TimetableType.Network
+                    ? _parent.GetStationById(t.GetAttribute<int>("fpl-id"))
+                    : _parent.GetStationsOrderedByDirection(Direction)[tElm.IndexOf(t)];
 
                 if (t.GetAttribute("a", "") != "")
                     ardp.Arrival = TimeSpan.Parse(t.GetAttribute<string>("a"));
