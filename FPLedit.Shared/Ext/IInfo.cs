@@ -11,11 +11,9 @@ namespace FPLedit.Shared
     {
         Timetable Timetable { get; set; }
 
-        FileState FileState { get; set; }
+        IFileState FileState { get; }
 
         void SetUnsaved();
-
-        void NotifyLineChanged();
 
         void BackupTimetable();
 
@@ -42,8 +40,6 @@ namespace FPLedit.Shared
 
         void StageUndoStep();
 
-        void AddUndoStep();
-
         dynamic Menu { get; }
 
         ILog Logger { get; }
@@ -59,9 +55,9 @@ namespace FPLedit.Shared
 
     public class FileStateChangedEventArgs : EventArgs
     {
-        public FileState FileState { get; private set; }
+        public IFileState FileState { get; private set; }
 
-        public FileStateChangedEventArgs(FileState state)
+        public FileStateChangedEventArgs(IFileState state)
         {
             FileState = state;
         }

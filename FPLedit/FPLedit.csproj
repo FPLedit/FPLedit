@@ -147,6 +147,7 @@
     <Compile Include="ExtensionsForm.Designer.cs">
       <DependentUpon>ExtensionsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="FileState.cs" />
     <Compile Include="InfoForm.cs">
       <SubType>Form</SubType>
     </Compile>

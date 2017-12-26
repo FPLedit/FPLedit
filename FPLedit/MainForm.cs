@@ -24,7 +24,6 @@ namespace FPLedit
         private IExport save;
 
         private FileState fileState;
-
         private TemplateManager templateManager;
         private ExtensionManager extensionManager;
         private UndoManager undo;
@@ -41,31 +40,17 @@ namespace FPLedit
 
         #region FileState
 
-        public FileState FileState
-        {
-            get { return fileState; }
-            set
-            {
-                if (!value.Equals(fileState))
-                {
-                    fileState = value;
-                    OnFileStateChanged();
-                }
-            }
-        }
+        public IFileState FileState => fileState;
 
         public void SetUnsaved()
         {
-            AddUndoStep();
+            undo.AddUndoStep();
             fileState.Saved = false;
-            OnFileStateChanged();
         }
 
         private void OnFileStateChanged()
         {
-            fileState.LineCreated = Timetable?.Stations.Count > 1; // Mind. 2 Bahnhöfe
-            fileState.TrainsCreated = Timetable?.Trains.Count > 0;
-            fileState.CanGoBack = undo.CanGoBack;
+            fileState.UpdateMetaProperties(Timetable, undo);
 
             saveToolStripMenuItem.Enabled = saveAsToolStripMenuItem.Enabled = exportToolStripMenuItem.Enabled = fileState.Opened;
 
@@ -78,9 +63,6 @@ namespace FPLedit
 
         public event EventHandler<FileStateChangedEventArgs> FileStateChanged;
         public event EventHandler ExtensionsLoaded;
-
-        public void NotifyLineChanged()
-            => OnFileStateChanged();
 
         #endregion
 
@@ -99,6 +81,7 @@ namespace FPLedit
             openFileDialog.Filter = open.Filter;
 
             fileState = new FileState();
+            fileState.FileStateInternalChanged += (s, e) => OnFileStateChanged();
 
             if (Settings.Get("log.enable-file", false))
                 Logger = new MultipleLogger(logTextBox, new TempLogger(this));
@@ -106,7 +89,7 @@ namespace FPLedit
                 Logger = new MultipleLogger(logTextBox);
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void MainForm_Load(object sender, EventArgs e)
         {
             // Extensions laden & initialisieren (=> Initialisiert Importer/Exporter)
             new Editor.EditorPlugin().Init(this);
@@ -202,8 +185,7 @@ namespace FPLedit
                 fileState.Opened = true;
                 fileState.Saved = true;
                 fileState.FileName = importFileDialog.FileName;
-                OnFileStateChanged();
-                ClearHistory();
+                undo.ClearHistory();
             }
         }
 
@@ -245,8 +227,7 @@ namespace FPLedit
             fileState.Opened = true;
             fileState.Saved = true;
             fileState.FileName = filename;
-            OnFileStateChanged();
-            ClearHistory();
+            undo.ClearHistory();
 
             if (enable_last)
             {
@@ -282,7 +263,6 @@ namespace FPLedit
             Logger.Info("Speichern erfolgreich abgeschlossen!");
             fileState.Saved = true;
             fileState.FileName = filename;
-            OnFileStateChanged();
         }
 
         private void New(TimetableType type)
@@ -293,8 +273,7 @@ namespace FPLedit
             fileState.Opened = true;
             fileState.Saved = false;
             fileState.FileName = null;
-            OnFileStateChanged();
-            ClearHistory();
+            undo.ClearHistory();
             Logger.Info("Neue Datei erstellt");
         }
 
@@ -391,23 +370,10 @@ namespace FPLedit
         {
             if (undo.CanGoBack)
                 Timetable = undo.Undo();
-            OnFileStateChanged();
         }
 
         public void StageUndoStep()
             => undo.StageUndoStep(Timetable);
-
-        public void AddUndoStep()
-        {
-            undo.AddUndoStep();
-            OnFileStateChanged();
-        }
-
-        private void ClearHistory()
-        {
-            undo.ClearHistory();
-            OnFileStateChanged();
-        }
 
         public void BackupTimetable()
         {

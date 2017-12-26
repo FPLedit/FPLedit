@@ -40,11 +40,7 @@ namespace FPLedit.Editor
 
             editLineItem = editRoot.DropDownItems.Add("Strecke bearbeiten (tabellarisch)");
             editLineItem.Enabled = false;
-            editLineItem.Click += (s, e) =>
-            {
-                info.NotifyLineChanged();
-                ShowForm(new Linear.LineEditForm(info));
-            };
+            editLineItem.Click += (s, e) => ShowForm(new Linear.LineEditForm(info));
 
             editTrainsItem = editRoot.DropDownItems.Add("Züge bearbeiten");
             editTrainsItem.Enabled = false;
