@@ -10,7 +10,7 @@
 #>
 
 <#
-string kbs = "";
+KBSnCollection kbsn = null;
 string font = "Arial"; //TODO: KBZiffern
 string heFont = "\"Arial Black\"";
 string additionalCss = "";
@@ -28,8 +28,8 @@ if (attrs != null)
     if (attrs.HeFont != "")
         heFont = attrs.HeFont;
     additionalCss = attrs.Css ?? "";
-    if (attrs.Kbs != "")
-        kbs = attrs.Kbs;
+    if (attrs.KBSn != null)
+        kbsn = attrs.KBSn;
 }
 #>
 
@@ -146,14 +146,16 @@ if (attrs != null)
 	</head>
 
 	<body>
+	<# foreach (var route in tt.GetRoutes()) { #>
 	<p class="heading">
-		<span class="line"><#= kbs #> <#= tt.GetLineName(TOP_DIRECTION) #> </span>
+		<span class="line"><#= kbsn.GetKbsn(route.Index) #> <#= helper.GetRouteName(route, TOP_DIRECTION) #> </span>
 		<span class="back">und zurück</span>
 	</p>
-	<#	var dirs = new[] { TOP_DIRECTION, BOTTOM_DIRECTION };
+	<#
+		var dirs = new[] { TOP_DIRECTION, BOTTOM_DIRECTION };
 		foreach (var direction in dirs) {
-		var trains = helper.GetTrains(direction);
-		var stations = helper.GetStations(direction);
+		var trains = helper.GetTrains(route, direction);
+		var stations = helper.GetStations(route, direction);
 	#>
 	<table cellspacing="0" cellpadding="0">
 		<tr>
@@ -179,7 +181,7 @@ if (attrs != null)
 		foreach (var sta in stations) { #>
 		<tr>
 			<# var last = stations.Last() == sta ? " last" : ""; #>
-			<td class="km<#= last #>"><span><#= sta.Kilometre.ToString("0.0") #></span></td>
+			<td class="km<#= last #>"><span><#= sta.Positions.GetPosition(route.Index).Value.ToString("0.0") #></span></td>
 			<td class="sta<#= last #>"><span><#= sta.SName.Replace(" ", "&nbsp;") #></span></td>
 
 			<# foreach (var t in trains) {
@@ -195,7 +197,9 @@ if (attrs != null)
 		</tr>
 		<# } #>
 	</table>
-	<# } #>
+	<# }
+	}
+	#>
 
 	</body>
 

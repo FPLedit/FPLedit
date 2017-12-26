@@ -118,7 +118,7 @@ namespace FPLedit.Shared.Templating
             if (TemplateType != null)
                 throw new Exception("Nur eine fpledit-template-Direktive pro Vorlage erlaubt!");
             var args = m.Groups[1].ToString().Trim();
-            var tparams = ArgsParser.ParseArgs(args);
+            var tparams = new ArgsParser(args).ParsedArgs;
             if (!tparams.ContainsKey("type") || !tparams.ContainsKey("name"))
                 throw new Exception("Fehlende Angabe type oder name in der fpledit-template-Direktive!");
             TemplateType = tparams["type"];

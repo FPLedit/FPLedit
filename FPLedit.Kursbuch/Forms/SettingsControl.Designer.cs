@@ -40,8 +40,8 @@
             this.fontLabel = new System.Windows.Forms.Label();
             this.cssTextBox = new System.Windows.Forms.TextBox();
             this.fontComboBox = new System.Windows.Forms.ComboBox();
-            this.kbsTextBox = new System.Windows.Forms.TextBox();
             this.kbsLable = new System.Windows.Forms.Label();
+            this.kbsnListView = new System.Windows.Forms.ListView();
             this.SuspendLayout();
             // 
             // tbFontLabel
@@ -92,7 +92,7 @@
             // consoleCheckBox
             // 
             this.consoleCheckBox.AutoSize = true;
-            this.consoleCheckBox.Location = new System.Drawing.Point(154, 285);
+            this.consoleCheckBox.Location = new System.Drawing.Point(154, 386);
             this.consoleCheckBox.Name = "consoleCheckBox";
             this.consoleCheckBox.Size = new System.Drawing.Size(334, 17);
             this.consoleCheckBox.TabIndex = 22;
@@ -102,7 +102,7 @@
             // cssHelpLinkLabel
             // 
             this.cssHelpLinkLabel.AutoSize = true;
-            this.cssHelpLinkLabel.Location = new System.Drawing.Point(20, 167);
+            this.cssHelpLinkLabel.Location = new System.Drawing.Point(20, 268);
             this.cssHelpLinkLabel.Name = "cssHelpLinkLabel";
             this.cssHelpLinkLabel.Size = new System.Drawing.Size(66, 13);
             this.cssHelpLinkLabel.TabIndex = 20;
@@ -121,7 +121,7 @@
             // 
             // cssLabel
             // 
-            this.cssLabel.Location = new System.Drawing.Point(20, 129);
+            this.cssLabel.Location = new System.Drawing.Point(20, 230);
             this.cssLabel.Name = "cssLabel";
             this.cssLabel.Size = new System.Drawing.Size(128, 54);
             this.cssLabel.TabIndex = 19;
@@ -141,7 +141,7 @@
             this.cssTextBox.AcceptsReturn = true;
             this.cssTextBox.AcceptsTab = true;
             this.cssTextBox.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cssTextBox.Location = new System.Drawing.Point(154, 126);
+            this.cssTextBox.Location = new System.Drawing.Point(154, 227);
             this.cssTextBox.Multiline = true;
             this.cssTextBox.Name = "cssTextBox";
             this.cssTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -158,21 +158,27 @@
             this.fontComboBox.TabIndex = 17;
             this.fontComboBox.TextChanged += new System.EventHandler(this.fontComboBox_TextChanged);
             // 
-            // kbsTextBox
-            // 
-            this.kbsTextBox.Location = new System.Drawing.Point(154, 100);
-            this.kbsTextBox.Name = "kbsTextBox";
-            this.kbsTextBox.Size = new System.Drawing.Size(73, 20);
-            this.kbsTextBox.TabIndex = 28;
-            // 
             // kbsLable
             // 
             this.kbsLable.AutoSize = true;
             this.kbsLable.Location = new System.Drawing.Point(20, 103);
+            this.kbsLable.MaximumSize = new System.Drawing.Size(140, 0);
             this.kbsLable.Name = "kbsLable";
-            this.kbsLable.Size = new System.Drawing.Size(130, 13);
+            this.kbsLable.Size = new System.Drawing.Size(139, 65);
             this.kbsLable.TabIndex = 29;
-            this.kbsLable.Text = "Kursbuchstreckennummer";
+            this.kbsLable.Text = "Kursbuchstreckennummern\r\n\r\nZum Bearbeiten zwei Mal mit Kurzem Abstand auf den Ein" +
+    "trag klicken";
+            // 
+            // kbsnListView
+            // 
+            this.kbsnListView.FullRowSelect = true;
+            this.kbsnListView.LabelEdit = true;
+            this.kbsnListView.Location = new System.Drawing.Point(154, 100);
+            this.kbsnListView.Name = "kbsnListView";
+            this.kbsnListView.Size = new System.Drawing.Size(310, 121);
+            this.kbsnListView.TabIndex = 30;
+            this.kbsnListView.UseCompatibleStateImageBehavior = false;
+            this.kbsnListView.View = System.Windows.Forms.View.Details;
             // 
             // SettingsControl
             // 
@@ -180,8 +186,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.Controls.Add(this.kbsnListView);
             this.Controls.Add(this.kbsLable);
-            this.Controls.Add(this.kbsTextBox);
             this.Controls.Add(this.tbFontLabel);
             this.Controls.Add(this.hwexampleLabel);
             this.Controls.Add(this.hwfontComboBox);
@@ -195,7 +201,7 @@
             this.Controls.Add(this.cssTextBox);
             this.Controls.Add(this.fontComboBox);
             this.Name = "SettingsControl";
-            this.Size = new System.Drawing.Size(516, 305);
+            this.Size = new System.Drawing.Size(516, 406);
             this.Load += new System.EventHandler(this.SettingsControl_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -216,7 +222,7 @@
         private System.Windows.Forms.Label fontLabel;
         private System.Windows.Forms.TextBox cssTextBox;
         private System.Windows.Forms.ComboBox fontComboBox;
-        private System.Windows.Forms.TextBox kbsTextBox;
         private System.Windows.Forms.Label kbsLable;
+        private System.Windows.Forms.ListView kbsnListView;
     }
 }

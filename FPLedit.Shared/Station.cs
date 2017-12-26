@@ -30,9 +30,8 @@ namespace FPLedit.Shared
         }
 
         public PositionCollection Positions
-        {
-            get => new PositionCollection(this, _parent);
-        }
+            => new PositionCollection(this, _parent);
+
 
         public int Wellenlinien
         {

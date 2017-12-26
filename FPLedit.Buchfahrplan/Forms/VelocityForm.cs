@@ -15,6 +15,7 @@ namespace FPLedit.Buchfahrplan
     public partial class VelocityForm : Form
     {
         private IInfo info;
+        private Route route;
         private Timetable tt;
         private BfplAttrs attrs;
 
@@ -28,27 +29,33 @@ namespace FPLedit.Buchfahrplan
             listView.Columns.Add("Wellenlinien");
         }
 
-        public VelocityForm(IInfo info) : this()
+        public VelocityForm(IInfo info, Route route) : this()
         {
             this.info = info;
             tt = info.Timetable;
+            this.route = route;
 
             attrs = BfplAttrs.GetAttrs(tt);
+            if (attrs == null)
+            {
+                attrs = new BfplAttrs(tt);
+                tt.Children.Add(attrs.XMLEntity);
+            }
 
             info.BackupTimetable();
-            UpdateStations();
+            UpdateListView();
         }
 
-        private void UpdateStations()
+        private void UpdateListView()
         {
             listView.Items.Clear();
 
             List<IStation> points = new List<IStation>();
-            points.AddRange(tt.Stations);
+            points.AddRange(route.Stations);
             if (attrs != null)
-                points.AddRange(attrs.Points);
+                points.AddRange(attrs.GetPoints(route.Index));
 
-            foreach (var p in points.OrderBy(o => o.Kilometre))
+            foreach (var p in points.OrderBy(o => o.Positions.GetPosition(route.Index)))
                 AddPointToList(p);
 
             listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
@@ -57,20 +64,20 @@ namespace FPLedit.Buchfahrplan
 
         private void AddPoint()
         {
-            VelocityEditForm vef = new VelocityEditForm(tt);
+            VelocityEditForm vef = new VelocityEditForm(tt, route.Index);
             if (vef.ShowDialog() == DialogResult.OK)
             {
                 var p = (BfplPoint)vef.Station;
                 if (attrs != null)
                     attrs.AddPoint(p);
-                AddPointToList(p);
+                UpdateListView();
             }
         }
 
         private void AddPointToList(IStation s)
         {
             listView.Items.Add(new ListViewItem(new[] {
-                s.Kilometre.ToString(),
+                s.Positions.GetPosition(route.Index).ToString(),
                 s.SName,
                 s.Vmax,
                 s.Wellenlinien.ToString(),
@@ -86,10 +93,10 @@ namespace FPLedit.Buchfahrplan
 
                 var sta = (IStation)item.Tag;
 
-                VelocityEditForm vef = new VelocityEditForm(sta);
+                VelocityEditForm vef = new VelocityEditForm(sta, route.Index);
                 if (vef.ShowDialog() == DialogResult.OK)
                 {
-                    item.SubItems[0].Text = sta.Kilometre.ToString();
+                    item.SubItems[0].Text = sta.Positions.GetPosition(route.Index).ToString();
                     item.SubItems[1].Text = sta.SName;
                     item.SubItems[2].Text = sta.Vmax;
                     item.SubItems[3].Text = sta.Wellenlinien.ToString();

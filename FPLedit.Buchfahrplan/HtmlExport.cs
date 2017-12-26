@@ -21,6 +21,9 @@ namespace FPLedit.Buchfahrplan
             ITemplate tmpl = chooser.GetTemplate(timetable);
             string cont = tmpl.GenerateResult(timetable);
 
+            if (cont == null)
+                return false;
+
             if (tryout_console)
                 cont += Resources.TryoutScript;
 

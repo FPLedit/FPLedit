@@ -20,9 +20,14 @@ namespace FPLedit.Kursbuch.Forms
         private KfplAttrs attrs;
         private KfplTemplateChooser chooser;
 
+        private const string NO_KBS_TEXT = "<keine Nummer>";
+
         private SettingsControl()
         {
             InitializeComponent();
+
+            kbsnListView.Columns.Add("Streckennummer");
+            kbsnListView.Columns.Add("Strecke");
         }
 
         public SettingsControl(Timetable tt, IInfo info) : this()
@@ -37,12 +42,16 @@ namespace FPLedit.Kursbuch.Forms
             {
                 fontComboBox.Text = attrs.Font;
                 cssTextBox.Text = attrs.Css ?? "";
-                kbsTextBox.Text = attrs.Kbs;
             }
             else
             {
                 attrs = new KfplAttrs(tt);
                 tt.Children.Add(attrs.XMLEntity);
+            }
+            foreach (var route in tt.GetRoutes())
+            {
+                var kbs = attrs.KBSn.GetKbsn(route.Index) ?? NO_KBS_TEXT;
+                kbsnListView.Items.Add(new ListViewItem(new[] { kbs, route.GetRouteName() }) { Tag = route });
             }
 
             var tmpl = chooser.GetTemplate(tt);
@@ -83,7 +92,14 @@ namespace FPLedit.Kursbuch.Forms
             attrs.Font = fontComboBox.Text;
             attrs.HeFont = hwfontComboBox.Text;
             attrs.Css = cssTextBox.Text;
-            attrs.Kbs = kbsTextBox.Text;
+            foreach (ListViewItem itm in kbsnListView.Items)
+            {
+                var route = (Route)itm.Tag;
+                var kbs = itm.Text;
+                if (kbs == NO_KBS_TEXT)
+                    continue;
+                attrs.KBSn.SetKbsn(route.Index, kbs);
+            }
 
             var tmpl_idx = templateComboBox.SelectedIndex;
             if (tmpl_idx != -1)

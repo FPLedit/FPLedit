@@ -26,11 +26,6 @@ namespace FPLedit.Buchfahrplan.Model
             set => SetAttribute("name", value);
         }
 
-        public float Kilometre
-        {
-            get => float.Parse(GetAttribute("km", "0.0"), CultureInfo.InvariantCulture);
-            set => SetAttribute("km", value.ToString("0.0", CultureInfo.InvariantCulture));
-        }
 
         public int Wellenlinien
         {
@@ -43,5 +38,31 @@ namespace FPLedit.Buchfahrplan.Model
             get => GetAttribute("fpl-vmax", "");
             set => SetAttribute("fpl-vmax", value);
         }
+
+        public float LinearKilometre
+        {
+            get => Positions.GetPosition(Timetable.LINEAR_ROUTE_ID).Value;
+            set => Positions.SetPosition(Timetable.LINEAR_ROUTE_ID, value);
+        }
+
+        public int[] Routes
+        {
+            get
+            {
+                if (_parent.Type == TimetableType.Linear)
+                    throw new NotSupportedException("Lineare Strecken haben keine Routen-Ids");
+                return GetAttribute("fpl-rt", "")
+                    .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(s => int.Parse(s)).ToArray();
+            }
+            set
+            {
+                if (_parent.Type == TimetableType.Linear)
+                    throw new NotSupportedException("Lineare Strecken haben keine Routen-Ids");
+                SetAttribute("fpl-rt", string.Join(",", value));
+            }
+        }
+
+        public PositionCollection Positions => new PositionCollection(this, _parent);
     }
 }

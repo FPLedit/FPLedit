@@ -19,6 +19,8 @@ namespace FPLedit.Shared
 
         public string FileName;
 
+        public int SelectedRoute;
+
         public override bool Equals(object obj)
         {
             if (!(obj is FileState))
@@ -28,7 +30,7 @@ namespace FPLedit.Shared
 
             return (s.Opened == Opened) && (s.Saved == Saved)
                 && (s.LineCreated == LineCreated) && (s.TrainsCreated == TrainsCreated)
-                && (s.CanGoBack == CanGoBack);
+                && (s.CanGoBack == CanGoBack) && (s.SelectedRoute == SelectedRoute);
         }
     }
 }

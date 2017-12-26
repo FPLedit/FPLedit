@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using FPLedit.Shared;
+using FPLedit.Shared.Ui;
 
 namespace FPLedit.Editor.Network
 {
@@ -55,12 +56,42 @@ namespace FPLedit.Editor.Network
                     ReloadRouteNames();
 
                 newLineButton.Visible = routesComboBox.Visible = info.Timetable.Type == TimetableType.Network;
+
+                foreach (Control c in toolbarFlowLayoutPanel.Controls)
+                {
+                    if (c.Tag is IRouteAction act)
+                        c.Enabled = act.IsEnabled(info);
+                }
+            };
+            info.ExtensionsLoaded += (s, e) =>
+            {
+                var actions = info.GetRegistered<IRouteAction>();
+                if (actions.Length > 0)
+                    toolbarFlowLayoutPanel.Controls.Add(new DividerPanel());
+
+                foreach (var action in actions)
+                {
+                    var btn = new Button()
+                    {
+                        Text = action.DisplayName,
+                        Tag = action,
+                        AutoSize = true,
+                        UseVisualStyleBackColor = true,
+                    };
+                    btn.Enabled = action.IsEnabled(info);
+                    btn.Click += (se, ev) => action.Show(info, info.Timetable?.GetRoute(selectedRoute));
+                    toolbarFlowLayoutPanel.Controls.Add(btn);
+                }
             };
 
             routesComboBox.SelectedIndexChanged += (s, e) =>
             {
                 selectedRoute = ((IndexedItem)routesComboBox.SelectedItem).Index;
                 lineRenderer.SelectedRoute = selectedRoute;
+
+                var state = info.FileState;
+                state.SelectedRoute = selectedRoute;
+                info.FileState = state;
             };
 
             lineRenderer.StationDoubleClicked += (s, e) =>

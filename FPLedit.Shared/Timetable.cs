@@ -115,6 +115,12 @@ namespace FPLedit.Shared
             return stas.First().SName + " - " + stas.Last().SName;
         }
 
+        public string GetLineName(Train t)
+        {
+            var path = t.GetPath();
+            return path.First().SName + " - " + path.Last().SName;
+        }
+
         public Timetable Clone()
         {
             using (MemoryStream stream = new MemoryStream())
@@ -243,6 +249,8 @@ namespace FPLedit.Shared
 
         public Route GetRoute(int index)
         {
+            if (Type == TimetableType.Linear && index == LINEAR_ROUTE_ID)
+                return new Route() { Index = LINEAR_ROUTE_ID, Stations = Stations };
             var stas = Stations.Where(s => s.Routes.Contains(index)).ToList();
             return new Route() { Index = index, Stations = stas };
         }

@@ -105,6 +105,9 @@
       <DependentUpon>LineEditForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Editor\EditorPlugin.cs" />
+    <Compile Include="Editor\Network\DividerPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Editor\Network\TrainCopyDialog.cs">
       <SubType>Form</SubType>
     </Compile>
