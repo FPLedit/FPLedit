@@ -11,7 +11,7 @@ namespace FPLedit.Shared
     {
         Timetable Timetable { get; set; }
 
-        FileState FileState { get; }
+        FileState FileState { get; set; }
 
         void SetUnsaved();
 

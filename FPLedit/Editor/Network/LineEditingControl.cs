@@ -88,6 +88,10 @@ namespace FPLedit.Editor.Network
             {
                 selectedRoute = ((IndexedItem)routesComboBox.SelectedItem).Index;
                 lineRenderer.SelectedRoute = selectedRoute;
+
+                var state = info.FileState;
+                state.SelectedRoute = selectedRoute;
+                info.FileState = state;
             };
 
             lineRenderer.StationDoubleClicked += (s, e) =>

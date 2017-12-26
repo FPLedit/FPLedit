@@ -52,6 +52,8 @@
     <Compile Include="SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SilentLogger.cs" />
+    <Compile Include="TimetableRouteSync.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj">
