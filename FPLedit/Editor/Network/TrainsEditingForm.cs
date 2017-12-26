@@ -62,18 +62,21 @@ namespace FPLedit.Editor.Network
             view.Columns.Add("Mbr");
             view.Columns.Add("Last");
             view.Columns.Add("Verkehrstage");
+            view.Columns.Add("Laufweg");
             view.Columns.Add("Kommentar");
         }
 
         private ListViewItem CreateItem(Train t)
         {
+            var path = t.GetPath();
             return new ListViewItem(new[] {
-                    t.TName,
-                    t.Locomotive,
-                    t.Mbr,
-                    t.Last,
-                    DaysHelper.DaysToString(t.Days),
-                    t.Comment })
+                t.TName,
+                t.Locomotive,
+                t.Mbr,
+                t.Last,
+                DaysHelper.DaysToString(t.Days),
+                path.FirstOrDefault()?.SName + " - " + path.LastOrDefault()?.SName,
+                t.Comment })
             { Tag = t };
         }
 
