@@ -25,7 +25,7 @@ namespace FPLedit
         public PluginInfo(IPlugin plugin)
         {
             FullName = plugin.GetType().FullName;
-            Name = GetDisplayName(plugin.GetType());
+            ExtractPluginInformation(plugin.GetType());
             this.plugin = plugin;
             Enabled = true;
         }
@@ -33,20 +33,21 @@ namespace FPLedit
         public PluginInfo(Type type)
         {
             FullName = type.FullName;
-            Name = GetDisplayName(type);
+            ExtractPluginInformation(type);
             Enabled = false;
         }
 
-        private string GetDisplayName(Type t)
+        private void ExtractPluginInformation(Type t)
         {
             var attrs = t.GetCustomAttributes(typeof(PluginAttribute), false);
+            Name = "<Fehler beim Laden>";
             if (attrs.Length != 1)
-                return "<Fehler beim Laden>";
+                return;
             var a = attrs[0] as PluginAttribute;
             Author = a.Author;
             Version = a.Version;
             Url = a.Web;
-            return a.Name;
+            Name = a.Name;
         }
 
         public void TryInit(IInfo info)

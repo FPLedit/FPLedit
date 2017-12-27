@@ -5,7 +5,7 @@ using FPLedit.Shared.Ui;
 
 namespace FPLedit.Aushangfahrplan
 {
-    [Plugin("Modul für Aushangfahrpläne", "1.5.0", Author = "Manuel Huber")]
+    [Plugin("Modul für Aushangfahrpläne", "1.5.0", "2.0", Author = "Manuel Huber")]
     public class Plugin : IPlugin
     {
         private IInfo info;

@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace FPLedit.Kursbuch
 {
-    [Plugin("Modul für Tabellenfahrpläne", "1.5.0", Author = "Manuel Huber")]
+    [Plugin("Modul für Tabellenfahrpläne", "1.5.0", "2.0", Author = "Manuel Huber")]
     public class Plugin : IPlugin
     {
         private IInfo info;

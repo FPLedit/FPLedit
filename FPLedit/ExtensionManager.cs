@@ -40,18 +40,17 @@ namespace FPLedit
                         if (!typeof(IPlugin).IsAssignableFrom(type))
                             continue;
 
-                        object[] attribs = attribs = type.GetCustomAttributes(typeof(PluginAttribute), false);
+                        object[] attribs = type.GetCustomAttributes(typeof(PluginAttribute), false);
                         if (attribs.Length != 1)
                             continue;
 
-                        bool enabled = enabledPlugins.Contains(type.FullName);
-                        var minVer = ((PluginAttribute)attribs[0]).MinVer;
-                        if (Version.TryParse(minVer, out Version res))
-                            if (currentVersion.CompareTo(res) < 0)
-                                continue; // Inkompatible Erweiterung
+                        var attr = (PluginAttribute)attribs[0];
+                        if (Version.TryParse(attr.MinVer, out Version min) && VersionCompare(currentVersion, min) < 0)
+                            continue; // Inkompatible Erweiterung (Programm zu alt)
+                        if (Version.TryParse(attr.MaxVer, out Version max) && VersionCompare(currentVersion, max) > 0)
+                            continue; // Inkompatible Erweiterung (Programm zu neu)
 
-
-                        if (enabled)
+                        if (enabledPlugins.Contains(type.FullName))
                         {
                             IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
 
@@ -94,6 +93,29 @@ namespace FPLedit
         public void WriteConfig()
         {
             settings.Set("extmgr.enabled", string.Join(";", Plugins.Where(p => p.Enabled).Select(p => p.FullName)));
+        }
+
+        public int VersionCompare(Version v1, Version v2)
+        {
+            if (v1 == null || v2 == null)
+                return 1;
+
+            bool skipBuild = v2.Build == -1,
+                skipRevision = v2.Revision == -1;
+
+            if (v1.Major != v2.Major)
+                return v1.Major > v2.Major ? 1 : -1;
+
+            if (v1.Minor != v2.Minor)
+                return v1.Minor > v2.Minor ? 1 : -1;
+
+            if (v1.Build != v2.Build && !skipBuild)
+                return v1.Build > v2.Build ? 1 : -1;
+
+            if (v1.Revision != v2.Revision && !skipRevision)
+                return v1.Revision > v2.Revision ? 1 : -1;
+
+            return 0;
         }
     }
 }
