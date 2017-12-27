@@ -53,9 +53,9 @@ namespace FPLedit.Editor.Linear
                     return;
 
                 if (e.KeyCode == Keys.Delete)
-                    DeleteTrain(active, dir, false);
+                    DeleteTrain(active, false);
                 else if ((e.KeyCode == Keys.B && e.Control) || (e.KeyCode == Keys.Enter))
-                    EditTrain(active, dir, false);
+                    EditTrain(active, false);
                 else if (e.KeyCode == Keys.N && e.Control)
                     NewTrain(active, dir);
             };
@@ -81,7 +81,7 @@ namespace FPLedit.Editor.Linear
             view.Columns.Add("Kommentar");
         }
 
-        private void DeleteTrain(ListView view, TrainDirection direction, bool message = true)
+        private void DeleteTrain(ListView view, bool message = true)
         {
             if (view.SelectedItems.Count > 0)
             {
@@ -94,7 +94,7 @@ namespace FPLedit.Editor.Linear
                 MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug löschen");
         }
 
-        private void EditTrain(ListView view, TrainDirection direction, bool message = true)
+        private void EditTrain(ListView view, bool message = true)
         {
             if (view.SelectedItems.Count > 0)
             {
@@ -163,24 +163,24 @@ namespace FPLedit.Editor.Linear
             => NewTrain(topListView, TOP_DIRECTION);
 
         private void topEditButton_Click(object sender, EventArgs e)
-            => EditTrain(topListView, TOP_DIRECTION);
+            => EditTrain(topListView);
 
         private void topDeleteButton_Click(object sender, EventArgs e)
-            => DeleteTrain(topListView, TOP_DIRECTION);
+            => DeleteTrain(topListView);
 
         private void bottomNewButton_Click(object sender, EventArgs e)
             => NewTrain(bottomListView, BOTTOM_DIRECTION);
 
         private void bottomEditButton_Click(object sender, EventArgs e)
-            => EditTrain(bottomListView, BOTTOM_DIRECTION);
+            => EditTrain(bottomListView);
 
         private void bottomDeleteButton_Click(object sender, EventArgs e)
-            => DeleteTrain(bottomListView, BOTTOM_DIRECTION);
+            => DeleteTrain(bottomListView);
 
         private void bottomListView_MouseDoubleClick(object sender, MouseEventArgs e)
-            => EditTrain(bottomListView, BOTTOM_DIRECTION, false);
+            => EditTrain(bottomListView, false);
 
         private void topListView_MouseDoubleClick(object sender, MouseEventArgs e)
-            => EditTrain(topListView, TOP_DIRECTION, false);
+            => EditTrain(topListView, false);
     }
 }

@@ -76,7 +76,6 @@ namespace FPLedit.Editor.Linear
             {
                 DataGridViewRow trainRow = view.Rows[view.Rows.Add()];
 
-                var fb = new Font(DefaultFont, FontStyle.Bold);
                 foreach (var sta in info.Timetable.Stations)
                 {
                     var ardp = tra.GetArrDep(sta);

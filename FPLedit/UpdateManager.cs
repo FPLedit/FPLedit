@@ -66,34 +66,36 @@ namespace FPLedit
 
         public void CheckAsync()
         {
-            WebClient wc = new WebClient();
-            wc.DownloadStringAsync(new Uri(CheckUrl));
-            wc.DownloadStringCompleted += (s, e) =>
+            using (WebClient wc = new WebClient())
             {
-                if (e.Error == null && e.Result != "")
+                wc.DownloadStringAsync(new Uri(CheckUrl));
+                wc.DownloadStringCompleted += (s, e) =>
                 {
-                    try
+                    if (e.Error == null && e.Result != "")
                     {
-                        VersionInfo info = GetVersioninfoFromXml(e.Result);
-                        bool newAvailable = IsNewVersion(info.NewVersion);
+                        try
+                        {
+                            VersionInfo info = GetVersioninfoFromXml(e.Result);
+                            bool newAvailable = IsNewVersion(info.NewVersion);
 
-                        if (newAvailable)
-                            CheckResult?.Invoke(info);
-                        else
-                            CheckResult?.Invoke(null);
+                            if (newAvailable)
+                                CheckResult?.Invoke(info);
+                            else
+                                CheckResult?.Invoke(null);
 
-                        if (info.Text != null)
-                            TextResult?.Invoke(info.Text);
-                    }
-                    catch (XmlException ex)
-                    {
+                            if (info.Text != null)
+                                TextResult?.Invoke(info.Text);
+                        }
+                        catch (XmlException ex)
+                        {
                         // Fehler im XML-Dokument
                         CheckError?.Invoke(ex);
+                        }
                     }
-                }
-                else
-                    CheckError?.Invoke(e.Error);
-            };
+                    else
+                        CheckError?.Invoke(e.Error);
+                };
+            }
         }
 
         public class VersionInfo

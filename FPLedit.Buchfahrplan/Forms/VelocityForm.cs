@@ -115,11 +115,10 @@ namespace FPLedit.Buchfahrplan
             {
                 ListViewItem item = listView.Items[listView.SelectedIndices[0]];
 
-                if (item.Tag.GetType() == typeof(Station))
+                if (item.Tag is Station)
                     throw new NotSupportedException("Bahnhöfe können nicht gelöscht werden!");
-                else if (item.Tag.GetType() == typeof(BfplPoint))
+                else if (item.Tag is BfplPoint point)
                 {
-                    BfplPoint point = (BfplPoint)item.Tag;
                     if (attrs != null)
                         attrs.RemovePoint(point);
 
@@ -137,7 +136,7 @@ namespace FPLedit.Buchfahrplan
             {
                 ListViewItem item = listView.Items[listView.SelectedIndices[0]];
 
-                deleteButton.Enabled = (item.Tag.GetType() == typeof(BfplPoint));
+                deleteButton.Enabled = (item.Tag is BfplPoint);
             }
         }
 

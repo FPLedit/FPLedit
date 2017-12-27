@@ -43,7 +43,7 @@ namespace FPLedit.Buchfahrplan
             wellenComboBox.SelectedItem = sta.Wellenlinien.ToString();
 
             isPoint = true;
-            if (sta.GetType() == typeof(Station))
+            if (sta is Station)
             {
                 positionTextBox.Enabled = false;
                 nameTextBox.Enabled = false;

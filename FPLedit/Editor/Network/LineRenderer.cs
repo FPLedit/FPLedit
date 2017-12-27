@@ -149,25 +149,22 @@ namespace FPLedit.Editor.Network
                 }
             }
 
-            if (tmp_sta != null)
+            if (tmp_sta != null && stapos.TryGetValue(tmp_sta, out Point point))
             {
-                if (stapos.TryGetValue(tmp_sta, out Point pos))
+                var x = OFFSET_X + point.X;
+                var y = OFFSET_Y + point.Y;
+
+                var p = new Panel()
                 {
-                    var x = OFFSET_X + pos.X;
-                    var y = OFFSET_Y + pos.Y;
+                    Location = new Point(x - 5, y - 5),
+                    Size = new Size(10, 10),
+                    BackColor = Color.DarkCyan,
+                    Tag = tmp_sta,
+                };
+                Controls.Add(p);
+                panels.Add(p);
 
-                    var p = new Panel()
-                    {
-                        Location = new Point(x - 5, y - 5),
-                        Size = new Size(10, 10),
-                        BackColor = Color.DarkCyan,
-                        Tag = tmp_sta,
-                    };
-                    Controls.Add(p);
-                    panels.Add(p);
-
-                    e.Graphics.DrawLine(linePen, new Point(x, y), PointToClient(MousePosition));
-                }
+                e.Graphics.DrawLine(linePen, new Point(x, y), PointToClient(MousePosition));
             }
 
             this.ResumeLayout();

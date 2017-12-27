@@ -27,7 +27,6 @@ namespace FPLedit.jTrainGraphStarter
         {
             var copy = orig.Clone();
             copy.SetAttribute("version", "008"); // Wir gehen aus dem Extended-Modus raus
-            copy.SetAttribute("fpl-sync-tt-id", routeIndex.ToString());
 
             var route = copy.GetRoute(routeIndex);
 
@@ -67,7 +66,7 @@ namespace FPLedit.jTrainGraphStarter
                     ti--;
                     continue;
                 }
-                tra.SetAttribute("fpl-sync-tra-id", syncId++.ToString());
+                tra.SetAttribute("fpl-sync-id", syncId++.ToString());
                 trainMap.Add(tra); // Der Index wird immer um 1 hochegzählt, daher brauchts hier kein Dictionary
 
                 // Fahrtzeiteneinträge setzen
@@ -112,8 +111,6 @@ namespace FPLedit.jTrainGraphStarter
         public void SyncBack(Timetable singleRoute)
         {
             singleRoute.SetAttribute("version", "100"); // Wieder in Netzwerk-Modus wechseln
-            var routeIndex = singleRoute.GetAttribute<int>("fpl-sync-tt-id");
-            singleRoute.RemoveAttribute("fpl-sync-tt-id");
             orig.Attributes = AttrDiff(orig, singleRoute);
 
             foreach (var sta in orig.Stations)
@@ -134,7 +131,7 @@ namespace FPLedit.jTrainGraphStarter
 
                 var srTra = singleRoute.Trains.FirstOrDefault(t => t.GetAttribute<int>("fpl-sync-tra-id") == syncId);
 
-                srTra.RemoveAttribute("fpl-sync-tra-id");
+                srTra.RemoveAttribute("fpl-sync-id");
                 tra.Attributes = AttrDiff(tra, srTra);
             }
         }

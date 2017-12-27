@@ -57,7 +57,7 @@ namespace FPLedit.Aushangfahrplan.Templates
                 var nextStations = dir == TrainDirection.ti ?
                     route.Stations.Where(s => s.Positions.GetPosition(rt) > pos) : // ti
                     route.Stations.Where(s => s.Positions.GetPosition(rt) < pos); // ta
-                if (nextStations.Count() > 0)
+                if (nextStations.Any())
                     stasAfter.Add(nextStations.Last());
             }
             return stasAfter.ToArray();

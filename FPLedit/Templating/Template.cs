@@ -193,9 +193,9 @@ namespace FPLedit.Shared.Templating
 
                 return ret;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 

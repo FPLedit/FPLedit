@@ -52,7 +52,7 @@ namespace FPLedit.Shared
 
         public void AddArrDep(Station sta, ArrDep ardp, int route)
         {
-            int idx = -1;
+            int idx;
             if (_parent.Type == TimetableType.Linear)
             {
                 var stas = _parent.Stations.OrderBy(s => s.LinearKilometre).ToList();
@@ -247,7 +247,7 @@ namespace FPLedit.Shared
 
         public Train(XMLEntity en, Timetable tt) : base(en, tt)
         {
-            if (Children.Where(x => x.XName == "t").Count() > tt.Stations.Count)
+            if (Children.Count(x => x.XName == "t") > tt.Stations.Count)
                 throw new Exception("Zu viele Fahrtzeiteneinträge im Vergleich zur Stationsanzahl!");
         }
 
