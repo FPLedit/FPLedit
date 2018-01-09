@@ -48,10 +48,53 @@ namespace FPLedit.Editor
                 return;
             }
 
+            var newPos = float.Parse(positionTextBox.Text);
+            bool resetArdep = false;
+
             if (Station == null)
                 Station = new Station(_parent);
+            else
+            {
+                var tt = Station._parent;
+                var rt = tt.GetRoute(route).GetOrderedStations();
+                var idx = rt.IndexOf(Station);
+
+                float? min = null, max = null;
+                if (idx != rt.Count - 1)
+                    max = rt[idx + 1].Positions.GetPosition(route);
+                if (idx != 0)
+                    min = rt[idx - 1].Positions.GetPosition(route);
+
+                if ((min.HasValue && newPos < min) || (max.HasValue && newPos > max))
+                {
+                    var res = MessageBox.Show("ACHTUNG: Sie versuchen eine Station durch eine Positionsänderung auf der Strecke zwischen zwei andere Bahnhöfe zu verschieben. Dies wird, wenn Züge über diese Strecke angelegt wurden, zu unerwarteten Effekten führen. Trotzdem fortfahren?",
+                        "FPLedit", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    if (res == DialogResult.No)
+                    {
+                        DialogResult = DialogResult.None; // Schließen abbrechen
+                        return;
+                    }
+                    else
+                        resetArdep = true;
+                }
+            }
+
+            Dictionary<Train, ArrDep> ardeps = new Dictionary<Train, ArrDep>();
+            if (resetArdep)
+            {
+                foreach (var tra in Station._parent.Trains)
+                {
+                    ardeps[tra] = tra.GetArrDep(Station);
+                    tra.RemoveArrDep(Station);
+                }
+            }
+
+            Station.Positions.SetPosition(route, newPos);
             Station.SName = name;
-            Station.Positions.SetPosition(route, float.Parse(positionTextBox.Text));
+
+            if (resetArdep)
+                foreach (var ardp in ardeps)
+                    ardp.Key.AddArrDep(Station, ardp.Value, route);
 
             DialogResult = DialogResult.OK;
             Close();

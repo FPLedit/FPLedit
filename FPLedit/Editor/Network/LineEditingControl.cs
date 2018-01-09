@@ -38,10 +38,14 @@ namespace FPLedit.Editor.Network
 
         private void ReloadRouteNames()
         {
+            var oldCount = routesComboBox.Items.Count;
             var routes = GetRouteNames(info.Timetable);
+            if (routes.Count() == oldCount)
+                return; // Wir brauchen hier (hoffentlich) keinen Reload, Änderung sollten hier immer nur einzeln reinkommen.
             routesComboBox.Items.Clear();
             routesComboBox.Items.AddRange(routes);
             routesComboBox.SelectedIndex = 0;
+            selectedRoute = 0;
         }
 
         public void Initialize(IInfo info)
@@ -95,7 +99,17 @@ namespace FPLedit.Editor.Network
             lineRenderer.StationDoubleClicked += (s, e) =>
             {
                 info.StageUndoStep();
-                Editor.EditStationForm nsf = new Editor.EditStationForm((Station)s, selectedRoute);
+                var sta = (Station)s;
+                var r = selectedRoute;
+                if (sta.Routes.Length == 1)
+                    r = sta.Routes[0];
+                if (!sta.Routes.Contains(r))
+                {
+                    MessageBox.Show("Die Station liegt auf mehreren Strecken. Bitte zuerst die Strecke auswählen, für die die Station bearbeitet werden soll!",
+                        "FPLedit", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                Editor.EditStationForm nsf = new Editor.EditStationForm(sta, r);
                 if (nsf.ShowDialog() == DialogResult.OK)
                 {
                     ReloadTimetable();

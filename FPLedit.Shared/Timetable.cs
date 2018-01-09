@@ -138,7 +138,7 @@ namespace FPLedit.Shared
         {
             // Neue Id an Station vergeben
             if (Type == TimetableType.Network)
-                sta.Id = nextStaId++;
+                sta.Id = ++nextStaId;
 
             sta._parent = this;
             stations.Add(sta);

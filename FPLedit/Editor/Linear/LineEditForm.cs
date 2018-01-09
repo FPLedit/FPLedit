@@ -73,7 +73,7 @@ namespace FPLedit.Editor.Linear
                 var item = listView.SelectedItems[0];
                 Station station = (Station)item.Tag;
 
-                EditStationForm nsf = new EditStationForm(station, 0);
+                EditStationForm nsf = new EditStationForm(station, Timetable.LINEAR_ROUTE_ID);
                 if (nsf.ShowDialog() == DialogResult.OK)
                 {
                     item.SubItems[0].Text = station.SName;
