@@ -41,7 +41,6 @@ namespace FPLedit.Editor.Network
             set { _selectedRoute = value; this.Invalidate(); }
         }
         private List<Station> _highlightedStations = new List<Station>();
-        public List<Station> HighlightedStations { get => _highlightedStations; }
 
 
         private StaPosHandler handler;
@@ -132,7 +131,7 @@ namespace FPLedit.Editor.Network
                     {
                         Location = new Point(x - 5, y - 5),
                         Size = new Size(10, 10),
-                        BackColor = HighlightedStations.Contains(sta) ? Color.Red : Color.Gray,
+                        BackColor = _highlightedStations.Contains(sta) ? Color.Red : Color.Gray,
                         Tag = sta,
                     };
 
@@ -298,6 +297,26 @@ namespace FPLedit.Editor.Network
                 hasDragged = false;
             }
             base.OnMouseUp(e);
+        }
+        #endregion
+
+        #region Highlight
+        public void AddHighlight(IEnumerable<Station> stations)
+        {
+            _highlightedStations.AddRange(stations);
+            Refresh();
+        }
+
+        public void AddHighlight(Station station)
+        {
+            _highlightedStations.Add(station);
+            Refresh();
+        }
+
+        public void RemoveHighlight(Station station)
+        {
+            _highlightedStations.Remove(station);
+            Refresh();
         }
         #endregion
     }

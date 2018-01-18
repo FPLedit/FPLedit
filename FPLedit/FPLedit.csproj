@@ -114,6 +114,12 @@
     <Compile Include="Editor\Network\TrainCopyDialog.Designer.cs">
       <DependentUpon>TrainCopyDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Editor\Network\TrainChangeRouteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Editor\Network\TrainChangeRouteForm.Designer.cs">
+      <DependentUpon>TrainChangeRouteForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Editor\TimeNormalizer.cs" />
     <Compile Include="Editor\Linear\TimetableEditForm.cs">
       <SubType>Form</SubType>
@@ -247,6 +253,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Editor\Network\TrainCopyDialog.resx">
       <DependentUpon>TrainCopyDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\Network\TrainChangeRouteForm.resx">
+      <DependentUpon>TrainChangeRouteForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Editor\TrainEditForm.resx">
       <DependentUpon>TrainEditForm.cs</DependentUpon>

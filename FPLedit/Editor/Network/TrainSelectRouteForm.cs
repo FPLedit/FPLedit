@@ -43,7 +43,7 @@ namespace FPLedit.Editor.Network
             if (staStart == null)
             {
                 staStart = (Station)sender;
-                lineRenderer.HighlightedStations.Add(staStart);
+                lineRenderer.AddHighlight(staStart);
                 lineRenderer.FixedStatusString = "Zielstation auswählen";
             }
             else if (staEnd == null)
@@ -52,7 +52,7 @@ namespace FPLedit.Editor.Network
 
                 var pathfinder = new Pathfinder(info.Timetable);
                 TrainRoute = pathfinder.GetFromAToB(staStart, staEnd);
-                lineRenderer.HighlightedStations.AddRange(TrainRoute.Skip(1));
+                lineRenderer.AddHighlight(TrainRoute.Skip(1));
                 closeButton.Enabled = true;
 
                 lineRenderer.FixedStatusString = "";

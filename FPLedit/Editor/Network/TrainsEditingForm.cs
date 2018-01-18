@@ -108,7 +108,8 @@ namespace FPLedit.Editor.Network
                     item.SubItems[2].Text = train.Mbr;
                     item.SubItems[3].Text = train.Last;
                     item.SubItems[4].Text = DaysHelper.DaysToString(train.Days);
-                    item.SubItems[5].Text = train.Comment;
+                    // item.SubItems[5] -> Laufweg
+                    item.SubItems[6].Text = train.Comment;
 
                     view.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
                     view.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
@@ -126,6 +127,24 @@ namespace FPLedit.Editor.Network
 
                 TrainTimetableEditor tte = new TrainTimetableEditor(info, train);
                 tte.ShowDialog();
+            }
+            else if (message)
+                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug-Fahrplan bearbeiten");
+        }
+
+        private void EditPath(ListView view, bool message = true)
+        {
+            if (view.SelectedItems.Count > 0)
+            {
+                ListViewItem item = view.SelectedItems[0];
+                var train = (Train)item.Tag;
+
+                TrainChangeRouteForm trf = new TrainChangeRouteForm(info, train);
+                if (trf.ShowDialog() == DialogResult.OK)
+                {
+                    var path = train.GetPath();
+                    item.SubItems[5].Text = path.FirstOrDefault()?.SName + " - " + path.LastOrDefault()?.SName;
+                }
             }
             else if (message)
                 MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug-Fahrplan bearbeiten");
@@ -193,5 +212,8 @@ namespace FPLedit.Editor.Network
 
         private void copyButton_Click(object sender, EventArgs e)
             => CopyTrain(listView);
+
+        private void editPathButton_Click(object sender, EventArgs e)
+            => EditPath(listView);
     }
 }
