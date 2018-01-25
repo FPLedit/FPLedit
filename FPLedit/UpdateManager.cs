@@ -42,13 +42,13 @@ namespace FPLedit
 
         public VersionInfo GetVersioninfoFromXml(string xml)
         {
-            XmlDocument doc = new XmlDocument();
+            var doc = new XmlDocument();
             doc.LoadXml(xml);
 
-            XmlNode ver = doc.DocumentElement.SelectSingleNode("/info/version");
-            XmlNode url = doc.DocumentElement.SelectSingleNode("/info/url");
-            XmlNode dsc = doc.DocumentElement.SelectSingleNode("/info/description");
-            XmlNode txt = doc.DocumentElement.SelectSingleNode("/info/text");
+            var ver = doc.DocumentElement.SelectSingleNode("/info/version");
+            var url = doc.DocumentElement.SelectSingleNode("/info/url");
+            var dsc = doc.DocumentElement.SelectSingleNode("/info/description");
+            var txt = doc.DocumentElement.SelectSingleNode("/info/text");
 
             return new VersionInfo()
             {
