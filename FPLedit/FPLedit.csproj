@@ -58,6 +58,12 @@
     <Win32Resource>
     </Win32Resource>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\build_scripts\fpledit.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
@@ -222,6 +228,7 @@
     <Compile Include="TemplatesForm.Designer.cs">
       <DependentUpon>TemplatesForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Templating\TemplateSandbox.cs" />
     <Compile Include="Templating\ArgsParser.cs" />
     <Compile Include="Templating\Compiler.cs" />
     <Compile Include="Templating\Template.cs" />
@@ -299,6 +306,9 @@
     <EmbeddedResource Include="TemplatesForm.resx">
       <DependentUpon>TemplatesForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="..\build_scripts\fpledit.snk">
+      <Link>Properties\fpledit.snk</Link>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

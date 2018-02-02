@@ -8,6 +8,7 @@ using FPLedit.Shared;
 using System.Security;
 using System.Security.Permissions;
 using System.Security.Policy;
+using System.IO;
 
 namespace FPLedit.Templating
 {
@@ -47,6 +48,9 @@ namespace FPLedit.Templating
             string usingsCode = string.Join("", usings.Distinct().Select(u => $"using {u};{nl}"));
 
             _codeCache = $@"{usingsCode}
+
+[assembly:System.Security.AllowPartiallyTrustedCallers]
+
 namespace FPLedit.Shared.Templating
 {{
 	public class TemplateParser
@@ -181,33 +185,41 @@ namespace FPLedit.Shared.Templating
             {
                 BuildCodeCache(); // Ensure that we have code to compile
 
+                // Create permissions
+                var permSet = new PermissionSet(PermissionState.None);
+                permSet.AddPermission(new SecurityPermission(SecurityPermissionFlag.Execution | SecurityPermissionFlag.UnmanagedCode));
+                permSet.AddPermission(new EnvironmentPermission(PermissionState.Unrestricted));
+                permSet.AddPermission(new ReflectionPermission(ReflectionPermissionFlag.AllFlags));
+
+                var fperm = new FileIOPermission(PermissionState.None);
+                fperm.AllLocalFiles = FileIOPermissionAccess.Read | FileIOPermissionAccess.PathDiscovery;
+                fperm.AddPathList(FileIOPermissionAccess.AllAccess, Path.GetTempPath());
+                permSet.AddPermission(fperm);
+
+                AppDomainSetup adSetup = new AppDomainSetup()
+                {
+                    ApplicationBase = Path.GetFullPath("sandbox" + DateTime.Now.Ticks),
+                };
+
+                var sharedAssembly = typeof(Timetable).Assembly.Evidence.GetHostEvidence<StrongName>();
+                var clientAssembly = typeof(Template).Assembly.Evidence.GetHostEvidence<StrongName>();
+
+                // Create new, isolated AppDomain
+                AppDomain domain = AppDomain.CreateDomain("tmpl-run-domain", null, adSetup, permSet, sharedAssembly, clientAssembly);
+
                 // Start compiler in another AppDomain
-                //TODO: evtl. Sicherheitsmaßnahmen
-                AppDomain domain = AppDomain.CreateDomain("tmpl-run-domain");
-                domain.SetData("tt", tt);
-                domain.SetData("code", _codeCache);
-                domain.SetData("refs", assemblyReferences.ToArray());
-                domain.DoCallBack(CompileInAppDomain);
-                var ret = (string)domain.GetData("ret");
+                var sandbox = (TemplateSandbox)Activator.CreateInstanceFrom(domain, typeof(TemplateSandbox).Assembly.Location, typeof(TemplateSandbox).FullName).Unwrap();
+                sandbox.InstallResolver(AppDomain.CurrentDomain.BaseDirectory);
+                var ret = sandbox.CompileInAppDomain(tt, _codeCache, assemblyReferences.ToArray());
+
                 AppDomain.Unload(domain);
 
                 return ret;
             }
-            catch (Exception)
+            catch
             {
                 throw;
             }
-        }
-
-        private static void CompileInAppDomain()
-        {
-            var tt = (Timetable)AppDomain.CurrentDomain.GetData("tt");
-            var code = (string)AppDomain.CurrentDomain.GetData("code");
-            var refs = (string[])AppDomain.CurrentDomain.GetData("refs");
-
-            Compiler engine = new Compiler();
-            var ret = engine.RunTemplate(code, refs, tt);
-            AppDomain.CurrentDomain.SetData("ret", ret);
         }
     }
 }

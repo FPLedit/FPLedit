@@ -6,6 +6,7 @@ using System.Text;
 
 namespace FPLedit.Shared
 {
+    [Serializable]
     public class PositionCollection
     {
         private IStation sta;

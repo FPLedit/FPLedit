@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit", "FPLedit\FPLedit.csproj", "{2809F962-DC06-4740-8AD0-0981891446DA}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -25,6 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build_scripts", "build_scri
 	ProjectSection(SolutionItems) = preProject
 		build_scripts\build-release.csx = build_scripts\build-release.csx
 		build_scripts\build-source.csx = build_scripts\build-source.csx
+		build_scripts\fpledit.snk = build_scripts\fpledit.snk
 		build_scripts\includes.csx = build_scripts\includes.csx
 		build_scripts\Info.txt = build_scripts\Info.txt
 		build_scripts\VersionInfo.cs = build_scripts\VersionInfo.cs
