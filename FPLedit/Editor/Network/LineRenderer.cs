@@ -34,7 +34,7 @@ namespace FPLedit.Editor.Network
             get => _disableTopBorder;
             set { _disableTopBorder = value; Refresh(); }
         }
-        private int _selectedRoute = 0;
+        private int _selectedRoute = Timetable.LINEAR_ROUTE_ID;
         public int SelectedRoute
         {
             get => _selectedRoute;

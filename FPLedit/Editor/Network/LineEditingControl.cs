@@ -14,7 +14,7 @@ namespace FPLedit.Editor.Network
     public partial class LineEditingControl : UserControl
     {
         private IInfo info;
-        private int selectedRoute = 0;
+        private int selectedRoute = Timetable.LINEAR_ROUTE_ID;
 
         public LineEditingControl()
         {

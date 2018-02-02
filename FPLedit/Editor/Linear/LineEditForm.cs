@@ -99,12 +99,12 @@ namespace FPLedit.Editor.Linear
 
         private void NewStation()
         {
-            EditStationForm nsf = new EditStationForm(tt, 0);
+            EditStationForm nsf = new EditStationForm(tt, Timetable.LINEAR_ROUTE_ID);
             if (nsf.ShowDialog() == DialogResult.OK)
             {
                 Station sta = nsf.Station;
 
-                tt.AddStation(sta, 0);
+                tt.AddStation(sta, Timetable.LINEAR_ROUTE_ID);
                 var item = listView.Items.Add(new ListViewItem(new[] {
                     sta.SName,
                     sta.LinearKilometre.ToString() })
@@ -131,7 +131,7 @@ namespace FPLedit.Editor.Linear
                 IImport import = Path.GetExtension(ofd.FileName) == ".fpl" ? timport : simport;
                 var ntt = import.Import(ofd.FileName, info.Logger);
                 foreach (var station in ntt.Stations)
-                    tt.AddStation(station, 0);
+                    tt.AddStation(station, Timetable.LINEAR_ROUTE_ID);
                 // ntt will be destroyed by decoupling stations, do not use afterwards!
             }
 
