@@ -52,7 +52,7 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="ArrDep.cs" />
-    <Compile Include="DaysHelper.cs" />
+    <Compile Include="Helpers\DaysHelper.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Ext\IFileState.cs" />
     <Compile Include="Ext\ISettings.cs" />
@@ -62,7 +62,7 @@
     <Compile Include="Filetypes\XMLImport.cs" />
     <Compile Include="ITimetable.cs" />
     <Compile Include="ITrain.cs" />
-    <Compile Include="Pathfinder.cs" />
+    <Compile Include="Helpers\Pathfinder.cs" />
     <Compile Include="PositionCollection.cs" />
     <Compile Include="Route.cs" />
     <Compile Include="FilterRule.cs" />

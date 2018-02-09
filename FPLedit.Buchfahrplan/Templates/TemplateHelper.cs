@@ -1,5 +1,6 @@
 ﻿using FPLedit.Buchfahrplan.Model;
 using FPLedit.Shared;
+using FPLedit.Shared.Helpers;
 using FPLedit.Shared.Ui;
 using System;
 using System.Collections.Generic;

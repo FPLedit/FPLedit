@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using FPLedit.Shared;
+using FPLedit.Shared.Helpers;
 
 namespace FPLedit.Editor.Linear
 {

@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace FPLedit.Shared
+namespace FPLedit.Shared.Helpers
 {
     public static class DaysHelper
     {

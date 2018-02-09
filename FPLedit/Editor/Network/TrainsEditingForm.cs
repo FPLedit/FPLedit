@@ -1,5 +1,6 @@
 ﻿using FPLedit.Editor;
 using FPLedit.Shared;
+using FPLedit.Shared.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

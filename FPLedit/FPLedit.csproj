@@ -126,6 +126,7 @@
     <Compile Include="Editor\Network\TrainChangeRouteForm.Designer.cs">
       <DependentUpon>TrainChangeRouteForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Editor\Network\TrainCopyHelper.cs" />
     <Compile Include="Editor\TimeNormalizer.cs" />
     <Compile Include="Editor\Linear\TimetableEditForm.cs">
       <SubType>Form</SubType>
@@ -145,7 +146,6 @@
     <Compile Include="Editor\Linear\TrainsEditForm.Designer.cs">
       <DependentUpon>TrainsEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Editor\Network\TrainCopyHelper.cs" />
     <Compile Include="Editor\ZlmEditForm.cs">
       <SubType>Form</SubType>
     </Compile>

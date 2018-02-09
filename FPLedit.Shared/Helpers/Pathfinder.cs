@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FPLedit.Shared
+namespace FPLedit.Shared.Helpers
 {
     /// <summary>
     /// Findet den kürzesten Weg zwischen zwei Stationen
