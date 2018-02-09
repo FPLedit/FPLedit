@@ -173,7 +173,7 @@
             this.lineEditingControl1.Location = new System.Drawing.Point(0, 23);
             this.lineEditingControl1.Name = "lineEditingControl1";
             this.lineEditingControl1.Size = new System.Drawing.Size(849, 374);
-            this.lineEditingControl1.TabIndex = 2;
+            this.lineEditingControl1.TabIndex = 1;
             //
             // logTextBox
             //
@@ -184,7 +184,7 @@
             this.logTextBox.Name = "logTextBox";
             this.logTextBox.Padding = new System.Windows.Forms.Padding(2);
             this.logTextBox.Size = new System.Drawing.Size(849, 85);
-            this.logTextBox.TabIndex = 1;
+            this.logTextBox.TabIndex = 2;
             //
             // MainForm
             //

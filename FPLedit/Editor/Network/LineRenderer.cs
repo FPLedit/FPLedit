@@ -172,7 +172,7 @@ namespace FPLedit.Editor.Network
 
         private void DrawStatus(Graphics g)
         {
-            string status = addMode ? "Klicken, um Station hinzuzufügen und diese mit einer bestehenden Station zu verbinden" : "Streckennetz Bearbeiten";
+            string status = addMode ? "Klicken, um Station hinzuzufügen und diese mit einer bestehenden Station zu verbinden; ESC zum Abbrechen" : "Streckennetz Bearbeiten";
             status = FixedStatusString ?? status;
             var size = g.MeasureString(status, font);
             var point = new PointF(ClientSize.Width - size.Width, ClientSize.Height - size.Height);
@@ -239,6 +239,18 @@ namespace FPLedit.Editor.Network
 
             // Setze Cursor auf Plus-Symbol
             Cursor = new Cursor(new MemoryStream(Properties.Resources.AddCursor));
+            this.Focus();
+        }
+
+        public void AbortAddStation()
+        {
+            if (tmp_sta == null) // Nicht benötigt
+                return;
+
+            tmp_sta = null;
+            Cursor = DefaultCursor;
+
+            Refresh();
         }
 
         private void PlaceStation()
@@ -253,6 +265,16 @@ namespace FPLedit.Editor.Network
             stapos[tmp_sta] = point;
 
             Refresh();
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                AbortAddStation();
+                e.Handled = true;
+            }
+            base.OnKeyDown(e);
         }
         #endregion
 
