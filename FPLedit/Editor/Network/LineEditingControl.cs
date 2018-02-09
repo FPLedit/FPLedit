@@ -132,6 +132,7 @@ namespace FPLedit.Editor.Network
                 };
             };
             lineRenderer.NewRouteAdded += (s, args) => ReloadRouteNames();
+            lineRenderer.StationMoveEnd += (s, args) => (info.FileState as FileState).Saved = false;
             newButton.Click += (s, e) =>
             {
                 info.StageUndoStep();
@@ -165,9 +166,7 @@ namespace FPLedit.Editor.Network
         }
 
         public void ReloadTimetable()
-        {
-            lineRenderer.SetTimetable(info.Timetable);
-        }
+            => lineRenderer.SetTimetable(info.Timetable);
     }
 
     internal class IndexedItem

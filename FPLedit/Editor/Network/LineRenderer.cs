@@ -50,6 +50,7 @@ namespace FPLedit.Editor.Network
         public event EventHandler<MouseEventArgs> StationClicked;
         public event EventHandler<MouseEventArgs> StationDoubleClicked;
         public event EventHandler NewRouteAdded;
+        public event EventHandler StationMoveEnd;
 
         private const int OFFSET_X = 20;
         private const int OFFSET_Y = 50;
@@ -315,7 +316,10 @@ namespace FPLedit.Editor.Network
                 Cursor.Current = Cursors.Default;
                 handler.WriteStapos(tt, stapos);
                 if (hasDragged)
+                {
                     Refresh();
+                    StationMoveEnd?.Invoke(this, new EventArgs());
+                }
                 hasDragged = false;
             }
             base.OnMouseUp(e);
