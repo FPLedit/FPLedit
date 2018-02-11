@@ -3,6 +3,7 @@ using Microsoft.CSharp;
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -18,6 +19,9 @@ namespace FPLedit.Templating
 
         private Assembly GetAssembly(string code, string[] references)
         {
+            var wd = Environment.CurrentDirectory;
+            Environment.CurrentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
             var provider = new CSharpCodeProvider();
 
             var cparams = new CompilerParameters()
@@ -41,6 +45,8 @@ namespace FPLedit.Templating
 
                 return null;
             }
+
+            Environment.CurrentDirectory = wd;
 
             return results.CompiledAssembly;
         }

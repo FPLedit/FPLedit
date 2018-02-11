@@ -43,6 +43,9 @@ namespace FPLedit.Editor.Network
 
         public void WriteStapos(Timetable tt, Dictionary<Station, Point> stapos)
         {
+            if (tt.Type == TimetableType.Linear)
+                return;
+
             foreach (var s in stapos)
             {
                 if (!tt.Stations.Contains(s.Key))

@@ -32,7 +32,7 @@ namespace FPLedit.Templating
         public Template(string code)
         {
             this.code = code + "<##>";
-            usings = new List<string>() { "System", "System.Collections.Generic", "System.Text", "System.Linq", "FPLedit.Shared" };
+            usings = new List<string>() { "System", "System.Collections.Generic", "System.Text", "System.Linq", "FPLedit.Shared", "FPLedit.Shared.Helpers" };
             assemblyReferences = new List<string>();
 
             BuildCodeCache();
@@ -189,7 +189,7 @@ namespace FPLedit.Shared.Templating
                 var permSet = new PermissionSet(PermissionState.None);
                 permSet.AddPermission(new SecurityPermission(SecurityPermissionFlag.Execution | SecurityPermissionFlag.UnmanagedCode));
                 permSet.AddPermission(new EnvironmentPermission(PermissionState.Unrestricted));
-                permSet.AddPermission(new ReflectionPermission(ReflectionPermissionFlag.AllFlags));
+                permSet.AddPermission(new ReflectionPermission(PermissionState.Unrestricted));
 
                 var fperm = new FileIOPermission(PermissionState.None);
                 fperm.AllLocalFiles = FileIOPermissionAccess.Read | FileIOPermissionAccess.PathDiscovery;

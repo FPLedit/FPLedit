@@ -11,6 +11,7 @@ namespace FPLedit.Shared
     {
         public Station(XMLEntity en, Timetable tt) : base(en, tt)
         {
+            Positions.TestForErrors();
         }
 
         public Station(Timetable tt) : base("sta", tt)

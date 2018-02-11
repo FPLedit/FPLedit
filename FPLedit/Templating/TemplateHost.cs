@@ -12,8 +12,6 @@ namespace FPLedit.Templating
 {
     internal class TemplateHost : ITemplate
     {
-        private const string MSG_TITLE = "FPLedit - Templatefehler";
-
         private Template tmpl;
         private ILog logger;
 

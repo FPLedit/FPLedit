@@ -24,6 +24,11 @@ namespace FPLedit.Shared
                 ParseNetwork();
         }
 
+        public void TestForErrors()
+        {
+            // Do nothing. Contructor is enough.
+        }
+
         public float? GetPosition(int route)
         {
             if (positions.TryGetValue(route, out float val))
@@ -44,6 +49,7 @@ namespace FPLedit.Shared
             foreach (var p in pos)
             {
                 var parts = p.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+
                 positions.Add(int.Parse(parts[0]),
                     float.Parse(parts[1], CultureInfo.InvariantCulture));
             }

@@ -16,6 +16,8 @@ namespace FPLedit.Editor.Network
         private Font font;
         private Pen linePen;
 
+        private bool IsNetwork => tt?.Type == TimetableType.Network;
+
         private bool _stationMovingEnabled = true;
         public bool StationMovingEnabled
         {
@@ -203,7 +205,7 @@ namespace FPLedit.Editor.Network
             p.MouseClick += (s, e) => StationClicked?.Invoke(sta, e);
 
             // Drag'n'Drop-Events
-            if (StationMovingEnabled)
+            if (StationMovingEnabled && IsNetwork)
             {
                 p.MouseDown += (s, e) =>
                 {
@@ -284,7 +286,7 @@ namespace FPLedit.Editor.Network
         private bool hasDragged = false;
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            if (StationMovingEnabled && draggedControl != null)
+            if (StationMovingEnabled && IsNetwork && draggedControl != null)
             {
                 var p = PointToClient(MousePosition);
 
@@ -310,7 +312,7 @@ namespace FPLedit.Editor.Network
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            if (StationMovingEnabled && draggedControl != null)
+            if (StationMovingEnabled && IsNetwork && draggedControl != null)
             {
                 draggedControl = null;
                 Cursor.Current = Cursors.Default;

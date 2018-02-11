@@ -107,11 +107,13 @@ namespace FPLedit
                     return filename;
                 i++;
             }
-            return null;
         }
 
         private void editButton_Click(object sender, EventArgs e)
         {
+            if (listView.SelectedIndices.Count == 0)
+                return;
+
             // May not always work
             var tmpl = templates[listView.SelectedIndices[0]];
             var fn = Path.Combine(templatesDir.FullName, tmpl.Identifier);

@@ -48,6 +48,12 @@ namespace FPLedit.Shared.Filetypes
 
         public bool Export(Timetable tt, string filename, IInfo info)
         {
+            if (info.Timetable.Type == TimetableType.Network)
+            {
+                MessageBox.Show("Der aktuelle Fahrplan ist ein Netzwerk-Fahrplan. Aus diesem erweiterten Fahrplanformat können aus technischen Gründen nicht alle von FPLedit angelegten Daten gelöscht werden.");
+                return false;
+            }
+
             var res = MessageBox.Show("Hiermit werden alle in FPLedit zusätzlich eingebenen Werte (z.B. Lokomotiven, Lasten, Mindestbremshundertstel, Geschwindigkeiten, Wellenlinien, Trapeztafelhalte und Zuglaufmeldungen) und Buchfahrplaneinstellungen aus dem gespeicherten Fahrplan gelöscht! Fortfahren?",
                 "FPLedit", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
