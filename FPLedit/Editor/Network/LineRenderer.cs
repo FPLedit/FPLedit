@@ -124,26 +124,36 @@ namespace FPLedit.Editor.Network
                     e.Graphics.TranslateTransform(x + 6, y + 7);
                     e.Graphics.RotateTransform(60);
 
-                    var km = sta.Positions.GetPosition(r.Index).Value;
-                    var text = sta.SName + " (" + km.ToString("0.0") + ")";
+                    var text = sta.SName + " (";
+                    foreach (var ri in sta.Routes)
+                    {
+                        var km = sta.Positions.GetPosition(ri).Value.ToString("0.0");
+                        if (ri == SelectedRoute && sta.Routes.Length > 1)
+                            km = "▶" + km;
+                        text += km + "|";
+                    }
+                    text = text.Substring(0, text.Length - 1) + ")";
                     e.Graphics.DrawString(text, font, Brushes.Black, new Point(0, 0));
 
                     e.Graphics.EndContainer(cont);
 
-                    var p = new Panel()
+                    if (panels.FirstOrDefault(pa => pa.Tag == sta) == null)
                     {
-                        Location = new Point(x - 5, y - 5),
-                        Size = new Size(10, 10),
-                        BackColor = _highlightedStations.Contains(sta) ? Color.Red : Color.Gray,
-                        Tag = sta,
-                    };
+                        var p = new Panel()
+                        {
+                            Location = new Point(x - 5, y - 5),
+                            Size = new Size(10, 10),
+                            BackColor = _highlightedStations.Contains(sta) ? Color.Red : Color.Gray,
+                            Tag = sta,
+                        };
 
-                    // Wire events
-                    if (!addMode) ApplyNormalMode(p, sta);
-                    else ApplyAddMode(p, sta);
+                        // Wire events
+                        if (!addMode) ApplyNormalMode(p, sta);
+                        else ApplyAddMode(p, sta);
 
-                    Controls.Add(p);
-                    panels.Add(p);
+                        Controls.Add(p);
+                        panels.Add(p);
+                    }
 
                     if (lastP.HasValue)
                         e.Graphics.DrawLine(pen, x, y, OFFSET_X + lastP.Value.X, OFFSET_Y + lastP.Value.Y);
