@@ -185,7 +185,7 @@ namespace FPLedit.Editor.Network
 
         private void DrawStatus(Graphics g)
         {
-            string status = addMode ? "Klicken, um Station hinzuzufügen und diese mit einer bestehenden Station zu verbinden; ESC zum Abbrechen" : "Streckennetz Bearbeiten";
+            string status = addMode ? "Klicken, um Station hinzuzufügen und diese mit einer bestehenden Station zu verbinden; ESC zum Abbrechen" : "Streckennetz bearbeiten";
             status = FixedStatusString ?? status;
             var size = g.MeasureString(status, font);
             var point = new PointF(ClientSize.Width - size.Width, ClientSize.Height - size.Height);

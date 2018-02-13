@@ -341,6 +341,10 @@ namespace FPLedit
         #region AutoUpdates
         private void AutoUpdate_Check(object sender, EventArgs e)
         {
+            // Beispiele für fehlende Funktionen
+            if (Environment.OSVersion.Platform != PlatformID.Win32NT)
+                Logger.Warning("Sie verwenden FPLedit nicht auf Windows. Grundsätzlich ist FPLedit zwar mit allen Systemen kompatibel, auf denen Mono läuft, hat aber Einschränkungen in den Funktionen und möglichen Sicherheitsvorkehrungen und ist möglicherweise nicht getestet.");
+
             if (Settings.Get("updater.auto", "") == "")
             {
                 var res = MessageBox.Show("FPLedit kann automatisch bei jedem Programmstart nach einer aktuelleren Version suchen. Dabei wird nur die IP-Adresse Ihres Computers übermittelt.", "Automatische Updateprüfung", MessageBoxButtons.YesNo, MessageBoxIcon.Question);

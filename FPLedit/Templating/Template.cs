@@ -185,27 +185,16 @@ namespace FPLedit.Shared.Templating
             {
                 BuildCodeCache(); // Ensure that we have code to compile
 
-                // Create permissions
-                var permSet = new PermissionSet(PermissionState.None);
-                permSet.AddPermission(new SecurityPermission(SecurityPermissionFlag.Execution | SecurityPermissionFlag.UnmanagedCode));
-                permSet.AddPermission(new EnvironmentPermission(PermissionState.Unrestricted));
-                permSet.AddPermission(new ReflectionPermission(PermissionState.Unrestricted));
-
-                var fperm = new FileIOPermission(PermissionState.None);
-                fperm.AllLocalFiles = FileIOPermissionAccess.Read | FileIOPermissionAccess.PathDiscovery;
-                fperm.AddPathList(FileIOPermissionAccess.AllAccess, Path.GetTempPath());
-                permSet.AddPermission(fperm);
-
                 AppDomainSetup adSetup = new AppDomainSetup()
                 {
                     ApplicationBase = Path.GetFullPath("sandbox" + DateTime.Now.Ticks),
                 };
+                AppDomain domain;
 
-                var sharedAssembly = typeof(Timetable).Assembly.Evidence.GetHostEvidence<StrongName>();
-                var clientAssembly = typeof(Template).Assembly.Evidence.GetHostEvidence<StrongName>();
-
-                // Create new, isolated AppDomain
-                AppDomain domain = AppDomain.CreateDomain("tmpl-run-domain", null, adSetup, permSet, sharedAssembly, clientAssembly);
+                if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                    domain = CreateSandboxDomain(adSetup); // Create new, isolated AppDomain (currently only Windows)
+                else
+                    domain = AppDomain.CreateDomain("tmpl-run-domain", null, adSetup); // Mono: No sandboxing possible at the moment.
 
                 // Start compiler in another AppDomain
                 var sandbox = (TemplateSandbox)Activator.CreateInstanceFrom(domain, typeof(TemplateSandbox).Assembly.Location, typeof(TemplateSandbox).FullName).Unwrap();
@@ -220,6 +209,26 @@ namespace FPLedit.Shared.Templating
             {
                 throw;
             }
+        }
+
+        private AppDomain CreateSandboxDomain(AppDomainSetup adSetup)
+        {
+            // Create permissions
+            var permSet = new PermissionSet(PermissionState.None);
+            permSet.AddPermission(new SecurityPermission(SecurityPermissionFlag.Execution | SecurityPermissionFlag.UnmanagedCode));
+            permSet.AddPermission(new EnvironmentPermission(PermissionState.Unrestricted));
+            permSet.AddPermission(new ReflectionPermission(PermissionState.Unrestricted));
+
+            var fperm = new FileIOPermission(PermissionState.None);
+            fperm.AllLocalFiles = FileIOPermissionAccess.Read | FileIOPermissionAccess.PathDiscovery;
+            fperm.AddPathList(FileIOPermissionAccess.AllAccess, Path.GetTempPath());
+            permSet.AddPermission(fperm);
+
+            var sharedAssembly = typeof(Timetable).Assembly.Evidence.GetHostEvidence<StrongName>();
+            var clientAssembly = typeof(Template).Assembly.Evidence.GetHostEvidence<StrongName>();
+
+            // Create new, isolated AppDomain
+            return AppDomain.CreateDomain("tmpl-run-domain", null, adSetup, permSet, sharedAssembly, clientAssembly);
         }
     }
 }

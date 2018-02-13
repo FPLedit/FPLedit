@@ -66,9 +66,20 @@ namespace FPLedit
 
         public void CheckAsync()
         {
+            string platform = "other";
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                platform = "mswin";
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major < 6)
+                platform = "mswinxp";
+            if (Environment.OSVersion.Platform == PlatformID.MacOSX)
+                platform = "macos";
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
+                platform = "unix";
+            var url = CheckUrl + "?pf=" + platform;
+
             using (WebClient wc = new WebClient())
             {
-                wc.DownloadStringAsync(new Uri(CheckUrl));
+                wc.DownloadStringAsync(new Uri(url));
                 wc.DownloadStringCompleted += (s, e) =>
                 {
                     if (e.Error == null && e.Result != "")
