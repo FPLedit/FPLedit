@@ -10,6 +10,7 @@ namespace FPLedit.Shared.Helpers
     public class Pathfinder
     {
         private Timetable tt;
+
         public Pathfinder(Timetable tt)
         {
             this.tt = tt;
@@ -19,51 +20,43 @@ namespace FPLedit.Shared.Helpers
         {
             if (!tt.Stations.Contains(start) || !tt.Stations.Contains(dest))
                 throw new ArgumentException("Start- oder Zielstation noch nicht im Fahrplan enthalten");
-            visited = new List<Station>();
-            var ret = new List<Station>();
-            return GetFromAToBIter(start, dest, ret);
+
+            return GetFromAToBIter(start, dest, new List<Station>(), new HashSet<Station>());
         }
 
-        private List<Station> visited;
-
-        private List<Station> GetFromAToBIter(Station a, Station dest, List<Station> way)
+        private IEnumerable<Station> GetNextStations(Station sta)
         {
-            if (visited.Contains(a))
-                return null;
-            visited.Add(a);
-            way = new List<Station>(way);
-            way.Add(a);
-            foreach (var ri in a.Routes)
+            foreach (var ri in sta.Routes)
             {
-                var route = tt.GetRoute(ri);
-                var stas = route.GetOrderedStations();
-                var idx = stas.IndexOf(a);
-                List<Station> way1 = null, way2 = null;
-                if (idx > 0)
-                {
-                    if (stas[idx - 1] == dest)
-                    {
-                        way.Add(dest);
-                        return way; // Gefunden
-                    }
-                    else
-                        way1 = GetFromAToBIter(stas[idx - 1], dest, way);
-                }
-                if (idx < stas.Count - 1)
-                {
-                    if (stas[idx + 1] == dest)
-                    {
-                        way.Add(dest);
-                        return way; // Gefunden
-                    }
-                    else
-                        way2 = GetFromAToBIter(stas[idx + 1], dest, way);
-                }
-                if (way1?.Last() == dest)
-                    return way1;
-                if (way2?.Last() == dest)
-                    return way2;
+                var route = tt.GetRoute(ri).GetOrderedStations();
+                var idx = route.IndexOf(sta);
 
+                if (idx > 0)
+                    yield return route[idx - 1];
+                if (idx < route.Count - 1)
+                    yield return route[idx + 1];
+            }
+        }
+
+        private List<Station> GetFromAToBIter(Station a, Station dest, List<Station> way, HashSet<Station> visited)
+        {
+            if (!visited.Add(a))
+                return null;
+
+            way.Add(a);
+            var orig = way;
+
+            foreach (var sta in GetNextStations(a))
+            {
+                if (sta == dest)
+                    way.Add(dest);
+                else
+                    way = GetFromAToBIter(sta, dest, way.ToList(), visited);
+
+                if (way?.Last() == dest)
+                    return way;
+
+                way = orig;
             }
             return null;
         }
