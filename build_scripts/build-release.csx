@@ -2,7 +2,7 @@
  * FPLedit Release-Prozess
  * Erstellt aus einem Ordner mit Kompilaten eine ZIP-Datei
  * Aufruf mit Pfad zum Ordner der Kompilate
- * Version 0.3 / (c) Manuel Huber 2018
+ * Version 0.4 / (c) Manuel Huber 2018
  */
 
 #r "System.IO.Compression.FileSystem.dll"
@@ -49,13 +49,30 @@ var license_path = Path.Combine(output_path, "README_LICENSE.txt");
 File.WriteAllText(license_path, license);
 
 /*
+ * TASK: Add offline documentation file
+ */
+var doc = Environment.GetEnvironmentVariable("FPLEDIT_DOK");
+var doc_generated = false;
+if (doc != null && !File.Exists(doc))
+{
+    Console.WriteLine("Kopiere Offline-Dokumentation");
+    var doc_path = Path.Combine(output_path, "doku.html");
+    File.Copy(doc, doc_path);
+    doc_generated = true;
+}
+else
+{
+    Console.WriteLine(String.Format($"build-release.csx(1,1,1,2): warning: [BUILD] Umgebungsvariable FPLEDIT_DOK nicht gesetzt bzw. die Datei (= Wert der Variablen) existiert nicht! Das generierte Programmpaket enthält keine Dokumentation!"));
+}
+
+/*
  * TASK: Build ZIP file
  */
 Console.WriteLine("Erstelle ZIP-Datei");
-var result_path = Path.Combine(output_path, "..", $"fpledit-{version}.zip");
+var result_path = Path.Combine(output_path, "..", $"fpledit-{version}{(doc_generated ? "" : "-nodoc")}.zip");
 
 if (File.Exists(result_path))
-    Console.WriteLine(String.Format($"build-release.csx(1,1,1,2): warning: ZIP-Datei {result_path} existiert bereits und wurde nicht erneut generiert!"));
+    Console.WriteLine(String.Format($"build-release.csx(1,1,1,2): warning: [BUILD] ZIP-Datei {result_path} existiert bereits und wurde nicht erneut generiert!"));
 else
 {
     ZipFile.CreateFromDirectory(output_path, result_path);

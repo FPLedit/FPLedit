@@ -2,7 +2,7 @@
  * FPLedit Release-Prozess
  * Erstellt aus dem Ordner mit dem Sourcecode eine ZIP-Datei
  * Aufruf mit Pfad zum Ordner des Sourcecodes
- * Version 0.3 / (c) Manuel Huber 2018
+ * Version 0.4 / (c) Manuel Huber 2018
  */
 
 #r "System.IO.Compression.FileSystem.dll"
@@ -43,7 +43,7 @@ Console.WriteLine("Erstelle ZIP-Datei");
 var result_path = Path.Combine(bin_path, "..", $"fpledit-{version}-src.zip");
 
 if (File.Exists(result_path))
-    Console.WriteLine(String.Format($"build-source.csx(1,1,1,2): warning: ZIP-Datei {result_path} existiert bereits und wurde nicht erneut generiert!"));
+    Console.WriteLine(String.Format($"build-source.csx(1,1,1,2): warning: [BUILD] ZIP-Datei {result_path} existiert bereits und wurde nicht erneut generiert!"));
 else
 {
     ZipFile.CreateFromDirectory(target_path, result_path);
@@ -57,7 +57,7 @@ Console.WriteLine("Post-Build erfolgreich abgeschlossen!");
 public static void CopyFilesRecursively(DirectoryInfo source, DirectoryInfo target)
 {
     var dir_exceptions = new[] { ".git", ".vs", "bin", "obj" };
-    var ext_exceptions = new[] { ".user", ".gitignore", ".gitattributes" };
+    var ext_exceptions = new[] { ".user", ".gitignore", ".gitattributes", "increment" };
 
     int copied = 0;
     foreach (DirectoryInfo dir in source.GetDirectories())
@@ -69,7 +69,7 @@ public static void CopyFilesRecursively(DirectoryInfo source, DirectoryInfo targ
     }
     foreach (FileInfo file in source.GetFiles())
     {
-        if (ext_exceptions.Contains(file.Extension))
+        if (ext_exceptions.Any(e => file.Name.EndsWith(e)))
             continue;
         file.CopyTo(Path.Combine(target.FullName, file.Name));
         copied++;
