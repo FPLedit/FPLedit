@@ -12,6 +12,12 @@ namespace FPLedit.Shared
 
         public List<Station> Stations { get; set; }
 
+        public float MinPosition
+            => Stations.Min(s => s.Positions.GetPosition(Index)) ?? 0f;
+
+        public float MaxPosition
+            => Stations.Max(s => s.Positions.GetPosition(Index)) ?? 0f;
+
         public Route()
         {
             Stations = new List<Station>();

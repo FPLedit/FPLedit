@@ -59,7 +59,7 @@ namespace FPLedit.Editor.Network
                 if (e.FileState.LineCreated)
                     ReloadRouteNames();
 
-                newLineButton.Visible = routesComboBox.Visible = info.Timetable.Type == TimetableType.Network;
+                newLineButton.Visible = dividerPanel1.Visible = routesComboBox.Visible = info.Timetable.Type == TimetableType.Network;
 
                 foreach (Control c in toolbarFlowLayoutPanel.Controls)
                 {

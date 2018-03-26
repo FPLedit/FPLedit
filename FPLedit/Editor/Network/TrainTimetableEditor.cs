@@ -56,6 +56,7 @@ namespace FPLedit.Editor.Network
 
             train = t;
             path = t.GetPath();
+            Text = Text.Replace("{train}", t.TName);
 
             InitializeGridView(dataGridView);
         }

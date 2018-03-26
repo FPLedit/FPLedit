@@ -68,6 +68,13 @@ namespace FPLedit.Buchfahrplan
             if (vef.ShowDialog() == DialogResult.OK)
             {
                 var p = (BfplPoint)vef.Station;
+
+                var pos = p.Positions.GetPosition(route.Index);
+                if (pos < route.MinPosition || pos > route.MaxPosition)
+                {
+                    MessageBox.Show($"Die Position muss im Streckenbereich liegen, also zwischen {route.MinPosition} und {route.MaxPosition}!", "FPLedit");
+                    return;
+                }
                 if (attrs != null)
                     attrs.AddPoint(p);
                 UpdateListView();

@@ -96,11 +96,13 @@
             // copyAllCheckBox
             // 
             this.copyAllCheckBox.AutoSize = true;
+            this.copyAllCheckBox.Checked = true;
+            this.copyAllCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.copyAllCheckBox.Location = new System.Drawing.Point(12, 62);
             this.copyAllCheckBox.Name = "copyAllCheckBox";
-            this.copyAllCheckBox.Size = new System.Drawing.Size(137, 17);
+            this.copyAllCheckBox.Size = new System.Drawing.Size(177, 17);
             this.copyAllCheckBox.TabIndex = 0;
-            this.copyAllCheckBox.Text = "Alle Daten übernehmen";
+            this.copyAllCheckBox.Text = "Erweiterte Attribute übernehmen";
             this.copyAllCheckBox.UseVisualStyleBackColor = true;
             // 
             // numberValidator

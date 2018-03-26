@@ -28,6 +28,7 @@ namespace FPLedit.Editor.Network
             this.info = info;
             train = tra;
             path = tra.GetPath();
+            Text = Text.Replace("{train}", tra.TName);
 
             lineRenderer.StationMovingEnabled = false;
             lineRenderer.FixedStatusString = "Durch Klick Stationen am Anfang/Ende des Laufwegs entfernen";

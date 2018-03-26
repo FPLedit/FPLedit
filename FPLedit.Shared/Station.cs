@@ -67,7 +67,7 @@ namespace FPLedit.Shared
             get
             {
                 if (_parent.Type == TimetableType.Linear)
-                    throw new NotSupportedException("Lineare Strecken haben keine Routen-Ids");
+                    return new[] { 0 }; //TODO: Any problems here?
                 return GetAttribute("fpl-rt", "")
                     .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                     .Select(s => int.Parse(s)).ToArray();

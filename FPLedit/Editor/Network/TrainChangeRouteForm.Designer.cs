@@ -85,7 +85,7 @@
             this.Name = "TrainChangeRouteForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.Text = "Fahrtstrecke bearbeiten";
+            this.Text = "Fahrtstrecke bearbeiten: {train}";
             this.ResumeLayout(false);
 
         }
