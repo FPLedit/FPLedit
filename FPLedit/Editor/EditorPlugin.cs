@@ -28,6 +28,9 @@ namespace FPLedit.Editor
 
             info.Register<IExport>(new FPLedit.Shared.Filetypes.CleanedXMLExport());
 
+            if (Environment.OSVersion.Platform != PlatformID.Win32NT || info.Settings.Get<bool>("mp-compat.route-edit-button"))
+                info.Register<IRouteAction>(new Network.EditRouteAction());
+
             editRoot = new ToolStripMenuItem("Bearbeiten");
             info.Menu.Items.Add(editRoot);
 
@@ -40,7 +43,7 @@ namespace FPLedit.Editor
 
             editLineItem = editRoot.DropDownItems.Add("Strecke bearbeiten (tabellarisch)");
             editLineItem.Enabled = false;
-            editLineItem.Click += (s, e) => ShowForm(new Linear.LineEditForm(info));
+            editLineItem.Click += (s, e) => ShowForm(new LineEditForm(info, Timetable.LINEAR_ROUTE_ID));
 
             editTrainsItem = editRoot.DropDownItems.Add("Züge bearbeiten");
             editTrainsItem.Enabled = false;

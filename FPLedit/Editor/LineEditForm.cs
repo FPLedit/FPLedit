@@ -1,4 +1,5 @@
-﻿using FPLedit.Shared;
+﻿using FPLedit.Editor.Network;
+using FPLedit.Shared;
 using FPLedit.Shared.Filetypes;
 using System;
 using System.Collections.Generic;
@@ -11,12 +12,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FPLedit.Editor.Linear
+namespace FPLedit.Editor
 {
     public partial class LineEditForm : Form
     {
         private IInfo info;
         private Timetable tt;
+        private int route;
 
         public LineEditForm()
         {
@@ -26,13 +28,16 @@ namespace FPLedit.Editor.Linear
             listView.Columns.Add("Position");
         }
 
-        public LineEditForm(IInfo info) : this()
+        public LineEditForm(IInfo info, int route) : this()
         {
             this.info = info;
             tt = info.Timetable;
-            if (info.Timetable.Type == TimetableType.Network)
-                throw new InvalidOperationException("LineEditForm läuft nur mit linearren Fahrplan-Dateien!");
-                info.BackupTimetable();
+            this.route = route;
+
+            info.BackupTimetable();
+
+            if (tt.Type == TimetableType.Network)
+                loadLineButton.Visible = false;
 
             KeyDown += (s, e) =>
             {
@@ -53,11 +58,11 @@ namespace FPLedit.Editor.Linear
         {
             listView.Items.Clear();
 
-            foreach (var station in tt.Stations.OrderBy(s => s.LinearKilometre))
+            foreach (var station in tt.GetRoute(route).GetOrderedStations())
             {
                 listView.Items.Add(new ListViewItem(new[] {
                     station.SName,
-                    station.LinearKilometre.ToString() })
+                    station.Positions.GetPosition(route).ToString() })
                 { Tag = station });
             }
 
@@ -73,7 +78,7 @@ namespace FPLedit.Editor.Linear
                 var item = listView.SelectedItems[0];
                 Station station = (Station)item.Tag;
 
-                EditStationForm nsf = new EditStationForm(station, Timetable.LINEAR_ROUTE_ID);
+                EditStationForm nsf = new EditStationForm(station, route);
                 if (nsf.ShowDialog() == DialogResult.OK)
                 {
                     item.SubItems[0].Text = station.SName;
@@ -99,12 +104,21 @@ namespace FPLedit.Editor.Linear
 
         private void NewStation()
         {
-            EditStationForm nsf = new EditStationForm(tt, Timetable.LINEAR_ROUTE_ID);
+            EditStationForm nsf = new EditStationForm(tt, route);
             if (nsf.ShowDialog() == DialogResult.OK)
             {
                 Station sta = nsf.Station;
 
-                tt.AddStation(sta, Timetable.LINEAR_ROUTE_ID);
+                if (info.Timetable.Type == TimetableType.Network)
+                {
+                    var handler = new StaPosHandler();
+                    handler.SetMiddlePos(route, sta, info.Timetable);
+                    var r = sta.Routes.ToList();
+                    r.Add(route);
+                    sta.Routes = r.ToArray();
+                }
+
+                tt.AddStation(sta, route);
                 var item = listView.Items.Add(new ListViewItem(new[] {
                     sta.SName,
                     sta.LinearKilometre.ToString() })
@@ -119,6 +133,8 @@ namespace FPLedit.Editor.Linear
         {
             if (tt.Stations.Count != 0)
                 return;
+            if (info.Timetable.Type == TimetableType.Network)
+                throw new Exception("Streckendateien können bei Netzwerk-Fahrplänen nicht geladen werden!");
 
             IImport timport = new XMLImport();
             IImport simport = new XMLStationsImport();

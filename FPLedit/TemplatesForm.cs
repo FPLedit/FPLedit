@@ -137,6 +137,9 @@ namespace FPLedit
                 extractButton.Enabled = removeButton.Enabled = editButton.Enabled = false;
         }
 
+        private void closeButton_Click(object sender, EventArgs e)
+            => Close();
+
         private void TemplatesForm_Load(object sender, EventArgs e)
             => RefreshList();
     }

@@ -104,20 +104,21 @@
     <Compile Include="Editor\FilterForm.Designer.cs">
       <DependentUpon>FilterForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Editor\Linear\LineEditForm.cs">
+    <Compile Include="Editor\LineEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Editor\Linear\LineEditForm.Designer.cs">
+    <Compile Include="Editor\LineEditForm.Designer.cs">
       <DependentUpon>LineEditForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Editor\EditorPlugin.cs" />
     <Compile Include="Editor\Network\DividerPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Editor\Network\TrainCopyDialog.cs">
+    <Compile Include="Editor\Network\EditRouteAction.cs" />
+    <Compile Include="Editor\TrainCopyDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Editor\Network\TrainCopyDialog.Designer.cs">
+    <Compile Include="Editor\TrainCopyDialog.Designer.cs">
       <DependentUpon>TrainCopyDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Editor\Network\TrainChangeRouteForm.cs">
@@ -126,7 +127,7 @@
     <Compile Include="Editor\Network\TrainChangeRouteForm.Designer.cs">
       <DependentUpon>TrainChangeRouteForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Editor\Network\TrainCopyHelper.cs" />
+    <Compile Include="Editor\TrainCopyHelper.cs" />
     <Compile Include="Editor\TimeNormalizer.cs" />
     <Compile Include="Editor\Linear\TimetableEditForm.cs">
       <SubType>Form</SubType>
@@ -252,13 +253,13 @@
     <EmbeddedResource Include="Editor\FilterForm.resx">
       <DependentUpon>FilterForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Editor\Linear\LineEditForm.resx">
+    <EmbeddedResource Include="Editor\LineEditForm.resx">
       <DependentUpon>LineEditForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Editor\Linear\TimetableEditForm.resx">
       <DependentUpon>TimetableEditForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Editor\Network\TrainCopyDialog.resx">
+    <EmbeddedResource Include="Editor\TrainCopyDialog.resx">
       <DependentUpon>TrainCopyDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Editor\Network\TrainChangeRouteForm.resx">

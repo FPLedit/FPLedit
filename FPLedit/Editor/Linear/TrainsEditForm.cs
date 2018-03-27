@@ -134,16 +134,31 @@ namespace FPLedit.Editor.Linear
             }
         }
 
+        private void CopyTrain(ListView view, TrainDirection dir, bool message = true)
+        {
+            if (view.SelectedItems.Count > 0)
+            {
+                var train = (Train)view.SelectedItems[0].Tag;
+
+                var tcf = new TrainCopyDialog(train, info.Timetable);
+                tcf.ShowDialog();
+
+                UpdateListView(view, dir);
+            }
+            else if (message)
+                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug kopieren");
+        }
+
         private ListViewItem CreateItem(Train t)
         {
             return new ListViewItem(new[] {
-                    t.TName,
-                    t.Locomotive,
-                    t.Mbr,
-                    t.Last,
-                    DaysHelper.DaysToString(t.Days),
-                    t.Comment })
-                    { Tag = t };
+                t.TName,
+                t.Locomotive,
+                t.Mbr,
+                t.Last,
+                DaysHelper.DaysToString(t.Days),
+                t.Comment
+            }) { Tag = t };
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -183,5 +198,11 @@ namespace FPLedit.Editor.Linear
 
         private void topListView_MouseDoubleClick(object sender, MouseEventArgs e)
             => EditTrain(topListView, false);
+
+        private void topCopyButton_Click(object sender, EventArgs e)
+            => CopyTrain(topListView, TOP_DIRECTION, true);
+
+        private void bottomCopyButton_Click(object sender, EventArgs e)
+            => CopyTrain(bottomListView, BOTTOM_DIRECTION, true);
     }
 }

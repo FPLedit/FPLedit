@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace FPLedit.Editor.Network
+namespace FPLedit.Editor
 {
     internal class TrainCopyHelper
     {
@@ -28,7 +28,12 @@ namespace FPLedit.Editor.Network
                         t.SetAttribute(attr.Key, attr.Value);
 
             var path = orig.GetPath();
-            t.AddAllArrDeps(path);
+
+            if (orig._parent.Type == TimetableType.Network)
+                t.AddAllArrDeps(path);
+            else
+                foreach (var sta in orig._parent.Stations)
+                    t.AddArrDep(sta, new ArrDep(), Timetable.LINEAR_ROUTE_ID);
 
             foreach (var sta in path)
             {

@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace FPLedit.Editor.Network
+namespace FPLedit.Editor
 {
     public partial class TrainCopyDialog : Form
     {

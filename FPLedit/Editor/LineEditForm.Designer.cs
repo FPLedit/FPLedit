@@ -1,4 +1,4 @@
-﻿namespace FPLedit.Editor.Linear
+﻿namespace FPLedit.Editor
 {
     partial class LineEditForm
     {

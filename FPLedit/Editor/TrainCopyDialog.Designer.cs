@@ -1,4 +1,4 @@
-﻿namespace FPLedit.Editor.Network
+﻿namespace FPLedit.Editor
 {
     partial class TrainCopyDialog
     {

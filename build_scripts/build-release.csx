@@ -53,7 +53,7 @@ File.WriteAllText(license_path, license);
  */
 var doc = Environment.GetEnvironmentVariable("FPLEDIT_DOK");
 var doc_generated = false;
-if (doc != null && !File.Exists(doc))
+if (doc != null && File.Exists(doc))
 {
     Console.WriteLine("Kopiere Offline-Dokumentation");
     var doc_path = Path.Combine(output_path, "doku.html");
