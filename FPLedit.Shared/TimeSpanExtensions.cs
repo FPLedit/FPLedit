@@ -10,6 +10,10 @@ namespace FPLedit.Shared
     {
         [DebuggerStepThrough]
         public static string ToShortTimeString(this TimeSpan span)
-            => span.ToString(@"hh\:mm");
+        {
+            if (span.Days > 0)
+                return "24:00"; //TODO: Testen
+            return span.ToString(@"hh\:mm");
+        }
     }
 }
