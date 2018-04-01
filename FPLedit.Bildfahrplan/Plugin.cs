@@ -1,4 +1,6 @@
-﻿using FPLedit.Shared;
+﻿using FPLedit.BildfahrplanExport.Model;
+using FPLedit.BildfahrplanExport.Render;
+using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,6 +13,7 @@ using System.Windows.Forms;
 
 namespace FPLedit.BildfahrplanExport
 {
+    //TODO: Fix print
     [Plugin("Bildfahrplanmodul", "2.0.0", "2.0", Author = "Manuel Huber")]
     public class Plugin : IPlugin
     {

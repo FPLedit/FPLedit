@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 
-namespace FPLedit.BildfahrplanExport
+namespace FPLedit.BildfahrplanExport.Model
 {
     internal abstract class Style
     {

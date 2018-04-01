@@ -1,4 +1,5 @@
-﻿using FPLedit.Shared;
+﻿using FPLedit.BildfahrplanExport.Model;
+using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

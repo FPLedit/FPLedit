@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.Helpers;
+using FPLedit.BildfahrplanExport.Model;
 
 namespace FPLedit.BildfahrplanExport
 {
