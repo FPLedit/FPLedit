@@ -57,6 +57,9 @@ namespace FPLedit.Shared
             if (type == TimetableType.Network && en.GetAttribute<string>("version") != "100")
                 throw new Exception("Falsche Versionsummer für Netzwerk-Fahrplandatei!");
 
+            if (GetAttribute<string>("version") == "009")
+                throw new Exception("Mit jTrainGraph 3.0 erstellte Dateien sind derzeit nicht mit FPLedit kompatibel!");
+
             stations = new List<Station>();
             sElm = Children.FirstOrDefault(x => x.XName == "stations");
             if (sElm != null)
