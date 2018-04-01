@@ -41,6 +41,9 @@ namespace FPLedit.Shared
 
         public Timetable(XMLEntity en) : base(en, null) // Root without parent
         {
+            if (GetAttribute<string>("version") == "009")
+                throw new Exception("Mit jTrainGraph 3.0 erstellte Dateien sind derzeit nicht mit FPLedit kompatibel!");
+
             stations = new List<Station>();
             sElm = Children.FirstOrDefault(x => x.XName == "stations");
             if (sElm != null)
