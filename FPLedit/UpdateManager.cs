@@ -79,6 +79,7 @@ namespace FPLedit
 
             using (WebClient wc = new WebClient())
             {
+                wc.Encoding = Encoding.UTF8;
                 wc.DownloadStringAsync(new Uri(url));
                 wc.DownloadStringCompleted += (s, e) =>
                 {
