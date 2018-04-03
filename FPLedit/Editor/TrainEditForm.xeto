@@ -1,0 +1,69 @@
+﻿<e:TrainEditForm
+  xmlns="clr-namespace:Eto.Forms;assembly=Eto"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:e="clr-namespace:FPLedit.Editor;assembly=FPLedit"
+  xmlns:sys="clr-namespace:System;assembly=mscorlib"
+  Title="Neuen Zug erstellen" Resizable="false">
+  <StackLayout>
+    <TableLayout>
+      <TableRow>
+        <TableLayout Spacing="5,5" Padding="10,10,10,10">
+          <TableRow>
+            <Label>Name</Label>
+            <TextBox x:Name="nameTextBox"></TextBox>
+          </TableRow>
+          <TableRow>
+            <Label>Kommentar</Label>
+            <TextBox x:Name="commentTextBox"></TextBox>
+          </TableRow>
+        </TableLayout>
+      </TableRow>
+    </TableLayout>
+    <GroupBox Text="Erweiterte Eigenschaften (für Bfpl)">
+      <TableLayout>
+        <TableRow>
+          <TableLayout Spacing="5,5" Padding="10,10,10,10">
+            <TableRow>
+              <Label>Tfz</Label>
+              <ComboBox x:Name="locomotiveComboBox"></ComboBox>
+            </TableRow>
+            <TableRow>
+              <Label>Mbr</Label>
+              <TextBox x:Name="mbrTextBox"></TextBox>
+            </TableRow>
+            <TableRow>
+              <Label>Last</Label>
+              <TextBox x:Name="lastTextBox"></TextBox>
+            </TableRow>
+          </TableLayout>
+        </TableRow>
+      </TableLayout>
+    </GroupBox>
+    <GroupBox Text="Verkehrstage">
+      <TableLayout>
+        <TableRow>
+          <TableLayout Spacing="5,5" Padding="10,10,10,10">
+            <TableRow>
+              <CheckBox Checked="true" x:Name="mondayCheckBox" Text="Mo" />
+              <CheckBox Checked="true" x:Name="tuesdayCheckBox" Text="Di" />
+              <CheckBox Checked="true" x:Name="wednesdayCheckBox" Text="Mi" />
+              <CheckBox Checked="true" x:Name="thursdayCheckBox" Text="Do" />
+            </TableRow>
+            <TableRow>
+              <CheckBox Checked="true" x:Name="fridayCheckBox" Text="Fr" />
+              <CheckBox Checked="true" x:Name="saturdayCheckBox" Text="Sa" />
+              <CheckBox Checked="true" x:Name="sundayCheckBox" Text="So" />
+            </TableRow>
+          </TableLayout>
+        </TableRow>
+      </TableLayout>
+    </GroupBox>
+    <TableLayout Spacing="5,5" Padding="10,10,10,10">
+      <TableRow>
+        <TableCell ScaleWidth="true" />
+        <Button Text="Abbrechen" Click="cancelButton_Click"></Button>
+        <Button Text="Schließen" Click="closeButton_Click"></Button>
+      </TableRow>
+    </TableLayout>
+  </StackLayout>
+</e:TrainEditForm>

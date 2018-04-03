@@ -160,7 +160,7 @@ namespace FPLedit.Shared
                 ArrDep ardp = new ArrDep();
                 var sta = _parent.Type == TimetableType.Network
                     ? _parent.GetStationById(t.GetAttribute<int>("fpl-id"))
-                    : _parent..Stations.OrderBy(s => s.LinearKilometre).ToList()[tElm.IndexOf(t)];
+                    : _parent.Stations.OrderBy(s => s.LinearKilometre).ToList()[tElm.IndexOf(t)];
 
                 if (t.GetAttribute("a", "") != "")
                     ardp.Arrival = TimeSpan.Parse(t.GetAttribute<string>("a"));

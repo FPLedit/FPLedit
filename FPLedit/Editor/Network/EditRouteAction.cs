@@ -1,10 +1,10 @@
-﻿using FPLedit.Shared;
+﻿using Eto.Forms;
+using FPLedit.Shared;
 using FPLedit.Shared.Ui;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 
 namespace FPLedit.Editor.Network
 {
@@ -19,7 +19,7 @@ namespace FPLedit.Editor.Network
         {
             info.StageUndoStep();
             LineEditForm lef = new LineEditForm(info, route.Index);
-            if (lef.ShowDialog() == DialogResult.OK)
+            if (lef.ShowModal() == DialogResult.Ok) //TODO: Api main parent form
                 info.SetUnsaved();
         }
     }

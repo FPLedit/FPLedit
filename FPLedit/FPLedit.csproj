@@ -1,18 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2809F962-DC06-4740-8AD0-0981891446DA}</ProjectGuid>
+    <ProjectGuid>{386836E8-5885-4ED1-B350-CE2BBEC5367E}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FPLedit</RootNamespace>
     <AssemblyName>FPLedit</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <TargetFrameworkProfile />
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -34,10 +32,9 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>1</WarningLevel>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <WarningLevel>4</WarningLevel>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -48,15 +45,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>Resources\programm.ico</ApplicationIcon>
-  </PropertyGroup>
-  <PropertyGroup>
-    <Win32Resource>
-    </Win32Resource>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -64,252 +52,191 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>..\build_scripts\fpledit.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\programm.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Eto">
+      <HintPath>..\libs\Eto.dll</HintPath>
+    </Reference>
+    <Reference Include="Eto.Gtk3">
+      <HintPath>..\libs\Eto.Gtk3.dll</HintPath>
+    </Reference>
+    <Reference Include="Eto.Serialization.Xaml">
+      <HintPath>..\libs\Eto.Serialization.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="Eto.Wpf">
+      <HintPath>..\libs\Eto.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.configuration" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\build_scripts\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="Editor\DesignableForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Editor\DesignableForm.Designer.cs">
-      <DependentUpon>DesignableForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Editor\EditPatternForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Editor\EditPatternForm.Designer.cs">
-      <DependentUpon>EditPatternForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Editor\EditStationForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Editor\EditStationForm.Designer.cs">
-      <DependentUpon>EditStationForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Editor\FilterForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Editor\FilterForm.Designer.cs">
-      <DependentUpon>FilterForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Editor\LineEditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Editor\LineEditForm.Designer.cs">
-      <DependentUpon>LineEditForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Editor\EditorPlugin.cs" />
-    <Compile Include="Editor\Network\DividerPanel.cs">
-      <SubType>Component</SubType>
+    <Compile Include="Editor\Filters\EditPatternForm.xeto.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Editor\Filters\FilterForm.xeto.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Editor\Linear\TrainsEditForm.xeto.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Editor\Linear\TimetableEditForm.xeto.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Editor\DesignableForm.xeto.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Editor\ZlmEditForm.xeto.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Editor\Network\ToggleButton.cs" />
+    <Compile Include="Editor\Network\TrainTimetableEditor.xeto.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Editor\TrainCopyDialog.xeto.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Editor\Network\TrainChangeRouteForm.xeto.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Editor\TrainEditForm.xeto.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Editor\EditStationForm.xeto.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Editor\LineEditForm.xeto.cs">
+      <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Editor\Network\EditRouteAction.cs" />
-    <Compile Include="Editor\TrainCopyDialog.cs">
-      <SubType>Form</SubType>
+    <Compile Include="Editor\Network\NewLineStationForm.xeto.cs">
+      <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Editor\TrainCopyDialog.Designer.cs">
-      <DependentUpon>TrainCopyDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Editor\Network\TrainChangeRouteForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Editor\Network\TrainChangeRouteForm.Designer.cs">
-      <DependentUpon>TrainChangeRouteForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Editor\TrainCopyHelper.cs" />
-    <Compile Include="Editor\TimeNormalizer.cs" />
-    <Compile Include="Editor\Linear\TimetableEditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Editor\Linear\TimetableEditForm.Designer.cs">
-      <DependentUpon>TimetableEditForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Editor\TrainEditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Editor\TrainEditForm.Designer.cs">
-      <DependentUpon>TrainEditForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Editor\Linear\TrainsEditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Editor\Linear\TrainsEditForm.Designer.cs">
-      <DependentUpon>TrainsEditForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Editor\ZlmEditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Editor\ZlmEditForm.Designer.cs">
-      <DependentUpon>ZlmEditForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ExtensionManager.cs" />
-    <Compile Include="ExtensionsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ExtensionsForm.Designer.cs">
-      <DependentUpon>ExtensionsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FileState.cs" />
-    <Compile Include="InfoForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="InfoForm.Designer.cs">
-      <DependentUpon>InfoForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="IRestartable.cs" />
-    <Compile Include="Editor\Network\NewLineStationForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Editor\Network\NewLineStationForm.Designer.cs">
-      <DependentUpon>NewLineStationForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Editor\Network\LineEditingControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Editor\Network\LineEditingControl.Designer.cs">
-      <DependentUpon>LineEditingControl.cs</DependentUpon>
+    <Compile Include="Editor\Network\LineEditingControl.xeto.cs">
+      <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Editor\Network\LineRenderer.cs">
-      <SubType>Component</SubType>
+      <SubType>Eto.Forms</SubType>
     </Compile>
+    <Compile Include="Editor\Network\StaPosHandler.cs" />
+    <Compile Include="Editor\Network\TrainsEditingForm.xeto.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Editor\TimeNormalizer.cs" />
+    <Compile Include="Editor\TrainCopyHelper.cs" />
+    <Compile Include="EtoExtensions.cs" />
+    <Compile Include="ExtensionManager.cs" />
+    <Compile Include="ExtensionsForm.xeto.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="FileState.cs" />
+    <Compile Include="InfoForm.xeto.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="IRestartable.cs" />
     <Compile Include="LogControl.cs">
-      <SubType>Component</SubType>
+      <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Logger\ConsoleLogger.cs" />
     <Compile Include="Logger\MultipleLogger.cs" />
     <Compile Include="Logger\TempLogger.cs" />
-    <Compile Include="MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Editor\Network\TrainsEditingForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Editor\Network\TrainsEditingForm.Designer.cs">
-      <DependentUpon>TrainsEditingForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Editor\Network\TrainSelectRouteForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Editor\Network\TrainSelectRouteForm.Designer.cs">
-      <DependentUpon>TrainSelectRouteForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Editor\Network\TrainTimetableEditor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Editor\Network\TrainTimetableEditor.Designer.cs">
-      <DependentUpon>TrainTimetableEditor.cs</DependentUpon>
+    <Compile Include="MainForm.xeto.cs">
+      <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="PluginInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="RegisterStore.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="TemplatesForm.cs">
-      <SubType>Form</SubType>
+    <Compile Include="TemplatesForm.xeto.cs">
+      <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="TemplatesForm.Designer.cs">
-      <DependentUpon>TemplatesForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Templating\TemplateSandbox.cs" />
     <Compile Include="Templating\ArgsParser.cs" />
     <Compile Include="Templating\Compiler.cs" />
     <Compile Include="Templating\Template.cs" />
     <Compile Include="Templating\TemplateHost.cs" />
     <Compile Include="Templating\TemplateManager.cs" />
-    <Compile Include="Editor\Network\StaPosHandler.cs" />
+    <Compile Include="Templating\TemplateSandbox.cs" />
     <Compile Include="UndoManager.cs" />
     <Compile Include="UpdateManager.cs" />
-    <Content Include="Resources\AddCursor.cur" />
-    <Content Include="Resources\trapeztafel.png" />
-    <Content Include="Resources\programm.ico" />
-    <EmbeddedResource Include="Editor\DesignableForm.resx">
-      <DependentUpon>DesignableForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Editor\EditPatternForm.resx">
-      <DependentUpon>EditPatternForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Editor\EditStationForm.resx">
-      <DependentUpon>EditStationForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Editor\FilterForm.resx">
-      <DependentUpon>FilterForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Editor\LineEditForm.resx">
-      <DependentUpon>LineEditForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Editor\Linear\TimetableEditForm.resx">
-      <DependentUpon>TimetableEditForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Editor\TrainCopyDialog.resx">
-      <DependentUpon>TrainCopyDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Editor\Network\TrainChangeRouteForm.resx">
-      <DependentUpon>TrainChangeRouteForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Editor\TrainEditForm.resx">
-      <DependentUpon>TrainEditForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Editor\Linear\TrainsEditForm.resx">
-      <DependentUpon>TrainsEditForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Editor\ZlmEditForm.resx">
-      <DependentUpon>ZlmEditForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ExtensionsForm.resx">
-      <DependentUpon>ExtensionsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="InfoForm.resx">
-      <DependentUpon>InfoForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Editor\Network\NewLineStationForm.resx">
-      <DependentUpon>NewLineStationForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Editor\Network\LineEditingControl.resx">
-      <DependentUpon>LineEditingControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Editor\Network\TrainsEditingForm.resx">
-      <DependentUpon>TrainsEditingForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Editor\Network\TrainSelectRouteForm.resx">
-      <DependentUpon>TrainSelectRouteForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Editor\Network\TrainTimetableEditor.resx">
-      <DependentUpon>TrainTimetableEditor.cs</DependentUpon>
-    </EmbeddedResource>
+    <Compile Include="Validators\BaseValidator.cs" />
+    <Compile Include="Validators\NotEmptyValidator.cs" />
+    <Compile Include="Validators\NumberValidator.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="TemplatesForm.resx">
-      <DependentUpon>TemplatesForm.cs</DependentUpon>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="MainForm.xeto">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TemplatesForm.xeto">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InfoForm.xeto">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ExtensionsForm.xeto" />
+    <EmbeddedResource Include="Editor\LineEditForm.xeto">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\EditStationForm.xeto">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\Network\LineEditingControl.xeto" />
+    <EmbeddedResource Include="Editor\Network\NewLineStationForm.xeto">
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="..\build_scripts\fpledit.snk">
       <Link>Properties\fpledit.snk</Link>
     </None>
+    <EmbeddedResource Include="Editor\Network\TrainsEditingForm.xeto" />
+    <EmbeddedResource Include="Editor\TrainEditForm.xeto">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\Network\TrainChangeRouteForm.xeto">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\TrainCopyDialog.xeto">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\Network\TrainTimetableEditor.xeto">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\ZlmEditForm.xeto">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\Linear\TrainsEditForm.xeto" />
+    <EmbeddedResource Include="Editor\Linear\TimetableEditForm.xeto">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\Filters\FilterForm.xeto" />
+    <EmbeddedResource Include="Editor\Filters\EditPatternForm.xeto">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\DesignableForm.xeto">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -321,47 +248,32 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
+    <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj">
+      <Project>{ce38d005-22b2-4b15-80ba-614f038240fd}</Project>
+      <Name>FPLedit.Shared</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\programm.ico" />
+    <EmbeddedResource Include="Resources\trapeztafel.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj">
-      <Project>{CE38D005-22B2-4B15-80BA-614F038240FD}</Project>
-      <Name>FPLedit.Shared</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>set csi="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\Roslyn\csi.exe"
 if $(ConfigurationName) == Release (
-  %25csi%25  "$(SolutionDir)build_scripts\build-release.csx" $(TargetDir)
-  %25csi%25  "$(SolutionDir)build_scripts\build-source.csx" $(SolutionDir) $(TargetDir)
+    %25csi%25  "$(SolutionDir)build_scripts\build-release.csx" $(TargetDir)
+    %25csi%25  "$(SolutionDir)build_scripts\build-source.csx" $(SolutionDir) $(TargetDir)
 )</PostBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

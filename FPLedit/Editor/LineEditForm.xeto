@@ -1,0 +1,33 @@
+﻿<e:LineEditForm
+  xmlns="clr-namespace:Eto.Forms;assembly=Eto"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:e="clr-namespace:FPLedit.Editor;assembly=FPLedit"
+  xmlns:sys="clr-namespace:System;assembly=mscorlib"
+  Title="Strecke bearbeiten" ClientSize="530,380" Resizable="true">
+  <TableLayout>
+    <TableRow ScaleHeight="true">
+      <TableLayout Spacing="5,5" Padding="10,10,10,10">
+        <TableRow ScaleHeight="True">
+          <TableCell ScaleWidth="true">
+            <GridView x:Name="gridView"></GridView>
+          </TableCell>
+          <StackLayout Spacing="5">
+            <Button Click="newButton_Click">Neue Station</Button>
+            <Button Click="editButton_Click">Station bearbeiten</Button>
+            <Button Click="deleteButton_Click">Station löschen</Button>
+            <Button Click="loadLineButton_Click" x:Name="loadLineButton">Strecke laden</Button>
+          </StackLayout>
+        </TableRow>
+      </TableLayout>
+    </TableRow>
+    <TableRow>
+      <TableLayout Spacing="5,5" Padding="10,10,10,10">
+        <TableRow>
+          <TableCell ScaleWidth="true" />
+          <Button Text="Abbrechen" Click="cancelButton_Click"></Button>
+          <Button Text="Schließen" Click="closeButton_Click"></Button>
+        </TableRow>
+      </TableLayout>
+    </TableRow>
+  </TableLayout>
+</e:LineEditForm>

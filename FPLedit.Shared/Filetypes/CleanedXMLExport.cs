@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Eto.Forms;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -55,7 +55,7 @@ namespace FPLedit.Shared.Filetypes
             }
 
             var res = MessageBox.Show("Hiermit werden alle in FPLedit zusätzlich eingebenen Werte (z.B. Lokomotiven, Lasten, Mindestbremshundertstel, Geschwindigkeiten, Wellenlinien, Trapeztafelhalte und Zuglaufmeldungen) und Buchfahrplaneinstellungen aus dem gespeicherten Fahrplan gelöscht! Fortfahren?",
-                "FPLedit", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                "FPLedit", MessageBoxButtons.YesNo, MessageBoxType.Warning);
 
             if (res == DialogResult.No)
                 return false;
