@@ -164,7 +164,7 @@ if (attrs != null)
 					<td colspan="10" class="trainname"><#= tra.TName #></td>
 				</tr>
 				<tr>
-					<td colspan="10" class="linename"><#= tt.GetLineName(tra.Direction) #></td>
+					<td colspan="10" class="linename"><#= tra.GetLineName() #></td>
 				</tr>
 				<tr>
 					<td class="tfz" colspan="10">

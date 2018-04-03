@@ -7,6 +7,8 @@ namespace FPLedit.Shared
 {
     public interface IStation : IEntity
     {
+        int Id { get; set; }
+
         string SName { get; set; }
 
         float LinearKilometre { get; set; }

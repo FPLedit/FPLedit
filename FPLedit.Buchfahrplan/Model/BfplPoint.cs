@@ -64,5 +64,11 @@ namespace FPLedit.Buchfahrplan.Model
         }
 
         public PositionCollection Positions => new PositionCollection(this, _parent);
+
+        public int Id
+        {
+            get => throw new NotSupportedException("Points haben keine Id!");
+            set => throw new NotSupportedException("Points haben keine Id!");
+        }
     }
 }

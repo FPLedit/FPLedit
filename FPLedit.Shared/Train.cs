@@ -255,5 +255,11 @@ namespace FPLedit.Shared
         [DebuggerStepThrough]
         public override string ToString()
             => TName;
+
+        public string GetLineName()
+        {
+            var path = GetPath();
+            return path.First().SName + " - " + path.Last().SName;
+        }
     }
 }
