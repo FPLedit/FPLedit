@@ -78,10 +78,12 @@ namespace FPLedit.jTrainGraphStarter
                     return;
             }
 
+            int targetVersion = info.Settings.Get("jTGStarter.target-version", 009);
+
             var exporter = new Shared.Filetypes.XMLExport();
             var importer = new Shared.Filetypes.XMLImport();
             var sync = new TimetableRouteSync(info.Timetable, route);
-            var rtt = sync.GetRouteTimetable();
+            var rtt = sync.GetRouteTimetable((TimetableVersion)targetVersion);
             var fn = info.GetTemp("route-" + route + ".fpl");
             exporter.Export(rtt, fn, info);
 
@@ -97,7 +99,7 @@ namespace FPLedit.jTrainGraphStarter
         private void StartJtg(string fnArg, Action finished)
         {
             string javapath = info.Settings.Get("jTGStarter.javapath", "java");
-            string jtgPath = info.Settings.Get("jTGStarter.jtgpath", "jTrainGraph_203.jar");
+            string jtgPath = info.Settings.Get("jTGStarter.jtgpath", "jTrainGraph_301.jar");
 
             string jtgFolder = Path.GetDirectoryName(jtgPath);
 

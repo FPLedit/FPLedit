@@ -71,6 +71,8 @@
     <Compile Include="Templating\ITemplateProxy.cs" />
     <Compile Include="Templating\ITemplateManager.cs" />
     <Compile Include="Templating\BaseTemplateChooser.cs" />
+    <Compile Include="TimetableVersion.cs" />
+    <Compile Include="Transition.cs" />
     <Compile Include="Ui\IDesignableUiProxy.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="IStation.cs" />

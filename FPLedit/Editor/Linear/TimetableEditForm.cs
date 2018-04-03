@@ -72,7 +72,7 @@ namespace FPLedit.Editor.Linear
                     view.Columns.Add(stas.IndexOf(sta) + "dp", sta.SName + " ab");
             }
 
-            foreach (var tra in info.Timetable.Trains.Where(t => t.Direction == direction))
+            foreach (var tra in info.Timetable.Trains.Where(t => t.Direction == direction && !t.IsLink))
             {
                 DataGridViewRow trainRow = view.Rows[view.Rows.Add()];
 

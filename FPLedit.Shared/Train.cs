@@ -16,6 +16,18 @@ namespace FPLedit.Shared
             set => SetAttribute("name", value);
         }
 
+        public int Id
+        {
+            get => GetAttribute<int>("id", -1);
+            set => SetAttribute("id", value.ToString());
+        }
+
+        public bool IsLink
+        {
+            get => GetAttribute<bool>("islink");
+            set => SetAttribute("islink", value.ToString());
+        }
+
         #region Handling der Fahrtzeiteneinträge
 
         public void AddAllArrDeps(List<Station> path)

@@ -39,6 +39,8 @@
             this.jTGDocLabel = new System.Windows.Forms.Label();
             this.javaDocLabel = new System.Windows.Forms.Label();
             this.messageCheckBox = new System.Windows.Forms.CheckBox();
+            this.versionComboBox = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -75,7 +77,7 @@
             // 
             // generalDocLabel
             // 
-            this.generalDocLabel.Location = new System.Drawing.Point(10, 112);
+            this.generalDocLabel.Location = new System.Drawing.Point(10, 152);
             this.generalDocLabel.Name = "generalDocLabel";
             this.generalDocLabel.Size = new System.Drawing.Size(387, 81);
             this.generalDocLabel.TabIndex = 6;
@@ -85,7 +87,7 @@
             // 
             // closeButton
             // 
-            this.closeButton.Location = new System.Drawing.Point(324, 193);
+            this.closeButton.Location = new System.Drawing.Point(324, 233);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
             this.closeButton.TabIndex = 9;
@@ -96,7 +98,7 @@
             // downloadLinkLabel
             // 
             this.downloadLinkLabel.AutoSize = true;
-            this.downloadLinkLabel.Location = new System.Drawing.Point(267, 138);
+            this.downloadLinkLabel.Location = new System.Drawing.Point(267, 178);
             this.downloadLinkLabel.Name = "downloadLinkLabel";
             this.downloadLinkLabel.Size = new System.Drawing.Size(130, 13);
             this.downloadLinkLabel.TabIndex = 8;
@@ -107,7 +109,7 @@
             // docLinkLabel
             // 
             this.docLinkLabel.AutoSize = true;
-            this.docLinkLabel.Location = new System.Drawing.Point(99, 112);
+            this.docLinkLabel.Location = new System.Drawing.Point(99, 152);
             this.docLinkLabel.Name = "docLinkLabel";
             this.docLinkLabel.Size = new System.Drawing.Size(161, 13);
             this.docLinkLabel.TabIndex = 7;
@@ -134,19 +136,39 @@
             // messageCheckBox
             // 
             this.messageCheckBox.AutoSize = true;
-            this.messageCheckBox.Location = new System.Drawing.Point(13, 199);
+            this.messageCheckBox.Location = new System.Drawing.Point(13, 239);
             this.messageCheckBox.Name = "messageCheckBox";
             this.messageCheckBox.Size = new System.Drawing.Size(290, 17);
             this.messageCheckBox.TabIndex = 10;
             this.messageCheckBox.Text = "Warnhinweis nicht bei jedem jTrainGraph-Start anzeigen";
             this.messageCheckBox.UseVisualStyleBackColor = true;
             // 
+            // versionComboBox
+            // 
+            this.versionComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.versionComboBox.FormattingEnabled = true;
+            this.versionComboBox.Location = new System.Drawing.Point(159, 115);
+            this.versionComboBox.Name = "versionComboBox";
+            this.versionComboBox.Size = new System.Drawing.Size(80, 21);
+            this.versionComboBox.TabIndex = 11;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(12, 118);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(121, 13);
+            this.label3.TabIndex = 12;
+            this.label3.Text = "Version von jTrainGraph";
+            // 
             // SettingsForm
             // 
             this.AcceptButton = this.closeButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(411, 228);
+            this.ClientSize = new System.Drawing.Size(411, 268);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.versionComboBox);
             this.Controls.Add(this.messageCheckBox);
             this.Controls.Add(this.javaDocLabel);
             this.Controls.Add(this.jTGDocLabel);
@@ -182,5 +204,7 @@
         private System.Windows.Forms.Label jTGDocLabel;
         private System.Windows.Forms.Label javaDocLabel;
         private System.Windows.Forms.CheckBox messageCheckBox;
+        private System.Windows.Forms.ComboBox versionComboBox;
+        private System.Windows.Forms.Label label3;
     }
 }

@@ -23,7 +23,7 @@ namespace FPLedit.jTrainGraphStarter
 
         #region Network -> Route
 
-        public Timetable GetRouteTimetable()
+        public Timetable GetRouteTimetable(TimetableVersion targetVersion)
         {
             var copy = orig.Clone();
             copy.SetAttribute("version", "008"); // Wir gehen aus dem Extended-Modus raus
@@ -98,7 +98,15 @@ namespace FPLedit.jTrainGraphStarter
             foreach (var sta in copy.Stations)
             {
                 float km = sta.Positions.GetPosition(routeIndex).Value;
-                sta.SetAttribute("km", km.ToString("0.0", CultureInfo.InvariantCulture));
+                var pos = km.ToString("0.0", CultureInfo.InvariantCulture);
+
+                if (targetVersion == TimetableVersion.JTG2_x)
+                    sta.SetAttribute("km", pos);
+                else if (targetVersion == TimetableVersion.JTG3_0)
+                {
+                    sta.SetAttribute("kml", pos);
+                    sta.SetAttribute("kmr", pos);
+                }
             }
 
             return copy;

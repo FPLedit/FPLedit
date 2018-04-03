@@ -14,11 +14,10 @@ namespace FPLedit.Shared
     {
         public const int LINEAR_ROUTE_ID = 0;
 
-        XMLEntity sElm, tElm;
+        XMLEntity sElm, tElm, trElm;
 
         public TimetableType Type { get; private set; }
-        private int nextStaId = 0;
-        private int nextRtId = 0;
+        private int nextStaId = 0, nextRtId = 0, nextTraId = 0;
 
         public string TTName
         {
@@ -26,12 +25,17 @@ namespace FPLedit.Shared
             set => SetAttribute("name", value);
         }
 
+        public TimetableVersion Version => (TimetableVersion)GetAttribute("version", 0);
+
         private List<Station> stations;
         private List<Train> trains;
+        private List<Transition> transitions;
 
         public List<Station> Stations => stations;
 
         public List<Train> Trains => trains;
+
+        public List<Transition> Transitions => transitions;
 
         public Timetable() : this(TimetableType.Linear)
         {
@@ -43,10 +47,12 @@ namespace FPLedit.Shared
             Type = type;
             stations = new List<Station>();
             trains = new List<Train>();
+            transitions = new List<Transition>();
 
             SetAttribute("version", type == TimetableType.Network ? "100" : "008"); // version="100" nicht kompatibel mit jTrainGraph
             sElm = new XMLEntity("stations");
             tElm = new XMLEntity("trains");
+            trElm = new XMLEntity("transitions");
             Children.Add(sElm);
             Children.Add(tElm);
         }
@@ -54,11 +60,11 @@ namespace FPLedit.Shared
         public Timetable(XMLEntity en, TimetableType type) : base(en, null)
         {
             Type = type;
-            if (type == TimetableType.Network && en.GetAttribute<string>("version") != "100")
+            if (type == TimetableType.Network && Version != TimetableVersion.Extended_FPL)
                 throw new Exception("Falsche Versionsummer für Netzwerk-Fahrplandatei!");
 
-            if (GetAttribute<string>("version") == "009")
-                throw new Exception("Mit jTrainGraph 3.0 erstellte Dateien sind derzeit nicht mit FPLedit kompatibel!");
+            if (!Enum.IsDefined(typeof(TimetableVersion), Version))
+                throw new Exception("Unbekannte Dateiversion. Nur mit jTrainGraph 2 oder 3.0 erstellte Dateien können geöffnet werden!");
 
             stations = new List<Station>();
             sElm = Children.FirstOrDefault(x => x.XName == "stations");
@@ -90,10 +96,32 @@ namespace FPLedit.Shared
                 Children.Add(tElm);
             }
 
+            transitions = new List<Transition>();
+            trElm = Children.FirstOrDefault(x => x.XName == "transitions");
+            if (trElm != null)
+            {
+                foreach (var c in trElm.Children.Where(x => x.XName == "tra")) // Filtert andere Elemente
+                    transitions.Add(new Transition(c, this));
+            }
+            else
+            {
+                trElm = new XMLEntity("transitions");
+                Children.Add(trElm);
+            }
+
+            // Höchste IDs ermitteln
+            nextTraId = trains.Max(s => s.Id);
             if (Type == TimetableType.Network)
             {
                 nextStaId = stations.Max(s => s.Id);
                 nextRtId = stations.SelectMany(s => s.Routes).DefaultIfEmpty().Max();
+            }
+
+            // Zügen ohne IDs diese zuweisen
+            foreach (var train in trains)
+            {
+                if (train.Id == -1)
+                    train.Id = nextTraId++;
             }
         }
 
@@ -194,6 +222,8 @@ namespace FPLedit.Shared
 
         public void AddTrain(Train tra, bool hasArDeps = false)
         {
+            tra.Id = nextTraId++;
+
             if (!hasArDeps && Type == TimetableType.Linear)
                 foreach (var sta in Stations)
                     tra.AddArrDep(sta, new ArrDep(), LINEAR_ROUTE_ID);
@@ -203,8 +233,13 @@ namespace FPLedit.Shared
             tElm.Children.Add(tra.XMLEntity);
         }
 
+        public Train GetTrainById(int id)
+            => trains.FirstOrDefault(t => t.Id == id);
+
         public void RemoveTrain(Train tra)
         {
+            RemoveTransition(tra, false); // Remove "orphaned" transitions
+
             tra._parent = null;
             trains.Remove(tra);
             tElm.Children.Remove(tra.XMLEntity);
@@ -250,6 +285,52 @@ namespace FPLedit.Shared
                 return new Route() { Index = LINEAR_ROUTE_ID, Stations = Stations };
             var stas = Stations.Where(s => s.Routes.Contains(index)).ToList();
             return new Route() { Index = index, Stations = stas };
+        }
+        #endregion
+
+        #region Hilfsmethoden für Umläufe
+        public void AddTransition(Train first, Train next)
+        {
+            var transition = new Transition(this)
+            {
+                First = first.Id,
+                Next = next.Id
+            };
+            trElm.Children.Add(transition.XMLEntity);
+        }
+
+        public void SetTransition(Train first, Train newNext)
+        {
+            var trans = transitions.Where(t => t.First == first.Id);
+
+            if (trans.Count() == 0)
+                AddTransition(first, newNext);
+            if (trans.Count() > 1)
+                throw new Exception("Keine Transition mit angegebenem ersten Zug gefunden!");
+
+            trans.First().Next = newNext.Id;
+        }
+
+        public Train GetTransition(Train first)
+        {
+            var trans = transitions.Where(t => t.First == first.Id);
+
+            if (trans.Count() == 0)
+                return null;
+            if (trans.Count() > 1)
+                throw new Exception("Keine Transition mit angegebenem ersten Zug gefunden!");
+
+            return GetTrainById(trans.First().Next);
+        }
+
+        public void RemoveTransition(Train tra, bool onlyAsFirst = true)
+        {
+            var trans = transitions.Where(t => t.First == tra.Id || (onlyAsFirst && t.Next == tra.Id));
+            foreach (var transition in trans)
+            {
+                trElm.Children.Remove(transition.XMLEntity);
+                transitions.Remove(transition);
+            }
         }
         #endregion
 

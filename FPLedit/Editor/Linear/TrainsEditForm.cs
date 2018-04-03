@@ -65,7 +65,7 @@ namespace FPLedit.Editor.Linear
         private void UpdateListView(ListView view, TrainDirection direction)
         {
             view.Items.Clear();
-            foreach (var train in tt.Trains.Where(o => o.Direction == direction))
+            foreach (var train in tt.Trains.Where(o => o.Direction == direction && !o.IsLink))
                 view.Items.Add(CreateItem(train));
 
             view.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);

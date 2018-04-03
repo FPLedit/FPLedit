@@ -40,6 +40,12 @@ namespace FPLedit.Shared
             set => SetAttribute("fpl-wl", value.ToString());
         }
 
+        public int LineTracksRight
+        {
+            get => GetAttribute("tr", 1);
+            set => SetAttribute("tr", value.ToString());
+        }
+
         public string Vmax
         {
             get => GetAttribute("fpl-vmax", "");
