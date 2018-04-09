@@ -23,7 +23,7 @@ namespace FPLedit.jTrainGraphStarter
             var item = new ToolStripMenuItem("jTrainGraph");
             info.Menu.Items.Add(item);
 
-            startItem = item.DropDownItems.Add("jTrainGraph Starten");
+            startItem = item.DropDownItems.Add("jTrainGraph starten");
             startItem.Enabled = false;
             startItem.Click += (s, e) => Start();
 
@@ -36,13 +36,13 @@ namespace FPLedit.jTrainGraphStarter
             startItem.Enabled = e.FileState.Opened;
         }
 
-        public void Start()
+        private void Start()
         {
             bool showMessage = info.Settings.Get("jTGStarter.show-message", true);
 
             if (showMessage)
             {
-                DialogResult res = MessageBox.Show("Dies speichert die Fahrplandatei am letzten Speicherort und öffnet dann jTrainGraph (>= 2.02). Nachdem Sie die Arbeit in jTrainGraph beendet haben, speichern Sie damit die Datei und schließen das jTrainGraph-Hauptfenster, damit werden die Änderungen übernommen. Aktion fortsetzen?"+Environment.NewLine+Environment.NewLine+"Diese Meldung kann unter jTrainGraph > Einstellungen deaktiviert werden.",
+                DialogResult res = MessageBox.Show("Dies speichert die Fahrplandatei am letzten Speicherort und öffnet dann jTrainGraph (>= 2.02). Nachdem Sie die Arbeit in jTrainGraph beendet haben, speichern Sie damit die Datei und schließen das jTrainGraph-Hauptfenster, damit werden die Änderungen übernommen. Aktion fortsetzen?" + Environment.NewLine + Environment.NewLine + "Diese Meldung kann unter jTrainGraph > Einstellungen deaktiviert werden.",
                     "jTrainGraph starten", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
                 if (res != DialogResult.Yes)
@@ -52,7 +52,7 @@ namespace FPLedit.jTrainGraphStarter
             info.Save(false);
 
             string javapath = info.Settings.Get("jTGStarter.javapath", "java");
-            string jtgPath = info.Settings.Get("jTGStarter.jtgpath", "jTrainGraph_203.jar");
+            string jtgPath = info.Settings.Get("jTGStarter.jtgpath", "jTrainGraph_301.jar");
 
             string jtgFolder = Path.GetDirectoryName(jtgPath);
 

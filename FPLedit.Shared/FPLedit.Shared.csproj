@@ -53,7 +53,11 @@
     <Compile Include="Filetypes\XMLExport.cs" />
     <Compile Include="Filetypes\XMLStationsImport.cs" />
     <Compile Include="Filetypes\XMLImport.cs" />
-    <Compile Include="Rule.cs" />
+    <Compile Include="FilterRule.cs" />
+    <Compile Include="ITimetable.cs" />
+    <Compile Include="PositionCollection.cs" />
+    <Compile Include="TimetableVersion.cs" />
+    <Compile Include="Transition.cs" />
     <Compile Include="Ui\IDesignableUiProxy.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="IStation.cs" />

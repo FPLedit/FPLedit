@@ -72,11 +72,10 @@ namespace FPLedit.Editor
                     view.Columns.Add(stas.IndexOf(sta) + "dp", sta.SName + " ab");
             }
 
-            foreach (var tra in info.Timetable.Trains.Where(t => t.Direction == direction))
+            foreach (var tra in info.Timetable.Trains.Where(t => t.Direction == direction && !t.IsLink))
             {
                 DataGridViewRow trainRow = view.Rows[view.Rows.Add()];
 
-                var fb = new Font(DefaultFont, FontStyle.Bold);
                 foreach (var sta in info.Timetable.Stations)
                 {
                     var ardp = tra.GetArrDep(sta);

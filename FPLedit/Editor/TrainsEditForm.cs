@@ -53,9 +53,9 @@ namespace FPLedit.Editor
                     return;
 
                 if (e.KeyCode == Keys.Delete)
-                    DeleteTrain(active, dir, false);
-                else if (e.KeyCode == Keys.B && e.Control)
-                    EditTrain(active, dir, false);
+                    DeleteTrain(active, false);
+                else if ((e.KeyCode == Keys.B && e.Control) || (e.KeyCode == Keys.Enter))
+                    EditTrain(active, false);
                 else if (e.KeyCode == Keys.N && e.Control)
                     NewTrain(active, dir);
             };
@@ -64,7 +64,7 @@ namespace FPLedit.Editor
         private void UpdateListView(ListView view, TrainDirection direction)
         {
             view.Items.Clear();
-            foreach (var train in tt.Trains.Where(o => o.Direction == direction))
+            foreach (var train in tt.Trains.Where(o => o.Direction == direction && !o.IsLink))
                 view.Items.Add(CreateItem(train));
 
             view.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
@@ -81,7 +81,7 @@ namespace FPLedit.Editor
             view.Columns.Add("Kommentar");
         }
 
-        private void DeleteTrain(ListView view, TrainDirection direction, bool message = true)
+        private void DeleteTrain(ListView view, bool message = true)
         {
             if (view.SelectedItems.Count > 0)
             {
@@ -94,7 +94,7 @@ namespace FPLedit.Editor
                 MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug löschen");
         }
 
-        private void EditTrain(ListView view, TrainDirection direction, bool message = true)
+        private void EditTrain(ListView view, bool message = true)
         {
             if (view.SelectedItems.Count > 0)
             {
@@ -136,13 +136,13 @@ namespace FPLedit.Editor
         private ListViewItem CreateItem(Train t)
         {
             return new ListViewItem(new[] {
-                    t.TName,
-                    t.Locomotive,
-                    t.Mbr,
-                    t.Last,
-                    DaysHelper.DaysToString(t.Days),
-                    t.Comment })
-                    { Tag = t };
+                t.TName,
+                t.Locomotive,
+                t.Mbr,
+                t.Last,
+                DaysHelper.DaysToString(t.Days),
+                t.Comment
+            }) { Tag = t };
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -163,24 +163,24 @@ namespace FPLedit.Editor
             => NewTrain(topListView, TOP_DIRECTION);
 
         private void topEditButton_Click(object sender, EventArgs e)
-            => EditTrain(topListView, TOP_DIRECTION);
+            => EditTrain(topListView);
 
         private void topDeleteButton_Click(object sender, EventArgs e)
-            => DeleteTrain(topListView, TOP_DIRECTION);
+            => DeleteTrain(topListView);
 
         private void bottomNewButton_Click(object sender, EventArgs e)
             => NewTrain(bottomListView, BOTTOM_DIRECTION);
 
         private void bottomEditButton_Click(object sender, EventArgs e)
-            => EditTrain(bottomListView, BOTTOM_DIRECTION);
+            => EditTrain(bottomListView);
 
         private void bottomDeleteButton_Click(object sender, EventArgs e)
-            => DeleteTrain(bottomListView, BOTTOM_DIRECTION);
+            => DeleteTrain(bottomListView);
 
         private void bottomListView_MouseDoubleClick(object sender, MouseEventArgs e)
-            => EditTrain(bottomListView, BOTTOM_DIRECTION, false);
+            => EditTrain(bottomListView, false);
 
         private void topListView_MouseDoubleClick(object sender, MouseEventArgs e)
-            => EditTrain(topListView, TOP_DIRECTION, false);
+            => EditTrain(topListView, false);
     }
 }

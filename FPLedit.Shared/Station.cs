@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 
 namespace FPLedit.Shared
 {
     [Serializable]
-    [DebuggerDisplay("{SName} [{Kilometre}]")]
+    [DebuggerDisplay("{SName} [Linear: {Kilometre}]")]
     public sealed class Station : Entity, IStation
     {
         public Station(XMLEntity en, Timetable tt) : base(en, tt)
         {
+            Positions.TestForErrors();
         }
 
         public Station(Timetable tt) : base("sta", tt)
@@ -24,14 +26,24 @@ namespace FPLedit.Shared
 
         public float Kilometre
         {
-            get => float.Parse(GetAttribute("km", "0.0"), CultureInfo.InvariantCulture);
-            set => SetAttribute("km", value.ToString("0.0", CultureInfo.InvariantCulture));
+            get => Positions.GetPosition().Value;
+            set => Positions.SetPosition(value);
         }
+
+        private PositionCollection Positions
+            => new PositionCollection(this, _parent);
+
 
         public int Wellenlinien
         {
             get => GetAttribute("fpl-wl", 0);
             set => SetAttribute("fpl-wl", value.ToString());
+        }
+
+        public int LineTracksRight
+        {
+            get => GetAttribute("tr", 1);
+            set => SetAttribute("tr", value.ToString());
         }
 
         public string Vmax
