@@ -16,7 +16,7 @@
             <Button Click="topNewButton_Click">Neuer Zug</Button>
             <Button Click="topEditButton_Click">Zug bearbeiten</Button>
             <Button Click="topDeleteButton_Click">Zug löschen</Button>
-            <Button Click="copyButton_Click">Zug kopieren</Button>
+            <Button Click="copyButton_Click">Zug kopieren/verschieben</Button>
             <!-- TODO: Spacer -->
             <Button Click="editTimetableButton_Click">Fahrplan bearbeiten</Button>
             <Button Click="editPathButton_Click">Laufweg bearbeiten</Button>
