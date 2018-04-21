@@ -21,7 +21,7 @@ namespace FPLedit.BildfahrplanExport.Model
         {
             get
             {
-                int minutes = tt.GetAttribute<int>("tMin");
+                int minutes = tt.GetAttribute<int>("tMin", -1);
                 if (minutes == -1)
                     minutes = 0;
                 return new TimeSpan(0, minutes, 0);
@@ -37,9 +37,9 @@ namespace FPLedit.BildfahrplanExport.Model
         {
             get
             {
-                int minutes = tt.GetAttribute<int>("tMax");
+                int minutes = tt.GetAttribute<int>("tMax", -1);
                 if (minutes == -1)
-                    minutes = 0;
+                    minutes = 1440;
                 return new TimeSpan(0, minutes, 0);
             }
             set

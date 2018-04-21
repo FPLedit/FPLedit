@@ -35,12 +35,12 @@ namespace FPLedit.BildfahrplanExport.Render
         public void Draw(Graphics g)
             => Draw(g, attrs.StartTime, attrs.EndTime);
 
-        public void Draw(Graphics g, TimeSpan startTime, TimeSpan endTime)
+        public void Draw(Graphics g, TimeSpan startTime, TimeSpan endTime, int maxHeight = -1)
         {
             g.Clear(attrs.BgColor);
 
             if (width == 0) width = g.VisibleClipBounds.Width;
-            if (height == 0) height = GetHeight();
+            if (height == 0) height = GetHeight(startTime, endTime);
 
             if (!marginsCalced)
             {
@@ -69,7 +69,8 @@ namespace FPLedit.BildfahrplanExport.Render
                 hour = !hour;
             }
 
-            g.ExcludeClip(new Rectangle(0, GetHeight() - (int)margin.Bottom, (int)width, (int)margin.Bottom + 200)); // Unterer Rand nicht bemalbar (200: Konstante für Page Margins)
+            //TODO: Hier eine bessere Lösung, die nicht auf magic numbers basiert
+            g.ExcludeClip(new Rectangle(0, GetHeight(startTime, endTime) - (int)margin.Bottom + 1, (int)width, (int)margin.Bottom + 20000)); // Unterer Rand nicht bemalbar (20000: Konstante für Page Margins)
 
             // Stationenaufteilung
             var stations = tt.GetRoute(route).GetOrderedStations();
@@ -106,82 +107,9 @@ namespace FPLedit.BildfahrplanExport.Render
                 || (attrs.RenderDays[4] && t.Days[4]) || (attrs.RenderDays[5] && t.Days[5])
                 || (attrs.RenderDays[6] && t.Days[6]);
             });
+            var trainRenderer = new TrainRenderer(stations, tt, margin, startTime, stationOffsets);
             foreach (var train in trains)
-            {
-                if (!train.GetAttribute("sh", true))
-                    continue;
-
-                var style = new TrainStyle(train);
-                var ardps = train.GetArrDeps();
-
-                int tWidth = style.TrainWidth ?? attrs.TrainWidth;
-                List<PointF> points = new List<PointF>();
-                foreach (var sta in stations)
-                {
-                    PointF? arPoint = null, dpPoint = null;
-
-                    if (!ardps.ContainsKey(sta))
-                        continue;
-                    var ardp = ardps[sta];
-
-                    if (ardp.Departure != new TimeSpan())
-                    {
-                        float x = margin.Left + stationOffsets[sta];
-                        TimeSpan timeOffset = ardp.Departure - startTime;
-                        float y = margin.Top + timeOffset.GetMinutes() * attrs.HeightPerHour / 60f;
-                        arPoint = new PointF(x, y);
-                    }
-                    if (ardp.Arrival != new TimeSpan())
-                    {
-                        float x = margin.Left + stationOffsets[sta];
-                        TimeSpan timeOffset = ardp.Arrival - startTime;
-                        float y = margin.Top + timeOffset.GetMinutes() * attrs.HeightPerHour / 60f;
-                        dpPoint = new PointF(x, y);
-                    }
-                    if (train.Direction == TrainDirection.ta)
-                    {
-                        if (arPoint.HasValue)
-                            points.Add(arPoint.Value);
-                        if (arPoint.HasValue && dpPoint.HasValue && arPoint.Value != dpPoint.Value && attrs.StationLines)
-                            points.AddRange(new[] { arPoint.Value, dpPoint.Value });
-                        if (dpPoint.HasValue)
-                            points.Add(dpPoint.Value);
-                    }
-                    else
-                    {
-                        if (dpPoint.HasValue)
-                            points.Add(dpPoint.Value);
-                        if (arPoint.HasValue && dpPoint.HasValue && arPoint.Value != dpPoint.Value && attrs.StationLines)
-                            points.AddRange(new[] { arPoint.Value, dpPoint.Value });
-                        if (arPoint.HasValue)
-                            points.Add(arPoint.Value);
-                    }
-                }
-
-                for (int i = 0; i < points.Count; i += 2)
-                {
-                    if (points.Count <= i + 1)
-                        continue;
-
-                    g.DrawLine(new Pen(style.TrainColor ?? attrs.TrainColor, tWidth), points[i], points[i + 1]);
-
-                    if (points[i].X == points[i + 1].X)
-                        continue;
-                    var size = g.MeasureString(train.TName, attrs.TrainFont);
-                    float[] yps = new[] { points[i].Y, points[i + 1].Y };
-                    float[] xs = new[] { points[i].X, points[i + 1].X };
-                    float y = yps.Min() + (yps.Max() - yps.Min()) / 2 - (size.Height / 2);
-                    float x = xs.Min() + (xs.Max() - xs.Min()) / 2;
-
-                    float angle = (float)(Math.Atan2(xs.Max() - xs.Min(), yps.Max() - yps.Min()) * (180d / Math.PI));
-                    angle = GetTrainDirection(train) ? 90 - angle : angle - 90;
-                    var container = g.BeginContainer();
-                    g.TranslateTransform(x, y);
-                    g.RotateTransform(-angle);
-                    g.DrawString(train.TName, attrs.TrainFont, new SolidBrush(style.TrainColor ?? attrs.TrainColor), -(size.Width / 2), -(size.Height / 2));
-                    g.EndContainer(container);
-                }
-            }
+                trainRenderer.Render(g, train);
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
         }
 
@@ -209,48 +137,6 @@ namespace FPLedit.BildfahrplanExport.Render
             return lines;
         }
 
-        private bool GetTrainDirection(Train train)
-        {
-            if (tt.Type == TimetableType.Linear)
-                return train.Direction == TrainDirection.ta;
-
-            var taTrains = GetTrains(TrainDirection.ta);
-            return taTrains.Contains(train);
-        }
-
-        public Station[] GetStationsInDir(TrainDirection dir)
-        {
-            if (tt.Type == TimetableType.Linear)
-                return tt.GetStationsOrderedByDirection(dir).ToArray();
-
-            var route = tt.GetRoute(this.route).GetOrderedStations();
-            if (dir == TrainDirection.ta)
-                route.Reverse();
-
-            return route.ToArray();
-        }
-
-        public Train[] GetTrains(TrainDirection dir)
-        {
-            var stasAfter = GetStationsInDir(dir);
-            return tt.Trains.Where(t =>
-            {
-                var p = t.GetPath();
-                var ardeps = t.GetArrDeps();
-
-                var intersect = stasAfter.Intersect(p)
-                    .Where(s => ardeps[s].HasMinOneTimeSet);
-
-                if (intersect.Count() == 0)
-                    return false;
-
-                var time1 = ardeps[intersect.First()].FirstSetTime;
-                var time2 = ardeps[intersect.Last()].FirstSetTime;
-
-                return time1 > time2;
-            }).ToArray();
-        }
-
         public int GetHeight(TimeSpan start, TimeSpan end)
         {
             using (var image = new Bitmap(1, 1))
@@ -269,30 +155,5 @@ namespace FPLedit.BildfahrplanExport.Render
 
         public int GetHeight()
             => GetHeight(attrs.StartTime, attrs.EndTime);
-
-        public TimeSpan GetTimeByHeight(TimeSpan start, int height)
-        {
-            var end = start + new TimeSpan(0, 60 - start.Minutes, 0); // to full hour
-            var one = new TimeSpan(1, 0, 0);
-            TimeSpan last = end;
-            int h = GetHeight(start, end);
-            while (true)
-            {
-                end += one;
-                h += attrs.HeightPerHour;
-                if (h >= height)
-                {
-                    end = last;
-                    var meta = attrs.EndTime;
-                    if (end > meta)
-                    {
-                        end = meta;
-                        return meta;
-                    }
-                    return last;
-                }
-                last = end;
-            }
-        }
     }
 }

@@ -13,7 +13,6 @@ using System.Windows.Forms;
 
 namespace FPLedit.BildfahrplanExport
 {
-    //TODO: Fix print
     [Plugin("Bildfahrplanmodul", "2.0.0", "2.0", Author = "Manuel Huber")]
     public class Plugin : IPlugin
     {
@@ -22,13 +21,9 @@ namespace FPLedit.BildfahrplanExport
         private Renderer renderer;
         private Form frm;
         private Panel panel;
-        private PrintDocument doc;
-        private TimeSpan? last;
         private DateControl dtc;
 
         private TimetableStyle attrs;
-
-        public string Name => "Exporter für Bildfahrpläne";
 
         public void Init(IInfo info)
         {
@@ -65,62 +60,59 @@ namespace FPLedit.BildfahrplanExport
             trainColorItem.Enabled = e.FileState.Opened && e.FileState.TrainsCreated;
 
             attrs = new TimetableStyle(info.Timetable);
+
+            if (e.FileState.Opened && info.Timetable.Type == TimetableType.Network)
+            {
+                showItem.Text = "Anzeigen (aktuelle Route)";
+                printItem.Text = "Drucken (aktuelle Route)";
+            }
+            else
+            {
+                showItem.Text = "Anzeigen";
+                printItem.Text = "Drucken";
+            }
         }
 
         private void TrainColorItem_Click(object sender, EventArgs e)
         {
+            info.StageUndoStep();
             TrainColorForm tcf = new TrainColorForm(info);
             if (tcf.ShowDialog() == DialogResult.OK)
                 info.SetUnsaved();
         }
 
-        private void PrintItem_Click(object sender, EventArgs e)
-        {
-            doc = new PrintDocument();
-            doc.PrintPage += Doc_PrintPage;
-            doc.DocumentName = "Bildfahrplan generiert mit FPLedit";
-            PrintDialog dlg = new PrintDialog();
-            dlg.AllowCurrentPage = false;
-            dlg.AllowPrintToFile = false;
-            dlg.UseEXDialog = true;
-            dlg.Document = doc;
-            if (dlg.ShowDialog() == DialogResult.OK)
-                doc.Print();
-        }
-
-        private void Doc_PrintPage(object sender, PrintPageEventArgs e)
-        {
-            renderer = new Renderer(info.Timetable, Timetable.LINEAR_ROUTE_ID);
-            int height = e.PageBounds.Height;
-            var start = last;
-            last = renderer.GetTimeByHeight(last ?? attrs.StartTime, height);
-            renderer.Draw(e.Graphics, start.Value, last.Value);
-
-            if (last.Value < attrs.EndTime)
-                e.HasMorePages = true;
-            else
-                last = null;
-        }
-
         private void ConfigItem_Click(object sender, EventArgs e)
         {
+            info.StageUndoStep();
             ConfigForm cnf = new ConfigForm(info.Timetable);
             if (cnf.ShowDialog() == DialogResult.OK)
                 info.SetUnsaved();
         }
 
+        #region Print
+        private void PrintItem_Click(object sender, EventArgs e)
+        {
+            var route = (info.Timetable.Type == TimetableType.Network) ? info.FileState.SelectedRoute : Timetable.LINEAR_ROUTE_ID;
+            new PrintRenderer(info.Timetable, route).InitPrint();
+        }
+        #endregion
+
+        #region Preview
         private void ShowItem_Click(object sender, EventArgs e)
         {
-            renderer = new Renderer(info.Timetable, Timetable.LINEAR_ROUTE_ID);
-            frm = new Form();
-            frm.Height = 1000;
-            frm.Width = 1000;
-            frm.ShowIcon = false;
-            frm.ShowInTaskbar = false;
-            frm.Text = "Bildfahrplan";
-            frm.MaximizeBox = false;
-            frm.AutoScroll = true;
-            frm.AutoSize = false;
+            var route = (info.Timetable.Type == TimetableType.Network) ? info.FileState.SelectedRoute : Timetable.LINEAR_ROUTE_ID;
+            renderer = new Renderer(info.Timetable, route);
+            frm = new Form
+            {
+                Height = 1000,
+                Width = 1000,
+                ShowIcon = false,
+                ShowInTaskbar = false,
+                Text = "Bildfahrplan",
+                MaximizeBox = false,
+                AutoScroll = true,
+                AutoSize = false
+            };
 
             dtc = new DateControl(info.Timetable);
             dtc.Dock = DockStyle.Top;
@@ -155,5 +147,6 @@ namespace FPLedit.BildfahrplanExport
             frm.Height = 1000;
             renderer.Draw(e.Graphics);
         }
+        #endregion
     }
 }
