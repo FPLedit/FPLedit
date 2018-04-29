@@ -1,0 +1,51 @@
+﻿<e:SettingsForm
+  xmlns="clr-namespace:Eto.Forms;assembly=Eto"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:e="clr-namespace:FPLedit.jTrainGraphStarter;assembly=FPLedit.jTrainGraphStarter"
+  xmlns:sys="clr-namespace:System;assembly=mscorlib"
+  Title="jTrainGraphStarter Einstellungen" Resizable="false">
+  <StackLayout>
+    <TableLayout>
+      <TableRow>
+        <TableLayout Spacing="5,5" Padding="10,10,10,10">
+          <TableRow>
+            <Label>Java-Pfad</Label>
+            <StackLayout>
+              <TextBox x:Name="javaPathTextBox" Width="240"></TextBox>
+              <Label Width="240">i.d.R: Windows: javaw.exe, Linux: java</Label>
+            </StackLayout>
+          </TableRow>
+          <TableRow>
+            <Label>Pfad zur jTrainGraph-Datei</Label>
+            <StackLayout>
+              <TextBox x:Name="jtgPathTextBox" Width="240"></TextBox>
+              <Label Width="240">Anwendungsdatei von jTrainGraph (jTrainGraph_xxx.jar/exe, wobei xxx >= 202)</Label>
+            </StackLayout>
+          </TableRow>
+          <TableRow>
+            <Label>Version von jTrainGraph</Label>
+            <ComboBox ReadOnly="true" Width="80" x:Name="versionComboBox"></ComboBox>
+          </TableRow>
+        </TableLayout>
+      </TableRow>
+    </TableLayout>
+    <StackLayout Padding="5">
+      <StackLayout Orientation="Horizontal">
+        <Label>Weitere Hinweise:</Label>
+        <LinkButton Click="docLinkLabel_LinkClicked">Dokumentation zu diesem Plugin</LinkButton>
+      </StackLayout>
+      <StackLayout Orientation="Horizontal">
+        <Label>Wenn Sie jTrainGraph noch gar nicht installiert haben:</Label>
+        <LinkButton Click="downloadLinkLabel_LinkClicked">jTrainGraph herunterladen</LinkButton>
+      </StackLayout>
+      <Label>Auch wenn jTrainGraph in der *.exe-Variante verwendet wird bitte den Java-Pfad ausfüllen!</Label>
+    </StackLayout>
+    <TableLayout Spacing="5,5" Padding="10,10,10,10">
+      <TableRow>
+        <CheckBox x:Name="messageCheckBox" Text="Warnhinweis nicht bei jedem jTrainGraph-Start anzeigen" />
+        <TableCell ScaleWidth="true" />
+        <Button Text="Schließen" Click="closeButton_Click"></Button>
+      </TableRow>
+    </TableLayout>
+  </StackLayout>
+</e:SettingsForm>

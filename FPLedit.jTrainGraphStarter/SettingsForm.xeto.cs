@@ -1,39 +1,38 @@
-﻿using FPLedit.Shared;
+﻿using Eto.Forms;
+using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
+using System.Threading.Tasks;
 
 namespace FPLedit.jTrainGraphStarter
 {
-    public partial class SettingsForm : Form
+    internal class SettingsForm : Dialog<DialogResult>
     {
         private ISettings settings;
 
-        private SettingsForm()
-        {
-            InitializeComponent();
-        }
+#pragma warning disable CS0649
+        private TextBox javaPathTextBox, jtgPathTextBox;
+        private ComboBox versionComboBox;
+        private CheckBox messageCheckBox;
+#pragma warning restore CS0649
 
-        public SettingsForm(ISettings settings) : this()
+        public SettingsForm(ISettings settings)
         {
+            Eto.Serialization.Xaml.XamlReader.Load(this);
+
             this.settings = settings;
-        }
 
-        private void SettingsForm_Load(object sender, EventArgs e)
-        {
             var versions = new[]
             {
                 new VersionItem(TimetableVersion.JTG2_x, "2.0x"),
                 new VersionItem(TimetableVersion.JTG3_0, "3.0x"),
             };
-            versionComboBox.Items.AddRange(versions);
+            versionComboBox.DataStore = versions;
+            versionComboBox.ItemTextBinding = Binding.Property<VersionItem, string>(vi => vi.Name);
 
             javaPathTextBox.Text = settings.Get("jTGStarter.javapath", "");
             jtgPathTextBox.Text = settings.Get("jTGStarter.jtgpath", "jTrainGraph_301.jar");
@@ -61,10 +60,10 @@ namespace FPLedit.jTrainGraphStarter
                     return;
             }
 
-            var targetVersion = (int)((VersionItem)versionComboBox.SelectedItem).Version;
+            var targetVersion = (int)((VersionItem)versionComboBox.SelectedValue).Version;
 
             settings.Set("jTGStarter.target-version", targetVersion);
-            settings.Set("jTGStarter.show-message", !messageCheckBox.Checked);
+            settings.Set("jTGStarter.show-message", !messageCheckBox.Checked.Value);
             settings.Set("jTGStarter.javapath", javaPathTextBox.Text);
             settings.Set("jTGStarter.jtgpath", jtgPathTextBox.Text);
             Close();
@@ -83,10 +82,10 @@ namespace FPLedit.jTrainGraphStarter
             return exists;
         }
 
-        private void docLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void docLinkLabel_LinkClicked(object sender, EventArgs e)
             => Process.Start("https://fahrplan.manuelhu.de/bildfahrplaene/");
 
-        private void downloadLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void downloadLinkLabel_LinkClicked(object sender, EventArgs e)
             => Process.Start("http://kinzigtalbahn.bplaced.net/homepage/programme.html");
 
         private class VersionItem

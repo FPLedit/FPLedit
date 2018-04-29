@@ -1,11 +1,11 @@
-﻿using FPLedit.Shared;
+﻿using Eto.Forms;
+using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 
 namespace FPLedit.jTrainGraphStarter
 {
@@ -13,17 +13,17 @@ namespace FPLedit.jTrainGraphStarter
     public class Plugin : IPlugin
     {
         IInfo info;
-        ToolStripItem startItem, settingsItem;
+        ButtonMenuItem startItem, settingsItem;
 
         public void Init(IInfo info)
         {
             this.info = info;
             info.FileStateChanged += Info_FileStateChanged;
 
-            var item = new ToolStripMenuItem("jTrainGraph");
+            var item = MenuItem("jTrainGraph");
             info.Menu.Items.Add(item);
 
-            startItem = item.DropDownItems.Add("jTrainGraph starten");
+            startItem = MenuItem("jTrainGraph starten", item);
             startItem.Enabled = false;
             startItem.Click += (s, e) =>
             {
@@ -33,8 +33,8 @@ namespace FPLedit.jTrainGraphStarter
                     StartNetwork(info.FileState.SelectedRoute);
             };
 
-            settingsItem = item.DropDownItems.Add("Einstellungen");
-            settingsItem.Click += (s, e) => (new SettingsForm(info.Settings)).ShowDialog();
+            settingsItem = MenuItem("Einstellungen", item);
+            settingsItem.Click += (s, e) => (new SettingsForm(info.Settings)).ShowModal(); //TODO: Main window
         }
 
         private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)
@@ -52,7 +52,7 @@ namespace FPLedit.jTrainGraphStarter
             if (showMessage)
             {
                 DialogResult res = MessageBox.Show("Dies speichert die Fahrplandatei am letzten Speicherort und öffnet dann jTrainGraph (>= 2.02). Nachdem Sie die Arbeit in jTrainGraph beendet haben, speichern Sie damit die Datei und schließen das jTrainGraph-Hauptfenster, damit werden die Änderungen übernommen. Aktion fortsetzen?" + Environment.NewLine + Environment.NewLine + "Diese Meldung kann unter jTrainGraph > Einstellungen deaktiviert werden.",
-                    "jTrainGraph starten", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    "jTrainGraph starten", MessageBoxButtons.YesNo, MessageBoxType.Warning);
 
                 if (res != DialogResult.Yes)
                     return;
@@ -72,7 +72,7 @@ namespace FPLedit.jTrainGraphStarter
                 DialogResult res = MessageBox.Show("Dies speichert die aktuell ausgewählte Route in eine temporäre Datei und öffnet dann jTrainGraph (>= 2.02). Nachdem Sie die Arbeit in jTrainGraph beendet haben, speichern Sie damit die Datei und schließen das jTrainGraph-Hauptfenster, damit werden alle Änderungen an den Bildfahrplaneinstellungen übernommen."
                     + Environment.NewLine + "ACHTUNG: Es werden nur Änderungen an der Bildfahrplandarstellung übernommen, alle anderen Änderungen (z.B. Bahnhöfe oder Züge einfügen) werden verworfen! Aktion fortsetzen?"
                     + Environment.NewLine + Environment.NewLine + "Diese Meldung kann unter jTrainGraph > Einstellungen deaktiviert werden.",
-                    "jTrainGraph starten (aktuelle Route)", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    "jTrainGraph starten (aktuelle Route)", MessageBoxButtons.YesNo, MessageBoxType.Warning);
 
                 if (res != DialogResult.Yes)
                     return;
@@ -123,5 +123,22 @@ namespace FPLedit.jTrainGraphStarter
                 info.Logger.Error("Möglicherweise ist das jTrainGraphStarter Plugin falsch konfiguriert! Zur Konfiguration siehe jTrainGraph > Einstellungen");
             }
         }
+
+        #region EtoHelpers
+        private ButtonMenuItem MenuItem(string text)
+        {
+            var itm = new ButtonMenuItem();
+            itm.Text = text;
+            return itm;
+        }
+
+        private ButtonMenuItem MenuItem(string text, ButtonMenuItem parent)
+        {
+            var itm = new ButtonMenuItem();
+            itm.Text = text;
+            parent.Items.Add(itm);
+            return itm;
+        }
+        #endregion
     }
 }
