@@ -16,7 +16,7 @@ namespace FPLedit.jTrainGraphStarter
 
 #pragma warning disable CS0649
         private TextBox javaPathTextBox, jtgPathTextBox;
-        private ComboBox versionComboBox;
+        private DropDown versionComboBox;
         private CheckBox messageCheckBox;
 #pragma warning restore CS0649
 

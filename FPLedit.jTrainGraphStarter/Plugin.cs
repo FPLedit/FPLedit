@@ -34,7 +34,7 @@ namespace FPLedit.jTrainGraphStarter
             };
 
             settingsItem = MenuItem("Einstellungen", item);
-            settingsItem.Click += (s, e) => (new SettingsForm(info.Settings)).ShowModal(); //TODO: Main window
+            settingsItem.Click += (s, e) => (new SettingsForm(info.Settings)).ShowModal(info.RootForm);
         }
 
         private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)

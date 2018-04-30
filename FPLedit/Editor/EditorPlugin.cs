@@ -82,9 +82,8 @@ namespace FPLedit.Editor
         private void Info_ExtensionsLoaded(object sender, EventArgs e)
         {
             var previewables = info.GetRegistered<IPreviewable>();
-            //TODO: reimplemnt
-            //if (previewables.Length == 0)
-            //    previewRoot.Visible = false;
+            if (previewables.Length == 0)
+                info.Menu.Items.Remove(previewRoot); // Ausblenden in der harten Art
 
             foreach (var prev in previewables)
             {
@@ -128,13 +127,10 @@ namespace FPLedit.Editor
             }
 
             // Im Netzwerk-Modus nicht verwendete Menü-Einträge ausblenden
-            if (info.Timetable != null && info.Timetable.Type == TimetableType.Network)
+            if (info.Timetable != null)
             {
-                //TODO: reimplemnt
-                //editLineItem.Visible = false;
-                //editTimetableItem.Visible = false;
-                editLineItem.Enabled = false;
-                editTimetableItem.Enabled = false;
+                //TODO: reimplemnt Visible
+                editLineItem.Enabled = editTimetableItem.Enabled = info.Timetable.Type != TimetableType.Network;
             }
         }
 

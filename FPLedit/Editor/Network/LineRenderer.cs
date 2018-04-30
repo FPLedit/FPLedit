@@ -148,13 +148,13 @@ namespace FPLedit.Editor.Network
                     DrawArgs args = panels.FirstOrDefault(pa => pa.Station == sta);
                     if (args == null)
                     {
-                        args = new DrawArgs(sta, new Point(x - 5, y - 5), new Size(10, 10));
+                        args = new DrawArgs(sta, new Point(x - 5, y - 5), new Size(10, 10), panelColor);
                         panels.Add(args);
                         // Wire events
                         if (!addMode) ApplyNormalMode(args, sta);
                         else ApplyAddMode(args, sta);
                     }
-                    e.Graphics.FillRectangle(panelColor, args.Rect);
+                    args.Color = panelColor;
                 }
             }
 
@@ -165,10 +165,12 @@ namespace FPLedit.Editor.Network
 
                 e.Graphics.DrawLine(linePen, new Point(x, y), mousePosition);
 
-                DrawArgs args = new DrawArgs(tmp_sta, new Point(x - 5, y - 5), new Size(10, 10));
-                e.Graphics.FillRectangle(Colors.DarkCyan, args.Rect);
+                DrawArgs args = new DrawArgs(tmp_sta, new Point(x - 5, y - 5), new Size(10, 10), Colors.DarkCyan);
                 panels.Add(args);
             }
+
+            foreach (var args in panels)
+                args.Draw(e.Graphics);
 
             this.ResumeLayout();
             base.OnPaint(e);
@@ -388,17 +390,20 @@ namespace FPLedit.Editor.Network
 
             public Rectangle Rect => new Rectangle(Location, Size);
 
+            public Color Color { get; set; }
+
             public event EventHandler Click;
 
             public event EventHandler RightClick;
 
             public event EventHandler DoubleClick;
 
-            public DrawArgs(Station sta, Point loc, Size size)
+            public DrawArgs(Station sta, Point loc, Size size, Color c)
             {
                 Station = sta;
                 Location = loc;
                 Size = size;
+                Color = c;
             }
 
             public void HandleClick(Point clickPosition)
@@ -418,6 +423,9 @@ namespace FPLedit.Editor.Network
                 if (Rect.Contains(clickPosition))
                     DoubleClick?.Invoke(this, new EventArgs());
             }
+
+            public void Draw(Graphics g)
+                => g.FillRectangle(Color, Rect);
         }
     }
 }

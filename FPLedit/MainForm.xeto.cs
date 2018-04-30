@@ -137,6 +137,11 @@ namespace FPLedit
 
             ExtensionsLoaded?.Invoke(this, new EventArgs());
 
+            Shown += LoadStartFile;
+        }
+
+        private void LoadStartFile(object sender, EventArgs e)
+        {
             // Parameter: Fpledit.exe [Dateiname] ODER Datei aus Restart
             string[] args = Environment.GetCommandLineArgs();
             string fn = args.Length >= 2 ? args[1] : null;
@@ -144,6 +149,7 @@ namespace FPLedit
             if (fn != null && File.Exists(fn))
                 InternalOpen(fn);
             Settings.Remove("restart.file");
+            Shown -= LoadStartFile;
         }
 
         private void InitializeExportImport()
@@ -404,7 +410,7 @@ namespace FPLedit
 
             if (!NotifyIfUnsaved())
                 return;
-            InternalOpen(files[0].AbsolutePath); //TODO: Make it work with spaces in filenames
+            InternalOpen(files[0].LocalPath);
 
             base.OnDragDrop(e);
         }
@@ -441,6 +447,8 @@ namespace FPLedit
         dynamic IInfo.Menu => Menu;
 
         public ITemplateManager TemplateManager => templateManager;
+
+        public dynamic RootForm => this;
 
         public void Register<T>(T obj)
             => registry.Register<T>(obj);

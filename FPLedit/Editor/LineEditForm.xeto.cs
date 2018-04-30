@@ -130,8 +130,8 @@ namespace FPLedit.Editor
             IImport simport = new XMLStationsImport();
 
             OpenFileDialog ofd = new OpenFileDialog();
-            //TODO: eto filter
-            //ofd.Filter = timport.Filter + "|" + simport.Filter;
+            ofd.Filters.Add(ToEtoFilter(timport.Filter));
+            ofd.Filters.Add(ToEtoFilter(simport.Filter));
 
             if (ofd.ShowDialog(this) == DialogResult.Ok)
             {
@@ -174,5 +174,11 @@ namespace FPLedit.Editor
 
         private void loadLineButton_Click(object sender, EventArgs e)
             => LoadLine();
+
+        private FileFilter ToEtoFilter(string filter)
+        {
+            var parts = filter.Split('|');
+            return new FileFilter(parts[0], parts[1]);
+        }
     }
 }

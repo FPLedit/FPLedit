@@ -16,7 +16,7 @@ namespace FPLedit.Editor.Network
         private int selectedRoute = Timetable.LINEAR_ROUTE_ID;
 
 #pragma warning disable CS0649
-        private ComboBox routesComboBox;
+        private DropDown routesComboBox;
         private LineRenderer lineRenderer;
         private Button newLineButton, newButton;
         private Divider divider1;

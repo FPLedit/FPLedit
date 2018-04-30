@@ -19,7 +19,7 @@ namespace FPLedit.Editor.Network
         {
             info.StageUndoStep();
             LineEditForm lef = new LineEditForm(info, route.Index);
-            if (lef.ShowModal() == DialogResult.Ok) //TODO: Api main parent form
+            if (lef.ShowModal(info.RootForm) == DialogResult.Ok)
                 info.SetUnsaved();
         }
     }

@@ -35,6 +35,7 @@ namespace FPLedit.Editor
             Eto.Serialization.Xaml.XamlReader.Load(this);
             Init();
 
+            Title = "Neue Station erstellen";
             _parent = tt;
             this.route = route;
         }

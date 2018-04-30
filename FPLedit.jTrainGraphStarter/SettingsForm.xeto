@@ -24,7 +24,7 @@
           </TableRow>
           <TableRow>
             <Label>Version von jTrainGraph</Label>
-            <ComboBox ReadOnly="true" Width="80" x:Name="versionComboBox"></ComboBox>
+            <DropDown Width="80" x:Name="versionComboBox"></DropDown>
           </TableRow>
         </TableLayout>
       </TableRow>
