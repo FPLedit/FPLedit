@@ -1,0 +1,32 @@
+﻿<e:VelocityForm
+  xmlns="clr-namespace:Eto.Forms;assembly=Eto"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:e="clr-namespace:FPLedit.Buchfahrplan.Forms;assembly=FPLedit.Buchfahrplan"
+  xmlns:sys="clr-namespace:System;assembly=mscorlib"
+  Title="Höchstgeschwindigkeiten ändern" Size="460,530" Resizable="true">
+  <TableLayout Spacing="5,5" Padding="10,10,10,10">
+    <TableRow ScaleHeight="true">
+      <TableLayout Spacing="5,5">
+        <TableRow ScaleHeight="True">
+          <TableCell ScaleWidth="true">
+            <GridView x:Name="gridView"></GridView>
+          </TableCell>
+          <StackLayout Spacing="5">
+            <Button Click="addButton_Click">Hizufügen</Button>
+            <Button Click="editButton_Click">Bearbeiten</Button>
+            <Button x:Name="deleteButton" Click="deleteButton_Click">Löschen</Button>
+          </StackLayout>
+        </TableRow>
+      </TableLayout>
+    </TableRow>
+    <TableRow>
+      <TableLayout Spacing="5,5">
+        <TableRow>
+          <TableCell ScaleWidth="true" />
+          <Button Text="Abbrechen" Click="cancelButton_Click"></Button>
+          <Button Text="Schließen" Click="closeButton_Click"></Button>
+        </TableRow>
+      </TableLayout>
+    </TableRow>
+  </TableLayout>
+</e:VelocityForm>

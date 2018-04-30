@@ -1,13 +1,31 @@
-﻿using FPLedit.Buchfahrplan.Model;
+﻿using Eto.Forms;
+using FPLedit.Buchfahrplan.Model;
 using FPLedit.Shared;
 using System;
-using System.Drawing;
-using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace FPLedit.Buchfahrplan
+namespace FPLedit.Buchfahrplan.Forms
 {
-    public partial class VelocityEditForm : Form
+    internal class VelocityEditForm : Dialog<DialogResult>
     {
+#pragma warning disable CS0649
+        private TextBox nameTextBox, positionTextBox, velocityTextBox;
+        private DropDown wellenComboBox;
+#pragma warning restore CS0649
+        //private NotEmptyValidator nameValidator;
+        //private NumberValidator positionValidator;
+
+        private void Init()
+        {
+            //positionValidator = new NumberValidator(positionTextBox, false, false);
+            //positionValidator.ErrorMessage = "Bitte eine Zahl als Position eingeben!";
+            //nameValidator = new NotEmptyValidator(nameTextBox);
+            //nameValidator.ErrorMessage = "Bitte einen Bahnhofsnamen eingeben!";
+        }
+
         public IStation Station { get; set; }
 
         private bool isPoint = false;
@@ -15,7 +33,7 @@ namespace FPLedit.Buchfahrplan
 
         public VelocityEditForm()
         {
-            InitializeComponent();
+            Eto.Serialization.Xaml.XamlReader.Load(this);
 
             for (int i = 0; i < 4; i++)
                 wellenComboBox.Items.Add(i.ToString());
@@ -40,7 +58,7 @@ namespace FPLedit.Buchfahrplan
             velocityTextBox.Text = sta.Vmax;
             positionTextBox.Text = sta.Positions.GetPosition(route).ToString();
             nameTextBox.Text = sta.SName;
-            wellenComboBox.SelectedItem = sta.Wellenlinien.ToString();
+            wellenComboBox.SelectedValue = sta.Wellenlinien.ToString();
 
             isPoint = true;
             if (sta is Station)
@@ -53,22 +71,28 @@ namespace FPLedit.Buchfahrplan
 
         private void closeButton_Click(object sender, EventArgs e)
         {
-            if (!velocityValidator.Valid || !positionValidator.Valid)
-            {
-                MessageBox.Show("Bitte erst alle Fehler beheben!");
-                return;
-            }
+            //if (!velocityValidator.Valid || !positionValidator.Valid)
+            //{
+            //    MessageBox.Show("Bitte erst alle Fehler beheben!");
+            //    return;
+            //}
 
-            DialogResult = DialogResult.OK;
+            Result = DialogResult.Ok;
 
             Station.SetAttribute("fpl-vmax", velocityTextBox.Text);
-            Station.Wellenlinien = int.Parse((string)wellenComboBox.SelectedItem);
+            Station.Wellenlinien = int.Parse(((IListItem)wellenComboBox.SelectedValue).Text);
 
             if (isPoint)
             {
                 Station.Positions.SetPosition(route, float.Parse(positionTextBox.Text));
                 Station.SName = nameTextBox.Text;
             }
+            Close();
+        }
+
+        private void cancelButton_Click(object sender, EventArgs e)
+        {
+            Result = DialogResult.Cancel;
             Close();
         }
     }

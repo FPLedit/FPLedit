@@ -1,19 +1,21 @@
-﻿using FPLedit.Buchfahrplan.Model;
+﻿using Eto.Forms;
+using FPLedit.Buchfahrplan.Model;
 using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
-namespace FPLedit.Buchfahrplan
+namespace FPLedit.Buchfahrplan.Forms
 {
-    public partial class VelocityForm : Form
+    internal class VelocityForm : Dialog<DialogResult>
     {
+#pragma warning disable CS0649
+        private GridView gridView;
+        private Button deleteButton;
+#pragma warning restore CS0649
+
         private IInfo info;
         private Route route;
         private Timetable tt;
@@ -21,12 +23,30 @@ namespace FPLedit.Buchfahrplan
 
         public VelocityForm()
         {
-            InitializeComponent();
+            Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            listView.Columns.Add("km");
-            listView.Columns.Add("Name");
-            listView.Columns.Add("Vmax");
-            listView.Columns.Add("Wellenlinien");
+            gridView.Columns.Add(new GridColumn()
+            {
+                DataCell = new TextBoxCell { Binding = Binding.Property<IStation, string>(s => s.Positions.GetPosition(route.Index).ToString()) },
+                HeaderText = "km"
+            });
+            gridView.Columns.Add(new GridColumn()
+            {
+                DataCell = new TextBoxCell { Binding = Binding.Property<IStation, string>(s => s.SName) },
+                HeaderText = "Name"
+            });
+            gridView.Columns.Add(new GridColumn()
+            {
+                DataCell = new TextBoxCell { Binding = Binding.Property<IStation, string>(s => s.Vmax) },
+                HeaderText = "Vmax"
+            });
+            gridView.Columns.Add(new GridColumn()
+            {
+                DataCell = new TextBoxCell { Binding = Binding.Property<IStation, string>(s => s.Wellenlinien.ToString()) },
+                HeaderText = "Wellenlinien"
+            });
+
+            gridView.SelectedItemsChanged += (s, e) => SelectPoint();
         }
 
         public VelocityForm(IInfo info, Route route) : this()
@@ -48,24 +68,18 @@ namespace FPLedit.Buchfahrplan
 
         private void UpdateListView()
         {
-            listView.Items.Clear();
-
             List<IStation> points = new List<IStation>();
             points.AddRange(route.Stations);
             if (attrs != null)
                 points.AddRange(attrs.GetPoints(route.Index));
 
-            foreach (var p in points.OrderBy(o => o.Positions.GetPosition(route.Index)))
-                AddPointToList(p);
-
-            listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-            listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            gridView.DataStore = points.OrderBy(o => o.Positions.GetPosition(route.Index));
         }
 
         private void AddPoint()
         {
             VelocityEditForm vef = new VelocityEditForm(tt, route.Index);
-            if (vef.ShowDialog() == DialogResult.OK)
+            if (vef.ShowModal(this) == DialogResult.Ok)
             {
                 var p = (BfplPoint)vef.Station;
 
@@ -81,36 +95,15 @@ namespace FPLedit.Buchfahrplan
             }
         }
 
-        private void AddPointToList(IStation s)
-        {
-            listView.Items.Add(new ListViewItem(new[] {
-                s.Positions.GetPosition(route.Index).ToString(),
-                s.SName,
-                s.Vmax,
-                s.Wellenlinien.ToString(),
-            })
-            { Tag = s });
-        }
-
         private void EditPoint(bool message = true)
         {
-            if (listView.SelectedItems.Count > 0)
+            if (gridView.SelectedItem != null)
             {
-                ListViewItem item = listView.Items[listView.SelectedIndices[0]];
-
-                var sta = (IStation)item.Tag;
+                var sta = (IStation)gridView.SelectedItem;
 
                 VelocityEditForm vef = new VelocityEditForm(sta, route.Index);
-                if (vef.ShowDialog() == DialogResult.OK)
-                {
-                    item.SubItems[0].Text = sta.Positions.GetPosition(route.Index).ToString();
-                    item.SubItems[1].Text = sta.SName;
-                    item.SubItems[2].Text = sta.Vmax;
-                    item.SubItems[3].Text = sta.Wellenlinien.ToString();
-
-                    listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-                    listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
-                }
+                if (vef.ShowModal(this) == DialogResult.Ok)
+                    UpdateListView();
             }
             else if (message)
                 MessageBox.Show("Zuerst muss eine Zeile ausgewählt werden!", "Höchstgeschwindigkeit ändern");
@@ -118,18 +111,18 @@ namespace FPLedit.Buchfahrplan
 
         private void RemovePoint(bool message = true)
         {
-            if (listView.SelectedItems.Count > 0)
+            if (gridView.SelectedItem != null)
             {
-                ListViewItem item = listView.Items[listView.SelectedIndices[0]];
+                var sta = gridView.SelectedItem;
 
-                if (item.Tag is Station)
+                if (sta is Station)
                     throw new NotSupportedException("Bahnhöfe können nicht gelöscht werden!");
-                else if (item.Tag is BfplPoint point)
+                else if (sta is BfplPoint point)
                 {
                     if (attrs != null)
                         attrs.RemovePoint(point);
 
-                    listView.Items.Remove(item);
+                    UpdateListView();
                 }
 
             }
@@ -139,24 +132,19 @@ namespace FPLedit.Buchfahrplan
 
         private void SelectPoint()
         {
-            if (listView.SelectedItems.Count > 0)
-            {
-                ListViewItem item = listView.Items[listView.SelectedIndices[0]];
-
-                deleteButton.Enabled = (item.Tag is BfplPoint);
-            }
+            deleteButton.Enabled = (gridView.SelectedItem is BfplPoint);
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.Cancel;
+            Result = DialogResult.Cancel;
             info.RestoreTimetable();
             Close();
         }
 
         private void closeButton_Click(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.OK;
+            Result = DialogResult.Ok;
             info.ClearBackup();
             Close();
         }
@@ -173,9 +161,6 @@ namespace FPLedit.Buchfahrplan
 
         private void deleteButton_Click(object sender, EventArgs e)
             => RemovePoint();
-
-        private void listView_SelectedIndexChanged(object sender, EventArgs e)
-            => SelectPoint();
         #endregion
     }
 }

@@ -34,10 +34,7 @@ namespace FPLedit.Editor
         public DesignableForm(IInfo info) : this()
         {
             this.info = info;
-        }
 
-        private void DesignableForm_Load(object sender, EventArgs e)
-        {
             var designables = info.GetRegistered<IDesignableUiProxy>();
 
             tabControl.SuspendLayout();
@@ -60,6 +57,7 @@ namespace FPLedit.Editor
             tabControl.ResumeLayout();
 
             expertCheckBox.Checked = info.Settings.Get<bool>("std.expert");
+            expertCheckBox.CheckedChanged += expertCheckBox_CheckedChanged;
             expertCheckBox_CheckedChanged(this, null);
         }
 
