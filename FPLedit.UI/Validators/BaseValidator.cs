@@ -6,9 +6,8 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 
-namespace FPLedit.Shared.Validators
+namespace FPLedit.Shared.UI.Validators
 {
-    //[System.Security.SecurityCritical]
     public abstract class BaseValidator
     {
         private TextBox control;

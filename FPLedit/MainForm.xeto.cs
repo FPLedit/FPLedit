@@ -16,6 +16,7 @@ using FPLedit.Shared.Templating;
 using System.ComponentModel;
 using System.Diagnostics;
 using FPLedit.Editor.Network;
+using FPLedit.Shared.UI;
 
 namespace FPLedit
 {
@@ -87,7 +88,7 @@ namespace FPLedit
         {
             application = app;
             Eto.Serialization.Xaml.XamlReader.Load(this);
-            Icon = new Icon(GetResource("Resources.programm.ico"));
+            Icon = new Icon(this.GetResource("Resources.programm.ico"));
 
             Settings = new Settings();
             undo = new UndoManager();
@@ -102,8 +103,8 @@ namespace FPLedit
 
             open = new XMLImport();
             save = new XMLExport();
-            saveFileDialog.Filters.Add(ToEtoFilter(save.Filter));
-            openFileDialog.Filters.Add(ToEtoFilter(open.Filter));
+            saveFileDialog.AddLegacyFilter(save.Filter);
+            openFileDialog.AddLegacyFilter(open.Filter);
 
             fileState = new FileState();
             fileState.FileStateInternalChanged += (s, e) => OnFileStateChanged();
@@ -157,8 +158,8 @@ namespace FPLedit
             var exporters = registry.GetRegistered<IExport>();
             var importers = registry.GetRegistered<IImport>();
 
-            exporters.ToList().ForEach(ex => exportFileDialog.Filters.Add(ToEtoFilter(ex.Filter)));
-            importers.ToList().ForEach(im => importFileDialog.Filters.Add(ToEtoFilter(im.Filter)));
+            exporters.ToList().ForEach(ex => exportFileDialog.AddLegacyFilter(ex.Filter));
+            importers.ToList().ForEach(im => importFileDialog.AddLegacyFilter(im.Filter));
 
             // Letzten Exporter auswählen
             int exporter_idx = Settings.Get("exporter.last", -1);
@@ -175,32 +176,29 @@ namespace FPLedit
                 lastFiles = Settings.Get("files.last", "").Split(';').Where(s => s != "").Reverse().ToList();
                 foreach (var lf in lastFiles)
                 {
-                    var itm = MenuItem(lf);
+                    var itm = lastMenu.CreateItem(lf);
                     itm.Click += (s, a) =>
                     {
                         if (!NotifyIfUnsaved())
                             return;
                         InternalOpen(lf);
                     };
-                    lastMenu.Items.Add(itm);
                 }
             }
             else
                 lastMenu.Enabled = false;
 
             // Hilfe Menü nach den Erweiterungen zusammenbasteln
-            var helpItem = MenuItem("Hilfe");
-            var extItem = MenuItem("Erweiterungen", helpItem);
+            var helpItem = Menu.CreateItem("Hilfe");
+            var extItem = helpItem.CreateItem("Erweiterungen");
             extItem.Click += (s, ev) => (new ExtensionsForm(extensionManager, this)).ShowModal(this);
-            var tmplItem = MenuItem("Vorlagen", helpItem);
+            var tmplItem = helpItem.CreateItem("Vorlagen");
             tmplItem.Click += (s, ev) => (new TemplatesForm(templateManager, TEMPLATE_PATH)).ShowModal(this);
             helpItem.Items.Add(new SeparatorMenuItem());
-            var docItem = MenuItem("Online Hilfe", helpItem);
+            var docItem = helpItem.CreateItem("Online Hilfe");
             docItem.Click += (s, ev) => Process.Start("https://fahrplan.manuelhu.de/");
-            var infoItem = MenuItem("Info", helpItem);
+            var infoItem = helpItem.CreateItem("Info");
             infoItem.Click += (s, ev) => (new InfoForm(Settings)).ShowModal(this);
-
-            Menu.Items.Add(helpItem);
         }
 
         #endregion
@@ -469,35 +467,6 @@ namespace FPLedit
             var dirpath = Path.Combine(Path.GetTempPath(), "fpledit");
             if (Directory.Exists(dirpath))
                 Directory.Delete(dirpath, true);
-        }
-        #endregion
-
-        #region EtoHelpers
-        private Stream GetResource(string dotFilePath)
-        {
-            var assembly = Assembly.GetExecutingAssembly();
-            return assembly.GetManifestResourceStream(GetType().Namespace + "." + dotFilePath);
-        }
-
-        private FileFilter ToEtoFilter(string filter)
-        {
-            var parts = filter.Split('|');
-            return new FileFilter(parts[0], parts[1]);
-        }
-
-        private ButtonMenuItem MenuItem(string text)
-        {
-            var itm = new ButtonMenuItem();
-            itm.Text = text;
-            return itm;
-        }
-
-        private ButtonMenuItem MenuItem(string text, ButtonMenuItem parent)
-        {
-            var itm = new ButtonMenuItem();
-            itm.Text = text;
-            parent.Items.Add(itm);
-            return itm;
         }
         #endregion
 

@@ -138,7 +138,6 @@
     </Compile>
     <Compile Include="Editor\TimeNormalizer.cs" />
     <Compile Include="Editor\TrainCopyHelper.cs" />
-    <Compile Include="EtoExtensions.cs" />
     <Compile Include="ExtensionManager.cs" />
     <Compile Include="ExtensionsForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
@@ -173,9 +172,6 @@
     <Compile Include="Templating\TemplateSandbox.cs" />
     <Compile Include="UndoManager.cs" />
     <Compile Include="UpdateManager.cs" />
-    <Compile Include="Validators\BaseValidator.cs" />
-    <Compile Include="Validators\NotEmptyValidator.cs" />
-    <Compile Include="Validators\NumberValidator.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -255,12 +251,15 @@
       <Project>{ce38d005-22b2-4b15-80ba-614f038240fd}</Project>
       <Name>FPLedit.Shared</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FPLedit.UI\FPLedit.Shared.UI.csproj">
+      <Project>{5a1a083a-1308-488a-8a6b-ed8c1936b7c4}</Project>
+      <Name>FPLedit.Shared.UI</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\programm.ico" />
     <EmbeddedResource Include="Resources\trapeztafel.png" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
       <Visible>False</Visible>

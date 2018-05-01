@@ -1,6 +1,6 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
-using FPLedit.Shared.Validators;
+using FPLedit.Shared.UI.Validators;
 using System;
 using System.Collections.Generic;
 using System.Linq;

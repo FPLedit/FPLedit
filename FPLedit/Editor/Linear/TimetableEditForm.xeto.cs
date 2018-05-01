@@ -2,17 +2,10 @@
 using Eto.Forms;
 using FPLedit.Editor.Network;
 using FPLedit.Shared;
-using FPLedit.Shared.Filetypes;
-using FPLedit.Shared.Helpers;
+using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using FPLedit;
-using FPLedit.Editor;
 
 namespace FPLedit.Editor.Linear
 {

@@ -47,6 +47,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit", "FPLedit\FPLedit.
 		{B8BA56BA-15FC-4D2E-8929-FDD6C6E13B5A} = {B8BA56BA-15FC-4D2E-8929-FDD6C6E13B5A}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Shared.UI", "FPLedit.UI\FPLedit.Shared.UI.csproj", "{5A1A083A-1308-488A-8A6B-ED8C1936B7C4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,10 @@ Global
 		{386836E8-5885-4ED1-B350-CE2BBEC5367E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{386836E8-5885-4ED1-B350-CE2BBEC5367E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{386836E8-5885-4ED1-B350-CE2BBEC5367E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A1A083A-1308-488A-8A6B-ED8C1936B7C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A1A083A-1308-488A-8A6B-ED8C1936B7C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A1A083A-1308-488A-8A6B-ED8C1936B7C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A1A083A-1308-488A-8A6B-ED8C1936B7C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
