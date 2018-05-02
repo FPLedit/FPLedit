@@ -8,11 +8,11 @@ namespace FPLedit.Shared.UI.Validators
 {
     public sealed class NotEmptyValidator : BaseValidator
     {
-        public NotEmptyValidator(TextBox control) : base(control)
+        public NotEmptyValidator(TextBox control, bool enableErrorColoring = true) : base(control, true, enableErrorColoring)
         {
         }
 
-        internal override bool IsValid()
+        protected override bool IsValid()
         {
             return Control.Text != "";
         }

@@ -12,13 +12,13 @@ namespace FPLedit.Shared.UI.Validators
 
         public bool UseInt { get; set; }
 
-        public NumberValidator(TextBox control, bool allowEmpty, bool useInt) : base(control)
+        public NumberValidator(TextBox control, bool allowEmpty, bool useInt, bool enableErrorColoring = true) : base(control, true, enableErrorColoring)
         {
             AllowEmpty = allowEmpty;
             UseInt = useInt;
         }
 
-        internal override bool IsValid()
+        protected override bool IsValid()
         {
             if (AllowEmpty && Control.Text == "")
                 return true;

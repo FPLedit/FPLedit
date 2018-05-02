@@ -1,6 +1,7 @@
 ﻿using Eto.Forms;
 using FPLedit.Buchfahrplan.Model;
 using FPLedit.Shared;
+using FPLedit.Shared.UI.Validators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,16 +16,7 @@ namespace FPLedit.Buchfahrplan.Forms
         private TextBox nameTextBox, positionTextBox, velocityTextBox;
         private DropDown wellenComboBox;
 #pragma warning restore CS0649
-        //private NotEmptyValidator nameValidator;
-        //private NumberValidator positionValidator;
-
-        private void Init()
-        {
-            //positionValidator = new NumberValidator(positionTextBox, false, false);
-            //positionValidator.ErrorMessage = "Bitte eine Zahl als Position eingeben!";
-            //nameValidator = new NotEmptyValidator(nameTextBox);
-            //nameValidator.ErrorMessage = "Bitte einen Bahnhofsnamen eingeben!";
-        }
+        private NumberValidator velocityValidator, positionValidator;
 
         public IStation Station { get; set; }
 
@@ -34,6 +26,11 @@ namespace FPLedit.Buchfahrplan.Forms
         public VelocityEditForm()
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
+
+            velocityValidator = new NumberValidator(velocityTextBox, true, true);
+            velocityValidator.ErrorMessage = "Bitte eine Zahl als Geschwindikgeit eingeben!";
+            positionValidator = new NumberValidator(positionTextBox, false, false);
+            positionValidator.ErrorMessage = "Bitte eine Zahl als Position eingeben!";
 
             for (int i = 0; i < 4; i++)
                 wellenComboBox.Items.Add(i.ToString());
@@ -71,11 +68,11 @@ namespace FPLedit.Buchfahrplan.Forms
 
         private void closeButton_Click(object sender, EventArgs e)
         {
-            //if (!velocityValidator.Valid || !positionValidator.Valid)
-            //{
-            //    MessageBox.Show("Bitte erst alle Fehler beheben!");
-            //    return;
-            //}
+            if (!velocityValidator.Valid || !positionValidator.Valid)
+            {
+                MessageBox.Show("Bitte erst alle Fehler beheben!");
+                return;
+            }
 
             Result = DialogResult.Ok;
 

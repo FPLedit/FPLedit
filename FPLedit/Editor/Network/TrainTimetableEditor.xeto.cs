@@ -24,6 +24,7 @@ namespace FPLedit.Editor.Network
         private Font fn, fb;
 
         private TimeNormalizer normalizer;
+        private Color errorColor = new Color(Colors.Red, 0.4f);
 
         private TrainTimetableEditor()
         {
@@ -72,7 +73,11 @@ namespace FPLedit.Editor.Network
             {
                 var tb = (TextBox)control;
                 var data = (DataElement)args.Item;
-                tb.Text = text(data);
+
+                if ((arrival && !data.IsArrivalError) || (!arrival && !data.IsDepartureError))
+                    tb.Text = text(data);
+
+                tb.BackgroundColor = Colors.White;
 
                 if ((!arrival && data.IsLast) || (arrival && data.IsFirst))
                 {
@@ -92,7 +97,7 @@ namespace FPLedit.Editor.Network
                 }
 
                 if ((arrival && data.IsArrivalError) || (!arrival && data.IsDepartureError))
-                    tb.BackgroundColor = Colors.PaleVioletRed;
+                    tb.BackgroundColor = errorColor;
 
                 tb.GotFocus += (s, e) => { CellSelected(data, arrival); data.IsSelectedArrival = arrival; data.SelectedTextBox = tb; };
                 tb.LostFocus += (s, e) => { FormatCell(data, arrival, tb); };
@@ -201,22 +206,28 @@ namespace FPLedit.Editor.Network
         {
             string val = tb.Text;
             if (val == null || val == "")
+            {
+                if (arrival)
+                    data.IsArrivalError = false;
+                else
+                    data.IsDepartureError = false;
+                data.SetTime(arrival, "0");
                 return;
+            }
 
             val = normalizer.Normalize(val);
+            bool error = true;
             if (val != null)
             {
                 tb.Text = val;
                 data.SetTime(arrival, val);
+                error = false;
             }
+
+            if (arrival)
+                data.IsArrivalError = error;
             else
-            {
-                MessageBox.Show("Formatierungsfehler: Zeit muss im Format hh:mm, h:mm, h:m, hh:mm, h:, :m, hhmm, hmm oder mm vorliegen!");
-                if (arrival)
-                    data.IsArrivalError = true;
-                else
-                    data.IsDepartureError = true;
-            }
+                data.IsDepartureError = error;
         }
 
         private void Trapez(GridView view)
@@ -264,12 +275,9 @@ namespace FPLedit.Editor.Network
             {
                 if (row.IsArrivalError || row.IsDepartureError)
                 {
-                    MessageBox.Show("Bitte erst alle Fehler beheben!");
+                    MessageBox.Show("Bitte erst alle Fehler beheben!\n\nDie Zeitangaben müssen im Format hh:mm, h:mm, h:m, hh:mm, h:, :m, hhmm, hmm oder mm vorliegen!");
                     return false;
                 }
-
-                //throw new Exception("Die erste Station darf keinen Trapeztafelhalt beinhalten!");
-                //throw new Exception("Keine Abfahrtszelle darf einen Trapeztafelhalt/Zugalufmeldungseintrag enthalten!");
 
                 train.SetArrDep(row.Station, row.ArrDep);
             }

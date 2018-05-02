@@ -314,7 +314,7 @@ namespace FPLedit.Editor.Network
             {
                 var p = new Point(e.Location);
 
-                //Not getting out of bounds
+                // Not getting out of bounds
                 if (p.X < 0)
                     p.X = 0;
                 if (p.Y < 0)

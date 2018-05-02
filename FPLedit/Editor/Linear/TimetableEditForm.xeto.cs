@@ -28,6 +28,7 @@ namespace FPLedit.Editor.Linear
         private Font fn, fb;
 
         private TimeNormalizer normalizer;
+        private Color errorColor = new Color(Colors.Red, 0.4f);
 
         public TimetableEditForm(IInfo info)
         {
@@ -73,7 +74,11 @@ namespace FPLedit.Editor.Linear
             {
                 var tb = (TextBox)control;
                 var data = (DataElement)args.Item;
-                tb.Text = text(data);
+
+                if (!data.HasError(sta, arrival))
+                    tb.Text = text(data);
+
+                tb.BackgroundColor = Colors.White;
 
                 var first = data.GetStations(info).First() == sta;
                 if (arrival ^ first)
@@ -89,7 +94,7 @@ namespace FPLedit.Editor.Linear
                 }
 
                 if (data.HasError(sta, arrival))
-                    tb.BackgroundColor = Colors.PaleVioletRed;
+                    tb.BackgroundColor = errorColor;
 
                 tb.GotFocus += (s, e) =>
                 {
@@ -217,20 +222,21 @@ namespace FPLedit.Editor.Linear
         {
             string val = tb.Text;
             if (val == null || val == "")
+            {
+                data.Errors[sta] = null;
+                data.SetTime(sta, arrival, "0");
                 return;
+            }
 
             val = normalizer.Normalize(val);
+            bool error = true;
             if (val != null)
             {
                 tb.Text = val;
                 data.SetTime(sta, arrival, val);
-                data.Errors[sta] = null;
+                error = false;
             }
-            else
-            {
-                MessageBox.Show("Formatierungsfehler: Zeit muss im Format hh:mm, h:mm, h:m, hh:mm, h:, :m, hhmm, hmm oder mm vorliegen!");
-                data.Errors[sta] = arrival;
-            }
+            data.Errors[sta] = error ? (bool?)arrival : null;
         }
 
         private void Trapez(GridView view)
@@ -283,15 +289,13 @@ namespace FPLedit.Editor.Linear
 
                 if (row.Errors.Any(e => e.Value.HasValue))
                 {
-                    MessageBox.Show("Bitte erst alle Fehler beheben!");
+                    MessageBox.Show("Bitte erst alle Fehler beheben!\n\nDie Zeitangaben müssen im Format hh:mm, h:mm, h:m, hh:mm, h:, :m, hhmm, hmm oder mm vorliegen!");
                     return false;
                 }
 
                 foreach (var sta in row.GetStations(info))
                     train.SetArrDep(sta, row.ArrDeps[sta]);
 
-                //throw new Exception("Die erste Station darf keinen Trapeztafelhalt beinhalten!");
-                //throw new Exception("Keine Abfahrtszelle darf einen Trapeztafelhalt/Zugalufmeldungseintrag enthalten!");
                 return true;
             }
 
@@ -312,9 +316,14 @@ namespace FPLedit.Editor.Linear
 
             foreach (var t in info.Timetable.Trains)
             {
-                if ((t.Direction == TOP_DIRECTION && !UpdateTrainDataFromGrid(t, topDataGridView))
-                    || (t.Direction == BOTTOM_DIRECTION && !UpdateTrainDataFromGrid(t, bottomDataGridView)))
-                    throw new Exception("In der Anwendung ist ein interner Fehler aufgetreten!");
+                var ret = true;
+                if (t.Direction == TOP_DIRECTION)
+                    ret &= UpdateTrainDataFromGrid(t, topDataGridView);
+                else
+                    ret &= UpdateTrainDataFromGrid(t, bottomDataGridView);
+
+                if (!ret)
+                    return;
             }
 
             info.ClearBackup();

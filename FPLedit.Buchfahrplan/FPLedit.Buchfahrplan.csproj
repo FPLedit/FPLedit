@@ -84,6 +84,10 @@
       <Project>{ce38d005-22b2-4b15-80ba-614f038240fd}</Project>
       <Name>FPLedit.Shared</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FPLedit.UI\FPLedit.Shared.UI.csproj">
+      <Project>{5A1A083A-1308-488A-8A6B-ED8C1936B7C4}</Project>
+      <Name>FPLedit.Shared.UI</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

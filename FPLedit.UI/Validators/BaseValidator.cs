@@ -1,8 +1,7 @@
-﻿using Eto.Forms;
+﻿using Eto.Drawing;
+using Eto.Forms;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 
@@ -12,28 +11,37 @@ namespace FPLedit.Shared.UI.Validators
     {
         private TextBox control;
 
-        public BaseValidator(TextBox control)
+        public BaseValidator(TextBox control, bool validateOnType, bool enableErrorColoring = true)
         {
             this.control = control;
+            EnableErrorColoring = enableErrorColoring;
+            ErrorColor = new Color(Colors.Red, 0.4f);
+
+            if (validateOnType)
+                Control.TextChanged += (s, e) => Validate();
+            else
+                Control.LostFocus += (s, e) => Validate();
         }
 
         public TextBox Control => control;
+
+        public Color ErrorColor { get; set; }
+
+        public bool EnableErrorColoring { get; set; }
 
         public bool Valid => IsValid();
 
         public string ErrorMessage { get; set; }
 
-        private void Control_Validating(object sender, EventArgs e)
-            => Validate();
-
         private void Validate()
         {
             bool valid = IsValid();
-            string msg = "";
-            if (!valid)
-                msg = ErrorMessage;
+
+            if (EnableErrorColoring)
+                Control.BackgroundColor = valid ? Colors.White : ErrorColor;
+            Control.ToolTip = valid ? null : ErrorMessage;
         }
 
-        internal abstract bool IsValid();
+        protected abstract bool IsValid();
     }
 }
