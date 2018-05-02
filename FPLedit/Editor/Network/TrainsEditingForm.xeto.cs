@@ -62,6 +62,8 @@ namespace FPLedit.Editor.Network
                 HeaderText = "Kommentar"
             });
 
+            gridView.CellDoubleClick += (s, e) => EditTrain(gridView, false);
+
             UpdateListView(gridView);
 
             KeyDown += (s, e) =>
@@ -69,9 +71,11 @@ namespace FPLedit.Editor.Network
                 if (e.Key == Keys.Delete)
                     DeleteTrain(gridView, false);
                 else if ((e.Key == Keys.T && e.Control))
-                    EditTimetable(gridView);
+                    EditTimetable(gridView, false);
                 else if ((e.Key == Keys.C && e.Control))
-                    CopyTrain(gridView);
+                    CopyTrain(gridView, false);
+                else if ((e.Key == Keys.P && e.Control))
+                    EditPath(gridView, false);
                 else if ((e.Key == Keys.B && e.Control) || (e.Key == Keys.Enter))
                     EditTrain(gridView, false);
                 else if (e.Key == Keys.N && e.Control)

@@ -37,32 +37,35 @@ namespace FPLedit.Editor.Linear
             UpdateListView(topGridView, TOP_DIRECTION);
             UpdateListView(bottomGridView, BOTTOM_DIRECTION);
 
-            //KeyDown += (s, e) =>
-            //{
-            //    GridView active = null;
-            //    TrainDirection dir = default(TrainDirection);
+            bottomGridView.CellDoubleClick += (s, e) => EditTrain(bottomGridView, BOTTOM_DIRECTION, false);
+            topGridView.CellDoubleClick += (s, e) => EditTrain(topGridView, TOP_DIRECTION, false);
 
-            //    if (ActiveControl == topListView)
-            //    {
-            //        active = topListView;
-            //        dir = TOP_DIRECTION;
-            //    }
-            //    if (ActiveControl == bottomListView)
-            //    {
-            //        active = bottomListView;
-            //        dir = BOTTOM_DIRECTION;
-            //    }
+            KeyDown += (s, e) =>
+            {
+                GridView active = null;
+                TrainDirection dir = default(TrainDirection);
 
-            //    if (active == null)
-            //        return;
+                if (topGridView.HasFocus)
+                {
+                    active = topGridView;
+                    dir = TOP_DIRECTION;
+                }
+                if (bottomGridView.HasFocus)
+                {
+                    active = bottomGridView;
+                    dir = BOTTOM_DIRECTION;
+                }
 
-            //    if (e.Key == Keys.Delete)
-            //        DeleteTrain(active, dir, false);
-            //    else if ((e.Key == Keys.B && e.Control) || (e.Key == Keys.Enter))
-            //        EditTrain(active, dir, false);
-            //    else if (e.Key == Keys.N && e.Control)
-            //        NewTrain(active, dir);
-            //};
+                if (active == null)
+                    return;
+
+                if (e.Key == Keys.Delete)
+                    DeleteTrain(active, dir, false);
+                else if ((e.Key == Keys.B && e.Control) || (e.Key == Keys.Enter))
+                    EditTrain(active, dir, false);
+                else if (e.Key == Keys.N && e.Control)
+                    NewTrain(active, dir);
+            };
         }
 
         private void UpdateListView(GridView view, TrainDirection direction)
@@ -188,12 +191,6 @@ namespace FPLedit.Editor.Linear
 
         private void bottomDeleteButton_Click(object sender, EventArgs e)
             => DeleteTrain(bottomGridView, BOTTOM_DIRECTION);
-
-        private void bottomListView_MouseDoubleClick(object sender, MouseEventArgs e)
-            => EditTrain(bottomGridView, BOTTOM_DIRECTION, false);
-
-        private void topListView_MouseDoubleClick(object sender, MouseEventArgs e)
-            => EditTrain(topGridView, TOP_DIRECTION, false);
 
         private void topCopyButton_Click(object sender, EventArgs e)
             => CopyTrain(topGridView, TOP_DIRECTION, true);

@@ -3,6 +3,7 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.jTrainGraphStarter;assembly=FPLedit.jTrainGraphStarter"
   xmlns:sys="clr-namespace:System;assembly=mscorlib"
+  DefaultButton="{x:Reference closeButton}"
   Title="jTrainGraphStarter Einstellungen" Resizable="false">
   <StackLayout>
     <TableLayout>
@@ -44,7 +45,7 @@
       <TableRow>
         <CheckBox x:Name="messageCheckBox" Text="Warnhinweis nicht bei jedem jTrainGraph-Start anzeigen" />
         <TableCell ScaleWidth="true" />
-        <Button Text="Schließen" Click="closeButton_Click"></Button>
+        <Button x:Name="closeButton" Text="Schließen" Click="closeButton_Click"></Button>
       </TableRow>
     </TableLayout>
   </StackLayout>

@@ -55,6 +55,7 @@ namespace FPLedit.Editor.Network
             lineRenderer.FixedStatusString = "Startstation auswählen";
             lineRenderer.SelectedRoute = -1;
             lineRenderer.SetTimetable(info.Timetable);
+            lineRenderer.DisableTopBorder = true;
             lineRenderer.StationClicked += SetRoute;
 
             closeButton.Text = "Weiter >>";

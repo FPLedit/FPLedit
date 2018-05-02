@@ -3,6 +3,7 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.Editor;assembly=FPLedit"
   xmlns:sys="clr-namespace:System;assembly=mscorlib"
+  DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
   Title="Fahrplandarstellung" ClientSize="550,400" Resizable="true">
   <TableLayout>
     <TableRow ScaleHeight="true">
@@ -15,8 +16,8 @@
         <TableRow>
           <CheckBox x:Name="expertCheckBox">Expertenmodus (CSS-Bearbeitung) aktivieren</CheckBox>
           <TableCell ScaleWidth="true" />
-          <Button Text="Abbrechen" Click="cancelButton_Click"></Button>
-          <Button Text="Schließen" Click="closeButton_Click"></Button>
+          <Button x:Name="cancelButton" Text="Abbrechen" Click="cancelButton_Click"></Button>
+          <Button x:Name="closeButton" Text="Schließen" Click="closeButton_Click"></Button>
         </TableRow>
       </TableLayout>
     </TableRow>

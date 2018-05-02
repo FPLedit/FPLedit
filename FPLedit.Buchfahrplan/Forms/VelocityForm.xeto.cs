@@ -46,6 +46,8 @@ namespace FPLedit.Buchfahrplan.Forms
                 HeaderText = "Wellenlinien"
             });
 
+            gridView.CellDoubleClick += (s, e) => EditPoint(false);
+
             gridView.SelectedItemsChanged += (s, e) => SelectPoint();
         }
 
@@ -152,9 +154,6 @@ namespace FPLedit.Buchfahrplan.Forms
         #region Events
         private void editButton_Click(object sender, EventArgs e)
             => EditPoint();
-
-        private void trainListView_MouseDoubleClick(object sender, MouseEventArgs e)
-            => EditPoint(false);
 
         private void addButton_Click(object sender, EventArgs e)
             => AddPoint();

@@ -48,6 +48,8 @@ namespace FPLedit.Editor
                 HeaderText = "Position"
             });
 
+            gridView.CellDoubleClick += (s, e) => EditStation(false);
+
             KeyDown += (s, e) =>
             {
                 if (e.Key == Keys.Delete)
@@ -168,9 +170,6 @@ namespace FPLedit.Editor
 
         private void newButton_Click(object sender, EventArgs e)
             => NewStation();
-
-        private void listView_MouseDoubleClick(object sender, MouseEventArgs e)
-            => EditStation(false);
 
         private void loadLineButton_Click(object sender, EventArgs e)
             => LoadLine();

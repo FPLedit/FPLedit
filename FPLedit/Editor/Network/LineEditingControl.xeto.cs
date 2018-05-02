@@ -2,6 +2,7 @@
 using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.Ui;
+using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -132,13 +133,16 @@ namespace FPLedit.Editor.Network
             };
             lineRenderer.StationRightClicked += (s, e) =>
             {
-                if (MessageBox.Show("Station löschen?", "FPLedit", MessageBoxButtons.YesNo, MessageBoxType.Question) == DialogResult.Yes)
+                var menu = new ContextMenu();
+                var itm = menu.CreateItem("Löschen");
+                itm.Click += (se, ar) =>
                 {
                     info.StageUndoStep();
                     info.Timetable.RemoveStation((Station)s);
                     ReloadTimetable();
                     info.SetUnsaved();
-                }
+                };
+                menu.Show(this);
             };
             lineRenderer.NewRouteAdded += (s, args) => ReloadRouteNames();
             lineRenderer.StationMoveEnd += (s, args) => (info.FileState as FileState).Saved = false;
