@@ -1,4 +1,5 @@
-﻿using FPLedit.BildfahrplanExport.Model;
+﻿using Eto.Forms;
+using FPLedit.BildfahrplanExport.Model;
 using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
@@ -8,24 +9,48 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace FPLedit.BildfahrplanExport
 {
-    public partial class TrainColorForm : Form
+    public partial class TrainColorForm : Dialog<DialogResult>
     {
         private IInfo info;
         private Timetable tt;
         private TimetableStyle attrs;
+        private ColorCollection cc;
+
+#pragma warning disable CS0649
+        private GridView gridView;
+#pragma warning restore CS0649
 
         public TrainColorForm()
         {
-            InitializeComponent();
+            Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            trainListView.Columns.Add("Zugnummer");
-            trainListView.Columns.Add("Farbe");
-            trainListView.Columns.Add("Linienstärke");
-            trainListView.Columns.Add("Zug zeichnen");
+            cc = new ColorCollection();
+
+            gridView.Columns.Add(new GridColumn()
+            {
+                DataCell = new TextBoxCell { Binding = Binding.Property<Train, string>(t => t.TName) },
+                HeaderText = "Zugnummer"
+            });
+            gridView.Columns.Add(new GridColumn()
+            {
+                DataCell = new TextBoxCell { Binding = Binding.Property<Train, string>(t => cc.ToName(new TrainStyle(t).TrainColor ?? attrs.TrainColor)) },
+                HeaderText = "Farbe"
+            });
+            gridView.Columns.Add(new GridColumn()
+            {
+                DataCell = new TextBoxCell { Binding = Binding.Property<Train, string>(t => (new TrainStyle(t).TrainWidth ?? attrs.TrainWidth).ToString()) },
+                HeaderText = "Linienstärke"
+            });
+            gridView.Columns.Add(new GridColumn()
+            {
+                DataCell = new TextBoxCell { Binding = Binding.Property<Train, string>(t => new TrainStyle(t).Show.ToString()) },
+                HeaderText = "Zug zeichnen"
+            });
+
+            gridView.CellDoubleClick += (s, e) => EditColor(false);
         }
 
         public TrainColorForm(IInfo info) : this()
@@ -40,31 +65,17 @@ namespace FPLedit.BildfahrplanExport
 
         private void UpdateTrains()
         {
-            trainListView.Items.Clear();
-            foreach (var train in tt.Trains)
-            {
-                var style = new TrainStyle(train);
-                trainListView.Items.Add(new ListViewItem(new [] {
-                    train.TName,
-                    ColorHelper.NameFromColor(style.TrainColor ?? attrs.TrainColor),
-                    (style.TrainWidth ?? attrs.TrainWidth).ToString(),
-                    style.Show.ToString()})
-                { Tag = train });
-            }
-
-            trainListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-            trainListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            gridView.DataStore = tt.Trains;
         }
 
         private void EditColor(bool message = true)
         {
-            if (trainListView.SelectedItems.Count > 0)
+            if (gridView.SelectedItem != null)
             {
-                ListViewItem item = trainListView.Items[trainListView.SelectedIndices[0]];
-                Train train = tt.Trains[tt.Trains.IndexOf((Train)item.Tag)];
+                var train = (Train)gridView.SelectedItem;
 
                 TrainColorEditForm tcef = new TrainColorEditForm(train);
-                if (tcef.ShowDialog() == DialogResult.OK)
+                if (tcef.ShowModal(this) == DialogResult.Ok)
                     UpdateTrains();
             }
             else if (message)
@@ -73,22 +84,19 @@ namespace FPLedit.BildfahrplanExport
 
         private void cancelButton_Click(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.Cancel;
+            Result = DialogResult.Cancel;
             info.RestoreTimetable();
             Close();
         }
 
         private void closeButton_Click(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.OK;
+            Result = DialogResult.Ok;
             info.ClearBackup();
             Close();
         }
 
         private void editButton_Click(object sender, EventArgs e)
             => EditColor();
-
-        private void trainListView_MouseDoubleClick(object sender, MouseEventArgs e)
-            => EditColor(false);
     }
 }

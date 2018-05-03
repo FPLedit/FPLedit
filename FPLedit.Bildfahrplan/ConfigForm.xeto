@@ -1,0 +1,90 @@
+﻿<e:ConfigForm
+  xmlns="clr-namespace:Eto.Forms;assembly=Eto"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:e="clr-namespace:FPLedit.BildfahrplanExport;assembly=FPLedit.Bildfahrplan"
+  xmlns:sys="clr-namespace:System;assembly=mscorlib"
+  DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
+  Title="Darstellung ändern" Resizable="false">
+  <TableLayout Spacing="5,5" Padding="10,10,10,10">
+    <TableRow>
+      <TableLayout Spacing="5,5">
+        <TableRow>
+          <Label>Hintergrundfarbe</Label>
+          <DropDown x:Name="bgColorComboBox" Width="150" />
+        </TableRow>
+        <TableRow>
+          <Label>Bahnhofslinienfarbe, -stärke</Label>
+          <DropDown x:Name="stationColorComboBox" Width="150" />
+          <DropDown x:Name="stationWidthComboBox" Width="60" />
+        </TableRow>
+        <TableRow>
+          <Label>Zeitlinienfarbe</Label>
+          <DropDown x:Name="timeColorComboBox" Width="150" />
+        </TableRow>
+        <TableRow>
+          <Label>Zeitlinienstärke zur vollen Stunde</Label>
+          <TableCell />
+          <DropDown x:Name="hourTimeWidthComboBox" Width="60" />
+        </TableRow>
+        <TableRow>
+          <Label>Zeitlinienstärke</Label>
+          <TableCell />
+          <DropDown x:Name="minuteTimeWidthComboBox" Width="60" />
+        </TableRow>
+        <TableRow>
+          <Label>Zuglinienfarbe, -stärke</Label>
+          <DropDown x:Name="trainColorComboBox" Width="150" />
+          <DropDown x:Name="trainWidthComboBox" Width="60" />
+        </TableRow>
+        <TableRow>
+          <Label>Bahnhofsschriftart, -größe</Label>
+          <DropDown x:Name="stationFontComboBox" Width="150" />
+          <DropDown x:Name="stationFontSizeComboBox" Width="60" />
+        </TableRow>
+        <TableRow>
+          <Label>Zeitenschriftart, -größe</Label>
+          <DropDown x:Name="timeFontComboBox" Width="150" />
+          <DropDown x:Name="timeFontSizeComboBox" Width="60" />
+        </TableRow>
+        <TableRow>
+          <Label>Zugnummernschriftart, -größe</Label>
+          <DropDown x:Name="trainFontComboBox" Width="150" />
+          <DropDown x:Name="trainFontSizeComboBox" Width="60" />
+        </TableRow>
+        <!-- CheckBoxes -->
+        <TableRow>
+          <CheckBox x:Name="stationLinesCheckBox">Linien für stehende Züge in Bahnhöfen</CheckBox>
+        </TableRow>
+        <TableRow>
+          <CheckBox x:Name="includeKilometreCheckBox">Streckenkilometer anzeigen</CheckBox>
+        </TableRow>
+        <TableRow>
+          <CheckBox x:Name="drawStationNamesCheckBox">Stationsnamen anzeigen</CheckBox>
+        </TableRow>
+        <TableRow>
+          <Label>Höhe pro Stunde</Label>
+          <TextBox x:Name="heightPerHourTextBox" Width="150"></TextBox>
+        </TableRow>
+        <TableRow>
+          <Label>Startzeit</Label>
+          <TextBox x:Name="startTimeTextBox" Width="150"></TextBox>
+          <!-- TODO: pattern -->
+        </TableRow>
+        <TableRow>
+          <Label>Endzeit</Label>
+          <TextBox x:Name="endTimeTextBox" Width="150"></TextBox>
+          <!-- TODO: pattern -->
+        </TableRow>
+      </TableLayout>
+    </TableRow>
+    <TableRow>
+      <TableLayout Spacing="5,5">
+        <TableRow>
+          <TableCell ScaleWidth="true" />
+          <Button x:Name="cancelButton" Text="Abbrechen" Click="cancelButton_Click"></Button>
+          <Button x:Name="closeButton" Text="Schließen" Click="closeButton_Click"></Button>
+        </TableRow>
+      </TableLayout>
+    </TableRow>
+  </TableLayout>
+</e:ConfigForm>

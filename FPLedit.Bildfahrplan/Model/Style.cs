@@ -88,13 +88,10 @@ namespace FPLedit.BildfahrplanExport.Model
                 return defaultValue;
 
             if (def.StartsWith("#"))
-                return ColorHelper.ColorFromHex(def);
+                return ColorHelper.FromHexString(def);
 
             if (def.StartsWith("c(") && def.EndsWith(")"))
-            {
-                var parts = def.Substring(2, def.Length - 3).Split(',');
-                return Color.FromArgb(int.Parse(parts[0]), int.Parse(parts[1]), int.Parse(parts[2]));
-            }
+                return ColorHelper.FromJtg2CustomColor(def);
 
             if (jtraingraphColors.ContainsKey(def))
                 return jtraingraphColors[def];
@@ -107,10 +104,10 @@ namespace FPLedit.BildfahrplanExport.Model
 
         protected string ColorToString(Color color)
         {
-            if (_parent.GetAttribute<string>("version") == "009")
-                return ColorHelper.HexFromColor(color); // jTG 3.0
+            if (_parent.GetAttribute<string>("version") != "008")
+                return ColorHelper.ToHexString(color); // jTG 3.0, FPLext
 
-            return "c(" + color.R + "," + color.G + "," + color.B + ")"; // jTG 2.x
+            return ColorHelper.ToJtg2CustomColor(color); // jTG 2.x
         }
         #endregion
     }

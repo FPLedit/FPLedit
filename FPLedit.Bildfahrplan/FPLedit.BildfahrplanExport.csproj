@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FPLedit.BildfahrplanExport</RootNamespace>
     <AssemblyName>FPLedit.Bildfahrplan</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,8 +30,17 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Eto, Version=2.4.0.0, Culture=neutral, PublicKeyToken=7187232a5547c00c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libs\Eto.dll</HintPath>
+    </Reference>
+    <Reference Include="Eto.Serialization.Xaml, Version=2.4.0.0, Culture=neutral, PublicKeyToken=7187232a5547c00c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libs\Eto.Serialization.Xaml.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -42,20 +52,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ColorCollection.cs" />
     <Compile Include="Model\TimetableStyle.cs" />
     <Compile Include="BitmapExport.cs" />
     <Compile Include="ColorHelper.cs" />
-    <Compile Include="ConfigForm.cs">
-      <SubType>Form</SubType>
+    <Compile Include="ConfigForm.xeto.cs">
+      <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="ConfigForm.Designer.cs">
-      <DependentUpon>ConfigForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DateControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="DateControl.Designer.cs">
-      <DependentUpon>DateControl.cs</DependentUpon>
+    <Compile Include="DateControl.xeto.cs">
+      <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Render\Margins.cs" />
     <Compile Include="Plugin.cs" />
@@ -66,16 +71,10 @@
     <Compile Include="Render\TrainRenderer.cs" />
     <Compile Include="TimeSpanExtensions.cs" />
     <Compile Include="TrainColorForm.cs">
-      <SubType>Form</SubType>
+      <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="TrainColorForm.Designer.cs">
-      <DependentUpon>TrainColorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="TrainColorEditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TrainColorEditForm.Designer.cs">
-      <DependentUpon>TrainColorEditForm.cs</DependentUpon>
+    <Compile Include="TrainColorEditForm.xeto.cs">
+      <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Model\TrainStyle.cs" />
   </ItemGroup>
@@ -84,19 +83,29 @@
       <Project>{ce38d005-22b2-4b15-80ba-614f038240fd}</Project>
       <Name>FPLedit.Shared</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FPLedit.UI\FPLedit.Shared.UI.csproj">
+      <Project>{5A1A083A-1308-488A-8A6B-ED8C1936B7C4}</Project>
+      <Name>FPLedit.Shared.UI</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ConfigForm.resx">
-      <DependentUpon>ConfigForm.cs</DependentUpon>
+    <EmbeddedResource Include="DateControl.xeto">
+      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="DateControl.resx">
-      <DependentUpon>DateControl.cs</DependentUpon>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ConfigForm.xeto">
+      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="TrainColorForm.resx">
-      <DependentUpon>TrainColorForm.cs</DependentUpon>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="TrainColorEditForm.xeto">
+      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="TrainColorEditForm.resx">
-      <DependentUpon>TrainColorEditForm.cs</DependentUpon>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="TrainColorForm.xeto">
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

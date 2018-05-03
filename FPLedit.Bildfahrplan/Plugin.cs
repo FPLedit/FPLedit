@@ -1,6 +1,8 @@
-﻿using FPLedit.BildfahrplanExport.Model;
+﻿using Eto.Forms;
+using FPLedit.BildfahrplanExport.Model;
 using FPLedit.BildfahrplanExport.Render;
 using FPLedit.Shared;
+using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,7 +11,6 @@ using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 
 namespace FPLedit.BildfahrplanExport
 {
@@ -17,10 +18,11 @@ namespace FPLedit.BildfahrplanExport
     public class Plugin : IPlugin
     {
         private IInfo info;
-        private ToolStripItem showItem, configItem, trainColorItem, printItem;
+        private ButtonMenuItem showItem, configItem, trainColorItem, printItem;
         private Renderer renderer;
-        private Form frm;
-        private Panel panel;
+        private Dialog frm;
+        private Drawable panel;
+        private Scrollable scrollable;
         private DateControl dtc;
 
         private TimetableStyle attrs;
@@ -32,22 +34,21 @@ namespace FPLedit.BildfahrplanExport
 
             info.Register<IExport>(new BitmapExport());
 
-            ToolStripMenuItem item = new ToolStripMenuItem("Bildfahrplan");
-            info.Menu.Items.AddRange(new[] { item });
+            ButtonMenuItem item = ((MenuBar)info.Menu).CreateItem("Bildfahrplan");
 
-            showItem = item.DropDownItems.Add("Anzeigen");
+            showItem = item.CreateItem("Anzeigen");
             showItem.Enabled = false;
             showItem.Click += ShowItem_Click;
 
-            configItem = item.DropDownItems.Add("Darstellung ändern");
+            configItem = item.CreateItem("Darstellung ändern");
             configItem.Enabled = false;
             configItem.Click += ConfigItem_Click;
 
-            printItem = item.DropDownItems.Add("Drucken");
+            printItem = item.CreateItem("Drucken");
             printItem.Enabled = false;
             printItem.Click += PrintItem_Click;
 
-            trainColorItem = item.DropDownItems.Add("Zugdarstellung ändern");
+            trainColorItem = item.CreateItem("Zugdarstellung ändern");
             trainColorItem.Enabled = false;
             trainColorItem.Click += TrainColorItem_Click;
         }
@@ -77,7 +78,7 @@ namespace FPLedit.BildfahrplanExport
         {
             info.StageUndoStep();
             TrainColorForm tcf = new TrainColorForm(info);
-            if (tcf.ShowDialog() == DialogResult.OK)
+            if (tcf.ShowModal(info.RootForm) == DialogResult.Ok)
                 info.SetUnsaved();
         }
 
@@ -85,7 +86,7 @@ namespace FPLedit.BildfahrplanExport
         {
             info.StageUndoStep();
             ConfigForm cnf = new ConfigForm(info.Timetable);
-            if (cnf.ShowDialog() == DialogResult.OK)
+            if (cnf.ShowModal(info.RootForm) == DialogResult.Ok)
                 info.SetUnsaved();
         }
 
@@ -102,50 +103,59 @@ namespace FPLedit.BildfahrplanExport
         {
             var route = (info.Timetable.Type == TimetableType.Network) ? info.FileState.SelectedRoute : Timetable.LINEAR_ROUTE_ID;
             renderer = new Renderer(info.Timetable, route);
-            frm = new Form
+            frm = new Dialog
             {
-                Height = 1000,
-                Width = 1000,
-                ShowIcon = false,
                 ShowInTaskbar = false,
-                Text = "Bildfahrplan",
-                MaximizeBox = false,
-                AutoScroll = true,
-                AutoSize = false
+                Title = "Bildfahrplan",
+                Maximizable = false,
             };
 
-            dtc = new DateControl(info.Timetable);
-            dtc.Dock = DockStyle.Top;
-            dtc.ValueChanged += Dtc_ValueChanged;
-            frm.Controls.Add(dtc);
+            var stackLayout = new StackLayout();
+            frm.Content = stackLayout;
 
-            panel = new Panel();
-            panel.Width = frm.ClientSize.Width - SystemInformation.VerticalScrollBarWidth;
-            panel.Height = renderer.GetHeight();
-            panel.Top = dtc.Height;
-            frm.Controls.Add(panel);
+            dtc = new DateControl(info.Timetable);
+            dtc.ValueChanged += Dtc_ValueChanged;
+            stackLayout.Items.Add(dtc);
+
+            panel = new Drawable
+            {
+                Height = renderer.GetHeight(),
+                Width = 800
+            };
             panel.Paint += Panel_Paint;
 
-            frm.ShowDialog();
+            scrollable = new Scrollable
+            {
+                ExpandContentWidth = false,
+                ExpandContentHeight = false,
+                Height = 800,
+                Content = panel,
+            };
+            stackLayout.Items.Add(scrollable);
+
+            frm.ShowModal(info.RootForm);
         }
 
         private void Dtc_ValueChanged(object sender, EventArgs e)
         {
             renderer = new Renderer(info.Timetable, Timetable.LINEAR_ROUTE_ID);
-            frm.Controls.Remove(panel);
-            panel = new Panel();
-            panel.Width = frm.ClientSize.Width - SystemInformation.VerticalScrollBarWidth;
             panel.Height = renderer.GetHeight();
-            panel.Top = dtc.Height;
-            frm.Controls.Add(panel);
-            panel.Paint += Panel_Paint;
+            panel.Invalidate();
         }
 
         private void Panel_Paint(object sender, PaintEventArgs e)
         {
-            frm.Width = 1000;
-            frm.Height = 1000;
-            renderer.Draw(e.Graphics);
+            renderer.width = panel.Width;
+
+            using (var bmp = new Bitmap(panel.Width, renderer.GetHeight()))
+            using (var g = Graphics.FromImage(bmp))
+            using (var ms = new MemoryStream())
+            {
+                renderer.Draw(g);
+                bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+                using (var eto = new Eto.Drawing.Bitmap(ms.ToArray()))
+                    e.Graphics.DrawImage(eto, new Eto.Drawing.PointF(0, 0));
+            }
         }
         #endregion
     }

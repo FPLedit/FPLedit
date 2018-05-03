@@ -1,0 +1,16 @@
+﻿<e:DateControl
+  xmlns="clr-namespace:Eto.Forms;assembly=Eto"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:e="clr-namespace:FPLedit.BildfahrplanExport;assembly=FPLedit.Bildfahrplan"
+  xmlns:sys="clr-namespace:System;assembly=mscorlib" Padding="5,5,5,5">
+  <StackLayout Orientation="Horizontal" VerticalContentAlignment="Center" Spacing="5">
+    <CheckBox Checked="true" x:Name="mondayCheckBox" Text="Montag" />
+    <CheckBox Checked="true" x:Name="tuesdayCheckBox" Text="Dienstag" />
+    <CheckBox Checked="true" x:Name="wednesdayCheckBox" Text="Mittowch" />
+    <CheckBox Checked="true" x:Name="thursdayCheckBox" Text="Donnerstag" />
+    <CheckBox Checked="true" x:Name="fridayCheckBox" Text="Freitag" />
+    <CheckBox Checked="true" x:Name="saturdayCheckBox" Text="Samstag" />
+    <CheckBox Checked="true" x:Name="sundayCheckBox" Text="Sonntag" />
+    <Button Click="preferencesButton_Click">Darstellung ändern</Button>
+  </StackLayout>
+</e:DateControl>
