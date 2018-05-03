@@ -52,7 +52,7 @@ namespace FPLedit.Kursbuch.Model
 
         private void ParseLinear()
         {
-            var toParse = attrs.GetAttribute(ATTR, "");
+            var toParse = attrs.GetAttribute<string>(ATTR);
             kbsns.Add(Timetable.LINEAR_ROUTE_ID, toParse);
         }
 

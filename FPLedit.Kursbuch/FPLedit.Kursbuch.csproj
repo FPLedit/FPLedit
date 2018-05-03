@@ -30,6 +30,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Eto, Version=2.4.0.0, Culture=neutral, PublicKeyToken=7187232a5547c00c" />
+    <Reference Include="Eto.Serialization.Xaml, Version=2.4.0.0, Culture=neutral, PublicKeyToken=7187232a5547c00c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libs\Eto.Serialization.Xaml.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -45,11 +50,8 @@
     <Compile Include="..\build_scripts\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="Forms\SettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Forms\SettingsControl.Designer.cs">
-      <DependentUpon>SettingsControl.cs</DependentUpon>
+    <Compile Include="Forms\SettingsControl.xeto.cs">
+      <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Forms\SettingsControlProxy.cs" />
     <Compile Include="KfplTemplateChooser.cs" />
@@ -74,7 +76,9 @@
       <Name>FPLedit.Shared</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\SettingsControl.xeto" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\TryoutScript.txt" />
     <EmbeddedResource Include="Templates\KfplTemplate.fpltmpl">
@@ -85,9 +89,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Forms\SettingsControl.resx">
-      <DependentUpon>SettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

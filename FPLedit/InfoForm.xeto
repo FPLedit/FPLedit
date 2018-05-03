@@ -1,0 +1,41 @@
+﻿<c:InfoForm
+  xmlns="clr-namespace:Eto.Forms;assembly=Eto"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:c="clr-namespace:FPLedit;assembly=FPLedit"
+  xmlns:sys="clr-namespace:System;assembly=mscorlib"
+  DefaultButton="{x:Reference closeButton}"
+  Title="Info über FPLedit" ClientSize="380,400" Resizable="false">
+  <TableLayout Spacing="5,5" Padding="10,10,10,10">
+    <TableRow>
+      <TableLayout Spacing="5,5">
+        <TableRow>
+          <TableCell>
+            <Label x:Name="versionLabel">Version {version}</Label>
+          </TableCell>
+          <TableCell ScaleWidth="True">
+          </TableCell>
+          <TableCell>
+            <Button x:Name="checkButton" Click="checkButton_Click">Auf neue Version prüfen</Button>
+          </TableCell>
+        </TableRow>
+      </TableLayout>
+    </TableRow>
+    <TableRow>
+      <StackLayout>
+        <Label>© 2015-2018 Manuel Huber</Label>
+        <LinkButton Click="docuLink_Click">Online-Dokumentation</LinkButton>
+      </StackLayout>
+    </TableRow>
+    <TableRow ScaleHeight="True">
+      <GroupBox Text="Lizenz / Hinweise">
+        <TextArea ReadOnly="true" x:Name="licenseTextArea" />
+      </GroupBox>
+    </TableRow>
+    <TableRow>
+      <CheckBox x:Name="updateCheckBox">Automatische Überprüfung auf Updates beim Programmstart aktivieren. (Dabei wird Ihre IP-Adresse an den Server übermittelt)</CheckBox>
+    </TableRow>
+    <TableRow>
+      <Button x:Name="closeButton" Click="closeButton_Click">Schließen</Button>
+    </TableRow>
+  </TableLayout>
+</c:InfoForm>

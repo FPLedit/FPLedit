@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FPLedit.Aushangfahrplan</RootNamespace>
     <AssemblyName>FPLedit.Aushangfahrplan</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,16 +30,19 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Eto, Version=2.4.0.0, Culture=neutral, PublicKeyToken=7187232a5547c00c" />
+    <Reference Include="Eto.Serialization.Xaml, Version=2.4.0.0, Culture=neutral, PublicKeyToken=7187232a5547c00c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libs\Eto.Serialization.Xaml.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -48,10 +53,7 @@
     <Compile Include="Forms\FilterableHandler.cs" />
     <Compile Include="Forms\Preview.cs" />
     <Compile Include="Forms\SettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Forms\SettingsControl.Designer.cs">
-      <DependentUpon>SettingsControl.cs</DependentUpon>
+      <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Forms\SettingsControlProxy.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -73,9 +75,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Forms\SettingsControl.resx">
-      <DependentUpon>SettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\abfahrt-text.svg" />
     <Content Include="Resources\TryoutScript.txt" />
     <EmbeddedResource Include="Templates\AfplTemplate.fpltmpl">
@@ -95,6 +94,9 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\SettingsControl.xeto" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

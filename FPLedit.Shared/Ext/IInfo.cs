@@ -1,4 +1,5 @@
-﻿using FPLedit.Shared.Templating;
+﻿using Eto.Forms;
+using FPLedit.Shared.Templating;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -41,6 +42,8 @@ namespace FPLedit.Shared
         void StageUndoStep();
 
         dynamic Menu { get; }
+
+        dynamic RootForm { get; }
 
         ILog Logger { get; }
 

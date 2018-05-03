@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FPLedit.Shared;
-using System.Windows.Forms;
+using Eto.Forms;
 
 namespace FPLedit.Buchfahrplan.Forms
 {
@@ -16,7 +16,7 @@ namespace FPLedit.Buchfahrplan.Forms
         {
             info.StageUndoStep();
             VelocityForm svf = new VelocityForm(info, route);
-            if (svf.ShowDialog() == DialogResult.OK)
+            if (svf.ShowModal() == DialogResult.Ok)
                 info.SetUnsaved();
         }
 

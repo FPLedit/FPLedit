@@ -2,7 +2,7 @@
  * FPLedit Release-Prozess
  * Erstellt aus einem Ordner mit Kompilaten eine ZIP-Datei
  * Aufruf mit Pfad zum Ordner der Kompilate
- * Version 0.4 / (c) Manuel Huber 2018
+ * Version 0.5 / (c) Manuel Huber 2018
  */
 
 #r "System.IO.Compression.FileSystem.dll"
@@ -32,13 +32,28 @@ foreach (var f in files)
     Console.WriteLine(f.Name);
 }
 
-Console.WriteLine("Entferne Installer!\n");
+Console.WriteLine("Entferne Installer!");
 files = info.GetFiles("FPLedit.Installer.exe");
 foreach (var f in files)
 {
     File.Delete(f.FullName);
     Console.WriteLine(f.Name);
 }
+
+/*
+ * TASK: Move eto files
+ */
+Console.WriteLine("Verschiebe Eto-Bibliotheken!");
+files = info.GetFiles("Eto.*");
+var eto_dest = info.CreateSubdirectory("eto");
+foreach (var f in files)
+{
+    var fname = Path.Combine(eto_dest.FullName, f.Name);
+    f.MoveTo(fname);
+    Console.WriteLine(f.Name);
+}
+
+Console.WriteLine();
 
 /*
  * TASK: Build new license file

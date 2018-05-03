@@ -1,0 +1,52 @@
+﻿<e:SettingsControl
+  xmlns="clr-namespace:Eto.Forms;assembly=Eto"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:e="clr-namespace:FPLedit.Kursbuch.Forms;assembly=FPLedit.Kursbuch"
+  xmlns:sys="clr-namespace:System;assembly=mscorlib">
+  <TableLayout Spacing="5,5" Padding="10">
+    <TableRow>
+      <Label>Tabellenfahrplan-Vorlage</Label>
+      <TableCell ScaleWidth="true">
+        <DropDown x:Name="templateComboBox" />
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <Label>Schriftart im Tabellenfpl.</Label>
+      <TableCell ScaleWidth="true">
+        <ComboBox x:Name="fontComboBox" />
+      </TableCell>
+      <Label x:Name="exampleLabel">Besipiel</Label>
+    </TableRow>
+    <TableRow>
+      <Label>Schriftart für Kursbuchstr.</Label>
+      <TableCell ScaleWidth="true">
+        <ComboBox x:Name="hefontComboBox" />
+      </TableCell>
+      <Label x:Name="heexampleLabel">Besipiel</Label>
+    </TableRow>
+    <TableRow ScaleHeight="true">
+      <StackLayout Spacing="5">
+        <Label>Kursbuchstreckennummern</Label>
+        <Label Width="100">Zum Bearbeiten zwei Mal mit Kurzem Abstand auf den Eintrag klicken</Label>
+      </StackLayout>
+      <TableCell ScaleWidth="true">
+        <GridView x:Name="kbsnListView"></GridView>
+      </TableCell>
+    </TableRow>
+    <TableRow ScaleHeight="true">
+      <StackLayout Spacing="5">
+        <Label x:Name="cssLabel">Eigene CSS-Styles</Label>
+        <LinkButton Click="cssHelpLinkLabel_LinkClicked" x:Name="cssHelpLinkLabel">Hilfe zu CSS</LinkButton>
+      </StackLayout>
+      <TableCell ScaleWidth="true">
+        <TextArea x:Name="cssTextBox"></TextArea>
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell></TableCell>
+      <TableCell ScaleWidth="true">
+        <CheckBox x:Name="consoleCheckBox">CSS-Test-Konsole bei Vorschau aktivieren (Gilt für alle Fahrpläne)</CheckBox>
+      </TableCell>
+    </TableRow>
+  </TableLayout>
+</e:SettingsControl>

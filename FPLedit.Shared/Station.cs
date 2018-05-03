@@ -73,7 +73,7 @@ namespace FPLedit.Shared
             get
             {
                 if (_parent.Type == TimetableType.Linear)
-                    return new[] { 0 }; //TODO: Any problems here?
+                    return new[] { 0 };
                 return GetAttribute("fpl-rt", "")
                     .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                     .Select(s => int.Parse(s)).ToArray();
