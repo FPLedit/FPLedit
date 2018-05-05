@@ -36,6 +36,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libs", "libs", "{A2218283-E
 		libs\Eto.Serialization.Xaml.dll = libs\Eto.Serialization.Xaml.dll
 		libs\Eto.WinForms.dll = libs\Eto.WinForms.dll
 		libs\Eto.Wpf.dll = libs\Eto.Wpf.dll
+		libs\LICENSE.txt = libs\LICENSE.txt
 		libs\Newtonsoft.Json.dll = libs\Newtonsoft.Json.dll
 	EndProjectSection
 EndProject

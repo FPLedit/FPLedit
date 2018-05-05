@@ -1,8 +1,10 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
+using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,12 +13,12 @@ namespace FPLedit
 {
     internal class InfoForm : Dialog
     {
-        #pragma warning disable CS0649
+#pragma warning disable CS0649
         private TextArea licenseTextArea;
         private Label versionLabel;
         private CheckBox updateCheckBox;
         private Button checkButton;
-        #pragma warning restore CS0649
+#pragma warning restore CS0649
 
         private UpdateManager mg;
 
@@ -26,7 +28,10 @@ namespace FPLedit
 
             mg = new UpdateManager(settings);
 
-            licenseTextArea.Text = FPLedit.Properties.Resources.Info;
+            using (var stream = this.GetResource("Resources.Info.txt"))
+            using (var sr = new StreamReader(stream))
+                licenseTextArea.Text = sr.ReadToEnd();
+
             versionLabel.Text = versionLabel.Text.Replace("{version}", mg.GetCurrentVersion().ToString());
             updateCheckBox.Checked = mg.AutoUpdateEnabled;
         }
