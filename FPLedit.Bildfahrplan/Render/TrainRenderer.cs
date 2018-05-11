@@ -1,4 +1,5 @@
-﻿using FPLedit.BildfahrplanExport.Model;
+﻿using FPLedit.BildfahrplanExport.Helpers;
+using FPLedit.BildfahrplanExport.Model;
 using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,8 @@ namespace FPLedit.BildfahrplanExport.Render
         private TimetableStyle attrs;
         private TimeSpan startTime;
         private Dictionary<Station, float> stationOffsets;
+
+        private DashStyleHelper ds = new DashStyleHelper();
 
         public TrainRenderer(List<Station> stations, Timetable tt, Margins margin, TimeSpan startTime, Dictionary<Station, float> stationOffsets)
         {
@@ -65,6 +68,7 @@ namespace FPLedit.BildfahrplanExport.Render
             }
 
             var pen = new Pen(style.TrainColor ?? attrs.TrainColor, tWidth);
+            pen.DashPattern = ds.ParseDashstyle(style.LineStyle);
             var brush = new SolidBrush(style.TrainColor ?? attrs.TrainColor);
 
             for (int i = 0; i < points.Count; i += 2)

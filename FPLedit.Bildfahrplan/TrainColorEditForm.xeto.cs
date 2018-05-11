@@ -1,4 +1,5 @@
 ﻿using Eto.Forms;
+using FPLedit.BildfahrplanExport.Helpers;
 using FPLedit.BildfahrplanExport.Model;
 using FPLedit.Shared;
 using System;
@@ -13,9 +14,10 @@ namespace FPLedit.BildfahrplanExport
 
         private TrainStyle style;
         private ColorCollection cc;
+        private DashStyleHelper ds;
 
 #pragma warning disable CS0649
-        private DropDown colorComboBox, widthComboBox;
+        private DropDown colorComboBox, widthComboBox, dashComboBox;
         private CheckBox drawCheckBox;
 #pragma warning restore CS0649
 
@@ -24,12 +26,16 @@ namespace FPLedit.BildfahrplanExport
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
             cc = new ColorCollection();
+            ds = new DashStyleHelper();
 
             colorComboBox.DataStore = cc.ColorHexStrings;
             colorComboBox.ItemTextBinding = cc.ColorBinding;
 
             widthComboBox.DataStore = Enumerable.Range(1, 5).Cast<object>();
             widthComboBox.ItemTextBinding = Binding.Property<int, string>(c => c.ToString());
+
+            dashComboBox.DataStore = ds.Indices.Cast<object>();
+            dashComboBox.ItemTextBinding = Binding.Property<int, string>(i => ds.GetDescription(i));
         }
 
         public TrainColorEditForm(Train train) : this()
@@ -40,6 +46,7 @@ namespace FPLedit.BildfahrplanExport
 
             colorComboBox.SelectedValue = ColorHelper.ToHexString(style.TrainColor ?? attrs.TrainColor);
             widthComboBox.SelectedValue = style.TrainWidth ?? attrs.TrainWidth;
+            dashComboBox.SelectedValue = style.LineStyle;
             drawCheckBox.Checked = style.Show;
         }
 
@@ -49,6 +56,7 @@ namespace FPLedit.BildfahrplanExport
 
             style.TrainColor = ColorHelper.FromHexString((string)colorComboBox.SelectedValue);
             style.TrainWidth = (int)widthComboBox.SelectedValue;
+            style.LineStyle = (int)dashComboBox.SelectedValue;
             style.Show = drawCheckBox.Checked.Value;
             Close();
         }

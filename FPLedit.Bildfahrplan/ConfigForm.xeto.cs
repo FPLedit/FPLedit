@@ -22,7 +22,7 @@ namespace FPLedit.BildfahrplanExport
         private TextBox heightPerHourTextBox;
         private TextBox startTimeTextBox;
         private TextBox endTimeTextBox;
-        private CheckBox includeKilometreCheckBox, drawStationNamesCheckBox, stationLinesCheckBox;
+        private CheckBox includeKilometreCheckBox, drawStationNamesCheckBox, stationLinesCheckBox, stationVerticalCheckBox;
 #pragma warning restore CS0649
         private NumberValidator heightPerHourValidator;
 
@@ -90,6 +90,7 @@ namespace FPLedit.BildfahrplanExport
             stationLinesCheckBox.Checked = attrs.StationLines;
             includeKilometreCheckBox.Checked = attrs.DisplayKilometre;
             drawStationNamesCheckBox.Checked = attrs.DrawHeader;
+            stationVerticalCheckBox.Checked = attrs.StationVertical;
 
             heightPerHourTextBox.Text = attrs.HeightPerHour.ToString();
             startTimeTextBox.Text = attrs.StartTime.ToShortTimeString();
@@ -121,6 +122,7 @@ namespace FPLedit.BildfahrplanExport
             attrs.StationLines = stationLinesCheckBox.Checked.Value;
             attrs.DisplayKilometre = includeKilometreCheckBox.Checked.Value;
             attrs.DrawHeader = drawStationNamesCheckBox.Checked.Value;
+            attrs.StationVertical = stationVerticalCheckBox.Checked.Value;
 
             attrs.HeightPerHour = int.Parse(heightPerHourTextBox.Text);
             attrs.StartTime = TimeSpan.Parse(startTimeTextBox.Text.Replace("24:", "1.00:"));

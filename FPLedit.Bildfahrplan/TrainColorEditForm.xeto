@@ -14,6 +14,10 @@
           <DropDown x:Name="widthComboBox" Width="60" />
         </TableRow>
         <TableRow>
+          <Label>Linieanart</Label>
+          <DropDown x:Name="dashComboBox" Width="150" />
+        </TableRow>
+        <TableRow>
           <CheckBox x:Name="drawCheckBox">Zug zeichnen</CheckBox>
         </TableRow>
       </TableLayout>

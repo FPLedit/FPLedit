@@ -17,8 +17,6 @@ namespace FPLedit.BildfahrplanExport.Render
         private Timetable tt;
         private int route;
 
-        private StringFormat format = new StringFormat(StringFormatFlags.DirectionVertical); //TODO: Konfigurierbar
-
         private bool marginsCalced = false;
         private Margins margin = new Margins(10, 20, 20, 20);
         public float width = 0, height = 0;
@@ -45,10 +43,12 @@ namespace FPLedit.BildfahrplanExport.Render
             if (!marginsCalced)
             {
                 // MarginTop berechnen
-                List<float> ssizes = new List<float>();
-                foreach (var sta in tt.Stations)
-                    ssizes.Add(g.MeasureString(sta.ToString(attrs.DisplayKilometre, route), attrs.StationFont).Width);
-                margin.Top = attrs.DrawHeader ? ssizes.Max() + margin.Top : margin.Top;
+                float sMax = 0f;
+                if (attrs.StationVertical)
+                    sMax = tt.Stations.Max(sta => g.MeasureString(sta.ToString(attrs.DisplayKilometre, route), attrs.StationFont).Width);
+                else
+                    sMax = g.MeasureString("M", attrs.StationFont).Height;
+                margin.Top = attrs.DrawHeader ? sMax + margin.Top : margin.Top;
 
                 // MarginLeft berechnen
                 List<float> tsizes = new List<float>();
@@ -78,6 +78,9 @@ namespace FPLedit.BildfahrplanExport.Render
             var lastStation = stations.Last();
             var stationOffsets = new Dictionary<Station, float>();
 
+            var verticalFormat = new StringFormat(StringFormatFlags.DirectionVertical);
+            var stationBrush = new SolidBrush(attrs.StationColor);
+
             foreach (var sta in stations)
             {
                 var kil = sta.Positions.GetPosition(route) - firstStation.Positions.GetPosition(route);
@@ -91,9 +94,15 @@ namespace FPLedit.BildfahrplanExport.Render
 
                 g.DrawLine(new Pen(attrs.StationColor, attrs.StationWidth), margin.Left + pos, margin.Top - 5, margin.Left + pos, height - margin.Bottom); // Linie
 
+                // Stationsnamen
                 if (attrs.DrawHeader)
-                    g.DrawString(sta.ToString(attrs.DisplayKilometre, route), attrs.StationFont, new SolidBrush(attrs.StationColor), margin.Left + pos - (size.Height / 2), margin.Top - 5 - size.Width, format); // Beschriftung
-
+                {
+                    var display = sta.ToString(attrs.DisplayKilometre, route);
+                    if (attrs.StationVertical)
+                        g.DrawString(display, attrs.StationFont, stationBrush, margin.Left + pos - (size.Height / 2), margin.Top - 5 - size.Width, verticalFormat);
+                    else
+                        g.DrawString(display, attrs.StationFont, stationBrush, margin.Left + pos - (size.Width / 2), margin.Top - size.Height - 5);
+                }
                 stationOffsets.Add(sta, pos);
             }
 

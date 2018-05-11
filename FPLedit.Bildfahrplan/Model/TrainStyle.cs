@@ -1,4 +1,5 @@
-﻿using FPLedit.Shared;
+﻿using FPLedit.BildfahrplanExport.Helpers;
+using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -10,7 +11,6 @@ namespace FPLedit.BildfahrplanExport.Model
     internal class TrainStyle : Style
     {
         private Train train;
-
         public TrainStyle(Train tra) : base(tra._parent)
         {
             train = tra;
@@ -40,6 +40,10 @@ namespace FPLedit.BildfahrplanExport.Model
             set => train.SetAttribute("sh", value.ToString().ToLower());
         }
 
-        //TODO: Linestyle
+        public int LineStyle
+        {
+            get => train.GetAttribute<int>("sy", 0);
+            set => train.SetAttribute("sy", value.ToString());
+        }
     }
 }

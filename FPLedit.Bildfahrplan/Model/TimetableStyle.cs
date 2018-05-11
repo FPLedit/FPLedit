@@ -83,6 +83,12 @@ namespace FPLedit.BildfahrplanExport.Model
             set => tt.SetAttribute("hpH", value.ToString());
         }
 
+        public bool StationVertical
+        {
+            get => tt.GetAttribute<bool>("sHor", true);
+            set => tt.SetAttribute("sHor", value.ToString());
+        }
+
         #region Fonts
 
         public Font StationFont

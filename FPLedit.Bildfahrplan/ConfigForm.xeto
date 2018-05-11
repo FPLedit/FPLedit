@@ -62,6 +62,9 @@
           <CheckBox x:Name="drawStationNamesCheckBox">Stationsnamen anzeigen</CheckBox>
         </TableRow>
         <TableRow>
+          <CheckBox x:Name="stationVerticalCheckBox">Stationsnamen vertikal zeichnen</CheckBox>
+        </TableRow>
+        <TableRow>
           <Label>Höhe pro Stunde</Label>
           <TextBox x:Name="heightPerHourTextBox" Width="150"></TextBox>
         </TableRow>
