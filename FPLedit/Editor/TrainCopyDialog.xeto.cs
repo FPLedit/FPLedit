@@ -12,10 +12,12 @@ namespace FPLedit.Editor
     internal class TrainCopyDialog : Dialog<DialogResult>
     {
         #pragma warning disable CS0649
-        private TextBox offsetTextBox, nameTextBox;
+        private TextBox offsetTextBox, nameTextBox, changeTextBox, countTextBox;
         private CheckBox copyAllCheckBox;
+        private RadioButton copyRadioButton;
+        private TableLayout extendedOptionsTable, copyOptionsTable;
         #pragma warning restore CS0649
-        private NumberValidator numberValidator;
+        private NumberValidator offsetValidator, countValidator, changeValidator;
 
         private Train train;
         private Timetable tt;
@@ -24,36 +26,59 @@ namespace FPLedit.Editor
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            numberValidator = new NumberValidator(offsetTextBox, false, true);
-            numberValidator.ErrorMessage = "Bitte die Verscheibung als Zahl in Minuten angeben!";
+            offsetValidator = new NumberValidator(offsetTextBox, false, true);
+            offsetValidator.ErrorMessage = "Bitte die Verscheibung als Zahl in Minuten angeben!";
+            countValidator = new NumberValidator(countTextBox, false, true);
+            countValidator.ErrorMessage = "Bitte eine gültige Anzahl neuer Züge eingeben!";
+            changeValidator = new NumberValidator(changeTextBox, false, true);
+            changeValidator.ErrorMessage = "Bitte eine gülzige Veränderung der Zugnummer eingeben!";
 
             train = t;
             this.tt = tt;
             nameTextBox.Text = t.TName;
             offsetTextBox.Text = "+20";
+            countTextBox.Text = "1";
+            changeTextBox.Text = "2";
+        }
+
+        private void SelectMode(object sender, EventArgs e)
+        {
+            var copy = copyRadioButton.Checked;
+
+            extendedOptionsTable.Visible = copyOptionsTable.Visible = copy;
         }
 
         private void closeButton_Click(object sender, EventArgs e)
         {
-            if (!numberValidator.Valid)
+            var copy = copyRadioButton.Checked;
+
+            if (!offsetValidator.Valid || (copy && (!countValidator.Valid || !changeValidator.Valid)))
             {
                 MessageBox.Show("Bitte erst alle Felder korrekt ausfüllen!");
                 Result = DialogResult.None;
                 return;
             }
 
+            var th = new TrainEditHelper();
             var offset = int.Parse(offsetTextBox.Text);
 
-            var th = new TrainCopyHelper();
-            var newTrain = th.CopyTrain(train, offset, nameTextBox.Text, copyAllCheckBox.Checked.Value);
-            tt.AddTrain(newTrain, true);
+            if (copy)
+            {
+                var count = int.Parse(countTextBox.Text);
+                var add = int.Parse(changeTextBox.Text);
 
-            Close();
+                var trains = th.CopyTrainMultiple(train, offset, nameTextBox.Text, copyAllCheckBox.Checked.Value, count, add);
+
+                foreach (var newTrain in trains)
+                    tt.AddTrain(newTrain, true);
+            }
+            else
+                th.MoveTrain(train, offset);
+
+            Close(DialogResult.Ok);
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
+            => Close(DialogResult.Cancel);
     }
 }

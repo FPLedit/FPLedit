@@ -100,6 +100,7 @@
     <Compile Include="Editor\DesignableForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
+    <Compile Include="Editor\TrainEditHelper.cs" />
     <Compile Include="Editor\ZlmEditForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
@@ -137,7 +138,6 @@
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Editor\TimeNormalizer.cs" />
-    <Compile Include="Editor\TrainCopyHelper.cs" />
     <Compile Include="ExtensionManager.cs" />
     <Compile Include="ExtensionsForm.xeto.cs">
       <SubType>Eto.Forms</SubType>

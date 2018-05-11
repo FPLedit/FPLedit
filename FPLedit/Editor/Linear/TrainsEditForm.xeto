@@ -23,7 +23,7 @@
             <Button Click="topNewButton_Click">Neuer Zug</Button>
             <Button Click="topEditButton_Click">Zug bearbeiten</Button>
             <Button Click="topDeleteButton_Click">Zug löschen</Button>
-            <Button Click="topCopyButton_Click">Zug kopieren</Button>
+            <Button Click="topCopyButton_Click">Zug kopieren/verschieben</Button>
           </StackLayout>
         </TableRow>
         <TableRow ScaleHeight="True">
@@ -41,7 +41,7 @@
             <Button Click="bottomNewButton_Click">Neuer Zug</Button>
             <Button Click="bottomEditButton_Click">Zug bearbeiten</Button>
             <Button Click="bottomDeleteButton_Click">Zug löschen</Button>
-            <Button Click="bottomCopyButton_Click">Zug kopieren</Button>
+            <Button Click="bottomCopyButton_Click">Zug kopieren/verschieben</Button>
           </StackLayout>
         </TableRow>
       </TableLayout><!-- /contents table -->

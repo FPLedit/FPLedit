@@ -3,10 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace FPLedit.Editor
 {
-    internal class TrainCopyHelper
+    internal class TrainEditHelper
     {
         public Train CopyTrain(Train orig, int offsetMin, string name, bool copyAll)
         {
@@ -46,6 +47,48 @@ namespace FPLedit.Editor
             }
 
             return t;
+        }
+
+        public void MoveTrain(Train t, int offsetMin)
+        {
+            var offset = new TimeSpan(0, offsetMin, 0);
+
+            var path = t.GetPath();
+
+            foreach (var sta in path)
+            {
+                var ardp = t.GetArrDep(sta);
+                if (sta != path.First() && ardp.Arrival != default(TimeSpan))
+                    ardp.Arrival = ardp.Arrival.Add(offset);
+                if (sta != path.Last() && ardp.Departure != default(TimeSpan))
+                    ardp.Departure = ardp.Departure.Add(offset);
+                t.SetArrDep(sta, ardp);
+            }
+        }
+
+        public Train[] CopyTrainMultiple(Train orig, int offsetMin, string name, bool copyAll, int count, int numberAdd)
+        {
+            var ret = new Train[count];
+
+            var nameBase = name.Trim();
+            var last = nameBase.ToCharArray().Last();
+            var num = "";
+            while (char.IsDigit(last))
+            {
+                num = last + num;
+                nameBase = nameBase.Substring(0, nameBase.Length - 1);
+                last = nameBase.ToCharArray().Last();
+            }
+
+            int.TryParse(num, out int start); // Startnummer
+
+            for (int i = 0; i < count; i++)
+            {
+                var n = nameBase + (start + numberAdd * (i + 1)).ToString();
+                ret[i] = CopyTrain(orig, offsetMin * (i + 1), n, copyAll);
+            }
+
+            return ret;
         }
     }
 }
