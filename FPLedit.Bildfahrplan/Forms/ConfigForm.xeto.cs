@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FPLedit.BildfahrplanExport
+namespace FPLedit.BildfahrplanExport.Forms
 {
     public partial class ConfigForm : Dialog<DialogResult>
     {

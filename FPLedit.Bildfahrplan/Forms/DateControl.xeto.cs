@@ -11,7 +11,7 @@ using FPLedit.Shared.Helpers;
 using FPLedit.BildfahrplanExport.Model;
 using Eto.Forms;
 
-namespace FPLedit.BildfahrplanExport
+namespace FPLedit.BildfahrplanExport.Forms
 {
     public partial class DateControl : Panel
     {

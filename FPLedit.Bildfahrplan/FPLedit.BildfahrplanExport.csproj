@@ -52,15 +52,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ColorCollection.cs" />
+    <Compile Include="Helpers\ColorCollection.cs" />
     <Compile Include="Helpers\DashStyleHelper.cs" />
     <Compile Include="Model\TimetableStyle.cs" />
     <Compile Include="BitmapExport.cs" />
-    <Compile Include="ColorHelper.cs" />
-    <Compile Include="ConfigForm.xeto.cs">
+    <Compile Include="Helpers\ColorHelper.cs" />
+    <Compile Include="Forms\ConfigForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="DateControl.xeto.cs">
+    <Compile Include="Forms\DateControl.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Render\Margins.cs" />
@@ -71,10 +71,10 @@
     <Compile Include="Model\Style.cs" />
     <Compile Include="Render\TrainRenderer.cs" />
     <Compile Include="TimeSpanExtensions.cs" />
-    <Compile Include="TrainColorForm.cs">
+    <Compile Include="Forms\TrainColorForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="TrainColorEditForm.xeto.cs">
+    <Compile Include="Forms\TrainColorEditForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Model\TrainStyle.cs" />
@@ -90,22 +90,22 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="DateControl.xeto">
+    <EmbeddedResource Include="Forms\DateControl.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ConfigForm.xeto">
+    <EmbeddedResource Include="Forms\ConfigForm.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="TrainColorEditForm.xeto">
+    <EmbeddedResource Include="Forms\TrainColorEditForm.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="TrainColorForm.xeto">
+    <EmbeddedResource Include="Forms\TrainColorForm.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
