@@ -1,4 +1,6 @@
 ﻿using Eto.Forms;
+using FPLedit.Shared;
+using FPLedit.Shared.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -27,12 +29,26 @@ namespace FPLedit.BildfahrplanExport
         };
 
         public string[] ColorHexStrings
-            => colors.Select(kvp => ColorHelper.ToHexString(kvp.Value)).ToArray();
+            => colors.Select(kvp => ColorFormatter.ToString(kvp.Value)).ToArray();
 
         public string ToName(Color color)
-            => colors.FirstOrDefault(c => c.Value.ToArgb() == color.ToArgb()).Key ?? ColorHelper.ToHexString(color);
+            => colors.FirstOrDefault(c => c.Value.ToArgb() == color.ToArgb()).Key ?? ColorFormatter.ToString(color);
 
         public IIndirectBinding<string> ColorBinding
-            => Binding.Property<string, string>(c => ToName(ColorHelper.FromHexString(c)));
+            => Binding.Property<string, string>(c => ToName(ColorFormatter.FromHexString(c)));
+
+        public ColorCollection(ISettings settings)
+        {
+            var setting = settings.Get<string>("bifpl.colors");
+            if (settings != null)
+            {
+                var customColors = setting.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var c in customColors)
+                {
+                    var parts = c.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                    colors.Add(parts[0], ColorFormatter.FromHexString(parts[1]));
+                }
+            }
+        }
     }
 }

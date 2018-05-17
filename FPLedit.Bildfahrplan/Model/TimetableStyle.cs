@@ -65,6 +65,7 @@ namespace FPLedit.BildfahrplanExport.Model
             set => tt.SetAttribute("d", DaysHelper.DaysToBinString(value));
         }
 
+        //TODO: jTG 3 shV -> int
         public bool StationLines
         {
             get => tt.GetAttribute("shV", true);

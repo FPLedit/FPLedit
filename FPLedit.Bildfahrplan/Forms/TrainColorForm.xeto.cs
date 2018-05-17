@@ -24,11 +24,16 @@ namespace FPLedit.BildfahrplanExport.Forms
         private GridView gridView;
 #pragma warning restore CS0649
 
-        public TrainColorForm()
+        public TrainColorForm(IInfo info)
         {
+            this.info = info;
+            tt = info.Timetable;
+            attrs = new TimetableStyle(tt);
+            info.BackupTimetable();
+
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            cc = new ColorCollection();
+            cc = new ColorCollection(info.Settings);
             ds = new DashStyleHelper();
 
             gridView.Columns.Add(new GridColumn()
@@ -58,14 +63,6 @@ namespace FPLedit.BildfahrplanExport.Forms
             });
 
             gridView.CellDoubleClick += (s, e) => EditColor(false);
-        }
-
-        public TrainColorForm(IInfo info) : this()
-        {
-            this.info = info;
-            tt = info.Timetable;
-            attrs = new TimetableStyle(tt);
-            info.BackupTimetable();
 
             UpdateTrains();
         }
@@ -81,7 +78,7 @@ namespace FPLedit.BildfahrplanExport.Forms
             {
                 var train = (Train)gridView.SelectedItem;
 
-                TrainColorEditForm tcef = new TrainColorEditForm(train);
+                TrainColorEditForm tcef = new TrainColorEditForm(train, info.Settings);
                 if (tcef.ShowModal(this) == DialogResult.Ok)
                     UpdateTrains();
             }

@@ -15,7 +15,7 @@ namespace FPLedit.BildfahrplanExport.Forms
 {
     public partial class DateControl : Panel
     {
-        private Timetable tt;
+        private IInfo info;
         private TimetableStyle attrs;
 
         public event EventHandler ValueChanged;
@@ -25,13 +25,13 @@ namespace FPLedit.BildfahrplanExport.Forms
 #pragma warning restore CS0649
         private CheckBox[] daysBoxes;
 
-        public DateControl(Timetable tt)
+        public DateControl(IInfo info)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
             daysBoxes = new[] { mondayCheckBox, tuesdayCheckBox, wednesdayCheckBox, thursdayCheckBox, fridayCheckBox, saturdayCheckBox, sundayCheckBox };
 
-            this.tt = tt;
-            attrs = new TimetableStyle(tt);
+            this.info = info;
+            attrs = new TimetableStyle(info.Timetable);
 
             for (int i = 0; i < attrs.RenderDays.Length; i++)
             {
@@ -52,7 +52,7 @@ namespace FPLedit.BildfahrplanExport.Forms
 
         private void preferencesButton_Click(object sender, EventArgs e)
         {
-            ConfigForm cnf = new ConfigForm(tt);
+            ConfigForm cnf = new ConfigForm(info.Timetable, info.Settings);
             cnf.ShowModal(Parent);
             ValueChanged?.Invoke(this, new EventArgs());
         }

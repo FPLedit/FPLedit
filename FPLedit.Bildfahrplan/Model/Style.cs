@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using FPLedit.Shared.Helpers;
 
 namespace FPLedit.BildfahrplanExport.Model
 {
@@ -65,50 +66,13 @@ namespace FPLedit.BildfahrplanExport.Model
         }
         #endregion
 
-        #region Colors
-        private static Dictionary<string, Color> jtraingraphColors = new Dictionary<string, Color>()
-        {
-            ["schwarz"] = Color.Black,
-            ["grau"] = Color.Gray,
-            ["weiß"] = Color.White,
-            ["rot"] = Color.Red,
-            ["orange"] = Color.Orange,
-            ["gelb"] = Color.Yellow,
-            ["blau"] = Color.Blue,
-            ["hellblau"] = Color.LightBlue,
-            ["grün"] = Color.Green,
-            ["dunkelgrün"] = Color.DarkGreen,
-            ["braun"] = Color.Brown,
-            ["magenta"] = Color.Magenta,
-        };
-
         protected Color? ParseColor(string def, Color? defaultValue)
-        {
-            if (def == null)
-                return defaultValue;
-
-            if (def.StartsWith("#"))
-                return ColorHelper.FromHexString(def);
-
-            if (def.StartsWith("c(") && def.EndsWith(")"))
-                return ColorHelper.FromJtg2CustomColor(def);
-
-            if (jtraingraphColors.ContainsKey(def))
-                return jtraingraphColors[def];
-
-            return defaultValue;
-        }
+            => ColorFormatter.FromString(def, defaultValue);
 
         protected Color ParseColor(string def, Color defaultValue)
-            => ParseColor(def, new Color?(defaultValue)).Value;
+            => ColorFormatter.FromString(def, defaultValue);
 
         protected string ColorToString(Color color)
-        {
-            if (_parent.GetAttribute<string>("version") != "008")
-                return ColorHelper.ToHexString(color); // jTG 3.0, FPLext
-
-            return ColorHelper.ToJtg2CustomColor(color); // jTG 2.x
-        }
-        #endregion
+            => ColorFormatter.ToString(color, _parent.Version == TimetableVersion.JTG2_x);
     }
 }

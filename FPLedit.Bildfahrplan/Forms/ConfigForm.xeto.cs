@@ -3,14 +3,11 @@ using FPLedit.BildfahrplanExport.Model;
 using FPLedit.Shared;
 using FPLedit.Shared.UI.Validators;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
+using Font = System.Drawing.Font;
 using System.Drawing.Text;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using FPLedit.Shared.Helpers;
 
 namespace FPLedit.BildfahrplanExport.Forms
 {
@@ -29,14 +26,14 @@ namespace FPLedit.BildfahrplanExport.Forms
         private Timetable tt;
         private TimetableStyle attrs;
 
-        public ConfigForm()
+        private ConfigForm(ISettings settings)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
             heightPerHourValidator = new NumberValidator(heightPerHourTextBox, false, true);
             heightPerHourValidator.ErrorMessage = "Bitte eine Zahl als Höhe pro Stunde angeben!";
 
-            var cc = new ColorCollection();
+            var cc = new ColorCollection(settings);
 
             bgColorComboBox.DataStore = cc.ColorHexStrings;
             stationColorComboBox.DataStore = cc.ColorHexStrings;
@@ -66,14 +63,14 @@ namespace FPLedit.BildfahrplanExport.Forms
             stationWidthComboBox.DataStore = lineWidths;
         }
 
-        public ConfigForm(Timetable tt) : this()
+        public ConfigForm(Timetable tt, ISettings settings) : this(settings)
         {
             this.tt = tt;
             attrs = new TimetableStyle(tt);
-            bgColorComboBox.SelectedValue = ColorHelper.ToHexString(attrs.BgColor);
-            timeColorComboBox.SelectedValue = ColorHelper.ToHexString(attrs.TimeColor);
-            trainColorComboBox.SelectedValue = ColorHelper.ToHexString(attrs.TrainColor);
-            stationColorComboBox.SelectedValue = ColorHelper.ToHexString(attrs.StationColor);
+            bgColorComboBox.SelectedValue = ColorFormatter.ToString(attrs.BgColor);
+            timeColorComboBox.SelectedValue = ColorFormatter.ToString(attrs.TimeColor);
+            trainColorComboBox.SelectedValue = ColorFormatter.ToString(attrs.TrainColor);
+            stationColorComboBox.SelectedValue = ColorFormatter.ToString(attrs.StationColor);
 
             hourTimeWidthComboBox.SelectedValue = attrs.HourTimeWidth;
             minuteTimeWidthComboBox.SelectedValue = attrs.MinuteTimeWidth;
@@ -105,10 +102,10 @@ namespace FPLedit.BildfahrplanExport.Forms
                 return;
             }
 
-            attrs.BgColor = ColorHelper.FromHexString((string)bgColorComboBox.SelectedValue);
-            attrs.TimeColor = ColorHelper.FromHexString((string)timeColorComboBox.SelectedValue);
-            attrs.TrainColor = ColorHelper.FromHexString((string)trainColorComboBox.SelectedValue);
-            attrs.StationColor = ColorHelper.FromHexString((string)stationColorComboBox.SelectedValue);
+            attrs.BgColor = ColorFormatter.FromHexString((string)bgColorComboBox.SelectedValue);
+            attrs.TimeColor = ColorFormatter.FromHexString((string)timeColorComboBox.SelectedValue);
+            attrs.TrainColor = ColorFormatter.FromHexString((string)trainColorComboBox.SelectedValue);
+            attrs.StationColor = ColorFormatter.FromHexString((string)stationColorComboBox.SelectedValue);
 
             attrs.HourTimeWidth = (int)hourTimeWidthComboBox.SelectedValue;
             attrs.MinuteTimeWidth = (int)minuteTimeWidthComboBox.SelectedValue;

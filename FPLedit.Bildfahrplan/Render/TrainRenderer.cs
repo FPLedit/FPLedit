@@ -133,7 +133,7 @@ namespace FPLedit.BildfahrplanExport.Render
                 var time1 = ardeps[intersect.First()].FirstSetTime;
                 var time2 = ardeps[intersect.Last()].FirstSetTime;
 
-                return time1 > time2;
+                return time1 < time2;
             }).ToArray();
         }
         #endregion

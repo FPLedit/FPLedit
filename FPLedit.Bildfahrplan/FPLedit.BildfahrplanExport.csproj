@@ -56,7 +56,6 @@
     <Compile Include="Helpers\DashStyleHelper.cs" />
     <Compile Include="Model\TimetableStyle.cs" />
     <Compile Include="BitmapExport.cs" />
-    <Compile Include="Helpers\ColorHelper.cs" />
     <Compile Include="Forms\ConfigForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>

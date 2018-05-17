@@ -86,7 +86,7 @@ namespace FPLedit.BildfahrplanExport
         private void ConfigItem_Click(object sender, EventArgs e)
         {
             info.StageUndoStep();
-            ConfigForm cnf = new ConfigForm(info.Timetable);
+            ConfigForm cnf = new ConfigForm(info.Timetable, info.Settings);
             if (cnf.ShowModal(info.RootForm) == DialogResult.Ok)
                 info.SetUnsaved();
         }
@@ -114,7 +114,7 @@ namespace FPLedit.BildfahrplanExport
             var stackLayout = new StackLayout();
             frm.Content = stackLayout;
 
-            dtc = new DateControl(info.Timetable);
+            dtc = new DateControl(info);
             dtc.ValueChanged += Dtc_ValueChanged;
             stackLayout.Items.Add(dtc);
 
