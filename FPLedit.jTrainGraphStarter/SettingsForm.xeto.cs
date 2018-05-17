@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FPLedit.Shared.UI;
 
 namespace FPLedit.jTrainGraphStarter
 {
@@ -68,6 +69,17 @@ namespace FPLedit.jTrainGraphStarter
             settings.Set("jTGStarter.jtgpath", jtgPathTextBox.Text);
             Close();
         }
+
+        private void chooseJtgButton_Click(object sender, EventArgs e)
+        {
+            var sfd = new OpenFileDialog();
+            sfd.AddLegacyFilter("JAR-Dateien (*.jar)|*.jar");
+            if (sfd.ShowDialog(this) == DialogResult.Ok)
+                jtgPathTextBox.Text = sfd.FileName;
+        }
+
+        private void findJavaButton_Click(object sender, EventArgs e)
+            => javaPathTextBox.Text = JavaFinder.JavaGuess() ?? javaPathTextBox.Text;
 
         private bool ExecutableExists(string path)
         {

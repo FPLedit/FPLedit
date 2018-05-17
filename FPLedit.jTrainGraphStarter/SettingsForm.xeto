@@ -12,14 +12,20 @@
           <TableRow>
             <Label>Java-Pfad</Label>
             <StackLayout>
-              <TextBox x:Name="javaPathTextBox" Width="240"></TextBox>
+              <StackLayout Orientation="Horizontal" Spacing="5">
+                <TextBox x:Name="javaPathTextBox" Width="240"></TextBox>
+                <Button Click="findJavaButton_Click">Erkennen</Button>
+              </StackLayout>
               <Label Width="240">i.d.R: Windows: javaw.exe, Linux: java</Label>
             </StackLayout>
           </TableRow>
           <TableRow>
             <Label>Pfad zur jTrainGraph-Datei</Label>
             <StackLayout>
-              <TextBox x:Name="jtgPathTextBox" Width="240"></TextBox>
+              <StackLayout Orientation="Horizontal" Spacing="5">
+                <TextBox x:Name="jtgPathTextBox" Width="240"></TextBox>
+                <Button Width="50" Click="chooseJtgButton_Click">...</Button>
+              </StackLayout>
               <Label Width="240">Anwendungsdatei von jTrainGraph (jTrainGraph_xxx.jar/exe, wobei xxx >= 202)</Label>
             </StackLayout>
           </TableRow>
