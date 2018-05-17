@@ -158,5 +158,8 @@ namespace FPLedit.Editor.Network
 
         private void editPathButton_Click(object sender, EventArgs e)
             => EditPath(gridView);
+
+        private void sortButton_Click(object sender, EventArgs e)
+            => SortTrains(gridView, TrainDirection.tr);
     }
 }

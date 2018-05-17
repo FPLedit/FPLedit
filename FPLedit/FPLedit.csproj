@@ -113,6 +113,9 @@
     <Compile Include="Editor\BaseTrainsEditor.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
+    <Compile Include="Editor\TrainSortDialog.xeto.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
     <Compile Include="Editor\ZlmEditForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
@@ -252,6 +255,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Editor\Network\MultipleTimetableEditForm.xeto">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\TrainSortDialog.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="fpledit.conf">

@@ -73,5 +73,12 @@ namespace FPLedit.Editor
             else if (message)
                 MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug kopieren");
         }
+
+        protected void SortTrains(GridView view, TrainDirection dir)
+        {
+            TrainSortDialog tsd = new TrainSortDialog(dir, tt);
+            if (tsd.ShowModal(this) == DialogResult.Ok)
+                UpdateListView(view, dir);
+        }
     }
 }

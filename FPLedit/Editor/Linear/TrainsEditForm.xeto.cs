@@ -109,6 +109,9 @@ namespace FPLedit.Editor.Linear
         private void topDeleteButton_Click(object sender, EventArgs e)
             => DeleteTrain(topGridView, TOP_DIRECTION);
 
+        private void topSortButton_Click(object sender, EventArgs e)
+            => SortTrains(topGridView, TOP_DIRECTION);
+
         private void bottomNewButton_Click(object sender, EventArgs e)
             => NewTrain(bottomGridView, BOTTOM_DIRECTION);
 
@@ -123,6 +126,9 @@ namespace FPLedit.Editor.Linear
 
         private void bottomCopyButton_Click(object sender, EventArgs e)
             => CopyTrain(bottomGridView, BOTTOM_DIRECTION, true);
+
+        private void bottomSortButton_Click(object sender, EventArgs e)
+            => SortTrains(bottomGridView, BOTTOM_DIRECTION);
         #endregion
     }
 }
