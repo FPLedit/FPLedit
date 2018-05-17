@@ -40,6 +40,8 @@ namespace FPLedit.Editor.Filters
 
         public EditPatternForm(string property)
         {
+            Eto.Serialization.Xaml.XamlReader.Load(this);
+
             propertyLabel.Text = property;
         }
 

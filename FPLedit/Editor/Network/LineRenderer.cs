@@ -277,11 +277,18 @@ namespace FPLedit.Editor.Network
         private bool hasDragged = false;
         private const int CLICK_TIME = 1000000; //0.1s
         private long lastClick = 0;
+        private bool lastDoubleClick;
 
         protected override void OnMouseDoubleClick(MouseEventArgs e)
         {
+            draggedControl = null;
+            Cursor = Cursors.Default;
+            hasDragged = false;
+
             foreach (var args in panels.ToArray())
                 args.HandleDoubleClick(new Point(e.Location));
+
+            lastDoubleClick = true;
             base.OnMouseDoubleClick(e);
         }
 
@@ -289,21 +296,27 @@ namespace FPLedit.Editor.Network
         {
             lastClick = DateTime.Now.Ticks;
 
-            if (e.Buttons == MouseButtons.Alternate)
-                foreach (var args in panels.ToArray())
-                    args.HandleRightClick(new Point(e.Location));
-            else if (e.Buttons == MouseButtons.Primary && StationMovingEnabled && IsNetwork)
+            if (!lastDoubleClick)
             {
-                foreach (var args in panels.ToArray())
-                {
-                    if (args.Rect.Contains(new Point(e.Location)))
-                    {
-                        draggedControl = args;
-                        Cursor = Cursors.Move;
-                    }
-                }
 
+                if (e.Buttons == MouseButtons.Alternate)
+                    foreach (var args in panels.ToArray())
+                        args.HandleRightClick(new Point(e.Location));
+                else if (e.Buttons == MouseButtons.Primary && StationMovingEnabled && IsNetwork)
+                {
+                    foreach (var args in panels.ToArray())
+                    {
+                        if (args.Rect.Contains(new Point(e.Location)))
+                        {
+                            draggedControl = args;
+                            Cursor = Cursors.Move;
+                        }
+                    }
+
+                }
             }
+
+            lastDoubleClick = false;
             base.OnMouseDown(e);
         }
 

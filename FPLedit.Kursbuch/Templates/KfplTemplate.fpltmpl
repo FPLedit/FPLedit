@@ -186,11 +186,14 @@ if (attrs != null)
 
 			<# foreach (var t in trains) {
 				var times = "";
-				var time = t.GetArrDep(sta).Departure;
-				if (time == default(TimeSpan)) time =  t.GetArrDep(sta).Arrival;
-				if (time == default(TimeSpan)) times = "...";
-				else times = time.ToString(@"hh\:mm");
 				last += trains.Last() == t ? " last-t" : "";
+				if (t.GetPath().Contains(sta))
+				{
+					var time = t.GetArrDep(sta).Departure;
+					if (time == default(TimeSpan)) time =  t.GetArrDep(sta).Arrival;
+					if (time == default(TimeSpan)) times = "...";
+					else times = time.ToString(@"hh\:mm");
+				}
 			#>
 			<td class="ti<#= last #>"><span><#= times #></span></td>
 			<# } #>

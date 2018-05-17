@@ -22,3 +22,11 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("2.0.0.0")] // File Version -> increment for fixes
 
 [assembly: AssemblyInformationalVersion("2.0.0")] // Display Version
+
+// Central version information used in plugins
+internal static class Pvi
+{
+    public const string Version = "2.0.0"; // Version of plugin (normally equasls assembly major.minor
+    public const string UpTo = "2.0"; // Compatible up to (normally "Version" without patch)
+    public const string From = "2.0.0"; // Compatible from - normally equals assembly version
+}

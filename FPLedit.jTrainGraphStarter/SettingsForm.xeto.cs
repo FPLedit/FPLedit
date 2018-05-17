@@ -36,7 +36,7 @@ namespace FPLedit.jTrainGraphStarter
             versionComboBox.ItemTextBinding = Binding.Property<VersionItem, string>(vi => vi.Name);
 
             javaPathTextBox.Text = settings.Get("jTGStarter.javapath", "");
-            jtgPathTextBox.Text = settings.Get("jTGStarter.jtgpath", "jTrainGraph_301.jar");
+            jtgPathTextBox.Text = settings.Get("jTGStarter.jtgpath", "jTrainGraph_302.jar");
             messageCheckBox.Checked = !settings.Get("jTGStarter.show-message", true);
 
             var targetVersion = (TimetableVersion)settings.Get("jTGStarter.target-version", 008);
@@ -98,7 +98,7 @@ namespace FPLedit.jTrainGraphStarter
             => Process.Start("https://fahrplan.manuelhu.de/bildfahrplaene/");
 
         private void downloadLinkLabel_LinkClicked(object sender, EventArgs e)
-            => Process.Start("http://kinzigtalbahn.bplaced.net/homepage/programme.html");
+            => Process.Start("https://jtraingraph.de");
 
         private class VersionItem
         {

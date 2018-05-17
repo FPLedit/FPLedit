@@ -3,17 +3,10 @@ using FPLedit.Kursbuch.Templates;
 using FPLedit.Shared;
 using FPLedit.Shared.Templating;
 using FPLedit.Shared.Ui;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace FPLedit.Kursbuch
 {
-    [Plugin("Modul für Tabellenfahrpläne", "1.5.0", "2.0", Author = "Manuel Huber")]
+    [Plugin("Modul für Tabellenfahrpläne", Pvi.From, Pvi.UpTo, Author = "Manuel Huber")]
     public class Plugin : IPlugin
     {
         private IInfo info;
@@ -22,6 +15,7 @@ namespace FPLedit.Kursbuch
         {
             this.info = info;
 
+            info.Register<IExport>(new HtmlExport());
             info.Register<IPreviewable>(new Preview());
             info.Register<IFilterableUi>(new FilterableHandler());
             info.Register<IDesignableUiProxy>(new SettingsControlProxy());

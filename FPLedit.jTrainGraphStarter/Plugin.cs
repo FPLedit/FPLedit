@@ -9,7 +9,7 @@ using System.Text;
 
 namespace FPLedit.jTrainGraphStarter
 {
-    [Plugin("Starter für jTrainGraph", "1.5.0", "2.0", Author = "Manuel Huber")]
+    [Plugin("Starter für jTrainGraph", Pvi.From, Pvi.UpTo, Author = "Manuel Huber")]
     public class Plugin : IPlugin
     {
         IInfo info;
@@ -99,7 +99,7 @@ namespace FPLedit.jTrainGraphStarter
         private void StartJtg(string fnArg, Action finished)
         {
             string javapath = info.Settings.Get("jTGStarter.javapath", "java");
-            string jtgPath = info.Settings.Get("jTGStarter.jtgpath", "jTrainGraph_301.jar");
+            string jtgPath = info.Settings.Get("jTGStarter.jtgpath", "jTrainGraph_302.jar");
 
             string jtgFolder = Path.GetDirectoryName(jtgPath);
 

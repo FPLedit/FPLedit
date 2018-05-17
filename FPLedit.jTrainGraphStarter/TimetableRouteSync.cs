@@ -26,7 +26,7 @@ namespace FPLedit.jTrainGraphStarter
         public Timetable GetRouteTimetable(TimetableVersion targetVersion)
         {
             var copy = orig.Clone();
-            copy.SetAttribute("version", "008"); // Wir gehen aus dem Extended-Modus raus
+            copy.SetAttribute("version", ((int)targetVersion).ToString("000")); // Wir gehen aus dem Extended-Modus raus
 
             var route = copy.GetRoute(routeIndex);
 
@@ -106,6 +106,7 @@ namespace FPLedit.jTrainGraphStarter
                 {
                     sta.SetAttribute("kml", pos);
                     sta.SetAttribute("kmr", pos);
+                    sta.RemoveAttribute("km"); // Alte Netzwerk-Form entfernen
                 }
             }
 

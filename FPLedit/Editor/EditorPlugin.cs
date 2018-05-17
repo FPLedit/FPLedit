@@ -1,6 +1,7 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.Ui;
+using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,21 +32,20 @@ namespace FPLedit.Editor
             if (Environment.OSVersion.Platform != PlatformID.Win32NT || info.Settings.Get<bool>("mp-compat.route-edit-button"))
                 info.Register<IRouteAction>(new Network.EditRouteAction());
 
-            editRoot = MenuItem("Bearbeiten");
-            info.Menu.Items.Add(editRoot);
+            editRoot = ((MenuBar)info.Menu).CreateItem("Bearbeiten");
 
-            undoItem = MenuItem("Rückgängig", editRoot);
+            undoItem = editRoot.CreateItem("Rückgängig");
             undoItem.Shortcut = Keys.Control | Keys.Z;
             undoItem.Enabled = false;
             undoItem.Click += (s, e) => info.Undo();
 
             editRoot.Items.Add(new SeparatorMenuItem());
 
-            editLineItem = MenuItem("Strecke bearbeiten (tabellarisch)", editRoot);
+            editLineItem = editRoot.CreateItem("Strecke bearbeiten (tabellarisch)");
             editLineItem.Enabled = false;
             editLineItem.Click += (s, e) => ShowForm(new LineEditForm(info, Timetable.LINEAR_ROUTE_ID));
 
-            editTrainsItem = MenuItem("Züge bearbeiten", editRoot);
+            editTrainsItem = editRoot.CreateItem("Züge bearbeiten");
             editTrainsItem.Enabled = false;
             editTrainsItem.Click += (s, e) =>
             {
@@ -54,22 +54,21 @@ namespace FPLedit.Editor
                 else ShowForm(new Network.TrainsEditingForm(info));
             };
 
-            editTimetableItem = MenuItem("Fahrplan bearbeiten", editRoot);
+            editTimetableItem = editRoot.CreateItem("Fahrplan bearbeiten");
             editTimetableItem.Enabled = false;
             editTimetableItem.Click += (s, e) => ShowForm(new Linear.TimetableEditForm(info));
 
             editRoot.Items.Add(new SeparatorMenuItem());
 
-            designItem = MenuItem("Fahrplandarstellung", editRoot);
+            designItem = editRoot.CreateItem("Fahrplandarstellung");
             designItem.Enabled = false;
             designItem.Click += (s, e) => ShowForm(new DesignableForm(info));
 
-            filterItem = MenuItem("Filterregeln", editRoot);
+            filterItem = editRoot.CreateItem("Filterregeln");
             filterItem.Enabled = false;
             filterItem.Click += (s, e) => ShowForm(new Filters.FilterForm(info));
 
-            previewRoot = MenuItem("Vorschau");
-            info.Menu.Items.Add(previewRoot);
+            previewRoot = ((MenuBar)info.Menu).CreateItem("Vorschau");
         }
 
         private void ShowForm(Dialog<DialogResult> form)
@@ -87,7 +86,7 @@ namespace FPLedit.Editor
 
             foreach (var prev in previewables)
             {
-                var itm = MenuItem(prev.DisplayName, previewRoot);
+                var itm = previewRoot.CreateItem(prev.DisplayName);
                 itm.Enabled = false;
                 itm.Click += (s, ev) => prev.Show(info);
             }
@@ -99,7 +98,7 @@ namespace FPLedit.Editor
             dialogOffset = editRoot.Items.Count;
             foreach (var dialog in dialogs)
             {
-                var itm = MenuItem(dialog.DisplayName, editRoot);
+                var itm = editRoot.CreateItem(dialog.DisplayName);
                 itm.Enabled = dialog.IsEnabled(info);
                 itm.Click += (s, ev) => dialog.Show(info);
             }
@@ -128,25 +127,7 @@ namespace FPLedit.Editor
 
             // Im Netzwerk-Modus nicht verwendete Menü-Einträge ausblenden
             if (info.Timetable != null)
-            {
-                //TODO: reimplemnt Visible
                 editLineItem.Enabled = editTimetableItem.Enabled = info.Timetable.Type != TimetableType.Network;
-            }
-        }
-
-        private ButtonMenuItem MenuItem(string text)
-        {
-            var itm = new ButtonMenuItem();
-            itm.Text = text;
-            return itm;
-        }
-
-        private ButtonMenuItem MenuItem(string text, ButtonMenuItem parent)
-        {
-            var itm = new ButtonMenuItem();
-            itm.Text = text;
-            parent.Items.Add(itm);
-            return itm;
         }
     }
 }

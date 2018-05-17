@@ -59,6 +59,7 @@ namespace FPLedit.Editor.Network
             lineRenderer.StationClicked += SetRoute;
 
             closeButton.Text = "Weiter >>";
+            closeButton.Enabled = false;
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -142,6 +143,13 @@ namespace FPLedit.Editor.Network
             else if (staEnd == null)
             {
                 staEnd = (Station)sender;
+
+                if (staEnd == staStart)
+                {
+                    MessageBox.Show("Rundzüge (gleiche Start- und Zielstation) sind nicht möglich!");
+                    staEnd = null;
+                    return;
+                }
 
                 var pathfinder = new Pathfinder(info.Timetable);
                 Path = pathfinder.GetFromAToB(staStart, staEnd);

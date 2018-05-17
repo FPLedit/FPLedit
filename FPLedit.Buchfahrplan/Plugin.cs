@@ -5,7 +5,7 @@ using System;
 
 namespace FPLedit.Buchfahrplan
 {
-    [Plugin("Modul für Buchfahrpläne", "1.5.0", "2.0", Author = "Manuel Huber")]
+    [Plugin("Modul für Buchfahrpläne", Pvi.From, Pvi.UpTo, Author = "Manuel Huber")]
     public class Plugin : IPlugin
     {
         private IInfo info;
