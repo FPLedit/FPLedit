@@ -20,6 +20,7 @@
         <SeparatorMenuItem />
         <ButtonMenuItem x:Name="importMenu" Text="Importieren" Click="importMenu_Click" />
         <ButtonMenuItem Text="Exportieren" Shortcut="Control,E" x:Name="exportMenu" Enabled="false" Click="exportMenu_Click" />
+        <ButtonMenuItem Text="Konvertieren" Shortcut="Control,K" x:Name="convertMenu" Enabled="false" Click="convertMenu_Click" />
         <SeparatorMenuItem />
         <ButtonMenuItem Text="Beenden" Click="quitMenu_Click" />
       </ButtonMenuItem>

@@ -55,6 +55,8 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="ArrDep.cs" />
+    <Compile Include="Filetypes\LinearExport.cs" />
+    <Compile Include="Filetypes\NetworkExport.cs" />
     <Compile Include="Helpers\DaysHelper.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Ext\IFileState.cs" />

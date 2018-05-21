@@ -1,12 +1,10 @@
 ﻿using Eto.Forms;
-using FPLedit.Properties;
 using System;
 using System.Collections.Generic;
 using Eto.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Reflection;
 using System.IO;
 using FPLedit.Shared;
 using FPLedit.Templating;
@@ -26,7 +24,7 @@ namespace FPLedit
         #region Controls
 #pragma warning disable CS0649
         private readonly LogControl logTextBox;
-        private readonly ButtonMenuItem saveMenu, saveAsMenu, exportMenu, importMenu, lastMenu, fileMenu;
+        private readonly ButtonMenuItem saveMenu, saveAsMenu, exportMenu, importMenu, lastMenu, fileMenu, convertMenu;
         private SaveFileDialog saveFileDialog, exportFileDialog;
         private OpenFileDialog openFileDialog, importFileDialog;
         private LineEditingControl lineEditingControl;
@@ -73,7 +71,7 @@ namespace FPLedit
         {
             fileState.UpdateMetaProperties(Timetable, undo);
 
-            saveMenu.Enabled = saveAsMenu.Enabled = exportMenu.Enabled = fileState.Opened;
+            saveMenu.Enabled = saveAsMenu.Enabled = exportMenu.Enabled = convertMenu.Enabled = fileState.Opened;
 
             FileStateChanged?.Invoke(this, new FileStateChangedEventArgs(fileState));
 
@@ -265,7 +263,7 @@ namespace FPLedit
             if (exportFileDialog.ShowDialog(this) == DialogResult.Ok)
             {
                 var exporters = registry.GetRegistered<IExport>();
-                IExport export = exporters[exportFileDialog.CurrentFilterIndex - 1];
+                IExport export = exporters[exportFileDialog.CurrentFilterIndex - 1]; //TODO: Hier knallts
                 string filename = exportFileDialog.FileName;
 
                 Logger.Info("Speichere Datei " + filename);
@@ -297,11 +295,12 @@ namespace FPLedit
             Logger.Info("Öffne Datei " + filename);
             Timetable = open.Import(filename, Logger);
             if (Timetable == null)
-                return;
-            Logger.Info("Datei erfolgeich geöffnet!");
-            fileState.Opened = true;
-            fileState.Saved = true;
-            fileState.FileName = filename;
+                Logger.Error("Fehler beim Öffnen der Datei!");
+            else
+                Logger.Info("Datei erfolgeich geöffnet!");
+            fileState.FileName = Timetable != null ? filename : null;
+            fileState.Opened = Timetable != null;
+            fileState.Saved = Timetable != null;
             undo.ClearHistory();
             lineEditingControl.ResetPan();
         }
@@ -393,6 +392,28 @@ namespace FPLedit
                     lastFiles.RemoveAt(lastFiles.Count - 1);
 
                 UpdateLastFilesMenu();
+            }
+        }
+
+        private void ConvertTimetable()
+        {
+            IExport exp = (Timetable.Type == TimetableType.Linear) ? (IExport)new NetworkExport() : new LinearExport();
+            string orig = (Timetable.Type == TimetableType.Linear) ? "Linear-Fahrplan" : "Netzwerk-Fahrplan";
+            string dest = (Timetable.Type == TimetableType.Linear) ? "Netzwerk-Fahrplan" : "Linear-Fahrplan";
+
+            if (MessageBox.Show($"Die aktuelle Fatei ist ein {orig}. Es wird zu einem {dest} konvertiert.", "FPLedit", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
+                return;
+
+            var sfd = new SaveFileDialog();
+            sfd.AddLegacyFilter(exp.Filter);
+            if (sfd.ShowDialog(this) == DialogResult.Ok)
+            {
+                Logger.Info("Konvertiere Datei...");
+                bool ret = exp.Export(Timetable, sfd.FileName, this);
+                if (ret == false)
+                    return;
+                Logger.Info("Konvertieren erfolgreich abgeschlossen!");
+                InternalOpen(sfd.FileName);
             }
         }
         #endregion
@@ -525,6 +546,9 @@ namespace FPLedit
 
         private void AutoUpdate_Check(object sender, EventArgs e)
             => update.AutoUpdateCheck(Settings, Logger);
+
+        private void convertMenu_Click(object sender, EventArgs e)
+            => ConvertTimetable();
         #endregion
     }
 }
