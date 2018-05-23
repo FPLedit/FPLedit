@@ -15,6 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Installer", "FPLedi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build_scripts", "build_scripts", "{A63B9FD7-0C3A-4C99-905C-52C85CA8D2E0}"
 	ProjectSection(SolutionItems) = preProject
+		build_scripts\build-pre.csx = build_scripts\build-pre.csx
 		build_scripts\build-release.csx = build_scripts\build-release.csx
 		build_scripts\build-source.csx = build_scripts\build-source.csx
 		build_scripts\fpledit.snk = build_scripts\fpledit.snk
