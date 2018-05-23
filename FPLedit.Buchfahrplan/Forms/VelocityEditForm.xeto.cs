@@ -55,7 +55,7 @@ namespace FPLedit.Buchfahrplan.Forms
             velocityTextBox.Text = sta.Vmax;
             positionTextBox.Text = sta.Positions.GetPosition(route).ToString();
             nameTextBox.Text = sta.SName;
-            wellenComboBox.SelectedValue = sta.Wellenlinien.ToString();
+            wellenComboBox.SelectedIndex = sta.Wellenlinien; // Achtung: Keine Datenbindung, Index!
 
             isPoint = true;
             if (sta is Station)

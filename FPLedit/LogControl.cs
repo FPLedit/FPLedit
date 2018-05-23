@@ -37,12 +37,25 @@ namespace FPLedit
         {
             Append(message + Environment.NewLine, true);
 
-            var lines = Text.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            var idx = string.Join("", lines).LastIndexOf(message);
+            int idx = -1, last = -1;
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
+            {
+                idx = Text.LastIndexOf(message);
+                last = Text.Length;
+            }
+            else
+            {
+                var lines = string.Join("", Text.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
+                idx = lines.LastIndexOf(message);
+                last = lines.Length;
+            }
+
             if (idx == -1)
                 return;
+
             Selection = new Range<int>(idx, idx + message.Length);
             SelectionForeground = c;
+            Selection = new Range<int>(last, last);
         }
         #endregion
     }
