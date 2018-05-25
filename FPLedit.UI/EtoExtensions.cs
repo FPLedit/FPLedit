@@ -31,5 +31,25 @@ namespace FPLedit.Shared.UI
             parent.Items.Add(itm);
             return itm;
         }
+
+        public static void WordWrap(this Label label, int maxWidth)
+        {
+            var lines = new List<string>();
+            var words = label.Text.Split(' ');
+            var line = "";
+            for (int i = 0; i < words.Length; i++)
+            {
+                var nline = line + words[i] + " ";
+                if (label.Font.MeasureString(nline.Substring(0, nline.Length - 1)).Width > maxWidth)
+                {
+                    lines.Add(line);
+                    line = words[i] + " ";
+                }
+                else
+                    line = nline;
+            }
+            lines.Add(line);
+            label.Text = string.Join(Environment.NewLine, lines);
+        }
     }
 }

@@ -391,6 +391,12 @@ namespace FPLedit.Editor.Network
             _highlightedStations.Remove(station);
             Invalidate();
         }
+
+        public void ClearHighlight()
+        {
+            _highlightedStations.Clear();
+            Invalidate();
+        }
         #endregion
 
         private class DrawArgs

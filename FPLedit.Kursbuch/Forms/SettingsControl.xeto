@@ -27,7 +27,7 @@
     <TableRow ScaleHeight="true">
       <StackLayout Spacing="5">
         <Label>Kursbuchstreckennummern</Label>
-        <Label Width="100">Zum Bearbeiten zwei Mal mit Kurzem Abstand auf den Eintrag klicken</Label>
+        <Label Width="100" x:Name="kbsnLabel">Zum Bearbeiten zwei Mal mit Kurzem Abstand auf den Eintrag klicken</Label>
       </StackLayout>
       <TableCell ScaleWidth="true">
         <GridView x:Name="kbsnListView"></GridView>

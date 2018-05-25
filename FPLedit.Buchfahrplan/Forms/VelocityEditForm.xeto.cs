@@ -17,6 +17,7 @@ namespace FPLedit.Buchfahrplan.Forms
         private DropDown wellenComboBox;
 #pragma warning restore CS0649
         private NumberValidator velocityValidator, positionValidator;
+        private ValidatorCollection validators;
 
         public IStation Station { get; set; }
 
@@ -31,6 +32,7 @@ namespace FPLedit.Buchfahrplan.Forms
             velocityValidator.ErrorMessage = "Bitte eine Zahl als Geschwindikgeit eingeben!";
             positionValidator = new NumberValidator(positionTextBox, false, false);
             positionValidator.ErrorMessage = "Bitte eine Zahl als Position eingeben!";
+            validators = new ValidatorCollection(velocityValidator, positionValidator);
 
             for (int i = 0; i < 4; i++)
                 wellenComboBox.Items.Add(i.ToString());
@@ -68,9 +70,9 @@ namespace FPLedit.Buchfahrplan.Forms
 
         private void closeButton_Click(object sender, EventArgs e)
         {
-            if (!velocityValidator.Valid || !positionValidator.Valid)
+            if (!validators.IsValid)
             {
-                MessageBox.Show("Bitte erst alle Fehler beheben!");
+                MessageBox.Show("Bitte erst alle Fehler beheben:" + Environment.NewLine + validators.Message);
                 return;
             }
 

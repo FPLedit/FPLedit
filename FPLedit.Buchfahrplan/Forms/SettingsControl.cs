@@ -36,8 +36,8 @@ namespace FPLedit.Buchfahrplan.Forms
 
             settings = info.Settings;
             chooser = new BfplTemplateChooser(info);
-            templateComboBox.DataStore = chooser.AvailableTemplates;
             templateComboBox.ItemTextBinding = Binding.Property<ITemplate, string>(t => t.TemplateName);
+            templateComboBox.DataStore = chooser.AvailableTemplates;
 
             attrs = BfplAttrs.GetAttrs(tt);
             if (attrs != null)
@@ -66,7 +66,16 @@ namespace FPLedit.Buchfahrplan.Forms
             => Process.Start("https://fahrplan.manuelhu.de/dev/css/");
 
         private void fontComboBox_TextChanged(object sender, EventArgs e)
-           => exampleLabel.Font = new Font(fontComboBox.Text, 10);
+        {
+            if (fontComboBox.Text == "")
+                return;
+
+            try
+            {
+                exampleLabel.Font = new Font(fontComboBox.Text, 10);
+            }
+            catch { }
+        }
 
         public void Save()
         {

@@ -54,7 +54,13 @@ namespace FPLedit.Editor
 
             if (!offsetValidator.Valid || (copy && (!countValidator.Valid || !changeValidator.Valid)))
             {
-                MessageBox.Show("Bitte erst alle Felder korrekt ausfüllen!");
+                var msg = offsetValidator.Valid ? "" : offsetValidator.ErrorMessage + Environment.NewLine;
+                if (copy)
+                {
+                    msg += countValidator.Valid ? "" : countValidator.ErrorMessage + Environment.NewLine;
+                    msg += changeValidator.Valid ? "" : changeValidator.ErrorMessage + Environment.NewLine;
+                }
+                MessageBox.Show("Bitte erst alle Felder korrekt ausfüllen:" + Environment.NewLine + msg);
                 Result = DialogResult.None;
                 return;
             }

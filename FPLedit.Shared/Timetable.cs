@@ -110,7 +110,8 @@ namespace FPLedit.Shared
             }
 
             // Höchste IDs ermitteln
-            nextTraId = trains.Max(s => s.Id);
+            if (trains.Count > 0)
+                nextTraId = trains.Max(s => s.Id);
             if (Type == TimetableType.Network)
             {
                 nextStaId = stations.Max(s => s.Id);

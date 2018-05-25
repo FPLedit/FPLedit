@@ -19,6 +19,7 @@ namespace FPLedit.Editor
         #pragma warning restore CS0649
         private NotEmptyValidator nameValidator;
         private NumberValidator positionValidator;
+        private ValidatorCollection validators;
 
         public Station Station { get; set; }
 
@@ -28,6 +29,7 @@ namespace FPLedit.Editor
             positionValidator.ErrorMessage = "Bitte eine Zahl als Position eingeben!";
             nameValidator = new NotEmptyValidator(nameTextBox);
             nameValidator.ErrorMessage = "Bitte einen Bahnhofsnamen eingeben!";
+            validators = new ValidatorCollection(positionValidator, nameValidator);
         }
 
         public EditStationForm(Timetable tt, int route)
@@ -56,9 +58,9 @@ namespace FPLedit.Editor
         {
             string name = nameTextBox.Text;
 
-            if (!positionValidator.Valid || !nameValidator.Valid)
+            if (!validators.IsValid)
             {
-                MessageBox.Show("Bitte erst alle Fehler beheben!");
+                MessageBox.Show("Bitte erst alle Fehler beheben:" + Environment.NewLine + validators.Message);
                 return;
             }
 

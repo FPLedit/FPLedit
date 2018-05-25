@@ -80,7 +80,7 @@ namespace FPLedit.Editor
         {
             if (!nameValidator.Valid)
             {
-                MessageBox.Show("Bitte erst alle Fehler beheben!");
+                MessageBox.Show("Bitte erst alle Fehler beheben:" + Environment.NewLine + nameValidator.ErrorMessage);
                 return;
             }
 

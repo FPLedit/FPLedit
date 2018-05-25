@@ -67,6 +67,8 @@ namespace FPLedit.Editor.Network
 
         private CustomCell GetCell(Func<DataElement, string> text, bool arrival)
         {
+            var mpmode = !Eto.Platform.Instance.SupportedFeatures.HasFlag(Eto.PlatformFeatures.CustomCellSupportsControlView);
+
             var cc = new CustomCell();
             cc.CreateCell = args => new TextBox();
             cc.ConfigureCell = (args, control) =>
@@ -99,8 +101,64 @@ namespace FPLedit.Editor.Network
                 if ((arrival && data.IsArrivalError) || (!arrival && data.IsDepartureError))
                     tb.BackgroundColor = errorColor;
 
+                if (mpmode)
+                {
+                    tb.KeyDown += (s, e) =>
+                    {
+                        if (e.Key == Keys.Enter)
+                        {
+                            e.Handled = true;
+                            dataGridView.ReloadData(dataGridView.SelectedRow);
+                        }
+                        else if (e.Key == Keys.T)
+                        {
+                            e.Handled = true;
+                            Trapez(dataGridView);
+                        }
+                        else if (e.Key == Keys.Z)
+                        {
+                            e.Handled = true;
+                            Zuglaufmeldung(dataGridView);
+                        }
+                    };
+                }
+
                 tb.GotFocus += (s, e) => { CellSelected(data, arrival); data.IsSelectedArrival = arrival; data.SelectedTextBox = tb; };
                 tb.LostFocus += (s, e) => { FormatCell(data, arrival, tb); };
+            };
+            cc.Paint += (s, e) =>
+            {
+                if (!mpmode)
+                    return;
+
+                var t = "";
+                var bg = Colors.White;
+                var fnt = fn;
+                var data = (DataElement)e.Item;
+
+                if ((arrival && !data.IsArrivalError) || (!arrival && !data.IsDepartureError))
+                    t = text(data);
+
+                if ((!arrival && data.IsLast) || (arrival && data.IsFirst))
+                {
+                    bg = Colors.DarkGray;
+                }
+                else if (arrival ^ data.IsFirst)
+                {
+                    if (data.IsFirst && data.ArrDep.TrapeztafelHalt)
+                        throw new Exception("Die erste Station darf keinen Trapeztafelhalt beinhalten!");
+
+                    bg = data.ArrDep.TrapeztafelHalt ? Colors.LightGrey : Colors.White;
+                    if (data.ArrDep.Zuglaufmeldung != null && data.ArrDep.Zuglaufmeldung != "")
+                        fnt = fb;
+                }
+
+                if ((arrival && data.IsArrivalError) || (!arrival && data.IsDepartureError))
+                    bg = errorColor;
+
+                e.Graphics.Clear(bg);
+                e.Graphics.DrawText(fnt, Colors.Black, new PointF(e.ClipRectangle.Left + 2, e.ClipRectangle.Top + 2), t);
+                e.Graphics.DrawRectangle(Colors.Black, e.ClipRectangle);
             };
             return cc;
         }
@@ -195,9 +253,6 @@ namespace FPLedit.Editor.Network
                 IsFirst = path.First() == sta,
                 IsLast = path.Last() == sta,
             }).ToList();
-
-            //TODO: Hier eine neue Idee...
-            //view.LostFocus += (s, e) => ClearSelection();
 
             view.DataStore = l;
         }

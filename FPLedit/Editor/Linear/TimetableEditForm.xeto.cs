@@ -66,8 +66,10 @@ namespace FPLedit.Editor.Linear
             internalToggle.Image = new Bitmap(this.GetResource("Resources.trapeztafel.png"));
         }
 
-        private CustomCell GetCell(Func<DataElement, string> text, Station sta, bool arrival)
+        private CustomCell GetCell(Func<DataElement, string> text, Station sta, bool arrival, GridView view)
         {
+            var mpmode = !Eto.Platform.Instance.SupportedFeatures.HasFlag(Eto.PlatformFeatures.CustomCellSupportsControlView);
+
             var cc = new CustomCell();
             cc.CreateCell = args => new TextBox();
             cc.ConfigureCell = (args, control) =>
@@ -96,14 +98,68 @@ namespace FPLedit.Editor.Linear
                 if (data.HasError(sta, arrival))
                     tb.BackgroundColor = errorColor;
 
+                if (mpmode)
+                {
+                    tb.KeyDown += (s, e) =>
+                    {
+                        if (e.Key == Keys.Enter)
+                        {
+                            e.Handled = true;
+                            focused.ReloadData(focused.SelectedRow);
+                        }
+                        else if (e.Key == Keys.T)
+                        {
+                            e.Handled = true;
+                            Trapez(focused);
+                        }
+                        else if (e.Key == Keys.Z)
+                        {
+                            e.Handled = true;
+                            Zuglaufmeldung(focused);
+                        }
+                    };
+                }
+
                 tb.GotFocus += (s, e) =>
                 {
                     CellSelected(data, sta, arrival);
                     data.IsSelectedArrival = arrival;
                     data.SelectedStation = sta;
                     data.SelectedTextBox = tb;
+                    focused = view;
                 };
                 tb.LostFocus += (s, e) => { FormatCell(data, sta, arrival, tb); };
+            };
+            cc.Paint += (s, e) =>
+            {
+                if (!mpmode)
+                    return;
+
+                var t = "";
+                var bg = Colors.White;
+                var fnt = fn;
+                var data = (DataElement)e.Item;
+
+                if (!data.HasError(sta, arrival))
+                    t = text(data);
+
+                var first = data.GetStations(info).First() == sta;
+                if (arrival ^ first)
+                {
+                    if (first && data.ArrDeps[sta].TrapeztafelHalt)
+                        throw new Exception("Die erste Station darf keinen Trapeztafelhalt beinhalten!");
+
+                    bg = data.ArrDeps[sta].TrapeztafelHalt ? Colors.LightGrey : Colors.White;
+                    if (data.ArrDeps[sta].Zuglaufmeldung != null && data.ArrDeps[sta].Zuglaufmeldung != "")
+                        fnt = fb;
+                }
+
+                if (data.HasError(sta, arrival))
+                    bg = errorColor;
+
+                e.Graphics.Clear(bg);
+                e.Graphics.DrawText(fnt, Colors.Black, new PointF(e.ClipRectangle.Left + 2, e.ClipRectangle.Top + 2), t);
+                e.Graphics.DrawRectangle(Colors.Black, e.ClipRectangle);
             };
             return cc;
         }
@@ -186,7 +242,7 @@ namespace FPLedit.Editor.Linear
                 {
                     view.Columns.Add(new GridColumn()
                     {
-                        DataCell = GetCell(t => t.ArrDeps[sta].Arrival != default(TimeSpan) ? t.ArrDeps[sta].Arrival.ToShortTimeString() : "", sta, true),
+                        DataCell = GetCell(t => t.ArrDeps[sta].Arrival != default(TimeSpan) ? t.ArrDeps[sta].Arrival.ToShortTimeString() : "", sta, true, view),
                         HeaderText = sta.SName + " an",
                         AutoSize = true,
                         Sortable = false,
@@ -196,7 +252,7 @@ namespace FPLedit.Editor.Linear
                 {
                     view.Columns.Add(new GridColumn()
                     {
-                        DataCell = GetCell(t => t.ArrDeps[sta].Departure != default(TimeSpan) ? t.ArrDeps[sta].Departure.ToShortTimeString() : "", sta, false),
+                        DataCell = GetCell(t => t.ArrDeps[sta].Departure != default(TimeSpan) ? t.ArrDeps[sta].Departure.ToShortTimeString() : "", sta, false, view),
                         HeaderText = sta.SName + " ab",
                         AutoSize = true,
                         Sortable = false,

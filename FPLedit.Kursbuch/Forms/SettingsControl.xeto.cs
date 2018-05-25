@@ -12,6 +12,7 @@ using FPLedit.Shared.Templating;
 using Eto.Drawing;
 using FPLedit.Kursbuch.Model;
 using FPLedit.Kursbuch;
+using FPLedit.Shared.UI;
 
 namespace FPLedit.Kursbuch.Forms
 {
@@ -26,7 +27,7 @@ namespace FPLedit.Kursbuch.Forms
 #pragma warning disable CS0649
         private DropDown templateComboBox;
         private ComboBox fontComboBox, hefontComboBox;
-        private Label exampleLabel, heexampleLabel, cssLabel;
+        private Label exampleLabel, heexampleLabel, cssLabel, kbsnLabel;
         private LinkButton cssHelpLinkLabel;
         private CheckBox consoleCheckBox;
         private TextArea cssTextBox;
@@ -41,8 +42,8 @@ namespace FPLedit.Kursbuch.Forms
 
             settings = info.Settings;
             chooser = new KfplTemplateChooser(info);
-            templateComboBox.DataStore = chooser.AvailableTemplates;
             templateComboBox.ItemTextBinding = Binding.Property<ITemplate, string>(t => t.TemplateName);
+            templateComboBox.DataStore = chooser.AvailableTemplates;
 
             attrs = KfplAttrs.GetAttrs(tt);
             if (attrs != null)
@@ -89,20 +90,43 @@ namespace FPLedit.Kursbuch.Forms
             fontComboBox.ItemTextBinding = Binding.Property<string, string>(s => s);
             hefontComboBox.ItemTextBinding = Binding.Property<string, string>(s => s);
             fontComboBox.TextChanged += fontComboBox_TextChanged;
-            hefontComboBox.TextChanged += hwfontComboBox_TextChanged;
+            hefontComboBox.TextChanged += hefontComboBox_TextChanged;
 
             consoleCheckBox.Checked = settings.Get<bool>("kfpl.console");
+
+            Shown += (s, e) =>
+            {
+                if (!Eto.Platform.Instance.IsWpf)
+                    kbsnLabel.WordWrap(200);
+            };
         }
 
         private void cssHelpLinkLabel_LinkClicked(object sender, EventArgs e)
             => Process.Start("https://fahrplan.manuelhu.de/dev/css/");
 
         private void fontComboBox_TextChanged(object sender, EventArgs e)
-           => exampleLabel.Font = new Font(fontComboBox.Text, 10);
+        {
+            if (fontComboBox.Text == "")
+                return;
 
-        private void hwfontComboBox_TextChanged(object sender, EventArgs e)
-            => heexampleLabel.Font = new Font(hefontComboBox.Text, 10);
+            try
+            {
+                exampleLabel.Font = new Font(fontComboBox.Text, 10);
+            }
+            catch { }
+        }
 
+        private void hefontComboBox_TextChanged(object sender, EventArgs e)
+        {
+            if (hefontComboBox.Text == "")
+                return;
+
+            try
+            {
+                heexampleLabel.Font = new Font(hefontComboBox.Text, 10);
+            }
+            catch { }
+        }
         public void Save()
         {
             attrs.Font = fontComboBox.Text;

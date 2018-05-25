@@ -160,6 +160,23 @@ namespace FPLedit.Editor.Network
             }
         }
 
+        private void ResetRoute(object sender, EventArgs e)
+        {
+            staStart = null;
+            staEnd = null;
+
+            Path = train?.GetPath();
+
+            lineRenderer.ClearHighlight();
+
+            if (train == null)
+            {
+                closeButton.Enabled = false;
+                lineRenderer.FixedStatusString = "Startstation auswählen";
+            }
+            else
+                lineRenderer.AddHighlight(Path);
+        }
 
         private void cancelButton_Click(object sender, EventArgs e)
         {

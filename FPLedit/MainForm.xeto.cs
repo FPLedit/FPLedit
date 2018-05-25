@@ -47,6 +47,7 @@ namespace FPLedit
 
         private List<string> lastFiles;
         private bool enable_last = true;
+        private string lastPath;
 
         private Application application;
 
@@ -132,6 +133,14 @@ namespace FPLedit
             InitializeExportImport();
             InitializeMenus();
 
+            // Letzte Pfade initialisieren
+            lastPath = Settings.Get<string>("files.lastpath", null);
+            if (lastPath != null && Uri.TryCreate(lastPath, UriKind.Absolute, out Uri uri))
+            {
+                openFileDialog.Directory = uri;
+                saveFileDialog.Directory = uri;
+            }
+
             // Vorlagen laden
             templateManager = new TemplateManager(registry, Logger);
             templateManager.LoadTemplates(TEMPLATE_PATH);
@@ -174,16 +183,7 @@ namespace FPLedit
             if (enable_last)
             {
                 lastFiles = Settings.Get("files.last", "").Split(';').Where(s => s != "").Reverse().ToList();
-                foreach (var lf in lastFiles)
-                {
-                    var itm = lastMenu.CreateItem(lf);
-                    itm.Click += (s, a) =>
-                    {
-                        if (!NotifyIfUnsaved())
-                            return;
-                        InternalOpen(lf);
-                    };
-                }
+                UpdateLastFilesMenu();
             }
             else
                 lastMenu.Enabled = false;
@@ -199,6 +199,21 @@ namespace FPLedit
             docItem.Click += (s, ev) => Process.Start("https://fahrplan.manuelhu.de/");
             var infoItem = helpItem.CreateItem("Info");
             infoItem.Click += (s, ev) => (new InfoForm(Settings)).ShowModal(this);
+        }
+
+        private void UpdateLastFilesMenu()
+        {
+            lastMenu.Items.Clear();
+            foreach (var lf in lastFiles)
+            {
+                var itm = lastMenu.CreateItem(lf);
+                itm.Click += (s, a) =>
+                {
+                    if (!NotifyIfUnsaved())
+                        return;
+                    InternalOpen(lf);
+                };
+            }
         }
 
         #endregion
@@ -247,7 +262,11 @@ namespace FPLedit
             if (!NotifyIfUnsaved())
                 return;
             if (openFileDialog.ShowDialog(this) == DialogResult.Ok)
+            {
                 InternalOpen(openFileDialog.FileName);
+                UpdateLastPath(openFileDialog);
+                AddLastFile(openFileDialog.FileName);
+            }
         }
 
         public void Reload()
@@ -264,14 +283,6 @@ namespace FPLedit
             fileState.Saved = true;
             fileState.FileName = filename;
             undo.ClearHistory();
-
-            if (enable_last)
-            {
-                lastFiles.RemoveAll(s => s == filename); // Doppelte Dateinamen verhindern
-                lastFiles.Add(filename);
-                if (lastFiles.Count > 3) // Überlauf
-                    lastFiles.RemoveAt(0);
-            }
         }
 
         public void Save(bool forceSaveAs)
@@ -282,16 +293,20 @@ namespace FPLedit
 
             if (saveAs)
             {
-                if (saveFileDialog.ShowDialog(this) == DialogResult.Ok)
-                    filename = saveFileDialog.FileName;
-                else
+                if (saveFileDialog.ShowDialog(this) != DialogResult.Ok)
                     return;
+                filename = saveFileDialog.FileName;
+                UpdateLastPath(saveFileDialog);
+                AddLastFile(saveFileDialog.FileName);
             }
             InternalSave(filename);
         }
 
         private void InternalSave(string filename)
         {
+            if (!filename.EndsWith(".fpl"))
+                filename += ".fpl";
+
             Logger.Info("Speichere Datei " + filename);
             bool ret = save.Export(Timetable, filename, this);
             if (ret == false)
@@ -337,6 +352,25 @@ namespace FPLedit
             application.Restart();
         }
 
+        private void UpdateLastPath(FileDialog dialog)
+        {
+            lastPath = Path.GetDirectoryName(dialog.FileName);
+            openFileDialog.Directory = new Uri(lastPath);
+            saveFileDialog.Directory = new Uri(lastPath);
+        }
+
+        private void AddLastFile(string filename)
+        {
+            if (enable_last)
+            {
+                lastFiles.RemoveAll(s => s == filename); // Doppelte Dateinamen verhindern
+                lastFiles.Insert(0, filename);
+                if (lastFiles.Count > 3) // Überlauf
+                    lastFiles.RemoveAt(lastFiles.Count - 1);
+
+                UpdateLastFilesMenu();
+            }
+        }
         #endregion
 
         #region AutoUpdates
@@ -376,6 +410,7 @@ namespace FPLedit
             {
                 if (enable_last)
                     Settings.Set("files.last", string.Join(";", lastFiles));
+                Settings.Set("files.lastpath", lastPath);
                 if (!NotifyIfUnsaved())
                     e.Cancel = true;
 

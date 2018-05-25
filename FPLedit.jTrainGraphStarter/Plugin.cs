@@ -47,6 +47,13 @@ namespace FPLedit.jTrainGraphStarter
 
         private void StartLinear()
         {
+            //HACK: Remove when jTG supports opening again
+            if (info.Settings.Get("jTGStarter.target-version", 009) == 009)
+            {
+                MessageBox.Show("ACHTUNG: jTrainGraph in der Version 3.0 ist derzeit auf Grund eines Fehlers nicht aus FPLedit heraus aufrufbar. Bitte speichern Sie die Datei in FPLedit, nehmen ihre Änderungen in jTRainGraph vor und öffnen diese anschließend wieder in FPLedit.", "jTrainGraph starten", MessageBoxType.Error);
+                return;
+            }
+
             bool showMessage = info.Settings.Get("jTGStarter.show-message", true);
 
             if (showMessage)
@@ -65,6 +72,13 @@ namespace FPLedit.jTrainGraphStarter
 
         private void StartNetwork(int route)
         {
+            //HACK: Remove when jTG supports opening again
+            if (info.Settings.Get("jTGStarter.target-version", 009) == 009)
+            {
+                MessageBox.Show("ACHTUNG: jTrainGraph in der Version 3.0 ist derzeit auf Grund eines Fehlers nicht aus FPLedit heraus aufrufbar. Es ist derzeit auch keine Lösung des Problems verfügbar.", "jTrainGraph starten", MessageBoxType.Error);
+                return;
+            }
+
             bool showMessage = info.Settings.Get("jTGStarter.show-message", true);
 
             if (showMessage)
