@@ -180,6 +180,9 @@ namespace FPLedit.Editor.Network
 
         public void ReloadTimetable()
             => lineRenderer.SetTimetable(info.Timetable);
+
+        public void DispatchKeystroke(KeyEventArgs e)
+            => lineRenderer.DispatchKeystroke(e);
     }
 
     public class Divider : Panel

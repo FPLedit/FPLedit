@@ -44,9 +44,16 @@ namespace FPLedit.Editor.Network
         public int SelectedRoute
         {
             get => _selectedRoute;
-            set { _selectedRoute = value; this.Invalidate(); }
+            set { _selectedRoute = value; Invalidate(); }
         }
         private List<Station> _highlightedStations = new List<Station>();
+
+        private PointF _pan = new PointF();
+        public PointF Pan
+        {
+            get => _pan;
+            set { _pan = value; Invalidate(); }
+        }
 
 
         private StaPosHandler handler;
@@ -107,6 +114,8 @@ namespace FPLedit.Editor.Network
 
             DrawStatus(e.Graphics);
             DrawBorder(e.Graphics);
+
+            e.Graphics.TranslateTransform(_pan);
 
             if (routes == null || routes.Length == 0)
                 return;
@@ -178,12 +187,21 @@ namespace FPLedit.Editor.Network
 
         private void DrawStatus(Graphics g)
         {
-            string status = addMode ? "Klicken, um Station hinzuzufügen und diese mit einer bestehenden Station zu verbinden; ESC zum Abbrechen" : "Streckennetz bearbeiten";
-            status = FixedStatusString ?? status;
-            var size = g.MeasureString(font, status);
-            var point = new PointF(ClientSize.Width - size.Width, ClientSize.Height - size.Height);
-            g.FillRectangle(Brushes.Turquoise, new RectangleF(point, size));
-            g.DrawText(font, Brushes.Black, point, status);
+            if (!_pan.IsZero)
+            {
+                string statusL = "Ansicht verschoben, [R] für Reset";
+                var sizeL = g.MeasureString(font, statusL);
+                var pointL = new PointF(0, ClientSize.Height - sizeL.Height);
+                g.FillRectangle(Brushes.Orange, new RectangleF(pointL, sizeL));
+                g.DrawText(font, Brushes.Black, pointL, statusL);
+            }
+
+            string statusR = addMode ? "Klicken, um Station hinzuzufügen und diese mit einer bestehenden Station zu verbinden; ESC zum Abbrechen" : "Streckennetz bearbeiten";
+            statusR = FixedStatusString ?? statusR;
+            var sizeR = g.MeasureString(font, statusR);
+            var pointR = new PointF(ClientSize.Width - sizeR.Width, ClientSize.Height - sizeR.Height);
+            g.FillRectangle(Brushes.Turquoise, new RectangleF(pointR, sizeR));
+            g.DrawText(font, Brushes.Black, pointR, statusR);
         }
 
         private void DrawBorder(Graphics g)
@@ -261,14 +279,18 @@ namespace FPLedit.Editor.Network
             Invalidate();
         }
 
-        protected override void OnKeyDown(KeyEventArgs e)
+        public void DispatchKeystroke(KeyEventArgs e)
         {
             if (e.Key == Keys.Escape)
             {
                 AbortAddStation();
                 e.Handled = true;
             }
-            base.OnKeyDown(e);
+            if (e.Key == Keys.R)
+            {
+                Pan = new PointF();
+                e.Handled = true;
+            }
         }
         #endregion
 
@@ -278,6 +300,9 @@ namespace FPLedit.Editor.Network
         private const int CLICK_TIME = 1000000; //0.1s
         private long lastClick = 0;
         private bool lastDoubleClick;
+        private bool hasPanned = false;
+        private PointF originalLocation;
+        private PointF originalPan;
 
         protected override void OnMouseDoubleClick(MouseEventArgs e)
         {
@@ -286,7 +311,7 @@ namespace FPLedit.Editor.Network
             hasDragged = false;
 
             foreach (var args in panels.ToArray())
-                args.HandleDoubleClick(new Point(e.Location));
+                args.HandleDoubleClick(new Point(e.Location), new Point(_pan));
 
             lastDoubleClick = true;
             base.OnMouseDoubleClick(e);
@@ -298,21 +323,27 @@ namespace FPLedit.Editor.Network
 
             if (!lastDoubleClick)
             {
-
                 if (e.Buttons == MouseButtons.Alternate)
                     foreach (var args in panels.ToArray())
-                        args.HandleRightClick(new Point(e.Location));
+                        args.HandleRightClick(new Point(e.Location), new Point(_pan));
                 else if (e.Buttons == MouseButtons.Primary && StationMovingEnabled && IsNetwork)
                 {
                     foreach (var args in panels.ToArray())
                     {
-                        if (args.Rect.Contains(new Point(e.Location)))
+                        if (args.Rect.Contains(new Point(e.Location) - new Point(_pan)))
                         {
                             draggedControl = args;
                             Cursor = Cursors.Move;
                         }
                     }
+                }
 
+                if (e.Buttons == MouseButtons.Primary && draggedControl == null)
+                {
+                    hasPanned = true;
+                    originalPan = _pan;
+                    originalLocation = e.Location;
+                    Cursor = Cursors.Move;
                 }
             }
 
@@ -338,8 +369,13 @@ namespace FPLedit.Editor.Network
                     p.Y = ClientSize.Height;
 
                 draggedControl.Location = p;
-                stapos[draggedControl.Station] = new Point(p.X - OFFSET_X, p.Y - OFFSET_Y);
+                stapos[draggedControl.Station] = p - new Point(OFFSET_X, OFFSET_Y) - new Point(_pan);
                 hasDragged = true;
+                Invalidate();
+            }
+            if (hasPanned)
+            {
+                _pan = originalPan + (e.Location - originalLocation);
                 Invalidate();
             }
             if (tmp_sta != null)
@@ -352,7 +388,7 @@ namespace FPLedit.Editor.Network
             if (DateTime.Now.Ticks <= lastClick + CLICK_TIME)
             {
                 foreach (var args in panels.ToArray())
-                    args.HandleClick(new Point(e.Location));
+                    args.HandleClick(new Point(e.Location), new Point(_pan));
             }
 
             if (StationMovingEnabled && IsNetwork && draggedControl != null)
@@ -366,6 +402,12 @@ namespace FPLedit.Editor.Network
                     StationMoveEnd?.Invoke(this, new EventArgs());
                 }
                 hasDragged = false;
+            }
+
+            if (hasPanned)
+            {
+                hasPanned = false;
+                Cursor = Cursors.Default;
             }
 
             lastClick = 0;
@@ -425,21 +467,21 @@ namespace FPLedit.Editor.Network
                 Color = c;
             }
 
-            public void HandleClick(Point clickPosition)
+            public void HandleClick(Point clickPosition, Point pan)
             {
-                if (Rect.Contains(clickPosition))
+                if (Rect.Contains(clickPosition - pan))
                     Click?.Invoke(this, new EventArgs());
             }
 
-            public void HandleRightClick(Point clickPosition)
+            public void HandleRightClick(Point clickPosition, Point pan)
             {
-                if (Rect.Contains(clickPosition))
+                if (Rect.Contains(clickPosition - pan))
                     RightClick?.Invoke(this, new EventArgs());
             }
 
-            public void HandleDoubleClick(Point clickPosition)
+            public void HandleDoubleClick(Point clickPosition, Point pan)
             {
-                if (Rect.Contains(clickPosition))
+                if (Rect.Contains(clickPosition - pan))
                     DoubleClick?.Invoke(this, new EventArgs());
             }
 

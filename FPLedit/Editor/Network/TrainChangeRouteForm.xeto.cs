@@ -183,5 +183,12 @@ namespace FPLedit.Editor.Network
             Result = DialogResult.Cancel;
             Close();
         }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.Key == Keys.R)
+                lineRenderer.DispatchKeystroke(e);
+            base.OnKeyDown(e);
+        }
     }
 }

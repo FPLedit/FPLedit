@@ -531,6 +531,13 @@ namespace FPLedit
         private void networkNewMenu_Click(object sender, EventArgs e)
             => New(TimetableType.Network);
 
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.Key == Keys.R || e.Key == Keys.Escape)
+                lineEditingControl.DispatchKeystroke(e);
+            base.OnKeyDown(e);
+        }
+
         #endregion
     }
 }
