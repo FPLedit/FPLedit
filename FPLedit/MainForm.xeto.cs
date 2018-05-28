@@ -157,7 +157,10 @@ namespace FPLedit
             string fn = args.Length >= 2 ? args[1] : null;
             fn = Settings.Get("restart.file", fn);
             if (fn != null && File.Exists(fn))
+            {
                 InternalOpen(fn);
+                AddLastFile(fn);
+            }
             Settings.Remove("restart.file");
             Shown -= LoadStartFile;
         }

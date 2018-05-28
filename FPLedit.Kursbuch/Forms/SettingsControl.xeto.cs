@@ -84,7 +84,7 @@ namespace FPLedit.Kursbuch.Forms
             var tmpl = chooser.GetTemplate(tt);
             templateComboBox.SelectedValue = tmpl;
 
-            string[] fontFamilies = new InstalledFontCollection().Families.Select(f => f.Name).ToArray();
+            string[] fontFamilies = new InstalledFontCollection().Families.Select(f => f.Name).OrderBy(f => f).ToArray();
             fontComboBox.DataStore = fontFamilies;
             hefontComboBox.DataStore = fontFamilies;
             fontComboBox.ItemTextBinding = Binding.Property<string, string>(s => s);

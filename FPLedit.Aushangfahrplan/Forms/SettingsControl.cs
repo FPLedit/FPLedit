@@ -54,7 +54,7 @@ namespace FPLedit.Aushangfahrplan.Forms
             var tmpl = chooser.GetTemplate(tt);
             templateComboBox.SelectedValue = tmpl;
 
-            string[] fontFamilies = new InstalledFontCollection().Families.Select(f => f.Name).ToArray();
+            string[] fontFamilies = new InstalledFontCollection().Families.Select(f => f.Name).OrderBy(f => f).ToArray();
             fontComboBox.DataStore = fontFamilies;
             hwfontComboBox.DataStore = fontFamilies;
             fontComboBox.ItemTextBinding = Binding.Property<string, string>(s => s);

@@ -50,6 +50,10 @@ namespace FPLedit.Kursbuch.Templates
                 var inters = stas.Intersect(path);
                 var stas2 = inters.OrderBy(s => t.GetArrDep(s).FirstSetTime)
                     .Where(s => t.GetArrDep(s).HasMinOneTimeSet);
+
+                if (!stas2.Any())
+                    continue;
+
                 if (stas.IndexOf(stas2.First()) < stas.IndexOf(stas2.Last()))
                     tras.Add(t);
             }
