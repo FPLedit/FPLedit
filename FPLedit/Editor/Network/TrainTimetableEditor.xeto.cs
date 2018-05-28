@@ -26,6 +26,8 @@ namespace FPLedit.Editor.Network
         private TimeNormalizer normalizer;
         private Color errorColor = new Color(Colors.Red, 0.4f);
 
+        private bool mpmode = false;
+
         private TrainTimetableEditor()
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
@@ -51,6 +53,8 @@ namespace FPLedit.Editor.Network
             };
 
             internalToggle.Image = new Bitmap(this.GetResource("Resources.trapeztafel.png"));
+
+            mpmode = !Eto.Platform.Instance.SupportedFeatures.HasFlag(Eto.PlatformFeatures.CustomCellSupportsControlView);
         }
 
         public TrainTimetableEditor(IInfo info, Train t) : this()
@@ -103,24 +107,12 @@ namespace FPLedit.Editor.Network
 
                 if (mpmode)
                 {
-                    tb.KeyDown += (s, e) =>
-                    {
-                        if (e.Key == Keys.Enter)
-                        {
-                            e.Handled = true;
-                            dataGridView.ReloadData(dataGridView.SelectedRow);
-                        }
-                        else if (e.Key == Keys.T)
-                        {
-                            e.Handled = true;
-                            Trapez(dataGridView);
-                        }
-                        else if (e.Key == Keys.Z)
-                        {
-                            e.Handled = true;
-                            Zuglaufmeldung(dataGridView);
-                        }
-                    };
+                    tb.KeyDown += (s, e) => HandleKeystroke(e, dataGridView);
+
+                    // Wir gehen hier gleich in den vollen EditMode rein
+                    tb.CaretIndex = 0;
+                    tb.SelectAll();
+                    CellSelected(data, arrival); data.IsSelectedArrival = arrival; data.SelectedTextBox = tb;
                 }
 
                 tb.GotFocus += (s, e) => { CellSelected(data, arrival); data.IsSelectedArrival = arrival; data.SelectedTextBox = tb; };
@@ -140,9 +132,7 @@ namespace FPLedit.Editor.Network
                     t = text(data);
 
                 if ((!arrival && data.IsLast) || (arrival && data.IsFirst))
-                {
                     bg = Colors.DarkGray;
-                }
                 else if (arrival ^ data.IsFirst)
                 {
                     if (data.IsFirst && data.ArrDep.TrapeztafelHalt)
@@ -246,6 +236,22 @@ namespace FPLedit.Editor.Network
                 Sortable = false,
             });
 
+            view.KeyDown += (s, e) =>
+            {
+                if (e.Key == Keys.Home) // Pos1
+                {
+                    if (!mpmode)
+                        return;
+
+                    e.Handled = true;
+                    if (view.IsEditing)
+                        view.ReloadData(view.SelectedRow);
+                    view.BeginEdit(0, 2); // erstes Abfahrtsfeld (Ankunft ja deaktiviert)
+                }
+                else
+                    HandleKeystroke(e, view);
+            };
+
             var l = path.Select(sta => new DataElement()
             {
                 Station = sta,
@@ -255,6 +261,76 @@ namespace FPLedit.Editor.Network
             }).ToList();
 
             view.DataStore = l;
+        }
+
+        private void HandleKeystroke(KeyEventArgs e, GridView view)
+        {
+            if (view == null)
+                return;
+
+            if (e.Key == Keys.Enter)
+            {
+                if (!mpmode)
+                    return;
+
+                e.Handled = true;
+                var data = (DataElement)view.SelectedItem;
+                if (data == null || data.SelectedTextBox == null)
+                    return;
+                FormatCell(data, data.IsSelectedArrival, data.SelectedTextBox);
+                view.ReloadData(view.SelectedRow);
+            }
+            else if (e.Key == Keys.T)
+            {
+                e.Handled = true;
+                Trapez(view);
+            }
+            else if (e.Key == Keys.Z)
+            {
+                e.Handled = true;
+                Zuglaufmeldung(view);
+            }
+            else if (e.Key == Keys.Tab)
+            {
+                if (!mpmode)
+                    return;
+
+                e.Handled = true;
+                var data = (DataElement)view.SelectedItem;
+                if (data == null || data.SelectedTextBox == null)
+                    return;
+                FormatCell(data, data.IsSelectedArrival, data.SelectedTextBox);
+
+                var arrival = data.IsSelectedArrival;
+                var idx = arrival ? 2 : 1;
+                int row;
+                if (!e.Control)
+                    row = view.SelectedRow + (arrival ? 0 : 1);
+                else
+                    row = view.SelectedRow - (arrival ? 1 : 0);
+
+                view.ReloadData(view.SelectedRow); // Commit current data
+                view.BeginEdit(row, idx);
+            }
+            else
+            {
+                if (!mpmode)
+                    return;
+
+                var data = (DataElement)view.SelectedItem;
+                if (data == null || data.SelectedTextBox == null)
+                    return;
+                var tb = data.SelectedTextBox;
+                if (tb.HasFocus) // Wir können "echt" editieren
+                    return;
+                if (char.IsLetterOrDigit(e.KeyChar) || char.IsPunctuation(e.KeyChar))
+                {
+                    tb.Text += e.KeyChar;
+                    e.Handled = true;
+                }
+                if (e.Key == Keys.Backspace && tb.Text.Length > 0)
+                    tb.Text = tb.Text.Substring(0, tb.Text.Length - 1);
+            }
         }
 
         private void FormatCell(DataElement data, bool arrival, TextBox tb)
@@ -339,6 +415,7 @@ namespace FPLedit.Editor.Network
             return true;
         }
 
+        #region Events
         private void closeButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Ok;
@@ -358,7 +435,6 @@ namespace FPLedit.Editor.Network
             Close();
         }
 
-        #region Events
         private void trapeztafelToggle_Click(object sender, EventArgs e)
             => Trapez(dataGridView);
 

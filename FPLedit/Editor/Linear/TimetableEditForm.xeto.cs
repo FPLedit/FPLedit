@@ -30,6 +30,8 @@ namespace FPLedit.Editor.Linear
         private TimeNormalizer normalizer;
         private Color errorColor = new Color(Colors.Red, 0.4f);
 
+        private bool mpmode = false;
+
         public TimetableEditForm(IInfo info)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
@@ -61,15 +63,17 @@ namespace FPLedit.Editor.Linear
                     e.Handled = true;
                     ViewDependantAction(Zuglaufmeldung);
                 }
+                //else if (!topDataGridView.HasFocus || !bottomDataGridView.HasFocus)
+                //    HandleKeystroke(e, focused);
             };
 
             internalToggle.Image = new Bitmap(this.GetResource("Resources.trapeztafel.png"));
+
+            mpmode = !Eto.Platform.Instance.SupportedFeatures.HasFlag(Eto.PlatformFeatures.CustomCellSupportsControlView);
         }
 
         private CustomCell GetCell(Func<DataElement, string> text, Station sta, bool arrival, GridView view)
         {
-            var mpmode = !Eto.Platform.Instance.SupportedFeatures.HasFlag(Eto.PlatformFeatures.CustomCellSupportsControlView);
-
             var cc = new CustomCell();
             cc.CreateCell = args => new TextBox();
             cc.ConfigureCell = (args, control) =>
@@ -100,24 +104,17 @@ namespace FPLedit.Editor.Linear
 
                 if (mpmode)
                 {
-                    tb.KeyDown += (s, e) =>
-                    {
-                        if (e.Key == Keys.Enter)
-                        {
-                            e.Handled = true;
-                            focused.ReloadData(focused.SelectedRow);
-                        }
-                        else if (e.Key == Keys.T)
-                        {
-                            e.Handled = true;
-                            Trapez(focused);
-                        }
-                        else if (e.Key == Keys.Z)
-                        {
-                            e.Handled = true;
-                            Zuglaufmeldung(focused);
-                        }
-                    };
+                    tb.KeyDown += (s, e) => HandleKeystroke(e, focused);
+
+                    // Wir gehen hier gleich in den vollen EditMode rein
+                    tb.CaretIndex = 0;
+                    tb.SelectAll();
+
+                    CellSelected(data, sta, arrival);
+                    data.IsSelectedArrival = arrival;
+                    data.SelectedStation = sta;
+                    data.SelectedTextBox = tb;
+                    focused = view;
                 }
 
                 tb.GotFocus += (s, e) =>
@@ -162,6 +159,92 @@ namespace FPLedit.Editor.Linear
                 e.Graphics.DrawRectangle(Colors.Black, e.ClipRectangle);
             };
             return cc;
+        }
+
+        private void HandleKeystroke(KeyEventArgs e, GridView view)
+        {
+            if (view == null)
+                return;
+
+            if (e.Key == Keys.Enter)
+            {
+                if (!mpmode)
+                    return;
+
+                e.Handled = true;
+
+                var data = (DataElement)view.SelectedItem;
+                if (data == null || data.SelectedStation == null || data.SelectedTextBox == null)
+                    return;
+                FormatCell(data, data.SelectedStation, data.IsSelectedArrival, data.SelectedTextBox);
+
+                view.ReloadData(view.SelectedRow);
+            }
+            else if (e.Key == Keys.T)
+            {
+                e.Handled = true;
+                Trapez(view);
+            }
+            else if (e.Key == Keys.Z)
+            {
+                e.Handled = true;
+                Zuglaufmeldung(view);
+            }
+            else if (e.Key == Keys.Tab)
+            {
+                if (!mpmode)
+                    return;
+
+                e.Handled = true;
+                var data = (DataElement)view.SelectedItem;
+                if (data == null || data.SelectedStation == null || data.SelectedTextBox == null)
+                    return;
+                FormatCell(data, data.SelectedStation, data.IsSelectedArrival, data.SelectedTextBox);
+
+                var path = data.Train.GetPath();
+                int idx, row;
+                if (!e.Control)
+                {
+                    idx = path.IndexOf(data.SelectedStation) * 2 + (data.IsSelectedArrival ? 1 : 2);
+                    row = view.SelectedRow;
+                    if (path.Last() == data.SelectedStation && data.IsSelectedArrival)
+                    {
+                        idx = 1;
+                        row++;
+                    }
+                }
+                else
+                {
+                    idx = path.IndexOf(data.SelectedStation) * 2 - (data.IsSelectedArrival ? 1 : 0);
+                    row = view.SelectedRow;
+                    if (path.First() == data.SelectedStation && !data.IsSelectedArrival)
+                    {
+                        idx = (path.Count - 1) * 2;
+                        row--;
+                    }
+                }
+                view.ReloadData(view.SelectedRow); // Commit current data
+                view.BeginEdit(row, idx);
+            }
+            else
+            {
+                if (!mpmode)
+                    return;
+
+                var data = (DataElement)view.SelectedItem;
+                if (data == null || data.SelectedTextBox == null)
+                    return;
+                var tb = data.SelectedTextBox;
+                if (tb.HasFocus) // Wir können "echt" editieren
+                    return;
+                if (char.IsLetterOrDigit(e.KeyChar) || char.IsPunctuation(e.KeyChar))
+                {
+                    tb.Text += e.KeyChar;
+                    e.Handled = true;
+                }
+                if (e.Key == Keys.Backspace && tb.Text.Length > 0)
+                    tb.Text = tb.Text.Substring(0, tb.Text.Length - 1);
+            }
         }
 
         private void CellSelected(DataElement data, Station sta, bool arrival)
@@ -270,6 +353,21 @@ namespace FPLedit.Editor.Linear
             //view.LostFocus += (s, e) => ClearSelection();
 
             view.GotFocus += (s, e) => focused = view;
+            view.KeyDown += (s, e) =>
+            {
+                if (e.Key == Keys.Home) // Pos1
+                {
+                    if (!mpmode)
+                        return;
+
+                    e.Handled = true;
+                    if (view.IsEditing)
+                        view.ReloadData(view.SelectedRow);
+                    view.BeginEdit(0, 1); // erstes Abfahrtsfeld
+                }
+                else
+                    HandleKeystroke(e, view);
+            };
 
             view.DataStore = l;
         }
