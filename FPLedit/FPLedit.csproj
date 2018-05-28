@@ -76,6 +76,7 @@
     <Compile Include="..\build_scripts\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Config\ConfigFile.cs" />
     <Compile Include="Editor\EditorPlugin.cs" />
     <Compile Include="Editor\Filters\EditPatternForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
@@ -225,6 +226,9 @@
     <EmbeddedResource Include="Editor\DesignableForm.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="fpledit.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -5,17 +5,19 @@ using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using FPLedit.Config;
+using System.IO;
 
 namespace FPLedit
 {
     internal class Settings : ISettings
     {
-        private Configuration config;
+        private ConfigFile config;
 
         public Settings()
         {
-            var path = Assembly.GetEntryAssembly().Location;
-            config = ConfigurationManager.OpenExeConfiguration(path);
+            var path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            config = new ConfigFile(Path.Combine(path, "fpledit.conf"));
         }
 
         public T Get<T>(string key)
@@ -25,7 +27,7 @@ namespace FPLedit
         {
             if (KeyExists(key))
             {
-                var val = config.AppSettings.Settings[key].Value;
+                var val = config.Get(key);
 
                 return (T)Convert.ChangeType(val, typeof(T));
             }
@@ -34,25 +36,22 @@ namespace FPLedit
         }
 
         public bool KeyExists(string key)
-            => config.AppSettings.Settings.AllKeys.Contains(key);
+            => config.KeyExists(key);
 
         public void Remove(string key)
         {
-            config.AppSettings.Settings.Remove(key);
-            config.Save(ConfigurationSaveMode.Modified, false);
+            config.Remove(key);
+            config.Save();
         }
 
         public void Set(string key, string value)
         {
-            if (config.AppSettings.Settings.AllKeys.Contains(key))
-                config.AppSettings.Settings[key].Value = value;
-            else
-                config.AppSettings.Settings.Add(key, value);
-            config.Save(ConfigurationSaveMode.Modified, false);
+            config.Set(key, value);
+            config.Save();
         }
 
         public void Set(string key, bool value)
-            => Set(key, value.ToString());
+            => Set(key, value.ToString().ToLower());
 
         public void Set(string key, int value)
             => Set(key, value.ToString());
