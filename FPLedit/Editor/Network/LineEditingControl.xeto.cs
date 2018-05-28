@@ -176,6 +176,8 @@ namespace FPLedit.Editor.Network
                     info.SetUnsaved();
                 }
             };
+
+            KeyDown += (s, e) => DispatchKeystroke(e);
         }
 
         public void ReloadTimetable()

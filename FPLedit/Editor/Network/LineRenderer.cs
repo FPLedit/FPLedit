@@ -68,6 +68,7 @@ namespace FPLedit.Editor.Network
 
         private const int OFFSET_X = 20;
         private const int OFFSET_Y = 50;
+        private readonly Point OFFSET = new Point(OFFSET_X, OFFSET_Y);
 
         private Station tmp_sta;
         private float tmp_km;
@@ -81,6 +82,7 @@ namespace FPLedit.Editor.Network
             handler = new StaPosHandler();
 
             MouseDown += (s, e) => PlaceStation();
+            KeyDown += (s, e) => DispatchKeystroke(e);
         }
 
         public void SetTimetable(Timetable tt)
@@ -172,7 +174,7 @@ namespace FPLedit.Editor.Network
                 var x = OFFSET_X + point.X;
                 var y = OFFSET_Y + point.Y;
 
-                e.Graphics.DrawLine(linePen, new Point(x, y), mousePosition);
+                e.Graphics.DrawLine(linePen, new Point(x, y), mousePosition - _pan);
 
                 DrawArgs args = new DrawArgs(tmp_sta, new Point(x - 5, y - 5), new Size(10, 10), Colors.DarkCyan);
                 panels.Add(args);
@@ -271,13 +273,12 @@ namespace FPLedit.Editor.Network
                 return;
 
             Cursor = Cursors.Default;
-            var point = mousePosition;
-            point.X -= OFFSET_X;
-            point.Y -= OFFSET_Y;
+            var point = mousePosition - OFFSET - _pan;
             stapos[tmp_sta] = new Point(point);
 
             Invalidate();
         }
+        #endregion
 
         public void DispatchKeystroke(KeyEventArgs e)
         {
@@ -292,7 +293,6 @@ namespace FPLedit.Editor.Network
                 e.Handled = true;
             }
         }
-        #endregion
 
         #region Drag'n'Drop
         private DrawArgs draggedControl;
@@ -369,7 +369,7 @@ namespace FPLedit.Editor.Network
                     p.Y = ClientSize.Height;
 
                 draggedControl.Location = p;
-                stapos[draggedControl.Station] = p - new Point(OFFSET_X, OFFSET_Y) - new Point(_pan);
+                stapos[draggedControl.Station] = p - OFFSET - new Point(_pan);
                 hasDragged = true;
                 Invalidate();
             }
