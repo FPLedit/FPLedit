@@ -1,5 +1,6 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
+using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,31 +11,29 @@ namespace FPLedit.Editor.Filters
 {
     internal class EditPatternForm : Dialog<DialogResult>
     {
-        #pragma warning disable CS0649
+#pragma warning disable CS0649
         private TextBox searchTextBox;
         private Label propertyLabel;
-        private RadioButton startsWithRadioButton, endsWithRadioButton, containsRadioButton, equalsRadioButton;
-        #pragma warning restore CS0649
+        private StackLayout typeSelectionStack;
+#pragma warning restore CS0649
+        private SelectionUI typeSelection;
 
         public string Pattern { get; set; }
 
-        public EditPatternForm(string pattern, string property)
+        public EditPatternForm(string pattern, string property) : this(property)
         {
-            Eto.Serialization.Xaml.XamlReader.Load(this);
-
             Pattern = pattern;
             var type = pattern[0];
             var rest = pattern.Substring(1);
 
             searchTextBox.Text = rest;
-            propertyLabel.Text = property;
 
             switch (type)
             {
-                case '^': startsWithRadioButton.Checked = true; break;
-                case '$': endsWithRadioButton.Checked = true; break;
-                case ' ': containsRadioButton.Checked = true; break;
-                case '=': equalsRadioButton.Checked = true; break;
+                case '^': typeSelection.ChangeSelection(0); break;
+                case '$': typeSelection.ChangeSelection(1); break;
+                case ' ': typeSelection.ChangeSelection(2); break;
+                case '=': typeSelection.ChangeSelection(3); break;
             }
         }
 
@@ -43,6 +42,8 @@ namespace FPLedit.Editor.Filters
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
             propertyLabel.Text = property;
+
+            typeSelection = new SelectionUI(null, typeSelectionStack, "beginnt mit", "endet mit", "enthält", "ist");
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -58,11 +59,11 @@ namespace FPLedit.Editor.Filters
 
             char type;
 
-            if (startsWithRadioButton.Checked)
+            if (typeSelection.SelectedState == 0)
                 type = '^';
-            else if (endsWithRadioButton.Checked)
+            else if (typeSelection.SelectedState == 1)
                 type = '$';
-            else if (containsRadioButton.Checked)
+            else if (typeSelection.SelectedState == 2)
                 type = ' ';
             else
                 type = '=';

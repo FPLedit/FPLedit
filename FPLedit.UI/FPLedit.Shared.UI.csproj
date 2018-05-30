@@ -54,6 +54,7 @@
     </Compile>
     <Compile Include="EtoExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SelectionUI.cs" />
     <Compile Include="Validators\BaseValidator.cs" />
     <Compile Include="Validators\NotEmptyValidator.cs" />
     <Compile Include="Validators\NumberValidator.cs" />

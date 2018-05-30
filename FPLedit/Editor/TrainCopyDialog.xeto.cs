@@ -1,5 +1,6 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
+using FPLedit.Shared.UI;
 using FPLedit.Shared.UI.Validators;
 using System;
 using System.Collections.Generic;
@@ -11,13 +12,14 @@ namespace FPLedit.Editor
 {
     internal class TrainCopyDialog : Dialog<DialogResult>
     {
-        #pragma warning disable CS0649
+#pragma warning disable CS0649
         private TextBox offsetTextBox, nameTextBox, changeTextBox, countTextBox;
         private CheckBox copyAllCheckBox;
-        private RadioButton copyRadioButton;
+        private StackLayout selectStack;
         private TableLayout extendedOptionsTable, copyOptionsTable;
-        #pragma warning restore CS0649
+#pragma warning restore CS0649
         private NumberValidator offsetValidator, countValidator, changeValidator;
+        private SelectionUI modeSelect;
 
         private Train train;
         private Timetable tt;
@@ -39,18 +41,20 @@ namespace FPLedit.Editor
             offsetTextBox.Text = "+20";
             countTextBox.Text = "1";
             changeTextBox.Text = "2";
+
+            modeSelect = new SelectionUI(SelectMode, selectStack, "Zug kopieren", "Zug verschieben");
         }
 
-        private void SelectMode(object sender, EventArgs e)
+        private void SelectMode(int sender)
         {
-            var copy = copyRadioButton.Checked;
+            var copy = sender == 0;
 
             extendedOptionsTable.Visible = copyOptionsTable.Visible = copy;
         }
 
         private void closeButton_Click(object sender, EventArgs e)
         {
-            var copy = copyRadioButton.Checked;
+            var copy = modeSelect.SelectedState == 0;
 
             if (!offsetValidator.Valid || (copy && (!countValidator.Valid || !changeValidator.Valid)))
             {

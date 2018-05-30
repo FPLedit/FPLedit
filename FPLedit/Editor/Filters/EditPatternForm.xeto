@@ -9,22 +9,7 @@
     <TableRow>
       <StackLayout Spacing="5">
         <Label x:Name="propertyLabel" />
-        <RadioButton x:Name="startsWithRadioButton">beginnt mit</RadioButton>
-        <RadioButton x:Name="endsWithRadioButton" Text="endet mit">
-          <x:Arguments>
-            <x:Reference>startsWithRadioButton</x:Reference>
-          </x:Arguments>
-        </RadioButton>
-        <RadioButton x:Name="containsRadioButton" Text="enthält">
-          <x:Arguments>
-            <x:Reference>startsWithRadioButton</x:Reference>
-          </x:Arguments>
-        </RadioButton>
-        <RadioButton x:Name="equalsRadioButton" Text="ist">
-          <x:Arguments>
-            <x:Reference>startsWithRadioButton</x:Reference>
-          </x:Arguments>
-        </RadioButton>
+        <StackLayout Spacing="5" x:Name="typeSelectionStack" />
         <TextBox x:Name="searchTextBox" Width="150"></TextBox>
       </StackLayout>
     </TableRow>
