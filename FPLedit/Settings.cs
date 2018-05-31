@@ -17,7 +17,23 @@ namespace FPLedit
         public Settings()
         {
             var path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            config = new ConfigFile(Path.Combine(path, "fpledit.conf"));
+            path = Path.Combine(path, "fpledit.conf");
+
+            config = new ConfigFile(TryGetUserPath() ?? path);
+        }
+
+        private string TryGetUserPath()
+        {
+            try
+            {
+                var appPath = Assembly.GetEntryAssembly().Location;
+                var appConfig = ConfigurationManager.OpenExeConfiguration(appPath);
+                return appConfig.AppSettings.Settings["config.path"].Value;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public T Get<T>(string key)

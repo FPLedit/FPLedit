@@ -157,6 +157,10 @@ namespace FPLedit.Editor.Network
                 closeButton.Enabled = true;
 
                 lineRenderer.FixedStatusString = "";
+
+                // Wechseln in den Änderungsmodus
+                lineRenderer.StationClicked -= SetRoute;
+                lineRenderer.StationClicked += ChangeRoute;
             }
         }
 
@@ -165,17 +169,18 @@ namespace FPLedit.Editor.Network
             staStart = null;
             staEnd = null;
 
-            Path = train?.GetPath();
+            Path = new List<Station>();
 
             lineRenderer.ClearHighlight();
+            closeButton.Enabled = false;
+            lineRenderer.FixedStatusString = "Startstation auswählen";
 
-            if (train == null)
+            if (train != null)
             {
-                closeButton.Enabled = false;
-                lineRenderer.FixedStatusString = "Startstation auswählen";
+                // Wechsel in den Neu Setzen-Modus
+                lineRenderer.StationClicked -= ChangeRoute;
+                lineRenderer.StationClicked += SetRoute;
             }
-            else
-                lineRenderer.AddHighlight(Path);
         }
 
         private void cancelButton_Click(object sender, EventArgs e)

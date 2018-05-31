@@ -39,7 +39,7 @@ namespace FPLedit.Aushangfahrplan.Templates
                 .ToArray();
         }
 
-        public Station[] GetStationsInDir(TrainDirection dir, Station sta)
+        public Station[] GetStationsInDir(TrainDirection dir, Station sta, bool onlyFirst = true)
         {
             if (TT.Type == TimetableType.Linear)
             {
@@ -57,24 +57,36 @@ namespace FPLedit.Aushangfahrplan.Templates
                 var nextStations = dir == TrainDirection.ti ?
                     route.Stations.Where(s => s.Positions.GetPosition(rt) > pos) : // ti
                     route.Stations.Where(s => s.Positions.GetPosition(rt) < pos); // ta
-                if (nextStations.Any())
+                if (onlyFirst && nextStations.Any())
                     stasAfter.Add(nextStations.Last());
+                else
+                    stasAfter.AddRange(nextStations);
             }
             return stasAfter.ToArray();
         }
 
+        public Station[] GetStationsFromDir(TrainDirection dir, Station sta, bool onlyFirst = true)
+            => GetStationsInDir(dir == TrainDirection.ta ? TrainDirection.ti : TrainDirection.ta, sta, onlyFirst);
+
         public Train[] GetTrains(TrainDirection dir, Station sta)
         {
-            var stasAfter = GetStationsInDir(dir, sta);
+            var stasAfter = GetStationsInDir(dir, sta, false);
+            var stasBefore = GetStationsFromDir(dir, sta, false);
             return GetTrains(sta).Where(t =>
             {
                 var p = t.GetPath();
                 var ardeps = t.GetArrDeps();
-                var nSta = p.Where(s => stasAfter.Contains(s)).FirstOrDefault(s => ardeps[s].HasMinOneTimeSet);
-                if (nSta == null)
-                    return false;
-                var time = ardeps[nSta].FirstSetTime;
-                return time > ardeps[sta].Departure;
+                var nsta = p.Where(s => stasAfter.Contains(s)).FirstOrDefault(s => ardeps[s].HasMinOneTimeSet);
+                if (nsta == null)
+                {
+                    var lsta = p.Where(s => stasBefore.Contains(s)).FirstOrDefault(s => ardeps[s].HasMinOneTimeSet);
+                    if (lsta == null)
+                        return false;
+                    var ltime = ardeps[lsta].FirstSetTime;
+                    return ltime < ardeps[sta].Departure;
+                }
+                var ntime = ardeps[nsta].FirstSetTime;
+                return ntime > ardeps[sta].Departure;
             }).ToArray();
         }
     }

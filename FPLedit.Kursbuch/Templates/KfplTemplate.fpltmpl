@@ -185,7 +185,7 @@ if (attrs != null)
 			<td class="sta<#= last #>"><span><#= sta.SName.Replace(" ", "&nbsp;") #></span></td>
 
 			<# foreach (var t in trains) {
-				var times = "";
+				var times = "...";
 				last += trains.Last() == t ? " last-t" : "";
 				if (t.GetPath().Contains(sta))
 				{
