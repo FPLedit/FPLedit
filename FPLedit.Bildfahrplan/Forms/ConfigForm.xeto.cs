@@ -1,5 +1,5 @@
 ﻿using Eto.Forms;
-using FPLedit.BildfahrplanExport.Model;
+using FPLedit.Bildfahrplan.Model;
 using FPLedit.Shared;
 using FPLedit.Shared.UI.Validators;
 using System;
@@ -9,7 +9,7 @@ using System.Drawing.Text;
 using System.Linq;
 using FPLedit.Shared.Helpers;
 
-namespace FPLedit.BildfahrplanExport.Forms
+namespace FPLedit.Bildfahrplan.Forms
 {
     public partial class ConfigForm : Dialog<DialogResult>
     {

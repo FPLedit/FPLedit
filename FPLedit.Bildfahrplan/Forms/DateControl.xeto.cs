@@ -8,10 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using FPLedit.Shared;
 using FPLedit.Shared.Helpers;
-using FPLedit.BildfahrplanExport.Model;
+using FPLedit.Bildfahrplan.Model;
 using Eto.Forms;
 
-namespace FPLedit.BildfahrplanExport.Forms
+namespace FPLedit.Bildfahrplan.Forms
 {
     public partial class DateControl : Panel
     {

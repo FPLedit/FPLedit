@@ -1,4 +1,4 @@
-﻿using FPLedit.BildfahrplanExport.Render;
+﻿using FPLedit.Bildfahrplan.Render;
 using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FPLedit.BildfahrplanExport
+namespace FPLedit.Bildfahrplan
 {
     public class BitmapExport : IExport
     {

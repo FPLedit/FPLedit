@@ -50,7 +50,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit", "FPLedit\FPLedit.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Shared.UI", "FPLedit.UI\FPLedit.Shared.UI.csproj", "{5A1A083A-1308-488A-8A6B-ED8C1936B7C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.BildfahrplanExport", "FPLedit.Bildfahrplan\FPLedit.BildfahrplanExport.csproj", "{77EE9755-CE3E-4B7B-AEF1-474B228E7B50}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Bildfahrplan", "FPLedit.Bildfahrplan\FPLedit.Bildfahrplan.csproj", "{77EE9755-CE3E-4B7B-AEF1-474B228E7B50}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

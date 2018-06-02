@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace FPLedit.BildfahrplanExport.Render
+namespace FPLedit.Bildfahrplan.Render
 {
     internal struct Margins
     {

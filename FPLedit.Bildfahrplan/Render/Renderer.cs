@@ -1,4 +1,4 @@
-﻿using FPLedit.BildfahrplanExport.Model;
+﻿using FPLedit.Bildfahrplan.Model;
 using FPLedit.Shared;
 using FPLedit.Shared.Helpers;
 using System;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FPLedit.BildfahrplanExport.Render
+namespace FPLedit.Bildfahrplan.Render
 {
     public class Renderer
     {

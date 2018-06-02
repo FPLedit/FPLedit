@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 
-namespace FPLedit.BildfahrplanExport.Model
+namespace FPLedit.Bildfahrplan.Model
 {
     internal class TrainStyle : Style
     {

@@ -1,4 +1,4 @@
-﻿using FPLedit.BildfahrplanExport.Model;
+﻿using FPLedit.Bildfahrplan.Model;
 using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FPLedit.BildfahrplanExport.Render
+namespace FPLedit.Bildfahrplan.Render
 {
     internal class HeaderRenderer
     {

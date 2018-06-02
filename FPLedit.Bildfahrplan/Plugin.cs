@@ -1,7 +1,7 @@
 ﻿using Eto.Forms;
-using FPLedit.BildfahrplanExport.Forms;
-using FPLedit.BildfahrplanExport.Model;
-using FPLedit.BildfahrplanExport.Render;
+using FPLedit.Bildfahrplan.Forms;
+using FPLedit.Bildfahrplan.Model;
+using FPLedit.Bildfahrplan.Render;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System;
@@ -13,9 +13,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace FPLedit.BildfahrplanExport
+namespace FPLedit.Bildfahrplan
 {
-    [Plugin("Bildfahrplanmodul", "2.0.0", "2.0", Author = "Manuel Huber")]
+    [Plugin("Modul für Bildfahrpläne", Pvi.From, Pvi.UpTo, Author = "Manuel Huber")]
     public class Plugin : IPlugin
     {
         private IInfo info;

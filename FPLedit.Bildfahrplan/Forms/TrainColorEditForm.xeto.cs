@@ -1,12 +1,12 @@
 ﻿using Eto.Forms;
-using FPLedit.BildfahrplanExport.Model;
+using FPLedit.Bildfahrplan.Model;
 using FPLedit.Shared;
 using System;
 using System.Drawing;
 using System.Linq;
 using FPLedit.Shared.Helpers;
 
-namespace FPLedit.BildfahrplanExport.Forms
+namespace FPLedit.Bildfahrplan.Forms
 {
     public partial class TrainColorEditForm : Dialog<DialogResult>
     {

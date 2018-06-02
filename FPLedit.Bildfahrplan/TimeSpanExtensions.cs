@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace FPLedit.BildfahrplanExport
+namespace FPLedit.Bildfahrplan
 {
     public static class TimeSpanExtensions
     {
