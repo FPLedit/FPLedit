@@ -17,6 +17,8 @@ namespace FPLedit.BildfahrplanExport.Render
         private Timetable tt;
         private int route;
 
+        private const string TIME_FORMAT = @"hh\:mm";
+
         private bool marginsCalced = false;
         private Margins margin = new Margins(10, 20, 20, 20);
         public float width = 0, height = 0;
@@ -40,23 +42,11 @@ namespace FPLedit.BildfahrplanExport.Render
             if (width == 0) width = g.VisibleClipBounds.Width;
             if (height == 0) height = GetHeight(startTime, endTime);
 
-            if (!marginsCalced)
-            {
-                // MarginTop berechnen
-                float sMax = 0f;
-                if (attrs.StationVertical)
-                    sMax = tt.Stations.Max(sta => g.MeasureString(sta.ToString(attrs.DisplayKilometre, route), attrs.StationFont).Width);
-                else
-                    sMax = g.MeasureString("M", attrs.StationFont).Height;
-                margin.Top = attrs.DrawHeader ? sMax + margin.Top : margin.Top;
+            var stations = tt.GetRoute(route).GetOrderedStations();
 
-                // MarginLeft berechnen
-                List<float> tsizes = new List<float>();
-                foreach (var l in GetTimeLines(startTime, endTime))
-                    tsizes.Add(g.MeasureString(new TimeSpan(0, l + startTime.GetMinutes(), 0).ToString(@"hh\:mm"), attrs.TimeFont).Width);
-                margin.Left = tsizes.Max() + margin.Left;
-                marginsCalced = true;
-            }
+            if (!marginsCalced)
+                margin = CalcMargins(g, margin, stations, startTime, endTime);
+            marginsCalced = true;
 
             // Zeitaufteilung
             foreach (var l in GetTimeLines(out bool hour, startTime, endTime))
@@ -64,8 +54,8 @@ namespace FPLedit.BildfahrplanExport.Render
                 var offset = margin.Top + l * attrs.HeightPerHour / 60f;
                 g.DrawLine(new Pen(attrs.TimeColor, hour ? attrs.HourTimeWidth : attrs.MinuteTimeWidth), margin.Left - 5, offset, width - margin.Right, offset); // Linie
 
-                var size = g.MeasureString(new TimeSpan(0, l + startTime.GetMinutes(), 0).ToString(@"hh\:mm"), attrs.TimeFont);
-                g.DrawString(new TimeSpan(0, l + startTime.GetMinutes(), 0).ToString(@"hh\:mm"), attrs.TimeFont, new SolidBrush(attrs.TimeColor), margin.Left - 5 - size.Width, offset - (size.Height / 2)); // Beschriftung
+                var size = g.MeasureString(new TimeSpan(0, l + startTime.GetMinutes(), 0).ToString(TIME_FORMAT), attrs.TimeFont);
+                g.DrawString(new TimeSpan(0, l + startTime.GetMinutes(), 0).ToString(TIME_FORMAT), attrs.TimeFont, new SolidBrush(attrs.TimeColor), margin.Left - 5 - size.Width, offset - (size.Height / 2)); // Beschriftung
                 hour = !hour;
             }
 
@@ -73,53 +63,41 @@ namespace FPLedit.BildfahrplanExport.Render
             g.ExcludeClip(new Rectangle(0, GetHeight(startTime, endTime) - (int)margin.Bottom + 1, (int)width, (int)margin.Bottom + 20000)); // Unterer Rand nicht bemalbar (20000: Konstante für Page Margins)
 
             // Stationenaufteilung
-            var stations = tt.GetRoute(route).GetOrderedStations();
-            var firstStation = stations.First();
-            var lastStation = stations.Last();
-            var stationOffsets = new Dictionary<Station, float>();
-
-            var verticalFormat = new StringFormat(StringFormatFlags.DirectionVertical);
-            var stationBrush = new SolidBrush(attrs.StationColor);
-
-            foreach (var sta in stations)
-            {
-                var kil = sta.Positions.GetPosition(route) - firstStation.Positions.GetPosition(route);
-                var length = lastStation.Positions.GetPosition(route) - firstStation.Positions.GetPosition(route);
-
-                if (!kil.HasValue || !length.HasValue)
-                    throw new Exception("Unerwarteter Fehler beim Rendern der Route!");
-
-                var pos = ((kil / length) * (width - margin.Right - margin.Left)).Value;
-                var size = g.MeasureString(sta.ToString(attrs.DisplayKilometre, route), attrs.StationFont);
-
-                g.DrawLine(new Pen(attrs.StationColor, attrs.StationWidth), margin.Left + pos, margin.Top - 5, margin.Left + pos, height - margin.Bottom); // Linie
-
-                // Stationsnamen
-                if (attrs.DrawHeader)
-                {
-                    var display = sta.ToString(attrs.DisplayKilometre, route);
-                    if (attrs.StationVertical)
-                        g.DrawString(display, attrs.StationFont, stationBrush, margin.Left + pos - (size.Height / 2), margin.Top - 5 - size.Width, verticalFormat);
-                    else
-                        g.DrawString(display, attrs.StationFont, stationBrush, margin.Left + pos - (size.Width / 2), margin.Top - size.Height - 5);
-                }
-                stationOffsets.Add(sta, pos);
-            }
+            var headerRenderer = new HeaderRenderer(stations, attrs, route);
+            var stationOffsets = headerRenderer.Render(g, margin, width, height);
 
             // Züge
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             g.ExcludeClip(new Rectangle(0, 0, (int)width, (int)margin.Top)); // Kopf nicht bemalbar
             var trains = tt.Trains.Where(t =>
             {
-                return (attrs.RenderDays[0] && t.Days[0]) || (attrs.RenderDays[1] && t.Days[1])
-                || (attrs.RenderDays[2] && t.Days[2]) || (attrs.RenderDays[3] && t.Days[3])
-                || (attrs.RenderDays[4] && t.Days[4]) || (attrs.RenderDays[5] && t.Days[5])
-                || (attrs.RenderDays[6] && t.Days[6]);
+                for (int i = 0; i < 6; i++)
+                    if (attrs.RenderDays[i] && t.Days[i]) return true;
+                return false;
             });
             var trainRenderer = new TrainRenderer(stations, tt, margin, startTime, stationOffsets);
             foreach (var train in trains)
                 trainRenderer.Render(g, train);
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
+        }
+
+        private Margins CalcMargins(Graphics g, Margins orig, IEnumerable<Station> stations, TimeSpan startTime, TimeSpan endTime)
+        {
+            var result = orig;
+            // MarginTop berechnen
+            float sMax = 0f;
+            if (attrs.StationVertical)
+                sMax = stations.Max(sta => g.MeasureString(sta.ToString(attrs.DisplayKilometre, route), attrs.StationFont).Width);
+            else
+                sMax = g.MeasureString("M", attrs.StationFont).Height;
+            result.Top = attrs.DrawHeader ? sMax + result.Top : result.Top;
+
+            // MarginLeft berechnen
+            List<float> tsizes = new List<float>();
+            foreach (var l in GetTimeLines(startTime, endTime))
+                tsizes.Add(g.MeasureString(new TimeSpan(0, l + startTime.GetMinutes(), 0).ToString(TIME_FORMAT), attrs.TimeFont).Width);
+            result.Left = tsizes.Max() + result.Left;
+            return result;
         }
 
         private List<int> GetTimeLines(TimeSpan start, TimeSpan end)
@@ -148,17 +126,12 @@ namespace FPLedit.BildfahrplanExport.Render
 
         public int GetHeight(TimeSpan start, TimeSpan end)
         {
+            var stations = tt.GetRoute(route).GetOrderedStations();
             using (var image = new Bitmap(1, 1))
             using (var g = Graphics.FromImage(image))
             {
-                List<float> ssizes = new List<float>();
-                foreach (var sta in tt.GetRoute(route).Stations)
-                    ssizes.Add(g.MeasureString(sta.ToString(attrs.DisplayKilometre, route), attrs.StationFont).Width);
-
-                if (!marginsCalced)
-                    return (int)((attrs.DrawHeader ? ssizes.Max() : 0) + margin.Top + margin.Bottom + (end - start).GetMinutes() * attrs.HeightPerHour / 60f);
-                else
-                    return (int)(margin.Top + margin.Bottom + (end - start).GetMinutes() * attrs.HeightPerHour / 60f);
+                var m = CalcMargins(g, margin, stations, start, end);
+                return (int)(m.Top + m.Bottom + (end - start).GetMinutes() * attrs.HeightPerHour / 60f);
             }
         }
 

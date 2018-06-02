@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FPLedit.BildfahrplanExport.Render
 {
-    internal class Margins
+    internal struct Margins
     {
         public float Left { get; set; }
 
