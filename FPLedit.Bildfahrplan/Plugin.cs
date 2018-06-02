@@ -1,17 +1,11 @@
 ﻿using Eto.Forms;
 using FPLedit.Bildfahrplan.Forms;
 using FPLedit.Bildfahrplan.Model;
-using FPLedit.Bildfahrplan.Render;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Printing;
-using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace FPLedit.Bildfahrplan
 {
@@ -20,11 +14,6 @@ namespace FPLedit.Bildfahrplan
     {
         private IInfo info;
         private ButtonMenuItem showItem, configItem, trainColorItem, printItem;
-        private Renderer renderer;
-        private Dialog frm;
-        private Drawable panel;
-        private Scrollable scrollable;
-        private DateControl dtc;
 
         private TimetableStyle attrs;
 
@@ -91,73 +80,16 @@ namespace FPLedit.Bildfahrplan
                 info.SetUnsaved();
         }
 
-        #region Print
         private void PrintItem_Click(object sender, EventArgs e)
         {
             var route = (info.Timetable.Type == TimetableType.Network) ? info.FileState.SelectedRoute : Timetable.LINEAR_ROUTE_ID;
             new PrintRenderer(info.Timetable, route).InitPrint();
         }
-        #endregion
 
-        #region Preview
         private void ShowItem_Click(object sender, EventArgs e)
         {
             var route = (info.Timetable.Type == TimetableType.Network) ? info.FileState.SelectedRoute : Timetable.LINEAR_ROUTE_ID;
-            renderer = new Renderer(info.Timetable, route);
-            frm = new Dialog
-            {
-                ShowInTaskbar = false,
-                Title = "Bildfahrplan",
-                Maximizable = false,
-            };
-
-            var stackLayout = new StackLayout();
-            frm.Content = stackLayout;
-
-            dtc = new DateControl(info);
-            dtc.ValueChanged += Dtc_ValueChanged;
-            stackLayout.Items.Add(dtc);
-
-            panel = new Drawable
-            {
-                Height = renderer.GetHeight(),
-                Width = 800
-            };
-            panel.Paint += Panel_Paint;
-
-            scrollable = new Scrollable
-            {
-                ExpandContentWidth = false,
-                ExpandContentHeight = false,
-                Height = 800,
-                Content = panel,
-            };
-            stackLayout.Items.Add(scrollable);
-
-            frm.ShowModal(info.RootForm);
+            new PreviewForm(info, route).ShowModal(info.RootForm);
         }
-
-        private void Dtc_ValueChanged(object sender, EventArgs e)
-        {
-            renderer = new Renderer(info.Timetable, Timetable.LINEAR_ROUTE_ID);
-            panel.Height = renderer.GetHeight();
-            panel.Invalidate();
-        }
-
-        private void Panel_Paint(object sender, PaintEventArgs e)
-        {
-            renderer.width = panel.Width;
-
-            using (var bmp = new Bitmap(panel.Width, renderer.GetHeight()))
-            using (var g = Graphics.FromImage(bmp))
-            using (var ms = new MemoryStream())
-            {
-                renderer.Draw(g);
-                bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
-                using (var eto = new Eto.Drawing.Bitmap(ms.ToArray()))
-                    e.Graphics.DrawImage(eto, new Eto.Drawing.PointF(0, 0));
-            }
-        }
-        #endregion
     }
 }

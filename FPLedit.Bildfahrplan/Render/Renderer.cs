@@ -17,7 +17,7 @@ namespace FPLedit.Bildfahrplan.Render
         private Timetable tt;
         private int route;
 
-        private const string TIME_FORMAT = @"hh\:mm";
+        internal const string TIME_FORMAT = @"hh\:mm";
 
         private bool marginsCalced = false;
         private Margins margin = new Margins(10, 20, 20, 20);
@@ -49,18 +49,8 @@ namespace FPLedit.Bildfahrplan.Render
             marginsCalced = true;
 
             // Zeitaufteilung
-            foreach (var l in GetTimeLines(out bool hour, startTime, endTime))
-            {
-                var offset = margin.Top + l * attrs.HeightPerHour / 60f;
-                g.DrawLine(new Pen(attrs.TimeColor, hour ? attrs.HourTimeWidth : attrs.MinuteTimeWidth), margin.Left - 5, offset, width - margin.Right, offset); // Linie
-
-                var size = g.MeasureString(new TimeSpan(0, l + startTime.GetMinutes(), 0).ToString(TIME_FORMAT), attrs.TimeFont);
-                g.DrawString(new TimeSpan(0, l + startTime.GetMinutes(), 0).ToString(TIME_FORMAT), attrs.TimeFont, new SolidBrush(attrs.TimeColor), margin.Left - 5 - size.Width, offset - (size.Height / 2)); // Beschriftung
-                hour = !hour;
-            }
-
-            //TODO: Hier eine bessere Lösung, die nicht auf magic numbers basiert
-            g.ExcludeClip(new Rectangle(0, GetHeight(startTime, endTime) - (int)margin.Bottom + 1, (int)width, (int)margin.Bottom + 20000)); // Unterer Rand nicht bemalbar (20000: Konstante für Page Margins)
+            var timeRenderer = new TimeRenderer(attrs, this);
+            timeRenderer.Render(g, margin, startTime, endTime, width);
 
             // Stationenaufteilung
             var headerRenderer = new HeaderRenderer(stations, attrs, route);
@@ -68,7 +58,10 @@ namespace FPLedit.Bildfahrplan.Render
 
             // Züge
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            //TODO: Hier eine bessere Lösung, die nicht auf magic numbers basiert
             g.ExcludeClip(new Rectangle(0, 0, (int)width, (int)margin.Top)); // Kopf nicht bemalbar
+            g.ExcludeClip(new Rectangle(0, GetHeight(startTime, endTime) - (int)margin.Bottom + 1, (int)width, (int)margin.Bottom + 20000)); // Unterer Rand nicht bemalbar (20000: Konstante für Page Margins)
+
             var trains = tt.Trains.Where(t =>
             {
                 for (int i = 0; i < 6; i++)
@@ -94,16 +87,13 @@ namespace FPLedit.Bildfahrplan.Render
 
             // MarginLeft berechnen
             List<float> tsizes = new List<float>();
-            foreach (var l in GetTimeLines(startTime, endTime))
+            foreach (var l in GetTimeLines(out bool h, startTime, endTime))
                 tsizes.Add(g.MeasureString(new TimeSpan(0, l + startTime.GetMinutes(), 0).ToString(TIME_FORMAT), attrs.TimeFont).Width);
             result.Left = tsizes.Max() + result.Left;
             return result;
         }
 
-        private List<int> GetTimeLines(TimeSpan start, TimeSpan end)
-            => GetTimeLines(out bool h, start, end);
-
-        private List<int> GetTimeLines(out bool hourStart, TimeSpan start, TimeSpan end)
+        internal List<int> GetTimeLines(out bool hourStart, TimeSpan start, TimeSpan end)
         {
             List<int> lines = new List<int>();
             int minutesToNextLine = 60 - start.Minutes;

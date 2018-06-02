@@ -65,11 +65,22 @@ namespace FPLedit.Bildfahrplan.Model
             set => tt.SetAttribute("d", DaysHelper.DaysToBinString(value));
         }
 
-        //TODO: jTG 3 shV -> int
-        public bool StationLines
+        public StationLineStyle StationLines
         {
-            get => tt.GetAttribute("shV", true);
-            set => tt.SetAttribute("shV", value.ToString().ToLower());
+            get
+            {
+                if (tt.Version == TimetableVersion.JTG2_x)
+                    return tt.GetAttribute("shV", true) ? StationLineStyle.Normal : StationLineStyle.None;
+                else
+                    return (StationLineStyle)tt.GetAttribute("shV", 0);
+            }
+            set
+            {
+                if (tt.Version == TimetableVersion.JTG2_x)
+                    tt.SetAttribute("shV", (value != StationLineStyle.None).ToString().ToLower());
+                else
+                    tt.SetAttribute("shV", ((int)value).ToString());
+            }
         }
 
         public bool DrawHeader

@@ -60,7 +60,7 @@ namespace FPLedit.Bildfahrplan.Render
                 if (!GetTrainDirection(train))
                     tmpPoints.Reverse();
 
-                if (tmpPoints.Count == 2 && tmpPoints[0] != tmpPoints[1] && attrs.StationLines)
+                if (tmpPoints.Count == 2 && tmpPoints[0] != tmpPoints[1] && attrs.StationLines != StationLineStyle.None)
                     tmpPoints.InsertRange(1, tmpPoints);
 
                 points.AddRange(tmpPoints);

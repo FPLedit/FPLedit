@@ -1,4 +1,5 @@
 ﻿using FPLedit.Bildfahrplan.Model;
+using FPLedit.Bildfahrplan.Render;
 using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace FPLedit.Bildfahrplan.Render
+namespace FPLedit.Bildfahrplan.Forms
 {
     internal class PrintRenderer
     {

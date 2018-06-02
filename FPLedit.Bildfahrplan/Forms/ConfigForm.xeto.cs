@@ -84,7 +84,7 @@ namespace FPLedit.Bildfahrplan.Forms
             timeFontSizeComboBox.SelectedValue = (int)attrs.TimeFont.Size;
             trainFontSizeComboBox.SelectedValue = (int)attrs.TrainFont.Size;
 
-            stationLinesCheckBox.Checked = attrs.StationLines;
+            stationLinesCheckBox.Checked = attrs.StationLines != StationLineStyle.None;
             includeKilometreCheckBox.Checked = attrs.DisplayKilometre;
             drawStationNamesCheckBox.Checked = attrs.DrawHeader;
             stationVerticalCheckBox.Checked = attrs.StationVertical;
@@ -116,7 +116,7 @@ namespace FPLedit.Bildfahrplan.Forms
             attrs.TimeFont = new Font((string)timeFontComboBox.SelectedValue, (int)timeFontSizeComboBox.SelectedValue);
             attrs.TrainFont = new Font((string)trainFontComboBox.SelectedValue, (int)trainFontSizeComboBox.SelectedValue);
 
-            attrs.StationLines = stationLinesCheckBox.Checked.Value;
+            attrs.StationLines = stationLinesCheckBox.Checked.Value ? StationLineStyle.Normal : StationLineStyle.None;
             attrs.DisplayKilometre = includeKilometreCheckBox.Checked.Value;
             attrs.DrawHeader = drawStationNamesCheckBox.Checked.Value;
             attrs.StationVertical = stationVerticalCheckBox.Checked.Value;
