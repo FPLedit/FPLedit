@@ -10,11 +10,16 @@ namespace FPLedit.Bildfahrplan.Model
 {
     internal abstract class Style
     {
+        internal static IInfo info;
+
         private Timetable _parent;
+
+        protected readonly bool overrideEntityStyle;
 
         public Style(Timetable tt)
         {
             _parent = tt;
+            overrideEntityStyle = info.Settings.Get<bool>("bifpl.override-entity-styles");
         }
 
         #region Fonts

@@ -14,12 +14,14 @@ namespace FPLedit.Bildfahrplan
     {
         private IInfo info;
         private ButtonMenuItem showItem, configItem, trainColorItem, printItem;
+        private CheckMenuItem overrideItem;
 
         private TimetableStyle attrs;
 
         public void Init(IInfo info)
         {
             this.info = info;
+            Style.info = info;
             info.FileStateChanged += Info_FileStateChanged;
 
             info.Register<IExport>(new BitmapExport());
@@ -41,6 +43,15 @@ namespace FPLedit.Bildfahrplan
             trainColorItem = item.CreateItem("Zugdarstellung ändern");
             trainColorItem.Enabled = false;
             trainColorItem.Click += TrainColorItem_Click;
+
+            overrideItem = item.CreateCheckItem("Verwende nur Plandarstellung");
+            overrideItem.CheckedChanged += OverrideItem_CheckedChanged;
+            overrideItem.Checked = info.Settings.Get<bool>("bifpl.override-entity-styles");
+        }
+
+        private void OverrideItem_CheckedChanged(object sender, EventArgs e)
+        {
+            info.Settings.Set("bifpl.override-entity-styles", overrideItem.Checked.ToString().ToLower());
         }
 
         private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)

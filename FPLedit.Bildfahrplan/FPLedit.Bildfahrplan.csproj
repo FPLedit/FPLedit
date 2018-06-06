@@ -75,6 +75,7 @@
     <Compile Include="Forms\DateControl.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
+    <Compile Include="Model\StationStyle.cs" />
     <Compile Include="Render\HeaderRenderer.cs" />
     <Compile Include="Render\Margins.cs" />
     <Compile Include="Plugin.cs" />

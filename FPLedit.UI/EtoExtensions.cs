@@ -60,6 +60,14 @@ namespace FPLedit.Shared.UI
             return itm;
         }
 
+        public static CheckMenuItem CreateCheckItem(this ISubmenu parent, string text)
+        {
+            var itm = new CheckMenuItem();
+            itm.Text = text;
+            parent.Items.Add(itm);
+            return itm;
+        }
+
         public static void WordWrap(this Label label, int maxWidth)
         {
             var lines = new List<string>();

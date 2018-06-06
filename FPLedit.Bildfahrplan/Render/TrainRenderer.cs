@@ -31,13 +31,16 @@ namespace FPLedit.Bildfahrplan.Render
 
         public void Render(Graphics g, Train train)
         {
-            var style = new TrainStyle(train);
-            if (!style.Show)
+            var style = new TrainStyle(train, attrs);
+            if (!style.CalcedShow)
                 return;
 
             var ardps = train.GetArrDeps();
 
-            int tWidth = style.TrainWidth ?? attrs.TrainWidth;
+            var pen = new Pen(style.CalcedColor, style.CalcedWidth);
+            pen.DashPattern = ds.ParseDashstyle(style.CalcedLineStyle);
+            var brush = new SolidBrush(style.CalcedColor);
+
             List<PointF> points = new List<PointF>();
             foreach (var sta in stations)
             {
@@ -65,10 +68,6 @@ namespace FPLedit.Bildfahrplan.Render
 
                 points.AddRange(tmpPoints);
             }
-
-            var pen = new Pen(style.TrainColor ?? attrs.TrainColor, tWidth);
-            pen.DashPattern = ds.ParseDashstyle(style.LineStyle);
-            var brush = new SolidBrush(style.TrainColor ?? attrs.TrainColor);
 
             for (int i = 0; i < points.Count; i += 2)
             {
