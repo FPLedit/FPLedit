@@ -46,7 +46,7 @@ namespace FPLedit.Buchfahrplan.Forms
                 HeaderText = "Wellenlinien"
             });
 
-            gridView.CellDoubleClick += (s, e) => EditPoint(false);
+            gridView.MouseDoubleClick += (s, e) => EditPoint(false);
 
             gridView.SelectedItemsChanged += (s, e) => SelectPoint();
         }

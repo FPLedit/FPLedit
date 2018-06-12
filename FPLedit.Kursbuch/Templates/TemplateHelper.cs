@@ -33,7 +33,7 @@ namespace FPLedit.Kursbuch.Templates
         public Train[] GetTrains(Route route, TrainDirection dir)
         {
             var stas = GetStations(route, dir).ToList();
-            var tras = new List<Train>();
+            var times = new Dictionary<Train, TimeSpan>();
 
             foreach (var t in TT.Trains)
             {
@@ -41,8 +41,11 @@ namespace FPLedit.Kursbuch.Templates
                     continue;
                 if (TT.Type == TimetableType.Linear) // Züge in linearen Fahrplänen sind recht einfach
                 {
-                    if (t.Direction == dir)
-                        tras.Add(t);
+                    if (t.Direction != dir)
+                        continue;
+
+                    var time = t.GetArrDeps().FirstOrDefault(a => a.Value.HasMinOneTimeSet).Value.FirstSetTime;
+                    times.Add(t, time);
                     continue;
                 }
 
@@ -55,10 +58,13 @@ namespace FPLedit.Kursbuch.Templates
                     continue;
 
                 if (stas.IndexOf(stas2.First()) < stas.IndexOf(stas2.Last()))
-                    tras.Add(t);
+                {
+                    var time = t.GetArrDep(stas2.FirstOrDefault()).FirstSetTime;
+                    times.Add(t, time);
+                }
             }
 
-            return tras.ToArray();
+            return times.Keys.OrderBy(t => times[t]).ToArray();
         }
 
         public string GetRouteName(Route r, TrainDirection dir)

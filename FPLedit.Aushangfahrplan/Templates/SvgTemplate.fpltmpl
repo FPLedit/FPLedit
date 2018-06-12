@@ -42,6 +42,7 @@ if (attrs != null)
 <html>
 	<head>
 		<meta charset="utf-8">
+		<title>Aushangfahrplan generiert von FPLedit</title>
 <style>
 body {
 	color:black;

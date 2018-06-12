@@ -62,25 +62,30 @@ namespace FPLedit.Editor.Network
                 HeaderText = "Kommentar"
             });
 
-            gridView.CellDoubleClick += (s, e) => EditTrain(gridView, false);
+            gridView.MouseDoubleClick += (s, e) => EditTrain(gridView, false);
 
             UpdateListView(gridView);
 
-            KeyDown += (s, e) =>
-            {
-                if (e.Key == Keys.Delete)
-                    DeleteTrain(gridView, false);
-                else if ((e.Key == Keys.T && e.Control))
-                    EditTimetable(gridView, false);
-                else if ((e.Key == Keys.C && e.Control))
-                    CopyTrain(gridView, false);
-                else if ((e.Key == Keys.P && e.Control))
-                    EditPath(gridView, false);
-                else if ((e.Key == Keys.B && e.Control) || (e.Key == Keys.Enter))
-                    EditTrain(gridView, false);
-                else if (e.Key == Keys.N && e.Control)
-                    NewTrain(gridView);
-            };
+            if (Eto.Platform.Instance.IsWpf)
+                KeyDown += HandleKeystroke;
+            else
+                gridView.KeyDown += HandleKeystroke;
+        }
+
+        private void HandleKeystroke(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Keys.Delete)
+                DeleteTrain(gridView, false);
+            else if ((e.Key == Keys.T && e.Control))
+                EditTimetable(gridView, false);
+            else if ((e.Key == Keys.C && e.Control))
+                CopyTrain(gridView, false);
+            else if ((e.Key == Keys.P && e.Control))
+                EditPath(gridView, false);
+            else if ((e.Key == Keys.B && e.Control) || (e.Key == Keys.Enter))
+                EditTrain(gridView, false);
+            else if (e.Key == Keys.N && e.Control)
+                NewTrain(gridView);
         }
 
         private string BuildPath(Train t)

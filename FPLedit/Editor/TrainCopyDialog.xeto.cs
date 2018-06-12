@@ -29,11 +29,11 @@ namespace FPLedit.Editor
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
             offsetValidator = new NumberValidator(offsetTextBox, false, true);
-            offsetValidator.ErrorMessage = "Bitte die Verscheibung als Zahl in Minuten angeben!";
+            offsetValidator.ErrorMessage = "Bitte die Verschiebung als Zahl in Minuten angeben!";
             countValidator = new NumberValidator(countTextBox, false, true);
             countValidator.ErrorMessage = "Bitte eine gültige Anzahl neuer Züge eingeben!";
             changeValidator = new NumberValidator(changeTextBox, false, true);
-            changeValidator.ErrorMessage = "Bitte eine gülzige Veränderung der Zugnummer eingeben!";
+            changeValidator.ErrorMessage = "Bitte eine gültige Veränderung der Zugnummer eingeben!";
 
             train = t;
             this.tt = tt;
@@ -80,7 +80,16 @@ namespace FPLedit.Editor
                 var trains = th.CopyTrainMultiple(train, offset, nameTextBox.Text, copyAllCheckBox.Checked.Value, count, add);
 
                 foreach (var newTrain in trains)
+                {
+                    if (tt.Trains.Any(t => t.TName == newTrain.TName))
+                    {
+                        if (MessageBox.Show($"Es ist bereits ein Zug mit der Zugnummer {newTrain.TName} in diesem Fahrplan vorhanden, soll diese Kopie trotzdem angelegt werden?",
+                            "Züge kopieren", MessageBoxButtons.YesNo) == DialogResult.No)
+                            continue;
+                    }
+
                     tt.AddTrain(newTrain, true);
+                }
             }
             else
                 th.MoveTrain(train, offset);

@@ -15,14 +15,14 @@
       <TableCell ScaleWidth="true">
         <ComboBox x:Name="fontComboBox" />
       </TableCell>
-      <Label x:Name="exampleLabel">Besipiel</Label>
+      <Label x:Name="exampleLabel">Beispiel</Label>
     </TableRow>
     <TableRow>
       <Label>Schriftart für Kursbuchstr.</Label>
       <TableCell ScaleWidth="true">
         <ComboBox x:Name="hefontComboBox" />
       </TableCell>
-      <Label x:Name="heexampleLabel">Besipiel</Label>
+      <Label x:Name="heexampleLabel">Beispiel</Label>
     </TableRow>
     <TableRow ScaleHeight="true">
       <StackLayout Spacing="5">

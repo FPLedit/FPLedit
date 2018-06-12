@@ -32,7 +32,7 @@ namespace FPLedit
 #pragma warning restore CS0649
         #endregion
 
-        private const string TEMPLATE_PATH = "templates";
+        private string templatePath = "templates";
 
         private Timetable timetableBackup = null;
 
@@ -140,16 +140,17 @@ namespace FPLedit
             InitializeMenus();
 
             // Letzte Pfade initialisieren
-            lastPath = Settings.Get<string>("files.lastpath", null);
-            if (lastPath != null && Uri.TryCreate(lastPath, UriKind.Absolute, out Uri uri))
+            lastPath = Settings.Get("files.lastpath", "");
+            if (lastPath != "" && Uri.TryCreate(lastPath, UriKind.Absolute, out Uri uri))
             {
                 openFileDialog.Directory = uri;
                 saveFileDialog.Directory = uri;
             }
 
             // Vorlagen laden
+            templatePath = Settings.Get("tmpl.root", templatePath);
             templateManager = new TemplateManager(registry, Logger);
-            templateManager.LoadTemplates(TEMPLATE_PATH);
+            templateManager.LoadTemplates(templatePath);
 
             ExtensionsLoaded?.Invoke(this, new EventArgs());
 
@@ -202,7 +203,7 @@ namespace FPLedit
             var extItem = helpItem.CreateItem("Erweiterungen");
             extItem.Click += (s, ev) => (new ExtensionsForm(extensionManager, this)).ShowModal(this);
             var tmplItem = helpItem.CreateItem("Vorlagen");
-            tmplItem.Click += (s, ev) => (new TemplatesForm(templateManager, TEMPLATE_PATH)).ShowModal(this);
+            tmplItem.Click += (s, ev) => (new TemplatesForm(templateManager, templatePath)).ShowModal(this);
             helpItem.Items.Add(new SeparatorMenuItem());
             var docItem = helpItem.CreateItem("Online Hilfe");
             docItem.Click += (s, ev) => Process.Start("https://fahrplan.manuelhu.de/");
@@ -372,6 +373,9 @@ namespace FPLedit
         {
             if (enable_last)
             {
+                if (!filename.EndsWith(".fpl"))
+                    filename += ".fpl";
+
                 lastFiles.RemoveAll(s => s == filename); // Doppelte Dateinamen verhindern
                 lastFiles.Insert(0, filename);
                 if (lastFiles.Count > 3) // Überlauf
@@ -386,7 +390,7 @@ namespace FPLedit
         private void AutoUpdate_Check(object sender, EventArgs e)
         {
             // Beispiele für fehlende Funktionen
-            if (Environment.OSVersion.Platform != PlatformID.Win32NT)
+            if (Environment.OSVersion.Platform != PlatformID.Win32NT && !Settings.Get<bool>("mp-compat.disable-startup-warn"))
                 Logger.Warning("Sie verwenden FPLedit nicht auf Windows. Grundsätzlich ist FPLedit zwar mit allen Systemen kompatibel, auf denen Mono läuft, hat aber Einschränkungen in den Funktionen und möglichen Sicherheitsvorkehrungen und ist möglicherweise nicht getestet.");
 
             if (Settings.Get("updater.auto", "") == "")

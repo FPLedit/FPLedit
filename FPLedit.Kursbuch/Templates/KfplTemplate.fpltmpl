@@ -3,9 +3,17 @@
 <#@ import FPLedit.Kursbuch.Templates #>
 <#@ import FPLedit.Kursbuch.Model #>
 
-<#@ define string Sign(Train t)
-{
+<#@ define string Sign(Train t) {
     return "";
+}
+#>
+
+<#@ define string Remarks(Station s, Station[] route) {
+    if (route.FirstOrDefault() == s)
+		return "ab";
+	if (route.LastOrDefault() == s)
+		return "an";
+	return "";
 }
 #>
 
@@ -114,21 +122,23 @@ if (attrs != null)
 			border-bottom:solid black 1.5pt;
 		}
 		.sta {
-			border-right:solid black 1.5pt;
 			padding: 0 3px 0 3px;
+		}
+		.remarks {
+			border-right:solid black 1.5pt;
 		}
 		.tn span, .kl span, .ti span {
 			margin: 0;
 			font-size:8.0pt;
 			line-height:normal;
 		}
-		.sta span, .km span {
+		.sta span, .km span, .remarks span {
 			margin: 0;
 			line-height:107%;
 			font-size:9.0pt;
-			line-height:normal;
+			/*line-height:normal;*/
 		}
-		.sta.last, .km.last {
+		.sta.last, .km.last, .remarks.last {
 			border-bottom:solid black 1pt;
 		}
 		.last-t {
@@ -138,6 +148,9 @@ if (attrs != null)
 			border-left:solid black 1.0pt;
 			border-right:solid black 1.0pt;
 			padding:0;
+		}
+		.remarks {
+			text-align: right;
 		}
 		</style>
 		<style id="add-css">
@@ -162,7 +175,7 @@ if (attrs != null)
 			<!-- rowspan="2" wenn Klassen hinzugefügt -->
 			<td class="kmcap"><p>km</td>
 			<!-- bottom entfernen, wenn Klassen hinzugefügt -->
-			<td class="caption top bottom"><p><span>Zug Nr.</span></p></td>
+			<td colspan="2" class="caption top bottom"><p><span>Zug Nr.</span></p></td>
 			<# foreach (var t in trains) {
 				var lastt = trains.Last() == t ? " last-t" : "";
 			#>
@@ -183,6 +196,7 @@ if (attrs != null)
 			<# var last = stations.Last() == sta ? " last" : ""; #>
 			<td class="km<#= last #>"><span><#= sta.Positions.GetPosition(route.Index).Value.ToString("0.0") #></span></td>
 			<td class="sta<#= last #>"><span><#= sta.SName.Replace(" ", "&nbsp;") #></span></td>
+			<td class="remarks<#= last #>"><span><#= Remarks(sta, stations) #></span></td>
 
 			<# foreach (var t in trains) {
 				var times = "...";

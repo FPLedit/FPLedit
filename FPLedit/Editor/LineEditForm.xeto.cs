@@ -48,21 +48,26 @@ namespace FPLedit.Editor
                 HeaderText = "Position"
             });
 
-            gridView.CellDoubleClick += (s, e) => EditStation(false);
+            gridView.MouseDoubleClick += (s, e) => EditStation(false);
 
-            KeyDown += (s, e) =>
-            {
-                if (e.Key == Keys.Delete)
-                    DeleteStation(false);
-                else if (e.Key == Keys.L && e.Control)
-                    LoadLine();
-                else if (e.Key == Keys.B && e.Control)
-                    EditStation(false);
-                else if (e.Key == Keys.N && e.Control)
-                    NewStation();
-            };
+            if (Eto.Platform.Instance.IsWpf)
+                KeyDown += HandleKeystroke;
+            else
+                gridView.KeyDown += HandleKeystroke;
 
             UpdateStations();
+        }
+
+        private void HandleKeystroke(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Keys.Delete)
+                DeleteStation(false);
+            else if (e.Key == Keys.L && e.Control)
+                LoadLine();
+            else if (e.Key == Keys.B && e.Control)
+                EditStation(false);
+            else if (e.Key == Keys.N && e.Control)
+                NewStation();
         }
 
         private void UpdateStations()

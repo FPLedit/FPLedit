@@ -335,15 +335,6 @@ namespace FPLedit.Shared
         }
         #endregion
 
-        public string[] GetAllTfzs()
-        {
-            return Trains
-                .Select(t => t.Locomotive)
-                .Distinct()
-                .Where(s => s != "")
-                .ToArray();
-        }
-
         [DebuggerStepThrough]
         public override string ToString()
             => GetLineName(TrainDirection.ta);

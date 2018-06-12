@@ -55,6 +55,9 @@ namespace FPLedit.Editor.Network
             internalToggle.Image = new Bitmap(this.GetResource("Resources.trapeztafel.png"));
 
             mpmode = !Eto.Platform.Instance.SupportedFeatures.HasFlag(Eto.PlatformFeatures.CustomCellSupportsControlView);
+
+            if (mpmode)
+                DefaultButton = null; // Bugfix, Window closes on enter [Enter]
         }
 
         public TrainTimetableEditor(IInfo info, Train t) : this()

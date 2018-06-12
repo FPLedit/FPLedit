@@ -71,13 +71,13 @@ namespace FPLedit.Editor
             var ret = new Train[count];
 
             var nameBase = name.Trim();
-            var last = nameBase.ToCharArray().Last();
+            var last = nameBase.ToCharArray().LastOrDefault();
             var num = "";
             while (char.IsDigit(last))
             {
                 num = last + num;
                 nameBase = nameBase.Substring(0, nameBase.Length - 1);
-                last = nameBase.ToCharArray().Last();
+                last = nameBase.ToCharArray().LastOrDefault();
             }
 
             int.TryParse(num, out int start); // Startnummer

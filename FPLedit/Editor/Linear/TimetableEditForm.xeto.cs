@@ -38,6 +38,8 @@ namespace FPLedit.Editor.Linear
             trapeztafelToggle = new ToggleButton(internalToggle);
             trapeztafelToggle.ToggleClick += trapeztafelToggle_Click;
 
+            mpmode = !Eto.Platform.Instance.SupportedFeatures.HasFlag(Eto.PlatformFeatures.CustomCellSupportsControlView);
+
             this.info = info;
             info.BackupTimetable();
 
@@ -69,7 +71,8 @@ namespace FPLedit.Editor.Linear
 
             internalToggle.Image = new Bitmap(this.GetResource("Resources.trapeztafel.png"));
 
-            mpmode = !Eto.Platform.Instance.SupportedFeatures.HasFlag(Eto.PlatformFeatures.CustomCellSupportsControlView);
+            if (mpmode)
+                DefaultButton = null; // Bugfix, Window closes on enter [Enter]
         }
 
         private CustomCell GetCell(Func<DataElement, string> text, Station sta, bool arrival, GridView view)
@@ -80,6 +83,12 @@ namespace FPLedit.Editor.Linear
             {
                 var tb = (TextBox)control;
                 var data = (DataElement)args.Item;
+
+                if (data == null)
+                {
+                    tb.Visible = false;
+                    return;
+                }
 
                 if (!data.HasError(sta, arrival))
                     tb.Text = text(data);
@@ -136,6 +145,9 @@ namespace FPLedit.Editor.Linear
                 var bg = Colors.White;
                 var fnt = fn;
                 var data = (DataElement)e.Item;
+
+                if (data == null)
+                    return;
 
                 if (!data.HasError(sta, arrival))
                     t = text(data);
@@ -368,6 +380,8 @@ namespace FPLedit.Editor.Linear
                 else
                     HandleKeystroke(e, view);
             };
+            if (mpmode)
+                l.Add(null);
 
             view.DataStore = l;
         }

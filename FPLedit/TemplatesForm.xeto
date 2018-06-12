@@ -13,13 +13,13 @@
       <TableLayout Spacing="5,5">
         <TableRow>
           <TableCell>
-            <Button Click="removeButton_Click">Entfernen</Button>
+            <Button x:Name="removeButton" Click="removeButton_Click">Entfernen</Button>
           </TableCell>
           <TableCell>
-            <Button Click="editButton_Click">Bearbeiten</Button>
+            <Button x:Name="editButton" Click="editButton_Click">Bearbeiten</Button>
           </TableCell>
           <TableCell>
-            <Button Click="extractButton_Click">Integrierte Vorlage extrahieren</Button>
+            <Button x:Name="extractButton" Click="extractButton_Click">Integrierte Vorlage extrahieren</Button>
           </TableCell>
           <TableCell ScaleWidth="True">
           </TableCell>

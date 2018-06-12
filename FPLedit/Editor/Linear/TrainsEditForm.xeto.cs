@@ -22,6 +22,8 @@ namespace FPLedit.Editor.Linear
         private const TrainDirection TOP_DIRECTION = TrainDirection.ti;
         private const TrainDirection BOTTOM_DIRECTION = TrainDirection.ta;
 
+        private GridView active;
+
         public TrainsEditForm(IInfo info)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
@@ -37,35 +39,31 @@ namespace FPLedit.Editor.Linear
             UpdateListView(topGridView, TOP_DIRECTION);
             UpdateListView(bottomGridView, BOTTOM_DIRECTION);
 
-            bottomGridView.CellDoubleClick += (s, e) => EditTrain(bottomGridView, BOTTOM_DIRECTION, false);
-            topGridView.CellDoubleClick += (s, e) => EditTrain(topGridView, TOP_DIRECTION, false);
+            bottomGridView.MouseDoubleClick += (s, e) => EditTrain(bottomGridView, BOTTOM_DIRECTION, false);
+            topGridView.MouseDoubleClick += (s, e) => EditTrain(topGridView, TOP_DIRECTION, false);
 
-            KeyDown += (s, e) =>
-            {
-                GridView active = null;
-                TrainDirection dir = default(TrainDirection);
+            if (Eto.Platform.Instance.IsWpf)
+                KeyDown += HandleKeystroke;
+        }
 
-                if (topGridView.HasFocus)
-                {
-                    active = topGridView;
-                    dir = TOP_DIRECTION;
-                }
-                if (bottomGridView.HasFocus)
-                {
-                    active = bottomGridView;
-                    dir = BOTTOM_DIRECTION;
-                }
+        private void HandleKeystroke(object sender, KeyEventArgs e)
+        {
+            TrainDirection dir = default(TrainDirection);
 
-                if (active == null)
-                    return;
+            if (active == topGridView)
+                dir = TOP_DIRECTION;
+            else
+                dir = BOTTOM_DIRECTION;
 
-                if (e.Key == Keys.Delete)
-                    DeleteTrain(active, dir, false);
-                else if ((e.Key == Keys.B && e.Control) || (e.Key == Keys.Enter))
-                    EditTrain(active, dir, false);
-                else if (e.Key == Keys.N && e.Control)
-                    NewTrain(active, dir);
-            };
+            if (active == null)
+                return;
+
+            if (e.Key == Keys.Delete)
+                DeleteTrain(active, dir, false);
+            else if ((e.Key == Keys.B && e.Control) || (e.Key == Keys.Enter))
+                EditTrain(active, dir, false);
+            else if (e.Key == Keys.N && e.Control)
+                NewTrain(active, dir);
         }
 
         private void UpdateListView(GridView view, TrainDirection direction)
@@ -105,6 +103,11 @@ namespace FPLedit.Editor.Linear
                 DataCell = new TextBoxCell { Binding = Binding.Property<Train, string>(t => t.Comment) },
                 HeaderText = "Kommentar"
             });
+
+            view.GotFocus += (s, e) => active = view;
+
+            if (!Eto.Platform.Instance.IsWpf)
+                view.KeyDown += HandleKeystroke;
         }
 
         private void DeleteTrain(GridView view, TrainDirection dir, bool message = true)

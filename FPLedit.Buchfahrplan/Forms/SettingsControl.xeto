@@ -15,7 +15,7 @@
       <TableCell ScaleWidth="true">
         <ComboBox x:Name="fontComboBox" />
       </TableCell>
-      <Label x:Name="exampleLabel">Besipiel</Label>
+      <Label x:Name="exampleLabel">Beispiel</Label>
     </TableRow>
     <TableRow ScaleHeight="true">
       <StackLayout Spacing="5">
@@ -24,6 +24,12 @@
       </StackLayout>
       <TableCell ScaleWidth="true">
         <TextArea x:Name="cssTextBox"></TextArea>
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell></TableCell>
+      <TableCell ScaleWidth="true">
+        <CheckBox x:Name="commentCheckBox">Kommentare im Buchfahrplan anzeigen</CheckBox>
       </TableCell>
     </TableRow>
     <TableRow>

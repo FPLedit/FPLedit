@@ -26,7 +26,7 @@ namespace FPLedit.Buchfahrplan.Forms
         private ComboBox fontComboBox;
         private Label exampleLabel, cssLabel;
         private LinkButton cssHelpLinkLabel;
-        private CheckBox consoleCheckBox;
+        private CheckBox consoleCheckBox, commentCheckBox;
         private TextArea cssTextBox;
 #pragma warning restore CS0649
 
@@ -44,6 +44,7 @@ namespace FPLedit.Buchfahrplan.Forms
             {
                 fontComboBox.Text = attrs.Font;
                 cssTextBox.Text = attrs.Css ?? "";
+                commentCheckBox.Checked = attrs.ShowComments;
             }
             else
             {
@@ -81,6 +82,7 @@ namespace FPLedit.Buchfahrplan.Forms
         {
             attrs.Font = fontComboBox.Text;
             attrs.Css = cssTextBox.Text;
+            attrs.ShowComments = commentCheckBox.Checked.Value;
 
             var tmpl = (ITemplate)templateComboBox.SelectedValue;
             if (tmpl != null)

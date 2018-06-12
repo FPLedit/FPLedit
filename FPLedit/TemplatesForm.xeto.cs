@@ -17,6 +17,7 @@ namespace FPLedit
     {
 #pragma warning disable CS0649
         private GridView gridView;
+        private Button extractButton, editButton, removeButton;
 #pragma warning restore CS0649
 
         private TemplateManager manager;
@@ -34,7 +35,8 @@ namespace FPLedit
             deactivatedDir = new DirectoryInfo(Path.Combine(appPath, templateRoot, "deactivated"));
 
             var buildName = new Func<string, string>((x) => x.StartsWith("builtin:") ? "(integriert)" : x);
-            gridView.Columns.Add(new GridColumn() {
+            gridView.Columns.Add(new GridColumn()
+            {
                 DataCell = new TextBoxCell { Binding = Binding.Property<ITemplate, string>(t => t.TemplateName) },
                 HeaderText = "Name"
             });
@@ -49,6 +51,19 @@ namespace FPLedit
                 HeaderText = "Typ"
             });
 
+            gridView.SelectedItemsChanged += (s, e) =>
+            {
+                var tmpl = (ITemplate)gridView.SelectedItem;
+                if (tmpl == null)
+                {
+                    extractButton.Enabled = editButton.Enabled = removeButton.Enabled = false;
+                    return;
+                }
+                var builtin = tmpl.Identifier.StartsWith("builtin:");
+                extractButton.Enabled = builtin;
+                editButton.Enabled = removeButton.Enabled = !builtin;
+            };
+
             RefreshList();
         }
 
@@ -60,7 +75,7 @@ namespace FPLedit
 
         private void ReloadTemplates()
         {
-            manager.LoadTemplates("templates");
+            manager.LoadTemplates(templatesDir.FullName);
             RefreshList();
         }
 
@@ -70,7 +85,9 @@ namespace FPLedit
             var src = tmpl.TemplateSource;
 
             templatesDir.Create();
+
             var fn = Path.Combine(templatesDir.FullName, "extracted.fpltmpl");
+            fn = FindNextFreeFile(fn);
             File.WriteAllText(fn, src);
 
             ReloadTemplates();
@@ -126,8 +143,13 @@ namespace FPLedit
             Process p = new Process();
             p.StartInfo.FileName = fn;
 
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
             if (p.Start())
                 p.WaitForExit();
+            watch.Stop();
+            if (watch.ElapsedMilliseconds < 200)
+                MessageBox.Show($"Es konnte kein Editor gestartet werden! Bitte öffnen Sie die Datei \"{fn}\" in einem Texteditor.", "FPLedit");
             ReloadTemplates();
         }
 

@@ -53,7 +53,7 @@ namespace FPLedit.Config
 
         public void Remove(string key)
         {
-            var ll = lines.OfType<ValueLine>().Where(vl => vl.Key == key);
+            var ll = lines.OfType<ValueLine>().Where(vl => vl.Key == key).ToArray();
             foreach (var l in ll)
                 lines.Remove(l);
         }

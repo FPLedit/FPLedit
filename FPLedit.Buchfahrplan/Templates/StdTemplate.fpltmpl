@@ -166,6 +166,11 @@ if (attrs != null)
 				<tr>
 					<td colspan=6 class="linename"><#= tra.GetLineName() #></td>
 				</tr>
+				<# if (attrs.ShowComments && tra.Comment != null && tra.Comment != "") { #>
+				<tr>
+					<td colspan="10" class="comment"><#= tra.Comment #></td>
+				</tr>
+				<# } #>
 				<tr>
 					<td class="tfz" colspan="9">
 					<table class="tfz-table"><tr>

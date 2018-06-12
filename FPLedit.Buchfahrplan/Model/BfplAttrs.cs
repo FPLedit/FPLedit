@@ -56,6 +56,12 @@ namespace FPLedit.Buchfahrplan.Model
             set => SetAttribute("sp", value);
         }
 
+        public bool ShowComments
+        {
+            get => GetAttribute<bool>("shC");
+            set => SetAttribute("shC", value.ToString().ToLower());
+        }
+
 
         public BfplAttrs(Timetable tt) : base("bfpl_attrs", tt)
         {
