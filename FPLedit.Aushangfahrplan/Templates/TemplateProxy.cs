@@ -4,31 +4,34 @@ using System.Reflection;
 
 namespace FPLedit.Aushangfahrplan.Templates
 {
-    internal class StdTemplateProxy : ITemplateProxy
+    internal class StdTemplateProxy : BaseTemplateProxy, ITemplateProxy
     {
         public string TemplateIdentifier => "builtin:FPLedit.Aushangfahrplan/Templates/AfplTemplate.fpltmpl";
 
         public string GetTemplateCode()
-        {
-            var a = Assembly.GetAssembly(GetType());
-            string name = "FPLedit.Aushangfahrplan.Templates.AfplTemplate.fpltmpl";
-
-            using (var stream = a.GetManifestResourceStream(name))
-            using (var sr = new StreamReader(stream))
-                return sr.ReadToEnd();
-        }
+            => LoadFile("FPLedit.Aushangfahrplan.Templates.AfplTemplate.fpltmpl") +
+            LoadFile("FPLedit.Aushangfahrplan.Templates.AfplCommon.fpltmpl");
     }
 
-    internal class SvgTemplateProxy : ITemplateProxy
+    internal class SvgTemplateProxy : BaseTemplateProxy, ITemplateProxy
     {
         public string TemplateIdentifier => "builtin:FPLedit.Aushangfahrplan/Templates/SvgTemplate.fpltmpl";
 
         public string GetTemplateCode()
-        {
-            var a = Assembly.GetAssembly(GetType());
-            string name = "FPLedit.Aushangfahrplan.Templates.SvgTemplate.fpltmpl";
+            => LoadFile("FPLedit.Aushangfahrplan.Templates.SvgTemplate.fpltmpl") +
+            LoadFile("FPLedit.Aushangfahrplan.Templates.AfplCommon.fpltmpl");
+    }
 
-            using (var stream = a.GetManifestResourceStream(name))
+    internal class BaseTemplateProxy
+    {
+        private Assembly assembly;
+
+        protected string LoadFile(string dotPath)
+        {
+            if (assembly == null)
+                assembly = Assembly.GetAssembly(GetType());
+
+            using (var stream = assembly.GetManifestResourceStream(dotPath))
             using (var sr = new StreamReader(stream))
                 return sr.ReadToEnd();
         }

@@ -98,6 +98,11 @@
   <ItemGroup>
     <EmbeddedResource Include="Forms\SettingsControl.xeto" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Templates\AfplCommon.fpltmpl">
+      <LastGenOutput>AfplTemplate.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
