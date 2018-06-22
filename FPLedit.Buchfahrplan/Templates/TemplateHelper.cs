@@ -129,7 +129,7 @@ namespace FPLedit.Buchfahrplan.Templates
 
             foreach (var train in tt.Trains.Where(pred))
             {
-                if (train == ot)
+                if (train == ot || !train.GetPath().Contains(s))
                     continue;
 
                 TimeSpan start2 = train.GetArrDep(s).Arrival;

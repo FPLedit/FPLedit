@@ -11,6 +11,10 @@ namespace FPLedit.Templating
 {
     internal class Compiler
     {
+#if TMPL_DEBUG
+        public static string CompilerDebugTemp => Path.Combine(Path.GetTempPath(), "fpledit-compiler");
+#endif
+
         public string RunTemplate(string code, string[] references, Timetable tt)
         {
             Assembly assembly = GetAssembly(code, references);
@@ -30,6 +34,11 @@ namespace FPLedit.Templating
                 GenerateExecutable = false,
                 GenerateInMemory = true,
             };
+
+#if TMPL_DEBUG
+            cparams.IncludeDebugInformation = true;
+            cparams.TempFiles = new TempFileCollection(CompilerDebugTemp, true);
+#endif
 
             cparams.ReferencedAssemblies.Add("mscorlib.dll");
             cparams.ReferencedAssemblies.Add("System.Core.dll");
@@ -60,6 +69,6 @@ namespace FPLedit.Templating
                     return (string)mi.Invoke(null, new object[] { tt });
             }
             return null;
-         }
+        }
     }
 }

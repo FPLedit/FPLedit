@@ -19,6 +19,16 @@ namespace FPLedit.Templating
         {
             this.store = store;
             this.logger = logger;
+
+#if TMPL_DEBUG
+            try
+            {
+                if (Directory.Exists(Compiler.CompilerDebugTemp))
+                    Directory.Delete(Compiler.CompilerDebugTemp, true);
+                Directory.CreateDirectory(Compiler.CompilerDebugTemp);
+            }
+            catch { }
+#endif
         }
 
         public void LoadTemplates(string templateRoot)

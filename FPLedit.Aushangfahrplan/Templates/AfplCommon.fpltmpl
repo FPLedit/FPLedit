@@ -19,11 +19,24 @@
 	Train train = trains.Count() > i ? trains[i] : null;
 	if (train == null)
 		return "";
-
-	if (multipleStations)
-		return train.TName + " nach " + train.GetArrDeps().Last(a => a.Value.HasMinOneTimeSet).Key.SName;
-
 	return train.TName;
+} #>
+
+<#@ define string DirString(Train[] trains, int i) {
+	if (!multipleStations)
+		return "";
+	Train train = trains.Count() > i ? trains[i] : null;
+	if (train == null)
+		return "<td class=\"direction\"></td>";
+	return "<td class=\"direction\">" + train.GetArrDeps().Last(a => a.Value.HasMinOneTimeSet).Key.SName + "</td>";
+} #>
+
+<#@ define string DirHeader(bool showText) {
+	if (!multipleStations)
+		return "";
+	if (!showText)
+		return "<td class=\"direction header\"></td>";
+	return "<td class=\"direction header\">Richtung</td>";
 } #>
 
 <#@ define bool multipleStations = false; #>
@@ -44,6 +57,9 @@ if (attrs != null)
         hwFont = attrs.HwFont;
     additionalCss = attrs.Css ?? "";
 }
+
+// Netzwerk-Modus mit Zielangabe
+multipleStations = tt.Type == TimetableType.Network && tt.Stations.Any(s => s.Routes.Length > 1);
 #>
 
 <!doctype html>
@@ -100,17 +116,23 @@ td {
 }
 .time {
 	text-align:center;
-	width: 200px;
+	width: <#= multipleStations ? "100" : "200" #>px;
+	<# if (multipleStations) { #>
 	border-right: 2px solid #000;
+	<# } #>
 }
 .name {
 	text-align:center;
 	width: 76px;
+	border-right: 2px solid #000;
+}
+.direction {
+	width: 150px;
 }
 .header {
 	border-bottom: 2px solid #000;
 }
-.time:not(.header), .name:not(.header) {
+.time:not(.header), .name:not(.header), .direction:not(.header) {
 	font-family: "<#= hwFont #>", serif;
 }
 .dir {
@@ -123,7 +145,11 @@ td {
 .dir ~ .dir {
 	border-right: 0;
 }
-.time + .name:not(:last-child) {
+<# if (!multipleStations) { #>
+.name + .time:not(:last-child) {
+<# } else { #>
+.name + .time + .direction:not(:last-child) {
+<# } #>
 	border-right:3px solid #000;
 }
 </style>
@@ -137,15 +163,13 @@ td {
 	<p class="title"><#= abfahrtSVG #></p>
 	<p class="heading">der Züge in der Richtung nach</p>
 	<#
-		var fss = helper.GetStationsInDir(TrainDirection.ta, sta);
-		var lss = helper.GetStationsInDir(TrainDirection.ti, sta);
-
-		multipleStations = fss.Count() > 1 || lss.Count() > 1;
+		var fss = helper.GetLastStations(TrainDirection.ta, sta);
+		var lss = helper.GetLastStations(TrainDirection.ti, sta);
 	#>
 	<table>
 		<tr>
-			<td colspan="2" class="dir"><#= string.Join("/", fss.Select(s => s.SName)) #></td>
-			<td colspan="2" class="dir"><#= string.Join("/", lss.Select(s => s.SName)) #></td>
+			<td colspan="<#= multipleStations ? "3" : "2" #>" class="dir"><#= string.Join("/", fss.Select(s => s.SName)) #></td>
+			<td colspan="<#= multipleStations ? "3" : "2" #>" class="dir"><#= string.Join("/", lss.Select(s => s.SName)) #></td>
 		</tr>
 		<#
 			var trainsA = helper.GetTrains(TrainDirection.ta, sta);
@@ -155,35 +179,43 @@ td {
 		#>
 		<tr>
 			<# if (fss.Count() > 0) { #>
-				<td class="time header">Zeit</td>
 				<td class="name header">Zug-Nr</td>
+				<td class="time header">Zeit</td>
+				<#= DirHeader(true) #>
 			<# } else { #>
-				<td class="time header"></td>
 				<td class="name header"></td>
+				<td class="time header"></td>
+				<#= DirHeader(false) #>
 			<# } #>
 			<# if (lss.Count() > 0) { #>
-				<td class="time header">Zeit</td>
 				<td class="name header">Zug-Nr</td>
+				<td class="time header">Zeit</td>
+				<#= DirHeader(true) #>
 			<# } else { #>
-				<td class="time header"></td>
 				<td class="name header"></td>
+				<td class="time header"></td>
+				<#= DirHeader(false) #>
 			<# } #>
 		</tr>
 		<# for (int i = 0; i < count; i++) { #>
 		<tr class="train-row">
 			<# if (fss.Count() > 0) { #>
-				<td class="time"><#= TimeString(trainsA, sta, i) #></td>
 				<td class="name"><#= NameString(trainsA, i) #></td>
+				<td class="time"><#= TimeString(trainsA, sta, i) #></td>
+				<#= DirString(trainsA, i) #>
 			<# } else { #>
-				<td class="time"></td>
 				<td class="name"></td>
+				<td class="time"></td>
+				<#= DirString(trainsA, i) #>
 			<# } #>
 			<# if (lss.Count() > 0) { #>
-				<td class="time"><#= TimeString(trainsB, sta, i) #></td>
 				<td class="name"><#= NameString(trainsB, i) #></td>
+				<td class="time"><#= TimeString(trainsB, sta, i) #></td>
+				<#= DirString(trainsB, i) #>
 			<# } else { #>
-				<td class="time"></td>
 				<td class="name"></td>
+				<td class="time"></td>
+				<#= DirString(trainsB, i) #>
 			<# } #>
 		</tr>
 		<# } #>

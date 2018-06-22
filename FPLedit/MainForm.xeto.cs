@@ -25,7 +25,7 @@ namespace FPLedit
         #region Controls
 #pragma warning disable CS0649
         private LogControl logTextBox;
-        private ButtonMenuItem saveMenu, saveAsMenu, exportMenu, lastMenu;
+        private ButtonMenuItem saveMenu, saveAsMenu, exportMenu, importMenu, lastMenu, fileMenu;
         private SaveFileDialog saveFileDialog, exportFileDialog;
         private OpenFileDialog openFileDialog, importFileDialog;
         private LineEditingControl lineEditingControl;
@@ -184,6 +184,10 @@ namespace FPLedit
             int exporter_idx = Settings.Get("exporter.last", -1);
             if (exporter_idx > -1 && exporters.Length > exporter_idx)
                 exportFileDialog.CurrentFilterIndex = exporter_idx + 1;
+
+            // Ggf. Import bzw. Export-Menü entfernen
+            if (importers.Length == 0)
+                fileMenu.Items.Remove(importMenu);
         }
 
         private void InitializeMenus()
@@ -229,14 +233,20 @@ namespace FPLedit
         #endregion
 
         #region FileHandling
-
         private void Import()
         {
+            var importers = registry.GetRegistered<IImport>();
+
+            if (importers.Length == 0)
+            {
+                Logger.Error("Keine Importer gefunden, Import nicht möglich!");
+                return;
+            }
+
             if (!NotifyIfUnsaved())
                 return;
             if (importFileDialog.ShowDialog(this) == DialogResult.Ok)
             {
-                var importers = registry.GetRegistered<IImport>();
                 IImport import = importers[importFileDialog.CurrentFilterIndex - 1];
                 Logger.Info("Öffne Datei " + importFileDialog.FileName);
                 Timetable = import.Import(importFileDialog.FileName, Logger);
