@@ -44,6 +44,7 @@ namespace FPLedit
         private ExtensionManager extensionManager;
         private UndoManager undo;
         private RegisterStore registry;
+        private UpdateManager update;
 
         private List<string> lastFiles;
         private bool enable_last = true;
@@ -94,6 +95,8 @@ namespace FPLedit
             Settings = new Settings();
             undo = new UndoManager();
             registry = new RegisterStore();
+            update = new UpdateManager(Settings);
+            extensionManager = new ExtensionManager(this, update);
 
             lineEditingControl.Initialize(this);
 
@@ -129,12 +132,8 @@ namespace FPLedit
         private void Init()
         {
             // Extensions laden & initialisieren (=> Initialisiert Importer/Exporter)
-            new Editor.EditorPlugin().Init(this);
-
-            extensionManager = new ExtensionManager(Logger, Settings, new UpdateManager(Settings));
-            var enabled_plgs = extensionManager.Plugins.Where(p => p.Enabled);
-            foreach (var plugin in enabled_plgs)
-                plugin.TryInit(this);
+            extensionManager.LoadExtensions();
+            extensionManager.InitActivatedExtensions();
 
             InitializeExportImport();
             InitializeMenus();
@@ -223,9 +222,8 @@ namespace FPLedit
                 var itm = lastMenu.CreateItem(lf);
                 itm.Click += (s, a) =>
                 {
-                    if (!NotifyIfUnsaved())
-                        return;
-                    InternalOpen(lf);
+                    if (NotifyIfUnsaved())
+                        InternalOpen(lf);
                 };
             }
         }
@@ -396,37 +394,6 @@ namespace FPLedit
         }
         #endregion
 
-        #region AutoUpdates
-        private void AutoUpdate_Check(object sender, EventArgs e)
-        {
-            // Beispiele für fehlende Funktionen
-            if (Environment.OSVersion.Platform != PlatformID.Win32NT && !Settings.Get<bool>("mp-compat.disable-startup-warn"))
-                Logger.Warning("Sie verwenden FPLedit nicht auf Windows. Grundsätzlich ist FPLedit zwar mit allen Systemen kompatibel, auf denen Mono läuft, hat aber Einschränkungen in den Funktionen und möglichen Sicherheitsvorkehrungen und ist möglicherweise nicht getestet.");
-
-            if (Settings.Get("updater.auto", "") == "")
-            {
-                var res = MessageBox.Show("FPLedit kann automatisch bei jedem Programmstart nach einer aktuelleren Version suchen. Dabei wird nur die IP-Adresse Ihres Computers übermittelt.", "Automatische Updateprüfung", MessageBoxButtons.YesNo, MessageBoxType.Question);
-                Settings.Set("updater.auto", (res == DialogResult.Yes));
-            }
-
-            UpdateManager mg = new UpdateManager(Settings);
-            if (!mg.AutoUpdateEnabled)
-                return;
-
-            mg.CheckResult = vi =>
-            {
-                if (vi != null)
-                    Logger.Info($"Eine neue Programmversion ({vi.NewVersion.ToString()}) ist verfügbar! {vi.Description ?? ""} Hier herunterladen: {vi.DownloadUrl}");
-                else
-                    Logger.Info($"Sie benutzen die aktuelleste Version von FPLedit ({mg.GetCurrentVersion().ToString()})!");
-            };
-
-            mg.TextResult = t => Logger.Info(t);
-
-            mg.CheckAsync();
-        }
-        #endregion
-
         protected override void OnClosing(CancelEventArgs e)
         {
             if (!Settings.KeyExists("restart.file"))
@@ -529,7 +496,6 @@ namespace FPLedit
         #endregion
 
         #region Events
-
         private void saveMenu_Click(object sender, EventArgs e)
             => Save(false);
 
@@ -553,6 +519,9 @@ namespace FPLedit
 
         private void networkNewMenu_Click(object sender, EventArgs e)
             => New(TimetableType.Network);
+
+        private void AutoUpdate_Check(object sender, EventArgs e)
+            => update.AutoUpdateCheck(Settings, Logger);
         #endregion
     }
 }

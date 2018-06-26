@@ -1,4 +1,5 @@
-﻿using FPLedit.Shared;
+﻿using Eto.Forms;
+using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -100,14 +101,42 @@ namespace FPLedit
                         }
                         catch (XmlException ex)
                         {
-                        // Fehler im XML-Dokument
-                        CheckError?.Invoke(ex);
+                            // Fehler im XML-Dokument
+                            CheckError?.Invoke(ex);
                         }
                     }
                     else
                         CheckError?.Invoke(e.Error);
                 };
             }
+        }
+
+        public void AutoUpdateCheck(ISettings settings, ILog log)
+        {
+            // Beispiele für fehlende Funktionen
+            if (Environment.OSVersion.Platform != PlatformID.Win32NT && !settings.Get<bool>("mp-compat.disable-startup-warn"))
+                log.Warning("Sie verwenden FPLedit nicht auf Windows. Grundsätzlich ist FPLedit zwar mit allen Systemen kompatibel, auf denen Mono läuft, hat aber Einschränkungen in den Funktionen und möglichen Sicherheitsvorkehrungen und ist möglicherweise nicht getestet.");
+
+            if (settings.Get("updater.auto", "") == "")
+            {
+                var res = MessageBox.Show("FPLedit kann automatisch bei jedem Programmstart nach einer aktuelleren Version suchen. Dabei wird nur die IP-Adresse Ihres Computers übermittelt.", "Automatische Updateprüfung", MessageBoxButtons.YesNo, MessageBoxType.Question);
+                settings.Set("updater.auto", (res == DialogResult.Yes));
+            }
+
+            if (!AutoUpdateEnabled)
+                return;
+
+            CheckResult = vi =>
+            {
+                if (vi != null)
+                    log.Info($"Eine neue Programmversion ({vi.NewVersion.ToString()}) ist verfügbar! {vi.Description ?? ""} Hier herunterladen: {vi.DownloadUrl}");
+                else
+                    log.Info($"Sie benutzen die aktuelleste Version von FPLedit ({GetCurrentVersion().ToString()})!");
+            };
+
+            TextResult = t => log.Info(t);
+
+            CheckAsync();
         }
 
         public class VersionInfo
