@@ -17,6 +17,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using FPLedit.Editor.Network;
 using FPLedit.Shared.UI;
+using FPLedit.Config;
 
 namespace FPLedit
 {
@@ -110,10 +111,12 @@ namespace FPLedit
             fileState = new FileState();
             fileState.FileStateInternalChanged += (s, e) => OnFileStateChanged();
 
+            var logger = new MultipleLogger(logTextBox);
             if (Settings.Get("log.enable-file", false))
-                Logger = new MultipleLogger(logTextBox, new TempLogger(this));
-            else
-                Logger = new MultipleLogger(logTextBox);
+                logger.Loggers.Add(new TempLogger(this));
+            if (OptionsParser.MPCompatLog)
+                logger.Loggers.Add(new ConsoleLogger());
+            Logger = logger;
 
             KeyDown += (s, e) =>
             {
@@ -160,8 +163,7 @@ namespace FPLedit
         private void LoadStartFile(object sender, EventArgs e)
         {
             // Parameter: Fpledit.exe [Dateiname] ODER Datei aus Restart
-            string[] args = Environment.GetCommandLineArgs();
-            string fn = args.Length >= 2 ? args[1] : null;
+            var fn = OptionsParser.OpenFilename;
             fn = Settings.Get("restart.file", fn);
             if (fn != null && File.Exists(fn))
             {

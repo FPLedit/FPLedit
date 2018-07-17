@@ -1,4 +1,5 @@
 ﻿using Eto.Forms;
+using FPLedit.Config;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +16,10 @@ namespace FPLedit
         /// </summary>
         [STAThread]
         [LoaderOptimization(LoaderOptimization.MultiDomainHost)] // Hopefully it doesn't break any things
-        static void Main()
+        static void Main(string[] args)
         {
+            OptionsParser.Init(args);
+
             var application = new Application();
             App = application;
             application.Run(new MainForm(application));
