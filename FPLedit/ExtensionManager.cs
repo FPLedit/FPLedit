@@ -14,14 +14,21 @@ namespace FPLedit
 
         public bool EnabledModified { get; private set; }
 
-        private ISettings settings;
+        private IInfo info;
+        private UpdateManager update;
 
-        public ExtensionManager(ILog log, ISettings settings, UpdateManager updateMgr)
+        public ExtensionManager(IInfo info, UpdateManager update)
+        {
+            this.info = info;
+            this.update = update;
+        }
+
+        public void LoadExtensions()
         {
             Plugins = new List<PluginInfo>();
-            this.settings = settings;
-            var enabledPlugins = settings.Get("extmgr.enabled", "").Split(';');
-            var currentVersion = updateMgr.GetCurrentVersion();
+
+            var enabledPlugins = info.Settings.Get("extmgr.enabled", "").Split(';');
+            var currentVersion = update.GetCurrentVersion();
 
             var path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             DirectoryInfo dir = new DirectoryInfo(path);
@@ -66,7 +73,7 @@ namespace FPLedit
                 }
                 catch (FileLoadException)
                 {
-                    log.Warning("Erweiterung " + file.Name + " konnte nicht geladen werden, bitte überprüfen ob diese noch geblockt ist!");
+                    info.Logger.Warning("Erweiterung " + file.Name + " konnte nicht geladen werden, bitte überprüfen ob diese noch geblockt ist!");
                 }
                 catch
                 {
@@ -92,10 +99,10 @@ namespace FPLedit
 
         public void WriteConfig()
         {
-            settings.Set("extmgr.enabled", string.Join(";", Plugins.Where(p => p.Enabled).Select(p => p.FullName)));
+            info.Settings.Set("extmgr.enabled", string.Join(";", Plugins.Where(p => p.Enabled).Select(p => p.FullName)));
         }
 
-        public int VersionCompare(Version v1, Version v2)
+        private int VersionCompare(Version v1, Version v2)
         {
             if (v1 == null || v2 == null)
                 return 1;
@@ -116,6 +123,15 @@ namespace FPLedit
                 return v1.Revision > v2.Revision ? 1 : -1;
 
             return 0;
+        }
+
+        public void InitActivatedExtensions()
+        {
+            new Editor.EditorPlugin().Init(info);
+
+            var enabled_plgs = Plugins.Where(p => p.Enabled);
+            foreach (var plugin in enabled_plgs)
+                plugin.TryInit(info);
         }
     }
 }
