@@ -39,14 +39,14 @@ namespace FPLedit.Bildfahrplan.Render
         {
             g.Clear(attrs.BgColor);
 
-            if (width == 0) width = g.VisibleClipBounds.Width;
-            if (height == 0) height = GetHeight(startTime, endTime);
-
             var stations = tt.GetRoute(route).GetOrderedStations();
 
             if (!marginsCalced)
                 margin = CalcMargins(g, margin, stations, startTime, endTime);
             marginsCalced = true;
+
+            if (width == 0) width = g.VisibleClipBounds.Width;
+            if (height == 0) height = GetHeight(startTime, endTime);
 
             // Zeitaufteilung
             var timeRenderer = new TimeRenderer(attrs, this);
@@ -76,6 +76,9 @@ namespace FPLedit.Bildfahrplan.Render
 
         private Margins CalcMargins(Graphics g, Margins orig, IEnumerable<Station> stations, TimeSpan startTime, TimeSpan endTime)
         {
+            if (marginsCalced)
+                return orig;
+
             var result = orig;
             // MarginTop berechnen
             float sMax = 0f;
