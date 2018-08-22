@@ -13,7 +13,7 @@ namespace FPLedit.Bildfahrplan
     public class Plugin : IPlugin
     {
         private IInfo info;
-        private ButtonMenuItem showItem, configItem, trainColorItem, printItem;
+        private ButtonMenuItem showItem, configItem, trainColorItem, stationStyleItem, printItem;
         private CheckMenuItem overrideItem;
 
         private TimetableStyle attrs;
@@ -44,6 +44,10 @@ namespace FPLedit.Bildfahrplan
             trainColorItem.Enabled = false;
             trainColorItem.Click += TrainColorItem_Click;
 
+            stationStyleItem = item.CreateItem("Stationsdarstellung ändern");
+            stationStyleItem.Enabled = false;
+            stationStyleItem.Click += StationStyleItem_Click;
+
             overrideItem = item.CreateCheckItem("Verwende nur Plandarstellung");
             overrideItem.CheckedChanged += OverrideItem_CheckedChanged;
             overrideItem.Checked = info.Settings.Get<bool>("bifpl.override-entity-styles");
@@ -59,7 +63,7 @@ namespace FPLedit.Bildfahrplan
             showItem.Enabled = e.FileState.Opened && e.FileState.TrainsCreated;
             configItem.Enabled = e.FileState.Opened;
             printItem.Enabled = e.FileState.Opened && e.FileState.TrainsCreated;
-            trainColorItem.Enabled = e.FileState.Opened && e.FileState.TrainsCreated;
+            trainColorItem.Enabled = stationStyleItem.Enabled = e.FileState.Opened && e.FileState.TrainsCreated;
 
             attrs = new TimetableStyle(info.Timetable);
 
@@ -80,6 +84,14 @@ namespace FPLedit.Bildfahrplan
             info.StageUndoStep();
             TrainColorForm tcf = new TrainColorForm(info);
             if (tcf.ShowModal(info.RootForm) == DialogResult.Ok)
+                info.SetUnsaved();
+        }
+
+        private void StationStyleItem_Click(object sender, EventArgs e)
+        {
+            info.StageUndoStep();
+            var scf = new StationStyleForm(info);
+            if (scf.ShowModal(info.RootForm) == DialogResult.Ok)
                 info.SetUnsaved();
         }
 

@@ -64,6 +64,12 @@
     <Compile Include="Forms\PreviewForm.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
+    <Compile Include="Forms\StationStyleForm.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Forms\StationStyleEditForm.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
     <Compile Include="Helpers\ColorCollection.cs" />
     <Compile Include="Helpers\DashStyleHelper.cs" />
     <Compile Include="Model\StationLineStyle.cs" />
@@ -128,6 +134,12 @@
     <None Include="..\build_scripts\fpledit.snk">
       <Link>Properties\fpledit.snk</Link>
     </None>
+    <EmbeddedResource Include="Forms\StationStyleForm.xeto">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\StationStyleEditForm.xeto">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
