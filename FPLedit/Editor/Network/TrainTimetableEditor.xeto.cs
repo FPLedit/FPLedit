@@ -58,6 +58,8 @@ namespace FPLedit.Editor.Network
 
             if (mpmode)
                 DefaultButton = null; // Bugfix, Window closes on enter [Enter]
+
+            this.AddCloseHandler();
         }
 
         public TrainTimetableEditor(IInfo info, Train t) : this()
@@ -427,7 +429,7 @@ namespace FPLedit.Editor.Network
                 return;
 
             info.ClearBackup();
-            Close();
+            this.NClose();
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
@@ -435,7 +437,7 @@ namespace FPLedit.Editor.Network
             Result = DialogResult.Cancel;
             info.RestoreTimetable();
 
-            Close();
+            this.NClose();
         }
 
         private void trapeztafelToggle_Click(object sender, EventArgs e)

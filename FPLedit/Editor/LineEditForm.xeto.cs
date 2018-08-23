@@ -2,6 +2,7 @@
 using FPLedit.Editor.Network;
 using FPLedit.Shared;
 using FPLedit.Shared.Filetypes;
+using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -56,6 +57,8 @@ namespace FPLedit.Editor
                 gridView.KeyDown += HandleKeystroke;
 
             UpdateStations();
+
+            this.AddCloseHandler();
         }
 
         private void HandleKeystroke(object sender, KeyEventArgs e)
@@ -87,6 +90,8 @@ namespace FPLedit.Editor
 
                 EditStationForm nsf = new EditStationForm(station, route);
                 nsf.ShowModal(this);
+
+                UpdateStations();
             }
             else if (message)
                 MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Station bearbeiten");
@@ -137,8 +142,7 @@ namespace FPLedit.Editor
             IImport simport = new XMLStationsImport();
 
             OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filters.Add(ToEtoFilter(timport.Filter));
-            ofd.Filters.Add(ToEtoFilter(simport.Filter));
+            ofd.AddLegacyFilter(timport.Filter, simport.Filter);
 
             if (ofd.ShowDialog(this) == DialogResult.Ok)
             {
@@ -156,7 +160,7 @@ namespace FPLedit.Editor
         {
             info.ClearBackup();
             Result = DialogResult.Ok;
-            Close();
+            this.NClose();
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
@@ -164,7 +168,7 @@ namespace FPLedit.Editor
             Result = DialogResult.Cancel;
             info.RestoreTimetable();
 
-            Close();
+            this.NClose();
         }
 
         private void editButton_Click(object sender, EventArgs e)
@@ -178,11 +182,5 @@ namespace FPLedit.Editor
 
         private void loadLineButton_Click(object sender, EventArgs e)
             => LoadLine();
-
-        private FileFilter ToEtoFilter(string filter)
-        {
-            var parts = filter.Split('|');
-            return new FileFilter(parts[0], parts[1]);
-        }
     }
 }

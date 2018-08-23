@@ -73,6 +73,8 @@ namespace FPLedit.Editor.Linear
 
             if (mpmode)
                 DefaultButton = null; // Bugfix, Window closes on enter [Enter]
+
+            this.AddCloseHandler();
         }
 
         private CustomCell GetCell(Func<DataElement, string> text, Station sta, bool arrival, GridView view)
@@ -495,7 +497,7 @@ namespace FPLedit.Editor.Linear
             }
 
             info.ClearBackup();
-            Close();
+            this.NClose();
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
@@ -503,7 +505,7 @@ namespace FPLedit.Editor.Linear
             Result = DialogResult.Cancel;
             info.RestoreTimetable();
 
-            Close();
+            this.NClose();
         }
 
         #region Events

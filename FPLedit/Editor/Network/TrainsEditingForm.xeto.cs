@@ -1,6 +1,7 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.Helpers;
+using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,6 +71,8 @@ namespace FPLedit.Editor.Network
                 KeyDown += HandleKeystroke;
             else
                 gridView.KeyDown += HandleKeystroke;
+
+            this.AddCloseHandler();
         }
 
         private void HandleKeystroke(object sender, KeyEventArgs e)
@@ -187,14 +190,14 @@ namespace FPLedit.Editor.Network
         {
             info.ClearBackup();
             Result = DialogResult.Ok;
-            Close();
+            this.NClose();
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Cancel;
             info.RestoreTimetable();
-            Close();
+            this.NClose();
         }
 
         private void topNewButton_Click(object sender, EventArgs e)

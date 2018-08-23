@@ -17,11 +17,32 @@ namespace FPLedit.Shared.UI
             return assembly.GetManifestResourceStream("FPLedit." + dotFilePath);
         }
 
+        #region Close Handlers
+
+
+        public static void AddCloseHandler(this Dialog dialog)
+            => AddCloseHandler(dialog, dialog.DefaultButton, dialog.AbortButton);
+
+        public static void AddCloseHandler(this Window dialog, Button accept, Button cancel)
+            => new CloseHandler(dialog, accept, cancel);
+
+        public static void NClose(this Window dialog) => CloseHandler.NClose(dialog);
+        #endregion
+
+        public static void AddLegacyFilter(this FileDialog dialog, params string[] filters)
+        {
+            foreach (var filter in filters)
+                dialog.AddLegacyFilter(filter);
+        }
+
         public static void AddLegacyFilter(this FileDialog dialog, string filter)
         {
             var parts = filter.Split('|');
-            var f = new FileFilter(parts[0], parts[1]);
-            dialog.Filters.Add(f);
+            for (int i = 0; i < parts.Length; i+=2)
+            {
+                var f = new FileFilter(parts[i], parts[i + 1]);
+                dialog.Filters.Add(f);
+            }
         }
 
         public static ButtonMenuItem CreateItem(this ISubmenu parent, string text)

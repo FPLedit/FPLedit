@@ -157,6 +157,13 @@ namespace FPLedit
             ExtensionsLoaded?.Invoke(this, new EventArgs());
 
             Shown += LoadStartFile;
+
+            for (int i = 0; i < 10000; i++)
+            {
+                var d = new Dialog();
+                d.AddCloseHandler();
+                d.Close();
+            }
         }
 
         private void LoadStartFile(object sender, EventArgs e)
@@ -178,8 +185,8 @@ namespace FPLedit
             var exporters = registry.GetRegistered<IExport>();
             var importers = registry.GetRegistered<IImport>();
 
-            exporters.ToList().ForEach(ex => exportFileDialog.AddLegacyFilter(ex.Filter));
-            importers.ToList().ForEach(im => importFileDialog.AddLegacyFilter(im.Filter));
+            exportFileDialog.AddLegacyFilter(exporters.Select(ex => ex.Filter).ToArray());
+            importFileDialog.AddLegacyFilter(importers.Select(im => im.Filter).ToArray());
 
             // Letzten Exporter auswählen
             int exporter_idx = Settings.Get("exporter.last", -1);

@@ -1,6 +1,7 @@
 ﻿using Eto.Forms;
 using FPLedit.Buchfahrplan.Model;
 using FPLedit.Shared;
+using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,6 +50,8 @@ namespace FPLedit.Buchfahrplan.Forms
             gridView.MouseDoubleClick += (s, e) => EditPoint(false);
 
             gridView.SelectedItemsChanged += (s, e) => SelectPoint();
+
+            this.AddCloseHandler();
         }
 
         public VelocityForm(IInfo info, Route route) : this()
@@ -141,14 +144,15 @@ namespace FPLedit.Buchfahrplan.Forms
         {
             Result = DialogResult.Cancel;
             info.RestoreTimetable();
-            Close();
+            this.NClose();
         }
 
         private void closeButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Ok;
             info.ClearBackup();
-            Close();
+
+            this.NClose();
         }
 
         #region Events
