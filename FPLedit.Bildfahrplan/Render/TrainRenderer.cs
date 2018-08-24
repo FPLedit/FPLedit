@@ -29,6 +29,7 @@ namespace FPLedit.Bildfahrplan.Render
             attrs = new TimetableStyle(tt);
         }
 
+        //TODO: Fix for trains "ta"
         public void Render(Graphics g, Train train)
         {
             var style = new TrainStyle(train, attrs);
@@ -36,17 +37,23 @@ namespace FPLedit.Bildfahrplan.Render
                 return;
 
             var ardps = train.GetArrDeps();
+            var dir = GetTrainDirection(train);
 
             var pen = new Pen(style.CalcedColor, style.CalcedWidth);
             pen.DashPattern = ds.ParseDashstyle(style.CalcedLineStyle);
             var brush = new SolidBrush(style.CalcedColor);
 
             List<PointF> points = new List<PointF>();
-            foreach (var sta in stations)
+            bool hadFirstArrival = false, hadLastDeparture = false, isFirst = true;
+            var stas = dir ? Enumerable.Reverse(stations) : stations;
+            foreach (var sta in stas)
             {
                 if (!ardps.ContainsKey(sta))
                     continue;
                 var ardp = ardps[sta];
+
+                if (!ardp.HasMinOneTimeSet)
+                    continue;
 
                 var tmpPoints = new List<PointF>(4);
                 float x = margin.Left + stationOffsets[sta];
@@ -60,7 +67,12 @@ namespace FPLedit.Bildfahrplan.Render
                     tmpPoints.Add(new PointF(x, y));
                 }
 
-                if (!GetTrainDirection(train))
+                hadLastDeparture = ardp.Departure != new TimeSpan();
+                if (isFirst)
+                    hadFirstArrival = ardp.Arrival != new TimeSpan();
+                isFirst = false;
+
+                if (!dir)
                     tmpPoints.Reverse();
 
                 if (tmpPoints.Count == 2 && tmpPoints[0] != tmpPoints[1] && attrs.StationLines != StationLineStyle.None)
@@ -68,6 +80,16 @@ namespace FPLedit.Bildfahrplan.Render
 
                 points.AddRange(tmpPoints);
             }
+
+            // Halbe Linien bei Abfahrten / Ankünften ohne Gegenstelle
+            var hly = !dir ? 20 : -20;
+            if (hadLastDeparture)
+                points.Add(points.Last() + new Size(50, hly));
+            if (hadFirstArrival)
+                points.Insert(0, points.First() - new Size(50, hly));
+
+            if (dir)
+                stas.Reverse();
 
             for (int i = 0; i < points.Count; i += 2)
             {
@@ -84,8 +106,7 @@ namespace FPLedit.Bildfahrplan.Render
                 float y = ys.Min() + (ys.Max() - ys.Min()) / 2 - (size.Height / 2);
                 float x = xs.Min() + (xs.Max() - xs.Min()) / 2;
 
-                float angle = (float)(Math.Atan2(xs.Max() - xs.Min(), ys.Max() - ys.Min()) * (180d / Math.PI));
-                angle = GetTrainDirection(train) ? 90 - angle : angle - 90;
+                float angle = CalcAngle(ys, xs, train);
                 var container = g.BeginContainer();
                 g.TranslateTransform(x, y);
                 g.RotateTransform(-angle);
@@ -136,5 +157,14 @@ namespace FPLedit.Bildfahrplan.Render
             }).ToArray();
         }
         #endregion
+
+        private float CalcAngle(PointF p1, PointF p2, Train train)
+            => CalcAngle(new[] { p1.Y, p2.Y }, new[] { p1.X, p2.X }, train);
+
+        private float CalcAngle(float[] ys, float[] xs, Train train)
+        {
+            float angle = (float)(Math.Atan2(xs.Max() - xs.Min(), ys.Max() - ys.Min()) * (180d / Math.PI));
+            return GetTrainDirection(train) ? 90 - angle : angle - 90;
+        }
     }
 }
