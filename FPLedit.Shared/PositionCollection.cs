@@ -10,10 +10,10 @@ namespace FPLedit.Shared
     [Serializable]
     public class PositionCollection
     {
-        private IStation sta;
+        private readonly IStation sta;
         private Dictionary<int, float> positions;
-        private TimetableType type;
-        private TimetableVersion version;
+        private readonly TimetableType type;
+        private readonly TimetableVersion version;
 
         public PositionCollection(IStation s, Timetable tt)
         {

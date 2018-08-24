@@ -25,8 +25,8 @@ namespace FPLedit
     {
         #region Controls
 #pragma warning disable CS0649
-        private LogControl logTextBox;
-        private ButtonMenuItem saveMenu, saveAsMenu, exportMenu, importMenu, lastMenu, fileMenu;
+        private readonly LogControl logTextBox;
+        private readonly ButtonMenuItem saveMenu, saveAsMenu, exportMenu, importMenu, lastMenu, fileMenu;
         private SaveFileDialog saveFileDialog, exportFileDialog;
         private OpenFileDialog openFileDialog, importFileDialog;
         private LineEditingControl lineEditingControl;
@@ -157,13 +157,6 @@ namespace FPLedit
             ExtensionsLoaded?.Invoke(this, new EventArgs());
 
             Shown += LoadStartFile;
-
-            for (int i = 0; i < 10000; i++)
-            {
-                var d = new Dialog();
-                d.AddCloseHandler();
-                d.Close();
-            }
         }
 
         private void LoadStartFile(object sender, EventArgs e)

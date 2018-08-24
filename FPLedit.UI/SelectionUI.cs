@@ -64,7 +64,7 @@ namespace FPLedit.Shared.UI
         public void ChangeSelection(int idx)
         {
             if (idx >= optionsCount)
-                throw new IndexOutOfRangeException("Der Index lag außerhalb des erlaubrten Bereich dieser SelectionUI!");
+                throw new IndexOutOfRangeException("Der Index lag außerhalb des erlaubten Bereich dieser SelectionUI!");
 
             if (EnableRadioButtons)
                 radioButtons[idx].Checked = true;

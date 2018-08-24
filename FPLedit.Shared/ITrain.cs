@@ -5,6 +5,7 @@ namespace FPLedit.Shared
     public interface ITrain : IEntity
     {
         int Id { get; set; }
+        bool IsLink { get; set; }
         string Comment { get; set; }
         bool[] Days { get; set; }
         TrainDirection Direction { get; }

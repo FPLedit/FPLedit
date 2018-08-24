@@ -307,7 +307,7 @@ namespace FPLedit.Shared
             if (trans.Count() == 0)
                 AddTransition(first, newNext);
             if (trans.Count() > 1)
-                throw new Exception("Keine Transition mit angegebenem ersten Zug gefunden!");
+                throw new Exception("Mehr als eine Transition mit angegebenem ersten Zug gefunden!");
 
             trans.First().Next = newNext.Id;
         }
@@ -319,9 +319,16 @@ namespace FPLedit.Shared
             if (trans.Count() == 0)
                 return null;
             if (trans.Count() > 1)
-                throw new Exception("Keine Transition mit angegebenem ersten Zug gefunden!");
+                throw new Exception("Mehr als eine Transition mit angegebenem ersten Zug gefunden!");
 
             return GetTrainById(trans.First().Next);
+        }
+
+        public IEnumerable<Train> GetTransitions(Train first)
+        {
+            Train tra = first;
+            while ((tra = GetTransition(tra)) != null)
+                yield return tra;
         }
 
         public void RemoveTransition(Train tra, bool onlyAsFirst = true)

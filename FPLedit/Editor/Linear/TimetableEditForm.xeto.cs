@@ -363,9 +363,6 @@ namespace FPLedit.Editor.Linear
                 ArrDeps = tra.GetArrDeps()
             }).ToList();
 
-            //TODO: Hier eine neue Idee...
-            //view.LostFocus += (s, e) => ClearSelection();
-
             view.GotFocus += (s, e) => focused = view;
             view.KeyDown += (s, e) =>
             {
