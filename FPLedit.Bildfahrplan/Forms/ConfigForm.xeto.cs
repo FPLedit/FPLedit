@@ -8,6 +8,7 @@ using Font = System.Drawing.Font;
 using System.Drawing.Text;
 using System.Linq;
 using FPLedit.Shared.Helpers;
+using FPLedit.Shared.UI;
 
 namespace FPLedit.Bildfahrplan.Forms
 {
@@ -35,6 +36,7 @@ namespace FPLedit.Bildfahrplan.Forms
 
             var cc = new ColorCollection(settings);
 
+            //TODO: Refactor??
             bgColorComboBox.DataStore = cc.ColorHexStrings;
             stationColorComboBox.DataStore = cc.ColorHexStrings;
             timeColorComboBox.DataStore = cc.ColorHexStrings;
@@ -61,6 +63,8 @@ namespace FPLedit.Bildfahrplan.Forms
             hourTimeWidthComboBox.DataStore = lineWidths;
             minuteTimeWidthComboBox.DataStore = lineWidths;
             stationWidthComboBox.DataStore = lineWidths;
+
+            this.AddCloseHandler();
         }
 
         public ConfigForm(Timetable tt, ISettings settings) : this(settings)
@@ -126,13 +130,13 @@ namespace FPLedit.Bildfahrplan.Forms
             attrs.EndTime = TimeSpan.Parse(endTimeTextBox.Text.Replace("24:", "1.00:"));
 
             Result = DialogResult.Ok;
-            Close();
+            this.NClose();
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Cancel;
-            Close();
+            this.NClose();
         }
     }
 }

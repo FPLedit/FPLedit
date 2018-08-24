@@ -1,6 +1,7 @@
 ﻿using Eto.Forms;
 using FPLedit.Bildfahrplan.Model;
 using FPLedit.Shared;
+using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -65,6 +66,8 @@ namespace FPLedit.Bildfahrplan.Forms
             gridView.CellDoubleClick += (s, e) => EditColor(false);
 
             UpdateTrains();
+
+            this.AddCloseHandler();
         }
 
         private void UpdateTrains()
@@ -90,14 +93,14 @@ namespace FPLedit.Bildfahrplan.Forms
         {
             Result = DialogResult.Cancel;
             info.RestoreTimetable();
-            Close();
+            this.NClose();
         }
 
         private void closeButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Ok;
             info.ClearBackup();
-            Close();
+            this.NClose();
         }
 
         private void editButton_Click(object sender, EventArgs e)

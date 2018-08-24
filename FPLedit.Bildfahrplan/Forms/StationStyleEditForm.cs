@@ -5,6 +5,7 @@ using System;
 using System.Drawing;
 using System.Linq;
 using FPLedit.Shared.Helpers;
+using FPLedit.Shared.UI;
 
 namespace FPLedit.Bildfahrplan.Forms
 {
