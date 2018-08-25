@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace FPLedit.Editor.Linear
 {
-    internal class TimetableEditForm : Dialog<DialogResult>
+    internal class TimetableEditForm : TimetableEditorBase
     {
         private const TrainDirection TOP_DIRECTION = TrainDirection.ti;
         private const TrainDirection BOTTOM_DIRECTION = TrainDirection.ta;
@@ -25,20 +25,15 @@ namespace FPLedit.Editor.Linear
         private GridView focused;
 
         private IInfo info;
-        private Font fn, fb;
 
-        private TimeNormalizer normalizer;
-        private Color errorColor = new Color(Colors.Red, 0.4f);
-
-        private bool mpmode = false;
+        protected override int FirstEditingColumn => 1; // erstes Abfahrtsfeld
 
         public TimetableEditForm(IInfo info)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
             trapeztafelToggle = new ToggleButton(internalToggle);
             trapeztafelToggle.ToggleClick += trapeztafelToggle_Click;
-
-            mpmode = !Eto.Platform.Instance.SupportedFeatures.HasFlag(Eto.PlatformFeatures.CustomCellSupportsControlView);
+            base.Init(trapeztafelToggle);
 
             this.info = info;
             info.BackupTimetable();
@@ -48,10 +43,6 @@ namespace FPLedit.Editor.Linear
 
             InitializeGridView(topDataGridView, TOP_DIRECTION);
             InitializeGridView(bottomDataGridView, BOTTOM_DIRECTION);
-
-            fb = SystemFonts.Bold();
-            fn = SystemFonts.Default();
-            normalizer = new TimeNormalizer();
 
             KeyDown += (s, e) =>
             {
@@ -65,8 +56,6 @@ namespace FPLedit.Editor.Linear
                     e.Handled = true;
                     ViewDependantAction(Zuglaufmeldung);
                 }
-                //else if (!topDataGridView.HasFocus || !bottomDataGridView.HasFocus)
-                //    HandleKeystroke(e, focused);
             };
 
             internalToggle.Image = new Bitmap(this.GetResource("Resources.trapeztafel.png"));
@@ -77,7 +66,7 @@ namespace FPLedit.Editor.Linear
             this.AddCloseHandler();
         }
 
-        private CustomCell GetCell(Func<DataElement, string> text, Station sta, bool arrival, GridView view)
+        private CustomCell GetCell(Func<ArrDep, TimeSpan> time, Station sta, bool arrival, GridView view)
         {
             var cc = new CustomCell();
             cc.CreateCell = args => new TextBox();
@@ -92,26 +81,16 @@ namespace FPLedit.Editor.Linear
                     return;
                 }
 
-                if (!data.HasError(sta, arrival))
-                    tb.Text = text(data);
+                new TimetableCellRenderProperties(time, sta, arrival, data).Apply(tb);
 
-                tb.BackgroundColor = Colors.White;
-
-                var first = data.GetStations(info).First() == sta;
-                if (arrival ^ first)
+                Action tbEnterEditMode = new Action(() =>
                 {
-                    if (first && data.ArrDeps[sta].TrapeztafelHalt)
-                        throw new Exception("Die erste Station darf keinen Trapeztafelhalt beinhalten!");
-
-                    tb.BackgroundColor = data.ArrDeps[sta].TrapeztafelHalt ? Colors.LightGrey : Colors.White;
-                    if (data.ArrDeps[sta].Zuglaufmeldung != null && data.ArrDeps[sta].Zuglaufmeldung != "")
-                        tb.Font = fb;
-                    else
-                        tb.Font = fn;
-                }
-
-                if (data.HasError(sta, arrival))
-                    tb.BackgroundColor = errorColor;
+                    CellSelected(data, sta, arrival);
+                    data.IsSelectedArrival = arrival;
+                    data.SelectedStation = sta;
+                    data.SelectedTextBox = tb;
+                    focused = view;
+                });
 
                 if (mpmode)
                 {
@@ -120,241 +99,79 @@ namespace FPLedit.Editor.Linear
                     // Wir gehen hier gleich in den vollen EditMode rein
                     tb.CaretIndex = 0;
                     tb.SelectAll();
-
-                    CellSelected(data, sta, arrival);
-                    data.IsSelectedArrival = arrival;
-                    data.SelectedStation = sta;
-                    data.SelectedTextBox = tb;
-                    focused = view;
+                    tbEnterEditMode();
                 }
 
-                tb.GotFocus += (s, e) =>
-                {
-                    CellSelected(data, sta, arrival);
-                    data.IsSelectedArrival = arrival;
-                    data.SelectedStation = sta;
-                    data.SelectedTextBox = tb;
-                    focused = view;
-                };
-                tb.LostFocus += (s, e) => { FormatCell(data, sta, arrival, tb); };
+                tb.GotFocus += (s, e) => tbEnterEditMode();
+                tb.LostFocus += (s, e) => FormatCell(data, sta, arrival, tb);
             };
             cc.Paint += (s, e) =>
             {
                 if (!mpmode)
                     return;
 
-                var t = "";
-                var bg = Colors.White;
-                var fnt = fn;
                 var data = (DataElement)e.Item;
-
                 if (data == null)
                     return;
 
-                if (!data.HasError(sta, arrival))
-                    t = text(data);
-
-                var first = data.GetStations(info).First() == sta;
-                if (arrival ^ first)
-                {
-                    if (first && data.ArrDeps[sta].TrapeztafelHalt)
-                        throw new Exception("Die erste Station darf keinen Trapeztafelhalt beinhalten!");
-
-                    bg = data.ArrDeps[sta].TrapeztafelHalt ? Colors.LightGrey : Colors.White;
-                    if (data.ArrDeps[sta].Zuglaufmeldung != null && data.ArrDeps[sta].Zuglaufmeldung != "")
-                        fnt = fb;
-                }
-
-                if (data.HasError(sta, arrival))
-                    bg = errorColor;
-
-                e.Graphics.Clear(bg);
-                e.Graphics.DrawText(fnt, Colors.Black, new PointF(e.ClipRectangle.Left + 2, e.ClipRectangle.Top + 2), t);
-                e.Graphics.DrawRectangle(Colors.Black, e.ClipRectangle);
+                new TimetableCellRenderProperties(time, sta, arrival, data).Render(e.Graphics, e.ClipRectangle);
             };
             return cc;
         }
 
-        private void HandleKeystroke(KeyEventArgs e, GridView view)
+        protected override Point GetNextEditingPosition(TimetableDataElement data, GridView view, KeyEventArgs e)
         {
-            if (view == null)
-                return;
-
-            if (e.Key == Keys.Enter)
+            var path = data.Train.GetPath();
+            int idx, row;
+            if (!e.Control)
             {
-                if (!mpmode)
-                    return;
-
-                e.Handled = true;
-
-                var data = (DataElement)view.SelectedItem;
-                if (data == null || data.SelectedStation == null || data.SelectedTextBox == null)
-                    return;
-                FormatCell(data, data.SelectedStation, data.IsSelectedArrival, data.SelectedTextBox);
-
-                view.ReloadData(view.SelectedRow);
-            }
-            else if (e.Key == Keys.T)
-            {
-                e.Handled = true;
-                Trapez(view);
-            }
-            else if (e.Key == Keys.Z)
-            {
-                e.Handled = true;
-                Zuglaufmeldung(view);
-            }
-            else if (e.Key == Keys.Tab)
-            {
-                if (!mpmode)
-                    return;
-
-                e.Handled = true;
-                var data = (DataElement)view.SelectedItem;
-                if (data == null || data.SelectedStation == null || data.SelectedTextBox == null)
-                    return;
-                FormatCell(data, data.SelectedStation, data.IsSelectedArrival, data.SelectedTextBox);
-
-                var path = data.Train.GetPath();
-                int idx, row;
-                if (!e.Control)
+                idx = path.IndexOf(data.GetStation()) * 2 + (data.IsSelectedArrival ? 1 : 2);
+                row = view.SelectedRow;
+                if (path.Last() == data.GetStation() && data.IsSelectedArrival)
                 {
-                    idx = path.IndexOf(data.SelectedStation) * 2 + (data.IsSelectedArrival ? 1 : 2);
-                    row = view.SelectedRow;
-                    if (path.Last() == data.SelectedStation && data.IsSelectedArrival)
-                    {
-                        idx = 1;
-                        row++;
-                    }
+                    idx = 1;
+                    row++;
                 }
-                else
-                {
-                    idx = path.IndexOf(data.SelectedStation) * 2 - (data.IsSelectedArrival ? 1 : 0);
-                    row = view.SelectedRow;
-                    if (path.First() == data.SelectedStation && !data.IsSelectedArrival)
-                    {
-                        idx = (path.Count - 1) * 2;
-                        row--;
-                    }
-                }
-                view.ReloadData(view.SelectedRow); // Commit current data
-                view.BeginEdit(row, idx);
             }
             else
             {
-                if (!mpmode)
-                    return;
-
-                var data = (DataElement)view.SelectedItem;
-                if (data == null || data.SelectedTextBox == null)
-                    return;
-                var tb = data.SelectedTextBox;
-                if (tb.HasFocus) // Wir können "echt" editieren
-                    return;
-                if (char.IsLetterOrDigit(e.KeyChar) || char.IsPunctuation(e.KeyChar))
+                idx = path.IndexOf(data.GetStation()) * 2 - (data.IsSelectedArrival ? 1 : 0);
+                row = view.SelectedRow;
+                if (path.First() == data.GetStation() && !data.IsSelectedArrival)
                 {
-                    tb.Text += e.KeyChar;
-                    e.Handled = true;
+                    idx = (path.Count - 1) * 2;
+                    row--;
                 }
-                if (e.Key == Keys.Backspace && tb.Text.Length > 0)
-                    tb.Text = tb.Text.Substring(0, tb.Text.Length - 1);
             }
+            return new Point(idx, row);
         }
 
-        private void CellSelected(DataElement data, Station sta, bool arrival)
+        protected override void CellSelected(TimetableDataElement data, Station sta, bool arrival)
         {
             trapeztafelToggle.Checked = data.ArrDeps[sta].TrapeztafelHalt;
 
             internalToggle.Enabled = arrival;
-            zlmButton.Enabled = arrival ^ (data.GetStations(info).First() == sta);
+            zlmButton.Enabled = arrival ^ (data.IsFirst(sta));
         }
 
-        private void ClearSelection()
+        private class DataElement : TimetableDataElement
         {
-            trapeztafelToggle.Checked = false;
-
-            internalToggle.Enabled = false;
-            zlmButton.Enabled = false;
-        }
-
-        private class DataElement
-        {
-            public Train Train { get; set; }
-
-            public Dictionary<Station, ArrDep> ArrDeps { get; set; }
-
-            public Dictionary<Station, bool?> Errors { get; set; } = new Dictionary<Station, bool?>();
-
-            public bool IsSelectedArrival { get; set; }
-
             public Station SelectedStation { get; set; }
 
-            public TextBox SelectedTextBox { get; set; }
-
-            public void SetTime(Station sta, bool arrival, string time)
-            {
-                var a = ArrDeps[sta];
-                if (arrival)
-                    a.Arrival = TimeSpan.Parse(time);
-                else
-                    a.Departure = TimeSpan.Parse(time);
-                ArrDeps[sta] = a;
-            }
-
-            public void SetZlm(Station sta, string zlm)
-            {
-                var a = ArrDeps[sta];
-                a.Zuglaufmeldung = zlm;
-                ArrDeps[sta] = a;
-            }
-
-            public void SetTrapez(Station sta, bool trapez)
-            {
-                var a = ArrDeps[sta];
-                a.TrapeztafelHalt = trapez;
-                ArrDeps[sta] = a;
-            }
-
-            public bool HasError(Station sta, bool arrival)
-                => Errors.TryGetValue(sta, out bool? val) && val.HasValue && val.Value == arrival;
-
-            public List<Station> GetStations(IInfo info)
-                => info.Timetable.GetStationsOrderedByDirection(Train.Direction);
+            public override Station GetStation() => SelectedStation;
         }
 
         private void InitializeGridView(GridView view, TrainDirection dir)
         {
             var stations = info.Timetable.GetStationsOrderedByDirection(dir);
 
-            view.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell() { Binding = Binding.Property<DataElement, string>(t => t.Train.TName) },
-                HeaderText = "Zugnummer",
-                AutoSize = true,
-                Sortable = false,
-            });
+            view.Columns.Add(GetColumn(new TextBoxCell() { Binding = Binding.Property<DataElement, string>(t => t.Train.TName) }, "Zugnummer"));
             foreach (var sta in stations)
             {
                 if (sta != stations.First())
-                {
-                    view.Columns.Add(new GridColumn()
-                    {
-                        DataCell = GetCell(t => t.ArrDeps[sta].Arrival != default(TimeSpan) ? t.ArrDeps[sta].Arrival.ToShortTimeString() : "", sta, true, view),
-                        HeaderText = sta.SName + " an",
-                        AutoSize = true,
-                        Sortable = false,
-                    });
-                }
+                    view.Columns.Add(GetColumn(GetCell(t => t.Arrival, sta, true, view), sta.SName + " an"));
                 if (sta != stations.Last())
-                {
-                    view.Columns.Add(new GridColumn()
-                    {
-                        DataCell = GetCell(t => t.ArrDeps[sta].Departure != default(TimeSpan) ? t.ArrDeps[sta].Departure.ToShortTimeString() : "", sta, false, view),
-                        HeaderText = sta.SName + " ab",
-                        AutoSize = true,
-                        Sortable = false,
-                    });
-                }
+                    view.Columns.Add(GetColumn(GetCell(t => t.Departure, sta, false, view), sta.SName + " ab"));
             }
 
             var l = info.Timetable.Trains.Where(t => t.Direction == dir).Select(tra => new DataElement()
@@ -364,87 +181,11 @@ namespace FPLedit.Editor.Linear
             }).ToList();
 
             view.GotFocus += (s, e) => focused = view;
-            view.KeyDown += (s, e) =>
-            {
-                if (e.Key == Keys.Home) // Pos1
-                {
-                    if (!mpmode)
-                        return;
-
-                    e.Handled = true;
-                    if (view.IsEditing)
-                        view.ReloadData(view.SelectedRow);
-                    view.BeginEdit(0, 1); // erstes Abfahrtsfeld
-                }
-                else
-                    HandleKeystroke(e, view);
-            };
+            view.KeyDown += (s, e) => HandleViewKeystroke(e, view);
             if (mpmode)
                 l.Add(null);
 
             view.DataStore = l;
-        }
-
-        private void FormatCell(DataElement data, Station sta, bool arrival, TextBox tb)
-        {
-            string val = tb.Text;
-            if (val == null || val == "")
-            {
-                data.Errors[sta] = null;
-                data.SetTime(sta, arrival, "0");
-                return;
-            }
-
-            val = normalizer.Normalize(val);
-            bool error = true;
-            if (val != null)
-            {
-                tb.Text = val;
-                data.SetTime(sta, arrival, val);
-                error = false;
-            }
-            data.Errors[sta] = error ? (bool?)arrival : null;
-        }
-
-        private void Trapez(GridView view)
-        {
-            if (view.SelectedRow == -1)
-                return;
-
-            var data = (DataElement)view.SelectedItem;
-
-            // Trapeztafelhalt darf nur bei Ankünften sein
-            if (!data.IsSelectedArrival)
-                return;
-
-            var sta = data.SelectedStation;
-            var trapez = !data.ArrDeps[sta].TrapeztafelHalt;
-            data.SetTrapez(sta, trapez);
-
-            view.ReloadData(view.SelectedRow);
-            trapeztafelToggle.Checked = trapez;
-            CellSelected(data, sta, data.IsSelectedArrival);
-        }
-
-        private void Zuglaufmeldung(GridView view)
-        {
-            if (view.SelectedRow == -1)
-                return;
-
-            var data = (DataElement)view.SelectedItem;
-            var sta = data.SelectedStation;
-
-            // Zuglaufmeldungen dürfen auch bei Abfahrt am ersten Bahnhof sein
-            if (!(data.GetStations(info).First() == sta) && !data.IsSelectedArrival)
-                return;
-
-            var zlmDialog = new ZlmEditForm(data.ArrDeps[sta].Zuglaufmeldung ?? "");
-            if (zlmDialog.ShowModal(this) != DialogResult.Ok)
-                return;
-
-            data.SetZlm(sta, zlmDialog.Zlm);
-
-            view.ReloadData(view.SelectedRow);
         }
 
         private bool UpdateTrainDataFromGrid(Train train, GridView view)
@@ -454,13 +195,13 @@ namespace FPLedit.Editor.Linear
                 if (row.Train != train)
                     continue;
 
-                if (row.Errors.Any(e => e.Value.HasValue))
+                if (row.HasAnyError)
                 {
                     MessageBox.Show("Bitte erst alle Fehler beheben!\n\nDie Zeitangaben müssen im Format hh:mm, h:mm, h:m, hh:mm, h:, :m, hhmm, hmm oder mm vorliegen!");
                     return false;
                 }
 
-                foreach (var sta in row.GetStations(info))
+                foreach (var sta in row.Train.GetPath())
                     train.SetArrDep(sta, row.ArrDeps[sta]);
 
                 return true;

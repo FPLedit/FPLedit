@@ -94,6 +94,11 @@
     <Compile Include="Editor\DesignableForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
+    <Compile Include="Editor\TimetableCellRenderProperties.cs" />
+    <Compile Include="Editor\TimetableDataElement.cs" />
+    <Compile Include="Editor\TimetableEditorBase.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
     <Compile Include="Editor\TrainEditHelper.cs" />
     <Compile Include="Editor\ZlmEditForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
