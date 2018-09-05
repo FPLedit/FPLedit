@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Editor.Linear
 {
-    internal class TrainsEditForm : Dialog<DialogResult>
+    internal class TrainsEditForm : TrainsEditorBase
     {
         private IInfo info;
         private Timetable tt;
@@ -25,7 +25,7 @@ namespace FPLedit.Editor.Linear
 
         private GridView active;
 
-        public TrainsEditForm(IInfo info)
+        public TrainsEditForm(IInfo info) : base(info.Timetable)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
             this.info = info;
@@ -69,100 +69,19 @@ namespace FPLedit.Editor.Linear
                 NewTrain(active, dir);
         }
 
-        private void UpdateListView(GridView view, TrainDirection direction)
-        {
-            view.DataStore = tt.Trains.Where(t => t.Direction == direction);
-        }
-
         private void InitListView(GridView view)
         {
-            view.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<Train, string>(t => t.TName) },
-                HeaderText = "Zugnummer"
-            });
-            view.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<Train, string>(t => t.Locomotive) },
-                HeaderText = "Tfz"
-            });
-            view.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<Train, string>(t => t.Mbr) },
-                HeaderText = "Mbr"
-            });
-            view.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<Train, string>(t => t.Last) },
-                HeaderText = "Last"
-            });
-            view.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<Train, string>(t => DaysHelper.DaysToString(t.Days, false)) },
-                HeaderText = "Verkehrstage"
-            });
-            view.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<Train, string>(t => t.Comment) },
-                HeaderText = "Kommentar"
-            });
+            view.Columns.Add(GetColumn(t => t.TName, "Zugnummer"));
+            view.Columns.Add(GetColumn(t => t.Locomotive, "Tfz"));
+            view.Columns.Add(GetColumn(t => t.Mbr, "Mbr"));
+            view.Columns.Add(GetColumn(t => t.Last, "Last"));
+            view.Columns.Add(GetColumn(t => DaysHelper.DaysToString(t.Days, false), "Verkehrstage"));
+            view.Columns.Add(GetColumn(t => t.Comment, "Kommentar"));
 
             view.GotFocus += (s, e) => active = view;
 
             if (!Eto.Platform.Instance.IsWpf)
                 view.KeyDown += HandleKeystroke;
-        }
-
-        private void DeleteTrain(GridView view, TrainDirection dir, bool message = true)
-        {
-            if (view.SelectedItem != null)
-            {
-                tt.RemoveTrain((Train)view.SelectedItem);
-
-                UpdateListView(view, dir);
-            }
-            else if (message)
-                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug löschen");
-        }
-
-        private void EditTrain(GridView view, TrainDirection dir, bool message = true)
-        {
-            if (view.SelectedItem != null)
-            {
-                Train train = (Train)view.SelectedItem;
-
-                TrainEditForm tef = new TrainEditForm(train);
-                if (tef.ShowModal(this) == DialogResult.Ok)
-                    UpdateListView(view, dir);
-            }
-            else if (message)
-                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug bearbeiten");
-        }
-
-        private void NewTrain(GridView view, TrainDirection direction)
-        {
-            TrainEditForm tef = new TrainEditForm(info.Timetable, direction);
-            if (tef.ShowModal(this) == DialogResult.Ok)
-            {
-                tt.AddTrain(tef.Train);
-
-                UpdateListView(view, direction);
-            }
-        }
-
-        private void CopyTrain(GridView view, TrainDirection dir, bool message = true)
-        {
-            if (view.SelectedItem != null)
-            {
-                var train = (Train)view.SelectedItem;
-
-                var tcf = new TrainCopyDialog(train, info.Timetable);
-                tcf.ShowModal(this);
-
-                UpdateListView(view, dir);
-            }
-            else if (message)
-                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug kopieren");
         }
 
         private void closeButton_Click(object sender, EventArgs e)

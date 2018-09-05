@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Editor.Network
 {
-    internal class TrainsEditingForm : Dialog<DialogResult>
+    internal class TrainsEditingForm : TrainsEditorBase
     {
         private IInfo info;
         private Timetable tt;
@@ -19,7 +19,7 @@ namespace FPLedit.Editor.Network
         private GridView gridView;
 #pragma warning restore CS0649
 
-        public TrainsEditingForm(IInfo info)
+        public TrainsEditingForm(IInfo info) : base(info.Timetable)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
@@ -27,45 +27,17 @@ namespace FPLedit.Editor.Network
             tt = info.Timetable;
             info.BackupTimetable();
 
-            gridView.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<Train, string>(t => t.TName) },
-                HeaderText = "Zugnummer"
-            });
-            gridView.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<Train, string>(t => t.Locomotive) },
-                HeaderText = "Tfz"
-            });
-            gridView.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<Train, string>(t => t.Mbr) },
-                HeaderText = "Mbr"
-            });
-            gridView.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<Train, string>(t => t.Last) },
-                HeaderText = "Last"
-            });
-            gridView.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<Train, string>(t => DaysHelper.DaysToString(t.Days, false)) },
-                HeaderText = "Verkehrstage"
-            });
-            gridView.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<Train, string>(t => BuildPath(t)) },
-                HeaderText = "Laufweg"
-            });
-            gridView.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<Train, string>(t => t.Comment) },
-                HeaderText = "Kommentar"
-            });
+            gridView.Columns.Add(GetColumn(t => t.TName, "Zugnummer"));
+            gridView.Columns.Add(GetColumn(t => t.Locomotive, "Tfz"));
+            gridView.Columns.Add(GetColumn(t => t.Mbr, "Mbr"));
+            gridView.Columns.Add(GetColumn(t => t.Last, "Last"));
+            gridView.Columns.Add(GetColumn(t => DaysHelper.DaysToString(t.Days, false), "Verkehrstage"));
+            gridView.Columns.Add(GetColumn(t => BuildPath(t), "Laufweg"));
+            gridView.Columns.Add(GetColumn(t => t.Comment, "Kommentar"));
 
-            gridView.MouseDoubleClick += (s, e) => EditTrain(gridView, false);
+            gridView.MouseDoubleClick += (s, e) => EditTrain(gridView, TrainDirection.tr, false);
 
-            UpdateListView(gridView);
+            UpdateListView(gridView, TrainDirection.tr);
 
             if (Eto.Platform.Instance.IsWpf)
                 KeyDown += HandleKeystroke;
@@ -78,7 +50,7 @@ namespace FPLedit.Editor.Network
         private void HandleKeystroke(object sender, KeyEventArgs e)
         {
             if (e.Key == Keys.Delete)
-                DeleteTrain(gridView, false);
+                DeleteTrain(gridView, TrainDirection.tr, false);
             else if ((e.Key == Keys.T && e.Control))
                 EditTimetable(gridView, false);
             else if ((e.Key == Keys.C && e.Control))
@@ -86,7 +58,7 @@ namespace FPLedit.Editor.Network
             else if ((e.Key == Keys.P && e.Control))
                 EditPath(gridView, false);
             else if ((e.Key == Keys.B && e.Control) || (e.Key == Keys.Enter))
-                EditTrain(gridView, false);
+                EditTrain(gridView, TrainDirection.tr, false);
             else if (e.Key == Keys.N && e.Control)
                 NewTrain(gridView);
         }
@@ -95,37 +67,6 @@ namespace FPLedit.Editor.Network
         {
             var path = t.GetPath();
             return path.FirstOrDefault()?.SName + " - " + path.LastOrDefault()?.SName;
-        }
-
-        private void UpdateListView(GridView view)
-        {
-            view.DataStore = tt.Trains;
-        }
-
-        private void DeleteTrain(GridView view, bool message = true)
-        {
-            if (view.SelectedItem != null)
-            {
-                tt.RemoveTrain((Train)view.SelectedItem);
-
-                UpdateListView(gridView);
-            }
-            else if (message)
-                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug löschen");
-        }
-
-        private void EditTrain(GridView view, bool message = true)
-        {
-            if (view.SelectedItem != null)
-            {
-                Train train = (Train)view.SelectedItem;
-
-                TrainEditForm tef = new TrainEditForm(train);
-                if (tef.ShowModal(this) == DialogResult.Ok)
-                    UpdateListView(view);
-            }
-            else if (message)
-                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug bearbeiten");
         }
 
         private void EditTimetable(GridView view, bool message = true)
@@ -147,9 +88,9 @@ namespace FPLedit.Editor.Network
             {
                 var train = (Train)view.SelectedItem;
 
-                TrainChangeRouteForm trf = new TrainChangeRouteForm(info, train);
+                var trf = new TrainChangeRouteForm(info, train);
                 if (trf.ShowModal(this) == DialogResult.Ok)
-                    UpdateListView(view);
+                    UpdateListView(view, TrainDirection.tr);
             }
             else if (message)
                 MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug-Fahrplan bearbeiten");
@@ -164,7 +105,7 @@ namespace FPLedit.Editor.Network
                 var tcf = new TrainCopyDialog(train, info.Timetable);
                 tcf.ShowModal(this);
 
-                UpdateListView(view);
+                UpdateListView(view, TrainDirection.tr);
             }
             else if (message)
                 MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug kopieren");
@@ -176,13 +117,13 @@ namespace FPLedit.Editor.Network
             if (trf.ShowModal(this) != DialogResult.Ok)
                 return;
 
-            TrainEditForm tef = new TrainEditForm(info.Timetable, TrainDirection.tr);
+            var tef = new TrainEditForm(info.Timetable, TrainDirection.tr);
             if (tef.ShowModal(this) == DialogResult.Ok)
             {
                 tef.Train.AddAllArrDeps(trf.Path);
                 tt.AddTrain(tef.Train);
 
-                UpdateListView(view);
+                UpdateListView(view, TrainDirection.tr);
             }
         }
 
@@ -204,10 +145,10 @@ namespace FPLedit.Editor.Network
             => NewTrain(gridView);
 
         private void topEditButton_Click(object sender, EventArgs e)
-            => EditTrain(gridView);
+            => EditTrain(gridView, TrainDirection.tr);
 
         private void topDeleteButton_Click(object sender, EventArgs e)
-            => DeleteTrain(gridView);
+            => DeleteTrain(gridView, TrainDirection.tr);
 
         private void editTimetableButton_Click(object sender, EventArgs e)
             => EditTimetable(gridView);

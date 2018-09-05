@@ -45,7 +45,7 @@ namespace FPLedit.Shared.UI
         public static void NClose(Window dialog)
         {
             var ch = ActiveHandlers.FirstOrDefault(c => c.Dialog == dialog);
-            if (ch == null || !ch.isClosing)
+            if (ch != null && !ch.isClosing)
                 dialog.Close();
         }
     }
