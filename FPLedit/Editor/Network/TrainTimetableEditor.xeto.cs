@@ -122,9 +122,9 @@ namespace FPLedit.Editor.Network
 
         private void InitializeGridView(GridView view)
         {
-            view.Columns.Add(GetColumn(new TextBoxCell() { Binding = Binding.Property<DataElement, string>(t => t.Station.SName) }, "Bahnhof"));
-            view.Columns.Add(GetColumn(GetCell(t => t.Arrival, true), "Ankunft"));
-            view.Columns.Add(GetColumn(GetCell(t => t.Departure, false), "Abfahrt"));
+            view.AddColumn<DataElement>(t => t.Station.SName, "Bahnhof");
+            view.AddColumn(GetCell(t => t.Arrival, true), "Ankunft");
+            view.AddColumn(GetCell(t => t.Departure, false), "Abfahrt");
 
             view.KeyDown += (s, e) => HandleViewKeystroke(e, view);
 

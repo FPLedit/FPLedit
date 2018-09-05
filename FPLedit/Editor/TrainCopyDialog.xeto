@@ -36,7 +36,7 @@
       <TableRow>
         <TableCell ScaleWidth="true" />
         <Button x:Name="cancelButton" Text="Abbrechen" Click="cancelButton_Click"></Button>
-        <Button x:Name="closeButton" Text="Schließen" Click="closeButton_Click"></Button>
+        <Button x:Name="closeButton" Text="Kopieren" Click="closeButton_Click"></Button>
       </TableRow>
     </TableLayout>
   </StackLayout>

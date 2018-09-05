@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using FPLedit.Shared;
-using System.Drawing.Text;
 using System.Diagnostics;
 using FPLedit.Shared.Ui;
 using Eto.Forms;
 using FPLedit.Shared.Templating;
-using Eto.Drawing;
 using FPLedit.Kursbuch.Model;
-using FPLedit.Kursbuch;
 using FPLedit.Shared.UI;
 
 namespace FPLedit.Kursbuch.Forms
@@ -33,6 +28,7 @@ namespace FPLedit.Kursbuch.Forms
         private TextArea cssTextBox;
         private GridView kbsnListView;
 #pragma warning restore CS0649
+        private FontComboBox fntComboBox, hefntComboBox;
 
         private Dictionary<int, string> setRouteNumbers;
 
@@ -44,6 +40,9 @@ namespace FPLedit.Kursbuch.Forms
             chooser = new KfplTemplateChooser(info);
             templateComboBox.ItemTextBinding = Binding.Property<ITemplate, string>(t => t.TemplateName);
             templateComboBox.DataStore = chooser.AvailableTemplates;
+
+            fntComboBox = new FontComboBox(fontComboBox, exampleLabel);
+            hefntComboBox = new FontComboBox(hefontComboBox, heexampleLabel);
 
             attrs = KfplAttrs.GetAttrs(tt);
             if (attrs != null)
@@ -59,9 +58,7 @@ namespace FPLedit.Kursbuch.Forms
             }
 
             setRouteNumbers = new Dictionary<int, string>();
-            kbsnListView.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell
+            var col = kbsnListView.AddColumn(new TextBoxCell
                 {
                     Binding = Binding.Delegate<Route, string>(r =>
                     {
@@ -69,28 +66,14 @@ namespace FPLedit.Kursbuch.Forms
                         return val ?? attrs.KBSn.GetKbsn(r.Index) ?? NO_KBS_TEXT;
                     },
                     (r, n) => setRouteNumbers[r.Index] = n)
-                },
-                Editable = true,
-                HeaderText = "Name"
-            });
-            kbsnListView.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<Route, string>(r => r.GetRouteName()) },
-                HeaderText = "Dateiname"
-            });
-
+                }, "Name"
+            );
+            col.Editable = true;
+            kbsnListView.AddColumn<Route>(r => r.GetRouteName(), "Dateiname");
             kbsnListView.DataStore = tt.GetRoutes();
 
             var tmpl = chooser.GetTemplate(tt);
             templateComboBox.SelectedValue = tmpl;
-
-            string[] fontFamilies = new InstalledFontCollection().Families.Select(f => f.Name).OrderBy(f => f).ToArray();
-            fontComboBox.DataStore = fontFamilies;
-            hefontComboBox.DataStore = fontFamilies;
-            fontComboBox.ItemTextBinding = Binding.Property<string, string>(s => s);
-            hefontComboBox.ItemTextBinding = Binding.Property<string, string>(s => s);
-            fontComboBox.TextChanged += fontComboBox_TextChanged;
-            hefontComboBox.TextChanged += hefontComboBox_TextChanged;
 
             consoleCheckBox.Checked = settings.Get<bool>("kfpl.console");
 
@@ -104,29 +87,6 @@ namespace FPLedit.Kursbuch.Forms
         private void cssHelpLinkLabel_LinkClicked(object sender, EventArgs e)
             => Process.Start("https://fahrplan.manuelhu.de/dev/css/");
 
-        private void fontComboBox_TextChanged(object sender, EventArgs e)
-        {
-            if (fontComboBox.Text == "")
-                return;
-
-            try
-            {
-                exampleLabel.Font = new Font(fontComboBox.Text, 10);
-            }
-            catch { }
-        }
-
-        private void hefontComboBox_TextChanged(object sender, EventArgs e)
-        {
-            if (hefontComboBox.Text == "")
-                return;
-
-            try
-            {
-                heexampleLabel.Font = new Font(hefontComboBox.Text, 10);
-            }
-            catch { }
-        }
         public void Save()
         {
             attrs.Font = fontComboBox.Text;

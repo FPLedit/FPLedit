@@ -1,12 +1,10 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.Ui;
+using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 
 namespace FPLedit.Editor.Filters
 {
@@ -50,16 +48,8 @@ namespace FPLedit.Editor.Filters
 
         private void InitView(GridView view)
         {
-            view.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<FilterRule, string>(r => TypeDescription(r.Pattern[0])) },
-                HeaderText = "Typ"
-            });
-            view.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<FilterRule, string>(r => r.Pattern.Substring(1)) },
-                HeaderText = "Suchwert"
-            });
+            view.AddColumn<FilterRule>(r => TypeDescription(r.Pattern[0]), "Typ");
+            view.AddColumn<FilterRule>(r => r.Pattern.Substring(1), "Suchwert");
         }
 
         private void SwitchType(int idx)
@@ -164,15 +154,11 @@ namespace FPLedit.Editor.Filters
             foreach (var fcon in fcontainers)
                 fcon.Filterable.SaveFilter(info.Timetable, fcon.StationRules, fcon.TrainRules);
 
-            Result = DialogResult.Ok;
-            Close();
+            Close(DialogResult.Ok);
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
-        {
-            Result = DialogResult.Cancel;
-            Close();
-        }
+            => Close(DialogResult.Cancel);
 
         #endregion
 

@@ -4,8 +4,6 @@ using FPLedit.Shared.UI.Validators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.Editor
 {
@@ -33,9 +31,9 @@ namespace FPLedit.Editor
 
             daysBoxes = new[] { mondayCheckBox, tuesdayCheckBox, wednesdayCheckBox, thursdayCheckBox, fridayCheckBox, saturdayCheckBox, sundayCheckBox };
 
-            locomotiveComboBox.Items.AddRange(GetAllTfzs(tt));
-            lastComboBox.Items.AddRange(GetAllLast(tt));
-            mbrComboBox.Items.AddRange(GetAllMbr(tt));
+            locomotiveComboBox.Items.AddRange(GetAllItems(tt, t => t.Locomotive));
+            lastComboBox.Items.AddRange(GetAllItems(tt, t => t.Last));
+            mbrComboBox.Items.AddRange(GetAllItems(tt, t => t.Mbr));
 
             KeyDown += (s, e) =>
             {
@@ -102,15 +100,11 @@ namespace FPLedit.Editor
             Train.Comment = commentTextBox.Text;
             Train.Days = daysBoxes.Select(b => b.Checked.Value).ToArray();
 
-            Result = DialogResult.Ok;
-            Close();
+            Close(DialogResult.Ok);
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
-        {
-            Result = DialogResult.Cancel;
-            Close();
-        }
+            => Close(DialogResult.Cancel);
 
         #region Shortcut buttons
 
@@ -144,31 +138,7 @@ namespace FPLedit.Editor
 
         #endregion
 
-        private IEnumerable<ListItem> GetAllTfzs(Timetable tt)
-        {
-            return tt.Trains
-                .Select(t => t.Locomotive)
-                .Distinct()
-                .Where(s => s != "")
-                .Select(s => new ListItem() { Text = s });
-        }
-
-        private IEnumerable<ListItem> GetAllLast(Timetable tt)
-        {
-            return tt.Trains
-                .Select(t => t.Last)
-                .Distinct()
-                .Where(s => s != "")
-                .Select(s => new ListItem() { Text = s });
-        }
-
-        private IEnumerable<ListItem> GetAllMbr(Timetable tt)
-        {
-            return tt.Trains
-                .Select(t => t.Mbr)
-                .Distinct()
-                .Where(s => s != "")
-                .Select(s => new ListItem() { Text = s });
-        }
+        private IEnumerable<ListItem> GetAllItems(Timetable tt, Func<Train, string> func)
+            => tt.Trains.Select(func).Distinct().Where(s => s != "").Select(s => new ListItem() { Text = s });
     }
 }

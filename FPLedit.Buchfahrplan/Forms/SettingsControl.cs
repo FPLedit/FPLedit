@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using FPLedit.Shared;
-using System.Drawing.Text;
 using System.Diagnostics;
 using FPLedit.Shared.Ui;
 using Eto.Forms;
 using FPLedit.Shared.Templating;
-using Eto.Drawing;
-using FPLedit.Buchfahrplan;
 using FPLedit.Buchfahrplan.Model;
+using FPLedit.Shared.UI;
 
 namespace FPLedit.Buchfahrplan.Forms
 {
@@ -29,6 +25,7 @@ namespace FPLedit.Buchfahrplan.Forms
         private CheckBox consoleCheckBox, commentCheckBox;
         private TextArea cssTextBox;
 #pragma warning restore CS0649
+        private FontComboBox fntComboBox;
 
         public SettingsControl(Timetable tt, IInfo info)
         {
@@ -38,6 +35,8 @@ namespace FPLedit.Buchfahrplan.Forms
             chooser = new BfplTemplateChooser(info);
             templateComboBox.ItemTextBinding = Binding.Property<ITemplate, string>(t => t.TemplateName);
             templateComboBox.DataStore = chooser.AvailableTemplates;
+
+            fntComboBox = new FontComboBox(fontComboBox, exampleLabel);
 
             attrs = BfplAttrs.GetAttrs(tt);
             if (attrs != null)
@@ -55,28 +54,11 @@ namespace FPLedit.Buchfahrplan.Forms
             var tmpl = chooser.GetTemplate(tt);
             templateComboBox.SelectedValue = tmpl;
 
-            string[] fontFamilies = new InstalledFontCollection().Families.Select(f => f.Name).OrderBy(f => f).ToArray();
-            fontComboBox.DataStore = fontFamilies;
-            fontComboBox.ItemTextBinding = Binding.Property<string, string>(s => s);
-            fontComboBox.TextChanged += fontComboBox_TextChanged;
-
             consoleCheckBox.Checked = settings.Get<bool>("bfpl.console");
         }
 
         private void cssHelpLinkLabel_LinkClicked(object sender, EventArgs e)
             => Process.Start("https://fahrplan.manuelhu.de/dev/css/");
-
-        private void fontComboBox_TextChanged(object sender, EventArgs e)
-        {
-            if (fontComboBox.Text == "")
-                return;
-
-            try
-            {
-                exampleLabel.Font = new Font(fontComboBox.Text, 10);
-            }
-            catch { }
-        }
 
         public void Save()
         {

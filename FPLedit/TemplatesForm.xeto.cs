@@ -1,5 +1,6 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared.Templating;
+using FPLedit.Shared.UI;
 using FPLedit.Templating;
 using System;
 using System.Collections.Generic;
@@ -35,21 +36,9 @@ namespace FPLedit
             deactivatedDir = new DirectoryInfo(Path.Combine(appPath, templateRoot, "deactivated"));
 
             var buildName = new Func<string, string>((x) => x.StartsWith("builtin:") ? "(integriert)" : x);
-            gridView.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<ITemplate, string>(t => t.TemplateName) },
-                HeaderText = "Name"
-            });
-            gridView.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<ITemplate, string>(t => buildName(t.Identifier)) },
-                HeaderText = "Dateiname"
-            });
-            gridView.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<ITemplate, string>(t => t.TemplateType) },
-                HeaderText = "Typ"
-            });
+            gridView.AddColumn<ITemplate>(t => t.TemplateName, "Name");
+            gridView.AddColumn<ITemplate>(t => buildName(t.Identifier), "Dateiname");
+            gridView.AddColumn<ITemplate>(t => t.TemplateType, "Typ");
 
             gridView.SelectedItemsChanged += (s, e) =>
             {
@@ -153,9 +142,6 @@ namespace FPLedit
             ReloadTemplates();
         }
 
-        private void closeButton_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
+        private void closeButton_Click(object sender, EventArgs e) => Close();
     }
 }

@@ -27,13 +27,13 @@ namespace FPLedit.Editor.Network
             tt = info.Timetable;
             info.BackupTimetable();
 
-            gridView.Columns.Add(GetColumn(t => t.TName, "Zugnummer"));
-            gridView.Columns.Add(GetColumn(t => t.Locomotive, "Tfz"));
-            gridView.Columns.Add(GetColumn(t => t.Mbr, "Mbr"));
-            gridView.Columns.Add(GetColumn(t => t.Last, "Last"));
-            gridView.Columns.Add(GetColumn(t => DaysHelper.DaysToString(t.Days, false), "Verkehrstage"));
-            gridView.Columns.Add(GetColumn(t => BuildPath(t), "Laufweg"));
-            gridView.Columns.Add(GetColumn(t => t.Comment, "Kommentar"));
+            gridView.AddColumn<Train>(t => t.TName, "Zugnummer");
+            gridView.AddColumn<Train>(t => t.Locomotive, "Tfz");
+            gridView.AddColumn<Train>(t => t.Mbr, "Mbr");
+            gridView.AddColumn<Train>(t => t.Last, "Last");
+            gridView.AddColumn<Train>(t => DaysHelper.DaysToString(t.Days, false), "Verkehrstage");
+            gridView.AddColumn<Train>(t => BuildPath(t), "Laufweg");
+            gridView.AddColumn<Train>(t => t.Comment, "Kommentar");
 
             gridView.MouseDoubleClick += (s, e) => EditTrain(gridView, TrainDirection.tr, false);
 

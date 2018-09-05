@@ -54,13 +54,10 @@ namespace FPLedit.Editor.Network
             Station.SName = name;
             Position = float.Parse(positionTextBox.Text);
 
-            Result = DialogResult.Ok;
-            Close();
+            Close(DialogResult.Ok);
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
+            => Close(DialogResult.Cancel);
     }
 }

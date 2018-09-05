@@ -1,14 +1,9 @@
 ﻿using Eto.Forms;
-using FPLedit.Editor.Network;
 using FPLedit.Shared;
-using FPLedit.Shared.Filetypes;
 using FPLedit.Shared.Helpers;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.Editor.Network
 {
@@ -81,8 +76,7 @@ namespace FPLedit.Editor.Network
 
                 train.RemoveOrphanedTimes();
             }
-            Result = DialogResult.Ok;
-            Close();
+            Close(DialogResult.Ok);
         }
 
         private void ChangeRoute(object sender, EventArgs e)
@@ -184,10 +178,7 @@ namespace FPLedit.Editor.Network
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
-        {
-            Result = DialogResult.Cancel;
-            Close();
-        }
+            => Close(DialogResult.Cancel);
 
         protected override void OnKeyDown(KeyEventArgs e)
         {

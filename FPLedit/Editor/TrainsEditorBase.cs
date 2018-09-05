@@ -73,14 +73,5 @@ namespace FPLedit.Editor
             else if (message)
                 MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug kopieren");
         }
-
-        protected GridColumn GetColumn(Expression<Func<Train, string>> value, string header)
-        {
-            return new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property(value) },
-                HeaderText = header
-            };
-        }
     }
 }

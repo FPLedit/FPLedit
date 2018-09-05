@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,8 +19,6 @@ namespace FPLedit.Shared.UI
         }
 
         #region Close Handlers
-
-
         public static void AddCloseHandler(this Dialog dialog)
             => AddCloseHandler(dialog, dialog.DefaultButton, dialog.AbortButton);
 
@@ -71,6 +70,22 @@ namespace FPLedit.Shared.UI
             }
             lines.Add(line);
             label.Text = string.Join(Environment.NewLine, lines);
+        }
+
+        public static GridColumn AddColumn<T>(this GridView view, Expression<Func<T, string>> value, string header)
+            => view.AddColumn(new TextBoxCell { Binding = Binding.Property(value) }, header);
+
+        public static GridColumn AddColumn(this GridView view, Cell cell, string header)
+        {
+            var col = new GridColumn()
+            {
+                DataCell = cell,
+                HeaderText = header,
+                AutoSize = true,
+                Sortable = false,
+            };
+            view.Columns.Add(col);
+            return col;
         }
     }
 }

@@ -38,16 +38,8 @@ namespace FPLedit.Editor
             if (tt.Type == TimetableType.Network)
                 loadLineButton.Visible = false;
 
-            gridView.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<Station, string>(s => s.SName) },
-                HeaderText = "Bahnhof"
-            });
-            gridView.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<Station, string>(s => s.Positions.GetPosition(route).ToString()) },
-                HeaderText = "Position"
-            });
+            gridView.AddColumn<Station>(s => s.SName, "Bahnhof");
+            gridView.AddColumn<Station>(s => s.Positions.GetPosition(route).ToString(), "Position");
 
             gridView.MouseDoubleClick += (s, e) => EditStation(false);
 

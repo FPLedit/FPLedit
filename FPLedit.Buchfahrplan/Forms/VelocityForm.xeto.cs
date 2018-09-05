@@ -26,26 +26,10 @@ namespace FPLedit.Buchfahrplan.Forms
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            gridView.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<IStation, string>(s => s.Positions.GetPosition(route.Index).ToString()) },
-                HeaderText = "km"
-            });
-            gridView.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<IStation, string>(s => s.SName) },
-                HeaderText = "Name"
-            });
-            gridView.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<IStation, string>(s => s.Vmax) },
-                HeaderText = "Vmax"
-            });
-            gridView.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<IStation, string>(s => s.Wellenlinien.ToString()) },
-                HeaderText = "Wellenlinien"
-            });
+            gridView.AddColumn<IStation>(s => s.Positions.GetPosition(route.Index).ToString(), "km");
+            gridView.AddColumn<IStation>(s => s.SName, "Name");
+            gridView.AddColumn<IStation>(s => s.Vmax, "Vmax");
+            gridView.AddColumn<IStation>(s => s.Wellenlinien.ToString(), "Wellenlinien");
 
             gridView.MouseDoubleClick += (s, e) => EditPoint(false);
 

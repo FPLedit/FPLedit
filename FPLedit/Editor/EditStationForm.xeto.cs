@@ -86,10 +86,7 @@ namespace FPLedit.Editor
                     var res = MessageBox.Show("ACHTUNG: Sie versuchen eine Station durch eine Positionsänderung auf der Strecke zwischen zwei andere Bahnhöfe zu verschieben. Dies wird, wenn Züge über diese Strecke angelegt wurden, zu unerwarteten Effekten führen. Trotzdem fortfahren?",
                         "FPLedit", MessageBoxButtons.YesNo, MessageBoxType.Warning);
                     if (res == DialogResult.No)
-                    {
-                        Result = DialogResult.None; // Schließen abbrechen
                         return;
-                    }
                     else
                         resetArdep = true;
                 }
@@ -112,13 +109,10 @@ namespace FPLedit.Editor
                 foreach (var ardp in ardeps)
                     ardp.Key.AddArrDep(Station, ardp.Value, route);
 
-            Result = DialogResult.Ok;
-            Close();
+            Close(DialogResult.Ok);
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
+            => Close(DialogResult.Cancel);
     }
 }

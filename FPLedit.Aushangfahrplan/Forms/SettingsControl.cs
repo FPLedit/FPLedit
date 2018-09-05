@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using FPLedit.Shared;
 using FPLedit.Aushangfahrplan.Model;
-using System.Drawing.Text;
 using System.Diagnostics;
 using FPLedit.Shared.Ui;
 using Eto.Forms;
 using FPLedit.Shared.Templating;
-using Eto.Drawing;
+using FPLedit.Shared.UI;
 
 namespace FPLedit.Aushangfahrplan.Forms
 {
@@ -28,6 +25,7 @@ namespace FPLedit.Aushangfahrplan.Forms
         private CheckBox consoleCheckBox;
         private TextArea cssTextBox;
 #pragma warning restore CS0649
+        private FontComboBox fntComboBox, hwfntComboBox;
 
         public SettingsControl(Timetable tt, IInfo info)
         {
@@ -37,6 +35,9 @@ namespace FPLedit.Aushangfahrplan.Forms
             chooser = new AfplTemplateChooser(info);
             templateComboBox.ItemTextBinding = Binding.Property<ITemplate, string>(t => t.TemplateName);
             templateComboBox.DataStore = chooser.AvailableTemplates;
+
+            fntComboBox = new FontComboBox(fontComboBox, exampleLabel);
+            hwfntComboBox = new FontComboBox(hwfontComboBox, hwexampleLabel);
 
             attrs = AfplAttrs.GetAttrs(tt);
             if (attrs != null)
@@ -54,43 +55,11 @@ namespace FPLedit.Aushangfahrplan.Forms
             var tmpl = chooser.GetTemplate(tt);
             templateComboBox.SelectedValue = tmpl;
 
-            string[] fontFamilies = new InstalledFontCollection().Families.Select(f => f.Name).OrderBy(f => f).ToArray();
-            fontComboBox.DataStore = fontFamilies;
-            hwfontComboBox.DataStore = fontFamilies;
-            fontComboBox.ItemTextBinding = Binding.Property<string, string>(s => s);
-            hwfontComboBox.ItemTextBinding = Binding.Property<string, string>(s => s);
-            fontComboBox.TextChanged += fontComboBox_TextChanged;
-            hwfontComboBox.TextChanged += hwfontComboBox_TextChanged;
-
             consoleCheckBox.Checked = settings.Get<bool>("afpl.console");
         }
 
         private void cssHelpLinkLabel_LinkClicked(object sender, EventArgs e)
             => Process.Start("https://fahrplan.manuelhu.de/dev/css/");
-
-        private void fontComboBox_TextChanged(object sender, EventArgs e)
-        {
-            if (fontComboBox.Text == "")
-                return;
-
-            try
-            {
-                exampleLabel.Font = new Font(fontComboBox.Text, 10);
-            }
-            catch { }
-        }
-
-        private void hwfontComboBox_TextChanged(object sender, EventArgs e)
-        {
-            if (hwfontComboBox.Text == "")
-                return;
-
-            try
-            {
-                hwexampleLabel.Font = new Font(hwfontComboBox.Text, 10);
-            }
-            catch { }
-        }
 
         public void Save()
         {

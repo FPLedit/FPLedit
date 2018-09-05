@@ -76,8 +76,6 @@ namespace FPLedit.Buchfahrplan.Forms
                 return;
             }
 
-            Result = DialogResult.Ok;
-
             Station.SetAttribute("fpl-vmax", velocityTextBox.Text);
             Station.Wellenlinien = int.Parse(((IListItem)wellenComboBox.SelectedValue).Text);
 
@@ -86,13 +84,10 @@ namespace FPLedit.Buchfahrplan.Forms
                 Station.Positions.SetPosition(route, float.Parse(positionTextBox.Text));
                 Station.SName = nameTextBox.Text;
             }
-            Close();
+            Close(DialogResult.Ok);
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
-        {
-            Result = DialogResult.Cancel;
-            Close();
-        }
+            => Close(DialogResult.Cancel);
     }
 }

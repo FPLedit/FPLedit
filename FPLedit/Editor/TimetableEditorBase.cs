@@ -168,17 +168,6 @@ namespace FPLedit.Editor
                 HandleKeystroke(e, view);
         }
 
-        protected GridColumn GetColumn(Cell cell, string header)
-        {
-            return new GridColumn()
-            {
-                DataCell = cell,
-                HeaderText = header,
-                AutoSize = true,
-                Sortable = false,
-            };
-        }
-
         protected abstract void CellSelected(TimetableDataElement data, Station sta, bool arrival);
 
         protected abstract Point GetNextEditingPosition(TimetableDataElement data, GridView view, KeyEventArgs e);

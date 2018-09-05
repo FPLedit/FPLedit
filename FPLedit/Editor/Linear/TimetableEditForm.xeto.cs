@@ -165,13 +165,13 @@ namespace FPLedit.Editor.Linear
         {
             var stations = info.Timetable.GetStationsOrderedByDirection(dir);
 
-            view.Columns.Add(GetColumn(new TextBoxCell() { Binding = Binding.Property<DataElement, string>(t => t.Train.TName) }, "Zugnummer"));
+            view.AddColumn<DataElement>(t => t.Train.TName, "Zugnummer");
             foreach (var sta in stations)
             {
                 if (sta != stations.First())
-                    view.Columns.Add(GetColumn(GetCell(t => t.Arrival, sta, true, view), sta.SName + " an"));
+                    view.AddColumn(GetCell(t => t.Arrival, sta, true, view), sta.SName + " an");
                 if (sta != stations.Last())
-                    view.Columns.Add(GetColumn(GetCell(t => t.Departure, sta, false, view), sta.SName + " ab"));
+                    view.AddColumn(GetCell(t => t.Departure, sta, false, view), sta.SName + " ab");
             }
 
             var l = info.Timetable.Trains.Where(t => t.Direction == dir).Select(tra => new DataElement()

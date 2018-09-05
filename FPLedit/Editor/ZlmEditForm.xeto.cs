@@ -27,14 +27,10 @@ namespace FPLedit.Editor
         private void closeButton_Click(object sender, EventArgs e)
         {
             Zlm = zlmTextBox.Text;
-            Result = DialogResult.Ok;
-            Close();
+            Close(DialogResult.Ok);
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
-        {
-            Result = DialogResult.Cancel;
-            Close();
-        }
+            => Close(DialogResult.Cancel);
     }
 }

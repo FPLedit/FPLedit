@@ -65,19 +65,13 @@ namespace FPLedit.Editor
         {
             info.Settings.Set("std.expert", expertCheckBox.Checked.Value);
             saveHandlers.ForEach(sh => sh.Save());
-            Result = DialogResult.Ok;
-            Close();
+            Close(DialogResult.Ok);
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
-        {
-            Result = DialogResult.Cancel;
-            Close();
-        }
+            => Close(DialogResult.Cancel);
 
         private void expertCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            expertHandlers.ForEach(eh => eh.SetExpertMode(expertCheckBox.Checked.Value));
-        }
+            => expertHandlers.ForEach(eh => eh.SetExpertMode(expertCheckBox.Checked.Value));
     }
 }

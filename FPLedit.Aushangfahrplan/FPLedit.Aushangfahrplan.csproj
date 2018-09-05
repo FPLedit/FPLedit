@@ -73,6 +73,10 @@
       <Project>{CE38D005-22B2-4B15-80BA-614F038240FD}</Project>
       <Name>FPLedit.Shared</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FPLedit.UI\FPLedit.Shared.UI.csproj">
+      <Project>{5A1A083A-1308-488A-8A6B-ED8C1936B7C4}</Project>
+      <Name>FPLedit.Shared.UI</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\abfahrt-text.svg" />

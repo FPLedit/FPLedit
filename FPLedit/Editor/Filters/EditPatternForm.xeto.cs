@@ -55,28 +55,20 @@ namespace FPLedit.Editor.Filters
                 return;
             }
 
-            Result = DialogResult.Ok;
-
-            char type;
-
+            char type = '=';
             if (typeSelection.SelectedState == 0)
                 type = '^';
             else if (typeSelection.SelectedState == 1)
                 type = '$';
             else if (typeSelection.SelectedState == 2)
                 type = ' ';
-            else
-                type = '=';
 
             Pattern = type + searchTextBox.Text;
 
-            Close();
+            Close(DialogResult.Ok);
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
-        {
-            Result = DialogResult.Cancel;
-            Close();
-        }
+            => Close(DialogResult.Cancel);
     }
 }
