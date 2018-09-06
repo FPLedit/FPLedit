@@ -37,31 +37,11 @@ namespace FPLedit.Bildfahrplan.Forms
             cc = new ColorCollection(info.Settings);
             ds = new DashStyleHelper();
 
-            gridView.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<Train, string>(t => t.TName) },
-                HeaderText = "Zugnummer"
-            });
-            gridView.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<Train, string>(t => cc.ToName(new TrainStyle(t).TrainColor ?? attrs.TrainColor)) },
-                HeaderText = "Farbe"
-            });
-            gridView.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<Train, string>(t => (new TrainStyle(t).TrainWidth ?? attrs.TrainWidth).ToString()) },
-                HeaderText = "Linienstärke"
-            });
-            gridView.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<Train, string>(t => (ds.GetDescription(new TrainStyle(t).LineStyle))) },
-                HeaderText = "Linientyp"
-            });
-            gridView.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<Train, string>(t => new TrainStyle(t).Show.ToString()) },
-                HeaderText = "Zug zeichnen"
-            });
+            gridView.AddColumn<Train>(t => t.TName, "Zugnummer");
+            gridView.AddColumn<Train>(t => cc.ToName(new TrainStyle(t).TrainColor ?? attrs.TrainColor), "Farbe");
+            gridView.AddColumn<Train>(t => (new TrainStyle(t).TrainWidth ?? attrs.TrainWidth).ToString(), "Linienstärke");
+            gridView.AddColumn<Train>(t => ds.GetDescription(new TrainStyle(t).LineStyle), "Linientyp");
+            gridView.AddColumn<Train>(t => new TrainStyle(t).Show.ToString(), "Zug zeichnen");
 
             gridView.CellDoubleClick += (s, e) => EditColor(false);
 

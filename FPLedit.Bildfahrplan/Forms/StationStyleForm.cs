@@ -37,31 +37,11 @@ namespace FPLedit.Bildfahrplan.Forms
             cc = new ColorCollection(info.Settings);
             ds = new DashStyleHelper();
 
-            gridView.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<Station, string>(t => t.SName) },
-                HeaderText = "Name"
-            });
-            gridView.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<Station, string>(t => cc.ToName(new StationStyle(t).StationColor ?? attrs.StationColor)) },
-                HeaderText = "Farbe"
-            });
-            gridView.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<Station, string>(t => (new StationStyle(t).StationWidth ?? attrs.StationWidth).ToString()) },
-                HeaderText = "Linienstärke"
-            });
-            gridView.Columns.Add(new GridColumn()
-            {
-                DataCell = new TextBoxCell { Binding = Binding.Property<Station, string>(t => (ds.GetDescription(new StationStyle(t).LineStyle))) },
-                HeaderText = "Linientyp"
-            });
-            gridView.Columns.Add(new GridColumn()
-            {
-                DataCell = new CheckBoxCell { Binding = Binding.Property<Station, bool?>(t => new StationStyle(t).Show) },
-                HeaderText = "Station zeichnen"
-            });
+            gridView.AddColumn<Station>(t => t.SName, "Name");
+            gridView.AddColumn<Station>(t => cc.ToName(new StationStyle(t).StationColor ?? attrs.StationColor), "Farbe");
+            gridView.AddColumn<Station>(t => (new StationStyle(t).StationWidth ?? attrs.StationWidth).ToString(), "Linienstärke");
+            gridView.AddColumn<Station>(t => ds.GetDescription(new StationStyle(t).LineStyle), "Linientyp");
+            gridView.AddColumn<Station>(t => new StationStyle(t).Show.ToString(), "Station zeichnen");
 
             gridView.CellDoubleClick += (s, e) => EditColor(false);
 

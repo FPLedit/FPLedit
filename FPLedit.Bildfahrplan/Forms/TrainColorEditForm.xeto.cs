@@ -52,19 +52,14 @@ namespace FPLedit.Bildfahrplan.Forms
 
         private void closeButton_Click(object sender, EventArgs e)
         {
-            Result = DialogResult.Ok;
-
             style.TrainColor = ColorFormatter.FromHexString((string)colorComboBox.SelectedValue);
             style.TrainWidth = (int)widthComboBox.SelectedValue;
             style.LineStyle = (int)dashComboBox.SelectedValue;
             style.Show = drawCheckBox.Checked.Value;
-            Close();
+            Close(DialogResult.Ok);
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
-        {
-            Result = DialogResult.Cancel;
-            Close();
-        }
+            => Close(DialogResult.Cancel);
     }
 }
