@@ -75,6 +75,7 @@ namespace FPLedit.Editor.Network
                     ReloadRouteNames();
 
                 newLineButton.Visible = divider1.Visible = routesComboBox.Visible = info.Timetable.Type == TimetableType.Network;
+                newLineButton.Enabled = info.Timetable.Type == TimetableType.Network && info.Timetable.GetRoutes().Any();
 
                 foreach (Control c in toolbar.Controls)
                 {
@@ -169,7 +170,7 @@ namespace FPLedit.Editor.Network
             newLineButton.Click += (s, e) =>
             {
                 info.StageUndoStep();
-                var nlf = new NewLineStationForm(info.Timetable);
+                var nlf = new EditStationForm(info.Timetable);
                 if (nlf.ShowModal(this) == DialogResult.Ok)
                 {
                     lineRenderer.StartAddStation(nlf.Station, nlf.Position);

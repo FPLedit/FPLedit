@@ -1,12 +1,8 @@
 ﻿using Eto.Drawing;
 using Eto.Forms;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace FPLedit.Editor.Network
+namespace FPLedit.Shared.UI
 {
     public class ToggleButton
     {

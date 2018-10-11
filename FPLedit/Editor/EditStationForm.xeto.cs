@@ -14,14 +14,16 @@ namespace FPLedit.Editor
         Timetable _parent;
         int route;
 
-        #pragma warning disable CS0649
+#pragma warning disable CS0649
         private TextBox nameTextBox, positionTextBox;
-        #pragma warning restore CS0649
+#pragma warning restore CS0649
         private NotEmptyValidator nameValidator;
         private NumberValidator positionValidator;
         private ValidatorCollection validators;
 
         public Station Station { get; set; }
+
+        public float Position { get; private set; }
 
         private void Init()
         {
@@ -30,6 +32,16 @@ namespace FPLedit.Editor
             nameValidator = new NotEmptyValidator(nameTextBox);
             nameValidator.ErrorMessage = "Bitte einen Bahnhofsnamen eingeben!";
             validators = new ValidatorCollection(positionValidator, nameValidator);
+        }
+
+        public EditStationForm(Timetable tt)
+        {
+            Eto.Serialization.Xaml.XamlReader.Load(this);
+            Init();
+
+            Title = "Neue Station erstellen";
+            _parent = tt;
+            route = -1;
         }
 
         public EditStationForm(Timetable tt, int route)
@@ -102,7 +114,10 @@ namespace FPLedit.Editor
                 }
             }
 
-            Station.Positions.SetPosition(route, newPos);
+            if (route != -1)
+                Station.Positions.SetPosition(route, newPos);
+            else
+                Position = newPos;
             Station.SName = name;
 
             if (resetArdep)

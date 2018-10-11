@@ -58,6 +58,7 @@
     <Compile Include="FontComboBox.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SelectionUI.cs" />
+    <Compile Include="ToggleButton.cs" />
     <Compile Include="Validators\BaseValidator.cs" />
     <Compile Include="Validators\NotEmptyValidator.cs" />
     <Compile Include="Validators\NumberValidator.cs" />

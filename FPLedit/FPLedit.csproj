@@ -106,7 +106,6 @@
     <Compile Include="Editor\ZlmEditForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Editor\Network\ToggleButton.cs" />
     <Compile Include="Editor\Network\TrainTimetableEditor.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
@@ -126,9 +125,6 @@
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Editor\Network\EditRouteAction.cs" />
-    <Compile Include="Editor\Network\NewLineStationForm.xeto.cs">
-      <SubType>Eto.Forms</SubType>
-    </Compile>
     <Compile Include="Editor\Network\LineEditingControl.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
@@ -202,9 +198,6 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Editor\Network\LineEditingControl.xeto" />
-    <EmbeddedResource Include="Editor\Network\NewLineStationForm.xeto">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <None Include="..\build_scripts\fpledit.snk">
       <Link>Properties\fpledit.snk</Link>
     </None>

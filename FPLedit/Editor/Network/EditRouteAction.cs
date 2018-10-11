@@ -18,7 +18,7 @@ namespace FPLedit.Editor.Network
         public void Show(IInfo info, Route route)
         {
             info.StageUndoStep();
-            LineEditForm lef = new LineEditForm(info, route.Index);
+            var lef = new LineEditForm(info, route.Index);
             if (lef.ShowModal(info.RootForm) == DialogResult.Ok)
                 info.SetUnsaved();
         }

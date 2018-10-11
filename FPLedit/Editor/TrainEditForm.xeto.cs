@@ -107,7 +107,6 @@ namespace FPLedit.Editor
             => Close(DialogResult.Cancel);
 
         #region Shortcut buttons
-
         private void wShortcutButton_Click(object sender, EventArgs e)
         {
             zShortcutButton_Click(null, null);
@@ -127,15 +126,10 @@ namespace FPLedit.Editor
         }
 
         private void aShortcutButton_Click(object sender, EventArgs e)
-        {
-            daysBoxes.All(c => { c.Checked = true; return true; });
-        }
+            => daysBoxes.All(c => { c.Checked = true; return true; });
 
         private void zShortcutButton_Click(object sender, EventArgs e)
-        {
-            daysBoxes.All(c => { c.Checked = false; return true; });
-        }
-
+            => daysBoxes.All(c => { c.Checked = false; return true; });
         #endregion
 
         private IEnumerable<ListItem> GetAllItems(Timetable tt, Func<Train, string> func)
