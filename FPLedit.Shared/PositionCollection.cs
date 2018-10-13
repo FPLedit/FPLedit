@@ -64,7 +64,12 @@ namespace FPLedit.Shared
             if (version == TimetableVersion.JTG2_x)
                 toParse = sta.GetAttribute("km", "0.0");
             else // jTG 3.0
+            {
                 toParse = sta.GetAttribute("kml", "0.0");
+                var kmr = sta.GetAttribute("kmr", "0.0");
+                if (toParse != kmr)
+                    throw new NotSupportedException("Unterschiedliche kmr/kml werden aktuell von FPLedit nicht unterstützt!");
+            }
             positions.Add(Timetable.LINEAR_ROUTE_ID, float.Parse(toParse, CultureInfo.InvariantCulture));
         }
 
