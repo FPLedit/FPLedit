@@ -102,7 +102,7 @@ namespace FPLedit.Editor.Linear
                 }
 
                 tb.GotFocus += (s, e) => tbEnterEditMode();
-                tb.LostFocus += (s, e) => FormatCell(data, sta, arrival, tb);
+                tb.LostFocus += (s, e) => { FormatCell(data, sta, arrival, tb); new TimetableCellRenderProperties(time, sta, arrival, data).Apply(tb); };
             };
             cc.Paint += (s, e) =>
             {
@@ -142,7 +142,7 @@ namespace FPLedit.Editor.Linear
                     row--;
                 }
             }
-            return new Point(idx, row);
+            return new Point(row, idx);
         }
 
         protected override void CellSelected(TimetableDataElement data, Station sta, bool arrival)

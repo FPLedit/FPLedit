@@ -186,6 +186,9 @@ namespace FPLedit.Editor.Network
 
         public void DispatchKeystroke(KeyEventArgs e)
             => lineRenderer.DispatchKeystroke(e);
+
+        public void ResetPan()
+            => lineRenderer.Pan = new PointF();
     }
 
     public class Divider : Panel

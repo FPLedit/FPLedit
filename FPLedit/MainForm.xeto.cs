@@ -303,6 +303,7 @@ namespace FPLedit
             fileState.Saved = true;
             fileState.FileName = filename;
             undo.ClearHistory();
+            lineEditingControl.ResetPan();
         }
 
         public void Save(bool forceSaveAs)

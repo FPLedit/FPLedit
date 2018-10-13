@@ -46,10 +46,11 @@ namespace FPLedit.Editor.Network
 
             internalToggle.Image = new Bitmap(this.GetResource("Resources.trapeztafel.png"));
 
+            this.AddCloseHandler();
+
             if (mpmode)
                 DefaultButton = null; // Bugfix, Window closes on enter [Enter]
-
-            this.AddCloseHandler();
+                                      // Important: After AddCloseHandler, otherwise it will destroy Timetable instance in mpmode!
         }
 
         public TrainTimetableEditor(IInfo info, Train t) : this()
@@ -85,7 +86,7 @@ namespace FPLedit.Editor.Network
                 }
 
                 tb.GotFocus += (s, e) => { CellSelected(data, data.Station, arrival); data.IsSelectedArrival = arrival; data.SelectedTextBox = tb; };
-                tb.LostFocus += (s, e) => FormatCell(data, data.Station, arrival, tb);
+                tb.LostFocus += (s, e) => { FormatCell(data, data.Station, arrival, tb); new TimetableCellRenderProperties(time, data.Station, arrival, data).Apply(tb); };
             };
             cc.Paint += (s, e) =>
             {
@@ -140,7 +141,7 @@ namespace FPLedit.Editor.Network
                 row = view.SelectedRow + (arrival ? 0 : 1);
             else
                 row = view.SelectedRow - (arrival ? 1 : 0);
-            return new Point(idx, row);
+            return new Point(row, idx);
         }
 
         private bool UpdateTrainDataFromGrid(GridView view)
