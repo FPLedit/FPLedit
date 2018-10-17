@@ -265,7 +265,7 @@ namespace FPLedit
             if (exportFileDialog.ShowDialog(this) == DialogResult.Ok)
             {
                 var exporters = registry.GetRegistered<IExport>();
-                IExport export = exporters[exportFileDialog.CurrentFilterIndex - 1];
+                IExport export = exporters[exportFileDialog.CurrentFilterIndex];
                 string filename = exportFileDialog.FileName;
 
                 Logger.Info("Speichere Datei " + filename);
@@ -273,7 +273,7 @@ namespace FPLedit
                 if (ret == false)
                     return;
                 Logger.Info("Speichern erfolgreich abgeschlossen!");
-                Settings.Set("exporter.last", exportFileDialog.CurrentFilterIndex - 1);
+                Settings.Set("exporter.last", exportFileDialog.CurrentFilterIndex);
             }
         }
 
