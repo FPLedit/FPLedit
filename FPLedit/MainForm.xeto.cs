@@ -268,11 +268,11 @@ namespace FPLedit
                 IExport export = exporters[exportFileDialog.CurrentFilterIndex];
                 string filename = exportFileDialog.FileName;
 
-                Logger.Info("Speichere Datei " + filename);
+                Logger.Info("Exportiere in Datei " + filename);
                 bool ret = export.Export(Timetable, filename, this);
                 if (ret == false)
-                    return;
-                Logger.Info("Speichern erfolgreich abgeschlossen!");
+                    return; //TODO: Fehlermeldung?
+                Logger.Info("Exportieren erfolgreich abgeschlossen!");
                 Settings.Set("exporter.last", exportFileDialog.CurrentFilterIndex);
             }
         }

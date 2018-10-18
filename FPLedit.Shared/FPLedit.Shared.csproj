@@ -59,9 +59,7 @@
     <Compile Include="Entity.cs" />
     <Compile Include="Ext\IFileState.cs" />
     <Compile Include="Ext\ISettings.cs" />
-    <Compile Include="Filetypes\CleanedXMLExport.cs" />
     <Compile Include="Filetypes\XMLExport.cs" />
-    <Compile Include="Filetypes\XMLStationsImport.cs" />
     <Compile Include="Filetypes\XMLImport.cs" />
     <Compile Include="ITimetable.cs" />
     <Compile Include="ITrain.cs" />

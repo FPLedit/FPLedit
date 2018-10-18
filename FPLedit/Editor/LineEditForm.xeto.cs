@@ -131,7 +131,7 @@ namespace FPLedit.Editor
                 throw new Exception("Streckendateien können bei Netzwerk-Fahrplänen nicht geladen werden!");
 
             IImport timport = new XMLImport();
-            IImport simport = new XMLStationsImport();
+            IImport simport = new NonDefaultFiletypes.XMLStationsImport();
 
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.AddLegacyFilter(timport.Filter, simport.Filter);

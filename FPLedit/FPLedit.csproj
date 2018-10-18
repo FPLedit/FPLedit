@@ -154,6 +154,8 @@
     <Compile Include="MainForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
+    <Compile Include="NonDefaultFiletypes\CleanedXMLExport.cs" />
+    <Compile Include="NonDefaultFiletypes\XMLStationsImport.cs" />
     <Compile Include="PluginInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

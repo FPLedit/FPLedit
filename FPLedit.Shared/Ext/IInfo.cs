@@ -1,5 +1,4 @@
-﻿using Eto.Forms;
-using FPLedit.Shared.Templating;
+﻿using FPLedit.Shared.Templating;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

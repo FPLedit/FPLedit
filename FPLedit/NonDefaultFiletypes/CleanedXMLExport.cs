@@ -1,4 +1,5 @@
 ﻿using Eto.Forms;
+using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace FPLedit.Shared.Filetypes
+namespace FPLedit.NonDefaultFiletypes
 {
     public class CleanedXMLExport : IExport
     {

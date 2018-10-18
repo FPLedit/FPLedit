@@ -27,7 +27,7 @@ namespace FPLedit.Editor
             info.FileStateChanged += Info_FileStateChanged;
             info.ExtensionsLoaded += Info_ExtensionsLoaded;
 
-            info.Register<IExport>(new FPLedit.Shared.Filetypes.CleanedXMLExport());
+            info.Register<IExport>(new FPLedit.NonDefaultFiletypes.CleanedXMLExport());
 
             if (Environment.OSVersion.Platform != PlatformID.Win32NT || info.Settings.Get<bool>("mp-compat.route-edit-button"))
                 info.Register<IRouteAction>(new Network.EditRouteAction());
