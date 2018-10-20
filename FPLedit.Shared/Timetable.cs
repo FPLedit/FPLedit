@@ -162,11 +162,12 @@ namespace FPLedit.Shared
 
         public void AddStation(Station sta, int route)
         {
+            sta._parent = this;
+
             // Neue Id an Station vergeben
             if (Type == TimetableType.Network)
                 sta.Id = ++nextStaId;
 
-            sta._parent = this;
             stations.Add(sta);
             if (Type == TimetableType.Linear)
             {

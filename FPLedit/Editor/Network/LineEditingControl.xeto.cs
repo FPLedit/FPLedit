@@ -55,8 +55,6 @@ namespace FPLedit.Editor.Network
         {
             var oldCount = routesComboBox.Items.Count;
             var routes = GetRouteNames(info.Timetable);
-            if (routes.Count() == oldCount)
-                return; // Wir brauchen hier (hoffentlich) keinen Reload, Änderung sollten hier immer nur einzeln reinkommen.
             routesComboBox.Items.Clear();
             routesComboBox.Items.AddRange(routes);
             routesComboBox.SelectedIndex = 0;
