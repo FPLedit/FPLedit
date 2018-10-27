@@ -15,11 +15,13 @@ namespace FPLedit
     {
         public string CheckUrl { get; private set; }
 
-        public Action<VersionInfo> CheckResult { get; set; }
+        public Action<bool, VersionInfo> CheckResult { get; set; }
 
         public Action<string> TextResult { get; set; }
 
         public Action<Exception> CheckError { get; set; }
+
+        public Version CurrentVersion { get; private set; }
 
         public bool AutoUpdateEnabled
         {
@@ -33,15 +35,12 @@ namespace FPLedit
         {
             this.settings = settings;
             CheckUrl = settings.Get("updater.url", "https://fahrplan.manuelhu.de/versioninfo.xml");
-        }
 
-        public Version GetCurrentVersion()
-        {
             string versionString = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
-            return new Version(versionString);
+            CurrentVersion = new Version(versionString);
         }
 
-        public VersionInfo GetVersioninfoFromXml(string xml)
+        private VersionInfo GetVersioninfoFromXml(string xml)
         {
             var doc = new XmlDocument();
             doc.LoadXml(xml);
@@ -60,25 +59,13 @@ namespace FPLedit
             };
         }
 
-        public bool IsNewVersion(Version check)
-        {
-            return GetCurrentVersion().CompareTo(check) < 0;
-        }
+        private bool IsNewVersion(Version check) => CurrentVersion.CompareTo(check) < 0;
 
         public void CheckAsync()
         {
-            string platform = "other";
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-                platform = "mswin";
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major < 6)
-                platform = "mswinxp";
-            if (Environment.OSVersion.Platform == PlatformID.MacOSX)
-                platform = "macos";
-            if (Environment.OSVersion.Platform == PlatformID.Unix)
-                platform = "unix";
-            var url = CheckUrl + "?pf=" + platform;
+            var url = CheckUrl + "?pf=" + GetPlatform();
 
-            using (WebClient wc = new WebClient())
+            using (var wc = new WebClient())
             {
                 wc.Encoding = Encoding.UTF8;
                 wc.DownloadStringAsync(new Uri(url));
@@ -88,21 +75,17 @@ namespace FPLedit
                     {
                         try
                         {
-                            VersionInfo info = GetVersioninfoFromXml(e.Result);
-                            bool newAvailable = IsNewVersion(info.NewVersion);
+                            VersionInfo vi = GetVersioninfoFromXml(e.Result);
+                            bool new_avail = IsNewVersion(vi.NewVersion);
 
-                            if (newAvailable)
-                                CheckResult?.Invoke(info);
-                            else
-                                CheckResult?.Invoke(null);
+                            CheckResult?.Invoke(new_avail, vi);
 
-                            if (info.Text != null)
-                                TextResult?.Invoke(info.Text);
+                            if (vi.Text != null)
+                                TextResult?.Invoke(vi.Text);
                         }
                         catch (XmlException ex)
                         {
-                            // Fehler im XML-Dokument
-                            CheckError?.Invoke(ex);
+                            CheckError?.Invoke(ex); // Fehler im XML-Dokument
                         }
                     }
                     else
@@ -111,27 +94,38 @@ namespace FPLedit
             }
         }
 
+        private string GetPlatform()
+        {
+            switch (Environment.OSVersion.Platform)
+            {
+                case PlatformID.Win32NT: return "win";
+                case PlatformID.MacOSX: return "macos";
+                case PlatformID.Unix: return "unix";
+                default: return "other";
+            }
+        }
+
         public void AutoUpdateCheck(ISettings settings, ILog log)
         {
             // Beispiele für fehlende Funktionen
             if (Environment.OSVersion.Platform != PlatformID.Win32NT && !settings.Get<bool>("mp-compat.disable-startup-warn"))
-                log.Warning("Sie verwenden FPLedit nicht auf Windows. Grundsätzlich ist FPLedit zwar mit allen Systemen kompatibel, auf denen Mono läuft, hat aber Einschränkungen in den Funktionen und möglichen Sicherheitsvorkehrungen und ist möglicherweise nicht getestet.");
+                log.Warning("Sie verwenden FPLedit nicht auf Windows. Grundsätzlich ist FPLedit zwar mit allen Systemen kompatibel, auf denen Mono läuft, hat aber Einschränkungen in den Funktionen und möglichen Sicherheitsvorkehrungen und ist möglicherweise nicht genauso gut getestet.");
 
             if (settings.Get("updater.auto", "") == "")
             {
-                var res = MessageBox.Show("FPLedit kann automatisch bei jedem Programmstart nach einer aktuelleren Version suchen. Dabei wird nur die IP-Adresse Ihres Computers übermittelt.", "Automatische Updateprüfung", MessageBoxButtons.YesNo, MessageBoxType.Question);
-                settings.Set("updater.auto", (res == DialogResult.Yes));
+                var res = MessageBox.Show("FPLedit kann automatisch bei jedem Programmstart nach einer aktuelleren Version suchen.\n\nDabei werden nur die IP-Adresse und der verwendete Betriebssystemtyp Ihres Computers an den Server übermittelt.", "Automatische Updateprüfung", MessageBoxButtons.YesNo, MessageBoxType.Question);
+                settings.Set("updater.auto", res == DialogResult.Yes);
             }
 
             if (!AutoUpdateEnabled)
                 return;
 
-            CheckResult = vi =>
+            CheckResult = (new_avail, vi) =>
             {
-                if (vi != null)
+                if (new_avail)
                     log.Info($"Eine neue Programmversion ({vi.NewVersion.ToString()}) ist verfügbar! {vi.Description ?? ""} Hier herunterladen: {vi.DownloadUrl}");
                 else
-                    log.Info($"Sie benutzen die aktuelleste Version von FPLedit ({GetCurrentVersion().ToString()})!");
+                    log.Info($"Sie benutzen die aktuelleste Version von FPLedit ({CurrentVersion.ToString()})!");
             };
 
             TextResult = t => log.Info(t);

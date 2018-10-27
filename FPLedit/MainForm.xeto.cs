@@ -6,16 +6,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using FPLedit.Shared;
-using FPLedit.Templating;
-using FPLedit.Shared.Filetypes;
-using FPLedit.Logger;
-using FPLedit.Shared.Templating;
 using System.ComponentModel;
 using System.Diagnostics;
-using FPLedit.Editor.Network;
+using FPLedit.Shared;
+using FPLedit.Shared.Filetypes;
+using FPLedit.Shared.Templating;
 using FPLedit.Shared.UI;
+using FPLedit.Logger;
+using FPLedit.Templating;
+using FPLedit.Editor.Network;
 using FPLedit.Config;
+using FPLedit.NonDefaultFiletypes;
 
 namespace FPLedit
 {

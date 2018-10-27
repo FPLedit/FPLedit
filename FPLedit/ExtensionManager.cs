@@ -28,7 +28,7 @@ namespace FPLedit
             Plugins = new List<PluginInfo>();
 
             var enabledPlugins = info.Settings.Get("extmgr.enabled", "").Split(';');
-            var currentVersion = update.GetCurrentVersion();
+            var currentVersion = update.CurrentVersion;
 
             var path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             DirectoryInfo dir = new DirectoryInfo(path);

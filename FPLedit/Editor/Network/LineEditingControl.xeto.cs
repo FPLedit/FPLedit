@@ -68,6 +68,7 @@ namespace FPLedit.Editor.Network
             {
                 ReloadTimetable();
                 newButton.Enabled = routesComboBox.Enabled = newLineButton.Enabled = e.FileState.Opened;
+                routesComboBox.Visible = info.FileState.Opened;
 
                 if (e.FileState.LineCreated)
                     ReloadRouteNames();

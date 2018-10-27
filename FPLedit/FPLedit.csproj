@@ -155,6 +155,8 @@
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="NonDefaultFiletypes\CleanedXMLExport.cs" />
+    <Compile Include="NonDefaultFiletypes\LinearExport.cs" />
+    <Compile Include="NonDefaultFiletypes\NetworkExport.cs" />
     <Compile Include="NonDefaultFiletypes\XMLStationsImport.cs" />
     <Compile Include="PluginInfo.cs" />
     <Compile Include="Program.cs" />

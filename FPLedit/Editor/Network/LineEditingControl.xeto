@@ -6,7 +6,7 @@
   <TableLayout BackgroundColor="White">
     <TableRow>
       <StackLayout x:Name="toolbar" Orientation="Horizontal" Spacing="5" Padding="5,5,5,5">
-        <DropDown x:Name="routesComboBox" Enabled="false" />
+        <DropDown x:Name="routesComboBox" Enabled="false" Visible="false" />
         <Button x:Name="newButton" Enabled="false">Neue Station</Button>
         <editor:Divider x:Name="divider1"/>
         <Button x:Name="newLineButton" Enabled="false">Neue Strecke</Button>

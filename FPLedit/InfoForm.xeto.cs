@@ -32,15 +32,15 @@ namespace FPLedit
             using (var sr = new StreamReader(stream))
                 licenseTextArea.Text = sr.ReadToEnd();
 
-            versionLabel.Text = versionLabel.Text.Replace("{version}", mg.GetCurrentVersion().ToString());
+            versionLabel.Text = versionLabel.Text.Replace("{version}", mg.CurrentVersion.ToString());
             updateCheckBox.Checked = mg.AutoUpdateEnabled;
         }
 
         private void VersionCheck()
         {
-            mg.CheckResult = vi =>
+            mg.CheckResult = (new_avail, vi) =>
             {
-                if (vi != null)
+                if (new_avail)
                 {
                     string nl = Environment.NewLine;
                     DialogResult res = MessageBox.Show($"Eine neue Programmversion ({vi.NewVersion.ToString()}) ist verfügbar!{nl}{vi.Description ?? ""}{nl}Jetzt zur Download-Seite wechseln, um die neue Version herunterzuladen?",
