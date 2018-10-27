@@ -49,6 +49,8 @@ var eto_dest = info.CreateSubdirectory("eto");
 foreach (var f in files)
 {
     var fname = Path.Combine(eto_dest.FullName, f.Name);
+    if (File.Exists(fname)) // Datei existiert bereits
+        File.Delete(fname);
     f.MoveTo(fname);
     Console.WriteLine(f.Name);
 }
@@ -72,6 +74,8 @@ if (doc != null && File.Exists(doc))
 {
     Console.WriteLine("Kopiere Offline-Dokumentation");
     var doc_path = Path.Combine(output_path, "doku.html");
+    if (File.Exists(doc_path))
+        File.Delete(doc_path);
     File.Copy(doc, doc_path);
     doc_generated = true;
 }
