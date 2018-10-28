@@ -3,6 +3,7 @@ using FPLedit.Editor.Network;
 using FPLedit.Shared;
 using FPLedit.Shared.Filetypes;
 using FPLedit.Shared.Ui;
+using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -29,6 +30,8 @@ namespace FPLedit.Editor
 
             saveHandlers = new List<ISaveHandler>();
             expertHandlers = new List<IExpertHandler>();
+
+            this.AddSizeStateHandler();
         }
 
         public DesignableForm(IInfo info) : this()

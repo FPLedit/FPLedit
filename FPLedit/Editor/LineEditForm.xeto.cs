@@ -51,6 +51,7 @@ namespace FPLedit.Editor
             UpdateStations();
 
             this.AddCloseHandler();
+            this.AddSizeStateHandler();
         }
 
         private void HandleKeystroke(object sender, KeyEventArgs e)

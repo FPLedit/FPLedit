@@ -1,4 +1,5 @@
 ﻿using Eto.Forms;
+using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,6 +46,8 @@ namespace FPLedit
                 deactivateButton.Enabled = false;
                 activateButton.Enabled = true;
             };
+
+            this.AddSizeStateHandler();
         }
 
         private void closeButton_Click(object sender, EventArgs e)

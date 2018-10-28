@@ -36,6 +36,7 @@ namespace FPLedit.Buchfahrplan.Forms
             gridView.SelectedItemsChanged += (s, e) => SelectPoint();
 
             this.AddCloseHandler();
+            this.AddSizeStateHandler();
         }
 
         public VelocityForm(IInfo info, Route route) : this()

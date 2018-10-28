@@ -4,8 +4,7 @@
   xmlns:c="clr-namespace:FPLedit;assembly=FPLedit"
   xmlns:editor="clr-namespace:FPLedit.Editor.Network;assembly=FPLedit"
   xmlns:sys="clr-namespace:System;assembly=mscorlib"
-  Title="FPLedit" ClientSize="870,520" AllowDrop="true"
-  Shown="AutoUpdate_Check">
+  Title="FPLedit" ClientSize="870,520" AllowDrop="true">
   <c:MainForm.Menu>
     <MenuBar>
       <ButtonMenuItem Text="Datei" x:Name="fileMenu">

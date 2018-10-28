@@ -12,6 +12,12 @@ namespace FPLedit.Shared.UI
 {
     public static class EtoExtensions
     {
+        private static SizeManager sizeManager;
+        public static void Initialize(IInfo info)
+        {
+            sizeManager = new SizeManager(info.Settings);
+        }
+
         public static Stream GetResource(this Window dialog, string dotFilePath)
         {
             var assembly = Assembly.GetCallingAssembly();
@@ -27,6 +33,8 @@ namespace FPLedit.Shared.UI
 
         public static void NClose(this Window dialog) => CloseHandler.NClose(dialog);
         #endregion
+
+        public static void AddSizeStateHandler(this Window w) => sizeManager.Apply(w);
 
         public static void AddLegacyFilter(this FileDialog dialog, params string[] filters)
         {

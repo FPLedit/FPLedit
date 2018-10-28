@@ -133,6 +133,9 @@ namespace FPLedit
 
         private void Init()
         {
+            EtoExtensions.Initialize(this); // UI-Erweiterungen initialiseren
+            this.AddSizeStateHandler();
+
             // Extensions laden & initialisieren (=> Initialisiert Importer/Exporter)
             extensionManager.LoadExtensions();
             extensionManager.InitActivatedExtensions();
@@ -156,6 +159,7 @@ namespace FPLedit
             ExtensionsLoaded?.Invoke(this, new EventArgs());
 
             Shown += LoadStartFile;
+            Shown += (s, e) => update.AutoUpdateCheck(Logger);
         }
 
         private void LoadStartFile(object sender, EventArgs e)
@@ -205,9 +209,12 @@ namespace FPLedit
             // Hilfe Menü nach den Erweiterungen zusammenbasteln
             var helpItem = Menu.CreateItem("Hilfe");
             var extItem = helpItem.CreateItem("Erweiterungen");
-            extItem.Click += (s, ev) => (new ExtensionsForm(extensionManager, this)).ShowModal(this);
+            extItem.Click += (s, ev) => new ExtensionsForm(extensionManager, this).ShowModal(this);
             var tmplItem = helpItem.CreateItem("Vorlagen");
-            tmplItem.Click += (s, ev) => (new TemplatesForm(templateManager, templatePath)).ShowModal(this);
+            tmplItem.Click += (s, ev) => new TemplatesForm(templateManager, templatePath).ShowModal(this);
+            helpItem.Items.Add(new SeparatorMenuItem());
+            var clearSizesItem = helpItem.CreateItem("Fenstergößen löschen");
+            clearSizesItem.Click += (s, ev) => SizeManager.Reset();
             helpItem.Items.Add(new SeparatorMenuItem());
             var docItem = helpItem.CreateItem("Online Hilfe");
             docItem.Click += (s, ev) => Process.Start("https://fahrplan.manuelhu.de/");
@@ -402,7 +409,7 @@ namespace FPLedit
             string orig = (Timetable.Type == TimetableType.Linear) ? "Linear-Fahrplan" : "Netzwerk-Fahrplan";
             string dest = (Timetable.Type == TimetableType.Linear) ? "Netzwerk-Fahrplan" : "Linear-Fahrplan";
 
-            if (MessageBox.Show($"Die aktuelle Fatei ist ein {orig}. Es wird zu einem {dest} konvertiert.", "FPLedit", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
+            if (MessageBox.Show($"Die aktuelle Datei ist ein {orig}. Es wird zu einem {dest} konvertiert.", "FPLedit", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
                 return;
 
             var sfd = new SaveFileDialog();
@@ -544,9 +551,6 @@ namespace FPLedit
 
         private void networkNewMenu_Click(object sender, EventArgs e)
             => New(TimetableType.Network);
-
-        private void AutoUpdate_Check(object sender, EventArgs e)
-            => update.AutoUpdateCheck(Settings, Logger);
 
         private void convertMenu_Click(object sender, EventArgs e)
             => ConvertTimetable();

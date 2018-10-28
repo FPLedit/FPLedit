@@ -63,6 +63,7 @@ namespace FPLedit.Editor.Linear
                 DefaultButton = null; // Bugfix, Window closes on enter [Enter]
 
             this.AddCloseHandler();
+            this.AddSizeStateHandler();
         }
 
         private CustomCell GetCell(Func<ArrDep, TimeSpan> time, Station sta, bool arrival, GridView view)

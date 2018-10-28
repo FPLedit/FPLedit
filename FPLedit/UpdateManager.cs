@@ -105,7 +105,7 @@ namespace FPLedit
             }
         }
 
-        public void AutoUpdateCheck(ISettings settings, ILog log)
+        public void AutoUpdateCheck(ILog log)
         {
             // Beispiele für fehlende Funktionen
             if (Environment.OSVersion.Platform != PlatformID.Win32NT && !settings.Get<bool>("mp-compat.disable-startup-warn"))

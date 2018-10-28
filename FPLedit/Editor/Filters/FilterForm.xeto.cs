@@ -44,6 +44,8 @@ namespace FPLedit.Editor.Filters
                 return;
             SwitchType(0);
             typeListBox.SelectedIndex = 0;
+
+            this.AddSizeStateHandler();
         }
 
         private void InitView(GridView view)

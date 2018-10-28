@@ -53,6 +53,8 @@ namespace FPLedit
                 editButton.Enabled = removeButton.Enabled = !builtin;
             };
 
+            this.AddSizeStateHandler();
+
             RefreshList();
         }
 

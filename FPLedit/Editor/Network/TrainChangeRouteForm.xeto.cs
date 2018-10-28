@@ -1,6 +1,7 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.Helpers;
+using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +38,8 @@ namespace FPLedit.Editor.Network
             lineRenderer.StationClicked += ChangeRoute;
             lineRenderer.DisableTopBorder = true;
             lineRenderer.AddHighlight(Path);
+
+            this.AddSizeStateHandler();
         }
 
         public TrainChangeRouteForm(IInfo info)

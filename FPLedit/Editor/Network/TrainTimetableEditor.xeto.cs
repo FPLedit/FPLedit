@@ -47,6 +47,7 @@ namespace FPLedit.Editor.Network
             internalToggle.Image = new Bitmap(this.GetResource("Resources.trapeztafel.png"));
 
             this.AddCloseHandler();
+            this.AddSizeStateHandler();
 
             if (mpmode)
                 DefaultButton = null; // Bugfix, Window closes on enter [Enter]

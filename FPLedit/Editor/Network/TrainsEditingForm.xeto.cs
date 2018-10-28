@@ -45,6 +45,7 @@ namespace FPLedit.Editor.Network
                 gridView.KeyDown += HandleKeystroke;
 
             this.AddCloseHandler();
+            this.AddSizeStateHandler();
         }
 
         private void HandleKeystroke(object sender, KeyEventArgs e)
