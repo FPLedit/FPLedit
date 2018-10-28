@@ -73,8 +73,8 @@ namespace FPLedit.Editor.Network
                 if (e.FileState.LineCreated)
                     ReloadRouteNames();
 
-                newLineButton.Visible = divider1.Visible = routesComboBox.Visible = info.Timetable.Type == TimetableType.Network;
-                newLineButton.Enabled = info.Timetable.Type == TimetableType.Network && info.Timetable.GetRoutes().Any();
+                newLineButton.Visible = divider1.Visible = routesComboBox.Visible = info.FileState.Opened && info.Timetable.Type == TimetableType.Network;
+                newLineButton.Enabled = info.FileState.Opened && info.Timetable.Type == TimetableType.Network && info.Timetable.GetRoutes().Any();
 
                 foreach (Control c in toolbar.Controls)
                 {

@@ -219,7 +219,7 @@ namespace FPLedit
             var docItem = helpItem.CreateItem("Online Hilfe");
             docItem.Click += (s, ev) => Process.Start("https://fahrplan.manuelhu.de/");
             var infoItem = helpItem.CreateItem("Info");
-            infoItem.Click += (s, ev) => (new InfoForm(Settings)).ShowModal(this);
+            infoItem.Click += (s, ev) => new InfoForm(Settings).ShowModal(this);
         }
 
         private void UpdateLastFilesMenu()
@@ -306,9 +306,9 @@ namespace FPLedit
                 Logger.Error("Fehler beim Öffnen der Datei!");
             else
                 Logger.Info("Datei erfolgeich geöffnet!");
-            fileState.FileName = Timetable != null ? filename : null;
             fileState.Opened = Timetable != null;
-            fileState.Saved = Timetable != null;
+            fileState.Saved = true;
+            fileState.FileName = Timetable != null ? filename : null;
             undo.ClearHistory();
             lineEditingControl.ResetPan();
         }

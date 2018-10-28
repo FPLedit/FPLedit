@@ -24,6 +24,12 @@ namespace FPLedit.Editor
             {
                 var hours = m[0].Groups["hr"].Value.PadLeft(2, '0');
                 var minutes = m[0].Groups["min"].Value.PadLeft(2, '0');
+
+                int hr = int.Parse(hours);
+                int mi = int.Parse(minutes);
+                if (hr > 24 || mi > 59)
+                    return null;
+
                 return hours + ":" + minutes;
             }
             return null;
