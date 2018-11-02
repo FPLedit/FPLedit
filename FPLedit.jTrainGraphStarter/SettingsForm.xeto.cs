@@ -36,7 +36,7 @@ namespace FPLedit.jTrainGraphStarter
             versionComboBox.ItemTextBinding = Binding.Property<VersionItem, string>(vi => vi.Name);
 
             javaPathTextBox.Text = settings.Get("jTGStarter.javapath", "");
-            jtgPathTextBox.Text = settings.Get("jTGStarter.jtgpath", "jTrainGraph_302.jar");
+            jtgPathTextBox.Text = settings.Get("jTGStarter.jtgpath", "jTrainGraph_303.jar");
             messageCheckBox.Checked = !settings.Get("jTGStarter.show-message", true);
 
             var targetVersion = (TimetableVersion)settings.Get("jTGStarter.target-version", 008);

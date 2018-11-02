@@ -99,7 +99,7 @@ namespace FPLedit.jTrainGraphStarter
         private void StartJtg(string fnArg, Action finished)
         {
             string javapath = info.Settings.Get("jTGStarter.javapath", "java");
-            string jtgPath = info.Settings.Get("jTGStarter.jtgpath", "jTrainGraph_302.jar");
+            string jtgPath = info.Settings.Get("jTGStarter.jtgpath", "jTrainGraph_303.jar");
 
             string jtgFolder = Path.GetDirectoryName(jtgPath);
 
