@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FPLedit.Shared.UI;
+using System.Text.RegularExpressions;
 
 namespace FPLedit.jTrainGraphStarter
 {
@@ -75,7 +76,19 @@ namespace FPLedit.jTrainGraphStarter
             var sfd = new OpenFileDialog();
             sfd.AddLegacyFilter("JAR-Dateien (*.jar)|*.jar");
             if (sfd.ShowDialog(this) == DialogResult.Ok)
+            {
                 jtgPathTextBox.Text = sfd.FileName;
+
+                var fn = Path.GetFileNameWithoutExtension(jtgPathTextBox.Text);
+
+                var match = Regex.Match(fn, @"jTrainGraph_(\d)(\d{2})");
+                if (match != null && match.Groups.Count == 3)
+                {
+                    var major = match.Groups[1].Value;
+                    var minor = match.Groups[2].Value;
+                    //TODO: Finish
+                }
+            }
         }
 
         private void findJavaButton_Click(object sender, EventArgs e)
