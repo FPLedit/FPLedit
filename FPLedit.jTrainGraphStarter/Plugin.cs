@@ -78,7 +78,7 @@ namespace FPLedit.jTrainGraphStarter
                     return;
             }
 
-            int targetVersion = info.Settings.Get("jTGStarter.target-version", 009);
+            int targetVersion = info.Settings.Get("jTGStarter.target-version", JTGShared.DEFAULT_TT_VERSION);
 
             var exporter = new Shared.Filetypes.XMLExport();
             var importer = new Shared.Filetypes.XMLImport();
@@ -99,7 +99,7 @@ namespace FPLedit.jTrainGraphStarter
         private void StartJtg(string fnArg, Action finished)
         {
             string javapath = info.Settings.Get("jTGStarter.javapath", "java");
-            string jtgPath = info.Settings.Get("jTGStarter.jtgpath", "jTrainGraph_303.jar");
+            string jtgPath = info.Settings.Get("jTGStarter.jtgpath", JTGShared.DEFAULT_FILENAME);
 
             string jtgFolder = Path.GetDirectoryName(jtgPath);
 

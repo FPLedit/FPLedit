@@ -58,6 +58,7 @@
     <Compile Include="SettingsForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
+    <Compile Include="JTGShared.cs" />
     <Compile Include="SilentLogger.cs" />
     <Compile Include="TimetableRouteSync.cs" />
   </ItemGroup>

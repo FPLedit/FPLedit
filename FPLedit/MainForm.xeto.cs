@@ -460,7 +460,7 @@ namespace FPLedit
         protected override void OnDragDrop(DragEventArgs e)
         {
             Uri[] files = e.Data.Uris;
-            if (files.Length != 1 || !files[0].AbsolutePath.EndsWith(".fpl"))
+            if (files == null || files.Length != 1 || !files[0].AbsolutePath.EndsWith(".fpl"))
                 return;
 
             if (!NotifyIfUnsaved())
