@@ -41,7 +41,7 @@ namespace FPLedit.Editor
 
             editRoot.Items.Add(new SeparatorMenuItem());
 
-            editLineItem = editRoot.CreateItem("Strecke bearbeiten (tabellarisch)");
+            editLineItem = editRoot.CreateItem("Strecke bearbeiten (linear)");
             editLineItem.Enabled = false;
             editLineItem.Click += (s, e) => ShowForm(new LineEditForm(info, Timetable.LINEAR_ROUTE_ID));
 
@@ -54,7 +54,7 @@ namespace FPLedit.Editor
                 else ShowForm(new Network.TrainsEditingForm(info));
             };
 
-            editTimetableItem = editRoot.CreateItem("Fahrplan bearbeiten");
+            editTimetableItem = editRoot.CreateItem("Fahrplan bearbeiten (linear)");
             editTimetableItem.Enabled = false;
             editTimetableItem.Click += (s, e) => ShowForm(new Linear.TimetableEditForm(info));
 
