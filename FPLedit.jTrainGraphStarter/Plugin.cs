@@ -101,6 +101,14 @@ namespace FPLedit.jTrainGraphStarter
             string javapath = info.Settings.Get("jTGStarter.javapath", "java");
             string jtgPath = info.Settings.Get("jTGStarter.jtgpath", JTGShared.DEFAULT_FILENAME);
 
+            var compat = JTGShared.JTGCompatCheck(jtgPath);
+            if (!compat.Compatible)
+            {
+                MessageBox.Show("Die gewählte Version von jTrainGraph ist wahrscheinlich nicht mit FPledit kompatibel. Bitte verwenden Sie jTrainGraph 2.02 - 2.03 oder 3.03 (und höher)!",
+                    "jTrainGraphStarter: Fehler", MessageBoxType.Error);
+                return;
+            }
+
             string jtgFolder = Path.GetDirectoryName(jtgPath);
 
             Process p = new Process();
