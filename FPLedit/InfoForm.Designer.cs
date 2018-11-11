@@ -39,9 +39,9 @@
             this.updateCheckBox = new System.Windows.Forms.CheckBox();
             this.licenseGroupBox.SuspendLayout();
             this.SuspendLayout();
-            //
+            // 
             // websiteLinkLabel
-            //
+            // 
             this.websiteLinkLabel.AutoSize = true;
             this.websiteLinkLabel.Location = new System.Drawing.Point(94, 62);
             this.websiteLinkLabel.Name = "websiteLinkLabel";
@@ -50,18 +50,18 @@
             this.websiteLinkLabel.TabStop = true;
             this.websiteLinkLabel.Text = "https://fahrplan.manuelhu.de";
             this.websiteLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.websiteLinkLabel_LinkClicked);
-            //
+            // 
             // versionLabel
-            //
+            // 
             this.versionLabel.AutoSize = true;
             this.versionLabel.Location = new System.Drawing.Point(15, 17);
             this.versionLabel.Name = "versionLabel";
             this.versionLabel.Size = new System.Drawing.Size(87, 13);
             this.versionLabel.TabIndex = 0;
             this.versionLabel.Text = "Version {version}";
-            //
+            // 
             // checkButton
-            //
+            // 
             this.checkButton.Location = new System.Drawing.Point(207, 12);
             this.checkButton.Name = "checkButton";
             this.checkButton.Size = new System.Drawing.Size(139, 23);
@@ -69,18 +69,18 @@
             this.checkButton.Text = "Auf neue Version prüfen";
             this.checkButton.UseVisualStyleBackColor = true;
             this.checkButton.Click += new System.EventHandler(this.checkButton_Click);
-            //
+            // 
             // copyrightLabel
-            //
+            // 
             this.copyrightLabel.AutoSize = true;
             this.copyrightLabel.Location = new System.Drawing.Point(15, 47);
             this.copyrightLabel.Name = "copyrightLabel";
             this.copyrightLabel.Size = new System.Drawing.Size(140, 13);
             this.copyrightLabel.TabIndex = 2;
-            this.copyrightLabel.Text = "© 2015-2018 Manuel Huber";
-            //
+            this.copyrightLabel.Text = "© 2015-2017 Manuel Huber";
+            // 
             // licenseGroupBox
-            //
+            // 
             this.licenseGroupBox.Controls.Add(this.textBox1);
             this.licenseGroupBox.Location = new System.Drawing.Point(12, 94);
             this.licenseGroupBox.Name = "licenseGroupBox";
@@ -89,9 +89,9 @@
             this.licenseGroupBox.TabIndex = 5;
             this.licenseGroupBox.TabStop = false;
             this.licenseGroupBox.Text = "Lizenz / Hinweise";
-            //
+            // 
             // textBox1
-            //
+            // 
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox1.Cursor = System.Windows.Forms.Cursors.Default;
             this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -102,9 +102,9 @@
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBox1.Size = new System.Drawing.Size(320, 152);
             this.textBox1.TabIndex = 0;
-            //
+            // 
             // closeButton
-            //
+            // 
             this.closeButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.closeButton.Location = new System.Drawing.Point(271, 319);
             this.closeButton.Name = "closeButton";
@@ -113,18 +113,18 @@
             this.closeButton.Text = "Schließen";
             this.closeButton.UseVisualStyleBackColor = true;
             this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
-            //
+            // 
             // dokuLabel
-            //
+            // 
             this.dokuLabel.AutoSize = true;
             this.dokuLabel.Location = new System.Drawing.Point(15, 62);
             this.dokuLabel.Name = "dokuLabel";
             this.dokuLabel.Size = new System.Drawing.Size(82, 13);
             this.dokuLabel.TabIndex = 3;
             this.dokuLabel.Text = "Dokumentation:";
-            //
+            // 
             // updateCheckBox
-            //
+            // 
             this.updateCheckBox.Location = new System.Drawing.Point(12, 279);
             this.updateCheckBox.Name = "updateCheckBox";
             this.updateCheckBox.Size = new System.Drawing.Size(334, 32);
@@ -132,9 +132,9 @@
             this.updateCheckBox.Text = "Automatische Überprüfung auf Updates beim Programmstart aktivieren. (Dabei wird I" +
     "hre IP-Adresse an den Server übermittelt)";
             this.updateCheckBox.UseVisualStyleBackColor = true;
-            //
+            // 
             // InfoForm
-            //
+            // 
             this.AcceptButton = this.closeButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;

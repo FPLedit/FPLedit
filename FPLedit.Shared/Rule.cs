@@ -11,7 +11,6 @@ namespace FPLedit.Shared
     //    "^..." -> beginnt mit
     //    "$..." -> endet mit
     //    "=..." -> gleich
-    [Serializable]
     public class FilterRule
     {
         public string Pattern { get; private set; }

@@ -15,19 +15,8 @@ namespace FPLedit.Shared
             set => SetAttribute("name", value);
         }
 
-        public int Id
-        {
-            get => GetAttribute<int>("id", -1);
-            set => SetAttribute("id", value.ToString());
-        }
-
-        public bool IsLink
-        {
-            get => GetAttribute<bool>("islink");
-            set => SetAttribute("islink", value.ToString());
-        }
-
         #region Handling der Fahrtzeiteneinträge
+
         public void AddArrDep(Station sta, ArrDep ardp)
         {
             var stas = _parent.Stations.OrderBy(s => s.Kilometre).ToList();
@@ -89,7 +78,7 @@ namespace FPLedit.Shared
             Children.Remove(tElm);
         }
 
-        public void RemoveOrphanedTimes()
+        public void RemovedOrphanedTimes()
         {
             // Räumt verwaiste Zeiten auf (z.B. Ankunftszeit im Startbahnhof)
             var stas = _parent.GetStationsOrderedByDirection(Direction);
@@ -130,7 +119,7 @@ namespace FPLedit.Shared
             set => SetAttribute("fpl-last", value);
         }
 
-        public TrainDirection Direction => (TrainDirection)Enum.Parse(typeof(TrainDirection), XName);
+        public TrainDirection Direction => XName == "ti" ? TrainDirection.ti : TrainDirection.ta;
 
         public string Comment
         {
