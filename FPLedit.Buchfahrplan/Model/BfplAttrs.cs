@@ -56,9 +56,16 @@ namespace FPLedit.Buchfahrplan.Model
             set => SetAttribute("sp", value);
         }
 
+        public bool ShowComments
+        {
+            get => GetAttribute<bool>("shC");
+            set => SetAttribute("shC", value.ToString().ToLower());
+        }
+
 
         public BfplAttrs(Timetable tt) : base("bfpl_attrs", tt)
         {
+            Points = new List<BfplPoint>();
         }
 
         public BfplAttrs(XMLEntity en, Timetable tt) : base(en, tt)
@@ -74,6 +81,13 @@ namespace FPLedit.Buchfahrplan.Model
             if (attrsEn != null)
                 return new BfplAttrs(attrsEn, tt);
             return null;
+        }
+
+        public BfplPoint[] GetPoints(int route)
+        {
+            if (_parent.Type == TimetableType.Linear && route == Timetable.LINEAR_ROUTE_ID)
+                return Points.ToArray();
+            return Points.Where(p => p.Routes.Contains(route)).ToArray();
         }
 
         public void AddPoint(BfplPoint p)

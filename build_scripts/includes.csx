@@ -1,7 +1,7 @@
 /*
  * FPLedit Release-Prozess
  * Includes zur Generierung einer einheitlichen Lizenz
- * Version 0.3 / (c) Manuel Huber 2017
+ * Version 0.3 / (c) Manuel Huber 2018
  */
 
 using System;

@@ -1,0 +1,36 @@
+﻿<c:MainForm
+  xmlns="clr-namespace:Eto.Forms;assembly=Eto"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:c="clr-namespace:FPLedit;assembly=FPLedit"
+  xmlns:editor="clr-namespace:FPLedit.Editor.Network;assembly=FPLedit"
+  xmlns:sys="clr-namespace:System;assembly=mscorlib"
+  Title="FPLedit" ClientSize="870,520" AllowDrop="true">
+  <c:MainForm.Menu>
+    <MenuBar>
+      <ButtonMenuItem Text="Datei" x:Name="fileMenu">
+        <ButtonMenuItem Text="Neu">
+          <ButtonMenuItem Text="Lineare Strecke" Click="linearNewMenu_Click" />
+          <ButtonMenuItem Text="Netzwerk-Fahrplan" Click="networkNewMenu_Click" />
+        </ButtonMenuItem>
+        <ButtonMenuItem Text="Öffnen" Shortcut="Control,O" Click="openMenu_Click" />
+        <ButtonMenuItem Text="Speichern" Shortcut="Control,S" x:Name="saveMenu" Enabled="false" Click="saveMenu_Click" />
+        <ButtonMenuItem Text="Speichern unter" Shortcut="Control,Shift,S" x:Name="saveAsMenu" Enabled="false" Click="saveAsMenu_Click" />
+        <ButtonMenuItem Text="Letzte Dateien" x:Name="lastMenu" />
+        <SeparatorMenuItem />
+        <ButtonMenuItem x:Name="importMenu" Text="Importieren" Click="importMenu_Click" />
+        <ButtonMenuItem Text="Exportieren" Shortcut="Control,E" x:Name="exportMenu" Enabled="false" Click="exportMenu_Click" />
+        <ButtonMenuItem Text="Konvertieren" Shortcut="Control,K" x:Name="convertMenu" Enabled="false" Click="convertMenu_Click" />
+        <SeparatorMenuItem />
+        <ButtonMenuItem Text="Beenden" Click="quitMenu_Click" />
+      </ButtonMenuItem>
+    </MenuBar>
+  </c:MainForm.Menu>
+  <TableLayout>
+    <TableRow ScaleHeight="True">
+      <editor:LineEditingControl x:Name="lineEditingControl" />
+    </TableRow>
+    <TableRow>
+      <c:LogControl x:Name="logTextBox" Height="100"></c:LogControl>
+    </TableRow>
+  </TableLayout>
+</c:MainForm>

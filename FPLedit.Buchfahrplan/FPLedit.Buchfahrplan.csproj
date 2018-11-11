@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FPLedit.Buchfahrplan</RootNamespace>
     <AssemblyName>FPLedit.Buchfahrplan</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,16 +30,22 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Eto, Version=2.4.0.0, Culture=neutral, PublicKeyToken=7187232a5547c00c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libs\Eto.dll</HintPath>
+    </Reference>
+    <Reference Include="Eto.Serialization.Xaml, Version=2.4.0.0, Culture=neutral, PublicKeyToken=7187232a5547c00c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libs\Eto.Serialization.Xaml.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -46,26 +53,23 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="BfplTemplateChooser.cs" />
+    <Compile Include="Forms\VelocityForm.xeto.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Forms\VelocityEditForm.xeto.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
     <Compile Include="Forms\FilterableHandler.cs" />
     <Compile Include="Forms\Preview.cs" />
+    <Compile Include="Forms\SettingsControl.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
     <Compile Include="Forms\SettingsControlProxy.cs" />
     <Compile Include="Forms\VelocityDialog.cs" />
-    <Compile Include="IBfplTemplate.cs" />
     <Compile Include="Model\BfplAttrs.cs" />
     <Compile Include="Model\BfplPoint.cs" />
     <Compile Include="Templates\TemplateHelper.cs" />
-    <Compile Include="Templates\ZLBTemplateCode.cs" />
-    <Compile Include="Templates\ZLBTemplate.cs">
-      <DependentUpon>ZLBTemplate.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Templates\BuchfahrplanTemplate.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>BuchfahrplanTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Templates\BuchfahrplanTemplateCode.cs" />
+    <Compile Include="Templates\TemplateProxies.cs" />
     <Compile Include="HtmlExport.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -74,61 +78,49 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Forms\SettingsControl.Designer.cs">
-      <DependentUpon>SettingsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\VelocityForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\VelocityForm.Designer.cs">
-      <DependentUpon>VelocityForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\VelocityEditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\VelocityEditForm.Designer.cs">
-      <DependentUpon>VelocityEditForm.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj">
       <Project>{ce38d005-22b2-4b15-80ba-614f038240fd}</Project>
       <Name>FPLedit.Shared</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FPLedit.UI\FPLedit.Shared.UI.csproj">
+      <Project>{5A1A083A-1308-488A-8A6B-ED8C1936B7C4}</Project>
+      <Name>FPLedit.Shared.UI</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SettingsControl.resx">
-      <DependentUpon>SettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\VelocityForm.resx">
-      <DependentUpon>VelocityForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\VelocityEditForm.resx">
-      <DependentUpon>VelocityEditForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\WellenCss.css" />
-    <Content Include="Templates\ZLBTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>ZLBTemplate.cs</LastGenOutput>
-    </Content>
-    <Content Include="Templates\BuchfahrplanTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>BuchfahrplanTemplate.cs</LastGenOutput>
-    </Content>
     <Content Include="Resources\TryoutScript.txt" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Templates\StdTemplate.fpltmpl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Templates\ZlbTemplate.fpltmpl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\SettingsControl.xeto" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\VelocityEditForm.xeto">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\VelocityForm.xeto">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

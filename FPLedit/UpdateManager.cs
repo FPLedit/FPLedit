@@ -1,4 +1,5 @@
-﻿using FPLedit.Shared;
+﻿using Eto.Forms;
+using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,11 +15,13 @@ namespace FPLedit
     {
         public string CheckUrl { get; private set; }
 
-        public Action<VersionInfo> CheckResult { get; set; }
+        public Action<bool, VersionInfo> CheckResult { get; set; }
 
         public Action<string> TextResult { get; set; }
 
         public Action<Exception> CheckError { get; set; }
+
+        public Version CurrentVersion { get; private set; }
 
         public bool AutoUpdateEnabled
         {
@@ -32,23 +35,20 @@ namespace FPLedit
         {
             this.settings = settings;
             CheckUrl = settings.Get("updater.url", "https://fahrplan.manuelhu.de/versioninfo.xml");
-        }
 
-        public Version GetCurrentVersion()
-        {
             string versionString = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
-            return new Version(versionString);
+            CurrentVersion = new Version(versionString);
         }
 
-        public VersionInfo GetVersioninfoFromXml(string xml)
+        private VersionInfo GetVersioninfoFromXml(string xml)
         {
-            XmlDocument doc = new XmlDocument();
+            var doc = new XmlDocument();
             doc.LoadXml(xml);
 
-            XmlNode ver = doc.DocumentElement.SelectSingleNode("/info/version");
-            XmlNode url = doc.DocumentElement.SelectSingleNode("/info/url");
-            XmlNode dsc = doc.DocumentElement.SelectSingleNode("/info/description");
-            XmlNode txt = doc.DocumentElement.SelectSingleNode("/info/text");
+            var ver = doc.DocumentElement.SelectSingleNode("/info/version");
+            var url = doc.DocumentElement.SelectSingleNode("/info/url");
+            var dsc = doc.DocumentElement.SelectSingleNode("/info/description");
+            var txt = doc.DocumentElement.SelectSingleNode("/info/text");
 
             return new VersionInfo()
             {
@@ -59,41 +59,78 @@ namespace FPLedit
             };
         }
 
-        public bool IsNewVersion(Version check)
-        {
-            return GetCurrentVersion().CompareTo(check) < 0;
-        }
+        private bool IsNewVersion(Version check) => CurrentVersion.CompareTo(check) < 0;
 
         public void CheckAsync()
         {
-            WebClient wc = new WebClient();
-            wc.DownloadStringAsync(new Uri(CheckUrl));
-            wc.DownloadStringCompleted += (s, e) =>
+            var url = CheckUrl + "?pf=" + GetPlatform();
+
+            using (var wc = new WebClient())
             {
-                if (e.Error == null && e.Result != "")
+                wc.Encoding = Encoding.UTF8;
+                wc.DownloadStringAsync(new Uri(url));
+                wc.DownloadStringCompleted += (s, e) =>
                 {
-                    try
+                    if (e.Error == null && e.Result != "")
                     {
-                        VersionInfo info = GetVersioninfoFromXml(e.Result);
-                        bool newAvailable = IsNewVersion(info.NewVersion);
+                        try
+                        {
+                            VersionInfo vi = GetVersioninfoFromXml(e.Result);
+                            bool new_avail = IsNewVersion(vi.NewVersion);
 
-                        if (newAvailable)
-                            CheckResult?.Invoke(info);
-                        else
-                            CheckResult?.Invoke(null);
+                            CheckResult?.Invoke(new_avail, vi);
 
-                        if (info.Text != null)
-                            TextResult?.Invoke(info.Text);
+                            if (vi.Text != null)
+                                TextResult?.Invoke(vi.Text);
+                        }
+                        catch (XmlException ex)
+                        {
+                            CheckError?.Invoke(ex); // Fehler im XML-Dokument
+                        }
                     }
-                    catch (XmlException ex)
-                    {
-                        // Fehler im XML-Dokument
-                        CheckError?.Invoke(ex);
-                    }
-                }
+                    else
+                        CheckError?.Invoke(e.Error);
+                };
+            }
+        }
+
+        private string GetPlatform()
+        {
+            switch (Environment.OSVersion.Platform)
+            {
+                case PlatformID.Win32NT: return "win";
+                case PlatformID.MacOSX: return "macos";
+                case PlatformID.Unix: return "unix";
+                default: return "other";
+            }
+        }
+
+        public void AutoUpdateCheck(ILog log)
+        {
+            // Beispiele für fehlende Funktionen
+            if (Environment.OSVersion.Platform != PlatformID.Win32NT && !settings.Get<bool>("mp-compat.disable-startup-warn"))
+                log.Warning("Sie verwenden FPLedit nicht auf Windows. Grundsätzlich ist FPLedit zwar mit allen Systemen kompatibel, auf denen Mono läuft, hat aber Einschränkungen in den Funktionen und möglichen Sicherheitsvorkehrungen und ist möglicherweise nicht genauso gut getestet.");
+
+            if (settings.Get("updater.auto", "") == "")
+            {
+                var res = MessageBox.Show("FPLedit kann automatisch bei jedem Programmstart nach einer aktuelleren Version suchen.\n\nDabei werden nur die IP-Adresse und der verwendete Betriebssystemtyp Ihres Computers an den Server übermittelt.", "Automatische Updateprüfung", MessageBoxButtons.YesNo, MessageBoxType.Question);
+                settings.Set("updater.auto", res == DialogResult.Yes);
+            }
+
+            if (!AutoUpdateEnabled)
+                return;
+
+            CheckResult = (new_avail, vi) =>
+            {
+                if (new_avail)
+                    log.Info($"Eine neue Programmversion ({vi.NewVersion.ToString()}) ist verfügbar! {vi.Description ?? ""} Hier herunterladen: {vi.DownloadUrl}");
                 else
-                    CheckError?.Invoke(e.Error);
+                    log.Info($"Sie benutzen die aktuelleste Version von FPLedit ({CurrentVersion.ToString()})!");
             };
+
+            TextResult = t => log.Info(t);
+
+            CheckAsync();
         }
 
         public class VersionInfo

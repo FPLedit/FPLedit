@@ -1,41 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using FPLedit.Shared;
 using FPLedit.Aushangfahrplan.Model;
-using System.Drawing.Text;
 using System.Diagnostics;
 using FPLedit.Shared.Ui;
+using Eto.Forms;
+using FPLedit.Shared.Templating;
+using FPLedit.Shared.UI;
 
 namespace FPLedit.Aushangfahrplan.Forms
 {
-    public partial class SettingsControl : UserControl, ISaveHandler, IExpertHandler
+    public partial class SettingsControl : Panel, ISaveHandler, IExpertHandler
     {
         private ISettings settings;
         private AfplAttrs attrs;
         private AfplTemplateChooser chooser;
 
-        private SettingsControl()
-        {
-            InitializeComponent();
-        }
+#pragma warning disable CS0649
+        private DropDown templateComboBox;
+        private ComboBox fontComboBox, hwfontComboBox;
+        private Label exampleLabel, hwexampleLabel, cssLabel;
+        private LinkButton cssHelpLinkLabel;
+        private CheckBox consoleCheckBox;
+        private TextArea cssTextBox;
+#pragma warning restore CS0649
+        private FontComboBox fntComboBox, hwfntComboBox;
 
-        public SettingsControl(Timetable tt, IInfo info) : this()
+        public SettingsControl(Timetable tt, IInfo info)
         {
+            Eto.Serialization.Xaml.XamlReader.Load(this);
+
             settings = info.Settings;
             chooser = new AfplTemplateChooser(info);
-            var templates = chooser.AvailableTemplates.Select(t => t.Name).ToArray();
-            templateComboBox.Items.AddRange(templates);
+            templateComboBox.ItemTextBinding = Binding.Property<ITemplate, string>(t => t.TemplateName);
+            templateComboBox.DataStore = chooser.AvailableTemplates;
+
+            fntComboBox = new FontComboBox(fontComboBox, exampleLabel);
+            hwfntComboBox = new FontComboBox(hwfontComboBox, hwexampleLabel);
 
             attrs = AfplAttrs.GetAttrs(tt);
             if (attrs != null)
             {
                 fontComboBox.Text = attrs.Font;
+                hwfontComboBox.Text = attrs.HwFont;
                 cssTextBox.Text = attrs.Css ?? "";
             }
             else
@@ -45,37 +53,13 @@ namespace FPLedit.Aushangfahrplan.Forms
             }
 
             var tmpl = chooser.GetTemplate(tt);
-            templateComboBox.Text = tmpl.Name;
-        }
-
-        private void SettingsControl_Load(object sender, EventArgs e)
-        {
-            string[] fontFamilies = new InstalledFontCollection().Families.Select(f => f.Name).ToArray();
-            fontComboBox.Items.AddRange(fontFamilies);
-            hwfontComboBox.Items.AddRange(fontFamilies);
+            templateComboBox.SelectedValue = tmpl;
 
             consoleCheckBox.Checked = settings.Get<bool>("afpl.console");
         }
 
-        private void cssHelpLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void cssHelpLinkLabel_LinkClicked(object sender, EventArgs e)
             => Process.Start("https://fahrplan.manuelhu.de/dev/css/");
-
-        private void fontComboBox_TextChanged(object sender, EventArgs e)
-           => exampleLabel.Font = new Font(fontComboBox.Text, 10);
-
-        private void hwfontComboBox_TextChanged(object sender, EventArgs e)
-            => hwexampleLabel.Font = new Font(hwfontComboBox.Text, 10);
-
-        private void cssTextBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            // Tab-Width anpassen
-            int tabWidth = 4;
-            if (e.KeyCode == Keys.Tab)
-            {
-                cssTextBox.SelectedText = new string(' ', tabWidth);
-                e.SuppressKeyPress = true;
-            }
-        }
 
         public void Save()
         {
@@ -83,14 +67,11 @@ namespace FPLedit.Aushangfahrplan.Forms
             attrs.HwFont = hwfontComboBox.Text;
             attrs.Css = cssTextBox.Text;
 
-            var tmpl_idx = templateComboBox.SelectedIndex;
-            if (tmpl_idx != -1)
-            {
-                var tmpl = chooser.AvailableTemplates[tmpl_idx];
-                attrs.Template = chooser.ReduceName(tmpl.GetType().FullName);
-            }
+            var tmpl = (ITemplate)templateComboBox.SelectedValue;
+            if (tmpl != null)
+                attrs.Template = tmpl.Identifier;
 
-            settings.Set("afpl.console", consoleCheckBox.Checked);
+            settings.Set("afpl.console", consoleCheckBox.Checked.Value);
         }
 
         public void SetExpertMode(bool enabled)

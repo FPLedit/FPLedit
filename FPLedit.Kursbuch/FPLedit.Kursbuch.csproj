@@ -30,12 +30,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Eto, Version=2.4.0.0, Culture=neutral, PublicKeyToken=7187232a5547c00c" />
+    <Reference Include="Eto.Serialization.Xaml, Version=2.4.0.0, Culture=neutral, PublicKeyToken=7187232a5547c00c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libs\Eto.Serialization.Xaml.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
@@ -45,19 +48,16 @@
     <Compile Include="..\build_scripts\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="Forms\SettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Forms\SettingsControl.Designer.cs">
-      <DependentUpon>SettingsControl.cs</DependentUpon>
+    <Compile Include="Forms\SettingsControl.xeto.cs">
+      <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Forms\SettingsControlProxy.cs" />
     <Compile Include="KfplTemplateChooser.cs" />
     <Compile Include="Forms\FilterableHandler.cs" />
     <Compile Include="Forms\Preview.cs" />
     <Compile Include="HtmlExport.cs" />
-    <Compile Include="IKfplTemplate.cs" />
     <Compile Include="Model\KfplAttrs.cs" />
+    <Compile Include="Model\KBSnCollection.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -65,12 +65,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Templates\KfplTemplate.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>KfplTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Templates\KfplTemplateCode.cs" />
+    <Compile Include="Templates\TemplateProxy.cs" />
     <Compile Include="Templates\TemplateHelper.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -78,22 +73,24 @@
       <Project>{ce38d005-22b2-4b15-80ba-614f038240fd}</Project>
       <Name>FPLedit.Shared</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FPLedit.UI\FPLedit.Shared.UI.csproj">
+      <Project>{5a1a083a-1308-488a-8a6b-ed8c1936b7c4}</Project>
+      <Name>FPLedit.Shared.UI</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\SettingsControl.xeto" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\TryoutScript.txt" />
-    <Content Include="Templates\KfplTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>KfplTemplate.cs</LastGenOutput>
-    </Content>
+    <EmbeddedResource Include="Templates\KfplTemplate.fpltmpl">
+      <LastGenOutput>KfplTemplate1.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Forms\SettingsControl.resx">
-      <DependentUpon>SettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

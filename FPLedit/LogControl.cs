@@ -1,97 +1,62 @@
-﻿using FPLedit.Shared;
+﻿using Eto.Drawing;
+using Eto.Forms;
+using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 
 namespace FPLedit
 {
-    class LogControl : Control, ILog
+    public class LogControl : RichTextArea, ILog
     {
-        private TextBox txt;
-        private RichTextBox rtf;
-        private Mode mode;
-
         public LogControl() : base()
         {
-            rtf = new RichTextBox();
-            rtf.Dock = DockStyle.Fill;
-            rtf.ScrollBars = RichTextBoxScrollBars.ForcedVertical;
-            rtf.ReadOnly = true;
-            rtf.BackColor = Color.White;
-            rtf.LinkClicked += (s, e) => Process.Start(e.LinkText);
-            this.Controls.Add(rtf);
-
-            txt = new TextBox();
-            txt.ReadOnly = true;
-            txt.Multiline = true;
-            txt.BackColor = Color.White;
-            txt.ScrollBars = ScrollBars.Vertical;
-            txt.Dock = DockStyle.Fill;
-            this.Controls.Add(txt);
-
-            var mn = new ContextMenuStrip();
-            var itm = mn.Items.Add("Log leeren");
-            itm.Click += (s, e) =>
-            {
-                if (mode == Mode.Plain)
-                    txt.Clear();
-                else
-                    rtf.Clear();
-            };
-            txt.ContextMenuStrip = mn;
-            rtf.ContextMenuStrip = mn;
-
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-                SwitchMode(Mode.RTF);
-            else
-                SwitchMode(Mode.Plain);
-        }
-
-        private void SwitchMode(Mode mode)
-        {
-            this.mode = mode;
-            txt.Visible = mode == Mode.Plain;
-            rtf.Visible = mode == Mode.RTF;
+            ReadOnly = true;
         }
 
         #region Log
         public void Error(string message)
-            => Write(message, Color.Red);
+            => WriteMl("[FEHLER] " + message, Colors.Red);
 
         public void Warning(string message)
-            => Write(message, Color.Orange);
+            => WriteMl("[WARNUNG] " + message, Colors.Orange);
 
         public void Info(string message)
-            => Write(message, Color.Black);
+            => WriteMl("[INFO] " + message, Colors.Black);
+
+        private void WriteMl(string message, Color c)
+        {
+            var lines = message.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var l in lines)
+                Write(l, c);
+        }
 
         private void Write(string message, Color c)
         {
-            var msg = message + Environment.NewLine;
-            if (mode == Mode.Plain)
+            Append(message + Environment.NewLine, true);
+
+            int idx = -1, last = -1;
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
             {
-                txt.AppendText(msg);
-                return;
+                idx = Text.LastIndexOf(message);
+                last = Text.Length;
             }
-            rtf.AppendText(msg);
-            msg = msg.Trim();
-            var idx = rtf.Find(msg);
+            else
+            {
+                var lines = string.Join("", Text.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
+                idx = lines.LastIndexOf(message);
+                last = lines.Length;
+            }
+
             if (idx == -1)
                 return;
-            rtf.Select(idx, msg.Length);
-            rtf.SelectionColor = c;
-            rtf.Select(rtf.Text.Length, 0);
-            rtf.ScrollToCaret();
+
+            Selection = new Range<int>(idx, idx + message.Length);
+            SelectionForeground = c;
+            Selection = new Range<int>(last, last);
         }
         #endregion
-
-        enum Mode
-        {
-            RTF,
-            Plain
-        }
     }
 }

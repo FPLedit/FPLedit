@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FPLedit.Shared.Templating;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace FPLedit.Shared
     {
         Timetable Timetable { get; set; }
 
-        FileState FileState { get; }
+        IFileState FileState { get; }
 
         void SetUnsaved();
 
@@ -39,13 +40,15 @@ namespace FPLedit.Shared
 
         void StageUndoStep();
 
-        void AddUndoStep();
-
         dynamic Menu { get; }
+
+        dynamic RootForm { get; }
 
         ILog Logger { get; }
 
         ISettings Settings { get; }
+
+        ITemplateManager TemplateManager { get; }
 
         event EventHandler<FileStateChangedEventArgs> FileStateChanged;
 
@@ -54,9 +57,9 @@ namespace FPLedit.Shared
 
     public class FileStateChangedEventArgs : EventArgs
     {
-        public FileState FileState { get; private set; }
+        public IFileState FileState { get; private set; }
 
-        public FileStateChangedEventArgs(FileState state)
+        public FileStateChangedEventArgs(IFileState state)
         {
             FileState = state;
         }

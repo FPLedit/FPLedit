@@ -1,22 +1,28 @@
-﻿using System;
+﻿using Eto.Forms;
+using FPLedit.Config;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace FPLedit
 {
     static class Program
     {
+        public static Application App { get; private set; }
+
         /// <summary>
         /// Der Haupteinstiegspunkt für die Anwendung.
         /// </summary>
         [STAThread]
-        static void Main()
+        [LoaderOptimization(LoaderOptimization.MultiDomainHost)] // Hopefully it doesn't break any things
+        static void Main(string[] args)
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            OptionsParser.Init(args);
+
+            var application = new Application();
+            App = application;
+            application.Run(new MainForm(application));
         }
     }
 }

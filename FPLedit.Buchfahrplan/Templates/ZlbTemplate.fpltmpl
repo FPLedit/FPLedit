@@ -1,0 +1,255 @@
+﻿<#@ fpledit-template type="bfpl" name="Vorlage für den Zugleitbetrieb" #>
+<#@ assembly FPLedit.Buchfahrplan.dll #>
+<#@ import FPLedit.Buchfahrplan.Templates #>
+<#@ import FPLedit.Buchfahrplan.Model #>
+
+<#@ define string GetWelle(ref int counter, IStation sta, Train tra, TemplateHelper helper)
+{
+    if (counter > 0)
+    {
+        counter--;
+        return "";
+    }
+    else if (sta.Wellenlinien != 0)
+    {
+        var w = sta.Wellenlinien;
+        var stas = helper.GetStations(tra);
+        stas = stas.Skip(stas.IndexOf(sta)).ToList();
+        counter = stas.TakeWhile(s => s.Wellenlinien == w).Count();
+        return string.Format("<td class=\"zug welle welle{0}\" rowspan=\"{1}\"></td>", w, counter--);
+    }
+
+    return "<td class=\"zug welle\"></td>";
+}
+#>
+
+<#
+string font = "serif";
+string additionalCss = "";
+// Initialisierung
+TemplateHelper helper = new TemplateHelper(tt);
+
+BfplAttrs attrs = BfplAttrs.GetAttrs(tt);
+if (attrs != null)
+{
+    if (attrs.Font != "")
+        font = attrs.Font;
+    additionalCss = attrs.Css ?? "";
+}
+#>
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Buchfahrplan generiert von FPLedit</title>
+		<style>
+		table:not(.tfz-table) {
+			border-collapse: collapse;
+			table-layout:fixed;
+			width:454pt;
+			margin-left:auto;
+			margin-right:auto;
+			margin-bottom:65px;
+		}
+		body {
+			font-family:<#= font #>, serif;
+		}
+		table:not(.first) {
+			page-break-before:always;
+		}
+		td {
+			padding-top:1px;
+			padding-right:1px;
+			padding-left:1px;
+			color:black;
+			white-space:nowrap;
+			font-size:11.0pt;
+		}
+		.tfz {
+			font-weight:400;
+			vertical-align:bottom;
+			padding-bottom:30px;
+		}
+		.tfz-table {
+			width: 100%;
+		}
+		.tfz-table td {
+			width: 33%;
+		}
+		.tfz-table td:nth-child(2) {
+			text-align: center;
+		}
+		.tfz-table td:nth-child(3) {
+			text-align: right;
+		}
+		.trainname {
+			height:19.5pt;
+			font-size:15.0pt;
+			font-weight:bold;
+			text-align:center;
+			vertical-align:middle;
+		}
+		.linename {
+			font-size:12.0pt;
+			font-weight:bold;
+			text-align:center;
+			vertical-align:middle;
+		}
+		.spaltennummer {
+			font-weight:400;
+			text-align:center;
+			vertical-align:top;
+			border:1.5pt solid black;
+			border-bottom:.5pt solid black;
+			border-top:2.5pt solid black;
+		}
+		.spaltenkopf {
+			height: 120px;
+			font-weight:400;
+			text-align:center;
+			vertical-align:top;
+			border:1.5pt solid black;
+			border-top:.5pt solid black;
+		}
+		.klein {
+			font-size:0.7em;
+			white-space: normal;
+		}
+		.zug {
+			height: 19px;
+			font-weight:400;
+			text-align:center;
+			vertical-align:top;
+			border-right:1.5pt solid black;
+			border-left:1.5pt solid black;
+		}
+		.trapez-tt {
+			border: 1px solid black;
+			padding: 2px;
+		}
+		td.first {
+			border-left:none;
+		}
+		td.last {
+			border-right:none;
+		}
+		@media print {
+			@page {
+				margin: 0;
+			}
+		}
+
+		<#= FPLedit.Buchfahrplan.Properties.Resources.WellenCss #>
+		</style>
+		<style id="add-css">
+			<#= additionalCss #>
+		</style>
+	</head>
+	<body>
+		<div>
+			<#
+			bool first = true; // No pagebreak before first train
+			foreach (Train tra in helper.GetTrains()) { #>
+			<table id="<#= helper.HtmlName(tra.TName, "train-") #>" class="<#= first ? "first" : "" #>">
+				<# first = false; #>
+				<col style="width:50px;">
+				<col style="width:50px;">
+				<col style="width:180px;">
+				<col style="width:20px;"><!-- Welle -->
+				<col style="width:62px;">
+				<col style="width:50px;">
+				<col style="width:50px;">
+				<tr>
+					<td colspan="10" class="trainname"><#= tra.TName #></td>
+				</tr>
+				<tr>
+					<td colspan="10" class="linename"><#= tra.GetLineName() #></td>
+				</tr>
+				<# if (attrs.ShowComments && tra.Comment != null && tra.Comment != "") { #>
+				<tr>
+					<td colspan="10" class="comment"><#= tra.Comment #></td>
+				</tr>
+				<# } #>
+				<tr>
+					<td class="tfz" colspan="10">
+					<table class="tfz-table"><tr>
+					<td><#= helper.OptAttr("Zlok", tra.Locomotive) #></td>
+					<td><#= helper.OptAttr("Last", tra.Last) #></td>
+					<td><#= helper.OptAttr("Mbr", tra.Mbr) #></td>
+					</tr></table>
+					</td>
+				</tr>
+				<tr>
+					<td class="spaltennummer first">1</td>
+					<td class="spaltennummer">2</td>
+					<td class="spaltennummer" colspan="2">3</td>
+					<td class="spaltennummer">4</td>
+					<td class="spaltennummer">5</td>
+					<td class="spaltennummer">6</td>
+					<td class="spaltennummer">7</td>
+					<td class="spaltennummer">8</td>
+					<td class="spaltennummer last">9</td>
+				</tr>
+				<tr>
+					<td class="spaltenkopf klein first">Lage<br>der<br>Betriebs-<br>stelle<br><br>km</td>
+					<td class="spaltenkopf klein">Höchst-<br>ge-<br>schwin-<br>digkeit<br><br>km/h</td>
+					<td class="spaltenkopf" colspan="2">Betriebsstellen,<br>ständige Langsam-<br>fahrstellen,<br>verkürzter<br>Vorsignalabstand</td>
+					<td class="spaltenkopf klein">An der<br>Trapeztafel<br>hält Zug</td>
+					<td class="spaltenkopf">An-<br>kunft</td>
+					<td class="spaltenkopf">Ab-<br>fahrt</td>
+					<td class="spaltenkopf klein">Kreu-<br>zung<br>mit Zug</td>
+					<td class="spaltenkopf klein">über-<br>holt<br>&mdash;<br>wird<br>über-<br>holt<br>durch<br>Zug</td>
+					<td class="spaltenkopf klein last">Zuglauf-<br>meldung<br>durch</td>
+				</tr>
+				<#
+				int rs_counter = 0;
+				string last_vmax = "";
+				var stations = helper.GetStations(tra);
+				int route = Timetable.LINEAR_ROUTE_ID;
+				foreach (var entity in stations) {
+				#>
+				<tr class="<#= helper.HtmlName(entity.SName, "station-") #>">
+					<#
+						if (entity != stations.Last() && tt.Type == TimetableType.Network) {
+							var sta1 = stations[stations.IndexOf(entity) + 1];
+							route = entity.Routes.Where(r => sta1.Routes.Contains(r)).ToArray()[0];
+						}
+						var pos = entity.Positions.GetPosition(route);
+					#>
+					<td class="zug first"><#= pos.HasValue ? pos.Value.ToString("0.0") : "" #></td>
+					<td class="zug"><#= entity.Vmax == last_vmax ? "" : entity.Vmax #></td>
+					<# last_vmax = entity.Vmax; #>
+					<td class="zug stat"><#= entity.SName #></td>
+					<#= GetWelle(ref rs_counter, entity, tra, helper) #>
+
+					<#
+					if (entity.GetType() == typeof(Station)) {
+						Station s = (Station)entity;
+						var ardp = tra.GetArrDep(s);
+						var ar = ardp.Arrival.ToShortTimeString();
+						var dp = ardp.Departure.ToShortTimeString();
+						var zlm = ardp.Zuglaufmeldung;
+					#>
+					<td class="zug klein"><#= helper.TrapezHalt(tra, s) #></td>
+					<td class="zug"><#= ar != "00:00" ? ar : "" #></td>
+					<td class="zug"><#= dp != "00:00" ? dp : "" #></td>
+					<td class="zug klein"><#= helper.Kreuzt(tra, s) #></td>
+					<td class="zug klein"><#= helper.Ueberholt(tra, s) #></td>
+					<td class="zug klein last"><#= zlm ?? "" #></td>
+
+					<# } else { #>
+					<td class="zug klein"><!--Trapeztafel--></td>
+					<td class="zug"></td><!-- Ankunft -->
+					<td class="zug"></td><!-- Abfahrt -->
+					<td class="zug klein"><!--Kreuzung--></td>
+					<td class="zug klein"><!--überholt--></td>
+					<td class="zug klein last"><!--Zuglaufmeldung--></td>
+					<# } #>
+				</tr>
+				<# } #>
+			</table>
+			<# } #>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,225 @@
+﻿<!-- Start AfplCommon.fpltmpl -->
+<#@ assembly FPLedit.Aushangfahrplan.dll #>
+<#@ import FPLedit.Aushangfahrplan.Templates #>
+<#@ import FPLedit.Aushangfahrplan.Model #>
+
+<#@ define string GetDays(Train t) {
+	return DaysHelper.DaysToString(t.Days, true);
+} #>
+
+<#@ define string GetTimeString(TimeSpan t) {
+	return t.Hours.ToString() + "<sup>" + t.Minutes.ToString("00") + "</sup>";
+} #>
+
+<#@ define string TimeString(Train[] trains, Station sta, int i) {
+	return trains.Count() > i ? GetTimeString(trains[i].GetArrDep(sta).Departure) + " " + GetDays(trains[i]) : "";
+} #>
+
+<#@ define string NameString(Train[] trains, int i) {
+	Train train = trains.Count() > i ? trains[i] : null;
+	if (train == null)
+		return "";
+	return train.TName;
+} #>
+
+<#@ define string DirString(Train[] trains, int i) {
+	if (!multipleStations)
+		return "";
+	Train train = trains.Count() > i ? trains[i] : null;
+	if (train == null)
+		return "<td class=\"direction\"></td>";
+	return "<td class=\"direction\">" + train.GetArrDeps().Last(a => a.Value.HasMinOneTimeSet).Key.SName + "</td>";
+} #>
+
+<#@ define string DirHeader(bool showText) {
+	if (!multipleStations)
+		return "";
+	if (!showText)
+		return "<td class=\"direction header\"></td>";
+	return "<td class=\"direction header\">Richtung</td>";
+} #>
+
+<#@ define bool multipleStations = false; #>
+
+<#
+string font = "Arial";
+string hwFont = "serif";
+string additionalCss = "";
+
+TemplateHelper helper = new TemplateHelper(tt);
+
+AfplAttrs attrs = AfplAttrs.GetAttrs(tt);
+if (attrs != null)
+{
+    if (attrs.Font != "")
+        font = attrs.Font;
+    if (attrs.HwFont != "")
+        hwFont = attrs.HwFont;
+    additionalCss = attrs.Css ?? "";
+}
+
+// Netzwerk-Modus mit Zielangabe
+multipleStations = tt.Type == TimetableType.Network && tt.Stations.Any(s => s.Routes.Length > 1);
+#>
+
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Aushangfahrplan generiert von FPLedit</title>
+<style>
+body {
+	color:black;
+	font-size:16px;
+	font-family: "<#= font #>", sans-serif;
+}
+table {
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 50px;
+	border: 0;
+	border-collapse:collapse;
+	border-bottom:3px solid #000;
+	page-break-after: always;
+}
+p {
+	font-size:20px;
+	text-align:center;
+	margin: 0;
+	font-weight: normal;
+}
+.title {
+	font-size: 60px;
+	letter-spacing: 1.5px;
+}
+.station {
+	font-size: 16px;
+	font-stretch: condensed;
+	font-weight: bold;
+}
+.heading {
+	margin-bottom: 5px;
+	font-weight: bold;
+}
+td {
+	padding-top:8px;
+	padding-right:3px;
+	padding-left:3px;
+	vertical-align:middle;
+}
+.train-row {
+	height:21px;
+	border-top:1px solid #000;
+}
+.train-row ~ .train-row {
+	border-top:1px solid #000;
+}
+.time {
+	text-align:center;
+	width: <#= multipleStations ? "100" : "200" #>px;
+	<# if (multipleStations) { #>
+	border-right: 2px solid #000;
+	<# } #>
+}
+.name {
+	text-align:center;
+	width: 76px;
+	border-right: 2px solid #000;
+}
+.direction {
+	width: 150px;
+}
+.header {
+	border-bottom: 2px solid #000;
+}
+.time:not(.header), .name:not(.header), .direction:not(.header) {
+	font-family: "<#= hwFont #>", serif;
+}
+.dir {
+	border-top: 3px solid #000;
+	border-right: 3px solid #000;
+	border-bottom: 1px solid #000;
+	text-align: center;
+	font-weight:bold;
+}
+.dir ~ .dir {
+	border-right: 0;
+}
+<# if (!multipleStations) { #>
+.name + .time:not(:last-child) {
+<# } else { #>
+.name + .time + .direction:not(:last-child) {
+<# } #>
+	border-right:3px solid #000;
+}
+</style>
+<style id="add-css">
+	<#= additionalCss #>
+</style>
+</head>
+<body>
+	<# foreach (var sta in helper.GetStations()) { #>
+	<p class="station">Bahnhof <#= sta.SName #></p>
+	<p class="title"><#= abfahrtSVG #></p>
+	<p class="heading">der Züge in der Richtung nach</p>
+	<#
+		var fss = helper.GetLastStations(TrainDirection.ta, sta);
+		var lss = helper.GetLastStations(TrainDirection.ti, sta);
+	#>
+	<table>
+		<tr>
+			<td colspan="<#= multipleStations ? "3" : "2" #>" class="dir"><#= string.Join("/", fss.Select(s => s.SName)) #></td>
+			<td colspan="<#= multipleStations ? "3" : "2" #>" class="dir"><#= string.Join("/", lss.Select(s => s.SName)) #></td>
+		</tr>
+		<#
+			var trainsA = helper.GetTrains(TrainDirection.ta, sta);
+			var trainsB = helper.GetTrains(TrainDirection.ti, sta);
+			int count = Math.Max(trainsA.Length, trainsB.Length);
+			//count = Math.Max(count, 20);
+		#>
+		<tr>
+			<# if (fss.Count() > 0) { #>
+				<td class="name header">Zug-Nr</td>
+				<td class="time header">Zeit</td>
+				<#= DirHeader(true) #>
+			<# } else { #>
+				<td class="name header"></td>
+				<td class="time header"></td>
+				<#= DirHeader(false) #>
+			<# } #>
+			<# if (lss.Count() > 0) { #>
+				<td class="name header">Zug-Nr</td>
+				<td class="time header">Zeit</td>
+				<#= DirHeader(true) #>
+			<# } else { #>
+				<td class="name header"></td>
+				<td class="time header"></td>
+				<#= DirHeader(false) #>
+			<# } #>
+		</tr>
+		<# for (int i = 0; i < count; i++) { #>
+		<tr class="train-row">
+			<# if (fss.Count() > 0) { #>
+				<td class="name"><#= NameString(trainsA, i) #></td>
+				<td class="time"><#= TimeString(trainsA, sta, i) #></td>
+				<#= DirString(trainsA, i) #>
+			<# } else { #>
+				<td class="name"></td>
+				<td class="time"></td>
+				<#= DirString(trainsA, i) #>
+			<# } #>
+			<# if (lss.Count() > 0) { #>
+				<td class="name"><#= NameString(trainsB, i) #></td>
+				<td class="time"><#= TimeString(trainsB, sta, i) #></td>
+				<#= DirString(trainsB, i) #>
+			<# } else { #>
+				<td class="name"></td>
+				<td class="time"></td>
+				<#= DirString(trainsB, i) #>
+			<# } #>
+		</tr>
+		<# } #>
+	</table>
+	<# } #>
+</body>
+</html>

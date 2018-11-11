@@ -18,12 +18,14 @@ namespace FPLedit.Aushangfahrplan.Forms
             string path = info.GetTemp("afpl.html");
 
             bool tryoutConsole = info.Settings.Get<bool>("afpl.console");
+            bool success = false;
             if (tryoutConsole)
-                exp.ExportTryoutConsole(info.Timetable, path, info);
+                success = exp.ExportTryoutConsole(info.Timetable, path, info);
             else
-                exp.Export(info.Timetable, path, info);
+                success = exp.Export(info.Timetable, path, info);
 
-            Process.Start(path);
+            if (success)
+                Process.Start(path);
         }
     }
 }

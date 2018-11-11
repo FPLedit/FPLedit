@@ -1,0 +1,96 @@
+﻿<e:TrainEditForm
+  xmlns="clr-namespace:Eto.Forms;assembly=Eto"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:e="clr-namespace:FPLedit.Editor;assembly=FPLedit"
+  xmlns:sys="clr-namespace:System;assembly=mscorlib"
+  DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
+  Title="Neuen Zug erstellen" Resizable="false">
+  <TableLayout Padding="10,10,10,10" Spacing="5,5">
+    <TableRow>
+      <TableCell>
+        <StackLayout>
+          <TableLayout>
+            <TableRow>
+              <TableLayout Spacing="5,5">
+                <TableRow>
+                  <Label>Name</Label>
+                  <TextBox x:Name="nameTextBox"></TextBox>
+                </TableRow>
+                <TableRow>
+                  <Label>Kommentar</Label>
+                  <TextBox x:Name="commentTextBox"></TextBox>
+                </TableRow>
+              </TableLayout>
+            </TableRow>
+          </TableLayout>
+          <GroupBox Text="Erweiterte Eigenschaften (für Bfpl)">
+            <TableLayout>
+              <TableRow>
+                <TableLayout Spacing="5,5" Padding="10,10,10,10">
+                  <TableRow>
+                    <Label ToolTip="Die Zuglok oder der verwendete Triebwagen.">Tfz</Label>
+                    <ComboBox x:Name="locomotiveComboBox"></ComboBox>
+                  </TableRow>
+                  <TableRow>
+                    <Label ToolTip="Mindestbremshundertstel">Mbr</Label>
+                    <ComboBox x:Name="mbrComboBox"></ComboBox>
+                  </TableRow>
+                  <TableRow>
+                    <Label>Last</Label>
+                    <ComboBox x:Name="lastComboBox"></ComboBox>
+                  </TableRow>
+                </TableLayout>
+              </TableRow>
+            </TableLayout>
+          </GroupBox>
+        </StackLayout>
+      </TableCell>
+      <TableCell>
+        <GroupBox Text="Verkehrstage">
+          <TableLayout Spacing="5,5" Padding="10,10,10,10">
+            <TableRow>
+              <TableLayout Spacing="5,5">
+                <TableRow>
+                  <CheckBox Checked="true" x:Name="mondayCheckBox" Text="Mo" />
+                  <CheckBox Checked="true" x:Name="tuesdayCheckBox" Text="Di" />
+                  <CheckBox Checked="true" x:Name="wednesdayCheckBox" Text="Mi" />
+                  <CheckBox Checked="true" x:Name="thursdayCheckBox" Text="Do" />
+                </TableRow>
+                <TableRow>
+                  <CheckBox Checked="true" x:Name="fridayCheckBox" Text="Fr" />
+                  <CheckBox Checked="true" x:Name="saturdayCheckBox" Text="Sa" />
+                  <CheckBox Checked="true" x:Name="sundayCheckBox" Text="So" />
+                </TableRow>
+              </TableLayout>
+            </TableRow>
+            <TableRow>
+              <TableLayout Spacing="5,5">
+                <TableRow>
+                  <Button Click="wShortcutButton_Click" ToolTip="Werktags (Montag - Samstag)">W</Button>
+                  <Button Click="wExclSaShortcutButton_Click" ToolTip="Werktags (außer Samstag)">W (Sa)</Button>
+                </TableRow>
+                <TableRow>
+                  <Button Click="sShortcutButton_Click" ToolTip="Sonn- und Feiertags">S</Button>
+                  <Button Click="aShortcutButton_Click" ToolTip="Alle aktivieren">Alle</Button>
+                </TableRow>
+                <TableRow>
+                  <Button Click="zShortcutButton_Click" ToolTip="Keine aktivieren">Keine</Button>
+                </TableRow>
+              </TableLayout>
+            </TableRow>
+          </TableLayout>
+        </GroupBox>
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell />
+      <TableLayout Spacing="5,5" Padding="10,10,10,10">
+        <TableRow>
+          <TableCell ScaleWidth="true" />
+          <Button x:Name="cancelButton" Text="Abbrechen" Click="cancelButton_Click"></Button>
+          <Button x:Name="closeButton" Text="Schließen" Click="closeButton_Click"></Button>
+        </TableRow>
+      </TableLayout>
+    </TableRow>
+  </TableLayout>
+</e:TrainEditForm>

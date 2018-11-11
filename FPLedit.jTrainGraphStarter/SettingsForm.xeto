@@ -1,0 +1,58 @@
+﻿<e:SettingsForm
+  xmlns="clr-namespace:Eto.Forms;assembly=Eto"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:e="clr-namespace:FPLedit.jTrainGraphStarter;assembly=FPLedit.jTrainGraphStarter"
+  xmlns:sys="clr-namespace:System;assembly=mscorlib"
+  DefaultButton="{x:Reference closeButton}"
+  Title="jTrainGraphStarter Einstellungen" Resizable="false">
+  <StackLayout>
+    <TableLayout>
+      <TableRow>
+        <TableLayout Spacing="5,5" Padding="10,10,10,10">
+          <TableRow>
+            <Label>Java-Pfad</Label>
+            <StackLayout>
+              <StackLayout Orientation="Horizontal" Spacing="5">
+                <TextBox x:Name="javaPathTextBox" Width="240"></TextBox>
+                <Button Click="findJavaButton_Click">Erkennen</Button>
+              </StackLayout>
+              <Label Width="240">i.d.R: Windows: javaw.exe, Linux: java</Label>
+            </StackLayout>
+          </TableRow>
+          <TableRow>
+            <Label>Pfad zur jTrainGraph-Datei</Label>
+            <StackLayout>
+              <StackLayout Orientation="Horizontal" Spacing="5">
+                <TextBox x:Name="jtgPathTextBox" Width="240"></TextBox>
+                <Button Width="50" Click="chooseJtgButton_Click">...</Button>
+              </StackLayout>
+              <Label Width="240">Anwendungsdatei von jTrainGraph (jTrainGraph_xxx.jar/exe, wobei xxx >= 202)</Label>
+            </StackLayout>
+          </TableRow>
+          <TableRow>
+            <Label>Version von jTrainGraph</Label>
+            <DropDown Width="80" x:Name="versionComboBox"></DropDown>
+          </TableRow>
+        </TableLayout>
+      </TableRow>
+    </TableLayout>
+    <StackLayout Padding="5">
+      <StackLayout Orientation="Horizontal">
+        <Label>Weitere Hinweise:</Label>
+        <LinkButton Click="docLinkLabel_LinkClicked">Dokumentation zu diesem Plugin</LinkButton>
+      </StackLayout>
+      <StackLayout Orientation="Horizontal">
+        <Label>Wenn Sie jTrainGraph noch gar nicht installiert haben:</Label>
+        <LinkButton Click="downloadLinkLabel_LinkClicked">jTrainGraph herunterladen</LinkButton>
+      </StackLayout>
+      <Label>Auch wenn jTrainGraph in der *.exe-Variante verwendet wird bitte den Java-Pfad ausfüllen!</Label>
+    </StackLayout>
+    <TableLayout Spacing="5,5" Padding="10,10,10,10">
+      <TableRow>
+        <CheckBox x:Name="messageCheckBox" Text="Warnhinweis nicht bei jedem jTrainGraph-Start anzeigen" />
+        <TableCell ScaleWidth="true" />
+        <Button x:Name="closeButton" Text="Schließen" Click="closeButton_Click"></Button>
+      </TableRow>
+    </TableLayout>
+  </StackLayout>
+</e:SettingsForm>

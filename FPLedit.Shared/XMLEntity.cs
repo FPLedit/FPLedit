@@ -44,8 +44,12 @@ namespace FPLedit.Shared
 
         public T GetAttribute<T>(string key, T defaultValue = default(T))
         {
-            if (Attributes.ContainsKey(key))
-                return (T)Convert.ChangeType(Attributes[key], typeof(T));
+            if (Attributes.TryGetValue(key, out string val))
+            {
+                if (val == "" && typeof(T) != typeof(string))
+                    return defaultValue;
+                return (T)Convert.ChangeType(val, typeof(T));
+            }
             return defaultValue;
         }
 

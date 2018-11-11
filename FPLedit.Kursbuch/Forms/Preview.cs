@@ -19,12 +19,14 @@ namespace FPLedit.Kursbuch.Forms
             string path = info.GetTemp("kfpl.html");
 
             bool tryoutConsole = info.Settings.Get<bool>("kfpl.console");
+            bool success = false;
             if (tryoutConsole)
-                exp.ExportTryoutConsole(info.Timetable, path, info);
+                success = exp.ExportTryoutConsole(info.Timetable, path, info);
             else
-                exp.Export(info.Timetable, path, info);
+                success = exp.Export(info.Timetable, path, info);
 
-            Process.Start(path);
+            if (success)
+                Process.Start(path);
         }
     }
 }

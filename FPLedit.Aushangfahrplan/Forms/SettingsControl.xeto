@@ -1,0 +1,43 @@
+﻿<e:SettingsControl
+  xmlns="clr-namespace:Eto.Forms;assembly=Eto"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:e="clr-namespace:FPLedit.Aushangfahrplan.Forms;assembly=FPLedit.Aushangfahrplan"
+  xmlns:sys="clr-namespace:System;assembly=mscorlib">
+  <TableLayout Spacing="5,5" Padding="10">
+    <TableRow>
+      <Label>Aushangfahrplan-Vorlage</Label>
+      <TableCell ScaleWidth="true">
+        <DropDown x:Name="templateComboBox" />
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <Label>Schriftart im Aushangfpl.</Label>
+      <TableCell ScaleWidth="true">
+        <ComboBox x:Name="fontComboBox" />
+      </TableCell>
+      <Label x:Name="exampleLabel">Beispiel</Label>
+    </TableRow>
+    <TableRow>
+      <Label>Schriftart in Tabelle</Label>
+      <TableCell ScaleWidth="true">
+        <ComboBox x:Name="hwfontComboBox" />
+      </TableCell>
+      <Label x:Name="hwexampleLabel">Beispiel</Label>
+    </TableRow>
+    <TableRow ScaleHeight="true">
+      <StackLayout Spacing="5">
+        <Label x:Name="cssLabel">Eigene CSS-Styles</Label>
+        <LinkButton Click="cssHelpLinkLabel_LinkClicked" x:Name="cssHelpLinkLabel">Hilfe zu CSS</LinkButton>
+      </StackLayout>
+      <TableCell ScaleWidth="true">
+        <TextArea x:Name="cssTextBox"></TextArea>
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell></TableCell>
+      <TableCell ScaleWidth="true">
+        <CheckBox x:Name="consoleCheckBox">CSS-Test-Konsole bei Vorschau aktivieren (Gilt für alle Fahrpläne)</CheckBox>
+      </TableCell>
+    </TableRow>
+  </TableLayout>
+</e:SettingsControl>

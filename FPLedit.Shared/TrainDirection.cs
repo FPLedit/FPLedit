@@ -8,6 +8,7 @@ namespace FPLedit.Shared
     public enum TrainDirection
     {
         ti, // train in
-        ta  // train against
+        ta,  // train against
+        tr // Allgemeiner Zug im Graph
     }
 }

@@ -16,5 +16,11 @@ namespace FPLedit.Shared
         public bool TrapeztafelHalt { get; set; }
 
         public string Zuglaufmeldung { get; set; }
+
+        public TimeSpan FirstSetTime
+            => Arrival == default(TimeSpan) ? Departure : Arrival;
+
+        public bool HasMinOneTimeSet
+            => FirstSetTime != default(TimeSpan);
     }
 }

@@ -19,6 +19,14 @@ using System.Runtime.InteropServices;
 // übernehmen, indem Sie "*" eingeben:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")] // Do not change
-[assembly: AssemblyFileVersion("1.5.3.0")] // File Version -> increment for fixes
+[assembly: AssemblyFileVersion("2.0.0.0")] // File Version -> increment for fixes
 
-[assembly: AssemblyInformationalVersion("1.5.3")] // Display Version
+[assembly: AssemblyInformationalVersion("2.0.0")] // Display Version
+
+// Central version information used in plugins
+internal static class Pvi
+{
+    public const string Version = "2.0.0"; // Version of plugin (normally equasls assembly major.minor
+    public const string UpTo = "2.0"; // Compatible up to (normally "Version" without patch)
+    public const string From = "2.0.0"; // Compatible from - normally equals assembly version
+}

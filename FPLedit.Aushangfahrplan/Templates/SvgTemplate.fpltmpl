@@ -1,0 +1,6 @@
+﻿<#@ fpledit-template type="afpl" name="Wie Standard, mit Schriftzug \"Abfahrt\" in Originalschrift" #>
+
+<#
+string abfahrtSVG = FPLedit.Aushangfahrplan.Properties.Resources.abfahrt_text;
+#>
+

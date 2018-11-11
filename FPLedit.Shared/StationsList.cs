@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 
 namespace FPLedit.Shared
@@ -9,9 +8,7 @@ namespace FPLedit.Shared
     [Serializable]
     public sealed class StationsList : Entity
     {
-        private List<Station> stations;
-
-        public ReadOnlyCollection<Station> Stations => stations.AsReadOnly();
+        public ReadOnlyCollection<Station> Stations { get; private set; }
 
         public StationsList() : base("jTrainGraph_stations", null) // Root without parent
         {
@@ -20,9 +17,9 @@ namespace FPLedit.Shared
 
         public StationsList(XMLEntity en) : base(en, null) // Root without parent
         {
-            stations = new List<Station>();
-            foreach (var c in Children.Where(x => x.XName == "sta")) // Filtert andere Elemente
-                stations.Add(new Station(c, null));
+            Stations = Children.Where(x => x.XName == "sta") // Filtert andere Elemente
+                .Select(x => new Station(x, null))
+                .ToList().AsReadOnly();
         }
     }
 }
