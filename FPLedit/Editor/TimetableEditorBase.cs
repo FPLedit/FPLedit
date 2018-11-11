@@ -30,7 +30,7 @@ namespace FPLedit.Editor
             string val = tb.Text;
             if (val == null || val == "")
             {
-                data.SetError(sta, null);
+                data.SetError(sta, arrival, null);
                 data.SetTime(sta, arrival, "0");
                 return;
             }
@@ -43,7 +43,7 @@ namespace FPLedit.Editor
                 data.SetTime(sta, arrival, val);
                 error = false;
             }
-            data.SetError(sta, error ? (bool?)arrival : null);
+            data.SetError(sta, arrival, error ? tb.Text : null);
         }
 
         protected void Trapez(GridView view)

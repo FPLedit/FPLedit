@@ -41,14 +41,36 @@ namespace FPLedit.Editor
         }
 
         #region Errors
-        private Dictionary<Station, bool?> Errors { get; set; } = new Dictionary<Station, bool?>();
+        private List<ErrorEntry> errors = new List<ErrorEntry>();
 
         public bool HasError(Station sta, bool arrival)
-            => Errors.TryGetValue(sta, out bool? val) && val.HasValue && val.Value == arrival;
+        {
+            var err = errors.FirstOrDefault(e => e.Station == sta && e.Arrival == arrival);
+            return err != null && !string.IsNullOrEmpty(err.Text);
+        }
 
-        public bool HasAnyError => Errors.Any(e => e.Value.HasValue);
+        public bool HasAnyError => errors.Any(e => !string.IsNullOrEmpty(e.Text));
 
-        public void SetError(Station sta, bool? arrival) => Errors[sta] = arrival;
+        public void SetError(Station sta, bool arrival, string text)
+        {
+            var err = errors.FirstOrDefault(e => e.Station == sta && e.Arrival == arrival);
+            if (text == null || text == "")
+            {
+                if (err != null)
+                    errors.Remove(err);
+                return;
+            }
+            if (err == null)
+            {
+                err = new ErrorEntry(sta, arrival, null);
+                errors.Add(err);
+            }
+            err.Arrival = arrival;
+            err.Text = text;
+        }
+
+        internal string GetErrorText(Station sta, bool arrival)
+            => errors.FirstOrDefault(e => e.Station == sta && e.Arrival == arrival)?.Text;
         #endregion
 
         public bool IsLast(Station sta) => Train.GetPath().Last() == sta;
@@ -56,5 +78,19 @@ namespace FPLedit.Editor
         public bool IsFirst(Station sta) => Train.GetPath().First() == sta;
 
         public abstract Station GetStation();
+
+        private class ErrorEntry
+        {
+            public Station Station;
+            public bool Arrival;
+            public string Text;
+
+            public ErrorEntry(Station station, bool arrival, string text)
+            {
+                Station = station;
+                Arrival = arrival;
+                Text = text;
+            }
+        }
     }
 }

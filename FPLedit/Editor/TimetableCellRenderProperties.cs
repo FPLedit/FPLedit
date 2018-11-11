@@ -35,6 +35,8 @@ namespace FPLedit.Editor
 
             if (!data.HasError(sta, arrival))
                 Text = time(ardp) != default(TimeSpan) ? time(ardp).ToShortTimeString() : "";
+            else
+                Text = data.GetErrorText(sta, arrival);
 
             var first = data.IsFirst(sta);
             if ((!arrival && data.IsLast(sta)) || (arrival && first))
