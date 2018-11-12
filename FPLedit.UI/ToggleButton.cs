@@ -9,6 +9,12 @@ namespace FPLedit.Shared.UI
         private Button btn;
         private Color origColor;
 
+        public object Tag { get; set; }
+
+        public bool AllowEnable { get; set; } = true;
+
+        public bool AllowDisable { get; set; } = true;
+
         private bool _checked;
         public bool Checked
         {
@@ -41,8 +47,11 @@ namespace FPLedit.Shared.UI
 
         protected void Click(object sender, EventArgs e)
         {
-            Checked = !Checked;
-            ToggleClick?.Invoke(sender, e);
+            if ((AllowEnable && !Checked) || (AllowDisable && Checked))
+            {
+                Checked = !Checked;
+                ToggleClick?.Invoke(this, e);
+            }
         }
     }
 }

@@ -66,15 +66,15 @@
             <TableRow>
               <TableLayout Spacing="5,5">
                 <TableRow>
-                  <Button Click="wShortcutButton_Click" ToolTip="Werktags (Montag - Samstag)">W</Button>
-                  <Button Click="wExclSaShortcutButton_Click" ToolTip="Werktags (außer Samstag)">W (Sa)</Button>
+                  <Button x:Name="wShort" ToolTip="Werktags (Montag - Samstag)">W</Button>
+                  <Button x:Name="wSaShort" ToolTip="Werktags (außer Samstag)">W (Sa)</Button>
                 </TableRow>
                 <TableRow>
-                  <Button Click="sShortcutButton_Click" ToolTip="Sonn- und Feiertags">S</Button>
-                  <Button Click="aShortcutButton_Click" ToolTip="Alle aktivieren">Alle</Button>
+                  <Button x:Name="sShort" ToolTip="Sonn- und Feiertags">S</Button>
+                  <Button x:Name="aShort" ToolTip="Alle aktivieren">Alle</Button>
                 </TableRow>
                 <TableRow>
-                  <Button Click="zShortcutButton_Click" ToolTip="Keine aktivieren">Keine</Button>
+                  <Button x:Name="zShort" ToolTip="Keine aktivieren">Keine</Button>
                 </TableRow>
               </TableLayout>
             </TableRow>

@@ -1,5 +1,7 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
+using FPLedit.Shared.Helpers;
+using FPLedit.Shared.UI;
 using FPLedit.Shared.UI.Validators;
 using System;
 using System.Collections.Generic;
@@ -13,6 +15,7 @@ namespace FPLedit.Editor
         private TextBox nameTextBox, commentTextBox;
         private CheckBox mondayCheckBox, tuesdayCheckBox, wednesdayCheckBox, thursdayCheckBox, fridayCheckBox, saturdayCheckBox, sundayCheckBox;
         private ComboBox locomotiveComboBox, mbrComboBox, lastComboBox;
+        private Button wShort, wSaShort, sShort, aShort, zShort;
 #pragma warning restore CS0649
         private NotEmptyValidator nameValidator;
 
@@ -21,6 +24,13 @@ namespace FPLedit.Editor
         public Train Train { get; set; }
 
         private CheckBox[] daysBoxes;
+        private ToggleButton[] shortcutsToggle;
+
+        private bool[] wShortcut = DaysHelper.ParseDays("1111110");
+        private bool[] wExclSaShortcut = DaysHelper.ParseDays("1111100");
+        private bool[] sShortcut = DaysHelper.ParseDays("0000001");
+        private bool[] aShortcut = DaysHelper.ParseDays("1111111");
+        private bool[] zShortcut = DaysHelper.ParseDays("0000000");
 
         private TrainEditForm(Timetable tt)
         {
@@ -30,6 +40,8 @@ namespace FPLedit.Editor
             nameValidator.ErrorMessage = "Bitte einen Zugnamen eingeben!";
 
             daysBoxes = new[] { mondayCheckBox, tuesdayCheckBox, wednesdayCheckBox, thursdayCheckBox, fridayCheckBox, saturdayCheckBox, sundayCheckBox };
+            foreach (var dayBox in daysBoxes)
+                dayBox.CheckedChanged += CheckBoxStateChanged;
 
             locomotiveComboBox.Items.AddRange(GetAllItems(tt, t => t.Locomotive));
             lastComboBox.Items.AddRange(GetAllItems(tt, t => t.Last));
@@ -40,20 +52,36 @@ namespace FPLedit.Editor
                 if (!e.Control)
                     return;
 
+                var handled = true;
                 if (new[] { Keys.D0, Keys.Keypad0 }.Contains(e.Key))
-                    zShortcutButton_Click(null, null);
-                if (e.Key == Keys.A)
-                    aShortcutButton_Click(null, null);
+                    ApplyShortcut(zShortcut);
+                else if (e.Key == Keys.A)
+                    ApplyShortcut(aShortcut);
                 else if (e.Key == Keys.W && e.Shift)
-                    wExclSaShortcutButton_Click(null, null);
+                    ApplyShortcut(wExclSaShortcut);
                 else if (e.Key == Keys.W)
-                    wShortcutButton_Click(null, null);
+                    ApplyShortcut(wShortcut);
                 else if (e.Key == Keys.S)
-                    sShortcutButton_Click(null, null);
+                    ApplyShortcut(sShortcut);
+                else
+                    handled = false;
 
-                if (new[] { Keys.D0, Keys.Keypad0, Keys.A, Keys.W, Keys.S }.Contains(e.Key))
-                    e.Handled = true;
+                e.Handled = handled;
             };
+
+            var shortcutsButtons = new[] { wShort, wSaShort, sShort, aShort, zShort };
+            var shortcuts = new[] { wShortcut, wExclSaShortcut, sShortcut, aShortcut, zShortcut };
+            shortcutsToggle = new ToggleButton[shortcuts.Length];
+            for (int i = 0; i < shortcutsButtons.Length; i++)
+            {
+                var toggle = new ToggleButton(shortcutsButtons[i])
+                {
+                    Tag = shortcuts[i],
+                    AllowDisable = false
+                };
+                toggle.ToggleClick += ApplyShortcutBtn;
+                shortcutsToggle[i] = toggle;
+            }
         }
 
         public TrainEditForm(Train train) : this(train._parent)
@@ -64,9 +92,8 @@ namespace FPLedit.Editor
             mbrComboBox.Text = train.Mbr;
             lastComboBox.Text = train.Last;
             commentTextBox.Text = train.Comment;
-
-            for (int i = 0; i < Train.Days.Length; i++)
-                daysBoxes[i].Checked = Train.Days[i];
+            ApplyShortcut(Train.Days);
+            CheckBoxStateChanged(null, null);
 
             Title = "Zug bearbeiten";
         }
@@ -107,29 +134,25 @@ namespace FPLedit.Editor
             => Close(DialogResult.Cancel);
 
         #region Shortcut buttons
-        private void wShortcutButton_Click(object sender, EventArgs e)
+        private void ApplyShortcutBtn(object sender, EventArgs e)
         {
-            zShortcutButton_Click(null, null);
-            daysBoxes.Take(6).All(c => { c.Checked = true; return true; });
+            var btn = (ToggleButton)sender;
+            if (btn.Tag is bool[] days)
+                ApplyShortcut(days);
         }
 
-        private void wExclSaShortcutButton_Click(object sender, EventArgs e)
+        private void ApplyShortcut(bool[] days)
         {
-            zShortcutButton_Click(null, null);
-            daysBoxes.Take(5).All(c => { c.Checked = true; return true; });
+            for (int i = 0; i < days.Length; i++)
+                daysBoxes[i].Checked = days[i];
         }
 
-        private void sShortcutButton_Click(object sender, EventArgs e)
+        private void CheckBoxStateChanged(object sender, EventArgs e)
         {
-            zShortcutButton_Click(null, null);
-            daysBoxes.Last().Checked = true;
+            var cur = daysBoxes.Select(b => b.Checked.Value).ToArray();
+            foreach (var item in shortcutsToggle)
+                item.Checked = cur.SequenceEqual((bool[])item.Tag);
         }
-
-        private void aShortcutButton_Click(object sender, EventArgs e)
-            => daysBoxes.All(c => { c.Checked = true; return true; });
-
-        private void zShortcutButton_Click(object sender, EventArgs e)
-            => daysBoxes.All(c => { c.Checked = false; return true; });
         #endregion
 
         private IEnumerable<ListItem> GetAllItems(Timetable tt, Func<Train, string> func)
