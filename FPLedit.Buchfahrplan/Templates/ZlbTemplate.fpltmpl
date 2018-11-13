@@ -134,6 +134,11 @@ if (attrs != null)
 		td.last {
 			border-right:none;
 		}
+		.days {
+			font-size: 0.7em;
+			border: 1px solid black;
+			padding: 2px;
+		}
 		@media print {
 			@page {
 				margin: 0;
@@ -161,7 +166,12 @@ if (attrs != null)
 				<col style="width:50px;">
 				<col style="width:50px;">
 				<tr>
-					<td colspan="10" class="trainname"><#= tra.TName #></td>
+					<#
+						string days = "";
+						if (attrs.ShowDays)
+							days = " <span class=\"days\">" + DaysHelper.DaysToString(tra.Days, true) + "</span>";
+					#>
+					<td colspan="10" class="trainname"><#= tra.TName #><#= days #></td>
 				</tr>
 				<tr>
 					<td colspan="10" class="linename"><#= tra.GetLineName() #></td>

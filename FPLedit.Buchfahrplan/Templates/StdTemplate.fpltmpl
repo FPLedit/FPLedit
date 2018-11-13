@@ -137,6 +137,11 @@ if (attrs != null)
 			border-bottom:1.5pt solid black;
 			border-left:1.5pt solid black;
 		}
+		.days {
+			font-size: 0.7em;
+			border: 1px solid black;
+			padding: 2px;
+		}
 		@media print {
 			@page {
 				margin: 0;
@@ -161,7 +166,12 @@ if (attrs != null)
 				<col style="width:20px;"><!-- Welle -->
 				<col style="width:80px;" span=2>
 				<tr>
-					<td colspan=6 class="trainname"><#= tra.TName #></td>
+					<#
+						string days = "";
+						if (attrs.ShowDays)
+							days = " <span class=\"days\">" + DaysHelper.DaysToString(tra.Days, true) + "</span>";
+					#>
+					<td colspan=6 class="trainname"><#= tra.TName #><#= days #></td>
 				</tr>
 				<tr>
 					<td colspan=6 class="linename"><#= tra.GetLineName() #></td>

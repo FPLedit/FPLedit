@@ -35,6 +35,12 @@
     <TableRow>
       <TableCell></TableCell>
       <TableCell ScaleWidth="true">
+        <CheckBox x:Name="daysCheckBox">Verkehrstage im Buchfahrplan anzeigen</CheckBox>
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell></TableCell>
+      <TableCell ScaleWidth="true">
         <CheckBox x:Name="consoleCheckBox">CSS-Test-Konsole bei Vorschau aktivieren (Gilt für alle Fahrpläne)</CheckBox>
       </TableCell>
     </TableRow>

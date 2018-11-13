@@ -33,12 +33,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libs", "libs", "{A2218283-E
 		libs\Eto.dll = libs\Eto.dll
 		libs\Eto.Gtk.dll = libs\Eto.Gtk.dll
 		libs\Eto.Gtk3.dll = libs\Eto.Gtk3.dll
-		libs\Eto.Serialization.Json.dll = libs\Eto.Serialization.Json.dll
 		libs\Eto.Serialization.Xaml.dll = libs\Eto.Serialization.Xaml.dll
 		libs\Eto.WinForms.dll = libs\Eto.WinForms.dll
 		libs\Eto.Wpf.dll = libs\Eto.Wpf.dll
 		libs\LICENSE.txt = libs\LICENSE.txt
-		libs\Newtonsoft.Json.dll = libs\Newtonsoft.Json.dll
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit", "FPLedit\FPLedit.csproj", "{386836E8-5885-4ED1-B350-CE2BBEC5367E}"

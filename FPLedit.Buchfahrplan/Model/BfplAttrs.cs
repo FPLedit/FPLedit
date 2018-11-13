@@ -62,6 +62,11 @@ namespace FPLedit.Buchfahrplan.Model
             set => SetAttribute("shC", value.ToString().ToLower());
         }
 
+        public bool ShowDays
+        {
+            get => GetAttribute<bool>("shD");
+            set => SetAttribute("shD", value.ToString().ToLower());
+        }
 
         public BfplAttrs(Timetable tt) : base("bfpl_attrs", tt)
         {
