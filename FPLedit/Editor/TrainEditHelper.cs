@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace FPLedit.Editor
 {
@@ -11,8 +9,6 @@ namespace FPLedit.Editor
     {
         public Train CopyTrain(Train orig, int offsetMin, string name, bool copyAll)
         {
-            var offset = new TimeSpan(0, offsetMin, 0);
-
             var t = new Train(orig.Direction, orig._parent)
             {
                 TName = name,
@@ -36,33 +32,40 @@ namespace FPLedit.Editor
                 foreach (var sta in orig._parent.Stations)
                     t.AddArrDep(sta, new ArrDep(), Timetable.LINEAR_ROUTE_ID);
 
-            foreach (var sta in path)
-            {
-                var ardp = orig.GetArrDep(sta);
-                if (sta != path.First() && ardp.Arrival != default)
-                    ardp.Arrival = ardp.Arrival.Add(offset);
-                if (sta != path.Last() && ardp.Departure != default)
-                    ardp.Departure = ardp.Departure.Add(offset);
-                t.SetArrDep(sta, ardp);
-            }
+            InternalCopyArrDeps(orig, t, offsetMin);
 
             return t;
         }
 
+        public void FillTrain(Train orig, Train target, int offsetMin)
+        {
+            var path = orig.GetPath();
+
+            if (orig._parent.Type == TimetableType.Network)
+                target.AddAllArrDeps(path);
+
+            InternalCopyArrDeps(orig, target, offsetMin);
+        }
+
+        public IEnumerable<Train> FillCandidates(Train tra)
+            => tra._parent.Trains.Where(t => t.Direction == tra.Direction && t != tra);
+
         public void MoveTrain(Train t, int offsetMin)
+            => InternalCopyArrDeps(t, t, offsetMin);
+
+        private void InternalCopyArrDeps(Train source, Train destination, int offsetMin)
         {
             var offset = new TimeSpan(0, offsetMin, 0);
-
-            var path = t.GetPath();
+            var path = source.GetPath();
 
             foreach (var sta in path)
             {
-                var ardp = t.GetArrDep(sta);
+                var ardp = source.GetArrDep(sta);
                 if (sta != path.First() && ardp.Arrival != default)
                     ardp.Arrival = ardp.Arrival.Add(offset);
                 if (sta != path.Last() && ardp.Departure != default)
                     ardp.Departure = ardp.Departure.Add(offset);
-                t.SetArrDep(sta, ardp);
+                destination.SetArrDep(sta, ardp);
             }
         }
 

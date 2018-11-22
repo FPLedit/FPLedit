@@ -91,7 +91,11 @@
       </TableCell><!-- /left column -->
       <TableCell><!-- right column -->
         <GroupBox Text="Fahrplan">
-          <n:SingleTimetableEditControl x:Name="editor" />
+          <n:SingleTimetableEditControl x:Name="editor">
+            <n:SingleTimetableEditControl.ActionButtons>
+              <Button x:Name="fillButton" Text="Von anderem Zug..." Click="fillButton_Click"></Button>
+            </n:SingleTimetableEditControl.ActionButtons>
+          </n:SingleTimetableEditControl>
         </GroupBox>
       </TableCell><!-- /right column -->
     </TableRow>

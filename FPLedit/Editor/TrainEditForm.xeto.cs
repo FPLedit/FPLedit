@@ -15,7 +15,7 @@ namespace FPLedit.Editor
         private TextBox nameTextBox, commentTextBox;
         private CheckBox mondayCheckBox, tuesdayCheckBox, wednesdayCheckBox, thursdayCheckBox, fridayCheckBox, saturdayCheckBox, sundayCheckBox;
         private ComboBox locomotiveComboBox, mbrComboBox, lastComboBox;
-        private Button wShort, wSaShort, sShort, aShort, zShort;
+        private Button wShort, wSaShort, sShort, aShort, zShort, fillButton;
         private Network.SingleTimetableEditControl editor;
         private DropDown transitionDropDown;
 #pragma warning restore CS0649
@@ -28,6 +28,7 @@ namespace FPLedit.Editor
         private CheckBox[] daysBoxes;
         private ToggleButton[] shortcutsToggle;
         private Timetable tt;
+        private TrainEditHelper th;
 
         private bool[] wShortcut = DaysHelper.ParseDays("1111110");
         private bool[] wExclSaShortcut = DaysHelper.ParseDays("1111100");
@@ -40,6 +41,8 @@ namespace FPLedit.Editor
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
             this.tt = tt;
+
+            th = new TrainEditHelper();
 
             nameValidator = new NotEmptyValidator(nameTextBox);
             nameValidator.ErrorMessage = "Bitte einen Zugnamen eingeben!";
@@ -102,11 +105,7 @@ namespace FPLedit.Editor
 
             Title = "Zug bearbeiten";
 
-            editor.Initialize(train._parent, train);
-
-            transitionDropDown.DataStore = tt.Trains.Where(t => t != train);
-            transitionDropDown.ItemTextBinding = Binding.Property<Train, string>(t => t.TName);
-            transitionDropDown.SelectedValue = tt.GetTransition(train);
+            InitializeTrain();
         }
 
         public TrainEditForm(Timetable tt, TrainDirection direction, List<Station> path = null) : this(tt)
@@ -118,11 +117,18 @@ namespace FPLedit.Editor
             if (tt.Type == TimetableType.Linear)
                 Train.AddLinearArrDeps();
 
+            InitializeTrain();
+        }
+
+        private void InitializeTrain()
+        {
             editor.Initialize(Train._parent, Train);
 
             transitionDropDown.DataStore = tt.Trains.Where(t => t != Train);
             transitionDropDown.ItemTextBinding = Binding.Property<Train, string>(t => t.TName);
             transitionDropDown.SelectedValue = tt.GetTransition(Train);
+
+            fillButton.Visible = tt.Type == TimetableType.Linear && th.FillCandidates(Train).Any();
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -158,6 +164,19 @@ namespace FPLedit.Editor
 
         private void cancelButton_Click(object sender, EventArgs e)
             => Close(DialogResult.Cancel);
+
+        private void fillButton_Click(object sender, EventArgs e)
+        {
+            var tfd = new TrainFillDialog(tt, Train);
+            if (tfd.ShowModal() == DialogResult.Ok)
+            {
+                var th = new TrainEditHelper();
+                th.FillTrain(tfd.ReferenceTrain, Train, tfd.Offset);
+
+                editor.Initialize(Train._parent, Train);
+                //TODO: Tabelle aktualiseren
+            }
+        }
 
         #region Shortcut buttons
         private void ApplyShortcutBtn(object sender, EventArgs e)
