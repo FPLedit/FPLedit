@@ -131,6 +131,7 @@ namespace FPLedit
 
         private void Init()
         {
+            FontCollection.InitAsync(); // Asynchron Liste von verfügbaren Schriftarten laden
             EtoExtensions.Initialize(this); // UI-Erweiterungen initialiseren
             this.AddSizeStateHandler();
 

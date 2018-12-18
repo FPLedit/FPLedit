@@ -5,7 +5,6 @@ using FPLedit.Shared.UI.Validators;
 using System;
 using System.Data;
 using Font = System.Drawing.Font;
-using System.Drawing.Text;
 using System.Linq;
 using FPLedit.Shared.Helpers;
 using FPLedit.Shared.UI;
@@ -40,7 +39,7 @@ namespace FPLedit.Bildfahrplan.Forms
             PrepareColorComboBox(settings, new Entry(bgColorComboBox, "BgColor"), new Entry(stationColorComboBox, "StationColor"),
                  new Entry(timeColorComboBox, "TimeColor"), new Entry(trainColorComboBox, "TrainColor"));
 
-            var fontFamilies = new InstalledFontCollection().Families.Select(f => f.Name);
+            var fontFamilies = FontCollection.Families;
             stationFontComboBox.DataStore = fontFamilies;
             timeFontComboBox.DataStore = fontFamilies;
             trainFontComboBox.DataStore = fontFamilies;
@@ -54,7 +53,7 @@ namespace FPLedit.Bildfahrplan.Forms
             PrepareWidthDropDowns(new Entry(trainWidthComboBox, "TrainWidth"), new Entry(hourTimeWidthComboBox, "HourTimeWidth"),
                 new Entry(minuteTimeWidthComboBox, "MinuteTimeWidth"), new Entry(stationWidthComboBox, "StationWidth"));
 
-            heightPerHourTextBox.TextBinding.Cast<int>().BindDataContext<TimetableStyle>(s => s.HeightPerHour);
+            heightPerHourTextBox.TextBinding.AddIntConvBinding<TimetableStyle, TextControl>(s => s.HeightPerHour);
 
             string convFromTs(TimeSpan ts) => ts.ToShortTimeString();
             TimeSpan convToTs(string s) => TimeSpan.Parse(s.Replace("24:", "1.00:"));

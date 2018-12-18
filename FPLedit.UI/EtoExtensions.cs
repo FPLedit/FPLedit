@@ -45,7 +45,7 @@ namespace FPLedit.Shared.UI
         public static void AddLegacyFilter(this FileDialog dialog, string filter)
         {
             var parts = filter.Split('|');
-            for (int i = 0; i < parts.Length; i+=2)
+            for (int i = 0; i < parts.Length; i += 2)
             {
                 var f = new FileFilter(parts[i], parts[i + 1]);
                 dialog.Filters.Add(f);
@@ -102,6 +102,18 @@ namespace FPLedit.Shared.UI
             };
             view.Columns.Add(col);
             return col;
+        }
+
+        public static void AddIntConvBinding<TValue, T1>(this BindableBinding<T1, string> binding, Expression<Func<TValue, int>> property)
+            where T1 : IBindable
+        {
+            var shadowBinding = Binding.Property(property);
+
+            binding.BindDataContext<TValue>(s => shadowBinding.GetValue(s).ToString(), (s, str) =>
+            {
+                if (int.TryParse(str, out int i))
+                    shadowBinding.SetValue(s, i);
+            });
         }
     }
 }

@@ -55,6 +55,7 @@
     </Compile>
     <Compile Include="CloseHandler.cs" />
     <Compile Include="EtoExtensions.cs" />
+    <Compile Include="FontCollection.cs" />
     <Compile Include="FontComboBox.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SelectionUI.cs" />
