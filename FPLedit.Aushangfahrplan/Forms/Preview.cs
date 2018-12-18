@@ -18,11 +18,7 @@ namespace FPLedit.Aushangfahrplan.Forms
             string path = info.GetTemp("afpl.html");
 
             bool tryoutConsole = info.Settings.Get<bool>("afpl.console");
-            bool success = false;
-            if (tryoutConsole)
-                success = exp.ExportTryoutConsole(info.Timetable, path, info);
-            else
-                success = exp.Export(info.Timetable, path, info);
+            bool success = exp.Exp(info.Timetable, path, info, tryoutConsole);
 
             if (success)
                 Process.Start(path);

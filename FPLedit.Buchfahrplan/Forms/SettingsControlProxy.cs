@@ -14,8 +14,6 @@ namespace FPLedit.Buchfahrplan
         public string DisplayName => "Buchfahrplan";
 
         public Control GetControl(IInfo info)
-        {
-            return new SettingsControl(info.Timetable, info);
-        }
+            => new SettingsControl(info.Timetable, info);
     }
 }

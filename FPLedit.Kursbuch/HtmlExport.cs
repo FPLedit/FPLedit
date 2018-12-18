@@ -13,7 +13,7 @@ namespace FPLedit.Kursbuch
     {
         public string Filter => "Tabellenfahrplan/Kursbuch als HTML Datei (*.html)|*.html";
 
-        private bool Exp(Timetable tt, string filename, IInfo info, bool tryout_console)
+        internal bool Exp(Timetable tt, string filename, IInfo info, bool tryout_console)
         {
             var chooser = new KfplTemplateChooser(info);
 
@@ -33,8 +33,5 @@ namespace FPLedit.Kursbuch
 
         public bool Export(Timetable tt, string filename, IInfo info)
             => Exp(tt, filename, info, false);
-
-        public bool ExportTryoutConsole(Timetable tt, string filename, IInfo info)
-            => Exp(tt, filename, info, true);
     }
 }
