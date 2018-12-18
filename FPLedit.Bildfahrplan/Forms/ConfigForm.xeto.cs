@@ -3,12 +3,8 @@ using FPLedit.Bildfahrplan.Model;
 using FPLedit.Shared;
 using FPLedit.Shared.UI.Validators;
 using System;
-using System.Data;
-using Font = System.Drawing.Font;
 using System.Linq;
-using FPLedit.Shared.Helpers;
 using FPLedit.Shared.UI;
-using System.Reflection;
 using System.Drawing;
 
 namespace FPLedit.Bildfahrplan.Forms
@@ -35,23 +31,19 @@ namespace FPLedit.Bildfahrplan.Forms
             heightPerHourValidator = new NumberValidator(heightPerHourTextBox, false, true);
             heightPerHourValidator.ErrorMessage = "Bitte eine Zahl als Höhe pro Stunde angeben!";
 
-            //TODO: Refactor??
-            PrepareColorComboBox(settings, new Entry(bgColorComboBox, "BgColor"), new Entry(stationColorComboBox, "StationColor"),
-                 new Entry(timeColorComboBox, "TimeColor"), new Entry(trainColorComboBox, "TrainColor"));
+            DropDownBind.Color<TimetableStyle>(settings, bgColorComboBox, "BgColor");
+            DropDownBind.Color<TimetableStyle>(settings, stationColorComboBox, "StationColor");
+            DropDownBind.Color<TimetableStyle>(settings, timeColorComboBox, "TimeColor");
+            DropDownBind.Color<TimetableStyle>(settings, trainColorComboBox, "TrainColor");
 
-            var fontFamilies = FontCollection.Families;
-            stationFontComboBox.DataStore = fontFamilies;
-            timeFontComboBox.DataStore = fontFamilies;
-            trainFontComboBox.DataStore = fontFamilies;
+            DropDownBind.Font<TimetableStyle>(stationFontComboBox, stationFontSizeComboBox, "StationFont");
+            DropDownBind.Font<TimetableStyle>(timeFontComboBox, timeFontSizeComboBox, "TimeFont");
+            DropDownBind.Font<TimetableStyle>(trainFontComboBox, trainFontSizeComboBox, "TrainFont");
 
-            var fontSizes = new object[11];
-            for (int i = 5; i <= 15; i++) fontSizes[i - 5] = i;
-            stationFontSizeComboBox.DataStore = fontSizes;
-            timeFontSizeComboBox.DataStore = fontSizes;
-            trainFontSizeComboBox.DataStore = fontSizes;
-
-            PrepareWidthDropDowns(new Entry(trainWidthComboBox, "TrainWidth"), new Entry(hourTimeWidthComboBox, "HourTimeWidth"),
-                new Entry(minuteTimeWidthComboBox, "MinuteTimeWidth"), new Entry(stationWidthComboBox, "StationWidth"));
+            DropDownBind.Width<TimetableStyle>(hourTimeWidthComboBox, "HourTimeWidth");
+            DropDownBind.Width<TimetableStyle>(minuteTimeWidthComboBox, "MinuteTimeWidth");
+            DropDownBind.Width<TimetableStyle>(stationWidthComboBox, "StationWidth");
+            DropDownBind.Width<TimetableStyle>(trainWidthComboBox, "TrainWidth");
 
             heightPerHourTextBox.TextBinding.AddIntConvBinding<TimetableStyle, TextControl>(s => s.HeightPerHour);
 
@@ -73,13 +65,6 @@ namespace FPLedit.Bildfahrplan.Forms
             attrs = new TimetableStyle(tt);
             DataContext = attrs;
 
-            stationFontComboBox.SelectedValue = attrs.StationFont.FontFamily.Name;
-            timeFontComboBox.SelectedValue = attrs.TimeFont.FontFamily.Name;
-            trainFontComboBox.SelectedValue = attrs.TrainFont.FontFamily.Name;
-            stationFontSizeComboBox.SelectedValue = (int)attrs.StationFont.Size;
-            timeFontSizeComboBox.SelectedValue = (int)attrs.TimeFont.Size;
-            trainFontSizeComboBox.SelectedValue = (int)attrs.TrainFont.Size;
-
             stationLinesCheckBox.Checked = attrs.StationLines != StationLineStyle.None;
         }
 
@@ -91,10 +76,6 @@ namespace FPLedit.Bildfahrplan.Forms
                 return;
             }
 
-            attrs.StationFont = new Font((string)stationFontComboBox.SelectedValue, (int)stationFontSizeComboBox.SelectedValue);
-            attrs.TimeFont = new Font((string)timeFontComboBox.SelectedValue, (int)timeFontSizeComboBox.SelectedValue);
-            attrs.TrainFont = new Font((string)trainFontComboBox.SelectedValue, (int)trainFontSizeComboBox.SelectedValue);
-
             attrs.StationLines = stationLinesCheckBox.Checked.Value ? StationLineStyle.Normal : StationLineStyle.None;
 
             Result = DialogResult.Ok;
@@ -105,44 +86,6 @@ namespace FPLedit.Bildfahrplan.Forms
         {
             Result = DialogResult.Cancel;
             this.NClose();
-        }
-
-        private void PrepareColorComboBox(ISettings settings, params Entry[] boxes)
-        {
-            var cc = new ColorCollection(settings);
-            foreach (var box in boxes)
-            {
-                var b = box;
-                b.DropDown.DataStore = cc.ColorHexStrings;
-                b.DropDown.ItemTextBinding = cc.ColorBinding;
-                b.DropDown.SelectedValueBinding.BindDataContext<TimetableStyle>(a => ColorFormatter.ToString((Color)b.Property.GetValue(a)),
-                    (a, val) => b.Property.SetValue(a, ColorFormatter.FromHexString((string)val)));
-            }
-        }
-
-        private void PrepareWidthDropDowns(params Entry[] boxes)
-        {
-            var lineWidths = Enumerable.Range(1, 5).Cast<object>().ToArray();
-            foreach (var box in boxes)
-            {
-                var b = box;
-                b.DropDown.DataStore = lineWidths;
-                b.DropDown.SelectedValueBinding.BindDataContext<TimetableStyle>(a => (int)b.Property.GetValue(a),
-                    (a, val) => b.Property.SetValue(a, (int)val));
-            }
-        }
-
-        private class Entry
-        {
-            public DropDown DropDown { get; set; }
-
-            public PropertyInfo Property { get; set; }
-
-            public Entry(DropDown control, string property)
-            {
-                DropDown = control;
-                Property = typeof(TimetableStyle).GetProperty(property);
-            }
         }
     }
 }

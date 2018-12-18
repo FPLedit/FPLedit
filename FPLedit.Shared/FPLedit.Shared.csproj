@@ -66,6 +66,7 @@
     <Compile Include="ITrain.cs" />
     <Compile Include="Helpers\Pathfinder.cs" />
     <Compile Include="PositionCollection.cs" />
+    <Compile Include="Rendering\MFont.cs" />
     <Compile Include="Route.cs" />
     <Compile Include="FilterRule.cs" />
     <Compile Include="TimetableType.cs" />

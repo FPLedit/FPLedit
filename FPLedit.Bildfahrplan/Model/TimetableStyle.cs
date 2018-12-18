@@ -1,5 +1,6 @@
 ﻿using FPLedit.Shared;
 using FPLedit.Shared.Helpers;
+using FPLedit.Shared.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -103,22 +104,22 @@ namespace FPLedit.Bildfahrplan.Model
 
         #region Fonts
 
-        public Font StationFont
+        public MFont StationFont
         {
-            get => ParseFont(tt.GetAttribute<string>("sFont"));
-            set => tt.SetAttribute("sFont", FontToString(value));
+            get => MFont.Parse(tt.GetAttribute<string>("sFont"));
+            set => tt.SetAttribute("sFont", value.FontToString());
         }
 
-        public Font TimeFont
+        public MFont TimeFont
         {
-            get => ParseFont(tt.GetAttribute<string>("hFont"));
-            set => tt.SetAttribute("hFont", FontToString(value));
+            get => MFont.Parse(tt.GetAttribute<string>("hFont"));
+            set => tt.SetAttribute("hFont", value.FontToString());
         }
 
-        public Font TrainFont
+        public MFont TrainFont
         {
-            get => ParseFont(tt.GetAttribute<string>("trFont"));
-            set => tt.SetAttribute("trFont", FontToString(value));
+            get => MFont.Parse(tt.GetAttribute<string>("trFont"));
+            set => tt.SetAttribute("trFont", value.FontToString());
         }
 
         #endregion

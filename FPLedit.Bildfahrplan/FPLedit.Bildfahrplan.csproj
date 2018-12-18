@@ -61,6 +61,7 @@
     <Compile Include="..\build_scripts\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Forms\DropDownBind.cs" />
     <Compile Include="Forms\PreviewForm.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
