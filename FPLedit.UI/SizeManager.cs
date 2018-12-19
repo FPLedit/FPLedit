@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Shared.UI
 {
-    //TODO: Nur bei Änderung speichern
     public class SizeManager
     {
         private ISettings settings;
@@ -67,7 +66,7 @@ namespace FPLedit.Shared.UI
             }
             else
             {
-                entry.Resized = true; // Wir haben einen EIntrag, also ist es schon resized.
+                entry.Resized = true; // Wir haben einen Eintrag, also ist es schon resized.
                 w.Width = entry.Width;
                 w.Height = entry.Height;
             }

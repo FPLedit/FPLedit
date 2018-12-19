@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using Eto.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -277,7 +275,10 @@ namespace FPLedit
                 Logger.Info("Exportiere in Datei " + filename);
                 bool ret = export.Export(Timetable, filename, this);
                 if (ret == false)
-                    return; //TODO: Fehlermeldung?
+                {
+                    Logger.Error("Exportieren fehlgeschlagen!");
+                    return;
+                }
                 Logger.Info("Exportieren erfolgreich abgeschlossen!");
                 Settings.Set("exporter.last", exportFileDialog.CurrentFilterIndex);
             }
