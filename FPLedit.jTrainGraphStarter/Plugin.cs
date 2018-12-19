@@ -11,7 +11,6 @@ using System.Text;
 namespace FPLedit.jTrainGraphStarter
 {
     [Plugin("Starter für jTrainGraph", Pvi.From, Pvi.UpTo, Author = "Manuel Huber")]
-    //TODO: Somehow translate the color formats
     public class Plugin : IPlugin
     {
         IInfo info;

@@ -3,6 +3,7 @@ using FPLedit.Shared.Rendering;
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace FPLedit.Shared.UI
 {
@@ -36,10 +37,17 @@ namespace FPLedit.Shared.UI
             var p = GetProperty<T>(property);
             Func<T, MFont> f = a => (MFont)p.GetValue(a);
 
-            familyDropDown.DataStore = FontCollection.Families; //TODO: Das ist ein mega Performance-Impact...
-            familyDropDown.SelectedValueBinding.BindDataContext<T>(
-                a => f(a).Family,
-                (a, val) => { var x = f(a); x.Family = (string)val; p.SetValue(a, x); });
+            familyDropDown.DataStore = new string[] { "<Lade>" };
+            familyDropDown.SelectedIndex = 0;
+
+            // Asynchrones Laden der Font-Liste, um Performance-Problemen vorzubeugen
+            Application.Instance.AsyncInvoke(() =>
+            {
+                familyDropDown.DataStore = FontCollection.Families;
+                familyDropDown.SelectedValueBinding.BindDataContext<T>(
+                    a => f(a).Family,
+                    (a, val) => { var x = f(a); x.Family = (string)val; p.SetValue(a, x); });
+            });
 
             sizeDropDown.DataStore = fontSizes;
             sizeDropDown.SelectedValueBinding.BindDataContext<T>(

@@ -11,8 +11,9 @@ namespace FPLedit.Shared
         [DebuggerStepThrough]
         public static string ToShortTimeString(this TimeSpan span)
         {
+            // Das ist ein Hack. Die Methode sollte nur mit "Zeitangaben" verwendet werden.
             if (span.Days > 0)
-                return "24:00"; //TODO: Testen
+                return "24:00";
             return span.ToString(@"hh\:mm");
         }
     }
