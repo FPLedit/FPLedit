@@ -22,7 +22,6 @@ namespace FPLedit.jTrainGraphStarter
             info.FileStateChanged += Info_FileStateChanged;
 
             var item = ((MenuBar)info.Menu).CreateItem("jTrainGraph");
-            info.Menu.Items.Add(item);
 
             startItem = item.CreateItem("jTrainGraph starten");
             startItem.Enabled = false;
