@@ -1,15 +1,11 @@
 ﻿using Eto.Forms;
 using FPLedit.Bildfahrplan.Model;
 using FPLedit.Shared;
+using FPLedit.Shared.Rendering;
 using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.Bildfahrplan.Forms
 {

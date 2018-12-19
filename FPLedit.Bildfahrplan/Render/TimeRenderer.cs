@@ -21,9 +21,9 @@ namespace FPLedit.Bildfahrplan.Render
 
         public void Render(Graphics g, Margins margin, TimeSpan startTime, TimeSpan endTime, float width)
         {
-            var timeBrush = new SolidBrush(attrs.TimeColor);
-            var minutePen = new Pen(attrs.TimeColor, attrs.MinuteTimeWidth);
-            var hourPen = new Pen(attrs.TimeColor, attrs.HourTimeWidth);
+            var timeBrush = new SolidBrush((Color)attrs.TimeColor);
+            var minutePen = new Pen((Color)attrs.TimeColor, attrs.MinuteTimeWidth);
+            var hourPen = new Pen((Color)attrs.TimeColor, attrs.HourTimeWidth);
             foreach (var l in parent.GetTimeLines(out bool hour, startTime, endTime))
             {
                 var offset = margin.Top + l * attrs.HeightPerHour / 60f;

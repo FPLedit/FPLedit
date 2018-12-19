@@ -3,7 +3,6 @@ using FPLedit.Shared.Helpers;
 using FPLedit.Shared.Rendering;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 
@@ -125,27 +124,27 @@ namespace FPLedit.Bildfahrplan.Model
         #endregion
 
         #region Colors
-        public Color TimeColor
+        public MColor TimeColor
         {
-            get => ParseColor(tt.GetAttribute<string>("fpl-tc"), Color.Orange);
+            get => ParseColor(tt.GetAttribute<string>("fpl-tc"), (MColor)System.Drawing.Color.Orange);
             set => tt.SetAttribute("fpl-tc", ColorToString(value));
         }
 
-        public Color BgColor
+        public MColor BgColor
         {
-            get => ParseColor(tt.GetAttribute<string>("bgC"), Color.White);
+            get => ParseColor(tt.GetAttribute<string>("bgC"), (MColor)System.Drawing.Color.White);
             set => tt.SetAttribute("bgC", ColorToString(value));
         }
 
-        public Color StationColor
+        public MColor StationColor
         {
-            get => ParseColor(tt.GetAttribute<string>("fpl-sc"), Color.Black);
+            get => ParseColor(tt.GetAttribute<string>("fpl-sc"), (MColor)System.Drawing.Color.Black);
             set => tt.SetAttribute("fpl-sc", ColorToString(value));
         }
 
-        public Color TrainColor
+        public MColor TrainColor
         {
-            get => ParseColor(tt.GetAttribute<string>("fpl-trc"), Color.Gray);
+            get => ParseColor(tt.GetAttribute<string>("fpl-trc"), (MColor)System.Drawing.Color.Gray);
             set => tt.SetAttribute("fpl-trc", ColorToString(value));
         }
         #endregion

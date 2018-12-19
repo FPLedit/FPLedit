@@ -1,4 +1,5 @@
 ﻿using FPLedit.Shared;
+using FPLedit.Shared.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -22,12 +23,12 @@ namespace FPLedit.Bildfahrplan.Model
             this.sta = sta;
         }
 
-        public Color? StationColor
+        public MColor StationColor
         {
             get => ParseColor(sta.GetAttribute<string>("cl"), null);
-            set => sta.SetAttribute("cl", ColorToString(value ?? System.Drawing.Color.White));
+            set => sta.SetAttribute("cl", ColorToString(value ?? MColor.White));
         }
-        public Color CalcedColor => overrideEntityStyle ? ttStyle.StationColor :(StationColor ?? ttStyle.StationColor);
+        public MColor CalcedColor => overrideEntityStyle ? ttStyle.StationColor :(StationColor ?? ttStyle.StationColor);
 
         public int? StationWidth
         {
@@ -51,7 +52,7 @@ namespace FPLedit.Bildfahrplan.Model
 
         public int LineStyle
         {
-            get => sta.GetAttribute<int>("sy", 0);
+            get => sta.GetAttribute("sy", 0);
             set => sta.SetAttribute("sy", value.ToString());
         }
         public int CalcedLineStyle => overrideEntityStyle ? 0 : LineStyle;

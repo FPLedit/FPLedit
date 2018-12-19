@@ -1,7 +1,7 @@
 ﻿using FPLedit.Shared;
+using FPLedit.Shared.Rendering;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 
@@ -22,12 +22,12 @@ namespace FPLedit.Bildfahrplan.Model
             train = tra;
         }
 
-        public Color? TrainColor
+        public MColor TrainColor
         {
             get => ParseColor(train.GetAttribute<string>("cl"), null);
-            set => train.SetAttribute("cl", ColorToString(value ?? Color.White));
+            set => train.SetAttribute("cl", ColorToString(value ?? MColor.White));
         }
-        public Color CalcedColor => overrideEntityStyle ? ttStyle.TrainColor : (TrainColor ?? ttStyle.TrainColor);
+        public MColor CalcedColor => overrideEntityStyle ? ttStyle.TrainColor : (TrainColor ?? ttStyle.TrainColor);
         public int? TrainWidth
         {
             get

@@ -1,10 +1,10 @@
 ﻿using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using FPLedit.Shared.Helpers;
+using FPLedit.Shared.Rendering;
 
 namespace FPLedit.Bildfahrplan.Model
 {
@@ -22,13 +22,10 @@ namespace FPLedit.Bildfahrplan.Model
             overrideEntityStyle = info.Settings.Get<bool>("bifpl.override-entity-styles");
         }
 
-        protected Color? ParseColor(string def, Color? defaultValue)
+        protected MColor ParseColor(string def, MColor defaultValue)
             => ColorFormatter.FromString(def, defaultValue);
 
-        protected Color ParseColor(string def, Color defaultValue)
-            => ColorFormatter.FromString(def, defaultValue);
-
-        protected string ColorToString(Color color)
+        protected string ColorToString(MColor color)
             => ColorFormatter.ToString(color, _parent.Version == TimetableVersion.JTG2_x);
     }
 }

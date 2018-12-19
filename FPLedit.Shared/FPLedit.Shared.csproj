@@ -55,7 +55,8 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="ArrDep.cs" />
-    <Compile Include="Helpers\ColorFormatter.cs" />
+    <Compile Include="Rendering\ColorCollection.cs" />
+    <Compile Include="Rendering\ColorFormatter.cs" />
     <Compile Include="Helpers\DaysHelper.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Ext\IFileState.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="ITrain.cs" />
     <Compile Include="Helpers\Pathfinder.cs" />
     <Compile Include="PositionCollection.cs" />
+    <Compile Include="Rendering\MColor.cs" />
     <Compile Include="Rendering\MFont.cs" />
     <Compile Include="Route.cs" />
     <Compile Include="FilterRule.cs" />

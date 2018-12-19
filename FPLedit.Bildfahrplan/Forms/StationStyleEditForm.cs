@@ -2,10 +2,8 @@
 using FPLedit.Bildfahrplan.Model;
 using FPLedit.Shared;
 using System;
-using System.Drawing;
 using System.Linq;
-using FPLedit.Shared.Helpers;
-using FPLedit.Shared.UI;
+using FPLedit.Shared.Rendering;
 
 namespace FPLedit.Bildfahrplan.Forms
 {
@@ -30,7 +28,7 @@ namespace FPLedit.Bildfahrplan.Forms
             ds = new DashStyleHelper();
 
             colorComboBox.DataStore = cc.ColorHexStrings;
-            colorComboBox.ItemTextBinding = cc.ColorBinding;
+            colorComboBox.ItemTextBinding = Shared.UI.ExtBind.ColorBinding(cc);
 
             widthComboBox.DataStore = Enumerable.Range(1, 5).Cast<object>();
             widthComboBox.ItemTextBinding = Binding.Property<int, string>(c => c.ToString());

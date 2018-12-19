@@ -37,7 +37,7 @@ namespace FPLedit.Bildfahrplan.Render
 
         public void Draw(Graphics g, TimeSpan startTime, TimeSpan endTime, int maxHeight = -1)
         {
-            g.Clear(attrs.BgColor);
+            g.Clear((Color)attrs.BgColor);
 
             var stations = tt.GetRoute(route).GetOrderedStations();
 

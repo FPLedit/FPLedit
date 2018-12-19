@@ -61,7 +61,6 @@
     <Compile Include="..\build_scripts\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="Forms\DropDownBind.cs" />
     <Compile Include="Forms\PreviewForm.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
@@ -71,7 +70,6 @@
     <Compile Include="Forms\StationStyleEditForm.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Helpers\ColorCollection.cs" />
     <Compile Include="Helpers\DashStyleHelper.cs" />
     <Compile Include="Model\StationLineStyle.cs" />
     <Compile Include="Model\TimetableStyle.cs" />

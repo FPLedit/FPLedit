@@ -39,9 +39,9 @@ namespace FPLedit.Bildfahrplan.Render
             var ardps = train.GetArrDeps();
             var dir = GetTrainDirection(train);
 
-            var pen = new Pen(style.CalcedColor, style.CalcedWidth);
+            var pen = new Pen((Color)style.CalcedColor, style.CalcedWidth);
             pen.DashPattern = ds.ParseDashstyle(style.CalcedLineStyle);
-            var brush = new SolidBrush(style.CalcedColor);
+            var brush = new SolidBrush((Color)style.CalcedColor);
 
             List<PointF> points = new List<PointF>();
             bool hadFirstArrival = false, hadLastDeparture = false, isFirst = true;

@@ -54,7 +54,9 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="CloseHandler.cs" />
+    <Compile Include="DropDownBind.cs" />
     <Compile Include="EtoExtensions.cs" />
+    <Compile Include="ExtBind.cs" />
     <Compile Include="FontCollection.cs" />
     <Compile Include="FontComboBox.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -48,9 +48,9 @@ namespace FPLedit.Bildfahrplan.Render
                 if (!style.CalcedShow)
                     continue;
 
-                var pen = new Pen(style.CalcedColor, style.CalcedWidth);
+                var pen = new Pen((Color)style.CalcedColor, style.CalcedWidth);
                 pen.DashPattern = ds.ParseDashstyle(style.CalcedLineStyle);
-                var brush = new SolidBrush(style.CalcedColor);
+                var brush = new SolidBrush((Color)style.CalcedColor);
 
                 var size = g.MeasureString(sta.ToString(attrs.DisplayKilometre, route), attrs.StationFont);
 
