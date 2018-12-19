@@ -1,5 +1,6 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
+using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -20,10 +21,10 @@ namespace FPLedit.jTrainGraphStarter
             this.info = info;
             info.FileStateChanged += Info_FileStateChanged;
 
-            var item = MenuItem("jTrainGraph");
+            var item = ((MenuBar)info.Menu).CreateItem("jTrainGraph");
             info.Menu.Items.Add(item);
 
-            startItem = MenuItem("jTrainGraph starten", item);
+            startItem = item.CreateItem("jTrainGraph starten");
             startItem.Enabled = false;
             startItem.Click += (s, e) =>
             {
@@ -33,7 +34,7 @@ namespace FPLedit.jTrainGraphStarter
                     StartNetwork(info.FileState.SelectedRoute);
             };
 
-            settingsItem = MenuItem("Einstellungen", item);
+            settingsItem = item.CreateItem("Einstellungen");
             settingsItem.Click += (s, e) => (new SettingsForm(info.Settings)).ShowModal(info.RootForm);
         }
 
@@ -131,22 +132,5 @@ namespace FPLedit.jTrainGraphStarter
                 info.Logger.Error("Möglicherweise ist das jTrainGraphStarter Plugin falsch konfiguriert! Zur Konfiguration siehe jTrainGraph > Einstellungen");
             }
         }
-
-        #region EtoHelpers
-        private ButtonMenuItem MenuItem(string text)
-        {
-            var itm = new ButtonMenuItem();
-            itm.Text = text;
-            return itm;
-        }
-
-        private ButtonMenuItem MenuItem(string text, ButtonMenuItem parent)
-        {
-            var itm = new ButtonMenuItem();
-            itm.Text = text;
-            parent.Items.Add(itm);
-            return itm;
-        }
-        #endregion
     }
 }
