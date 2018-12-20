@@ -18,9 +18,9 @@ namespace FPLedit.Shared
         public string Zuglaufmeldung { get; set; }
 
         public TimeSpan FirstSetTime
-            => Arrival == default(TimeSpan) ? Departure : Arrival;
+            => Arrival == default ? Departure : Arrival;
 
         public bool HasMinOneTimeSet
-            => FirstSetTime != default(TimeSpan);
+            => FirstSetTime != default;
     }
 }

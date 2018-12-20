@@ -23,8 +23,8 @@ namespace FPLedit.Shared.UI.Validators
             if (AllowEmpty && Control.Text == "")
                 return true;
             if (!UseInt)
-                return float.TryParse(Control.Text, out var f);
-            return int.TryParse(Control.Text, out var i);
+                return float.TryParse(Control.Text, out var _);
+            return int.TryParse(Control.Text, out var _);
         }
     }
 }

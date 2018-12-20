@@ -269,7 +269,7 @@ namespace FPLedit.Editor.Network
 
         private void PlaceStation()
         {
-            if (tmp_sta == null || stapos.TryGetValue(tmp_sta, out Point p))
+            if (tmp_sta == null || stapos.TryGetValue(tmp_sta, out var _))
                 return;
 
             Cursor = Cursors.Default;

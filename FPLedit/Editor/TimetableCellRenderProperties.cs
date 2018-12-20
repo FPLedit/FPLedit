@@ -34,7 +34,7 @@ namespace FPLedit.Editor
             var ardp = data.ArrDeps[sta];
 
             if (!data.HasError(sta, arrival))
-                Text = time(ardp) != default(TimeSpan) ? time(ardp).ToShortTimeString() : "";
+                Text = time(ardp) != default ? time(ardp).ToShortTimeString() : "";
             else
                 Text = data.GetErrorText(sta, arrival);
 

@@ -39,9 +39,9 @@ namespace FPLedit.Editor
             foreach (var sta in path)
             {
                 var ardp = orig.GetArrDep(sta);
-                if (sta != path.First() && ardp.Arrival != default(TimeSpan))
+                if (sta != path.First() && ardp.Arrival != default)
                     ardp.Arrival = ardp.Arrival.Add(offset);
-                if (sta != path.Last() && ardp.Departure != default(TimeSpan))
+                if (sta != path.Last() && ardp.Departure != default)
                     ardp.Departure = ardp.Departure.Add(offset);
                 t.SetArrDep(sta, ardp);
             }
@@ -58,9 +58,9 @@ namespace FPLedit.Editor
             foreach (var sta in path)
             {
                 var ardp = t.GetArrDep(sta);
-                if (sta != path.First() && ardp.Arrival != default(TimeSpan))
+                if (sta != path.First() && ardp.Arrival != default)
                     ardp.Arrival = ardp.Arrival.Add(offset);
-                if (sta != path.Last() && ardp.Departure != default(TimeSpan))
+                if (sta != path.Last() && ardp.Departure != default)
                     ardp.Departure = ardp.Departure.Add(offset);
                 t.SetArrDep(sta, ardp);
             }

@@ -90,7 +90,7 @@ namespace FPLedit.Bildfahrplan.Render
 
             // MarginLeft berechnen
             List<float> tsizes = new List<float>();
-            foreach (var l in GetTimeLines(out bool h, startTime, endTime))
+            foreach (var l in GetTimeLines(out bool _, startTime, endTime))
                 tsizes.Add(g.MeasureString(new TimeSpan(0, l + startTime.GetMinutes(), 0).ToString(TIME_FORMAT), (Font)attrs.TimeFont).Width);
             result.Left = tsizes.Max() + result.Left;
             return result;

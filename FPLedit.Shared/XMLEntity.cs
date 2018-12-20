@@ -42,7 +42,7 @@ namespace FPLedit.Shared
                 Children.Add(new XMLEntity(c));
         }
 
-        public T GetAttribute<T>(string key, T defaultValue = default(T))
+        public T GetAttribute<T>(string key, T defaultValue = default)
         {
             if (Attributes.TryGetValue(key, out string val))
             {

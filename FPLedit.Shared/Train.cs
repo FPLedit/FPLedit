@@ -209,8 +209,8 @@ namespace FPLedit.Shared
             var fa = GetArrDep(fs);
             var la = GetArrDep(ls);
 
-            fa.Arrival = default(TimeSpan);
-            la.Departure = default(TimeSpan);
+            fa.Arrival = default;
+            la.Departure = default;
 
             SetArrDep(fs, fa);
             SetArrDep(ls, la);

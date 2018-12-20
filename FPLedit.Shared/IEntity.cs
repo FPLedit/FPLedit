@@ -7,7 +7,7 @@ namespace FPLedit.Shared
 {
     public interface IEntity
     {
-        T GetAttribute<T>(string key, T defaultValue = default(T));
+        T GetAttribute<T>(string key, T defaultValue = default);
 
         void SetAttribute(string key, string value);
 

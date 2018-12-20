@@ -34,7 +34,7 @@ namespace FPLedit.Aushangfahrplan.Templates
         private Train[] GetTrains(Station sta)
         {
             return TT.Trains.Where(t => t.GetPath().Contains(sta)
-                && t.GetArrDep(sta).Departure != default(TimeSpan)
+                && t.GetArrDep(sta).Departure != default
                 && trules.All(r => !r.Matches(t)))
                 .OrderBy(t => t.GetArrDep(sta).Departure)
                 .ToArray();

@@ -60,16 +60,16 @@ namespace FPLedit.Bildfahrplan.Render
                 var times = new[] { ardp.Departure, ardp.Arrival }.OrderBy(t => t);
                 foreach (var time in times)
                 {
-                    if (time == new TimeSpan())
+                    if (time == default)
                         continue;
                     TimeSpan timeOffset = time - startTime;
                     float y = margin.Top + timeOffset.GetMinutes() * attrs.HeightPerHour / 60f;
                     tmpPoints.Add(new PointF(x, y));
                 }
 
-                hadLastDeparture = ardp.Departure != new TimeSpan();
+                hadLastDeparture = ardp.Departure != default;
                 if (isFirst)
-                    hadFirstArrival = ardp.Arrival != new TimeSpan();
+                    hadFirstArrival = ardp.Arrival != default;
                 isFirst = false;
 
                 if (tmpPoints.Count == 2 && tmpPoints[0] != tmpPoints[1] && attrs.StationLines != StationLineStyle.None)

@@ -52,7 +52,7 @@ namespace FPLedit.Editor.Linear
 
         private void HandleKeystroke(object sender, KeyEventArgs e)
         {
-            TrainDirection dir = default(TrainDirection);
+            TrainDirection dir = default;
 
             if (active == topGridView)
                 dir = TOP_DIRECTION;
