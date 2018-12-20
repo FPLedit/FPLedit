@@ -66,6 +66,7 @@
     <Compile Include="Validators\BaseValidator.cs" />
     <Compile Include="Validators\NotEmptyValidator.cs" />
     <Compile Include="Validators\NumberValidator.cs" />
+    <Compile Include="Validators\TimeValidator.cs" />
     <Compile Include="Validators\ValidatorError.cs" />
   </ItemGroup>
   <ItemGroup>

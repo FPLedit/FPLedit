@@ -5,7 +5,6 @@ using FPLedit.Shared.UI.Validators;
 using System;
 using System.Linq;
 using FPLedit.Shared.UI;
-using System.Drawing;
 
 namespace FPLedit.Bildfahrplan.Forms
 {
@@ -20,6 +19,8 @@ namespace FPLedit.Bildfahrplan.Forms
         private CheckBox includeKilometreCheckBox, drawStationNamesCheckBox, stationLinesCheckBox, stationVerticalCheckBox;
 #pragma warning restore CS0649
         private NumberValidator heightPerHourValidator;
+        private TimeValidator startTimeValidator, endTimeValidator;
+        private ValidatorCollection validators;
 
         private Timetable tt;
         private TimetableStyle attrs;
@@ -30,6 +31,10 @@ namespace FPLedit.Bildfahrplan.Forms
 
             heightPerHourValidator = new NumberValidator(heightPerHourTextBox, false, true);
             heightPerHourValidator.ErrorMessage = "Bitte eine Zahl als Höhe pro Stunde angeben!";
+            startTimeValidator = new TimeValidator(startTimeTextBox, false);
+            endTimeValidator = new TimeValidator(endTimeTextBox, false);
+            startTimeValidator.ErrorMessage = endTimeValidator.ErrorMessage = "Bitte eine gültige Uhrzeit im Format hh:mm angeben!";
+            validators = new ValidatorCollection(heightPerHourValidator, startTimeValidator, endTimeValidator);
 
             DropDownBind.Color<TimetableStyle>(settings, bgColorComboBox, "BgColor");
             DropDownBind.Color<TimetableStyle>(settings, stationColorComboBox, "StationColor");
@@ -47,10 +52,8 @@ namespace FPLedit.Bildfahrplan.Forms
 
             heightPerHourTextBox.TextBinding.AddIntConvBinding<TimetableStyle, TextControl>(s => s.HeightPerHour);
 
-            string convFromTs(TimeSpan ts) => ts.ToShortTimeString();
-            TimeSpan convToTs(string s) => TimeSpan.Parse(s.Replace("24:", "1.00:"));
-            startTimeTextBox.TextBinding.Convert(convToTs, convFromTs).BindDataContext<TimetableStyle>(s => s.StartTime);
-            endTimeTextBox.TextBinding.Convert(convToTs, convFromTs).BindDataContext<TimetableStyle>(s => s.EndTime);
+            startTimeTextBox.TextBinding.AddTimeSpanConvBinding<TimetableStyle, TextControl>(s => s.StartTime);
+            endTimeTextBox.TextBinding.AddTimeSpanConvBinding<TimetableStyle, TextControl>(s => s.EndTime);
 
             includeKilometreCheckBox.CheckedBinding.BindDataContext<TimetableStyle>(s => s.DisplayKilometre);
             drawStationNamesCheckBox.CheckedBinding.BindDataContext<TimetableStyle>(s => s.DrawHeader);
@@ -70,9 +73,9 @@ namespace FPLedit.Bildfahrplan.Forms
 
         private void closeButton_Click(object sender, EventArgs e)
         {
-            if (!heightPerHourValidator.Valid)
+            if (!validators.IsValid)
             {
-                MessageBox.Show("Bitte erst alle Fehler beheben!");
+                MessageBox.Show("Bitte erst alle Fehler beheben: " + Environment.NewLine + validators.Message);
                 return;
             }
 
