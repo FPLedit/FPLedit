@@ -29,7 +29,6 @@ namespace FPLedit.Bildfahrplan.Render
             attrs = new TimetableStyle(tt);
         }
 
-        //TODO: Fix for trains "ta"
         public void Render(Graphics g, Train train)
         {
             var style = new TrainStyle(train, attrs);
@@ -58,7 +57,8 @@ namespace FPLedit.Bildfahrplan.Render
                 var tmpPoints = new List<PointF>(4);
                 float x = margin.Left + stationOffsets[sta];
 
-                foreach (var time in new[] { ardp.Departure, ardp.Arrival })
+                var times = new[] { ardp.Departure, ardp.Arrival }.OrderBy(t => t);
+                foreach (var time in times)
                 {
                     if (time == new TimeSpan())
                         continue;
@@ -71,9 +71,6 @@ namespace FPLedit.Bildfahrplan.Render
                 if (isFirst)
                     hadFirstArrival = ardp.Arrival != new TimeSpan();
                 isFirst = false;
-
-                if (!dir)
-                    tmpPoints.Reverse();
 
                 if (tmpPoints.Count == 2 && tmpPoints[0] != tmpPoints[1] && attrs.StationLines != StationLineStyle.None)
                     tmpPoints.InsertRange(1, tmpPoints);
