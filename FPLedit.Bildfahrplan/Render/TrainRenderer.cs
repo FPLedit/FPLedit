@@ -97,7 +97,7 @@ namespace FPLedit.Bildfahrplan.Render
 
                 if (points[i].X == points[i + 1].X)
                     continue;
-                var size = g.MeasureString(train.TName, attrs.TrainFont);
+                var size = g.MeasureString(train.TName, (Font)attrs.TrainFont);
                 float[] ys = new[] { points[i].Y, points[i + 1].Y };
                 float[] xs = new[] { points[i].X, points[i + 1].X };
                 float y = ys.Min() + (ys.Max() - ys.Min()) / 2 - (size.Height / 2);
@@ -107,7 +107,7 @@ namespace FPLedit.Bildfahrplan.Render
                 var container = g.BeginContainer();
                 g.TranslateTransform(x, y);
                 g.RotateTransform(-angle);
-                g.DrawString(train.TName, attrs.TrainFont, brush, -(size.Width / 2), -(size.Height / 2));
+                g.DrawString(train.TName, (Font)attrs.TrainFont, brush, -(size.Width / 2), -(size.Height / 2));
                 g.EndContainer(container);
             }
         }

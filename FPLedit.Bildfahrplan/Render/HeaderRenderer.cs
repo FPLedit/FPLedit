@@ -52,7 +52,7 @@ namespace FPLedit.Bildfahrplan.Render
                 pen.DashPattern = ds.ParseDashstyle(style.CalcedLineStyle);
                 var brush = new SolidBrush((Color)style.CalcedColor);
 
-                var size = g.MeasureString(sta.ToString(attrs.DisplayKilometre, route), attrs.StationFont);
+                var size = g.MeasureString(sta.ToString(attrs.DisplayKilometre, route), (Font)attrs.StationFont);
 
                 g.DrawLine(pen, margin.Left + pos, margin.Top - 5, margin.Left + pos, height - margin.Bottom); // Linie
 
@@ -61,9 +61,9 @@ namespace FPLedit.Bildfahrplan.Render
                 {
                     var display = sta.ToString(attrs.DisplayKilometre, route);
                     if (attrs.StationVertical)
-                        g.DrawString(display, attrs.StationFont, brush, margin.Left + pos - (size.Height / 2), margin.Top - 5 - size.Width, verticalFormat);
+                        g.DrawString(display, (Font)attrs.StationFont, brush, margin.Left + pos - (size.Height / 2), margin.Top - 5 - size.Width, verticalFormat);
                     else
-                        g.DrawString(display, attrs.StationFont, brush, margin.Left + pos - (size.Width / 2), margin.Top - size.Height - 5);
+                        g.DrawString(display, (Font)attrs.StationFont, brush, margin.Left + pos - (size.Width / 2), margin.Top - size.Height - 5);
                 }
 
             }

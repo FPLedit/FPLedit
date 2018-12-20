@@ -27,7 +27,7 @@ namespace FPLedit.Shared.Rendering
 
         public MFontStyle Style { get; set; }
 
-        public static implicit operator System.Drawing.Font(MFont m)
+        public static explicit operator System.Drawing.Font(MFont m)
             => new System.Drawing.Font(m.Family, m.Size, (System.Drawing.FontStyle)m.Style);
 
         #region Conversion
