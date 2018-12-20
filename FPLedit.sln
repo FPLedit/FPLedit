@@ -91,7 +91,6 @@ Global
 		{77EE9755-CE3E-4B7B-AEF1-474B228E7B50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{77EE9755-CE3E-4B7B-AEF1-474B228E7B50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77EE9755-CE3E-4B7B-AEF1-474B228E7B50}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{77EE9755-CE3E-4B7B-AEF1-474B228E7B50}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
