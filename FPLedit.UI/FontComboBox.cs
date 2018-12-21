@@ -1,7 +1,6 @@
 ﻿using Eto.Drawing;
 using Eto.Forms;
 using System;
-using System.Drawing.Text;
 using System.Linq;
 
 namespace FPLedit.Shared.UI
@@ -16,8 +15,16 @@ namespace FPLedit.Shared.UI
             this.box = box;
             this.label = label;
 
-            box.DataStore = new InstalledFontCollection().Families.Select(f => f.Name).OrderBy(f => f).ToArray();
-            box.ItemTextBinding = Binding.Property<string, string>(s => s);
+            box.DataStore = new string[] { "<Lade>" };
+            box.SelectedIndex = 0;
+
+            // Asynchrones Laden der Font-Liste, um Performance-Problemen vorzubeugen
+            Application.Instance.AsyncInvoke(() =>
+            {
+                box.DataStore = FontCollection.Families;
+                box.ItemTextBinding = Binding.Property<string, string>(s => s);
+            });
+
             box.TextChanged += TextChanged;
         }
 
