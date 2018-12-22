@@ -19,6 +19,8 @@ namespace FPLedit.Editor
 
         protected bool mpmode = false;
 
+        public bool Initialized { get; protected set; }
+
         protected void Init(ToggleButton trapeztafelToggle)
         {
             this.trapeztafelToggle = trapeztafelToggle;

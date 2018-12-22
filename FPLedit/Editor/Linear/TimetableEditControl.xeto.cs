@@ -77,6 +77,8 @@ namespace FPLedit.Editor.Linear
 
             InitializeGridView(topDataGridView, TOP_DIRECTION);
             InitializeGridView(bottomDataGridView, BOTTOM_DIRECTION);
+
+            Initialized = true;
         }
 
         private CustomCell GetCell(Func<ArrDep, TimeSpan> time, Station sta, bool arrival, GridView view)

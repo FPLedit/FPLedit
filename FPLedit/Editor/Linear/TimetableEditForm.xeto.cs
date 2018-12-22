@@ -29,12 +29,12 @@ namespace FPLedit.Editor.Linear
 
             KeyDown += editor.HandleControlKeystroke;
 
-            if (!Platform.IsWpf)
-                DefaultButton = null; // Bugfix, Window closes on [Enter]
-            //TODO: Test if this destroys timetabvle instance in mpmode
-
             this.AddCloseHandler();
             this.AddSizeStateHandler();
+
+            if (!Platform.IsWpf)
+                DefaultButton = null; // Bugfix, Window closes on [Enter]
+                                      // Important: After AddCloseHandler, otherwise it will destroy Timetable instance in mpmode!
         }
 
         #region Events

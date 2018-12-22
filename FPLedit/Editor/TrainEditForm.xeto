@@ -2,6 +2,7 @@
   xmlns="clr-namespace:Eto.Forms;assembly=Eto"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.Editor;assembly=FPLedit"
+  xmlns:n="clr-namespace:FPLedit.Editor.Network;assembly=FPLedit"
   xmlns:sys="clr-namespace:System;assembly=mscorlib"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
   Title="Neuen Zug erstellen" Resizable="false">
@@ -43,42 +44,45 @@
               </TableRow>
             </TableLayout>
           </GroupBox>
+          <GroupBox Text="Verkehrstage">
+            <TableLayout Spacing="5,5" Padding="10,10,10,10">
+              <TableRow>
+                <TableLayout Spacing="5,5">
+                  <TableRow>
+                    <CheckBox Checked="true" x:Name="mondayCheckBox" Text="Mo" />
+                    <CheckBox Checked="true" x:Name="tuesdayCheckBox" Text="Di" />
+                    <CheckBox Checked="true" x:Name="wednesdayCheckBox" Text="Mi" />
+                    <CheckBox Checked="true" x:Name="thursdayCheckBox" Text="Do" />
+                  </TableRow>
+                  <TableRow>
+                    <CheckBox Checked="true" x:Name="fridayCheckBox" Text="Fr" />
+                    <CheckBox Checked="true" x:Name="saturdayCheckBox" Text="Sa" />
+                    <CheckBox Checked="true" x:Name="sundayCheckBox" Text="So" />
+                  </TableRow>
+                </TableLayout>
+              </TableRow>
+              <TableRow>
+                <TableLayout Spacing="5,5">
+                  <TableRow>
+                    <Button x:Name="wShort" ToolTip="Werktags (Montag - Samstag)">W</Button>
+                    <Button x:Name="wSaShort" ToolTip="Werktags (außer Samstag)">W (Sa)</Button>
+                  </TableRow>
+                  <TableRow>
+                    <Button x:Name="sShort" ToolTip="Sonn- und Feiertags">S</Button>
+                    <Button x:Name="aShort" ToolTip="Alle aktivieren">Alle</Button>
+                  </TableRow>
+                  <TableRow>
+                    <Button x:Name="zShort" ToolTip="Keine aktivieren">Keine</Button>
+                  </TableRow>
+                </TableLayout>
+              </TableRow>
+            </TableLayout>
+          </GroupBox>
         </StackLayout>
       </TableCell>
       <TableCell>
-        <GroupBox Text="Verkehrstage">
-          <TableLayout Spacing="5,5" Padding="10,10,10,10">
-            <TableRow>
-              <TableLayout Spacing="5,5">
-                <TableRow>
-                  <CheckBox Checked="true" x:Name="mondayCheckBox" Text="Mo" />
-                  <CheckBox Checked="true" x:Name="tuesdayCheckBox" Text="Di" />
-                  <CheckBox Checked="true" x:Name="wednesdayCheckBox" Text="Mi" />
-                  <CheckBox Checked="true" x:Name="thursdayCheckBox" Text="Do" />
-                </TableRow>
-                <TableRow>
-                  <CheckBox Checked="true" x:Name="fridayCheckBox" Text="Fr" />
-                  <CheckBox Checked="true" x:Name="saturdayCheckBox" Text="Sa" />
-                  <CheckBox Checked="true" x:Name="sundayCheckBox" Text="So" />
-                </TableRow>
-              </TableLayout>
-            </TableRow>
-            <TableRow>
-              <TableLayout Spacing="5,5">
-                <TableRow>
-                  <Button x:Name="wShort" ToolTip="Werktags (Montag - Samstag)">W</Button>
-                  <Button x:Name="wSaShort" ToolTip="Werktags (außer Samstag)">W (Sa)</Button>
-                </TableRow>
-                <TableRow>
-                  <Button x:Name="sShort" ToolTip="Sonn- und Feiertags">S</Button>
-                  <Button x:Name="aShort" ToolTip="Alle aktivieren">Alle</Button>
-                </TableRow>
-                <TableRow>
-                  <Button x:Name="zShort" ToolTip="Keine aktivieren">Keine</Button>
-                </TableRow>
-              </TableLayout>
-            </TableRow>
-          </TableLayout>
+        <GroupBox Text="Fahrplan">
+          <n:TrainTimetableControl x:Name="editor" />
         </GroupBox>
       </TableCell>
     </TableRow>

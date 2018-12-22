@@ -74,6 +74,7 @@ namespace FPLedit.Editor.Network
             path = t.GetPath();
 
             InitializeGridView(dataGridView);
+            Initialized = true;
         }
 
         private CustomCell GetCell(Func<ArrDep, TimeSpan> time, bool arrival)
@@ -134,6 +135,7 @@ namespace FPLedit.Editor.Network
 
         private void InitializeGridView(GridView view)
         {
+            view.Columns.Clear();
             view.AddColumn<DataElement>(t => t.Station.SName, "Bahnhof");
             view.AddColumn(GetCell(t => t.Arrival, true), "Ankunft");
             view.AddColumn(GetCell(t => t.Departure, false), "Abfahrt");

@@ -54,9 +54,14 @@ namespace FPLedit.Editor
                 else ShowForm(new Network.TrainsEditingForm(info));
             };
 
-            editTimetableItem = editRoot.CreateItem("Fahrplan bearbeiten (linear)");
+            editTimetableItem = editRoot.CreateItem("Fahrplan bearbeiten");
             editTimetableItem.Enabled = false;
-            editTimetableItem.Click += (s, e) => ShowForm(new Linear.TimetableEditForm(info));
+            editTimetableItem.Click += (s, e) =>
+            {
+                if (info.Timetable.Type == TimetableType.Linear)
+                    ShowForm(new Linear.TimetableEditForm(info));
+                else ShowForm(new Network.MultipleTimetableEditor(info));
+            };
 
             editRoot.Items.Add(new SeparatorMenuItem());
 
@@ -127,7 +132,7 @@ namespace FPLedit.Editor
 
             // Im Netzwerk-Modus nicht verwendete Menü-Einträge ausblenden
             if (info.Timetable != null)
-                editLineItem.Enabled = editTimetableItem.Enabled = info.Timetable.Type != TimetableType.Network;
+                editLineItem.Enabled = info.Timetable.Type != TimetableType.Network;
         }
     }
 }
