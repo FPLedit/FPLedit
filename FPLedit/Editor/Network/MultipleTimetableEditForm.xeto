@@ -1,4 +1,4 @@
-﻿<e:MultipleTimetableEditor
+﻿<e:MultipleTimetableEditForm
   xmlns="clr-namespace:Eto.Forms;assembly=Eto"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.Editor.Network;assembly=FPLedit"
@@ -22,7 +22,7 @@
     </TableRow>
     <TableRow ScaleHeight="true">
       <TableCell ScaleWidth="true">
-        <e:TrainTimetableControl x:Name="editor" />
+        <e:SingleTimetableEditControl x:Name="editor" />
       </TableCell>
     </TableRow>
     <TableRow>
@@ -35,4 +35,4 @@
       </TableLayout>
     </TableRow>
   </TableLayout>
-</e:MultipleTimetableEditor>
+</e:MultipleTimetableEditForm>

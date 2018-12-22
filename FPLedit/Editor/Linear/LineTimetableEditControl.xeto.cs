@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace FPLedit.Editor.Linear
 {
-    internal class TimetableEditControl : TimetableEditorBase
+    internal class LineTimetableEditControl : BaseTimetableEditControl
     {
         private const TrainDirection TOP_DIRECTION = TrainDirection.ti;
         private const TrainDirection BOTTOM_DIRECTION = TrainDirection.ta;
@@ -31,7 +31,7 @@ namespace FPLedit.Editor.Linear
         private ObservableCollection<Control> actionButtons = new ObservableCollection<Control>();
         public IList<Control> ActionButtons => actionButtons;
 
-        public TimetableEditControl()
+        public LineTimetableEditControl()
         {
             actionButtons.CollectionChanged += (s, e) =>
             {
@@ -134,7 +134,7 @@ namespace FPLedit.Editor.Linear
             return cc;
         }
 
-        protected override Point GetNextEditingPosition(TimetableDataElement data, GridView view, KeyEventArgs e)
+        protected override Point GetNextEditingPosition(BaseTimetableDataElement data, GridView view, KeyEventArgs e)
         {
             var path = data.Train.GetPath();
             int idx, row;
@@ -161,7 +161,7 @@ namespace FPLedit.Editor.Linear
             return new Point(row, idx);
         }
 
-        protected override void CellSelected(TimetableDataElement data, Station sta, bool arrival)
+        protected override void CellSelected(BaseTimetableDataElement data, Station sta, bool arrival)
         {
             trapeztafelToggle.Checked = data.ArrDeps[sta].TrapeztafelHalt;
 
@@ -169,7 +169,7 @@ namespace FPLedit.Editor.Linear
             zlmButton.Enabled = arrival ^ (data.IsFirst(sta));
         }
 
-        private class DataElement : TimetableDataElement
+        private class DataElement : BaseTimetableDataElement
         {
             public Station SelectedStation { get; set; }
 

@@ -59,8 +59,8 @@ namespace FPLedit.Editor
             editTimetableItem.Click += (s, e) =>
             {
                 if (info.Timetable.Type == TimetableType.Linear)
-                    ShowForm(new Linear.TimetableEditForm(info));
-                else ShowForm(new Network.MultipleTimetableEditor(info));
+                    ShowForm(new Linear.LineTimetableEditForm(info));
+                else ShowForm(new Network.MultipleTimetableEditForm(info));
             };
 
             editRoot.Items.Add(new SeparatorMenuItem());

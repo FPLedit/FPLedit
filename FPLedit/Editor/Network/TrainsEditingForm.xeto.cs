@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Editor.Network
 {
-    internal class TrainsEditingForm : TrainsEditorBase
+    internal class TrainsEditingForm : BaseTrainsEditor
     {
         private IInfo info;
         private Timetable tt;
@@ -76,7 +76,7 @@ namespace FPLedit.Editor.Network
             {
                 var train = (Train)view.SelectedItem;
 
-                TrainTimetableEditor tte = new TrainTimetableEditor(info, train);
+                SingleTimetableEditForm tte = new SingleTimetableEditForm(info, train);
                 tte.ShowModal(this);
             }
             else if (message)

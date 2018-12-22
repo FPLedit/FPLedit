@@ -1,14 +1,14 @@
-﻿<e:TimetableEditForm
+﻿<e:LineTimetableEditForm
   xmlns="clr-namespace:Eto.Forms;assembly=Eto"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.Editor.Linear;assembly=FPLedit"
   xmlns:sys="clr-namespace:System;assembly=mscorlib"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
   Title="Fahrplan bearbeiten" ClientSize="870,690" Resizable="true">
-  <e:TimetableEditControl x:Name="editor">
-    <e:TimetableEditControl.ActionButtons>
+  <e:LineTimetableEditControl x:Name="editor">
+    <e:LineTimetableEditControl.ActionButtons>
       <Button x:Name="cancelButton" Text="Abbrechen" Click="cancelButton_Click"></Button>
       <Button x:Name="closeButton" Text="Schließen" Click="closeButton_Click"></Button>
-    </e:TimetableEditControl.ActionButtons>
-  </e:TimetableEditControl>
-</e:TimetableEditForm>
+    </e:LineTimetableEditControl.ActionButtons>
+  </e:LineTimetableEditControl>
+</e:LineTimetableEditForm>

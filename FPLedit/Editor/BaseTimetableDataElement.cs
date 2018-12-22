@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace FPLedit.Editor
 {
-    internal abstract class TimetableDataElement
+    internal abstract class BaseTimetableDataElement
     {
         public Train Train { get; set; }
 

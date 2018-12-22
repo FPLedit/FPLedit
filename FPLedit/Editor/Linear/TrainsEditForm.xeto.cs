@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Editor.Linear
 {
-    internal class TrainsEditForm : TrainsEditorBase
+    internal class TrainsEditForm : BaseTrainsEditor
     {
         private IInfo info;
         private Timetable tt;

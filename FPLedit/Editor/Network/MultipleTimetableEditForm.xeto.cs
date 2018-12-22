@@ -7,16 +7,16 @@ using FPLedit.Shared.UI;
 
 namespace FPLedit.Editor.Network
 {
-    internal class MultipleTimetableEditor : Dialog<DialogResult>
+    internal class MultipleTimetableEditForm : Dialog<DialogResult>
     {
 #pragma warning disable CS0649
         private DropDown trainDropDown;
-        private TrainTimetableControl editor;
+        private SingleTimetableEditControl editor;
 #pragma warning restore CS0649
 
         private IInfo info;
 
-        private MultipleTimetableEditor()
+        private MultipleTimetableEditForm()
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
@@ -30,7 +30,7 @@ namespace FPLedit.Editor.Network
                                       // Important: After AddCloseHandler, otherwise it will destroy Timetable instance in mpmode!
         }
 
-        public MultipleTimetableEditor(IInfo info) : this()
+        public MultipleTimetableEditForm(IInfo info) : this()
         {
             this.info = info;
             info.BackupTimetable();

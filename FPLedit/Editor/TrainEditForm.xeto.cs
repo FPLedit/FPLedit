@@ -16,7 +16,7 @@ namespace FPLedit.Editor
         private CheckBox mondayCheckBox, tuesdayCheckBox, wednesdayCheckBox, thursdayCheckBox, fridayCheckBox, saturdayCheckBox, sundayCheckBox;
         private ComboBox locomotiveComboBox, mbrComboBox, lastComboBox;
         private Button wShort, wSaShort, sShort, aShort, zShort;
-        private Network.TrainTimetableControl editor;
+        private Network.SingleTimetableEditControl editor;
 #pragma warning restore CS0649
         private NotEmptyValidator nameValidator;
 

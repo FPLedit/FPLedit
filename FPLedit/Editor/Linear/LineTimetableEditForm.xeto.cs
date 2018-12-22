@@ -1,23 +1,31 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
+using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using FPLedit.Shared.UI;
 
-namespace FPLedit.Editor.Network
+namespace FPLedit.Editor.Linear
 {
-    internal class TrainTimetableEditor : Dialog<DialogResult>
+    internal class LineTimetableEditForm : Dialog<DialogResult>
     {
+        private const TrainDirection TOP_DIRECTION = TrainDirection.ti;
+        private const TrainDirection BOTTOM_DIRECTION = TrainDirection.ta;
+
 #pragma warning disable CS0649
-        private TrainTimetableControl editor;
+        private LineTimetableEditControl editor;
 #pragma warning restore CS0649
 
         private IInfo info;
 
-        private TrainTimetableEditor()
+        public LineTimetableEditForm(IInfo info)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
+
+            this.info = info;
+            info.BackupTimetable();
+
+            editor.Initialize(info.Timetable);
 
             KeyDown += editor.HandleControlKeystroke;
 
@@ -25,17 +33,8 @@ namespace FPLedit.Editor.Network
             this.AddSizeStateHandler();
 
             if (!Platform.IsWpf)
-                DefaultButton = null; // Bugfix, Window closes on enter [Enter]
+                DefaultButton = null; // Bugfix, Window closes on [Enter]
                                       // Important: After AddCloseHandler, otherwise it will destroy Timetable instance in mpmode!
-        }
-
-        public TrainTimetableEditor(IInfo info, Train t) : this()
-        {
-            this.info = info;
-            info.BackupTimetable();
-
-            editor.Initialize(info.Timetable, t);
-            Title = Title.Replace("{train}", t.TName);
         }
 
         #region Events

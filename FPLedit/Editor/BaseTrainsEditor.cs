@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Editor
 {
-    internal class TrainsEditorBase : Dialog<DialogResult>
+    internal class BaseTrainsEditor : Dialog<DialogResult>
     {
         private Timetable tt;
-        public TrainsEditorBase(Timetable tt)
+        public BaseTrainsEditor(Timetable tt)
         {
             this.tt = tt;
         }

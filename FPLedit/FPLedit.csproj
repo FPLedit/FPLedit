@@ -86,37 +86,37 @@
     <Compile Include="Editor\Filters\FilterForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Editor\Linear\TimetableEditControl.xeto.cs">
+    <Compile Include="Editor\Linear\LineTimetableEditControl.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Editor\Linear\TrainsEditForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Editor\Linear\TimetableEditForm.xeto.cs">
+    <Compile Include="Editor\Linear\LineTimetableEditForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Editor\DesignableForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Editor\Network\TrainTimetableControl.xeto.cs">
+    <Compile Include="Editor\Network\SingleTimetableEditControl.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Editor\Network\MultipleTimetableEditor.xeto.cs">
+    <Compile Include="Editor\Network\MultipleTimetableEditForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Editor\TimetableCellRenderProperties.cs" />
-    <Compile Include="Editor\TimetableDataElement.cs" />
-    <Compile Include="Editor\TimetableEditorBase.cs">
+    <Compile Include="Editor\BaseTimetableDataElement.cs" />
+    <Compile Include="Editor\BaseTimetableEditControl.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Editor\TrainEditHelper.cs" />
-    <Compile Include="Editor\TrainsEditorBase.cs">
+    <Compile Include="Editor\BaseTrainsEditor.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Editor\ZlmEditForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Editor\Network\TrainTimetableEditor.xeto.cs">
+    <Compile Include="Editor\Network\SingleTimetableEditForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Editor\TrainCopyDialog.xeto.cs">
@@ -225,14 +225,14 @@
     <EmbeddedResource Include="Editor\TrainCopyDialog.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Editor\Network\TrainTimetableEditor.xeto">
+    <EmbeddedResource Include="Editor\Network\SingleTimetableEditForm.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Editor\ZlmEditForm.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Editor\Linear\TrainsEditForm.xeto" />
-    <EmbeddedResource Include="Editor\Linear\TimetableEditForm.xeto">
+    <EmbeddedResource Include="Editor\Linear\LineTimetableEditForm.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Editor\Filters\FilterForm.xeto" />
@@ -242,13 +242,13 @@
     <EmbeddedResource Include="Editor\DesignableForm.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Editor\Linear\TimetableEditControl.xeto">
+    <EmbeddedResource Include="Editor\Linear\LineTimetableEditControl.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Editor\Network\TrainTimetableControl.xeto">
+    <EmbeddedResource Include="Editor\Network\SingleTimetableEditControl.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Editor\Network\MultipleTimetableEditor.xeto">
+    <EmbeddedResource Include="Editor\Network\MultipleTimetableEditForm.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="fpledit.conf">

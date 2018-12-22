@@ -1,4 +1,4 @@
-﻿<e:TrainTimetableControl
+﻿<e:SingleTimetableEditControl
   xmlns="clr-namespace:Eto.Forms;assembly=Eto"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.Editor.Network;assembly=FPLedit"
@@ -23,4 +23,4 @@
       </TableLayout>
     </TableRow>
   </TableLayout>
-</e:TrainTimetableControl>
+</e:SingleTimetableEditControl>

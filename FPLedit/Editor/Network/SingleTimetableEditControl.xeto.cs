@@ -10,7 +10,7 @@ using System.Collections.ObjectModel;
 
 namespace FPLedit.Editor.Network
 {
-    internal class TrainTimetableControl : TimetableEditorBase
+    internal class SingleTimetableEditControl : BaseTimetableEditControl
     {
 #pragma warning disable CS0649
         private GridView dataGridView;
@@ -28,7 +28,7 @@ namespace FPLedit.Editor.Network
         private ObservableCollection<Control> actionButtons = new ObservableCollection<Control>();
         public IList<Control> ActionButtons => actionButtons;
 
-        public TrainTimetableControl()
+        public SingleTimetableEditControl()
         {
             actionButtons.CollectionChanged += (s, e) =>
             {
@@ -111,7 +111,7 @@ namespace FPLedit.Editor.Network
             return cc;
         }
 
-        protected override void CellSelected(TimetableDataElement data, Station sta, bool arrival)
+        protected override void CellSelected(BaseTimetableDataElement data, Station sta, bool arrival)
         {
             trapeztafelToggle.Checked = data.ArrDeps[sta].TrapeztafelHalt;
 
@@ -119,7 +119,7 @@ namespace FPLedit.Editor.Network
             zlmButton.Enabled = arrival ^ data.IsFirst(sta);
         }
 
-        private class DataElement : TimetableDataElement
+        private class DataElement : BaseTimetableDataElement
         {
             public Station Station { get; set; }
 
@@ -145,7 +145,7 @@ namespace FPLedit.Editor.Network
             view.DataStore = path.Select(sta => new DataElement(train, sta, train.GetArrDep(sta))).ToList();
         }
 
-        protected override Point GetNextEditingPosition(TimetableDataElement data, GridView view, KeyEventArgs e)
+        protected override Point GetNextEditingPosition(BaseTimetableDataElement data, GridView view, KeyEventArgs e)
         {
             var arrival = data.IsSelectedArrival;
             var idx = arrival ? 2 : 1;

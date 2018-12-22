@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Editor
 {
-    internal abstract class TimetableEditorBase : Panel
+    internal abstract class BaseTimetableEditControl : Panel
     {
         private TimeNormalizer normalizer = new TimeNormalizer();
 
@@ -27,7 +27,7 @@ namespace FPLedit.Editor
             mpmode = !Eto.Platform.Instance.SupportedFeatures.HasFlag(Eto.PlatformFeatures.CustomCellSupportsControlView);
         }
 
-        protected void FormatCell(TimetableDataElement data, Station sta, bool arrival, TextBox tb)
+        protected void FormatCell(BaseTimetableDataElement data, Station sta, bool arrival, TextBox tb)
         {
             string val = tb.Text;
             if (val == null || val == "")
@@ -53,7 +53,7 @@ namespace FPLedit.Editor
             if (view.SelectedRow == -1)
                 return;
 
-            var data = (TimetableDataElement)view.SelectedItem;
+            var data = (BaseTimetableDataElement)view.SelectedItem;
 
             // Trapeztafelhalt darf nur bei Ankünften sein
             if (!data.IsSelectedArrival)
@@ -73,7 +73,7 @@ namespace FPLedit.Editor
             if (view.SelectedRow == -1)
                 return;
 
-            var data = (TimetableDataElement)view.SelectedItem;
+            var data = (BaseTimetableDataElement)view.SelectedItem;
             var sta = data.GetStation();
 
             // Zuglaufmeldungen dürfen auch bei Abfahrt am ersten Bahnhof sein
@@ -101,7 +101,7 @@ namespace FPLedit.Editor
 
                 e.Handled = true;
 
-                var data = (TimetableDataElement)view.SelectedItem;
+                var data = (BaseTimetableDataElement)view.SelectedItem;
                 if (data == null || data.GetStation() == null || data.SelectedTextBox == null)
                     return;
                 FormatCell(data, data.GetStation(), data.IsSelectedArrival, data.SelectedTextBox);
@@ -124,7 +124,7 @@ namespace FPLedit.Editor
                     return;
 
                 e.Handled = true;
-                var data = (TimetableDataElement)view.SelectedItem;
+                var data = (BaseTimetableDataElement)view.SelectedItem;
                 if (data == null || data.GetStation() == null || data.SelectedTextBox == null)
                     return;
                 FormatCell(data, data.GetStation(), data.IsSelectedArrival, data.SelectedTextBox);
@@ -140,7 +140,7 @@ namespace FPLedit.Editor
                 if (!mpmode)
                     return;
 
-                var data = (TimetableDataElement)view.SelectedItem;
+                var data = (BaseTimetableDataElement)view.SelectedItem;
                 if (data == null || data.SelectedTextBox == null)
                     return;
                 var tb = data.SelectedTextBox;
@@ -172,9 +172,9 @@ namespace FPLedit.Editor
                 HandleKeystroke(e, view);
         }
 
-        protected abstract void CellSelected(TimetableDataElement data, Station sta, bool arrival);
+        protected abstract void CellSelected(BaseTimetableDataElement data, Station sta, bool arrival);
 
-        protected abstract Point GetNextEditingPosition(TimetableDataElement data, GridView view, KeyEventArgs e);
+        protected abstract Point GetNextEditingPosition(BaseTimetableDataElement data, GridView view, KeyEventArgs e);
 
         protected abstract int FirstEditingColumn { get; }
     }

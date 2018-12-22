@@ -1,4 +1,4 @@
-﻿<e:TimetableEditControl
+﻿<e:LineTimetableEditControl
   xmlns="clr-namespace:Eto.Forms;assembly=Eto"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.Editor.Linear;assembly=FPLedit"
@@ -42,4 +42,4 @@
       </TableLayout>
     </TableRow><!-- /buttons table -->
   </TableLayout><!-- /main table-->
-</e:TimetableEditControl>
+</e:LineTimetableEditControl>
