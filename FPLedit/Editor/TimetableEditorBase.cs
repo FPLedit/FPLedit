@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Editor
 {
-    internal abstract class TimetableEditorBase : Dialog<DialogResult>
+    internal abstract class TimetableEditorBase : Panel
     {
         private TimeNormalizer normalizer = new TimeNormalizer();
 

@@ -18,7 +18,7 @@ namespace FPLedit.Shared.UI
             sizeManager = new SizeManager(info.Settings);
         }
 
-        public static Stream GetResource(this Window dialog, string dotFilePath)
+        public static Stream GetResource(this Control dialog, string dotFilePath)
         {
             var assembly = Assembly.GetCallingAssembly();
             return assembly.GetManifestResourceStream("FPLedit." + dotFilePath);
