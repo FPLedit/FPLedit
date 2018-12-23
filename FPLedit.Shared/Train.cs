@@ -46,6 +46,15 @@ namespace FPLedit.Shared
             }
         }
 
+        public void AddLinearArrDeps()
+        {
+            if (_parent.Type == TimetableType.Network)
+                throw new Exception("Bei Netzwerk-Fahrplänen nicht möglich!");
+            foreach (var sta in _parent.Stations)
+                AddArrDep(sta, new ArrDep(), Timetable.LINEAR_ROUTE_ID);
+        }
+
+
         public List<Station> GetPath()
         {
             if (_parent.Type == TimetableType.Network)

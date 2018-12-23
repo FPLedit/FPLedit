@@ -121,8 +121,7 @@ namespace FPLedit.Editor.Network
             var tef = new TrainEditForm(info.Timetable, TrainDirection.tr);
             if (tef.ShowModal(this) == DialogResult.Ok)
             {
-                tef.Train.AddAllArrDeps(trf.Path);
-                tt.AddTrain(tef.Train);
+                tt.AddTrain(tef.Train, true);
 
                 UpdateListView(view, TrainDirection.tr);
             }

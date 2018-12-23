@@ -250,8 +250,7 @@ namespace FPLedit.Shared
             tra.Id = ++nextTraId;
 
             if (!hasArDeps && Type == TimetableType.Linear)
-                foreach (var sta in Stations)
-                    tra.AddArrDep(sta, new ArrDep(), LINEAR_ROUTE_ID);
+                tra.AddLinearArrDeps();
 
             tra._parent = this;
             trains.Add(tra);
@@ -316,6 +315,7 @@ namespace FPLedit.Shared
         #region Hilfsmethoden für Umläufe
         public void AddTransition(Train first, Train next)
         {
+            if (next == null) return;
             var transition = new Transition(this)
             {
                 First = first.Id,

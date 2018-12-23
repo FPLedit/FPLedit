@@ -53,7 +53,7 @@ namespace FPLedit.Editor
             TrainEditForm tef = new TrainEditForm(tt, direction);
             if (tef.ShowModal(this) == DialogResult.Ok)
             {
-                tt.AddTrain(tef.Train);
+                tt.AddTrain(tef.Train, true);
 
                 UpdateListView(view, direction);
             }

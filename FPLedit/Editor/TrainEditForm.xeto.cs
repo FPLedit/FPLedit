@@ -109,9 +109,20 @@ namespace FPLedit.Editor
             transitionDropDown.SelectedValue = tt.GetTransition(train);
         }
 
-        public TrainEditForm(Timetable tt, TrainDirection direction) : this(tt)
+        public TrainEditForm(Timetable tt, TrainDirection direction, List<Station> path = null) : this(tt)
         {
             Train = new Train(direction, tt);
+
+            if (path != null)
+                Train.AddAllArrDeps(path);
+            if (tt.Type == TimetableType.Linear)
+                Train.AddLinearArrDeps();
+
+            editor.Initialize(Train._parent, Train);
+
+            transitionDropDown.DataStore = tt.Trains.Where(t => t != Train);
+            transitionDropDown.ItemTextBinding = Binding.Property<Train, string>(t => t.TName);
+            transitionDropDown.SelectedValue = tt.GetTransition(Train);
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -137,6 +148,8 @@ namespace FPLedit.Editor
             Train.Last = lastComboBox.Text;
             Train.Comment = commentTextBox.Text;
             Train.Days = daysBoxes.Select(b => b.Checked.Value).ToArray();
+
+            editor.ApplyChanges();
 
             tt.SetTransition(Train, (Train)transitionDropDown.SelectedValue);
 
