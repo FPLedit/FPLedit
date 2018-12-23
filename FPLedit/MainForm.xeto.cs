@@ -480,6 +480,7 @@ namespace FPLedit
         {
             if (undo.CanGoBack)
                 Timetable = undo.Undo();
+            fileState.Saved = false;
         }
 
         public void StageUndoStep()
