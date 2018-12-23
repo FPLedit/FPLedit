@@ -5,11 +5,11 @@
   xmlns:n="clr-namespace:FPLedit.Editor.Network;assembly=FPLedit"
   xmlns:sys="clr-namespace:System;assembly=mscorlib"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
-  Title="Neuen Zug erstellen" Resizable="false">
+  Title="Neuen Zug erstellen" Resizable="true">
   <TableLayout Padding="10,10,10,10" Spacing="5,5">
     <TableRow>
-      <TableCell>
-        <StackLayout>
+      <TableCell><!-- left column -->
+        <StackLayout HorizontalContentAlignment="Stretch">
           <TableLayout>
             <TableRow>
               <TableLayout Spacing="5,5">
@@ -43,7 +43,7 @@
                 </TableLayout>
               </TableRow>
             </TableLayout>
-          </GroupBox>
+          </GroupBox><!-- /group Erweiterte Eigenschaften (für Bfpl) -->
           <GroupBox Text="Verkehrstage">
             <TableLayout Spacing="5,5" Padding="10,10,10,10">
               <TableRow>
@@ -77,16 +77,25 @@
                 </TableLayout>
               </TableRow>
             </TableLayout>
-          </GroupBox>
+          </GroupBox><!-- /group Verkehrstage -->
+          <GroupBox Text="Folgezug">
+            <TableLayout Spacing="5,5" Padding="10,10,10,10">
+              <TableRow>
+                <TableCell ScaleWidth="true">
+                  <DropDown x:Name="transitionDropDown" />
+                </TableCell>
+              </TableRow>
+            </TableLayout>
+          </GroupBox><!-- /group Folgezug -->
         </StackLayout>
-      </TableCell>
-      <TableCell>
+      </TableCell><!-- /left column -->
+      <TableCell><!-- right column -->
         <GroupBox Text="Fahrplan">
-          <n:TrainTimetableControl x:Name="editor" />
+          <n:SingleTimetableEditControl x:Name="editor" />
         </GroupBox>
-      </TableCell>
+      </TableCell><!-- /right column -->
     </TableRow>
-    <TableRow>
+    <TableRow><!-- bottom actions -->
       <TableCell />
       <TableLayout Spacing="5,5" Padding="10,10,10,10">
         <TableRow>
@@ -95,6 +104,6 @@
           <Button x:Name="closeButton" Text="Schließen" Click="closeButton_Click"></Button>
         </TableRow>
       </TableLayout>
-    </TableRow>
+    </TableRow><!-- /bottom actions -->
   </TableLayout>
 </e:TrainEditForm>

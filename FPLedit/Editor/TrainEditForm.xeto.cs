@@ -17,6 +17,7 @@ namespace FPLedit.Editor
         private ComboBox locomotiveComboBox, mbrComboBox, lastComboBox;
         private Button wShort, wSaShort, sShort, aShort, zShort;
         private Network.SingleTimetableEditControl editor;
+        private DropDown transitionDropDown;
 #pragma warning restore CS0649
         private NotEmptyValidator nameValidator;
 
@@ -26,6 +27,7 @@ namespace FPLedit.Editor
 
         private CheckBox[] daysBoxes;
         private ToggleButton[] shortcutsToggle;
+        private Timetable tt;
 
         private bool[] wShortcut = DaysHelper.ParseDays("1111110");
         private bool[] wExclSaShortcut = DaysHelper.ParseDays("1111100");
@@ -36,6 +38,8 @@ namespace FPLedit.Editor
         private TrainEditForm(Timetable tt)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
+
+            this.tt = tt;
 
             nameValidator = new NotEmptyValidator(nameTextBox);
             nameValidator.ErrorMessage = "Bitte einen Zugnamen eingeben!";
@@ -99,6 +103,10 @@ namespace FPLedit.Editor
             Title = "Zug bearbeiten";
 
             editor.Initialize(train._parent, train);
+
+            transitionDropDown.DataStore = tt.Trains.Where(t => t != train);
+            transitionDropDown.ItemTextBinding = Binding.Property<Train, string>(t => t.TName);
+            transitionDropDown.SelectedValue = tt.GetTransition(train);
         }
 
         public TrainEditForm(Timetable tt, TrainDirection direction) : this(tt)
@@ -129,6 +137,8 @@ namespace FPLedit.Editor
             Train.Last = lastComboBox.Text;
             Train.Comment = commentTextBox.Text;
             Train.Days = daysBoxes.Select(b => b.Checked.Value).ToArray();
+
+            tt.SetTransition(Train, (Train)transitionDropDown.SelectedValue);
 
             Close(DialogResult.Ok);
         }

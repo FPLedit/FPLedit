@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -36,6 +35,9 @@ namespace FPLedit.Shared
         public List<Train> Trains => trains;
 
         public List<Transition> Transitions => transitions;
+
+        [field: NonSerialized]
+        public string UpgradeMessage { get; private set; }
 
         public Timetable() : this(TimetableType.Linear)
         {
@@ -118,11 +120,32 @@ namespace FPLedit.Shared
                 nextRtId = stations.SelectMany(s => s.Routes).DefaultIfEmpty().Max();
             }
 
-            // Zügen ohne IDs diese zuweisen
+            // BUG in FPLedit 1.5.3 bis 2.0.0 muss nachträglich korrigiert werden
+            // In manchen Fällen wurden Zug-Ids doppelt vergeben
+            var duplicate_tra_ids = trains.GroupBy(t => t.Id).Where(g => g.Count() > 1).Select(g => g.ToArray());
+            if (duplicate_tra_ids.Any()) // Wir haben doppelte IDs
+            {
+                if (transitions.Count > 0)
+                {
+                    var duplicate_transitions = duplicate_tra_ids.Where(dup => HasTransition(dup[0], false)).ToArray();
+                    foreach (var dup in duplicate_transitions)
+                        RemoveTransition(dup[0], false); // Transitions mit dieser Id entfernen
+
+                    if (duplicate_transitions.Any())
+                        UpgradeMessage = "Aufgrund eines Fehlers in früheren Versionen von FPLedit mussten leider einige Verknüpfungen zu Folgezügen aufgehoben werden. Die betroffenen Züge sind: "
+                            + string.Join(", ", duplicate_transitions.SelectMany(dup => dup.Select(t => t.TName)));
+                }
+
+                // Korrektur ohne Side-Effects möglich, alle doppelten Zug-Ids werden neu vergeben
+                foreach (var dup in duplicate_tra_ids)
+                    dup.Skip(1).All((t) => { t.Id = ++nextTraId; return true; });
+            }
+
+            // Zügen ohne IDs diese neu zuweisen
             foreach (var train in trains)
             {
                 if (train.Id == -1)
-                    train.Id = nextTraId++;
+                    train.Id = ++nextTraId;
             }
         }
 
@@ -224,7 +247,7 @@ namespace FPLedit.Shared
 
         public void AddTrain(Train tra, bool hasArDeps = false)
         {
-            tra.Id = nextTraId++;
+            tra.Id = ++nextTraId;
 
             if (!hasArDeps && Type == TimetableType.Linear)
                 foreach (var sta in Stations)
@@ -299,18 +322,24 @@ namespace FPLedit.Shared
                 Next = next.Id
             };
             trElm.Children.Add(transition.XMLEntity);
+            transitions.Add(transition);
         }
 
         public void SetTransition(Train first, Train newNext)
         {
             var trans = transitions.Where(t => t.First == first.Id);
 
-            if (trans.Count() == 0)
+            if (trans.Count() == 0 && newNext != null)
                 AddTransition(first, newNext);
-            if (trans.Count() > 1)
+            else if (trans.Count() > 1)
                 throw new Exception("Mehr als eine Transition mit angegebenem ersten Zug gefunden!");
-
-            trans.First().Next = newNext.Id;
+            else if (trans.Count() == 1)
+            {
+                if (newNext != null)
+                    trans.First().Next = newNext.Id;
+                else
+                    RemoveTransition(first);
+            }
         }
 
         public Train GetTransition(Train first)
@@ -334,13 +363,14 @@ namespace FPLedit.Shared
 
         public void RemoveTransition(Train tra, bool onlyAsFirst = true)
         {
-            var trans = transitions.Where(t => t.First == tra.Id || (onlyAsFirst && t.Next == tra.Id));
+            var trans = transitions.Where(t => t.First == tra.Id || (!onlyAsFirst && t.Next == tra.Id));
             foreach (var transition in trans)
-            {
                 trElm.Children.Remove(transition.XMLEntity);
-                transitions.Remove(transition);
-            }
+            transitions.RemoveAll(t => trans.Contains(t));
         }
+
+        public bool HasTransition(Train tra, bool onlyAsFirst = true)
+            => transitions.Any(t => t.First == tra.Id || (!onlyAsFirst && t.Next == tra.Id));
         #endregion
 
         [DebuggerStepThrough]

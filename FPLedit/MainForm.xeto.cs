@@ -308,6 +308,8 @@ namespace FPLedit
                 Logger.Error("Fehler beim Öffnen der Datei!");
             else
                 Logger.Info("Datei erfolgeich geöffnet!");
+            if (Timetable?.UpgradeMessage != null)
+                Logger.Warning(Timetable.UpgradeMessage);
             fileState.Opened = Timetable != null;
             fileState.Saved = true;
             fileState.FileName = Timetable != null ? filename : null;
