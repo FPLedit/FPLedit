@@ -176,6 +176,8 @@ namespace FPLedit.Editor.Linear
             public override Station GetStation() => SelectedStation;
         }
 
+        private string GetTransition(Train t) => tt.GetTransition(t)?.TName ?? "";
+
         private void InitializeGridView(GridView view, TrainDirection dir)
         {
             var stations = tt.GetStationsOrderedByDirection(dir);
@@ -188,6 +190,7 @@ namespace FPLedit.Editor.Linear
                 if (sta != stations.Last())
                     view.AddColumn(GetCell(t => t.Departure, sta, false, view), sta.SName + " ab");
             }
+            view.AddColumn<DataElement>(t => GetTransition(t.Train), "Folgezug");
 
             var l = tt.Trains.Where(t => t.Direction == dir).Select(tra => new DataElement()
             {
