@@ -147,6 +147,16 @@ namespace FPLedit.Shared
                 if (train.Id == -1)
                     train.Id = ++nextTraId;
             }
+
+            // Clean up invalid transitions
+            var tids = trains.Select(t => t.Id).ToArray();
+            foreach (var tra in Transitions.ToArray())
+            {
+                if (!tids.Contains(tra.First))
+                    RemoveTransition(tra.First);
+                else if (!tids.Contains(tra.Next))
+                    RemoveTransition(tra.Next, false);
+            }
         }
 
         public Timetable(XMLEntity en) : this(en, TimetableType.Linear) // Root without parent
@@ -342,9 +352,11 @@ namespace FPLedit.Shared
             }
         }
 
-        public Train GetTransition(Train first)
+        public Train GetTransition(Train first) => GetTransition(first.Id);
+
+        public Train GetTransition(int tid)
         {
-            var trans = transitions.Where(t => t.First == first.Id);
+            var trans = transitions.Where(t => t.First == tid);
 
             if (trans.Count() == 0)
                 return null;
@@ -361,9 +373,11 @@ namespace FPLedit.Shared
                 yield return tra;
         }
 
-        public void RemoveTransition(Train tra, bool onlyAsFirst = true)
+        public void RemoveTransition(Train tra, bool onlyAsFirst = true) => RemoveTransition(tra.Id, onlyAsFirst);
+
+        public void RemoveTransition(int tid, bool onlyAsFirst = true)
         {
-            var trans = transitions.Where(t => t.First == tra.Id || (!onlyAsFirst && t.Next == tra.Id));
+            var trans = transitions.Where(t => t.First == tid || (!onlyAsFirst && t.Next == tid));
             foreach (var transition in trans)
                 trElm.Children.Remove(transition.XMLEntity);
             transitions.RemoveAll(t => trans.Contains(t));
