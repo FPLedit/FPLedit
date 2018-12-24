@@ -28,6 +28,8 @@ namespace FPLedit.Editor
             info.ExtensionsLoaded += Info_ExtensionsLoaded;
 
             info.Register<IExport>(new FPLedit.NonDefaultFiletypes.CleanedXMLExport());
+            info.Register<ITimetableCheck>(new FPLedit.TimetableChecks.TransitionsCheck());
+            info.Register<ITimetableCheck>(new FPLedit.TimetableChecks.DayOverflowCheck());
 
             if (Environment.OSVersion.Platform != PlatformID.Win32NT || info.Settings.Get<bool>("mp-compat.route-edit-button"))
                 info.Register<IRouteAction>(new Network.EditRouteAction());

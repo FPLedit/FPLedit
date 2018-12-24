@@ -182,6 +182,9 @@
     <Compile Include="Templating\TemplateHost.cs" />
     <Compile Include="Templating\TemplateManager.cs" />
     <Compile Include="Templating\TemplateSandbox.cs" />
+    <Compile Include="TimetableChecks\DayOverflowCheck.cs" />
+    <Compile Include="TimetableChecks\TimetableCheckRunner.cs" />
+    <Compile Include="TimetableChecks\TransitionsCheck.cs" />
     <Compile Include="UndoManager.cs" />
     <Compile Include="UpdateManager.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">

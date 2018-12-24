@@ -56,6 +56,7 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="ArrDep.cs" />
+    <Compile Include="Ext\ITimetableCheck.cs" />
     <Compile Include="Rendering\ColorCollection.cs" />
     <Compile Include="Rendering\ColorFormatter.cs" />
     <Compile Include="Helpers\DaysHelper.cs" />

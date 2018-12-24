@@ -159,6 +159,8 @@ namespace FPLedit
 
             Shown += LoadStartFile;
             Shown += (s, e) => update.AutoUpdateCheck(Logger);
+
+            new TimetableChecks.TimetableCheckRunner(this); // CheckRunner initialisieren
         }
 
         private void LoadStartFile(object sender, EventArgs e)
