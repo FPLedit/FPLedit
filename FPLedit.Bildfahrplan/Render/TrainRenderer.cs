@@ -85,8 +85,20 @@ namespace FPLedit.Bildfahrplan.Render
             if (hadFirstArrival)
                 points.Insert(0, points.First() - new Size(50, hly));
 
-            if (dir)
-                stas.Reverse();
+            // Verbindung zum Folgezug
+            var transition = tt.GetTransition(train);
+            if (transition != null && !hadLastDeparture && attrs.StationLines != StationLineStyle.None)
+            {
+                var lastStaOfFirst = GetSortedStations(train)?.LastOrDefault();
+                var firstStaOfNext = GetSortedStations(transition)?.FirstOrDefault();
+
+                if (lastStaOfFirst == firstStaOfNext)
+                {
+                    var offset = transition.GetArrDep(firstStaOfNext).Departure - train.GetArrDep(lastStaOfFirst).Arrival;
+                    points.Add(points.Last());
+                    points.Add(points.Last() + new Size(0, (int)(offset.TotalHours * attrs.HeightPerHour)));
+                }
+            }
 
             for (int i = 0; i < points.Count; i += 2)
             {
@@ -162,6 +174,17 @@ namespace FPLedit.Bildfahrplan.Render
         {
             float angle = (float)(Math.Atan2(xs.Max() - xs.Min(), ys.Max() - ys.Min()) * (180d / Math.PI));
             return GetTrainDirection(train) ? 90 - angle : angle - 90;
+        }
+
+        private IEnumerable<Station> GetSortedStations(Train train)
+        {
+            var path = train.GetPath();
+            var arrdeps = train.GetArrDeps();
+            foreach (var sta in path)
+            {
+                if (arrdeps[sta].HasMinOneTimeSet)
+                    yield return sta;
+            }
         }
     }
 }
