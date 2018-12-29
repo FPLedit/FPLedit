@@ -19,11 +19,13 @@
               </TableRow>
             </TableLayout>
           </TableCell>
-          <StackLayout Spacing="5">
+          <StackLayout Spacing="5" HorizontalContentAlignment="Stretch">
             <Button Click="topNewButton_Click">Neuer Zug</Button>
             <Button Click="topEditButton_Click">Zug bearbeiten</Button>
             <Button Click="topDeleteButton_Click">Zug löschen</Button>
             <Button Click="topCopyButton_Click">Zug kopieren/verschieben</Button>
+            <!-- Spacer: -->
+            <Label />
             <Button Click="topSortButton_Click">Züge sortieren</Button>
           </StackLayout>
         </TableRow>
@@ -38,11 +40,13 @@
               </TableRow>
             </TableLayout>
           </TableCell>
-          <StackLayout Spacing="5">
+          <StackLayout Spacing="5" HorizontalContentAlignment="Stretch">
             <Button Click="bottomNewButton_Click">Neuer Zug</Button>
             <Button Click="bottomEditButton_Click">Zug bearbeiten</Button>
             <Button Click="bottomDeleteButton_Click">Zug löschen</Button>
             <Button Click="bottomCopyButton_Click">Zug kopieren/verschieben</Button>
+            <!-- Spacer: -->
+            <Label />
             <Button Click="bottomSortButton_Click">Züge sortieren</Button>
           </StackLayout>
         </TableRow>

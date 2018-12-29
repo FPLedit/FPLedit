@@ -174,7 +174,6 @@ namespace FPLedit.Editor
                 th.FillTrain(tfd.ReferenceTrain, Train, tfd.Offset);
 
                 editor.Initialize(Train._parent, Train);
-                //TODO: Tabelle aktualiseren
             }
         }
 

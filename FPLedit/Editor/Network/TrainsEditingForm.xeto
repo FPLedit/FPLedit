@@ -12,7 +12,7 @@
           <TableCell ScaleWidth="true">
             <GridView x:Name="gridView"></GridView>
           </TableCell>
-          <StackLayout Spacing="5">
+          <StackLayout Spacing="5" HorizontalContentAlignment="Stretch">
             <Button Click="topNewButton_Click">Neuer Zug</Button>
             <Button Click="topEditButton_Click">Zug bearbeiten</Button>
             <Button Click="topDeleteButton_Click">Zug löschen</Button>
