@@ -1,6 +1,7 @@
 ﻿using Eto.Drawing;
 using Eto.Forms;
 using FPLedit.Shared;
+using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,9 +12,15 @@ namespace FPLedit
 {
     public class LogControl : RichTextArea, ILog
     {
+        private ContextMenu menu;
+
         public LogControl() : base()
         {
             ReadOnly = true;
+
+            menu = new ContextMenu();
+            var btn = menu.CreateItem("Alles löschen");
+            btn.Click += (s, e) => Text = "";
         }
 
         #region Log
@@ -58,5 +65,15 @@ namespace FPLedit
             Selection = new Range<int>(last, last);
         }
         #endregion
+
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            if (e.Buttons == MouseButtons.Alternate)
+            {
+                menu.Show(this);
+                e.Handled = true;
+            }
+            base.OnMouseUp(e);
+        }
     }
 }
