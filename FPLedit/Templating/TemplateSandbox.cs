@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Security.Permissions;
 
 namespace FPLedit.Templating
 {
@@ -21,11 +22,22 @@ namespace FPLedit.Templating
             };
         }
 
-        public string CompileInAppDomain(Timetable tt, string code, string[] refs)
+        public string RunInAppDomain(Timetable tt, string assemblyPath)
         {
-            Compiler engine = new Compiler();
-            var ret = engine.RunTemplate(code, refs, tt);
-            return ret;
+            var assembly = Assembly.LoadFrom(assemblyPath);
+
+            return InvokeTemplate(assembly, tt);
+        }
+
+        private string InvokeTemplate(Assembly assembly, Timetable tt)
+        {
+            foreach (Type type in assembly.GetTypes())
+            {
+                var mi = type.GetMethod("Render", BindingFlags.Public | BindingFlags.Static);
+                if (mi != null && mi.GetParameters().Length == 1)
+                    return (string)mi.Invoke(null, new object[] { tt });
+            }
+            return null;
         }
     }
 }

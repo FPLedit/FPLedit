@@ -11,33 +11,29 @@ namespace FPLedit.Templating
 {
     internal class Compiler
     {
-#if TMPL_DEBUG
         public static string CompilerDebugTemp => Path.Combine(Path.GetTempPath(), "fpledit-compiler");
-#endif
 
-        public string RunTemplate(string code, string[] references, Timetable tt)
-        {
-            Assembly assembly = GetAssembly(code, references);
-            return InvokeTemplate(assembly, tt);
-        }
-
-        private Assembly GetAssembly(string code, string[] references)
+        public string CompileAssembly(string code, string[] references)
         {
             var wd = Environment.CurrentDirectory;
             Environment.CurrentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
             var provider = new CSharpCodeProvider();
 
+            var guid = Guid.NewGuid().ToString();
+
             var cparams = new CompilerParameters()
             {
                 CompilerOptions = "/target:library",
                 GenerateExecutable = false,
-                GenerateInMemory = true,
+                OutputAssembly = Path.Combine(CompilerDebugTemp, guid + ".dll"),
+                GenerateInMemory = false,
+                TempFiles = new TempFileCollection(CompilerDebugTemp, false),
             };
 
 #if TMPL_DEBUG
             cparams.IncludeDebugInformation = true;
-            cparams.TempFiles = new TempFileCollection(CompilerDebugTemp, true);
+            cparams.TempFiles.KeepFiles = true;
 #endif
 
             cparams.ReferencedAssemblies.Add("mscorlib.dll");
@@ -57,18 +53,7 @@ namespace FPLedit.Templating
 
             Environment.CurrentDirectory = wd;
 
-            return results.CompiledAssembly;
-        }
-
-        private string InvokeTemplate(Assembly assembly, Timetable tt)
-        {
-            foreach (Type type in assembly.GetTypes())
-            {
-                var mi = type.GetMethod("Render", BindingFlags.Public | BindingFlags.Static);
-                if (mi != null && mi.GetParameters().Length == 1)
-                    return (string)mi.Invoke(null, new object[] { tt });
-            }
-            return null;
+            return results.PathToAssembly;
         }
     }
 }

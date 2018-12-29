@@ -9,6 +9,7 @@ using System.Security;
 using System.Security.Permissions;
 using System.Security.Policy;
 using System.IO;
+using System.Reflection;
 
 namespace FPLedit.Templating
 {
@@ -185,6 +186,9 @@ namespace FPLedit.Shared.Templating
             {
                 BuildCodeCache(); // Ensure that we have code to compile
 
+                // Kompilieren in der aktuellen
+                var assemblyPath = new Compiler().CompileAssembly(_codeCache, assemblyReferences.ToArray());
+
                 AppDomainSetup adSetup = new AppDomainSetup()
                 {
                     ApplicationBase = Path.GetFullPath("sandbox" + DateTime.Now.Ticks),
@@ -192,14 +196,14 @@ namespace FPLedit.Shared.Templating
                 AppDomain domain;
 
                 if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-                    domain = CreateSandboxDomain(adSetup); // Create new, isolated AppDomain (currently only Windows)
+                    domain = CreateSandboxDomain(adSetup, assemblyPath); // Create new, isolated AppDomain (currently only Windows)
                 else
                     domain = AppDomain.CreateDomain("tmpl-run-domain", null, adSetup); // Mono: No sandboxing possible at the moment.
 
                 // Start compiler in another AppDomain
                 var sandbox = (TemplateSandbox)Activator.CreateInstanceFrom(domain, typeof(TemplateSandbox).Assembly.Location, typeof(TemplateSandbox).FullName).Unwrap();
                 sandbox.InstallResolver(AppDomain.CurrentDomain.BaseDirectory);
-                var ret = sandbox.CompileInAppDomain(tt, _codeCache, assemblyReferences.ToArray());
+                var ret = sandbox.RunInAppDomain(tt, assemblyPath);
 
                 AppDomain.Unload(domain);
 
@@ -211,17 +215,17 @@ namespace FPLedit.Shared.Templating
             }
         }
 
-        private AppDomain CreateSandboxDomain(AppDomainSetup adSetup)
+        private AppDomain CreateSandboxDomain(AppDomainSetup adSetup, string assemblyPath)
         {
             // Create permissions
             var permSet = new PermissionSet(PermissionState.None);
-            permSet.AddPermission(new SecurityPermission(SecurityPermissionFlag.Execution | SecurityPermissionFlag.UnmanagedCode));
-            permSet.AddPermission(new EnvironmentPermission(PermissionState.Unrestricted));
+            permSet.AddPermission(new SecurityPermission(SecurityPermissionFlag.Execution));
             permSet.AddPermission(new ReflectionPermission(PermissionState.Unrestricted));
 
             var fperm = new FileIOPermission(PermissionState.None);
-            fperm.AllLocalFiles = FileIOPermissionAccess.Read | FileIOPermissionAccess.PathDiscovery;
-            fperm.AddPathList(FileIOPermissionAccess.AllAccess, Path.GetTempPath());
+            fperm.AllFiles = FileIOPermissionAccess.NoAccess;
+            fperm.AddPathList(FileIOPermissionAccess.Read | FileIOPermissionAccess.PathDiscovery, Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
+            fperm.AddPathList(FileIOPermissionAccess.Read | FileIOPermissionAccess.PathDiscovery, Path.GetDirectoryName(assemblyPath));
             permSet.AddPermission(fperm);
 
             var sharedAssembly = typeof(Timetable).Assembly.Evidence.GetHostEvidence<StrongName>();
