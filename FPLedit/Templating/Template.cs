@@ -189,16 +189,11 @@ namespace FPLedit.Shared.Templating
                 // Kompilieren in der aktuellen
                 var assemblyPath = new Compiler().CompileAssembly(_codeCache, assemblyReferences.ToArray());
 
-                AppDomainSetup adSetup = new AppDomainSetup()
+                var adSetup = new AppDomainSetup()
                 {
                     ApplicationBase = Path.GetFullPath("sandbox" + DateTime.Now.Ticks),
                 };
-                AppDomain domain;
-
-                if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-                    domain = CreateSandboxDomain(adSetup, assemblyPath); // Create new, isolated AppDomain (currently only Windows)
-                else
-                    domain = AppDomain.CreateDomain("tmpl-run-domain", null, adSetup); // Mono: No sandboxing possible at the moment.
+                var domain = CreateSandboxDomain(adSetup, assemblyPath); // Create new, isolated AppDomain
 
                 // Start compiler in another AppDomain
                 var sandbox = (TemplateSandbox)Activator.CreateInstanceFrom(domain, typeof(TemplateSandbox).Assembly.Location, typeof(TemplateSandbox).FullName).Unwrap();
@@ -228,11 +223,20 @@ namespace FPLedit.Shared.Templating
             fperm.AddPathList(FileIOPermissionAccess.Read | FileIOPermissionAccess.PathDiscovery, Path.GetDirectoryName(assemblyPath));
             permSet.AddPermission(fperm);
 
-            var sharedAssembly = typeof(Timetable).Assembly.Evidence.GetHostEvidence<StrongName>();
-            var clientAssembly = typeof(Template).Assembly.Evidence.GetHostEvidence<StrongName>();
+            // StrongNames of FullTrust-Assemblies
+            var sharedAssembly = GetStrongName(typeof(Timetable));
+            var clientAssembly = GetStrongName(typeof(Template));
 
             // Create new, isolated AppDomain
             return AppDomain.CreateDomain("tmpl-run-domain", null, adSetup, permSet, sharedAssembly, clientAssembly);
+        }
+
+        private StrongName GetStrongName(Type type)
+        {
+            AssemblyName aname = type.Assembly.GetName();
+            byte[] pubkey = aname.GetPublicKey();
+            var blob = new StrongNamePublicKeyBlob(pubkey);
+            return new StrongName(blob, aname.Name, aname.Version);
         }
     }
 }

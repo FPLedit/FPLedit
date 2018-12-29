@@ -109,7 +109,7 @@ namespace FPLedit
         {
             // Beispiele für fehlende Funktionen
             if (Environment.OSVersion.Platform != PlatformID.Win32NT && !settings.Get<bool>("mp-compat.disable-startup-warn"))
-                log.Warning("Sie verwenden FPLedit nicht auf Windows. Grundsätzlich ist FPLedit zwar mit allen Systemen kompatibel, auf denen Mono läuft, hat aber Einschränkungen in den Funktionen und möglichen Sicherheitsvorkehrungen und ist möglicherweise nicht genauso gut getestet.");
+                log.Warning("Sie verwenden FPLedit nicht auf Windows. Grundsätzlich ist FPLedit zwar mit allen Systemen kompatibel, auf denen Mono läuft, hat aber Einschränkungen in den Funktionen und ist möglicherweise nicht genauso gut getestet.");
 
             if (settings.Get("updater.auto", "") == "")
             {
