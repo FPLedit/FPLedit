@@ -23,9 +23,9 @@ namespace FPLedit.Templating
 #if TMPL_DEBUG
             try
             {
-                if (Directory.Exists(Compiler.CompilerDebugTemp))
-                    Directory.Delete(Compiler.CompilerDebugTemp, true);
-                Directory.CreateDirectory(Compiler.CompilerDebugTemp);
+                if (Directory.Exists(TemplateCompiler.CompilerTemp))
+                    Directory.Delete(TemplateCompiler.CompilerTemp, true);
+                Directory.CreateDirectory(TemplateCompiler.CompilerTemp);
             }
             catch { }
 #endif

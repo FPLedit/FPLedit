@@ -9,9 +9,9 @@ using System.Reflection;
 
 namespace FPLedit.Templating
 {
-    internal class Compiler
+    internal class TemplateCompiler
     {
-        public static string CompilerDebugTemp => Path.Combine(Path.GetTempPath(), "fpledit-compiler");
+        public static string CompilerTemp => Path.Combine(Path.GetTempPath(), "fpledit-compiler");
 
         public string CompileAssembly(string code, string[] references)
         {
@@ -20,15 +20,15 @@ namespace FPLedit.Templating
 
             var provider = new CSharpCodeProvider();
 
-            var guid = Guid.NewGuid().ToString();
+            var assemblyFilename = Guid.NewGuid().ToString() + ".dll";
 
             var cparams = new CompilerParameters()
             {
                 CompilerOptions = "/target:library",
                 GenerateExecutable = false,
-                OutputAssembly = Path.Combine(CompilerDebugTemp, guid + ".dll"),
+                OutputAssembly = Path.Combine(CompilerTemp, assemblyFilename),
                 GenerateInMemory = false,
-                TempFiles = new TempFileCollection(CompilerDebugTemp, false),
+                TempFiles = new TempFileCollection(CompilerTemp, false),
             };
 
 #if TMPL_DEBUG

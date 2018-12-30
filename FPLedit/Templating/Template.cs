@@ -5,18 +5,13 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using FPLedit.Shared.Templating;
 using FPLedit.Shared;
-using System.Security;
-using System.Security.Permissions;
-using System.Security.Policy;
 using System.IO;
-using System.Reflection;
 
 namespace FPLedit.Templating
 {
     // Based on: https://www.codeproject.com/Articles/15728/Write-your-own-Code-Generator-or-Template-Engine-i
     internal class Template : ITemplate
     {
-        private string code;
         private List<string> usings;
         private List<string> assemblyReferences;
         private string functions;
@@ -24,7 +19,7 @@ namespace FPLedit.Templating
         public string TemplateType { get; private set; }
         public string TemplateName { get; private set; }
         public string Identifier => throw new NotSupportedException();
-        public string TemplateSource => code;
+        public string TemplateSource { get; private set; }
 
         private string _codeCache;
 
@@ -32,7 +27,7 @@ namespace FPLedit.Templating
 
         public Template(string code)
         {
-            this.code = code + "<##>";
+            TemplateSource = code + "<##>";
             usings = new List<string>() { "System", "System.Collections.Generic", "System.Text", "System.Linq", "FPLedit.Shared", "FPLedit.Shared.Helpers" };
             assemblyReferences = new List<string>();
 
@@ -78,7 +73,7 @@ namespace FPLedit.Shared.Templating
 
         private string GetMethodBody()
         {
-            string mainCode = code;
+            string mainCode = TemplateSource;
             var ro = RegexOptions.Singleline | RegexOptions.IgnoreCase;
             var rom = RegexOptions.Multiline | RegexOptions.IgnoreCase;
 
@@ -185,58 +180,12 @@ namespace FPLedit.Shared.Templating
             try
             {
                 BuildCodeCache(); // Ensure that we have code to compile
-
-                // Kompilieren in der aktuellen
-                var assemblyPath = new Compiler().CompileAssembly(_codeCache, assemblyReferences.ToArray());
-
-                var adSetup = new AppDomainSetup()
-                {
-                    ApplicationBase = Path.GetFullPath("sandbox" + DateTime.Now.Ticks),
-                };
-                var domain = CreateSandboxDomain(adSetup, assemblyPath); // Create new, isolated AppDomain
-
-                // Start compiler in another AppDomain
-                var sandbox = (TemplateSandbox)Activator.CreateInstanceFrom(domain, typeof(TemplateSandbox).Assembly.Location, typeof(TemplateSandbox).FullName).Unwrap();
-                sandbox.InstallResolver(AppDomain.CurrentDomain.BaseDirectory);
-                var ret = sandbox.RunInAppDomain(tt, assemblyPath);
-
-                AppDomain.Unload(domain);
-
-                return ret;
+                return new TemplateSandbox().GenerateResult(_codeCache, assemblyReferences.ToArray(), tt);
             }
             catch
             {
                 throw;
             }
-        }
-
-        private AppDomain CreateSandboxDomain(AppDomainSetup adSetup, string assemblyPath)
-        {
-            // Create permissions
-            var permSet = new PermissionSet(PermissionState.None);
-            permSet.AddPermission(new SecurityPermission(SecurityPermissionFlag.Execution));
-            permSet.AddPermission(new ReflectionPermission(PermissionState.Unrestricted));
-
-            var fperm = new FileIOPermission(PermissionState.None);
-            fperm.AllFiles = FileIOPermissionAccess.NoAccess;
-            fperm.AddPathList(FileIOPermissionAccess.Read | FileIOPermissionAccess.PathDiscovery, Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
-            fperm.AddPathList(FileIOPermissionAccess.Read | FileIOPermissionAccess.PathDiscovery, Path.GetDirectoryName(assemblyPath));
-            permSet.AddPermission(fperm);
-
-            // StrongNames of FullTrust-Assemblies
-            var sharedAssembly = GetStrongName(typeof(Timetable));
-            var clientAssembly = GetStrongName(typeof(Template));
-
-            // Create new, isolated AppDomain
-            return AppDomain.CreateDomain("tmpl-run-domain", null, adSetup, permSet, sharedAssembly, clientAssembly);
-        }
-
-        private StrongName GetStrongName(Type type)
-        {
-            AssemblyName aname = type.Assembly.GetName();
-            byte[] pubkey = aname.GetPublicKey();
-            var blob = new StrongNamePublicKeyBlob(pubkey);
-            return new StrongName(blob, aname.Name, aname.Version);
         }
     }
 }

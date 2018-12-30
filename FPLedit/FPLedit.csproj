@@ -183,11 +183,12 @@
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Templating\ArgsParser.cs" />
-    <Compile Include="Templating\Compiler.cs" />
+    <Compile Include="Templating\TemplateCompiler.cs" />
     <Compile Include="Templating\Template.cs" />
     <Compile Include="Templating\TemplateHost.cs" />
     <Compile Include="Templating\TemplateManager.cs" />
     <Compile Include="Templating\TemplateSandbox.cs" />
+    <Compile Include="Templating\TemplateSandboxRunner.cs" />
     <Compile Include="TimetableChecks\DayOverflowCheck.cs" />
     <Compile Include="TimetableChecks\TimetableCheckRunner.cs" />
     <Compile Include="TimetableChecks\TransitionsCheck.cs" />

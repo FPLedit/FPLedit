@@ -9,6 +9,9 @@ using System.Text;
 
 namespace FPLedit.Templating
 {
+    /// <summary>
+    /// Exception-Handling for compiled templates.
+    /// </summary>
     internal class TemplateHost : ITemplate
     {
         private Template tmpl;

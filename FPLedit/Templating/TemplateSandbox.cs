@@ -1,43 +1,67 @@
 ﻿using FPLedit.Shared;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Security;
 using System.Security.Permissions;
+using System.Security.Policy;
 
 namespace FPLedit.Templating
 {
-    public class TemplateSandbox : MarshalByRefObject
+    internal class TemplateSandbox
     {
-        public void InstallResolver(string path)
+        public string GenerateResult(string code, string[] assemblyReferences, Timetable tt)
         {
-            AppDomain.CurrentDomain.AssemblyResolve += (s, e) =>
-            {
-                var name = new AssemblyName(e.Name);
-                var fn = name.Name + ".dll";
+            // Compiling in current AppDomain: Not security critical, assemblies will only be written to disk.
+            var assemblyPath = new TemplateCompiler().CompileAssembly(code, assemblyReferences);
 
-                var p = Path.Combine(path, fn);
-                if (File.Exists(p))
-                    return Assembly.LoadFrom(p);
-                return null;
+            var adSetup = new AppDomainSetup()
+            {
+                ApplicationBase = Path.GetFullPath("sandbox" + DateTime.Now.Ticks),
             };
+            var domain = CreateSandboxDomain(adSetup, assemblyPath); // Create new, isolated AppDomain
+
+            // Run template in another AppDomain
+            var sandbox = (TemplateSandboxRunner)Activator.CreateInstanceFrom(domain, typeof(TemplateSandboxRunner).Assembly.Location, typeof(TemplateSandboxRunner).FullName).Unwrap();
+            sandbox.InstallResolver(AppDomain.CurrentDomain.BaseDirectory);
+            var ret = sandbox.RunInAppDomain(tt, assemblyPath);
+
+            AppDomain.Unload(domain);
+
+            File.Delete(assemblyPath); // Cleanup
+
+            return ret;
         }
 
-        public string RunInAppDomain(Timetable tt, string assemblyPath)
+        private AppDomain CreateSandboxDomain(AppDomainSetup adSetup, string templateAssemblyPath)
         {
-            var assembly = Assembly.LoadFrom(assemblyPath);
+            // Create restricted permissions
+            var permSet = new PermissionSet(PermissionState.None);
+            permSet.AddPermission(new SecurityPermission(SecurityPermissionFlag.Execution));
 
-            return InvokeTemplate(assembly, tt);
+            var fperm = new FileIOPermission(PermissionState.None);
+            fperm.AllFiles = FileIOPermissionAccess.NoAccess;
+            var roAccess = FileIOPermissionAccess.Read | FileIOPermissionAccess.PathDiscovery;
+            fperm.AddPathList(roAccess, Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)); // App directory -> Load Dependencies
+            fperm.AddPathList(roAccess, Path.GetDirectoryName(templateAssemblyPath)); // Directory containing templateAssembly
+            permSet.AddPermission(fperm);
+
+            // StrongNames of FullTrust-Assemblies
+            var sharedAssembly = GetStrongName(typeof(Timetable));
+            var clientAssembly = GetStrongName(typeof(Template));
+
+            // Create new, isolated AppDomain
+            return AppDomain.CreateDomain("tmpl-run-domain", null, adSetup, permSet, sharedAssembly, clientAssembly);
         }
 
-        private string InvokeTemplate(Assembly assembly, Timetable tt)
+        private StrongName GetStrongName(Type type)
         {
-            foreach (Type type in assembly.GetTypes())
-            {
-                var mi = type.GetMethod("Render", BindingFlags.Public | BindingFlags.Static);
-                if (mi != null && mi.GetParameters().Length == 1)
-                    return (string)mi.Invoke(null, new object[] { tt });
-            }
-            return null;
+            AssemblyName aname = type.Assembly.GetName();
+            byte[] pubkey = aname.GetPublicKey();
+            var blob = new StrongNamePublicKeyBlob(pubkey);
+            return new StrongName(blob, aname.Name, aname.Version);
         }
     }
 }
