@@ -18,7 +18,7 @@ namespace FPLedit.NonDefaultFiletypes
 
                 XMLEntity en = new XMLEntity(el);
                 var list = new StationsList(en);
-                var tt = new Timetable();
+                var tt = new Timetable(TimetableType.Linear);
                 foreach (var i in list.Stations)
                     tt.AddStation(i, 0);
                 return tt;

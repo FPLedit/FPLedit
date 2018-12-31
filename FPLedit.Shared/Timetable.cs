@@ -40,11 +40,6 @@ namespace FPLedit.Shared
         [field: NonSerialized]
         public string UpgradeMessage { get; private set; }
 
-        public Timetable() : this(TimetableType.Linear)
-        {
-
-        }
-
         public Timetable(TimetableType type) : base("jTrainGraph_timetable", null) // Root without parent
         {
             Type = type;

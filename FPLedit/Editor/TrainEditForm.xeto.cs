@@ -18,6 +18,7 @@ namespace FPLedit.Editor
         private Button wShort, wSaShort, sShort, aShort, zShort, fillButton;
         private Network.SingleTimetableEditControl editor;
         private DropDown transitionDropDown;
+        private GroupBox transitionsGroupBox;
 #pragma warning restore CS0649
         private NotEmptyValidator nameValidator;
 
@@ -124,9 +125,14 @@ namespace FPLedit.Editor
         {
             editor.Initialize(Train._parent, Train);
 
-            transitionDropDown.DataStore = tt.Trains.Where(t => t != Train);
-            transitionDropDown.ItemTextBinding = Binding.Property<Train, string>(t => t.TName);
-            transitionDropDown.SelectedValue = tt.GetTransition(Train);
+            if (tt.Version != TimetableVersion.JTG2_x)
+            {
+                transitionDropDown.DataStore = tt.Trains.Where(t => t != Train);
+                transitionDropDown.ItemTextBinding = Binding.Property<Train, string>(t => t.TName);
+                transitionDropDown.SelectedValue = tt.GetTransition(Train);
+            }
+            else
+                transitionsGroupBox.Visible = false;
 
             fillButton.Visible = tt.Type == TimetableType.Linear && th.FillCandidates(Train).Any();
         }
@@ -157,7 +163,8 @@ namespace FPLedit.Editor
 
             editor.ApplyChanges();
 
-            tt.SetTransition(Train, (Train)transitionDropDown.SelectedValue);
+            if (tt.Version != TimetableVersion.JTG2_x)
+                tt.SetTransition(Train, (Train)transitionDropDown.SelectedValue);
 
             Close(DialogResult.Ok);
         }
