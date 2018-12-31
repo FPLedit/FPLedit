@@ -3,8 +3,8 @@ using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
-using System.Text;
 
 namespace FPLedit.Bildfahrplan.Render
 {
@@ -105,7 +105,19 @@ namespace FPLedit.Bildfahrplan.Render
                 if (points.Count <= i + 1)
                     continue;
 
-                g.DrawLine(pen, points[i], points[i + 1]);
+                var isStationLine = (int)points[i].X == (int)points[i + 1].X;
+                var isTransition = isStationLine && points.Count == i + 2;
+                float bezierFactor = train.Direction == TrainDirection.ti ? -1 : 1;
+                if (isTransition) bezierFactor *= 0.5f;
+                var bezierOffset = new SizeF(bezierFactor * 14, (points[i + 1].Y - points[i].Y) / -4.0f);
+                var bezierOffsetT = new SizeF(bezierOffset.Width, -bezierOffset.Height);
+
+                if (!isStationLine || attrs.StationLines != StationLineStyle.Cubic)
+                    g.DrawLine(pen, points[i], points[i + 1]);
+                else if (!isTransition)
+                    g.DrawBezier(pen, points[i], points[i] - bezierOffset, points[i + 1] + bezierOffset, points[i + 1]);
+                else
+                    g.DrawBezier(pen, points[i], points[i] - bezierOffset, points[i + 1] - bezierOffsetT, points[i + 1]);
 
                 if (points[i].X == points[i + 1].X)
                     continue;

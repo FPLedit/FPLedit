@@ -51,10 +51,11 @@
           <DropDown x:Name="trainFontComboBox" Width="150" />
           <DropDown x:Name="trainFontSizeComboBox" Width="60" />
         </TableRow>
-        <!-- CheckBoxes -->
         <TableRow>
-          <CheckBox x:Name="stationLinesCheckBox">Linien für stehende Züge in Bahnhöfen</CheckBox>
+          <Label>Linien für stehende Züge in Bahnhöfen</Label>
+          <DropDown x:Name="stationLinesDropDown" Width="150" />
         </TableRow>
+        <!-- CheckBoxes -->
         <TableRow>
           <CheckBox x:Name="includeKilometreCheckBox">Streckenkilometer anzeigen</CheckBox>
         </TableRow>
