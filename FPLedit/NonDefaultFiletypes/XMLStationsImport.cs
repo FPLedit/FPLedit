@@ -6,7 +6,7 @@ using System.Xml.Linq;
 
 namespace FPLedit.NonDefaultFiletypes
 {
-    public class XMLStationsImport : IImport
+    internal class XMLStationsImport : IImport
     {
         public string Filter => "Streckendateien (*.str)|*.str";
 

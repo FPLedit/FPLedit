@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.NonDefaultFiletypes
 {
-    public class NetworkExport : IExport
+    internal class NetworkExport : IExport
     {
         public string Filter => "Fahrplan Dateien (*.fpl)|*.fpl";
 

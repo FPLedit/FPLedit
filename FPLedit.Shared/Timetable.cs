@@ -51,6 +51,7 @@ namespace FPLedit.Shared
             trains = new List<Train>();
             transitions = new List<Transition>();
 
+            //TODO: Default "009"
             SetAttribute("version", type == TimetableType.Network ? "100" : "008"); // version="100" nicht kompatibel mit jTrainGraph
             sElm = new XMLEntity("stations");
             tElm = new XMLEntity("trains");

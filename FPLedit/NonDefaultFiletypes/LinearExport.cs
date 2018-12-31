@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.NonDefaultFiletypes
 {
-    public class LinearExport : IExport
+    internal class LinearExport : IExport
     {
         public string Filter => "Fahrplan Dateien (*.fpl)|*.fpl";
 

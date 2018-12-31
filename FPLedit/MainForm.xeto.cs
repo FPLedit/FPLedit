@@ -81,6 +81,7 @@ namespace FPLedit
 
         public event EventHandler<FileStateChangedEventArgs> FileStateChanged;
         public event EventHandler ExtensionsLoaded;
+        public event EventHandler FileOpened;
 
         #endregion
 
@@ -159,6 +160,8 @@ namespace FPLedit
 
             Shown += LoadStartFile;
             Shown += (s, e) => update.AutoUpdateCheck(Logger);
+
+            FileOpened += (s, e) => MaybeUpgradeTtVersion();
 
             new TimetableChecks.TimetableCheckRunner(this); // CheckRunner initialisieren
         }
@@ -317,6 +320,8 @@ namespace FPLedit
             fileState.FileName = Timetable != null ? filename : null;
             undo.ClearHistory();
             lineEditingControl.ResetPan();
+            if (Timetable != null)
+                FileOpened?.Invoke(this, null);
         }
 
         public void Save(bool forceSaveAs)
@@ -429,6 +434,33 @@ namespace FPLedit
                 Logger.Info("Konvertieren erfolgreich abgeschlossen!");
                 InternalOpen(sfd.FileName);
             }
+        }
+
+
+        private void MaybeUpgradeTtVersion()
+        {
+            if (Timetable == null || Timetable.Version != TimetableVersion.JTG2_x)
+                return;
+
+            var res = MessageBox.Show("Diese Fahrplandatei ist im Dateiformat von jTrainGraph 2.x erstellt worden. Im Format von jTrainGraph 3.x stehen mehr Funktionen zur Verfügung." +
+                " Soll das Format jetzt aktualisiert werden? ACHTUNG: Die Datei kann danach nicht mehr mit jTrainGraph 2.x berabeitet werden!", "FPLedit",
+                MessageBoxButtons.YesNo, MessageBoxType.Question);
+            if (res != DialogResult.Yes)
+                return;
+
+            var exp = new UpgradeJTG3Export();
+            var sfd = new SaveFileDialog();
+            sfd.AddLegacyFilter(exp.Filter);
+            if (sfd.ShowDialog(this) == DialogResult.Ok)
+            {
+                Logger.Info("Konvertiere Datei...");
+                bool ret = exp.Export(Timetable, sfd.FileName, this);
+                if (ret == false)
+                    return;
+                Logger.Info("Konvertieren erfolgreich abgeschlossen!");
+                InternalOpen(sfd.FileName);
+            }
+
         }
         #endregion
 
