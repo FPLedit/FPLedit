@@ -12,7 +12,7 @@ namespace FPLedit.jTrainGraphStarter
     internal class JTGShared
     {
         public const string DEFAULT_FILENAME = "jTrainGraph_303.jar";
-        public const int DEFAULT_TT_VERSION = 009;
+        public const TimetableVersion DEFAULT_TT_VERSION = TimetableVersion.JTG3_0;
 
         public static JTGCompatibility JTGCompatCheck(string jTGPath)
         {

@@ -36,19 +36,20 @@ namespace FPLedit
             }
         }
 
-        public T Get<T>(string key)
-            => Get(key, default(T));
-
-        public T Get<T>(string key, T defaultValue)
+        public T Get<T>(string key, T defaultValue = default)
         {
-            if (KeyExists(key))
-            {
-                var val = config.Get(key);
-
+            var val = config.Get(key);
+            if (val != null)
                 return (T)Convert.ChangeType(val, typeof(T));
-            }
             else
                 return defaultValue;
+        }
+
+        public T GetEnum<T>(string key, T defaultValue = default) where T : Enum
+        {
+            var underlying = Enum.GetUnderlyingType(typeof(T));
+            var x = (int)Convert.ChangeType(defaultValue, underlying);
+            return (T)Enum.ToObject(typeof(T), Get(key, x));
         }
 
         public bool KeyExists(string key)
@@ -71,5 +72,12 @@ namespace FPLedit
 
         public void Set(string key, int value)
             => Set(key, value.ToString());
+
+        public void SetEnum<T>(string key, T value) where T : Enum
+        {
+            var underlying = Enum.GetUnderlyingType(typeof(T));
+            var x = (int)Convert.ChangeType(value, underlying);
+            Set(key, x);
+        }
     }
 }

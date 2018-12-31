@@ -55,7 +55,7 @@ namespace FPLedit.Bildfahrplan
 
         private void OverrideItem_CheckedChanged(object sender, EventArgs e)
         {
-            info.Settings.Set("bifpl.override-entity-styles", overrideItem.Checked.ToString().ToLower());
+            info.Settings.Set("bifpl.override-entity-styles", overrideItem.Checked);
         }
 
         private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)

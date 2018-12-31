@@ -39,7 +39,7 @@ namespace FPLedit.jTrainGraphStarter
             jtgPathTextBox.Text = settings.Get("jTGStarter.jtgpath", JTGShared.DEFAULT_FILENAME);
             messageCheckBox.Checked = !settings.Get("jTGStarter.show-message", true);
 
-            var targetVersion = (TimetableVersion)settings.Get("jTGStarter.target-version", JTGShared.DEFAULT_TT_VERSION);
+            var targetVersion = settings.GetEnum("jTGStarter.target-version", JTGShared.DEFAULT_TT_VERSION);
             var vidx = Array.FindIndex(versions, v => v.Version == targetVersion);
             versionComboBox.SelectedIndex = vidx == -1 ? 0 : vidx;
         }
@@ -64,9 +64,9 @@ namespace FPLedit.jTrainGraphStarter
                     return;
             }
 
-            var targetVersion = (int)((VersionItem)versionComboBox.SelectedValue).Version;
+            var targetVersion = ((VersionItem)versionComboBox.SelectedValue).Version;
 
-            settings.Set("jTGStarter.target-version", targetVersion);
+            settings.SetEnum("jTGStarter.target-version", targetVersion);
             settings.Set("jTGStarter.show-message", !messageCheckBox.Checked.Value);
             settings.Set("jTGStarter.javapath", javaPathTextBox.Text);
             settings.Set("jTGStarter.jtgpath", jtgPathTextBox.Text);

@@ -12,6 +12,7 @@ namespace FPLedit.Shared
     public sealed class Timetable : Entity, ITimetable
     {
         public const int LINEAR_ROUTE_ID = 0;
+        public static TimetableVersion DefaultLinearVersion { get; set; } = TimetableVersion.JTG3_0;
 
         XMLEntity sElm, tElm, trElm;
 
@@ -51,8 +52,7 @@ namespace FPLedit.Shared
             trains = new List<Train>();
             transitions = new List<Transition>();
 
-            //TODO: Default "009"
-            SetAttribute("version", type == TimetableType.Network ? "100" : "008"); // version="100" nicht kompatibel mit jTrainGraph
+            SetAttribute("version", type == TimetableType.Network ? "100" : ((int)DefaultLinearVersion).ToString()); // version="100" nicht kompatibel mit jTrainGraph
             sElm = new XMLEntity("stations");
             tElm = new XMLEntity("trains");
             trElm = new XMLEntity("transitions");

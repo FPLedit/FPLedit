@@ -132,6 +132,7 @@ namespace FPLedit
 
         private void Init()
         {
+            Timetable.DefaultLinearVersion = Settings.GetEnum("core.default-file-format", Timetable.DefaultLinearVersion);
             FontCollection.InitAsync(); // Asynchron Liste von verfügbaren Schriftarten laden
             EtoExtensions.Initialize(this); // UI-Erweiterungen initialiseren
             this.AddSizeStateHandler();

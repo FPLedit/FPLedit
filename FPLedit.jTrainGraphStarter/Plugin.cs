@@ -78,12 +78,12 @@ namespace FPLedit.jTrainGraphStarter
                     return;
             }
 
-            int targetVersion = info.Settings.Get("jTGStarter.target-version", JTGShared.DEFAULT_TT_VERSION);
+            var targetVersion = info.Settings.GetEnum("jTGStarter.target-version", JTGShared.DEFAULT_TT_VERSION);
 
             var exporter = new Shared.Filetypes.XMLExport();
             var importer = new Shared.Filetypes.XMLImport();
             var sync = new TimetableRouteSync(info.Timetable, route);
-            var rtt = sync.GetRouteTimetable((TimetableVersion)targetVersion);
+            var rtt = sync.GetRouteTimetable(targetVersion);
             var fn = info.GetTemp("route-" + route + ".fpl");
             exporter.Export(rtt, fn, info);
 
