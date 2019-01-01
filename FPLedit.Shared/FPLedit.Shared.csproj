@@ -58,6 +58,7 @@
     <Compile Include="ArrDep.cs" />
     <Compile Include="Ext\ITimetableCheck.cs" />
     <Compile Include="Rendering\ColorCollection.cs" />
+    <Compile Include="Rendering\ColorTimetableConverter.cs" />
     <Compile Include="Rendering\ColorFormatter.cs" />
     <Compile Include="Helpers\DaysHelper.cs" />
     <Compile Include="Entity.cs" />

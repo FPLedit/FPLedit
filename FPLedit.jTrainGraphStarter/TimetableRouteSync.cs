@@ -1,4 +1,5 @@
 ﻿using FPLedit.Shared;
+using FPLedit.Shared.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -26,7 +27,9 @@ namespace FPLedit.jTrainGraphStarter
         public Timetable GetRouteTimetable(TimetableVersion targetVersion)
         {
             var copy = orig.Clone();
-            copy.SetAttribute("version", ((int)targetVersion).ToString("000")); // Wir gehen aus dem Extended-Modus raus
+            copy.SetAttribute("version", targetVersion.ToNumberString()); // Wir gehen aus dem Extended-Modus raus
+
+            ColorTimetableConverter.ConvertAll(copy); // Zum Ziel-Farbformat konvertieren
 
             var route = copy.GetRoute(routeIndex);
 
@@ -121,6 +124,8 @@ namespace FPLedit.jTrainGraphStarter
         {
             singleRoute.SetAttribute("version", "100"); // Wieder in Netzwerk-Modus wechseln
             orig.Attributes = AttrDiff(orig, singleRoute);
+
+            ColorTimetableConverter.ConvertAll(singleRoute); // Zu Hex-Farben zurück
 
             foreach (var sta in orig.Stations)
             {

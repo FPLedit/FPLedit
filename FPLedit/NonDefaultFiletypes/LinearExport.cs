@@ -1,5 +1,6 @@
 ﻿using FPLedit.Shared;
 using FPLedit.Shared.Filetypes;
+using FPLedit.Shared.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,6 +73,8 @@ namespace FPLedit.NonDefaultFiletypes
                     ntra.SetArrDep(nsta, ardp);
                 }
             }
+
+            ColorTimetableConverter.ConvertAll(ntt);
 
             return new XMLExport().Export(ntt, filename, info);
         }
