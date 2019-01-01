@@ -12,12 +12,6 @@ namespace FPLedit.Shared
 
         public Timetable _parent { get; set; }
 
-        public string XName
-        {
-            get => XMLEntity.XName;
-            set => XMLEntity.XName = value;
-        }
-
         public Dictionary<string, string> Attributes
         {
             get => XMLEntity.Attributes;

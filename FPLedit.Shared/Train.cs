@@ -245,7 +245,7 @@ namespace FPLedit.Shared
             set => SetAttribute("fpl-last", value);
         }
 
-        public TrainDirection Direction => (TrainDirection)Enum.Parse(typeof(TrainDirection), XName);
+        public TrainDirection Direction => (TrainDirection)Enum.Parse(typeof(TrainDirection), XMLEntity.XName);
 
         public string Comment
         {
