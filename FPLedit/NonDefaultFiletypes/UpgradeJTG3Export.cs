@@ -1,5 +1,6 @@
 ﻿using FPLedit.Shared;
 using FPLedit.Shared.Filetypes;
+using FPLedit.Shared.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,7 +41,7 @@ namespace FPLedit.NonDefaultFiletypes
                     orig.Id = ++nextId;
             }
 
-            //TODO: Farben konvertieren: c(r,g,b) -> #RRGGBB
+            ColorTimetableConverter.ConvertAll(clone);
 
             return new XMLExport().Export(clone, filename, info);
         }

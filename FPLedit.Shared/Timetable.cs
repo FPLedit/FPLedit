@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FPLedit.Shared.Rendering;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -153,6 +154,9 @@ namespace FPLedit.Shared
                 else if (!tids.Contains(tra.Next))
                     RemoveTransition(tra.Next, false);
             }
+
+            // Farbangaben vereinheitlichen
+            ColorTimetableConverter.ConvertAll(this);
         }
 
         public Timetable(XMLEntity en) : this(en, TimetableType.Linear) // Root without parent

@@ -3,8 +3,8 @@ using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
-using System.Text;
 
 namespace FPLedit.Bildfahrplan.Render
 {
@@ -85,15 +85,39 @@ namespace FPLedit.Bildfahrplan.Render
             if (hadFirstArrival)
                 points.Insert(0, points.First() - new Size(50, hly));
 
-            if (dir)
-                stas.Reverse();
+            // Verbindung zum Folgezug
+            var transition = tt.GetTransition(train);
+            if (transition != null && !hadLastDeparture && attrs.StationLines != StationLineStyle.None)
+            {
+                var lastStaOfFirst = GetSortedStations(train)?.LastOrDefault();
+                var firstStaOfNext = GetSortedStations(transition)?.FirstOrDefault();
+
+                if (lastStaOfFirst == firstStaOfNext)
+                {
+                    var offset = transition.GetArrDep(firstStaOfNext).Departure - train.GetArrDep(lastStaOfFirst).Arrival;
+                    points.Add(points.Last());
+                    points.Add(points.Last() + new Size(0, (int)(offset.TotalHours * attrs.HeightPerHour)));
+                }
+            }
 
             for (int i = 0; i < points.Count; i += 2)
             {
                 if (points.Count <= i + 1)
                     continue;
 
-                g.DrawLine(pen, points[i], points[i + 1]);
+                var isStationLine = (int)points[i].X == (int)points[i + 1].X;
+                var isTransition = isStationLine && points.Count == i + 2;
+                float bezierFactor = train.Direction == TrainDirection.ti ? -1 : 1;
+                if (isTransition) bezierFactor *= 0.5f;
+                var bezierOffset = new SizeF(bezierFactor * 14, (points[i + 1].Y - points[i].Y) / -4.0f);
+                var bezierOffsetT = new SizeF(bezierOffset.Width, -bezierOffset.Height);
+
+                if (!isStationLine || attrs.StationLines != StationLineStyle.Cubic)
+                    g.DrawLine(pen, points[i], points[i + 1]);
+                else if (!isTransition)
+                    g.DrawBezier(pen, points[i], points[i] - bezierOffset, points[i + 1] + bezierOffset, points[i + 1]);
+                else
+                    g.DrawBezier(pen, points[i], points[i] - bezierOffset, points[i + 1] - bezierOffsetT, points[i + 1]);
 
                 if (points[i].X == points[i + 1].X)
                     continue;
@@ -162,6 +186,17 @@ namespace FPLedit.Bildfahrplan.Render
         {
             float angle = (float)(Math.Atan2(xs.Max() - xs.Min(), ys.Max() - ys.Min()) * (180d / Math.PI));
             return GetTrainDirection(train) ? 90 - angle : angle - 90;
+        }
+
+        private IEnumerable<Station> GetSortedStations(Train train)
+        {
+            var path = train.GetPath();
+            var arrdeps = train.GetArrDeps();
+            foreach (var sta in path)
+            {
+                if (arrdeps[sta].HasMinOneTimeSet)
+                    yield return sta;
+            }
         }
     }
 }

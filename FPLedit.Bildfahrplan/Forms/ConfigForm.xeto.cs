@@ -5,6 +5,7 @@ using FPLedit.Shared.UI.Validators;
 using System;
 using System.Linq;
 using FPLedit.Shared.UI;
+using System.Collections.Generic;
 
 namespace FPLedit.Bildfahrplan.Forms
 {
@@ -13,10 +14,11 @@ namespace FPLedit.Bildfahrplan.Forms
 #pragma warning disable CS0649
         private DropDown stationFontComboBox, timeColorComboBox, trainColorComboBox, stationColorComboBox, bgColorComboBox, timeFontComboBox, trainFontComboBox, trainWidthComboBox;
         private DropDown stationFontSizeComboBox, timeFontSizeComboBox, trainFontSizeComboBox, stationWidthComboBox, hourTimeWidthComboBox, minuteTimeWidthComboBox;
+        private DropDown stationLinesDropDown;
         private TextBox heightPerHourTextBox;
         private TextBox startTimeTextBox;
         private TextBox endTimeTextBox;
-        private CheckBox includeKilometreCheckBox, drawStationNamesCheckBox, stationLinesCheckBox, stationVerticalCheckBox;
+        private CheckBox includeKilometreCheckBox, drawStationNamesCheckBox, stationVerticalCheckBox;
 #pragma warning restore CS0649
         private NumberValidator heightPerHourValidator;
         private TimeValidator startTimeValidator, endTimeValidator;
@@ -25,9 +27,11 @@ namespace FPLedit.Bildfahrplan.Forms
         private Timetable tt;
         private TimetableStyle attrs;
 
-        private ConfigForm(ISettings settings)
+        public ConfigForm(Timetable tt, ISettings settings)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
+
+            this.tt = tt;
 
             heightPerHourValidator = new NumberValidator(heightPerHourTextBox, false, true);
             heightPerHourValidator.ErrorMessage = "Bitte eine Zahl als Höhe pro Stunde angeben!";
@@ -50,6 +54,16 @@ namespace FPLedit.Bildfahrplan.Forms
             DropDownBind.Width<TimetableStyle>(stationWidthComboBox, "StationWidth");
             DropDownBind.Width<TimetableStyle>(trainWidthComboBox, "TrainWidth");
 
+            var styles = new Dictionary<StationLineStyle, string>()
+            {
+                [StationLineStyle.None] = "Keine",
+                [StationLineStyle.Normal] = "Gerade Linien",
+                [StationLineStyle.Cubic] = "Kubische Linien",
+            };
+            if (tt.Version == TimetableVersion.JTG2_x)
+                styles.Remove(StationLineStyle.Cubic);
+            DropDownBind.Enum<TimetableStyle, StationLineStyle>(stationLinesDropDown, "StationLines", styles);
+
             heightPerHourTextBox.TextBinding.AddIntConvBinding<TimetableStyle, TextControl>(s => s.HeightPerHour);
 
             startTimeTextBox.TextBinding.AddTimeSpanConvBinding<TimetableStyle, TextControl>(s => s.StartTime);
@@ -59,16 +73,10 @@ namespace FPLedit.Bildfahrplan.Forms
             drawStationNamesCheckBox.CheckedBinding.BindDataContext<TimetableStyle>(s => s.DrawHeader);
             stationVerticalCheckBox.CheckedBinding.BindDataContext<TimetableStyle>(s => s.StationVertical);
 
-            this.AddCloseHandler();
-        }
-
-        public ConfigForm(Timetable tt, ISettings settings) : this(settings)
-        {
-            this.tt = tt;
             attrs = new TimetableStyle(tt);
             DataContext = attrs;
 
-            stationLinesCheckBox.Checked = attrs.StationLines != StationLineStyle.None;
+            this.AddCloseHandler();
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -78,8 +86,6 @@ namespace FPLedit.Bildfahrplan.Forms
                 MessageBox.Show("Bitte erst alle Fehler beheben: " + Environment.NewLine + validators.Message);
                 return;
             }
-
-            attrs.StationLines = stationLinesCheckBox.Checked.Value ? StationLineStyle.Normal : StationLineStyle.None;
 
             Result = DialogResult.Ok;
             this.NClose();

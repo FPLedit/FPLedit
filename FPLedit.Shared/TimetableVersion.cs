@@ -11,4 +11,10 @@ namespace FPLedit.Shared
         JTG3_0 = 009,
         Extended_FPL = 100,
     }
+
+    public static class TimetableVersionExt
+    {
+        public static string ToNumberString(this TimetableVersion version)
+            => ((int)version).ToString("000");
+    }
 }

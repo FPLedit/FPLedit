@@ -1,6 +1,7 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared.Rendering;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -53,6 +54,14 @@ namespace FPLedit.Shared.UI
             sizeDropDown.SelectedValueBinding.BindDataContext<T>(
                 a => f(a).Size,
                 (a, val) => { var x = f(a); x.Size = (int)val; p.SetValue(a, x); });
+        }
+
+        public static void Enum<T, TEnum>(DropDown dropDown, string property, Dictionary<TEnum, string> display) where TEnum : Enum
+        {
+            var p = GetProperty<T>(property);
+            dropDown.DataStore = display.Keys.Cast<object>();
+            dropDown.ItemTextBinding = Binding.Property<TEnum, string>(s => display[s]);
+            dropDown.SelectedValueBinding.BindDataContext<T>(s => (TEnum)p.GetValue(s), (s, v) => p.SetValue(s, v));
         }
 
         private static PropertyInfo GetProperty<T>(string property)
