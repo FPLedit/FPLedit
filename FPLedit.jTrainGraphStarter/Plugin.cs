@@ -84,7 +84,7 @@ namespace FPLedit.jTrainGraphStarter
             var importer = new Shared.Filetypes.XMLImport();
             var sync = new TimetableRouteSync(info.Timetable, route);
             var rtt = sync.GetRouteTimetable(targetVersion);
-            var fn = info.GetTemp("route-" + route + ".fpl");
+            var fn = info.GetTemp(Guid.NewGuid().ToString() + "-route-" + route + ".fpl");
             exporter.Export(rtt, fn, info);
 
             StartJtg(fn, () =>
@@ -105,6 +105,12 @@ namespace FPLedit.jTrainGraphStarter
             if (!compat.Compatible)
             {
                 MessageBox.Show("Die gewählte Version von jTrainGraph ist wahrscheinlich nicht mit FPledit kompatibel. Bitte verwenden Sie jTrainGraph 2.02 - 2.03 oder 3.03 (und höher)!",
+                    "jTrainGraphStarter: Fehler", MessageBoxType.Error);
+                return;
+            }
+            if (info.Timetable.Version != compat.Version && info.Timetable.Type != TimetableType.Network)
+            {
+                MessageBox.Show("Die gewählte Version von jTrainGraph ist wahrscheinlich nicht mit der aktuellen Fahrplandatei kompatibel.",
                     "jTrainGraphStarter: Fehler", MessageBoxType.Error);
                 return;
             }
