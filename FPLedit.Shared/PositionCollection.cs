@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 
 namespace FPLedit.Shared
 {
@@ -12,24 +11,26 @@ namespace FPLedit.Shared
     {
         private readonly IStation sta;
         private Dictionary<int, float> positions;
-        private readonly TimetableType type;
-        private readonly TimetableVersion version;
+        private readonly Timetable tt;
 
         public PositionCollection(IStation s, Timetable tt)
         {
             sta = s;
             positions = new Dictionary<int, float>();
-            type = tt.Type;
-            version = tt.Version;
-            if (type == TimetableType.Linear)
+            this.tt = tt;
+            if (tt.Type == TimetableType.Linear)
                 ParseLinear();
             else
                 ParseNetwork();
         }
 
-        public void TestForErrors()
+        public void ReparseData()
         {
-            // Do nothing. Contructor is enough.
+
+        }
+
+        public void TestForErrors() // Do nothing. Contructor is enough.
+        {
         }
 
         public float? GetPosition(int route)
@@ -61,7 +62,7 @@ namespace FPLedit.Shared
         private void ParseLinear()
         {
             var toParse = "";
-            if (version == TimetableVersion.JTG2_x)
+            if (tt.Version == TimetableVersion.JTG2_x)
                 toParse = sta.GetAttribute("km", "0.0");
             else // jTG 3.0
             {
@@ -75,10 +76,10 @@ namespace FPLedit.Shared
 
         private void Write()
         {
-            if (type == TimetableType.Linear)
+            if (tt.Type == TimetableType.Linear)
             {
                 var pos = GetPosition(Timetable.LINEAR_ROUTE_ID).Value.ToString("0.0", CultureInfo.InvariantCulture);
-                if (version == TimetableVersion.JTG2_x)
+                if (tt.Version == TimetableVersion.JTG2_x)
                     sta.SetAttribute("km", pos);
                 else // jTG 3.0
                 {

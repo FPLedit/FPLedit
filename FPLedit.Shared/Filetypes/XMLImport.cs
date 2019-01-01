@@ -17,8 +17,7 @@ namespace FPLedit.Shared.Filetypes
                 XElement el = XElement.Load(filename);
 
                 XMLEntity en = new XMLEntity(el);
-                bool isNetwork = en.GetAttribute("version", "") == "100";
-                return new Timetable(en, isNetwork ? TimetableType.Network : TimetableType.Linear);
+                return new Timetable(en);
             }
             catch (Exception ex)
             {

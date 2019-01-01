@@ -4,8 +4,6 @@ using FPLedit.Shared.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.NonDefaultFiletypes
 {
@@ -21,29 +19,40 @@ namespace FPLedit.NonDefaultFiletypes
                 throw new Exception("Der Fahrplan hat mehr als eine Strecke");
 
             var clone = tt.Clone();
-            var ntt = new Timetable(TimetableType.Linear);
 
-            foreach (var attr in clone.Attributes)
-                if (ntt.GetAttribute<string>(attr.Key) == null)
-                    ntt.SetAttribute(attr.Key, attr.Value);
+            Dictionary<Train, TrainData> trainPaths = new Dictionary<Train, TrainData>();
+            foreach (var orig in clone.Trains)
+                trainPaths[orig] = new TrainData(orig);
+
+            clone.SetAttribute("version", Timetable.DefaultLinearVersion.ToNumberString());
 
             foreach (var sta in clone.Stations)
             {
                 var km_old = sta.GetAttribute("km", "").Split(':');
-                sta.SetAttribute("km", km_old[1]);
+                sta.RemoveAttribute("km");
+                var pos = km_old[1];
+
+                if (clone.Version == TimetableVersion.JTG2_x)
+                    sta.SetAttribute("km", pos);
+                else // jTG 3.0
+                {
+                    sta.SetAttribute("kml", pos);
+                    sta.SetAttribute("kmr", pos);
+                }
+
                 sta.RemoveAttribute("fpl-rt");
                 sta.RemoveAttribute("fpl-pos");
-                ntt.AddStation(sta, Timetable.LINEAR_ROUTE_ID);
+                sta.RemoveAttribute("fpl-id");
             }
 
-            var sortedStations = tt.GetRoutes()[0].GetOrderedStations();
+            var sortedStations = clone.GetRoutes()[0].GetOrderedStations();
 
-            foreach (var orig in tt.Trains)
+            foreach (var t in clone.Trains)
             {
-                var path = orig.GetPath();
+                var data = trainPaths[t];
 
-                var sta1 = path.FirstOrDefault();
-                var sta2 = path.LastOrDefault();
+                var sta1 = data.Path.FirstOrDefault();
+                var sta2 = data.Path.LastOrDefault();
 
                 var dir = TrainDirection.ti;
                 if (sta1 != sta2)
@@ -54,29 +63,21 @@ namespace FPLedit.NonDefaultFiletypes
                 else if (sortedStations.IndexOf(sta1) == sortedStations.Count - 1)
                     dir = TrainDirection.ta;
 
-                var stas = sortedStations;
-                if (dir == TrainDirection.ta)
-                    stas = stas.Reverse<Station>().ToList();
+                t.XMLEntity.XName = dir.ToString();
 
-                var ntra = new Train(dir, ntt);
+                t.Children.Clear();
+                t.AddLinearArrDeps();
 
-                foreach (var attr in orig.Attributes)
-                    if (ntra.GetAttribute<string>(attr.Key) == null)
-                        ntra.SetAttribute(attr.Key, attr.Value);
-
-                ntt.AddTrain(ntra);
-
-                foreach (var sta in path)
+                foreach (var sta in data.Path)
                 {
-                    var ardp = orig.GetArrDep(sta);
-                    var nsta = ntt.Stations[tt.Stations.IndexOf(sta)];
-                    ntra.SetArrDep(nsta, ardp);
+                    if (data.ArrDeps.ContainsKey(sta))
+                        t.SetArrDep(sta, data.ArrDeps[sta]);
                 }
             }
 
-            ColorTimetableConverter.ConvertAll(ntt);
+            ColorTimetableConverter.ConvertAll(clone);
 
-            return new XMLExport().Export(ntt, filename, info);
+            return new XMLExport().Export(clone, filename, info);
         }
     }
 }

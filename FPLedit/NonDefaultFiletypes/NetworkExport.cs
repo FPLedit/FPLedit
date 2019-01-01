@@ -4,8 +4,6 @@ using FPLedit.Shared.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.NonDefaultFiletypes
 {
@@ -19,46 +17,44 @@ namespace FPLedit.NonDefaultFiletypes
                 throw new Exception("Der Fahrplan ist bereits ein Netzwerk-Fahrplan");
 
             var clone = tt.Clone();
-            var ntt = new Timetable(TimetableType.Network);
+            var old_version = clone.GetAttribute("version", "");
 
-            foreach (var attr in clone.Attributes)
-                if (ntt.GetAttribute<string>(attr.Key) == null)
-                    ntt.SetAttribute(attr.Key, attr.Value);
+            Dictionary<Train, TrainData> trainPaths = new Dictionary<Train, TrainData>();
+            foreach (var orig in clone.Trains)
+                trainPaths[orig] = new TrainData(orig);
 
             var rt = Timetable.LINEAR_ROUTE_ID.ToString();
+            var id = 0;
             var y = 0;
             foreach (var sta in clone.Stations)
             {
-                var km_old = sta.GetAttribute("km", "");
+                var km_old = sta.Positions.GetPosition(Timetable.LINEAR_ROUTE_ID);
                 sta.SetAttribute("km", rt + ":" + km_old);
                 sta.SetAttribute("fpl-rt", rt);
                 sta.SetAttribute("fpl-pos", (y += 40).ToString() + ";0");
-                ntt.AddStation(sta, 0);
+                sta.SetAttribute("fpl-id", id++.ToString());
             }
+
+            clone.SetAttribute("version", TimetableVersion.Extended_FPL.ToNumberString());
 
             foreach (var orig in clone.Trains)
             {
-                var ntra = new Train(TrainDirection.tr, ntt);
+                var data = trainPaths[orig];
 
-                foreach (var attr in orig.Attributes)
-                    if (ntra.GetAttribute<string>(attr.Key) == null)
-                        ntra.SetAttribute(attr.Key, attr.Value);
+                orig.Children.Clear();
+                orig.AddAllArrDeps(data.Path);
+                orig.XMLEntity.XName = "tr";
 
-                var path = orig.GetPath();
-                ntra.AddAllArrDeps(path);
-
-                foreach (var sta in path)
+                foreach (var sta in data.Path)
                 {
-                    var ardp = orig.GetArrDep(sta);
-                    ntra.SetArrDep(sta, ardp);
+                    if (data.ArrDeps.ContainsKey(sta))
+                        orig.SetArrDep(sta, data.ArrDeps[sta]);
                 }
-
-                ntt.AddTrain(ntra);
             }
 
-            ColorTimetableConverter.ConvertAll(ntt);
+            ColorTimetableConverter.ConvertAll(clone);
 
-            return new XMLExport().Export(ntt, filename, info);
+            return new XMLExport().Export(clone, filename, info);
         }
     }
 }

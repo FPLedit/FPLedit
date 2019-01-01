@@ -17,7 +17,9 @@ namespace FPLedit.Shared
 
         XMLEntity sElm, tElm, trElm;
 
-        public TimetableType Type { get; private set; }
+        public TimetableVersion Version => (TimetableVersion)GetAttribute("version", 0);
+        public TimetableType Type => Version == TimetableVersion.Extended_FPL ? TimetableType.Network : TimetableType.Linear;
+
         private int nextStaId = 0, nextRtId = 0, nextTraId = 0;
 
         public string TTName
@@ -25,8 +27,6 @@ namespace FPLedit.Shared
             get => GetAttribute("name", "");
             set => SetAttribute("name", value);
         }
-
-        public TimetableVersion Version => (TimetableVersion)GetAttribute("version", 0);
 
         private List<Station> stations;
         private List<Train> trains;
@@ -43,12 +43,11 @@ namespace FPLedit.Shared
 
         public Timetable(TimetableType type) : base("jTrainGraph_timetable", null) // Root without parent
         {
-            Type = type;
             stations = new List<Station>();
             trains = new List<Train>();
             transitions = new List<Transition>();
 
-            SetAttribute("version", type == TimetableType.Network ? "100" : ((int)DefaultLinearVersion).ToString()); // version="100" nicht kompatibel mit jTrainGraph
+            SetAttribute("version", type == TimetableType.Network ? "100" : DefaultLinearVersion.ToNumberString()); // version="100" nicht kompatibel mit jTrainGraph
             sElm = new XMLEntity("stations");
             tElm = new XMLEntity("trains");
             trElm = new XMLEntity("transitions");
@@ -56,10 +55,9 @@ namespace FPLedit.Shared
             Children.Add(tElm);
         }
 
-        public Timetable(XMLEntity en, TimetableType type) : base(en, null)
+        public Timetable(XMLEntity en) : base(en, null)
         {
-            Type = type;
-            if (type == TimetableType.Network && Version != TimetableVersion.Extended_FPL)
+            if (Type == TimetableType.Network && Version != TimetableVersion.Extended_FPL)
                 throw new Exception("Falsche Versionsummer für Netzwerk-Fahrplandatei!");
 
             if (!Enum.IsDefined(typeof(TimetableVersion), Version))
@@ -157,10 +155,6 @@ namespace FPLedit.Shared
 
             // Farbangaben vereinheitlichen
             ColorTimetableConverter.ConvertAll(this);
-        }
-
-        public Timetable(XMLEntity en) : this(en, TimetableType.Linear) // Root without parent
-        {
         }
 
         public List<Station> GetStationsOrderedByDirection(TrainDirection direction)
