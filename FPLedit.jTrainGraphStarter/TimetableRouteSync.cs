@@ -72,7 +72,8 @@ namespace FPLedit.jTrainGraphStarter
                 tra.Children.Clear();
                 tra.AddAllArrDeps(sortedStations);
                 foreach (var ardp in ardps)
-                    tra.SetArrDep(ardp.Key, ardp.Value);
+                    if (sortedStations.Contains(ardp.Key))
+                        tra.SetArrDep(ardp.Key, ardp.Value);
 
                 // Lineare Fahrtrichtung bestimmen
                 var sta1 = ardps.FirstOrDefault().Key;
@@ -86,9 +87,6 @@ namespace FPLedit.jTrainGraphStarter
                 }
                 else if (sortedStations.IndexOf(sta1) == sortedStations.Count - 1)
                     dir = TrainDirection.ta;
-
-                if (dir == TrainDirection.ta)
-                    tra.Children.Reverse();
 
                 tra.XMLEntity.XName = dir.ToString();
             }

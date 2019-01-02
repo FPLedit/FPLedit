@@ -10,7 +10,7 @@ using System.Xml.Linq;
 namespace FPLedit.Shared
 {
     [Serializable]
-    [DebuggerDisplay("Name: {XName}, Children: {Children.Count}")]
+    [DebuggerDisplay("Name: {XName}, Children: {Children.Count}, Attrs: {AttributeDebugger,nq}")]
     public sealed class XMLEntity : IEntity
     {
         public string XName { get; set; }
@@ -53,14 +53,10 @@ namespace FPLedit.Shared
             return defaultValue;
         }
 
-        public void SetAttribute(string key, string value)
-        {
-            Attributes[key] = value;
-        }
+        public void SetAttribute(string key, string value) => Attributes[key] = value;
 
-        public void RemoveAttribute(string key)
-        {
-            Attributes.Remove(key);
-        }
+        public void RemoveAttribute(string key) => Attributes.Remove(key);
+
+        private string AttributeDebugger => string.Join(", ", Attributes.ToList().Select(a => a.Key + "=" + a.Value));
     }
 }
