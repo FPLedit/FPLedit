@@ -46,6 +46,13 @@ namespace FPLedit.Editor.Network
             get => _selectedRoute;
             set { _selectedRoute = value; Invalidate(); }
         }
+        private bool _highlightBetween;
+        public bool HighlightBetweenStations
+        {
+            get => _highlightBetween;
+            set { _highlightBetween = value; Invalidate(); }
+        }
+
         private List<Station> _highlightedStations = new List<Station>();
 
         private PointF _pan = new PointF();
@@ -122,6 +129,7 @@ namespace FPLedit.Editor.Network
             if (routes == null || routes.Length == 0)
                 return;
 
+            Station lastSta = null;
             foreach (var r in routes)
             {
                 var pen = linePen;
@@ -151,9 +159,13 @@ namespace FPLedit.Editor.Network
 
                     e.Graphics.RestoreTransform();
 
+                    var tPen = pen;
+                    if (_highlightBetween && _highlightedStations.Contains(sta) && _highlightedStations.Contains(lastSta))
+                        tPen = new Pen(Colors.Red, 2);
                     if (lastP.HasValue)
-                        e.Graphics.DrawLine(pen, x, y, OFFSET_X + lastP.Value.X, OFFSET_Y + lastP.Value.Y);
+                        e.Graphics.DrawLine(tPen, x, y, OFFSET_X + lastP.Value.X, OFFSET_Y + lastP.Value.Y);
                     lastP = pos;
+                    lastSta = sta;
 
                     var panelColor = _highlightedStations.Contains(sta) ? Colors.Red : Colors.Gray;
                     DrawArgs args = panels.FirstOrDefault(pa => pa.Station == sta);

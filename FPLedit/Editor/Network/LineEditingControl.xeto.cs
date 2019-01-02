@@ -60,7 +60,6 @@ namespace FPLedit.Editor.Network
             routesComboBox.Items.Clear();
             routesComboBox.Items.AddRange(routes);
 
-
             if (oldSelected != -1 && !forceReload && routes.Any(r => (int)r.Tag == oldSelected))
             {
                 routesComboBox.SelectedIndex = routes.ToList().IndexOf(routes.FirstOrDefault(li => (int)li.Tag == oldSelected));

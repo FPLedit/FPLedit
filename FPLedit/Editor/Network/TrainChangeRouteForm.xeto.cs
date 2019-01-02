@@ -50,6 +50,7 @@ namespace FPLedit.Editor.Network
             Title = "Fahrtstrecke für neuen Zug auswählen";
 
             lineRenderer.StationMovingEnabled = false;
+            lineRenderer.HighlightBetweenStations = true;
             lineRenderer.FixedStatusString = "Startstation auswählen";
             lineRenderer.SelectedRoute = -1;
             lineRenderer.SetTimetable(info.Timetable);

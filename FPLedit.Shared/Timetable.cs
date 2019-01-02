@@ -314,6 +314,13 @@ namespace FPLedit.Shared
             var stas = Stations.Where(s => s.Routes.Contains(index)).ToList();
             return new Route() { Index = index, Stations = stas };
         }
+
+        public void JoinRoutes(Station sta1, Station sta2)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool HasRouteCycles => throw new NotImplementedException();
         #endregion
 
         #region Hilfsmethoden für Umläufe
