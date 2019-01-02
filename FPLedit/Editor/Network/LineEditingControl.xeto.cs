@@ -51,27 +51,40 @@ namespace FPLedit.Editor.Network
                 yield return BuildItem("<Standard>", Timetable.LINEAR_ROUTE_ID);
         }
 
-        private void ReloadRouteNames()
+        private void ReloadRouteNames(bool forceReload)
         {
-            var oldCount = routesComboBox.Items.Count;
+            int oldSelected = -1;
+            if (routesComboBox.SelectedValue != null)
+                oldSelected = (int)((ListItem)routesComboBox.SelectedValue).Tag;
             var routes = GetRouteNames(info.Timetable);
             routesComboBox.Items.Clear();
             routesComboBox.Items.AddRange(routes);
-            routesComboBox.SelectedIndex = 0;
-            selectedRoute = 0;
+
+
+            if (oldSelected != -1 && !forceReload && routes.Any(r => (int)r.Tag == oldSelected))
+            {
+                routesComboBox.SelectedIndex = routes.ToList().IndexOf(routes.FirstOrDefault(li => (int)li.Tag == oldSelected));
+                selectedRoute = oldSelected;
+            }
+            else
+            {
+                selectedRoute = 0;
+                routesComboBox.SelectedIndex = 0;
+            }
         }
 
         public void Initialize(IInfo info)
         {
             this.info = info;
+            string lastFn = null;
             info.FileStateChanged += (s, e) =>
             {
                 ReloadTimetable();
                 newButton.Enabled = routesComboBox.Enabled = newLineButton.Enabled = e.FileState.Opened;
                 routesComboBox.Visible = info.FileState.Opened;
 
-                if (e.FileState.LineCreated)
-                    ReloadRouteNames();
+                ReloadRouteNames(lastFn != e.FileState.FileName);
+                lastFn = e.FileState.FileName;
 
                 newLineButton.Visible = divider1.Visible = routesComboBox.Visible = info.FileState.Opened && info.Timetable.Type == TimetableType.Network;
                 newLineButton.Enabled = info.FileState.Opened && info.Timetable.Type == TimetableType.Network && info.Timetable.GetRoutes().Any();
@@ -144,7 +157,7 @@ namespace FPLedit.Editor.Network
                 };
                 menu.Show(this);
             };
-            lineRenderer.NewRouteAdded += (s, args) => ReloadRouteNames();
+            lineRenderer.NewRouteAdded += (s, args) => ReloadRouteNames(false);
             lineRenderer.StationMoveEnd += (s, args) => (info.FileState as FileState).Saved = false;
             newButton.Click += (s, e) =>
             {
