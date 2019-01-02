@@ -27,9 +27,6 @@ namespace FPLedit.jTrainGraphStarter
         public Timetable GetRouteTimetable(TimetableVersion targetVersion)
         {
             var copy = orig.Clone();
-            copy.SetAttribute("version", targetVersion.ToNumberString()); // Wir gehen aus dem Extended-Modus raus
-
-            ColorTimetableConverter.ConvertAll(copy); // Zum Ziel-Farbformat konvertieren
 
             var route = copy.GetRoute(routeIndex);
 
@@ -55,7 +52,6 @@ namespace FPLedit.jTrainGraphStarter
                     return copy.Stations.FirstOrDefault(s => s.XMLEntity == c)?.Positions.GetPosition(routeIndex);
                 return null;
             }).ToList();
-
 
             int syncId = 0;
             for (int ti = 0; ti < copy.Trains.Count; ti++)
@@ -112,6 +108,9 @@ namespace FPLedit.jTrainGraphStarter
                     sta.RemoveAttribute("km"); // Alte Netzwerk-Form entfernen
                 }
             }
+
+            copy.SetAttribute("version", targetVersion.ToNumberString()); // Wir gehen aus dem Extended-Modus raus
+            ColorTimetableConverter.ConvertAll(copy); // Zum Ziel-Farbformat konvertieren
 
             return copy;
         }

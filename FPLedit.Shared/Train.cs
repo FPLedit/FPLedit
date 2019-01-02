@@ -33,7 +33,7 @@ namespace FPLedit.Shared
         public void AddAllArrDeps(List<Station> path)
         {
             if (_parent.Type != TimetableType.Network)
-                throw new Exception("Netzwerk-Fahrpläne haben keine Laufwege!");
+                throw new Exception("Lineare Fahrpläne haben keine Laufwege!");
             foreach (var sta in path)
             {
                 var tElm = new XMLEntity("t");
