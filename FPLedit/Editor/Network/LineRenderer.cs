@@ -79,7 +79,7 @@ namespace FPLedit.Editor.Network
 
         private Station tmp_sta;
         private float tmp_km;
-        private bool addMode => tmp_sta != null;
+        private Modes mode;
 
         public LineRenderer()
         {
@@ -161,7 +161,7 @@ namespace FPLedit.Editor.Network
 
                     var tPen = pen;
                     if (_highlightBetween && _highlightedStations.Contains(sta) && _highlightedStations.Contains(lastSta))
-                        tPen = new Pen(Colors.Red, 2);
+                        tPen = new Pen(Colors.Red, 2); //TODO: Check, ob Stationen wirklich ohne Zwischenstationen sind
                     if (lastP.HasValue)
                         e.Graphics.DrawLine(tPen, x, y, OFFSET_X + lastP.Value.X, OFFSET_Y + lastP.Value.Y);
                     lastP = pos;
@@ -174,8 +174,12 @@ namespace FPLedit.Editor.Network
                         args = new DrawArgs(sta, new Point(x - 5, y - 5), new Size(10, 10), panelColor);
                         panels.Add(args);
                         // Wire events
-                        if (!addMode) ApplyNormalMode(args, sta);
-                        else ApplyAddMode(args, sta);
+                        switch (mode)
+                        {
+                            case Modes.Normal: ApplyNormalMode(args, sta); break;
+                            case Modes.AddRoute: ApplyAddMode(args, sta); break;
+                            case Modes.JoinRoutes: ApplyJoinMode(args, sta); break;
+                        }
                     }
                     args.Color = panelColor;
                 }
@@ -210,7 +214,7 @@ namespace FPLedit.Editor.Network
                 g.DrawText(font, Brushes.Black, pointL, statusL);
             }
 
-            string statusR = addMode ? "Klicken, um Station hinzuzufügen und diese mit einer bestehenden Station zu verbinden; ESC zum Abbrechen" : "Streckennetz bearbeiten";
+            string statusR = GetStatusString(mode);
             statusR = FixedStatusString ?? statusR;
             var sizeR = g.MeasureString(font, statusR);
             var pointR = new PointF(ClientSize.Width - sizeR.Width, ClientSize.Height - sizeR.Height);
@@ -250,6 +254,7 @@ namespace FPLedit.Editor.Network
 
         private void ConnectAddStation(Station sta)
         {
+            mode = Modes.Normal;
             var rtIdx = tt.AddRoute(sta, tmp_sta, 0, tmp_km);
             tt.AddStation(tmp_sta, rtIdx);
             handler.WriteStapos(tt, stapos);
@@ -263,9 +268,33 @@ namespace FPLedit.Editor.Network
         {
             tmp_sta = rawSta;
             tmp_km = km;
+            mode = Modes.AddRoute;
 
             Cursor = Cursors.Crosshair;
             this.Focus();
+        }
+
+        private void ApplyJoinMode(DrawArgs p, Station sta)
+        {
+            p.Click += (s, e) => ConnectJoinLines(sta);
+        }
+
+        public void StartJoinLines(float km)
+        {
+            tmp_km = km;
+            mode = Modes.JoinRoutes;
+
+            Cursor = Cursors.Crosshair;
+            this.Focus();
+        }
+
+        private void ConnectJoinLines(Station sta)
+        {
+            tt.JoinRoutes(SelectedRoute, sta, tmp_km);
+            tmp_sta = null;
+            mode = Modes.Normal;
+
+            ReloadTimetable();
         }
 
         public void AbortAddStation()
@@ -275,6 +304,7 @@ namespace FPLedit.Editor.Network
 
             tmp_sta = null;
             Cursor = Cursors.Default;
+            mode = Modes.Normal;
 
             Invalidate();
         }
@@ -291,6 +321,17 @@ namespace FPLedit.Editor.Network
             Invalidate();
         }
         #endregion
+
+        private string GetStatusString(Modes mode)
+        {
+            switch (mode)
+            {
+                case Modes.Normal: return "Streckennetz bearbeiten";
+                case Modes.AddRoute: return "Klicken, um Station hinzuzufügen und diese mit einer bestehenden Station zu verbinden; ESC zum Abbrechen";
+                case Modes.JoinRoutes: return "Klicken, um die Zielstation der Verbindung auzuwählen; ESC zum Abbrechen";
+                default: return "";
+            }
+        }
 
         public void DispatchKeystroke(KeyEventArgs e)
         {
@@ -499,6 +540,13 @@ namespace FPLedit.Editor.Network
 
             public void Draw(Graphics g)
                 => g.FillRectangle(Color, Rect);
+        }
+
+        private enum Modes
+        {
+            Normal,
+            AddRoute,
+            JoinRoutes,
         }
     }
 }

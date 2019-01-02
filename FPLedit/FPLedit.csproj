@@ -80,6 +80,9 @@
     <Compile Include="Config\ConfigFile.cs" />
     <Compile Include="Config\OptionsParser.cs" />
     <Compile Include="Editor\EditorPlugin.cs" />
+    <Compile Include="Editor\EditPositionForm.xeto.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
     <Compile Include="Editor\Filters\EditPatternForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
@@ -267,6 +270,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Editor\TrainFillDialog.xeto">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\EditPositionForm.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="fpledit.conf">

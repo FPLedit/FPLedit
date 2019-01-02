@@ -315,12 +315,47 @@ namespace FPLedit.Shared
             return new Route() { Index = index, Stations = stas };
         }
 
-        public void JoinRoutes(Station sta1, Station sta2)
+        public void JoinRoutes(int route, Station sta2, float newKm)
         {
-            throw new NotImplementedException();
+            if (Type == TimetableType.Linear)
+                throw new NotSupportedException("Lineare Strecken haben keine Routen!");
+            var routes = sta2.Routes.ToList();
+            routes.Add(route);
+            sta2.Routes = routes.ToArray();
+            sta2.Positions.SetPosition(route, newKm);
         }
 
-        public bool HasRouteCycles => throw new NotImplementedException();
+        public bool HasRouteCycles
+        {
+            get
+            {
+                if (Type == TimetableType.Linear)
+                    throw new NotSupportedException("Lineare Strecken haben keine Routen!");
+
+                var junctions = Stations.Where(s => s.Routes.Count() > 1);
+                var rids = junctions.SelectMany(s => s.Routes).ToList();
+
+                int[] GetSingles() => rids.GroupBy(r => r).Where(g => g.Count() == 1).Select(g => g.Key).ToArray();
+
+                int[] singles = GetSingles();
+                while (singles.Any())
+                {
+                    for (int i = 0; i < singles.Length; i++)
+                    {
+                        var s = singles[i];
+                        // Find junction
+                        var j = junctions.FirstOrDefault(t => t.Routes.Contains(s));
+                        var r = j.Routes;
+                        if (r.Length == 2) // s und eine andere
+                            rids.Remove(r.First(t => t != s));
+                        rids.Remove(s);
+                    }
+                    singles = GetSingles();
+                }
+
+                return rids.Any();
+            }
+        }
         #endregion
 
         #region Hilfsmethoden für Umläufe
