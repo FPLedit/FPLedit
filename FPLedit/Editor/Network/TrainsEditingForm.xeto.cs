@@ -118,7 +118,7 @@ namespace FPLedit.Editor.Network
             if (trf.ShowModal(this) != DialogResult.Ok)
                 return;
 
-            var tef = new TrainEditForm(info.Timetable, TrainDirection.tr);
+            var tef = new TrainEditForm(info.Timetable, TrainDirection.tr, trf.Path);
             if (tef.ShowModal(this) == DialogResult.Ok)
             {
                 tt.AddTrain(tef.Train, true);

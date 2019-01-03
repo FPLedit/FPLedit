@@ -18,7 +18,7 @@ namespace FPLedit.Editor.Network
         private Timetable tt;
         private List<DrawArgs> panels = new List<DrawArgs>();
         private Font font;
-        private Pen linePen;
+        private Pen linePen, highlightPen;
 
         private bool IsNetwork => tt?.Type == TimetableType.Network;
 
@@ -53,7 +53,7 @@ namespace FPLedit.Editor.Network
             set { _highlightBetween = value; Invalidate(); }
         }
 
-        private List<Station> _highlightedStations = new List<Station>();
+        private List<Station> _highlightedPath = new List<Station>();
 
         private PointF _pan = new PointF();
         public PointF Pan
@@ -85,7 +85,8 @@ namespace FPLedit.Editor.Network
         {
             layout = new PixelLayout();
             font = new Font(FontFamilies.SansFamilyName, 8);
-            linePen = new Pen(Colors.Black, 2.0f);
+            linePen = new Pen(Colors.Black, 2f);
+            highlightPen = new Pen(Colors.Red, 2f);
             handler = new StaPosHandler();
 
             MouseDown += (s, e) => PlaceStation();
@@ -132,9 +133,6 @@ namespace FPLedit.Editor.Network
             Station lastSta = null;
             foreach (var r in routes)
             {
-                var pen = linePen;
-                if (r.Index == SelectedRoute)
-                    pen = new Pen(Colors.Red, 2);
                 Point? lastP = null;
                 foreach (var sta in r.GetOrderedStations())
                 {
@@ -159,15 +157,13 @@ namespace FPLedit.Editor.Network
 
                     e.Graphics.RestoreTransform();
 
-                    var tPen = pen;
-                    if (_highlightBetween && _highlightedStations.Contains(sta) && _highlightedStations.Contains(lastSta))
-                        tPen = new Pen(Colors.Red, 2); //TODO: Check, ob Stationen wirklich ohne Zwischenstationen sind
+                    var tPen = GetLinePan(r.Index, sta, lastSta);
                     if (lastP.HasValue)
                         e.Graphics.DrawLine(tPen, x, y, OFFSET_X + lastP.Value.X, OFFSET_Y + lastP.Value.Y);
                     lastP = pos;
                     lastSta = sta;
 
-                    var panelColor = _highlightedStations.Contains(sta) ? Colors.Red : Colors.Gray;
+                    var panelColor = _highlightedPath.Contains(sta) ? Colors.Red : Colors.Gray;
                     DrawArgs args = panels.FirstOrDefault(pa => pa.Station == sta);
                     if (args == null)
                     {
@@ -228,6 +224,22 @@ namespace FPLedit.Editor.Network
                 return;
             var pen = new Pen(Brushes.Black) { DashStyle = DashStyle.Parse("2,2,2,2") };
             g.DrawLine(pen, Point.Empty, new Point(ClientSize.Width, 0));
+        }
+
+        private Pen GetLinePan(int route, Station sta, Station lastSta)
+        {
+            if (route == SelectedRoute || (_highlightBetween && IsDirectlyConnected(sta, lastSta)))
+                return highlightPen;
+            return linePen;
+        }
+
+        private bool IsDirectlyConnected(Station sta1, Station sta2)
+        {
+            var idx1 = _highlightedPath.IndexOf(sta1);
+            var idx2 = _highlightedPath.IndexOf(sta2);
+            if (idx1 == -1 || idx2 == -1)
+                return false;
+            return Math.Abs(idx1 - idx2) == 1;
         }
 
         protected override void OnSizeChanged(EventArgs e)
@@ -469,27 +481,15 @@ namespace FPLedit.Editor.Network
         #endregion
 
         #region Highlight
-        public void AddHighlight(IEnumerable<Station> stations)
+        public void SetHighlightedPath(IEnumerable<Station> stations)
         {
-            _highlightedStations.AddRange(stations);
+            _highlightedPath = stations.ToList();
             Invalidate();
         }
 
-        public void AddHighlight(Station station)
+        public void ClearHighlightedPath()
         {
-            _highlightedStations.Add(station);
-            Invalidate();
-        }
-
-        public void RemoveHighlight(Station station)
-        {
-            _highlightedStations.Remove(station);
-            Invalidate();
-        }
-
-        public void ClearHighlight()
-        {
-            _highlightedStations.Clear();
+            _highlightedPath.Clear();
             Invalidate();
         }
         #endregion

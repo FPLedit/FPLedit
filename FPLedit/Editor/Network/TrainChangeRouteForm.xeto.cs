@@ -8,6 +8,7 @@ using System.Linq;
 
 namespace FPLedit.Editor.Network
 {
+    //TODO: Stützpunkte
     internal class TrainChangeRouteForm : Dialog<DialogResult>
     {
 #pragma warning disable CS0649
@@ -37,7 +38,7 @@ namespace FPLedit.Editor.Network
             lineRenderer.SetTimetable(info.Timetable);
             lineRenderer.StationClicked += ChangeRoute;
             lineRenderer.DisableTopBorder = true;
-            lineRenderer.AddHighlight(Path);
+            lineRenderer.SetHighlightedPath(Path);
 
             this.AddSizeStateHandler();
         }
@@ -99,13 +100,13 @@ namespace FPLedit.Editor.Network
                 {
                     pl.Remove(pl.First());
                     Path.AddRange(pl); // Am Ende anbauen
-                    lineRenderer.AddHighlight(pl);
+                    lineRenderer.SetHighlightedPath(Path);
                 }
                 else if (intersectf.Count() == 1)
                 {
                     pf.Remove(pf.Last());
                     Path.InsertRange(0, pf); // Am Anfang anbauen
-                    lineRenderer.AddHighlight(pf);
+                    lineRenderer.SetHighlightedPath(Path);
                 }
                 else
                 {
@@ -125,8 +126,8 @@ namespace FPLedit.Editor.Network
             }
             else
             {
-                lineRenderer.RemoveHighlight(sta);
                 Path.Remove(sta);
+                lineRenderer.SetHighlightedPath(Path);
             }
         }
 
@@ -135,7 +136,7 @@ namespace FPLedit.Editor.Network
             if (staStart == null)
             {
                 staStart = (Station)sender;
-                lineRenderer.AddHighlight(staStart);
+                lineRenderer.SetHighlightedPath(new[] { staStart });
                 lineRenderer.FixedStatusString = "Zielstation auswählen";
             }
             else if (staEnd == null)
@@ -151,7 +152,7 @@ namespace FPLedit.Editor.Network
 
                 var pathfinder = new Pathfinder(info.Timetable);
                 Path = pathfinder.GetFromAToB(staStart, staEnd);
-                lineRenderer.AddHighlight(Path.Skip(1));
+                lineRenderer.SetHighlightedPath(Path);
                 closeButton.Enabled = true;
 
                 lineRenderer.FixedStatusString = "";
@@ -169,7 +170,7 @@ namespace FPLedit.Editor.Network
 
             Path = new List<Station>();
 
-            lineRenderer.ClearHighlight();
+            lineRenderer.ClearHighlightedPath();
             closeButton.Enabled = false;
             lineRenderer.FixedStatusString = "Startstation auswählen";
 
