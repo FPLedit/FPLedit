@@ -16,12 +16,19 @@ namespace FPLedit.Shared.Helpers
             this.tt = tt;
         }
 
-        public List<Station> GetFromAToB(Station start, Station dest)
+        public List<Station> GetFromAToB(Station start, Station dest, params Station[] waypoints)
         {
             if (!tt.Stations.Contains(start) || !tt.Stations.Contains(dest))
                 throw new ArgumentException("Start- oder Zielstation noch nicht im Fahrplan enthalten");
 
-            return GetFromAToBIter(start, dest, new List<Station>(), new HashSet<Station>());
+            var points = new List<Station>(waypoints);
+            points.Insert(0, start);
+            points.Add(dest);
+
+            var ret = new List<Station>();
+            for (int i = 0; i < points.Count - 1; i++)
+                ret.AddRange(GetFromAToBIter(points[i], points[i + 1], new List<Station>(), new HashSet<Station>()));
+            return ret;
         }
 
         private IEnumerable<Station> GetNextStations(Station sta)

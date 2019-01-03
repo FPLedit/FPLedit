@@ -131,7 +131,7 @@
     <Compile Include="Editor\TrainCopyDialog.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Editor\Network\TrainChangeRouteForm.xeto.cs">
+    <Compile Include="Editor\Network\TrainRouteForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Editor\TrainEditForm.xeto.cs">
@@ -234,7 +234,7 @@
     <EmbeddedResource Include="Editor\TrainEditForm.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Editor\Network\TrainChangeRouteForm.xeto">
+    <EmbeddedResource Include="Editor\Network\TrainRouteForm.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Editor\TrainCopyDialog.xeto">

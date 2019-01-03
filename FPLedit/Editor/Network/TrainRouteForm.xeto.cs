@@ -9,11 +9,12 @@ using System.Linq;
 namespace FPLedit.Editor.Network
 {
     //TODO: Stützpunkte
-    internal class TrainChangeRouteForm : Dialog<DialogResult>
+    internal class TrainRouteForm : Dialog<DialogResult>
     {
 #pragma warning disable CS0649
         private LineRenderer lineRenderer;
         private Button closeButton;
+        private CheckBox waypointsCheckBox;
 #pragma warning restore CS0649
 
         private IInfo info;
@@ -23,43 +24,52 @@ namespace FPLedit.Editor.Network
 
         private Station staStart, staEnd; // Set-Mode
 
-        public TrainChangeRouteForm(IInfo info, Train tra)
+        private bool waypointsAllowed = false;
+        private List<Station> wayPoints = new List<Station>();
+
+        private TrainRouteForm(IInfo info)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
             this.info = info;
-            train = tra;
-            Path = tra.GetPath();
-            Title = Title.Replace("{train}", tra.TName);
 
             lineRenderer.StationMovingEnabled = false;
-            lineRenderer.FixedStatusString = "Durch Klick Stationen am Anfang/Ende des Laufwegs entfernen";
+            lineRenderer.HighlightBetweenStations = true;
             lineRenderer.SelectedRoute = -1;
             lineRenderer.SetTimetable(info.Timetable);
-            lineRenderer.StationClicked += ChangeRoute;
             lineRenderer.DisableTopBorder = true;
-            lineRenderer.SetHighlightedPath(Path);
 
             this.AddSizeStateHandler();
         }
 
-        public TrainChangeRouteForm(IInfo info)
+        public static TrainRouteForm EditPath(IInfo info, Train tra)
         {
-            Eto.Serialization.Xaml.XamlReader.Load(this);
+            var trf = new TrainRouteForm(info);
+            trf.train = tra;
+            trf.Path = tra.GetPath();
+            trf.Title = trf.Title.Replace("{train}", tra.TName);
 
-            this.info = info;
-            Title = "Fahrtstrecke für neuen Zug auswählen";
+            trf.lineRenderer.FixedStatusString = "Durch Klick Stationen am Anfang/Ende des Laufwegs entfernen";
+            trf.lineRenderer.StationClicked += trf.ChangeRoute;
+            trf.lineRenderer.SetHighlightedPath(trf.Path);
+            trf.waypointsAllowed = false;
+            trf.waypointsCheckBox.Visible = false;
+            return trf;
+        }
 
-            lineRenderer.StationMovingEnabled = false;
-            lineRenderer.HighlightBetweenStations = true;
-            lineRenderer.FixedStatusString = "Startstation auswählen";
-            lineRenderer.SelectedRoute = -1;
-            lineRenderer.SetTimetable(info.Timetable);
-            lineRenderer.DisableTopBorder = true;
-            lineRenderer.StationClicked += SetRoute;
+        public static TrainRouteForm NewTrain(IInfo info)
+        {
+            var trf = new TrainRouteForm(info);
+            trf.Title = "Fahrtstrecke für neuen Zug auswählen";
 
-            closeButton.Text = "Weiter >>";
-            closeButton.Enabled = false;
+            trf.lineRenderer.FixedStatusString = "Startstation auswählen";
+            trf.lineRenderer.StationClicked += trf.SetRoute;
+
+            trf.closeButton.Text = "Weiter >>";
+            trf.closeButton.Enabled = false;
+            trf.waypointsAllowed = info.Timetable.HasRouteCycles;
+            trf.waypointsCheckBox.Visible = true;
+            return trf;
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -90,28 +100,26 @@ namespace FPLedit.Editor.Network
             if (!Path.Contains(sta))
             {
                 var pathfinder = new Pathfinder(info.Timetable);
-                var pf = pathfinder.GetFromAToB(sta, Path.First());
-                var pl = pathfinder.GetFromAToB(Path.Last(), sta);
-
-                var intersectf = Path.Intersect(pf);
-                var intersectl = Path.Intersect(pl);
-
-                if (pf.Count > pl.Count && intersectl.Count() == 1)
+                if (waypointsAllowed && waypointsCheckBox.Checked.Value)
                 {
-                    pl.Remove(pl.First());
-                    Path.AddRange(pl); // Am Ende anbauen
-                    lineRenderer.SetHighlightedPath(Path);
-                }
-                else if (intersectf.Count() == 1)
-                {
-                    pf.Remove(pf.Last());
-                    Path.InsertRange(0, pf); // Am Anfang anbauen
-                    lineRenderer.SetHighlightedPath(Path);
+                    if (!wayPoints.Contains(sta))
+                        wayPoints.Add(sta);
+                    Path = pathfinder.GetFromAToB(Path.First(), Path.Last(), wayPoints.ToArray());
                 }
                 else
                 {
-                    MessageBox.Show("Diese Station kann nicht zum Laufweg hinzugefügt werden, da dabei ein verzweigter Laufweg entstehen würde!",
-                        "FPLedit");
+                    var pf = pathfinder.GetFromAToB(sta, Path.First(), wayPoints.ToArray());
+                    var pl = pathfinder.GetFromAToB(Path.Last(), sta);
+
+                    var intersectf = Path.Intersect(pf);
+                    var intersectl = Path.Intersect(pl);
+
+                    if (pf.Count > pl.Count && intersectl.Count() == 1)
+                        Path.AddRange(pl.Skip(1)); // Am Ende anbauen
+                    else if (intersectf.Count() == 1)
+                        Path.InsertRange(0, pf.Take(pf.Count - 1)); // Am Anfang anbauen
+                    else
+                        MessageBox.Show("Diese Station kann nicht zum Laufweg hinzugefügt werden, da dabei ein verzweigter Laufweg entstehen würde!", "FPLedit");
                 }
             }
             else if (sta != Path.Last() && sta != Path.First())
@@ -125,10 +133,9 @@ namespace FPLedit.Editor.Network
                     "FPLedit");
             }
             else
-            {
                 Path.Remove(sta);
-                lineRenderer.SetHighlightedPath(Path);
-            }
+
+            lineRenderer.SetHighlightedPath(Path);
         }
 
         private void SetRoute(object sender, EventArgs e)
