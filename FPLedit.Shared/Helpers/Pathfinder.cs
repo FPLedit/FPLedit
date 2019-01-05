@@ -16,7 +16,7 @@ namespace FPLedit.Shared.Helpers
             this.tt = tt;
         }
 
-        public List<Station> GetFromAToB(Station start, Station dest, params Station[] waypoints)
+        public List<Station> GetPath(Station start, Station dest, params Station[] waypoints)
         {
             if (!tt.Stations.Contains(start) || !tt.Stations.Contains(dest))
                 throw new ArgumentException("Start- oder Zielstation noch nicht im Fahrplan enthalten");
@@ -27,8 +27,8 @@ namespace FPLedit.Shared.Helpers
 
             var ret = new List<Station>();
             for (int i = 0; i < points.Count - 1; i++)
-                ret.AddRange(GetFromAToBIter(points[i], points[i + 1], new List<Station>(), new HashSet<Station>()));
-            return ret;
+                ret.AddRange(GetFromAToB(points[i], points[i + 1]));
+            return ret.Distinct().ToList();
         }
 
         private IEnumerable<Station> GetNextStations(Station sta)
@@ -45,26 +45,38 @@ namespace FPLedit.Shared.Helpers
             }
         }
 
-        private List<Station> GetFromAToBIter(Station a, Station dest, List<Station> way, HashSet<Station> visited)
+        private List<Station> GetFromAToB(Station start, Station dest)
         {
-            if (!visited.Add(a))
-                return null;
+            var visited = new HashSet<Station>();
+            var queue = new Queue<Station>();
+            var parents = new Dictionary<Station, Station>();
+            var ways = new Dictionary<Station, Station[]>();
 
-            way.Add(a);
-            var orig = way;
+            queue.Enqueue(start);
+            parents[start] = null;
+            ways[start] = new Station[0];
 
-            foreach (var sta in GetNextStations(a))
+            while (queue.Any())
             {
-                if (sta == dest)
-                    way.Add(dest);
-                else
-                    way = GetFromAToBIter(sta, dest, way.ToList(), visited);
+                var rail = queue.Dequeue();
 
-                if (way?.Last() == dest)
-                    return way;
+                if (rail == dest)
+                    return ways[dest].SkipWhile(r => r == null).Concat(new[] { dest }).ToList();
 
-                way = orig;
+                var last = parents[rail];
+                foreach (var n in GetNextStations(rail))
+                {
+                    if (visited.Contains(n) || queue.Contains(n))
+                        continue;
+
+                    parents[n] = rail;
+                    ways[n] = ways[last ?? start].Concat(new[] { last, rail }).ToArray();
+                    queue.Enqueue(n);
+                }
+
+                visited.Add(rail);
             }
+
             return null;
         }
     }

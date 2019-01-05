@@ -104,12 +104,12 @@ namespace FPLedit.Editor.Network
                 {
                     if (!wayPoints.Contains(sta))
                         wayPoints.Add(sta);
-                    Path = pathfinder.GetFromAToB(Path.First(), Path.Last(), wayPoints.ToArray());
+                    Path = pathfinder.GetPath(Path.First(), Path.Last(), wayPoints.ToArray());
                 }
                 else
                 {
-                    var pf = pathfinder.GetFromAToB(sta, Path.First(), wayPoints.ToArray());
-                    var pl = pathfinder.GetFromAToB(Path.Last(), sta);
+                    var pf = pathfinder.GetPath(sta, Path.First(), wayPoints.ToArray());
+                    var pl = pathfinder.GetPath(Path.Last(), sta);
 
                     var intersectf = Path.Intersect(pf);
                     var intersectl = Path.Intersect(pl);
@@ -158,7 +158,7 @@ namespace FPLedit.Editor.Network
                 }
 
                 var pathfinder = new Pathfinder(info.Timetable);
-                Path = pathfinder.GetFromAToB(staStart, staEnd);
+                Path = pathfinder.GetPath(staStart, staEnd);
                 lineRenderer.SetHighlightedPath(Path);
                 closeButton.Enabled = true;
 
