@@ -7,6 +7,7 @@ using System.Linq;
 using FPLedit.Shared.UI;
 using Eto;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 
 namespace FPLedit.Editor.Network
 {
@@ -17,6 +18,7 @@ namespace FPLedit.Editor.Network
         private Button internalToggle;
         private ToggleButton trapeztafelToggle;
         private Button zlmButton;
+        private TableLayout actionsLayout;
 #pragma warning restore CS0649
 
         private Timetable tt;
@@ -25,18 +27,19 @@ namespace FPLedit.Editor.Network
 
         protected override int FirstEditingColumn => 2; // erstes Abfahrtsfeld (Ankunft ja deaktiviert)
 
-        private ObservableCollection<Control> actionButtons = new ObservableCollection<Control>();
+        private ObservableCollection<Control> actionButtons;
         public IList<Control> ActionButtons => actionButtons;
 
         public SingleTimetableEditControl()
         {
+            actionButtons = new ObservableCollection<Control>();
             actionButtons.CollectionChanged += (s, e) =>
             {
-                var row = FindChild<TableLayout>("actionsLayout").Rows[0];
-                if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+                var row = actionsLayout.Rows[0];
+                if (e.Action == NotifyCollectionChangedAction.Add)
                     foreach (Control btn in e.NewItems)
                         row.Cells.Add(btn);
-                if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+                if (e.Action == NotifyCollectionChangedAction.Remove)
                     foreach (Control btn in e.OldItems)
                         row.Cells.Remove(btn);
             };

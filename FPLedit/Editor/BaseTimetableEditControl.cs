@@ -21,6 +21,11 @@ namespace FPLedit.Editor
 
         public bool Initialized { get; protected set; }
 
+        protected BaseTimetableEditControl()
+        {
+
+        }
+
         protected void Init(ToggleButton trapeztafelToggle)
         {
             this.trapeztafelToggle = trapeztafelToggle;

@@ -20,6 +20,7 @@ namespace FPLedit.Editor.Linear
         private Button internalToggle;
         private ToggleButton trapeztafelToggle;
         private Button zlmButton;
+        private TableLayout actionsLayout;
 #pragma warning restore CS0649
 
         private GridView focused;
@@ -28,14 +29,15 @@ namespace FPLedit.Editor.Linear
 
         protected override int FirstEditingColumn => 1; // erstes Abfahrtsfeld
 
-        private ObservableCollection<Control> actionButtons = new ObservableCollection<Control>();
+        private ObservableCollection<Control> actionButtons;
         public IList<Control> ActionButtons => actionButtons;
 
         public LineTimetableEditControl()
         {
+            actionButtons = new ObservableCollection<Control>();
             actionButtons.CollectionChanged += (s, e) =>
             {
-                var row = FindChild<TableLayout>("actionsLayout").Rows[0];
+                var row = actionsLayout.Rows[0];
                 if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
                     foreach (Control btn in e.NewItems)
                         row.Cells.Add(btn);
