@@ -10,6 +10,7 @@
         <Button x:Name="newButton" Enabled="false">Neue Station</Button>
         <editor:Divider x:Name="divider1"/>
         <Button x:Name="newLineButton" Enabled="false">Neue Strecke</Button>
+        <Button x:Name="joinLineButton" Enabled="false">Strecken zusammenführen</Button>
       </StackLayout>
     </TableRow>
     <TableRow ScaleHeight="True">

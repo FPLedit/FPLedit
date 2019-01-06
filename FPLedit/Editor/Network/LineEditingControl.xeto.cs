@@ -19,7 +19,7 @@ namespace FPLedit.Editor.Network
 #pragma warning disable CS0649
         private DropDown routesComboBox;
         private LineRenderer lineRenderer;
-        private Button newLineButton, newButton;
+        private Button newLineButton, newButton, joinLineButton;
         private Divider divider1;
         private StackLayout toolbar;
 #pragma warning restore CS0649
@@ -60,7 +60,6 @@ namespace FPLedit.Editor.Network
             routesComboBox.Items.Clear();
             routesComboBox.Items.AddRange(routes);
 
-
             if (oldSelected != -1 && !forceReload && routes.Any(r => (int)r.Tag == oldSelected))
             {
                 routesComboBox.SelectedIndex = routes.ToList().IndexOf(routes.FirstOrDefault(li => (int)li.Tag == oldSelected));
@@ -86,8 +85,8 @@ namespace FPLedit.Editor.Network
                 ReloadRouteNames(lastFn != e.FileState.FileName);
                 lastFn = e.FileState.FileName;
 
-                newLineButton.Visible = divider1.Visible = routesComboBox.Visible = info.FileState.Opened && info.Timetable.Type == TimetableType.Network;
-                newLineButton.Enabled = info.FileState.Opened && info.Timetable.Type == TimetableType.Network && info.Timetable.GetRoutes().Any();
+                newLineButton.Visible = joinLineButton.Visible = divider1.Visible = routesComboBox.Visible = info.FileState.Opened && info.Timetable.Type == TimetableType.Network;
+                newLineButton.Enabled = joinLineButton.Enabled = info.FileState.Opened && info.Timetable.Type == TimetableType.Network && info.Timetable.GetRoutes().Any();
 
                 foreach (Control c in toolbar.Controls)
                 {
@@ -186,6 +185,17 @@ namespace FPLedit.Editor.Network
                 if (nlf.ShowModal(this) == DialogResult.Ok)
                 {
                     lineRenderer.StartAddStation(nlf.Station, nlf.Position);
+                    info.SetUnsaved();
+                }
+            };
+            joinLineButton.Click += (s, e) =>
+            {
+                info.StageUndoStep();
+                var epf = new EditPositionForm();
+                if (epf.ShowModal(this) == DialogResult.Ok)
+                {
+                    lineRenderer.StartJoinLines(epf.Position);
+                    ReloadTimetable();
                     info.SetUnsaved();
                 }
             };

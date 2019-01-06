@@ -89,12 +89,12 @@ namespace FPLedit.Editor.Network
             {
                 var train = (Train)view.SelectedItem;
 
-                var trf = new TrainChangeRouteForm(info, train);
+                var trf = TrainRouteForm.EditPath(info, train);
                 if (trf.ShowModal(this) == DialogResult.Ok)
                     UpdateListView(view, TrainDirection.tr);
             }
             else if (message)
-                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug-Fahrplan bearbeiten");
+                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Laufweg bearbeiten");
         }
 
         private void CopyTrain(GridView view, bool message = true)
@@ -114,11 +114,11 @@ namespace FPLedit.Editor.Network
 
         private void NewTrain(GridView view)
         {
-            var trf = new TrainChangeRouteForm(info);
+            var trf = TrainRouteForm.NewTrain(info);
             if (trf.ShowModal(this) != DialogResult.Ok)
                 return;
 
-            var tef = new TrainEditForm(info.Timetable, TrainDirection.tr);
+            var tef = new TrainEditForm(info.Timetable, TrainDirection.tr, trf.Path);
             if (tef.ShowModal(this) == DialogResult.Ok)
             {
                 tt.AddTrain(tef.Train, true);
