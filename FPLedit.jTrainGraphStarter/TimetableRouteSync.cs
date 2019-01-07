@@ -58,8 +58,12 @@ namespace FPLedit.jTrainGraphStarter
             {
                 var tra = copy.Trains[ti];
                 var ardps = tra.GetArrDeps();
+                var path = tra.GetPath();
 
-                if (ardps.Count == 0) // Dieser Zug berührt diese Route nicht
+                var pf = path.FirstOrDefault();
+                var pl = path.LastOrDefault();
+                var isEmpty = (pf != null && pl != null && ardps[pf].Arrival != default && ardps[pf].Departure == default) || (ardps[pl].Departure != default && ardps[pl].Arrival == default);
+                if (ardps.Count == 0 || ardps.All(a => !a.Value.HasMinOneTimeSet) || isEmpty) // Dieser Zug berührt diese Route nicht
                 {
                     copy.RemoveTrain(tra);
                     ti--;
