@@ -137,6 +137,7 @@ namespace FPLedit.Editor.Network
                 foreach (var sta in r.GetOrderedStations())
                 {
                     var pos = stapos[sta];
+                    var p = OFFSET + pos;
                     var x = OFFSET_X + pos.X;
                     var y = OFFSET_Y + pos.Y;
 
@@ -157,9 +158,9 @@ namespace FPLedit.Editor.Network
 
                     e.Graphics.RestoreTransform();
 
-                    var tPen = GetLinePan(r.Index, sta, lastSta);
+                    var tPen = GetLinePen(r.Index, sta, lastSta);
                     if (lastP.HasValue)
-                        e.Graphics.DrawLine(tPen, x, y, OFFSET_X + lastP.Value.X, OFFSET_Y + lastP.Value.Y);
+                        e.Graphics.DrawLine(tPen, p, OFFSET + lastP.Value);
                     lastP = pos;
                     lastSta = sta;
 
@@ -226,7 +227,7 @@ namespace FPLedit.Editor.Network
             g.DrawLine(pen, Point.Empty, new Point(ClientSize.Width, 0));
         }
 
-        private Pen GetLinePan(int route, Station sta, Station lastSta)
+        private Pen GetLinePen(int route, Station sta, Station lastSta)
         {
             if (route == SelectedRoute || (_highlightBetween && IsDirectlyConnected(sta, lastSta)))
                 return highlightPen;
@@ -235,11 +236,16 @@ namespace FPLedit.Editor.Network
 
         private bool IsDirectlyConnected(Station sta1, Station sta2)
         {
-            var idx1 = _highlightedPath.IndexOf(sta1);
-            var idx2 = _highlightedPath.IndexOf(sta2);
-            if (idx1 == -1 || idx2 == -1)
-                return false;
-            return Math.Abs(idx1 - idx2) == 1;
+            for (int i = 0; i < _highlightedPath.Count; i++)
+            {
+                if (_highlightedPath[i] != sta1)
+                    continue;
+                if (i > 0 && _highlightedPath[i - 1] == sta2)
+                    return true;
+                if (i < _highlightedPath.Count - 1 && _highlightedPath[i + 1] == sta2)
+                    return true;
+            }
+            return false;
         }
 
         protected override void OnSizeChanged(EventArgs e)

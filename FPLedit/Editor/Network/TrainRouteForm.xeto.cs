@@ -8,7 +8,6 @@ using System.Linq;
 
 namespace FPLedit.Editor.Network
 {
-    //TODO: Stützpunkte
     internal class TrainRouteForm : Dialog<DialogResult>
     {
 #pragma warning disable CS0649

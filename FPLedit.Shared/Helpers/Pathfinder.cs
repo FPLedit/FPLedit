@@ -27,8 +27,11 @@ namespace FPLedit.Shared.Helpers
 
             var ret = new List<Station>();
             for (int i = 0; i < points.Count - 1; i++)
-                ret.AddRange(GetFromAToB(points[i], points[i + 1]));
-            return ret.Distinct().ToList();
+            {
+                var part = GetFromAToB(points[i], points[i + 1]);
+                ret.AddRange(part.Skip(i == 0 ? 0 : 1));
+            }
+            return ret;
         }
 
         private IEnumerable<Station> GetNextStations(Station sta)
