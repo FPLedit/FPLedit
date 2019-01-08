@@ -62,7 +62,8 @@ namespace FPLedit.Editor.Network
 
             if (oldSelected != -1 && !forceReload && routes.Any(r => (int)r.Tag == oldSelected))
             {
-                routesComboBox.SelectedIndex = routes.ToList().IndexOf(routes.FirstOrDefault(li => (int)li.Tag == oldSelected));
+                var rl = routes.ToList();
+                routesComboBox.SelectedIndex = rl.IndexOf(rl.FirstOrDefault(li => (int)li.Tag == oldSelected));
                 selectedRoute = oldSelected;
             }
             else

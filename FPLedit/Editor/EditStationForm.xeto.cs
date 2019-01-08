@@ -4,8 +4,6 @@ using FPLedit.Shared.UI.Validators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.Editor
 {
@@ -25,8 +23,10 @@ namespace FPLedit.Editor
 
         public float Position { get; private set; }
 
-        private void Init()
+        private EditStationForm()
         {
+            Eto.Serialization.Xaml.XamlReader.Load(this);
+
             positionValidator = new NumberValidator(positionTextBox, false, false);
             positionValidator.ErrorMessage = "Bitte eine Zahl als Position eingeben!";
             nameValidator = new NotEmptyValidator(nameTextBox);
@@ -34,31 +34,19 @@ namespace FPLedit.Editor
             validators = new ValidatorCollection(positionValidator, nameValidator);
         }
 
-        public EditStationForm(Timetable tt)
+        public EditStationForm(Timetable tt) : this(tt, -1) // Neue Station ohne Routenangabe
         {
-            Eto.Serialization.Xaml.XamlReader.Load(this);
-            Init();
-
-            Title = "Neue Station erstellen";
-            _parent = tt;
-            route = -1;
         }
 
-        public EditStationForm(Timetable tt, int route)
+        public EditStationForm(Timetable tt, int route) : this() // Neue Station mit Routenangabe
         {
-            Eto.Serialization.Xaml.XamlReader.Load(this);
-            Init();
-
             Title = "Neue Station erstellen";
             _parent = tt;
             this.route = route;
         }
 
-        public EditStationForm(Station station, int route)
+        public EditStationForm(Station station, int route) : this() // Station editieren
         {
-            Eto.Serialization.Xaml.XamlReader.Load(this);
-            Init();
-
             Title = "Station bearbeiten";
             nameTextBox.Text = station.SName;
             positionTextBox.Text = station.Positions.GetPosition(route).Value.ToString("0.0");
