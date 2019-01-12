@@ -25,6 +25,7 @@
 <#
 string font = "\"Alte DIN 1451 Mittelschrift\"";
 string additionalCss = "";
+bool showDays = false, showComments = false;
 // Initialisierung
 TemplateHelper helper = new TemplateHelper(tt);
 
@@ -34,6 +35,8 @@ if (attrs != null)
     if (attrs.Font != "")
         font = attrs.Font;
     additionalCss = attrs.Css ?? "";
+	showDays = attrs.ShowDays;
+	showComments = attrs.ShowComments;
 }
 #>
 
@@ -168,7 +171,7 @@ if (attrs != null)
 				<tr>
 					<#
 						string days = "";
-						if (attrs.ShowDays)
+						if (showDays)
 							days = " <span class=\"days\">" + DaysHelper.DaysToString(tra.Days, true) + "</span>";
 					#>
 					<td colspan=6 class="trainname"><#= tra.TName #><#= days #></td>
@@ -176,7 +179,7 @@ if (attrs != null)
 				<tr>
 					<td colspan=6 class="linename"><#= tra.GetLineName() #></td>
 				</tr>
-				<# if (attrs.ShowComments && tra.Comment != null && tra.Comment != "") { #>
+				<# if (showComments && tra.Comment != null && tra.Comment != "") { #>
 				<tr>
 					<td colspan="10" class="comment"><#= tra.Comment #></td>
 				</tr>
