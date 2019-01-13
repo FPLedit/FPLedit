@@ -1,8 +1,8 @@
 /*
  * FPLedit Release-Prozess
  * Erstellt aus einem Ordner mit Kompilaten eine ZIP-Datei
- * Aufruf mit Pfad zum Ordner der Kompilate
- * Version 0.5 / (c) Manuel Huber 2018
+ * Aufruf: build-release.csx $(TargetDir)
+ * Version 0.5 / (c) Manuel Huber 2019
  */
 
 #r "System.IO.Compression.FileSystem.dll"

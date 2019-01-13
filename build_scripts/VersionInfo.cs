@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyCompany("Manuel Huber")]
 [assembly: AssemblyProduct("FPLedit")]
-[assembly: AssemblyCopyright("Copyright © 2016-2018 Manuel Huber")]
+[assembly: AssemblyCopyright("Copyright © 2015-2019 Manuel Huber")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -19,14 +19,25 @@ using System.Runtime.InteropServices;
 // übernehmen, indem Sie "*" eingeben:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")] // Do not change
-[assembly: AssemblyFileVersion("2.0.0.0")] // File Version -> increment for fixes
+[assembly: AssemblyFileVersion(Vi.FileVersion)] // File Version -> increment for fixes
 
-[assembly: AssemblyInformationalVersion("2.0.0")] // Display Version
+[assembly: AssemblyInformationalVersion(Vi.InformationalVersion)] // Display Version
 
-// Central version information used in plugins
-internal static class Pvi
+// Central version information used in plugins & main application
+internal static class Vi
 {
-    public const string Version = "2.0.0"; // Version of plugin (normally equasls assembly major.minor
-    public const string UpTo = "2.0"; // Compatible up to (normally "Version" without patch)
-    public const string From = "2.0.0"; // Compatible from - normally equals assembly version
+    /*
+     * FOR EVERY RELEASE: Increment InformationalVersion an maybe also PUpTo.
+     * The rest ist updated automatically
+     */
+    public const string InformationalVersion = "2.1.0";
+    public const string PUpTo = "2.1"; // Compatible up to (normally "Version" without patch)
+
+    /*
+     * It shouldn't be necessary to update the following entries.
+     */
+    public const string FileVersion = InformationalVersion + ".0";
+
+    public const string PVersion = InformationalVersion; // Version of plugin (normally equasls assembly major.minor.patch)
+    public const string PFrom = InformationalVersion; // Compatible from - normally equals assembly version
 }

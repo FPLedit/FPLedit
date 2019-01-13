@@ -1,8 +1,8 @@
 /*
  * FPLedit Build-Prozess
  * Kopiert die Eto-Plattform-Assemblies
- * Aufruf: $0 $(SolutionDir) $(TargetDir)
- * Version 0.1 / (c) Manuel Huber 2018
+ * Aufruf: build-pre.csx $(SolutionDir) $(TargetDir)
+ * Version 0.1 / (c) Manuel Huber 2019
  */
 
 using System;

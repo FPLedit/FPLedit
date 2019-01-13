@@ -312,7 +312,8 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent Condition=" '$(OS)' == 'Windows_NT' ">rem DO NOT EDIT. VS WILL DESTROY CONDITIONS!
-	
+rem This will only be run on Windows
+
 set csi="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\Roslyn\csi.exe"
 if $(ConfigurationName) == Release (
     %25csi%25  "$(SolutionDir)build_scripts\build-release.csx" $(TargetDir)
@@ -321,6 +322,7 @@ if $(ConfigurationName) == Release (
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent Condition=" '$(OS)' == 'Windows_NT' ">rem DO NOT EDIT. VS WILL DESTROY CONDITIONS!
+rem This will only be run on Windows
 
 set csi="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\Roslyn\csi.exe"
 %25csi%25  "$(SolutionDir)build_scripts\build-pre.csx" $(SolutionDir) $(TargetDir)</PreBuildEvent>

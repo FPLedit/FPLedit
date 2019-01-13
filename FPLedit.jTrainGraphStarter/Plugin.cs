@@ -10,7 +10,7 @@ using System.Text;
 
 namespace FPLedit.jTrainGraphStarter
 {
-    [Plugin("Starter für jTrainGraph", Pvi.From, Pvi.UpTo, Author = "Manuel Huber")]
+    [Plugin("Starter für jTrainGraph", Vi.PFrom, Vi.PUpTo, Author = "Manuel Huber")]
     public class Plugin : IPlugin
     {
         IInfo info;

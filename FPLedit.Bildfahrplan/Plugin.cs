@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace FPLedit.Bildfahrplan
 {
-    [Plugin("Modul für Bildfahrpläne", Pvi.From, Pvi.UpTo, Author = "Manuel Huber")]
+    [Plugin("Modul für Bildfahrpläne", Vi.PFrom, Vi.PUpTo, Author = "Manuel Huber")]
     public class Plugin : IPlugin
     {
         private IInfo info;

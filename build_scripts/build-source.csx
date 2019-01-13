@@ -2,7 +2,7 @@
  * FPLedit Release-Prozess
  * Erstellt aus dem Ordner mit dem Sourcecode eine ZIP-Datei
  * Aufruf mit Pfad zum Ordner des Sourcecodes
- * Version 0.4 / (c) Manuel Huber 2018
+ * Version 0.4 / (c) Manuel Huber 2019
  */
 
 #r "System.IO.Compression.FileSystem.dll"

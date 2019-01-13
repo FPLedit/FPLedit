@@ -6,7 +6,7 @@ using FPLedit.Shared.Ui;
 
 namespace FPLedit.Kursbuch
 {
-    [Plugin("Modul für Tabellenfahrpläne", Pvi.From, Pvi.UpTo, Author = "Manuel Huber")]
+    [Plugin("Modul für Tabellenfahrpläne", Vi.PFrom, Vi.PUpTo, Author = "Manuel Huber")]
     public class Plugin : IPlugin
     {
         private IInfo info;

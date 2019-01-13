@@ -22,7 +22,7 @@
     </TableRow>
     <TableRow>
       <StackLayout>
-        <Label>© 2015-2018 Manuel Huber</Label>
+        <Label>© 2015-2019 Manuel Huber</Label>
         <LinkButton Click="docuLink_Click">Online-Dokumentation</LinkButton>
       </StackLayout>
     </TableRow>
