@@ -10,17 +10,17 @@ namespace FPLedit.Logger
     {
         public void Error(string message)
         {
-            Console.WriteLine("Fehler: " + message);
+            Console.WriteLine("[ERROR] " + message);
         }
 
         public void Info(string message)
         {
-            Console.WriteLine(message);
+            Console.WriteLine("[INFO] " + message);
         }
 
         public void Warning(string message)
         {
-            Console.WriteLine("Warnung: " + message);
+            Console.WriteLine("[WARN] " + message);
         }
     }
 }

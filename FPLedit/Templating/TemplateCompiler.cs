@@ -29,10 +29,10 @@ namespace FPLedit.Templating
                 OutputAssembly = Path.Combine(CompilerTemp, assemblyFilename),
                 GenerateInMemory = false,
                 TempFiles = new TempFileCollection(CompilerTemp, false),
+                IncludeDebugInformation = true,
             };
 
 #if TMPL_DEBUG
-            cparams.IncludeDebugInformation = true;
             cparams.TempFiles.KeepFiles = true;
 #endif
 

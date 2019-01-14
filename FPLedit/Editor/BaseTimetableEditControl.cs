@@ -135,7 +135,7 @@ namespace FPLedit.Editor
                 FormatCell(data, data.GetStation(), data.IsSelectedArrival, data.SelectedTextBox);
 
                 var target = GetNextEditingPosition(data, view, e);
-                Console.WriteLine("Next pos: " + target.ToString());
+                //Console.WriteLine("Next pos: " + target.ToString());
 
                 view.ReloadData(view.SelectedRow); // Commit current data
                 view.BeginEdit(target.X, target.Y);

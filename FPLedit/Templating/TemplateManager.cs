@@ -20,7 +20,6 @@ namespace FPLedit.Templating
             this.store = store;
             this.logger = logger;
 
-#if TMPL_DEBUG
             try
             {
                 if (Directory.Exists(TemplateCompiler.CompilerTemp))
@@ -28,7 +27,6 @@ namespace FPLedit.Templating
                 Directory.CreateDirectory(TemplateCompiler.CompilerTemp);
             }
             catch { }
-#endif
         }
 
         public void LoadTemplates(string templateRoot)
