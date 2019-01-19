@@ -17,8 +17,7 @@ namespace FPLedit.Logger
 
         public MultipleLogger(params ILog[] logger)
         {
-            Loggers = new List<ILog>();
-            Loggers.AddRange(logger);
+            Loggers = new List<ILog>(logger);
         }
 
         public void Error(string message)
@@ -37,6 +36,12 @@ namespace FPLedit.Logger
         {
             foreach (var log in Loggers)
                 log.Warning(message);
+        }
+
+        public void LogException(Exception e)
+        {
+            foreach (var log in Loggers)
+                log.LogException(e);
         }
     }
 }

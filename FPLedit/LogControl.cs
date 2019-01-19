@@ -75,5 +75,9 @@ namespace FPLedit
             }
             base.OnMouseUp(e);
         }
+
+        public void LogException(Exception e)
+        {
+        }
     }
 }

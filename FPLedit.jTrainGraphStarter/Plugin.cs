@@ -47,53 +47,73 @@ namespace FPLedit.jTrainGraphStarter
 
         private void StartLinear()
         {
-            bool showMessage = info.Settings.Get("jTGStarter.show-message", true);
-
-            if (showMessage)
+            var backup = info.Timetable.Clone();
+            try
             {
-                DialogResult res = MessageBox.Show("Dies speichert die Fahrplandatei am letzten Speicherort und öffnet dann jTrainGraph (>= 2.02). Nachdem Sie die Arbeit in jTrainGraph beendet haben, speichern Sie damit die Datei und schließen das jTrainGraph-Hauptfenster, damit werden die Änderungen übernommen. Aktion fortsetzen?" + Environment.NewLine + Environment.NewLine + "Diese Meldung kann unter jTrainGraph > Einstellungen deaktiviert werden.",
-                    "jTrainGraph starten", MessageBoxButtons.YesNo, MessageBoxType.Warning);
+                bool showMessage = info.Settings.Get("jTGStarter.show-message", true);
 
-                if (res != DialogResult.Yes)
-                    return;
+                if (showMessage)
+                {
+                    DialogResult res = MessageBox.Show("Dies speichert die Fahrplandatei am letzten Speicherort und öffnet dann jTrainGraph (>= 2.02). Nachdem Sie die Arbeit in jTrainGraph beendet haben, speichern Sie damit die Datei und schließen das jTrainGraph-Hauptfenster, damit werden die Änderungen übernommen. Aktion fortsetzen?" + Environment.NewLine + Environment.NewLine + "Diese Meldung kann unter jTrainGraph > Einstellungen deaktiviert werden.",
+                        "jTrainGraph starten", MessageBoxButtons.YesNo, MessageBoxType.Warning);
+
+                    if (res != DialogResult.Yes)
+                        return;
+                }
+
+                info.Save(false);
+
+                StartJtg(info.FileState.FileName, () => info.Reload());
             }
-
-            info.Save(false);
-
-            StartJtg(info.FileState.FileName, () => info.Reload());
+            catch (Exception e)
+            {
+                info.Logger.Error("Beim Verwenden von jTrainGraph ist ein unerwarteter Fehler aufgetreten! " + e);
+                info.Logger.LogException(e);
+                info.Timetable = backup;
+            }
         }
 
         private void StartNetwork(int route)
         {
-            bool showMessage = info.Settings.Get("jTGStarter.show-message", true);
-
-            if (showMessage)
+            var backup = info.Timetable.Clone();
+            try
             {
-                DialogResult res = MessageBox.Show("Dies speichert die aktuell ausgewählte Route in eine temporäre Datei und öffnet dann jTrainGraph (>= 2.02). Nachdem Sie die Arbeit in jTrainGraph beendet haben, speichern Sie damit die Datei und schließen das jTrainGraph-Hauptfenster, damit werden alle Änderungen an den Bildfahrplaneinstellungen übernommen."
-                    + Environment.NewLine + "ACHTUNG: Es werden nur Änderungen an der Bildfahrplandarstellung übernommen, alle anderen Änderungen (z.B. Bahnhöfe oder Züge einfügen) werden verworfen! Aktion fortsetzen?"
-                    + Environment.NewLine + Environment.NewLine + "Diese Meldung kann unter jTrainGraph > Einstellungen deaktiviert werden.",
-                    "jTrainGraph starten (aktuelle Route)", MessageBoxButtons.YesNo, MessageBoxType.Warning);
+                bool showMessage = info.Settings.Get("jTGStarter.show-message", true);
 
-                if (res != DialogResult.Yes)
-                    return;
+                if (showMessage)
+                {
+                    DialogResult res = MessageBox.Show("Dies speichert die aktuell ausgewählte Route in eine temporäre Datei und öffnet dann jTrainGraph (>= 2.02). Nachdem Sie die Arbeit in jTrainGraph beendet haben, speichern Sie damit die Datei und schließen das jTrainGraph-Hauptfenster, damit werden alle Änderungen an den Bildfahrplaneinstellungen übernommen."
+                        + Environment.NewLine + "ACHTUNG: Es werden nur Änderungen an der Bildfahrplandarstellung übernommen, alle anderen Änderungen (z.B. Bahnhöfe oder Züge einfügen) werden verworfen! Aktion fortsetzen?"
+                        + Environment.NewLine + Environment.NewLine + "Diese Meldung kann unter jTrainGraph > Einstellungen deaktiviert werden.",
+                        "jTrainGraph starten (aktuelle Route)", MessageBoxButtons.YesNo, MessageBoxType.Warning);
+
+                    if (res != DialogResult.Yes)
+                        return;
+                }
+
+                var targetVersion = info.Settings.GetEnum("jTGStarter.target-version", JTGShared.DEFAULT_TT_VERSION);
+
+                var exporter = new Shared.Filetypes.XMLExport();
+                var importer = new Shared.Filetypes.XMLImport();
+                var sync = new TimetableRouteSync(info.Timetable, route);
+                var rtt = sync.GetRouteTimetable(targetVersion);
+                var fn = info.GetTemp(Guid.NewGuid().ToString() + "-route-" + route + ".fpl");
+                exporter.Export(rtt, fn, info);
+
+                StartJtg(fn, () =>
+                {
+                    info.StageUndoStep();
+                    var crtt = importer.Import(fn, new SilentLogger(info.Logger));
+                    sync.SyncBack(crtt);
+                    info.SetUnsaved();
+                });
             }
-
-            var targetVersion = info.Settings.GetEnum("jTGStarter.target-version", JTGShared.DEFAULT_TT_VERSION);
-
-            var exporter = new Shared.Filetypes.XMLExport();
-            var importer = new Shared.Filetypes.XMLImport();
-            var sync = new TimetableRouteSync(info.Timetable, route);
-            var rtt = sync.GetRouteTimetable(targetVersion);
-            var fn = info.GetTemp(Guid.NewGuid().ToString() + "-route-" + route + ".fpl");
-            exporter.Export(rtt, fn, info);
-
-            StartJtg(fn, () =>
+            catch (Exception e)
             {
-                info.StageUndoStep();
-                var crtt = importer.Import(fn, new SilentLogger());
-                sync.SyncBack(crtt);
-                info.SetUnsaved();
-            });
+                info.Logger.Error("Beim Verwenden von jTrainGraph ist ein unerwarteter Fehler aufgetreten! " + e);
+                info.Logger.LogException(e);
+                info.Timetable = backup;
+            }
         }
 
         private void StartJtg(string fnArg, Action finished)
