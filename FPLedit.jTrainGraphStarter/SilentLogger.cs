@@ -15,6 +15,10 @@ namespace FPLedit.jTrainGraphStarter
             this.parent = parent;
         }
 
+        public void Debug(string message)
+        {
+        }
+
         public void Error(string message) => parent.Error(message);
 
         public void Info(string message)

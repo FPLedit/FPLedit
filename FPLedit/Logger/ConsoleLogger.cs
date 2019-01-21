@@ -48,5 +48,10 @@ namespace FPLedit.Logger
                 ));
             return string.Join("\n", fields);
         }
+
+        public void Debug(string message)
+        {
+            Console.WriteLine("[DEBUG] " + message);
+        }
     }
 }

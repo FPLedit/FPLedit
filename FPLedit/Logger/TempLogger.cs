@@ -62,6 +62,11 @@ namespace FPLedit.Logger
             Write(message, "WARN");
         }
 
+        public void Debug(string message)
+        {
+            Write(message, "DEBUG");
+        }
+
         private void Write(string message, string type)
         {
             using (StreamWriter r = new StreamWriter(filename, true))

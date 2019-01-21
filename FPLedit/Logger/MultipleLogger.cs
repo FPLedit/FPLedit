@@ -43,5 +43,11 @@ namespace FPLedit.Logger
             foreach (var log in Loggers)
                 log.LogException(e);
         }
+
+        public void Debug(string message)
+        {
+            foreach (var log in Loggers)
+                log.Debug(message);
+        }
     }
 }

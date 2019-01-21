@@ -33,6 +33,14 @@ namespace FPLedit
         public void Info(string message)
             => WriteMl("[INFO] " + message, Colors.Black);
 
+        public void LogException(Exception e)
+        {
+        }
+
+        public void Debug(string message)
+        {
+        }
+
         private void WriteMl(string message, Color c)
         {
             var lines = message.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
@@ -74,10 +82,6 @@ namespace FPLedit
                 e.Handled = true;
             }
             base.OnMouseUp(e);
-        }
-
-        public void LogException(Exception e)
-        {
         }
     }
 }
