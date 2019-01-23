@@ -11,7 +11,7 @@ using FPLedit.Shared.UI;
 
 namespace FPLedit.jTrainGraphStarter
 {
-    internal class SettingsForm : Dialog<DialogResult>
+    internal class SettingsForm : FDialog<DialogResult>
     {
         private ISettings settings;
 

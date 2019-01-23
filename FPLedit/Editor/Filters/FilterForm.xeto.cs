@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace FPLedit.Editor.Filters
 {
-    internal class FilterForm : Dialog<DialogResult>
+    internal class FilterForm : FDialog<DialogResult>
     {
         private List<FilterRule> curTrainRules, curStationRules;
         private FilterableContainer[] fcontainers;

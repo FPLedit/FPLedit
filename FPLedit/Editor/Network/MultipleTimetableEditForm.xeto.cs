@@ -7,7 +7,7 @@ using FPLedit.Shared.UI;
 
 namespace FPLedit.Editor.Network
 {
-    internal class MultipleTimetableEditForm : Dialog<DialogResult>
+    internal class MultipleTimetableEditForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
         private DropDown trainDropDown;

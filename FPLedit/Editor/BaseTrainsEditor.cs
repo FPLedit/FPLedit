@@ -1,5 +1,6 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
+using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Editor
 {
-    internal class BaseTrainsEditor : Dialog<DialogResult>
+    internal class BaseTrainsEditor : FDialog<DialogResult>
     {
         private Timetable tt;
         public BaseTrainsEditor(Timetable tt)

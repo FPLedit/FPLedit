@@ -1,5 +1,6 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
+using FPLedit.Shared.UI;
 using FPLedit.Shared.UI.Validators;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Editor
 {
-    internal class EditPositionForm : Dialog<DialogResult>
+    internal class EditPositionForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
         private TextBox positionTextBox;

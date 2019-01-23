@@ -18,7 +18,7 @@ using FPLedit.NonDefaultFiletypes;
 
 namespace FPLedit
 {
-    public class MainForm : Form, IInfo, IRestartable
+    public class MainForm : FForm, IInfo, IRestartable
     {
         #region Controls
 #pragma warning disable CS0649

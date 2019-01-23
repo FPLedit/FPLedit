@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Editor
 {
-    internal class TrainSortDialog : Dialog<DialogResult>
+    internal class TrainSortDialog : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
         private DropDown stationsComboBox;

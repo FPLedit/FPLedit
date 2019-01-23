@@ -4,10 +4,11 @@ using FPLedit.Shared;
 using System;
 using System.Linq;
 using FPLedit.Shared.Rendering;
+using FPLedit.Shared.UI;
 
 namespace FPLedit.Bildfahrplan.Forms
 {
-    public partial class TrainColorEditForm : Dialog<DialogResult>
+    public partial class TrainColorEditForm : FDialog<DialogResult>
     {
         public Train Train { get; set; }
 

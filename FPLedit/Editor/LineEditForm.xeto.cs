@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Editor
 {
-    internal class LineEditForm : Dialog<DialogResult>
+    internal class LineEditForm : FDialog<DialogResult>
     {
         private IInfo info;
         private Timetable tt;

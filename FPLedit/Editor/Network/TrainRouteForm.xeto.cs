@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace FPLedit.Editor.Network
 {
-    internal class TrainRouteForm : Dialog<DialogResult>
+    internal class TrainRouteForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
         private LineRenderer lineRenderer;

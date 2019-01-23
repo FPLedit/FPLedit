@@ -1,6 +1,7 @@
 ﻿using Eto.Forms;
 using FPLedit.Buchfahrplan.Model;
 using FPLedit.Shared;
+using FPLedit.Shared.UI;
 using FPLedit.Shared.UI.Validators;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Buchfahrplan.Forms
 {
-    internal class VelocityEditForm : Dialog<DialogResult>
+    internal class VelocityEditForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
         private TextBox nameTextBox, positionTextBox, velocityTextBox;

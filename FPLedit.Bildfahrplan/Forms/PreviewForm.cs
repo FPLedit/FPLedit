@@ -1,6 +1,7 @@
 ﻿using Eto.Forms;
 using FPLedit.Bildfahrplan.Render;
 using FPLedit.Shared;
+using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Bildfahrplan.Forms
 {
-    internal class PreviewForm : Dialog
+    internal class PreviewForm : FDialog
     {
         private readonly IInfo info;
         private Drawable panel;

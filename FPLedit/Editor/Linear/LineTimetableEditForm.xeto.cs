@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace FPLedit.Editor.Linear
 {
-    internal class LineTimetableEditForm : Dialog<DialogResult>
+    internal class LineTimetableEditForm : FDialog<DialogResult>
     {
         private const TrainDirection TOP_DIRECTION = TrainDirection.ti;
         private const TrainDirection BOTTOM_DIRECTION = TrainDirection.ta;

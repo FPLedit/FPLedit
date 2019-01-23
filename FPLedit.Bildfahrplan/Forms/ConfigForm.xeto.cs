@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace FPLedit.Bildfahrplan.Forms
 {
-    public partial class ConfigForm : Dialog<DialogResult>
+    public partial class ConfigForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
         private DropDown stationFontComboBox, timeColorComboBox, trainColorComboBox, stationColorComboBox, bgColorComboBox, timeFontComboBox, trainFontComboBox, trainWidthComboBox;

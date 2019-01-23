@@ -1,5 +1,7 @@
-﻿using FPLedit.Shared;
+﻿using Eto.Forms;
+using FPLedit.Shared;
 using FPLedit.Shared.Filetypes;
+using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -32,10 +34,19 @@ namespace FPLedit.DebugDump
             if (!dir.Exists)
                 dir.Create();
 
+            // Log UI interaction
+            FFormHandler.Init = (w) =>
+            {
+                var n = w.GetType().FullName;
+                w.Shown += (s, e) => info.Logger.Debug("Form shown: " + n);
+                w.Closed += (s, e) => info.Logger.Debug("Form closed: " + n);
+            };
+
             var logPath = Path.Combine(basePath, "session.log");
             dynamic l = info.Logger;
             l.Loggers.Add(new FileLogger(info, logPath));
 
+            // Log Timetable changes
             info.FileStateChanged += (s, e) =>
             {
                 try
@@ -67,6 +78,7 @@ namespace FPLedit.DebugDump
             info.ExtensionsLoaded += (s, e) =>
             {
                 info.Logger.Info("DebugDump aktiviert. Session: " + session);
+                info.Logger.Debug("Enabled extensions: " + info.Settings.Get("extmgr.enabled", ""));
             };
 
             var tmpDir = info.GetTemp("");

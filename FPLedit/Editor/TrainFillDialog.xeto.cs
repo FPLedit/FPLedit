@@ -1,5 +1,6 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
+using FPLedit.Shared.UI;
 using FPLedit.Shared.UI.Validators;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Linq;
 
 namespace FPLedit.Editor
 {
-    internal class TrainFillDialog : Dialog<DialogResult>
+    internal class TrainFillDialog : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
         private DropDown trainsComboBox;

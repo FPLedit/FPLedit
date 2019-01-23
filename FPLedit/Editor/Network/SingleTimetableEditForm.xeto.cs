@@ -7,7 +7,7 @@ using FPLedit.Shared.UI;
 
 namespace FPLedit.Editor.Network
 {
-    internal class SingleTimetableEditForm : Dialog<DialogResult>
+    internal class SingleTimetableEditForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
         private SingleTimetableEditControl editor;

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Editor
 {
-    internal class DesignableForm : Dialog<DialogResult>
+    internal class DesignableForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
         private TabControl tabControl;
