@@ -96,19 +96,21 @@ namespace FPLedit.Editor
 
         public void SortTrainsName(Timetable tt, TrainDirection dir, bool excludePrefix)
         {
-            var trains = tt.Trains.ToList();
+            if (excludePrefix)
+                SortTrainsName(tt, dir, false);
 
-            string NameSelector(Train train) => excludePrefix ? RemoveNamePrefix(train.TName, out var _).ToString() : train.TName;
-            bool StringComparer(string cur, string next) => cur.CompareTo(next) > 0;
+            Train[] trains() => tt.Trains.Where(t => t.Direction == dir).ToArray();
+
+            NameParts NameSelector(Train train) => new NameParts(train.TName, excludePrefix);
+            bool StringComparer(NameParts cur, NameParts next) => cur.CompareTo(next, excludePrefix);
 
             InternalSort(tt, trains, NameSelector, StringComparer);
         }
 
         public void SortTrainsAtStation(Timetable tt, TrainDirection dir, Station sta)
         {
-            var trains = tt.Trains.Where(t => t.Direction == dir)
-                .Where(t => t.GetPath().Contains(sta))
-                .ToList();
+            Train[] trains() => tt.Trains.Where(t => t.Direction == dir)
+                .Where(t => t.GetPath().Contains(sta)).ToArray();
 
             TimeSpan TimeSelector(Train train) => train.GetArrDep(sta).FirstSetTime;
             bool TimeComparer(TimeSpan cur, TimeSpan next) => (cur != default) && (next != default) && (cur > next);
@@ -116,23 +118,30 @@ namespace FPLedit.Editor
             InternalSort(tt, trains, TimeSelector, TimeComparer);
         }
 
-        public void InternalSort<TCompare>(Timetable tt, List<Train> trains, Func<Train, TCompare> selector, Func<TCompare, TCompare, bool> comparer)
+        public void InternalSort<TCompare>(Timetable tt, Func<Train[]> trains, Func<Train, TCompare> selector, Func<TCompare, TCompare, bool> comparer)
         {
-            // Bubblesort
-            foreach (var train in trains)
+            var t = trains();
+            for (int n = t.Length; n > 1; n--)
             {
-                var idx = trains.IndexOf(train);
+                // Bubblesort
+                for (int i = 0; i < n - 1; i++)
+                {
+                    var train = t[i];
 
-                if (idx + 1 == trains.Count)
-                    break; // Wir sind durch
+                    if (i + 1 == t.Length)
+                        break; // Wir sind durch
 
-                var next = trains.ElementAt(idx + 1);
+                    var next = t.ElementAt(i + 1);
 
-                var firstVal = selector(train);
-                var secondVal = selector(next);
+                    var firstVal = selector(train);
+                    var secondVal = selector(next);
 
-                if (comparer(firstVal, secondVal))
-                    SwapTrains(tt, train, next);
+                    if (comparer(firstVal, secondVal))
+                    {
+                        SwapTrains(tt, train, next);
+                        t = trains();
+                    }
+                }
             }
         }
 
@@ -150,8 +159,7 @@ namespace FPLedit.Editor
             tElm.Children.Insert(xidx, t2.XMLEntity);
         }
 
-
-        private int RemoveNamePrefix(string name, out string prefix)
+        private static int RemoveNamePrefix(string name, out string prefix)
         {
             var nameBase = name.Trim();
             var last = nameBase.ToCharArray().LastOrDefault();
@@ -167,6 +175,32 @@ namespace FPLedit.Editor
 
             prefix = nameBase;
             return start;
+        }
+
+        private struct NameParts
+        {
+            public NameParts(string full, bool calcPrefix) : this()
+            {
+                Full = full;
+
+                if (!calcPrefix)
+                    return;
+
+                Number = RemoveNamePrefix(Full, out var prefix);
+                Prefix = prefix;
+            }
+
+            public string Prefix { get; set; }
+            public int Number { get; set; }
+
+            public string Full { get; set; }
+
+            public bool CompareTo(NameParts np2, bool excludePrefix)
+            {
+                if (excludePrefix)
+                    return Prefix == np2.Prefix && Number.CompareTo(np2.Number) > 0;
+                return Full.CompareTo(np2.Full) > 0;
+            }
         }
     }
 }
