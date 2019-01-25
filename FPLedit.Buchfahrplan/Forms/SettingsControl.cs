@@ -66,7 +66,7 @@ namespace FPLedit.Buchfahrplan.Forms
             attrs.Font = fontComboBox.Text;
             attrs.Css = cssTextBox.Text;
             attrs.ShowComments = commentCheckBox.Checked.Value;
-            attrs.ShowDays = commentCheckBox.Checked.Value;
+            attrs.ShowDays = daysCheckBox.Checked.Value;
 
             var tmpl = (ITemplate)templateComboBox.SelectedValue;
             if (tmpl != null)

@@ -170,11 +170,12 @@ if (attrs != null)
 				<col style="width:80px;" span=2>
 				<tr>
 					<#
-						string days = "";
-						if (showDays)
-							days = " <span class=\"days\">" + DaysHelper.DaysToString(tra.Days, true) + "</span>";
+						string days = DaysHelper.DaysToString(tra.Days, true);
+						string daysHtml = "";
+						if (showDays && days != "")
+							daysHtml = " <span class=\"days\">" + days + "</span>";
 					#>
-					<td colspan=6 class="trainname"><#= tra.TName #><#= days #></td>
+					<td colspan=6 class="trainname"><#= tra.TName #><#= daysHtml #></td>
 				</tr>
 				<tr>
 					<td colspan=6 class="linename"><#= tra.GetLineName() #></td>
