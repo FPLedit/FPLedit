@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace FPLedit.Buchfahrplan.Templates
 {
@@ -28,6 +29,17 @@ namespace FPLedit.Buchfahrplan.Templates
                 .Replace(".", "-")
                 .Replace(":", "-")
                 .ToLower();
+        }
+
+        public string GetDaysHtml(Train tra, bool showDays)
+        {
+            var days = tra.Days.DaysToString(true);
+            if (!showDays || days == "")
+                return "";
+
+            days = Regex.Replace(days, @"\[(\w*)\]", (m) => " <span class=\"days\">" + m.Groups[1].Value + "</span>");
+
+            return "&nbsp;&nbsp;" + days;
         }
 
         public List<IStation> GetStations(Train train)

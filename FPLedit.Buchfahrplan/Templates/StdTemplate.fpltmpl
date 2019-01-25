@@ -169,13 +169,7 @@ if (attrs != null)
 				<col style="width:20px;"><!-- Welle -->
 				<col style="width:80px;" span=2>
 				<tr>
-					<#
-						string days = tra.Days.DaysToString(true);
-						string daysHtml = "";
-						if (showDays && days != "")
-							daysHtml = " <span class=\"days\">" + days + "</span>";
-					#>
-					<td colspan=6 class="trainname"><#= tra.TName #><#= daysHtml #></td>
+					<td colspan=6 class="trainname"><#= tra.TName #><#= helper.GetDaysHtml(tra, showDays) #></td>
 				</tr>
 				<tr>
 					<td colspan=6 class="linename"><#= tra.GetLineName() #></td>
