@@ -1,6 +1,5 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
-using FPLedit.Shared.Helpers;
 using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
@@ -31,7 +30,7 @@ namespace FPLedit.Editor.Network
             gridView.AddColumn<Train>(t => t.Locomotive, "Tfz");
             gridView.AddColumn<Train>(t => t.Mbr, "Mbr");
             gridView.AddColumn<Train>(t => t.Last, "Last");
-            gridView.AddColumn<Train>(t => DaysHelper.DaysToString(t.Days, false), "Verkehrstage");
+            gridView.AddColumn<Train>(t => t.Days.DaysToString(false), "Verkehrstage");
             gridView.AddColumn<Train>(t => BuildPath(t), "Laufweg");
             gridView.AddColumn<Train>(t => t.Comment, "Kommentar");
 

@@ -170,7 +170,7 @@ if (attrs != null)
 				<col style="width:50px;">
 				<tr>
 					<#
-						string days = DaysHelper.DaysToString(tra.Days, true);
+						string days = tra.Days.DaysToString(true);
 						string daysHtml = "";
 						if (showDays && days != "")
 							daysHtml = " <span class=\"days\">" + days + "</span>";

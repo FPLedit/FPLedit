@@ -1,5 +1,4 @@
 ﻿using FPLedit.Shared;
-using FPLedit.Shared.Helpers;
 using FPLedit.Shared.Rendering;
 using System;
 using System.Collections.Generic;
@@ -55,14 +54,14 @@ namespace FPLedit.Bildfahrplan.Model
             set => tt.SetAttribute("sKm", value.ToString().ToLower());
         }
 
-        public bool[] RenderDays
+        public Days RenderDays
         {
             get
             {
                 var attr = tt.GetAttribute<string>("d") ?? "1111111";
-                return DaysHelper.ParseDays(attr);
+                return Days.Parse(attr);
             }
-            set => tt.SetAttribute("d", DaysHelper.DaysToBinString(value));
+            set => tt.SetAttribute("d", value.ToBinString());
         }
 
         public StationLineStyle StationLines

@@ -1,6 +1,5 @@
 ﻿using FPLedit.Buchfahrplan.Model;
 using FPLedit.Shared;
-using FPLedit.Shared.Helpers;
 using FPLedit.Shared.Ui;
 using System;
 using System.Collections.Generic;
@@ -113,7 +112,7 @@ namespace FPLedit.Buchfahrplan.Templates
         }
 
         private string IntersectDaysSt(Train ot, Train t)
-            => DaysHelper.DaysToString(DaysHelper.IntersectingDays(ot.Days, t.Days), true);
+            => ot.Days.IntersectingDays(t.Days).DaysToString(true);
 
         private Train IntersectTrains(Train ot, Station s, bool kreuzung)
         {
@@ -142,7 +141,7 @@ namespace FPLedit.Buchfahrplan.Templates
                 var en = end < end2 ? end : end2;
                 var crossing = st < en ? true : false;
 
-                if (crossing && DaysHelper.IntersectDays(ot.Days, train.Days))
+                if (crossing && ot.Days.IsIntersecting(train.Days))
                     return train;
             }
 

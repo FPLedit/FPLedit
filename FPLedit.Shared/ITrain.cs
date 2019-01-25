@@ -7,7 +7,7 @@ namespace FPLedit.Shared
         int Id { get; set; }
         bool IsLink { get; set; }
         string Comment { get; set; }
-        bool[] Days { get; set; }
+        Days Days { get; set; }
         TrainDirection Direction { get; }
         string Last { get; set; }
         string Locomotive { get; set; }

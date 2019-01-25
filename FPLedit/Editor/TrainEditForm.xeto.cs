@@ -1,6 +1,5 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
-using FPLedit.Shared.Helpers;
 using FPLedit.Shared.UI;
 using FPLedit.Shared.UI.Validators;
 using System;
@@ -31,11 +30,11 @@ namespace FPLedit.Editor
         private Timetable tt;
         private TrainEditHelper th;
 
-        private bool[] wShortcut = DaysHelper.ParseDays("1111110");
-        private bool[] wExclSaShortcut = DaysHelper.ParseDays("1111100");
-        private bool[] sShortcut = DaysHelper.ParseDays("0000001");
-        private bool[] aShortcut = DaysHelper.ParseDays("1111111");
-        private bool[] zShortcut = DaysHelper.ParseDays("0000000");
+        private Days wShortcut = Days.Parse("1111110");
+        private Days wExclSaShortcut = Days.Parse("1111100");
+        private Days sShortcut = Days.Parse("0000001");
+        private Days aShortcut = Days.Parse("1111111");
+        private Days zShortcut = Days.Parse("0000000");
 
         private TrainEditForm(Timetable tt)
         {
@@ -159,7 +158,7 @@ namespace FPLedit.Editor
             Train.Mbr = mbrComboBox.Text;
             Train.Last = lastComboBox.Text;
             Train.Comment = commentTextBox.Text;
-            Train.Days = daysBoxes.Select(b => b.Checked.Value).ToArray();
+            Train.Days = new Days(daysBoxes.Select(b => b.Checked.Value).ToArray());
 
             editor.ApplyChanges();
 
@@ -188,11 +187,11 @@ namespace FPLedit.Editor
         private void ApplyShortcutBtn(object sender, EventArgs e)
         {
             var btn = (ToggleButton)sender;
-            if (btn.Tag is bool[] days)
+            if (btn.Tag is Days days)
                 ApplyShortcut(days);
         }
 
-        private void ApplyShortcut(bool[] days)
+        private void ApplyShortcut(Days days)
         {
             for (int i = 0; i < days.Length; i++)
                 daysBoxes[i].Checked = days[i];
@@ -200,9 +199,9 @@ namespace FPLedit.Editor
 
         private void CheckBoxStateChanged(object sender, EventArgs e)
         {
-            var cur = daysBoxes.Select(b => b.Checked.Value).ToArray();
+            var cur = new Days(daysBoxes.Select(b => b.Checked.Value).ToArray());
             foreach (var item in shortcutsToggle)
-                item.Checked = cur.SequenceEqual((bool[])item.Tag);
+                item.Checked = cur.Equals((Days)item.Tag);
         }
         #endregion
 

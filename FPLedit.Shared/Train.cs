@@ -1,5 +1,4 @@
-﻿using FPLedit.Shared.Helpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -253,10 +252,10 @@ namespace FPLedit.Shared
             set => SetAttribute("cm", value);
         }
 
-        public bool[] Days
+        public Days Days
         {
-            get => DaysHelper.ParseDays(GetAttribute("d", "1111111"));
-            set => SetAttribute("d", DaysHelper.DaysToBinString(value));
+            get => Days.Parse(GetAttribute("d", "1111111"));
+            set => SetAttribute("d", value.ToBinString());
         }
 
         public Train(TrainDirection dir, Timetable tt) : base(dir.ToString(), tt)

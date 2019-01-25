@@ -1,6 +1,5 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
-using FPLedit.Shared.Helpers;
 using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
@@ -76,7 +75,7 @@ namespace FPLedit.Editor.Linear
             view.AddColumn<Train>(t => t.Locomotive, "Tfz");
             view.AddColumn<Train>(t => t.Mbr, "Mbr");
             view.AddColumn<Train>(t => t.Last, "Last");
-            view.AddColumn<Train>(t => DaysHelper.DaysToString(t.Days, false), "Verkehrstage");
+            view.AddColumn<Train>(t => t.Days.DaysToString(false), "Verkehrstage");
             view.AddColumn<Train>(t => t.Comment, "Kommentar");
 
             view.GotFocus += (s, e) => active = view;

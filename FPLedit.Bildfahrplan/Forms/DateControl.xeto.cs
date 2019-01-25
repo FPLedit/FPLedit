@@ -40,7 +40,7 @@ namespace FPLedit.Bildfahrplan.Forms
             var days = new bool[7];
             for (int i = 0; i < daysBoxes.Length; i++)
                 days[i] = daysBoxes[i].Checked.Value;
-            attrs.RenderDays = days;
+            attrs.RenderDays = new Days(days);
 
             ValueChanged?.Invoke(this, new EventArgs());
         }

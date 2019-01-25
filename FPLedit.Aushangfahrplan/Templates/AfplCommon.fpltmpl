@@ -4,7 +4,7 @@
 <#@ import FPLedit.Aushangfahrplan.Model #>
 
 <#@ define string GetDays(Train t) {
-	return DaysHelper.DaysToString(t.Days, true);
+	return t.Days.DaysToString(true);
 } #>
 
 <#@ define string GetTimeString(TimeSpan t) {

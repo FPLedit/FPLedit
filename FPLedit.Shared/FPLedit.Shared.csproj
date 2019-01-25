@@ -61,7 +61,7 @@
     <Compile Include="Rendering\ColorCollection.cs" />
     <Compile Include="Rendering\ColorTimetableConverter.cs" />
     <Compile Include="Rendering\ColorFormatter.cs" />
-    <Compile Include="Helpers\DaysHelper.cs" />
+    <Compile Include="Days.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Ext\IFileState.cs" />
     <Compile Include="Ext\ISettings.cs" />
