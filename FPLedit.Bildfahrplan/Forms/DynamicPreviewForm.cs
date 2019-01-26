@@ -7,8 +7,6 @@ using System.Drawing;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using EtoPoint = Eto.Drawing.Point;
 
 namespace FPLedit.Bildfahrplan.Forms
@@ -19,9 +17,7 @@ namespace FPLedit.Bildfahrplan.Forms
         private Drawable panel;
         private Scrollable scrollable;
         private Renderer renderer;
-        private DropDown routesComboBox;
-        private string lastFn = null;
-        private int selectedRoute = Timetable.LINEAR_ROUTE_ID;
+        private RoutesDropDown routesDropDown;
         private EtoPoint scrollPosition = new EtoPoint(0, 0);
 
         public DynamicPreviewForm(IInfo info)
@@ -46,19 +42,15 @@ namespace FPLedit.Bildfahrplan.Forms
             };
             stackLayout.Items.Add(nStack);
 
-            routesComboBox = new DropDown();
-            nStack.Items.Add(routesComboBox);
-
-            routesComboBox.SelectedIndexChanged += (s, e) =>
+            routesDropDown = new RoutesDropDown();
+            routesDropDown.SelectedRouteChanged += (s, e) =>
             {
-                if (routesComboBox.SelectedIndex == -1)
-                    return;
-                selectedRoute = (int)((ListItem)routesComboBox.Items[routesComboBox.SelectedIndex]).Tag;
-                renderer = new Renderer(info.Timetable, selectedRoute);
+                renderer = new Renderer(info.Timetable, routesDropDown.SelectedRoute);
                 scrollPosition.Y = 0;
                 panel.Height = renderer.GetHeight();
                 panel.Invalidate();
             };
+            nStack.Items.Add(routesDropDown);
 
             panel = new Drawable
             {
@@ -77,59 +69,11 @@ namespace FPLedit.Bildfahrplan.Forms
             stackLayout.Items.Add(scrollable);
 
             // Initialisierung der Daten
-            ReloadRouteNames(true);
-            routesComboBox.SelectedIndex = 0;
-        }
-
-        private IEnumerable<ListItem> GetRouteNames(Timetable tt)
-        {
-            ListItem BuildItem(string name, int route)
-            {
-                var itm = new ListItem
-                {
-                    Text = name,
-                    Tag = route
-                };
-                return itm;
-            }
-
-            if (tt.Type == TimetableType.Network)
-            {
-                var rt = tt.GetRoutes();
-                foreach (var route in rt)
-                    yield return BuildItem(route.GetRouteName(), route.Index);
-            }
-            else
-                yield return BuildItem("<Standard>", Timetable.LINEAR_ROUTE_ID);
-        }
-
-        private void ReloadRouteNames(bool forceReload)
-        {
-            int oldSelected = -1;
-            if (routesComboBox.SelectedValue != null)
-                oldSelected = (int)((ListItem)routesComboBox.SelectedValue).Tag;
-            var routes = GetRouteNames(info.Timetable);
-            routesComboBox.Items.Clear();
-            routesComboBox.Items.AddRange(routes);
-
-            if (oldSelected != -1 && !forceReload && routes.Any(r => (int)r.Tag == oldSelected))
-            {
-                var rl = routes.ToList();
-                routesComboBox.SelectedIndex = rl.IndexOf(rl.FirstOrDefault(li => (int)li.Tag == oldSelected));
-                selectedRoute = oldSelected;
-            }
-            else
-            {
-                selectedRoute = 0;
-                routesComboBox.SelectedIndex = 0;
-            }
+            routesDropDown.Initialize(info);
         }
 
         private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)
         {
-            ReloadRouteNames(lastFn != e.FileState.FileName);
-            lastFn = e.FileState.FileName;
-
             scrollPosition = scrollable.ScrollPosition;
             panel.Invalidate();
         }

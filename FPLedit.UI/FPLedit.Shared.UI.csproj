@@ -63,6 +63,9 @@
     <Compile Include="FontCollection.cs" />
     <Compile Include="FontComboBox.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoutesDropDown.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
     <Compile Include="SelectionUI.cs" />
     <Compile Include="SizeManager.cs" />
     <Compile Include="ToggleButton.cs" />
