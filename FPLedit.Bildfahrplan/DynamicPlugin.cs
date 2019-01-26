@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Bildfahrplan
 {
-    [Plugin("Dynamische Vorschau als Bildfahrplan", Vi.PFrom, Vi.PUpTo, Author = "Manuel Huber")]
+    [Plugin("Dynamische Bildfahrplan-Vorschau", Vi.PFrom, Vi.PUpTo, Author = "Manuel Huber")]
     public class DynamicPlugin : IPlugin
     {
         private IInfo info;

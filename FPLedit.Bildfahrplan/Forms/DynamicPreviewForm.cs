@@ -30,6 +30,10 @@ namespace FPLedit.Bildfahrplan.Forms
             Maximizable = false;
             Resizable = false;
 
+            var mainForm = (FForm)info.RootForm;
+            if (mainForm.Bounds.TopRight.X + 500 < Screen.Bounds.Width)
+                Location = mainForm.Bounds.TopRight + new EtoPoint(10, 0);
+
             var stackLayout = new StackLayout();
             Content = stackLayout;
 
@@ -43,14 +47,22 @@ namespace FPLedit.Bildfahrplan.Forms
             stackLayout.Items.Add(nStack);
 
             routesDropDown = new RoutesDropDown();
-            routesDropDown.SelectedRouteChanged += (s, e) =>
-            {
-                renderer = new Renderer(info.Timetable, routesDropDown.SelectedRoute);
-                scrollPosition.Y = 0;
-                panel.Height = renderer.GetHeight();
-                panel.Invalidate();
-            };
+            routesDropDown.SelectedRouteChanged += (s, e) => ResetRenderer();
             nStack.Items.Add(routesDropDown);
+
+            var preferencesButton = new Button
+            {
+                Text = "Darstellung ändern",
+            };
+            preferencesButton.Click += (s, e) =>
+            {
+                info.StageUndoStep();
+                ConfigForm cnf = new ConfigForm(info.Timetable, info.Settings);
+                cnf.ShowModal(this);
+                ResetRenderer();
+                info.SetUnsaved();
+            };
+            nStack.Items.Add(preferencesButton);
 
             panel = new Drawable
             {
@@ -70,6 +82,14 @@ namespace FPLedit.Bildfahrplan.Forms
 
             // Initialisierung der Daten
             routesDropDown.Initialize(info);
+        }
+
+        private void ResetRenderer()
+        {
+            renderer = new Renderer(info.Timetable, routesDropDown.SelectedRoute);
+            scrollPosition.Y = 0;
+            panel.Height = renderer.GetHeight();
+            panel.Invalidate();
         }
 
         private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)
