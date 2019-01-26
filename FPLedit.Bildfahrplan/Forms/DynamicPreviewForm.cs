@@ -31,7 +31,7 @@ namespace FPLedit.Bildfahrplan.Forms
             Resizable = false;
 
             var mainForm = (FForm)info.RootForm;
-            if (mainForm.Bounds.TopRight.X + 500 < Screen.Bounds.Width)
+            if (Screen != null && mainForm.Bounds.TopRight.X + 500 < Screen.Bounds.Width)
                 Location = mainForm.Bounds.TopRight + new EtoPoint(10, 0);
 
             var stackLayout = new StackLayout();
