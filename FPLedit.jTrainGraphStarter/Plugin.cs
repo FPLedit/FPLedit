@@ -103,7 +103,7 @@ namespace FPLedit.jTrainGraphStarter
                 StartJtg(fn, () =>
                 {
                     info.StageUndoStep();
-                    var crtt = importer.Import(fn, new SilentLogger(info.Logger));
+                    var crtt = importer.Import(fn, info, new SilentLogger(info.Logger));
                     sync.SyncBack(crtt);
                     info.SetUnsaved();
                 });

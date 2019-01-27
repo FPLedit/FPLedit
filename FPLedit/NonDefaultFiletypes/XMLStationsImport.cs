@@ -10,7 +10,7 @@ namespace FPLedit.NonDefaultFiletypes
     {
         public string Filter => "Streckendateien (*.str)|*.str";
 
-        public Timetable Import(string filename, ILog logger)
+        public Timetable Import(string filename, IInfo info, ILog replaceLog = null)
         {
             try
             {
@@ -25,7 +25,8 @@ namespace FPLedit.NonDefaultFiletypes
             }
             catch (Exception ex)
             {
-                logger.Error("XMLStationsImporter: " + ex.Message);
+                var log = replaceLog ?? info.Logger;
+                log.Error("XMLStationsImporter: " + ex.Message);
                 return null;
             }
         }

@@ -140,7 +140,7 @@ namespace FPLedit.Editor
             if (ofd.ShowDialog(this) == DialogResult.Ok)
             {
                 IImport import = Path.GetExtension(ofd.FileName) == ".fpl" ? timport : simport;
-                var ntt = import.Import(ofd.FileName, info.Logger);
+                var ntt = import.Import(ofd.FileName, info);
                 foreach (var station in ntt.Stations)
                     tt.AddStation(station, Timetable.LINEAR_ROUTE_ID);
                 // ntt will be destroyed by decoupling stations, do not use afterwards!
