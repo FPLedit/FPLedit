@@ -21,9 +21,6 @@ namespace FPLedit.Shared.Rendering
             B = b;
         }
 
-        public static explicit operator MColor(System.Drawing.Color sc)
-            => new MColor(sc.R, sc.G, sc.B);
-
         public static bool operator ==(MColor c1, MColor c2) => c1.Equals(c2);
 
         public static bool operator !=(MColor c1, MColor c2) => !c1.Equals(c2);
@@ -33,8 +30,11 @@ namespace FPLedit.Shared.Rendering
 
         public override int GetHashCode() => R + (G << 8) + (B << 16);
 
-        public static explicit operator System.Drawing.Color(MColor m)
-            => System.Drawing.Color.FromArgb(255, m.R, m.G, m.B);
+        public static explicit operator MColor(Eto.Drawing.Color sc)
+            => new MColor((byte)sc.Rb, (byte)sc.Gb, (byte)sc.Bb);
+
+        public static explicit operator Eto.Drawing.Color(MColor m)
+            => Eto.Drawing.Color.FromArgb(m.R, m.G, m.B, 255);
 
         public static MColor White => new MColor(255, 255, 255);
     }

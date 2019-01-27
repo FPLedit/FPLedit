@@ -1,7 +1,6 @@
-﻿using System;
+﻿using Eto.Drawing;
+using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Text;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,7 +21,8 @@ namespace FPLedit.Shared.UI
         {
             new Task(() =>
             {
-                Families = new InstalledFontCollection().Families.Select(f => f.Name).ToArray();
+                //Families = new InstalledFontCollection().Families.Select(f => f.Name).ToArray();
+                Families = Fonts.AvailableFontFamilies.Select(f => f.Name).ToArray();
                 //GenericSansSerif = FontFamily.GenericSansSerif.Name;
                 //GenericSansSerif = FontFamily.GenericMonospace.Name;
                 //GenericMonospace = FontFamily.GenericSerif.Name;

@@ -3,11 +3,10 @@ using FPLedit.Bildfahrplan.Render;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System;
-using System.Drawing;
 using System.Collections.Generic;
+using Eto.Drawing;
 using System.IO;
 using System.Linq;
-using EtoPoint = Eto.Drawing.Point;
 
 namespace FPLedit.Bildfahrplan.Forms
 {
@@ -18,7 +17,7 @@ namespace FPLedit.Bildfahrplan.Forms
         private Scrollable scrollable;
         private Renderer renderer;
         private RoutesDropDown routesDropDown;
-        private EtoPoint scrollPosition = new EtoPoint(0, 0);
+        private Point scrollPosition = new Point(0, 0);
 
         public DynamicPreviewForm(IInfo info)
         {
@@ -32,7 +31,7 @@ namespace FPLedit.Bildfahrplan.Forms
 
             var mainForm = (FForm)info.RootForm;
             if (Screen != null && mainForm.Bounds.TopRight.X + 500 < Screen.Bounds.Width)
-                Location = mainForm.Bounds.TopRight + new EtoPoint(10, 0);
+                Location = mainForm.Bounds.TopRight + new Point(10, 0);
 
             var stackLayout = new StackLayout();
             Content = stackLayout;
@@ -42,7 +41,7 @@ namespace FPLedit.Bildfahrplan.Forms
                 Orientation = Orientation.Horizontal,
                 VerticalContentAlignment = VerticalAlignment.Center,
                 Spacing = 5,
-                Padding = new Eto.Drawing.Padding(5),
+                Padding = new Padding(5),
             };
             stackLayout.Items.Add(nStack);
 
@@ -104,16 +103,7 @@ namespace FPLedit.Bildfahrplan.Forms
                 return;
 
             renderer.width = panel.Width;
-
-            using (var bmp = new Bitmap(panel.Width, renderer.GetHeight()))
-            using (var g = Graphics.FromImage(bmp))
-            using (var ms = new MemoryStream())
-            {
-                renderer.Draw(g);
-                bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
-                using (var eto = new Eto.Drawing.Bitmap(ms.ToArray()))
-                    e.Graphics.DrawImage(eto, new Eto.Drawing.PointF(0, 0));
-            }
+            renderer.Draw(e.Graphics);
 
             scrollable.ScrollPosition = scrollPosition;
         }

@@ -1,5 +1,4 @@
-﻿using FPLedit.Shared.Rendering;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -155,8 +154,6 @@ namespace FPLedit.Shared
                     RemoveTransition(tra.Next, false);
             }
 
-            // Farbangaben vereinheitlichen
-            ColorTimetableConverter.ConvertAll(this);
 
             // BUG in FPledit 1.5.4 bis 2.0.0 muss nachträglich korrigiert werden
             // Vmax/Wellenlinien bei Stationen wurden nicht routenspezifisch gespeichert
@@ -190,6 +187,8 @@ namespace FPLedit.Shared
             UpgradeMessage = string.Join(Environment.NewLine, upgradeMessages);
             if (UpgradeMessage == "")
                 UpgradeMessage = null;
+            //TODO: Somehow re-enable after Shared.Rendering split-up
+            //ColorTimetableConverter.ConvertAll(this);
         }
 
         public List<Station> GetStationsOrderedByDirection(TrainDirection direction = TrainDirection.ti)

@@ -1,7 +1,7 @@
 ﻿using FPLedit.Bildfahrplan.Model;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using Eto.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,8 +30,8 @@ namespace FPLedit.Bildfahrplan.Render
                 g.DrawLine(hour ? hourPen : minutePen, margin.Left - 5, offset, width - margin.Right, offset); // Linie
 
                 var text = new TimeSpan(0, l + startTime.GetMinutes(), 0).ToString(Renderer.TIME_FORMAT);
-                var size = g.MeasureString(text, (Font)attrs.TimeFont);
-                g.DrawString(text, (Font)attrs.TimeFont, timeBrush, margin.Left - 5 - size.Width, offset - (size.Height / 2)); // Beschriftung
+                var size = g.MeasureString((Font)attrs.TimeFont, text);
+                g.DrawText((Font)attrs.TimeFont, timeBrush, margin.Left - 5 - size.Width, offset - (size.Height / 2), text); // Beschriftung
                 hour = !hour;
             }
         }

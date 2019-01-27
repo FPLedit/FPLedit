@@ -2,8 +2,7 @@
 using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Drawing2D;
+using Eto.Drawing;
 using System.Linq;
 
 namespace FPLedit.Bildfahrplan.Render
@@ -39,7 +38,7 @@ namespace FPLedit.Bildfahrplan.Render
             var dir = GetTrainDirection(train);
 
             var pen = new Pen((Color)style.CalcedColor, style.CalcedWidth);
-            pen.DashPattern = ds.ParseDashstyle(style.CalcedLineStyle);
+            pen.DashStyle = ds.ParseDashstyle(style.CalcedLineStyle);
             var brush = new SolidBrush((Color)style.CalcedColor);
 
             List<PointF> points = new List<PointF>();
@@ -112,27 +111,30 @@ namespace FPLedit.Bildfahrplan.Render
                 var bezierOffset = new SizeF(bezierFactor * 14, (points[i + 1].Y - points[i].Y) / -4.0f);
                 var bezierOffsetT = new SizeF(bezierOffset.Width, -bezierOffset.Height);
 
+                var p = new GraphicsPath();
                 if (!isStationLine || attrs.StationLines != StationLineStyle.Cubic)
-                    g.DrawLine(pen, points[i], points[i + 1]);
+                    p.AddLine(points[i], points[i + 1]);
                 else if (!isTransition)
-                    g.DrawBezier(pen, points[i], points[i] - bezierOffset, points[i + 1] + bezierOffset, points[i + 1]);
+                    p.AddBezier(points[i], points[i] - bezierOffset, points[i + 1] + bezierOffset, points[i + 1]);
                 else
-                    g.DrawBezier(pen, points[i], points[i] - bezierOffset, points[i + 1] - bezierOffsetT, points[i + 1]);
+                    p.AddBezier(points[i], points[i] - bezierOffset, points[i + 1] - bezierOffsetT, points[i + 1]);
+
+                g.DrawPath(pen, p);
 
                 if (points[i].X == points[i + 1].X)
                     continue;
-                var size = g.MeasureString(train.TName, (Font)attrs.TrainFont);
+                var size = g.MeasureString((Font)attrs.TrainFont, train.TName);
                 float[] ys = new[] { points[i].Y, points[i + 1].Y };
                 float[] xs = new[] { points[i].X, points[i + 1].X };
                 float y = ys.Min() + (ys.Max() - ys.Min()) / 2 - (size.Height / 2);
                 float x = xs.Min() + (xs.Max() - xs.Min()) / 2;
 
                 float angle = CalcAngle(ys, xs, train);
-                var container = g.BeginContainer();
+                g.SaveTransform();
                 g.TranslateTransform(x, y);
                 g.RotateTransform(-angle);
-                g.DrawString(train.TName, (Font)attrs.TrainFont, brush, -(size.Width / 2), -(size.Height / 2));
-                g.EndContainer(container);
+                g.DrawText((Font)attrs.TrainFont, brush, -(size.Width / 2), -(size.Height / 2), train.TName);
+                g.RestoreTransform();
             }
         }
 

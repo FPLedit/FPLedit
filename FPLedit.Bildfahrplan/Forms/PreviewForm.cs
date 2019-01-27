@@ -4,11 +4,7 @@ using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.Bildfahrplan.Forms
 {
@@ -63,16 +59,7 @@ namespace FPLedit.Bildfahrplan.Forms
         private void Panel_Paint(object sender, PaintEventArgs e)
         {
             renderer.width = panel.Width;
-
-            using (var bmp = new Bitmap(panel.Width, renderer.GetHeight()))
-            using (var g = Graphics.FromImage(bmp))
-            using (var ms = new MemoryStream())
-            {
-                renderer.Draw(g);
-                bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
-                using (var eto = new Eto.Drawing.Bitmap(ms.ToArray()))
-                    e.Graphics.DrawImage(eto, new Eto.Drawing.PointF(0, 0));
-            }
+            renderer.Draw(e.Graphics);
         }
     }
 }

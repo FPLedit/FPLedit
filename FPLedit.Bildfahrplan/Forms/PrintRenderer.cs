@@ -1,56 +1,60 @@
-﻿using FPLedit.Bildfahrplan.Model;
+﻿using Eto.Forms;
+using FPLedit.Bildfahrplan.Model;
 using FPLedit.Bildfahrplan.Render;
 using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
-using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 
 namespace FPLedit.Bildfahrplan.Forms
 {
     internal class PrintRenderer
     {
+        private IInfo info;
         private Timetable tt;
         private int route;
         private TimetableStyle attrs;
+        private PrintDocument doc;
 
         private TimeSpan? last;
 
-        public PrintRenderer(Timetable tt, int route)
+        public PrintRenderer(IInfo info, int route)
         {
-            this.tt = tt;
+            this.info = info;
+            this.tt = info.Timetable;
             this.route = route;
             attrs = new TimetableStyle(tt);
         }
 
         public void InitPrint()
         {
-            var doc = new PrintDocument();
-            doc.PrintPage += Doc_PrintPage;
-            doc.DocumentName = "Bildfahrplan generiert mit FPLedit";
             PrintDialog dlg = new PrintDialog
             {
-                AllowCurrentPage = false,
-                AllowPrintToFile = false,
-                UseEXDialog = true,
-                Document = doc
+                AllowSelection = false,
             };
-            if (dlg.ShowDialog() == DialogResult.OK)
+            if (dlg.ShowDialog(info.RootForm) == DialogResult.Ok)
+            {
+                doc = new PrintDocument();
+                doc.PrintPage += Doc_PrintPage;
+                doc.Name = "Bildfahrplan generiert mit FPLedit";
+                doc.PageCount = 1;
+
+                doc.PrintSettings = dlg.PrintSettings;
                 doc.Print();
+            }
         }
 
         private void Doc_PrintPage(object sender, PrintPageEventArgs e)
         {
             var renderer = new Renderer(tt, route);
-            int height = e.PageBounds.Height;
+            int height = (int)e.PageSize.Height;
             var start = last ?? attrs.StartTime;
             last = GetTimeByHeight(renderer, start, height);
             renderer.Draw(e.Graphics, start, last.Value);
 
             if (last.Value < attrs.EndTime)
-                e.HasMorePages = true;
+                doc.PageCount++;
             else
                 last = null;
         }

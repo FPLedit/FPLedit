@@ -107,7 +107,7 @@ namespace FPLedit.Bildfahrplan
         private void PrintItem_Click(object sender, EventArgs e)
         {
             var route = (info.Timetable.Type == TimetableType.Network) ? info.FileState.SelectedRoute : Timetable.LINEAR_ROUTE_ID;
-            new PrintRenderer(info.Timetable, route).InitPrint();
+            new PrintRenderer(info, route).InitPrint();
         }
 
         private void ShowItem_Click(object sender, EventArgs e)

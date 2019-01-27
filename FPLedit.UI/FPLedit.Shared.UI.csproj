@@ -81,6 +81,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FPLedit.Shared.Rendering\FPLedit.Shared.Rendering.csproj">
+      <Project>{7d24f283-5220-42e0-83f9-76297a4bd03d}</Project>
+      <Name>FPLedit.Shared.Rendering</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj">
       <Project>{ce38d005-22b2-4b15-80ba-614f038240fd}</Project>
       <Name>FPLedit.Shared</Name>

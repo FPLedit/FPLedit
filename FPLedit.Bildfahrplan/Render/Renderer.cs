@@ -1,14 +1,11 @@
 ﻿using FPLedit.Bildfahrplan.Model;
 using FPLedit.Shared;
-using FPLedit.Shared.Helpers;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Printing;
+using Eto.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace FPLedit.Bildfahrplan.Render
 {
@@ -45,7 +42,7 @@ namespace FPLedit.Bildfahrplan.Render
                 margin = CalcMargins(g, margin, stations, startTime, endTime);
             marginsCalced = true;
 
-            if (width == 0) width = g.VisibleClipBounds.Width;
+            if (width == 0) width = g.ClipBounds.Width;
             if (height == 0) height = GetHeight(startTime, endTime);
 
             // Zeitaufteilung
@@ -57,10 +54,14 @@ namespace FPLedit.Bildfahrplan.Render
             var stationOffsets = headerRenderer.Render(g, margin, width, height);
 
             // Züge
-            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            //TODO: Hier eine bessere Lösung, die nicht auf magic numbers basiert
-            g.ExcludeClip(new Rectangle(0, 0, (int)width, (int)margin.Top)); // Kopf nicht bemalbar
-            g.ExcludeClip(new Rectangle(0, GetHeight(startTime, endTime) - (int)margin.Bottom + 1, (int)width, (int)margin.Bottom + 20000)); // Unterer Rand nicht bemalbar (20000: Konstante für Page Margins)
+            g.AntiAlias = true;
+            //TddODO: Hier eine bessere Lösung, die nicht auf magic numbers basiert
+            var clip = g.ClipBounds;
+            clip.Y += margin.Top;
+            clip.Height -= (margin.Top + margin.Bottom + 1);
+            g.SetClip(clip);
+            //g.ExcludeClip(new Rectangle(0, 0, (int)width, (int)margin.Top)); // Kopf nicht bemalbar
+            //g.ExcludeClip(new Rectangle(0, GetHeight(startTime, endTime) - (int)margin.Bottom + 1, (int)width, (int)margin.Bottom + 20000)); // Unterer Rand nicht bemalbar (20000: Konstante für Page Margins)
 
             var trains = tt.Trains.Where(t =>
             {
@@ -71,7 +72,7 @@ namespace FPLedit.Bildfahrplan.Render
             var trainRenderer = new TrainRenderer(stations, tt, margin, startTime, stationOffsets);
             foreach (var train in trains)
                 trainRenderer.Render(g, train);
-            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
+            g.AntiAlias = false;
         }
 
         private Margins CalcMargins(Graphics g, Margins orig, IEnumerable<Station> stations, TimeSpan startTime, TimeSpan endTime)
@@ -83,15 +84,15 @@ namespace FPLedit.Bildfahrplan.Render
             // MarginTop berechnen
             float sMax = 0f;
             if (attrs.StationVertical)
-                sMax = stations.Max(sta => g.MeasureString(sta.ToString(attrs.DisplayKilometre, route), (Font)attrs.StationFont).Width);
+                sMax = stations.Max(sta => g.MeasureString((Font)attrs.StationFont, sta.ToString(attrs.DisplayKilometre, route)).Width);
             else
-                sMax = g.MeasureString("M", (Font)attrs.StationFont).Height;
+                sMax = g.MeasureString((Font)attrs.StationFont, "M").Height;
             result.Top = attrs.DrawHeader ? sMax + result.Top : result.Top;
 
             // MarginLeft berechnen
             List<float> tsizes = new List<float>();
             foreach (var l in GetTimeLines(out bool _, startTime, endTime))
-                tsizes.Add(g.MeasureString(new TimeSpan(0, l + startTime.GetMinutes(), 0).ToString(TIME_FORMAT), (Font)attrs.TimeFont).Width);
+                tsizes.Add(g.MeasureString((Font)attrs.TimeFont, new TimeSpan(0, l + startTime.GetMinutes(), 0).ToString(TIME_FORMAT)).Width);
             result.Left = tsizes.Max() + result.Left;
             return result;
         }
@@ -120,8 +121,8 @@ namespace FPLedit.Bildfahrplan.Render
         public int GetHeight(TimeSpan start, TimeSpan end)
         {
             var stations = tt.GetRoute(route).GetOrderedStations();
-            using (var image = new Bitmap(1, 1))
-            using (var g = Graphics.FromImage(image))
+            using (var image = new Bitmap(new Size(1, 1), PixelFormat.Format24bppRgb))
+            using (var g = new Graphics(image))
             {
                 var m = CalcMargins(g, margin, stations, start, end);
                 return (int)(m.Top + m.Bottom + (end - start).GetMinutes() * attrs.HeightPerHour / 60f);

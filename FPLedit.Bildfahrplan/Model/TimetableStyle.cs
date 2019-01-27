@@ -125,25 +125,25 @@ namespace FPLedit.Bildfahrplan.Model
         #region Colors
         public MColor TimeColor
         {
-            get => ParseColor(tt.GetAttribute<string>("fpl-tc"), (MColor)System.Drawing.Color.Orange);
+            get => ParseColor(tt.GetAttribute<string>("fpl-tc"), (MColor)Eto.Drawing.Colors.Orange);
             set => tt.SetAttribute("fpl-tc", ColorToString(value));
         }
 
         public MColor BgColor
         {
-            get => ParseColor(tt.GetAttribute<string>("bgC"), (MColor)System.Drawing.Color.White);
+            get => ParseColor(tt.GetAttribute<string>("bgC"), (MColor)Eto.Drawing.Colors.White);
             set => tt.SetAttribute("bgC", ColorToString(value));
         }
 
         public MColor StationColor
         {
-            get => ParseColor(tt.GetAttribute<string>("fpl-sc"), (MColor)System.Drawing.Color.Black);
+            get => ParseColor(tt.GetAttribute<string>("fpl-sc"), (MColor)Eto.Drawing.Colors.Black);
             set => tt.SetAttribute("fpl-sc", ColorToString(value));
         }
 
         public MColor TrainColor
         {
-            get => ParseColor(tt.GetAttribute<string>("fpl-trc"), (MColor)System.Drawing.Color.Gray);
+            get => ParseColor(tt.GetAttribute<string>("fpl-trc"), (MColor)Eto.Drawing.Colors.Gray);
             set => tt.SetAttribute("fpl-trc", ColorToString(value));
         }
         #endregion
