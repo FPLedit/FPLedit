@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿using Eto.Drawing;
+using Eto.Forms;
 using FPLedit.Bildfahrplan.Render;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
@@ -15,6 +16,7 @@ namespace FPLedit.Bildfahrplan.Forms
         private Scrollable scrollable;
         private DateControl dtc;
         private Renderer renderer;
+        private AsyncDoubleBufferedGraph adbg;
 
         public PreviewForm(IInfo info, int route)
         {
@@ -24,42 +26,47 @@ namespace FPLedit.Bildfahrplan.Forms
             ShowInTaskbar = false;
             Title = "Bildfahrplan";
             Maximizable = false;
+            Resizable = Platform.IsWpf;
+            Width = 800;
+            Height = 800;
 
-            var stackLayout = new StackLayout();
+            var stackLayout = new TableLayout();
             Content = stackLayout;
 
             dtc = new DateControl(info);
             dtc.ValueChanged += Dtc_ValueChanged;
-            stackLayout.Items.Add(dtc);
+            stackLayout.Rows.Add(dtc);
 
             panel = new Drawable
             {
                 Height = renderer.GetHeight(),
-                Width = 800
             };
+            adbg = new AsyncDoubleBufferedGraph(panel);
             panel.Paint += Panel_Paint;
 
             scrollable = new Scrollable
             {
-                ExpandContentWidth = false,
+                ExpandContentWidth = true,
                 ExpandContentHeight = false,
-                Height = 800,
                 Content = panel,
             };
-            stackLayout.Items.Add(scrollable);
+            var scrollableRow = new TableRow(scrollable)
+            {
+                ScaleHeight = true,
+            };
+            stackLayout.Rows.Add(scrollableRow);
         }
 
         private void Dtc_ValueChanged(object sender, EventArgs e)
         {
             renderer = new Renderer(info.Timetable, Timetable.LINEAR_ROUTE_ID);
             panel.Height = renderer.GetHeight();
-            panel.Invalidate();
+            adbg.Invalidate();
         }
 
         private void Panel_Paint(object sender, PaintEventArgs e)
         {
-            renderer.width = panel.Width;
-            renderer.Draw(e.Graphics);
+            adbg.Render(renderer, e.Graphics);
         }
     }
 }

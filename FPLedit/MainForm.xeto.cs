@@ -15,6 +15,7 @@ using FPLedit.Templating;
 using FPLedit.Editor.Network;
 using FPLedit.Config;
 using FPLedit.NonDefaultFiletypes;
+using FPLedit.Shared.Rendering;
 using System.Threading.Tasks;
 
 namespace FPLedit

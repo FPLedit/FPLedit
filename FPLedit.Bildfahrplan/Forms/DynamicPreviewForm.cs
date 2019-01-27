@@ -1,12 +1,12 @@
 ﻿using Eto.Forms;
+using Eto.Drawing;
 using FPLedit.Bildfahrplan.Render;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
-using Eto.Drawing;
-using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace FPLedit.Bildfahrplan.Forms
 {
@@ -18,6 +18,7 @@ namespace FPLedit.Bildfahrplan.Forms
         private Renderer renderer;
         private RoutesDropDown routesDropDown;
         private Point scrollPosition = new Point(0, 0);
+        private AsyncDoubleBufferedGraph adbg;
 
         public DynamicPreviewForm(IInfo info)
         {
@@ -27,13 +28,15 @@ namespace FPLedit.Bildfahrplan.Forms
             ShowInTaskbar = true;
             Title = "Dynamische Bildfahrplan-Vorschau";
             Maximizable = false;
-            Resizable = false;
+            Resizable = Platform.IsWpf;
+            Height = 800;
+            Width = 800;
 
             var mainForm = (FForm)info.RootForm;
             if (Screen != null && mainForm.Bounds.TopRight.X + 500 < Screen.Bounds.Width)
                 Location = mainForm.Bounds.TopRight + new Point(10, 0);
 
-            var stackLayout = new StackLayout();
+            var stackLayout = new TableLayout();
             Content = stackLayout;
 
             var nStack = new StackLayout
@@ -43,7 +46,7 @@ namespace FPLedit.Bildfahrplan.Forms
                 Spacing = 5,
                 Padding = new Padding(5),
             };
-            stackLayout.Items.Add(nStack);
+            stackLayout.Rows.Add(nStack);
 
             routesDropDown = new RoutesDropDown();
             routesDropDown.SelectedRouteChanged += (s, e) => ResetRenderer();
@@ -63,21 +66,21 @@ namespace FPLedit.Bildfahrplan.Forms
             };
             nStack.Items.Add(preferencesButton);
 
-            panel = new Drawable
-            {
-                Height = 0,
-                Width = 800
-            };
+            panel = new Drawable();
+            adbg = new AsyncDoubleBufferedGraph(panel);
             panel.Paint += Panel_Paint;
 
             scrollable = new Scrollable
             {
-                ExpandContentWidth = false,
+                ExpandContentWidth = true,
                 ExpandContentHeight = false,
-                Height = 800,
                 Content = panel,
             };
-            stackLayout.Items.Add(scrollable);
+            var scrollableRow = new TableRow(scrollable)
+            {
+                ScaleHeight = true,
+            };
+            stackLayout.Rows.Add(scrollableRow);
 
             // Initialisierung der Daten
             routesDropDown.Initialize(info);
@@ -88,22 +91,20 @@ namespace FPLedit.Bildfahrplan.Forms
             renderer = new Renderer(info.Timetable, routesDropDown.SelectedRoute);
             scrollPosition.Y = 0;
             panel.Height = renderer.GetHeight();
-            panel.Invalidate();
+
+            adbg.Invalidate();
         }
 
         private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)
         {
             scrollPosition = scrollable.ScrollPosition;
-            panel.Invalidate();
+
+            adbg.Invalidate();
         }
 
         private void Panel_Paint(object sender, PaintEventArgs e)
         {
-            if (renderer == null)
-                return;
-
-            renderer.width = panel.Width;
-            renderer.Draw(e.Graphics);
+            adbg.Render(renderer, e.Graphics);
 
             scrollable.ScrollPosition = scrollPosition;
         }

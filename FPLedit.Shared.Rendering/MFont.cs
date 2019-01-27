@@ -28,13 +28,16 @@ namespace FPLedit.Shared.Rendering
         public MFontStyle Style { get; set; }
 
         public static explicit operator Eto.Drawing.Font(MFont m)
-            => new Eto.Drawing.Font(m.Family, m.Size, (Eto.Drawing.FontStyle)m.Style);
+        {
+            var family = FontCollection.Families.Contains(m.Family) ? m.Family : FontCollection.GenericSans;
+            return new Eto.Drawing.Font(family, m.Size, (Eto.Drawing.FontStyle)m.Style);
+        }
 
         #region Conversion
         public static MFont Parse(string def)
         {
             if (def == null || !def.StartsWith("font(") || !def.EndsWith(")"))
-                return new MFont("Arial", 9); // Keine valide Font-Definition
+                return new MFont(Eto.Drawing.FontFamilies.SansFamilyName, 9); // Keine valide Font-Definition
 
             var parts = def.Substring(5, def.Length - 6).Split(';');
             var family = GetFontFamily(parts[0]);

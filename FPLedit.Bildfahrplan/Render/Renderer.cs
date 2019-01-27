@@ -55,13 +55,10 @@ namespace FPLedit.Bildfahrplan.Render
 
             // Züge
             g.AntiAlias = true;
-            //TddODO: Hier eine bessere Lösung, die nicht auf magic numbers basiert
             var clip = g.ClipBounds;
             clip.Y += margin.Top;
             clip.Height -= (margin.Top + margin.Bottom + 1);
             g.SetClip(clip);
-            //g.ExcludeClip(new Rectangle(0, 0, (int)width, (int)margin.Top)); // Kopf nicht bemalbar
-            //g.ExcludeClip(new Rectangle(0, GetHeight(startTime, endTime) - (int)margin.Bottom + 1, (int)width, (int)margin.Bottom + 20000)); // Unterer Rand nicht bemalbar (20000: Konstante für Page Margins)
 
             var trains = tt.Trains.Where(t =>
             {
