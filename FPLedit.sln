@@ -21,6 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build_scripts", "build_scri
 		build_scripts\fpledit.snk = build_scripts\fpledit.snk
 		build_scripts\includes.csx = build_scripts\includes.csx
 		build_scripts\Info.txt = build_scripts\Info.txt
+		build_scripts\ResourceHelper.cs = build_scripts\ResourceHelper.cs
 		build_scripts\VersionInfo.cs = build_scripts\VersionInfo.cs
 	EndProjectSection
 EndProject

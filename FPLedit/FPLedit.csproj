@@ -200,16 +200,6 @@
     <Compile Include="TimetableChecks\TransitionsCheck.cs" />
     <Compile Include="UndoManager.cs" />
     <Compile Include="UpdateManager.cs" />
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <EmbeddedResource Include="MainForm.xeto">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

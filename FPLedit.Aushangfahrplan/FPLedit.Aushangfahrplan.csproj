@@ -48,6 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\build_scripts\ResourceHelper.cs">
+      <Link>Properties\ResourceHelper.cs</Link>
+    </Compile>
     <Compile Include="..\build_scripts\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
@@ -58,11 +61,6 @@
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Forms\SettingsControlProxy.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="HtmlExport.cs" />
     <Compile Include="Model\AfplAttrs.cs" />
     <Compile Include="Plugin.cs" />
@@ -82,7 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\abfahrt-text.svg" />
-    <Content Include="Resources\TryoutScript.txt" />
+    <EmbeddedResource Include="Resources\TryoutScript.txt" />
     <EmbeddedResource Include="Templates\AfplTemplate.fpltmpl">
       <LastGenOutput>AfplTemplate.cs</LastGenOutput>
     </EmbeddedResource>
@@ -93,12 +91,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Templates\SvgTemplate.fpltmpl">
       <LastGenOutput>AfplTemplate.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

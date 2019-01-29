@@ -151,7 +151,7 @@ if (attrs != null)
 			}
 		}
 
-		<#= FPLedit.Buchfahrplan.Properties.Resources.WellenCss #>
+		<#= global::ResourceHelper.GetStringResource("Buchfahrplan.Resources.WellenCss.css") #>
 		</style>
 		<style id="add-css">
 			<#= additionalCss #>

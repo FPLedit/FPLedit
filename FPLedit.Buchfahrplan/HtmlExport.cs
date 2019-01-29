@@ -1,5 +1,4 @@
 ﻿using FPLedit.Buchfahrplan.Model;
-using FPLedit.Buchfahrplan.Properties;
 using FPLedit.Shared;
 using FPLedit.Shared.Templating;
 using System;
@@ -7,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace FPLedit.Buchfahrplan
 {
@@ -25,7 +25,7 @@ namespace FPLedit.Buchfahrplan
                 return false;
 
             if (tryout_console)
-                cont += Resources.TryoutScript;
+                cont += global::ResourceHelper.GetStringResource("Buchfahrplan.Resources.TryoutScript.txt");
 
             File.WriteAllText(filename, cont);
 

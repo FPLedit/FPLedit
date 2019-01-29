@@ -1,5 +1,4 @@
-﻿using FPLedit.Aushangfahrplan.Properties;
-using FPLedit.Shared;
+﻿using FPLedit.Shared;
 using FPLedit.Shared.Templating;
 using System;
 using System.Collections.Generic;
@@ -24,7 +23,7 @@ namespace FPLedit.Aushangfahrplan
                 return false;
 
             if (tryout_console)
-                cont += Resources.TryoutScript;
+                cont += global::ResourceHelper.GetStringResource("Aushangfahrplan.Resources.TryoutScript.txt");
 
             File.WriteAllText(filename, cont);
 
