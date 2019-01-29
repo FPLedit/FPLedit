@@ -53,6 +53,12 @@ namespace FPLedit.Editor.Network
 
         private void ReloadRouteNames(bool forceReload)
         {
+            if (info.Timetable == null)
+            {
+                routesComboBox.Items.Clear();
+                return;
+            }
+
             int oldSelected = -1;
             if (routesComboBox.SelectedValue != null)
                 oldSelected = (int)((ListItem)routesComboBox.SelectedValue).Tag;

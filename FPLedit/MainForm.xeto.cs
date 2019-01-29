@@ -74,9 +74,9 @@ namespace FPLedit
 
             FileStateChanged?.Invoke(this, new FileStateChangedEventArgs(fileState));
 
-            Title = "FPLedit - "
+            Title = "FPLedit" + (fileState.Opened ? " - "
                 + (fileState.FileName != null ? (Path.GetFileName(fileState.FileName) + " ") : "")
-                + (fileState.Saved ? "" : "*");
+                + (fileState.Saved ? "" : "*") : "");
         }
 
         public event EventHandler<FileStateChangedEventArgs> FileStateChanged;
@@ -317,7 +317,7 @@ namespace FPLedit
             if (Timetable?.UpgradeMessage != null)
                 Logger.Warning(Timetable.UpgradeMessage);
             fileState.Opened = Timetable != null;
-            fileState.Saved = true;
+            fileState.Saved = Timetable != null;
             fileState.FileName = Timetable != null ? filename : null;
             undo.ClearHistory();
             lineEditingControl.ResetPan();

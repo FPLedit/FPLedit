@@ -44,6 +44,7 @@ namespace FPLedit.Aushangfahrplan.Templates
 
         public Station[] GetLastStations(TrainDirection dir, Station sta)
         {
+            var visited = new HashSet<Station>();
             if (TT.Type == TimetableType.Linear)
             {
                 var lSta = TT.GetStationsOrderedByDirection(dir).LastOrDefault();
@@ -72,13 +73,13 @@ namespace FPLedit.Aushangfahrplan.Templates
                 foreach (var s in nextStations)
                 {
                     if (s.Routes.Count() > 1)
-                        stasAfter.AddRange(GetSubLastStations(s, rt));
+                        stasAfter.AddRange(GetSubLastStations(s, rt, visited));
                 }
             }
             return stasAfter.ToArray();
         }
 
-        private List<Station> GetSubLastStations(Station sta, int originatingRoute)
+        private List<Station> GetSubLastStations(Station sta, int originatingRoute, HashSet<Station> visited)
         {
             var stasAfter = new List<Station>();
             foreach (var rt in sta.Routes)
@@ -98,8 +99,10 @@ namespace FPLedit.Aushangfahrplan.Templates
 
                 foreach (var s in stations)
                 {
+                    if (!visited.Add(s))
+                        continue;
                     if (s.Routes.Count() > 1 && s != sta)
-                        stasAfter.AddRange(GetSubLastStations(s, rt));
+                        stasAfter.AddRange(GetSubLastStations(s, rt, visited));
                 }
             }
             return stasAfter;
