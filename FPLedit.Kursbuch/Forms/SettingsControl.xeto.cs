@@ -63,7 +63,7 @@ namespace FPLedit.Kursbuch.Forms
                     Binding = Binding.Delegate<Route, string>(r =>
                     {
                         setRouteNumbers.TryGetValue(r.Index, out string val);
-                        return val ?? attrs.KBSn.GetKbsn(r.Index) ?? NO_KBS_TEXT;
+                        return val ?? attrs.KBSn.GetValue(r.Index) ?? NO_KBS_TEXT;
                     },
                     (r, n) => setRouteNumbers[r.Index] = n)
                 }, "Name"
@@ -98,7 +98,7 @@ namespace FPLedit.Kursbuch.Forms
                 var kbs = itm.Value;
                 if (kbs == NO_KBS_TEXT)
                     continue;
-                attrs.KBSn.SetKbsn(itm.Key, kbs);
+                attrs.KBSn.SetValue(itm.Key, kbs);
             }
 
             var tmpl = (ITemplate)templateComboBox.SelectedValue;

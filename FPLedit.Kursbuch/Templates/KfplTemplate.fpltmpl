@@ -18,7 +18,7 @@
 #>
 
 <#
-KBSnCollection kbsn = null;
+RouteValueCollection<string> kbsn = null;
 string font = "Arial"; //TODO: KBZiffern
 string heFont = "\"Arial Black\"";
 string additionalCss = "";
@@ -161,7 +161,7 @@ if (attrs != null)
 	<body>
 	<# foreach (var route in tt.GetRoutes()) { #>
 	<p class="heading">
-		<span class="line"><#= kbsn.GetKbsn(route.Index) #> <#= helper.GetRouteName(route, TOP_DIRECTION) #> </span>
+		<span class="line"><#= kbsn.GetValue(route.Index) #> <#= helper.GetRouteName(route, TOP_DIRECTION) #> </span>
 		<span class="back">und zurück</span>
 	</p>
 	<#

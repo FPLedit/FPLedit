@@ -26,24 +26,11 @@ namespace FPLedit.Buchfahrplan.Model
             set => SetAttribute("name", value);
         }
 
+        public RouteValueCollection<int> Wellenlinien
+            => new RouteValueCollection<int>(this, _parent, "fpl-wl", "0", s => int.Parse(s), i => i.ToString());
 
-        public int Wellenlinien
-        {
-            get => GetAttribute("fpl-wl", 0);
-            set => SetAttribute("fpl-wl", value.ToString());
-        }
-
-        public string Vmax
-        {
-            get => GetAttribute("fpl-vmax", "");
-            set => SetAttribute("fpl-vmax", value);
-        }
-
-        public float LinearKilometre
-        {
-            get => Positions.GetPosition(Timetable.LINEAR_ROUTE_ID).Value;
-            set => Positions.SetPosition(Timetable.LINEAR_ROUTE_ID, value);
-        }
+        public RouteValueCollection<string> Vmax
+            => new RouteValueCollection<string>(this, _parent, "fpl-vmax", "", s => s, s => s);
 
         public int[] Routes
         {

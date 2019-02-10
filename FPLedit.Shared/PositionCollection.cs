@@ -24,11 +24,6 @@ namespace FPLedit.Shared
                 ParseNetwork();
         }
 
-        public void ReparseData()
-        {
-
-        }
-
         public void TestForErrors() // Do nothing. Contructor is enough.
         {
         }
@@ -74,17 +69,24 @@ namespace FPLedit.Shared
             positions.Add(Timetable.LINEAR_ROUTE_ID, float.Parse(toParse, CultureInfo.InvariantCulture));
         }
 
-        private void Write()
+        public void Write(TimetableType? forceType = null, TimetableVersion? forceVersion = null)
         {
-            if (tt.Type == TimetableType.Linear)
+            var t = forceType ?? tt.Type;
+            var v = forceVersion ?? tt.Version;
+            if (t == TimetableType.Linear)
             {
                 var pos = GetPosition(Timetable.LINEAR_ROUTE_ID).Value.ToString("0.0", CultureInfo.InvariantCulture);
-                if (tt.Version == TimetableVersion.JTG2_x)
+                if (v == TimetableVersion.JTG2_x)
+                {
                     sta.SetAttribute("km", pos);
+                    sta.RemoveAttribute("kml");
+                    sta.RemoveAttribute("kmr");
+                }
                 else // jTG 3.0
                 {
                     sta.SetAttribute("kml", pos);
                     sta.SetAttribute("kmr", pos);
+                    sta.RemoveAttribute("km");
                 }
             }
             else
@@ -92,6 +94,8 @@ namespace FPLedit.Shared
                 var posStrings = positions.Select(kvp => kvp.Key.ToString() + ":" + kvp.Value.ToString("0.0", CultureInfo.InvariantCulture));
                 var text = string.Join(";", posStrings);
                 sta.SetAttribute("km", text);
+                sta.RemoveAttribute("kml");
+                sta.RemoveAttribute("kmr");
             }
         }
     }

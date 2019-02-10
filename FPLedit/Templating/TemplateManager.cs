@@ -54,5 +54,12 @@ namespace FPLedit.Templating
 
         public ITemplate[] GetTemplates(string type)
             => templates.Where(t => t.TemplateType == type).ToArray();
+
+        internal void DebugCompileAll()
+        {
+            var tt = new Timetable(TimetableType.Linear);
+            foreach (var t in templates)
+                t.GenerateResult(tt);
+        }
     }
 }

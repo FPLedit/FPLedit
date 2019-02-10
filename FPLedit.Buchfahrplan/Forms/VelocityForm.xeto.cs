@@ -22,14 +22,14 @@ namespace FPLedit.Buchfahrplan.Forms
         private Timetable tt;
         private BfplAttrs attrs;
 
-        public VelocityForm()
+        private VelocityForm()
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
             gridView.AddColumn<IStation>(s => s.Positions.GetPosition(route.Index).ToString(), "km");
             gridView.AddColumn<IStation>(s => s.SName, "Name");
-            gridView.AddColumn<IStation>(s => s.Vmax, "Vmax");
-            gridView.AddColumn<IStation>(s => s.Wellenlinien.ToString(), "Wellenlinien");
+            gridView.AddColumn<IStation>(s => s.Vmax.GetValue(route.Index), "Vmax");
+            gridView.AddColumn<IStation>(s => s.Wellenlinien.GetValue(route.Index).ToString(), "Wellenlinien");
 
             gridView.MouseDoubleClick += (s, e) => EditPoint(false);
 

@@ -76,7 +76,7 @@ namespace FPLedit.Shared
             int idx;
             if (_parent.Type == TimetableType.Linear)
             {
-                var stas = _parent.Stations.OrderBy(s => s.LinearKilometre).ToList();
+                var stas = _parent.GetStationsOrderedByDirection();
                 idx = stas.IndexOf(sta);
             }
             else
@@ -115,7 +115,7 @@ namespace FPLedit.Shared
             XMLEntity tElm;
             if (_parent.Type == TimetableType.Linear)
             {
-                var stas = _parent.Stations.OrderBy(s => s.LinearKilometre).ToList();
+                var stas = _parent.GetStationsOrderedByDirection();
                 var idx = stas.IndexOf(sta);
                 tElm = tElems[idx];
             }
@@ -136,7 +136,7 @@ namespace FPLedit.Shared
             XMLEntity tElm;
             if (_parent.Type == TimetableType.Linear)
             {
-                var stas = _parent.Stations.OrderBy(s => s.LinearKilometre).ToList();
+                var stas = _parent.GetStationsOrderedByDirection();
                 var idx = stas.IndexOf(sta);
                 tElm = tElems[idx];
             }
@@ -168,7 +168,7 @@ namespace FPLedit.Shared
                 ArrDep ardp = new ArrDep();
                 var sta = _parent.Type == TimetableType.Network
                     ? _parent.GetStationById(t.GetAttribute<int>("fpl-id"))
-                    : _parent.Stations.OrderBy(s => s.LinearKilometre).ToList()[tElm.IndexOf(t)];
+                    : _parent.GetStationsOrderedByDirection()[tElm.IndexOf(t)];
 
                 if (t.GetAttribute("a", "") != "")
                     ardp.Arrival = TimeSpan.Parse(t.GetAttribute<string>("a"));
@@ -191,7 +191,7 @@ namespace FPLedit.Shared
             XMLEntity tElm;
             if (_parent.Type == TimetableType.Linear)
             {
-                var stas = _parent.Stations.OrderBy(s => s.LinearKilometre).ToList();
+                var stas = _parent.GetStationsOrderedByDirection();
                 var idx = stas.IndexOf(sta);
                 tElm = tElems[idx];
             }
@@ -205,7 +205,7 @@ namespace FPLedit.Shared
         {
             // Räumt verwaiste Zeiten auf (z.B. Ankunftszeit im Startbahnhof)
             var stas = _parent.Type == TimetableType.Linear
-                ? _parent.Stations.OrderBy(s => s.LinearKilometre).ToList()
+                ? _parent.GetStationsOrderedByDirection()
                 : GetPath();
 
             if (stas.Count == 0) // Die letzte Station wurde gelöscht

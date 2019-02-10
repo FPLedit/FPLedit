@@ -20,8 +20,8 @@ namespace FPLedit.Kursbuch.Model
             set => SetAttribute("hefont", value);
         }
 
-        public KBSnCollection KBSn
-            => new KBSnCollection(this, _parent);
+        public RouteValueCollection<string> KBSn
+            => new RouteValueCollection<string>(this, _parent, "kbsn", "", s => s, s => s);
 
         public string Css
         {

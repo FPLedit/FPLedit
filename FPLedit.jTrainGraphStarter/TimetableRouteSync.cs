@@ -1,4 +1,5 @@
 ﻿using FPLedit.Shared;
+using FPLedit.Shared.Filetypes;
 using FPLedit.Shared.Rendering;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Text;
 
 namespace FPLedit.jTrainGraphStarter
 {
-    internal class TimetableRouteSync
+    internal class TimetableRouteSync : BaseConverterFileType
     {
         private Timetable orig;
         private int routeIndex;
@@ -62,7 +63,7 @@ namespace FPLedit.jTrainGraphStarter
 
                 var pf = path.FirstOrDefault();
                 var pl = path.LastOrDefault();
-                var isEmpty = (pf != null && pl != null && ardps[pf].Arrival != default && ardps[pf].Departure == default) || (ardps[pl].Departure != default && ardps[pl].Arrival == default);
+                var isEmpty = pf != null && pl != null && ((ardps[pf].Arrival != default && ardps[pf].Departure == default) || (ardps[pl].Departure != default && ardps[pl].Arrival == default));
                 if (ardps.Count == 0 || ardps.All(a => !a.Value.HasMinOneTimeSet) || isEmpty) // Dieser Zug berührt diese Route nicht
                 {
                     copy.RemoveTrain(tra);
@@ -95,21 +96,9 @@ namespace FPLedit.jTrainGraphStarter
                 tra.XMLEntity.XName = dir.ToString();
             }
 
-            // Am Ende die Kilometer auf den linearen Stil setzen
+            // Am Ende die Kilometer & anderen Attribute auf den linearen Stil setzen
             foreach (var sta in copy.Stations)
-            {
-                float km = sta.Positions.GetPosition(routeIndex).Value;
-                var pos = km.ToString("0.0", CultureInfo.InvariantCulture);
-
-                if (targetVersion == TimetableVersion.JTG2_x)
-                    sta.SetAttribute("km", pos);
-                else if (targetVersion == TimetableVersion.JTG3_0)
-                {
-                    sta.SetAttribute("kml", pos);
-                    sta.SetAttribute("kmr", pos);
-                    sta.RemoveAttribute("km"); // Alte Netzwerk-Form entfernen
-                }
-            }
+                ConvertStationNetToLin(sta, routeIndex, targetVersion);
 
             copy.SetAttribute("version", targetVersion.ToNumberString()); // Wir gehen aus dem Extended-Modus raus
             ColorTimetableConverter.ConvertAll(copy); // Zum Ziel-Farbformat konvertieren
@@ -123,7 +112,7 @@ namespace FPLedit.jTrainGraphStarter
 
         public void SyncBack(Timetable singleRoute)
         {
-            singleRoute.SetAttribute("version", "100"); // Wieder in Netzwerk-Modus wechseln
+            singleRoute.SetAttribute("version", TimetableVersion.Extended_FPL.ToNumberString()); // Wieder in Netzwerk-Modus wechseln
             orig.Attributes = AttrDiff(orig, singleRoute);
 
             ColorTimetableConverter.ConvertAll(singleRoute); // Zu Hex-Farben zurück

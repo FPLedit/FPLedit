@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace FPLedit.NonDefaultFiletypes
 {
-    internal class NetworkExport : IExport
+    internal class NetworkExport : BaseConverterFileType, IExport
     {
         public string Filter => "Fahrplan Dateien (*.fpl)|*.fpl";
 
@@ -28,8 +28,8 @@ namespace FPLedit.NonDefaultFiletypes
             var y = 0;
             foreach (var sta in clone.Stations)
             {
-                var km_old = sta.Positions.GetPosition(Timetable.LINEAR_ROUTE_ID);
-                sta.SetAttribute("km", rt + ":" + km_old);
+                ConvertStationLinToNet(sta);
+
                 sta.SetAttribute("fpl-rt", rt);
                 sta.SetAttribute("fpl-pos", (y += 40).ToString() + ";0");
                 sta.SetAttribute("fpl-id", id++.ToString());

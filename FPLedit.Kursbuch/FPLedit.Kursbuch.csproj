@@ -62,7 +62,6 @@
     <Compile Include="Forms\Preview.cs" />
     <Compile Include="HtmlExport.cs" />
     <Compile Include="Model\KfplAttrs.cs" />
-    <Compile Include="Model\KBSnCollection.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Templates\TemplateProxy.cs" />

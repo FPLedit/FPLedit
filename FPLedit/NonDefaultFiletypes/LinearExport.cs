@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace FPLedit.NonDefaultFiletypes
 {
-    internal class LinearExport : IExport
+    internal class LinearExport : BaseConverterFileType, IExport
     {
         public string Filter => "Fahrplan Dateien (*.fpl)|*.fpl";
 
@@ -15,8 +15,8 @@ namespace FPLedit.NonDefaultFiletypes
         {
             if (tt.Type == TimetableType.Linear)
                 throw new Exception("Der Fahrplan ist bereits ein Linear-Fahrplan");
-            if (tt.GetRoutes().Count() > 1)
-                throw new Exception("Der Fahrplan hat mehr als eine Strecke");
+            if (tt.GetRoutes().Count() != 1)
+                throw new Exception("Der Fahrplan hat mehr als eine oder keine Strecke");
 
             var clone = tt.Clone();
 
@@ -24,28 +24,20 @@ namespace FPLedit.NonDefaultFiletypes
             foreach (var orig in clone.Trains)
                 trainPaths[orig] = new TrainData(orig);
 
-            clone.SetAttribute("version", Timetable.DefaultLinearVersion.ToNumberString());
+            var route = clone.GetRoutes().FirstOrDefault().Index;
 
             foreach (var sta in clone.Stations)
             {
-                var km_old = sta.GetAttribute("km", "").Split(':');
-                sta.RemoveAttribute("km");
-                var pos = km_old[1];
-
-                if (clone.Version == TimetableVersion.JTG2_x)
-                    sta.SetAttribute("km", pos);
-                else // jTG 3.0
-                {
-                    sta.SetAttribute("kml", pos);
-                    sta.SetAttribute("kmr", pos);
-                }
+                ConvertStationNetToLin(sta, route, Timetable.DefaultLinearVersion);
 
                 sta.RemoveAttribute("fpl-rt");
                 sta.RemoveAttribute("fpl-pos");
                 sta.RemoveAttribute("fpl-id");
             }
 
-            var sortedStations = clone.GetRoutes()[0].GetOrderedStations();
+            clone.SetAttribute("version", Timetable.DefaultLinearVersion.ToNumberString());
+
+            var sortedStations = clone.GetRoutes()[Timetable.LINEAR_ROUTE_ID].GetOrderedStations();
 
             foreach (var t in clone.Trains)
             {

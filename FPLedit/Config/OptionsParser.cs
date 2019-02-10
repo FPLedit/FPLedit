@@ -11,6 +11,7 @@ namespace FPLedit.Config
         private static string[] known_flags = new[]
         {
             "--mp-log",
+            "--tmpl-debug",
         };
 
         private static List<string> present_flags = new List<string>();
@@ -18,6 +19,8 @@ namespace FPLedit.Config
         public static string OpenFilename { get; private set; }
 
         public static bool MPCompatLog => present_flags.Contains("--mp-log");
+
+        public static bool TemplateDebug => present_flags.Contains("--tmpl-debug");
 
         public static void Init(string[] args)
         {

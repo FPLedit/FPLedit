@@ -11,13 +11,11 @@ namespace FPLedit.Shared
 
         string SName { get; set; }
 
-        float LinearKilometre { get; set; }
-
         PositionCollection Positions { get; }
 
-        int Wellenlinien { get; set; }
+        RouteValueCollection<int> Wellenlinien { get;}
 
-        string Vmax { get; set; }
+        RouteValueCollection<string> Vmax { get; }
 
         int[] Routes { get; set; }
     }

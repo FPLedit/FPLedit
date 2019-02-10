@@ -28,7 +28,6 @@ namespace FPLedit.Shared
         void RemoveTransition(Train tra, bool onlyAsFirst = true);
 
         Timetable Clone();
-        string GetLineName(TrainDirection direction);
         List<Station> GetStationsOrderedByDirection(TrainDirection direction);
     }
 }

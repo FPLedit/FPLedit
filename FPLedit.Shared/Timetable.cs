@@ -115,6 +115,8 @@ namespace FPLedit.Shared
                 nextRtId = stations.SelectMany(s => s.Routes).DefaultIfEmpty().Max();
             }
 
+            var upgradeMessages = new List<string>();
+
             // BUG in FPLedit 1.5.3 bis 2.0.0 muss nachträglich korrigiert werden
             // In manchen Fällen wurden Zug-Ids doppelt vergeben
             var duplicate_tra_ids = trains.GroupBy(t => t.Id).Where(g => g.Count() > 1).Select(g => g.ToArray());
@@ -127,8 +129,8 @@ namespace FPLedit.Shared
                         RemoveTransition(dup[0], false); // Transitions mit dieser Id entfernen
 
                     if (duplicate_transitions.Any())
-                        UpgradeMessage = "Aufgrund eines Fehlers in früheren Versionen von FPLedit mussten leider einige Verknüpfungen zu Folgezügen aufgehoben werden. Die betroffenen Züge sind: "
-                            + string.Join(", ", duplicate_transitions.SelectMany(dup => dup.Select(t => t.TName)));
+                        upgradeMessages.Add("Aufgrund eines Fehlers in früheren Versionen von FPLedit mussten leider einige Verknüpfungen zu Folgezügen aufgehoben werden. Die betroffenen Züge sind: "
+                            + string.Join(", ", duplicate_transitions.SelectMany(dup => dup.Select(t => t.TName))));
                 }
 
                 // Korrektur ohne Side-Effects möglich, alle doppelten Zug-Ids werden neu vergeben
@@ -155,15 +157,50 @@ namespace FPLedit.Shared
 
             // Farbangaben vereinheitlichen
             ColorTimetableConverter.ConvertAll(this);
+
+            // BUG in FPledit 1.5.4 bis 2.0.0 muss nachträglich korrigiert werden
+            // Vmax/Wellenlinien bei Stationen wurden nicht routenspezifisch gespeichert
+            if (Type == TimetableType.Network)
+            {
+                List<Station> hadAttrsUpgrade = new List<Station>();
+                string[] upgradeAttrs = new[] { "fpl-vmax", "fpl-wl", "tr" };
+                foreach (var sta in Stations)
+                {
+                    foreach (var attr in upgradeAttrs)
+                    {
+                        var val = sta.GetAttribute<string>(attr, null);
+                        if (val == null || val == "")
+                            continue;
+                        if (val.Contains(':'))
+                            continue;
+
+                        var r = sta.Routes.First();
+                        sta.SetAttribute(attr, r + ":" + val);
+                        hadAttrsUpgrade.Add(sta);
+                    }
+                }
+
+                if (hadAttrsUpgrade.Any())
+                {
+                    upgradeMessages.Add("Aufgrund eines Fehlers in früheren Versionen von FPLedit mussten leider einige Höchstgeschwindigkeiten und Wellenlinienangaben zurückgesetzt werden. Die betroffenen Stationen sind: "
+                        + string.Join(", ", hadAttrsUpgrade.Select(s => s.SName)));
+                }
+            }
+
+            UpgradeMessage = string.Join(Environment.NewLine, upgradeMessages);
+            if (UpgradeMessage == "")
+                UpgradeMessage = null;
         }
 
-        public List<Station> GetStationsOrderedByDirection(TrainDirection direction)
+        public List<Station> GetStationsOrderedByDirection(TrainDirection direction = TrainDirection.ti)
         {
+            float linearOrder(Station s) => s.Positions.GetPosition(LINEAR_ROUTE_ID).Value;
+
             if (Type == TimetableType.Network)
                 throw new NotSupportedException("Netzwerk-Fahrpläne haben keine Richtung!");
             return (direction == TrainDirection.ta ?
-                Stations.OrderByDescending(s => s.LinearKilometre)
-                : Stations.OrderBy(s => s.LinearKilometre)).ToList();
+                Stations.OrderByDescending(linearOrder)
+                : Stations.OrderBy(linearOrder)).ToList();
         }
 
         public string GetLineName(TrainDirection direction)
@@ -199,7 +236,7 @@ namespace FPLedit.Shared
             if (Type == TimetableType.Linear)
             {
                 route = LINEAR_ROUTE_ID;
-                stations = stations.OrderBy(s => s.LinearKilometre).ToList();
+                stations = GetStationsOrderedByDirection();
                 var idx = stations.IndexOf(sta); // Index vorläufig ermitteln
 
                 // Es können ja noch andere Nodes in den Children sein.
@@ -425,6 +462,6 @@ namespace FPLedit.Shared
 
         [DebuggerStepThrough]
         public override string ToString()
-            => GetLineName(TrainDirection.ta);
+            => string.Join(" | ", GetRoutes().Select(r => r.GetRouteName()));
     }
 }

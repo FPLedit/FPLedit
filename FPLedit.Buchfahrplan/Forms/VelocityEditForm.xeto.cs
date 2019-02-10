@@ -55,10 +55,10 @@ namespace FPLedit.Buchfahrplan.Forms
             Station = sta;
             this.route = route;
 
-            velocityTextBox.Text = sta.Vmax;
+            velocityTextBox.Text = sta.Vmax.GetValue(route);
             positionTextBox.Text = sta.Positions.GetPosition(route).ToString();
             nameTextBox.Text = sta.SName;
-            wellenComboBox.SelectedIndex = sta.Wellenlinien; // Achtung: Keine Datenbindung, Index!
+            wellenComboBox.SelectedIndex = sta.Wellenlinien.GetValue(route); // Achtung: Keine Datenbindung, Index!
 
             isPoint = true;
             if (sta is Station)
@@ -77,8 +77,8 @@ namespace FPLedit.Buchfahrplan.Forms
                 return;
             }
 
-            Station.SetAttribute("fpl-vmax", velocityTextBox.Text);
-            Station.Wellenlinien = int.Parse(((IListItem)wellenComboBox.SelectedValue).Text);
+            Station.Vmax.SetValue(route, velocityTextBox.Text);
+            Station.Wellenlinien.SetValue(route, int.Parse(((IListItem)wellenComboBox.SelectedValue).Text));
 
             if (isPoint)
             {

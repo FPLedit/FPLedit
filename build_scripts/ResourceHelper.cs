@@ -1,7 +1,7 @@
 using System.IO;
 using System.Reflection;
 
-internal static class ResourceHelper
+public static class ResourceHelper
 {
     public static Stream GetResource(string dotFilePath)
     {

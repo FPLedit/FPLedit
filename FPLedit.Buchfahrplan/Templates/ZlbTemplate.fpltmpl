@@ -3,25 +3,24 @@
 <#@ import FPLedit.Buchfahrplan.Templates #>
 <#@ import FPLedit.Buchfahrplan.Model #>
 
-<#@ define string GetWelle(ref int counter, IStation sta, Train tra, TemplateHelper helper)
+<#@ define string GetWelle(ref int counter, IStation sta, int route, Train tra, TemplateHelper helper)
 {
     if (counter > 0)
     {
         counter--;
         return "";
     }
-    else if (sta.Wellenlinien != 0)
+    else if (sta.Wellenlinien.GetValue(route) != 0)
     {
-        var w = sta.Wellenlinien;
+        var w = sta.Wellenlinien.GetValue(route);
         var stas = helper.GetStations(tra);
         stas = stas.Skip(stas.IndexOf(sta)).ToList();
-        counter = stas.TakeWhile(s => s.Wellenlinien == w).Count();
+        counter = stas.TakeWhile(s => s.Wellenlinien.GetValue(route) == w).Count(); //TODO: Better data structure
         return string.Format("<td class=\"zug welle welle{0}\" rowspan=\"{1}\"></td>", w, counter--);
     }
 
     return "<td class=\"zug welle\"></td>";
-}
-#>
+} #>
 
 <#
 string font = "serif";
@@ -224,12 +223,13 @@ if (attrs != null)
 							route = entity.Routes.Where(r => sta1.Routes.Contains(r)).ToArray()[0];
 						}
 						var pos = entity.Positions.GetPosition(route);
+						var cur_vmax = entity.Vmax.GetValue(route);
 					#>
 					<td class="zug first"><#= pos.HasValue ? pos.Value.ToString("0.0") : "" #></td>
-					<td class="zug"><#= entity.Vmax == last_vmax ? "" : entity.Vmax #></td>
-					<# last_vmax = entity.Vmax; #>
+					<td class="zug"><#= cur_vmax == last_vmax ? "" : cur_vmax #></td>
+					<# last_vmax = cur_vmax; #>
 					<td class="zug stat"><#= entity.SName #></td>
-					<#= GetWelle(ref rs_counter, entity, tra, helper) #>
+					<#= GetWelle(ref rs_counter, entity, route, tra, helper) #>
 
 					<#
 					if (entity.GetType() == typeof(Station)) {

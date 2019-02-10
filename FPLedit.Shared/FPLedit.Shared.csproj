@@ -58,6 +58,7 @@
     </Compile>
     <Compile Include="ArrDep.cs" />
     <Compile Include="Ext\ITimetableCheck.cs" />
+    <Compile Include="Filetypes\BaseConverterFileType.cs" />
     <Compile Include="Rendering\ColorCollection.cs" />
     <Compile Include="Rendering\ColorTimetableConverter.cs" />
     <Compile Include="Rendering\ColorFormatter.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Rendering\MFont.cs" />
     <Compile Include="Route.cs" />
     <Compile Include="FilterRule.cs" />
+    <Compile Include="RouteValueCollection.cs" />
     <Compile Include="TimetableType.cs" />
     <Compile Include="Templating\ITemplate.cs" />
     <Compile Include="Templating\ITemplateProxy.cs" />
