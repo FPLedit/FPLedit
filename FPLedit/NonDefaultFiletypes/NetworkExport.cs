@@ -35,6 +35,10 @@ namespace FPLedit.NonDefaultFiletypes
                 sta.SetAttribute("fpl-id", id++.ToString());
             }
 
+            var actions = info.GetRegistered<ITimetableTypeChangeAction>();
+            foreach (var action in actions)
+                action.ToNetwork(clone);
+
             clone.SetAttribute("version", TimetableVersion.Extended_FPL.ToNumberString());
 
             foreach (var orig in clone.Trains)

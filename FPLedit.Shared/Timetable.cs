@@ -54,7 +54,7 @@ namespace FPLedit.Shared
             Children.Add(tElm);
         }
 
-        public Timetable(XMLEntity en) : base(en, null)
+        internal Timetable(XMLEntity en) : base(en, null)
         {
             if (Type == TimetableType.Network && Version != TimetableVersion.Extended_FPL)
                 throw new Exception("Falsche Versionsummer für Netzwerk-Fahrplandatei!");
@@ -155,40 +155,9 @@ namespace FPLedit.Shared
             }
 
 
-            // BUG in FPledit 1.5.4 bis 2.0.0 muss nachträglich korrigiert werden
-            // Vmax/Wellenlinien bei Stationen wurden nicht routenspezifisch gespeichert
-            if (Type == TimetableType.Network)
-            {
-                List<Station> hadAttrsUpgrade = new List<Station>();
-                string[] upgradeAttrs = new[] { "fpl-vmax", "fpl-wl", "tr" };
-                foreach (var sta in Stations)
-                {
-                    foreach (var attr in upgradeAttrs)
-                    {
-                        var val = sta.GetAttribute<string>(attr, null);
-                        if (val == null || val == "")
-                            continue;
-                        if (val.Contains(':'))
-                            continue;
-
-                        var r = sta.Routes.First();
-                        sta.SetAttribute(attr, r + ":" + val);
-                        hadAttrsUpgrade.Add(sta);
-                    }
-                }
-
-                if (hadAttrsUpgrade.Any())
-                {
-                    upgradeMessages.Add("Aufgrund eines Fehlers in früheren Versionen von FPLedit mussten leider einige Höchstgeschwindigkeiten und Wellenlinienangaben zurückgesetzt werden. Die betroffenen Stationen sind: "
-                        + string.Join(", ", hadAttrsUpgrade.Select(s => s.SName)));
-                }
-            }
-
             UpgradeMessage = string.Join(Environment.NewLine, upgradeMessages);
             if (UpgradeMessage == "")
                 UpgradeMessage = null;
-            //TODO: Somehow re-enable after Shared.Rendering split-up
-            //ColorTimetableConverter.ConvertAll(this);
         }
 
         public List<Station> GetStationsOrderedByDirection(TrainDirection direction = TrainDirection.ti)

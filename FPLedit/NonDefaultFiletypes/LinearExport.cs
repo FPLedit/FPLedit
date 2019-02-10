@@ -35,6 +35,10 @@ namespace FPLedit.NonDefaultFiletypes
                 sta.RemoveAttribute("fpl-id");
             }
 
+            var actions = info.GetRegistered<ITimetableTypeChangeAction>();
+            foreach (var action in actions)
+                action.ToLinear(clone);
+
             clone.SetAttribute("version", Timetable.DefaultLinearVersion.ToNumberString());
 
             var sortedStations = clone.GetRoutes()[Timetable.LINEAR_ROUTE_ID].GetOrderedStations();

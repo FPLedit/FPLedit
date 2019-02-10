@@ -63,7 +63,10 @@ namespace FPLedit.Shared.UI
         private void ReloadRouteNames(bool forceReload)
         {
             if (info.Timetable == null)
+            {
+                Items.Clear();
                 return;
+            }
 
             int oldSelected = -1;
             if (SelectedValue != null)

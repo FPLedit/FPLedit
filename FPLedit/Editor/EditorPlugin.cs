@@ -31,6 +31,7 @@ namespace FPLedit.Editor
             info.Register<ITimetableCheck>(new FPLedit.TimetableChecks.TransitionsCheck());
             info.Register<ITimetableCheck>(new FPLedit.TimetableChecks.DayOverflowCheck());
             info.Register<ITimetableInitAction>(new FPLedit.TimetableChecks.UpdateColorsAction());
+            info.Register<ITimetableInitAction>(new FPLedit.TimetableChecks.FixNetworkAttributesAction());
 
             if (Environment.OSVersion.Platform != PlatformID.Win32NT || info.Settings.Get<bool>("mp-compat.route-edit-button"))
                 info.Register<IRouteAction>(new Network.EditRouteAction());

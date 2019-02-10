@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Shared
 {
-    public interface ITimetableInitAction
+    public interface ITimetableTypeChangeAction
     {
-        string Init(Timetable tt);
+        void ToLinear(Timetable tt);
+
+        void ToNetwork(Timetable tt);
     }
 }

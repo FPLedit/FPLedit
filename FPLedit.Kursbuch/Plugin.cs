@@ -1,6 +1,8 @@
-﻿using FPLedit.Kursbuch.Forms;
+﻿using System.Linq;
+using FPLedit.Kursbuch.Forms;
 using FPLedit.Kursbuch.Templates;
 using FPLedit.Shared;
+using FPLedit.Shared.Filetypes;
 using FPLedit.Shared.Templating;
 using FPLedit.Shared.Ui;
 
@@ -21,6 +23,28 @@ namespace FPLedit.Kursbuch
             info.Register<IDesignableUiProxy>(new SettingsControlProxy());
 
             info.Register<ITemplateProxy>(new TemplateProxy());
+
+            info.Register<ITimetableTypeChangeAction>(new FixAttrsAction());
+        }
+    }
+
+    public class FixAttrsAction : BaseConverterFileType, ITimetableTypeChangeAction
+    {
+        public void ToLinear(Timetable tt)
+        {
+            var attrs = Model.KfplAttrs.GetAttrs(tt);
+            if (attrs == null)
+                return;
+            var route = tt.GetRoutes().FirstOrDefault().Index;
+            ConvertAttrNetToLin(attrs.KBSn, route);
+        }
+
+        public void ToNetwork(Timetable tt)
+        {
+            var attrs = Model.KfplAttrs.GetAttrs(tt);
+            if (attrs == null)
+                return;
+            ConvertAttrLinToNet(attrs.KBSn);
         }
     }
 }

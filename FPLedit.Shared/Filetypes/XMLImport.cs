@@ -21,7 +21,11 @@ namespace FPLedit.Shared.Filetypes
 
                 var actions = info.GetRegistered<ITimetableInitAction>();
                 foreach (var action in actions)
-                    action.Init(tt);
+                {
+                    var message = action.Init(tt);
+                    if (message != null)
+                        info.Logger.Warning(message);
+                }
 
                 return tt;
             }

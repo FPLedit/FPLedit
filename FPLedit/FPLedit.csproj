@@ -195,6 +195,7 @@
     <Compile Include="Templating\TemplateSandbox.cs" />
     <Compile Include="Templating\TemplateSandboxRunner.cs" />
     <Compile Include="TimetableChecks\DayOverflowCheck.cs" />
+    <Compile Include="TimetableChecks\FixNetworkAttributesAction.cs" />
     <Compile Include="TimetableChecks\TimetableCheckRunner.cs" />
     <Compile Include="TimetableChecks\TransitionsCheck.cs" />
     <Compile Include="TimetableChecks\UpdateColorsAction.cs" />

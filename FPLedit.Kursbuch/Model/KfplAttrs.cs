@@ -21,7 +21,7 @@ namespace FPLedit.Kursbuch.Model
         }
 
         public RouteValueCollection<string> KBSn
-            => new RouteValueCollection<string>(this, _parent, "kbsn", "", s => s, s => s);
+            => new RouteValueCollection<string>(this, _parent, "kbsn", null, s => s, s => s);
 
         public string Css
         {
