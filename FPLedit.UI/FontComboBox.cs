@@ -1,5 +1,6 @@
 ﻿using Eto.Drawing;
 using Eto.Forms;
+using FPLedit.Shared.Rendering;
 using System;
 using System.Linq;
 

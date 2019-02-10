@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Eto.Drawing;
+using System;
 using System.Collections.Generic;
-using System.Drawing;
 
 namespace FPLedit.Shared.Rendering
 {
@@ -37,18 +37,18 @@ namespace FPLedit.Shared.Rendering
 
         private static Dictionary<string, MColor> jtraingraphColors = new Dictionary<string, MColor>()
         {
-            ["schwarz"] = (MColor)Color.Black,
-            ["grau"] = (MColor)Color.Gray,
-            ["weiß"] = (MColor)Color.White,
-            ["rot"] = (MColor)Color.Red,
-            ["orange"] = (MColor)Color.Orange,
-            ["gelb"] = (MColor)Color.Yellow,
-            ["blau"] = (MColor)Color.Blue,
-            ["hellblau"] = (MColor)Color.LightBlue,
-            ["grün"] = (MColor)Color.Green,
-            ["dunkelgrün"] = (MColor)Color.DarkGreen,
-            ["braun"] = (MColor)Color.Brown,
-            ["magenta"] = (MColor)Color.Magenta,
+            ["schwarz"] = (MColor)Colors.Black,
+            ["grau"] = (MColor)Colors.Gray,
+            ["weiß"] = (MColor)Colors.White,
+            ["rot"] = (MColor)Colors.Red,
+            ["orange"] = (MColor)Colors.Orange,
+            ["gelb"] = (MColor)Colors.Yellow,
+            ["blau"] = (MColor)Colors.Blue,
+            ["hellblau"] = (MColor)Colors.LightBlue,
+            ["grün"] = (MColor)Colors.Green,
+            ["dunkelgrün"] = (MColor)Colors.DarkGreen,
+            ["braun"] = (MColor)Colors.Brown,
+            ["magenta"] = (MColor)Colors.Magenta,
         };
 
         public static MColor FromString(string def, MColor defaultValue)

@@ -14,10 +14,9 @@ namespace FPLedit.Editor.Network
     public class LineEditingControl : Panel
     {
         private IInfo info;
-        private int selectedRoute = Timetable.LINEAR_ROUTE_ID;
 
 #pragma warning disable CS0649
-        private DropDown routesComboBox;
+        private RoutesDropDown routesDropDown;
         private LineRenderer lineRenderer;
         private Button newLineButton, newButton, joinLineButton;
         private Divider divider1;
@@ -29,70 +28,19 @@ namespace FPLedit.Editor.Network
             Eto.Serialization.Xaml.XamlReader.Load(this);
         }
 
-        private IEnumerable<ListItem> GetRouteNames(Timetable tt)
-        {
-            ListItem BuildItem(string name, int route)
-            {
-                var itm = new ListItem
-                {
-                    Text = name,
-                    Tag = route
-                };
-                return itm;
-            }
 
-            if (tt.Type == TimetableType.Network)
-            {
-                var rt = tt.GetRoutes();
-                foreach (var route in rt)
-                    yield return BuildItem(route.GetRouteName(), route.Index);
-            }
-            else
-                yield return BuildItem("<Standard>", Timetable.LINEAR_ROUTE_ID);
-        }
-
-        private void ReloadRouteNames(bool forceReload)
-        {
-            if (info.Timetable == null)
-            {
-                routesComboBox.Items.Clear();
-                return;
-            }
-
-            int oldSelected = -1;
-            if (routesComboBox.SelectedValue != null)
-                oldSelected = (int)((ListItem)routesComboBox.SelectedValue).Tag;
-            var routes = GetRouteNames(info.Timetable);
-            routesComboBox.Items.Clear();
-            routesComboBox.Items.AddRange(routes);
-
-            if (oldSelected != -1 && !forceReload && routes.Any(r => (int)r.Tag == oldSelected))
-            {
-                var rl = routes.ToList();
-                routesComboBox.SelectedIndex = rl.IndexOf(rl.FirstOrDefault(li => (int)li.Tag == oldSelected));
-                selectedRoute = oldSelected;
-            }
-            else
-            {
-                selectedRoute = 0;
-                routesComboBox.SelectedIndex = 0;
-            }
-        }
 
         public void Initialize(IInfo info)
         {
             this.info = info;
-            string lastFn = null;
+            routesDropDown.Initialize(info);
             info.FileStateChanged += (s, e) =>
             {
                 ReloadTimetable();
-                newButton.Enabled = routesComboBox.Enabled = newLineButton.Enabled = e.FileState.Opened;
-                routesComboBox.Visible = info.FileState.Opened;
+                newButton.Enabled = routesDropDown.Enabled = newLineButton.Enabled = e.FileState.Opened;
+                routesDropDown.Visible = info.FileState.Opened;
 
-                ReloadRouteNames(lastFn != e.FileState.FileName);
-                lastFn = e.FileState.FileName;
-
-                newLineButton.Visible = joinLineButton.Visible = divider1.Visible = routesComboBox.Visible = info.FileState.Opened && info.Timetable.Type == TimetableType.Network;
+                newLineButton.Visible = joinLineButton.Visible = divider1.Visible = routesDropDown.Visible = info.FileState.Opened && info.Timetable.Type == TimetableType.Network;
                 newLineButton.Enabled = joinLineButton.Enabled = info.FileState.Opened && info.Timetable.Type == TimetableType.Network && info.Timetable.GetRoutes().Any();
 
                 foreach (Control c in toolbar.Controls)
@@ -115,26 +63,22 @@ namespace FPLedit.Editor.Network
                         Tag = action,
                     };
                     btn.Enabled = action.IsEnabled(info);
-                    btn.Click += (se, ev) => action.Show(info, info.Timetable?.GetRoute(selectedRoute));
+                    btn.Click += (se, ev) => action.Show(info, info.Timetable?.GetRoute(routesDropDown.SelectedRoute));
                     toolbar.Items.Add(btn);
                 }
             };
 
-            routesComboBox.SelectedIndexChanged += (s, e) =>
+            routesDropDown.SelectedRouteChanged += (s, e) =>
             {
-                if (routesComboBox.SelectedIndex == -1)
-                    return;
-                selectedRoute = (int)((ListItem)routesComboBox.Items[routesComboBox.SelectedIndex]).Tag;
-                lineRenderer.SelectedRoute = selectedRoute;
-
-                info.FileState.SelectedRoute = selectedRoute;
+                lineRenderer.SelectedRoute = routesDropDown.SelectedRoute;
+                info.FileState.SelectedRoute = routesDropDown.SelectedRoute;
             };
 
             lineRenderer.StationDoubleClicked += (s, e) =>
             {
                 info.StageUndoStep();
                 var sta = (Station)s;
-                var r = selectedRoute;
+                var r = routesDropDown.SelectedRoute;
                 if (sta.Routes.Length == 1)
                     r = sta.Routes[0];
                 if (!sta.Routes.Contains(r))
@@ -163,24 +107,25 @@ namespace FPLedit.Editor.Network
                 };
                 menu.Show(this);
             };
-            lineRenderer.NewRouteAdded += (s, args) => ReloadRouteNames(false);
+            //TODO: Neue Strecke auch auswählen
+            lineRenderer.NewRouteAdded += (s, args) => (info.FileState as FileState).Saved = false;
             lineRenderer.StationMoveEnd += (s, args) => (info.FileState as FileState).Saved = false;
             newButton.Click += (s, e) =>
             {
                 info.StageUndoStep();
-                var nsf = new EditStationForm(info.Timetable, selectedRoute);
+                var nsf = new EditStationForm(info.Timetable, routesDropDown.SelectedRoute);
                 if (nsf.ShowModal(this) == DialogResult.Ok)
                 {
                     Station sta = nsf.Station;
                     if (info.Timetable.Type == TimetableType.Network)
                     {
                         var handler = new StaPosHandler();
-                        handler.SetMiddlePos(selectedRoute, sta, info.Timetable);
+                        handler.SetMiddlePos(routesDropDown.SelectedRoute, sta, info.Timetable);
                         var r = sta.Routes.ToList();
                         r.Add(lineRenderer.SelectedRoute);
                         sta.Routes = r.ToArray();
                     }
-                    info.Timetable.AddStation(sta, selectedRoute);
+                    info.Timetable.AddStation(sta, routesDropDown.SelectedRoute);
                     info.SetUnsaved();
                     ReloadTimetable();
                 }

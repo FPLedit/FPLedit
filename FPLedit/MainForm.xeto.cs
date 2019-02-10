@@ -15,6 +15,7 @@ using FPLedit.Templating;
 using FPLedit.Editor.Network;
 using FPLedit.Config;
 using FPLedit.NonDefaultFiletypes;
+using FPLedit.Shared.Rendering;
 using System.Threading.Tasks;
 
 namespace FPLedit
@@ -263,7 +264,7 @@ namespace FPLedit
             {
                 IImport import = importers[importFileDialog.CurrentFilterIndex - 1];
                 Logger.Info("Öffne Datei " + importFileDialog.FileName);
-                Timetable = import.Import(importFileDialog.FileName, Logger);
+                Timetable = import.Import(importFileDialog.FileName, this);
                 if (Timetable == null)
                     return;
                 Logger.Info("Datei erfolgeich geöffnet!");
@@ -312,7 +313,7 @@ namespace FPLedit
         private void InternalOpen(string filename)
         {
             Logger.Info("Öffne Datei " + filename);
-            Timetable = open.Import(filename, Logger);
+            Timetable = open.Import(filename, this);
             if (Timetable == null)
                 Logger.Error("Fehler beim Öffnen der Datei!");
             else

@@ -27,14 +27,17 @@ namespace FPLedit.Shared.Rendering
 
         public MFontStyle Style { get; set; }
 
-        public static explicit operator System.Drawing.Font(MFont m)
-            => new System.Drawing.Font(m.Family, m.Size, (System.Drawing.FontStyle)m.Style);
+        public static explicit operator Eto.Drawing.Font(MFont m)
+        {
+            var family = FontCollection.Families.Contains(m.Family) ? m.Family : FontCollection.GenericSans;
+            return new Eto.Drawing.Font(family, m.Size, (Eto.Drawing.FontStyle)m.Style);
+        }
 
         #region Conversion
         public static MFont Parse(string def)
         {
             if (def == null || !def.StartsWith("font(") || !def.EndsWith(")"))
-                return new MFont("Arial", 9); // Keine valide Font-Definition
+                return new MFont(Eto.Drawing.FontFamilies.SansFamilyName, 9); // Keine valide Font-Definition
 
             var parts = def.Substring(5, def.Length - 6).Split(';');
             var family = GetFontFamily(parts[0]);
@@ -51,11 +54,11 @@ namespace FPLedit.Shared.Rendering
                 case "sansserif":
                 case "dialog":
                 case "dialoginput":
-                    return System.Drawing.FontFamily.GenericSansSerif.Name;
+                    return Eto.Drawing.FontFamilies.SansFamilyName;
                 case "monospaced":
-                    return System.Drawing.FontFamily.GenericMonospace.Name;
+                    return Eto.Drawing.FontFamilies.MonospaceFamilyName;
                 case "serif":
-                    return System.Drawing.FontFamily.GenericSerif.Name;
+                    return Eto.Drawing.FontFamilies.SerifFamilyName;
             }
             return name;
         }
@@ -69,11 +72,11 @@ namespace FPLedit.Shared.Rendering
 
         private string GetFontName(string family)
         {
-            if (family == System.Drawing.FontFamily.GenericSansSerif.Name)
+            if (family == Eto.Drawing.FontFamilies.SansFamilyName)
                 return "SansSerif";
-            if (family == System.Drawing.FontFamily.GenericSerif.Name)
+            if (family == Eto.Drawing.FontFamilies.SerifFamilyName)
                 return "Serif";
-            if (family == System.Drawing.FontFamily.GenericMonospace.Name)
+            if (family == Eto.Drawing.FontFamilies.MonospaceFamilyName)
                 return "Monospaced";
             return family;
         }

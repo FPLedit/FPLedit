@@ -56,6 +56,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Bildfahrplan", "FPL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.DebugDump", "FPLedit.DebugDump\FPLedit.DebugDump.csproj", "{CA3BB2AD-517E-475F-B7D7-ABA69AC31A96}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Shared.Rendering", "FPLedit.Shared.Rendering\FPLedit.Shared.Rendering.csproj", "{7D24F283-5220-42E0-83F9-76297A4BD03D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,9 +97,14 @@ Global
 		{77EE9755-CE3E-4B7B-AEF1-474B228E7B50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{77EE9755-CE3E-4B7B-AEF1-474B228E7B50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77EE9755-CE3E-4B7B-AEF1-474B228E7B50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77EE9755-CE3E-4B7B-AEF1-474B228E7B50}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CA3BB2AD-517E-475F-B7D7-ABA69AC31A96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CA3BB2AD-517E-475F-B7D7-ABA69AC31A96}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA3BB2AD-517E-475F-B7D7-ABA69AC31A96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D24F283-5220-42E0-83F9-76297A4BD03D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D24F283-5220-42E0-83F9-76297A4BD03D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D24F283-5220-42E0-83F9-76297A4BD03D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D24F283-5220-42E0-83F9-76297A4BD03D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

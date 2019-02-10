@@ -2,7 +2,7 @@
 using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using Eto.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,8 +30,6 @@ namespace FPLedit.Bildfahrplan.Render
             var lastStation = stations.Last();
             var stationOffsets = new Dictionary<Station, float>();
 
-            var verticalFormat = new StringFormat(StringFormatFlags.DirectionVertical);
-
             foreach (var sta in stations)
             {
                 var style = new StationStyle(sta, attrs);
@@ -49,10 +47,10 @@ namespace FPLedit.Bildfahrplan.Render
                     continue;
 
                 var pen = new Pen((Color)style.CalcedColor, style.CalcedWidth);
-                pen.DashPattern = ds.ParseDashstyle(style.CalcedLineStyle);
+                pen.DashStyle = ds.ParseDashstyle(style.CalcedLineStyle);
                 var brush = new SolidBrush((Color)style.CalcedColor);
 
-                var size = g.MeasureString(sta.ToString(attrs.DisplayKilometre, route), (Font)attrs.StationFont);
+                var size = g.MeasureString((Font)attrs.StationFont, sta.ToString(attrs.DisplayKilometre, route));
 
                 g.DrawLine(pen, margin.Left + pos, margin.Top - 5, margin.Left + pos, height - margin.Bottom); // Linie
 
@@ -60,10 +58,17 @@ namespace FPLedit.Bildfahrplan.Render
                 if (attrs.DrawHeader)
                 {
                     var display = sta.ToString(attrs.DisplayKilometre, route);
+
                     if (attrs.StationVertical)
-                        g.DrawString(display, (Font)attrs.StationFont, brush, margin.Left + pos - (size.Height / 2), margin.Top - 5 - size.Width, verticalFormat);
+                    {
+                        g.SaveTransform();
+                        g.TranslateTransform(margin.Left + pos + (size.Height / 2), margin.Top - 8 - size.Width);
+                        g.RotateTransform(90);
+                        g.DrawText((Font)attrs.StationFont, brush, 0, 0, display);
+                        g.RestoreTransform();
+                    }
                     else
-                        g.DrawString(display, (Font)attrs.StationFont, brush, margin.Left + pos - (size.Width / 2), margin.Top - size.Height - 5);
+                        g.DrawText((Font)attrs.StationFont, brush, margin.Left + pos - (size.Width / 2), margin.Top - size.Height - 5, display);
                 }
 
             }

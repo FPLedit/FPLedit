@@ -2,8 +2,7 @@
 using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Drawing2D;
+using Eto.Drawing;
 using System.Linq;
 
 namespace FPLedit.Bildfahrplan.Render
@@ -16,6 +15,7 @@ namespace FPLedit.Bildfahrplan.Render
         private TimetableStyle attrs;
         private TimeSpan startTime;
         private Dictionary<Station, float> stationOffsets;
+        private Train[] trainCache;
 
         private DashStyleHelper ds = new DashStyleHelper();
 
@@ -39,12 +39,13 @@ namespace FPLedit.Bildfahrplan.Render
             var dir = GetTrainDirection(train);
 
             var pen = new Pen((Color)style.CalcedColor, style.CalcedWidth);
-            pen.DashPattern = ds.ParseDashstyle(style.CalcedLineStyle);
+            pen.DashStyle = ds.ParseDashstyle(style.CalcedLineStyle);
             var brush = new SolidBrush((Color)style.CalcedColor);
 
             List<PointF> points = new List<PointF>();
             bool hadFirstArrival = false, hadLastDeparture = false, isFirst = true;
             var stas = dir ? Enumerable.Reverse(stations) : stations;
+
             foreach (var sta in stas)
             {
                 if (!ardps.ContainsKey(sta))
@@ -100,6 +101,7 @@ namespace FPLedit.Bildfahrplan.Render
                 }
             }
 
+            var p = new GraphicsPath();
             for (int i = 0; i < points.Count; i += 2)
             {
                 if (points.Count <= i + 1)
@@ -107,33 +109,35 @@ namespace FPLedit.Bildfahrplan.Render
 
                 var isStationLine = (int)points[i].X == (int)points[i + 1].X;
                 var isTransition = isStationLine && points.Count == i + 2;
-                float bezierFactor = train.Direction == TrainDirection.ti ? -1 : 1;
+                float bezierFactor = !dir ? -1 : 1; // !dir --> TrainDirection.ti
                 if (isTransition) bezierFactor *= 0.5f;
                 var bezierOffset = new SizeF(bezierFactor * 14, (points[i + 1].Y - points[i].Y) / -4.0f);
                 var bezierOffsetT = new SizeF(bezierOffset.Width, -bezierOffset.Height);
 
                 if (!isStationLine || attrs.StationLines != StationLineStyle.Cubic)
-                    g.DrawLine(pen, points[i], points[i + 1]);
+                    p.AddLine(points[i], points[i + 1]);
                 else if (!isTransition)
-                    g.DrawBezier(pen, points[i], points[i] - bezierOffset, points[i + 1] + bezierOffset, points[i + 1]);
+                    p.AddBezier(points[i], points[i] - bezierOffset, points[i + 1] + bezierOffset, points[i + 1]);
                 else
-                    g.DrawBezier(pen, points[i], points[i] - bezierOffset, points[i + 1] - bezierOffsetT, points[i + 1]);
+                    p.AddBezier(points[i], points[i] - bezierOffset, points[i + 1] - bezierOffsetT, points[i + 1]);
+
 
                 if (points[i].X == points[i + 1].X)
                     continue;
-                var size = g.MeasureString(train.TName, (Font)attrs.TrainFont);
+                var size = g.MeasureString((Font)attrs.TrainFont, train.TName);
                 float[] ys = new[] { points[i].Y, points[i + 1].Y };
                 float[] xs = new[] { points[i].X, points[i + 1].X };
                 float y = ys.Min() + (ys.Max() - ys.Min()) / 2 - (size.Height / 2);
                 float x = xs.Min() + (xs.Max() - xs.Min()) / 2;
 
                 float angle = CalcAngle(ys, xs, train);
-                var container = g.BeginContainer();
+                g.SaveTransform();
                 g.TranslateTransform(x, y);
                 g.RotateTransform(-angle);
-                g.DrawString(train.TName, (Font)attrs.TrainFont, brush, -(size.Width / 2), -(size.Height / 2));
-                g.EndContainer(container);
+                g.DrawText((Font)attrs.TrainFont, brush, -(size.Width / 2), -(size.Height / 2), train.TName);
+                g.RestoreTransform();
             }
+            g.DrawPath(pen, p);
         }
 
         #region Direction helpers
@@ -159,28 +163,29 @@ namespace FPLedit.Bildfahrplan.Render
 
         private Train[] GetTrains(TrainDirection dir)
         {
-            var stasAfter = GetStationsInDir(dir);
-            return tt.Trains.Where(t =>
+            if (trainCache == null)
             {
-                var p = t.GetPath();
-                var ardeps = t.GetArrDeps();
+                var stasAfter = GetStationsInDir(dir);
+                trainCache = tt.Trains.Where(t =>
+                {
+                    var p = t.GetPath();
+                    var ardeps = t.GetArrDeps();
 
-                var intersect = stasAfter.Intersect(p)
-                    .Where(s => ardeps[s].HasMinOneTimeSet);
+                    var intersect = stasAfter.Intersect(p)
+                        .Where(s => ardeps[s].HasMinOneTimeSet);
 
-                if (intersect.Count() == 0)
-                    return false;
+                    if (intersect.Count() == 0)
+                        return false;
 
-                var time1 = ardeps[intersect.First()].FirstSetTime;
-                var time2 = ardeps[intersect.Last()].FirstSetTime;
+                    var time1 = ardeps[intersect.First()].FirstSetTime;
+                    var time2 = ardeps[intersect.Last()].FirstSetTime;
 
-                return time1 < time2;
-            }).ToArray();
+                    return time1 < time2;
+                }).ToArray();
+            }
+            return trainCache;
         }
         #endregion
-
-        private float CalcAngle(PointF p1, PointF p2, Train train)
-            => CalcAngle(new[] { p1.Y, p2.Y }, new[] { p1.X, p2.X }, train);
 
         private float CalcAngle(float[] ys, float[] xs, Train train)
         {

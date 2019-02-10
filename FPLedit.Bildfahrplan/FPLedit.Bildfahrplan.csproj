@@ -28,7 +28,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;DISABLE_EDIT_BIFPL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
@@ -51,17 +51,17 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\build_scripts\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
+    </Compile>
+    <Compile Include="DynamicPlugin.cs" />
+    <Compile Include="Forms\DynamicPreviewForm.cs">
+      <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Forms\PreviewForm.cs">
       <SubType>Eto.Forms</SubType>
@@ -83,6 +83,7 @@
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Model\StationStyle.cs" />
+    <Compile Include="Render\AsyncDoubleBufferedGraph.cs" />
     <Compile Include="Render\HeaderRenderer.cs" />
     <Compile Include="Render\Margins.cs" />
     <Compile Include="Plugin.cs" />
@@ -102,6 +103,10 @@
     <Compile Include="Model\TrainStyle.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FPLedit.Shared.Rendering\FPLedit.Shared.Rendering.csproj">
+      <Project>{7d24f283-5220-42e0-83f9-76297a4bd03d}</Project>
+      <Name>FPLedit.Shared.Rendering</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj">
       <Project>{ce38d005-22b2-4b15-80ba-614f038240fd}</Project>
       <Name>FPLedit.Shared</Name>

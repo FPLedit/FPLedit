@@ -9,6 +9,7 @@ using System.Linq;
 
 namespace FPLedit.Bildfahrplan
 {
+#if !DISABLE_EDIT_BIFPL
     [Plugin("Modul für Bildfahrpläne", Vi.PFrom, Vi.PUpTo, Author = "Manuel Huber")]
     public class Plugin : IPlugin
     {
@@ -16,7 +17,7 @@ namespace FPLedit.Bildfahrplan
         private ButtonMenuItem showItem, configItem, trainColorItem, stationStyleItem, printItem;
         private CheckMenuItem overrideItem;
 
-        private TimetableStyle attrs;
+        //private TimetableStyle attrs;
 
         public void Init(IInfo info)
         {
@@ -65,7 +66,7 @@ namespace FPLedit.Bildfahrplan
             printItem.Enabled = e.FileState.Opened && e.FileState.TrainsCreated;
             trainColorItem.Enabled = stationStyleItem.Enabled = e.FileState.Opened && e.FileState.TrainsCreated;
 
-            attrs = new TimetableStyle(info.Timetable);
+            //attrs = new TimetableStyle(info.Timetable);
 
             if (e.FileState.Opened && info.Timetable.Type == TimetableType.Network)
             {
@@ -106,7 +107,7 @@ namespace FPLedit.Bildfahrplan
         private void PrintItem_Click(object sender, EventArgs e)
         {
             var route = (info.Timetable.Type == TimetableType.Network) ? info.FileState.SelectedRoute : Timetable.LINEAR_ROUTE_ID;
-            new PrintRenderer(info.Timetable, route).InitPrint();
+            new PrintRenderer(info, route).InitPrint();
         }
 
         private void ShowItem_Click(object sender, EventArgs e)
@@ -115,4 +116,5 @@ namespace FPLedit.Bildfahrplan
             new PreviewForm(info, route).ShowModal(info.RootForm);
         }
     }
+#endif
 }
