@@ -19,7 +19,14 @@ namespace FPLedit.Shared.UI
         public SizeManager(ISettings settings)
         {
             this.settings = settings;
-            sizes = ParseSettings().ToList();
+            try
+            {
+                sizes = ParseSettings().ToList();
+            }
+            catch
+            {
+                sizes = new List<SizeEntry>();
+            }
         }
 
         public static void Reset()
@@ -34,13 +41,16 @@ namespace FPLedit.Shared.UI
             foreach (var form in forms)
             {
                 var parts = form.Split(':');
-                yield return new SizeEntry(parts[0], int.Parse(parts[1]), int.Parse(parts[2]));
+                if (parts.Length == 3)
+                    yield return new SizeEntry(parts[0], int.Parse(parts[1]), int.Parse(parts[2]), false);
+                else if (parts.Length == 4)
+                    yield return new SizeEntry(parts[0], int.Parse(parts[1]), int.Parse(parts[2]), bool.Parse(parts[3]));
             }
         }
 
         private void WriteSettings()
         {
-            var set = string.Join(";", sizes.Where(s => s.Resized).Select(s => $"{s.TypeName}:{s.Width}:{s.Height}"));
+            var set = string.Join(";", sizes.Where(s => s.Resized).Select(s => $"{s.TypeName}:{s.Width}:{s.Height}:{s.Maximized}"));
             if (reset)
                 set = "";
             settings.Set(SETTINGS_KEY, set);
@@ -61,14 +71,19 @@ namespace FPLedit.Shared.UI
             var entry = sizes.FirstOrDefault(s => s.TypeName == type);
             if (entry == null)
             {
-                entry = new SizeEntry(type, w.Width, w.Height);
+                entry = new SizeEntry(type, w.Width, w.Height, false);
                 sizes.Add(entry);
             }
             else
             {
                 entry.Resized = true; // Wir haben einen Eintrag, also ist es schon resized.
-                w.Width = entry.Width;
-                w.Height = entry.Height;
+                if (!entry.Maximized || !w.Maximizable)
+                {
+                    w.Width = entry.Width;
+                    w.Height = entry.Height;
+                }
+                else
+                    w.Maximize();
             }
         }
 
@@ -85,6 +100,7 @@ namespace FPLedit.Shared.UI
             entry.Resized = entry.Resized || w.Width != entry.Width || w.Height != entry.Height;
             entry.Height = w.Height;
             entry.Width = w.Width;
+            entry.Maximized = w.WindowState == WindowState.Maximized;
 
             WriteSettings();
         }
@@ -95,12 +111,14 @@ namespace FPLedit.Shared.UI
             public int Width;
             public int Height;
             public bool Resized;
+            public bool Maximized;
 
-            public SizeEntry(string type, int w, int h)
+            public SizeEntry(string type, int w, int h, bool max)
             {
                 TypeName = type;
                 Width = w;
                 Height = h;
+                Maximized = max;
             }
         }
     }
