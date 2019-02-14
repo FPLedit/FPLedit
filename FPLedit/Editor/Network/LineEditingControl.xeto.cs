@@ -28,8 +28,6 @@ namespace FPLedit.Editor.Network
             Eto.Serialization.Xaml.XamlReader.Load(this);
         }
 
-
-
         public void Initialize(IInfo info)
         {
             this.info = info;
@@ -107,8 +105,11 @@ namespace FPLedit.Editor.Network
                 };
                 menu.Show(this);
             };
-            //TODO: Neue Strecke auch auswählen
-            lineRenderer.NewRouteAdded += (s, args) => (info.FileState as FileState).Saved = false;
+            lineRenderer.NewRouteAdded += (s, args) =>
+            {
+                (info.FileState as FileState).Saved = false;
+                routesDropDown.SelectedRoute = args.Value;
+            };
             lineRenderer.StationMoveEnd += (s, args) => (info.FileState as FileState).Saved = false;
             newButton.Click += (s, e) =>
             {

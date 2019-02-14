@@ -70,7 +70,7 @@ namespace FPLedit.Editor.Network
         public event EventHandler StationClicked;
         public event EventHandler StationRightClicked;
         public event EventHandler StationDoubleClicked;
-        public event EventHandler NewRouteAdded;
+        public event EventHandler<EventArgs<int>> NewRouteAdded;
         public event EventHandler StationMoveEnd;
 
         private const int OFFSET_X = 20;
@@ -278,7 +278,7 @@ namespace FPLedit.Editor.Network
             handler.WriteStapos(tt, stapos);
             tmp_sta = null;
 
-            NewRouteAdded?.Invoke(this, new EventArgs());
+            NewRouteAdded?.Invoke(this, new EventArgs<int>(rtIdx));
             ReloadTimetable();
         }
 

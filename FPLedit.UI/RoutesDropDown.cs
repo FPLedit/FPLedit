@@ -9,6 +9,7 @@ namespace FPLedit.Shared.UI
     {
         private IInfo info;
         private string lastFn;
+        private int selectedRoute;
 
         public void Initialize(IInfo info)
         {
@@ -24,7 +25,7 @@ namespace FPLedit.Shared.UI
             {
                 if (SelectedIndex == -1)
                     return;
-                SelectedRoute = (int)((ListItem)Items[SelectedIndex]).Tag;
+                selectedRoute = (int)((ListItem)Items[SelectedIndex]).Tag;
 
                 SelectedRouteChanged?.Invoke(this, new EventArgs());
             };
@@ -34,7 +35,21 @@ namespace FPLedit.Shared.UI
             SelectedIndex = 0;
         }
 
-        public int SelectedRoute { get; private set; }
+        public int SelectedRoute
+        {
+            get => selectedRoute;
+            set
+            {
+                var routes = GetRouteNames(info.Timetable);
+
+                if (!routes.Any(r => (int)r.Tag == value))
+                    throw new ArgumentOutOfRangeException($"Route {value} does not exist");
+
+                var rl = routes.ToList();
+                SelectedIndex = rl.IndexOf(rl.FirstOrDefault(li => (int)li.Tag == value));
+                selectedRoute = value;
+            }
+        }
 
         public event EventHandler SelectedRouteChanged;
 
@@ -79,11 +94,11 @@ namespace FPLedit.Shared.UI
             {
                 var rl = routes.ToList();
                 SelectedIndex = rl.IndexOf(rl.FirstOrDefault(li => (int)li.Tag == oldSelected));
-                SelectedRoute = oldSelected;
+                selectedRoute = oldSelected;
             }
             else
             {
-                SelectedRoute = 0;
+                selectedRoute = 0;
                 SelectedIndex = 0;
             }
         }
