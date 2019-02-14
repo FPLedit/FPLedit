@@ -16,7 +16,7 @@ namespace FPLedit.Shared
 
         string GetLineName();
 
-        void AddAllArrDeps(List<Station> path);
+        void AddAllArrDeps(IEnumerable<Station> path);
         List<Station> GetPath();
         void AddArrDep(Station sta, ArrDep ardp, int route);
         void SetArrDep(Station sta, ArrDep ardp);

@@ -361,6 +361,12 @@ namespace FPLedit.Shared
                 return rids.Any();
             }
         }
+
+        public bool RouteConnectsDirectly(int routeToCheck, Station sta1, Station sta2)
+        {
+            var path = GetRoute(routeToCheck)?.GetOrderedStations();
+            return Math.Abs(path.IndexOf(sta1) - path.IndexOf(sta2)) == 1;
+        }
         #endregion
 
         #region Hilfsmethoden für Umläufe

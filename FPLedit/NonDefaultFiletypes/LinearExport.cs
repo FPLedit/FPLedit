@@ -20,9 +20,9 @@ namespace FPLedit.NonDefaultFiletypes
 
             var clone = tt.Clone();
 
-            Dictionary<Train, TrainData> trainPaths = new Dictionary<Train, TrainData>();
+            Dictionary<Train, PathData> trainPaths = new Dictionary<Train, PathData>();
             foreach (var orig in clone.Trains)
-                trainPaths[orig] = new TrainData(orig);
+                trainPaths[orig] = new PathData(clone, orig);
 
             var route = clone.GetRoutes().FirstOrDefault().Index;
 
@@ -47,8 +47,8 @@ namespace FPLedit.NonDefaultFiletypes
             {
                 var data = trainPaths[t];
 
-                var sta1 = data.Path.FirstOrDefault();
-                var sta2 = data.Path.LastOrDefault();
+                var sta1 = data.PathEntries.FirstOrDefault()?.Station;
+                var sta2 = data.PathEntries.LastOrDefault()?.Station;
 
                 var dir = TrainDirection.ti;
                 if (sta1 != sta2)
@@ -64,10 +64,10 @@ namespace FPLedit.NonDefaultFiletypes
                 t.Children.Clear();
                 t.AddLinearArrDeps();
 
-                foreach (var sta in data.Path)
+                foreach (var sta in data.PathEntries)
                 {
-                    if (data.ArrDeps.ContainsKey(sta))
-                        t.SetArrDep(sta, data.ArrDeps[sta]);
+                    if (sta.HasArrDep)
+                        t.SetArrDep(sta.Station, sta.ArrDep.Value);
                 }
             }
 

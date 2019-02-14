@@ -29,7 +29,7 @@ namespace FPLedit.Shared
 
         #region Handling der Fahrtzeiteneinträge
 
-        public void AddAllArrDeps(List<Station> path)
+        public void AddAllArrDeps(IEnumerable<Station> path)
         {
             if (_parent.Type != TimetableType.Network)
                 throw new Exception("Lineare Fahrpläne haben keine Laufwege!");
