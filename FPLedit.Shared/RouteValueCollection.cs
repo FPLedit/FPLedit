@@ -14,6 +14,7 @@ namespace FPLedit.Shared
         private Func<string, T> convTo;
         private Func<T, string> convFrom;
         private bool optional;
+        private T convDefault;
 
         public RouteValueCollection(IEntity e, Timetable tt, string attr, string defaultVal, Func<string, T> convTo, Func<T, string> convFrom, bool optional = true)
         {
@@ -22,6 +23,7 @@ namespace FPLedit.Shared
             this.convTo = convTo;
             this.defaultVal = defaultVal;
             this.optional = optional;
+            convDefault = convTo(defaultVal);
 
             entity = e;
             values = new Dictionary<int, T>();
@@ -40,7 +42,7 @@ namespace FPLedit.Shared
         {
             if (values.TryGetValue(route, out T val))
                 return val;
-            return default;
+            return convDefault;
         }
 
         public void SetValue(int route, T val)
@@ -63,7 +65,11 @@ namespace FPLedit.Shared
 
         private void ParseLinear()
         {
-            var toParse = entity.GetAttribute(attr, defaultVal);
+            var toParse = entity.GetAttribute<string>(attr, null);
+            if (optional && toParse == null)
+                return;
+            else if (toParse == null)
+                toParse = defaultVal;
             values.Add(Timetable.LINEAR_ROUTE_ID, convTo(toParse));
         }
 
