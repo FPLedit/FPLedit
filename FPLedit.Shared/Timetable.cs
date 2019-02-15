@@ -245,6 +245,10 @@ namespace FPLedit.Shared
             // Wenn Endstationen gelöscht werden könnten sonst korrupte Dateien entstehen!
             foreach (var train in Trains)
                 train.RemoveOrphanedTimes();
+
+            // Es können verwaiste Routen entstehen
+            if (Type == TimetableType.Network)
+                RemoveOrphanedRoutes();
         }
 
         public Station GetStationById(int id)
@@ -366,6 +370,25 @@ namespace FPLedit.Shared
         {
             var path = GetRoute(routeToCheck)?.GetOrderedStations();
             return Math.Abs(path.IndexOf(sta1) - path.IndexOf(sta2)) == 1;
+        }
+
+        private void RemoveOrphanedRoutes()
+        {
+            if (Type != TimetableType.Network)
+                return;
+
+            foreach (var route in GetRoutes())
+            {
+                if (route.Stations.Count >= 2)
+                    continue;
+
+                foreach (var rsta in route.Stations)
+                {
+                    var list = rsta.Routes.ToList();
+                    list.Remove(route.Index);
+                    rsta.Routes = list.ToArray();
+                }
+            }
         }
         #endregion
 
