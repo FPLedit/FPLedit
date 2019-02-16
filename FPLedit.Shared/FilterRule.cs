@@ -11,6 +11,7 @@ namespace FPLedit.Shared
     //    "^..." -> beginnt mit
     //    "$..." -> endet mit
     //    "=..." -> gleich
+    //    "!<pattern>" -> negiert
     [Serializable]
     public class FilterRule
     {
@@ -19,34 +20,61 @@ namespace FPLedit.Shared
         public FilterRule(string pattern)
         {
             this.Pattern = pattern;
-            if (pattern.Length < 2)
+            if (pattern.Length < 2 || (pattern.Length < 3 && pattern[0] == '!'))
                 throw new ArgumentException("Zu kurzes Pattern!");
         }
 
         public bool Matches(string s)
         {
             var type = Pattern[0];
-            var rest = Pattern.Substring(1);
+            var negate = type == '!';
+            if (negate)
+                type = Pattern[1];
+            var rest = Pattern.Substring(negate ? 2 : 1);
 
-            switch(type)
+            switch ((FilterType)type)
             {
-                case ' ':
-                    return s.Contains(rest);
-                case '=':
-                    return s == rest;
-                case '^':
-                    return s.StartsWith(rest);
-                case '$':
-                    return s.EndsWith(rest);
+                case FilterType.Contains:
+                    return negate ^ s.Contains(rest);
+                case FilterType.Equals:
+                    return negate ^ s == rest;
+                case FilterType.StartsWith:
+                    return negate ^ s.StartsWith(rest);
+                case FilterType.EndsWidth:
+                    return negate ^ s.EndsWith(rest);
                 default:
                     throw new Exception("Unbekannter Regel-Typ: " + Pattern);
             }
         }
+
+        public FilterType FilterType
+        {
+            get
+            {
+                var type = Pattern[0];
+                var negate = type == '!';
+                if (negate)
+                    type = Pattern[1];
+                return (FilterType)type;
+            }
+        }
+
+        public bool Negate => Pattern[0] == '!';
+
+        public string SearchString => Pattern.Substring((Pattern[0] == '!') ? 2 : 1);
 
         public bool Matches(Train t)
             => Matches(t.TName);
 
         public bool Matches(Station s)
            => Matches(s.SName);
+    }
+
+    public enum FilterType
+    {
+        Contains = ' ',
+        Equals = '=',
+        StartsWith = '^',
+        EndsWidth = '$',
     }
 }

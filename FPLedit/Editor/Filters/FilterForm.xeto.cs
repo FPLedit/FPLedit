@@ -50,8 +50,8 @@ namespace FPLedit.Editor.Filters
 
         private void InitView(GridView view)
         {
-            view.AddColumn<FilterRule>(r => TypeDescription(r.Pattern[0]), "Typ");
-            view.AddColumn<FilterRule>(r => r.Pattern.Substring(1), "Suchwert");
+            view.AddColumn<FilterRule>(r => TypeDescription(r.FilterType, r.Negate), "Typ");
+            view.AddColumn<FilterRule>(r => r.SearchString, "Suchwert");
         }
 
         private void SwitchType(int idx)
@@ -88,10 +88,10 @@ namespace FPLedit.Editor.Filters
             {
                 var frule = (FilterRule)view.SelectedItem;
 
-                var epf = new EditPatternForm(frule.Pattern, property);
+                var epf = new EditPatternForm(frule, property);
                 if (epf.ShowModal(this) == DialogResult.Ok)
                 {
-                    patterns[view.SelectedRow] = new FilterRule(epf.Pattern);
+                    patterns[view.SelectedRow] = epf.Pattern;
 
                     UpdateListView(view, patterns);
                 }
@@ -105,24 +105,24 @@ namespace FPLedit.Editor.Filters
             var epf = new EditPatternForm(property);
             if (epf.ShowModal(this) == DialogResult.Ok)
             {
-                patterns.Add(new FilterRule(epf.Pattern));
+                patterns.Add(epf.Pattern);
 
                 UpdateListView(view, patterns);
             }
         }
 
-        private string TypeDescription(char type)
+        private string TypeDescription(FilterType type, bool negate)
         {
             switch (type)
             {
-                case '^':
-                    return "beginnt mit";
-                case '$':
-                    return "endet mit";
-                case ' ':
-                    return "enthält";
-                case '=':
-                    return "ist";
+                case FilterType.StartsWith:
+                    return negate ? "beginnt nicht mit" : "beginnt mit";
+                case FilterType.EndsWidth:
+                    return negate ? "endet nicht mit" : "endet mit";
+                case FilterType.Contains:
+                    return negate ? "enthält nicht" : "enthält";
+                case FilterType.Equals:
+                    return negate ? "ist nicht" : "ist";
                 default:
                     return "";
             }

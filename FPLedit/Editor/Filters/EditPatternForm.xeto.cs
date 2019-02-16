@@ -15,25 +15,24 @@ namespace FPLedit.Editor.Filters
         private TextBox searchTextBox;
         private Label propertyLabel;
         private StackLayout typeSelectionStack;
+        private CheckBox negateCheckBox;
 #pragma warning restore CS0649
         private SelectionUI typeSelection;
 
-        public string Pattern { get; set; }
+        public FilterRule Pattern { get; set; }
 
-        public EditPatternForm(string pattern, string property) : this(property)
+        public EditPatternForm(FilterRule rule, string property) : this(property)
         {
-            Pattern = pattern;
-            var type = pattern[0];
-            var rest = pattern.Substring(1);
+            Pattern = rule;
+            searchTextBox.Text = rule.SearchString;
+            negateCheckBox.Checked = rule.Negate;
 
-            searchTextBox.Text = rest;
-
-            switch (type)
+            switch (rule.FilterType)
             {
-                case '^': typeSelection.ChangeSelection(0); break;
-                case '$': typeSelection.ChangeSelection(1); break;
-                case ' ': typeSelection.ChangeSelection(2); break;
-                case '=': typeSelection.ChangeSelection(3); break;
+                case FilterType.StartsWith: typeSelection.ChangeSelection(0); break;
+                case FilterType.EndsWidth: typeSelection.ChangeSelection(1); break;
+                case FilterType.Contains: typeSelection.ChangeSelection(2); break;
+                case FilterType.Equals: typeSelection.ChangeSelection(3); break;
             }
         }
 
@@ -63,7 +62,9 @@ namespace FPLedit.Editor.Filters
             else if (typeSelection.SelectedState == 2)
                 type = ' ';
 
-            Pattern = type + searchTextBox.Text;
+            var negate = negateCheckBox.Checked == true ? "!" : "";
+
+            Pattern = new FilterRule(negate + type + searchTextBox.Text);
 
             Close(DialogResult.Ok);
         }
