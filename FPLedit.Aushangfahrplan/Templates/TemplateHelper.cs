@@ -42,9 +42,8 @@ namespace FPLedit.Aushangfahrplan.Templates
 
         #region Last stations
 
-        public Station[] GetLastStations(TrainDirection dir, Station sta)
+        public Station[] GetLastStations(TrainDirection dir, Station sta, IEnumerable<Train> trainsInThisDir)
         {
-            var visited = new HashSet<Station>();
             if (TT.Type == TimetableType.Linear)
             {
                 var lSta = TT.GetStationsOrderedByDirection(dir).LastOrDefault();
@@ -53,61 +52,26 @@ namespace FPLedit.Aushangfahrplan.Templates
                 return new Station[0];
             }
 
+            // Alle Stationen in Zügen dieser Richtung, die nach dieser Station folgen
+            var stasInTrains = trainsInThisDir.SelectMany(t => t.GetArrDeps().Where(a => a.Value.HasMinOneTimeSet).Select(kvp => kvp.Key).SkipWhile(s => s != sta)).ToArray();
+
+            var connectionNodes = sta._parent.Stations.Where(s => s.Routes.Length > 1);
+            var visitedConnectionNodes = connectionNodes.Intersect(stasInTrains); // Eine Hälfte der "Richtungsangaben": Verbindungsknoten im Netz
+
+            var visitedRoutes = stasInTrains.SelectMany(s => s.Routes).Distinct();
+
             var stasAfter = new List<Station>();
+            stasAfter.AddRange(visitedConnectionNodes);
 
-            var routes = sta.Routes;
-            foreach (var rt in routes)
+            foreach (var rt in visitedRoutes)
             {
-                var route = TT.GetRoute(rt);
-                var stas = route.GetOrderedStations();
-                var pos = sta.Positions.GetPosition(rt);
-                var nextStations = dir == TrainDirection.ti ?
-                    stas.Where(s => s.Positions.GetPosition(rt) > pos) : // ti
-                    stas.Where(s => s.Positions.GetPosition(rt) < pos).Reverse(); // ta
-
-                if (!nextStations.Any())
-                    continue;
-
-                stasAfter.Add(nextStations.Last());
-
-                foreach (var s in nextStations)
-                {
-                    if (s.Routes.Count() > 1)
-                        stasAfter.AddRange(GetSubLastStations(s, rt, visited));
-                }
+                var route = sta._parent.GetRoute(rt).GetOrderedStations();
+                stasAfter.Add(route.First());
+                stasAfter.Add(route.Last());
             }
-            return stasAfter.ToArray();
+
+            return stasAfter.Distinct().OrderBy(s => s.SName).ToArray();
         }
-
-        private List<Station> GetSubLastStations(Station sta, int originatingRoute, HashSet<Station> visited)
-        {
-            var stasAfter = new List<Station>();
-            foreach (var rt in sta.Routes)
-            {
-                if (rt == originatingRoute)
-                    continue;
-
-                var route = TT.GetRoute(rt);
-                var stations = route.GetOrderedStations();
-                if (!stations.Any())
-                    continue;
-
-                if (stations.Last() == sta)
-                    stations.Reverse();
-
-                stasAfter.Add(stations.Last());
-
-                foreach (var s in stations)
-                {
-                    if (!visited.Add(s))
-                        continue;
-                    if (s.Routes.Count() > 1 && s != sta)
-                        stasAfter.AddRange(GetSubLastStations(s, rt, visited));
-                }
-            }
-            return stasAfter;
-        }
-
         #endregion
 
         #region Trains at station

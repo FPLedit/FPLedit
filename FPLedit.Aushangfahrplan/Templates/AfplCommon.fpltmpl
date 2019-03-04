@@ -3,43 +3,45 @@
 <#@ import FPLedit.Aushangfahrplan.Templates #>
 <#@ import FPLedit.Aushangfahrplan.Model #>
 
-<#@ define string GetDays(Train t) {
-	return t.Days.DaysToString(true);
-} #>
+<#@ define
+	string GetDays(Train t) {
+		return t.Days.DaysToString(true);
+	}
 
-<#@ define string GetTimeString(TimeSpan t) {
-	return t.Hours.ToString() + "<sup>" + t.Minutes.ToString("00") + "</sup>";
-} #>
+	string GetTimeString(TimeSpan t) {
+		return t.Hours.ToString() + "<sup>" + t.Minutes.ToString("00") + "</sup>";
+	}
 
-<#@ define string TimeString(Train[] trains, Station sta, int i) {
-	return trains.Count() > i ? GetTimeString(trains[i].GetArrDep(sta).Departure) + " " + GetDays(trains[i]) : "";
-} #>
+	string TimeString(Train[] trains, Station sta, int i) {
+		return trains.Count() > i ? GetTimeString(trains[i].GetArrDep(sta).Departure) + " " + GetDays(trains[i]) : "";
+	}
 
-<#@ define string NameString(Train[] trains, int i) {
-	Train train = trains.Count() > i ? trains[i] : null;
-	if (train == null)
-		return "";
-	return train.TName;
-} #>
+	string NameString(Train[] trains, int i) {
+		Train train = trains.Count() > i ? trains[i] : null;
+		if (train == null)
+			return "";
+		return train.TName;
+	}
 
-<#@ define string DirString(Train[] trains, int i) {
-	if (!multipleStations)
-		return "";
-	Train train = trains.Count() > i ? trains[i] : null;
-	if (train == null)
-		return "<td class=\"direction\"></td>";
-	return "<td class=\"direction\">" + train.GetArrDeps().Last(a => a.Value.HasMinOneTimeSet).Key.SName + "</td>";
-} #>
+	string DirString(Train[] trains, int i) {
+		if (!multipleStations)
+			return "";
+		Train train = trains.Count() > i ? trains[i] : null;
+		if (train == null)
+			return "<td class=\"direction\"></td>";
+		return "<td class=\"direction\">" + train.GetArrDeps().Last(a => a.Value.HasMinOneTimeSet).Key.SName + "</td>";
+	}
 
-<#@ define string DirHeader(bool showText) {
-	if (!multipleStations)
-		return "";
-	if (!showText)
-		return "<td class=\"direction header\"></td>";
-	return "<td class=\"direction header\">Richtung</td>";
-} #>
+	string DirHeader(bool showText) {
+		if (!multipleStations)
+			return "";
+		if (!showText)
+			return "<td class=\"direction header\"></td>";
+		return "<td class=\"direction header\">Richtung</td>";
+	}
 
-<#@ define bool multipleStations = false; #>
+	bool multipleStations = false;
+#>
 
 <#
 string font = "Arial";
@@ -158,25 +160,29 @@ td {
 </style>
 </head>
 <body>
-	<# foreach (var sta in helper.GetStations()) { #>
+	<# foreach (var sta in helper.GetStations()) {
+
+		var trainsA = helper.GetTrains(TrainDirection.ta, sta);
+		var trainsB = helper.GetTrains(TrainDirection.ti, sta);
+		int count = Math.Max(trainsA.Length, trainsB.Length);
+		//count = Math.Max(count, 20);
+
+		if (count == 0)
+			continue;
+	#>
 	<p class="station">Bahnhof <#= sta.SName #></p>
 	<p class="title"><#= abfahrtSVG #></p>
 	<p class="heading">der Züge in der Richtung nach</p>
 	<#
-		var fss = helper.GetLastStations(TrainDirection.ta, sta);
-		var lss = helper.GetLastStations(TrainDirection.ti, sta);
+		var fss = helper.GetLastStations(TrainDirection.ta, sta, trainsA);
+		var lss = helper.GetLastStations(TrainDirection.ti, sta, trainsB);
 	#>
 	<table>
 		<tr>
 			<td colspan="<#= multipleStations ? "3" : "2" #>" class="dir"><#= string.Join("/", fss.Select(s => s.SName)) #></td>
 			<td colspan="<#= multipleStations ? "3" : "2" #>" class="dir"><#= string.Join("/", lss.Select(s => s.SName)) #></td>
 		</tr>
-		<#
-			var trainsA = helper.GetTrains(TrainDirection.ta, sta);
-			var trainsB = helper.GetTrains(TrainDirection.ti, sta);
-			int count = Math.Max(trainsA.Length, trainsB.Length);
-			//count = Math.Max(count, 20);
-		#>
+
 		<tr>
 			<# if (fss.Count() > 0) { #>
 				<td class="name header">Zug-Nr</td>
@@ -206,7 +212,7 @@ td {
 			<# } else { #>
 				<td class="name"></td>
 				<td class="time"></td>
-				<#= DirString(trainsA, i) #>
+				<td class="direction"></td>
 			<# } #>
 			<# if (lss.Count() > 0) { #>
 				<td class="name"><#= NameString(trainsB, i) #></td>
@@ -215,7 +221,7 @@ td {
 			<# } else { #>
 				<td class="name"></td>
 				<td class="time"></td>
-				<#= DirString(trainsB, i) #>
+				<td class="direction"></td>
 			<# } #>
 		</tr>
 		<# } #>
