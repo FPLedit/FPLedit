@@ -35,13 +35,9 @@ namespace FPLedit.Shared
                 throw new Exception("Lineare Fahrpläne haben keine Laufwege!");
             foreach (var sta in path)
             {
-                var tElm = new XMLEntity("t");
-                tElm.SetAttribute("fpl-id", sta.Id.ToString());
-                tElm.SetAttribute("a", "");
-                tElm.SetAttribute("d", "");
-                tElm.SetAttribute("fpl-tr", "0");
-                tElm.SetAttribute("fpl-zlm", "");
-                Children.Add(tElm);
+                var ardp = new ArrDep(_parent);
+                ardp.StationId = sta.Id;
+                Children.Add(ardp.XMLEntity);
             }
         }
 
@@ -50,28 +46,18 @@ namespace FPLedit.Shared
             if (_parent.Type == TimetableType.Network)
                 throw new Exception("Bei Netzwerk-Fahrplänen nicht möglich!");
             foreach (var sta in _parent.Stations)
-                AddArrDep(sta, new ArrDep(), Timetable.LINEAR_ROUTE_ID);
+                AddArrDep(sta, Timetable.LINEAR_ROUTE_ID);
         }
-
 
         public List<Station> GetPath()
         {
             if (_parent.Type == TimetableType.Network)
-            {
-                List<Station> ret = new List<Station>();
-                var tElems = Children.Where(x => x.XName == "t").ToList();
-                foreach (var tElm in tElems)
-                {
-                    var sta = _parent.Stations.FirstOrDefault(s => s.Id == tElm.GetAttribute<int>("fpl-id"));
-                    ret.Add(sta);
-                }
-                return ret;
-            }
+                return InternalGetArrDeps().Select(ardp => _parent.GetStationById(ardp.StationId)).ToList();
             else
                 return _parent.GetStationsOrderedByDirection(Direction);
         }
 
-        public void AddArrDep(Station sta, ArrDep ardp, int route)
+        public void AddArrDep(Station sta, int route)
         {
             int idx;
             if (_parent.Type == TimetableType.Linear)
@@ -96,90 +82,35 @@ namespace FPLedit.Shared
                     return; // Betrifft diesen Zug nicht
             }
 
-            var ar = ardp.Arrival.ToShortTimeString();
-            var dp = ardp.Departure.ToShortTimeString();
-
-            var tElm = new XMLEntity("t");
-            tElm.SetAttribute("a", ar != "00:00" ? ar : "");
-            tElm.SetAttribute("d", dp != "00:00" ? dp : "");
-            tElm.SetAttribute("fpl-tr", ardp.TrapeztafelHalt ? "1" : "0");
-            tElm.SetAttribute("fpl-zlm", ardp.Zuglaufmeldung);
+            var ardp = new ArrDep(_parent);
             if (_parent.Type == TimetableType.Network)
-                tElm.SetAttribute("fpl-id", sta.Id.ToString());
-            Children.Insert(idx, tElm);
-        }
-
-        public void SetArrDep(Station sta, ArrDep ardp)
-        {
-            var tElems = Children.Where(x => x.XName == "t").ToList();
-            XMLEntity tElm;
-            if (_parent.Type == TimetableType.Linear)
-            {
-                var stas = _parent.GetStationsOrderedByDirection();
-                var idx = stas.IndexOf(sta);
-                tElm = tElems[idx];
-            }
-            else
-                tElm = tElems.First(t => t.GetAttribute<int>("fpl-id") == sta.Id);
-
-            var ar = ardp.Arrival.ToShortTimeString();
-            var dp = ardp.Departure.ToShortTimeString();
-            tElm.SetAttribute("a", ar != "00:00" ? ar : "");
-            tElm.SetAttribute("d", dp != "00:00" ? dp : "");
-            tElm.SetAttribute("fpl-tr", ardp.TrapeztafelHalt ? "1" : "0");
-            tElm.SetAttribute("fpl-zlm", ardp.Zuglaufmeldung);
+                ardp.StationId = sta.Id;
+            Children.Insert(idx, ardp.XMLEntity);
         }
 
         public ArrDep GetArrDep(Station sta)
         {
-            var tElems = Children.Where(x => x.XName == "t").ToList();
-            XMLEntity tElm;
+            var tElems = InternalGetArrDeps();
             if (_parent.Type == TimetableType.Linear)
             {
                 var stas = _parent.GetStationsOrderedByDirection();
                 var idx = stas.IndexOf(sta);
-                tElm = tElems[idx];
+                return tElems[idx];
             }
             else
-                tElm = tElems.First(t => t.GetAttribute<int>("fpl-id") == sta.Id);
-
-            ArrDep ardp = new ArrDep();
-
-            if (tElm.GetAttribute("a", "") != "")
-                ardp.Arrival = TimeSpan.Parse(tElm.GetAttribute<string>("a"));
-
-            if (tElm.GetAttribute("d", "") != "")
-                ardp.Departure = TimeSpan.Parse(tElm.GetAttribute<string>("d"));
-
-            if (tElm.GetAttribute("fpl-tr", "") != "")
-                ardp.TrapeztafelHalt = Convert.ToBoolean(tElm.GetAttribute<int>("fpl-tr"));
-            if (tElm.GetAttribute("fpl-zlm", "") != "")
-                ardp.Zuglaufmeldung = tElm.GetAttribute<string>("fpl-zlm");
-
-            return ardp;
+                return tElems.First(t => t.StationId == sta.Id);
         }
 
         public Dictionary<Station, ArrDep> GetArrDeps()
         {
             var ret = new Dictionary<Station, ArrDep>();
-            var tElm = Children.Where(x => x.XName == "t").ToList();
-            foreach (var t in tElm)
+            var ardps = InternalGetArrDeps();
+            foreach (var ardp in ardps)
             {
-                ArrDep ardp = new ArrDep();
                 var sta = _parent.Type == TimetableType.Network
-                    ? _parent.GetStationById(t.GetAttribute<int>("fpl-id"))
-                    : _parent.GetStationsOrderedByDirection()[tElm.IndexOf(t)];
+                    ? _parent.GetStationById(ardp.StationId)
+                    : _parent.GetStationsOrderedByDirection()[Array.IndexOf(ardps, ardp)];
 
-                if (t.GetAttribute("a", "") != "")
-                    ardp.Arrival = TimeSpan.Parse(t.GetAttribute<string>("a"));
-
-                if (t.GetAttribute("d", "") != "")
-                    ardp.Departure = TimeSpan.Parse(t.GetAttribute<string>("d"));
-
-                if (t.GetAttribute("fpl-tr", "") != "")
-                    ardp.TrapeztafelHalt = Convert.ToBoolean(t.GetAttribute<int>("fpl-tr"));
-                if (t.GetAttribute("fpl-zlm", "") != "")
-                    ardp.Zuglaufmeldung = t.GetAttribute<string>("fpl-zlm");
                 ret.Add(sta, ardp);
             }
             return ret;
@@ -187,8 +118,8 @@ namespace FPLedit.Shared
 
         public void RemoveArrDep(Station sta)
         {
-            var tElems = Children.Where(x => x.XName == "t").ToList();
-            XMLEntity tElm;
+            var tElems = InternalGetArrDeps();
+            ArrDep tElm;
             if (_parent.Type == TimetableType.Linear)
             {
                 var stas = _parent.GetStationsOrderedByDirection();
@@ -196,9 +127,9 @@ namespace FPLedit.Shared
                 tElm = tElems[idx];
             }
             else
-                tElm = tElems.FirstOrDefault(t => t.GetAttribute<int>("fpl-id") == sta.Id);
+                tElm = tElems.FirstOrDefault(t => t.StationId == sta.Id);
 
-            Children.Remove(tElm);
+            Children.Remove(tElm.XMLEntity);
         }
 
         public void RemoveOrphanedTimes()
@@ -214,15 +145,11 @@ namespace FPLedit.Shared
             var fs = stas.First();
             var ls = stas.Last();
 
-            var fa = GetArrDep(fs);
-            var la = GetArrDep(ls);
-
-            fa.Arrival = default;
-            la.Departure = default;
-
-            SetArrDep(fs, fa);
-            SetArrDep(ls, la);
+            GetArrDep(fs).Arrival = default;
+            GetArrDep(ls).Departure = default;
         }
+
+        private ArrDep[] InternalGetArrDeps() => Children.Where(x => x.XName == "t").Select(x => new ArrDep(x, _parent)).ToArray();
 
         #endregion
 

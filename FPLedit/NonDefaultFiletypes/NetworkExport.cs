@@ -19,7 +19,7 @@ namespace FPLedit.NonDefaultFiletypes
             var clone = tt.Clone();
             var old_version = clone.GetAttribute("version", "");
 
-            Dictionary<Train, PathData> trainPaths = new Dictionary<Train, PathData>();
+            var trainPaths = new Dictionary<Train, PathData>();
             foreach (var orig in clone.Trains)
                 trainPaths[orig] = new PathData(clone, orig);
 
@@ -41,18 +41,18 @@ namespace FPLedit.NonDefaultFiletypes
 
             clone.SetAttribute("version", TimetableVersion.Extended_FPL.ToNumberString());
 
-            foreach (var orig in clone.Trains)
+            foreach (var train in clone.Trains)
             {
-                var data = trainPaths[orig];
+                var data = trainPaths[train];
 
-                orig.Children.Clear();
-                orig.AddAllArrDeps(data.GetRawPath());
-                orig.XMLEntity.XName = "tr";
+                train.Children.Clear();
+                train.AddAllArrDeps(data.GetRawPath());
+                train.XMLEntity.XName = "tr";
 
                 foreach (var sta in data.PathEntries)
                 {
-                    if (sta.HasArrDep)
-                        orig.SetArrDep(sta.Station, sta.ArrDep.Value);
+                    if (sta.ArrDep != null)
+                        train.GetArrDep(sta.Station).ApplyCopy(sta.ArrDep);
                 }
             }
 

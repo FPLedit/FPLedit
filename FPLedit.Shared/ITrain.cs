@@ -18,8 +18,7 @@ namespace FPLedit.Shared
 
         void AddAllArrDeps(IEnumerable<Station> path);
         List<Station> GetPath();
-        void AddArrDep(Station sta, ArrDep ardp, int route);
-        void SetArrDep(Station sta, ArrDep ardp);
+        void AddArrDep(Station sta, int route);
         ArrDep GetArrDep(Station sta);
         Dictionary<Station, ArrDep> GetArrDeps();
         void RemoveArrDep(Station sta);

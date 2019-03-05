@@ -169,8 +169,6 @@ namespace FPLedit.Editor.Network
                     MessageBox.Show("Bitte erst alle Fehler beheben!\n\nDie Zeitangaben müssen im Format hh:mm, h:mm, h:m, hh:mm, h:, :m, hhmm, hmm oder mm vorliegen!");
                     return false;
                 }
-
-                train.SetArrDep(row.Station, row.ArrDeps[row.Station]);
             }
             return true;
         }

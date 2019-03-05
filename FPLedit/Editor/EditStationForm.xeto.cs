@@ -93,12 +93,12 @@ namespace FPLedit.Editor
                 }
             }
 
-            Dictionary<Train, ArrDep> ardeps = new Dictionary<Train, ArrDep>();
+            var ardeps = new Dictionary<Train, ArrDep>();
             if (resetArdep)
             {
                 foreach (var tra in Station._parent.Trains)
                 {
-                    ardeps[tra] = tra.GetArrDep(Station);
+                    ardeps[tra] = tra.GetArrDep(Station).Clone<ArrDep>();
                     tra.RemoveArrDep(Station);
                 }
             }
@@ -110,8 +110,13 @@ namespace FPLedit.Editor
             Station.SName = name;
 
             if (resetArdep)
+            {
                 foreach (var ardp in ardeps)
-                    ardp.Key.AddArrDep(Station, ardp.Value, route);
+                {
+                    ardp.Key.AddArrDep(Station, route);
+                    ardp.Key.GetArrDep(Station).ApplyCopy(ardp.Value);
+                }
+            }
 
             Close(DialogResult.Ok);
         }

@@ -179,16 +179,7 @@ namespace FPLedit.Shared
             return stas.First().SName + " - " + stas.Last().SName;
         }
 
-        public Timetable Clone()
-        {
-            using (MemoryStream stream = new MemoryStream())
-            {
-                BinaryFormatter formatter = new BinaryFormatter();
-                formatter.Serialize(stream, this);
-                stream.Seek(0, SeekOrigin.Begin);
-                return (Timetable)formatter.Deserialize(stream);
-            }
-        }
+        public Timetable Clone() => Clone<Timetable>();
 
         #region Hilfsmethoden für andere Entitäten
 
@@ -225,7 +216,7 @@ namespace FPLedit.Shared
 
             // Auch bei allen Zügen hinzufügen
             foreach (var t in Trains)
-                t.AddArrDep(sta, new ArrDep(), route);
+                t.AddArrDep(sta, route);
         }
 
         public void RemoveStation(Station sta)

@@ -25,7 +25,7 @@ namespace FPLedit.NonDefaultFiletypes
                 int route = next != null ? GetDirectlyConnectingRoute(tt, sta, next) : lastRoute;
                 lastRoute = route;
                 idx++;
-                return new PathEntry(sta, hasArrDep ? ardp : (ArrDep?)null, route);
+                return new PathEntry(sta, ardp, route);
             }).ToArray();
         }
 
@@ -53,7 +53,7 @@ namespace FPLedit.NonDefaultFiletypes
 
     internal class PathEntry
     {
-        public PathEntry(Station station, ArrDep? arrDep, int routeIndex)
+        public PathEntry(Station station, ArrDep arrDep, int routeIndex)
         {
             Station = station;
             ArrDep = arrDep;
@@ -62,9 +62,7 @@ namespace FPLedit.NonDefaultFiletypes
 
         public Station Station { get; private set; }
 
-        public ArrDep? ArrDep { get; private set; }
-
-        public bool HasArrDep => ArrDep.HasValue;
+        public ArrDep ArrDep { get; private set; }
 
         public int RouteIndex { get; private set; }
     }
