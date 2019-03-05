@@ -230,7 +230,7 @@ if (attrs != null)
 						var ar = ardp.Arrival.ToShortTimeString();
 						var dp = ardp.Departure.ToShortTimeString();
 					#>
-					<td class="zug"><#= ar != "00:00" ? ar : "" #></td>
+					<td class="zug"><#= (ar != "00:00" && ar != dp) ? ar : "" #></td>
 					<td class="zug"><#= dp != "00:00" ? dp : "" #></td>
 					<# } else { #>
 					<td class="zug"></td>

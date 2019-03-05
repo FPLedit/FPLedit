@@ -240,7 +240,7 @@ if (attrs != null)
 						var zlm = ardp.Zuglaufmeldung;
 					#>
 					<td class="zug klein"><#= helper.TrapezHalt(tra, s) #></td>
-					<td class="zug"><#= ar != "00:00" ? ar : "" #></td>
+					<td class="zug"><#= (ar != "00:00" && ar != dp) ? ar : "" #></td>
 					<td class="zug"><#= dp != "00:00" ? dp : "" #></td>
 					<td class="zug klein"><#= helper.Kreuzt(tra, s) #></td>
 					<td class="zug klein"><#= helper.Ueberholt(tra, s) #></td>

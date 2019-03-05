@@ -29,7 +29,9 @@ namespace FPLedit.Editor
             direction = dir;
             this.tt = tt;
 
-            sortSelection = new SelectionUI(SelectMode, sortSelectionStack, "Nach Namen", "Nach Zugnummern (Name ohne Zugart)", "Nach Zeit, an Station", "Von oben nach unten", "Von unten nach oben");
+            //TODO: Investigate & re-enable linear sorting top-to-bottom/bottom-to-top
+            //sortSelection = new SelectionUI(SelectMode, sortSelectionStack, "Nach Namen", "Nach Zugnummern (Name ohne Zugart)", "Nach Zeit, an Station", "Von oben nach unten", "Von unten nach oben");
+            sortSelection = new SelectionUI(SelectMode, sortSelectionStack, "Nach Namen", "Nach Zugnummern (Name ohne Zugart)", "Nach Zeit, an Station");
 
             stationsComboBox.ItemTextBinding = Binding.Property<Station, string>(s => s.SName);
             stationsComboBox.DataStore = tt.Stations;

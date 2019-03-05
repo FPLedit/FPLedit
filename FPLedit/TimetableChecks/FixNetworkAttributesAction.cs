@@ -36,7 +36,7 @@ namespace FPLedit.TimetableChecks
                 if (hadAttrsUpgrade.Any())
                 {
                     return "Aufgrund eines Fehlers in früheren Versionen von FPLedit mussten leider einige Höchstgeschwindigkeiten und Wellenlinienangaben zurückgesetzt werden. Die betroffenen Stationen sind: "
-                        + string.Join(", ", hadAttrsUpgrade.Select(s => s.SName));
+                        + string.Join(", ", hadAttrsUpgrade.Distinct().Select(s => s.SName));
                 }
             }
             return null;
