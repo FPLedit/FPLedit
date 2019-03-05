@@ -13,12 +13,15 @@ namespace FPLedit.Templating
     {
         private RegisterStore store;
         private ILog logger;
+        private ISettings settings;
         private List<TemplateHost> templates;
+        private List<string> enabledTemplates;
 
-        public TemplateManager(RegisterStore store, ILog logger)
+        public TemplateManager(RegisterStore store, ILog logger, ISettings settings)
         {
             this.store = store;
             this.logger = logger;
+            this.settings = settings;
 
             try
             {
@@ -27,13 +30,15 @@ namespace FPLedit.Templating
                 Directory.CreateDirectory(TemplateCompiler.CompilerTemp);
             }
             catch { }
+
+            enabledTemplates = settings.Get("tmpl.enabled", "").Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
         }
 
         public void LoadTemplates(string templateRoot)
         {
             // Registrierte (Standard-)Templates laden
             var instances = store.GetRegistered<ITemplateProxy>();
-            templates = instances.Select(t => new TemplateHost(t.GetTemplateCode(), t.TemplateIdentifier, logger)).ToList();
+            templates = instances.Select(t => new TemplateHost(t.GetTemplateCode(), t.TemplateIdentifier, logger, true)).ToList();
 
             // Weitere Templates aus Dateien laden
             var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), templateRoot);
@@ -45,21 +50,37 @@ namespace FPLedit.Templating
             foreach (var file in files)
             {
                 var content = File.ReadAllText(file.FullName);
-                templates.Add(new TemplateHost(content, file.Name, logger));
+                templates.Add(new TemplateHost(content, file.Name, logger, enabledTemplates.Contains(file.Name)));
             }
         }
 
-        public ITemplate[] GetTemplates()
+        public ITemplate[] GetAllTemplates()
             => templates.ToArray();
 
         public ITemplate[] GetTemplates(string type)
-            => templates.Where(t => t.TemplateType == type).ToArray();
+            => templates.Where(t => t.Enabled && t.TemplateType == type).ToArray();
 
         internal void DebugCompileAll()
         {
             var tt = new Timetable(TimetableType.Linear);
             foreach (var t in templates)
                 t.GenerateResult(tt);
+        }
+
+        internal void EnableTemplate(ITemplate tmpl)
+        {
+            var fn = Path.GetFileName(tmpl.Identifier);
+            if (enabledTemplates.Contains(fn))
+                return;
+            enabledTemplates.Add(fn);
+            settings.Set("tmpl.enabled", string.Join(";", enabledTemplates));
+        }
+
+        internal void DisableTemplate(ITemplate tmpl)
+        {
+            var fn = Path.GetFileName(tmpl.Identifier);
+            enabledTemplates.Remove(fn);
+            settings.Set("tmpl.enabled", string.Join(";", enabledTemplates));
         }
     }
 }

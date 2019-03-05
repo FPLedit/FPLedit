@@ -18,13 +18,13 @@ namespace FPLedit
     {
 #pragma warning disable CS0649
         private GridView gridView;
-        private Button extractButton, editButton, removeButton;
+        private Button extractButton, editButton, removeButton, enableButton, disableButton;
 #pragma warning restore CS0649
 
         private TemplateManager manager;
         private ITemplate[] templates;
 
-        private DirectoryInfo templatesDir, deactivatedDir;
+        private DirectoryInfo templatesDir;
 
         public TemplatesForm(TemplateManager manager, string templateRoot)
         {
@@ -33,24 +33,26 @@ namespace FPLedit
             this.manager = manager;
             var appPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             templatesDir = new DirectoryInfo(Path.Combine(appPath, templateRoot));
-            deactivatedDir = new DirectoryInfo(Path.Combine(appPath, templateRoot, "deactivated"));
 
             var buildName = new Func<string, string>((x) => x.StartsWith("builtin:") ? "(integriert)" : x);
+            gridView.AddColumn<ITemplate>(t => ((TemplateHost)t).Enabled ? "X" : "", "Aktiviert");
             gridView.AddColumn<ITemplate>(t => t.TemplateName, "Name");
             gridView.AddColumn<ITemplate>(t => buildName(t.Identifier), "Dateiname");
             gridView.AddColumn<ITemplate>(t => t.TemplateType, "Typ");
 
             gridView.SelectedItemsChanged += (s, e) =>
             {
-                var tmpl = (ITemplate)gridView.SelectedItem;
+                var tmpl = (TemplateHost)gridView.SelectedItem;
                 if (tmpl == null)
                 {
-                    extractButton.Enabled = editButton.Enabled = removeButton.Enabled = false;
+                    extractButton.Enabled = editButton.Enabled = removeButton.Enabled = enableButton.Enabled = disableButton.Enabled = false;
                     return;
                 }
                 var builtin = tmpl.Identifier.StartsWith("builtin:");
                 extractButton.Enabled = builtin;
                 editButton.Enabled = removeButton.Enabled = !builtin;
+                enableButton.Enabled = !builtin && !tmpl.Enabled;
+                disableButton.Enabled = !builtin && tmpl.Enabled;
             };
 
             this.AddSizeStateHandler();
@@ -60,7 +62,7 @@ namespace FPLedit
 
         private void RefreshList()
         {
-            templates = manager.GetTemplates();
+            templates = manager.GetAllTemplates();
             gridView.DataStore = templates;
         }
 
@@ -87,21 +89,48 @@ namespace FPLedit
         private void removeButton_Click(object sender, EventArgs e)
         {
             var tmpl = templates[gridView.SelectedRow];
-            var res = MessageBox.Show("Die Vorlagendatei wird verschoben und muss zur Reaktivierung manuell wieder zurück in den templates-Ordner im Installationsverzeichnis verschoben werden!",
+            var res = MessageBox.Show("Die Vorlagendatei wird unwiderruflich gelöscht! Fortfahren?",
                 "FPLedit", MessageBoxButtons.OKCancel);
             if (res == DialogResult.Ok)
             {
                 if (!templatesDir.Exists)
                     return; // How did we come so far?
-                deactivatedDir.Create(); // Ensure we have a destination
 
                 var file = templatesDir.EnumerateFiles(tmpl.Identifier).FirstOrDefault();
-                var dest = Path.Combine(deactivatedDir.FullName, tmpl.Identifier);
-                dest = FindNextFreeFile(dest);
-                file.MoveTo(dest);
+                file.Delete();
 
                 ReloadTemplates();
             }
+        }
+
+        private void enableButton_Click(object sender, EventArgs e)
+        {
+            var tmpl = templates[gridView.SelectedRow];
+
+            var res = MessageBox.Show($"Die Vorlage {tmpl.TemplateName} stammt nicht vom FPLedit-Entwickler. Sie sollten die Vorlage nur aktivieren, wenn Sie " +
+                $"sich sicher sein, dass sie aus einer vertrauenswürdigen Quelle stammt. Bösartige Vorlagen könnten möglicherweise Schadcode auf dem System ausführen.",
+                "Vorlage aktivieren", MessageBoxButtons.YesNo, MessageBoxType.Warning);
+            if (res == DialogResult.No)
+                return;
+
+            if (!templatesDir.Exists)
+                return; // How did we come so far?
+
+            manager.EnableTemplate(tmpl);
+
+            ReloadTemplates();
+        }
+
+        private void disableButton_Click(object sender, EventArgs e)
+        {
+            var tmpl = templates[gridView.SelectedRow];
+
+            if (!templatesDir.Exists)
+                return; // How did we come so far?
+
+            manager.DisableTemplate(tmpl);
+
+            ReloadTemplates();
         }
 
         // Doppelte Dateinamen vermeiden, indem eine Nummer angehängt wird.

@@ -25,11 +25,14 @@ namespace FPLedit.Templating
 
         public string TemplateSource => tmpl.TemplateSource;
 
-        public TemplateHost(string content, string identifier, ILog log)
+        public bool Enabled { get; private set; }
+
+        public TemplateHost(string content, string identifier, ILog log, bool enabled)
         {
             tmpl = new Template(content);
             logger = log;
             Identifier = identifier;
+            Enabled = enabled;
 
             if (tmpl.TemplateType == null)
                 logger.Warning("Keine valide Template-Deklaration gefunden! Das Template steht deshalb nicht zur Verfügung!");
@@ -37,6 +40,9 @@ namespace FPLedit.Templating
 
         public string GenerateResult(Timetable tt)
         {
+            if (!Enabled)
+                return null;
+
             try
             {
                 return tmpl.GenerateResult(tt);

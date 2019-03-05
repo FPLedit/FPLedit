@@ -13,16 +13,28 @@
       <TableLayout Spacing="5,5">
         <TableRow>
           <TableCell>
-            <Button x:Name="removeButton" Click="removeButton_Click">Entfernen</Button>
-          </TableCell>
-          <TableCell>
             <Button x:Name="editButton" Click="editButton_Click">Bearbeiten</Button>
           </TableCell>
           <TableCell>
             <Button x:Name="extractButton" Click="extractButton_Click">Integrierte Vorlage extrahieren</Button>
           </TableCell>
-          <TableCell ScaleWidth="True">
+          <TableCell>
+            <Button x:Name="removeButton" Click="removeButton_Click">Löschen</Button>
           </TableCell>
+          <TableCell ScaleWidth="True" />
+        </TableRow>
+      </TableLayout>
+    </TableRow>
+    <TableRow>
+      <TableLayout Spacing="5,5">
+        <TableRow>
+          <TableCell>
+            <Button x:Name="enableButton" Click="enableButton_Click">Aktivieren</Button>
+          </TableCell>
+          <TableCell>
+            <Button x:Name="disableButton" Click="disableButton_Click">Deaktivieren</Button>
+          </TableCell>
+          <TableCell ScaleWidth="True" />
           <TableCell>
             <Button x:Name="closeButton" Text="Schließen" Click="closeButton_Click"></Button>
           </TableCell>
