@@ -17,6 +17,7 @@ using FPLedit.Config;
 using FPLedit.NonDefaultFiletypes;
 using FPLedit.Shared.Rendering;
 using System.Threading.Tasks;
+using FPLedit.Extensibility;
 
 namespace FPLedit
 {
@@ -156,7 +157,7 @@ namespace FPLedit
 
             // Vorlagen laden
             templatePath = Settings.Get("tmpl.root", templatePath);
-            templateManager = new TemplateManager(registry, Logger);
+            templateManager = new TemplateManager(registry, Logger, Settings);
             templateManager.LoadTemplates(templatePath);
             if (OptionsParser.TemplateDebug)
                 Task.Run(() => Application.Instance.Invoke(() => templateManager.DebugCompileAll()));

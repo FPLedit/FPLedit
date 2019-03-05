@@ -1,0 +1,2 @@
+# Exclude the private key used to generate the extension-signing-keypair
+extensions.privkey

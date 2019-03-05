@@ -1,4 +1,5 @@
 ﻿using Eto.Forms;
+using FPLedit.Extensibility;
 using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
@@ -69,7 +70,7 @@ namespace FPLedit
                 return;
             var plg = ((ListItem)lb.Items[lb.SelectedIndex]).Tag as PluginInfo;
             if (plg.Author != null)
-                infoLabel.Text = "Autor: " + plg.Author;
+                infoLabel.Text = "Autor: " + plg.Author + (plg.SecurityContext == SecurityContext.Official ? " [Offizielle Erweiterung]" : "");
             else
                 infoLabel.Text = "";
         }
@@ -93,12 +94,22 @@ namespace FPLedit
             if (disabledListBox.SelectedIndex != -1)
             {
                 var item = (ListItem)disabledListBox.Items[disabledListBox.SelectedIndex];
+                var pluginInfo = (PluginInfo)item.Tag;
+                if (pluginInfo.SecurityContext == SecurityContext.ThirdParty)
+                {
+                    var res = MessageBox.Show($"Die Erweiterung {pluginInfo.Name} stammt nicht vom FPLedit-Entwickler. Sie sollten die Erweiterung nur aktivieren, wenn Sie " +
+                        $"sich sicher sein, dass sie aus einer vertrauenswürdigen Quelle stammt. Bösartige Erweiterungen könnten möglicherweise Schadcode auf dem System ausführen.",
+                        "Erweiterung aktivieren", MessageBoxButtons.YesNo, MessageBoxType.Warning);
+                    if (res == DialogResult.No)
+                        return;
+                }
+
                 disabledListBox.Items.Remove(item);
                 enabledListBox.Items.Add(item);
                 enabledListBox.SelectedIndex = -1;
                 infoLabel.Text = "";
 
-                manager.Activate((PluginInfo)item.Tag);
+                manager.Activate(pluginInfo);
             }
         }
     }

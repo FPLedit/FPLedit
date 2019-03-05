@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace FPLedit
+namespace FPLedit.Extensibility
 {
     internal class PluginInfo
     {
@@ -22,19 +22,23 @@ namespace FPLedit
 
         public string FullName { get; private set; }
 
-        public PluginInfo(IPlugin plugin)
+        public SecurityContext SecurityContext { get; private set; }
+
+        public PluginInfo(IPlugin plugin, SecurityContext securityContext)
         {
             FullName = plugin.GetType().FullName;
             ExtractPluginInformation(plugin.GetType());
             this.plugin = plugin;
             Enabled = true;
+            SecurityContext = securityContext;
         }
 
-        public PluginInfo(Type type)
+        public PluginInfo(Type type, SecurityContext securityContext)
         {
             FullName = type.FullName;
             ExtractPluginInformation(type);
             Enabled = false;
+            SecurityContext = securityContext;
         }
 
         private void ExtractPluginInformation(Type t)

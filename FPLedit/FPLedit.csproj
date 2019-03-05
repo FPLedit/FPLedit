@@ -155,7 +155,7 @@
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Editor\TimeNormalizer.cs" />
-    <Compile Include="ExtensionManager.cs" />
+    <Compile Include="Extensibility\ExtensionManager.cs" />
     <Compile Include="ExtensionsForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
@@ -179,10 +179,12 @@
     <Compile Include="NonDefaultFiletypes\PathData.cs" />
     <Compile Include="NonDefaultFiletypes\UpgradeJTG3Export.cs" />
     <Compile Include="NonDefaultFiletypes\XMLStationsImport.cs" />
-    <Compile Include="PluginInfo.cs" />
+    <Compile Include="Extensibility\PluginInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegisterStore.cs" />
+    <Compile Include="Extensibility\AssemblySignature.cs" />
+    <Compile Include="Extensibility\SecurityContext.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="TemplatesForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
@@ -267,6 +269,12 @@
     <EmbeddedResource Include="Editor\EditPositionForm.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\build_tmp\extensions.sig">
+      <Link>Resources\extensions.sig</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\build_scripts\extensions.pubkey">
+      <Link>Resources\extensions.pubkey</Link>
+    </EmbeddedResource>
     <None Include="fpledit.conf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -320,6 +328,7 @@ if $(ConfigurationName) == Release (
 rem This will only be run on Windows
 
 set csi="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\Roslyn\csi.exe"
-%25csi%25  "$(SolutionDir)build_scripts\build-pre.csx" $(SolutionDir) $(TargetDir)</PreBuildEvent>
+%25csi%25  "$(SolutionDir)build_scripts\build-pre.csx" $(SolutionDir) $(TargetDir)
+%25csi%25  "$(SolutionDir)build_scripts\build-sign.csx" $(SolutionDir) $(TargetDir)</PreBuildEvent>
   </PropertyGroup>
 </Project>

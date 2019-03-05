@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace FPLedit
+namespace FPLedit.Extensibility
 {
     internal class ExtensionManager
     {
@@ -26,6 +26,8 @@ namespace FPLedit
         public void LoadExtensions()
         {
             Plugins = new List<PluginInfo>();
+
+            var signatureVerifier = new AssemblySignatureVerifier();
 
             var enabledPlugins = info.Settings.Get("extmgr.enabled", "").Split(';');
             var currentVersion = update.CurrentVersion;
@@ -57,16 +59,18 @@ namespace FPLedit
                         if (Version.TryParse(attr.MaxVer, out Version max) && VersionCompare(currentVersion, max) > 0)
                             continue; // Inkompatible Erweiterung (Programm zu neu)
 
+                        var securityContext = signatureVerifier.Validate(file.FullName);
+
                         if (enabledPlugins.Contains(type.FullName))
                         {
                             IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
 
-                            var info = new PluginInfo(plugin);
+                            var info = new PluginInfo(plugin, securityContext);
                             Plugins.Add(info);
                         }
                         else
                         {
-                            var info = new PluginInfo(type);
+                            var info = new PluginInfo(type, securityContext);
                             Plugins.Add(info);
                         }
                     }
