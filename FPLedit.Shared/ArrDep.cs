@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
@@ -9,6 +10,8 @@ namespace FPLedit.Shared
     [Serializable]
     public class ArrDep : Entity
     {
+        public ObservableCollection<ShuntMove> ShuntMoves { get; private set; }
+
         public int StationId
         {
             get
@@ -49,6 +52,18 @@ namespace FPLedit.Shared
             set => SetAttribute("fpl-zlm", value);
         }
 
+        public string ArrivalTrack
+        {
+            get => GetAttribute<string>("at");
+            set => SetAttribute("at", value);
+        }
+
+        public string DepartureTrack
+        {
+            get => GetAttribute<string>("dt");
+            set => SetAttribute("dt", value);
+        }
+
         // Meta-Properties
         public TimeSpan FirstSetTime
             => Arrival == default ? Departure : Arrival;
@@ -58,22 +73,12 @@ namespace FPLedit.Shared
 
         public ArrDep(Timetable tt) : base("t", tt)
         {
+            ShuntMoves = new ObservableChildrenCollection<ShuntMove>(this, "shMove", _parent);
         }
 
         public ArrDep(XMLEntity en, Timetable tt) : base(en, tt)
         {
-        }
-
-        private void SetNotEmptyTime(TimeSpan time, string key)
-        {
-            var t = time.ToShortTimeString();
-            SetAttribute(key, t != "00:00" ? t : "");
-        }
-
-        private TimeSpan GetTime(string key)
-        {
-            var val = GetAttribute(key, "");
-            return val != "" ? TimeSpan.Parse(val) : default;
+            ShuntMoves = new ObservableChildrenCollection<ShuntMove>(this, "shMove", _parent);
         }
 
         /// <summary>
@@ -86,6 +91,9 @@ namespace FPLedit.Shared
             Departure = copy.Departure;
             TrapeztafelHalt = copy.TrapeztafelHalt;
             Zuglaufmeldung = copy.Zuglaufmeldung;
-        }
+
+            foreach (var shunt in copy.ShuntMoves)
+                ShuntMoves.Add(shunt.Clone<ShuntMove>());
+         }
     }
 }

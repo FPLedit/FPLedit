@@ -27,6 +27,12 @@ namespace FPLedit.Shared
             set => SetAttribute("name", value);
         }
 
+        public int DefaultPrePostTrackTime
+        {
+            get => GetAttribute("dTt", 10);
+            set => SetAttribute("dTt", value.ToString());
+        }
+
         private List<Station> stations;
         private List<Train> trains;
         private List<Transition> transitions;

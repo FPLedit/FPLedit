@@ -57,5 +57,17 @@ namespace FPLedit.Shared
                 return (T)formatter.Deserialize(stream);
             }
         }
+
+        protected void SetNotEmptyTime(TimeSpan time, string key)
+        {
+            var t = time.ToShortTimeString();
+            SetAttribute(key, t != "00:00" ? t : "");
+        }
+
+        protected TimeSpan GetTime(string key)
+        {
+            var val = GetAttribute(key, "");
+            return val != "" ? TimeSpan.Parse(val) : default;
+        }
     }
 }
