@@ -15,6 +15,7 @@ namespace FPLedit.Editor
 
 #pragma warning disable CS0649
         private TextBox nameTextBox, positionTextBox;
+        private StationRenderer stationRenderer;
 #pragma warning restore CS0649
         private NotEmptyValidator nameValidator;
         private NumberValidator positionValidator;
@@ -23,6 +24,11 @@ namespace FPLedit.Editor
         public Station Station { get; set; }
 
         public float Position { get; private set; }
+
+        private bool existingStation;
+        private Station trackStation;
+
+        private int stationRendererHeight, stationRendererWidth;
 
         private EditStationForm()
         {
@@ -33,6 +39,29 @@ namespace FPLedit.Editor
             nameValidator = new NotEmptyValidator(nameTextBox);
             nameValidator.ErrorMessage = "Bitte einen Bahnhofsnamen eingeben!";
             validators = new ValidatorCollection(positionValidator, nameValidator);
+
+            var shown = false;
+            this.Shown += (s, e) =>
+            {
+                shown = true;
+                stationRendererHeight = stationRenderer.Height;
+                stationRendererWidth = stationRenderer.Width;
+            };
+            stationRenderer.SizeChanged += (s, e) =>
+            {
+                if (shown && stationRenderer.Height > stationRendererHeight)
+                {
+                    var diff = stationRenderer.Height - stationRendererHeight;
+                    this.Height += diff;
+                    stationRendererHeight = stationRenderer.Height;
+                }
+                if (shown && stationRenderer.Width > stationRendererWidth)
+                {
+                    var diff = stationRenderer.Width - stationRendererWidth;
+                    this.Width += diff;
+                    stationRendererWidth = stationRenderer.Width;
+                }
+            };
         }
 
         public EditStationForm(Timetable tt) : this(tt, -1) // Neue Station ohne Routenangabe
@@ -44,6 +73,12 @@ namespace FPLedit.Editor
             Title = "Neue Station erstellen";
             _parent = tt;
             this.route = route;
+            existingStation = false;
+            Station = new Station(tt);
+
+            trackStation = Station.Clone<Station>();
+            stationRenderer.Station = trackStation;
+            stationRenderer.Route = route;
         }
 
         public EditStationForm(Station station, int route) : this() // Station editieren
@@ -53,6 +88,12 @@ namespace FPLedit.Editor
             positionTextBox.Text = station.Positions.GetPosition(route).Value.ToString("0.0");
             Station = station;
             this.route = route;
+
+            existingStation = true;
+
+            trackStation = Station.Clone<Station>();
+            stationRenderer.Station = trackStation;
+            stationRenderer.Route = route;
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -68,9 +109,7 @@ namespace FPLedit.Editor
             var newPos = float.Parse(positionTextBox.Text);
             bool resetArdep = false;
 
-            if (Station == null)
-                Station = new Station(_parent);
-            else
+            if (existingStation)
             {
                 var tt = Station._parent;
                 var rt = tt.GetRoute(route).GetOrderedStations();
@@ -116,6 +155,15 @@ namespace FPLedit.Editor
                     ardp.Key.AddArrDep(Station, route);
                     ardp.Key.GetArrDep(Station).ApplyCopy(ardp.Value);
                 }
+            }
+
+            // Trackdaten aktualisieren
+            Station.DefaultTrackLeft.SetValue(route, trackStation.DefaultTrackLeft.GetValue(route));
+            Station.DefaultTrackRight.SetValue(route, trackStation.DefaultTrackRight.GetValue(route));
+            Station.Tracks.Clear();
+            foreach (var track in trackStation.Tracks)
+            {
+                Station.Tracks.Add(track);
             }
 
             Close(DialogResult.Ok);

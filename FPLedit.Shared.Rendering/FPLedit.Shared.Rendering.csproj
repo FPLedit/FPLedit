@@ -58,6 +58,7 @@
     <Compile Include="ColorCollection.cs" />
     <Compile Include="ColorFormatter.cs" />
     <Compile Include="ColorTimetableConverter.cs" />
+    <Compile Include="DrawArgs.cs" />
     <Compile Include="FontCollection.cs" />
     <Compile Include="MColor.cs" />
     <Compile Include="MFont.cs" />

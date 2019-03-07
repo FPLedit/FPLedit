@@ -70,11 +70,8 @@ namespace FPLedit.Shared
                 var r = _parent.GetRoute(route).GetOrderedStations();
                 var i1 = r.IndexOf(sta);
                 var p = GetPath();
-                Station prev = null, next = null;
-                if (r.ElementAtOrDefault(i1 - 1) != null)
-                    prev = r.ElementAtOrDefault(i1 - 1);
-                if (r.ElementAtOrDefault(i1 + 1) != null)
-                    next = r.ElementAtOrDefault(i1 + 1);
+                var prev = r.ElementAtOrDefault(i1 - 1);
+                var next = r.ElementAtOrDefault(i1 + 1);
 
                 if (prev != null && p.Contains(prev) && next != null && p.Contains(next))
                     idx = p.IndexOf(prev) + 1;

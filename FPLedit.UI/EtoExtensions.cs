@@ -88,10 +88,10 @@ namespace FPLedit.Shared.UI
             label.Text = string.Join(Environment.NewLine, lines);
         }
 
-        public static GridColumn AddColumn<T>(this GridView view, Expression<Func<T, string>> value, string header)
-            => view.AddColumn(new TextBoxCell { Binding = Binding.Property(value) }, header);
+        public static GridColumn AddColumn<T>(this GridView view, Expression<Func<T, string>> value, string header, bool editable = false)
+            => view.AddColumn(new TextBoxCell { Binding = Binding.Property(value) }, header, editable);
 
-        public static GridColumn AddColumn(this GridView view, Cell cell, string header)
+        public static GridColumn AddColumn(this GridView view, Cell cell, string header, bool editable = false)
         {
             var col = new GridColumn()
             {
@@ -99,6 +99,7 @@ namespace FPLedit.Shared.UI
                 HeaderText = header,
                 AutoSize = true,
                 Sortable = false,
+                Editable = editable,
             };
             view.Columns.Add(col);
             return col;

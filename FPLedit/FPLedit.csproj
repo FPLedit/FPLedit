@@ -107,6 +107,9 @@
     <Compile Include="Editor\Network\MultipleTimetableEditForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
+    <Compile Include="Editor\StationRenderer.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
     <Compile Include="Editor\TimetableCellRenderProperties.cs" />
     <Compile Include="Editor\BaseTimetableDataElement.cs" />
     <Compile Include="Editor\BaseTimetableEditControl.cs">

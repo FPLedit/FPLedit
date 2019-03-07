@@ -19,6 +19,9 @@
       </TableLayout>
     </TableRow>
     <TableRow>
+      <e:StationRenderer Height="100" Width="400" x:Name="stationRenderer" />
+    </TableRow>
+    <TableRow>
       <TableLayout Spacing="5,5">
         <TableRow>
           <TableCell ScaleWidth="true" />
