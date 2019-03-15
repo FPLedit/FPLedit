@@ -30,6 +30,8 @@ namespace FPLedit.Editor
         private Timetable tt;
         private TrainEditHelper th;
 
+        private Dictionary<Station, ArrDep> arrDepBackup;
+
         private Days wShortcut = Days.Parse("1111110");
         private Days wExclSaShortcut = Days.Parse("1111100");
         private Days sShortcut = Days.Parse("0000001");
@@ -134,6 +136,10 @@ namespace FPLedit.Editor
                 transitionsGroupBox.Visible = false;
 
             fillButton.Visible = tt.Type == TimetableType.Linear && th.FillCandidates(Train).Any();
+
+            arrDepBackup = Train.GetArrDeps()
+                .Select(kvp => new KeyValuePair<Station, ArrDep>(kvp.Key, kvp.Value.Clone<ArrDep>()))
+                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -169,7 +175,11 @@ namespace FPLedit.Editor
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
-            => Close(DialogResult.Cancel);
+        {
+            foreach (var kvp in arrDepBackup)
+                Train.GetArrDep(kvp.Key).ApplyCopy(kvp.Value);
+            Close(DialogResult.Cancel);
+        }
 
         private void fillButton_Click(object sender, EventArgs e)
         {

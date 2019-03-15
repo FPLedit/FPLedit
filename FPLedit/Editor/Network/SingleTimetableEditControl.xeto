@@ -18,6 +18,7 @@
         <TableRow>
           <Button x:Name="internalToggle" Text="T"></Button>
           <Button Text="Zuglaufmeldung durch" x:Name="zlmButton" Click="zlmButton_Click"></Button>
+          <Button Text="Rangierfahrten" x:Name="shuntButton" Click="shuntButton_Click"></Button>
           <TableCell ScaleWidth="true" />
         </TableRow>
       </TableLayout>

@@ -89,9 +89,12 @@ namespace FPLedit.Shared
         {
             Arrival = copy.Arrival;
             Departure = copy.Departure;
+            ArrivalTrack = copy.ArrivalTrack;
+            DepartureTrack = copy.DepartureTrack;
             TrapeztafelHalt = copy.TrapeztafelHalt;
             Zuglaufmeldung = copy.Zuglaufmeldung;
 
+            ShuntMoves.Clear();
             foreach (var shunt in copy.ShuntMoves)
                 ShuntMoves.Add(shunt.Clone<ShuntMove>());
          }

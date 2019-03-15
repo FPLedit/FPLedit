@@ -37,8 +37,8 @@ namespace FPLedit.Shared
 
         public bool EmptyAfterwards
         {
-            get => GetAttribute<bool>("fpl-tr");
-            set => SetAttribute("fpl-tr", value.ToString().ToLower());
+            get => GetAttribute<bool>("ea");
+            set => SetAttribute("ea", value.ToString().ToLower());
         }
     }
 }

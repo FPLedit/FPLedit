@@ -101,6 +101,9 @@
     <Compile Include="Editor\DesignableForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
+    <Compile Include="Editor\Network\ShuntForm.xeto.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
     <Compile Include="Editor\Network\SingleTimetableEditControl.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
@@ -278,6 +281,7 @@
     <EmbeddedResource Include="..\build_scripts\extensions.pubkey">
       <Link>Resources\extensions.pubkey</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="Editor\Network\ShuntForm.xeto" />
     <None Include="fpledit.conf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

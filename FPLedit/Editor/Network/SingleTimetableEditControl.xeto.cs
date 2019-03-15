@@ -18,7 +18,7 @@ namespace FPLedit.Editor.Network
         private GridView dataGridView;
         private Button internalToggle;
         private ToggleButton trapeztafelToggle;
-        private Button zlmButton;
+        private Button zlmButton, shuntButton;
         private TableLayout actionsLayout;
 #pragma warning restore CS0649
 
@@ -199,6 +199,23 @@ namespace FPLedit.Editor.Network
 
         private void zlmButton_Click(object sender, EventArgs e)
             => Zuglaufmeldung(dataGridView);
+
+        private void shuntButton_Click(object sender, EventArgs e)
+        {
+            if (dataGridView.SelectedRow == -1)
+                return;
+
+            var data = (DataElement)dataGridView.SelectedItem;
+            var sta = data.Station;
+
+            var arrDep = data.ArrDeps[sta];
+
+            var shf = new ShuntForm(arrDep, sta);
+            if (shf.ShowModal(this) != DialogResult.Ok)
+                return;
+
+            dataGridView.ReloadData(dataGridView.SelectedRow);
+        }
         #endregion
     }
 }

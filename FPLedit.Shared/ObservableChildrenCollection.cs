@@ -59,7 +59,7 @@ namespace FPLedit.Shared
                 var elmAfter = this[idx + 1];
                 idx = parentEntity.Children.IndexOf(elmAfter.XMLEntity); // Davor einfügen
             }
-            parentEntity.Children.InsertRange(idx, e.NewItems.Cast<Track>().Select(t => t.XMLEntity));
+            parentEntity.Children.InsertRange(idx, e.NewItems.Cast<T>().Select(t => t.XMLEntity));
         }
 
         private void RemoveItem(NotifyCollectionChangedEventArgs e)
