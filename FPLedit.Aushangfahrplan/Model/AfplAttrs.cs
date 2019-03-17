@@ -60,6 +60,12 @@ namespace FPLedit.Aushangfahrplan.Model
             set => SetAttribute("sp", value);
         }
 
+        public bool ShowTracks
+        {
+            get => GetAttribute<bool>("shT", true);
+            set => SetAttribute("shT", value.ToString().ToLower());
+        }
+
         public AfplAttrs(Timetable tt) : base("afpl_attrs", tt)
         {
         }

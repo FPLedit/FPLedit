@@ -22,7 +22,7 @@ namespace FPLedit.Aushangfahrplan.Forms
         private ComboBox fontComboBox, hwfontComboBox;
         private Label exampleLabel, hwexampleLabel, cssLabel;
         private LinkButton cssHelpLinkLabel;
-        private CheckBox consoleCheckBox;
+        private CheckBox tracksCheckBox, consoleCheckBox;
         private TextArea cssTextBox;
 #pragma warning restore CS0649
         private FontComboBox fntComboBox, hwfntComboBox;
@@ -45,6 +45,7 @@ namespace FPLedit.Aushangfahrplan.Forms
                 fontComboBox.Text = attrs.Font;
                 hwfontComboBox.Text = attrs.HwFont;
                 cssTextBox.Text = attrs.Css ?? "";
+                tracksCheckBox.Checked = attrs.ShowTracks;
             }
             else
             {
@@ -66,6 +67,7 @@ namespace FPLedit.Aushangfahrplan.Forms
             attrs.Font = fontComboBox.Text;
             attrs.HwFont = hwfontComboBox.Text;
             attrs.Css = cssTextBox.Text;
+            attrs.ShowTracks = tracksCheckBox.Checked.Value;
 
             var tmpl = (ITemplate)templateComboBox.SelectedValue;
             if (tmpl != null)
