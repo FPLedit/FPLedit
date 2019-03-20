@@ -42,7 +42,7 @@ namespace FPLedit
 
         private FileState fileState;
         private TemplateManager templateManager;
-        private ExtensionManager extensionManager;
+        internal ExtensionManager extensionManager;
         private UndoManager undo;
         private RegisterStore registry;
         private UpdateManager update;
@@ -50,8 +50,6 @@ namespace FPLedit
         private List<string> lastFiles;
         private bool enable_last = true;
         private string lastPath;
-
-        private Application application;
 
         public Timetable Timetable { get; set; }
 
@@ -88,9 +86,8 @@ namespace FPLedit
 
         #endregion
 
-        public MainForm(Application app)
+        public MainForm()
         {
-            application = app;
             Eto.Serialization.Xaml.XamlReader.Load(this);
             Icon = new Icon(this.GetResource("Resources.programm.ico"));
 
@@ -474,7 +471,7 @@ namespace FPLedit
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            if (!Settings.KeyExists("restart.file"))
+            if (!Settings.KeyExists("restart.file") && !Program.ExceptionQuit)
             {
                 if (enable_last)
                     Settings.Set("files.last", string.Join(";", lastFiles));

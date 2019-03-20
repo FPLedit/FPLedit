@@ -161,6 +161,7 @@
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Editor\TimeNormalizer.cs" />
+    <Compile Include="CrashReporting\CrashReport.cs" />
     <Compile Include="Extensibility\ExtensionManager.cs" />
     <Compile Include="ExtensionsForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
