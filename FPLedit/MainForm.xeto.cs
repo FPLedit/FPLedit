@@ -394,7 +394,9 @@ namespace FPLedit
                 return;
             if (fileState.Opened)
                 Settings.Set("restart.file", fileState.FileName);
-            application.Restart();
+
+            Process.Start(System.Reflection.Assembly.GetEntryAssembly().Location);
+            Program.App.Quit();
         }
 
         private void UpdateLastPath(FileDialog dialog)
