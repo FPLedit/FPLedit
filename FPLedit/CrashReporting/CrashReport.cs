@@ -33,12 +33,12 @@ namespace FPLedit.CrashReporting
 
         internal CrashReport(ExtensionManager mg, Exception x)
         {
-            Time = DateTime.Now;
-            Exception = new ExceptionInfo(x);
-            Extensions = mg.Plugins.Where(p => p.Enabled).Select(p => new ExtensionInfo(p)).ToArray();
-            Version = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
-            OS = Environment.OSVersion.ToString();
-            Assemblies = AppDomain.CurrentDomain.GetAssemblies().Select(a => a.GetName().Name).ToArray();
+            SafeAction(() => Time = DateTime.Now);
+            SafeAction(() => Exception = new ExceptionInfo(x));
+            SafeAction(() => Extensions = mg.Plugins.Where(p => p.Enabled).Select(p => new ExtensionInfo(p)).ToArray());
+            SafeAction(() => Version = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion);
+            SafeAction(() => OS = Environment.OSVersion.ToString());
+            SafeAction(() => Assemblies = AppDomain.CurrentDomain.GetAssemblies().Select(a => a.GetName().Name).ToArray());
         }
 
         public string Serialize()
@@ -49,6 +49,11 @@ namespace FPLedit.CrashReporting
                 s.Serialize(stream, this);
                 return Encoding.UTF8.GetString(stream.ToArray());
             }
+        }
+
+        private void SafeAction(Action action)
+        {
+            try { action(); } catch { }
         }
     }
 

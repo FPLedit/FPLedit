@@ -18,6 +18,7 @@ namespace FPLedit
         public static bool ExceptionQuit { get; private set; }
 
         private static MainForm mainForm;
+        private static CrashReporter crashReporter;
 
         /// <summary>
         /// Der Haupteinstiegspunkt für die Anwendung.
@@ -32,28 +33,14 @@ namespace FPLedit
             App.UnhandledException += UnhandledException;
 
             mainForm = new MainForm();
+            crashReporter = mainForm.crashReporter;
             App.Run(mainForm);
         }
 
         private static void UnhandledException(object sender, Eto.UnhandledExceptionEventArgs e)
         {
             var info = new CrashReport(mainForm.extensionManager, e.ExceptionObject as Exception);
-            var telegram = info.Serialize();
-            try
-            {
-                var fn_tt = mainForm.GetTemp("crash_tt.fpl");
-                new Shared.Filetypes.XMLExport().Export(mainForm.Timetable, fn_tt, mainForm);
-
-                var fn = mainForm.GetTemp("crash_report.xml");
-                File.WriteAllText(fn, telegram);
-
-                MessageBox.Show("Es ist ein unerwarteter Fehler in FPLedit aufgetreten." + Environment.NewLine + Environment.NewLine +
-                    "FPLedit wird neu gestartet. Möglicherweise ist eine Wiederherstellung möglich.", MessageBoxType.Error);
-            }
-            catch
-            {
-                MessageBox.Show("Es ist ein unerwarteter Fehler in FPLedit aufgetreten. Es konnten keine weiteren Informationen gespeichert werden. FPLedit wird neu gestartet.");
-            }
+            crashReporter.Report(info);
 
             ExceptionQuit = true;
             Process.Start(Assembly.GetEntryAssembly().Location);
