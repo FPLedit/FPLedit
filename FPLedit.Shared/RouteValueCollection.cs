@@ -59,7 +59,9 @@ namespace FPLedit.Shared
             {
                 var parts = p.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
 
-                values.Add(int.Parse(parts[0]), convTo(parts[1]));
+                int route = int.Parse(parts[0]);
+                T value = convTo(parts.Length == 2 ? parts[1] : defaultVal);
+                values.Add(route, value);
             }
         }
 
@@ -89,6 +91,17 @@ namespace FPLedit.Shared
                 text = string.Join(";", posStrings);
             }
             entity.SetAttribute(attr, text);
+        }
+
+        public bool ContainsValue(T value) => values.ContainsValue(value);
+
+        public void ReplaceAllValues(T oldVal, T newVal)
+        {
+            foreach (var kvp in values)
+            {
+                if (kvp.Value.Equals(oldVal))
+                    SetValue(kvp.Key, newVal);
+            }
         }
     }
 }

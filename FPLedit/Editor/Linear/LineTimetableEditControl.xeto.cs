@@ -221,9 +221,6 @@ namespace FPLedit.Editor.Linear
                     return false;
                 }
 
-                foreach (var sta in row.Train.GetPath())
-                    train.SetArrDep(sta, row.ArrDeps[sta]);
-
                 return true;
             }
 

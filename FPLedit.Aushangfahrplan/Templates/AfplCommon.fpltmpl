@@ -4,6 +4,8 @@
 <#@ import FPLedit.Aushangfahrplan.Model #>
 
 <#@ define
+
+	// CELLS: Time column
 	string GetDays(Train t) {
 		return t.Days.DaysToString(true);
 	}
@@ -12,18 +14,35 @@
 		return t.Hours.ToString() + "<sup>" + t.Minutes.ToString("00") + "</sup>";
 	}
 
-	string TimeString(Train[] trains, Station sta, int i) {
-		return trains.Count() > i ? GetTimeString(trains[i].GetArrDep(sta).Departure) + " " + GetDays(trains[i]) : "";
-	}
-
-	string NameString(Train[] trains, int i) {
+	string TimeCell(Train[] trains, Station sta, int i) {
 		Train train = trains.Count() > i ? trains[i] : null;
 		if (train == null)
-			return "";
-		return train.TName;
+			return "<td class=\"time\"></td>";
+		return "<td class=\"time\">" + GetTimeString(train.GetArrDep(sta).Departure) + " " + GetDays(train) + "</td>";
 	}
 
-	string DirString(Train[] trains, int i) {
+	string TimeHeader(bool showText) {
+		if (!showText)
+			return "<td class=\"time header\"></td>";
+		return "<td class=\"time header\">Zeit</td>";
+	}
+
+	// CELLS: Name column
+	string NameCell(Train[] trains, int i) {
+		Train train = trains.Count() > i ? trains[i] : null;
+		if (train == null)
+			return "<td class=\"name\"></td>";
+		return "<td class=\"name\">" + train.TName + "</td>";
+	}
+
+	string NameHeader(bool showText) {
+		if (!showText)
+			return "<td class=\"name header\"></td>";
+		return "<td class=\"name header\">Zug-Nr</td>";
+	}
+
+	// CELLS: Direction column
+	string DirCell(Train[] trains, int i) {
 		if (!multipleStations)
 			return "";
 		Train train = trains.Count() > i ? trains[i] : null;
@@ -40,7 +59,51 @@
 		return "<td class=\"direction header\">Richtung</td>";
 	}
 
+	// CELLS: Track column
+	string TrackCell(Train[] trains, TrainDirection dir, int i, Station sta) {
+		if (!showTracks)
+			return "";
+		Train train = trains.Count() > i ? trains[i] : null;
+		if (train == null)
+			return "<td class=\"track\"></td>";
+
+		// Gleis-Angabe bekommen
+		ArrDep ardp = train.GetArrDep(sta);
+		string track = ardp.DepartureTrack;
+		if (track == "" && ardp.ArrivalTrack != null)
+			track = ardp.ArrivalTrack;
+
+		PathData pd = new PathData(train._parent, train);
+		int connectingRoute = pd.GetExitRoute(sta);
+
+		if (track == "" && dir == TrainDirection.ti)
+			track = sta.DefaultTrackRight.GetValue(connectingRoute);
+		if (track == "" && dir == TrainDirection.ta)
+			track = sta.DefaultTrackLeft.GetValue(connectingRoute);
+
+		return "<td class=\"track\">" + track + "</td>";
+	}
+
+	string TrackHeader(bool showText) {
+		if (!showTracks)
+			return "";
+		if (!showText)
+			return "<td class=\"track header\"></td>";
+		return "<td class=\"track header\">Gleis</td>";
+	}
+
+	// ROWS
+	string HeaderRow(Station[] stations) {
+		var show = stations.Any();
+		return NameHeader(show) + TrackHeader(show) + TimeHeader(show) + DirHeader(show);
+	}
+
+	string TrainRow(Train[] trains, TrainDirection dir, int i, Station sta) {
+		return NameCell(trains, i) + TrackCell(trains, dir, i, sta) + TimeCell(trains, sta, i) + DirCell(trains, i);
+	}
+
 	bool multipleStations = false;
+	bool showTracks = true;
 #>
 
 <#
@@ -58,6 +121,7 @@ if (attrs != null)
     if (attrs.HwFont != "")
         hwFont = attrs.HwFont;
     additionalCss = attrs.Css ?? "";
+	showTracks = attrs.ShowTracks;
 }
 
 // Netzwerk-Modus mit Zielangabe
@@ -123,6 +187,11 @@ td {
 	border-right: 2px solid #000;
 	<# } #>
 }
+.track {
+	text-align: center;
+	width: 50px;
+	border-right: 2px solid #000;
+}
 .name {
 	text-align:center;
 	width: 76px;
@@ -147,12 +216,20 @@ td {
 .dir ~ .dir {
 	border-right: 0;
 }
-<# if (!multipleStations) { #>
+<# if (!showTracks) {
+if (!multipleStations) { #>
 .name + .time:not(:last-child) {
 <# } else { #>
 .name + .time + .direction:not(:last-child) {
-<# } #>
-	border-right:3px solid #000;
+<# }
+} else {
+if (!multipleStations) { #>
+.name + .track + .time:not(:last-child) {
+<# } else { #>
+.name + .track + .time + .direction:not(:last-child) {
+<# }
+} #>
+	border-right: 3px solid #000;
 }
 </style>
 <style id="add-css">
@@ -165,67 +242,33 @@ td {
 		var trainsA = helper.GetTrains(TrainDirection.ta, sta);
 		var trainsB = helper.GetTrains(TrainDirection.ti, sta);
 		int count = Math.Max(trainsA.Length, trainsB.Length);
-		//count = Math.Max(count, 20);
 
 		if (count == 0)
 			continue;
+
+		var fss = helper.GetLastStations(TrainDirection.ta, sta, trainsA);
+		var lss = helper.GetLastStations(TrainDirection.ti, sta, trainsB);
+		var colspan = 2 + (multipleStations ? 1 : 0) + (showTracks ? 1 : 0);
 	#>
 	<p class="station">Bahnhof <#= sta.SName #></p>
 	<p class="title"><#= abfahrtSVG #></p>
 	<p class="heading">der Züge in der Richtung nach</p>
-	<#
-		var fss = helper.GetLastStations(TrainDirection.ta, sta, trainsA);
-		var lss = helper.GetLastStations(TrainDirection.ti, sta, trainsB);
-	#>
 	<table>
 		<tr>
-			<td colspan="<#= multipleStations ? "3" : "2" #>" class="dir"><#= string.Join("/", fss.Select(s => s.SName)) #></td>
-			<td colspan="<#= multipleStations ? "3" : "2" #>" class="dir"><#= string.Join("/", lss.Select(s => s.SName)) #></td>
+			<td colspan="<#= colspan #>" class="dir"><#= string.Join("/", fss.Select(s => s.SName)) #></td>
+			<td colspan="<#= colspan #>" class="dir"><#= string.Join("/", lss.Select(s => s.SName)) #></td>
 		</tr>
-
 		<tr>
-			<# if (fss.Count() > 0) { #>
-				<td class="name header">Zug-Nr</td>
-				<td class="time header">Zeit</td>
-				<#= DirHeader(true) #>
-			<# } else { #>
-				<td class="name header"></td>
-				<td class="time header"></td>
-				<#= DirHeader(false) #>
-			<# } #>
-			<# if (lss.Count() > 0) { #>
-				<td class="name header">Zug-Nr</td>
-				<td class="time header">Zeit</td>
-				<#= DirHeader(true) #>
-			<# } else { #>
-				<td class="name header"></td>
-				<td class="time header"></td>
-				<#= DirHeader(false) #>
-			<# } #>
+			<#= HeaderRow(fss) #>
+			<#= HeaderRow(lss) #>
 		</tr>
 		<# for (int i = 0; i < count; i++) { #>
 		<tr class="train-row">
-			<# if (fss.Count() > 0) { #>
-				<td class="name"><#= NameString(trainsA, i) #></td>
-				<td class="time"><#= TimeString(trainsA, sta, i) #></td>
-				<#= DirString(trainsA, i) #>
-			<# } else { #>
-				<td class="name"></td>
-				<td class="time"></td>
-				<td class="direction"></td>
-			<# } #>
-			<# if (lss.Count() > 0) { #>
-				<td class="name"><#= NameString(trainsB, i) #></td>
-				<td class="time"><#= TimeString(trainsB, sta, i) #></td>
-				<#= DirString(trainsB, i) #>
-			<# } else { #>
-				<td class="name"></td>
-				<td class="time"></td>
-				<td class="direction"></td>
-			<# } #>
+			<#= TrainRow(trainsA, TrainDirection.ta, i, sta) #>
+			<#= TrainRow(trainsB, TrainDirection.ti, i, sta) #>
 		</tr>
-		<# } #>
+		<# } // for (i) #>
 	</table>
-	<# } #>
+	<# } // foreach(stations) #>
 </body>
 </html>

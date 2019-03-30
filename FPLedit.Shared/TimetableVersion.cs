@@ -9,6 +9,7 @@ namespace FPLedit.Shared
     {
         JTG2_x = 008,
         JTG3_0 = 009,
+        JTG3_1 = 010,
         Extended_FPL = 100,
     }
 

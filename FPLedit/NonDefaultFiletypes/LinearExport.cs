@@ -20,7 +20,7 @@ namespace FPLedit.NonDefaultFiletypes
 
             var clone = tt.Clone();
 
-            Dictionary<Train, PathData> trainPaths = new Dictionary<Train, PathData>();
+            var trainPaths = new Dictionary<Train, PathData>();
             foreach (var orig in clone.Trains)
                 trainPaths[orig] = new PathData(clone, orig);
 
@@ -66,8 +66,8 @@ namespace FPLedit.NonDefaultFiletypes
 
                 foreach (var sta in data.PathEntries)
                 {
-                    if (sta.HasArrDep)
-                        t.SetArrDep(sta.Station, sta.ArrDep.Value);
+                    if (sta.ArrDep != null)
+                        t.GetArrDep(sta.Station).ApplyCopy(sta.ArrDep);
                 }
             }
 

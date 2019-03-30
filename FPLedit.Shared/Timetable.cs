@@ -27,6 +27,12 @@ namespace FPLedit.Shared
             set => SetAttribute("name", value);
         }
 
+        public int DefaultPrePostTrackTime
+        {
+            get => GetAttribute("dTt", 10);
+            set => SetAttribute("dTt", value.ToString());
+        }
+
         private List<Station> stations;
         private List<Train> trains;
         private List<Transition> transitions;
@@ -179,16 +185,7 @@ namespace FPLedit.Shared
             return stas.First().SName + " - " + stas.Last().SName;
         }
 
-        public Timetable Clone()
-        {
-            using (MemoryStream stream = new MemoryStream())
-            {
-                BinaryFormatter formatter = new BinaryFormatter();
-                formatter.Serialize(stream, this);
-                stream.Seek(0, SeekOrigin.Begin);
-                return (Timetable)formatter.Deserialize(stream);
-            }
-        }
+        public Timetable Clone() => Clone<Timetable>();
 
         #region Hilfsmethoden für andere Entitäten
 
@@ -225,7 +222,7 @@ namespace FPLedit.Shared
 
             // Auch bei allen Zügen hinzufügen
             foreach (var t in Trains)
-                t.AddArrDep(sta, new ArrDep(), route);
+                t.AddArrDep(sta, route);
         }
 
         public void RemoveStation(Station sta)
@@ -371,6 +368,10 @@ namespace FPLedit.Shared
             var path = GetRoute(routeToCheck)?.GetOrderedStations();
             return Math.Abs(path.IndexOf(sta1) - path.IndexOf(sta2)) == 1;
         }
+
+        public int GetDirectlyConnectingRoute(Station sta1, Station sta2)
+            => sta1.Routes.Intersect(sta2.Routes).DefaultIfEmpty(-1)
+                .First(r => RouteConnectsDirectly(r, sta1, sta2));
 
         private void RemoveOrphanedRoutes()
         {

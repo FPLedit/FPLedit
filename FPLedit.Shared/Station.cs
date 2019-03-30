@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -9,13 +12,17 @@ namespace FPLedit.Shared
     [DebuggerDisplay("{SName} [{GetAttribute(\"km\", \"\")}]")]
     public sealed class Station : Entity, IStation
     {
+        public ObservableCollection<Track> Tracks { get; private set; }
+
         public Station(XMLEntity en, Timetable tt) : base(en, tt)
         {
             Positions.TestForErrors();
+            Tracks = new ObservableChildrenCollection<Track>(this, "track", _parent);
         }
 
         public Station(Timetable tt) : base("sta", tt)
         {
+            Tracks = new ObservableChildrenCollection<Track>(this, "track", _parent);
         }
 
         public string SName
@@ -35,6 +42,12 @@ namespace FPLedit.Shared
 
         public RouteValueCollection<string> Vmax
             => new RouteValueCollection<string>(this, _parent, "fpl-vmax", "", s => s, s => s);
+
+        public RouteValueCollection<string> DefaultTrackRight
+            => new RouteValueCollection<string>(this, _parent, "dTi", "", s => s, s => s);
+
+        public RouteValueCollection<string> DefaultTrackLeft
+            => new RouteValueCollection<string>(this, _parent, "dTa", "", s => s, s => s);
 
         public int Id
         {

@@ -1,6 +1,7 @@
 ﻿using Eto.Drawing;
 using Eto.Forms;
 using FPLedit.Shared;
+using FPLedit.Shared.Rendering;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,11 +13,10 @@ namespace FPLedit.Editor.Network
 {
     public class LineRenderer : Drawable
     {
-        private PixelLayout layout;
         private PointF mousePosition = new PointF();
 
         private Timetable tt;
-        private List<DrawArgs> panels = new List<DrawArgs>();
+        private List<DrawArgs<Station>> panels = new List<DrawArgs<Station>>();
         private Font font;
         private Pen linePen, highlightPen;
 
@@ -83,7 +83,6 @@ namespace FPLedit.Editor.Network
 
         public LineRenderer()
         {
-            layout = new PixelLayout();
             font = new Font(FontFamilies.SansFamilyName, 8);
             linePen = new Pen(Colors.Black, 2f);
             highlightPen = new Pen(Colors.Red, 2f);
@@ -165,10 +164,10 @@ namespace FPLedit.Editor.Network
                     lastSta = sta;
 
                     var panelColor = _highlightedPath.Contains(sta) ? Colors.Red : Colors.Gray;
-                    DrawArgs args = panels.FirstOrDefault(pa => pa.Station == sta);
+                    DrawArgs<Station> args = panels.FirstOrDefault(pa => pa.Tag == sta);
                     if (args == null)
                     {
-                        args = new DrawArgs(sta, new Point(x - 5, y - 5), new Size(10, 10), panelColor);
+                        args = new DrawArgs<Station>(sta, new Point(x - 5, y - 5), new Size(10, 10), panelColor);
                         panels.Add(args);
                         // Wire events
                         switch (mode)
@@ -189,7 +188,7 @@ namespace FPLedit.Editor.Network
 
                 e.Graphics.DrawLine(linePen, new Point(x, y), mousePosition - _pan);
 
-                DrawArgs args = new DrawArgs(tmp_sta, new Point(x - 5, y - 5), new Size(10, 10), Colors.DarkCyan);
+                var args = new DrawArgs<Station>(tmp_sta, new Point(x - 5, y - 5), new Size(10, 10), Colors.DarkCyan);
                 panels.Add(args);
             }
 
@@ -256,7 +255,7 @@ namespace FPLedit.Editor.Network
         #endregion
 
         #region Normal Mode
-        private void ApplyNormalMode(DrawArgs p, Station sta)
+        private void ApplyNormalMode(DrawArgs<Station> p, Station sta)
         {
             p.DoubleClick += (s, e) => StationDoubleClicked?.Invoke(sta, new EventArgs());
             p.Click += (s, e) => StationClicked?.Invoke(sta, new EventArgs());
@@ -265,7 +264,7 @@ namespace FPLedit.Editor.Network
         #endregion
 
         #region AddMode
-        private void ApplyAddMode(DrawArgs p, Station sta)
+        private void ApplyAddMode(DrawArgs<Station> p, Station sta)
         {
             p.Click += (s, e) => ConnectAddStation(sta);
         }
@@ -292,7 +291,7 @@ namespace FPLedit.Editor.Network
             this.Focus();
         }
 
-        private void ApplyJoinMode(DrawArgs p, Station sta)
+        private void ApplyJoinMode(DrawArgs<Station> p, Station sta)
         {
             p.Click += (s, e) => ConnectJoinLines(sta);
         }
@@ -366,7 +365,7 @@ namespace FPLedit.Editor.Network
         }
 
         #region Drag'n'Drop
-        private DrawArgs draggedControl;
+        private DrawArgs<Station> draggedControl;
         private bool hasDragged = false;
         private const int CLICK_TIME = 1000000; //0.1s
         private long lastClick = 0;
@@ -440,7 +439,7 @@ namespace FPLedit.Editor.Network
                     p.Y = ClientSize.Height;
 
                 draggedControl.Location = p;
-                stapos[draggedControl.Station] = p - OFFSET - new Point(_pan);
+                stapos[draggedControl.Tag] = p - OFFSET - new Point(_pan);
                 hasDragged = true;
                 Invalidate();
             }
@@ -499,54 +498,6 @@ namespace FPLedit.Editor.Network
             Invalidate();
         }
         #endregion
-
-        private class DrawArgs
-        {
-            public Station Station { get; set; }
-
-            public Point Location { get; set; }
-
-            public Size Size { get; set; }
-
-            public Rectangle Rect => new Rectangle(Location, Size);
-
-            public Color Color { get; set; }
-
-            public event EventHandler Click;
-
-            public event EventHandler RightClick;
-
-            public event EventHandler DoubleClick;
-
-            public DrawArgs(Station sta, Point loc, Size size, Color c)
-            {
-                Station = sta;
-                Location = loc;
-                Size = size;
-                Color = c;
-            }
-
-            public void HandleClick(Point clickPosition, Point pan)
-            {
-                if (Rect.Contains(clickPosition - pan))
-                    Click?.Invoke(this, new EventArgs());
-            }
-
-            public void HandleRightClick(Point clickPosition, Point pan)
-            {
-                if (Rect.Contains(clickPosition - pan))
-                    RightClick?.Invoke(this, new EventArgs());
-            }
-
-            public void HandleDoubleClick(Point clickPosition, Point pan)
-            {
-                if (Rect.Contains(clickPosition - pan))
-                    DoubleClick?.Invoke(this, new EventArgs());
-            }
-
-            public void Draw(Graphics g)
-                => g.FillRectangle(Color, Rect);
-        }
 
         private enum Modes
         {

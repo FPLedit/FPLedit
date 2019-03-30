@@ -88,10 +88,21 @@ namespace FPLedit.Shared.UI
             label.Text = string.Join(Environment.NewLine, lines);
         }
 
-        public static GridColumn AddColumn<T>(this GridView view, Expression<Func<T, string>> value, string header)
-            => view.AddColumn(new TextBoxCell { Binding = Binding.Property(value) }, header);
+        #region Grid Columns
 
-        public static GridColumn AddColumn(this GridView view, Cell cell, string header)
+        public static GridColumn AddColumn<T>(this GridView view, Expression<Func<T, string>> value, string header, bool editable = false)
+            => view.AddColumn(new TextBoxCell { Binding = Binding.Property(value) }, header, editable);
+
+        public static GridColumn AddColumn<T, TVal>(this GridView view, Expression<Func<T, TVal>> value, Func<TVal, string> to, Func<string, TVal> from, string header, bool editable = false)
+            => view.AddColumn(new TextBoxCell { Binding = Binding.Property(value).Convert(to, from) }, header, editable);
+
+        public static GridColumn AddCheckColumn<T>(this GridView view, Expression<Func<T, bool>> value, string header, bool editable = false)
+            => view.AddColumn(new CheckBoxCell { Binding = Binding.Property(value).Convert<bool?>(b => b, b => b.HasValue && b.Value), }, header, editable);
+
+        public static GridColumn AddDropDownColumn<T>(this GridView view, Expression<Func<T, object>> value, IEnumerable<object> dataStore, string header, bool editable = false)
+            => view.AddColumn(new ComboBoxCell { Binding = Binding.Property(value), DataStore = dataStore }, header, editable);
+
+        public static GridColumn AddColumn(this GridView view, Cell cell, string header, bool editable = false)
         {
             var col = new GridColumn()
             {
@@ -99,9 +110,12 @@ namespace FPLedit.Shared.UI
                 HeaderText = header,
                 AutoSize = true,
                 Sortable = false,
+                Editable = editable,
             };
             view.Columns.Add(col);
             return col;
         }
+
+        #endregion
     }
 }

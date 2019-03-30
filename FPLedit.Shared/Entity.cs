@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 
 namespace FPLedit.Shared
@@ -44,5 +46,28 @@ namespace FPLedit.Shared
 
         public void RemoveAttribute(string key)
             => XMLEntity.RemoveAttribute(key);
+
+        public T Clone<T>() where T : Entity
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+                formatter.Serialize(stream, this);
+                stream.Seek(0, SeekOrigin.Begin);
+                return (T)formatter.Deserialize(stream);
+            }
+        }
+
+        protected void SetNotEmptyTime(TimeSpan time, string key)
+        {
+            var t = time.ToShortTimeString();
+            SetAttribute(key, t != "00:00" ? t : "");
+        }
+
+        protected TimeSpan GetTime(string key)
+        {
+            var val = GetAttribute(key, "");
+            return val != "" ? TimeSpan.Parse(val) : default;
+        }
     }
 }

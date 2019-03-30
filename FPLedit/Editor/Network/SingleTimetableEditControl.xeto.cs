@@ -8,6 +8,7 @@ using FPLedit.Shared.UI;
 using Eto;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq.Expressions;
 
 namespace FPLedit.Editor.Network
 {
@@ -17,7 +18,7 @@ namespace FPLedit.Editor.Network
         private GridView dataGridView;
         private Button internalToggle;
         private ToggleButton trapeztafelToggle;
-        private Button zlmButton;
+        private Button zlmButton, shuntButton;
         private TableLayout actionsLayout;
 #pragma warning restore CS0649
 
@@ -114,6 +115,20 @@ namespace FPLedit.Editor.Network
             return cc;
         }
 
+        private BDComboBoxCell GetTrackCell(Expression<Func<ArrDep, string>> track)
+        {
+            var cc = new BDComboBoxCell();
+
+            var shadowBinding = Binding.Property(track);
+
+            cc.Binding = Binding.Delegate<DataElement, string>(
+                d => shadowBinding.GetValue(d.ArrDeps[d.Station]),
+                (d, t) => shadowBinding.SetValue(d.ArrDeps[d.Station], t))
+                .Cast<object>();
+            cc.DataStoreBinding = Binding.Property<DataElement, IEnumerable<object>>(d => d.Station.Tracks.Select(s => s.Name));
+            return cc;
+        }
+
         protected override void CellSelected(BaseTimetableDataElement data, Station sta, bool arrival)
         {
             trapeztafelToggle.Checked = data.ArrDeps[sta].TrapeztafelHalt;
@@ -142,6 +157,8 @@ namespace FPLedit.Editor.Network
             view.AddColumn<DataElement>(t => t.Station.SName, "Bahnhof");
             view.AddColumn(GetCell(t => t.Arrival, true), "Ankunft");
             view.AddColumn(GetCell(t => t.Departure, false), "Abfahrt");
+            view.AddColumn(GetTrackCell(t => t.ArrivalTrack), "Ankunftsgleis", editable: true);
+            view.AddColumn(GetTrackCell(t => t.DepartureTrack), "Abfahrtsgleis", editable: true);
 
             view.KeyDown += (s, e) => HandleViewKeystroke(e, view);
 
@@ -169,8 +186,6 @@ namespace FPLedit.Editor.Network
                     MessageBox.Show("Bitte erst alle Fehler beheben!\n\nDie Zeitangaben müssen im Format hh:mm, h:mm, h:m, hh:mm, h:, :m, hhmm, hmm oder mm vorliegen!");
                     return false;
                 }
-
-                train.SetArrDep(row.Station, row.ArrDeps[row.Station]);
             }
             return true;
         }
@@ -184,6 +199,23 @@ namespace FPLedit.Editor.Network
 
         private void zlmButton_Click(object sender, EventArgs e)
             => Zuglaufmeldung(dataGridView);
+
+        private void shuntButton_Click(object sender, EventArgs e)
+        {
+            if (dataGridView.SelectedRow == -1)
+                return;
+
+            var data = (DataElement)dataGridView.SelectedItem;
+            var sta = data.Station;
+
+            var arrDep = data.ArrDeps[sta];
+
+            var shf = new ShuntForm(arrDep, sta);
+            if (shf.ShowModal(this) != DialogResult.Ok)
+                return;
+
+            dataGridView.ReloadData(dataGridView.SelectedRow);
+        }
         #endregion
     }
 }

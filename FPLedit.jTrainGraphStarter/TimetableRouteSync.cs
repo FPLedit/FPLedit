@@ -78,7 +78,7 @@ namespace FPLedit.jTrainGraphStarter
                 tra.AddAllArrDeps(sortedStations);
                 foreach (var ardp in ardps)
                     if (sortedStations.Contains(ardp.Key))
-                        tra.SetArrDep(ardp.Key, ardp.Value);
+                        tra.GetArrDep(ardp.Key).ApplyCopy(ardp.Value);
 
                 // Lineare Fahrtrichtung bestimmen
                 var sta1 = ardps.FirstOrDefault().Key;

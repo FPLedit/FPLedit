@@ -30,7 +30,7 @@ namespace FPLedit.Editor
                 t.AddAllArrDeps(path);
             else
                 foreach (var sta in orig._parent.Stations)
-                    t.AddArrDep(sta, new ArrDep(), Timetable.LINEAR_ROUTE_ID);
+                    t.AddArrDep(sta, Timetable.LINEAR_ROUTE_ID);
 
             InternalCopyArrDeps(orig, t, offsetMin);
 
@@ -60,12 +60,12 @@ namespace FPLedit.Editor
 
             foreach (var sta in path)
             {
-                var ardp = source.GetArrDep(sta);
+                var ardp = source.GetArrDep(sta).Clone<ArrDep>();
                 if (sta != path.First() && ardp.Arrival != default)
                     ardp.Arrival = ardp.Arrival.Add(offset);
                 if (sta != path.Last() && ardp.Departure != default)
                     ardp.Departure = ardp.Departure.Add(offset);
-                destination.SetArrDep(sta, ardp);
+                destination.GetArrDep(sta).ApplyCopy(ardp);
             }
         }
 

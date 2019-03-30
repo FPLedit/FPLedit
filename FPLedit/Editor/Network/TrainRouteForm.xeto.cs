@@ -85,7 +85,7 @@ namespace FPLedit.Editor.Network
                 {
                     if (!Path.Contains(ardp.Key))
                         continue;
-                    train.SetArrDep(ardp.Key, ardp.Value);
+                    train.GetArrDep(ardp.Key).ApplyCopy(ardp.Value);
                 }
 
                 train.RemoveOrphanedTimes();

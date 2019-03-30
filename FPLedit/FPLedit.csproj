@@ -101,10 +101,16 @@
     <Compile Include="Editor\DesignableForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
+    <Compile Include="Editor\Network\ShuntForm.xeto.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
     <Compile Include="Editor\Network\SingleTimetableEditControl.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Editor\Network\MultipleTimetableEditForm.xeto.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Editor\StationRenderer.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Editor\TimetableCellRenderProperties.cs" />
@@ -176,7 +182,6 @@
     <Compile Include="NonDefaultFiletypes\CleanedXMLExport.cs" />
     <Compile Include="NonDefaultFiletypes\LinearExport.cs" />
     <Compile Include="NonDefaultFiletypes\NetworkExport.cs" />
-    <Compile Include="NonDefaultFiletypes\PathData.cs" />
     <Compile Include="NonDefaultFiletypes\UpgradeJTG3Export.cs" />
     <Compile Include="NonDefaultFiletypes\XMLStationsImport.cs" />
     <Compile Include="Extensibility\PluginInfo.cs" />
@@ -275,6 +280,7 @@
     <EmbeddedResource Include="..\build_scripts\extensions.pubkey">
       <Link>Resources\extensions.pubkey</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="Editor\Network\ShuntForm.xeto" />
     <None Include="fpledit.conf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
