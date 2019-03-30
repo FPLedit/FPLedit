@@ -73,7 +73,7 @@
 		if (track == "" && ardp.ArrivalTrack != null)
 			track = ardp.ArrivalTrack;
 
-		PathData pd = new PathData(train._parent, train);
+		TrainPathData pd = new TrainPathData(train._parent, train);
 		int connectingRoute = pd.GetExitRoute(sta);
 
 		if (track == "" && dir == TrainDirection.ti)

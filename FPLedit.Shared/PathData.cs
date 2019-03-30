@@ -8,34 +8,40 @@ namespace FPLedit.Shared
 {
     public class PathData
     {
-        public PathEntry[] PathEntries { get; private set; }
-        private Timetable tt;
+        protected PathEntry[] entries;
+        public PathEntry[] PathEntries => entries;
+        protected Timetable tt;
 
-        public PathData(Timetable tt, Train train)
+        public PathData(Timetable tt, IList<Station> path) : this(tt)
+        {
+            entries = Init(path, (s, r) => new PathEntry(s, r));
+        }
+
+        protected PathData(Timetable tt)
         {
             this.tt = tt;
-            var path = train.GetPath();
-            var arrDeps = train.GetArrDeps();
+        }
 
+        protected T[] Init<T>(IList<Station> path, Func<Station, int, T> instanciator) where T : PathEntry
+        {
             int lastRoute = -1;
             int idx = 0;
-            PathEntries = path.Select(sta =>
+            return path.Select(sta =>
             {
-                var hasArrDep = arrDeps.TryGetValue(sta, out var ardp);
                 var next = (idx < path.Count - 1) ? path[idx + 1] : null;
                 int route = next != null ? tt.GetDirectlyConnectingRoute(sta, next) : lastRoute;
                 lastRoute = route;
                 idx++;
-                return new PathEntry(sta, ardp, route);
+                return instanciator(sta, route);
             }).ToArray();
         }
 
         public Station NextStation(Station sta)
-            => PathEntries.SkipWhile(pe => pe.Station != sta).Skip(1).FirstOrDefault()?.Station;
+            => entries.SkipWhile(pe => pe.Station != sta).Skip(1).FirstOrDefault()?.Station;
 
         public int GetExitRoute(Station sta)
         {
-            if (sta == PathEntries.LastOrDefault()?.Station)
+            if (sta == entries.LastOrDefault()?.Station)
                 return -1;
             var next = NextStation(sta);
             return tt.GetDirectlyConnectingRoute(sta, next);
@@ -56,22 +62,46 @@ namespace FPLedit.Shared
         //    return false;
         //}
 
-        public IEnumerable<Station> GetRawPath() => PathEntries.Select(e => e.Station);
+        public IEnumerable<Station> GetRawPath() => entries.Select(e => e.Station);
+    }
+
+    public class TrainPathData : PathData
+    {
+        public new TrainPathEntry[] PathEntries => (TrainPathEntry[])entries;
+
+        public TrainPathData(Timetable tt, Train train) : base(tt)
+        {
+            var path = train.GetPath();
+            var arrDeps = train.GetArrDeps();
+
+            entries = Init(path, (s, r) =>
+            {
+                arrDeps.TryGetValue(s, out var ardp);
+                return new TrainPathEntry(s, ardp, r);
+            });
+        }
     }
 
     public class PathEntry
     {
-        public PathEntry(Station station, ArrDep arrDep, int routeIndex)
+        public PathEntry(Station station, int routeIndex)
         {
             Station = station;
-            ArrDep = arrDep;
             RouteIndex = routeIndex;
         }
 
         public Station Station { get; private set; }
 
-        public ArrDep ArrDep { get; private set; }
-
         public int RouteIndex { get; private set; }
+    }
+
+    public class TrainPathEntry : PathEntry
+    {
+        public TrainPathEntry(Station station, ArrDep arrDep, int routeIndex) : base(station, routeIndex)
+        {
+            ArrDep = arrDep;
+        }
+
+        public ArrDep ArrDep { get; private set; }
     }
 }

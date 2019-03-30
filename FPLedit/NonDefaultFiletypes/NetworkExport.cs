@@ -19,9 +19,9 @@ namespace FPLedit.NonDefaultFiletypes
             var clone = tt.Clone();
             var old_version = clone.GetAttribute("version", "");
 
-            var trainPaths = new Dictionary<Train, PathData>();
+            var trainPaths = new Dictionary<Train, TrainPathData>();
             foreach (var orig in clone.Trains)
-                trainPaths[orig] = new PathData(clone, orig);
+                trainPaths[orig] = new TrainPathData(clone, orig);
 
             var rt = Timetable.LINEAR_ROUTE_ID.ToString();
             var id = 0;

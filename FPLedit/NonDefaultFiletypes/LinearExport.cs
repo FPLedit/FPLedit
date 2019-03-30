@@ -20,9 +20,9 @@ namespace FPLedit.NonDefaultFiletypes
 
             var clone = tt.Clone();
 
-            var trainPaths = new Dictionary<Train, PathData>();
+            var trainPaths = new Dictionary<Train, TrainPathData>();
             foreach (var orig in clone.Trains)
-                trainPaths[orig] = new PathData(clone, orig);
+                trainPaths[orig] = new TrainPathData(clone, orig);
 
             var route = clone.GetRoutes().FirstOrDefault().Index;
 
