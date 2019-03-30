@@ -72,6 +72,7 @@
     <Compile Include="ITrain.cs" />
     <Compile Include="Helpers\Pathfinder.cs" />
     <Compile Include="ObservableChildrenCollection.cs" />
+    <Compile Include="PathData.cs" />
     <Compile Include="PositionCollection.cs" />
     <Compile Include="Route.cs" />
     <Compile Include="FilterRule.cs" />

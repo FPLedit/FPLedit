@@ -369,6 +369,10 @@ namespace FPLedit.Shared
             return Math.Abs(path.IndexOf(sta1) - path.IndexOf(sta2)) == 1;
         }
 
+        public int GetDirectlyConnectingRoute(Station sta1, Station sta2)
+            => sta1.Routes.Intersect(sta2.Routes).DefaultIfEmpty(-1)
+                .First(r => RouteConnectsDirectly(r, sta1, sta2));
+
         private void RemoveOrphanedRoutes()
         {
             if (Type != TimetableType.Network)

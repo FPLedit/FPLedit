@@ -1,37 +1,45 @@
-﻿using FPLedit.Shared;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FPLedit.NonDefaultFiletypes
+namespace FPLedit.Shared
 {
-    internal class PathData
+    public class PathData
     {
         public PathEntry[] PathEntries { get; private set; }
+        private Timetable tt;
 
         public PathData(Timetable tt, Train train)
         {
+            this.tt = tt;
             var path = train.GetPath();
             var arrDeps = train.GetArrDeps();
 
             int lastRoute = -1;
-            int idx = -1;
+            int idx = 0;
             PathEntries = path.Select(sta =>
             {
                 var hasArrDep = arrDeps.TryGetValue(sta, out var ardp);
                 var next = (idx < path.Count - 1) ? path[idx + 1] : null;
-                int route = next != null ? GetDirectlyConnectingRoute(tt, sta, next) : lastRoute;
+                int route = next != null ? tt.GetDirectlyConnectingRoute(sta, next) : lastRoute;
                 lastRoute = route;
                 idx++;
                 return new PathEntry(sta, ardp, route);
             }).ToArray();
         }
 
-        private int GetDirectlyConnectingRoute(Timetable tt, Station sta1, Station sta2)
-            => sta1.Routes.Intersect(sta2.Routes)
-                .First(r => tt.RouteConnectsDirectly(r, sta1, sta2));
+        public Station NextStation(Station sta)
+            => PathEntries.SkipWhile(pe => pe.Station != sta).Skip(1).FirstOrDefault()?.Station;
+
+        public int GetExitRoute(Station sta)
+        {
+            if (sta == PathEntries.LastOrDefault()?.Station)
+                return -1;
+            var next = NextStation(sta);
+            return tt.GetDirectlyConnectingRoute(sta, next);
+        }
 
         //public bool IsDirectlyConnected(Station sta1, Station sta2)
         //{
@@ -51,7 +59,7 @@ namespace FPLedit.NonDefaultFiletypes
         public IEnumerable<Station> GetRawPath() => PathEntries.Select(e => e.Station);
     }
 
-    internal class PathEntry
+    public class PathEntry
     {
         public PathEntry(Station station, ArrDep arrDep, int routeIndex)
         {
