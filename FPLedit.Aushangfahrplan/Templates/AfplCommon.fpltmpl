@@ -60,13 +60,28 @@
 	}
 
 	// CELLS: Track column
-	string TrackCell(Train[] trains, int i, Station sta) {
+	string TrackCell(Train[] trains, TrainDirection dir, int i, Station sta) {
 		if (!showTracks)
 			return "";
 		Train train = trains.Count() > i ? trains[i] : null;
 		if (train == null)
 			return "<td class=\"track\"></td>";
-		return "<td class=\"track\">" + train.GetArrDep(sta).DepartureTrack + "</td>";
+
+		// Gleis-Angabe bekommen
+		ArrDep ardp = train.GetArrDep(sta);
+		string track = ardp.DepartureTrack;
+		if (track == "" && ardp.ArrivalTrack != null)
+			track = ardp.ArrivalTrack;
+
+		PathData pd = new PathData(train._parent, train);
+		int connectingRoute = pd.GetExitRoute(sta);
+
+		if (track == "" && dir == TrainDirection.ti)
+			track = sta.DefaultTrackRight.GetValue(connectingRoute);
+		if (track == "" && dir == TrainDirection.ta)
+			track = sta.DefaultTrackLeft.GetValue(connectingRoute);
+
+		return "<td class=\"track\">" + track + "</td>";
 	}
 
 	string TrackHeader(bool showText) {
@@ -83,8 +98,8 @@
 		return NameHeader(show) + TrackHeader(show) + TimeHeader(show) + DirHeader(show);
 	}
 
-	string TrainRow(Train[] trains, int i, Station sta) {
-		return NameCell(trains, i) + TrackCell(trains, i, sta) + TimeCell(trains, sta, i) + DirCell(trains, i);
+	string TrainRow(Train[] trains, TrainDirection dir, int i, Station sta) {
+		return NameCell(trains, i) + TrackCell(trains, dir, i, sta) + TimeCell(trains, sta, i) + DirCell(trains, i);
 	}
 
 	bool multipleStations = false;
@@ -249,8 +264,8 @@ if (!multipleStations) { #>
 		</tr>
 		<# for (int i = 0; i < count; i++) { #>
 		<tr class="train-row">
-			<#= TrainRow(trainsA, i, sta) #>
-			<#= TrainRow(trainsB, i, sta) #>
+			<#= TrainRow(trainsA, TrainDirection.ta, i, sta) #>
+			<#= TrainRow(trainsB, TrainDirection.ti, i, sta) #>
 		</tr>
 		<# } // for (i) #>
 	</table>
