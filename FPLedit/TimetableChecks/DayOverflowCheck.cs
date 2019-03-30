@@ -9,33 +9,26 @@ namespace FPLedit.TimetableChecks
 {
     internal class DayOverflowCheck : ITimetableCheck
     {
-        public void Check(Timetable tt, ILog log)
+        public string Display => "Zugverkehr über Mitternacht";
+
+        public IEnumerable<string> Check(Timetable tt)
         {
             foreach (var train in tt.Trains)
             {
-                var arrdeps = GetSortedArrDeps(train);
+                var arrdeps = new TrainPathData(train._parent, train);
                 TimeSpan last = default;
                 bool hasOverflow = false;
-                foreach (var arrdep in arrdeps)
+                foreach (var arrdep in arrdeps.PathEntries)
                 {
-                    if (arrdep.FirstSetTime < last)
+                    if (arrdep.ArrDep.HasMinOneTimeSet && arrdep.ArrDep.FirstSetTime < last)
                         hasOverflow = true;
-                    last = arrdep.Departure == default ? arrdep.Arrival : arrdep.Departure;
+                    last = arrdep.ArrDep.Departure == default ?
+                        arrdep.ArrDep.Arrival :
+                        arrdep.ArrDep.Departure;
                 }
 
                 if (hasOverflow)
-                    log.Warning($"Der Zug {train.TName} verkehrt über Mitternacht hinweg!");
-            }
-        }
-
-        private IEnumerable<ArrDep> GetSortedArrDeps(Train train)
-        {
-            var path = train.GetPath();
-            var arrdeps = train.GetArrDeps();
-            foreach (var sta in path)
-            {
-                if (arrdeps[sta].HasMinOneTimeSet)
-                    yield return arrdeps[sta];
+                    yield return $"Der Zug {train.TName} verkehrt über Mitternacht hinweg!";
             }
         }
     }

@@ -8,6 +8,8 @@ namespace FPLedit.Shared
 {
     public interface ITimetableCheck
     {
-        void Check(Timetable tt, ILog log);
+        string Display { get; }
+
+        IEnumerable<string> Check(Timetable tt);
     }
 }
