@@ -91,6 +91,7 @@
     <Compile Include="Forms\PrintRenderer.cs" />
     <Compile Include="Render\Renderer.cs" />
     <Compile Include="Model\Style.cs" />
+    <Compile Include="Render\StationX.cs" />
     <Compile Include="Render\TimeRenderer.cs" />
     <Compile Include="Render\TrainRenderer.cs" />
     <Compile Include="TimeSpanExtensions.cs" />
