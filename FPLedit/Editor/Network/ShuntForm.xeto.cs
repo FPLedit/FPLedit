@@ -32,7 +32,7 @@ namespace FPLedit.Editor.Network
 
             var tracks = sta.Tracks.Select(t => t.Name);
 
-            gridView.AddColumn<ShuntMove, TimeSpan>(s => s.Time, ts => ts.ToShortTimeString(), s => TimeSpan.Parse(s), "Zeit", editable: true); //TODO: Parsing mit Fehlern handlen
+            gridView.AddColumn<ShuntMove, TimeSpan>(s => s.Time, ts => ts.ToShortTimeString(), s => { TimeSpan.TryParse(s, out var res); return res; }, "Zeit", editable: true);
             gridView.AddDropDownColumn<ShuntMove>(s => s.SourceTrack, tracks, "Startgleis", editable: true);
             gridView.AddDropDownColumn<ShuntMove>(s => s.TargetTrack, tracks, "Zielgleis", editable: true);
             gridView.AddCheckColumn<ShuntMove>(s => s.EmptyAfterwards, "Alle Wagen?", editable: true);

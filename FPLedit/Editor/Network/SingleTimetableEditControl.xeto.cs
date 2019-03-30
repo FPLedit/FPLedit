@@ -163,6 +163,10 @@ namespace FPLedit.Editor.Network
             view.KeyDown += (s, e) => HandleViewKeystroke(e, view);
 
             view.DataStore = path.Select(sta => new DataElement(train, sta, train.GetArrDep(sta))).ToList();
+            view.SelectedRowsChanged += (s, e) =>
+            {
+                shuntButton.Enabled = ((DataElement)view.SelectedItem).Station.Tracks.Any();
+            };
         }
 
         protected override Point GetNextEditingPosition(BaseTimetableDataElement data, GridView view, KeyEventArgs e)
