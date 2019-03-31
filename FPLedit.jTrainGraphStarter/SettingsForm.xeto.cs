@@ -31,6 +31,7 @@ namespace FPLedit.jTrainGraphStarter
             {
                 new VersionItem(TimetableVersion.JTG2_x, "2.0x"),
                 new VersionItem(TimetableVersion.JTG3_0, "3.0x"),
+                new VersionItem(TimetableVersion.JTG3_1, "3.1x"),
             };
             versionComboBox.DataStore = versions;
             versionComboBox.ItemTextBinding = Binding.Property<VersionItem, string>(vi => vi.Name);

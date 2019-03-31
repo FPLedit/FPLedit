@@ -447,11 +447,11 @@ namespace FPLedit
 
         private void MaybeUpgradeTtVersion()
         {
-            if (Timetable == null || Timetable.Version != TimetableVersion.JTG2_x)
+            if (Timetable == null || Timetable.Version.Compare(Timetable.DefaultLinearVersion) >= 0)
                 return;
 
-            var res = MessageBox.Show("Diese Fahrplandatei ist im Dateiformat von jTrainGraph 2.x erstellt worden. Im Format von jTrainGraph 3.x stehen mehr Funktionen zur Verfügung." +
-                " Soll das Format jetzt aktualisiert werden? ACHTUNG: Die Datei kann danach nicht mehr mit jTrainGraph 2.x berabeitet werden!", "FPLedit",
+            var res = MessageBox.Show("Diese Fahrplandatei ist im Dateiformat von jTrainGraph 2.x bzw. 3.0x erstellt worden. Im Format von jTrainGraph 3.1x stehen mehr Funktionen zur Verfügung." +
+                " Soll das Format jetzt aktualisiert werden? ACHTUNG: Die Datei kann danach nicht mehr mit jTrainGraph 2.x oder 3.0x berabeitet werden!", "FPLedit",
                 MessageBoxButtons.YesNo, MessageBoxType.Question);
             if (res != DialogResult.Yes)
                 return;

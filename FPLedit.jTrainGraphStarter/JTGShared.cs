@@ -11,8 +11,8 @@ namespace FPLedit.jTrainGraphStarter
 {
     internal class JTGShared
     {
-        public const string DEFAULT_FILENAME = "jTrainGraph_303.jar";
-        public const TimetableVersion DEFAULT_TT_VERSION = TimetableVersion.JTG3_0;
+        public const string DEFAULT_FILENAME = "jTrainGraph_310.jar";
+        public const TimetableVersion DEFAULT_TT_VERSION = TimetableVersion.JTG3_1;
 
         public static JTGCompatibility JTGCompatCheck(string jTGPath)
         {
@@ -26,8 +26,10 @@ namespace FPLedit.jTrainGraphStarter
 
                 if (major == 2)
                     return new JTGCompatibility(minor > 1, TimetableVersion.JTG2_x); // Ab 2.01
-                else if (major == 3)
+                else if (major == 3 && minor < 10)
                     return new JTGCompatibility(minor > 2, TimetableVersion.JTG3_0); // Ab 3.03
+                else if (major == 3)
+                    return new JTGCompatibility(minor == 10, TimetableVersion.JTG3_1);
                 else
                     return new JTGCompatibility(false); // Neue Hauptversion, wahrscheinlich inkompatibel
             }

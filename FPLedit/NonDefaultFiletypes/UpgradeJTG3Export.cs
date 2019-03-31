@@ -15,11 +15,11 @@ namespace FPLedit.NonDefaultFiletypes
 
         public bool Export(Timetable tt, string filename, IInfo info)
         {
-            if (tt.Version != TimetableVersion.JTG2_x)
-                throw new Exception("Nur mit jTrainGraph 2.x erstellte Fahrpläne können aktualisiert werden.");
+            if (tt.Version.Compare(Timetable.DefaultLinearVersion) >= 0)
+                throw new Exception("Nur mit jTrainGraph 2.x oder 3.0x erstellte Fahrpläne können aktualisiert werden.");
 
             var clone = tt.Clone();
-            clone.SetAttribute("version", "009");
+            clone.SetAttribute("version", "010");
 
             var shv = clone.GetAttribute<bool>("shV");
             clone.SetAttribute("shV", shv ? "1" : "0");

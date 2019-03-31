@@ -157,8 +157,14 @@ namespace FPLedit.Editor.Network
             view.AddColumn<DataElement>(t => t.Station.SName, "Bahnhof");
             view.AddColumn(GetCell(t => t.Arrival, true), "Ankunft");
             view.AddColumn(GetCell(t => t.Departure, false), "Abfahrt");
-            view.AddColumn(GetTrackCell(t => t.ArrivalTrack), "Ankunftsgleis", editable: true);
-            view.AddColumn(GetTrackCell(t => t.DepartureTrack), "Abfahrtsgleis", editable: true);
+
+            if (tt.Version.Compare(TimetableVersion.JTG3_1) >= 0)
+            {
+                view.AddColumn(GetTrackCell(t => t.ArrivalTrack), "Ankunftsgleis", editable: true);
+                view.AddColumn(GetTrackCell(t => t.DepartureTrack), "Abfahrtsgleis", editable: true);
+            }
+            else
+                shuntButton.Visible = false;
 
             view.KeyDown += (s, e) => HandleViewKeystroke(e, view);
 

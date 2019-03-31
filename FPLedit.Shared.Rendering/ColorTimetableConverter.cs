@@ -35,10 +35,7 @@ namespace FPLedit.Shared.Rendering
         private static string ConvertColor(string value, TimetableVersion version)
         {
             var mcolor = ColorFormatter.FromString(value, null);
-            if (version == TimetableVersion.JTG2_x)
-                return ColorFormatter.ToString(mcolor, true);
-            else
-                return ColorFormatter.ToString(mcolor, false);
+            return ColorFormatter.ToString(mcolor, version == TimetableVersion.JTG2_x);
         }
     }
 }

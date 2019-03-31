@@ -79,6 +79,9 @@ namespace FPLedit.Editor
             trackStation = Station.Clone<Station>();
             stationRenderer.Station = trackStation;
             stationRenderer.Route = route;
+
+            if (tt.Version.Compare(TimetableVersion.JTG3_1) < 0)
+                stationRenderer.Visible = false;
         }
 
         public EditStationForm(Station station, int route) : this() // Station editieren
@@ -94,6 +97,9 @@ namespace FPLedit.Editor
             trackStation = Station.Clone<Station>();
             stationRenderer.Station = trackStation;
             stationRenderer.Route = route;
+
+            if (station._parent.Version.Compare(TimetableVersion.JTG3_1) < 0)
+                stationRenderer.Visible = false;
         }
 
         private void closeButton_Click(object sender, EventArgs e)

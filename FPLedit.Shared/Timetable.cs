@@ -62,9 +62,6 @@ namespace FPLedit.Shared
 
         internal Timetable(XMLEntity en) : base(en, null)
         {
-            if (Type == TimetableType.Network && Version != TimetableVersion.Extended_FPL)
-                throw new Exception("Falsche Versionsummer für Netzwerk-Fahrplandatei!");
-
             if (!Enum.IsDefined(typeof(TimetableVersion), Version))
                 throw new Exception("Unbekannte Dateiversion. Nur mit jTrainGraph 2 oder 3.0 erstellte Dateien können geöffnet werden!");
 
