@@ -42,16 +42,15 @@ namespace FPLedit
 
         private FileState fileState;
         private TemplateManager templateManager;
-        private ExtensionManager extensionManager;
+        internal ExtensionManager extensionManager;
         private UndoManager undo;
         private RegisterStore registry;
         private UpdateManager update;
+        internal CrashReporting.CrashReporter crashReporter;
 
         private List<string> lastFiles;
         private bool enable_last = true;
         private string lastPath;
-
-        private Application application;
 
         public Timetable Timetable { get; set; }
 
@@ -88,9 +87,8 @@ namespace FPLedit
 
         #endregion
 
-        public MainForm(Application app)
+        public MainForm()
         {
-            application = app;
             Eto.Serialization.Xaml.XamlReader.Load(this);
             Icon = new Icon(this.GetResource("Resources.programm.ico"));
 
@@ -99,6 +97,7 @@ namespace FPLedit
             registry = new RegisterStore();
             update = new UpdateManager(Settings);
             extensionManager = new ExtensionManager(this, update);
+            crashReporter = new CrashReporting.CrashReporter(this);
 
             lineEditingControl.Initialize(this);
 
@@ -170,6 +169,26 @@ namespace FPLedit
             FileOpened += (s, e) => MaybeUpgradeTtVersion();
 
             new TimetableChecks.TimetableCheckRunner(this); // CheckRunner initialisieren
+
+            // Hatten wir einen Crash beim letzten Mal?
+            if (crashReporter.HasCurrentReport)
+            {
+                Shown += (s, e) =>
+                {
+                    try
+                    {
+                        var cf = new CrashReporting.CrashForm(crashReporter);
+                        if (cf.ShowModal(this) == DialogResult.Ok)
+                            crashReporter.Restore();
+                        crashReporter.RemoveCrashFlag();
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Error("Fehlermeldung des letzten Absturzes konnte nicht angezeigt werden: " + ex.Message);
+                        crashReporter.RemoveCrashFlag(); // Der Crash crasht sogar noch die Fehlerbehandlung...
+                    }
+                };
+            }
         }
 
         private void LoadStartFile(object sender, EventArgs e)
@@ -311,7 +330,7 @@ namespace FPLedit
         public void Reload()
             => InternalOpen(fileState.FileName);
 
-        private void InternalOpen(string filename)
+        internal void InternalOpen(string filename)
         {
             Logger.Info("Öffne Datei " + filename);
             Timetable = open.Import(filename, this);
@@ -474,7 +493,7 @@ namespace FPLedit
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            if (!Settings.KeyExists("restart.file"))
+            if (!Settings.KeyExists("restart.file") && !Program.ExceptionQuit)
             {
                 if (enable_last)
                     Settings.Set("files.last", string.Join(";", lastFiles));

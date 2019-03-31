@@ -79,6 +79,10 @@
     </Compile>
     <Compile Include="Config\ConfigFile.cs" />
     <Compile Include="Config\OptionsParser.cs" />
+    <Compile Include="CrashReporting\CrashForm.xeto.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="CrashReporting\CrashReporter.cs" />
     <Compile Include="Editor\EditorPlugin.cs" />
     <Compile Include="Editor\EditPositionForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
@@ -161,6 +165,7 @@
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Editor\TimeNormalizer.cs" />
+    <Compile Include="CrashReporting\CrashReport.cs" />
     <Compile Include="Extensibility\ExtensionManager.cs" />
     <Compile Include="ExtensionsForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
@@ -218,7 +223,9 @@
     <EmbeddedResource Include="InfoForm.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="ExtensionsForm.xeto" />
+    <EmbeddedResource Include="ExtensionsForm.xeto">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Editor\LineEditForm.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -281,6 +288,9 @@
       <Link>Resources\extensions.pubkey</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="Editor\Network\ShuntForm.xeto" />
+    <EmbeddedResource Include="CrashReporting\CrashForm.xeto">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <None Include="fpledit.conf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

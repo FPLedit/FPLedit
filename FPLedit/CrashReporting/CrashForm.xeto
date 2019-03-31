@@ -1,0 +1,29 @@
+﻿<e:CrashForm
+  xmlns="clr-namespace:Eto.Forms;assembly=Eto"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:e="clr-namespace:FPLedit.CrashReporting;assembly=FPLedit"
+  xmlns:sys="clr-namespace:System;assembly=mscorlib"
+  DefaultButton="{x:Reference restoreButton}" AbortButton="{x:Reference cancelButton}"
+  Title="Fehler im FPLedit" ClientSize="380,-1" Resizable="false">
+  <StackLayout Spacing="5" HorizontalContentAlignment="Stretch" Padding="10,10,10,10">
+    <Label>In FPLedit ist ein interner Fehler aufgetreten. Weiterführende Informationen wurden gesammelt:</Label>
+    <TextArea ReadOnly="true" x:Name="infoTextBox" />
+    <GroupBox Text="Fehler melden">
+      <StackLayout Spacing="5" HorizontalContentAlignment="Stretch" Padding="5,5,5,5">
+        <Label>Diese können an den Autor von FPLedit weitergegeben werden, um zur Fehlerbehebung beizutragen.</Label>
+        <Button Click="mailButton_Click">(1) Email senden und Fehlerhergang beschreiben</Button>
+        <Button Click="folderButton_Click">(2) Dateien dieses Ordners anhängen</Button>
+        <Label>Vielen Dank, Ihr Programmautor</Label>
+      </StackLayout>
+    </GroupBox>
+    <GroupBox Text="Wiederherstellung" x:Name="restoreGroupBox">
+      <StackLayout Spacing="5" HorizontalContentAlignment="Stretch" Padding="5,5,5,5">
+        <Label>Der Zustand des bearbeiteten Fahrplans wurde beim Absturz gespeichert. Möglicherweise können die Daten wiederhergestellt werden:</Label>
+        <Label x:Name="fnLabel" />
+        <Button Click="restoreButton_Click" x:Name="restoreButton">Datei wiederherstellen</Button>
+        <Button Click="norestoreButton_Click" x:Name="cancelButton">Nicht wiederherstellen</Button>
+      </StackLayout>
+    </GroupBox>
+    <Button Click="norestoreButton_Click" x:Name="norestoreButton">Schließen</Button>
+  </StackLayout>
+</e:CrashForm>
