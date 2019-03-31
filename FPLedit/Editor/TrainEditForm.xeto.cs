@@ -135,8 +135,6 @@ namespace FPLedit.Editor
             else
                 transitionsGroupBox.Visible = false;
 
-            //TODO: Disable track selector if V < 3.10
-
             fillButton.Visible = tt.Type == TimetableType.Linear && th.FillCandidates(Train).Any();
 
             arrDepBackup = Train.GetArrDeps()

@@ -30,7 +30,9 @@ namespace FPLedit
             OptionsParser.Init(args);
 
             App = new Application();
+#if !DEBUG || CRASH_DEBUG
             App.UnhandledException += UnhandledException;
+#endif
 
             mainForm = new MainForm();
             crashReporter = mainForm.crashReporter;
