@@ -97,8 +97,9 @@ namespace FPLedit.Shared
 
         public void ReplaceAllValues(T oldVal, T newVal)
         {
-            foreach (var kvp in values)
+            for (int i = 0; i < values.Count; i++)
             {
+                var kvp = values.ElementAt(i);
                 if (kvp.Value.Equals(oldVal))
                     SetValue(kvp.Key, newVal);
             }

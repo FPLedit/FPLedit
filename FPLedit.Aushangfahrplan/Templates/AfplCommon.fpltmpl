@@ -70,15 +70,15 @@
 		// Gleis-Angabe bekommen
 		ArrDep ardp = train.GetArrDep(sta);
 		string track = ardp.DepartureTrack;
-		if (track == "" && ardp.ArrivalTrack != null)
+		if (string.IsNullOrEmpty(track) && ardp.ArrivalTrack != null)
 			track = ardp.ArrivalTrack;
 
 		TrainPathData pd = new TrainPathData(train._parent, train);
 		int connectingRoute = pd.GetExitRoute(sta);
 
-		if (track == "" && dir == TrainDirection.ti)
+		if (string.IsNullOrEmpty(track) && dir == TrainDirection.ti)
 			track = sta.DefaultTrackRight.GetValue(connectingRoute);
-		if (track == "" && dir == TrainDirection.ta)
+		if (string.IsNullOrEmpty(track) && dir == TrainDirection.ta)
 			track = sta.DefaultTrackLeft.GetValue(connectingRoute);
 
 		return "<td class=\"track\">" + track + "</td>";

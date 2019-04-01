@@ -15,30 +15,36 @@ namespace FPLedit.NonDefaultFiletypes
 
         public bool Export(Timetable tt, string filename, IInfo info)
         {
-            if (tt.Version.Compare(Timetable.DefaultLinearVersion) >= 0)
+            if (tt.Version.Compare(TimetableVersion.JTG3_1) >= 0)
                 throw new Exception("Nur mit jTrainGraph 2.x oder 3.0x erstellte Fahrpläne können aktualisiert werden.");
+
+            var origVersion = tt.Version;
 
             var clone = tt.Clone();
             clone.SetAttribute("version", "010");
 
-            var shv = clone.GetAttribute<bool>("shV");
-            clone.SetAttribute("shV", shv ? "1" : "0");
-
-            // km -> kml/kmr
-            foreach (var sta in clone.Stations)
+            if (origVersion == TimetableVersion.JTG2_x)
             {
-                var km_old = sta.GetAttribute("km", "");
-                sta.SetAttribute("kml", km_old);
-                sta.SetAttribute("kmr", km_old);
-                sta.RemoveAttribute("km");
-            }
+                var shv = clone.GetAttribute<bool>("shV");
+                clone.SetAttribute("shV", shv ? "1" : "0");
 
-            // Allocate train ids
-            var nextId = clone.Trains.Max(t => t.Id);
-            foreach (var orig in clone.Trains)
-            {
-                if (orig.Id == -1)
-                    orig.Id = ++nextId;
+                // km -> kml/kmr
+                foreach (var sta in clone.Stations)
+                {
+                    var km_old = sta.GetAttribute("km", "");
+                    sta.SetAttribute("kml", km_old);
+                    sta.SetAttribute("kmr", km_old);
+                    sta.RemoveAttribute("km");
+                }
+
+                // Allocate train ids
+                var nextId = clone.Trains.Max(t => t.Id);
+                foreach (var orig in clone.Trains)
+                {
+                    if (orig.Id == -1)
+                        orig.Id = ++nextId;
+                }
+
             }
 
             ColorTimetableConverter.ConvertAll(clone);
