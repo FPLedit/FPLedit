@@ -16,7 +16,7 @@ namespace FPLedit.Editor.Network
         private PointF mousePosition = new PointF();
 
         private Timetable tt;
-        private List<DrawArgs<Station>> panels = new List<DrawArgs<Station>>();
+        private List<RenderBtn<Station>> panels = new List<RenderBtn<Station>>();
         private Font font;
         private Pen linePen, highlightPen;
 
@@ -164,10 +164,10 @@ namespace FPLedit.Editor.Network
                     lastSta = sta;
 
                     var panelColor = _highlightedPath.Contains(sta) ? Colors.Red : Colors.Gray;
-                    DrawArgs<Station> args = panels.FirstOrDefault(pa => pa.Tag == sta);
+                    RenderBtn<Station> args = panels.FirstOrDefault(pa => pa.Tag == sta);
                     if (args == null)
                     {
-                        args = new DrawArgs<Station>(sta, new Point(x - 5, y - 5), new Size(10, 10), panelColor);
+                        args = new RenderBtn<Station>(sta, new Point(x - 5, y - 5), new Size(10, 10), panelColor);
                         panels.Add(args);
                         // Wire events
                         switch (mode)
@@ -188,7 +188,7 @@ namespace FPLedit.Editor.Network
 
                 e.Graphics.DrawLine(linePen, new Point(x, y), mousePosition - _pan);
 
-                var args = new DrawArgs<Station>(tmp_sta, new Point(x - 5, y - 5), new Size(10, 10), Colors.DarkCyan);
+                var args = new RenderBtn<Station>(tmp_sta, new Point(x - 5, y - 5), new Size(10, 10), Colors.DarkCyan);
                 panels.Add(args);
             }
 
@@ -255,7 +255,7 @@ namespace FPLedit.Editor.Network
         #endregion
 
         #region Normal Mode
-        private void ApplyNormalMode(DrawArgs<Station> p, Station sta)
+        private void ApplyNormalMode(RenderBtn<Station> p, Station sta)
         {
             p.DoubleClick += (s, e) => StationDoubleClicked?.Invoke(sta, new EventArgs());
             p.Click += (s, e) => StationClicked?.Invoke(sta, new EventArgs());
@@ -264,7 +264,7 @@ namespace FPLedit.Editor.Network
         #endregion
 
         #region AddMode
-        private void ApplyAddMode(DrawArgs<Station> p, Station sta)
+        private void ApplyAddMode(RenderBtn<Station> p, Station sta)
         {
             p.Click += (s, e) => ConnectAddStation(sta);
         }
@@ -291,7 +291,7 @@ namespace FPLedit.Editor.Network
             this.Focus();
         }
 
-        private void ApplyJoinMode(DrawArgs<Station> p, Station sta)
+        private void ApplyJoinMode(RenderBtn<Station> p, Station sta)
         {
             p.Click += (s, e) => ConnectJoinLines(sta);
         }
@@ -365,7 +365,7 @@ namespace FPLedit.Editor.Network
         }
 
         #region Drag'n'Drop
-        private DrawArgs<Station> draggedControl;
+        private RenderBtn<Station> draggedControl;
         private bool hasDragged = false;
         private const int CLICK_TIME = 1000000; //0.1s
         private long lastClick = 0;

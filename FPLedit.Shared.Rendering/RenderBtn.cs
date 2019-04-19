@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Shared.Rendering
 {
-    public class DrawArgs<T>
+    public class RenderBtn<T>
     {
         private Font font = new Font(FontFamilies.SansFamilyName, 8);
 
@@ -29,7 +29,7 @@ namespace FPLedit.Shared.Rendering
 
         public event EventHandler DoubleClick;
 
-        public DrawArgs(T data, Point loc, Size size, Color c, string text = "")
+        public RenderBtn(T data, Point loc, Size size, Color c, string text = "")
         {
             Tag = data;
             Location = loc;

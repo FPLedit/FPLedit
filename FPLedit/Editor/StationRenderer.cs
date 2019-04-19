@@ -17,7 +17,7 @@ namespace FPLedit.Editor
         private Font font = new Font(FontFamilies.SansFamilyName, 8);
         private Pen dashedPen = new Pen(Colors.Black, 1) { DashStyle = DashStyles.Dash };
 
-        private List<DrawArgs<Track>> buttons = new List<DrawArgs<Track>>();
+        private List<RenderBtn<Track>> buttons = new List<RenderBtn<Track>>();
         private PixelLayout layout;
 
         private Station _station;
@@ -132,7 +132,7 @@ namespace FPLedit.Editor
 
                 // Gleisnamen als Button hinzufügen
                 var textSize = e.Graphics.MeasureString(font, track.Name);
-                var nameBtn = new DrawArgs<Track>(track, new Point(midx - (int)(textSize.Width / 2) - 5, y - 8), new Size((int)textSize.Width + 5, 16), Colors.White, track.Name);
+                var nameBtn = new RenderBtn<Track>(track, new Point(midx - (int)(textSize.Width / 2) - 5, y - 8), new Size((int)textSize.Width + 5, 16), Colors.White, track.Name);
                 nameBtn.Click += NameBtn_Click;
                 buttons.Add(nameBtn);
 
@@ -157,17 +157,17 @@ namespace FPLedit.Editor
                 if (trackIndex == leftdefaultTrack && !disableLeft)
                 {
                     var leftUpBtn = GetButton("▲", track, 10, y);
-                    leftUpBtn.Click += (s, x) => MoveDefaultTrack(_station.DefaultTrackLeft, ((DrawArgs<Track>)s).Tag, -1);
+                    leftUpBtn.Click += (s, x) => MoveDefaultTrack(_station.DefaultTrackLeft, ((RenderBtn<Track>)s).Tag, -1);
                     var leftDownBtn = GetButton("▼", track, 30, y);
-                    leftDownBtn.Click += (s, x) => MoveDefaultTrack(_station.DefaultTrackLeft, ((DrawArgs<Track>)s).Tag, 1);
+                    leftDownBtn.Click += (s, x) => MoveDefaultTrack(_station.DefaultTrackLeft, ((RenderBtn<Track>)s).Tag, 1);
                 }
 
                 if (trackIndex == rightdefaultTrack && !disableRight)
                 {
                     var rightUpButton = GetButton("▲", track, width - 46, y);
-                    rightUpButton.Click += (s, x) => MoveDefaultTrack(_station.DefaultTrackRight, ((DrawArgs<Track>)s).Tag, -1);
+                    rightUpButton.Click += (s, x) => MoveDefaultTrack(_station.DefaultTrackRight, ((RenderBtn<Track>)s).Tag, -1);
                     var rightDownBtn = GetButton("▼", track, width - 26, y);
-                    rightDownBtn.Click += (s, x) => MoveDefaultTrack(_station.DefaultTrackRight, ((DrawArgs<Track>)s).Tag, 1);
+                    rightDownBtn.Click += (s, x) => MoveDefaultTrack(_station.DefaultTrackRight, ((RenderBtn<Track>)s).Tag, 1);
                 }
 
                 y += LINE_HEIGHT;
@@ -175,7 +175,7 @@ namespace FPLedit.Editor
 
             // Button für neue Gleise
             var textWidth = (int)e.Graphics.MeasureString(font, "Neues Gleis hinzufügen").Width;
-            var addBtn = new DrawArgs<Track>(null, new Point(midx - (textWidth / 2) - 5, y - 8), new Size(textWidth + 10, 16), Colors.LightGrey, "Neues Gleis hinzufügen");
+            var addBtn = new RenderBtn<Track>(null, new Point(midx - (textWidth / 2) - 5, y - 8), new Size(textWidth + 10, 16), Colors.LightGrey, "Neues Gleis hinzufügen");
             buttons.Add(addBtn);
             addBtn.Click += AddBtn_Click;
 
@@ -220,7 +220,7 @@ namespace FPLedit.Editor
 
         private void NameBtn_Click(object sender, EventArgs e)
         {
-            var btn = (DrawArgs<Track>)sender;
+            var btn = (RenderBtn<Track>)sender;
             var txt = new TextBox() { Width = 30 + btn.Size.Width, Text = btn.Text, Font = font };
             layout.Add(txt, btn.Location);
             txt.KeyDown += (s, args) =>
@@ -251,7 +251,7 @@ namespace FPLedit.Editor
 
         private void DownBtn_Click(object sender, EventArgs e)
         {
-            var btn = (DrawArgs<Track>)sender;
+            var btn = (RenderBtn<Track>)sender;
             var idx = _station.Tracks.IndexOf(btn.Tag);
             if (idx == _station.Tracks.Count - 1)
                 return;
@@ -261,7 +261,7 @@ namespace FPLedit.Editor
 
         private void UpBtn_Click(object sender, EventArgs e)
         {
-            var btn = (DrawArgs<Track>)sender;
+            var btn = (RenderBtn<Track>)sender;
             var idx = _station.Tracks.IndexOf(btn.Tag);
             if (idx == 0)
                 return;
@@ -271,7 +271,7 @@ namespace FPLedit.Editor
 
         private void DeleteBtn_Click(object sender, EventArgs e)
         {
-            var btn = (DrawArgs<Track>)sender;
+            var btn = (RenderBtn<Track>)sender;
             _station.Tracks.Remove(btn.Tag);
 
             var firstName = _station.Tracks.FirstOrDefault()?.Name;
@@ -281,9 +281,9 @@ namespace FPLedit.Editor
             Invalidate();
         }
 
-        private DrawArgs<Track> GetButton(string text, Track track, int x, int y)
+        private RenderBtn<Track> GetButton(string text, Track track, int x, int y)
         {
-            var btn = new DrawArgs<Track>(track, new Point(x, y - 8), new Size(16, 16), Colors.LightGrey, text);
+            var btn = new RenderBtn<Track>(track, new Point(x, y - 8), new Size(16, 16), Colors.LightGrey, text);
             buttons.Add(btn);
             return btn;
         }
