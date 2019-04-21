@@ -15,6 +15,7 @@ namespace FPLedit.Bildfahrplan.Render
         private readonly Font font = new Font(FontFamilies.SansFamilyName, 8);
         private Panel panel;
         private object bufferLock = new object();
+        public Action RenderingFinished { get; set; }
 
         public AsyncDoubleBufferedGraph(Panel p)
         {
@@ -45,7 +46,11 @@ namespace FPLedit.Bildfahrplan.Render
                         buffer = newBuffer;
                     }
                     generatingBuffer = false;
-                    Application.Instance.Invoke(() => panel.Invalidate());
+                    Application.Instance.Invoke(() =>
+                    {
+                        panel.Invalidate();
+                        RenderingFinished?.Invoke();
+                    });
                 });
             }
             else if (buffer == null && generatingBuffer)

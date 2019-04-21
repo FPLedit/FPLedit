@@ -24,7 +24,7 @@ namespace FPLedit.CrashReporting
 
         public void Report(CrashReport report)
         {
-            var reporText = report.Serialize();
+            var reportText = report.Serialize();
             try
             {
                 var dir = info.GetTemp(REPORT_DIR);
@@ -38,7 +38,7 @@ namespace FPLedit.CrashReporting
                     File.Delete(fn_tt);
 
                 var fn_report = info.GetTemp(REPORT_DIR + "crash_report.xml");
-                File.WriteAllText(fn_report, reporText);
+                File.WriteAllText(fn_report, reportText);
 
                 var fn_fileinfo = info.GetTemp(CRASH_DIR + "crash.file");
                 File.WriteAllText(fn_fileinfo, info.FileState.FileName);

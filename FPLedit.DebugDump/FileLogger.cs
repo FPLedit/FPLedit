@@ -45,7 +45,8 @@ namespace FPLedit.DebugDump
         private string GetExceptionDetails(Exception exception)
         {
             var properties = exception.GetType().GetProperties();
-            var fields = properties.Select(property => new {
+            var fields = properties.Select(property => new
+            {
                 property.Name,
                 Value = property.GetValue(exception, null)
             })
@@ -69,9 +70,18 @@ namespace FPLedit.DebugDump
 
         private void Write(string message, string type)
         {
-            using (StreamWriter r = new StreamWriter(filename, true))
+            try
             {
-                r.WriteLine(DateTime.Now.ToString() + ": [" + type + "] " + message);
+                using (StreamWriter r = new StreamWriter(filename, true))
+                    r.WriteLine(DateTime.Now.ToString() + ": [" + type + "] " + message);
+            }
+            catch
+            {
+                Console.WriteLine(new string('#', 40));
+                Console.WriteLine(new string('#', 40));
+                Console.WriteLine(new string('#', 40));
+                Console.WriteLine(new string('#', 40));
+                Console.WriteLine("Error writing log file");
             }
         }
     }

@@ -17,7 +17,7 @@ namespace FPLedit.Bildfahrplan.Forms
         private Scrollable scrollable;
         private Renderer renderer;
         private RoutesDropDown routesDropDown;
-        private Point scrollPosition = new Point(0, 0);
+        private Point? scrollPosition = new Point(0, 0);
         private AsyncDoubleBufferedGraph adbg;
 
         public DynamicPreviewForm(IInfo info)
@@ -68,6 +68,12 @@ namespace FPLedit.Bildfahrplan.Forms
 
             panel = new Drawable();
             adbg = new AsyncDoubleBufferedGraph(panel);
+            adbg.RenderingFinished = () =>
+            {
+                if (scrollPosition.HasValue)
+                    scrollable.ScrollPosition = scrollPosition.Value;
+                scrollPosition = null;
+            };
             panel.Paint += Panel_Paint;
 
             scrollable = new Scrollable
@@ -89,7 +95,8 @@ namespace FPLedit.Bildfahrplan.Forms
         private void ResetRenderer()
         {
             renderer = new Renderer(info.Timetable, routesDropDown.SelectedRoute);
-            scrollPosition.Y = 0;
+            if (!scrollPosition.HasValue)
+                scrollPosition = new Point(0, 0);
             panel.Height = renderer.GetHeight();
 
             adbg.Invalidate();
@@ -103,10 +110,6 @@ namespace FPLedit.Bildfahrplan.Forms
         }
 
         private void Panel_Paint(object sender, PaintEventArgs e)
-        {
-            adbg.Render(renderer, e.Graphics);
-
-            scrollable.ScrollPosition = scrollPosition;
-        }
+            => adbg.Render(renderer, e.Graphics);
     }
 }
