@@ -26,6 +26,18 @@ namespace FPLedit.Shared.UI
             });
         }
 
+        public static void AddFloatConvBinding<TValue, T1>(this BindableBinding<T1, string> binding, Expression<Func<TValue, float>> property)
+            where T1 : IBindable
+        {
+            var shadowBinding = Binding.Property(property);
+
+            binding.BindDataContext<TValue>(s => shadowBinding.GetValue(s).ToString(), (s, str) =>
+            {
+                if (float.TryParse(str, out float i))
+                    shadowBinding.SetValue(s, i);
+            });
+        }
+
         public static void AddTimeSpanConvBinding<TValue, T1>(this BindableBinding<T1, string> binding, Expression<Func<TValue, TimeSpan>> property)
             where T1 : IBindable
         {

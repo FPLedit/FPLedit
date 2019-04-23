@@ -2,6 +2,7 @@
 using FPLedit.Shared.Rendering;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -88,10 +89,10 @@ namespace FPLedit.Bildfahrplan.Model
             set => tt.SetAttribute("fpl-dh", value.ToString().ToLower());
         }
 
-        public int HeightPerHour
+        public float HeightPerHour
         {
-            get => tt.GetAttribute("hpH", 150);
-            set => tt.SetAttribute("hpH", value.ToString());
+            get => tt.GetAttribute("hpH", 150f);
+            set => tt.SetAttribute("hpH", value.ToString("0.0", CultureInfo.InvariantCulture));
         }
 
         public bool StationVertical

@@ -61,26 +61,22 @@ namespace FPLedit.Bildfahrplan.Forms
 
         private TimeSpan GetTimeByHeight(Renderer renderer, TimeSpan start, int height)
         {
-            var end = start + new TimeSpan(0, 60 - start.Minutes, 0); // to full hour
-            var one = new TimeSpan(1, 0, 0);
-            TimeSpan last = end;
-            int h = renderer.GetHeight(start, end);
+            var cur = start + new TimeSpan(0, 60 - start.Minutes, 0); // to full hour
+            var oneHour = new TimeSpan(1, 0, 0);
+            TimeSpan last = cur;
+            float h = renderer.GetHeight(start, cur);
             while (true)
             {
-                end += one;
+                cur += oneHour;
                 h += attrs.HeightPerHour;
                 if (h >= height)
                 {
-                    end = last;
-                    var meta = attrs.EndTime;
-                    if (end > meta)
-                    {
-                        end = meta;
-                        return meta;
-                    }
+                    cur = last;
+                    if (cur > attrs.EndTime)
+                        return attrs.EndTime;
                     return last;
                 }
-                last = end;
+                last = cur;
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -47,7 +48,7 @@ namespace FPLedit.Shared
             {
                 if (val == "" && typeof(T) != typeof(string))
                     return defaultValue;
-                return (T)Convert.ChangeType(val, typeof(T));
+                return (T)Convert.ChangeType(val, typeof(T), CultureInfo.InvariantCulture);
             }
             return defaultValue;
         }

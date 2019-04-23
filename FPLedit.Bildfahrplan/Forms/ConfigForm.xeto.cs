@@ -24,16 +24,13 @@ namespace FPLedit.Bildfahrplan.Forms
         private TimeValidator startTimeValidator, endTimeValidator;
         private ValidatorCollection validators;
 
-        private Timetable tt;
         private TimetableStyle attrs;
 
         public ConfigForm(Timetable tt, ISettings settings)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            this.tt = tt;
-
-            heightPerHourValidator = new NumberValidator(heightPerHourTextBox, false, true);
+            heightPerHourValidator = new NumberValidator(heightPerHourTextBox, false, false);
             heightPerHourValidator.ErrorMessage = "Bitte eine Zahl als Höhe pro Stunde angeben!";
             startTimeValidator = new TimeValidator(startTimeTextBox, false);
             endTimeValidator = new TimeValidator(endTimeTextBox, false);
@@ -64,7 +61,7 @@ namespace FPLedit.Bildfahrplan.Forms
                 styles.Remove(StationLineStyle.Cubic);
             DropDownBind.Enum<TimetableStyle, StationLineStyle>(stationLinesDropDown, "StationLines", styles);
 
-            heightPerHourTextBox.TextBinding.AddIntConvBinding<TimetableStyle, TextControl>(s => s.HeightPerHour);
+            heightPerHourTextBox.TextBinding.AddFloatConvBinding<TimetableStyle, TextControl>(s => s.HeightPerHour);
 
             startTimeTextBox.TextBinding.AddTimeSpanConvBinding<TimetableStyle, TextControl>(s => s.StartTime);
             endTimeTextBox.TextBinding.AddTimeSpanConvBinding<TimetableStyle, TextControl>(s => s.EndTime);
