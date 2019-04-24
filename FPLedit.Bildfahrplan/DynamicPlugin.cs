@@ -27,7 +27,7 @@ namespace FPLedit.Bildfahrplan
     public class DynamicPreview : IPreviewable
     {
         private bool opened = false;
-        private DynamicPreviewForm dpf;
+        private PreviewForm dpf;
 
         public string DisplayName => "Dynamischer Bildfahrplan";
 
@@ -36,7 +36,7 @@ namespace FPLedit.Bildfahrplan
             if (!opened)
             {
                 var route = (info.Timetable.Type == TimetableType.Network) ? info.FileState.SelectedRoute : Timetable.LINEAR_ROUTE_ID;
-                dpf = new DynamicPreviewForm(info);
+                dpf = new PreviewForm(info);
                 dpf.Closed += (s, e) => opened = false;
                 dpf.Show();
                 opened = true;

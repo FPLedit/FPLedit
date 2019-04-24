@@ -112,7 +112,7 @@ namespace FPLedit.Bildfahrplan
 
         private void ShowItem_Click(object sender, EventArgs e)
         {
-            new DynamicPreviewForm(info).Show();
+            new PreviewForm(info).Show();
         }
     }
 #endif

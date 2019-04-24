@@ -60,7 +60,7 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="DynamicPlugin.cs" />
-    <Compile Include="Forms\DynamicPreviewForm.cs">
+    <Compile Include="Forms\PreviewForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Forms\StationStyleForm.cs">
@@ -144,6 +144,7 @@
     <EmbeddedResource Include="Forms\StationStyleEditForm.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PreviewForm.xeto" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
