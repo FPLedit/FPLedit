@@ -67,7 +67,8 @@ namespace FPLedit.Shared
         protected TimeSpan GetTime(string key)
         {
             var val = GetAttribute(key, "");
-            return val != "" ? TimeSpan.Parse(val) : default;
+            TimeSpan.TryParse(val, out var ts);
+            return ts;
         }
     }
 }

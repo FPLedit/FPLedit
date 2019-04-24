@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿using Eto.Drawing;
+using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System;
@@ -14,6 +15,7 @@ namespace FPLedit.Editor.Network
 #pragma warning disable CS0649
         private GridView gridView;
         private Button removeButton, upButton, downButton;
+        private Label arrivalLabel, departureLabel;
 #pragma warning restore CS0649
 
         private ArrDep arrDep;
@@ -27,6 +29,11 @@ namespace FPLedit.Editor.Network
 
             this.arrDep = arrDep;
             this.station = sta;
+
+            arrivalLabel.Font = new Font(arrivalLabel.Font.FamilyName, arrivalLabel.Font.Size, FontStyle.Bold);
+            departureLabel.Font = new Font(departureLabel.Font.FamilyName, departureLabel.Font.Size, FontStyle.Bold);
+            arrivalLabel.Text = arrivalLabel.Text.Replace("{time}", arrDep.Arrival != default ? arrDep.Arrival.ToShortTimeString() : "-");
+            departureLabel.Text = departureLabel.Text.Replace("{time}", arrDep.Departure != default ? arrDep.Departure.ToShortTimeString() : "-");
 
             Title = Title.Replace("{station}", station.SName);
 
@@ -95,7 +102,17 @@ namespace FPLedit.Editor.Network
             RefreshList();
         }
 
-        private void closeButton_Click(object sender, EventArgs e) => Close(DialogResult.Ok);
+        private void closeButton_Click(object sender, EventArgs e)
+        {
+            var outOfRange = arrDep.ShuntMoves.Any(
+                shunt => (shunt.Time < arrDep.Arrival && arrDep.Arrival != default) || (shunt.Time > arrDep.Departure && arrDep.Departure != default));
+            if (outOfRange)
+            {
+                MessageBox.Show("Einige Rangierfahrten befinden sich außerhalb des Zeitfensters des Aufenthalts an der Station!", "FPLedit", MessageBoxType.Error);
+                return;
+            }
+            Close(DialogResult.Ok);
+        }
 
         private void cancelButton_Click(object sender, EventArgs e)
         {

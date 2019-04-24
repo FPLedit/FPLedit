@@ -6,8 +6,14 @@
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
   Title="Rangierfahrten am Bahnhof {station}" ClientSize="410,370" Resizable="true">
   <TableLayout Spacing="5,5" Padding="10,10,10,10">
+    <TableRow>
+      <Label x:Name="arrivalLabel">Ankunft: {time}</Label>
+    </TableRow>
     <TableRow ScaleHeight="True">
       <GridView x:Name="gridView"></GridView>
+    </TableRow>
+    <TableRow>
+      <Label x:Name="departureLabel">Abfahrt: {time}</Label>
     </TableRow>
     <TableRow>
       <TableLayout Spacing="5,5">
