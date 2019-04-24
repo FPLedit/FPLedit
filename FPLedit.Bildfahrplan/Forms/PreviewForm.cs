@@ -39,7 +39,7 @@ namespace FPLedit.Bildfahrplan.Forms
 
             panel = new Drawable
             {
-                Height = renderer.GetHeight(),
+                Height = renderer.GetHeight(true),
             };
             adbg = new AsyncDoubleBufferedGraph(panel);
             panel.Paint += Panel_Paint;
@@ -60,13 +60,13 @@ namespace FPLedit.Bildfahrplan.Forms
         private void Dtc_ValueChanged(object sender, EventArgs e)
         {
             renderer = new Renderer(info.Timetable, Timetable.LINEAR_ROUTE_ID);
-            panel.Height = renderer.GetHeight();
+            panel.Height = renderer.GetHeight(true);
             adbg.Invalidate();
         }
 
         private void Panel_Paint(object sender, PaintEventArgs e)
         {
-            adbg.Render(renderer, e.Graphics);
+            adbg.Render(renderer, e.Graphics, true);
         }
     }
 }

@@ -14,7 +14,6 @@ namespace FPLedit.Bildfahrplan.Render
         private List<Station> stations;
         private int route;
         private TimetableStyle attrs;
-        private bool multiTrack = true; //TODO: From attrs
 
         private DashStyleHelper ds = new DashStyleHelper();
 
@@ -25,7 +24,7 @@ namespace FPLedit.Bildfahrplan.Render
             this.attrs = attrs;
         }
 
-        public Dictionary<Station, StationX> Render(Graphics g, Margins margin, float width, float height)
+        public Dictionary<Station, StationX> Render(Graphics g, Margins margin, float width, float height, bool drawHeader)
         {
             var firstStation = stations.First();
             var lastStation = stations.Last();
@@ -47,7 +46,7 @@ namespace FPLedit.Bildfahrplan.Render
                     throw new Exception("Unerwarteter Fehler beim Rendern der Route!");
 
                 StationX posX;
-                if (!multiTrack)
+                if (!attrs.MultiTrack)
                     posX = new StationX(sta, kil.Value, ((kil / length) * (width - margin.Right - margin.Left)).Value);
                 else
                 {
@@ -69,7 +68,7 @@ namespace FPLedit.Bildfahrplan.Render
 
                 var trackPen = new Pen(Colors.Red, style.CalcedWidth);
 
-                if (!multiTrack)
+                if (!attrs.MultiTrack)
                 {
                     // Linie (Single-Track-Mode)
                     g.DrawLine(pen, margin.Left + posX.Center, margin.Top - 5, margin.Left + posX.Center, height - margin.Bottom);
@@ -82,6 +81,9 @@ namespace FPLedit.Bildfahrplan.Render
                         g.DrawLine(trackPen, margin.Left + trackX.Value, margin.Top - 5, margin.Left + trackX.Value, height - margin.Bottom);
                     g.DrawLine(pen, margin.Left + posX.Right, margin.Top - 5, margin.Left + posX.Right, height - margin.Bottom);
                 }
+
+                if (!drawHeader)
+                    continue;
 
                 // Stationsnamen
                 if (attrs.DrawHeader)

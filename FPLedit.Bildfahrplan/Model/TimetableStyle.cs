@@ -10,6 +10,8 @@ namespace FPLedit.Bildfahrplan.Model
 {
     internal class TimetableStyle : Style
     {
+        public bool MultiTrack { get; internal set; } //TODO: Read from xml
+
         private Timetable tt;
 
         public TimetableStyle(Timetable tt) : base(tt)

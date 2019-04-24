@@ -17,8 +17,9 @@ namespace FPLedit.Bildfahrplan.Forms
         private Scrollable scrollable;
         private Renderer renderer;
         private RoutesDropDown routesDropDown;
+        private CheckBox splitCheckBox;
         private Point? scrollPosition = new Point(0, 0);
-        private AsyncDoubleBufferedGraph adbg, hadbg;
+        private AsyncDoubleBufferedGraph adbg;
 
         public DynamicPreviewForm(IInfo info)
         {
@@ -65,9 +66,19 @@ namespace FPLedit.Bildfahrplan.Forms
                 info.SetUnsaved();
             };
             nStack.Items.Add(preferencesButton);
+            splitCheckBox = new CheckBox
+            {
+                Text = "Stationen nicht mitscrollen",
+                Checked = info.Settings.Get<bool>("bifpl.lock-stations"),
+            };
+            splitCheckBox.CheckedChanged += (s, e) =>
+            {
+                ResetRenderer();
+                info.Settings.Set("bifpl.lock-stations", splitCheckBox.Checked.Value);
+            };
+            nStack.Items.Add(splitCheckBox);
 
             hpanel = new Drawable();
-            //hadbg = new AsyncDoubleBufferedGraph(hpanel);
             hpanel.Paint += Hpanel_Paint;
             stackLayout.Rows.Add(hpanel);
 
@@ -99,11 +110,13 @@ namespace FPLedit.Bildfahrplan.Forms
 
         private void Hpanel_Paint(object sender, PaintEventArgs e)
         {
-            /*var attrs = new Model.TimetableStyle(info.Timetable);
-            var stations = info.Timetable.GetRoute(routesDropDown.SelectedRoute).GetOrderedStations();
-            var headerRenderer = new HeaderRenderer(stations, attrs, routesDropDown.SelectedRoute);
-            headerRenderer.Render(e.Graphics, renderer.Margins, panel.Width, hpanel.Height);*/
-            renderer.DrawHeader(e.Graphics, panel.Width);
+            try
+            {
+                if (splitCheckBox.Checked.Value)
+                    renderer.DrawHeader(e.Graphics, (scrollable.ClientSize.Width + panel.Width) / 2);
+            }
+            catch
+            { }
         }
 
         private void ResetRenderer()
@@ -111,10 +124,11 @@ namespace FPLedit.Bildfahrplan.Forms
             renderer = new Renderer(info.Timetable, routesDropDown.SelectedRoute);
             if (!scrollPosition.HasValue)
                 scrollPosition = new Point(0, 0);
-            panel.Height = renderer.GetHeight();
-            hpanel.Height = renderer.GetHeight(default, default);
+            panel.Height = renderer.GetHeight(!splitCheckBox.Checked.Value);
+            hpanel.Height = splitCheckBox.Checked.Value ? renderer.GetHeight(default, default, true) : 0;
 
             adbg.Invalidate();
+            hpanel.Invalidate();
         }
 
         private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)
@@ -122,9 +136,10 @@ namespace FPLedit.Bildfahrplan.Forms
             scrollPosition = scrollable.ScrollPosition;
 
             adbg.Invalidate();
+            hpanel.Invalidate();
         }
 
         private void Panel_Paint(object sender, PaintEventArgs e)
-            => adbg.Render(renderer, e.Graphics);
+            => adbg.Render(renderer, e.Graphics, !splitCheckBox.Checked.Value);
     }
 }

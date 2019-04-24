@@ -51,7 +51,7 @@ namespace FPLedit.Bildfahrplan.Forms
             int height = (int)e.PageSize.Height;
             var start = last ?? attrs.StartTime;
             last = GetTimeByHeight(renderer, start, height);
-            renderer.Draw(e.Graphics, start, last.Value);
+            renderer.Draw(e.Graphics, start, last.Value, true);
 
             if (last.Value < attrs.EndTime)
                 doc.PageCount++;
@@ -64,7 +64,7 @@ namespace FPLedit.Bildfahrplan.Forms
             var cur = start + new TimeSpan(0, 60 - start.Minutes, 0); // to full hour
             var oneHour = new TimeSpan(1, 0, 0);
             TimeSpan last = cur;
-            float h = renderer.GetHeight(start, cur);
+            float h = renderer.GetHeight(start, cur, true);
             while (true)
             {
                 cur += oneHour;
