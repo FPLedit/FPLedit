@@ -13,9 +13,9 @@ namespace FPLedit.Editor.Network
     internal class ShuntForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
-        private GridView gridView;
-        private Button removeButton, upButton, downButton;
-        private Label arrivalLabel, departureLabel;
+        private readonly GridView gridView;
+        private readonly Button removeButton, upButton, downButton;
+        private readonly Label arrivalLabel, departureLabel;
 #pragma warning restore CS0649
 
         private ArrDep arrDep;

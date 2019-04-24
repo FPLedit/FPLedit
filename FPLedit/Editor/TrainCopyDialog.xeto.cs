@@ -13,13 +13,13 @@ namespace FPLedit.Editor
     internal class TrainCopyDialog : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
-        private TextBox offsetTextBox, nameTextBox, changeTextBox, countTextBox;
-        private CheckBox copyAllCheckBox;
-        private StackLayout selectStack;
-        private TableLayout extendedOptionsTable, copyOptionsTable;
+        private readonly TextBox offsetTextBox, nameTextBox, changeTextBox, countTextBox;
+        private readonly CheckBox copyAllCheckBox;
+        private readonly StackLayout selectStack;
+        private readonly TableLayout extendedOptionsTable, copyOptionsTable;
 #pragma warning restore CS0649
-        private NumberValidator offsetValidator, countValidator, changeValidator;
-        private SelectionUI modeSelect;
+        private readonly NumberValidator offsetValidator, countValidator, changeValidator;
+        private readonly SelectionUI modeSelect;
 
         private Train train;
         private Timetable tt;

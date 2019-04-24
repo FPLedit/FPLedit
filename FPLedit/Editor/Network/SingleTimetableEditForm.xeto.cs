@@ -10,7 +10,7 @@ namespace FPLedit.Editor.Network
     internal class SingleTimetableEditForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
-        private SingleTimetableEditControl editor;
+        private readonly SingleTimetableEditControl editor;
 #pragma warning restore CS0649
 
         private IInfo info;

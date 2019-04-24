@@ -11,9 +11,9 @@ namespace FPLedit.Editor.Network
     internal class TrainRouteForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
-        private LineRenderer lineRenderer;
-        private Button closeButton;
-        private CheckBox waypointsCheckBox;
+        private readonly LineRenderer lineRenderer;
+        private readonly Button closeButton;
+        private readonly CheckBox waypointsCheckBox;
 #pragma warning restore CS0649
 
         private IInfo info;

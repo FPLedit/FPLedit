@@ -17,8 +17,8 @@ namespace FPLedit.Bildfahrplan.Forms
         private DashStyleHelper ds;
 
 #pragma warning disable CS0649
-        private DropDown colorComboBox, widthComboBox, dashComboBox;
-        private CheckBox drawCheckBox;
+        private readonly DropDown colorComboBox, widthComboBox, dashComboBox;
+        private readonly CheckBox drawCheckBox;
 #pragma warning restore CS0649
 
         private StationStyleEditForm(ISettings settings)
@@ -29,7 +29,7 @@ namespace FPLedit.Bildfahrplan.Forms
             ds = new DashStyleHelper();
 
             colorComboBox.DataStore = cc.ColorHexStrings;
-            colorComboBox.ItemTextBinding = Shared.UI.ExtBind.ColorBinding(cc);
+            colorComboBox.ItemTextBinding = ExtBind.ColorBinding(cc);
 
             widthComboBox.DataStore = Enumerable.Range(1, 5).Cast<object>();
             widthComboBox.ItemTextBinding = Binding.Property<int, string>(c => c.ToString());

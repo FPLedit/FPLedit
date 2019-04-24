@@ -15,7 +15,7 @@ namespace FPLedit.Editor.Network
         private Timetable tt;
 
 #pragma warning disable CS0649
-        private GridView gridView;
+        private readonly GridView gridView;
 #pragma warning restore CS0649
 
         public TrainsEditingForm(IInfo info) : base(info.Timetable)

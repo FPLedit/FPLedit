@@ -27,9 +27,9 @@ namespace FPLedit
 #pragma warning disable CS0649
         private readonly LogControl logTextBox;
         private readonly ButtonMenuItem saveMenu, saveAsMenu, exportMenu, importMenu, lastMenu, fileMenu, convertMenu;
-        private SaveFileDialog saveFileDialog, exportFileDialog;
-        private OpenFileDialog openFileDialog, importFileDialog;
-        private LineEditingControl lineEditingControl;
+        private readonly SaveFileDialog saveFileDialog, exportFileDialog;
+        private readonly OpenFileDialog openFileDialog, importFileDialog;
+        private readonly LineEditingControl lineEditingControl;
 #pragma warning restore CS0649
         #endregion
 

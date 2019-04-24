@@ -9,11 +9,8 @@ namespace FPLedit.Editor.Linear
 {
     internal class LineTimetableEditForm : FDialog<DialogResult>
     {
-        private const TrainDirection TOP_DIRECTION = TrainDirection.ti;
-        private const TrainDirection BOTTOM_DIRECTION = TrainDirection.ta;
-
 #pragma warning disable CS0649
-        private LineTimetableEditControl editor;
+        private readonly LineTimetableEditControl editor;
 #pragma warning restore CS0649
 
         private IInfo info;

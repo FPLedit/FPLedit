@@ -20,15 +20,14 @@ namespace FPLedit.Kursbuch.Forms
         private const string NO_KBS_TEXT = "<keine Nummer>";
 
 #pragma warning disable CS0649
-        private DropDown templateComboBox;
-        private ComboBox fontComboBox, hefontComboBox;
-        private Label exampleLabel, heexampleLabel, cssLabel, kbsnLabel;
-        private LinkButton cssHelpLinkLabel;
-        private CheckBox consoleCheckBox;
-        private TextArea cssTextBox;
-        private GridView kbsnListView;
+        private readonly DropDown templateComboBox;
+        private readonly ComboBox fontComboBox, hefontComboBox;
+        private readonly Label exampleLabel, heexampleLabel, cssLabel, kbsnLabel;
+        private readonly LinkButton cssHelpLinkLabel;
+        private readonly CheckBox consoleCheckBox;
+        private readonly TextArea cssTextBox;
+        private readonly GridView kbsnListView;
 #pragma warning restore CS0649
-        private FontComboBox fntComboBox, hefntComboBox;
 
         private Dictionary<int, string> setRouteNumbers;
 
@@ -41,8 +40,8 @@ namespace FPLedit.Kursbuch.Forms
             templateComboBox.ItemTextBinding = Binding.Property<ITemplate, string>(t => t.TemplateName);
             templateComboBox.DataStore = chooser.AvailableTemplates;
 
-            fntComboBox = new FontComboBox(fontComboBox, exampleLabel);
-            hefntComboBox = new FontComboBox(hefontComboBox, heexampleLabel);
+            var fntComboBox = new FontComboBox(fontComboBox, exampleLabel);
+            var hefntComboBox = new FontComboBox(hefontComboBox, heexampleLabel);
 
             attrs = KfplAttrs.GetAttrs(tt);
             if (attrs != null)

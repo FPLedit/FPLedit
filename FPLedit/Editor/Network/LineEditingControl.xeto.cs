@@ -16,11 +16,11 @@ namespace FPLedit.Editor.Network
         private IInfo info;
 
 #pragma warning disable CS0649
-        private RoutesDropDown routesDropDown;
-        private LineRenderer lineRenderer;
-        private Button newLineButton, newButton, joinLineButton;
-        private Divider divider1;
-        private StackLayout toolbar;
+        private readonly RoutesDropDown routesDropDown;
+        private readonly LineRenderer lineRenderer;
+        private readonly Button newLineButton, newButton, joinLineButton;
+        private readonly Divider divider1;
+        private readonly StackLayout toolbar;
 #pragma warning restore CS0649
 
         public LineEditingControl()

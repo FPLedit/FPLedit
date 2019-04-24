@@ -11,10 +11,10 @@ namespace FPLedit.Editor
     internal class TrainFillDialog : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
-        private DropDown trainsComboBox;
-        private TextBox offsetTextBox;
+        private readonly DropDown trainsComboBox;
+        private readonly TextBox offsetTextBox;
 #pragma warning restore CS0649
-        private NumberValidator offsetValidator;
+        private readonly NumberValidator offsetValidator;
 
         public Train ReferenceTrain { get; private set; }
 

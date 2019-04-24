@@ -18,14 +18,13 @@ namespace FPLedit.Aushangfahrplan.Forms
         private AfplTemplateChooser chooser;
 
 #pragma warning disable CS0649
-        private DropDown templateComboBox;
-        private ComboBox fontComboBox, hwfontComboBox;
-        private Label exampleLabel, hwexampleLabel, cssLabel;
-        private LinkButton cssHelpLinkLabel;
-        private CheckBox tracksCheckBox, consoleCheckBox;
-        private TextArea cssTextBox;
+        private readonly DropDown templateComboBox;
+        private readonly ComboBox fontComboBox, hwfontComboBox;
+        private readonly Label exampleLabel, hwexampleLabel, cssLabel;
+        private readonly LinkButton cssHelpLinkLabel;
+        private readonly CheckBox tracksCheckBox, consoleCheckBox;
+        private readonly TextArea cssTextBox;
 #pragma warning restore CS0649
-        private FontComboBox fntComboBox, hwfntComboBox;
 
         public SettingsControl(Timetable tt, IInfo info)
         {
@@ -36,8 +35,8 @@ namespace FPLedit.Aushangfahrplan.Forms
             templateComboBox.ItemTextBinding = Binding.Property<ITemplate, string>(t => t.TemplateName);
             templateComboBox.DataStore = chooser.AvailableTemplates;
 
-            fntComboBox = new FontComboBox(fontComboBox, exampleLabel);
-            hwfntComboBox = new FontComboBox(hwfontComboBox, hwexampleLabel);
+            var fntComboBox = new FontComboBox(fontComboBox, exampleLabel);
+            var hwfntComboBox = new FontComboBox(hwfontComboBox, hwexampleLabel);
 
             attrs = AfplAttrs.GetAttrs(tt);
             if (attrs != null)

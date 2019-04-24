@@ -18,14 +18,13 @@ namespace FPLedit.Buchfahrplan.Forms
         private BfplTemplateChooser chooser;
 
 #pragma warning disable CS0649
-        private DropDown templateComboBox;
-        private ComboBox fontComboBox;
-        private Label exampleLabel, cssLabel;
-        private LinkButton cssHelpLinkLabel;
-        private CheckBox consoleCheckBox, commentCheckBox, daysCheckBox;
-        private TextArea cssTextBox;
+        private readonly DropDown templateComboBox;
+        private readonly ComboBox fontComboBox;
+        private readonly Label exampleLabel, cssLabel;
+        private readonly LinkButton cssHelpLinkLabel;
+        private readonly CheckBox consoleCheckBox, commentCheckBox, daysCheckBox;
+        private readonly TextArea cssTextBox;
 #pragma warning restore CS0649
-        private FontComboBox fntComboBox;
 
         public SettingsControl(Timetable tt, IInfo info)
         {
@@ -36,7 +35,7 @@ namespace FPLedit.Buchfahrplan.Forms
             templateComboBox.ItemTextBinding = Binding.Property<ITemplate, string>(t => t.TemplateName);
             templateComboBox.DataStore = chooser.AvailableTemplates;
 
-            fntComboBox = new FontComboBox(fontComboBox, exampleLabel);
+            var fntComboBox = new FontComboBox(fontComboBox, exampleLabel);
 
             attrs = BfplAttrs.GetAttrs(tt);
             if (attrs != null)

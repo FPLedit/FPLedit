@@ -17,7 +17,6 @@ namespace FPLedit.NonDefaultFiletypes
                 throw new Exception("Der Fahrplan ist bereits ein Netzwerk-Fahrplan");
 
             var clone = tt.Clone();
-            var old_version = clone.GetAttribute("version", "");
 
             var trainPaths = new Dictionary<Train, TrainPathData>();
             foreach (var orig in clone.Trains)

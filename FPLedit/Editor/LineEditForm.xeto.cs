@@ -19,8 +19,8 @@ namespace FPLedit.Editor
         private int route;
 
 #pragma warning disable CS0649
-        private GridView gridView;
-        private Button loadLineButton;
+        private readonly GridView gridView;
+        private readonly Button loadLineButton;
 #pragma warning restore CS0649
 
         private List<Station> stations;

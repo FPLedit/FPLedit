@@ -11,7 +11,7 @@ namespace FPLedit.DebugDump
     {
         private string filename;
 
-        public FileLogger(IInfo info, string fn)
+        public FileLogger(string fn)
         {
             filename = fn;
 

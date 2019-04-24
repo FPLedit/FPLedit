@@ -11,15 +11,15 @@ namespace FPLedit.Editor
     internal class TrainEditForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
-        private TextBox nameTextBox, commentTextBox;
-        private CheckBox mondayCheckBox, tuesdayCheckBox, wednesdayCheckBox, thursdayCheckBox, fridayCheckBox, saturdayCheckBox, sundayCheckBox;
-        private ComboBox locomotiveComboBox, mbrComboBox, lastComboBox;
-        private Button wShort, wSaShort, sShort, aShort, zShort, fillButton;
-        private Network.SingleTimetableEditControl editor;
-        private DropDown transitionDropDown;
-        private GroupBox transitionsGroupBox;
+        private readonly TextBox nameTextBox, commentTextBox;
+        private readonly CheckBox mondayCheckBox, tuesdayCheckBox, wednesdayCheckBox, thursdayCheckBox, fridayCheckBox, saturdayCheckBox, sundayCheckBox;
+        private readonly ComboBox locomotiveComboBox, mbrComboBox, lastComboBox;
+        private readonly Button wShort, wSaShort, sShort, aShort, zShort, fillButton;
+        private readonly Network.SingleTimetableEditControl editor;
+        private readonly DropDown transitionDropDown;
+        private readonly GroupBox transitionsGroupBox;
 #pragma warning restore CS0649
-        private NotEmptyValidator nameValidator;
+        private readonly NotEmptyValidator nameValidator;
 
         public Station Station { get; set; }
 

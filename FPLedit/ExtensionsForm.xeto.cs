@@ -15,9 +15,9 @@ namespace FPLedit
         private IRestartable restartable;
 
 #pragma warning disable CS0649
-        private ListBox enabledListBox, disabledListBox;
-        private Button deactivateButton, activateButton;
-        private Label infoLabel;
+        private readonly ListBox enabledListBox, disabledListBox;
+        private readonly Button deactivateButton, activateButton;
+        private readonly Label infoLabel;
 #pragma warning restore CS0649
 
         public ExtensionsForm(ExtensionManager mg, IRestartable restartable)

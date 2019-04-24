@@ -4,21 +4,18 @@ using FPLedit.Shared.UI;
 using FPLedit.Templating;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit
 {
     internal class TemplatesForm : Dialog
     {
 #pragma warning disable CS0649
-        private GridView gridView;
-        private Button extractButton, editButton, removeButton, enableButton, disableButton;
+        private readonly GridView gridView;
+        private readonly Button extractButton, editButton, removeButton, enableButton, disableButton;
 #pragma warning restore CS0649
 
         private TemplateManager manager;

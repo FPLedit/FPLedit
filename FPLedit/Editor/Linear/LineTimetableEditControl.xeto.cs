@@ -15,12 +15,12 @@ namespace FPLedit.Editor.Linear
         private const TrainDirection BOTTOM_DIRECTION = TrainDirection.ta;
 
 #pragma warning disable CS0649
-        private GridView topDataGridView, bottomDataGridView;
-        private Label topLineLabel, bottomLineLabel;
-        private Button internalToggle;
-        private ToggleButton trapeztafelToggle;
-        private Button zlmButton;
-        private TableLayout actionsLayout;
+        private readonly GridView topDataGridView, bottomDataGridView;
+        private readonly Label topLineLabel, bottomLineLabel;
+        private readonly Button internalToggle;
+        private readonly ToggleButton trapeztafelToggle;
+        private readonly Button zlmButton;
+        private readonly TableLayout actionsLayout;
 #pragma warning restore CS0649
 
         private GridView focused;

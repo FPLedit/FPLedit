@@ -12,10 +12,10 @@ namespace FPLedit.Editor
     internal class TrainSortDialog : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
-        private DropDown stationsComboBox;
-        private StackLayout sortSelectionStack;
+        private readonly DropDown stationsComboBox;
+        private readonly StackLayout sortSelectionStack;
 #pragma warning restore CS0649
-        private SelectionUI sortSelection;
+        private readonly SelectionUI sortSelection;
 
         private TrainDirection direction;
         private Timetable tt;

@@ -14,10 +14,10 @@ namespace FPLedit
     internal class InfoForm : Dialog
     {
 #pragma warning disable CS0649
-        private TextArea licenseTextArea;
-        private Label versionLabel;
-        private CheckBox updateCheckBox;
-        private Button checkButton;
+        private readonly TextArea licenseTextArea;
+        private readonly Label versionLabel;
+        private readonly CheckBox updateCheckBox;
+        private readonly Button checkButton;
 #pragma warning restore CS0649
 
         private UpdateManager mg;

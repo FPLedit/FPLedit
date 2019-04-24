@@ -17,8 +17,8 @@ namespace FPLedit.Bildfahrplan.Forms
         private DashStyleHelper ds;
 
 #pragma warning disable CS0649
-        private DropDown colorComboBox, widthComboBox, dashComboBox;
-        private CheckBox drawCheckBox;
+        private readonly DropDown colorComboBox, widthComboBox, dashComboBox;
+        private readonly CheckBox drawCheckBox;
 #pragma warning restore CS0649
 
         private TrainColorEditForm(ISettings settings)

@@ -12,7 +12,7 @@ namespace FPLedit.Editor
     internal class ZlmEditForm : FDialog<DialogResult>
     {
         #pragma warning disable CS0649
-        private TextBox zlmTextBox;
+        private readonly TextBox zlmTextBox;
         #pragma warning restore CS0649
 
         public string Zlm { get; set; }

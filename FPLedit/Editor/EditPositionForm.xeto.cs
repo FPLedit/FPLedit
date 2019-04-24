@@ -13,9 +13,9 @@ namespace FPLedit.Editor
     internal class EditPositionForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
-        private TextBox positionTextBox;
+        private readonly TextBox positionTextBox;
 #pragma warning restore CS0649
-        private NumberValidator positionValidator;
+        private readonly NumberValidator positionValidator;
 
         public float Position { get; private set; }
 

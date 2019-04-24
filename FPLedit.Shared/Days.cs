@@ -93,6 +93,14 @@ namespace FPLedit.Shared
         public override bool Equals(object obj)
             => obj is Days d && internalDays.SequenceEqual(d.internalDays);
 
+        public override int GetHashCode()
+        {
+            var ret = 0;
+            for (int i = 0; i < 7; i++)
+                ret |= (internalDays[i] ? 1 : 0) << i;
+            return ret;
+        }
+
         private bool EqualsString(string compare) => Parse(compare).Equals(this);
     }
 }

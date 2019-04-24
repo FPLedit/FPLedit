@@ -10,16 +10,15 @@ namespace FPLedit.Editor
 {
     internal class EditStationForm : FDialog<DialogResult>
     {
-        Timetable _parent;
         int route;
 
 #pragma warning disable CS0649
-        private TextBox nameTextBox, positionTextBox;
-        private StationRenderer stationRenderer;
+        private readonly TextBox nameTextBox, positionTextBox;
+        private readonly StationRenderer stationRenderer;
 #pragma warning restore CS0649
-        private NotEmptyValidator nameValidator;
-        private NumberValidator positionValidator;
-        private ValidatorCollection validators;
+        private readonly NotEmptyValidator nameValidator;
+        private readonly NumberValidator positionValidator;
+        private readonly ValidatorCollection validators;
 
         public Station Station { get; set; }
 
@@ -71,7 +70,6 @@ namespace FPLedit.Editor
         public EditStationForm(Timetable tt, int route) : this() // Neue Station mit Routenangabe
         {
             Title = "Neue Station erstellen";
-            _parent = tt;
             this.route = route;
             existingStation = false;
             Station = new Station(tt);

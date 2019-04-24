@@ -16,8 +16,8 @@ namespace FPLedit.Editor
     internal class DesignableForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
-        private TabControl tabControl;
-        private CheckBox expertCheckBox;
+        private readonly TabControl tabControl;
+        private readonly CheckBox expertCheckBox;
 #pragma warning restore CS0649
 
         private IInfo info;

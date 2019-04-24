@@ -12,17 +12,17 @@ namespace FPLedit.Bildfahrplan.Forms
     public partial class ConfigForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
-        private DropDown stationFontComboBox, timeColorComboBox, trainColorComboBox, stationColorComboBox, bgColorComboBox, timeFontComboBox, trainFontComboBox, trainWidthComboBox;
-        private DropDown stationFontSizeComboBox, timeFontSizeComboBox, trainFontSizeComboBox, stationWidthComboBox, hourTimeWidthComboBox, minuteTimeWidthComboBox;
-        private DropDown stationLinesDropDown;
-        private TextBox heightPerHourTextBox;
-        private TextBox startTimeTextBox;
-        private TextBox endTimeTextBox;
-        private CheckBox includeKilometreCheckBox, drawStationNamesCheckBox, stationVerticalCheckBox;
+        private readonly DropDown stationFontComboBox, timeColorComboBox, trainColorComboBox, stationColorComboBox, bgColorComboBox, timeFontComboBox, trainFontComboBox, trainWidthComboBox;
+        private readonly DropDown stationFontSizeComboBox, timeFontSizeComboBox, trainFontSizeComboBox, stationWidthComboBox, hourTimeWidthComboBox, minuteTimeWidthComboBox;
+        private readonly DropDown stationLinesDropDown;
+        private readonly TextBox heightPerHourTextBox;
+        private readonly TextBox startTimeTextBox;
+        private readonly TextBox endTimeTextBox;
+        private readonly CheckBox includeKilometreCheckBox, drawStationNamesCheckBox, stationVerticalCheckBox;
 #pragma warning restore CS0649
-        private NumberValidator heightPerHourValidator;
-        private TimeValidator startTimeValidator, endTimeValidator;
-        private ValidatorCollection validators;
+        private readonly NumberValidator heightPerHourValidator;
+        private readonly TimeValidator startTimeValidator, endTimeValidator;
+        private readonly ValidatorCollection validators;
 
         private TimetableStyle attrs;
 

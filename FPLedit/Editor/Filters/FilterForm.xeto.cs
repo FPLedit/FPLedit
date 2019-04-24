@@ -15,8 +15,8 @@ namespace FPLedit.Editor.Filters
         private IInfo info;
 
 #pragma warning disable CS0649
-        private GridView trainPattListView, stationPattListView;
-        private ListBox typeListBox;
+        private readonly GridView trainPattListView, stationPattListView;
+        private readonly ListBox typeListBox;
 #pragma warning restore CS0649
 
         public FilterForm(IInfo info)

@@ -44,7 +44,7 @@ namespace FPLedit.DebugDump
 
             var logPath = Path.Combine(basePath, "session.log");
             dynamic l = info.Logger;
-            l.Loggers.Add(new FileLogger(info, logPath));
+            l.Loggers.Add(new FileLogger(logPath));
 
             // Log Timetable changes
             info.FileStateChanged += (s, e) =>

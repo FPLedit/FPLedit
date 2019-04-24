@@ -12,12 +12,12 @@ namespace FPLedit.Editor.Filters
     internal class EditPatternForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
-        private TextBox searchTextBox;
-        private Label propertyLabel;
-        private StackLayout typeSelectionStack;
-        private CheckBox negateCheckBox;
+        private readonly TextBox searchTextBox;
+        private readonly Label propertyLabel;
+        private readonly StackLayout typeSelectionStack;
+        private readonly CheckBox negateCheckBox;
 #pragma warning restore CS0649
-        private SelectionUI typeSelection;
+        private readonly SelectionUI typeSelection;
 
         public FilterRule Pattern { get; set; }
 

@@ -5,20 +5,16 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net.Mail;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.CrashReporting
 {
     internal class CrashForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
-        private Label fnLabel;
-        private TextArea infoTextBox;
-        private GroupBox restoreGroupBox;
-        private Button norestoreButton;
+        private readonly Label fnLabel;
+        private readonly TextArea infoTextBox;
+        private readonly GroupBox restoreGroupBox;
+        private readonly Button norestoreButton;
 #pragma warning restore CS0649
 
         private string crash_fn;

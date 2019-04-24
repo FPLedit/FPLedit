@@ -15,8 +15,8 @@ namespace FPLedit.Editor.Linear
         private Timetable tt;
 
 #pragma warning disable CS0649
-        private GridView topGridView, bottomGridView;
-        private Label topLineLabel, bottomLineLabel;
+        private readonly GridView topGridView, bottomGridView;
+        private readonly Label topLineLabel, bottomLineLabel;
 #pragma warning restore CS0649
 
         private const TrainDirection TOP_DIRECTION = TrainDirection.ti;

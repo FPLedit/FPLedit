@@ -15,11 +15,11 @@ namespace FPLedit.Editor.Network
     internal class SingleTimetableEditControl : BaseTimetableEditControl
     {
 #pragma warning disable CS0649
-        private GridView dataGridView;
-        private Button internalToggle;
-        private ToggleButton trapeztafelToggle;
-        private Button zlmButton, shuntButton;
-        private TableLayout actionsLayout;
+        private readonly GridView dataGridView;
+        private readonly Button internalToggle;
+        private readonly ToggleButton trapeztafelToggle;
+        private readonly Button zlmButton, shuntButton;
+        private readonly TableLayout actionsLayout;
 #pragma warning restore CS0649
 
         private Timetable tt;
