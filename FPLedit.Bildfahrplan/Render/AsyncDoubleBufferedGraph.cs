@@ -22,7 +22,7 @@ namespace FPLedit.Bildfahrplan.Render
             panel = p;
         }
 
-        public void Render(Renderer renderer, Graphics g)
+        public void Render(Renderer renderer, Graphics g, bool drawHeader)
         {
             if (renderer == null)
                 return;
@@ -38,9 +38,9 @@ namespace FPLedit.Bildfahrplan.Render
                 generatingBuffer = true;
                 Task.Run(() =>
                 {
-                    var newBuffer = new Bitmap(panel.Width, renderer.GetHeight(), PixelFormat.Format32bppRgb);
+                    var newBuffer = new Bitmap(panel.Width, renderer.GetHeight(drawHeader), PixelFormat.Format32bppRgb);
                     using (var g2 = new Graphics(newBuffer))
-                        renderer.Draw(g2);
+                        renderer.Draw(g2, drawHeader);
                     lock (bufferLock)
                     {
                         buffer = newBuffer;

@@ -112,8 +112,7 @@ namespace FPLedit.Bildfahrplan
 
         private void ShowItem_Click(object sender, EventArgs e)
         {
-            var route = (info.Timetable.Type == TimetableType.Network) ? info.FileState.SelectedRoute : Timetable.LINEAR_ROUTE_ID;
-            new PreviewForm(info, route).ShowModal(info.RootForm);
+            new PreviewForm(info).Show();
         }
     }
 #endif

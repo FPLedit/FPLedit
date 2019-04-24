@@ -14,12 +14,12 @@ namespace FPLedit.Bildfahrplan.Render
         private Margins margin = new Margins(10, 20, 20, 20);
         private TimetableStyle attrs;
         private TimeSpan startTime;
-        private Dictionary<Station, float> stationOffsets;
+        private Dictionary<Station, StationX> stationOffsets;
         private Train[] trainCache;
 
         private DashStyleHelper ds = new DashStyleHelper();
 
-        public TrainRenderer(List<Station> stations, Timetable tt, Margins margin, TimeSpan startTime, Dictionary<Station, float> stationOffsets)
+        public TrainRenderer(List<Station> stations, Timetable tt, Margins margin, TimeSpan startTime, Dictionary<Station, StationX> stationOffsets)
         {
             this.stations = stations;
             this.tt = tt;
@@ -46,6 +46,30 @@ namespace FPLedit.Bildfahrplan.Render
             bool hadFirstArrival = false, hadLastDeparture = false, isFirst = true;
             var stas = dir ? Enumerable.Reverse(stations) : stations;
 
+            // Render helpers
+            float GetTimeY(TimeSpan time) => margin.Top + ((time - startTime).GetMinutes() * attrs.HeightPerHour / 60f);
+
+            PointF? GetGutterPoint(bool arrival, StationX sx, TimeSpan time)
+            {
+                if (time == default)
+                    return null;
+                var x = arrival ^ dir ? sx.Left : sx.Right;
+                return new PointF(margin.Left + x, GetTimeY(time));
+            }
+
+            PointF? GetInternalPoint(StationX sx, TimeSpan time, string track)
+            {
+                if (time == default || !sx.TrackOffsets.TryGetValue(track, out float x))
+                    return null;
+                return new PointF(margin.Left + x, GetTimeY(time));
+            }
+
+            void MaybeAddPoint(PointF? point)
+            {
+                if (point.HasValue)
+                    points.Add(point.Value);
+            }
+
             foreach (var sta in stas)
             {
                 if (!ardps.ContainsKey(sta))
@@ -55,28 +79,22 @@ namespace FPLedit.Bildfahrplan.Render
                 if (!ardp.HasMinOneTimeSet)
                     continue;
 
-                var tmpPoints = new List<PointF>(4);
-                float x = margin.Left + stationOffsets[sta];
+                MaybeAddPoint(GetGutterPoint(true, stationOffsets[sta], ardp.Arrival));
+                MaybeAddPoint(GetInternalPoint(stationOffsets[sta], ardp.Arrival, ardp.ArrivalTrack));
 
-                var times = new[] { ardp.Departure, ardp.Arrival }.OrderBy(t => t);
-                foreach (var time in times)
+                foreach (var shunt in ardp.ShuntMoves)
                 {
-                    if (time == default)
-                        continue;
-                    TimeSpan timeOffset = time - startTime;
-                    float y = margin.Top + timeOffset.GetMinutes() * attrs.HeightPerHour / 60f;
-                    tmpPoints.Add(new PointF(x, y));
+                    MaybeAddPoint(GetInternalPoint(stationOffsets[sta], shunt.Time, shunt.SourceTrack));
+                    MaybeAddPoint(GetInternalPoint(stationOffsets[sta], shunt.Time, shunt.TargetTrack));
                 }
+
+                MaybeAddPoint(GetInternalPoint(stationOffsets[sta], ardp.Departure, ardp.DepartureTrack));
+                MaybeAddPoint(GetGutterPoint(false, stationOffsets[sta], ardp.Departure));
 
                 hadLastDeparture = ardp.Departure != default;
                 if (isFirst)
                     hadFirstArrival = ardp.Arrival != default;
                 isFirst = false;
-
-                if (tmpPoints.Count == 2 && tmpPoints[0] != tmpPoints[1] && attrs.StationLines != StationLineStyle.None)
-                    tmpPoints.InsertRange(1, tmpPoints);
-
-                points.AddRange(tmpPoints);
             }
 
             // Halbe Linien bei Abfahrten / Ankünften ohne Gegenstelle
@@ -95,14 +113,13 @@ namespace FPLedit.Bildfahrplan.Render
 
                 if (lastStaOfFirst == firstStaOfNext)
                 {
-                    var offset = transition.GetArrDep(firstStaOfNext).Departure - train.GetArrDep(lastStaOfFirst).Arrival;
-                    points.Add(points.Last());
-                    points.Add(points.Last() + new Size(0, (int)(offset.TotalHours * attrs.HeightPerHour)));
+                    var departure = transition.GetArrDep(firstStaOfNext).Departure;
+                    points.Add(new PointF(points.Last().X, GetTimeY(departure)));
                 }
             }
 
             var p = new GraphicsPath();
-            for (int i = 0; i < points.Count; i += 2)
+            for (int i = 0; i < points.Count; i += 1)
             {
                 if (points.Count <= i + 1)
                     continue;
@@ -114,6 +131,8 @@ namespace FPLedit.Bildfahrplan.Render
                 var bezierOffset = new SizeF(bezierFactor * 14, (points[i + 1].Y - points[i].Y) / -4.0f);
                 var bezierOffsetT = new SizeF(bezierOffset.Width, -bezierOffset.Height);
 
+                //TODO: Respect stationlinestyle == none
+                //TODO: Fix bezier orientation (+full or half wave) for shunts
                 if (!isStationLine || attrs.StationLines != StationLineStyle.Cubic)
                     p.AddLine(points[i], points[i + 1]);
                 else if (!isTransition)
@@ -122,8 +141,9 @@ namespace FPLedit.Bildfahrplan.Render
                     p.AddBezier(points[i], points[i] - bezierOffset, points[i + 1] - bezierOffsetT, points[i + 1]);
 
 
-                if (points[i].X == points[i + 1].X)
+                if (points[i].X == points[i + 1].X || points[i].Y == points[i + 1].Y)
                     continue;
+                // Zugnummern zeichnen
                 var size = g.MeasureString((Font)attrs.TrainFont, train.TName);
                 float[] ys = new[] { points[i].Y, points[i + 1].Y };
                 float[] xs = new[] { points[i].X, points[i + 1].X };

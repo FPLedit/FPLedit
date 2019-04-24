@@ -38,11 +38,11 @@ namespace FPLedit.Bildfahrplan.Render
             var stations = tt.GetRoute(route).GetOrderedStations();
 
             if (!margin.Calced)
-                margin = CalcMargins(g, margin, stations, startTime, endTime);
+                margin = CalcMargins(g, margin, stations, startTime, endTime, drawHeader);
             margin.Calced = true;
 
             if (width == 0) width = g.ClipBounds.Width;
-            if (height == 0) height = GetHeight(startTime, endTime);
+            if (height == 0) height = GetHeight(startTime, endTime, drawHeader);
 
             // Zeitaufteilung
             var timeRenderer = new TimeRenderer(attrs, this);
@@ -50,7 +50,7 @@ namespace FPLedit.Bildfahrplan.Render
 
             // Stationenaufteilung
             var headerRenderer = new HeaderRenderer(stations, attrs, route);
-            var stationOffsets = headerRenderer.Render(g, margin, width, height);
+            var stationOffsets = headerRenderer.Render(g, margin, width, height, drawHeader);
 
             // Züge
             g.AntiAlias = true;
@@ -77,16 +77,16 @@ namespace FPLedit.Bildfahrplan.Render
 
             var stations = tt.GetRoute(route).GetOrderedStations();
 
-            var margin = CalcMargins(g, new Margins(10, 20, 20, 0), stations, attrs.StartTime, attrs.EndTime);
+            var margin = CalcMargins(g, new Margins(11, 20, 20, 0), stations, attrs.StartTime, attrs.EndTime, true);
 
-            var height = GetHeight(default, default);
+            var height = GetHeight(default, default, true);
 
             // Stationenaufteilung
             var headerRenderer = new HeaderRenderer(stations, attrs, route);
-            headerRenderer.Render(g, margin, width, height);
+            headerRenderer.Render(g, margin, width, height, true);
         }
 
-        internal Margins CalcMargins(Graphics g, Margins orig, IEnumerable<Station> stations, TimeSpan startTime, TimeSpan endTime)
+        internal Margins CalcMargins(Graphics g, Margins orig, IEnumerable<Station> stations, TimeSpan startTime, TimeSpan endTime, bool drawHeader)
         {
             if (orig.Calced)
                 return orig;
@@ -99,6 +99,7 @@ namespace FPLedit.Bildfahrplan.Render
             else
                 sMax = g.MeasureString((Font)attrs.StationFont, "M").Height;
             result.Top = attrs.DrawHeader ? sMax + result.Top : result.Top;
+            result.Top = drawHeader ? result.Top : 5;
 
             // MarginLeft berechnen
             List<float> tsizes = new List<float>();
@@ -129,18 +130,18 @@ namespace FPLedit.Bildfahrplan.Render
             return lines;
         }
 
-        public int GetHeight(TimeSpan start, TimeSpan end)
+        public int GetHeight(TimeSpan start, TimeSpan end, bool drawHeader)
         {
             var stations = tt.GetRoute(route).GetOrderedStations();
             using (var image = new Bitmap(new Size(1, 1), PixelFormat.Format24bppRgb))
             using (var g = new Graphics(image))
             {
-                var m = CalcMargins(g, margin, stations, start, end);
+                var m = CalcMargins(g, margin, stations, start, end, drawHeader);
                 return (int)(m.Top + m.Bottom + (end - start).GetMinutes() * attrs.HeightPerHour / 60f);
             }
         }
 
-        public int GetHeight()
-            => GetHeight(attrs.StartTime, attrs.EndTime);
+        public int GetHeight(bool drawHeader)
+            => GetHeight(attrs.StartTime, attrs.EndTime, drawHeader);
     }
 }

@@ -13,21 +13,20 @@ namespace FPLedit.Bildfahrplan
     [Plugin("Dynamische Bildfahrplan-Vorschau", Vi.PFrom, Vi.PUpTo, Author = "Manuel Huber")]
     public class DynamicPlugin : IPlugin
     {
-        private IInfo info;
-
         public void Init(IInfo info)
         {
-            this.info = info;
             Style.info = info;
 
-            info.Register<IPreviewable>(new DynamicPreview());
+            var dpf = new DynamicPreview();
+            info.Register<IPreviewable>(dpf);
+            info.AppClosing += (s, e) => dpf.Close();
         }
     }
 
     public class DynamicPreview : IPreviewable
     {
         private bool opened = false;
-        private DynamicPreviewForm dpf;
+        private PreviewForm dpf;
 
         public string DisplayName => "Dynamischer Bildfahrplan";
 
@@ -36,7 +35,7 @@ namespace FPLedit.Bildfahrplan
             if (!opened)
             {
                 var route = (info.Timetable.Type == TimetableType.Network) ? info.FileState.SelectedRoute : Timetable.LINEAR_ROUTE_ID;
-                dpf = new DynamicPreviewForm(info);
+                dpf = new PreviewForm(info);
                 dpf.Closed += (s, e) => opened = false;
                 dpf.Show();
                 opened = true;
@@ -44,5 +43,7 @@ namespace FPLedit.Bildfahrplan
             else
                 dpf.Focus();
         }
+
+        public void Close() => dpf?.Close();
     }
 }
