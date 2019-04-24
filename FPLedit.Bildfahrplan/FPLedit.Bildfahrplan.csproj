@@ -63,9 +63,6 @@
     <Compile Include="Forms\DynamicPreviewForm.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Forms\PreviewForm.cs">
-      <SubType>Eto.Forms</SubType>
-    </Compile>
     <Compile Include="Forms\StationStyleForm.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>

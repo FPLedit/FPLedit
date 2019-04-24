@@ -78,6 +78,10 @@ namespace FPLedit.Bildfahrplan.Forms
             };
             nStack.Items.Add(splitCheckBox);
 
+            var dtc = new DateControl(info);
+            dtc.ValueChanged += (s, e) => ResetRenderer();
+            stackLayout.Rows.Add(dtc);
+
             hpanel = new Drawable();
             hpanel.Paint += Hpanel_Paint;
             stackLayout.Rows.Add(hpanel);
