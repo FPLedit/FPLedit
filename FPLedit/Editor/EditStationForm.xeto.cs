@@ -164,13 +164,16 @@ namespace FPLedit.Editor
             }
 
             // Trackdaten aktualisieren
+            if (!stationRenderer.CommitNameEdit())
+                return;
+
             Station.DefaultTrackLeft.SetValue(route, trackStation.DefaultTrackLeft.GetValue(route));
             Station.DefaultTrackRight.SetValue(route, trackStation.DefaultTrackRight.GetValue(route));
             Station.Tracks.Clear();
             foreach (var track in trackStation.Tracks)
-            {
                 Station.Tracks.Add(track);
-            }
+            foreach (var rename in stationRenderer.TrackRenames)
+                Station._parent.InternalRenameAllTrainTracksAtStation(Station, rename.Key, rename.Value);
 
             Close(DialogResult.Ok);
         }

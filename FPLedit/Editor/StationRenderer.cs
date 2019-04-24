@@ -20,6 +20,9 @@ namespace FPLedit.Editor
         private List<RenderBtn<Track>> buttons = new List<RenderBtn<Track>>();
         private PixelLayout layout;
 
+        private TextBox editingTextBox;
+        private RenderBtn<Track> editingButton;
+
         private Station _station;
         public Station Station
         {
@@ -41,6 +44,8 @@ namespace FPLedit.Editor
                 this.Invalidate();
             }
         }
+
+        public Dictionary<string, string> TrackRenames { get; } = new Dictionary<string, string>();
 
         public StationRenderer()
         {
@@ -194,6 +199,9 @@ namespace FPLedit.Editor
 
         private void MoveDefaultTrack(RouteValueCollection<string> property, Track current, int offset)
         {
+            if (!CommitNameEdit())
+                return;
+
             var idx = _station.Tracks.IndexOf(current) + offset;
             if (idx < 0 || idx > _station.Tracks.Count - 1)
                 return;
@@ -204,6 +212,9 @@ namespace FPLedit.Editor
 
         private void AddBtn_Click(object sender, EventArgs e)
         {
+            if (!CommitNameEdit())
+                return;
+
             var count = _station.Tracks.Count(t => t.Name.StartsWith("Neues Gleis "));
             var track = new Track(_station._parent);
             track.Name = "Neues Gleis " + (count + 1);
@@ -220,37 +231,66 @@ namespace FPLedit.Editor
 
         private void NameBtn_Click(object sender, EventArgs e)
         {
-            var btn = (RenderBtn<Track>)sender;
-            var txt = new TextBox() { Width = 30 + btn.Size.Width, Text = btn.Text, Font = font };
-            layout.Add(txt, btn.Location);
-            txt.KeyDown += (s, args) =>
-             {
-                 if (args.Key == Keys.Enter)
-                 {
-                     args.Handled = true;
+            if (!CommitNameEdit())
+                return;
 
-                     var name = txt.Text;
+            editingButton = (RenderBtn<Track>)sender;
+            editingTextBox = new TextBox() { Width = 30 + editingButton.Size.Width, Text = editingButton.Text, Font = font };
+            layout.Add(editingTextBox, editingButton.Location - new Size(25, 0));
+            editingTextBox.KeyDown += (s, args) =>
+            {
+                if (args.Key == Keys.Enter)
+                {
+                    args.Handled = true;
+                    CommitNameEdit();
+                }
+            };
+        }
 
-                     var duplicate = _station.Tracks.Any(t => t != btn.Tag && t.Name == name);
-                     if (duplicate)
-                     {
-                         MessageBox.Show($"Ein Gleis mit der Bezeichnung {name} ist bereits vorhanden. Bitte wählen Sie einen anderen Namen!", MessageBoxType.Error);
-                         return;
-                     }
+        public bool CommitNameEdit()
+        {
+            if (editingTextBox == null)
+                return true;
 
-                     _station.DefaultTrackLeft.ReplaceAllValues(btn.Tag.Name, name);
-                     _station.DefaultTrackRight.ReplaceAllValues(btn.Tag.Name, name);
+            var name = editingTextBox.Text;
+            var oldName = editingButton.Tag.Name;
 
-                     btn.Tag.Name = name;
-                     Invalidate();
+            var duplicate = _station.Tracks.Any(t => t != editingButton.Tag && t.Name == name);
+            if (duplicate)
+            {
+                MessageBox.Show($"Ein Gleis mit der Bezeichnung {name} ist bereits vorhanden. Bitte wählen Sie einen anderen Namen!", MessageBoxType.Error);
+                return false;
+            }
 
-                     layout.Remove(txt);
-                 }
-             };
+            // Streckengleise umbenennen
+            _station.DefaultTrackLeft.ReplaceAllValues(editingButton.Tag.Name, name);
+            _station.DefaultTrackRight.ReplaceAllValues(editingButton.Tag.Name, name);
+
+            // Ankunfts- und Abfhartsgleise zum umbenennen stagen
+            if (TrackRenames.ContainsKey(name))
+                TrackRenames.Remove(name);
+            else if (TrackRenames.ContainsValue(oldName))
+            {
+                var k = TrackRenames.First(kvp => kvp.Value == oldName).Key;
+                TrackRenames[k] = name;
+            }
+            else if (!TrackRenames.ContainsKey(name) && !TrackRenames.ContainsValue(name))
+                TrackRenames.Add(oldName, name);
+
+            editingButton.Tag.Name = name;
+            Invalidate();
+
+            layout.Remove(editingTextBox);
+            editingTextBox = null;
+            editingButton = null;
+            return true;
         }
 
         private void DownBtn_Click(object sender, EventArgs e)
         {
+            if (!CommitNameEdit())
+                return;
+
             var btn = (RenderBtn<Track>)sender;
             var idx = _station.Tracks.IndexOf(btn.Tag);
             if (idx == _station.Tracks.Count - 1)
@@ -261,6 +301,9 @@ namespace FPLedit.Editor
 
         private void UpBtn_Click(object sender, EventArgs e)
         {
+            if (!CommitNameEdit())
+                return;
+
             var btn = (RenderBtn<Track>)sender;
             var idx = _station.Tracks.IndexOf(btn.Tag);
             if (idx == 0)
@@ -271,6 +314,9 @@ namespace FPLedit.Editor
 
         private void DeleteBtn_Click(object sender, EventArgs e)
         {
+            if (!CommitNameEdit())
+                return;
+
             var btn = (RenderBtn<Track>)sender;
             _station.Tracks.Remove(btn.Tag);
 
@@ -293,6 +339,9 @@ namespace FPLedit.Editor
         private bool lastDoubleClick;
         protected override void OnMouseDoubleClick(MouseEventArgs e)
         {
+            if (!CommitNameEdit())
+                return;
+
             foreach (var args in buttons.ToArray())
                 args.HandleDoubleClick(new Point(e.Location), Point.Empty);
 
@@ -302,6 +351,9 @@ namespace FPLedit.Editor
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
+            if (!CommitNameEdit())
+                return;
+
             lastClick = DateTime.Now.Ticks;
 
             if (!lastDoubleClick)

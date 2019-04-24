@@ -276,6 +276,20 @@ namespace FPLedit.Shared
             tElm.Children.Remove(tra.XMLEntity);
         }
 
+        public void InternalRenameAllTrainTracksAtStation(Station sta, string oldTrackName, string newTrackName)
+        {
+            foreach (var tra in Trains)
+            {
+                var ardps = tra.GetArrDeps();
+                if (!ardps.TryGetValue(sta, out var ardp))
+                    return;
+                if (ardp.ArrivalTrack == oldTrackName)
+                    ardp.ArrivalTrack = newTrackName;
+                if (ardp.DepartureTrack == oldTrackName)
+                    ardp.DepartureTrack = newTrackName;
+            }
+        }
+
         #endregion
 
         #region Hilfsmethoden für Routen
