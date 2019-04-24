@@ -83,6 +83,7 @@ namespace FPLedit
 
         public event EventHandler<FileStateChangedEventArgs> FileStateChanged;
         public event EventHandler ExtensionsLoaded;
+        public event EventHandler AppClosing;
         public event EventHandler FileOpened;
 
         #endregion
@@ -503,6 +504,8 @@ namespace FPLedit
 
                 ClearTemp();
             }
+
+            AppClosing?.Invoke(this, null);
 
             base.OnClosing(e);
         }
