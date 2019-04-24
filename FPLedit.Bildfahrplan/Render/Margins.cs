@@ -15,12 +15,15 @@ namespace FPLedit.Bildfahrplan.Render
 
         public float Bottom { get; set; }
 
+        public bool Calced { get; set; }
+
         public Margins(float left, float top, float right, float bottom)
         {
             Left = left;
             Top = top;
             Right = right;
             Bottom = bottom;
+            Calced = false;
         }
     }
 }

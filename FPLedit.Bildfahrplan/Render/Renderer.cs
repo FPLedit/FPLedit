@@ -16,7 +16,6 @@ namespace FPLedit.Bildfahrplan.Render
 
         internal const string TIME_FORMAT = @"hh\:mm";
 
-        private bool marginsCalced = false;
         private Margins margin = new Margins(10, 20, 20, 20);
         public float width = 0, height = 0;
 
@@ -29,18 +28,18 @@ namespace FPLedit.Bildfahrplan.Render
             attrs = new TimetableStyle(tt);
         }
 
-        public void Draw(Graphics g)
-            => Draw(g, attrs.StartTime, attrs.EndTime);
+        public void Draw(Graphics g, bool drawHeader)
+            => Draw(g, attrs.StartTime, attrs.EndTime, drawHeader);
 
-        public void Draw(Graphics g, TimeSpan startTime, TimeSpan endTime, int maxHeight = -1)
+        public void Draw(Graphics g, TimeSpan startTime, TimeSpan endTime, bool drawHeader)
         {
             g.Clear((Color)attrs.BgColor);
 
             var stations = tt.GetRoute(route).GetOrderedStations();
 
-            if (!marginsCalced)
+            if (!margin.Calced)
                 margin = CalcMargins(g, margin, stations, startTime, endTime);
-            marginsCalced = true;
+            margin.Calced = true;
 
             if (width == 0) width = g.ClipBounds.Width;
             if (height == 0) height = GetHeight(startTime, endTime);
@@ -72,9 +71,24 @@ namespace FPLedit.Bildfahrplan.Render
             g.AntiAlias = false;
         }
 
-        private Margins CalcMargins(Graphics g, Margins orig, IEnumerable<Station> stations, TimeSpan startTime, TimeSpan endTime)
+        public void DrawHeader(Graphics g, int width)
         {
-            if (marginsCalced)
+            g.Clear((Color)attrs.BgColor);
+
+            var stations = tt.GetRoute(route).GetOrderedStations();
+
+            var margin = CalcMargins(g, new Margins(10, 20, 20, 0), stations, attrs.StartTime, attrs.EndTime);
+
+            var height = GetHeight(default, default);
+
+            // Stationenaufteilung
+            var headerRenderer = new HeaderRenderer(stations, attrs, route);
+            headerRenderer.Render(g, margin, width, height);
+        }
+
+        internal Margins CalcMargins(Graphics g, Margins orig, IEnumerable<Station> stations, TimeSpan startTime, TimeSpan endTime)
+        {
+            if (orig.Calced)
                 return orig;
 
             var result = orig;
