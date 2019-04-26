@@ -59,13 +59,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FPLedit.Shared.UI\FPLedit.Shared.UI.csproj">
+      <Project>{5a1a083a-1308-488a-8a6b-ed8c1936b7c4}</Project>
+      <Name>FPLedit.Shared.UI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj">
       <Project>{CE38D005-22B2-4B15-80BA-614F038240FD}</Project>
       <Name>FPLedit.Shared</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\FPLedit.UI\FPLedit.Shared.UI.csproj">
-      <Project>{5a1a083a-1308-488a-8a6b-ed8c1936b7c4}</Project>
-      <Name>FPLedit.Shared.UI</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
