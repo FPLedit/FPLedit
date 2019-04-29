@@ -94,10 +94,15 @@ namespace FPLedit.Bildfahrplan.Render
             var result = orig;
             // MarginTop berechnen
             float sMax = 0f;
+            var emSize = g.MeasureString((Font)attrs.StationFont, "M").Height;
             if (attrs.StationVertical)
                 sMax = stations.Max(sta => g.MeasureString((Font)attrs.StationFont, sta.ToString(attrs.DisplayKilometre, route)).Width);
             else
-                sMax = g.MeasureString((Font)attrs.StationFont, "M").Height;
+                sMax = emSize;
+
+            if (attrs.MultiTrack)
+                sMax += emSize;
+
             result.Top = attrs.DrawHeader ? sMax + result.Top : result.Top;
             result.Top = drawHeader ? result.Top : 5;
 

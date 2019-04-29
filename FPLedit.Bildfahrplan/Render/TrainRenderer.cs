@@ -125,21 +125,36 @@ namespace FPLedit.Bildfahrplan.Render
                     continue;
 
                 var isStationLine = (int)points[i].X == (int)points[i + 1].X;
-                var isTransition = isStationLine && points.Count == i + 2;
-                float bezierFactor = !dir ? -1 : 1; // !dir --> TrainDirection.ti
-                if (isTransition) bezierFactor *= 0.5f;
-                var bezierOffset = new SizeF(bezierFactor * 14, (points[i + 1].Y - points[i].Y) / -4.0f);
-                var bezierOffsetT = new SizeF(bezierOffset.Width, -bezierOffset.Height);
+                if (isStationLine)
+                {
+                    var preX = i > 0 ? points[i - 1].X : 0;
+                    var postX = i < points.Count - 2 ? points[i + 2].X : 0;
+                    var x = points[i].X;
+                    var isTransition = isStationLine && (points.Count == i + 2 || Math.Sign(preX - x) == Math.Sign(postX - x));
 
-                //TODO: Respect stationlinestyle == none
-                //TODO: Fix bezier orientation (+full or half wave) for shunts
-                if (!isStationLine || attrs.StationLines != StationLineStyle.Cubic)
-                    p.AddLine(points[i], points[i + 1]);
-                else if (!isTransition)
-                    p.AddBezier(points[i], points[i] - bezierOffset, points[i + 1] + bezierOffset, points[i + 1]);
+                    float bezierFactor = !isTransition ?
+                        ((preX < postX) ? -1 : 1) : // preX < postX --> TrainDirection.ti
+                        Math.Sign(preX - x); // Bei Transitions
+                    if (isTransition) bezierFactor *= 0.5f;
+                    var bezierOffset = new SizeF(bezierFactor * 14, (points[i + 1].Y - points[i].Y) / -4.0f);
+                    var bezierOffsetT = new SizeF(bezierOffset.Width, -bezierOffset.Height);
+
+                    switch (attrs.StationLines)
+                    {
+                        case StationLineStyle.None:
+                            p.MoveTo(points[i + 1]);
+                            break;
+                        case StationLineStyle.Normal:
+                            p.AddLine(points[i], points[i + 1]);
+                            break;
+                        case StationLineStyle.Cubic:
+                            var control2 = points[i + 1] + (!isTransition ? bezierOffset : -bezierOffsetT);
+                            p.AddBezier(points[i], points[i] - bezierOffset, control2, points[i + 1]);
+                            break;
+                    }
+                }
                 else
-                    p.AddBezier(points[i], points[i] - bezierOffset, points[i + 1] - bezierOffsetT, points[i + 1]);
-
+                    p.AddLine(points[i], points[i + 1]); // Normale Zuglinie
 
                 if (points[i].X == points[i + 1].X || points[i].Y == points[i + 1].Y)
                     continue;
@@ -147,12 +162,12 @@ namespace FPLedit.Bildfahrplan.Render
                 var size = g.MeasureString((Font)attrs.TrainFont, train.TName);
                 float[] ys = new[] { points[i].Y, points[i + 1].Y };
                 float[] xs = new[] { points[i].X, points[i + 1].X };
-                float y = ys.Min() + (ys.Max() - ys.Min()) / 2 - (size.Height / 2);
-                float x = xs.Min() + (xs.Max() - xs.Min()) / 2;
+                float ty = ys.Min() + (ys.Max() - ys.Min()) / 2 - (size.Height / 2);
+                float tx = xs.Min() + (xs.Max() - xs.Min()) / 2;
 
                 float angle = CalcAngle(ys, xs, train);
                 g.SaveTransform();
-                g.TranslateTransform(x, y);
+                g.TranslateTransform(tx, ty);
                 g.RotateTransform(-angle);
                 g.DrawText((Font)attrs.TrainFont, brush, -(size.Width / 2), -(size.Height / 2), train.TName);
                 g.RestoreTransform();

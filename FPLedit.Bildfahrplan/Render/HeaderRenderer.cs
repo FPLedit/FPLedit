@@ -34,6 +34,8 @@ namespace FPLedit.Bildfahrplan.Render
             var stasWithTracks = stations.Count(s => s.Tracks.Any());
             var allTrackWidth = (stasWithTracks + allTrackCount) * StationX.IndividualTrackOffset;
 
+            var emSize = g.MeasureString((Font)attrs.StationFont, "M").Width;
+
             StationX lastPos = null;
             foreach (var sta in stations)
             {
@@ -66,8 +68,6 @@ namespace FPLedit.Bildfahrplan.Render
                 pen.DashStyle = ds.ParseDashstyle(style.CalcedLineStyle);
                 var brush = new SolidBrush((Color)style.CalcedColor);
 
-                var trackPen = new Pen(Colors.Red, style.CalcedWidth);
-
                 if (!attrs.MultiTrack)
                 {
                     // Linie (Single-Track-Mode)
@@ -78,7 +78,7 @@ namespace FPLedit.Bildfahrplan.Render
                     // Linie (Multi-Track-Mode)
                     g.DrawLine(pen, margin.Left + posX.Left, margin.Top - 5, margin.Left + posX.Left, height - margin.Bottom);
                     foreach (var trackX in posX.TrackOffsets)
-                        g.DrawLine(trackPen, margin.Left + trackX.Value, margin.Top - 5, margin.Left + trackX.Value, height - margin.Bottom);
+                        g.DrawLine(pen, margin.Left + trackX.Value, margin.Top - 5, margin.Left + trackX.Value, height - margin.Bottom);
                     g.DrawLine(pen, margin.Left + posX.Right, margin.Top - 5, margin.Left + posX.Right, height - margin.Bottom);
                 }
 
@@ -91,16 +91,27 @@ namespace FPLedit.Bildfahrplan.Render
                     var display = sta.ToString(attrs.DisplayKilometre, route);
                     var size = g.MeasureString((Font)attrs.StationFont, display);
 
+                    var addOffset = attrs.MultiTrack ? emSize + 3 : 0;
+
                     if (attrs.StationVertical)
                     {
                         g.SaveTransform();
-                        g.TranslateTransform(margin.Left + posX.Center + (size.Height / 2), margin.Top - 8 - size.Width);
+                        g.TranslateTransform(margin.Left + posX.Center + (size.Height / 2), margin.Top - 8 - addOffset - size.Width);
                         g.RotateTransform(90);
                         g.DrawText((Font)attrs.StationFont, brush, 0, 0, display);
                         g.RestoreTransform();
                     }
                     else
-                        g.DrawText((Font)attrs.StationFont, brush, margin.Left + posX.Center - (size.Width / 2), margin.Top - size.Height - 5, display);
+                        g.DrawText((Font)attrs.StationFont, brush, margin.Left + posX.Center - (size.Width / 2), margin.Top - size.Height - addOffset - 5, display);
+
+                    if (attrs.MultiTrack)
+                    {
+                        foreach (var track in posX.TrackOffsets)
+                        {
+                            var trackSize = g.MeasureString((Font)attrs.StationFont, track.Key);
+                            g.DrawText((Font)attrs.StationFont, brush, margin.Left + track.Value - (trackSize.Width / 2), margin.Top - trackSize.Height - 5, track.Key);
+                        }
+                    }
                 }
 
             }
