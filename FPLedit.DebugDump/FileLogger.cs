@@ -9,7 +9,7 @@ namespace FPLedit.DebugDump
 {
     public class FileLogger : ILog
     {
-        private string filename;
+        private readonly string filename;
 
         public FileLogger(string fn)
         {

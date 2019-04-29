@@ -13,14 +13,14 @@ namespace FPLedit.Buchfahrplan.Forms
     internal class VelocityForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
-        readonly private GridView gridView;
-        readonly private Button deleteButton;
+        private readonly GridView gridView;
+        private readonly Button deleteButton;
 #pragma warning restore CS0649
 
-        private IInfo info;
-        private Route route;
-        private Timetable tt;
-        private BfplAttrs attrs;
+        private readonly IInfo info;
+        private readonly Route route;
+        private readonly Timetable tt;
+        private readonly BfplAttrs attrs;
 
         private VelocityForm()
         {

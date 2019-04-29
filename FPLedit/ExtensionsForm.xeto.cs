@@ -11,8 +11,8 @@ namespace FPLedit
 {
     internal class ExtensionsForm : Dialog
     {
-        private ExtensionManager manager;
-        private IRestartable restartable;
+        private readonly ExtensionManager manager;
+        private readonly IRestartable restartable;
 
 #pragma warning disable CS0649
         private readonly ListBox enabledListBox, disabledListBox;

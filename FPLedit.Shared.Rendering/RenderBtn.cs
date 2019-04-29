@@ -9,7 +9,7 @@ namespace FPLedit.Shared.Rendering
 {
     public class RenderBtn<T>
     {
-        private Font font = new Font(FontFamilies.SansFamilyName, 8);
+        private readonly Font font = new Font(FontFamilies.SansFamilyName, 8);
 
         public T Tag { get; set; }
 

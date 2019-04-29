@@ -13,7 +13,7 @@ namespace FPLedit.jTrainGraphStarter
 {
     internal class SettingsForm : FDialog<DialogResult>
     {
-        private ISettings settings;
+        private readonly ISettings settings;
 
 #pragma warning disable CS0649
         private readonly TextBox javaPathTextBox, jtgPathTextBox;

@@ -35,8 +35,10 @@ namespace FPLedit.Shared
                 throw new Exception("Lineare Fahrpläne haben keine Laufwege!");
             foreach (var sta in path)
             {
-                var ardp = new ArrDep(_parent);
-                ardp.StationId = sta.Id;
+                var ardp = new ArrDep(_parent)
+                {
+                    StationId = sta.Id
+                };
                 Children.Add(ardp.XMLEntity);
             }
         }

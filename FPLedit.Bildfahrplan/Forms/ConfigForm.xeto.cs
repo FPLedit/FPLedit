@@ -24,7 +24,7 @@ namespace FPLedit.Bildfahrplan.Forms
         private readonly TimeValidator startTimeValidator, endTimeValidator;
         private readonly ValidatorCollection validators;
 
-        private TimetableStyle attrs;
+        private readonly TimetableStyle attrs;
 
         public ConfigForm(Timetable tt, ISettings settings)
         {

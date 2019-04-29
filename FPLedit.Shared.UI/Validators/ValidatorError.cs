@@ -8,7 +8,7 @@ namespace FPLedit.Shared.UI.Validators
 {
     public class ValidatorCollection
     {
-        private BaseValidator[] validators;
+        private readonly BaseValidator[] validators;
 
         public ValidatorCollection(params BaseValidator[] validators)
         {

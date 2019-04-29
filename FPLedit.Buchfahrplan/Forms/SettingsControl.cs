@@ -13,9 +13,9 @@ namespace FPLedit.Buchfahrplan.Forms
 {
     public partial class SettingsControl : Panel, ISaveHandler, IExpertHandler
     {
-        private ISettings settings;
-        private BfplAttrs attrs;
-        private BfplTemplateChooser chooser;
+        private readonly ISettings settings;
+        private readonly BfplAttrs attrs;
+        private readonly BfplTemplateChooser chooser;
 
 #pragma warning disable CS0649
         private readonly DropDown templateComboBox;

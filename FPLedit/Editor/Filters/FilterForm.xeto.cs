@@ -10,9 +10,10 @@ namespace FPLedit.Editor.Filters
 {
     internal class FilterForm : FDialog<DialogResult>
     {
+        private readonly FilterableContainer[] fcontainers;
+        private readonly IInfo info;
+
         private List<FilterRule> curTrainRules, curStationRules;
-        private FilterableContainer[] fcontainers;
-        private IInfo info;
 
 #pragma warning disable CS0649
         private readonly GridView trainPattListView, stationPattListView;

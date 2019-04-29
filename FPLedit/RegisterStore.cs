@@ -7,7 +7,7 @@ namespace FPLedit
 {
     public class RegisterStore
     {
-        private Dictionary<Type, List<object>> store;
+        private readonly Dictionary<Type, List<object>> store;
 
         public RegisterStore()
         {

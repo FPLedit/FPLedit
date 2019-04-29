@@ -13,7 +13,7 @@ namespace FPLedit.Editor
 {
     internal abstract class BaseTimetableEditControl : Panel
     {
-        private TimeNormalizer normalizer = new TimeNormalizer();
+        private readonly TimeNormalizer normalizer = new TimeNormalizer();
 
         private ToggleButton trapeztafelToggle;
 

@@ -11,7 +11,7 @@ namespace FPLedit.Shared
     [Serializable]
     public class ObservableChildrenCollection<T> : ObservableCollection<T>, IChildrenCollection<T> where T : Entity
     {
-        private Entity parentEntity;
+        private readonly Entity parentEntity;
 
         public ObservableChildrenCollection(Entity parent, string childXName, Timetable tt)
         {

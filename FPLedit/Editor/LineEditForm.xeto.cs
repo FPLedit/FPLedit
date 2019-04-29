@@ -14,9 +14,9 @@ namespace FPLedit.Editor
 {
     internal class LineEditForm : FDialog<DialogResult>
     {
-        private IInfo info;
-        private Timetable tt;
-        private int route;
+        private readonly IInfo info;
+        private readonly Timetable tt;
+        private readonly int route;
 
 #pragma warning disable CS0649
         private readonly GridView gridView;

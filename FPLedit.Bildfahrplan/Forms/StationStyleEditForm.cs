@@ -12,9 +12,9 @@ namespace FPLedit.Bildfahrplan.Forms
     {
         public Station Station { get; set; }
 
-        private StationStyle style;
-        private ColorCollection cc;
-        private DashStyleHelper ds;
+        private readonly StationStyle style;
+        private readonly ColorCollection cc;
+        private readonly DashStyleHelper ds;
 
 #pragma warning disable CS0649
         private readonly DropDown colorComboBox, widthComboBox, dashComboBox;

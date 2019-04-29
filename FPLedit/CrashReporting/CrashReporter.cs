@@ -15,7 +15,7 @@ namespace FPLedit.CrashReporting
         private const string CRASH_DIR = "crash/";
         private const string REPORT_DIR = CRASH_DIR + "report/";
 
-        private IInfo info;
+        private readonly IInfo info;
 
         public CrashReporter(IInfo info)
         {

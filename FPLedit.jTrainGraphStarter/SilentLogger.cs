@@ -8,7 +8,7 @@ namespace FPLedit.jTrainGraphStarter
 {
     internal class SilentLogger : ILog
     {
-        private ILog parent;
+        private readonly ILog parent;
 
         public SilentLogger(ILog parent)
         {

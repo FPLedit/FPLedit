@@ -18,10 +18,10 @@ namespace FPLedit.Editor.Network
         private readonly Label arrivalLabel, departureLabel;
 #pragma warning restore CS0649
 
-        private ArrDep arrDep;
-        private Station station;
+        private readonly ArrDep arrDep;
+        private readonly Station station;
 
-        private IEnumerable<ShuntMove> shuntBackup;
+        private readonly IEnumerable<ShuntMove> shuntBackup;
 
         public ShuntForm(ArrDep arrDep, Station sta)
         {

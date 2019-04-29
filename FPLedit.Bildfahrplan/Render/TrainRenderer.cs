@@ -9,15 +9,15 @@ namespace FPLedit.Bildfahrplan.Render
 {
     internal class TrainRenderer
     {
-        private List<Station> stations; // Selected route, ordered
-        private Timetable tt;
+        private readonly List<Station> stations; // Selected route, ordered
+        private readonly Timetable tt;
         private Margins margin = new Margins(10, 20, 20, 20);
-        private TimetableStyle attrs;
-        private TimeSpan startTime;
-        private Dictionary<Station, StationX> stationOffsets;
+        private readonly TimetableStyle attrs;
+        private readonly TimeSpan startTime;
+        private readonly Dictionary<Station, StationX> stationOffsets;
         private Train[] trainCache;
 
-        private DashStyleHelper ds = new DashStyleHelper();
+        private readonly DashStyleHelper ds = new DashStyleHelper();
 
         public TrainRenderer(List<Station> stations, Timetable tt, Margins margin, TimeSpan startTime, Dictionary<Station, StationX> stationOffsets)
         {

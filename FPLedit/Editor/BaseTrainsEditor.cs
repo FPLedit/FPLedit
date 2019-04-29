@@ -12,7 +12,7 @@ namespace FPLedit.Editor
 {
     internal class BaseTrainsEditor : FDialog<DialogResult>
     {
-        private Timetable tt;
+        private readonly Timetable tt;
         public BaseTrainsEditor(Timetable tt)
         {
             this.tt = tt;

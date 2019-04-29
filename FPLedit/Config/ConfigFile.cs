@@ -9,8 +9,8 @@ namespace FPLedit.Config
 {
     internal class ConfigFile
     {
-        private List<ILine> lines;
-        private string filename;
+        private readonly List<ILine> lines;
+        private readonly string filename;
 
         public ConfigFile(string filename)
         {

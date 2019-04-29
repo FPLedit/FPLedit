@@ -10,7 +10,7 @@ namespace FPLedit.Editor
 {
     internal class EditStationForm : FDialog<DialogResult>
     {
-        int route;
+        private readonly int route;
 
 #pragma warning disable CS0649
         private readonly TextBox nameTextBox, positionTextBox;
@@ -24,8 +24,8 @@ namespace FPLedit.Editor
 
         public float Position { get; private set; }
 
-        private bool existingStation;
-        private Station trackStation;
+        private readonly bool existingStation;
+        private readonly Station trackStation;
 
         private int stationRendererHeight, stationRendererWidth;
 

@@ -10,12 +10,12 @@ namespace FPLedit.Shared.UI
 {
     public class SelectionUI
     {
-        private Action<int> selectedEvent;
-        private DropDown dropDown;
-        private RadioButton[] radioButtons;
-        private int optionsCount;
-        private bool[] disabledOptions;
-        private Color origBackground;
+        private readonly Action<int> selectedEvent;
+        private readonly DropDown dropDown;
+        private readonly RadioButton[] radioButtons;
+        private readonly int optionsCount;
+        private readonly bool[] disabledOptions;
+        private readonly Color origBackground;
 
         public int SelectedState { get; private set; }
 
@@ -63,9 +63,11 @@ namespace FPLedit.Shared.UI
             }
             else
             {
-                dropDown = new DropDown();
-                dropDown.DataStore = actions;
-                dropDown.ItemTextBinding = Binding.Property<string, string>(s => s);
+                dropDown = new DropDown
+                {
+                    DataStore = actions,
+                    ItemTextBinding = Binding.Property<string, string>(s => s)
+                };
                 dropDown.SelectedIndexChanged += (s, e) => InternalSelect(dropDown.SelectedIndex);
                 dropDown.SelectedIndex = 0;
                 origBackground = dropDown.BackgroundColor;

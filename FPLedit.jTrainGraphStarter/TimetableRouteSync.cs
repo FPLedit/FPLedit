@@ -11,10 +11,10 @@ namespace FPLedit.jTrainGraphStarter
 {
     internal class TimetableRouteSync : BaseConverterFileType
     {
-        private Timetable orig;
-        private int routeIndex;
+        private readonly Timetable orig;
+        private readonly int routeIndex;
 
-        private List<Train> trainMap;
+        private readonly List<Train> trainMap;
 
         public TimetableRouteSync(Timetable tt, int routeIndex)
         {

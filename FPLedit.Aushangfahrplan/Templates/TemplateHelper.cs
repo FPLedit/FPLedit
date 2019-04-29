@@ -10,7 +10,7 @@ namespace FPLedit.Aushangfahrplan.Templates
     {
         public Timetable TT { get; private set; }
 
-        private FilterRule[] trules, srules;
+        private readonly FilterRule[] trules, srules;
 
         public TemplateHelper(Timetable tt)
         {

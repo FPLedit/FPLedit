@@ -8,7 +8,7 @@ namespace FPLedit.Extensibility
 {
     internal class PluginInfo
     {
-        private IPlugin plugin;
+        private readonly IPlugin plugin;
 
         public bool Enabled { get; set; }
 

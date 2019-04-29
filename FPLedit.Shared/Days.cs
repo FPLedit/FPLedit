@@ -9,7 +9,7 @@ namespace FPLedit.Shared
     [DebuggerStepThrough]
     public struct Days
     {
-        private bool[] internalDays;
+        private readonly bool[] internalDays;
 
         public bool this[int index]
         {

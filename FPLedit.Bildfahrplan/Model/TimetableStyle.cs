@@ -10,7 +10,7 @@ namespace FPLedit.Bildfahrplan.Model
 {
     internal class TimetableStyle : Style
     {
-        private Timetable tt;
+        private readonly Timetable tt;
 
         public TimetableStyle(Timetable tt) : base(tt)
         {

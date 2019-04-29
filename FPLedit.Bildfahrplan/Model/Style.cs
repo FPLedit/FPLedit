@@ -12,7 +12,7 @@ namespace FPLedit.Bildfahrplan.Model
     {
         internal static IInfo info;
 
-        private Timetable _parent;
+        private readonly Timetable _parent;
 
         protected readonly bool overrideEntityStyle;
 

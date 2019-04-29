@@ -11,12 +11,8 @@ namespace FPLedit.Kursbuch
     [Plugin("Modul für Tabellenfahrpläne", Vi.PFrom, Vi.PUpTo, Author = "Manuel Huber")]
     public class Plugin : IPlugin
     {
-        private IInfo info;
-
         public void Init(IInfo info)
         {
-            this.info = info;
-
             info.Register<IExport>(new HtmlExport());
             info.Register<IPreviewable>(new Preview());
             info.Register<IFilterableUi>(new FilterableHandler());

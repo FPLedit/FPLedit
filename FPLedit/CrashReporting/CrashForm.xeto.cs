@@ -17,7 +17,7 @@ namespace FPLedit.CrashReporting
         private readonly Button norestoreButton;
 #pragma warning restore CS0649
 
-        private string crash_fn;
+        private readonly string crash_fn;
 
         public CrashForm(CrashReporter reporter)
         {

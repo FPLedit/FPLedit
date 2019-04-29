@@ -11,11 +11,11 @@ namespace FPLedit.Bildfahrplan.Forms
 {
     public partial class TrainColorForm : FDialog<DialogResult>
     {
-        private IInfo info;
-        private Timetable tt;
-        private TimetableStyle attrs;
-        private ColorCollection cc;
-        private DashStyleHelper ds;
+        private readonly IInfo info;
+        private readonly Timetable tt;
+        private readonly TimetableStyle attrs;
+        private readonly ColorCollection cc;
+        private readonly DashStyleHelper ds;
 
 #pragma warning disable CS0649
         private readonly GridView gridView;

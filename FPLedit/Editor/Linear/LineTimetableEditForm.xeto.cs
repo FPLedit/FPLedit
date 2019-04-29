@@ -13,7 +13,7 @@ namespace FPLedit.Editor.Linear
         private readonly LineTimetableEditControl editor;
 #pragma warning restore CS0649
 
-        private IInfo info;
+        private readonly IInfo info;
 
         public LineTimetableEditForm(IInfo info)
         {

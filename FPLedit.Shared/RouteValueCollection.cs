@@ -8,13 +8,13 @@ namespace FPLedit.Shared
     public class RouteValueCollection<T>
     {
         private readonly IEntity entity;
-        private Dictionary<int, T> values;
+        private readonly Dictionary<int, T> values;
         private readonly Timetable tt;
-        private string attr, defaultVal;
-        private Func<string, T> convTo;
-        private Func<T, string> convFrom;
-        private bool optional;
-        private T convDefault;
+        private readonly string attr, defaultVal;
+        private readonly Func<string, T> convTo;
+        private readonly Func<T, string> convFrom;
+        private readonly bool optional;
+        private readonly T convDefault;
 
         public RouteValueCollection(IEntity e, Timetable tt, string attr, string defaultVal, Func<string, T> convTo, Func<T, string> convFrom, bool optional = true)
         {

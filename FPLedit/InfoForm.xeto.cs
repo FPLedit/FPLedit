@@ -20,7 +20,7 @@ namespace FPLedit
         private readonly Button checkButton;
 #pragma warning restore CS0649
 
-        private UpdateManager mg;
+        private readonly UpdateManager mg;
 
         public InfoForm(ISettings settings)
         {

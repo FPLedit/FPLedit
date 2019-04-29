@@ -8,8 +8,8 @@ namespace FPLedit.Shared.UI
 {
     public class FontComboBox
     {
-        private ComboBox box;
-        private Label label;
+        private readonly ComboBox box;
+        private readonly Label label;
 
         public FontComboBox(ComboBox box, Label label)
         {

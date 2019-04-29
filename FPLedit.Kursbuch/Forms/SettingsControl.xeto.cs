@@ -13,9 +13,9 @@ namespace FPLedit.Kursbuch.Forms
 {
     public partial class SettingsControl : Panel, ISaveHandler, IExpertHandler
     {
-        private ISettings settings;
-        private KfplAttrs attrs;
-        private KfplTemplateChooser chooser;
+        private readonly ISettings settings;
+        private readonly KfplAttrs attrs;
+        private readonly KfplTemplateChooser chooser;
 
         private const string NO_KBS_TEXT = "<keine Nummer>";
 
@@ -29,7 +29,7 @@ namespace FPLedit.Kursbuch.Forms
         private readonly GridView kbsnListView;
 #pragma warning restore CS0649
 
-        private Dictionary<int, string> setRouteNumbers;
+        private readonly Dictionary<int, string> setRouteNumbers;
 
         public SettingsControl(Timetable tt, IInfo info)
         {

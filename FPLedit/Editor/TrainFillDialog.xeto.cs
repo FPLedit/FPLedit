@@ -20,7 +20,7 @@ namespace FPLedit.Editor
 
         public int Offset { get; private set; }
 
-        public TrainFillDialog(Timetable tt, Train train)
+        public TrainFillDialog(Train train)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 

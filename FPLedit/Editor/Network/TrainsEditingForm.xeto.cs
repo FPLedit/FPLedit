@@ -11,8 +11,8 @@ namespace FPLedit.Editor.Network
 {
     internal class TrainsEditingForm : BaseTrainsEditor
     {
-        private IInfo info;
-        private Timetable tt;
+        private readonly IInfo info;
+        private readonly Timetable tt;
 
 #pragma warning disable CS0649
         private readonly GridView gridView;

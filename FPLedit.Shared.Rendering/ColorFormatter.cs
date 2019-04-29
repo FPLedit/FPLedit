@@ -35,7 +35,7 @@ namespace FPLedit.Shared.Rendering
             return new MColor(byte.Parse(parts[0]), byte.Parse(parts[1]), byte.Parse(parts[2]));
         }
 
-        private static Dictionary<string, MColor> jtraingraphColors = new Dictionary<string, MColor>()
+        private static readonly Dictionary<string, MColor> jtraingraphColors = new Dictionary<string, MColor>()
         {
             ["schwarz"] = (MColor)Colors.Black,
             ["grau"] = (MColor)Colors.Gray,

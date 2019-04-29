@@ -18,10 +18,10 @@ namespace FPLedit
         private readonly Button extractButton, editButton, removeButton, enableButton, disableButton;
 #pragma warning restore CS0649
 
-        private TemplateManager manager;
+        private readonly TemplateManager manager;
         private ITemplate[] templates;
 
-        private DirectoryInfo templatesDir;
+        private readonly DirectoryInfo templatesDir;
 
         public TemplatesForm(TemplateManager manager, string templateRoot)
         {

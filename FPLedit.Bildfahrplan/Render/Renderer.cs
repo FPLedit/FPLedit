@@ -11,15 +11,15 @@ namespace FPLedit.Bildfahrplan.Render
 {
     public class Renderer
     {
-        private Timetable tt;
-        private int route;
+        private readonly Timetable tt;
+        private readonly int route;
 
         internal const string TIME_FORMAT = @"hh\:mm";
 
         private Margins margin = new Margins(10, 20, 20, 20);
         public float width = 0, height = 0;
 
-        private TimetableStyle attrs;
+        private readonly TimetableStyle attrs;
 
         public Renderer(Timetable timetable, int route)
         {

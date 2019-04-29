@@ -8,13 +8,13 @@ namespace FPLedit.Config
 {
     internal static class OptionsParser
     {
-        private static string[] known_flags = new[]
+        private static readonly string[] known_flags = new[]
         {
             "--mp-log",
             "--tmpl-debug",
         };
 
-        private static List<string> present_flags = new List<string>();
+        private static readonly List<string> present_flags = new List<string>();
 
         public static string OpenFilename { get; private set; }
 

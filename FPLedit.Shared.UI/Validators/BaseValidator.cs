@@ -9,7 +9,7 @@ namespace FPLedit.Shared.UI.Validators
 {
     public abstract class BaseValidator
     {
-        private TextBox control;
+        private readonly TextBox control;
 
         public BaseValidator(TextBox control, bool validateOnType, bool enableErrorColoring = true)
         {

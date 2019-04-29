@@ -8,12 +8,8 @@ namespace FPLedit.Aushangfahrplan
     [Plugin("Modul für Aushangfahrpläne", Vi.PFrom, Vi.PUpTo, Author = "Manuel Huber")]
     public class Plugin : IPlugin
     {
-        private IInfo info;
-
         public void Init(IInfo info)
         {
-            this.info = info;
-
             info.Register<IExport>(new HtmlExport());
             info.Register<IDesignableUiProxy>(new SettingsControlProxy());
             info.Register<IFilterableUi>(new FilterableHandler());

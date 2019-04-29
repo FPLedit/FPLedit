@@ -36,7 +36,7 @@ namespace FPLedit.Shared.UI
             var fontSizes = Enumerable.Range(5, 15).Cast<object>().ToArray();
 
             var p = GetProperty<T>(property);
-            Func<T, MFont> f = a => (MFont)p.GetValue(a);
+            MFont f(T a) => (MFont)p.GetValue(a);
 
             familyDropDown.DataStore = new string[] { "<Lade>" };
             familyDropDown.SelectedIndex = 0;

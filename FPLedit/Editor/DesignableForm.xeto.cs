@@ -20,9 +20,9 @@ namespace FPLedit.Editor
         private readonly CheckBox expertCheckBox;
 #pragma warning restore CS0649
 
-        private IInfo info;
-        private List<ISaveHandler> saveHandlers;
-        private List<IExpertHandler> expertHandlers;
+        private readonly IInfo info;
+        private readonly List<ISaveHandler> saveHandlers;
+        private readonly List<IExpertHandler> expertHandlers;
 
         private DesignableForm()
         {

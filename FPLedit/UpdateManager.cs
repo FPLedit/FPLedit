@@ -29,7 +29,7 @@ namespace FPLedit
             set => settings.Set("updater.auto", value);
         }
 
-        private ISettings settings;
+        private readonly ISettings settings;
 
         public UpdateManager(ISettings settings)
         {

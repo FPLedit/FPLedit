@@ -21,8 +21,8 @@ namespace FPLedit.Editor
         private readonly NumberValidator offsetValidator, countValidator, changeValidator;
         private readonly SelectionUI modeSelect;
 
-        private Train train;
-        private Timetable tt;
+        private readonly Train train;
+        private readonly Timetable tt;
 
         public TrainCopyDialog(Train t, Timetable tt)
         {

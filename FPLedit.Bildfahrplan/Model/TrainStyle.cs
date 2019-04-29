@@ -9,8 +9,8 @@ namespace FPLedit.Bildfahrplan.Model
 {
     internal class TrainStyle : Style
     {
-        private Train train;
-        private TimetableStyle ttStyle;
+        private readonly Train train;
+        private readonly TimetableStyle ttStyle;
         public TrainStyle(Train tra, TimetableStyle ttStyle) : base(tra._parent)
         {
             train = tra;

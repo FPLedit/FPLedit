@@ -11,12 +11,12 @@ namespace FPLedit.Bildfahrplan.Forms
 {
     internal class PrintRenderer
     {
-        private IInfo info;
-        private Timetable tt;
-        private int route;
-        private TimetableStyle attrs;
-        private PrintDocument doc;
+        private readonly IInfo info;
+        private readonly Timetable tt;
+        private readonly int route;
+        private readonly TimetableStyle attrs;
 
+        private PrintDocument doc;
         private TimeSpan? last;
 
         public PrintRenderer(IInfo info, int route)

@@ -41,7 +41,7 @@ namespace FPLedit.Editor
         }
 
         #region Errors
-        private List<ErrorEntry> errors = new List<ErrorEntry>();
+        private readonly List<ErrorEntry> errors = new List<ErrorEntry>();
 
         public bool HasError(Station sta, bool arrival)
         {

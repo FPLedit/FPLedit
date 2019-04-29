@@ -11,9 +11,9 @@ namespace FPLedit.Buchfahrplan.Templates
 {
     public class TemplateHelper
     {
-        private BfplAttrs attrs;
-        private Timetable tt;
-        private IFilterableUi filterable;
+        private readonly BfplAttrs attrs;
+        private readonly Timetable tt;
+        private readonly IFilterableUi filterable;
 
         public TemplateHelper(Timetable tt)
         {

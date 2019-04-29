@@ -7,8 +7,8 @@ namespace FPLedit.Templating
 {
     internal class ArgsParser
     {
-        private string args;
-        private char[] chars;
+        private readonly string args;
+        private readonly char[] chars;
 
         public ArgsParser(string args)
         {

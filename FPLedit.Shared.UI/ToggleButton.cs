@@ -6,8 +6,8 @@ namespace FPLedit.Shared.UI
 {
     public class ToggleButton
     {
-        private Button btn;
-        private Color origColor;
+        private readonly Button btn;
+        private readonly Color origColor;
 
         public object Tag { get; set; }
 

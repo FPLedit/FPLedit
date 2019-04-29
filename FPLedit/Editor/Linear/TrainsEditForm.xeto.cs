@@ -11,8 +11,8 @@ namespace FPLedit.Editor.Linear
 {
     internal class TrainsEditForm : BaseTrainsEditor
     {
-        private IInfo info;
-        private Timetable tt;
+        private readonly IInfo info;
+        private readonly Timetable tt;
 
 #pragma warning disable CS0649
         private readonly GridView topGridView, bottomGridView;
@@ -51,8 +51,7 @@ namespace FPLedit.Editor.Linear
 
         private void HandleKeystroke(object sender, KeyEventArgs e)
         {
-            TrainDirection dir = default;
-
+            TrainDirection dir;
             if (active == topGridView)
                 dir = TOP_DIRECTION;
             else

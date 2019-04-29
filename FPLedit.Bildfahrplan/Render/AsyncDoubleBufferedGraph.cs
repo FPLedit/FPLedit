@@ -13,8 +13,8 @@ namespace FPLedit.Bildfahrplan.Render
         private Bitmap buffer;
         private bool generatingBuffer = false;
         private readonly Font font = new Font(FontFamilies.SansFamilyName, 8);
-        private Panel panel;
-        private object bufferLock = new object();
+        private readonly Panel panel;
+        private readonly object bufferLock = new object();
         public Action RenderingFinished { get; set; }
 
         public AsyncDoubleBufferedGraph(Panel p)

@@ -22,8 +22,8 @@ namespace FPLedit.Buchfahrplan.Forms
 
         public IStation Station { get; set; }
 
-        private bool isPoint = false;
-        private int route;
+        private readonly bool isPoint = false;
+        private readonly int route;
 
         public VelocityEditForm()
         {

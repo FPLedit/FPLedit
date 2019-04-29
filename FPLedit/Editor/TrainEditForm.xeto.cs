@@ -25,18 +25,18 @@ namespace FPLedit.Editor
 
         public Train Train { get; set; }
 
-        private CheckBox[] daysBoxes;
-        private ToggleButton[] shortcutsToggle;
-        private Timetable tt;
-        private TrainEditHelper th;
+        private readonly CheckBox[] daysBoxes;
+        private readonly ToggleButton[] shortcutsToggle;
+        private readonly Timetable tt;
+        private readonly TrainEditHelper th;
 
         private Dictionary<Station, ArrDep> arrDepBackup;
 
-        private Days wShortcut = Days.Parse("1111110");
-        private Days wExclSaShortcut = Days.Parse("1111100");
-        private Days sShortcut = Days.Parse("0000001");
-        private Days aShortcut = Days.Parse("1111111");
-        private Days zShortcut = Days.Parse("0000000");
+        private readonly Days wShortcut = Days.Parse("1111110");
+        private readonly Days wExclSaShortcut = Days.Parse("1111100");
+        private readonly Days sShortcut = Days.Parse("0000001");
+        private readonly Days aShortcut = Days.Parse("1111111");
+        private readonly Days zShortcut = Days.Parse("0000000");
 
         private TrainEditForm(Timetable tt)
         {
@@ -183,7 +183,7 @@ namespace FPLedit.Editor
 
         private void fillButton_Click(object sender, EventArgs e)
         {
-            var tfd = new TrainFillDialog(tt, Train);
+            var tfd = new TrainFillDialog(Train);
             if (tfd.ShowModal() == DialogResult.Ok)
             {
                 var th = new TrainEditHelper();

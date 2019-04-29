@@ -14,7 +14,7 @@ namespace FPLedit.Shared
         public const int LINEAR_ROUTE_ID = 0;
         public static TimetableVersion DefaultLinearVersion { get; set; } = TimetableVersion.JTG3_0;
 
-        XMLEntity sElm, tElm, trElm;
+        private readonly XMLEntity sElm, tElm, trElm;
 
         public TimetableVersion Version => (TimetableVersion)GetAttribute("version", 0);
         public TimetableType Type => Version == TimetableVersion.Extended_FPL ? TimetableType.Network : TimetableType.Linear;
@@ -34,8 +34,8 @@ namespace FPLedit.Shared
         }
 
         private List<Station> stations;
-        private List<Train> trains;
-        private List<Transition> transitions;
+        private readonly List<Train> trains;
+        private readonly List<Transition> transitions;
 
         public List<Station> Stations => stations;
 

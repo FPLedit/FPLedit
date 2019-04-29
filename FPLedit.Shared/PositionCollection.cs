@@ -10,7 +10,7 @@ namespace FPLedit.Shared
     public class PositionCollection
     {
         private readonly IStation sta;
-        private Dictionary<int, float> positions;
+        private readonly Dictionary<int, float> positions;
         private readonly Timetable tt;
 
         public PositionCollection(IStation s, Timetable tt)
@@ -56,7 +56,7 @@ namespace FPLedit.Shared
 
         private void ParseLinear()
         {
-            var toParse = "";
+            string toParse;
             if (tt.Version == TimetableVersion.JTG2_x)
                 toParse = sta.GetAttribute("km", "0.0");
             else // jTG 3.0

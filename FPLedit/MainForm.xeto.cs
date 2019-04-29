@@ -37,16 +37,16 @@ namespace FPLedit
 
         private Timetable timetableBackup = null;
 
-        private IImport open;
-        private IExport save;
+        private readonly IImport open;
+        private readonly IExport save;
 
-        private FileState fileState;
+        private readonly FileState fileState;
         private TemplateManager templateManager;
-        internal ExtensionManager extensionManager;
-        private UndoManager undo;
-        private RegisterStore registry;
-        private UpdateManager update;
-        internal CrashReporting.CrashReporter crashReporter;
+        internal readonly ExtensionManager extensionManager;
+        private readonly UndoManager undo;
+        private readonly RegisterStore registry;
+        private readonly UpdateManager update;
+        internal readonly CrashReporting.CrashReporter crashReporter;
 
         private List<string> lastFiles;
         private bool enable_last = true;

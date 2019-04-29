@@ -9,7 +9,7 @@ namespace FPLedit.Shared.Helpers
     /// </summary>
     public class Pathfinder
     {
-        private Timetable tt;
+        private readonly Timetable tt;
 
         public Pathfinder(Timetable tt)
         {

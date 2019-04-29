@@ -17,8 +17,8 @@ namespace FPLedit.Editor
 #pragma warning restore CS0649
         private readonly SelectionUI sortSelection;
 
-        private TrainDirection direction;
-        private Timetable tt;
+        private readonly TrainDirection direction;
+        private readonly Timetable tt;
 
         private bool shown;
 

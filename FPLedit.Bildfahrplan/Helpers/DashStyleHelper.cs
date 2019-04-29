@@ -6,7 +6,7 @@ namespace FPLedit.Bildfahrplan
 {
     internal class DashStyleHelper
     {
-        private List<DashStyle> types = new List<DashStyle>
+        private readonly List<DashStyle> types = new List<DashStyle>
         {
             new DashStyle("Normal", new[] { 10000.0f, 0.01f }),
             new DashStyle("Gepunktet", new[] { 3.0f, 3.0f }),

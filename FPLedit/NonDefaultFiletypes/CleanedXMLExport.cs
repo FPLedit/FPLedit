@@ -13,14 +13,14 @@ namespace FPLedit.NonDefaultFiletypes
     {
         public string Filter => "Bereinigte Fahrplan Dateien (*.fpl)|*.fpl";
 
-        private string[] node_names = new[]
+        private readonly string[] node_names = new[]
         {
             "bfpl_attrs",   // Buchfahrplaneigenschaften
             "afpl_attrs",   // Aushangfahrplaneigenschaften
             "kfpl_attrs",   // Kursbucheigenschaften
         };
 
-        private string[] attrs_names = new[]
+        private readonly string[] attrs_names = new[]
         {
             "fpl-vmax",     // Höchstgeschwindigkeit
             "fpl-wl",       // Wellenlinien

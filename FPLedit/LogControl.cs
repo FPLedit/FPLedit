@@ -10,7 +10,7 @@ namespace FPLedit
 {
     public class LogControl : RichTextArea, ILog
     {
-        private ContextMenu menu;
+        private readonly ContextMenu menu;
         private bool showDebug;
 
         public LogControl() : base()
@@ -54,8 +54,7 @@ namespace FPLedit
         private void Write(string message, Color c)
         {
             Append(message + Environment.NewLine, true);
-
-            int idx = -1, last = -1;
+            int idx, last;
             if (Environment.OSVersion.Platform == PlatformID.Unix)
             {
                 idx = Text.LastIndexOf(message);

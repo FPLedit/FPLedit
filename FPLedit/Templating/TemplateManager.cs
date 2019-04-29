@@ -11,11 +11,11 @@ namespace FPLedit.Templating
 {
     internal class TemplateManager : ITemplateManager
     {
-        private RegisterStore store;
-        private ILog logger;
-        private ISettings settings;
+        private readonly RegisterStore store;
+        private readonly ILog logger;
+        private readonly ISettings settings;
+        private readonly List<string> enabledTemplates;
         private List<TemplateHost> templates;
-        private List<string> enabledTemplates;
 
         public TemplateManager(RegisterStore store, ILog logger, ISettings settings)
         {

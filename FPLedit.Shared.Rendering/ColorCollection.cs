@@ -7,7 +7,7 @@ namespace FPLedit.Shared.Rendering
 {
     public class ColorCollection
     {
-        private Dictionary<string, MColor> colors = new Dictionary<string, MColor>()
+        private readonly Dictionary<string, MColor> colors = new Dictionary<string, MColor>()
         {
             ["Schwarz"] = (MColor)Colors.Black,
             ["Grau"] = (MColor)Colors.Gray,

@@ -8,7 +8,7 @@ namespace FPLedit.Editor
 {
     internal class TimeNormalizer
     {
-        private Regex verifyRegex;
+        private readonly Regex verifyRegex;
 
         public TimeNormalizer()
         {

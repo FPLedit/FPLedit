@@ -14,11 +14,11 @@ namespace FPLedit.Editor
     {
         const int INDENT = 20;
         const int LINE_HEIGHT = 30;
-        private Font font = new Font(FontFamilies.SansFamilyName, 8);
-        private Pen dashedPen = new Pen(Colors.Black, 1) { DashStyle = DashStyles.Dash };
+        private readonly Font font = new Font(FontFamilies.SansFamilyName, 8);
+        private readonly Pen dashedPen = new Pen(Colors.Black, 1) { DashStyle = DashStyles.Dash };
 
-        private List<RenderBtn<Track>> buttons = new List<RenderBtn<Track>>();
-        private PixelLayout layout;
+        private readonly List<RenderBtn<Track>> buttons = new List<RenderBtn<Track>>();
+        private readonly PixelLayout layout;
 
         private TextBox editingTextBox;
         private RenderBtn<Track> editingButton;
@@ -335,7 +335,6 @@ namespace FPLedit.Editor
         }
 
         #region DrawArgs click handling
-        private long lastClick;
         private bool lastDoubleClick;
         protected override void OnMouseDoubleClick(MouseEventArgs e)
         {
@@ -353,8 +352,6 @@ namespace FPLedit.Editor
         {
             if (!CommitNameEdit())
                 return;
-
-            lastClick = DateTime.Now.Ticks;
 
             if (!lastDoubleClick)
             {

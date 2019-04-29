@@ -10,8 +10,8 @@ namespace FPLedit.Bildfahrplan.Render
 {
     internal class TimeRenderer
     {
-        private TimetableStyle attrs;
-        private Renderer parent;
+        private readonly TimetableStyle attrs;
+        private readonly Renderer parent;
 
         public TimeRenderer(TimetableStyle attrs, Renderer parent)
         {

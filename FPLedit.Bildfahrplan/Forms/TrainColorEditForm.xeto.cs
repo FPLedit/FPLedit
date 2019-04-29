@@ -12,9 +12,9 @@ namespace FPLedit.Bildfahrplan.Forms
     {
         public Train Train { get; set; }
 
-        private TrainStyle style;
-        private ColorCollection cc;
-        private DashStyleHelper ds;
+        private readonly TrainStyle style;
+        private readonly ColorCollection cc;
+        private readonly DashStyleHelper ds;
 
 #pragma warning disable CS0649
         private readonly DropDown colorComboBox, widthComboBox, dashComboBox;

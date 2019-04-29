@@ -9,8 +9,8 @@ namespace FPLedit.Bildfahrplan.Model
 {
     internal class StationStyle : Style
     {
-        private Station sta;
-        private TimetableStyle ttStyle;
+        private readonly Station sta;
+        private readonly TimetableStyle ttStyle;
         public StationStyle(Station sta, TimetableStyle ttStyle) : base(sta._parent)
         {
             this.sta = sta;

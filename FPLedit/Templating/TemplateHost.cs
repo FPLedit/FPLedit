@@ -14,8 +14,8 @@ namespace FPLedit.Templating
     /// </summary>
     internal class TemplateHost : ITemplate
     {
-        private Template tmpl;
-        private ILog logger;
+        private readonly Template tmpl;
+        private readonly ILog logger;
 
         public string TemplateType => tmpl.TemplateType;
 

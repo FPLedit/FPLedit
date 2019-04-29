@@ -13,9 +13,9 @@ namespace FPLedit.Aushangfahrplan.Forms
 {
     public partial class SettingsControl : Panel, ISaveHandler, IExpertHandler
     {
-        private ISettings settings;
-        private AfplAttrs attrs;
-        private AfplTemplateChooser chooser;
+        private readonly ISettings settings;
+        private readonly AfplAttrs attrs;
+        private readonly AfplTemplateChooser chooser;
 
 #pragma warning disable CS0649
         private readonly DropDown templateComboBox;

@@ -9,7 +9,7 @@ namespace FPLedit.Logger
 {
     public class TempLogger : ILog
     {
-        private string filename;
+        private readonly string filename;
 
         public TempLogger(IInfo info)
         {

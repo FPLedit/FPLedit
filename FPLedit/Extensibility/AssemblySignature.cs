@@ -12,8 +12,8 @@ namespace FPLedit.Extensibility
 {
     internal class AssemblySignatureVerifier
     {
-        private AssemblySignature[] signatures;
-        private RSAParameters pubkey;
+        private readonly AssemblySignature[] signatures;
+        private readonly RSAParameters pubkey;
 
         public AssemblySignatureVerifier()
         {

@@ -12,7 +12,7 @@ namespace FPLedit
 {
     internal class Settings : ISettings
     {
-        private ConfigFile config;
+        private readonly ConfigFile config;
 
         public Settings()
         {

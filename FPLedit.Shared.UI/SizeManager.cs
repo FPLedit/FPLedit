@@ -9,8 +9,8 @@ namespace FPLedit.Shared.UI
 {
     public class SizeManager
     {
-        private ISettings settings;
-        private List<SizeEntry> sizes;
+        private readonly ISettings settings;
+        private readonly List<SizeEntry> sizes;
 
         private const string SETTINGS_KEY = "ui.sizes";
 

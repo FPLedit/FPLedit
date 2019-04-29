@@ -14,8 +14,8 @@ namespace FPLedit.Extensibility
 
         public bool EnabledModified { get; private set; }
 
-        private IInfo info;
-        private UpdateManager update;
+        private readonly IInfo info;
+        private readonly UpdateManager update;
 
         public ExtensionManager(IInfo info, UpdateManager update)
         {

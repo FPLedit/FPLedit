@@ -12,8 +12,8 @@ namespace FPLedit.Templating
     // Based on: https://www.codeproject.com/Articles/15728/Write-your-own-Code-Generator-or-Template-Engine-i
     internal class Template : ITemplate
     {
-        private List<string> usings;
-        private List<string> assemblyReferences;
+        private readonly List<string> usings;
+        private readonly List<string> assemblyReferences;
         private string functions;
 
         public string TemplateType { get; private set; }
@@ -158,7 +158,6 @@ namespace FPLedit.Shared.Templating
             StringBuilder builder = new StringBuilder();
 
             int lnLast = 0;
-            int lnAt2 = 0;
             int lnAt = code.IndexOf("<#", 0);
             if (lnAt == -1)
                 return code;
@@ -170,7 +169,7 @@ namespace FPLedit.Shared.Templating
                     builder.Append("__builder.Append(@\"" + code.Substring(lnLast, lnAt - lnLast).Replace("\"", "\"\"") + "\");" + nl);
 
                 // Find end tag
-                lnAt2 = code.IndexOf("#>", lnAt);
+                int lnAt2 = code.IndexOf("#>", lnAt);
                 if (lnAt2 < 0)
                     break;
 

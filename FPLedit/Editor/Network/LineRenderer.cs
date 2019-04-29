@@ -16,9 +16,9 @@ namespace FPLedit.Editor.Network
         private PointF mousePosition = new PointF();
 
         private Timetable tt;
-        private List<RenderBtn<Station>> panels = new List<RenderBtn<Station>>();
-        private Font font;
-        private Pen linePen, highlightPen;
+        private readonly List<RenderBtn<Station>> panels = new List<RenderBtn<Station>>();
+        private readonly Font font;
+        private readonly Pen linePen, highlightPen;
 
         private bool IsNetwork => tt?.Type == TimetableType.Network;
 
@@ -63,7 +63,7 @@ namespace FPLedit.Editor.Network
         }
 
 
-        private StaPosHandler handler;
+        private readonly StaPosHandler handler;
         private Dictionary<Station, Point> stapos;
         private Route[] routes;
 

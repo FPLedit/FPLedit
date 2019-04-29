@@ -16,7 +16,7 @@ namespace FPLedit.Editor.Network
         private readonly CheckBox waypointsCheckBox;
 #pragma warning restore CS0649
 
-        private IInfo info;
+        private readonly IInfo info;
 
         public List<Station> Path { get; private set; }
         private Train train;
@@ -24,7 +24,7 @@ namespace FPLedit.Editor.Network
         private Station staStart, staEnd; // Set-Mode
 
         private bool waypointsAllowed = false;
-        private List<Station> wayPoints = new List<Station>();
+        private readonly List<Station> wayPoints = new List<Station>();
 
         private TrainRouteForm(IInfo info)
         {
