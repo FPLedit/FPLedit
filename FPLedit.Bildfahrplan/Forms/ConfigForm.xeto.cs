@@ -18,7 +18,7 @@ namespace FPLedit.Bildfahrplan.Forms
         private readonly TextBox heightPerHourTextBox;
         private readonly TextBox startTimeTextBox;
         private readonly TextBox endTimeTextBox;
-        private readonly CheckBox includeKilometreCheckBox, drawStationNamesCheckBox, stationVerticalCheckBox;
+        private readonly CheckBox includeKilometreCheckBox, drawStationNamesCheckBox, stationVerticalCheckBox, multitrackCheckBox;
 #pragma warning restore CS0649
         private readonly NumberValidator heightPerHourValidator;
         private readonly TimeValidator startTimeValidator, endTimeValidator;
@@ -69,6 +69,7 @@ namespace FPLedit.Bildfahrplan.Forms
             includeKilometreCheckBox.CheckedBinding.BindDataContext<TimetableStyle>(s => s.DisplayKilometre);
             drawStationNamesCheckBox.CheckedBinding.BindDataContext<TimetableStyle>(s => s.DrawHeader);
             stationVerticalCheckBox.CheckedBinding.BindDataContext<TimetableStyle>(s => s.StationVertical);
+            multitrackCheckBox.CheckedBinding.BindDataContext<TimetableStyle>(s => s.MultiTrack);
 
             attrs = new TimetableStyle(tt);
             DataContext = attrs;

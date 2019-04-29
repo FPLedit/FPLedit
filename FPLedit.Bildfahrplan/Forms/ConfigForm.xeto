@@ -66,18 +66,20 @@
           <CheckBox x:Name="stationVerticalCheckBox">Stationsnamen vertikal zeichnen</CheckBox>
         </TableRow>
         <TableRow>
+          <CheckBox x:Name="multitrackCheckBox">Gleise zeichnen</CheckBox>
+        </TableRow>
+        <!-- TextBoxes -->
+        <TableRow>
           <Label>Höhe pro Stunde</Label>
           <TextBox x:Name="heightPerHourTextBox" Width="150"></TextBox>
         </TableRow>
         <TableRow>
           <Label>Startzeit</Label>
           <TextBox x:Name="startTimeTextBox" Width="150"></TextBox>
-          <!-- TODO: pattern -->
         </TableRow>
         <TableRow>
           <Label>Endzeit</Label>
           <TextBox x:Name="endTimeTextBox" Width="150"></TextBox>
-          <!-- TODO: pattern -->
         </TableRow>
       </TableLayout>
     </TableRow>
