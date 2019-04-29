@@ -10,8 +10,6 @@ namespace FPLedit.Bildfahrplan.Model
 {
     internal class TimetableStyle : Style
     {
-        public bool MultiTrack { get; internal set; } //TODO: Read from xml
-
         private Timetable tt;
 
         public TimetableStyle(Timetable tt) : base(tt)
@@ -103,6 +101,12 @@ namespace FPLedit.Bildfahrplan.Model
             set => tt.SetAttribute("sHor", value.ToString());
         }
 
+        public bool MultiTrack
+        {
+            get => tt.GetAttribute<bool>("shMu", true);
+            set => tt.SetAttribute("shMu", value.ToString());
+        }
+
         #region Fonts
 
         public MFont StationFont
@@ -123,9 +127,9 @@ namespace FPLedit.Bildfahrplan.Model
             set => tt.SetAttribute("trFont", value.FontToString());
         }
 
-        #endregion
+#endregion
 
-        #region Colors
+#region Colors
         public MColor TimeColor
         {
             get => ParseColor(tt.GetAttribute<string>("fpl-tc"), (MColor)Eto.Drawing.Colors.Orange);
@@ -149,9 +153,9 @@ namespace FPLedit.Bildfahrplan.Model
             get => ParseColor(tt.GetAttribute<string>("fpl-trc"), (MColor)Eto.Drawing.Colors.Gray);
             set => tt.SetAttribute("fpl-trc", ColorToString(value));
         }
-        #endregion
+#endregion
 
-        #region Thickness
+#region Thickness
         public int TrainWidth
         {
             get => tt.GetAttribute("fpl-tw", 1);
@@ -175,6 +179,6 @@ namespace FPLedit.Bildfahrplan.Model
             get => tt.GetAttribute("fpl-mw", 1);
             set => tt.SetAttribute("fpl-mw", value.ToString());
         }
-        #endregion
+#endregion
     }
 }
