@@ -20,8 +20,6 @@ namespace FPLedit.Editor
         private readonly TrainDirection direction;
         private readonly Timetable tt;
 
-        private bool shown;
-
         public TrainSortDialog(TrainDirection dir, Timetable tt)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
@@ -41,13 +39,11 @@ namespace FPLedit.Editor
                 sortSelection.DisableOption(3);
                 sortSelection.DisableOption(4);
             }
-
-            Shown += (s, e) => shown = true;
         }
 
         private void SelectMode(int idx)
         {
-            if (direction == TrainDirection.tr && shown && !sortSelection.EnabledOptionSelected)
+            if (direction == TrainDirection.tr && WindowShown && !sortSelection.EnabledOptionSelected)
                 MessageBox.Show("Die gewählte Option ist im Netzwerk-Fahrplan nicht verfügbar.", "FPLedit");
 
             stationsComboBox.Enabled = idx == 2;

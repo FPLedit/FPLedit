@@ -35,8 +35,9 @@ namespace FPLedit.DebugDump
                 dir.Create();
 
             // Log UI interaction
-            FFormHandler.Init = (w) =>
+            FFormHandler.Init += (se, a) =>
             {
+                var w = (Window)se;
                 var n = w.GetType().FullName;
                 w.Shown += (s, e) => info.Logger.Debug("Form shown: " + n);
                 w.Closed += (s, e) => info.Logger.Debug("Form closed: " + n);

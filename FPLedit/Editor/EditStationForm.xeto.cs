@@ -39,22 +39,20 @@ namespace FPLedit.Editor
             nameValidator.ErrorMessage = "Bitte einen Bahnhofsnamen eingeben!";
             validators = new ValidatorCollection(positionValidator, nameValidator);
 
-            var shown = false;
             this.Shown += (s, e) =>
             {
-                shown = true;
                 stationRendererHeight = stationRenderer.Height;
                 stationRendererWidth = stationRenderer.Width;
             };
             stationRenderer.SizeChanged += (s, e) =>
             {
-                if (shown && stationRenderer.Height > stationRendererHeight)
+                if (WindowShown && stationRenderer.Height > stationRendererHeight)
                 {
                     var diff = stationRenderer.Height - stationRendererHeight;
                     this.Height += diff;
                     stationRendererHeight = stationRenderer.Height;
                 }
-                if (shown && stationRenderer.Width > stationRendererWidth)
+                if (WindowShown && stationRenderer.Width > stationRendererWidth)
                 {
                     var diff = stationRenderer.Width - stationRendererWidth;
                     this.Width += diff;
