@@ -8,19 +8,21 @@ namespace FPLedit.Shared.Rendering
 {
     public class ColorTimetableConverter
     {
-        public static void ConvertAll(Timetable tt)
+        public static void ConvertAll(Timetable tt, TimetableVersion? forceVersion = null)
         {
             var timetableAttributes = new[] { "bgC", "hlC" };
             var stationAttributes = new[] { "cl" };
             var trainAttributes = new[] { "cl" };
 
-            ConvertElement(tt.XMLEntity, timetableAttributes, tt.Version);
+            var version = forceVersion ?? tt.Version;
+
+            ConvertElement(tt.XMLEntity, timetableAttributes, version);
 
             foreach (var sta in tt.Stations)
-                ConvertElement(sta.XMLEntity, stationAttributes, tt.Version);
+                ConvertElement(sta.XMLEntity, stationAttributes, version);
 
             foreach (var tra in tt.Trains)
-                ConvertElement(tra.XMLEntity, trainAttributes, tt.Version);
+                ConvertElement(tra.XMLEntity, trainAttributes, version);
         }
 
         private static void ConvertElement(XMLEntity xml, string[] attributesToConvert, TimetableVersion version)

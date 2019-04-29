@@ -144,17 +144,29 @@ namespace FPLedit.jTrainGraphStarter
 
             try
             {
-                p.Start();
-                info.Logger.Info("Wartet darauf, dass jTrainGraph beendet wird...");
-                p.WaitForExit();
-                info.Logger.Info("jTrainGraph beendet! Lade Datei neu...");
+                try
+                {
+                    p.Start();
+                    info.Logger.Info("Wartet darauf, dass jTrainGraph beendet wird...");
+                    p.WaitForExit();
+                    info.Logger.Info("jTrainGraph beendet! Lade Datei neu...");
+
+                    if (p.ExitCode != 0)
+                        throw new Exception("Process exited with error code " + p.ExitCode);
+                }
+                catch (Exception e)
+                {
+                    info.Logger.Error("Fehler beim Starten von jTrainGraph: Möglicherweise ist das jTrainGraphStarter Plugin falsch konfiguriert! Zur Konfiguration siehe jTrainGraph > Einstellungen");
+                    info.Logger.LogException(e);
+                    return;
+                }
 
                 finished();
             }
             catch (Exception e)
             {
                 info.Logger.Error("jTrainGraphStarter: " + e.Message);
-                info.Logger.Error("Möglicherweise ist das jTrainGraphStarter Plugin falsch konfiguriert! Zur Konfiguration siehe jTrainGraph > Einstellungen");
+                info.Logger.LogException(e);
             }
         }
     }

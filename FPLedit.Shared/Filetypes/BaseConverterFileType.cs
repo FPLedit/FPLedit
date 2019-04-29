@@ -18,6 +18,8 @@ namespace FPLedit.Shared.Filetypes
             ConvertAttrNetToLin(sta.Wellenlinien, route);
             ConvertAttrNetToLin(sta.Vmax, route);
             ConvertAttrNetToLin(sta.LineTracksRight, route);
+            ConvertAttrNetToLin(sta.DefaultTrackLeft, route);
+            ConvertAttrNetToLin(sta.DefaultTrackRight, route);
         }
 
         protected void ConvertStationLinToNet(Station sta)
@@ -27,6 +29,8 @@ namespace FPLedit.Shared.Filetypes
             ConvertAttrLinToNet(sta.Vmax);
             ConvertAttrLinToNet(sta.Wellenlinien);
             ConvertAttrLinToNet(sta.LineTracksRight);
+            ConvertAttrLinToNet(sta.DefaultTrackLeft);
+            ConvertAttrLinToNet(sta.DefaultTrackRight);
         }
 
         protected void ConvertAttrNetToLin<T>(RouteValueCollection<T> rvc, int route)

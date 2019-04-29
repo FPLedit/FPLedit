@@ -20,6 +20,9 @@ namespace FPLedit.TimetableChecks
                 bool hasOverflow = false;
                 foreach (var arrdep in arrdeps.PathEntries)
                 {
+                    if (arrdep.ArrDep == null)
+                        continue;
+
                     if (arrdep.ArrDep.HasMinOneTimeSet && arrdep.ArrDep.FirstSetTime < last)
                         hasOverflow = true;
                     last = arrdep.ArrDep.Departure == default ?

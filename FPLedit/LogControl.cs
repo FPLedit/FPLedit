@@ -4,23 +4,24 @@ using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 
 namespace FPLedit
 {
     public class LogControl : RichTextArea, ILog
     {
         private ContextMenu menu;
+        private bool showDebug;
 
         public LogControl() : base()
         {
             ReadOnly = true;
 
             menu = new ContextMenu();
-            var btn = menu.CreateItem("Alles löschen");
-            btn.Click += (s, e) => Text = "";
+            var clearBtn = menu.CreateItem("Alles löschen");
+            clearBtn.Click += (s, e) => Text = "";
+            var debugBtn = menu.CreateCheckItem("Debug-Informationen anzeigen");
+            debugBtn.CheckedChanged += (s, e) => showDebug = debugBtn.Checked;
         }
 
         #region Log
@@ -35,10 +36,12 @@ namespace FPLedit
 
         public void LogException(Exception e)
         {
+            if (showDebug) WriteMl("[EXCEPTION] " + e.GetExceptionDetails(), Colors.Red);
         }
 
         public void Debug(string message)
         {
+            if (showDebug) WriteMl("[DEBUG] " + message, Colors.Blue);
         }
 
         private void WriteMl(string message, Color c)

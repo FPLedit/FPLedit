@@ -34,6 +34,7 @@ namespace FPLedit.jTrainGraphStarter
             for (int si = 0; si < copy.Stations.Count; si++)
             {
                 var sta = copy.Stations[si];
+
                 if (!route.Stations.Contains(sta))
                 {
                     copy.RemoveStation(sta);
@@ -112,17 +113,24 @@ namespace FPLedit.jTrainGraphStarter
 
         public void SyncBack(Timetable singleRoute)
         {
-            singleRoute.SetAttribute("version", TimetableVersion.Extended_FPL.ToNumberString()); // Wieder in Netzwerk-Modus wechseln
-            orig.Attributes = AttrDiff(orig, singleRoute);
+            ColorTimetableConverter.ConvertAll(singleRoute, TimetableVersion.Extended_FPL); // Zu Hex-Farben zurück
 
-            ColorTimetableConverter.ConvertAll(singleRoute); // Zu Hex-Farben zurück
+            orig.Attributes = AttrDiff(orig, singleRoute);
+            orig.SetAttribute("version", TimetableVersion.Extended_FPL.ToNumberString()); // Wieder in Netzwerk-Modus wechseln
 
             foreach (var sta in orig.Stations)
             {
                 var srSta = singleRoute.Stations.FirstOrDefault(s => s.GetAttribute<int>("fpl-id") == sta.Id);
                 if (srSta == null)
                     continue;
-                srSta.RemoveAttribute("km"); // Alte km-Angabe entfernen
+
+                var dTa = sta.GetAttribute<string>("dTa");
+                var dTi = sta.GetAttribute<string>("dTi");
+
+                ConvertStationLinToNet(srSta);
+
+                sta.SetAttribute("dTa", dTa);
+                sta.SetAttribute("dTi", dTi);
 
                 sta.Attributes = AttrDiff(sta, srSta);
             }

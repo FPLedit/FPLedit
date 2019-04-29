@@ -382,7 +382,7 @@ namespace FPLedit.Shared
 
         public int GetDirectlyConnectingRoute(Station sta1, Station sta2)
             => sta1.Routes.Intersect(sta2.Routes).DefaultIfEmpty(-1)
-                .First(r => RouteConnectsDirectly(r, sta1, sta2));
+                .FirstOrDefault(r => RouteConnectsDirectly(r, sta1, sta2));
 
         private void RemoveOrphanedRoutes()
         {

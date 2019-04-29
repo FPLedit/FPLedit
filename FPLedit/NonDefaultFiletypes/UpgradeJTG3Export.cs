@@ -38,7 +38,7 @@ namespace FPLedit.NonDefaultFiletypes
                 }
 
                 // Allocate train ids
-                var nextId = clone.Trains.Max(t => t.Id);
+                var nextId = clone.Trains.DefaultIfEmpty().Max(t => t?.Id) ?? 0;
                 foreach (var orig in clone.Trains)
                 {
                     if (orig.Id == -1)

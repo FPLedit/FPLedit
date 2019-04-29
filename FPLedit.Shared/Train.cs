@@ -126,6 +126,9 @@ namespace FPLedit.Shared
             else
                 tElm = tElems.FirstOrDefault(t => t.StationId == sta.Id);
 
+            if (tElm == null)
+                return;
+
             Children.Remove(tElm.XMLEntity);
         }
 

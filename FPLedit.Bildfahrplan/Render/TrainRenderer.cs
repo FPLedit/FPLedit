@@ -59,7 +59,7 @@ namespace FPLedit.Bildfahrplan.Render
 
             PointF? GetInternalPoint(StationX sx, TimeSpan time, string track)
             {
-                if (time == default || !sx.TrackOffsets.TryGetValue(track, out float x))
+                if (time == default || track == null || !sx.TrackOffsets.TryGetValue(track, out float x))
                     return null;
                 return new PointF(margin.Left + x, GetTimeY(time));
             }
