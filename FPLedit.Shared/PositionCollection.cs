@@ -5,7 +5,6 @@ using System.Linq;
 
 namespace FPLedit.Shared
 {
-    //TODO: Handle kmr/kml in a better, more generic way
     [Serializable]
     public class PositionCollection
     {

@@ -25,10 +25,13 @@ namespace FPLedit.Bildfahrplan.Forms
         private readonly ValidatorCollection validators;
 
         private readonly TimetableStyle attrs;
+        private readonly Timetable tt;
 
         public ConfigForm(Timetable tt, ISettings settings)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
+
+            this.tt = tt;
 
             heightPerHourValidator = new NumberValidator(heightPerHourTextBox, false, false);
             heightPerHourValidator.ErrorMessage = "Bitte eine Zahl als Höhe pro Stunde angeben!";
@@ -93,6 +96,26 @@ namespace FPLedit.Bildfahrplan.Forms
         {
             Result = DialogResult.Cancel;
             this.NClose();
+        }
+
+        private void CalcTimesButton_Click(object sender, EventArgs e)
+        {
+            var times = tt.Trains.SelectMany(t => t.GetArrDeps().Values).SelectMany(a =>
+            {
+                var ts = a.ShuntMoves.Select(sm => sm.Time).ToList();
+                ts.AddRange(new[] { a.Arrival, a.Departure });
+                return ts;
+            }).Where(t => t != default);
+
+            var offset = new TimeSpan(0, 5, 0);
+            var max = new TimeSpan(23, 59, 59);
+            var start = times.DefaultIfEmpty().Min();
+            var end = times.DefaultIfEmpty(max).Max();
+            attrs.StartTime = start > default(TimeSpan) + offset ? start - offset : default;
+            attrs.EndTime = end < max - offset ? end + offset : max;
+
+            startTimeTextBox.UpdateBindings(BindingUpdateMode.Destination);
+            endTimeTextBox.UpdateBindings(BindingUpdateMode.Destination);
         }
     }
 }
