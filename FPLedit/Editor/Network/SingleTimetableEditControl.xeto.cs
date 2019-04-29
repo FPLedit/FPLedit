@@ -26,6 +26,8 @@ namespace FPLedit.Editor.Network
         private Train train;
         private List<Station> path;
 
+        private const string NO_TRACK = "<Kein Gleis>";
+
         protected override int FirstEditingColumn => 2; // erstes Abfahrtsfeld (Ankunft ja deaktiviert)
 
         private ObservableCollection<Control> actionButtons;
@@ -123,9 +125,9 @@ namespace FPLedit.Editor.Network
 
             cc.Binding = Binding.Delegate<DataElement, string>(
                 d => shadowBinding.GetValue(d.ArrDeps[d.Station]),
-                (d, t) => shadowBinding.SetValue(d.ArrDeps[d.Station], t))
+                (d, t) => shadowBinding.SetValue(d.ArrDeps[d.Station], t == (string)d.GetTrackDataStore().FirstOrDefault() ? "" : t))
                 .Cast<object>();
-            cc.DataStoreBinding = Binding.Property<DataElement, IEnumerable<object>>(d => d.Station.Tracks.Select(s => s.Name));
+            cc.DataStoreBinding = Binding.Delegate<DataElement, IEnumerable<object>>(d => d.GetTrackDataStore());
             return cc;
         }
 
@@ -142,6 +144,13 @@ namespace FPLedit.Editor.Network
             public Station Station { get; set; }
 
             public override Station GetStation() => Station;
+
+            public IEnumerable<object> GetTrackDataStore()
+            {
+                var ds = Station.Tracks.Select(s => s.Name).ToList();
+                ds.Insert(0, NO_TRACK);
+                return ds;
+            }
 
             public DataElement(Train tra, Station sta, ArrDep arrDep)
             {

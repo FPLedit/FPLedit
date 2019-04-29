@@ -287,6 +287,13 @@ namespace FPLedit.Shared
                     ardp.ArrivalTrack = newTrackName;
                 if (ardp.DepartureTrack == oldTrackName)
                     ardp.DepartureTrack = newTrackName;
+                foreach (var shunt in ardp.ShuntMoves)
+                {
+                    if (shunt.SourceTrack == oldTrackName)
+                        shunt.SourceTrack = newTrackName;
+                    if (shunt.TargetTrack == oldTrackName)
+                        shunt.TargetTrack = newTrackName;
+                }
             }
         }
 

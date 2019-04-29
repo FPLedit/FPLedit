@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 
 namespace FPLedit.Shared
@@ -12,7 +9,7 @@ namespace FPLedit.Shared
     [DebuggerDisplay("{SName} [{GetAttribute(\"km\", \"\")}]")]
     public sealed class Station : Entity, IStation
     {
-        public ObservableCollection<Track> Tracks { get; private set; }
+        public IChildrenCollection<Track> Tracks { get; private set; }
 
         public Station(XMLEntity en, Timetable tt) : base(en, tt)
         {

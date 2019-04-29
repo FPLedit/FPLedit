@@ -14,7 +14,7 @@ namespace FPLedit.Editor.Network
     {
 #pragma warning disable CS0649
         private readonly GridView gridView;
-        private readonly Button removeButton, upButton, downButton;
+        private readonly Button removeButton;
         private readonly Label arrivalLabel, departureLabel;
 #pragma warning restore CS0649
 
@@ -33,7 +33,9 @@ namespace FPLedit.Editor.Network
             arrivalLabel.Font = new Font(arrivalLabel.Font.FamilyName, arrivalLabel.Font.Size, FontStyle.Bold);
             departureLabel.Font = new Font(departureLabel.Font.FamilyName, departureLabel.Font.Size, FontStyle.Bold);
             arrivalLabel.Text = arrivalLabel.Text.Replace("{time}", arrDep.Arrival != default ? arrDep.Arrival.ToShortTimeString() : "-");
+            arrivalLabel.Text = arrivalLabel.Text.Replace("{track}", arrDep.ArrivalTrack);
             departureLabel.Text = departureLabel.Text.Replace("{time}", arrDep.Departure != default ? arrDep.Departure.ToShortTimeString() : "-");
+            departureLabel.Text = departureLabel.Text.Replace("{track}", arrDep.DepartureTrack);
 
             Title = Title.Replace("{station}", station.SName);
 
@@ -44,11 +46,8 @@ namespace FPLedit.Editor.Network
             gridView.AddDropDownColumn<ShuntMove>(s => s.TargetTrack, tracks, "Zielgleis", editable: true);
             gridView.AddCheckColumn<ShuntMove>(s => s.EmptyAfterwards, "Alle Wagen?", editable: true);
 
-            gridView.SelectedItemsChanged += (s, e) =>
-            {
-                var shunt = (ShuntMove)gridView.SelectedItem;
-                removeButton.Enabled = upButton.Enabled = downButton.Enabled = shunt != null;
-            };
+            gridView.SelectedItemsChanged += (s, e) => removeButton.Enabled = gridView.SelectedItem != null;
+
 
             this.AddSizeStateHandler();
 
@@ -78,38 +77,34 @@ namespace FPLedit.Editor.Network
             RefreshList();
         }
 
-        private void upButton_Click(object sender, EventArgs e)
+        private void sortButton_Click(object sender, EventArgs e)
         {
-            if (gridView.SelectedItem == null)
-                return;
-
-            var idx = gridView.SelectedRow;
-            if (idx == 0)
-                return;
-            arrDep.ShuntMoves.Move(idx, idx - 1);
-            RefreshList();
-        }
-
-        private void downButton_Click(object sender, EventArgs e)
-        {
-            if (gridView.SelectedItem == null)
-                return;
-
-            var idx = gridView.SelectedRow;
-            if (idx == arrDep.ShuntMoves.Count - 1)
-                return;
-            arrDep.ShuntMoves.Move(idx, idx + 1);
+            arrDep.ShuntMoves.Sort(s => s.Time);
             RefreshList();
         }
 
         private void closeButton_Click(object sender, EventArgs e)
         {
+            // Automatisch sortieren
+            arrDep.ShuntMoves.Sort(s => s.Time);
+            RefreshList();
+
             var outOfRange = arrDep.ShuntMoves.Any(
                 shunt => (shunt.Time < arrDep.Arrival && arrDep.Arrival != default) || (shunt.Time > arrDep.Departure && arrDep.Departure != default));
             if (outOfRange)
             {
                 MessageBox.Show("Einige Rangierfahrten befinden sich außerhalb des Zeitfensters des Aufenthalts an der Station!", "FPLedit", MessageBoxType.Error);
                 return;
+            }
+            if (arrDep.ShuntMoves.Last().TargetTrack != arrDep.DepartureTrack)
+            {
+                var res = MessageBox.Show("Die letzte Rangierfahrt endet nicht am Abfahrtsgleis! Trotzdem fortfahren?", "FPLedit", MessageBoxButtons.YesNo, MessageBoxType.Warning);
+                if (res == DialogResult.No) return;
+            }
+            if (arrDep.ShuntMoves.Last().TargetTrack != arrDep.DepartureTrack)
+            {
+                var res = MessageBox.Show("Die erste Rangierfahrt beginnt nicht am Ankunftsgleis! Trotzdem fortfahren?", "FPLedit", MessageBoxButtons.YesNo, MessageBoxType.Warning);
+                if (res == DialogResult.No) return;
             }
             Close(DialogResult.Ok);
         }

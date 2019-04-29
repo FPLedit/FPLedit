@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace FPLedit.Shared
 {
     [Serializable]
-    public class ObservableChildrenCollection<T> : ObservableCollection<T> where T : Entity
+    public class ObservableChildrenCollection<T> : ObservableCollection<T>, IChildrenCollection<T> where T : Entity
     {
         private Entity parentEntity;
 
@@ -77,5 +77,30 @@ namespace FPLedit.Shared
             var toRemove = e.OldItems.Cast<T>().Select(t => t.XMLEntity).ToList();
             parentEntity.Children.RemoveAll(t => toRemove.Contains(t));
         }
+
+        public void Sort<TCompare>(Func<T, TCompare> comparer) where TCompare : IComparable
+        {
+            for (int n = Count; n > 1; n--)
+            {
+                // Bubblesort
+                for (int i = 0; i < n - 1; i++)
+                {
+                    if (i + 1 == Count)
+                        break; // Wir sind durch
+
+                    var cur = this[i];
+                    var next = this[i + 1];
+
+                    if (comparer(cur).CompareTo(comparer(next)) > 0)
+                        Move(i + 1, i);
+                }
+            }
+        }
+    }
+
+    public interface IChildrenCollection<T> : IList<T>
+    {
+        void Move(int oldIndex, int newIndex);
+        void Sort<TCompare>(Func<T, TCompare> comparer) where TCompare : IComparable;
     }
 }

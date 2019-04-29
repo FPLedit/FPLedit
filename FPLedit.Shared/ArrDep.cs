@@ -10,7 +10,7 @@ namespace FPLedit.Shared
     [Serializable]
     public class ArrDep : Entity
     {
-        public ObservableCollection<ShuntMove> ShuntMoves { get; private set; }
+        public IChildrenCollection<ShuntMove> ShuntMoves { get; private set; }
 
         public int StationId
         {
