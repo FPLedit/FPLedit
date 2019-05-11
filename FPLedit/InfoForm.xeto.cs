@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿using Eto.Drawing;
+using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System;
@@ -33,6 +34,7 @@ namespace FPLedit
                 licenseTextArea.Text = sr.ReadToEnd();
 
             versionLabel.Text = versionLabel.Text.Replace("{version}", mg.CurrentVersion.ToString());
+            versionLabel.Font = new Font(versionLabel.Font.FamilyName, versionLabel.Font.Size, FontStyle.Bold);
             updateCheckBox.Checked = mg.AutoUpdateEnabled;
         }
 
