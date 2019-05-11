@@ -7,28 +7,24 @@ using System.IO;
 using System.ComponentModel;
 using System.Diagnostics;
 using FPLedit.Shared;
-using FPLedit.Shared.Filetypes;
 using FPLedit.Shared.Templating;
 using FPLedit.Shared.UI;
 using FPLedit.Logger;
 using FPLedit.Templating;
 using FPLedit.Editor.Network;
 using FPLedit.Config;
-using FPLedit.NonDefaultFiletypes;
 using FPLedit.Shared.Rendering;
 using System.Threading.Tasks;
 using FPLedit.Extensibility;
 
 namespace FPLedit
 {
-    public class MainForm : FForm, IInfo, IRestartable
+    public class MainForm : FForm, IInfo, IRestartable, ILastFileHandler
     {
         #region Controls
 #pragma warning disable CS0649
         private readonly LogControl logTextBox;
         private readonly ButtonMenuItem saveMenu, saveAsMenu, exportMenu, importMenu, lastMenu, fileMenu, convertMenu;
-        private readonly SaveFileDialog saveFileDialog, exportFileDialog;
-        private readonly OpenFileDialog openFileDialog, importFileDialog;
         private readonly LineEditingControl lineEditingControl;
 #pragma warning restore CS0649
         #endregion
@@ -37,22 +33,19 @@ namespace FPLedit
 
         private Timetable timetableBackup = null;
 
-        private readonly IImport open;
-        private readonly IExport save;
-
-        private readonly FileState fileState;
         private TemplateManager templateManager;
-        internal readonly ExtensionManager extensionManager;
         private readonly UndoManager undo;
         private readonly RegisterStore registry;
         private readonly UpdateManager update;
+        private readonly FileHandler fileHandler;
+        internal readonly ExtensionManager extensionManager;
         internal readonly CrashReporting.CrashReporter crashReporter;
+
 
         private List<string> lastFiles;
         private bool enable_last = true;
-        private string lastPath;
 
-        public Timetable Timetable { get; set; }
+        public Timetable Timetable => fileHandler.Timetable;
 
         public ILog Logger { get; private set; }
 
@@ -60,26 +53,7 @@ namespace FPLedit
 
         #region FileState
 
-        public IFileState FileState => fileState;
-
-        public void SetUnsaved()
-        {
-            undo.AddUndoStep();
-            fileState.Saved = false;
-        }
-
-        private void OnFileStateChanged()
-        {
-            fileState.UpdateMetaProperties(Timetable, undo);
-
-            saveMenu.Enabled = saveAsMenu.Enabled = exportMenu.Enabled = convertMenu.Enabled = fileState.Opened;
-
-            FileStateChanged?.Invoke(this, new FileStateChangedEventArgs(fileState));
-
-            Title = "FPLedit" + (fileState.Opened ? " - "
-                + (fileState.FileName != null ? (Path.GetFileName(fileState.FileName) + " ") : "")
-                + (fileState.Saved ? "" : "*") : "");
-        }
+        public IFileState FileState => fileHandler.FileState;
 
         public event EventHandler<FileStateChangedEventArgs> FileStateChanged;
         public event EventHandler ExtensionsLoaded;
@@ -99,21 +73,9 @@ namespace FPLedit
             update = new UpdateManager(Settings);
             extensionManager = new ExtensionManager(this, update);
             crashReporter = new CrashReporting.CrashReporter(this);
+            fileHandler = new FileHandler(this, this, this, undo);
 
             lineEditingControl.Initialize(this);
-
-            saveFileDialog = new SaveFileDialog();
-            openFileDialog = new OpenFileDialog();
-            exportFileDialog = new SaveFileDialog();
-            importFileDialog = new OpenFileDialog();
-
-            open = new XMLImport();
-            save = new XMLExport();
-            saveFileDialog.AddLegacyFilter(save.Filter);
-            openFileDialog.AddLegacyFilter(open.Filter);
-
-            fileState = new FileState();
-            fileState.FileStateInternalChanged += (s, e) => OnFileStateChanged();
 
             var logger = new MultipleLogger(logTextBox);
             if (Settings.Get("log.enable-file", false))
@@ -128,7 +90,28 @@ namespace FPLedit
                     lineEditingControl.DispatchKeystroke(e);
             };
 
+            fileHandler.FileStateChanged += FileHandler_FileStateChanged;
+            fileHandler.FileOpened += FileHandler_FileOpened;
+
             Init();
+        }
+
+        private void FileHandler_FileOpened(object sender, EventArgs e)
+        {
+            lineEditingControl.ResetPan();
+
+            FileOpened?.Invoke(sender, e);
+        }
+
+        private void FileHandler_FileStateChanged(object sender, FileStateChangedEventArgs e)
+        {
+            Title = "FPLedit" + (e.FileState.Opened ? " - "
+                + (e.FileState.FileName != null ? (Path.GetFileName(e.FileState.FileName) + " ") : "")
+                + (e.FileState.Saved ? "" : "*") : "");
+
+            saveMenu.Enabled = saveAsMenu.Enabled = exportMenu.Enabled = convertMenu.Enabled = e.FileState.Opened;
+
+            FileStateChanged?.Invoke(sender, e);
         }
 
         #region Initialization
@@ -147,14 +130,6 @@ namespace FPLedit
             InitializeExportImport();
             InitializeMenus();
 
-            // Letzte Pfade initialisieren
-            lastPath = Settings.Get("files.lastpath", "");
-            if (lastPath != "" && Uri.TryCreate(lastPath, UriKind.Absolute, out Uri uri))
-            {
-                openFileDialog.Directory = uri;
-                saveFileDialog.Directory = uri;
-            }
-
             // Vorlagen laden
             templatePath = Settings.Get("tmpl.root", templatePath);
             templateManager = new TemplateManager(registry, Logger, Settings);
@@ -164,10 +139,8 @@ namespace FPLedit
 
             ExtensionsLoaded?.Invoke(this, new EventArgs());
 
-            Shown += LoadStartFile;
+            Shown += (s, e) => LoadStartFile();
             Shown += (s, e) => update.AutoUpdateCheck(Logger);
-
-            FileOpened += (s, e) => MaybeUpgradeTtVersion();
 
             new TimetableChecks.TimetableCheckRunner(this); // CheckRunner initialisieren
 
@@ -180,7 +153,7 @@ namespace FPLedit
                     {
                         var cf = new CrashReporting.CrashForm(crashReporter);
                         if (cf.ShowModal(this) == DialogResult.Ok)
-                            crashReporter.Restore();
+                            crashReporter.Restore(fileHandler);
                         crashReporter.RemoveCrashFlag();
                     }
                     catch (Exception ex)
@@ -192,18 +165,17 @@ namespace FPLedit
             }
         }
 
-        private void LoadStartFile(object sender, EventArgs e)
+        private void LoadStartFile()
         {
             // Parameter: Fpledit.exe [Dateiname] ODER Datei aus Restart
             var fn = OptionsParser.OpenFilename;
             fn = Settings.Get("restart.file", fn);
             if (fn != null && File.Exists(fn))
             {
-                InternalOpen(fn);
+                fileHandler.InternalOpen(fn);
                 AddLastFile(fn);
             }
             Settings.Remove("restart.file");
-            Shown -= LoadStartFile;
         }
 
         private void InitializeExportImport()
@@ -211,13 +183,7 @@ namespace FPLedit
             var exporters = registry.GetRegistered<IExport>();
             var importers = registry.GetRegistered<IImport>();
 
-            exportFileDialog.AddLegacyFilter(exporters.Select(ex => ex.Filter).ToArray());
-            importFileDialog.AddLegacyFilter(importers.Select(im => im.Filter).ToArray());
-
-            // Letzten Exporter auswählen
-            int exporter_idx = Settings.Get("exporter.last", -1);
-            if (exporter_idx > -1 && exporters.Length > exporter_idx)
-                exportFileDialog.CurrentFilterIndex = exporter_idx + 1;
+            fileHandler.InitializeExportImport(exporters, importers);
 
             // Ggf. Import bzw. Export-Menü entfernen
             if (importers.Length == 0)
@@ -260,173 +226,13 @@ namespace FPLedit
                 var itm = lastMenu.CreateItem(lf);
                 itm.Click += (s, a) =>
                 {
-                    if (NotifyIfUnsaved())
-                        InternalOpen(lf);
+                    if (fileHandler.NotifyIfUnsaved())
+                        fileHandler.InternalOpen(lf);
                 };
             }
         }
 
-        #endregion
-
-        #region FileHandling
-        private void Import()
-        {
-            var importers = registry.GetRegistered<IImport>();
-
-            if (importers.Length == 0)
-            {
-                Logger.Error("Keine Importer gefunden, Import nicht möglich!");
-                return;
-            }
-
-            if (!NotifyIfUnsaved())
-                return;
-            if (importFileDialog.ShowDialog(this) == DialogResult.Ok)
-            {
-                IImport import = importers[importFileDialog.CurrentFilterIndex - 1];
-                Logger.Info("Öffne Datei " + importFileDialog.FileName);
-                Timetable = import.Import(importFileDialog.FileName, this);
-                if (Timetable == null)
-                    return;
-                Logger.Info("Datei erfolgeich geöffnet!");
-                fileState.Opened = true;
-                fileState.Saved = true;
-                fileState.FileName = importFileDialog.FileName;
-                undo.ClearHistory();
-            }
-        }
-
-        private void Export()
-        {
-            if (exportFileDialog.ShowDialog(this) == DialogResult.Ok)
-            {
-                var exporters = registry.GetRegistered<IExport>();
-                IExport export = exporters[exportFileDialog.CurrentFilterIndex];
-                string filename = exportFileDialog.FileName;
-
-                Logger.Info("Exportiere in Datei " + filename);
-                bool ret = export.Export(Timetable, filename, this);
-                if (ret == false)
-                {
-                    Logger.Error("Exportieren fehlgeschlagen!");
-                    return;
-                }
-                Logger.Info("Exportieren erfolgreich abgeschlossen!");
-                Settings.Set("exporter.last", exportFileDialog.CurrentFilterIndex);
-            }
-        }
-
-        public void Open()
-        {
-            if (!NotifyIfUnsaved())
-                return;
-            if (openFileDialog.ShowDialog(this) == DialogResult.Ok)
-            {
-                InternalOpen(openFileDialog.FileName);
-                UpdateLastPath(openFileDialog);
-                AddLastFile(openFileDialog.FileName);
-            }
-        }
-
-        public void Reload()
-            => InternalOpen(fileState.FileName);
-
-        internal void InternalOpen(string filename)
-        {
-            Logger.Info("Öffne Datei " + filename);
-            Timetable = open.Import(filename, this);
-            if (Timetable == null)
-                Logger.Error("Fehler beim Öffnen der Datei!");
-            else
-                Logger.Info("Datei erfolgeich geöffnet!");
-            if (Timetable?.UpgradeMessage != null)
-                Logger.Warning(Timetable.UpgradeMessage);
-            fileState.Opened = Timetable != null;
-            fileState.Saved = Timetable != null;
-            fileState.FileName = Timetable != null ? filename : null;
-            undo.ClearHistory();
-            lineEditingControl.ResetPan();
-            if (Timetable != null)
-                FileOpened?.Invoke(this, null);
-        }
-
-        public void Save(bool forceSaveAs)
-        {
-            string filename = fileState.FileName;
-
-            bool saveAs = forceSaveAs || filename == null || filename == "" || Path.GetExtension(filename) != ".fpl";
-
-            if (saveAs)
-            {
-                if (saveFileDialog.ShowDialog(this) != DialogResult.Ok)
-                    return;
-                filename = saveFileDialog.FileName;
-                UpdateLastPath(saveFileDialog);
-                AddLastFile(saveFileDialog.FileName);
-            }
-            InternalSave(filename);
-        }
-
-        private void InternalSave(string filename)
-        {
-            if (!filename.EndsWith(".fpl"))
-                filename += ".fpl";
-
-            Logger.Info("Speichere Datei " + filename);
-            bool ret = save.Export(Timetable, filename, this);
-            if (ret == false)
-                return;
-            Logger.Info("Speichern erfolgreich abgeschlossen!");
-            fileState.Saved = true;
-            fileState.FileName = filename;
-        }
-
-        private void New(TimetableType type)
-        {
-            if (!NotifyIfUnsaved())
-                return;
-            Timetable = new Timetable(type);
-            fileState.Opened = true;
-            fileState.Saved = false;
-            fileState.FileName = null;
-            undo.ClearHistory();
-            Logger.Info("Neue Datei erstellt");
-        }
-
-        private bool NotifyIfUnsaved()
-        {
-            if (!fileState.Saved && fileState.Opened)
-            {
-                DialogResult res = MessageBox.Show("Wollen Sie die noch nicht gespeicherten Änderungen speichern?",
-                    "FPLedit", MessageBoxButtons.YesNoCancel);
-
-                if (res == DialogResult.Cancel)
-                    return false;
-                if (res == DialogResult.Yes)
-                    Save(false);
-            }
-            return true;
-        }
-
-        public void RestartWithCurrentFile()
-        {
-            if (!NotifyIfUnsaved())
-                return;
-            if (fileState.Opened)
-                Settings.Set("restart.file", fileState.FileName);
-
-            Process.Start(System.Reflection.Assembly.GetEntryAssembly().Location);
-            Program.App.Quit();
-        }
-
-        private void UpdateLastPath(FileDialog dialog)
-        {
-            lastPath = Path.GetDirectoryName(dialog.FileName);
-            openFileDialog.Directory = new Uri(lastPath);
-            saveFileDialog.Directory = new Uri(lastPath);
-        }
-
-        private void AddLastFile(string filename)
+        public void AddLastFile(string filename)
         {
             if (enable_last)
             {
@@ -442,55 +248,18 @@ namespace FPLedit
             }
         }
 
-        private void ConvertTimetable()
-        {
-            IExport exp = (Timetable.Type == TimetableType.Linear) ? (IExport)new NetworkExport() : new LinearExport();
-            string orig = (Timetable.Type == TimetableType.Linear) ? "Linear-Fahrplan" : "Netzwerk-Fahrplan";
-            string dest = (Timetable.Type == TimetableType.Linear) ? "Netzwerk-Fahrplan" : "Linear-Fahrplan";
-
-            if (MessageBox.Show($"Die aktuelle Datei ist ein {orig}. Es wird zu einem {dest} konvertiert.", "FPLedit", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
-                return;
-
-            var sfd = new SaveFileDialog();
-            sfd.AddLegacyFilter(exp.Filter);
-            if (sfd.ShowDialog(this) == DialogResult.Ok)
-            {
-                Logger.Info("Konvertiere Datei...");
-                bool ret = exp.Export(Timetable, sfd.FileName, this);
-                if (ret == false)
-                    return;
-                Logger.Info("Konvertieren erfolgreich abgeschlossen!");
-                InternalOpen(sfd.FileName);
-            }
-        }
-
-
-        private void MaybeUpgradeTtVersion()
-        {
-            if (Timetable == null || Timetable.Version.Compare(Timetable.DefaultLinearVersion) >= 0)
-                return;
-
-            var res = MessageBox.Show("Diese Fahrplandatei ist im Dateiformat von jTrainGraph 2.x bzw. 3.0x erstellt worden. Im Format von jTrainGraph 3.1x stehen mehr Funktionen zur Verfügung." +
-                " Soll das Format jetzt aktualisiert werden? ACHTUNG: Die Datei kann danach nicht mehr mit jTrainGraph 2.x oder 3.0x berabeitet werden!", "FPLedit",
-                MessageBoxButtons.YesNo, MessageBoxType.Question);
-            if (res != DialogResult.Yes)
-                return;
-
-            var exp = new UpgradeJTG3Export();
-            var sfd = new SaveFileDialog();
-            sfd.AddLegacyFilter(exp.Filter);
-            if (sfd.ShowDialog(this) == DialogResult.Ok)
-            {
-                Logger.Info("Konvertiere Datei...");
-                bool ret = exp.Export(Timetable, sfd.FileName, this);
-                if (ret == false)
-                    return;
-                Logger.Info("Konvertieren erfolgreich abgeschlossen!");
-                InternalOpen(sfd.FileName);
-            }
-
-        }
         #endregion
+
+        public void RestartWithCurrentFile()
+        {
+            if (!fileHandler.NotifyIfUnsaved())
+                return;
+            if (FileState.Opened)
+                Settings.Set("restart.file", FileState.FileName);
+
+            Process.Start(System.Reflection.Assembly.GetEntryAssembly().Location);
+            Program.App.Quit();
+        }
 
         protected override void OnClosing(CancelEventArgs e)
         {
@@ -498,8 +267,7 @@ namespace FPLedit
             {
                 if (enable_last)
                     Settings.Set("files.last", string.Join(";", lastFiles));
-                Settings.Set("files.lastpath", lastPath);
-                if (!NotifyIfUnsaved())
+                if (!fileHandler.NotifyIfUnsaved())
                     e.Cancel = true;
 
                 ClearTemp();
@@ -531,9 +299,9 @@ namespace FPLedit
             if (files == null || files.Length != 1 || !files[0].AbsolutePath.EndsWith(".fpl"))
                 return;
 
-            if (!NotifyIfUnsaved())
+            if (!fileHandler.NotifyIfUnsaved())
                 return;
-            InternalOpen(files[0].LocalPath);
+            fileHandler.InternalOpen(files[0].LocalPath);
 
             base.OnDragDrop(e);
         }
@@ -543,8 +311,8 @@ namespace FPLedit
         public void Undo()
         {
             if (undo.CanGoBack)
-                Timetable = undo.Undo();
-            fileState.Saved = false;
+                fileHandler.Timetable = undo.Undo();
+            fileHandler.FileState.Saved = false;
         }
 
         public void StageUndoStep()
@@ -557,7 +325,7 @@ namespace FPLedit
 
         public void RestoreTimetable()
         {
-            Timetable = timetableBackup;
+            fileHandler.Timetable = timetableBackup;
             ClearBackup();
         }
 
@@ -594,35 +362,43 @@ namespace FPLedit
             if (Directory.Exists(dirpath))
                 Directory.Delete(dirpath, true);
         }
+
+        public void SetUnsaved() => fileHandler.SetUnsaved();
+
+        public void Open() => fileHandler.Open();
+
+        public void Save(bool forceSaveAs) => fileHandler.Save(forceSaveAs);
+
+        public void Reload() => fileHandler.Reload();
         #endregion
 
         #region Events
         private void saveMenu_Click(object sender, EventArgs e)
-            => Save(false);
+            => fileHandler.Save(false);
 
         private void openMenu_Click(object sender, EventArgs e)
-            => Open();
+            => fileHandler.Open();
 
         private void saveAsMenu_Click(object sender, EventArgs e)
-            => Save(true);
+            => fileHandler.Save(true);
 
         private void importMenu_Click(object sender, EventArgs e)
-            => Import();
+            => fileHandler.Import();
 
         private void exportMenu_Click(object sender, EventArgs e)
-            => Export();
+            => fileHandler.Export();
 
         private void quitMenu_Click(object sender, EventArgs e)
             => Close();
 
         private void linearNewMenu_Click(object sender, EventArgs e)
-            => New(TimetableType.Linear);
+            => fileHandler.New(TimetableType.Linear);
 
         private void networkNewMenu_Click(object sender, EventArgs e)
-            => New(TimetableType.Network);
+            => fileHandler.New(TimetableType.Network);
 
         private void convertMenu_Click(object sender, EventArgs e)
-            => ConvertTimetable();
+            => fileHandler.ConvertTimetable();
         #endregion
     }
 }

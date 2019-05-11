@@ -7,7 +7,7 @@ namespace FPLedit.Shared
 {
     public interface IInfo
     {
-        Timetable Timetable { get; set; }
+        Timetable Timetable { get; }
 
         IFileState FileState { get; }
         void SetUnsaved();
