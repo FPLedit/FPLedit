@@ -124,13 +124,9 @@ namespace FPLedit.jTrainGraphStarter
                 if (srSta == null)
                     continue;
 
-                var dTa = sta.GetAttribute<string>("dTa");
-                var dTi = sta.GetAttribute<string>("dTi");
-
-                ConvertStationLinToNet(srSta);
-
-                sta.SetAttribute("dTa", dTa);
-                sta.SetAttribute("dTi", dTi);
+                //TODO: Better method to remove all known attributes?
+                foreach (var a in new[] { "km", "kml", "kmr", "fpl-rt", "fpl-id", "fpl-wl", "fpl-vmax", "tr", "dTi", "dTa" })
+                    srSta.RemoveAttribute(a); // Alte Angaben entfernen
 
                 sta.Attributes = AttrDiff(sta, srSta);
             }
