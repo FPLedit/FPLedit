@@ -47,7 +47,7 @@ namespace FPLedit.jTrainGraphStarter
 
         private void StartLinear()
         {
-            var backup = info.Timetable.Clone();
+            info.BackupTimetable();
             try
             {
                 bool showMessage = info.Settings.Get("jTGStarter.show-message", true);
@@ -69,13 +69,13 @@ namespace FPLedit.jTrainGraphStarter
             {
                 info.Logger.Error("Beim Verwenden von jTrainGraph ist ein unerwarteter Fehler aufgetreten! " + e);
                 info.Logger.LogException(e);
-                info.Timetable = backup;
+                info.RestoreTimetable();
             }
         }
 
         private void StartNetwork(int route)
         {
-            var backup = info.Timetable.Clone();
+            info.BackupTimetable();
             try
             {
                 bool showMessage = info.Settings.Get("jTGStarter.show-message", true);
@@ -112,7 +112,7 @@ namespace FPLedit.jTrainGraphStarter
             {
                 info.Logger.Error("Beim Verwenden von jTrainGraph ist ein unerwarteter Fehler aufgetreten! " + e);
                 info.Logger.LogException(e);
-                info.Timetable = backup;
+                info.RestoreTimetable();
             }
         }
 

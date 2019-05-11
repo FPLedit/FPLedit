@@ -55,15 +55,13 @@ namespace FPLedit.CrashReporting
             }
         }
 
-        public void Restore()
+        public void Restore(FileHandler fh)
         {
-            var form = (MainForm)info;
             if (!HasCurrentTtBackup)
                 return;
-            form.InternalOpen(CrashTtFileName);
-            var fs = (FileState)form.FileState;
-            fs.Saved = false;
-            fs.FileName = OrigTtFileName != "" ? OrigTtFileName : null;
+            fh.InternalOpen(CrashTtFileName);
+            fh.FileState.Saved = false;
+            fh.FileState.FileName = OrigTtFileName != "" ? OrigTtFileName : null;
         }
 
         // Crash flag
