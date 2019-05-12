@@ -373,31 +373,31 @@ namespace FPLedit
         #endregion
 
         #region Events
-        private void saveMenu_Click(object sender, EventArgs e)
+        private void SaveMenu_Click(object sender, EventArgs e)
             => fileHandler.Save(false);
 
-        private void openMenu_Click(object sender, EventArgs e)
+        private void OpenMenu_Click(object sender, EventArgs e)
             => fileHandler.Open();
 
-        private void saveAsMenu_Click(object sender, EventArgs e)
+        private void SaveAsMenu_Click(object sender, EventArgs e)
             => fileHandler.Save(true);
 
-        private void importMenu_Click(object sender, EventArgs e)
+        private void ImportMenu_Click(object sender, EventArgs e)
             => fileHandler.Import();
 
-        private void exportMenu_Click(object sender, EventArgs e)
+        private void ExportMenu_Click(object sender, EventArgs e)
             => fileHandler.Export();
 
-        private void quitMenu_Click(object sender, EventArgs e)
+        private void QuitMenu_Click(object sender, EventArgs e)
             => Close();
 
-        private void linearNewMenu_Click(object sender, EventArgs e)
+        private void LinearNewMenu_Click(object sender, EventArgs e)
             => fileHandler.New(TimetableType.Linear);
 
-        private void networkNewMenu_Click(object sender, EventArgs e)
+        private void NetworkNewMenu_Click(object sender, EventArgs e)
             => fileHandler.New(TimetableType.Network);
 
-        private void convertMenu_Click(object sender, EventArgs e)
+        private void ConvertMenu_Click(object sender, EventArgs e)
             => fileHandler.ConvertTimetable();
         #endregion
     }

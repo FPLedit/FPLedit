@@ -7,8 +7,8 @@
   Title="Fahrplan bearbeiten" ClientSize="870,690" Resizable="true">
   <e:LineTimetableEditControl x:Name="editor">
     <e:LineTimetableEditControl.ActionButtons>
-      <Button x:Name="cancelButton" Text="Abbrechen" Click="cancelButton_Click"></Button>
-      <Button x:Name="closeButton" Text="Schließen" Click="closeButton_Click"></Button>
+      <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click"></Button>
+      <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click"></Button>
     </e:LineTimetableEditControl.ActionButtons>
   </e:LineTimetableEditControl>
 </e:LineTimetableEditForm>

@@ -1,13 +1,12 @@
 ﻿using Eto.Drawing;
 using Eto.Forms;
-using FPLedit.Editor.Network;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.Editor
 {
@@ -21,14 +20,31 @@ namespace FPLedit.Editor
 
         public bool Initialized { get; protected set; }
 
+        // Actions
+        private TableLayout internalActionsLayout;
+
+        protected readonly ObservableCollection<Control> actionButtons;
+        public IList<Control> ActionButtons => actionButtons;
+
         protected BaseTimetableEditControl()
         {
-
+            actionButtons = new ObservableCollection<Control>();
+            actionButtons.CollectionChanged += (s, e) =>
+            {
+                var row = internalActionsLayout.Rows[0];
+                if (e.Action == NotifyCollectionChangedAction.Add)
+                    foreach (Control btn in e.NewItems)
+                        row.Cells.Add(btn);
+                if (e.Action == NotifyCollectionChangedAction.Remove)
+                    foreach (Control btn in e.OldItems)
+                        row.Cells.Remove(btn);
+            };
         }
 
-        protected void Init(ToggleButton trapeztafelToggle)
+        protected void Init(ToggleButton trapeztafelToggle, TableLayout actionsLayout)
         {
             this.trapeztafelToggle = trapeztafelToggle;
+            internalActionsLayout = actionsLayout;
             mpmode = !Eto.Platform.Instance.SupportedFeatures.HasFlag(Eto.PlatformFeatures.CustomCellSupportsControlView);
         }
 

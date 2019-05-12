@@ -9,19 +9,19 @@
     <MenuBar>
       <ButtonMenuItem Text="Datei" x:Name="fileMenu">
         <ButtonMenuItem Text="Neu">
-          <ButtonMenuItem Text="Lineare Strecke" Click="linearNewMenu_Click" />
-          <ButtonMenuItem Text="Netzwerk-Fahrplan" Click="networkNewMenu_Click" />
+          <ButtonMenuItem Text="Lineare Strecke" Click="LinearNewMenu_Click" />
+          <ButtonMenuItem Text="Netzwerk-Fahrplan" Click="NetworkNewMenu_Click" />
         </ButtonMenuItem>
-        <ButtonMenuItem Text="Öffnen" Shortcut="Control,O" Click="openMenu_Click" />
-        <ButtonMenuItem Text="Speichern" Shortcut="Control,S" x:Name="saveMenu" Enabled="false" Click="saveMenu_Click" />
-        <ButtonMenuItem Text="Speichern unter" Shortcut="Control,Shift,S" x:Name="saveAsMenu" Enabled="false" Click="saveAsMenu_Click" />
+        <ButtonMenuItem Text="Öffnen" Shortcut="Control,O" Click="OpenMenu_Click" />
+        <ButtonMenuItem Text="Speichern" Shortcut="Control,S" x:Name="saveMenu" Enabled="false" Click="SaveMenu_Click" />
+        <ButtonMenuItem Text="Speichern unter" Shortcut="Control,Shift,S" x:Name="saveAsMenu" Enabled="false" Click="SaveAsMenu_Click" />
         <ButtonMenuItem Text="Letzte Dateien" x:Name="lastMenu" />
         <SeparatorMenuItem />
-        <ButtonMenuItem x:Name="importMenu" Text="Importieren" Click="importMenu_Click" />
-        <ButtonMenuItem Text="Exportieren" Shortcut="Control,E" x:Name="exportMenu" Enabled="false" Click="exportMenu_Click" />
-        <ButtonMenuItem Text="Konvertieren" Shortcut="Control,K" x:Name="convertMenu" Enabled="false" Click="convertMenu_Click" />
+        <ButtonMenuItem x:Name="importMenu" Text="Importieren" Click="ImportMenu_Click" />
+        <ButtonMenuItem Text="Exportieren" Shortcut="Control,E" x:Name="exportMenu" Enabled="false" Click="ExportMenu_Click" />
+        <ButtonMenuItem Text="Konvertieren" Shortcut="Control,K" x:Name="convertMenu" Enabled="false" Click="ConvertMenu_Click" />
         <SeparatorMenuItem />
-        <ButtonMenuItem Text="Beenden" Click="quitMenu_Click" />
+        <ButtonMenuItem Text="Beenden" Click="QuitMenu_Click" />
       </ButtonMenuItem>
     </MenuBar>
   </c:MainForm.Menu>

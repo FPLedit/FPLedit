@@ -13,7 +13,7 @@ namespace FPLedit.Editor.Network
         private readonly SingleTimetableEditControl editor;
 #pragma warning restore CS0649
 
-        private IInfo info;
+        private readonly IInfo info;
 
         private SingleTimetableEditForm()
         {

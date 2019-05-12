@@ -46,8 +46,10 @@ namespace FPLedit.Editor
             foreach (var d in designables)
             {
                 var c = d.GetControl(info);
-                var tp = new TabPage(c);
-                tp.Text = d.DisplayName;
+                var tp = new TabPage(c)
+                {
+                    Text = d.DisplayName
+                };
                 c.BackgroundColor = tp.BackgroundColor;
                 tabControl.Pages.Add(tp);
 
@@ -60,21 +62,21 @@ namespace FPLedit.Editor
             tabControl.ResumeLayout();
 
             expertCheckBox.Checked = info.Settings.Get<bool>("std.expert");
-            expertCheckBox.CheckedChanged += expertCheckBox_CheckedChanged;
-            expertCheckBox_CheckedChanged(this, null);
+            expertCheckBox.CheckedChanged += ExpertCheckBox_CheckedChanged;
+            ExpertCheckBox_CheckedChanged(this, null);
         }
 
-        private void closeButton_Click(object sender, EventArgs e)
+        private void CloseButton_Click(object sender, EventArgs e)
         {
             info.Settings.Set("std.expert", expertCheckBox.Checked.Value);
             saveHandlers.ForEach(sh => sh.Save());
             Close(DialogResult.Ok);
         }
 
-        private void cancelButton_Click(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e)
             => Close(DialogResult.Cancel);
 
-        private void expertCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void ExpertCheckBox_CheckedChanged(object sender, EventArgs e)
             => expertHandlers.ForEach(eh => eh.SetExpertMode(expertCheckBox.Checked.Value));
     }
 }

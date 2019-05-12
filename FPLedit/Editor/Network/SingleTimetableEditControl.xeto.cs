@@ -5,9 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FPLedit.Shared.UI;
-using Eto;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Linq.Expressions;
 
 namespace FPLedit.Editor.Network
@@ -30,28 +27,13 @@ namespace FPLedit.Editor.Network
 
         protected override int FirstEditingColumn => 2; // erstes Abfahrtsfeld (Ankunft ja deaktiviert)
 
-        private ObservableCollection<Control> actionButtons;
-        public IList<Control> ActionButtons => actionButtons;
-
-        public SingleTimetableEditControl()
+        public SingleTimetableEditControl() : base()
         {
-            actionButtons = new ObservableCollection<Control>();
-            actionButtons.CollectionChanged += (s, e) =>
-            {
-                var row = actionsLayout.Rows[0];
-                if (e.Action == NotifyCollectionChangedAction.Add)
-                    foreach (Control btn in e.NewItems)
-                        row.Cells.Add(btn);
-                if (e.Action == NotifyCollectionChangedAction.Remove)
-                    foreach (Control btn in e.OldItems)
-                        row.Cells.Remove(btn);
-            };
-
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
             trapeztafelToggle = new ToggleButton(internalToggle);
-            trapeztafelToggle.ToggleClick += trapeztafelToggle_Click;
-            base.Init(trapeztafelToggle);
+            trapeztafelToggle.ToggleClick += TrapeztafelToggle_Click;
+            base.Init(trapeztafelToggle, actionsLayout);
 
             KeyDown += HandleControlKeystroke;
 
@@ -85,26 +67,28 @@ namespace FPLedit.Editor.Network
 
         private CustomCell GetCell(Func<ArrDep, TimeSpan> time, bool arrival)
         {
-            var cc = new CustomCell();
-            cc.CreateCell = args => new TextBox();
-            cc.ConfigureCell = (args, control) =>
+            var cc = new CustomCell
             {
-                var tb = (TextBox)control;
-                var data = (DataElement)args.Item;
-                new TimetableCellRenderProperties(time, data.Station, arrival, data).Apply(tb);
-
-                if (mpmode)
+                CreateCell = args => new TextBox(),
+                ConfigureCell = (args, control) =>
                 {
-                    tb.KeyDown += (s, e) => HandleKeystroke(e, dataGridView);
+                    var tb = (TextBox)control;
+                    var data = (DataElement)args.Item;
+                    new TimetableCellRenderProperties(time, data.Station, arrival, data).Apply(tb);
+
+                    if (mpmode)
+                    {
+                        tb.KeyDown += (s, e) => HandleKeystroke(e, dataGridView);
 
                     // Wir gehen hier gleich in den vollen EditMode rein
                     tb.CaretIndex = 0;
-                    tb.SelectAll();
-                    CellSelected(data, data.Station, arrival); data.IsSelectedArrival = arrival; data.SelectedTextBox = tb;
-                }
+                        tb.SelectAll();
+                        CellSelected(data, data.Station, arrival); data.IsSelectedArrival = arrival; data.SelectedTextBox = tb;
+                    }
 
-                tb.GotFocus += (s, e) => { CellSelected(data, data.Station, arrival); data.IsSelectedArrival = arrival; data.SelectedTextBox = tb; };
-                tb.LostFocus += (s, e) => { FormatCell(data, data.Station, arrival, tb); new TimetableCellRenderProperties(time, data.Station, arrival, data).Apply(tb); };
+                    tb.GotFocus += (s, e) => { CellSelected(data, data.Station, arrival); data.IsSelectedArrival = arrival; data.SelectedTextBox = tb; };
+                    tb.LostFocus += (s, e) => { FormatCell(data, data.Station, arrival, tb); new TimetableCellRenderProperties(time, data.Station, arrival, data).Apply(tb); };
+                }
             };
             cc.Paint += (s, e) =>
             {
@@ -213,13 +197,13 @@ namespace FPLedit.Editor.Network
         public bool ApplyChanges()
             => UpdateTrainDataFromGrid(dataGridView);
 
-        private void trapeztafelToggle_Click(object sender, EventArgs e)
+        private void TrapeztafelToggle_Click(object sender, EventArgs e)
             => Trapez(dataGridView);
 
-        private void zlmButton_Click(object sender, EventArgs e)
+        private void ZlmButton_Click(object sender, EventArgs e)
             => Zuglaufmeldung(dataGridView);
 
-        private void shuntButton_Click(object sender, EventArgs e)
+        private void ShuntButton_Click(object sender, EventArgs e)
         {
             if (dataGridView.SelectedRow == -1)
                 return;

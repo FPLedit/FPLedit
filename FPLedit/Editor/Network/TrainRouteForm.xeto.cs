@@ -43,9 +43,11 @@ namespace FPLedit.Editor.Network
 
         public static TrainRouteForm EditPath(IInfo info, Train tra)
         {
-            var trf = new TrainRouteForm(info);
-            trf.train = tra;
-            trf.Path = tra.GetPath();
+            var trf = new TrainRouteForm(info)
+            {
+                train = tra,
+                Path = tra.GetPath()
+            };
             trf.Title = trf.Title.Replace("{train}", tra.TName);
 
             trf.lineRenderer.FixedStatusString = "Durch Klick Stationen am Anfang/Ende des Laufwegs entfernen";
@@ -58,8 +60,10 @@ namespace FPLedit.Editor.Network
 
         public static TrainRouteForm NewTrain(IInfo info)
         {
-            var trf = new TrainRouteForm(info);
-            trf.Title = "Fahrtstrecke für neuen Zug auswählen";
+            var trf = new TrainRouteForm(info)
+            {
+                Title = "Fahrtstrecke für neuen Zug auswählen"
+            };
 
             trf.lineRenderer.FixedStatusString = "Startstation auswählen";
             trf.lineRenderer.StationClicked += trf.SetRoute;
@@ -71,7 +75,7 @@ namespace FPLedit.Editor.Network
             return trf;
         }
 
-        private void closeButton_Click(object sender, EventArgs e)
+        private void CloseButton_Click(object sender, EventArgs e)
         {
             if (train != null)
             {
@@ -188,7 +192,7 @@ namespace FPLedit.Editor.Network
             }
         }
 
-        private void cancelButton_Click(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e)
             => Close(DialogResult.Cancel);
 
         protected override void OnKeyDown(KeyEventArgs e)

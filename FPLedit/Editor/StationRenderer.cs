@@ -216,8 +216,10 @@ namespace FPLedit.Editor
                 return;
 
             var count = _station.Tracks.Count(t => t.Name.StartsWith("Neues Gleis "));
-            var track = new Track(_station._parent);
-            track.Name = "Neues Gleis " + (count + 1);
+            var track = new Track(_station._parent)
+            {
+                Name = "Neues Gleis " + (count + 1)
+            };
 
             if (!_station.Tracks.Any())
             {

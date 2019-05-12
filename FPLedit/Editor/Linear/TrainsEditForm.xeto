@@ -20,13 +20,13 @@
             </TableLayout>
           </TableCell>
           <StackLayout Spacing="5" HorizontalContentAlignment="Stretch">
-            <Button Click="topNewButton_Click">Neuer Zug</Button>
-            <Button Click="topEditButton_Click">Zug bearbeiten</Button>
-            <Button Click="topDeleteButton_Click">Zug löschen</Button>
-            <Button Click="topCopyButton_Click">Zug kopieren/verschieben</Button>
+            <Button Click="TopNewButton_Click">Neuer Zug</Button>
+            <Button Click="TopEditButton_Click">Zug bearbeiten</Button>
+            <Button Click="TopDeleteButton_Click">Zug löschen</Button>
+            <Button Click="TopCopyButton_Click">Zug kopieren/verschieben</Button>
             <!-- Spacer: -->
             <Label />
-            <Button Click="topSortButton_Click">Züge sortieren</Button>
+            <Button Click="TopSortButton_Click">Züge sortieren</Button>
           </StackLayout>
         </TableRow>
         <TableRow ScaleHeight="True">
@@ -41,13 +41,13 @@
             </TableLayout>
           </TableCell>
           <StackLayout Spacing="5" HorizontalContentAlignment="Stretch">
-            <Button Click="bottomNewButton_Click">Neuer Zug</Button>
-            <Button Click="bottomEditButton_Click">Zug bearbeiten</Button>
-            <Button Click="bottomDeleteButton_Click">Zug löschen</Button>
-            <Button Click="bottomCopyButton_Click">Zug kopieren/verschieben</Button>
+            <Button Click="BottomNewButton_Click">Neuer Zug</Button>
+            <Button Click="BottomEditButton_Click">Zug bearbeiten</Button>
+            <Button Click="BottomDeleteButton_Click">Zug löschen</Button>
+            <Button Click="BottomCopyButton_Click">Zug kopieren/verschieben</Button>
             <!-- Spacer: -->
             <Label />
-            <Button Click="bottomSortButton_Click">Züge sortieren</Button>
+            <Button Click="BottomSortButton_Click">Züge sortieren</Button>
           </StackLayout>
         </TableRow>
       </TableLayout><!-- /contents table -->
@@ -56,8 +56,8 @@
       <TableLayout Spacing="5,5" Padding="10,10,10,10"><!-- buttons table -->
         <TableRow>
           <TableCell ScaleWidth="true" />
-          <Button x:Name="cancelButton" Text="Abbrechen" Click="cancelButton_Click"></Button>
-          <Button x:Name="closeButton" Text="Schließen" Click="closeButton_Click"></Button>
+          <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click"></Button>
+          <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click"></Button>
         </TableRow>
       </TableLayout>
     </TableRow><!-- /buttons table -->

@@ -3,8 +3,6 @@ using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace FPLedit.Editor.Linear
@@ -29,27 +27,13 @@ namespace FPLedit.Editor.Linear
 
         protected override int FirstEditingColumn => 1; // erstes Abfahrtsfeld
 
-        private ObservableCollection<Control> actionButtons;
-        public IList<Control> ActionButtons => actionButtons;
-
-        public LineTimetableEditControl()
+        public LineTimetableEditControl() : base()
         {
-            actionButtons = new ObservableCollection<Control>();
-            actionButtons.CollectionChanged += (s, e) =>
-            {
-                var row = actionsLayout.Rows[0];
-                if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-                    foreach (Control btn in e.NewItems)
-                        row.Cells.Add(btn);
-                if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-                    foreach (Control btn in e.OldItems)
-                        row.Cells.Remove(btn);
-            };
-
             Eto.Serialization.Xaml.XamlReader.Load(this);
+
             trapeztafelToggle = new ToggleButton(internalToggle);
-            trapeztafelToggle.ToggleClick += trapeztafelToggle_Click;
-            base.Init(trapeztafelToggle);
+            trapeztafelToggle.ToggleClick += TrapeztafelToggle_Click;
+            base.Init(trapeztafelToggle, actionsLayout);
 
             KeyDown += HandleControlKeystroke;
 
@@ -85,42 +69,44 @@ namespace FPLedit.Editor.Linear
 
         private CustomCell GetCell(Func<ArrDep, TimeSpan> time, Station sta, bool arrival, GridView view)
         {
-            var cc = new CustomCell();
-            cc.CreateCell = args => new TextBox();
-            cc.ConfigureCell = (args, control) =>
+            var cc = new CustomCell
             {
-                var tb = (TextBox)control;
-                var data = (DataElement)args.Item;
-
-                if (data == null)
+                CreateCell = args => new TextBox(),
+                ConfigureCell = (args, control) =>
                 {
-                    tb.Visible = false;
-                    return;
+                    var tb = (TextBox)control;
+                    var data = (DataElement)args.Item;
+
+                    if (data == null)
+                    {
+                        tb.Visible = false;
+                        return;
+                    }
+
+                    new TimetableCellRenderProperties(time, sta, arrival, data).Apply(tb);
+
+                    Action tbEnterEditMode = new Action(() =>
+                    {
+                        CellSelected(data, sta, arrival);
+                        data.IsSelectedArrival = arrival;
+                        data.SelectedStation = sta;
+                        data.SelectedTextBox = tb;
+                        focused = view;
+                    });
+
+                    if (mpmode)
+                    {
+                        tb.KeyDown += (s, e) => HandleKeystroke(e, focused);
+
+                        // Wir gehen hier gleich in den vollen EditMode rein
+                        tb.CaretIndex = 0;
+                        tb.SelectAll();
+                        tbEnterEditMode();
+                    }
+
+                    tb.GotFocus += (s, e) => tbEnterEditMode();
+                    tb.LostFocus += (s, e) => { FormatCell(data, sta, arrival, tb); new TimetableCellRenderProperties(time, sta, arrival, data).Apply(tb); };
                 }
-
-                new TimetableCellRenderProperties(time, sta, arrival, data).Apply(tb);
-
-                Action tbEnterEditMode = new Action(() =>
-                {
-                    CellSelected(data, sta, arrival);
-                    data.IsSelectedArrival = arrival;
-                    data.SelectedStation = sta;
-                    data.SelectedTextBox = tb;
-                    focused = view;
-                });
-
-                if (mpmode)
-                {
-                    tb.KeyDown += (s, e) => HandleKeystroke(e, focused);
-
-                    // Wir gehen hier gleich in den vollen EditMode rein
-                    tb.CaretIndex = 0;
-                    tb.SelectAll();
-                    tbEnterEditMode();
-                }
-
-                tb.GotFocus += (s, e) => tbEnterEditMode();
-                tb.LostFocus += (s, e) => { FormatCell(data, sta, arrival, tb); new TimetableCellRenderProperties(time, sta, arrival, data).Apply(tb); };
             };
             cc.Paint += (s, e) =>
             {
@@ -252,10 +238,10 @@ namespace FPLedit.Editor.Linear
         }
 
         #region Events
-        private void trapeztafelToggle_Click(object sender, EventArgs e)
+        private void TrapeztafelToggle_Click(object sender, EventArgs e)
             => ViewDependantAction(Trapez);
 
-        private void zlmButton_Click(object sender, EventArgs e)
+        private void ZlmButton_Click(object sender, EventArgs e)
             => ViewDependantAction(Zuglaufmeldung);
         #endregion
     }

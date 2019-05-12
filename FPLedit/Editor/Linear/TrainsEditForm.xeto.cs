@@ -4,8 +4,6 @@ using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.Editor.Linear
 {
@@ -83,14 +81,14 @@ namespace FPLedit.Editor.Linear
                 view.KeyDown += HandleKeystroke;
         }
 
-        private void closeButton_Click(object sender, EventArgs e)
+        private void CloseButton_Click(object sender, EventArgs e)
         {
             info.ClearBackup();
             Result = DialogResult.Ok;
             this.NClose();
         }
 
-        private void cancelButton_Click(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Cancel;
             info.RestoreTimetable();
@@ -98,34 +96,34 @@ namespace FPLedit.Editor.Linear
         }
 
         #region Events
-        private void topNewButton_Click(object sender, EventArgs e)
+        private void TopNewButton_Click(object sender, EventArgs e)
             => NewTrain(topGridView, TOP_DIRECTION);
 
-        private void topEditButton_Click(object sender, EventArgs e)
+        private void TopEditButton_Click(object sender, EventArgs e)
             => EditTrain(topGridView, TOP_DIRECTION);
 
-        private void topDeleteButton_Click(object sender, EventArgs e)
+        private void TopDeleteButton_Click(object sender, EventArgs e)
             => DeleteTrain(topGridView, TOP_DIRECTION);
 
-        private void topSortButton_Click(object sender, EventArgs e)
+        private void TopSortButton_Click(object sender, EventArgs e)
             => SortTrains(topGridView, TOP_DIRECTION);
 
-        private void bottomNewButton_Click(object sender, EventArgs e)
+        private void BottomNewButton_Click(object sender, EventArgs e)
             => NewTrain(bottomGridView, BOTTOM_DIRECTION);
 
-        private void bottomEditButton_Click(object sender, EventArgs e)
+        private void BottomEditButton_Click(object sender, EventArgs e)
             => EditTrain(bottomGridView, BOTTOM_DIRECTION);
 
-        private void bottomDeleteButton_Click(object sender, EventArgs e)
+        private void BottomDeleteButton_Click(object sender, EventArgs e)
             => DeleteTrain(bottomGridView, BOTTOM_DIRECTION);
 
-        private void topCopyButton_Click(object sender, EventArgs e)
+        private void TopCopyButton_Click(object sender, EventArgs e)
             => CopyTrain(topGridView, TOP_DIRECTION, true);
 
-        private void bottomCopyButton_Click(object sender, EventArgs e)
+        private void BottomCopyButton_Click(object sender, EventArgs e)
             => CopyTrain(bottomGridView, BOTTOM_DIRECTION, true);
 
-        private void bottomSortButton_Click(object sender, EventArgs e)
+        private void BottomSortButton_Click(object sender, EventArgs e)
             => SortTrains(bottomGridView, BOTTOM_DIRECTION);
         #endregion
     }
