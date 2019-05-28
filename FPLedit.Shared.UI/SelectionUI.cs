@@ -43,10 +43,11 @@ namespace FPLedit.Shared.UI
                 for (int i = 0; i < actions.Length; i++)
                 {
                     var ac = actions[i];
-                    var rb = new RadioButton(rbf);
-                    rb.Text = ac;
-
-                    rb.Checked = (rbf == null);
+                    var rb = new RadioButton(rbf)
+                    {
+                        Text = ac,
+                        Checked = rbf == null
+                    };
                     if (rbf == null)
                         rbf = rb;
 

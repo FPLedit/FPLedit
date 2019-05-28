@@ -28,12 +28,9 @@ namespace FPLedit.Editor
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            offsetValidator = new NumberValidator(offsetTextBox, false, true);
-            offsetValidator.ErrorMessage = "Bitte die Verschiebung als Zahl in Minuten angeben!";
-            countValidator = new NumberValidator(countTextBox, false, true);
-            countValidator.ErrorMessage = "Bitte eine gültige Anzahl neuer Züge eingeben!";
-            changeValidator = new NumberValidator(changeTextBox, false, true);
-            changeValidator.ErrorMessage = "Bitte eine gültige Veränderung der Zugnummer eingeben!";
+            offsetValidator = new NumberValidator(offsetTextBox, false, true, errorMessage: "Bitte die Verschiebung als Zahl in Minuten angeben!");
+            countValidator = new NumberValidator(countTextBox, false, true, errorMessage: "Bitte eine gültige Anzahl neuer Züge eingeben!");
+            changeValidator = new NumberValidator(changeTextBox, false, true, errorMessage: "Bitte eine gültige Veränderung der Zugnummer eingeben!");
 
             train = t;
             this.tt = tt;

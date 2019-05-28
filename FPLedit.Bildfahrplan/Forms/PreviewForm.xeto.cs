@@ -45,12 +45,14 @@ namespace FPLedit.Bildfahrplan.Forms
                 info.Settings.Set("bifpl.lock-stations", splitCheckBox.Checked.Value);
             };
 
-            adbg = new AsyncDoubleBufferedGraph(panel);
-            adbg.RenderingFinished = () =>
+            adbg = new AsyncDoubleBufferedGraph(panel)
             {
-                if (scrollPosition.HasValue)
-                    scrollable.ScrollPosition = scrollPosition.Value;
-                scrollPosition = null;
+                RenderingFinished = () =>
+                {
+                    if (scrollPosition.HasValue)
+                        scrollable.ScrollPosition = scrollPosition.Value;
+                    scrollPosition = null;
+                }
             };
 
             // Initialisierung der Daten

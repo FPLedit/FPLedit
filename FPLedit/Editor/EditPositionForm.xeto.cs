@@ -23,8 +23,7 @@ namespace FPLedit.Editor
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            positionValidator = new NumberValidator(positionTextBox, false, false);
-            positionValidator.ErrorMessage = "Bitte eine Zahl als Position eingeben!";
+            positionValidator = new NumberValidator(positionTextBox, false, false, errorMessage: "Bitte eine Zahl als Position eingeben!");
         }
 
         private void closeButton_Click(object sender, EventArgs e)

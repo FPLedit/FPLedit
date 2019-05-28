@@ -24,8 +24,7 @@ namespace FPLedit.Editor
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            offsetValidator = new NumberValidator(offsetTextBox, false, true);
-            offsetValidator.ErrorMessage = "Bitte die Verschiebung als Zahl in Minuten angeben!";
+            offsetValidator = new NumberValidator(offsetTextBox, false, true, errorMessage: "Bitte die Verschiebung als Zahl in Minuten angeben!");
 
             offsetTextBox.Text = "+20";
 

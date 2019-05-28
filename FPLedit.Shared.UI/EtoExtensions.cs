@@ -18,11 +18,13 @@ namespace FPLedit.Shared.UI
             sizeManager = new SizeManager(info.Settings);
         }
 
+#pragma warning disable IDE0060 // Nicht verwendete Parameter entfernen
         public static Stream GetResource(this Control dialog, string dotFilePath)
         {
             var assembly = Assembly.GetCallingAssembly();
             return assembly.GetManifestResourceStream("FPLedit." + dotFilePath);
         }
+#pragma warning restore IDE0060 // Nicht verwendete Parameter entfernen
 
         #region Close Handlers
         public static void AddCloseHandler(this Dialog dialog)
@@ -54,16 +56,20 @@ namespace FPLedit.Shared.UI
 
         public static ButtonMenuItem CreateItem(this ISubmenu parent, string text)
         {
-            var itm = new ButtonMenuItem();
-            itm.Text = text;
+            var itm = new ButtonMenuItem
+            {
+                Text = text
+            };
             parent.Items.Add(itm);
             return itm;
         }
 
         public static CheckMenuItem CreateCheckItem(this ISubmenu parent, string text)
         {
-            var itm = new CheckMenuItem();
-            itm.Text = text;
+            var itm = new CheckMenuItem
+            {
+                Text = text
+            };
             parent.Items.Add(itm);
             return itm;
         }

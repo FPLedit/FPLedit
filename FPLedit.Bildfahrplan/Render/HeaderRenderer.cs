@@ -64,8 +64,10 @@ namespace FPLedit.Bildfahrplan.Render
                 if (!style.CalcedShow)
                     continue;
 
-                var pen = new Pen((Color)style.CalcedColor, style.CalcedWidth);
-                pen.DashStyle = ds.ParseDashstyle(style.CalcedLineStyle);
+                var pen = new Pen((Color)style.CalcedColor, style.CalcedWidth)
+                {
+                    DashStyle = ds.ParseDashstyle(style.CalcedLineStyle)
+                };
                 var brush = new SolidBrush((Color)style.CalcedColor);
 
                 if (!attrs.MultiTrack)

@@ -83,8 +83,10 @@ namespace FPLedit.DebugDump
             };
 
             var tmpDir = info.GetTemp("");
-            var watcher = new FileSystemWatcher(tmpDir, "*.*");
-            watcher.NotifyFilter = NotifyFilters.LastWrite;
+            var watcher = new FileSystemWatcher(tmpDir, "*.*")
+            {
+                NotifyFilter = NotifyFilters.LastWrite
+            };
             watcher.Changed += WatcherEvent;
             watcher.Created += WatcherEvent;
             watcher.EnableRaisingEvents = true;

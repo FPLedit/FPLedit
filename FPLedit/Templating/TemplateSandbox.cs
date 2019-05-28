@@ -41,8 +41,10 @@ namespace FPLedit.Templating
             var permSet = new PermissionSet(PermissionState.None);
             permSet.AddPermission(new SecurityPermission(SecurityPermissionFlag.Execution));
 
-            var fperm = new FileIOPermission(PermissionState.None);
-            fperm.AllFiles = FileIOPermissionAccess.NoAccess;
+            var fperm = new FileIOPermission(PermissionState.None)
+            {
+                AllFiles = FileIOPermissionAccess.NoAccess
+            };
             var roAccess = FileIOPermissionAccess.Read | FileIOPermissionAccess.PathDiscovery;
             fperm.AddPathList(roAccess, Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)); // App directory -> Load Dependencies
             fperm.AddPathList(roAccess, Path.GetDirectoryName(templateAssemblyPath)); // Directory containing templateAssembly

@@ -12,7 +12,8 @@ namespace FPLedit.Shared.UI.Validators
 
         public bool UseInt { get; set; }
 
-        public NumberValidator(TextBox control, bool allowEmpty, bool useInt, bool enableErrorColoring = true) : base(control, true, enableErrorColoring)
+        public NumberValidator(TextBox control, bool allowEmpty, bool useInt, bool enableErrorColoring = true, string errorMessage = null)
+            : base(control, true, enableErrorColoring, errorMessage)
         {
             AllowEmpty = allowEmpty;
             UseInt = useInt;

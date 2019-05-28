@@ -46,8 +46,7 @@ namespace FPLedit.Editor
 
             th = new TrainEditHelper();
 
-            nameValidator = new NotEmptyValidator(nameTextBox);
-            nameValidator.ErrorMessage = "Bitte einen Zugnamen eingeben!";
+            nameValidator = new NotEmptyValidator(nameTextBox, errorMessage: "Bitte einen Zugnamen eingeben!");
 
             daysBoxes = new[] { mondayCheckBox, tuesdayCheckBox, wednesdayCheckBox, thursdayCheckBox, fridayCheckBox, saturdayCheckBox, sundayCheckBox };
             foreach (var dayBox in daysBoxes)

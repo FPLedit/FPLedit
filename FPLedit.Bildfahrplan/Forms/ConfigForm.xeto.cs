@@ -33,11 +33,9 @@ namespace FPLedit.Bildfahrplan.Forms
 
             this.tt = tt;
 
-            heightPerHourValidator = new NumberValidator(heightPerHourTextBox, false, false);
-            heightPerHourValidator.ErrorMessage = "Bitte eine Zahl als Höhe pro Stunde angeben!";
-            startTimeValidator = new TimeValidator(startTimeTextBox, false);
-            endTimeValidator = new TimeValidator(endTimeTextBox, false);
-            startTimeValidator.ErrorMessage = endTimeValidator.ErrorMessage = "Bitte eine gültige Uhrzeit im Format hh:mm angeben!";
+            heightPerHourValidator = new NumberValidator(heightPerHourTextBox, false, false, errorMessage: "Bitte eine Zahl als Höhe pro Stunde angeben!");
+            startTimeValidator = new TimeValidator(startTimeTextBox, false, errorMessage: "Bitte eine gültige Uhrzeit im Format hh:mm angeben!");
+            endTimeValidator = new TimeValidator(endTimeTextBox, false, errorMessage: "Bitte eine gültige Uhrzeit im Format hh:mm angeben!");
             validators = new ValidatorCollection(heightPerHourValidator, startTimeValidator, endTimeValidator);
 
             DropDownBind.Color<TimetableStyle>(settings, bgColorComboBox, "BgColor");

@@ -38,8 +38,10 @@ namespace FPLedit.Bildfahrplan.Render
             var ardps = train.GetArrDeps();
             var dir = GetTrainDirection(train);
 
-            var pen = new Pen((Color)style.CalcedColor, style.CalcedWidth);
-            pen.DashStyle = ds.ParseDashstyle(style.CalcedLineStyle);
+            var pen = new Pen((Color)style.CalcedColor, style.CalcedWidth)
+            {
+                DashStyle = ds.ParseDashstyle(style.CalcedLineStyle)
+            };
             var brush = new SolidBrush((Color)style.CalcedColor);
 
             List<PointF> points = new List<PointF>();

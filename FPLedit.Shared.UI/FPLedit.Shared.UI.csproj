@@ -12,7 +12,7 @@
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-	<PathMap>$(MSBuildProjectDirectory)=fpledit-src\$(MSBuildProjectName)</PathMap>
+    <PathMap>$(MSBuildProjectDirectory)=fpledit-src\$(MSBuildProjectName)</PathMap>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -75,7 +75,7 @@
     <Compile Include="Validators\NotEmptyValidator.cs" />
     <Compile Include="Validators\NumberValidator.cs" />
     <Compile Include="Validators\TimeValidator.cs" />
-    <Compile Include="Validators\ValidatorError.cs" />
+    <Compile Include="Validators\ValidatorCollection.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\build_scripts\fpledit.snk">

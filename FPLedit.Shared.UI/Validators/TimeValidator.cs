@@ -10,7 +10,8 @@ namespace FPLedit.Shared.UI.Validators
     {
         public bool AllowEmpty { get; set; }
 
-        public TimeValidator(TextBox control, bool allowEmpty, bool enableErrorColoring = true) : base(control, true, enableErrorColoring)
+        public TimeValidator(TextBox control, bool allowEmpty, bool enableErrorColoring = true, string errorMessage = null)
+            : base(control, true, enableErrorColoring, errorMessage)
         {
             AllowEmpty = allowEmpty;
         }

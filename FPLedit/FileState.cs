@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace FPLedit
 {
@@ -32,7 +31,9 @@ namespace FPLedit
             CanGoBack = undo.CanGoBack;
         }
 
+#pragma warning disable IDE0060 // Nicht verwendete Parameter entfernen
         private void TriggerEvent(object o) => FileStateInternalChanged?.Invoke(this, new FileStateChangedEventArgs(this));
+#pragma warning restore IDE0060 // Nicht verwendete Parameter entfernen
 
         internal event EventHandler<FileStateChangedEventArgs> FileStateInternalChanged;
     }
