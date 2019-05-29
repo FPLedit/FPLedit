@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GtkSharp" Version="3.22.24.37" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FPLedit.Shared.UI\FPLedit.Shared.UI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Eto">
+      <HintPath>..\libs\Eto.dll</HintPath>
+    </Reference>
+    <Reference Include="Eto.Gtk">
+      <HintPath>..\libs\Eto.Gtk.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
