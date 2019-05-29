@@ -15,7 +15,7 @@ namespace FPLedit.Editor.TimetableEditor
     {
         private readonly TimeNormalizer normalizer = new TimeNormalizer();
 
-        private FPLedit.Shared.UI.ToggleButton trapeztafelToggle;
+        private ToggleButton trapeztafelToggle;
 
         protected bool mpmode = false;
 
@@ -42,7 +42,7 @@ namespace FPLedit.Editor.TimetableEditor
             };
         }
 
-        protected void Init(FPLedit.Shared.UI.ToggleButton trapeztafelToggle, TableLayout actionsLayout)
+        protected void Init(ToggleButton trapeztafelToggle, TableLayout actionsLayout)
         {
             this.trapeztafelToggle = trapeztafelToggle;
             internalActionsLayout = actionsLayout;

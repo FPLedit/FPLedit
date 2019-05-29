@@ -15,8 +15,7 @@ namespace FPLedit.Editor.TimetableEditor
     {
 #pragma warning disable CS0649
         private readonly GridView dataGridView;
-        private readonly Button internalToggle;
-        private readonly FPLedit.Shared.UI.ToggleButton trapeztafelToggle;
+        private readonly ToggleButton trapeztafelToggle;
         private readonly Button zlmButton, shuntButton;
         private readonly TableLayout actionsLayout;
 #pragma warning restore CS0649
@@ -33,13 +32,12 @@ namespace FPLedit.Editor.TimetableEditor
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            trapeztafelToggle = new FPLedit.Shared.UI.ToggleButton(internalToggle);
-            trapeztafelToggle.ToggleClick += TrapeztafelToggle_Click;
+            trapeztafelToggle.Click += TrapeztafelToggle_Click;
             base.Init(trapeztafelToggle, actionsLayout);
 
             KeyDown += HandleControlKeystroke;
 
-            internalToggle.Image = new Bitmap(this.GetResource("Resources.trapeztafel.png"));
+            trapeztafelToggle.Image = new Bitmap(this.GetResource("Resources.trapeztafel.png"));
         }
 
         public void HandleControlKeystroke(object sender, KeyEventArgs e)
@@ -121,7 +119,7 @@ namespace FPLedit.Editor.TimetableEditor
         {
             trapeztafelToggle.Checked = data.ArrDeps[sta].TrapeztafelHalt;
 
-            internalToggle.Enabled = arrival && !data.IsFirst(sta);
+            trapeztafelToggle.Enabled = arrival && !data.IsFirst(sta);
             zlmButton.Enabled = arrival ^ data.IsFirst(sta);
         }
 
