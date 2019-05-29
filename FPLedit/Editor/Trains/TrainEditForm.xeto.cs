@@ -27,7 +27,7 @@ namespace FPLedit.Editor.Trains
         public Train Train { get; set; }
 
         private readonly CheckBox[] daysBoxes;
-        private readonly ToggleButton[] shortcutsToggle;
+        private readonly FPLedit.Shared.UI.ToggleButton[] shortcutsToggle;
         private readonly Timetable tt;
         private readonly TrainEditHelper th;
 
@@ -81,10 +81,10 @@ namespace FPLedit.Editor.Trains
 
             var shortcutsButtons = new[] { wShort, wSaShort, sShort, aShort, zShort };
             var shortcuts = new[] { wShortcut, wExclSaShortcut, sShortcut, aShortcut, zShortcut };
-            shortcutsToggle = new ToggleButton[shortcuts.Length];
+            shortcutsToggle = new FPLedit.Shared.UI.ToggleButton[shortcuts.Length];
             for (int i = 0; i < shortcutsButtons.Length; i++)
             {
-                var toggle = new ToggleButton(shortcutsButtons[i])
+                var toggle = new FPLedit.Shared.UI.ToggleButton(shortcutsButtons[i])
                 {
                     Tag = shortcuts[i],
                     AllowDisable = false
@@ -198,7 +198,7 @@ namespace FPLedit.Editor.Trains
         #region Shortcut buttons
         private void ApplyShortcutBtn(object sender, EventArgs e)
         {
-            var btn = (ToggleButton)sender;
+            var btn = (FPLedit.Shared.UI.ToggleButton)sender;
             if (btn.Tag is Days days)
                 ApplyShortcut(days);
         }

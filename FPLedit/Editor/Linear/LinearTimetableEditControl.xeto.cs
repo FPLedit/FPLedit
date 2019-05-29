@@ -17,7 +17,7 @@ namespace FPLedit.Editor.Linear
         private readonly GridView topDataGridView, bottomDataGridView;
         private readonly Label topLineLabel, bottomLineLabel;
         private readonly Button internalToggle;
-        private readonly ToggleButton trapeztafelToggle;
+        private readonly FPLedit.Shared.UI.ToggleButton trapeztafelToggle;
         private readonly Button zlmButton;
         private readonly TableLayout actionsLayout;
 #pragma warning restore CS0649
@@ -32,7 +32,7 @@ namespace FPLedit.Editor.Linear
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            trapeztafelToggle = new ToggleButton(internalToggle);
+            trapeztafelToggle = new FPLedit.Shared.UI.ToggleButton(internalToggle);
             trapeztafelToggle.ToggleClick += TrapeztafelToggle_Click;
             base.Init(trapeztafelToggle, actionsLayout);
 

@@ -15,7 +15,7 @@ namespace FPLedit.Editor.TimetableEditor
 #pragma warning disable CS0649
         private readonly GridView dataGridView;
         private readonly Button internalToggle;
-        private readonly ToggleButton trapeztafelToggle;
+        private readonly FPLedit.Shared.UI.ToggleButton trapeztafelToggle;
         private readonly Button zlmButton, shuntButton;
         private readonly TableLayout actionsLayout;
 #pragma warning restore CS0649
@@ -32,7 +32,7 @@ namespace FPLedit.Editor.TimetableEditor
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            trapeztafelToggle = new ToggleButton(internalToggle);
+            trapeztafelToggle = new FPLedit.Shared.UI.ToggleButton(internalToggle);
             trapeztafelToggle.ToggleClick += TrapeztafelToggle_Click;
             base.Init(trapeztafelToggle, actionsLayout);
 
@@ -102,19 +102,19 @@ namespace FPLedit.Editor.TimetableEditor
             return cc;
         }
 
-        private BDComboBoxCell GetTrackCell(Expression<Func<ArrDep, string>> track)
-        {
-            var cc = new BDComboBoxCell();
+        //private BDComboBoxCell GetTrackCell(Expression<Func<ArrDep, string>> track)
+        //{
+        //    var cc = new BDComboBoxCell();
 
-            var shadowBinding = Binding.Property(track);
+        //    var shadowBinding = Binding.Property(track);
 
-            cc.Binding = Binding.Delegate<DataElement, string>(
-                d => shadowBinding.GetValue(d.ArrDeps[d.Station]),
-                (d, t) => shadowBinding.SetValue(d.ArrDeps[d.Station], t == (string)d.GetTrackDataStore().FirstOrDefault() ? "" : t))
-                .Cast<object>();
-            cc.DataStoreBinding = Binding.Delegate<DataElement, IEnumerable<object>>(d => d.GetTrackDataStore());
-            return cc;
-        }
+        //    cc.Binding = Binding.Delegate<DataElement, string>(
+        //        d => shadowBinding.GetValue(d.ArrDeps[d.Station]),
+        //        (d, t) => shadowBinding.SetValue(d.ArrDeps[d.Station], t == (string)d.GetTrackDataStore().FirstOrDefault() ? "" : t))
+        //        .Cast<object>();
+        //    cc.DataStoreBinding = Binding.Delegate<DataElement, IEnumerable<object>>(d => d.GetTrackDataStore());
+        //    return cc;
+        //}
 
         protected override void CellSelected(BaseTimetableDataElement data, Station sta, bool arrival)
         {
@@ -152,12 +152,12 @@ namespace FPLedit.Editor.TimetableEditor
             view.AddColumn(GetCell(t => t.Arrival, true), "Ankunft");
             view.AddColumn(GetCell(t => t.Departure, false), "Abfahrt");
 
-            if (tt.Version.Compare(TimetableVersion.JTG3_1) >= 0)
-            {
-                view.AddColumn(GetTrackCell(t => t.ArrivalTrack), "Ankunftsgleis", editable: true);
-                view.AddColumn(GetTrackCell(t => t.DepartureTrack), "Abfahrtsgleis", editable: true);
-            }
-            else
+            //if (tt.Version.Compare(TimetableVersion.JTG3_1) >= 0)
+            //{
+            //    view.AddColumn(GetTrackCell(t => t.ArrivalTrack), "Ankunftsgleis", editable: true);
+            //    view.AddColumn(GetTrackCell(t => t.DepartureTrack), "Abfahrtsgleis", editable: true);
+            //}
+            //else
                 shuntButton.Visible = false;
 
             view.KeyDown += (s, e) => HandleViewKeystroke(e, view);
