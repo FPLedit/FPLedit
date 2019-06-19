@@ -61,14 +61,14 @@ namespace FPLedit.Editor.Network
             gridView.DataStore = arrDep.ShuntMoves;
         }
 
-        private void addButton_Click(object sender, EventArgs e)
+        private void AddButton_Click(object sender, EventArgs e)
         {
             var shunt = new ShuntMove(station._parent);
             arrDep.ShuntMoves.Add(shunt);
             RefreshList();
         }
 
-        private void removeButton_Click(object sender, EventArgs e)
+        private void RemoveButton_Click(object sender, EventArgs e)
         {
             if (gridView.SelectedItem == null)
                 return;
@@ -77,13 +77,13 @@ namespace FPLedit.Editor.Network
             RefreshList();
         }
 
-        private void sortButton_Click(object sender, EventArgs e)
+        private void SortButton_Click(object sender, EventArgs e)
         {
             arrDep.ShuntMoves.Sort(s => s.Time);
             RefreshList();
         }
 
-        private void closeButton_Click(object sender, EventArgs e)
+        private void CloseButton_Click(object sender, EventArgs e)
         {
             // Automatisch sortieren
             arrDep.ShuntMoves.Sort(s => s.Time);
@@ -109,7 +109,7 @@ namespace FPLedit.Editor.Network
             Close(DialogResult.Ok);
         }
 
-        private void cancelButton_Click(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e)
         {
             arrDep.ShuntMoves.Clear();
             foreach (var shunt in shuntBackup)

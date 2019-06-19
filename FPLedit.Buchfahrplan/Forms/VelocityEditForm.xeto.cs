@@ -67,7 +67,7 @@ namespace FPLedit.Buchfahrplan.Forms
             }
         }
 
-        private void closeButton_Click(object sender, EventArgs e)
+        private void CloseButton_Click(object sender, EventArgs e)
         {
             if (!validators.IsValid)
             {
@@ -86,7 +86,7 @@ namespace FPLedit.Buchfahrplan.Forms
             Close(DialogResult.Ok);
         }
 
-        private void cancelButton_Click(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e)
             => Close(DialogResult.Cancel);
     }
 }

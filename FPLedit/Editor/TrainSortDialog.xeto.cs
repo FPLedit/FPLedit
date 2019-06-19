@@ -51,7 +51,7 @@ namespace FPLedit.Editor
             stationsComboBox.Enabled = idx == 2;
         }
 
-        private void closeButton_Click(object sender, EventArgs e)
+        private void CloseButton_Click(object sender, EventArgs e)
         {
             if (direction == TrainDirection.tr && !sortSelection.EnabledOptionSelected)
             {
@@ -79,7 +79,7 @@ namespace FPLedit.Editor
             base.Dispose(disposing);
         }
 
-        private void cancelButton_Click(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e)
             => Close(DialogResult.Cancel);
     }
 }

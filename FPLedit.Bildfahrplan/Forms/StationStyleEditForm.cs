@@ -50,7 +50,7 @@ namespace FPLedit.Bildfahrplan.Forms
             drawCheckBox.Checked = style.Show;
         }
 
-        private void closeButton_Click(object sender, EventArgs e)
+        private void CloseButton_Click(object sender, EventArgs e)
         {
             style.StationColor = ColorFormatter.FromHexString((string)colorComboBox.SelectedValue);
             style.StationWidth = (int)widthComboBox.SelectedValue;
@@ -59,7 +59,7 @@ namespace FPLedit.Bildfahrplan.Forms
             Close(DialogResult.Ok);
         }
 
-        private void cancelButton_Click(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e)
             => Close(DialogResult.Cancel);
     }
 }

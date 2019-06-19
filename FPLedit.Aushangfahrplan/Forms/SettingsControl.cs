@@ -58,7 +58,7 @@ namespace FPLedit.Aushangfahrplan.Forms
             consoleCheckBox.Checked = settings.Get<bool>("afpl.console");
         }
 
-        private void cssHelpLinkLabel_LinkClicked(object sender, EventArgs e)
+        private void CssHelpLinkLabel_LinkClicked(object sender, EventArgs e)
             => Process.Start("https://fahrplan.manuelhu.de/dev/css/");
 
         public void Save()

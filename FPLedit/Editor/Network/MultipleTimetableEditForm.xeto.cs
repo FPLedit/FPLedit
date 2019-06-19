@@ -55,7 +55,7 @@ namespace FPLedit.Editor.Network
         }
 
         #region Events
-        private void closeButton_Click(object sender, EventArgs e)
+        private void CloseButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Ok;
 
@@ -66,7 +66,7 @@ namespace FPLedit.Editor.Network
             this.NClose();
         }
 
-        private void cancelButton_Click(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Cancel;
             info.RestoreTimetable(backupHandle);

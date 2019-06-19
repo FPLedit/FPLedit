@@ -18,9 +18,9 @@
     <TableRow>
       <TableLayout Spacing="5,5">
         <TableRow>
-          <Button x:Name="addButton" Click="addButton_Click">Hinzufügen</Button>
-          <Button x:Name="removeButton" Click="removeButton_Click">Löschen</Button>
-          <Button Click="sortButton_Click">Sortieren</Button>
+          <Button x:Name="addButton" Click="AddButton_Click">Hinzufügen</Button>
+          <Button x:Name="removeButton" Click="RemoveButton_Click">Löschen</Button>
+          <Button Click="SortButton_Click">Sortieren</Button>
           <TableCell ScaleWidth="True" />
         </TableRow>
       </TableLayout>
@@ -29,8 +29,8 @@
       <TableLayout Spacing="5,5">
         <TableRow>
           <TableCell ScaleWidth="True" />
-          <Button x:Name="cancelButton" Text="Abbrechen" Click="cancelButton_Click"></Button>
-          <Button x:Name="closeButton" Text="Schließen" Click="closeButton_Click"></Button>
+          <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click"></Button>
+          <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click"></Button>
         </TableRow>
       </TableLayout>
     </TableRow>

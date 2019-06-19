@@ -69,7 +69,7 @@ namespace FPLedit
             RefreshList();
         }
 
-        private void extractButton_Click(object sender, EventArgs e)
+        private void ExtractButton_Click(object sender, EventArgs e)
         {
             var tmpl = templates[gridView.SelectedRow];
             var src = tmpl.TemplateSource;
@@ -83,7 +83,7 @@ namespace FPLedit
             ReloadTemplates();
         }
 
-        private void removeButton_Click(object sender, EventArgs e)
+        private void RemoveButton_Click(object sender, EventArgs e)
         {
             var tmpl = templates[gridView.SelectedRow];
             var res = MessageBox.Show("Die Vorlagendatei wird unwiderruflich gelöscht! Fortfahren?",
@@ -100,7 +100,7 @@ namespace FPLedit
             }
         }
 
-        private void enableButton_Click(object sender, EventArgs e)
+        private void EnableButton_Click(object sender, EventArgs e)
         {
             var tmpl = templates[gridView.SelectedRow];
 
@@ -118,7 +118,7 @@ namespace FPLedit
             ReloadTemplates();
         }
 
-        private void disableButton_Click(object sender, EventArgs e)
+        private void DisableButton_Click(object sender, EventArgs e)
         {
             var tmpl = templates[gridView.SelectedRow];
 
@@ -149,7 +149,7 @@ namespace FPLedit
             }
         }
 
-        private void editButton_Click(object sender, EventArgs e)
+        private void EditButton_Click(object sender, EventArgs e)
         {
             if (gridView.SelectedRows.Count() == 0)
                 return;
@@ -173,6 +173,6 @@ namespace FPLedit
             ReloadTemplates();
         }
 
-        private void closeButton_Click(object sender, EventArgs e) => Close();
+        private void CloseButton_Click(object sender, EventArgs e) => Close();
     }
 }

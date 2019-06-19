@@ -20,7 +20,7 @@
     <TableRow ScaleHeight="true">
       <StackLayout Spacing="5">
         <Label x:Name="cssLabel">Eigene CSS-Styles</Label>
-        <LinkButton Click="cssHelpLinkLabel_LinkClicked" x:Name="cssHelpLinkLabel">Hilfe zu CSS</LinkButton>
+        <LinkButton Click="CssHelpLinkLabel_LinkClicked" x:Name="cssHelpLinkLabel">Hilfe zu CSS</LinkButton>
       </StackLayout>
       <TableCell ScaleWidth="true">
         <TextArea x:Name="cssTextBox"></TextArea>

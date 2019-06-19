@@ -141,7 +141,7 @@ namespace FPLedit.Editor
                 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
         }
 
-        private void closeButton_Click(object sender, EventArgs e)
+        private void CloseButton_Click(object sender, EventArgs e)
         {
             if (!nameValidator.Valid)
             {
@@ -173,14 +173,14 @@ namespace FPLedit.Editor
             Close(DialogResult.Ok);
         }
 
-        private void cancelButton_Click(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e)
         {
             foreach (var kvp in arrDepBackup)
                 Train.GetArrDep(kvp.Key).ApplyCopy(kvp.Value);
             Close(DialogResult.Cancel);
         }
 
-        private void fillButton_Click(object sender, EventArgs e)
+        private void FillButton_Click(object sender, EventArgs e)
         {
             using (var tfd = new TrainFillDialog(Train))
             {

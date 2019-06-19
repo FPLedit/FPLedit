@@ -45,7 +45,7 @@ namespace FPLedit.Editor.Filters
             typeSelection = new SelectionUI(null, typeSelectionStack, "beginnt mit", "endet mit", "enthält", "ist");
         }
 
-        private void closeButton_Click(object sender, EventArgs e)
+        private void CloseButton_Click(object sender, EventArgs e)
         {
             if (searchTextBox.Text.Length == 0)
             {
@@ -75,7 +75,7 @@ namespace FPLedit.Editor.Filters
             base.Dispose(disposing);
         }
 
-        private void cancelButton_Click(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e)
             => Close(DialogResult.Cancel);
     }
 }

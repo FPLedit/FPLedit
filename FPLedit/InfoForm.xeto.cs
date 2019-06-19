@@ -67,13 +67,13 @@ namespace FPLedit
             checkButton.Enabled = false;
         }
 
-        private void docuLink_Click(object sender, EventArgs e)
+        private void DocuLink_Click(object sender, EventArgs e)
             => Process.Start("https://fahrplan.manuelhu.de/");
 
-        private void checkButton_Click(object sender, EventArgs e)
+        private void CheckButton_Click(object sender, EventArgs e)
             => VersionCheck();
 
-        private void closeButton_Click(object sender, EventArgs e)
+        private void CloseButton_Click(object sender, EventArgs e)
         {
             mg.AutoUpdateEnabled = updateCheckBox.Checked.Value;
             Close();

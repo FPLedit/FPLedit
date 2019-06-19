@@ -29,8 +29,8 @@
       <TableLayout Spacing="5,5" Padding="10,0,10,10">
         <TableRow>
           <TableCell ScaleWidth="true" />
-          <Button x:Name="cancelButton" Text="Abbrechen" Click="cancelButton_Click"></Button>
-          <Button x:Name="closeButton" Text="Schließen" Click="closeButton_Click"></Button>
+          <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click"></Button>
+          <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click"></Button>
         </TableRow>
       </TableLayout>
     </TableRow>

@@ -78,7 +78,7 @@ namespace FPLedit.Bildfahrplan.Forms
             this.AddCloseHandler();
         }
 
-        private void closeButton_Click(object sender, EventArgs e)
+        private void CloseButton_Click(object sender, EventArgs e)
         {
             if (!validators.IsValid)
             {
@@ -90,7 +90,7 @@ namespace FPLedit.Bildfahrplan.Forms
             this.NClose();
         }
 
-        private void cancelButton_Click(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Cancel;
             this.NClose();

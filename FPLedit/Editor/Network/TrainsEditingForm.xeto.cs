@@ -131,39 +131,39 @@ namespace FPLedit.Editor.Network
             }
         }
 
-        private void closeButton_Click(object sender, EventArgs e)
+        private void CloseButton_Click(object sender, EventArgs e)
         {
             info.ClearBackup(backupHandle);
             Result = DialogResult.Ok;
             this.NClose();
         }
 
-        private void cancelButton_Click(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Cancel;
             info.RestoreTimetable(backupHandle);
             this.NClose();
         }
 
-        private void topNewButton_Click(object sender, EventArgs e)
+        private void TopNewButton_Click(object sender, EventArgs e)
             => NewTrain(gridView);
 
-        private void topEditButton_Click(object sender, EventArgs e)
+        private void TopEditButton_Click(object sender, EventArgs e)
             => EditTrain(gridView, TrainDirection.tr);
 
-        private void topDeleteButton_Click(object sender, EventArgs e)
+        private void TopDeleteButton_Click(object sender, EventArgs e)
             => DeleteTrain(gridView, TrainDirection.tr);
 
-        private void editTimetableButton_Click(object sender, EventArgs e)
+        private void EditTimetableButton_Click(object sender, EventArgs e)
             => EditTimetable(gridView);
 
-        private void copyButton_Click(object sender, EventArgs e)
+        private void CopyButton_Click(object sender, EventArgs e)
             => CopyTrain(gridView);
 
-        private void editPathButton_Click(object sender, EventArgs e)
+        private void EditPathButton_Click(object sender, EventArgs e)
             => EditPath(gridView);
 
-        private void sortButton_Click(object sender, EventArgs e)
+        private void SortButton_Click(object sender, EventArgs e)
             => SortTrains(gridView, TrainDirection.tr);
     }
 }

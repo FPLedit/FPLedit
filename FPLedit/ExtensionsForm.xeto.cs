@@ -51,7 +51,7 @@ namespace FPLedit
             this.AddSizeStateHandler();
         }
 
-        private void closeButton_Click(object sender, EventArgs e)
+        private void CloseButton_Click(object sender, EventArgs e)
         {
             if (manager.EnabledModified)
             {
@@ -75,7 +75,7 @@ namespace FPLedit
                 infoLabel.Text = "";
         }
 
-        private void deactivateButton_Click(object sender, EventArgs e)
+        private void DeactivateButton_Click(object sender, EventArgs e)
         {
             if (enabledListBox.SelectedIndex != -1)
             {
@@ -89,7 +89,7 @@ namespace FPLedit
             }
         }
 
-        private void activateButton_Click(object sender, EventArgs e)
+        private void ActivateButton_Click(object sender, EventArgs e)
         {
             if (disabledListBox.SelectedIndex != -1)
             {

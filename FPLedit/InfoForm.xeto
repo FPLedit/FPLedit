@@ -15,7 +15,7 @@
           <TableCell ScaleWidth="True">
           </TableCell>
           <TableCell>
-            <Button x:Name="checkButton" Click="checkButton_Click">Auf neue Version prüfen</Button>
+            <Button x:Name="checkButton" Click="CheckButton_Click">Auf neue Version prüfen</Button>
           </TableCell>
         </TableRow>
       </TableLayout>
@@ -23,7 +23,7 @@
     <TableRow>
       <StackLayout>
         <Label>© 2015-2019 Manuel Huber</Label>
-        <LinkButton Click="docuLink_Click">Online-Dokumentation</LinkButton>
+        <LinkButton Click="DocuLink_Click">Online-Dokumentation</LinkButton>
       </StackLayout>
     </TableRow>
     <TableRow ScaleHeight="True">
@@ -38,7 +38,7 @@
       </StackLayout>
     </TableRow>
     <TableRow>
-      <Button x:Name="closeButton" Click="closeButton_Click">Schließen</Button>
+      <Button x:Name="closeButton" Click="CloseButton_Click">Schließen</Button>
     </TableRow>
   </TableLayout>
 </c:InfoForm>

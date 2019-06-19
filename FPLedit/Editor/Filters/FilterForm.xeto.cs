@@ -36,7 +36,7 @@ namespace FPLedit.Editor.Filters
             }).ToArray();
 
             typeListBox.Items.AddRange(filterables.Select(f => new ListItem() { Text = f.DisplayName }));
-            typeListBox.SelectedIndexChanged += listBox1_SelectedIndexChanged;
+            typeListBox.SelectedIndexChanged += TypeListBox_SelectedIndexChanged;
 
             InitView(trainPattListView);
             InitView(stationPattListView);
@@ -135,28 +135,28 @@ namespace FPLedit.Editor.Filters
 
         #region Events
 
-        private void addTrainPattButton_Click(object sender, EventArgs e)
+        private void AddTrainPattButton_Click(object sender, EventArgs e)
             => AddEntry(trainPattListView, curTrainRules, "Zugname");
 
-        private void editTrainPattButton_Click(object sender, EventArgs e)
+        private void EditTrainPattButton_Click(object sender, EventArgs e)
             => EditEntry(trainPattListView, curTrainRules, "Zugname");
 
-        private void deleteTrainPattButton_Click(object sender, EventArgs e)
+        private void DeleteTrainPattButton_Click(object sender, EventArgs e)
             => DeleteEntry(trainPattListView, curTrainRules);
 
-        private void addStationPattButton_Click(object sender, EventArgs e)
+        private void AddStationPattButton_Click(object sender, EventArgs e)
             => AddEntry(stationPattListView, curStationRules, "Stationsname");
 
-        private void editStationPattButton_Click(object sender, EventArgs e)
+        private void EditStationPattButton_Click(object sender, EventArgs e)
             => EditEntry(stationPattListView, curStationRules, "Stationsname");
 
-        private void deleteStationPattButton_Click(object sender, EventArgs e)
+        private void DeleteStationPattButton_Click(object sender, EventArgs e)
             => DeleteEntry(stationPattListView, curStationRules);
 
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void TypeListBox_SelectedIndexChanged(object sender, EventArgs e)
             => SwitchType(typeListBox.SelectedIndex);
 
-        private void closeButton_Click(object sender, EventArgs e)
+        private void CloseButton_Click(object sender, EventArgs e)
         {
             foreach (var fcon in fcontainers)
                 fcon.Filterable.SaveFilter(info.Timetable, fcon.StationRules, fcon.TrainRules);
@@ -164,7 +164,7 @@ namespace FPLedit.Editor.Filters
             Close(DialogResult.Ok);
         }
 
-        private void cancelButton_Click(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e)
             => Close(DialogResult.Cancel);
 
         #endregion

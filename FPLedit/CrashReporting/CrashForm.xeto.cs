@@ -33,12 +33,12 @@ namespace FPLedit.CrashReporting
             norestoreButton.Visible = !reporter.HasCurrentTtBackup;
         }
 
-        private void mailButton_Click(object sender, EventArgs e) => Process.Start("mailto:info@manuelhu.de?subject=Bugreport%20FPLedit");
+        private void MailButton_Click(object sender, EventArgs e) => Process.Start("mailto:info@manuelhu.de?subject=Bugreport%20FPLedit");
 
-        private void folderButton_Click(object sender, EventArgs e) => Process.Start(Path.GetDirectoryName(crash_fn));
+        private void FolderButton_Click(object sender, EventArgs e) => Process.Start(Path.GetDirectoryName(crash_fn));
 
-        private void restoreButton_Click(object sender, EventArgs e) => Close(DialogResult.Ok);
+        private void RestoreButton_Click(object sender, EventArgs e) => Close(DialogResult.Ok);
 
-        private void norestoreButton_Click(object sender, EventArgs e) => Close(DialogResult.Cancel);
+        private void NorestoreButton_Click(object sender, EventArgs e) => Close(DialogResult.Cancel);
     }
 }

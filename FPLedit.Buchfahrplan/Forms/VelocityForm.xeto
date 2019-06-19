@@ -13,9 +13,9 @@
             <GridView x:Name="gridView"></GridView>
           </TableCell>
           <StackLayout Spacing="5">
-            <Button Click="addButton_Click">Hizufügen</Button>
-            <Button Click="editButton_Click">Bearbeiten</Button>
-            <Button x:Name="deleteButton" Click="deleteButton_Click">Löschen</Button>
+            <Button Click="AddButton_Click">Hizufügen</Button>
+            <Button Click="EditButton_Click">Bearbeiten</Button>
+            <Button x:Name="deleteButton" Click="DeleteButton_Click">Löschen</Button>
           </StackLayout>
         </TableRow>
       </TableLayout>
@@ -24,8 +24,8 @@
       <TableLayout Spacing="5,5">
         <TableRow>
           <TableCell ScaleWidth="true" />
-          <Button x:Name="cancelButton" Text="Abbrechen" Click="cancelButton_Click"></Button>
-          <Button x:Name="closeButton" Text="Schließen" Click="closeButton_Click"></Button>
+          <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click"></Button>
+          <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click"></Button>
         </TableRow>
       </TableLayout>
     </TableRow>

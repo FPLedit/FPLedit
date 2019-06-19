@@ -7,8 +7,8 @@
   Title="Fahrplan des Zuges {train} bearbeiten" ClientSize="460,370" Resizable="true">
   <e:SingleTimetableEditControl x:Name="editor">
     <e:SingleTimetableEditControl.ActionButtons>
-      <Button x:Name="cancelButton" Text="Abbrechen" Click="cancelButton_Click"></Button>
-      <Button x:Name="closeButton" Text="Schließen" Click="closeButton_Click"></Button>
+      <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click"></Button>
+      <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click"></Button>
     </e:SingleTimetableEditControl.ActionButtons>
   </e:SingleTimetableEditControl>
 </e:SingleTimetableEditForm>

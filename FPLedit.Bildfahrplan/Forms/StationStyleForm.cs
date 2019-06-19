@@ -66,21 +66,21 @@ namespace FPLedit.Bildfahrplan.Forms
                 MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Stationsdarstellung ändern");
         }
 
-        private void cancelButton_Click(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Cancel;
             info.RestoreTimetable(backupHandle);
             this.NClose();
         }
 
-        private void closeButton_Click(object sender, EventArgs e)
+        private void CloseButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Ok;
             info.ClearBackup(backupHandle);
             this.NClose();
         }
 
-        private void editButton_Click(object sender, EventArgs e)
+        private void EditButton_Click(object sender, EventArgs e)
             => EditColor();
     }
 }

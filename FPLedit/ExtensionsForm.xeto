@@ -24,8 +24,8 @@
           </TableCell>
           <StackLayout Orientation="Horizontal" VerticalContentAlignment="Center">
             <StackLayout HorizontalContentAlignment="Center" Spacing="5">
-              <Button x:Name="deactivateButton" Click="deactivateButton_Click" Width="50">&lt;</Button>
-              <Button x:Name="activateButton" Click="activateButton_Click" Width="50">&gt;</Button>
+              <Button x:Name="deactivateButton" Click="DeactivateButton_Click" Width="50">&lt;</Button>
+              <Button x:Name="activateButton" Click="ActivateButton_Click" Width="50">&gt;</Button>
             </StackLayout>
           </StackLayout>
           <TableCell ScaleWidth="true">
@@ -39,7 +39,7 @@
         <TableRow>
           <Label x:Name="infoLabel" />
           <TableCell ScaleWidth="True" />
-          <Button x:Name="closeButton" Click="closeButton_Click" Text="Schließen"></Button>
+          <Button x:Name="closeButton" Click="CloseButton_Click" Text="Schließen"></Button>
         </TableRow>
       </TableLayout>
     </TableRow>

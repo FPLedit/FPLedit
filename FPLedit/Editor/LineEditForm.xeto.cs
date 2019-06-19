@@ -154,14 +154,14 @@ namespace FPLedit.Editor
             UpdateStations();
         }
 
-        private void closeButton_Click(object sender, EventArgs e)
+        private void CloseButton_Click(object sender, EventArgs e)
         {
             info.ClearBackup(backupHandle);
             Result = DialogResult.Ok;
             this.NClose();
         }
 
-        private void cancelButton_Click(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Cancel;
             info.RestoreTimetable(backupHandle);
@@ -169,16 +169,16 @@ namespace FPLedit.Editor
             this.NClose();
         }
 
-        private void editButton_Click(object sender, EventArgs e)
+        private void EditButton_Click(object sender, EventArgs e)
             => EditStation();
 
-        private void deleteButton_Click(object sender, EventArgs e)
+        private void DeleteButton_Click(object sender, EventArgs e)
             => DeleteStation();
 
-        private void newButton_Click(object sender, EventArgs e)
+        private void NewButton_Click(object sender, EventArgs e)
             => NewStation();
 
-        private void loadLineButton_Click(object sender, EventArgs e)
+        private void LoadLineButton_Click(object sender, EventArgs e)
             => LoadLine();
     }
 }

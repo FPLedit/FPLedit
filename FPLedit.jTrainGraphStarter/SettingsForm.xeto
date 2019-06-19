@@ -14,7 +14,7 @@
             <StackLayout>
               <StackLayout Orientation="Horizontal" Spacing="5">
                 <TextBox x:Name="javaPathTextBox" Width="240"></TextBox>
-                <Button Click="findJavaButton_Click">Erkennen</Button>
+                <Button Click="FindJavaButton_Click">Erkennen</Button>
               </StackLayout>
               <Label Width="240">i.d.R: Windows: javaw.exe, Linux: java</Label>
             </StackLayout>
@@ -24,7 +24,7 @@
             <StackLayout>
               <StackLayout Orientation="Horizontal" Spacing="5">
                 <TextBox x:Name="jtgPathTextBox" Width="240"></TextBox>
-                <Button Width="50" Click="chooseJtgButton_Click">...</Button>
+                <Button Width="50" Click="ChooseJtgButton_Click">...</Button>
               </StackLayout>
               <Label Width="240">Anwendungsdatei von jTrainGraph (jTrainGraph_xxx.jar/exe, wobei xxx >= 202)</Label>
             </StackLayout>
@@ -39,11 +39,11 @@
     <StackLayout Padding="5">
       <StackLayout Orientation="Horizontal">
         <Label>Weitere Hinweise:</Label>
-        <LinkButton Click="docLinkLabel_LinkClicked">Dokumentation zu diesem Plugin</LinkButton>
+        <LinkButton Click="DocLinkLabel_LinkClicked">Dokumentation zu diesem Plugin</LinkButton>
       </StackLayout>
       <StackLayout Orientation="Horizontal">
         <Label>Wenn Sie jTrainGraph noch gar nicht installiert haben:</Label>
-        <LinkButton Click="downloadLinkLabel_LinkClicked">jTrainGraph herunterladen</LinkButton>
+        <LinkButton Click="DownloadLinkLabel_LinkClicked">jTrainGraph herunterladen</LinkButton>
       </StackLayout>
       <Label>Auch wenn jTrainGraph in der *.exe-Variante verwendet wird bitte den Java-Pfad ausfüllen!</Label>
     </StackLayout>
@@ -51,7 +51,7 @@
       <TableRow>
         <CheckBox x:Name="messageCheckBox" Text="Warnhinweis nicht bei jedem jTrainGraph-Start anzeigen" />
         <TableCell ScaleWidth="true" />
-        <Button x:Name="closeButton" Text="Schließen" Click="closeButton_Click"></Button>
+        <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click"></Button>
       </TableRow>
     </TableLayout>
   </StackLayout>

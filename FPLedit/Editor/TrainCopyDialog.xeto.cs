@@ -49,7 +49,7 @@ namespace FPLedit.Editor
             extendedOptionsTable.Visible = copyOptionsTable.Visible = copy;
         }
 
-        private void closeButton_Click(object sender, EventArgs e)
+        private void CloseButton_Click(object sender, EventArgs e)
         {
             var copy = modeSelect.SelectedState == 0;
 
@@ -94,7 +94,7 @@ namespace FPLedit.Editor
             Close(DialogResult.Ok);
         }
 
-        private void cancelButton_Click(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e)
             => Close(DialogResult.Cancel);
 
         protected override void Dispose(bool disposing)

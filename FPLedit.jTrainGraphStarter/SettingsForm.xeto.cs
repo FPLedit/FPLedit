@@ -45,7 +45,7 @@ namespace FPLedit.jTrainGraphStarter
             versionComboBox.SelectedIndex = vidx == -1 ? 0 : vidx;
         }
 
-        private void closeButton_Click(object sender, EventArgs e)
+        private void CloseButton_Click(object sender, EventArgs e)
         {
             bool jtgexists = File.Exists(jtgPathTextBox.Text) || ExecutableExists(jtgPathTextBox.Text);
             bool javaexists = ExecutableExists(javaPathTextBox.Text);
@@ -74,7 +74,7 @@ namespace FPLedit.jTrainGraphStarter
             Close();
         }
 
-        private void chooseJtgButton_Click(object sender, EventArgs e)
+        private void ChooseJtgButton_Click(object sender, EventArgs e)
         {
             using (var ofd = new OpenFileDialog())
             {
@@ -91,7 +91,7 @@ namespace FPLedit.jTrainGraphStarter
             }
         }
 
-        private void findJavaButton_Click(object sender, EventArgs e)
+        private void FindJavaButton_Click(object sender, EventArgs e)
             => javaPathTextBox.Text = JavaFinder.JavaGuess() ?? javaPathTextBox.Text;
 
         private bool ExecutableExists(string path)
@@ -107,10 +107,10 @@ namespace FPLedit.jTrainGraphStarter
             return exists;
         }
 
-        private void docLinkLabel_LinkClicked(object sender, EventArgs e)
+        private void DocLinkLabel_LinkClicked(object sender, EventArgs e)
             => Process.Start("https://fahrplan.manuelhu.de/bildfahrplaene/");
 
-        private void downloadLinkLabel_LinkClicked(object sender, EventArgs e)
+        private void DownloadLinkLabel_LinkClicked(object sender, EventArgs e)
             => Process.Start("https://jtraingraph.de");
 
         private class VersionItem

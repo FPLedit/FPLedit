@@ -105,7 +105,7 @@ namespace FPLedit.Editor
                 stationRenderer.Visible = false;
         }
 
-        private void closeButton_Click(object sender, EventArgs e)
+        private void CloseButton_Click(object sender, EventArgs e)
         {
             string name = nameTextBox.Text;
 
@@ -202,7 +202,7 @@ namespace FPLedit.Editor
             Close(DialogResult.Ok);
         }
 
-        private void cancelButton_Click(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e)
             => Close(DialogResult.Cancel);
     }
 }
