@@ -34,11 +34,13 @@ namespace FPLedit.Editor
             stationsComboBox.ItemTextBinding = Binding.Property<Station, string>(s => s.SName);
             stationsComboBox.DataStore = tt.Stations;
 
-            if (dir == TrainDirection.tr) // Netzwerk-Fahrplan
-            {
-                sortSelection.DisableOption(3);
-                sortSelection.DisableOption(4);
-            }
+            //TODO: Investigate & re-enable linear sorting top-to-bottom/bottom-to-top
+            //if (dir == TrainDirection.tr) // Netzwerk-Fahrplan
+            //{
+            //    // deaktiviert "von unten nach oben", "von oben nach unten"
+            //    sortSelection.DisableOption(3);
+            //    sortSelection.DisableOption(4);
+            //}
         }
 
         private void SelectMode(int idx)
