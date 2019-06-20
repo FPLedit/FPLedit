@@ -15,7 +15,7 @@ namespace FPLedit.Editor
         private readonly DropDown stationsComboBox;
         private readonly StackLayout sortSelectionStack;
 #pragma warning restore CS0649
-        private readonly SelectionUI sortSelection;
+        private readonly SelectionUI<SortSelectionType> sortSelection;
 
         private readonly TrainDirection direction;
         private readonly Timetable tt;
@@ -27,9 +27,7 @@ namespace FPLedit.Editor
             direction = dir;
             this.tt = tt;
 
-            //TODO: Investigate & re-enable linear sorting top-to-bottom/bottom-to-top
-            //sortSelection = new SelectionUI(SelectMode, sortSelectionStack, "Nach Namen", "Nach Zugnummern (Name ohne Zugart)", "Nach Zeit, an Station", "Von oben nach unten", "Von unten nach oben");
-            sortSelection = new SelectionUI(SelectMode, sortSelectionStack, "Nach Namen", "Nach Zugnummern (Name ohne Zugart)", "Nach Zeit, an Station");
+            sortSelection = new SelectionUI<SortSelectionType>(SelectMode, sortSelectionStack);
 
             stationsComboBox.ItemTextBinding = Binding.Property<Station, string>(s => s.SName);
             stationsComboBox.DataStore = tt.Stations;
@@ -38,17 +36,17 @@ namespace FPLedit.Editor
             //if (dir == TrainDirection.tr) // Netzwerk-Fahrplan
             //{
             //    // deaktiviert "von unten nach oben", "von oben nach unten"
-            //    sortSelection.DisableOption(3);
-            //    sortSelection.DisableOption(4);
+            //    sortSelection.DisableOption(SortSelectionType.TimeDown);
+            //    sortSelection.DisableOption(SortSelectionType.TimeUp);
             //}
         }
 
-        private void SelectMode(int idx)
+        private void SelectMode(SortSelectionType option)
         {
             if (direction == TrainDirection.tr && WindowShown && !sortSelection.EnabledOptionSelected)
                 MessageBox.Show("Die gewählte Option ist im Netzwerk-Fahrplan nicht verfügbar.", "FPLedit");
 
-            stationsComboBox.Enabled = idx == 2;
+            stationsComboBox.Enabled = option == SortSelectionType.TimeStation;
         }
 
         private void CloseButton_Click(object sender, EventArgs e)
@@ -61,13 +59,13 @@ namespace FPLedit.Editor
 
             var th = new TrainEditHelper();
 
-            switch(sortSelection.SelectedState)
+            switch (sortSelection.SelectedState)
             {
-                case 0: th.SortTrainsName(tt, direction, false); break;
-                case 1: th.SortTrainsName(tt, direction, true); break;
-                case 2: th.SortTrainsAtStation(tt, direction, (Station)stationsComboBox.SelectedValue); break;
-                case 3: th.SortTrainsAllStations(tt, direction, true); break;
-                case 4: th.SortTrainsAllStations(tt, direction, false); break;
+                case SortSelectionType.Name:        th.SortTrainsName(tt, direction, false); break;
+                case SortSelectionType.TrainNumber: th.SortTrainsName(tt, direction, true); break;
+                case SortSelectionType.TimeStation: th.SortTrainsAtStation(tt, direction, (Station)stationsComboBox.SelectedValue); break;
+                //case SortSelectionType.TimeDown:    th.SortTrainsAllStations(tt, direction, true); break;
+                //case SortSelectionType.TimeUp:      th.SortTrainsAllStations(tt, direction, false); break;
             }
 
             Close(DialogResult.Ok);
@@ -81,5 +79,20 @@ namespace FPLedit.Editor
 
         private void CancelButton_Click(object sender, EventArgs e)
             => Close(DialogResult.Cancel);
+
+        private enum SortSelectionType
+        {
+            [SelectionName("Nach Namen")]
+            Name,
+            [SelectionName("Nach Zugnummern (Name ohne Zugart)")]
+            TrainNumber,
+            [SelectionName("Nach Zeit, an Station")]
+            TimeStation,
+            //TODO: Investigate & re-enable linear sorting top-to-bottom/bottom-to-top
+            //[SelectionName("Von oben nach unten")]
+            //TimeDown,
+            //[SelectionName("Von unten nach oben")]
+            //TimeUp,
+        }
     }
 }

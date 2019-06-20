@@ -17,7 +17,7 @@ namespace FPLedit.Editor.Filters
         private readonly StackLayout typeSelectionStack;
         private readonly CheckBox negateCheckBox;
 #pragma warning restore CS0649
-        private readonly SelectionUI typeSelection;
+        private readonly SelectionUI<PatternSelectionType> typeSelection;
 
         public FilterRule Pattern { get; set; }
 
@@ -27,13 +27,7 @@ namespace FPLedit.Editor.Filters
             searchTextBox.Text = rule.SearchString;
             negateCheckBox.Checked = rule.Negate;
 
-            switch (rule.FilterType)
-            {
-                case FilterType.StartsWith: typeSelection.ChangeSelection(0); break;
-                case FilterType.EndsWidth: typeSelection.ChangeSelection(1); break;
-                case FilterType.Contains: typeSelection.ChangeSelection(2); break;
-                case FilterType.Equals: typeSelection.ChangeSelection(3); break;
-            }
+            typeSelection.ChangeSelection((PatternSelectionType)rule.FilterType);
         }
 
         public EditPatternForm(string property)
@@ -42,7 +36,7 @@ namespace FPLedit.Editor.Filters
 
             propertyLabel.Text = property;
 
-            typeSelection = new SelectionUI(null, typeSelectionStack, "beginnt mit", "endet mit", "enthält", "ist");
+            typeSelection = new SelectionUI<PatternSelectionType>(null, typeSelectionStack);
         }
 
         private void CloseButton_Click(object sender, EventArgs e)
@@ -54,13 +48,7 @@ namespace FPLedit.Editor.Filters
                 return;
             }
 
-            char type = '=';
-            if (typeSelection.SelectedState == 0)
-                type = '^';
-            else if (typeSelection.SelectedState == 1)
-                type = '$';
-            else if (typeSelection.SelectedState == 2)
-                type = ' ';
+            char type = (char)typeSelection.SelectedState;
 
             var negate = negateCheckBox.Checked == true ? "!" : "";
 
@@ -77,5 +65,18 @@ namespace FPLedit.Editor.Filters
 
         private void CancelButton_Click(object sender, EventArgs e)
             => Close(DialogResult.Cancel);
+
+        // Hinweis: Speigelung von FPLedit.Shared.FilterType
+        private enum PatternSelectionType
+        {
+            [SelectionName("beginnt mit")]
+            StartsWith = '^',
+            [SelectionName("endet mit")]
+            EndsWith = '$',
+            [SelectionName("enthält")]
+            Contains = ' ',
+            [SelectionName("ist")]
+            Equals = '=',
+        }
     }
 }

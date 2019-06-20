@@ -8,36 +8,34 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Shared.UI
 {
-    public sealed class SelectionUI : IDisposable
+    public sealed class SelectionUI<T> : IDisposable where T : Enum
     {
-        private readonly Action<int> selectedEvent;
+        private readonly Action<T> selectedEvent;
         private readonly DropDown dropDown;
-        private readonly RadioButton[] radioButtons;
-        private readonly int optionsCount;
-        private readonly bool[] disabledOptions;
         private readonly Color origBackground;
+        private readonly ActionInfo[] actions;
 
-        public int SelectedState { get; private set; }
+        private ActionInfo selectedState;
+
+        public T SelectedState => selectedState.Value;
 
         public Color ErrorColor { get; set; } = new Color(Colors.Red, 0.4f);
 
         public bool EnableErrorColoring { get; set; } = true;
 
-        public bool EnabledOptionSelected => !disabledOptions[SelectedState];
+        public bool EnabledOptionSelected => selectedState.Enabled;
 
-        public SelectionUI(Action<int> selectedEvent, StackLayout st, params string[] actions)
+        public SelectionUI(Action<T> selectedEvent, StackLayout st)
         {
             this.selectedEvent = selectedEvent;
-            optionsCount = actions.Length;
+
+            actions = GetActions(typeof(T)).ToArray();
 
             if (actions.Length == 0)
                 return;
 
-            disabledOptions = new bool[actions.Length];
-
             if (EnableRadioButtons)
             {
-                radioButtons = new RadioButton[actions.Length];
                 RadioButton rbf = null;
 
                 for (int i = 0; i < actions.Length; i++)
@@ -45,7 +43,7 @@ namespace FPLedit.Shared.UI
                     var ac = actions[i];
                     var rb = new RadioButton(rbf)
                     {
-                        Text = ac,
+                        Text = ac.Name,
                         Checked = rbf == null
                     };
                     if (rbf == null)
@@ -55,65 +53,106 @@ namespace FPLedit.Shared.UI
                     rb.CheckedChanged += (s, e) =>
                     {
                         if (rb.Checked)
-                            InternalSelect(tmp);
+                            InternalSelect(ac.Value);
                     };
 
                     st.Items.Add(rb);
-                    radioButtons[i] = rb;
+                    ac.RadioButton = rb;
                 }
             }
             else
             {
                 dropDown = new DropDown
                 {
-                    DataStore = actions,
+                    DataStore = actions.Cast<object>(),
                     ItemTextBinding = Binding.Property<string, string>(s => s)
                 };
-                dropDown.SelectedIndexChanged += (s, e) => InternalSelect(dropDown.SelectedIndex);
+                dropDown.SelectedIndexChanged += (s, e) => InternalSelect(((ActionInfo)dropDown.SelectedValue).Value);
                 dropDown.SelectedIndex = 0;
                 origBackground = dropDown.BackgroundColor;
                 st.Items.Add(dropDown);
             }
         }
 
-        public void DisableOption(int idx)
+        private IEnumerable<ActionInfo> GetActions(Type type)
         {
-            if (idx >= optionsCount)
-                throw new IndexOutOfRangeException("Der Index lag außerhalb des erlaubten Bereich dieser SelectionUI!");
+            var values = type.GetEnumValues();
 
-            if (EnableRadioButtons)
-                radioButtons[idx].Enabled = false;
-            disabledOptions[idx] = true;
+            foreach (T val in values)
+            {
+                var memInfo = type.GetMember(val.ToString());
+                var mem = memInfo.FirstOrDefault(m => m.DeclaringType == type);
+                var attributes = mem.GetCustomAttributes(typeof(SelectionNameAttribute), false);
+                var name = ((SelectionNameAttribute)attributes.FirstOrDefault())?.Name;
+                yield return new ActionInfo(val, name);
+            }
         }
 
-        public void ChangeSelection(int idx)
+        public void DisableOption(T option)
         {
-            if (idx >= optionsCount)
-                throw new IndexOutOfRangeException("Der Index lag außerhalb des erlaubten Bereich dieser SelectionUI!");
-
+            var state = GetState(option);
             if (EnableRadioButtons)
-                radioButtons[idx].Checked = true;
+                state.RadioButton.Enabled = false;
+            state.Enabled = false;
+        }
+
+        public void ChangeSelection(T option)
+        {
+            var state = GetState(option);
+            if (EnableRadioButtons)
+                state.RadioButton.Checked = true;
             else
-                dropDown.SelectedIndex = idx;
+                dropDown.SelectedValue = state;
         }
 
-        private void InternalSelect(int idx)
+        private void InternalSelect(T option)
         {
-            SelectedState = idx;
-            selectedEvent?.Invoke(idx);
+            selectedState = GetState(option);
+            selectedEvent?.Invoke(option);
 
             if (!EnableRadioButtons && EnableErrorColoring)
-                dropDown.BackgroundColor = disabledOptions[idx] ? ErrorColor : origBackground;
+                dropDown.BackgroundColor = !selectedState.Enabled ? ErrorColor : origBackground;
         }
 
         public void Dispose()
         {
             dropDown?.Dispose();
             if (EnableRadioButtons)
-                foreach (var rb in radioButtons)
-                    rb?.Dispose();
+                foreach (var rb in actions)
+                    rb.RadioButton?.Dispose();
         }
 
         private bool EnableRadioButtons => Eto.Platform.Instance.IsWpf;
+
+        private ActionInfo GetState(T value) => actions.First(v => v.Value.Equals(value));
+
+        private class ActionInfo
+        {
+            public string Name;
+            public T Value;
+            public bool Enabled;
+            public RadioButton RadioButton;
+
+            public ActionInfo(T value, string name)
+            {
+                Name = name;
+                Value = value;
+                Enabled = true;
+                RadioButton = null;
+            }
+        }
+    }
+
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
+    public class SelectionNameAttribute : Attribute
+    {
+        private readonly string name;
+
+        public string Name => name;
+
+        public SelectionNameAttribute(string name)
+        {
+            this.name = name;
+        }
     }
 }

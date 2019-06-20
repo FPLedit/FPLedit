@@ -19,7 +19,7 @@ namespace FPLedit.Editor
         private readonly TableLayout extendedOptionsTable, copyOptionsTable;
 #pragma warning restore CS0649
         private readonly NumberValidator offsetValidator, countValidator, changeValidator;
-        private readonly SelectionUI modeSelect;
+        private readonly SelectionUI<CopySelectionMode> modeSelect;
 
         private readonly Train train;
         private readonly Timetable tt;
@@ -39,12 +39,12 @@ namespace FPLedit.Editor
             countTextBox.Text = "1";
             changeTextBox.Text = "2";
 
-            modeSelect = new SelectionUI(SelectMode, selectStack, "Zug kopieren", "Zug verschieben");
+            modeSelect = new SelectionUI<CopySelectionMode>(SelectMode, selectStack);
         }
 
-        private void SelectMode(int sender)
+        private void SelectMode(CopySelectionMode mode)
         {
-            var copy = sender == 0;
+            var copy = mode == CopySelectionMode.Copy;
 
             extendedOptionsTable.Visible = copyOptionsTable.Visible = copy;
         }
@@ -101,6 +101,14 @@ namespace FPLedit.Editor
         {
             modeSelect?.Dispose();
             base.Dispose(disposing);
+        }
+
+        private enum CopySelectionMode
+        {
+            [SelectionName("Zug kopieren")]
+            Copy,
+            [SelectionName("Zug verschieben")]
+            Move
         }
     }
 }
