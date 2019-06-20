@@ -6,22 +6,26 @@ using System.Text;
 
 namespace FPLedit.Buchfahrplan.Model
 {
+    [XElmName("bfpl_attrs", IsFpleditElement = true)]
     public class BfplAttrs : Entity
     {
         public List<BfplPoint> Points { get; private set; }
 
+        [XAttrName("font")]
         public string Font
         {
             get => GetAttribute("font", "");
             set => SetAttribute("font", value);
         }
 
+        [XAttrName("tmpl")]
         public string Template
         {
             get => GetAttribute("tmpl", "");
             set => SetAttribute("tmpl", value);
         }
 
+        [XAttrName("css")]
         public string Css
         {
             get
@@ -44,24 +48,28 @@ namespace FPLedit.Buchfahrplan.Model
             }
         }
 
+        [XAttrName("tp")]
         public string TrainPatterns
         {
             get => GetAttribute("tp", "");
             set => SetAttribute("tp", value);
         }
 
+        [XAttrName("sp")]
         public string StationPatterns
         {
             get => GetAttribute("sp", "");
             set => SetAttribute("sp", value);
         }
 
+        [XAttrName("shC")]
         public bool ShowComments
         {
             get => GetAttribute<bool>("shC");
             set => SetAttribute("shC", value.ToString().ToLower());
         }
 
+        [XAttrName("shD")]
         public bool ShowDays
         {
             get => GetAttribute<bool>("shD");

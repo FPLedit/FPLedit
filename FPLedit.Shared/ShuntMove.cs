@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace FPLedit.Shared
 {
     [Serializable]
+    [XElmName("shMove")]
     public class ShuntMove : Entity
     {
         public ShuntMove(Timetable tt) : base("shMove", tt)
@@ -17,24 +18,28 @@ namespace FPLedit.Shared
         {
         }
 
+        [XAttrName("so")]
         public string SourceTrack
         {
             get => GetAttribute<string>("so");
             set => SetAttribute("so", value);
         }
 
+        [XAttrName("ta")]
         public string TargetTrack
         {
             get => GetAttribute<string>("ta");
             set => SetAttribute("ta", value);
         }
 
+        [XAttrName("ti")]
         public TimeSpan Time
         {
             get => GetTime("ti");
             set => SetNotEmptyTime(value, "ti");
         }
 
+        [XAttrName("ea")]
         public bool EmptyAfterwards
         {
             get => GetAttribute<bool>("ea");

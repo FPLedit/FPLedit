@@ -6,23 +6,28 @@ using System.Text;
 
 namespace FPLedit.Kursbuch.Model
 {
+    [XElmName("kfpl_attrs", IsFpleditElement = true)]
     public class KfplAttrs : Entity
     {
+        [XAttrName("font")]
         public string Font
         {
             get => GetAttribute("font", "");
             set => SetAttribute("font", value);
         }
 
+        [XAttrName("hefont")]
         public string HeFont
         {
             get => GetAttribute("hefont", "");
             set => SetAttribute("hefont", value);
         }
 
+        [XAttrName("kbsn")]
         public RouteValueCollection<string> KBSn
             => new RouteValueCollection<string>(this, _parent, "kbsn", null, s => s, s => s);
 
+        [XAttrName("css")]
         public string Css
         {
             get
@@ -45,18 +50,21 @@ namespace FPLedit.Kursbuch.Model
             }
         }
 
+        [XAttrName("tmpl")]
         public string Template
         {
             get => GetAttribute("tmpl", "");
             set => SetAttribute("tmpl", value);
         }
 
+        [XAttrName("tp")]
         public string TrainPatterns
         {
             get => GetAttribute("tp", "");
             set => SetAttribute("tp", value);
         }
 
+        [XAttrName("sp")]
         public string StationPatterns
         {
             get => GetAttribute("sp", "");

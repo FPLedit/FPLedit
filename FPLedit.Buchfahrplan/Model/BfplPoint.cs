@@ -10,6 +10,7 @@ namespace FPLedit.Buchfahrplan.Model
 {
     [Serializable]
     [DebuggerDisplay("Point {SName} [{Kilometre}]")]
+    [XElmName("p", IsFpleditElement = true)]
     public sealed class BfplPoint : Entity, IStation
     {
         public BfplPoint(XMLEntity en, Timetable tt) : base(en, tt)
@@ -20,18 +21,22 @@ namespace FPLedit.Buchfahrplan.Model
         {
         }
 
+        [XAttrName("name")]
         public string SName
         {
             get => GetAttribute("name", "");
             set => SetAttribute("name", value);
         }
 
+        [XAttrName("fpl-wl")]
         public RouteValueCollection<int> Wellenlinien
             => new RouteValueCollection<int>(this, _parent, "fpl-wl", "0", s => int.Parse(s), i => i.ToString());
 
+        [XAttrName("fpl-vmax")]
         public RouteValueCollection<string> Vmax
             => new RouteValueCollection<string>(this, _parent, "fpl-vmax", "", s => s, s => s);
 
+        [XAttrName("fpl-rt")]
         public int[] Routes
         {
             get

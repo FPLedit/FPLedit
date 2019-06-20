@@ -7,20 +7,24 @@ namespace FPLedit.Shared
 {
     [Serializable]
     [DebuggerDisplay("{TName}")]
+    [XElmName("ti", "ta", "tr")]
     public sealed class Train : Entity, ITrain
     {
+        [XAttrName("name")]
         public string TName
         {
             get => GetAttribute<string>("name");
             set => SetAttribute("name", value);
         }
 
+        [XAttrName("id")]
         public int Id
         {
             get => GetAttribute<int>("id", -1);
             set => SetAttribute("id", value.ToString());
         }
 
+        [XAttrName("islink")]
         public bool IsLink
         {
             get => GetAttribute<bool>("islink");
@@ -155,18 +159,21 @@ namespace FPLedit.Shared
 
         #endregion
 
+        [XAttrName("fpl-tfz")]
         public string Locomotive
         {
             get => GetAttribute("fpl-tfz", "");
             set => SetAttribute("fpl-tfz", value);
         }
 
+        [XAttrName("fpl-mbr")]
         public string Mbr
         {
             get => GetAttribute("fpl-mbr", "");
             set => SetAttribute("fpl-mbr", value);
         }
 
+        [XAttrName("fpl-last")]
         public string Last
         {
             get => GetAttribute("fpl-last", "");
@@ -175,12 +182,14 @@ namespace FPLedit.Shared
 
         public TrainDirection Direction => (TrainDirection)Enum.Parse(typeof(TrainDirection), XMLEntity.XName);
 
+        [XAttrName("cm")]
         public string Comment
         {
             get => GetAttribute("cm", "");
             set => SetAttribute("cm", value);
         }
 
+        [XAttrName("d")]
         public Days Days
         {
             get => Days.Parse(GetAttribute("d", "1111111"));

@@ -8,6 +8,7 @@ namespace FPLedit.Shared
 {
     [Serializable]
     [DebuggerDisplay("From {First} to {Next}")]
+    [XElmName("tra")]
     public class Transition : Entity
     {
         public Transition(Timetable tt) : base("tra", tt)
@@ -18,12 +19,14 @@ namespace FPLedit.Shared
         {
         }
 
+        [XAttrName("first")]
         public int First
         {
             get => GetAttribute<int>("first");
             set => SetAttribute("first", value.ToString());
         }
 
+        [XAttrName("next")]
         public int Next
         {
             get => GetAttribute<int>("next");

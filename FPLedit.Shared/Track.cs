@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace FPLedit.Shared
 {
     [Serializable]
+    [XElmName("track")]
     public class Track : Entity
     {
         public Track(Timetable tt) : base("track", tt)
@@ -17,6 +18,7 @@ namespace FPLedit.Shared
         {
         }
 
+        [XAttrName("name")]
         public string Name
         {
             get => GetAttribute<string>("name");

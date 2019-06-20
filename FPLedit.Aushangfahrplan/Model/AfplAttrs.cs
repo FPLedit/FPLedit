@@ -6,20 +6,24 @@ using System.Text;
 
 namespace FPLedit.Aushangfahrplan.Model
 {
+    [XElmName("afpl-attrs", IsFpleditElement = true)]
     public class AfplAttrs : Entity
     {
+        [XAttrName("font")]
         public string Font
         {
             get => GetAttribute("font", "");
             set => SetAttribute("font", value);
         }
 
+        [XAttrName("hefont")]
         public string HwFont
         {
             get => GetAttribute("hwfont", "");
             set => SetAttribute("hwfont", value);
         }
 
+        [XAttrName("css")]
         public string Css
         {
             get
@@ -42,24 +46,28 @@ namespace FPLedit.Aushangfahrplan.Model
             }
         }
 
+        [XAttrName("tmpl")]
         public string Template
         {
             get => GetAttribute("tmpl", "");
             set => SetAttribute("tmpl", value);
         }
 
+        [XAttrName("tp")]
         public string TrainPatterns
         {
             get => GetAttribute("tp", "");
             set => SetAttribute("tp", value);
         }
 
+        [XAttrName("sp")]
         public string StationPatterns
         {
             get => GetAttribute("sp", "");
             set => SetAttribute("sp", value);
         }
 
+        [XAttrName("shT")]
         public bool ShowTracks
         {
             get => GetAttribute<bool>("shT", true);

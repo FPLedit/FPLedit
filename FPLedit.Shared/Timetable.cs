@@ -9,6 +9,7 @@ namespace FPLedit.Shared
 {
     [Serializable]
     [DebuggerDisplay("{TTName}")]
+    [XElmName("jTrainGraph_timetable")]
     public sealed class Timetable : Entity, ITimetable
     {
         public const int LINEAR_ROUTE_ID = 0;
@@ -16,17 +17,20 @@ namespace FPLedit.Shared
 
         private readonly XMLEntity sElm, tElm, trElm;
 
+        [XAttrName("version")]
         public TimetableVersion Version => (TimetableVersion)GetAttribute("version", 0);
         public TimetableType Type => Version == TimetableVersion.Extended_FPL ? TimetableType.Network : TimetableType.Linear;
 
         private int nextStaId = 0, nextRtId = 0, nextTraId = 0;
 
+        [XAttrName("name")]
         public string TTName
         {
             get => GetAttribute("name", "");
             set => SetAttribute("name", value);
         }
 
+        [XAttrName("dTt")]
         public int DefaultPrePostTrackTime
         {
             get => GetAttribute("dTt", 10);

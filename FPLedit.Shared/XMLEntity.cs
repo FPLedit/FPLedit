@@ -59,4 +59,28 @@ namespace FPLedit.Shared
 
         private string AttributeDebugger => string.Join(", ", Attributes.ToList().Select(a => a.Key + "=" + a.Value));
     }
+
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
+    public class XElmNameAttribute : Attribute
+    {
+        public XElmNameAttribute(params string[] names)
+        {
+            Names = names;
+        }
+
+        public string[] Names { get; }
+
+        public bool IsFpleditElement { get; set; }
+    }
+
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    public class XAttrNameAttribute : Attribute
+    {
+        public XAttrNameAttribute(string name)
+        {
+            Name = name;
+        }
+
+        public string Name { get; }
+    }
 }

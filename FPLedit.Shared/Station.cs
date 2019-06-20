@@ -7,6 +7,7 @@ namespace FPLedit.Shared
 {
     [Serializable]
     [DebuggerDisplay("{SName} [{GetAttribute(\"km\", \"\")}]")]
+    [XElmName("sta")]
     public sealed class Station : Entity, IStation
     {
         public IChildrenCollection<Track> Tracks { get; private set; }
@@ -22,6 +23,7 @@ namespace FPLedit.Shared
             Tracks = new ObservableChildrenCollection<Track>(this, "track", _parent);
         }
 
+        [XAttrName("name")]
         public string SName
         {
             get => GetAttribute("name", "");
@@ -31,21 +33,27 @@ namespace FPLedit.Shared
         public PositionCollection Positions
             => new PositionCollection(this, _parent);
 
+        [XAttrName("tr")]
         public RouteValueCollection<int> LineTracksRight
             => new RouteValueCollection<int>(this, _parent, "tr", "1", s => int.Parse(s), i => i.ToString());
 
+        [XAttrName("fpl-wl")]
         public RouteValueCollection<int> Wellenlinien
             => new RouteValueCollection<int>(this, _parent, "fpl-wl", "0", s => int.Parse(s), i => i.ToString());
 
+        [XAttrName("fpl-vmax")]
         public RouteValueCollection<string> Vmax
             => new RouteValueCollection<string>(this, _parent, "fpl-vmax", "", s => s, s => s);
 
+        [XAttrName("dTi")]
         public RouteValueCollection<string> DefaultTrackRight
             => new RouteValueCollection<string>(this, _parent, "dTi", "", s => s, s => s);
 
+        [XAttrName("dTa")]
         public RouteValueCollection<string> DefaultTrackLeft
             => new RouteValueCollection<string>(this, _parent, "dTa", "", s => s, s => s);
 
+        [XAttrName("fpl-id")]
         public int Id
         {
             get
@@ -62,6 +70,7 @@ namespace FPLedit.Shared
             }
         }
 
+        [XAttrName("fpl-rt")]
         public int[] Routes
         {
             get
