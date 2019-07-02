@@ -164,7 +164,8 @@ namespace FPLedit.Editor.Network
             view.DataStore = path.Select(sta => new DataElement(train, sta, train.GetArrDep(sta))).ToList();
             view.SelectedRowsChanged += (s, e) =>
             {
-                shuntButton.Enabled = ((DataElement)view.SelectedItem).Station.Tracks.Any();
+                var selected = (DataElement)view.SelectedItem;
+                shuntButton.Enabled = (selected != null) ? selected.Station.Tracks.Any() : false;
             };
         }
 
