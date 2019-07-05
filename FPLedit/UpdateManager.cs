@@ -113,7 +113,7 @@ namespace FPLedit
 
             if (settings.Get("updater.auto", "") == "")
             {
-                var res = MessageBox.Show("FPLedit kann automatisch bei jedem Programmstart nach einer aktuelleren Version suchen.\n\nDabei werden nur die IP-Adresse und der verwendete Betriebssystemtyp Ihres Computers an den Server übermittelt.", "Automatische Updateprüfung", MessageBoxButtons.YesNo, MessageBoxType.Question);
+                var res = MessageBox.Show("FPLedit kann automatisch bei jedem Programmstart nach einer aktuelleren Version suchen.\n\nDabei werden nur die IP-Adresse und der verwendete Betriebssystemtyp Ihres Computers an den Server übermittelt. Die IP-Adresse wird nur anonymisiert in Log-Dateien gespeichert; ein Rückschluss auf einzelne Benutzer ist daher nicht möglich.", "Automatische Updateprüfung", MessageBoxButtons.YesNo, MessageBoxType.Question);
                 settings.Set("updater.auto", res == DialogResult.Yes);
             }
 
