@@ -14,6 +14,7 @@ namespace FPLedit.Editor.Network
         private readonly LineRenderer lineRenderer;
         private readonly Button closeButton;
         private readonly CheckBox waypointsCheckBox;
+        private readonly LinkButton waypointsDocuLink;
 #pragma warning restore CS0649
 
         private readonly IInfo info;
@@ -53,8 +54,10 @@ namespace FPLedit.Editor.Network
             trf.lineRenderer.FixedStatusString = "Durch Klick Stationen am Anfang/Ende des Laufwegs entfernen";
             trf.lineRenderer.StationClicked += trf.ChangeRoute;
             trf.lineRenderer.SetHighlightedPath(trf.Path);
-            trf.waypointsAllowed = false;
-            trf.waypointsCheckBox.Visible = false;
+            // Disable waypoints
+            trf.waypointsAllowed =
+                trf.waypointsCheckBox.Visible =
+                trf.waypointsDocuLink.Visible = false;
             return trf;
         }
 
@@ -70,13 +73,24 @@ namespace FPLedit.Editor.Network
 
             trf.closeButton.Text = "Weiter >>";
             trf.closeButton.Enabled = false;
-            trf.waypointsAllowed = info.Timetable.HasRouteCycles;
-            trf.waypointsCheckBox.Visible = true;
+            // Set waypoints state according to timetable
+            trf.waypointsAllowed =
+                trf.waypointsCheckBox.Visible =
+                trf.waypointsDocuLink.Visible = info.Timetable.HasRouteCycles;
+            // Waypoints can be edited only after creating initial route
+            trf.waypointsCheckBox.Enabled = false;
             return trf;
         }
 
         private void CloseButton_Click(object sender, EventArgs e)
         {
+            if (Path.Distinct().Count() < Path.Count)
+            {
+                MessageBox.Show("Der Laufweg enthält eine Station mehr als einmal. Dies ist aktuell nicht möglich. Ggf. fehlt ein weiterer Wegpunkt!",
+                    "FPLedit");
+                return;
+            }
+
             if (train != null)
             {
                 var ardps = train.GetArrDeps();
@@ -170,6 +184,8 @@ namespace FPLedit.Editor.Network
                 // Wechseln in den Änderungsmodus
                 lineRenderer.StationClicked -= SetRoute;
                 lineRenderer.StationClicked += ChangeRoute;
+                // Waypoints can be edited only after creating initial route
+                waypointsCheckBox.Enabled = true;
             }
         }
 
@@ -201,5 +217,8 @@ namespace FPLedit.Editor.Network
                 lineRenderer.DispatchKeystroke(e);
             base.OnKeyDown(e);
         }
+
+        private void WaypointsDocuLink_Click(object sender, EventArgs e)
+            => System.Diagnostics.Process.Start("https://fahrplan.manuelhu.de/fahrplaene-bearbeiten/cycles/");
     }
 }

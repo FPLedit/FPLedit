@@ -114,6 +114,9 @@ namespace FPLedit.Shared
                     ? _parent.GetStationById(ardp.StationId)
                     : _parent.GetStationsOrderedByDirection()[Array.IndexOf(ardps, ardp)];
 
+                if (ret.ContainsKey(sta))
+                    throw new Exception($"The path already contains the station \"{sta.SName}\"");
+
                 ret.Add(sta, ardp);
             }
             return ret;

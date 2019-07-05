@@ -4,7 +4,7 @@
   xmlns:e="clr-namespace:FPLedit.Editor.Network;assembly=FPLedit"
   xmlns:sys="clr-namespace:System;assembly=mscorlib"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
-  Title="Fahrtstrecke bearbeiten: {train}" ClientSize="610,370" Resizable="true">
+  Title="Fahrtstrecke bearbeiten: {train}" ClientSize="650,370" Resizable="true">
   <TableLayout>
     <TableRow ScaleHeight="true">
       <TableLayout Spacing="5,5" Padding="10,10,10,10">
@@ -19,7 +19,10 @@
       <TableLayout Spacing="5,5" Padding="10,10,10,10">
         <TableRow>
           <Button Text="Laufweg zurücksetzen/leeren" Click="ResetRoute"></Button>
-          <CheckBox x:Name="waypointsCheckBox">Wegpunkte setzen</CheckBox>
+          <StackLayout Orientation="Horizontal" Spacing="5">
+            <CheckBox x:Name="waypointsCheckBox">Wegpunkte setzen (für zirkuläre Netze)</CheckBox>
+            <LinkButton x:Name="waypointsDocuLink" Click="WaypointsDocuLink_Click">Info</LinkButton>
+          </StackLayout>
           <TableCell ScaleWidth="true" />
           <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click"></Button>
           <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click"></Button>
