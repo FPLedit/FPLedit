@@ -40,6 +40,7 @@ namespace FPLedit
         private readonly FileHandler fileHandler;
         internal readonly ExtensionManager extensionManager;
         internal readonly CrashReporting.CrashReporter crashReporter;
+        private TimetableChecks.TimetableCheckRunner checkRunner;
 
 
         private List<string> lastFiles;
@@ -142,7 +143,7 @@ namespace FPLedit
             Shown += (s, e) => LoadStartFile();
             Shown += (s, e) => update.AutoUpdateCheck(Logger);
 
-            new TimetableChecks.TimetableCheckRunner(this); // CheckRunner initialisieren
+            checkRunner = new TimetableChecks.TimetableCheckRunner(this); // CheckRunner initialisieren
 
             // Hatten wir einen Crash beim letzten Mal?
             if (crashReporter.HasCurrentReport)
@@ -400,5 +401,13 @@ namespace FPLedit
         private void ConvertMenu_Click(object sender, EventArgs e)
             => fileHandler.ConvertTimetable();
         #endregion
+
+        protected override void Dispose(bool disposing)
+        {
+            fileHandler?.Dispose();
+            checkRunner?.Dispose();
+            registry?.Dispose();
+            base.Dispose(disposing);
+        }
     }
 }

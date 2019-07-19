@@ -369,5 +369,14 @@ namespace FPLedit.Editor
             base.OnMouseDown(e);
         }
         #endregion
+
+        protected override void Dispose(bool disposing)
+        {
+            font?.Dispose();
+            layout?.Dispose();
+            dashedPen?.Dispose();
+            editingTextBox?.Dispose();
+            base.Dispose(disposing);
+        }
     }
 }

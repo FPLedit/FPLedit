@@ -91,12 +91,15 @@ namespace FPLedit.Bildfahrplan.Render
             if (orig.Calced)
                 return orig;
 
+            var stationFont = (Font)attrs.StationFont;
+            var timeFont = (Font)attrs.TimeFont;
+
             var result = orig;
             // MarginTop berechnen
             float sMax = 0f;
-            var emSize = g.MeasureString((Font)attrs.StationFont, "M").Height;
+            var emSize = g.MeasureString(stationFont, "M").Height;
             if (attrs.StationVertical)
-                sMax = stations.Max(sta => g.MeasureString((Font)attrs.StationFont, sta.ToString(attrs.DisplayKilometre, route)).Width);
+                sMax = stations.Max(sta => g.MeasureString(stationFont, sta.ToString(attrs.DisplayKilometre, route)).Width);
             else
                 sMax = emSize;
 
@@ -109,7 +112,7 @@ namespace FPLedit.Bildfahrplan.Render
             // MarginLeft berechnen
             List<float> tsizes = new List<float>();
             foreach (var l in GetTimeLines(out bool _, startTime, endTime))
-                tsizes.Add(g.MeasureString((Font)attrs.TimeFont, new TimeSpan(0, l + startTime.GetMinutes(), 0).ToString(TIME_FORMAT)).Width);
+                tsizes.Add(g.MeasureString(timeFont, new TimeSpan(0, l + startTime.GetMinutes(), 0).ToString(TIME_FORMAT)).Width);
             result.Left = tsizes.Max() + result.Left;
             return result;
         }

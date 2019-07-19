@@ -83,36 +83,38 @@ namespace FPLedit.Bildfahrplan
         private void TrainColorItem_Click(object sender, EventArgs e)
         {
             info.StageUndoStep();
-            TrainColorForm tcf = new TrainColorForm(info);
-            if (tcf.ShowModal(info.RootForm) == DialogResult.Ok)
-                info.SetUnsaved();
+            using (var tcf = new TrainColorForm(info))
+                if (tcf.ShowModal(info.RootForm) == DialogResult.Ok)
+                    info.SetUnsaved();
         }
 
         private void StationStyleItem_Click(object sender, EventArgs e)
         {
             info.StageUndoStep();
-            var scf = new StationStyleForm(info);
-            if (scf.ShowModal(info.RootForm) == DialogResult.Ok)
-                info.SetUnsaved();
+            using (var scf = new StationStyleForm(info))
+                if (scf.ShowModal(info.RootForm) == DialogResult.Ok)
+                    info.SetUnsaved();
         }
 
         private void ConfigItem_Click(object sender, EventArgs e)
         {
             info.StageUndoStep();
-            ConfigForm cnf = new ConfigForm(info.Timetable, info.Settings);
-            if (cnf.ShowModal(info.RootForm) == DialogResult.Ok)
-                info.SetUnsaved();
+            using (var cnf = new ConfigForm(info.Timetable, info.Settings))
+                if (cnf.ShowModal(info.RootForm) == DialogResult.Ok)
+                    info.SetUnsaved();
         }
 
         private void PrintItem_Click(object sender, EventArgs e)
         {
             var route = (info.Timetable.Type == TimetableType.Network) ? info.FileState.SelectedRoute : Timetable.LINEAR_ROUTE_ID;
-            new PrintRenderer(info, route).InitPrint();
+            using (var pr = new PrintRenderer(info, route))
+                pr.InitPrint();
         }
 
         private void ShowItem_Click(object sender, EventArgs e)
         {
-            new PreviewForm(info).Show();
+            using (var prf = new PreviewForm(info))
+                prf.Show();
         }
     }
 #endif

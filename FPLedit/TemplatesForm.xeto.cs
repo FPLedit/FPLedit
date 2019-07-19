@@ -157,16 +157,19 @@ namespace FPLedit
             // May not always work
             var tmpl = templates[gridView.SelectedRow];
             var fn = Path.Combine(templatesDir.FullName, tmpl.Identifier);
-            Process p = new Process();
-            p.StartInfo.FileName = fn;
+            using (var p = new Process())
+            {
+                p.StartInfo.FileName = fn;
 
-            Stopwatch watch = new Stopwatch();
-            watch.Start();
-            if (p.Start())
-                p.WaitForExit();
-            watch.Stop();
-            if (watch.ElapsedMilliseconds < 200)
-                MessageBox.Show($"Es konnte kein Editor gestartet werden! Bitte öffnen Sie die Datei \"{fn}\" in einem Texteditor.", "FPLedit");
+                Stopwatch watch = new Stopwatch();
+                watch.Start();
+                if (p.Start())
+                    p.WaitForExit();
+                watch.Stop();
+
+                if (watch.ElapsedMilliseconds < 200)
+                    MessageBox.Show($"Es konnte kein Editor gestartet werden! Bitte öffnen Sie die Datei \"{fn}\" in einem Texteditor.", "FPLedit");
+            }
             ReloadTemplates();
         }
 

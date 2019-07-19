@@ -18,10 +18,12 @@ namespace FPLedit.Bildfahrplan
             try
             {
                 Renderer renderer = new Renderer(tt, Timetable.LINEAR_ROUTE_ID);
-                Bitmap bmp = new Bitmap(1000, renderer.GetHeight(true), PixelFormat.Format32bppRgba);
+                using (var bmp = new Bitmap(1000, renderer.GetHeight(true), PixelFormat.Format32bppRgba))
                 using (var g = new Graphics(bmp))
+                {
                     renderer.Draw(g, true);
-                bmp.Save(filename, ImageFormat.Png);
+                    bmp.Save(filename, ImageFormat.Png);
+                }
                 return true;
             }
             catch

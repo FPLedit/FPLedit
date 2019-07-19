@@ -41,9 +41,9 @@ namespace FPLedit.Editor
             {
                 Train train = (Train)view.SelectedItem;
 
-                TrainEditForm tef = new TrainEditForm(train);
-                if (tef.ShowModal(this) == DialogResult.Ok)
-                    UpdateListView(view, dir);
+                using (var tef = new TrainEditForm(train))
+                    if (tef.ShowModal(this) == DialogResult.Ok)
+                        UpdateListView(view, dir);
             }
             else if (message)
                 MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug bearbeiten");
@@ -51,12 +51,14 @@ namespace FPLedit.Editor
 
         protected void NewTrain(GridView view, TrainDirection direction)
         {
-            TrainEditForm tef = new TrainEditForm(tt, direction);
-            if (tef.ShowModal(this) == DialogResult.Ok)
+            using (var tef = new TrainEditForm(tt, direction))
             {
-                tt.AddTrain(tef.Train, true);
+                if (tef.ShowModal(this) == DialogResult.Ok)
+                {
+                    tt.AddTrain(tef.Train, true);
 
-                UpdateListView(view, direction);
+                    UpdateListView(view, direction);
+                }
             }
         }
 
@@ -66,8 +68,8 @@ namespace FPLedit.Editor
             {
                 var train = (Train)view.SelectedItem;
 
-                var tcf = new TrainCopyDialog(train, tt);
-                tcf.ShowModal(this);
+                using (var tcf = new TrainCopyDialog(train, tt))
+                    tcf.ShowModal(this);
 
                 UpdateListView(view, dir);
             }
@@ -77,9 +79,9 @@ namespace FPLedit.Editor
 
         protected void SortTrains(GridView view, TrainDirection dir)
         {
-            TrainSortDialog tsd = new TrainSortDialog(dir, tt);
-            if (tsd.ShowModal(this) == DialogResult.Ok)
-                UpdateListView(view, dir);
+            using (var tsd = new TrainSortDialog(dir, tt))
+                if (tsd.ShowModal(this) == DialogResult.Ok)
+                    UpdateListView(view, dir);
         }
     }
 }

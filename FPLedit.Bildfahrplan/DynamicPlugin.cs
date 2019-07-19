@@ -23,7 +23,7 @@ namespace FPLedit.Bildfahrplan
         }
     }
 
-    public class DynamicPreview : IPreviewable
+    public sealed class DynamicPreview : IPreviewable, IDisposable
     {
         private bool opened = false;
         private PreviewForm dpf;
@@ -45,5 +45,7 @@ namespace FPLedit.Bildfahrplan
         }
 
         public void Close() => dpf?.Close();
+
+        public void Dispose() => dpf?.Dispose();
     }
 }

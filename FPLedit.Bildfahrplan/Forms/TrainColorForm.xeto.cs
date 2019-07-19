@@ -57,9 +57,9 @@ namespace FPLedit.Bildfahrplan.Forms
             {
                 var train = (Train)gridView.SelectedItem;
 
-                TrainColorEditForm tcef = new TrainColorEditForm(train, info.Settings);
-                if (tcef.ShowModal(this) == DialogResult.Ok)
-                    UpdateTrains();
+                using (var tcef = new TrainColorEditForm(train, info.Settings))
+                    if (tcef.ShowModal(this) == DialogResult.Ok)
+                        UpdateTrains();
             }
             else if (message)
                 MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zugdarstellung ändern");

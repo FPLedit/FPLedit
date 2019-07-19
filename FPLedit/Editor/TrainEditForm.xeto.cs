@@ -182,13 +182,15 @@ namespace FPLedit.Editor
 
         private void fillButton_Click(object sender, EventArgs e)
         {
-            var tfd = new TrainFillDialog(Train);
-            if (tfd.ShowModal() == DialogResult.Ok)
+            using (var tfd = new TrainFillDialog(Train))
             {
-                var th = new TrainEditHelper();
-                th.FillTrain(tfd.ReferenceTrain, Train, tfd.Offset);
+                if (tfd.ShowModal() == DialogResult.Ok)
+                {
+                    var th = new TrainEditHelper();
+                    th.FillTrain(tfd.ReferenceTrain, Train, tfd.Offset);
 
-                editor.Initialize(Train._parent, Train);
+                    editor.Initialize(Train._parent, Train);
+                }
             }
         }
 

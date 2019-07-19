@@ -57,9 +57,9 @@ namespace FPLedit.Bildfahrplan.Forms
             {
                 var station = (Station)gridView.SelectedItem;
 
-                var sef = new StationStyleEditForm(station, info.Settings);
-                if (sef.ShowModal(this) == DialogResult.Ok)
-                    UpdateStations();
+                using (var sef = new StationStyleEditForm(station, info.Settings))
+                    if (sef.ShowModal(this) == DialogResult.Ok)
+                        UpdateStations();
             }
             else if (message)
                 MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Stationsdarstellung ändern");

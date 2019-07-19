@@ -21,18 +21,21 @@ namespace FPLedit.Bildfahrplan.Render
 
         public void Render(Graphics g, Margins margin, TimeSpan startTime, TimeSpan endTime, float width)
         {
-            var timeBrush = new SolidBrush((Color)attrs.TimeColor);
-            var minutePen = new Pen((Color)attrs.TimeColor, attrs.MinuteTimeWidth);
-            var hourPen = new Pen((Color)attrs.TimeColor, attrs.HourTimeWidth);
-            foreach (var l in parent.GetTimeLines(out bool hour, startTime, endTime))
+            var timeFont = (Font)attrs.TimeFont; // Reminder: Do not dispose, will be disposed with MFont instance!
+            using (var timeBrush = new SolidBrush((Color)attrs.TimeColor))
+            using (var minutePen = new Pen((Color)attrs.TimeColor, attrs.MinuteTimeWidth))
+            using (var hourPen = new Pen((Color)attrs.TimeColor, attrs.HourTimeWidth))
             {
-                var offset = margin.Top + l * attrs.HeightPerHour / 60f;
-                g.DrawLine(hour ? hourPen : minutePen, margin.Left - 5, offset, width - margin.Right, offset); // Linie
+                foreach (var l in parent.GetTimeLines(out bool hour, startTime, endTime))
+                {
+                    var offset = margin.Top + l * attrs.HeightPerHour / 60f;
+                    g.DrawLine(hour ? hourPen : minutePen, margin.Left - 5, offset, width - margin.Right, offset); // Linie
 
-                var text = new TimeSpan(0, l + startTime.GetMinutes(), 0).ToString(Renderer.TIME_FORMAT);
-                var size = g.MeasureString((Font)attrs.TimeFont, text);
-                g.DrawText((Font)attrs.TimeFont, timeBrush, margin.Left - 5 - size.Width, offset - (size.Height / 2), text); // Beschriftung
-                hour = !hour;
+                    var text = new TimeSpan(0, l + startTime.GetMinutes(), 0).ToString(Renderer.TIME_FORMAT);
+                    var size = g.MeasureString(timeFont, text);
+                    g.DrawText(timeFont, timeBrush, margin.Left - 5 - size.Width, offset - (size.Height / 2), text); // Beschriftung
+                    hour = !hour;
+                }
             }
         }
     }

@@ -80,8 +80,8 @@ namespace FPLedit.Editor.Network
                     {
                         tb.KeyDown += (s, e) => HandleKeystroke(e, dataGridView);
 
-                    // Wir gehen hier gleich in den vollen EditMode rein
-                    tb.CaretIndex = 0;
+                        // Wir gehen hier gleich in den vollen EditMode rein
+                        tb.CaretIndex = 0;
                         tb.SelectAll();
                         CellSelected(data, data.Station, arrival); data.IsSelectedArrival = arrival; data.SelectedTextBox = tb;
                     }
@@ -214,9 +214,9 @@ namespace FPLedit.Editor.Network
 
             var arrDep = data.ArrDeps[sta];
 
-            var shf = new ShuntForm(arrDep, sta);
-            if (shf.ShowModal(this) != DialogResult.Ok)
-                return;
+            using (var shf = new ShuntForm(arrDep, sta))
+                if (shf.ShowModal(this) != DialogResult.Ok)
+                    return;
 
             dataGridView.ReloadData(dataGridView.SelectedRow);
         }

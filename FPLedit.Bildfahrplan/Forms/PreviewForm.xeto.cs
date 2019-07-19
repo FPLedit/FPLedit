@@ -63,8 +63,8 @@ namespace FPLedit.Bildfahrplan.Forms
         private void PreferencesButton_Click(object sender, EventArgs e)
         {
             info.StageUndoStep();
-            ConfigForm cnf = new ConfigForm(info.Timetable, info.Settings);
-            cnf.ShowModal(this);
+            using (var cnf = new ConfigForm(info.Timetable, info.Settings))
+                cnf.ShowModal(this);
             ResetRenderer();
             info.SetUnsaved();
         }
@@ -102,5 +102,11 @@ namespace FPLedit.Bildfahrplan.Forms
 
         private void Panel_Paint(object sender, PaintEventArgs e)
             => adbg.Render(renderer, e.Graphics, !splitCheckBox.Checked.Value);
+
+        protected override void Dispose(bool disposing)
+        {
+            adbg?.Dispose();
+            base.Dispose(disposing);
+        }
     }
 }

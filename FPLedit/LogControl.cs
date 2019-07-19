@@ -85,5 +85,11 @@ namespace FPLedit
             }
             base.OnMouseUp(e);
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            menu?.Dispose();
+            base.Dispose(disposing);
+        }
     }
 }

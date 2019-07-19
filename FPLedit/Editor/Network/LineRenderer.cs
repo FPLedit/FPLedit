@@ -20,6 +20,13 @@ namespace FPLedit.Editor.Network
         private readonly Font font;
         private readonly Pen linePen, highlightPen;
 
+        protected override void Dispose(bool disposing)
+        {
+            font?.Dispose();
+            linePen?.Dispose();
+            highlightPen?.Dispose();
+        }
+
         private bool IsNetwork => tt?.Type == TimetableType.Network;
 
         private bool _stationMovingEnabled = true;
@@ -222,8 +229,8 @@ namespace FPLedit.Editor.Network
         {
             if (DisableTopBorder)
                 return;
-            var pen = new Pen(Brushes.Black) { DashStyle = DashStyle.Parse("2,2,2,2") };
-            g.DrawLine(pen, Point.Empty, new Point(ClientSize.Width, 0));
+            using (var pen = new Pen(Brushes.Black) { DashStyle = DashStyle.Parse("2,2,2,2") })
+                g.DrawLine(pen, Point.Empty, new Point(ClientSize.Width, 0));
         }
 
         private Pen GetLinePen(int route, Station sta, Station lastSta)

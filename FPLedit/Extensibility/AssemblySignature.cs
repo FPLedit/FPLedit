@@ -60,17 +60,20 @@ namespace FPLedit.Extensibility
                 return SecurityContext.ThirdParty;
 
             var bytes = File.ReadAllBytes(fn);
-            var sha512 = SHA256.Create();
-            var hash = sha512.ComputeHash(bytes);
 
-            var rsa = new RSACryptoServiceProvider();
-            rsa.ImportParameters(pubkey);
+            using (var sha512 = SHA256.Create())
+            using (var rsa = new RSACryptoServiceProvider())
+            {
+                var hash = sha512.ComputeHash(bytes);
 
-            var sigDeformatter = new RSAPKCS1SignatureDeformatter(rsa);
-            sigDeformatter.SetHashAlgorithm("SHA256");
-            if (sigDeformatter.VerifySignature(hash, signature.Signature))
-                return SecurityContext.Official;
-            return SecurityContext.ThirdParty;
+                rsa.ImportParameters(pubkey);
+
+                var sigDeformatter = new RSAPKCS1SignatureDeformatter(rsa);
+                sigDeformatter.SetHashAlgorithm("SHA256");
+                if (sigDeformatter.VerifySignature(hash, signature.Signature))
+                    return SecurityContext.Official;
+                return SecurityContext.ThirdParty;
+            }
         }
 
         private struct AssemblySignature

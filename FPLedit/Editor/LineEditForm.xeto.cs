@@ -81,8 +81,8 @@ namespace FPLedit.Editor
             {
                 Station station = (Station)gridView.SelectedItem;
 
-                EditStationForm nsf = new EditStationForm(station, route);
-                nsf.ShowModal(this);
+                using (var nsf = new EditStationForm(station, route))
+                    nsf.ShowModal(this);
 
                 UpdateStations();
             }
@@ -105,22 +105,24 @@ namespace FPLedit.Editor
 
         private void NewStation()
         {
-            EditStationForm nsf = new EditStationForm(tt, route);
-            if (nsf.ShowModal(this) == DialogResult.Ok)
+            using (EditStationForm nsf = new EditStationForm(tt, route))
             {
-                Station sta = nsf.Station;
-
-                if (info.Timetable.Type == TimetableType.Network)
+                if (nsf.ShowModal(this) == DialogResult.Ok)
                 {
-                    var handler = new StaPosHandler();
-                    handler.SetMiddlePos(route, sta, info.Timetable);
-                    var r = sta.Routes.ToList();
-                    r.Add(route);
-                    sta.Routes = r.ToArray();
-                }
+                    Station sta = nsf.Station;
 
-                tt.AddStation(sta, route);
-                UpdateStations();
+                    if (info.Timetable.Type == TimetableType.Network)
+                    {
+                        var handler = new StaPosHandler();
+                        handler.SetMiddlePos(route, sta, info.Timetable);
+                        var r = sta.Routes.ToList();
+                        r.Add(route);
+                        sta.Routes = r.ToArray();
+                    }
+
+                    tt.AddStation(sta, route);
+                    UpdateStations();
+                }
             }
         }
 
@@ -134,16 +136,18 @@ namespace FPLedit.Editor
             IImport timport = new XMLImport();
             IImport simport = new NonDefaultFiletypes.XMLStationsImport();
 
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.AddLegacyFilter(timport.Filter, simport.Filter);
-
-            if (ofd.ShowDialog(this) == DialogResult.Ok)
+            using (var ofd = new OpenFileDialog())
             {
-                IImport import = Path.GetExtension(ofd.FileName) == ".fpl" ? timport : simport;
-                var ntt = import.Import(ofd.FileName, info);
-                foreach (var station in ntt.Stations)
-                    tt.AddStation(station, Timetable.LINEAR_ROUTE_ID);
-                // ntt will be destroyed by decoupling stations, do not use afterwards!
+                ofd.AddLegacyFilter(timport.Filter, simport.Filter);
+
+                if (ofd.ShowDialog(this) == DialogResult.Ok)
+                {
+                    IImport import = Path.GetExtension(ofd.FileName) == ".fpl" ? timport : simport;
+                    var ntt = import.Import(ofd.FileName, info);
+                    foreach (var station in ntt.Stations)
+                        tt.AddStation(station, Timetable.LINEAR_ROUTE_ID);
+                    // ntt will be destroyed by decoupling stations, do not use afterwards!
+                }
             }
 
             UpdateStations();

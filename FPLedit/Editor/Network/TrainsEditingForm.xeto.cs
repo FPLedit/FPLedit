@@ -75,8 +75,8 @@ namespace FPLedit.Editor.Network
             {
                 var train = (Train)view.SelectedItem;
 
-                SingleTimetableEditForm tte = new SingleTimetableEditForm(info, train);
-                tte.ShowModal(this);
+                using (var tte = new SingleTimetableEditForm(info, train))
+                    tte.ShowModal(this);
             }
             else if (message)
                 MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug-Fahrplan bearbeiten");
@@ -88,9 +88,9 @@ namespace FPLedit.Editor.Network
             {
                 var train = (Train)view.SelectedItem;
 
-                var trf = TrainRouteForm.EditPath(info, train);
-                if (trf.ShowModal(this) == DialogResult.Ok)
-                    UpdateListView(view, TrainDirection.tr);
+                using (var trf = TrainRouteForm.EditPath(info, train))
+                    if (trf.ShowModal(this) == DialogResult.Ok)
+                        UpdateListView(view, TrainDirection.tr);
             }
             else if (message)
                 MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Laufweg bearbeiten");
@@ -102,8 +102,8 @@ namespace FPLedit.Editor.Network
             {
                 var train = (Train)view.SelectedItem;
 
-                var tcf = new TrainCopyDialog(train, info.Timetable);
-                tcf.ShowModal(this);
+                using (var tcf = new TrainCopyDialog(train, info.Timetable))
+                    tcf.ShowModal(this);
 
                 UpdateListView(view, TrainDirection.tr);
             }
@@ -113,16 +113,20 @@ namespace FPLedit.Editor.Network
 
         private void NewTrain(GridView view)
         {
-            var trf = TrainRouteForm.NewTrain(info);
-            if (trf.ShowModal(this) != DialogResult.Ok)
-                return;
-
-            var tef = new TrainEditForm(info.Timetable, TrainDirection.tr, trf.Path);
-            if (tef.ShowModal(this) == DialogResult.Ok)
+            using (var trf = TrainRouteForm.NewTrain(info))
             {
-                tt.AddTrain(tef.Train, true);
+                if (trf.ShowModal(this) != DialogResult.Ok)
+                    return;
 
-                UpdateListView(view, TrainDirection.tr);
+                using (var tef = new TrainEditForm(info.Timetable, TrainDirection.tr, trf.Path))
+                {
+                    if (tef.ShowModal(this) == DialogResult.Ok)
+                    {
+                        tt.AddTrain(tef.Train, true);
+
+                        UpdateListView(view, TrainDirection.tr);
+                    }
+                }
             }
         }
 

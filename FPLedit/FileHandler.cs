@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace FPLedit
 {
-    internal class FileHandler
+    internal class FileHandler : IDisposable
     {
         private readonly SaveFileDialog saveFileDialog, exportFileDialog;
         private readonly OpenFileDialog openFileDialog, importFileDialog;
@@ -231,16 +231,18 @@ namespace FPLedit
             if (MessageBox.Show($"Die aktuelle Datei ist ein {orig}. Es wird zu einem {dest} konvertiert.", "FPLedit", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
                 return;
 
-            var sfd = new SaveFileDialog();
-            sfd.AddLegacyFilter(exp.Filter);
-            if (sfd.ShowDialog(parent) == DialogResult.Ok)
+            using (var sfd = new SaveFileDialog())
             {
-                info.Logger.Info("Konvertiere Datei...");
-                bool ret = exp.Export(Timetable, sfd.FileName, info);
-                if (ret == false)
-                    return;
-                info.Logger.Info("Konvertieren erfolgreich abgeschlossen!");
-                InternalOpen(sfd.FileName);
+                sfd.AddLegacyFilter(exp.Filter);
+                if (sfd.ShowDialog(parent) == DialogResult.Ok)
+                {
+                    info.Logger.Info("Konvertiere Datei...");
+                    bool ret = exp.Export(Timetable, sfd.FileName, info);
+                    if (ret == false)
+                        return;
+                    info.Logger.Info("Konvertieren erfolgreich abgeschlossen!");
+                    InternalOpen(sfd.FileName);
+                }
             }
         }
 
@@ -256,16 +258,18 @@ namespace FPLedit
                 return;
 
             var exp = new UpgradeJTG3Export();
-            var sfd = new SaveFileDialog();
-            sfd.AddLegacyFilter(exp.Filter);
-            if (sfd.ShowDialog(parent) == DialogResult.Ok)
+            using (var sfd = new SaveFileDialog())
             {
-                info.Logger.Info("Konvertiere Datei...");
-                bool ret = exp.Export(Timetable, sfd.FileName, info);
-                if (ret == false)
-                    return;
-                info.Logger.Info("Konvertieren erfolgreich abgeschlossen!");
-                InternalOpen(sfd.FileName);
+                sfd.AddLegacyFilter(exp.Filter);
+                if (sfd.ShowDialog(parent) == DialogResult.Ok)
+                {
+                    info.Logger.Info("Konvertiere Datei...");
+                    bool ret = exp.Export(Timetable, sfd.FileName, info);
+                    if (ret == false)
+                        return;
+                    info.Logger.Info("Konvertieren erfolgreich abgeschlossen!");
+                    InternalOpen(sfd.FileName);
+                }
             }
         }
         #endregion
@@ -282,6 +286,14 @@ namespace FPLedit
                 return res != DialogResult.Cancel;
             }
             return true;
+        }
+
+        public void Dispose()
+        {
+            openFileDialog?.Dispose();
+            saveFileDialog?.Dispose();
+            exportFileDialog?.Dispose();
+            importFileDialog?.Dispose();
         }
     }
 

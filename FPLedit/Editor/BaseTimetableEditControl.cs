@@ -101,11 +101,13 @@ namespace FPLedit.Editor
             if (!data.IsFirst(sta) && !data.IsSelectedArrival)
                 return;
 
-            var zlmDialog = new ZlmEditForm(data.ArrDeps[sta].Zuglaufmeldung ?? "");
-            if (zlmDialog.ShowModal(this) != DialogResult.Ok)
-                return;
+            using (var zlmDialog = new ZlmEditForm(data.ArrDeps[sta].Zuglaufmeldung ?? ""))
+            {
+                if (zlmDialog.ShowModal(this) != DialogResult.Ok)
+                    return;
 
-            data.SetZlm(sta, zlmDialog.Zlm);
+                data.SetZlm(sta, zlmDialog.Zlm);
+            }
 
             view.ReloadData(view.SelectedRow);
         }

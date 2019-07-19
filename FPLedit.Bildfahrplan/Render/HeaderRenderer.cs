@@ -26,6 +26,7 @@ namespace FPLedit.Bildfahrplan.Render
 
         public Dictionary<Station, StationX> Render(Graphics g, Margins margin, float width, float height, bool drawHeader)
         {
+            var stationFont = (Font)attrs.StationFont; // Reminder: Do not dispose, will be disposed with MFont instance!
             var firstStation = stations.First();
             var lastStation = stations.Last();
             var stationOffsets = new Dictionary<Station, StationX>();
@@ -34,7 +35,7 @@ namespace FPLedit.Bildfahrplan.Render
             var stasWithTracks = stations.Count(s => s.Tracks.Any());
             var allTrackWidth = (stasWithTracks + allTrackCount) * StationX.IndividualTrackOffset;
 
-            var emSize = g.MeasureString((Font)attrs.StationFont, "M").Width;
+            var emSize = g.MeasureString(stationFont, "M").Width;
 
             StationX lastPos = null;
             foreach (var sta in stations)
@@ -64,58 +65,58 @@ namespace FPLedit.Bildfahrplan.Render
                 if (!style.CalcedShow)
                     continue;
 
-                var pen = new Pen((Color)style.CalcedColor, style.CalcedWidth)
+                using (var pen = new Pen((Color)style.CalcedColor, style.CalcedWidth)
                 {
                     DashStyle = ds.ParseDashstyle(style.CalcedLineStyle)
-                };
-                var brush = new SolidBrush((Color)style.CalcedColor);
-
-                if (!attrs.MultiTrack)
+                })
+                using (var brush = new SolidBrush((Color)style.CalcedColor))
                 {
-                    // Linie (Single-Track-Mode)
-                    g.DrawLine(pen, margin.Left + posX.Center, margin.Top - 5, margin.Left + posX.Center, height - margin.Bottom);
-                }
-                else
-                {
-                    // Linie (Multi-Track-Mode)
-                    g.DrawLine(pen, margin.Left + posX.Left, margin.Top - 5, margin.Left + posX.Left, height - margin.Bottom);
-                    foreach (var trackX in posX.TrackOffsets)
-                        g.DrawLine(pen, margin.Left + trackX.Value, margin.Top - 5, margin.Left + trackX.Value, height - margin.Bottom);
-                    g.DrawLine(pen, margin.Left + posX.Right, margin.Top - 5, margin.Left + posX.Right, height - margin.Bottom);
-                }
-
-                if (!drawHeader)
-                    continue;
-
-                // Stationsnamen
-                if (attrs.DrawHeader)
-                {
-                    var display = sta.ToString(attrs.DisplayKilometre, route);
-                    var size = g.MeasureString((Font)attrs.StationFont, display);
-
-                    var addOffset = attrs.MultiTrack ? emSize + 3 : 0;
-
-                    if (attrs.StationVertical)
+                    if (!attrs.MultiTrack)
                     {
-                        g.SaveTransform();
-                        g.TranslateTransform(margin.Left + posX.Center + (size.Height / 2), margin.Top - 8 - addOffset - size.Width);
-                        g.RotateTransform(90);
-                        g.DrawText((Font)attrs.StationFont, brush, 0, 0, display);
-                        g.RestoreTransform();
+                        // Linie (Single-Track-Mode)
+                        g.DrawLine(pen, margin.Left + posX.Center, margin.Top - 5, margin.Left + posX.Center, height - margin.Bottom);
                     }
                     else
-                        g.DrawText((Font)attrs.StationFont, brush, margin.Left + posX.Center - (size.Width / 2), margin.Top - size.Height - addOffset - 5, display);
-
-                    if (attrs.MultiTrack)
                     {
-                        foreach (var track in posX.TrackOffsets)
+                        // Linie (Multi-Track-Mode)
+                        g.DrawLine(pen, margin.Left + posX.Left, margin.Top - 5, margin.Left + posX.Left, height - margin.Bottom);
+                        foreach (var trackX in posX.TrackOffsets)
+                            g.DrawLine(pen, margin.Left + trackX.Value, margin.Top - 5, margin.Left + trackX.Value, height - margin.Bottom);
+                        g.DrawLine(pen, margin.Left + posX.Right, margin.Top - 5, margin.Left + posX.Right, height - margin.Bottom);
+                    }
+
+                    if (!drawHeader)
+                        continue;
+
+                    // Stationsnamen
+                    if (attrs.DrawHeader)
+                    {
+                        var display = sta.ToString(attrs.DisplayKilometre, route);
+                        var size = g.MeasureString(stationFont, display);
+
+                        var addOffset = attrs.MultiTrack ? emSize + 3 : 0;
+
+                        if (attrs.StationVertical)
                         {
-                            var trackSize = g.MeasureString((Font)attrs.StationFont, track.Key);
-                            g.DrawText((Font)attrs.StationFont, brush, margin.Left + track.Value - (trackSize.Width / 2), margin.Top - trackSize.Height - 5, track.Key);
+                            g.SaveTransform();
+                            g.TranslateTransform(margin.Left + posX.Center + (size.Height / 2), margin.Top - 8 - addOffset - size.Width);
+                            g.RotateTransform(90);
+                            g.DrawText(stationFont, brush, 0, 0, display);
+                            g.RestoreTransform();
+                        }
+                        else
+                            g.DrawText(stationFont, brush, margin.Left + posX.Center - (size.Width / 2), margin.Top - size.Height - addOffset - 5, display);
+
+                        if (attrs.MultiTrack)
+                        {
+                            foreach (var track in posX.TrackOffsets)
+                            {
+                                var trackSize = g.MeasureString(stationFont, track.Key);
+                                g.DrawText(stationFont, brush, margin.Left + track.Value - (trackSize.Width / 2), margin.Top - trackSize.Height - 5, track.Key);
+                            }
                         }
                     }
-                }
-
+                } // Disposing Pens and Brushes
             }
             return stationOffsets;
         }

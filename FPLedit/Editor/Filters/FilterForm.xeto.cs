@@ -89,12 +89,14 @@ namespace FPLedit.Editor.Filters
             {
                 var frule = (FilterRule)view.SelectedItem;
 
-                var epf = new EditPatternForm(frule, property);
-                if (epf.ShowModal(this) == DialogResult.Ok)
+                using (var epf = new EditPatternForm(frule, property))
                 {
-                    patterns[view.SelectedRow] = epf.Pattern;
+                    if (epf.ShowModal(this) == DialogResult.Ok)
+                    {
+                        patterns[view.SelectedRow] = epf.Pattern;
 
-                    UpdateListView(view, patterns);
+                        UpdateListView(view, patterns);
+                    }
                 }
             }
             else if (message)
@@ -103,12 +105,14 @@ namespace FPLedit.Editor.Filters
 
         private void AddEntry(GridView view, List<FilterRule> patterns, string property)
         {
-            var epf = new EditPatternForm(property);
-            if (epf.ShowModal(this) == DialogResult.Ok)
+            using (var epf = new EditPatternForm(property))
             {
-                patterns.Add(epf.Pattern);
+                if (epf.ShowModal(this) == DialogResult.Ok)
+                {
+                    patterns.Add(epf.Pattern);
 
-                UpdateListView(view, patterns);
+                    UpdateListView(view, patterns);
+                }
             }
         }
 

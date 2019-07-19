@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Bildfahrplan.Render
 {
-    internal class AsyncDoubleBufferedGraph
+    internal class AsyncDoubleBufferedGraph : IDisposable
     {
         private Bitmap buffer;
         private bool generatingBuffer = false;
@@ -72,6 +72,13 @@ namespace FPLedit.Bildfahrplan.Render
                 buffer = null;
                 panel.Invalidate();
             }
+        }
+
+        public void Dispose()
+        {
+            buffer?.Dispose();
+            panel?.Dispose();
+            font?.Dispose();
         }
     }
 }

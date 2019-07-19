@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Shared.UI
 {
-    public class SelectionUI
+    public sealed class SelectionUI : IDisposable
     {
         private readonly Action<int> selectedEvent;
         private readonly DropDown dropDown;
@@ -104,6 +104,14 @@ namespace FPLedit.Shared.UI
 
             if (!EnableRadioButtons && EnableErrorColoring)
                 dropDown.BackgroundColor = disabledOptions[idx] ? ErrorColor : origBackground;
+        }
+
+        public void Dispose()
+        {
+            dropDown?.Dispose();
+            if (EnableRadioButtons)
+                foreach (var rb in radioButtons)
+                    rb?.Dispose();
         }
 
         private bool EnableRadioButtons => Eto.Platform.Instance.IsWpf;

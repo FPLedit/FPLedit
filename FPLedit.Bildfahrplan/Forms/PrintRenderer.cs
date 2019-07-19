@@ -9,7 +9,7 @@ using System.Text;
 
 namespace FPLedit.Bildfahrplan.Forms
 {
-    internal class PrintRenderer
+    internal class PrintRenderer : IDisposable
     {
         private readonly IInfo info;
         private readonly Timetable tt;
@@ -27,21 +27,25 @@ namespace FPLedit.Bildfahrplan.Forms
             attrs = new TimetableStyle(tt);
         }
 
+        public void Dispose()
+        {
+            doc?.Dispose();
+        }
+
         public void InitPrint()
         {
-            PrintDialog dlg = new PrintDialog
+            using (var dlg = new PrintDialog { AllowSelection = false })
             {
-                AllowSelection = false,
-            };
-            if (dlg.ShowDialog(info.RootForm) == DialogResult.Ok)
-            {
-                doc = new PrintDocument();
-                doc.PrintPage += Doc_PrintPage;
-                doc.Name = "Bildfahrplan generiert mit FPLedit";
-                doc.PageCount = 1;
+                if (dlg.ShowDialog(info.RootForm) == DialogResult.Ok)
+                {
+                    doc = new PrintDocument();
+                    doc.PrintPage += Doc_PrintPage;
+                    doc.Name = "Bildfahrplan generiert mit FPLedit";
+                    doc.PageCount = 1;
 
-                doc.PrintSettings = dlg.PrintSettings;
-                doc.Print();
+                    doc.PrintSettings = dlg.PrintSettings;
+                    doc.Print();
+                }
             }
         }
 
@@ -79,5 +83,7 @@ namespace FPLedit.Bildfahrplan.Forms
                 last = cur;
             }
         }
+
+
     }
 }

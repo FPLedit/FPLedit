@@ -76,16 +76,18 @@ namespace FPLedit.jTrainGraphStarter
 
         private void chooseJtgButton_Click(object sender, EventArgs e)
         {
-            var sfd = new OpenFileDialog();
-            sfd.AddLegacyFilter("JAR-Dateien (*.jar)|*.jar");
-            if (sfd.ShowDialog(this) == DialogResult.Ok)
+            using (var ofd = new OpenFileDialog())
             {
-                jtgPathTextBox.Text = sfd.FileName;
+                ofd.AddLegacyFilter("JAR-Dateien (*.jar)|*.jar");
+                if (ofd.ShowDialog(this) == DialogResult.Ok)
+                {
+                    jtgPathTextBox.Text = ofd.FileName;
 
-                var compat = JTGShared.JTGCompatCheck(jtgPathTextBox.Text);
-                if (compat.Version.HasValue)
-                    versionComboBox.SelectedValue = versionComboBox.DataStore.
-                        FirstOrDefault(i => ((VersionItem)i).Version == compat.Version);
+                    var compat = JTGShared.JTGCompatCheck(jtgPathTextBox.Text);
+                    if (compat.Version.HasValue)
+                        versionComboBox.SelectedValue = versionComboBox.DataStore.
+                            FirstOrDefault(i => ((VersionItem)i).Version == compat.Version);
+                }
             }
         }
 

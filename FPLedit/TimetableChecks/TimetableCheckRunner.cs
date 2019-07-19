@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 
 namespace FPLedit.TimetableChecks
 {
-    internal class TimetableCheckRunner
+    //TODO: Static instance
+    internal class TimetableCheckRunner : IDisposable
     {
         private FForm form;
         private GridView gridView;
@@ -33,6 +34,12 @@ namespace FPLedit.TimetableChecks
                 if (gridView != null)
                     gridView.DataStore = list;
             };
+        }
+
+        public void Dispose()
+        {
+            form?.Dispose();
+            gridView?.Dispose();
         }
 
         private FForm GetForm()

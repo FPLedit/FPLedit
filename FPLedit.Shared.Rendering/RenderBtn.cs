@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Shared.Rendering
 {
-    public class RenderBtn<T>
+    public sealed class RenderBtn<T> : IDisposable
     {
         private readonly Font font = new Font(FontFamilies.SansFamilyName, 8);
 
@@ -65,5 +65,7 @@ namespace FPLedit.Shared.Rendering
                 g.DrawText(font, Colors.Black, Rect.MiddleX - (size.Width / 2), Rect.MiddleY - (size.Height / 2), Text);
             }
         }
+
+        public void Dispose() => font?.Dispose();
     }
 }

@@ -73,6 +73,12 @@ namespace FPLedit.Editor
             Close(DialogResult.Ok);
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            sortSelection?.Dispose();
+            base.Dispose(disposing);
+        }
+
         private void cancelButton_Click(object sender, EventArgs e)
             => Close(DialogResult.Cancel);
     }

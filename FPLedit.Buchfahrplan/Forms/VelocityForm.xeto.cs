@@ -68,20 +68,22 @@ namespace FPLedit.Buchfahrplan.Forms
 
         private void AddPoint()
         {
-            VelocityEditForm vef = new VelocityEditForm(tt, route.Index);
-            if (vef.ShowModal(this) == DialogResult.Ok)
+            using (var vef = new VelocityEditForm(tt, route.Index))
             {
-                var p = (BfplPoint)vef.Station;
-
-                var pos = p.Positions.GetPosition(route.Index);
-                if (pos < route.MinPosition || pos > route.MaxPosition)
+                if (vef.ShowModal(this) == DialogResult.Ok)
                 {
-                    MessageBox.Show($"Die Position muss im Streckenbereich liegen, also zwischen {route.MinPosition} und {route.MaxPosition}!", "FPLedit");
-                    return;
+                    var p = (BfplPoint)vef.Station;
+
+                    var pos = p.Positions.GetPosition(route.Index);
+                    if (pos < route.MinPosition || pos > route.MaxPosition)
+                    {
+                        MessageBox.Show($"Die Position muss im Streckenbereich liegen, also zwischen {route.MinPosition} und {route.MaxPosition}!", "FPLedit");
+                        return;
+                    }
+                    if (attrs != null)
+                        attrs.AddPoint(p);
+                    UpdateListView();
                 }
-                if (attrs != null)
-                    attrs.AddPoint(p);
-                UpdateListView();
             }
         }
 
@@ -91,9 +93,9 @@ namespace FPLedit.Buchfahrplan.Forms
             {
                 var sta = (IStation)gridView.SelectedItem;
 
-                VelocityEditForm vef = new VelocityEditForm(sta, route.Index);
-                if (vef.ShowModal(this) == DialogResult.Ok)
-                    UpdateListView();
+                using (var vef = new VelocityEditForm(sta, route.Index))
+                    if (vef.ShowModal(this) == DialogResult.Ok)
+                        UpdateListView();
             }
             else if (message)
                 MessageBox.Show("Zuerst muss eine Zeile ausgewählt werden!", "Höchstgeschwindigkeit ändern");

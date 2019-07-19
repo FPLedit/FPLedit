@@ -96,5 +96,11 @@ namespace FPLedit.Editor
 
         private void cancelButton_Click(object sender, EventArgs e)
             => Close(DialogResult.Cancel);
+
+        protected override void Dispose(bool disposing)
+        {
+            modeSelect?.Dispose();
+            base.Dispose(disposing);
+        }
     }
 }
