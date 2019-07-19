@@ -7,7 +7,7 @@ using System.Text;
 namespace FPLedit.Shared
 {
     [DebuggerStepThrough]
-    public struct Days
+    public struct Days : IEquatable<Days>, IEquatable<string>
     {
         private readonly bool[] internalDays;
 
@@ -98,9 +98,18 @@ namespace FPLedit.Shared
             var ret = 0;
             for (int i = 0; i < 7; i++)
                 ret |= (internalDays[i] ? 1 : 0) << i;
+
             return ret;
         }
 
         private bool EqualsString(string compare) => Parse(compare).Equals(this);
+
+        public bool Equals(Days other) => Equals(other);
+
+        public bool Equals(string other) => EqualsString(other);
+
+        public static bool operator !=(Days d1, Days d2) => !d1.Equals(d2);
+
+        public static bool operator ==(Days d1, Days d2) => d1.Equals(d2);
     }
 }

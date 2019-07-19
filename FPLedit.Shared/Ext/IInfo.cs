@@ -17,7 +17,7 @@ namespace FPLedit.Shared
         void ClearBackup();
 
         // Regsitry
-        void Register<T>(T obj);
+        void Register<T>(T elem);
         T[] GetRegistered<T>();
 
         // FileHandling

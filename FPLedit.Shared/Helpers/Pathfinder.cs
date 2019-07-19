@@ -57,7 +57,7 @@ namespace FPLedit.Shared.Helpers
 
             queue.Enqueue(start);
             parents[start] = null;
-            ways[start] = new Station[0];
+            ways[start] = Array.Empty<Station>();
 
             while (queue.Any())
             {

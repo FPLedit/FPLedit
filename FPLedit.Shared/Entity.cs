@@ -64,7 +64,7 @@ namespace FPLedit.Shared
             SetAttribute(key, t != "00:00" ? t : "");
         }
 
-        protected TimeSpan GetTime(string key)
+        protected TimeSpan GetTimeValue(string key)
         {
             var val = GetAttribute(key, "");
             TimeSpan.TryParse(val, out var ts);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Shared.Rendering
 {
-    public class ColorTimetableConverter
+    public static class ColorTimetableConverter
     {
         public static void ConvertAll(Timetable tt, TimetableVersion? forceVersion = null)
         {

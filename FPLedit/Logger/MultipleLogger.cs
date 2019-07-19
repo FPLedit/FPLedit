@@ -8,7 +8,7 @@ namespace FPLedit.Logger
 {
     public class MultipleLogger : ILog
     {
-        public List<ILog> Loggers { get; set; }
+        public List<ILog> Loggers { get; }
 
         public MultipleLogger()
         {

@@ -8,9 +8,9 @@ namespace FPLedit.Shared
     [Serializable]
     public class Route
     {
-        public int Index { get; set; }
+        public int Index { get; }
 
-        public List<Station> Stations { get; set; }
+        public List<Station> Stations { get; }
 
         public float MinPosition
             => Stations.Min(s => s.Positions.GetPosition(Index)) ?? 0f;
@@ -18,9 +18,10 @@ namespace FPLedit.Shared
         public float MaxPosition
             => Stations.Max(s => s.Positions.GetPosition(Index)) ?? 0f;
 
-        public Route()
+        public Route(int index, List<Station> stations)
         {
-            Stations = new List<Station>();
+            Index = index;
+            Stations = stations;
         }
 
         public string GetRouteName()

@@ -17,7 +17,7 @@ namespace FPLedit.Bildfahrplan.Render
         internal const string TIME_FORMAT = @"hh\:mm";
 
         private Margins margin = new Margins(10, 20, 20, 20);
-        public float width = 0, height = 0;
+        internal float width = 0, height = 0;
 
         private readonly TimetableStyle attrs;
 

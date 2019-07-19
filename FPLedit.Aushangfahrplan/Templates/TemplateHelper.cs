@@ -49,7 +49,7 @@ namespace FPLedit.Aushangfahrplan.Templates
                 var lSta = TT.GetStationsOrderedByDirection(dir).LastOrDefault();
                 if (lSta != sta)
                     return new[] { lSta };
-                return new Station[0];
+                return Array.Empty<Station>();
             }
 
             // Alle Stationen in Zügen dieser Richtung, die nach dieser Station folgen

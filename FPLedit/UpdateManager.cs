@@ -42,8 +42,16 @@ namespace FPLedit
 
         private VersionInfo GetVersioninfoFromXml(string xml)
         {
-            var doc = new XmlDocument();
-            doc.LoadXml(xml);
+            var doc = new XmlDocument { XmlResolver = null };
+
+            var settings = new XmlReaderSettings()
+            {
+                DtdProcessing = DtdProcessing.Prohibit,
+                XmlResolver = null,
+            };
+
+            using (var reader = XmlReader.Create(new System.IO.StringReader(xml), settings))
+                doc.Load(reader);
 
             var ver = doc.DocumentElement.SelectSingleNode("/info/version");
             var url = doc.DocumentElement.SelectSingleNode("/info/url");

@@ -9,7 +9,7 @@ namespace FPLedit.Shared.Rendering
 {
     public static class FontCollection
     {
-        public static string[] Families { get; private set; } = new string[0];
+        public static string[] Families { get; private set; } = Array.Empty<string>();
 
         public static string GenericSans { get; } = FontFamilies.SansFamilyName;
 

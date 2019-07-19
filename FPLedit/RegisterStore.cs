@@ -30,7 +30,7 @@ namespace FPLedit
         {
             store.TryGetValue(typeof(T), out List<object> res);
 
-            return res?.Select(o => (T)o).ToArray() ?? new T[0];
+            return res?.Select(o => (T)o).ToArray() ?? Array.Empty<T>();
         }
 
         public void Dispose()

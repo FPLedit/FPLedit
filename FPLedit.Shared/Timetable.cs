@@ -305,19 +305,19 @@ namespace FPLedit.Shared
 
         #region Hilfsmethoden für Routen
         // "Eröffnet" eine neue Strecke zwischen zwei Bahnhöfen
-        public int AddRoute(Station s_old, Station s_new, float old_add_km, float new_km)
+        public int AddRoute(Station exisitingStartStation, Station newStation, float newStartPosition, float newPosition)
         {
             if (Type == TimetableType.Linear)
                 throw new NotSupportedException("Lineare Strecken haben keine Routen!");
             var idx = ++nextRtId;
-            var r1 = s_old.Routes.ToList();
-            var r2 = s_new.Routes.ToList();
+            var r1 = exisitingStartStation.Routes.ToList();
+            var r2 = newStation.Routes.ToList();
             r1.Add(idx);
             r2.Add(idx);
-            s_old.Routes = r1.ToArray();
-            s_new.Routes = r2.ToArray();
-            s_old.Positions.SetPosition(idx, old_add_km);
-            s_new.Positions.SetPosition(idx, new_km);
+            exisitingStartStation.Routes = r1.ToArray();
+            newStation.Routes = r2.ToArray();
+            exisitingStartStation.Positions.SetPosition(idx, newStartPosition);
+            newStation.Positions.SetPosition(idx, newStartPosition);
             return idx;
         }
 
@@ -331,16 +331,16 @@ namespace FPLedit.Shared
                     routes.Add(GetRoute(ri));
             }
             else
-                routes.Add(new Route() { Index = LINEAR_ROUTE_ID, Stations = Stations });
+                routes.Add(new Route(LINEAR_ROUTE_ID, Stations));
             return routes.ToArray();
         }
 
         public Route GetRoute(int index)
         {
             if (Type == TimetableType.Linear && index == LINEAR_ROUTE_ID)
-                return new Route() { Index = LINEAR_ROUTE_ID, Stations = Stations };
+                return new Route(LINEAR_ROUTE_ID, Stations);
             var stas = Stations.Where(s => s.Routes.Contains(index)).ToList();
-            return new Route() { Index = index, Stations = stas };
+            return new Route(index, stas);
         }
 
         public void JoinRoutes(int route, Station sta2, float newKm)

@@ -33,14 +33,14 @@ namespace FPLedit.Shared
         [XAttrName("a")]
         public TimeSpan Arrival
         {
-            get => GetTime("a");
+            get => GetTimeValue("a");
             set => SetNotEmptyTime(value, "a");
         }
 
         [XAttrName("d")]
         public TimeSpan Departure
         {
-            get => GetTime("d");
+            get => GetTimeValue("d");
             set => SetNotEmptyTime(value, "d");
         }
 

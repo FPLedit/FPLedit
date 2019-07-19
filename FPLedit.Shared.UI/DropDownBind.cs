@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Shared.UI
 {
-    public class DropDownBind
+    public static class DropDownBind
     {
         public static void Color<T>(ISettings settings, DropDown dropDown, string property)
         {

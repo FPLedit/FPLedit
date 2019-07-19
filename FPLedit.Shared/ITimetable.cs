@@ -16,7 +16,7 @@ namespace FPLedit.Shared
         void RemoveStation(Station sta);
         void RemoveTrain(Train tra);
 
-        int AddRoute(Station s_old, Station s_new, float old_add_km, float new_km);
+        int AddRoute(Station exisitingStartStation, Station newStation, float newStartPosition, float newPosition);
         Route GetRoute(int index);
         Route[] GetRoutes();
         Station GetStationById(int id);
