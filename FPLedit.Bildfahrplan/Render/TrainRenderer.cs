@@ -44,35 +44,9 @@ namespace FPLedit.Bildfahrplan.Render
             })
             using (var brush = new SolidBrush((Color)style.CalcedColor))
             {
-
                 List<PointF> points = new List<PointF>();
                 bool hadFirstArrival = false, hadLastDeparture = false, isFirst = true;
                 var stas = dir ? Enumerable.Reverse(stations) : stations;
-
-                //TODO: Those helpers are ugly in this part of the code...
-                // Render helpers
-                float GetTimeY(TimeSpan time) => margin.Top + ((time - startTime).GetMinutes() * attrs.HeightPerHour / 60f);
-
-                PointF? GetGutterPoint(bool arrival, StationX sx, TimeSpan time)
-                {
-                    if (time == default)
-                        return null;
-                    var x = arrival ^ dir ? sx.Left : sx.Right;
-                    return new PointF(margin.Left + x, GetTimeY(time));
-                }
-
-                PointF? GetInternalPoint(StationX sx, TimeSpan time, string track)
-                {
-                    if (time == default || track == null || !sx.TrackOffsets.TryGetValue(track, out float x))
-                        return null;
-                    return new PointF(margin.Left + x, GetTimeY(time));
-                }
-
-                void MaybeAddPoint(PointF? point)
-                {
-                    if (point.HasValue)
-                        points.Add(point.Value);
-                }
 
                 foreach (var sta in stas)
                 {
@@ -83,17 +57,17 @@ namespace FPLedit.Bildfahrplan.Render
                     if (!ardp.HasMinOneTimeSet)
                         continue;
 
-                    MaybeAddPoint(GetGutterPoint(true, stationOffsets[sta], ardp.Arrival));
-                    MaybeAddPoint(GetInternalPoint(stationOffsets[sta], ardp.Arrival, ardp.ArrivalTrack));
+                    MaybeAddPoint(points, GetGutterPoint(true, dir, stationOffsets[sta], ardp.Arrival));
+                    MaybeAddPoint(points, GetInternalPoint(stationOffsets[sta], ardp.Arrival, ardp.ArrivalTrack));
 
                     foreach (var shunt in ardp.ShuntMoves)
                     {
-                        MaybeAddPoint(GetInternalPoint(stationOffsets[sta], shunt.Time, shunt.SourceTrack));
-                        MaybeAddPoint(GetInternalPoint(stationOffsets[sta], shunt.Time, shunt.TargetTrack));
+                        MaybeAddPoint(points, GetInternalPoint(stationOffsets[sta], shunt.Time, shunt.SourceTrack));
+                        MaybeAddPoint(points, GetInternalPoint(stationOffsets[sta], shunt.Time, shunt.TargetTrack));
                     }
 
-                    MaybeAddPoint(GetInternalPoint(stationOffsets[sta], ardp.Departure, ardp.DepartureTrack));
-                    MaybeAddPoint(GetGutterPoint(false, stationOffsets[sta], ardp.Departure));
+                    MaybeAddPoint(points, GetInternalPoint(stationOffsets[sta], ardp.Departure, ardp.DepartureTrack));
+                    MaybeAddPoint(points, GetGutterPoint(false, dir, stationOffsets[sta], ardp.Departure));
 
                     hadLastDeparture = ardp.Departure != default;
                     if (isFirst)
@@ -183,6 +157,31 @@ namespace FPLedit.Bildfahrplan.Render
                 }
             }
         }
+
+        #region Render helpers
+        private float GetTimeY(TimeSpan time) => margin.Top + ((time - startTime).GetMinutes() * attrs.HeightPerHour / 60f);
+
+        PointF? GetGutterPoint(bool arrival, bool dir, StationX sx, TimeSpan time)
+        {
+            if (time == default)
+                return null;
+            var x = arrival ^ dir ? sx.Left : sx.Right;
+            return new PointF(margin.Left + x, GetTimeY(time));
+        }
+
+        PointF? GetInternalPoint(StationX sx, TimeSpan time, string track)
+        {
+            if (time == default || track == null || !sx.TrackOffsets.TryGetValue(track, out float x))
+                return null;
+            return new PointF(margin.Left + x, GetTimeY(time));
+        }
+
+        void MaybeAddPoint(List<PointF> points, PointF? point)
+        {
+            if (point.HasValue)
+                points.Add(point.Value);
+        }
+        #endregion
 
         #region Direction helpers
         private bool GetTrainDirection(Train train)

@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace FPLedit.TimetableChecks
 {
-    //TODO: Static instance
     internal class TimetableCheckRunner : IDisposable
     {
         private FForm form;
