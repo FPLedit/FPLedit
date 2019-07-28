@@ -67,9 +67,6 @@ namespace FPLedit
             checkButton.Enabled = false;
         }
 
-        private void DocuLink_Click(object sender, EventArgs e)
-            => Process.Start("https://fahrplan.manuelhu.de/");
-
         private void CheckButton_Click(object sender, EventArgs e)
             => VersionCheck();
 

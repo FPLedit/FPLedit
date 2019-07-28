@@ -2,6 +2,7 @@
   xmlns="clr-namespace:Eto.Forms;assembly=Eto"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.jTrainGraphStarter;assembly=FPLedit.jTrainGraphStarter"
+  xmlns:fui="clr-namespace:FPLedit.Shared.UI;assembly=FPLedit.Shared.UI"
   xmlns:sys="clr-namespace:System;assembly=mscorlib"
   DefaultButton="{x:Reference closeButton}"
   Title="jTrainGraphStarter Einstellungen" Resizable="false">
@@ -39,11 +40,11 @@
     <StackLayout Padding="5">
       <StackLayout Orientation="Horizontal">
         <Label>Weitere Hinweise:</Label>
-        <LinkButton Click="DocLinkLabel_LinkClicked">Dokumentation zu diesem Plugin</LinkButton>
+        <fui:UrlButton Url="https://fahrplan.manuelhu.de/bildfahrplaene/">Dokumentation zu diesem Plugin</fui:UrlButton>
       </StackLayout>
       <StackLayout Orientation="Horizontal">
         <Label>Wenn Sie jTrainGraph noch gar nicht installiert haben:</Label>
-        <LinkButton Click="DownloadLinkLabel_LinkClicked">jTrainGraph herunterladen</LinkButton>
+        <fui:UrlButton Url="https://jtraingraph.de">jTrainGraph herunterladen</fui:UrlButton>
       </StackLayout>
       <Label>Auch wenn jTrainGraph in der *.exe-Variante verwendet wird bitte den Java-Pfad ausfüllen!</Label>
     </StackLayout>

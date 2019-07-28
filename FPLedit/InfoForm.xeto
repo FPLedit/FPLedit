@@ -2,6 +2,7 @@
   xmlns="clr-namespace:Eto.Forms;assembly=Eto"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:c="clr-namespace:FPLedit;assembly=FPLedit"
+  xmlns:fui="clr-namespace:FPLedit.Shared.UI;assembly=FPLedit.Shared.UI"
   xmlns:sys="clr-namespace:System;assembly=mscorlib"
   DefaultButton="{x:Reference closeButton}"
   Title="Info über FPLedit" ClientSize="450,450" Resizable="false">
@@ -23,7 +24,7 @@
     <TableRow>
       <StackLayout>
         <Label>© 2015-2019 Manuel Huber</Label>
-        <LinkButton Click="DocuLink_Click">Online-Dokumentation</LinkButton>
+        <fui:UrlButton Url="https://fahrplan.manuelhu.de/">Online-Dokumentation</fui:UrlButton>
       </StackLayout>
     </TableRow>
     <TableRow ScaleHeight="True">

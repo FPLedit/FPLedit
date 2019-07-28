@@ -15,7 +15,7 @@ namespace FPLedit.Editor.Network
         private readonly LineRenderer lineRenderer;
         private readonly Button closeButton;
         private readonly CheckBox waypointsCheckBox;
-        private readonly LinkButton waypointsDocuLink;
+        private readonly UrlButton waypointsDocuLink;
 #pragma warning restore CS0649
 
         private readonly IInfo info;
@@ -228,8 +228,5 @@ namespace FPLedit.Editor.Network
                 lineRenderer.DispatchKeystroke(e);
             base.OnKeyDown(e);
         }
-
-        private void WaypointsDocuLink_Click(object sender, EventArgs e)
-            => System.Diagnostics.Process.Start("https://fahrplan.manuelhu.de/fahrplaene-bearbeiten/cycles/");
     }
 }

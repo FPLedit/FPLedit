@@ -107,12 +107,6 @@ namespace FPLedit.jTrainGraphStarter
             return exists;
         }
 
-        private void DocLinkLabel_LinkClicked(object sender, EventArgs e)
-            => Process.Start("https://fahrplan.manuelhu.de/bildfahrplaene/");
-
-        private void DownloadLinkLabel_LinkClicked(object sender, EventArgs e)
-            => Process.Start("https://jtraingraph.de");
-
         private class VersionItem
         {
             public TimetableVersion Version { get; set; }

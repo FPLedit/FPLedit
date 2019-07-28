@@ -23,7 +23,7 @@ namespace FPLedit.Kursbuch.Forms
         private readonly DropDown templateComboBox;
         private readonly ComboBox fontComboBox, hefontComboBox;
         private readonly Label exampleLabel, heexampleLabel, cssLabel, kbsnLabel;
-        private readonly LinkButton cssHelpLinkLabel;
+        private readonly UrlButton cssHelpLinkLabel;
         private readonly CheckBox consoleCheckBox;
         private readonly TextArea cssTextBox;
         private readonly GridView kbsnListView;
@@ -82,9 +82,6 @@ namespace FPLedit.Kursbuch.Forms
                     kbsnLabel.WordWrap(200);
             };
         }
-
-        private void CssHelpLinkLabel_LinkClicked(object sender, EventArgs e)
-            => Process.Start("https://fahrplan.manuelhu.de/dev/css/");
 
         public void Save()
         {
