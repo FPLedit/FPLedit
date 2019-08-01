@@ -104,7 +104,7 @@ namespace FPLedit.Shared
 
         private bool EqualsString(string compare) => Parse(compare).Equals(this);
 
-        public bool Equals(Days other) => Equals(other);
+        public bool Equals(Days other) => Equals((object)other);
 
         public bool Equals(string other) => EqualsString(other);
 
