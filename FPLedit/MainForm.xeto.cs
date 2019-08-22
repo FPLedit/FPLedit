@@ -31,7 +31,7 @@ namespace FPLedit
 
         private string templatePath = "templates";
 
-        private Timetable timetableBackup = null;
+        private Dictionary<object, Timetable> timetableBackup;
 
         private TemplateManager templateManager;
         private readonly UndoManager undo;
@@ -67,6 +67,8 @@ namespace FPLedit
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
             Icon = new Icon(this.GetResource("Resources.programm.ico"));
+
+            timetableBackup = new Dictionary<object, Timetable>();
 
             Settings = new Settings();
             undo = new UndoManager();
@@ -319,20 +321,24 @@ namespace FPLedit
         public void StageUndoStep()
             => undo.StageUndoStep(Timetable);
 
-        public void BackupTimetable()
+        public object BackupTimetable()
         {
-            timetableBackup = Timetable.Clone();
+            var backupHandle = new object();
+            timetableBackup[backupHandle] = Timetable.Clone();
+            return backupHandle;
         }
 
-        public void RestoreTimetable()
+        public void RestoreTimetable(object backupHandle)
         {
-            fileHandler.Timetable = timetableBackup;
-            ClearBackup();
+            if (!timetableBackup.TryGetValue(backupHandle, out Timetable backupTt))
+                throw new Exception("Invalid timetable backup handle!");
+            fileHandler.Timetable = backupTt;
+            ClearBackup(backupHandle);
         }
 
-        public void ClearBackup()
+        public void ClearBackup(object backupHandle)
         {
-            timetableBackup = null;
+            timetableBackup.Remove(backupHandle);
         }
         #endregion
 

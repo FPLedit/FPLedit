@@ -17,6 +17,7 @@ namespace FPLedit.Editor
         private readonly IInfo info;
         private readonly Timetable tt;
         private readonly int route;
+        private readonly object backupHandle;
 
 #pragma warning disable CS0649
         private readonly GridView gridView;
@@ -33,7 +34,7 @@ namespace FPLedit.Editor
             tt = info.Timetable;
             this.route = route;
 
-            info.BackupTimetable();
+            backupHandle = info.BackupTimetable();
 
             if (tt.Type == TimetableType.Network)
                 loadLineButton.Visible = false;
@@ -155,7 +156,7 @@ namespace FPLedit.Editor
 
         private void closeButton_Click(object sender, EventArgs e)
         {
-            info.ClearBackup();
+            info.ClearBackup(backupHandle);
             Result = DialogResult.Ok;
             this.NClose();
         }
@@ -163,7 +164,7 @@ namespace FPLedit.Editor
         private void cancelButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Cancel;
-            info.RestoreTimetable();
+            info.RestoreTimetable(backupHandle);
 
             this.NClose();
         }

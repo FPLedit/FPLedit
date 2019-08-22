@@ -12,9 +12,9 @@ namespace FPLedit.Shared
         IFileState FileState { get; }
         void SetUnsaved();
 
-        void BackupTimetable();
-        void RestoreTimetable();
-        void ClearBackup();
+        object BackupTimetable();
+        void RestoreTimetable(object backupHandle);
+        void ClearBackup(object backupHandle);
 
         // Regsitry
         void Register<T>(T elem);

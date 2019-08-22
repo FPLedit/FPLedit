@@ -47,7 +47,7 @@ namespace FPLedit.jTrainGraphStarter
 
         private void StartLinear()
         {
-            info.BackupTimetable();
+            var backupHandle = info.BackupTimetable();
             try
             {
                 bool showMessage = info.Settings.Get("jTGStarter.show-message", true);
@@ -64,18 +64,19 @@ namespace FPLedit.jTrainGraphStarter
                 info.Save(false);
 
                 StartJtg(info.FileState.FileName, () => info.Reload());
+                info.ClearBackup(backupHandle);
             }
             catch (Exception e)
             {
                 info.Logger.Error("Beim Verwenden von jTrainGraph ist ein unerwarteter Fehler aufgetreten! " + e);
                 info.Logger.LogException(e);
-                info.RestoreTimetable();
+                info.RestoreTimetable(backupHandle);
             }
         }
 
         private void StartNetwork(int route)
         {
-            info.BackupTimetable();
+            var backupHandle = info.BackupTimetable();
             try
             {
                 bool showMessage = info.Settings.Get("jTGStarter.show-message", true);
@@ -107,12 +108,13 @@ namespace FPLedit.jTrainGraphStarter
                     sync.SyncBack(crtt);
                     info.SetUnsaved();
                 });
+                info.ClearBackup(backupHandle);
             }
             catch (Exception e)
             {
                 info.Logger.Error("Beim Verwenden von jTrainGraph ist ein unerwarteter Fehler aufgetreten! " + e);
                 info.Logger.LogException(e);
-                info.RestoreTimetable();
+                info.RestoreTimetable(backupHandle);
             }
         }
 
@@ -162,6 +164,7 @@ namespace FPLedit.jTrainGraphStarter
                 }
 
                 finished();
+
             }
             catch (Exception e)
             {

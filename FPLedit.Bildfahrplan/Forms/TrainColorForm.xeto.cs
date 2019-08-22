@@ -16,6 +16,7 @@ namespace FPLedit.Bildfahrplan.Forms
         private readonly TimetableStyle attrs;
         private readonly ColorCollection cc;
         private readonly DashStyleHelper ds;
+        private readonly object backupHandle;
 
 #pragma warning disable CS0649
         private readonly GridView gridView;
@@ -26,7 +27,7 @@ namespace FPLedit.Bildfahrplan.Forms
             this.info = info;
             tt = info.Timetable;
             attrs = new TimetableStyle(tt);
-            info.BackupTimetable();
+            backupHandle = info.BackupTimetable();
 
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
@@ -68,14 +69,14 @@ namespace FPLedit.Bildfahrplan.Forms
         private void cancelButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Cancel;
-            info.RestoreTimetable();
+            info.RestoreTimetable(backupHandle);
             this.NClose();
         }
 
         private void closeButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Ok;
-            info.ClearBackup();
+            info.ClearBackup(backupHandle);
             this.NClose();
         }
 

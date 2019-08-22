@@ -13,6 +13,7 @@ namespace FPLedit.Editor.Network
     {
         private readonly IInfo info;
         private readonly Timetable tt;
+        private readonly object backupHandle;
 
 #pragma warning disable CS0649
         private readonly GridView gridView;
@@ -24,7 +25,7 @@ namespace FPLedit.Editor.Network
 
             this.info = info;
             tt = info.Timetable;
-            info.BackupTimetable();
+            backupHandle = info.BackupTimetable();
 
             gridView.AddColumn<Train>(t => t.TName, "Zugnummer");
             gridView.AddColumn<Train>(t => t.Locomotive, "Tfz");
@@ -132,7 +133,7 @@ namespace FPLedit.Editor.Network
 
         private void closeButton_Click(object sender, EventArgs e)
         {
-            info.ClearBackup();
+            info.ClearBackup(backupHandle);
             Result = DialogResult.Ok;
             this.NClose();
         }
@@ -140,7 +141,7 @@ namespace FPLedit.Editor.Network
         private void cancelButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Cancel;
-            info.RestoreTimetable();
+            info.RestoreTimetable(backupHandle);
             this.NClose();
         }
 

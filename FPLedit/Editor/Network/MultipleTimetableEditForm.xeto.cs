@@ -15,6 +15,7 @@ namespace FPLedit.Editor.Network
 #pragma warning restore CS0649
 
         private readonly IInfo info;
+        private readonly object backupHandle;
 
         private MultipleTimetableEditForm()
         {
@@ -33,7 +34,7 @@ namespace FPLedit.Editor.Network
         public MultipleTimetableEditForm(IInfo info) : this()
         {
             this.info = info;
-            info.BackupTimetable();
+            backupHandle = info.BackupTimetable();
 
             //editor.Initialize(info.Timetable, t);
             //Title = Title.Replace("{train}", t.TName);
@@ -61,14 +62,14 @@ namespace FPLedit.Editor.Network
             if (!editor.ApplyChanges())
                 return;
 
-            info.ClearBackup();
+            info.ClearBackup(backupHandle);
             this.NClose();
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Cancel;
-            info.RestoreTimetable();
+            info.RestoreTimetable(backupHandle);
 
             this.NClose();
         }

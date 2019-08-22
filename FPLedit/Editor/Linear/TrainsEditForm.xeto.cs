@@ -11,6 +11,7 @@ namespace FPLedit.Editor.Linear
     {
         private readonly IInfo info;
         private readonly Timetable tt;
+        private readonly object backupHandle;
 
 #pragma warning disable CS0649
         private readonly GridView topGridView, bottomGridView;
@@ -27,7 +28,7 @@ namespace FPLedit.Editor.Linear
             Eto.Serialization.Xaml.XamlReader.Load(this);
             this.info = info;
             tt = info.Timetable;
-            info.BackupTimetable();
+            backupHandle = info.BackupTimetable();
 
             InitListView(topGridView);
             InitListView(bottomGridView);
@@ -83,7 +84,7 @@ namespace FPLedit.Editor.Linear
 
         private void CloseButton_Click(object sender, EventArgs e)
         {
-            info.ClearBackup();
+            info.ClearBackup(backupHandle);
             Result = DialogResult.Ok;
             this.NClose();
         }
@@ -91,7 +92,7 @@ namespace FPLedit.Editor.Linear
         private void CancelButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Cancel;
-            info.RestoreTimetable();
+            info.RestoreTimetable(backupHandle);
             this.NClose();
         }
 

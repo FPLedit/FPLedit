@@ -21,6 +21,7 @@ namespace FPLedit.Buchfahrplan.Forms
         private readonly Route route;
         private readonly Timetable tt;
         private readonly BfplAttrs attrs;
+        private readonly object backupHandle;
 
         private VelocityForm()
         {
@@ -52,7 +53,7 @@ namespace FPLedit.Buchfahrplan.Forms
                 tt.Children.Add(attrs.XMLEntity);
             }
 
-            info.BackupTimetable();
+            backupHandle = info.BackupTimetable();
             UpdateListView();
         }
 
@@ -130,14 +131,14 @@ namespace FPLedit.Buchfahrplan.Forms
         private void cancelButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Cancel;
-            info.RestoreTimetable();
+            info.RestoreTimetable(backupHandle);
             this.NClose();
         }
 
         private void closeButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Ok;
-            info.ClearBackup();
+            info.ClearBackup(backupHandle);
 
             this.NClose();
         }

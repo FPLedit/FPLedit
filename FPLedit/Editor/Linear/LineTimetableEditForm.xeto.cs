@@ -14,13 +14,14 @@ namespace FPLedit.Editor.Linear
 #pragma warning restore CS0649
 
         private readonly IInfo info;
+        private readonly object backupHandle;
 
         public LineTimetableEditForm(IInfo info)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
             this.info = info;
-            info.BackupTimetable();
+            backupHandle = info.BackupTimetable();
 
             editor.Initialize(info.Timetable);
 
@@ -42,14 +43,14 @@ namespace FPLedit.Editor.Linear
             if (!editor.ApplyChanges())
                 return;
 
-            info.ClearBackup();
+            info.ClearBackup(backupHandle);
             this.NClose();
         }
 
         private void CancelButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Cancel;
-            info.RestoreTimetable();
+            info.RestoreTimetable(backupHandle);
 
             this.NClose();
         }
