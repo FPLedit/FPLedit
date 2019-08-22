@@ -4,10 +4,7 @@ using FPLedit.Shared;
 using FPLedit.Shared.Rendering;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.Editor.Rendering
 {
@@ -60,7 +57,14 @@ namespace FPLedit.Editor.Rendering
             set { _highlightBetween = value; Invalidate(); }
         }
 
-        private List<Station> _highlightedPath = new List<Station>();
+        private PathData _highlightedPath;
+
+        public void SetHighlightedPath(IEnumerable<Station> stations)
+        {
+            var stas = stations ?? Array.Empty<Station>();
+            _highlightedPath = new PathData(tt, stas);
+            Invalidate();
+        }
 
         private PointF _pan = new PointF();
         public PointF Pan
@@ -111,6 +115,8 @@ namespace FPLedit.Editor.Rendering
                     stapos = handler.LoadNetworkPoints(tt);
             }
 
+            _highlightedPath = PathData.Empty(tt);
+
             this.Invalidate();
         }
 
@@ -128,11 +134,20 @@ namespace FPLedit.Editor.Rendering
             e.Graphics.Clear(Colors.White);
             panels.Clear();
 
+            e.Graphics.TranslateTransform(_pan);
+            DrawNetwork(e.Graphics);
+            e.Graphics.TranslateTransform(-_pan);
+
+            // Draw Status strings & border on top of network
             DrawStatus(e.Graphics);
             DrawBorder(e.Graphics);
 
-            e.Graphics.TranslateTransform(_pan);
+            this.ResumeLayout();
+            base.OnPaint(e);
+        }
 
+        private void DrawNetwork(Graphics g)
+        {
             if (routes == null || routes.Length == 0)
                 return;
 
@@ -147,9 +162,9 @@ namespace FPLedit.Editor.Rendering
                     var x = OFFSET_X + pos.X;
                     var y = OFFSET_Y + pos.Y;
 
-                    e.Graphics.SaveTransform();
-                    e.Graphics.TranslateTransform(x + 6, y + 7);
-                    e.Graphics.RotateTransform(60);
+                    g.SaveTransform();
+                    g.TranslateTransform(x + 6, y + 7);
+                    g.RotateTransform(60);
 
                     var text = sta.SName + " (";
                     foreach (var ri in sta.Routes)
@@ -160,17 +175,17 @@ namespace FPLedit.Editor.Rendering
                         text += km + "|";
                     }
                     text = text.Substring(0, text.Length - 1) + ")";
-                    e.Graphics.DrawText(font, Brushes.Black, new Point(0, 0), text);
+                    g.DrawText(font, Brushes.Black, new Point(0, 0), text);
 
-                    e.Graphics.RestoreTransform();
+                    g.RestoreTransform();
 
                     var tPen = GetLinePen(r.Index, sta, lastSta);
                     if (lastP.HasValue)
-                        e.Graphics.DrawLine(tPen, p, OFFSET + lastP.Value);
+                        g.DrawLine(tPen, p, OFFSET + lastP.Value);
                     lastP = pos;
                     lastSta = sta;
 
-                    var panelColor = _highlightedPath.Contains(sta) ? Colors.Red : Colors.Gray;
+                    var panelColor = _highlightedPath.ContainsStation(sta) ? Colors.Red : Colors.Gray;
                     RenderBtn<Station> args = panels.FirstOrDefault(pa => pa.Tag == sta);
                     if (args == null)
                     {
@@ -193,17 +208,14 @@ namespace FPLedit.Editor.Rendering
                 var x = OFFSET_X + point.X;
                 var y = OFFSET_Y + point.Y;
 
-                e.Graphics.DrawLine(linePen, new Point(x, y), mousePosition - _pan);
+                g.DrawLine(linePen, new Point(x, y), mousePosition - _pan);
 
                 var args = new RenderBtn<Station>(tmp_sta, new Point(x - 5, y - 5), new Size(10, 10), Colors.DarkCyan);
                 panels.Add(args);
             }
 
             foreach (var args in panels)
-                args.Draw(e.Graphics);
-
-            this.ResumeLayout();
-            base.OnPaint(e);
+                args.Draw(g);
         }
 
         private void DrawStatus(Graphics g)
@@ -235,23 +247,9 @@ namespace FPLedit.Editor.Rendering
 
         private Pen GetLinePen(int route, Station sta, Station lastSta)
         {
-            if (route == SelectedRoute || (_highlightBetween && IsDirectlyConnected(sta, lastSta)))
+            if (route == SelectedRoute || (_highlightBetween && _highlightedPath.IsDirectlyConnected(sta, lastSta)))
                 return highlightPen;
             return linePen;
-        }
-
-        private bool IsDirectlyConnected(Station sta1, Station sta2)
-        {
-            for (int i = 0; i < _highlightedPath.Count; i++)
-            {
-                if (_highlightedPath[i] != sta1)
-                    continue;
-                if (i > 0 && _highlightedPath[i - 1] == sta2)
-                    return true;
-                if (i < _highlightedPath.Count - 1 && _highlightedPath[i + 1] == sta2)
-                    return true;
-            }
-            return false;
         }
 
         protected override void OnSizeChanged(EventArgs e)
@@ -374,7 +372,7 @@ namespace FPLedit.Editor.Rendering
         #region Drag'n'Drop
         private RenderBtn<Station> draggedControl;
         private bool hasDragged = false;
-        private const int CLICK_TIME = 1000000; //0.1s
+        private const int CLICK_TIME = 10^6; // 0.1*10^7s, 1 tick = 10^-7 seconds
         private long lastClick = 0;
         private bool lastDoubleClick;
         private bool hasPanned = false;
@@ -489,20 +487,6 @@ namespace FPLedit.Editor.Rendering
 
             lastClick = 0;
             base.OnMouseUp(e);
-        }
-        #endregion
-
-        #region Highlight
-        public void SetHighlightedPath(IEnumerable<Station> stations)
-        {
-            _highlightedPath = stations.ToList();
-            Invalidate();
-        }
-
-        public void ClearHighlightedPath()
-        {
-            _highlightedPath.Clear();
-            Invalidate();
         }
         #endregion
 

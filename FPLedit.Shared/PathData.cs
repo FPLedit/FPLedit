@@ -10,11 +10,12 @@ namespace FPLedit.Shared
     {
         protected PathEntry[] entries;
         public PathEntry[] PathEntries => entries;
-        protected Timetable tt;
 
-        public PathData(Timetable tt, IList<Station> path) : this(tt)
+        private readonly Timetable tt;
+
+        public PathData(Timetable tt, IEnumerable<Station> path) : this(tt)
         {
-            entries = Init(path, (s, r) => new PathEntry(s, r));
+            entries = Init(path.ToArray(), (s, r) => new PathEntry(s, r));
         }
 
         protected PathData(Timetable tt)
@@ -22,7 +23,7 @@ namespace FPLedit.Shared
             this.tt = tt;
         }
 
-        protected T[] Init<T>(IList<Station> path, Func<Station, int, T> instanciator) where T : PathEntry
+        protected T[] Init<T>(IReadOnlyList<Station> path, Func<Station, int, T> instanciator) where T : PathEntry
         {
             int lastRoute = -1;
             int idx = 0;
@@ -47,22 +48,26 @@ namespace FPLedit.Shared
             return tt.GetDirectlyConnectingRoute(sta, next);
         }
 
-        //public bool IsDirectlyConnected(Station sta1, Station sta2)
-        //{
-        //    var path = GetRawPath().ToArray();
-        //    for (int i = 0; i < path.Length; i++)
-        //    {
-        //        if (path[i] != sta1)
-        //            continue;
-        //        if (i > 0 && path[i - 1] == sta2)
-        //            return true;
-        //        if (i < path.Length - 1 && path[i + 1] == sta2)
-        //            return true;
-        //    }
-        //    return false;
-        //}
+        public bool ContainsStation(Station sta) => Array.IndexOf(PathEntries, sta) != -1;
+
+        public bool IsDirectlyConnected(Station sta1, Station sta2)
+        {
+            var path = GetRawPath().ToArray();
+            for (int i = 0; i < path.Length; i++)
+            {
+                if (path[i] != sta1)
+                    continue;
+                if (i > 0 && path[i - 1] == sta2)
+                    return true;
+                if (i < path.Length - 1 && path[i + 1] == sta2)
+                    return true;
+            }
+            return false;
+        }
 
         public IEnumerable<Station> GetRawPath() => entries.Select(e => e.Station);
+
+        public static PathData Empty(Timetable tt) => new PathData(tt, Array.Empty<Station>());
     }
 
     public class TrainPathData : PathData
@@ -71,7 +76,7 @@ namespace FPLedit.Shared
 
         public TrainPathData(Timetable tt, Train train) : base(tt)
         {
-            var path = train.GetPath();
+            var path = train.GetPath().ToArray();
             var arrDeps = train.GetArrDeps();
 
             entries = Init(path, (s, r) =>
