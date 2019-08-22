@@ -93,7 +93,7 @@
         <GroupBox Text="Fahrplan">
           <n:SingleTimetableEditControl x:Name="editor">
             <n:SingleTimetableEditControl.ActionButtons>
-              <Button x:Name="FillButton" Text="Von anderem Zug..." Click="FillButton_Click"></Button>
+              <Button x:Name="fillButton" Text="Von anderem Zug..." Click="FillButton_Click"></Button>
             </n:SingleTimetableEditControl.ActionButtons>
           </n:SingleTimetableEditControl>
         </GroupBox>
