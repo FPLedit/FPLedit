@@ -2,7 +2,7 @@
   xmlns="clr-namespace:Eto.Forms;assembly=Eto"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:c="clr-namespace:FPLedit;assembly=FPLedit"
-  xmlns:editor="clr-namespace:FPLedit.Editor.Network;assembly=FPLedit"
+  xmlns:editor="clr-namespace:FPLedit.Editor.Rendering;assembly=FPLedit"
   xmlns:sys="clr-namespace:System;assembly=mscorlib"
   Title="FPLedit" ClientSize="870,520" AllowDrop="true">
   <c:MainForm.Menu>
@@ -27,7 +27,7 @@
   </c:MainForm.Menu>
   <TableLayout>
     <TableRow ScaleHeight="True">
-      <editor:LineEditingControl x:Name="lineEditingControl" />
+      <editor:NetworkEditingControl x:Name="networkEditingControl" />
     </TableRow>
     <TableRow>
       <c:LogControl x:Name="logTextBox" Height="100"></c:LogControl>

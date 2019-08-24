@@ -86,58 +86,61 @@
     <Compile Include="Editor\Filters\FilterForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Editor\Linear\LineTimetableEditControl.xeto.cs">
+    <Compile Include="Editor\Linear\LinearTimetableEditControl.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Editor\Linear\TrainsEditForm.xeto.cs">
+    <Compile Include="Editor\Linear\LinearTrainsEditForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Editor\Linear\LineTimetableEditForm.xeto.cs">
+    <Compile Include="Editor\Linear\LinearTimetableEditForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Editor\DesignableForm.xeto.cs">
+    <Compile Include="Editor\Rendering\Divider.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Editor\Network\ShuntForm.xeto.cs">
+    <Compile Include="Editor\RenderSettingsForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Editor\Network\SingleTimetableEditControl.xeto.cs">
+    <Compile Include="Editor\TimetableEditor\ShuntForm.xeto.cs">
+      <SubType>Eto.Forms</SubType>
+    </Compile>
+    <Compile Include="Editor\TimetableEditor\SingleTimetableEditControl.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Editor\Network\MultipleTimetableEditForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Editor\StationRenderer.cs">
+    <Compile Include="Editor\Rendering\StationRenderer.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Editor\TimetableCellRenderProperties.cs" />
-    <Compile Include="Editor\BaseTimetableDataElement.cs" />
-    <Compile Include="Editor\BaseTimetableEditControl.cs">
+    <Compile Include="Editor\TimetableEditor\TimetableCellRenderProperties.cs" />
+    <Compile Include="Editor\TimetableEditor\BaseTimetableDataElement.cs" />
+    <Compile Include="Editor\TimetableEditor\BaseTimetableEditControl.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Editor\TrainEditHelper.cs" />
-    <Compile Include="Editor\BaseTrainsEditor.cs">
+    <Compile Include="Editor\Trains\TrainEditHelper.cs" />
+    <Compile Include="Editor\Trains\BaseTrainsEditor.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Editor\TrainFillDialog.xeto.cs">
+    <Compile Include="Editor\Trains\TrainFillDialog.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Editor\TrainSortDialog.xeto.cs">
+    <Compile Include="Editor\Trains\TrainSortDialog.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Editor\ZlmEditForm.xeto.cs">
+    <Compile Include="Editor\TimetableEditor\ZlmEditForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Editor\Network\SingleTimetableEditForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Editor\TrainCopyDialog.xeto.cs">
+    <Compile Include="Editor\Trains\TrainCopyDialog.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Editor\Network\TrainRouteForm.xeto.cs">
+    <Compile Include="Editor\Network\TrainPathForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Editor\TrainEditForm.xeto.cs">
+    <Compile Include="Editor\Trains\TrainEditForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Editor\EditStationForm.xeto.cs">
@@ -147,17 +150,16 @@
       <SubType>Eto.Forms</SubType>
     </Compile>
     <Compile Include="Editor\Network\EditRouteAction.cs" />
-    <Compile Include="Editor\Network\LineEditingControl.xeto.cs">
+    <Compile Include="Editor\Rendering\NetworkEditingControl.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Editor\Network\LineRenderer.cs">
+    <Compile Include="Editor\Rendering\NetworkRenderer.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Editor\Network\StaPosHandler.cs" />
-    <Compile Include="Editor\Network\TrainsEditingForm.xeto.cs">
+    <Compile Include="Editor\Rendering\StaPosHandler.cs" />
+    <Compile Include="Editor\Network\NetworkTrainsEditForm.xeto.cs">
       <SubType>Eto.Forms</SubType>
     </Compile>
-    <Compile Include="Editor\TimeNormalizer.cs" />
     <Compile Include="CrashReporting\CrashReport.cs" />
     <Compile Include="Extensibility\ExtensionManager.cs" />
     <Compile Include="ExtensionsForm.xeto.cs">
@@ -226,50 +228,50 @@
     <EmbeddedResource Include="Editor\EditStationForm.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Editor\Network\LineEditingControl.xeto" />
+    <EmbeddedResource Include="Editor\Rendering\NetworkEditingControl.xeto" />
     <None Include="..\build_scripts\fpledit.snk">
       <Link>Properties\fpledit.snk</Link>
     </None>
-    <EmbeddedResource Include="Editor\Network\TrainsEditingForm.xeto" />
-    <EmbeddedResource Include="Editor\TrainEditForm.xeto">
+    <EmbeddedResource Include="Editor\Network\NetworkTrainsEditForm.xeto" />
+    <EmbeddedResource Include="Editor\Trains\TrainEditForm.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Editor\Network\TrainRouteForm.xeto">
+    <EmbeddedResource Include="Editor\Network\TrainPathForm.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Editor\TrainCopyDialog.xeto">
+    <EmbeddedResource Include="Editor\Trains\TrainCopyDialog.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Editor\Network\SingleTimetableEditForm.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Editor\ZlmEditForm.xeto">
+    <EmbeddedResource Include="Editor\TimetableEditor\ZlmEditForm.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Editor\Linear\TrainsEditForm.xeto" />
-    <EmbeddedResource Include="Editor\Linear\LineTimetableEditForm.xeto">
+    <EmbeddedResource Include="Editor\Linear\LinearTrainsEditForm.xeto" />
+    <EmbeddedResource Include="Editor\Linear\LinearTimetableEditForm.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Editor\Filters\FilterForm.xeto" />
     <EmbeddedResource Include="Editor\Filters\EditPatternForm.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Editor\DesignableForm.xeto">
+    <EmbeddedResource Include="Editor\RenderSettingsForm.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Editor\Linear\LineTimetableEditControl.xeto">
+    <EmbeddedResource Include="Editor\Linear\LinearTimetableEditControl.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Editor\Network\SingleTimetableEditControl.xeto">
+    <EmbeddedResource Include="Editor\TimetableEditor\SingleTimetableEditControl.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Editor\Network\MultipleTimetableEditForm.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Editor\TrainSortDialog.xeto">
+    <EmbeddedResource Include="Editor\Trains\TrainSortDialog.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Editor\TrainFillDialog.xeto">
+    <EmbeddedResource Include="Editor\Trains\TrainFillDialog.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Editor\EditPositionForm.xeto">
@@ -281,7 +283,7 @@
     <EmbeddedResource Include="..\build_scripts\extensions.pubkey">
       <Link>Resources\extensions.pubkey</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="Editor\Network\ShuntForm.xeto" />
+    <EmbeddedResource Include="Editor\TimetableEditor\ShuntForm.xeto" />
     <EmbeddedResource Include="CrashReporting\CrashForm.xeto">
       <SubType>Designer</SubType>
     </EmbeddedResource>

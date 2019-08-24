@@ -2,6 +2,7 @@
   xmlns="clr-namespace:Eto.Forms;assembly=Eto"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.Editor.Network;assembly=FPLedit"
+  xmlns:et="clr-namespace:FPLedit.Editor.TimetableEditor;assembly=FPLedit"
   xmlns:sys="clr-namespace:System;assembly=mscorlib"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
   Title="Fahrpläne bearbeiten" ClientSize="410,470" Resizable="true">
@@ -22,7 +23,7 @@
     </TableRow>
     <TableRow ScaleHeight="true">
       <TableCell ScaleWidth="true">
-        <e:SingleTimetableEditControl x:Name="editor" />
+        <et:SingleTimetableEditControl x:Name="editor" />
       </TableCell>
     </TableRow>
     <TableRow>

@@ -1,4 +1,5 @@
 ﻿using Eto.Forms;
+using FPLedit.Editor.Rendering;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using FPLedit.Shared.UI.Validators;

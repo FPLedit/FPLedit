@@ -1,5 +1,4 @@
 ﻿using Eto.Forms;
-using FPLedit.Editor.Network;
 using FPLedit.Shared;
 using FPLedit.Shared.Filetypes;
 using FPLedit.Shared.UI;
@@ -7,8 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.Editor
 {
@@ -114,7 +111,7 @@ namespace FPLedit.Editor
 
                     if (info.Timetable.Type == TimetableType.Network)
                     {
-                        var handler = new StaPosHandler();
+                        var handler = new Rendering.StaPosHandler();
                         handler.SetMiddlePos(route, sta, info.Timetable);
                         var r = sta.Routes.ToList();
                         r.Add(route);

@@ -74,6 +74,7 @@
     <Compile Include="Ext\ITimetableInitAction.cs" />
     <Compile Include="Filetypes\XMLExport.cs" />
     <Compile Include="Filetypes\XMLImport.cs" />
+    <Compile Include="Helpers\TimeNormalizer.cs" />
     <Compile Include="ITimetable.cs" />
     <Compile Include="ITrain.cs" />
     <Compile Include="Helpers\Pathfinder.cs" />

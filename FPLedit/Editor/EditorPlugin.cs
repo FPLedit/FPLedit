@@ -54,8 +54,8 @@ namespace FPLedit.Editor
             editTrainsItem.Click += (s, e) =>
             {
                 if (info.Timetable.Type == TimetableType.Linear)
-                    ShowForm(new Linear.TrainsEditForm(info));
-                else ShowForm(new Network.TrainsEditingForm(info));
+                    ShowForm(new Linear.LinearTrainsEditForm(info));
+                else ShowForm(new Network.NetworkTrainsEditForm(info));
             };
 
             editTimetableItem = editRoot.CreateItem("Fahrplan bearbeiten");
@@ -63,7 +63,7 @@ namespace FPLedit.Editor
             editTimetableItem.Click += (s, e) =>
             {
                 if (info.Timetable.Type == TimetableType.Linear)
-                    ShowForm(new Linear.LineTimetableEditForm(info));
+                    ShowForm(new Linear.LinearTimetableEditForm(info));
                 else ShowForm(new Network.MultipleTimetableEditForm(info));
             };
 
@@ -71,7 +71,7 @@ namespace FPLedit.Editor
 
             designItem = editRoot.CreateItem("Fahrplandarstellung");
             designItem.Enabled = false;
-            designItem.Click += (s, e) => ShowForm(new DesignableForm(info));
+            designItem.Click += (s, e) => ShowForm(new RenderSettingsForm(info));
 
             filterItem = editRoot.CreateItem("Filterregeln");
             filterItem.Enabled = false;

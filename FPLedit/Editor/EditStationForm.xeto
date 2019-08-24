@@ -2,6 +2,7 @@
   xmlns="clr-namespace:Eto.Forms;assembly=Eto"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.Editor;assembly=FPLedit"
+  xmlns:er="clr-namespace:FPLedit.Editor.Rendering;assembly=FPLedit"
   xmlns:sys="clr-namespace:System;assembly=mscorlib"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
   Title="Station bearbeiten" Resizable="false">
@@ -13,13 +14,13 @@
           <TextBox x:Name="nameTextBox" Width="150"></TextBox>
         </TableRow>
         <TableRow>
-          <Label>Pos. (km)</Label>
+          <Label>Position (km)</Label>
           <TextBox x:Name="positionTextBox" Width="150"></TextBox>
         </TableRow>
       </TableLayout>
     </TableRow>
     <TableRow>
-      <e:StationRenderer Height="100" Width="400" x:Name="stationRenderer" />
+      <er:StationRenderer Height="100" Width="400" x:Name="stationRenderer" />
     </TableRow>
     <TableRow>
       <TableLayout Spacing="5,5">

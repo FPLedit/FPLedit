@@ -11,7 +11,7 @@ using FPLedit.Shared.Templating;
 using FPLedit.Shared.UI;
 using FPLedit.Logger;
 using FPLedit.Templating;
-using FPLedit.Editor.Network;
+using FPLedit.Editor.Rendering;
 using FPLedit.Config;
 using FPLedit.Shared.Rendering;
 using System.Threading.Tasks;
@@ -25,7 +25,7 @@ namespace FPLedit
 #pragma warning disable CS0649
         private readonly LogControl logTextBox;
         private readonly ButtonMenuItem saveMenu, saveAsMenu, exportMenu, importMenu, lastMenu, fileMenu, convertMenu;
-        private readonly LineEditingControl lineEditingControl;
+        private readonly NetworkEditingControl networkEditingControl;
 #pragma warning restore CS0649
         #endregion
 
@@ -78,7 +78,7 @@ namespace FPLedit
             crashReporter = new CrashReporting.CrashReporter(this);
             fileHandler = new FileHandler(this, this, this, undo);
 
-            lineEditingControl.Initialize(this);
+            networkEditingControl.Initialize(this);
 
             var logger = new MultipleLogger(logTextBox);
             if (Settings.Get("log.enable-file", false))
@@ -90,7 +90,7 @@ namespace FPLedit
             KeyDown += (s, e) =>
             {
                 if (e.Key == Keys.R || e.Key == Keys.Escape)
-                    lineEditingControl.DispatchKeystroke(e);
+                    networkEditingControl.DispatchKeystroke(e);
             };
 
             fileHandler.FileStateChanged += FileHandler_FileStateChanged;
@@ -101,7 +101,7 @@ namespace FPLedit
 
         private void FileHandler_FileOpened(object sender, EventArgs e)
         {
-            lineEditingControl.ResetPan();
+            networkEditingControl.ResetPan();
 
             FileOpened?.Invoke(sender, e);
         }
