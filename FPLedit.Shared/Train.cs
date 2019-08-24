@@ -63,7 +63,7 @@ namespace FPLedit.Shared
                 return _parent.GetStationsOrderedByDirection(Direction);
         }
 
-        public void AddArrDep(Station sta, int route)
+        public ArrDep AddArrDep(Station sta, int route)
         {
             int idx;
             if (_parent.Type == TimetableType.Linear)
@@ -82,26 +82,35 @@ namespace FPLedit.Shared
                 if (prev != null && p.Contains(prev) && next != null && p.Contains(next))
                     idx = p.IndexOf(prev) + 1;
                 else
-                    return; // Betrifft diesen Zug nicht
+                    return null; // Betrifft diesen Zug nicht
             }
 
             var ardp = new ArrDep(_parent);
             if (_parent.Type == TimetableType.Network)
                 ardp.StationId = sta.Id;
             Children.Insert(idx, ardp.XMLEntity);
+            return ardp;
         }
 
         public ArrDep GetArrDep(Station sta)
+        {
+            if (TryGetArrDep(sta, out var arrDep))
+                return arrDep;
+            throw new Exception($"No ArrDep found for station {sta.SName}!");
+        }
+
+        public bool TryGetArrDep(Station sta, out ArrDep arrDep)
         {
             var tElems = InternalGetArrDeps();
             if (_parent.Type == TimetableType.Linear)
             {
                 var stas = _parent.GetStationsOrderedByDirection();
                 var idx = stas.IndexOf(sta);
-                return tElems[idx];
+                arrDep = tElems[idx];
+                return true;
             }
-            else
-                return tElems.First(t => t.StationId == sta.Id);
+            arrDep = tElems.FirstOrDefault(t => t.StationId == sta.Id);
+            return arrDep != null;
         }
 
         public Dictionary<Station, ArrDep> GetArrDeps()

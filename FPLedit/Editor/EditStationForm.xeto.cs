@@ -178,8 +178,7 @@ namespace FPLedit.Editor
                 var trainsDataLoss = new List<string>();
                 foreach (var ardp in ardeps)
                 {
-                    ardp.Key.AddArrDep(Station, route);
-                    var a = ardp.Key.GetArrDep(Station); //TODO: Make AddArDep return it's added ArrDep (and use it here)
+                    var a = ardp.Key.AddArrDep(Station, route);
                     a?.ApplyCopy(ardp.Value);
                     if (a == null)
                         trainsDataLoss.Add(ardp.Key.TName);

@@ -18,8 +18,9 @@ namespace FPLedit.Shared
 
         void AddAllArrDeps(IEnumerable<Station> path);
         List<Station> GetPath();
-        void AddArrDep(Station sta, int route);
+        ArrDep AddArrDep(Station sta, int route);
         ArrDep GetArrDep(Station sta);
+        bool TryGetArrDep(Station sta, out ArrDep arrDep);
         Dictionary<Station, ArrDep> GetArrDeps();
         void RemoveArrDep(Station sta);
         void RemoveOrphanedTimes();
