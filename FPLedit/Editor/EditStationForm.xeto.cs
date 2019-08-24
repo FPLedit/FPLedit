@@ -59,11 +59,17 @@ namespace FPLedit.Editor
             };
         }
 
-        public EditStationForm(Timetable tt) : this(tt, -1) // Neue Station ohne Routenangabe
+        /// <summary>
+        /// Form to create a new station without a given route id.
+        /// </summary>
+        public EditStationForm(Timetable tt) : this(tt, -1)
         {
         }
 
-        public EditStationForm(Timetable tt, int route) : this() // Neue Station mit Routenangabe
+        /// <summary>
+        /// Form to create a new station with a given route id.
+        /// </summary>
+        public EditStationForm(Timetable tt, int route) : this()
         {
             Title = "Neue Station erstellen";
             this.route = route;
@@ -78,7 +84,10 @@ namespace FPLedit.Editor
                 stationRenderer.Visible = false;
         }
 
-        public EditStationForm(Station station, int route) : this() // Station editieren
+        /// <summary>
+        /// Form to edit a station (with given route id);
+        /// </summary>
+        public EditStationForm(Station station, int route) : this()
         {
             Title = "Station bearbeiten";
             nameTextBox.Text = station.SName;
@@ -137,7 +146,22 @@ namespace FPLedit.Editor
             {
                 foreach (var tra in Station._parent.Trains)
                 {
-                    ardeps[tra] = tra.GetArrDep(Station).Clone<ArrDep>();
+                    var path = tra.GetPath();
+                    var idx = path.IndexOf(Station);
+                    if (idx == -1) // Station not in path; not applicable to train.
+                        continue;
+
+                    // Filter out trains that don't use the current editing sessions route id.
+                    var prev = path.ElementAtOrDefault(idx - 1);
+                    var next = path.ElementAtOrDefault(idx + 1);
+
+                    var empty = Array.Empty<int>();
+                    var routes = empty.Concat(prev?.Routes ?? empty).Concat(next?.Routes ?? empty);
+                    if (!routes.Contains(route))
+                        continue;
+
+                    var arrDep = tra.GetArrDep(Station);
+                    ardeps[tra] = arrDep.Clone<ArrDep>();
                     tra.RemoveArrDep(Station);
                 }
             }
@@ -150,14 +174,20 @@ namespace FPLedit.Editor
 
             if (resetArdep)
             {
+                var trainsDataLoss = new List<string>();
                 foreach (var ardp in ardeps)
                 {
                     ardp.Key.AddArrDep(Station, route);
-                    ardp.Key.GetArrDep(Station).ApplyCopy(ardp.Value);
+                    var a = ardp.Key.GetArrDep(Station); //TODO: Make AddArDep return it's added ArrDep (and use it here)
+                    a?.ApplyCopy(ardp.Value);
+                    if (a == null)
+                        trainsDataLoss.Add(ardp.Key.TName);
                 }
+                if (trainsDataLoss.Any()) //TODO: Is this safeguard message really needed (or should we throw?)
+                    MessageBox.Show($"Unerwarteter Datenverlust beim Umschreiben der Züge: {string.Join(",", trainsDataLoss)}", "FPLedit", MessageBoxType.Error);
             }
 
-            // Trackdaten aktualisieren
+            // Update track data.
             if (!stationRenderer.CommitNameEdit())
                 return;
 
