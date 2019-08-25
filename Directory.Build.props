@@ -1,0 +1,40 @@
+<!--
+  FPLedit Build Process
+  Common build properties for all projects.
+  (c) Manuel Huber 2019
+-->
+
+<Project>
+  <PropertyGroup>
+    <!-- Common props -->
+    <PathMap>$(MSBuildProjectDirectory)=fpledit-src\$(MSBuildProjectName)</PathMap>
+    <LangVersion>7.3</LangVersion>
+	<CodeAnalysisRuleSet>..\build_scripts\FPLedit.ruleset</CodeAnalysisRuleSet>
+
+	<!-- Output configuration -->
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <OutputPath>..\bin\$(Configuration)\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+
+	<!-- Signature -->
+	<SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\build_scripts\fpledit.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+      <!-- Include signature key -->
+      <None Include="..\build_scripts\fpledit.snk" Link="Properties\fpledit.snk" />
+
+	  <!-- Include VersionInfo -->
+	  <Compile Include="..\build_scripts\VersionInfo.cs" Link="Properties\VersionInfo.cs" />
+  </ItemGroup>
+
+  <!-- Include Analyzers -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.3" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VersionCheckAnalyzer" Version="2.9.3" />
+    <PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="2.9.3" />
+    <PackageReference Include="Microsoft.NetCore.Analyzers" Version="2.9.3" />
+    <PackageReference Include="Microsoft.NetFramework.Analyzers" Version="2.9.3" />
+  </ItemGroup>
+</Project>
