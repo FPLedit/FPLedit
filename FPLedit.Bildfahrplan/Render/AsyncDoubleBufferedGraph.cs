@@ -2,7 +2,6 @@
 using Eto.Forms;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -55,6 +54,7 @@ namespace FPLedit.Bildfahrplan.Render
                     {
                         panel.Invalidate();
                         RenderingFinished?.Invoke();
+                        GC.Collect();
                     });
                 });
             }
@@ -66,7 +66,10 @@ namespace FPLedit.Bildfahrplan.Render
                 g.DrawText(font, Colors.Black, (panel.Width - t.Width) / 2, (panel.Height - t.Height) / 2, text);
             }
             else if (buffer != null)
-                g.DrawImage(buffer, 0f, 0f);
+            {
+                lock (bufferLock)
+                    g.DrawImage(buffer, 0f, 0f);
+            }
         }
 
         public void Invalidate() => Invalidate(false);
@@ -79,6 +82,7 @@ namespace FPLedit.Bildfahrplan.Render
                 buffer = null;
                 if (!invalidatingControl)
                     panel.Invalidate();
+                GC.Collect();
             }
         }
 

@@ -33,7 +33,7 @@ namespace FPLedit.Bildfahrplan.Render
             sdGraphics?.Flush();
             using (var ms = new MemoryStream())
             {
-                sdBuffer.Save(ms, sd.Imaging.ImageFormat.Bmp);
+                sdBuffer.Save(ms, sd.Imaging.ImageFormat.Png);
                 return new ed.Bitmap(ms.ToArray());
             }
         }
@@ -49,6 +49,7 @@ namespace FPLedit.Bildfahrplan.Render
             GC.SuppressFinalize(this);
             sdBuffer?.Dispose();
             sdGraphics?.Dispose();
+            GC.Collect();
         }
 
         ~ImageBridge()
