@@ -68,6 +68,9 @@
         <TableRow>
           <CheckBox x:Name="multitrackCheckBox">Gleise zeichnen</CheckBox>
         </TableRow>
+        <TableRow>
+          <CheckBox x:Name="networkTrainsCheckBox">An Knotenbahnhöfen Züge anderer Strecken zeichnen</CheckBox>
+        </TableRow>
         <!-- TextBoxes -->
         <TableRow>
           <Label>Höhe pro Stunde</Label>

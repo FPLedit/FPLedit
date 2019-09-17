@@ -49,11 +49,13 @@ namespace FPLedit.Bildfahrplan.Render
                 bool hadFirstArrival = false, hadLastDeparture = false, isFirst = true;
                 var stas = dir ? Enumerable.Reverse(stations) : stations;
 
+                int trainTravelsRouteCount = 0;
                 foreach (var sta in stas)
                 {
                     if (!ardps.ContainsKey(sta))
                         continue;
                     var ardp = ardps[sta];
+                    trainTravelsRouteCount++;
 
                     if (!ardp.HasMinOneTimeSet)
                         continue;
@@ -77,11 +79,16 @@ namespace FPLedit.Bildfahrplan.Render
                 }
 
                 // Halbe Linien bei Abfahrten / Ankünften ohne Gegenstelle
-                var hly = !dir ? 20 : -20;
-                if (hadLastDeparture)
-                    points.Add(points.Last() + new Size(50, hly));
-                if (hadFirstArrival)
-                    points.Insert(0, points.First() - new Size(50, hly));
+                if (attrs.DrawNetworkTrains)
+                {
+                    var hly = !dir ? 20 : -20;
+                    if (hadLastDeparture)
+                        points.Add(points.Last() + new Size(50, hly));
+                    if (hadFirstArrival)
+                        points.Insert(0, points.First() - new Size(50, hly));
+                }
+                else if (trainTravelsRouteCount <= 1)
+                        return; // This train has only one station on this route and we don't draw network trains.
 
                 // Verbindung zum Folgezug
                 var transition = tt.GetTransition(train);
