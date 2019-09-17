@@ -29,16 +29,14 @@ namespace FPLedit.Bildfahrplan.Render
                 return;
 
             if (renderer.width != panel.Width)
-            {
-                renderer.width = panel.Width;
-                Invalidate();
-            }
+                Invalidate(true);
 
             if (buffer == null && !generatingBuffer)
             {
                 generatingBuffer = true;
                 Task.Run(() =>
                 {
+                    renderer.width = panel.Width;
                     var newBuffer = new Bitmap(panel.Width, renderer.GetHeight(drawHeader), PixelFormat.Format32bppRgb);
                     using (var ib = new ImageBridge(panel.Width, renderer.GetHeight(drawHeader)))
                     using (var etoGraphics = new Graphics(newBuffer))
@@ -49,6 +47,7 @@ namespace FPLedit.Bildfahrplan.Render
 
                     lock (bufferLock)
                     {
+                        buffer?.Dispose();
                         buffer = newBuffer;
                     }
                     generatingBuffer = false;
@@ -70,13 +69,16 @@ namespace FPLedit.Bildfahrplan.Render
                 g.DrawImage(buffer, 0f, 0f);
         }
 
-        public void Invalidate()
+        public void Invalidate() => Invalidate(false);
+
+        private void Invalidate(bool invalidatingControl)
         {
             lock (bufferLock)
             {
                 buffer?.Dispose();
                 buffer = null;
-                panel.Invalidate();
+                if (!invalidatingControl)
+                    panel.Invalidate();
             }
         }
 

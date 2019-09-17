@@ -4,7 +4,7 @@
   xmlns:e="clr-namespace:FPLedit.Bildfahrplan.Forms;assembly=FPLedit.Bildfahrplan"
   xmlns:sys="clr-namespace:System;assembly=mscorlib"
   xmlns:shared="clr-namespace:FPLedit.Shared.UI;assembly=FPLedit.Shared.UI"
-  Title="Dynamische Bildfahrplan-Vorschau" Resizable="false" ShowInTaskbar="true"
+  Title="Dynamische Bildfahrplan-Vorschau" Resizable="true" ShowInTaskbar="true"
   Maximizable="false" Height="800" Width="800">
   <TableLayout>
     <TableRow>

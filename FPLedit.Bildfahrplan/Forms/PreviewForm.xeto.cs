@@ -29,11 +29,11 @@ namespace FPLedit.Bildfahrplan.Forms
             this.pluginInterface = pluginInterface;
             pluginInterface.FileStateChanged += PluginInterface_FileStateChanged;
 
-            Resizable = Platform.IsWpf;
-
             var mainForm = (FForm)pluginInterface.RootForm;
             if (Screen != null && mainForm.Bounds.TopRight.X + 500 < Screen.Bounds.Width)
                 Location = mainForm.Bounds.TopRight + new Point(10, 0);
+
+            this.SizeChanged += (s, e) => panel.Invalidate();
 
             routesDropDown.SelectedRouteChanged += (s, e) => ResetRenderer();
             dtc.ValueChanged += (s, e) => ResetRenderer();
