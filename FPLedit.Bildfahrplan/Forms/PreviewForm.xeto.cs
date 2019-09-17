@@ -74,7 +74,13 @@ namespace FPLedit.Bildfahrplan.Forms
             try
             {
                 if (splitCheckBox.Checked.Value)
-                    renderer.DrawHeader(e.Graphics, (scrollable.ClientSize.Width + panel.Width) / 2);
+                {
+                    using (var ib = new ImageBridge(hpanel.Width, hpanel.Height))
+                    {
+                        renderer.DrawHeader(ib.Graphics, (scrollable.ClientSize.Width + panel.Width) / 2);
+                        ib.CoptyToEto(e.Graphics);
+                    }
+                }
             }
             catch
             { }

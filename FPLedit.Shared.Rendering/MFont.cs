@@ -46,8 +46,16 @@ namespace FPLedit.Shared.Rendering
             return m.instanceCachedEto;
         }
 
+        public static explicit operator System.Drawing.Font(MFont m)
+        {
+            if (m.instanceCachedSD == null)
+                m.instanceCachedSD = new System.Drawing.Font(m.Family, m.Size, (System.Drawing.FontStyle)m.Style);
+            return m.instanceCachedSD;
+        }
+
         #region Caching (instance & global)
         private Eto.Drawing.Font instanceCachedEto;
+        private System.Drawing.Font instanceCachedSD;
         private static readonly List<MFont> cachedM = new List<MFont>();
 
 #pragma warning disable IDE0060 // Nicht verwendete Parameter entfernen
@@ -56,6 +64,8 @@ namespace FPLedit.Shared.Rendering
         {
             instanceCachedEto?.Dispose();
             instanceCachedEto = null;
+            instanceCachedSD?.Dispose();
+            instanceCachedSD = null;
         }
 
         public void Dispose()

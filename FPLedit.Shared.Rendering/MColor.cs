@@ -36,6 +36,9 @@ namespace FPLedit.Shared.Rendering
         public static explicit operator Eto.Drawing.Color(MColor m)
             => Eto.Drawing.Color.FromArgb(m.R, m.G, m.B, 255);
 
+        public static explicit operator System.Drawing.Color(MColor m)
+            => System.Drawing.Color.FromArgb(255, m.R, m.G, m.B);
+
         public static MColor White => new MColor(255, 255, 255);
     }
 }

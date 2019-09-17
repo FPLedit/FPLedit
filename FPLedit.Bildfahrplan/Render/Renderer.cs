@@ -2,7 +2,8 @@
 using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
-using Eto.Drawing;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,7 +52,7 @@ namespace FPLedit.Bildfahrplan.Render
             var stationOffsets = headerRenderer.Render(g, margin, width, height, drawHeader);
 
             // Züge
-            g.AntiAlias = true;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             var clip = g.ClipBounds;
             clip.Y += margin.Top;
             clip.Height -= (margin.Top + margin.Bottom + 1);
@@ -66,7 +67,7 @@ namespace FPLedit.Bildfahrplan.Render
             var trainRenderer = new TrainRenderer(stations, tt, margin, startTime, stationOffsets);
             foreach (var train in trains)
                 trainRenderer.Render(g, train);
-            g.AntiAlias = false;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
         }
 
         public void DrawHeader(Graphics g, int width)
@@ -97,7 +98,7 @@ namespace FPLedit.Bildfahrplan.Render
             float sMax = 0f;
             var emSize = g.MeasureString(stationFont, "M").Height;
             if (attrs.StationVertical)
-                sMax = stations.Max(sta => g.MeasureString(stationFont, sta.ToString(attrs.DisplayKilometre, route)).Width);
+                sMax = stations.Max(sta => g.MeasureString(sta.ToString(attrs.DisplayKilometre, route), stationFont).Width);
             else
                 sMax = emSize;
 
@@ -108,10 +109,10 @@ namespace FPLedit.Bildfahrplan.Render
             result.Top = drawHeader ? result.Top : 5;
 
             // MarginLeft berechnen
-            List<float> tsizes = new List<float>();
+            float tMax = 0f;
             foreach (var l in GetTimeLines(out bool _, startTime, endTime))
-                tsizes.Add(g.MeasureString(timeFont, new TimeEntry(0, l + startTime.GetTotalMinutes()).ToShortTimeString()).Width);
-            result.Left = tsizes.Max() + result.Left;
+                tMax = Math.Max(tMax, g.MeasureString(new TimeEntry(0, l + startTime.GetTotalMinutes()).ToShortTimeString(), timeFont).Width);
+            result.Left += tMax;
             return result;
         }
 
@@ -139,8 +140,8 @@ namespace FPLedit.Bildfahrplan.Render
         public int GetHeight(TimeEntry start, TimeEntry end, bool drawHeader)
         {
             var stations = tt.GetRoute(route).GetOrderedStations();
-            using (var image = new Bitmap(new Size(1, 1), PixelFormat.Format24bppRgb))
-            using (var g = new Graphics(image))
+            using (var image = new Bitmap(1, 1, PixelFormat.Format24bppRgb))
+            using (var g = Graphics.FromImage(image))
             {
                 var m = CalcMargins(g, margin, stations, start, end, drawHeader);
                 return (int)(m.Top + m.Bottom + (end - start).GetTotalMinutes() * attrs.HeightPerHour / 60f);

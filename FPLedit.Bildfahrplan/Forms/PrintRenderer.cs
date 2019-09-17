@@ -55,7 +55,12 @@ namespace FPLedit.Bildfahrplan.Forms
             int height = (int)e.PageSize.Height;
             var start = last ?? attrs.StartTime;
             last = GetTimeByHeight(renderer, start, height);
-            renderer.Draw(e.Graphics, start, last.Value, true);
+
+            using (var ib = new ImageBridge(e.Graphics.ClipBounds))
+            {
+                renderer.Draw(ib.Graphics, start, last.Value, true);
+                ib.CoptyToEto(e.Graphics);
+            }
 
             if (last.Value < attrs.EndTime)
                 doc.PageCount++;

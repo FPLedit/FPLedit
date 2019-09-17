@@ -2,7 +2,8 @@
 using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
-using Eto.Drawing;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 
 namespace FPLedit.Bildfahrplan.Render
@@ -40,7 +41,7 @@ namespace FPLedit.Bildfahrplan.Render
 
             using (var pen = new Pen((Color)style.CalcedColor, style.CalcedWidth)
             {
-                DashStyle = ds.ParseDashstyle(style.CalcedLineStyle)
+                DashPattern = ds.ParseDashstyle(style.CalcedLineStyle)
             })
             using (var brush = new SolidBrush((Color)style.CalcedColor))
             {
@@ -127,7 +128,7 @@ namespace FPLedit.Bildfahrplan.Render
                                     p.AddLine(points[i], points[i + 1]);
                                     break;
                                 case StationLineStyle.Cubic:
-                                    var control2 = points[i + 1] + (!isTransition ? bezierOffset : -bezierOffsetT);
+                                    var control2 = points[i + 1] + (!isTransition ? bezierOffset : (SizeF.Empty-bezierOffsetT));
                                     p.AddBezier(points[i], points[i] - bezierOffset, control2, points[i + 1]);
                                     break;
                             }
@@ -147,11 +148,11 @@ namespace FPLedit.Bildfahrplan.Render
                         float tx = xs.Min() + (xs.Max() - xs.Min()) / 2;
 
                         float angle = CalcAngle(ys, xs, train);
-                        g.SaveTransform();
+                        var container = g.BeginContainer();
                         g.TranslateTransform(tx, ty);
                         g.RotateTransform(-angle);
                         g.DrawText(trainFont, brush, -(size.Width / 2), -(size.Height / 2), train.TName);
-                        g.RestoreTransform();
+                        g.EndContainer(container);
                     }
                     g.DrawPath(pen, p);
                 }

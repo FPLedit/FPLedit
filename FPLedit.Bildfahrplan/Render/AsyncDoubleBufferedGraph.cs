@@ -2,6 +2,7 @@
 using Eto.Forms;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,8 +40,13 @@ namespace FPLedit.Bildfahrplan.Render
                 Task.Run(() =>
                 {
                     var newBuffer = new Bitmap(panel.Width, renderer.GetHeight(drawHeader), PixelFormat.Format32bppRgb);
-                    using (var g2 = new Graphics(newBuffer))
-                        renderer.Draw(g2, drawHeader);
+                    using (var ib = new ImageBridge(panel.Width, renderer.GetHeight(drawHeader)))
+                    using (var etoGraphics = new Graphics(newBuffer))
+                    {
+                        renderer.Draw(ib.Graphics, drawHeader);
+                        ib.CoptyToEto(etoGraphics);
+                    }
+
                     lock (bufferLock)
                     {
                         buffer = newBuffer;

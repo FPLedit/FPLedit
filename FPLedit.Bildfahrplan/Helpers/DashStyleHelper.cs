@@ -18,7 +18,10 @@ namespace FPLedit.Bildfahrplan
 
         public int[] Indices => Enumerable.Range(0, types.Count - 1).ToArray();
 
-        public Eto.Drawing.DashStyle ParseDashstyle(int index)
+        public float[] ParseDashstyle(int index)
+            => types[index].DashPattern;
+
+        public Eto.Drawing.DashStyle ParseEtoDashstyle(int index)
             => new Eto.Drawing.DashStyle(0f, types[index].DashPattern);
 
         public string GetDescription(int index)
