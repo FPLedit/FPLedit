@@ -17,8 +17,6 @@ namespace FPLedit.Bildfahrplan
         private ButtonMenuItem showItem, configItem, trainColorItem, stationStyleItem, printItem;
         private CheckMenuItem overrideItem;
 
-        //private TimetableStyle attrs;
-
         public void Init(IInfo info)
         {
             this.info = info;
@@ -27,31 +25,15 @@ namespace FPLedit.Bildfahrplan
 
             info.Register<IExport>(new BitmapExport());
 
-            ButtonMenuItem item = ((MenuBar)info.Menu).CreateItem("Bildfahrplan");
+            var graphItem = ((MenuBar)info.Menu).CreateItem("Bildfahrplan");
 
-            showItem = item.CreateItem("Anzeigen");
-            showItem.Enabled = false;
-            showItem.Click += ShowItem_Click;
-
-            configItem = item.CreateItem("Darstellung ändern");
-            configItem.Enabled = false;
-            configItem.Click += ConfigItem_Click;
-
-            printItem = item.CreateItem("Drucken");
-            printItem.Enabled = false;
-            printItem.Click += PrintItem_Click;
-
-            trainColorItem = item.CreateItem("Zugdarstellung ändern");
-            trainColorItem.Enabled = false;
-            trainColorItem.Click += TrainColorItem_Click;
-
-            stationStyleItem = item.CreateItem("Stationsdarstellung ändern");
-            stationStyleItem.Enabled = false;
-            stationStyleItem.Click += StationStyleItem_Click;
-
-            overrideItem = item.CreateCheckItem("Verwende nur Plandarstellung");
-            overrideItem.CheckedChanged += OverrideItem_CheckedChanged;
-            overrideItem.Checked = info.Settings.Get<bool>("bifpl.override-entity-styles");
+            showItem = graphItem.CreateItem("Anzeigen", enabled: false, clickHandler: ShowItem_Click);
+            configItem = graphItem.CreateItem("Darstellung ändern", enabled: false, clickHandler: (s, ev) => ShowForm(new ConfigForm(info.Timetable, info.Settings)));
+            printItem = graphItem.CreateItem("Drucken", enabled: false, clickHandler: PrintItem_Click);
+            trainColorItem = graphItem.CreateItem("Zugdarstellung ändern", enabled: false, clickHandler: (s, ev) => ShowForm(new TrainColorForm(info)));
+            stationStyleItem = graphItem.CreateItem("Stationsdarstellung ändern", enabled: false, clickHandler: (s, ev) => ShowForm(new StationStyleForm(info)));
+            overrideItem = graphItem.CreateCheckItem("Verwende nur Plandarstellung", isChecked: info.Settings.Get<bool>("bifpl.override-entity-styles"),
+                changeHandler: OverrideItem_CheckedChanged);
         }
 
         private void OverrideItem_CheckedChanged(object sender, EventArgs e)
@@ -66,8 +48,6 @@ namespace FPLedit.Bildfahrplan
             printItem.Enabled = e.FileState.Opened && e.FileState.TrainsCreated;
             trainColorItem.Enabled = stationStyleItem.Enabled = e.FileState.Opened && e.FileState.TrainsCreated;
 
-            //attrs = new TimetableStyle(info.Timetable);
-
             if (e.FileState.Opened && info.Timetable.Type == TimetableType.Network)
             {
                 showItem.Text = "Anzeigen (aktuelle Route)";
@@ -80,30 +60,6 @@ namespace FPLedit.Bildfahrplan
             }
         }
 
-        private void TrainColorItem_Click(object sender, EventArgs e)
-        {
-            info.StageUndoStep();
-            using (var tcf = new TrainColorForm(info))
-                if (tcf.ShowModal(info.RootForm) == DialogResult.Ok)
-                    info.SetUnsaved();
-        }
-
-        private void StationStyleItem_Click(object sender, EventArgs e)
-        {
-            info.StageUndoStep();
-            using (var scf = new StationStyleForm(info))
-                if (scf.ShowModal(info.RootForm) == DialogResult.Ok)
-                    info.SetUnsaved();
-        }
-
-        private void ConfigItem_Click(object sender, EventArgs e)
-        {
-            info.StageUndoStep();
-            using (var cnf = new ConfigForm(info.Timetable, info.Settings))
-                if (cnf.ShowModal(info.RootForm) == DialogResult.Ok)
-                    info.SetUnsaved();
-        }
-
         private void PrintItem_Click(object sender, EventArgs e)
         {
             var route = (info.Timetable.Type == TimetableType.Network) ? info.FileState.SelectedRoute : Timetable.LINEAR_ROUTE_ID;
@@ -111,10 +67,14 @@ namespace FPLedit.Bildfahrplan
                 pr.InitPrint();
         }
 
-        private void ShowItem_Click(object sender, EventArgs e)
+        private void ShowItem_Click(object sender, EventArgs e) => new PreviewForm(info).Show(); // no using intended!
+
+        private void ShowForm(Dialog<DialogResult> form)
         {
-            using (var prf = new PreviewForm(info))
-                prf.Show();
+            info.StageUndoStep();
+            if (form.ShowModal(info.RootForm) == DialogResult.Ok)
+                info.SetUnsaved();
+            form.Dispose();
         }
     }
 #endif

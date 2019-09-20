@@ -207,18 +207,13 @@ namespace FPLedit
 
             // Hilfe Menü nach den Erweiterungen zusammenbasteln
             var helpItem = Menu.CreateItem("Hilfe");
-            var extItem = helpItem.CreateItem("Erweiterungen");
-            extItem.Click += (s, ev) => new ExtensionsForm(extensionManager, this).ShowModal(this);
-            var tmplItem = helpItem.CreateItem("Vorlagen");
-            tmplItem.Click += (s, ev) => new TemplatesForm(templateManager, templatePath).ShowModal(this);
+            helpItem.CreateItem("Erweiterungen", clickHandler: (s, ev) => new ExtensionsForm(extensionManager, this).ShowModal(this));
+            helpItem.CreateItem("Vorlagen", clickHandler: (s, ev) => new TemplatesForm(templateManager, templatePath).ShowModal(this));
             helpItem.Items.Add(new SeparatorMenuItem());
-            var clearSizesItem = helpItem.CreateItem("Fenstergößen löschen");
-            clearSizesItem.Click += (s, ev) => SizeManager.Reset();
+            helpItem.CreateItem("Fenstergößen löschen", clickHandler: (s, ev) => SizeManager.Reset());
             helpItem.Items.Add(new SeparatorMenuItem());
-            var docItem = helpItem.CreateItem("Online Hilfe");
-            docItem.Click += (s, ev) => Process.Start("https://fahrplan.manuelhu.de/");
-            var infoItem = helpItem.CreateItem("Info");
-            infoItem.Click += (s, ev) => new InfoForm(Settings).ShowModal(this);
+            helpItem.CreateItem("Online Hilfe", clickHandler: (s, ev) => Process.Start("https://fahrplan.manuelhu.de/"));
+            helpItem.CreateItem("Info", clickHandler: (s, ev) => new InfoForm(Settings).ShowModal(this));
         }
 
         private void UpdateLastFilesMenu()

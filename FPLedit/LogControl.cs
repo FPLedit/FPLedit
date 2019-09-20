@@ -18,10 +18,8 @@ namespace FPLedit
             ReadOnly = true;
 
             menu = new ContextMenu();
-            var clearBtn = menu.CreateItem("Alles löschen");
-            clearBtn.Click += (s, e) => Text = "";
-            var debugBtn = menu.CreateCheckItem("Debug-Informationen anzeigen");
-            debugBtn.CheckedChanged += (s, e) => showDebug = debugBtn.Checked;
+            menu.CreateItem("Alles löschen", clickHandler: (s, e) => Text = "");
+            menu.CreateCheckItem("Debug-Informationen anzeigen", changeHandler: (s, e) => showDebug = ((CheckMenuItem)s).Checked);
         }
 
         #region Log

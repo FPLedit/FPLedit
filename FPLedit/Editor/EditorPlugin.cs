@@ -38,19 +38,15 @@ namespace FPLedit.Editor
 
             editRoot = ((MenuBar)info.Menu).CreateItem("Bearbeiten");
 
-            undoItem = editRoot.CreateItem("Rückgängig");
+            undoItem = editRoot.CreateItem("Rückgängig", enabled: false, clickHandler: (s, e) => info.Undo());
             undoItem.Shortcut = Keys.Control | Keys.Z;
-            undoItem.Enabled = false;
-            undoItem.Click += (s, e) => info.Undo();
 
             editRoot.Items.Add(new SeparatorMenuItem());
 
-            editLineItem = editRoot.CreateItem("Strecke bearbeiten (linear)");
-            editLineItem.Enabled = false;
-            editLineItem.Click += (s, e) => ShowForm(new LineEditForm(info, Timetable.LINEAR_ROUTE_ID));
+            editLineItem = editRoot.CreateItem("Strecke bearbeiten (linear)", enabled: false,
+                clickHandler: (s, e) => ShowForm(new LineEditForm(info, Timetable.LINEAR_ROUTE_ID)));
 
-            editTrainsItem = editRoot.CreateItem("Züge bearbeiten");
-            editTrainsItem.Enabled = false;
+            editTrainsItem = editRoot.CreateItem("Züge bearbeiten", enabled: false);
             editTrainsItem.Click += (s, e) =>
             {
                 if (info.Timetable.Type == TimetableType.Linear)
@@ -58,8 +54,7 @@ namespace FPLedit.Editor
                 else ShowForm(new Network.NetworkTrainsEditForm(info));
             };
 
-            editTimetableItem = editRoot.CreateItem("Fahrplan bearbeiten");
-            editTimetableItem.Enabled = false;
+            editTimetableItem = editRoot.CreateItem("Fahrplan bearbeiten", enabled: false);
             editTimetableItem.Click += (s, e) =>
             {
                 if (info.Timetable.Type == TimetableType.Linear)
@@ -69,13 +64,8 @@ namespace FPLedit.Editor
 
             editRoot.Items.Add(new SeparatorMenuItem());
 
-            designItem = editRoot.CreateItem("Fahrplandarstellung");
-            designItem.Enabled = false;
-            designItem.Click += (s, e) => ShowForm(new RenderSettingsForm(info));
-
-            filterItem = editRoot.CreateItem("Filterregeln");
-            filterItem.Enabled = false;
-            filterItem.Click += (s, e) => ShowForm(new Filters.FilterForm(info));
+            designItem = editRoot.CreateItem("Fahrplandarstellung", enabled: false, clickHandler: (s, e) => ShowForm(new RenderSettingsForm(info)));
+            filterItem = editRoot.CreateItem("Filterregeln", enabled: false, clickHandler: (s, e) => ShowForm(new Filters.FilterForm(info)));
 
             previewRoot = ((MenuBar)info.Menu).CreateItem("Vorschau");
         }
@@ -85,6 +75,7 @@ namespace FPLedit.Editor
             info.StageUndoStep();
             if (form.ShowModal(Program.App.MainForm) == DialogResult.Ok)
                 info.SetUnsaved();
+            form.Dispose();
         }
 
         private void Info_ExtensionsLoaded(object sender, EventArgs e)
@@ -94,11 +85,7 @@ namespace FPLedit.Editor
                 info.Menu.Items.Remove(previewRoot); // Ausblenden in der harten Art
 
             foreach (var prev in previewables)
-            {
-                var itm = previewRoot.CreateItem(prev.DisplayName);
-                itm.Enabled = false;
-                itm.Click += (s, ev) => prev.Show(info);
-            }
+                previewRoot.CreateItem(prev.DisplayName, enabled: false, clickHandler: (s, ev) => prev.Show(info));
 
             dialogs = info.GetRegistered<IEditingDialog>();
             if (dialogs.Length > 0)
@@ -106,11 +93,7 @@ namespace FPLedit.Editor
 
             dialogOffset = editRoot.Items.Count;
             foreach (var dialog in dialogs)
-            {
-                var itm = editRoot.CreateItem(dialog.DisplayName);
-                itm.Enabled = dialog.IsEnabled(info);
-                itm.Click += (s, ev) => dialog.Show(info);
-            }
+                editRoot.CreateItem(dialog.DisplayName, enabled: dialog.IsEnabled(info), clickHandler: (s, ev) => dialog.Show(info));
 
             hasFilterables = info.GetRegistered<IFilterableUi>().Length > 0;
             hasDesignables = info.GetRegistered<IDesignableUiProxy>().Length > 0;

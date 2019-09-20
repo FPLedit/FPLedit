@@ -14,7 +14,7 @@ namespace FPLedit.jTrainGraphStarter
     public class Plugin : IPlugin
     {
         IInfo info;
-        ButtonMenuItem startItem, settingsItem;
+        ButtonMenuItem startItem;
 
         public void Init(IInfo info)
         {
@@ -23,8 +23,7 @@ namespace FPLedit.jTrainGraphStarter
 
             var item = ((MenuBar)info.Menu).CreateItem("jTrainGraph");
 
-            startItem = item.CreateItem("jTrainGraph starten");
-            startItem.Enabled = false;
+            startItem = item.CreateItem("jTrainGraph starten", enabled: false);
             startItem.Click += (s, e) =>
             {
                 if (info.Timetable.Type == TimetableType.Linear)
@@ -33,8 +32,7 @@ namespace FPLedit.jTrainGraphStarter
                     StartNetwork(info.FileState.SelectedRoute);
             };
 
-            settingsItem = item.CreateItem("Einstellungen");
-            settingsItem.Click += (s, e) => (new SettingsForm(info.Settings)).ShowModal(info.RootForm);
+            item.CreateItem("Einstellungen", clickHandler: (s, e) => (new SettingsForm(info.Settings)).ShowModal(info.RootForm));
         }
 
         private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)

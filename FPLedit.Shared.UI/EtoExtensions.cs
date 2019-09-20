@@ -54,22 +54,28 @@ namespace FPLedit.Shared.UI
             }
         }
 
-        public static ButtonMenuItem CreateItem(this ISubmenu parent, string text)
+        public static ButtonMenuItem CreateItem(this ISubmenu parent, string text, bool enabled = true, EventHandler<EventArgs> clickHandler = null)
         {
             var itm = new ButtonMenuItem
             {
-                Text = text
+                Text = text,
+                Enabled = enabled,
             };
+            if (clickHandler != null)
+                itm.Click += clickHandler;
             parent.Items.Add(itm);
             return itm;
         }
 
-        public static CheckMenuItem CreateCheckItem(this ISubmenu parent, string text)
+        public static CheckMenuItem CreateCheckItem(this ISubmenu parent, string text, bool isChecked = false, EventHandler<EventArgs> changeHandler = null)
         {
             var itm = new CheckMenuItem
             {
-                Text = text
+                Text = text,
+                Checked = isChecked,
             };
+            if (changeHandler != null)
+                itm.CheckedChanged += changeHandler;
             parent.Items.Add(itm);
             return itm;
         }
