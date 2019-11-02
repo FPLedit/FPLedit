@@ -11,7 +11,9 @@ if (Get-Command "csi" -ErrorAction SilentlyContinue) {
 	exit 1
 }
 
+cd "$($SolutionDir)build_scripts"
+
 if ($ConfigurationName -eq "Release") {
-	& $csi @("$($SolutionDir)build_scripts\build-release.csx", $TargetDir)
-	& $csi @("$($SolutionDir)build_scripts\build-source.csx", $SolutionDir, $TargetDir)
+	& $csi @("./build-release.csx", $TargetDir)
+	& $csi @("./build-source.csx", $SolutionDir, $TargetDir)
 }

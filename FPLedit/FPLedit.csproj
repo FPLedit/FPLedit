@@ -41,9 +41,9 @@
     <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj" />
   </ItemGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="powershell -executionpolicy bypass -nologo -File $(SolutionDir)\build_scripts\vsbuild-pre.ps1 $(SolutionDir) $(TargetDir) $(ConfigurationName)" />
+    <Exec Command="powershell -executionpolicy bypass -nologo -File $(SolutionDir)/build_scripts/vsbuild-pre.ps1 $(SolutionDir) $(TargetDir) $(ConfigurationName)" />
   </Target>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="powershell -executionpolicy bypass -nologo -File $(SolutionDir)\build_scripts\vsbuild-post.ps1 $(SolutionDir) $(TargetDir) $(ConfigurationName)" />
+    <Exec Command="powershell -executionpolicy bypass -nologo -File $(SolutionDir)/build_scripts/vsbuild-post.ps1 $(SolutionDir) $(TargetDir) $(ConfigurationName)" />
   </Target>
 </Project>
