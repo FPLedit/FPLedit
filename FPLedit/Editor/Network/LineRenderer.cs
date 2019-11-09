@@ -386,6 +386,7 @@ namespace FPLedit.Editor.Network
             draggedControl = null;
             Cursor = Cursors.Default;
             hasDragged = false;
+            hasPanned = false;
 
             foreach (var args in panels.ToArray())
                 args.HandleDoubleClick(new Point(e.Location), new Point(_pan));
