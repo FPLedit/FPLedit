@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace FPLedit.Editor
@@ -214,10 +215,14 @@ namespace FPLedit.Editor
             if (!CommitNameEdit())
                 return;
 
-            var count = _station.Tracks.Count(t => t.Name.StartsWith("Neues Gleis "));
+            var regex = new Regex(@"^Neues Gleis (\d+)$", RegexOptions.Compiled);
+            var maxTrack = 0;
+            var matchedTracks = _station.Tracks.Select(t => regex.Match(t.Name)).Where(m => m.Success);
+            if (matchedTracks.Any())
+                maxTrack = matchedTracks.Select(m => int.Parse(m.Groups[1].Value)).Max();
             var track = new Track(_station._parent)
             {
-                Name = "Neues Gleis " + (count + 1)
+                Name = "Neues Gleis " + (maxTrack + 1)
             };
 
             if (!_station.Tracks.Any())
