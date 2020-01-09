@@ -27,15 +27,17 @@ using System.Runtime.InteropServices;
 internal static class Vi
 {
     /*
-     * FOR EVERY RELEASE: Increment InformationalVersion an maybe also PUpTo.
+     * FOR EVERY RELEASE: Increment the following version entries
      * The rest ist updated automatically
      */
-    public const string InformationalVersion = "2.1.0";
-    public const string PUpTo = "2.1"; // Compatible up to (normally "Version" without patch)
+    private const string Major = "2", Minor = "1", Patch = "1";
 
     /*
      * It shouldn't be necessary to update the following entries.
      */
+    public const string InformationalVersion = Major + "." + Minor + "." + Patch;
+    public const string PUpTo = Major + "." + Minor; // Compatible up to (normally "Version" without patch)
+
     public const string FileVersion = InformationalVersion + ".0";
 
     public const string PVersion = InformationalVersion; // Version of plugin (normally equasls assembly major.minor.patch)

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace FPLedit.Editor.Rendering
@@ -58,10 +59,9 @@ namespace FPLedit.Editor.Rendering
             // Reset
             e.Graphics.Clear(Colors.White);
             buttons.Clear();
-
-            var width = (int)e.Graphics.ClipBounds.Width;
-            int midx = width / 2;
-
+            
+            int midx = Width / 2;
+            
             // Richtungsangaben ermitteln
             var route = _station._parent.GetRoute(_route).GetOrderedStations();
             var staIdx = route.IndexOf(_station);
@@ -77,7 +77,7 @@ namespace FPLedit.Editor.Rendering
             if (next != null)
             {
                 var nextSize = e.Graphics.MeasureString(font, "nach " + next.SName);
-                e.Graphics.DrawText(font, Colors.Black, width - 5 - nextSize.Width, 5, "nach " + next.SName);
+                e.Graphics.DrawText(font, Colors.Black, Width - 5 - nextSize.Width, 5, "nach " + next.SName);
             }
 
             var leftdefaultTrack = _station.Tracks.IndexOf(_station.Tracks.FirstOrDefault(t => t.Name == _station.DefaultTrackLeft.GetValue(_route)));
@@ -119,7 +119,7 @@ namespace FPLedit.Editor.Rendering
                 if (rightdefaultTrack == trackIndex)
                     rightIndent = disableRight ? 30 : 0;
                 maxIndent = Math.Max(maxIndent, rightIndent + leftIndent);
-                rightIndent = width - rightIndent;
+                rightIndent = Width - rightIndent;
 
                 // Gleiselinie zeichnen
                 e.Graphics.DrawLine(Colors.Black, leftIndent, y, rightIndent, y);
@@ -145,7 +145,7 @@ namespace FPLedit.Editor.Rendering
                 if (_station.DefaultTrackLeft.ContainsValue(track.Name) && leftdefaultTrack != trackIndex)
                     e.Graphics.DrawLine(dashedPen, 0, y, leftIndent, y);
                 if (_station.DefaultTrackRight.ContainsValue(track.Name) && rightdefaultTrack != trackIndex)
-                    e.Graphics.DrawLine(dashedPen, rightIndent, y, width, y);
+                    e.Graphics.DrawLine(dashedPen, rightIndent, y, Width, y);
 
                 // Aktions-Buttons hinzufügen
                 var btnLeft = midx + (int)(textSize.Width / 2) + 10;
@@ -169,9 +169,9 @@ namespace FPLedit.Editor.Rendering
 
                 if (trackIndex == rightdefaultTrack && !disableRight)
                 {
-                    var rightUpButton = GetButton("▲", track, width - 46, y);
+                    var rightUpButton = GetButton("▲", track, Width - 46, y);
                     rightUpButton.Click += (s, x) => MoveDefaultTrack(_station.DefaultTrackRight, ((RenderBtn<Track>)s).Tag, -1);
-                    var rightDownBtn = GetButton("▼", track, width - 26, y);
+                    var rightDownBtn = GetButton("▼", track, Width - 26, y);
                     rightDownBtn.Click += (s, x) => MoveDefaultTrack(_station.DefaultTrackRight, ((RenderBtn<Track>)s).Tag, 1);
                 }
 
@@ -215,10 +215,14 @@ namespace FPLedit.Editor.Rendering
             if (!CommitNameEdit())
                 return;
 
-            var count = _station.Tracks.Count(t => t.Name.StartsWith("Neues Gleis "));
+            var regex = new Regex(@"^Neues Gleis (\d+)$", RegexOptions.Compiled);
+            var maxTrack = 0;
+            var matchedTracks = _station.Tracks.Select(t => regex.Match(t.Name)).Where(m => m.Success);
+            if (matchedTracks.Any())
+                maxTrack = matchedTracks.Select(m => int.Parse(m.Groups[1].Value)).Max();
             var track = new Track(_station._parent)
             {
-                Name = "Neues Gleis " + (count + 1)
+                Name = "Neues Gleis " + (maxTrack + 1)
             };
 
             if (!_station.Tracks.Any())
@@ -254,32 +258,32 @@ namespace FPLedit.Editor.Rendering
             if (editingTextBox == null)
                 return true;
 
-            var name = editingTextBox.Text;
+            var newName = editingTextBox.Text;
             var oldName = editingButton.Tag.Name;
 
-            var duplicate = _station.Tracks.Any(t => t != editingButton.Tag && t.Name == name);
+            var duplicate = _station.Tracks.Any(t => t != editingButton.Tag && t.Name == newName);
             if (duplicate)
             {
-                MessageBox.Show($"Ein Gleis mit der Bezeichnung {name} ist bereits vorhanden. Bitte wählen Sie einen anderen Namen!", MessageBoxType.Error);
+                MessageBox.Show($"Ein Gleis mit der Bezeichnung {newName} ist bereits vorhanden. Bitte wählen Sie einen anderen Namen!", MessageBoxType.Error);
                 return false;
             }
 
             // Streckengleise umbenennen
-            _station.DefaultTrackLeft.ReplaceAllValues(editingButton.Tag.Name, name);
-            _station.DefaultTrackRight.ReplaceAllValues(editingButton.Tag.Name, name);
+            _station.DefaultTrackLeft.ReplaceAllValues(editingButton.Tag.Name, newName);
+            _station.DefaultTrackRight.ReplaceAllValues(editingButton.Tag.Name, newName);
 
-            // Ankunfts- und Abfhartsgleise zum umbenennen stagen
-            if (TrackRenames.ContainsKey(name))
-                TrackRenames.Remove(name);
+            // Ankunfts- und Abfahrtsgleise zum umbenennen stagen
+            if (TrackRenames.ContainsKey(newName))
+                TrackRenames.Remove(newName);
             else if (TrackRenames.ContainsValue(oldName))
             {
                 var k = TrackRenames.First(kvp => kvp.Value == oldName).Key;
-                TrackRenames[k] = name;
+                TrackRenames[k] = newName;
             }
-            else if (!TrackRenames.ContainsKey(name) && !TrackRenames.ContainsValue(name))
-                TrackRenames.Add(oldName, name);
+            else if (!TrackRenames.ContainsKey(oldName) && !TrackRenames.ContainsValue(newName))
+                TrackRenames.Add(oldName, newName);
 
-            editingButton.Tag.Name = name;
+            editingButton.Tag.Name = newName;
             Invalidate();
 
             layout.Remove(editingTextBox);
