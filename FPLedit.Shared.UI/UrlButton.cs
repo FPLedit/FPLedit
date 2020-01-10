@@ -19,7 +19,7 @@ namespace FPLedit.Shared.UI
             {
                 var url = new Uri(Url);
                 if (url.Scheme.StartsWith("http") || AllowNonHttpProtocols)
-                    Process.Start(Url);
+                    OpenHelper.Open(Url);
             }
             base.OnClick(e);
         }

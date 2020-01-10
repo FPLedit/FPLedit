@@ -21,7 +21,7 @@ namespace FPLedit.Aushangfahrplan.Forms
             bool success = exp.Exp(info.Timetable, path, info, tryoutConsole);
 
             if (success)
-                Process.Start(path);
+                OpenHelper.Open(path);
         }
     }
 }

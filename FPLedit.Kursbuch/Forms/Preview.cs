@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FPLedit.Shared;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace FPLedit.Kursbuch.Forms
 {
@@ -22,7 +23,7 @@ namespace FPLedit.Kursbuch.Forms
             bool success = exp.Exp(info.Timetable, path, info, tryoutConsole);
 
             if (success)
-                Process.Start(path);
+                OpenHelper.Open(path);
         }
     }
 }

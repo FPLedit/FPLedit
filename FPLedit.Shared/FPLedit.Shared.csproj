@@ -13,5 +13,6 @@
     <Reference Include="Eto">
       <HintPath>..\libs\Eto.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation" />
   </ItemGroup>
 </Project>

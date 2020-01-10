@@ -49,7 +49,7 @@ namespace FPLedit
                         "Neue FPLedit-Version verfügbar", MessageBoxButtons.YesNo);
 
                     if (res == DialogResult.Yes)
-                        Process.Start(vi.DownloadUrl);
+                        OpenHelper.Open(vi.DownloadUrl);
                 }
                 else
                 {

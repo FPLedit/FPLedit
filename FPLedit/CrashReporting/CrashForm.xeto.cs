@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using FPLedit.Shared;
 
 namespace FPLedit.CrashReporting
 {
@@ -33,9 +34,9 @@ namespace FPLedit.CrashReporting
             norestoreButton.Visible = !reporter.HasCurrentTtBackup;
         }
 
-        private void MailButton_Click(object sender, EventArgs e) => Process.Start("mailto:info@manuelhu.de?subject=Bugreport%20FPLedit");
+        private void MailButton_Click(object sender, EventArgs e) => OpenHelper.Open("mailto:info@manuelhu.de?subject=Bugreport%20FPLedit");
 
-        private void FolderButton_Click(object sender, EventArgs e) => Process.Start(Path.GetDirectoryName(crash_fn));
+        private void FolderButton_Click(object sender, EventArgs e) => OpenHelper.Open(Path.GetDirectoryName(crash_fn));
 
         private void RestoreButton_Click(object sender, EventArgs e) => Close(DialogResult.Ok);
 

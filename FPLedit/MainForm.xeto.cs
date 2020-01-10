@@ -1,4 +1,4 @@
-﻿using Eto.Forms;
+using Eto.Forms;
 using System;
 using System.Collections.Generic;
 using Eto.Drawing;
@@ -212,7 +212,7 @@ namespace FPLedit
             helpItem.Items.Add(new SeparatorMenuItem());
             helpItem.CreateItem("Fenstergößen löschen", clickHandler: (s, ev) => SizeManager.Reset());
             helpItem.Items.Add(new SeparatorMenuItem());
-            helpItem.CreateItem("Online Hilfe", clickHandler: (s, ev) => Process.Start("https://fahrplan.manuelhu.de/"));
+            helpItem.CreateItem("Online Hilfe", clickHandler: (s, ev) => OpenHelper.Open("https://fahrplan.manuelhu.de/"));
             helpItem.CreateItem("Info", clickHandler: (s, ev) => new InfoForm(Settings).ShowModal(this));
         }
 
