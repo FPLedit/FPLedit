@@ -2,10 +2,7 @@
 using FPLedit.Shared.Templating;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 
 namespace FPLedit.Templating
 {
@@ -14,7 +11,7 @@ namespace FPLedit.Templating
     /// </summary>
     internal class TemplateHost : ITemplate
     {
-        private readonly Template tmpl;
+        private readonly ITemplate tmpl;
         private readonly ILog logger;
 
         public string TemplateType => tmpl.TemplateType;
@@ -27,10 +24,13 @@ namespace FPLedit.Templating
 
         public bool Enabled { get; private set; }
 
-        public TemplateHost(string content, string identifier, ILog log, bool enabled)
+        public TemplateHost(string content, string identifier, IInfo info, bool enabled, bool js)
         {
-            tmpl = new Template(content);
-            logger = log;
+            if (!js)
+                tmpl = new Template(content);
+            else 
+                tmpl = new JavascriptTemplate(content, info);
+            logger = info.Logger;
             Identifier = identifier;
             Enabled = enabled;
 
@@ -47,14 +47,10 @@ namespace FPLedit.Templating
             {
                 return tmpl.GenerateResult(tt);
             }
-            catch (TargetInvocationException ex)
-            {
-                logger.Error("Laufzeitfehler im Template " + Identifier + ": " + ex.InnerException.Message);
-                logger.Error("[StackTrace]: " + ex.InnerException.StackTrace);
-            }
             catch (Exception ex)
             {
                 logger.Error("Fehler im Template " + Identifier + ": " + ex.Message);
+                logger.Error("[StackTrace]: " + ex.InnerException?.StackTrace);
             }
             return null;
         }

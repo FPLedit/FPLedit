@@ -5,5 +5,7 @@
         string TemplateIdentifier { get; }
 
         string GetTemplateCode();
+        
+        bool Javascript { get; }
     }
 }

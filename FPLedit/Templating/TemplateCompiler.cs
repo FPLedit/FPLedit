@@ -32,10 +32,6 @@ namespace FPLedit.Templating
                     IncludeDebugInformation = true,
                 };
 
-#if TMPL_DEBUG
-                cparams.TempFiles.KeepFiles = true;
-#endif
-
                 cparams.ReferencedAssemblies.Add("mscorlib.dll");
                 cparams.ReferencedAssemblies.Add("System.Core.dll");
                 cparams.ReferencedAssemblies.Add("FPLedit.Shared.dll");

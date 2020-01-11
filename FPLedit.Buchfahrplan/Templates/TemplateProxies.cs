@@ -17,6 +17,8 @@ namespace FPLedit.Buchfahrplan.Templates
             using (var sr = new StreamReader(stream))
                 return sr.ReadToEnd();
         }
+        
+        public bool Javascript => false;
     }
 
     public class ZlbTemplate : ITemplateProxy
@@ -32,5 +34,7 @@ namespace FPLedit.Buchfahrplan.Templates
             using (var sr = new StreamReader(stream))
                 return sr.ReadToEnd();
         }
+        
+        public bool Javascript => false;
     }
 }

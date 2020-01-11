@@ -11,6 +11,8 @@ namespace FPLedit.Aushangfahrplan.Templates
         public string GetTemplateCode()
             => LoadFile("FPLedit.Aushangfahrplan.Templates.AfplTemplate.fpltmpl") +
             LoadFile("FPLedit.Aushangfahrplan.Templates.AfplCommon.fpltmpl");
+        
+        public bool Javascript => false;
     }
 
     internal class SvgTemplateProxy : BaseTemplateProxy, ITemplateProxy
@@ -20,6 +22,8 @@ namespace FPLedit.Aushangfahrplan.Templates
         public string GetTemplateCode()
             => LoadFile("FPLedit.Aushangfahrplan.Templates.SvgTemplate.fpltmpl") +
             LoadFile("FPLedit.Aushangfahrplan.Templates.AfplCommon.fpltmpl");
+        
+        public bool Javascript => false;
     }
 
     internal class BaseTemplateProxy
