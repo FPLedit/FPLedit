@@ -8,6 +8,7 @@ namespace FPLedit.Shared
 {
     [Serializable]
     [XElmName("shMove")]
+    [TemplateSafe]
     public class ShuntMove : Entity
     {
         public ShuntMove(Timetable tt) : base("shMove", tt)

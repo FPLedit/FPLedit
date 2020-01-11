@@ -11,6 +11,7 @@ namespace FPLedit.Shared
 {
     [Serializable]
     [DebuggerDisplay("Name: {XName}, Children: {Children.Count}, Attrs: {AttributeDebugger,nq}")]
+    [TemplateSafe]
     public sealed class XMLEntity : IEntity
     {
         public string XName { get; set; }
@@ -33,7 +34,7 @@ namespace FPLedit.Shared
             if (el.Name.Namespace != XNamespace.None)
                 throw new NotSupportedException("Dateien mit XML-Namensräumen werden nicht unterstützt!");
             XName = el.Name.LocalName;
-            if (!el.Attributes().All(a => a.Name.Namespace == XNamespace.None))
+            if (el.Attributes().Any(a => a.Name.Namespace != XNamespace.None))
                 throw new NotSupportedException("Dateien mit XML-Namensräumen werden nicht unterstützt!");
             Attributes = el.Attributes().ToDictionary(a => a.Name.LocalName, a => (string)a);
             Children = new List<XMLEntity>();

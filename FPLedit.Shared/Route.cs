@@ -6,6 +6,7 @@ using System.Text;
 namespace FPLedit.Shared
 {
     [Serializable]
+    [TemplateSafe]
     public class Route
     {
         public int Index { get; }

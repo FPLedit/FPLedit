@@ -10,6 +10,7 @@ namespace FPLedit.Shared
     [Serializable]
     [DebuggerDisplay("{TTName}")]
     [XElmName("jTrainGraph_timetable")]
+    [TemplateSafe]
     public sealed class Timetable : Entity, ITimetable
     {
         public const int LINEAR_ROUTE_ID = 0;

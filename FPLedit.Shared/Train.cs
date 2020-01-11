@@ -8,6 +8,7 @@ namespace FPLedit.Shared
     [Serializable]
     [DebuggerDisplay("{TName}")]
     [XElmName("ti", "ta", "tr")]
+    [TemplateSafe]
     public sealed class Train : Entity, ITrain
     {
         [XAttrName("name")]

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Shared
 {
+    [TemplateSafe]
     public class PathData
     {
         protected PathEntry[] entries;

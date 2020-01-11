@@ -6,6 +6,7 @@ using System.Text;
 
 namespace FPLedit.Shared
 {
+    [TemplateSafe]
     public static class TimeSpanExtensions
     {
         [DebuggerStepThrough]

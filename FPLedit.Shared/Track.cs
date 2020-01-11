@@ -8,6 +8,7 @@ namespace FPLedit.Shared
 {
     [Serializable]
     [XElmName("track")]
+    [TemplateSafe]
     public class Track : Entity
     {
         public Track(Timetable tt) : base("track", tt)
