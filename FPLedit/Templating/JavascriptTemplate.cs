@@ -20,6 +20,8 @@ namespace FPLedit.Templating
         private readonly IInfo info;
         private readonly string nl = Environment.NewLine;
 
+        private const int CURRENT_VERSION = 2;
+
         public JavascriptTemplate(string code, IInfo info)
         {
             TemplateSource = code;
@@ -50,14 +52,15 @@ namespace FPLedit.Templating
         private string TemplateDefinition(Match m)
         {
             if (TemplateType != null)
-                throw new Exception("Nur eine fpledit-template-Direktive pro Vorlage erlaubt!");
-            var args = m.Groups[1].ToString().Trim();
-            var tparams = new ArgsParser(args).ParsedArgs;
-            if (!tparams.ContainsKey("type") || !tparams.ContainsKey("name"))
-                throw new Exception("Fehlende Angabe type oder name in der fpledit-template-Direktive!");
+                throw new Exception("Nur eine fpledit-template-Direktive ist pro Vorlage erlaubt!");
+            var tparams = new ArgsParser(m.Groups[1].ToString().Trim());
+            if (tparams.Require("name", "type", "version"))
+                throw new Exception("Fehlende Angabe type, version oder name in der fpledit-template-Direktive!");
+            if (tparams["version"] != CURRENT_VERSION.ToString())
+                throw new Exception($"Template-version mismatch! (Current: {CURRENT_VERSION} vs {tparams["version"]})");
             TemplateType = tparams["type"];
             TemplateName = "JS: " + tparams["name"];
-            return "";
+            return ""; // remove this match.
         }
 
         private string TransformCalls(Match m) => "__builder +=" + m.Groups[1].ToString().Trim() + ";" + nl;
