@@ -26,16 +26,26 @@ namespace FPLedit.Templating
 
         public TemplateHost(string content, string identifier, IInfo info, bool enabled, bool js)
         {
-            if (!js)
-                tmpl = new Template(content);
-            else 
-                tmpl = new JavascriptTemplate(content, info);
             logger = info.Logger;
             Identifier = identifier;
             Enabled = enabled;
-
-            if (tmpl.TemplateType == null)
-                logger.Warning("Keine valide Template-Deklaration gefunden! Das Template steht deshalb nicht zur Verfügung!");
+            
+            try
+            {
+                if (!js)
+                    tmpl = new Template(content);
+                else
+                    tmpl = new JavascriptTemplate(content, info);
+                
+                if (tmpl.TemplateType == null)
+                    logger.Warning(
+                        "Keine valide Template-Deklaration gefunden! Das Template steht deshalb nicht zur Verfügung!");
+            }
+            catch (Exception ex)
+            {
+                logger.Error("Fehler im Template " + Identifier + ": " + ex.Message);
+                logger.Error("[StackTrace]: " + ex.InnerException?.StackTrace);
+            }
         }
 
         public string GenerateResult(Timetable tt)
@@ -50,8 +60,10 @@ namespace FPLedit.Templating
             catch (Exception ex)
             {
                 logger.Error("Fehler im Template " + Identifier + ": " + ex.Message);
-                logger.Error("[StackTrace]: " + ex.InnerException?.StackTrace);
+                if (ex.InnerException != null)
+                    logger.Error("[StackTrace]: " + ex.InnerException?.StackTrace);
             }
+
             return null;
         }
     }

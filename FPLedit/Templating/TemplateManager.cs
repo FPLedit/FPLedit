@@ -40,11 +40,11 @@ namespace FPLedit.Templating
 
             // Weitere Templates aus Dateien laden
             var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), templateRoot);
-            var info = new DirectoryInfo(path);
-            if (!info.Exists)
+            var dir = new DirectoryInfo(path);
+            if (!dir.Exists)
                 return;
 
-            var files = info.GetFiles("*.fpltmpl");
+            var files = dir.GetFiles("*.fpltmpl");
             foreach (var file in files)
             {
                 var content = File.ReadAllText(file.FullName);
