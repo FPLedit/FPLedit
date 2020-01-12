@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -13,24 +15,26 @@ namespace FPLedit.Templating
     {
         public string TemplateType { get; private set; }
         public string TemplateName { get; private set; }
-        public string Identifier => throw new NotSupportedException();
+        public string Identifier { get; }
         public string TemplateSource { get; }
         public string CompiledCode { get; }
-        
+
         private readonly IInfo info;
         private readonly string nl = Environment.NewLine;
 
         private const int CURRENT_VERSION = 2;
 
-        public JavascriptTemplate(string code, IInfo info)
+        public JavascriptTemplate(string code, string identifier, IInfo info)
         {
             TemplateSource = code;
+            Identifier = identifier;
             this.info = info;
 
-            CompiledCode =  ParseTemplate();
+            CompiledCode = ParseTemplate();
         }
 
         #region Parser
+
         private string ParseTemplate()
         {
             var code = TemplateSource;
@@ -63,17 +67,17 @@ namespace FPLedit.Templating
             return ""; // remove this match.
         }
 
-        private string TransformCalls(Match m) => "__builder +=" + m.Groups[1].ToString().Trim() + ";" + nl;
+        private string TransformCalls(Match m) => "__builder += " + m.Groups[1].ToString().Trim() + ";" + nl;
         private string TransformCodeTag(Match m) => m.Groups[1].ToString().Trim() + nl;
 
         private string ProcessTextBlocks(string code) // leaves code blocks untouched
         {
             if (string.IsNullOrEmpty(code))
                 return string.Empty;
-            
+
             const string startTag = "<#";
             const string endTag = "#>";
-            
+
             var scriptBuilder = new StringBuilder();
 
             var nextBlockSearchIdx = 0;
@@ -94,7 +98,7 @@ namespace FPLedit.Templating
                 nextBlockSearchIdx = blockEndIdx + endTag.Length; // The next block can only start after the current one.
                 blockStartIdx = code.IndexOf(startTag, nextBlockSearchIdx, StringComparison.Ordinal); // Find next code block
             }
-            
+
             // Write out the final block of non-code text (No more code blocks found).
             scriptBuilder.Append(BuildMultilineAppend(code.Substring(nextBlockSearchIdx, code.Length - nextBlockSearchIdx)));
 
@@ -103,13 +107,17 @@ namespace FPLedit.Templating
 
         private string BuildMultilineAppend(string text)
         {
-            return string.Join(nl,text
+            var lines = text
                 .Replace("\\", "\\\\") // escape backslash
                 .Replace("\"", "\\\"") // escape quotes
-                .Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries)
-                .Select(l => "__builder += \"" + l + "\\n\";"))
-                + nl;
+                .Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries);
+            return string.Join(nl, lines
+                       .Take(lines.Length - 1)
+                       .Select(l => "__builder += \"" + l + "\\n\";"))
+                   + (lines.Length > 0 ? "__builder += \"" + lines[lines.Length - 1] + "\";" : "")
+                   + nl;
         }
+
         #endregion
 
         public string GenerateResult(Timetable tt)
@@ -122,16 +130,17 @@ namespace FPLedit.Templating
             var allowedTypes = typeof(Timetable).Assembly.GetTypes()
                 .Where(type => type.GetCustomAttributes(typeof(TemplateSafeAttribute), true).Length > 0)
                 .Concat(extensionAllowedTypes)
-                .Concat(new[] { typeof(TimeSpan), }); // Also whitelist type used for time entries
+                .Concat(new[] { typeof(TimeSpan), typeof(Enumerable), }); // Also whitelist type used for time entries
 
             var engine = new Engine();
             foreach (var type in allowedTypes) // Register all allowed types
                 engine.SetValue(type.Name, type);
 
-            //TODO: Better way to show code when there are errors...
+            TemplateDebugger.GetInstance().SetContext(this); // Move "Debugger" context to current template.
+
             return engine
                 .SetValue("tt", tt)
-                .SetValue("debug", new Action<object>((o) => info.Logger.Info($"{o.GetType().FullName}: {o}")))
+                .SetValue("debug", new Action<object>((o) => info.Logger.Info($"{o?.GetType()?.FullName ?? "null"}: {o ?? "null"}")))
                 .SetValue("debug_print", new Action<object>((o) => info.Logger.Info($"{o}")))
                 .Execute(CompiledCode)
                 .GetValue("__builder")
