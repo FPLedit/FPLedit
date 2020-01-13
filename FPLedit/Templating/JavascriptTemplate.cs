@@ -50,7 +50,7 @@ namespace FPLedit.Templating
             code = Regex.Replace(code, @"<##>", "", ro);
             code = Regex.Replace(code, @"<#[^=|@](.*?)#>", TransformCodeTag, ro);
 
-            return @"let __builder = '';" + nl + code;
+            return code;
         }
 
         private string TemplateDefinition(Match m)
@@ -142,6 +142,10 @@ namespace FPLedit.Templating
                 .SetValue("tt", tt)
                 .SetValue("debug", new Action<object>((o) => info.Logger.Info($"{o?.GetType()?.FullName ?? "null"}: {o ?? "null"}")))
                 .SetValue("debug_print", new Action<object>((o) => info.Logger.Info($"{o}")))
+                .SetValue("clr_typename", new Func<object,string>(o => o.GetType().Name))
+                .SetValue("clr_typefullname", new Func<object,string>(o => o.GetType().FullName))
+                .Execute(ResourceHelper.GetStringResource("Templating.TemplatePolyfills.js")) // Load polyfills
+                .Execute("let __builder = '';") // Create output variable
                 .Execute(CompiledCode)
                 .GetValue("__builder")
                 .ToString();
