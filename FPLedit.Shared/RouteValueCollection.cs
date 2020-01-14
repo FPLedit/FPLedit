@@ -5,6 +5,7 @@ using System.Linq;
 namespace FPLedit.Shared
 {
     [Serializable]
+    [Templating.TemplateSafe]
     public class RouteValueCollection<T>
     {
         private readonly IEntity entity;

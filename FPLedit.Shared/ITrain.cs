@@ -2,6 +2,7 @@
 
 namespace FPLedit.Shared
 {
+    [Templating.TemplateSafe]
     public interface ITrain : IEntity
     {
         int Id { get; set; }

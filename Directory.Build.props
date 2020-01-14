@@ -15,16 +15,9 @@
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <OutputPath>..\bin\$(Configuration)\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-
-	<!-- Signature -->
-	<SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\build_scripts\fpledit.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>
-      <!-- Include signature key -->
-      <None Include="..\build_scripts\fpledit.snk" Link="Properties\fpledit.snk" />
-
 	  <!-- Include VersionInfo -->
 	  <Compile Include="..\build_scripts\VersionInfo.cs" Link="Properties\VersionInfo.cs" />
   </ItemGroup>

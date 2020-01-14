@@ -1,6 +1,0 @@
-﻿<#@ fpledit-template type="afpl" name="Wie Standard, mit Schriftzug \"Abfahrt\" in Originalschrift" #>
-
-<#
-string abfahrtSVG = global::ResourceHelper.GetStringResource("Aushangfahrplan.Resources.abfahrt-text.svg");
-#>
-

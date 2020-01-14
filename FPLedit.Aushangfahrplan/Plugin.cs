@@ -17,6 +17,9 @@ namespace FPLedit.Aushangfahrplan
 
             info.Register<ITemplateProxy>(new Templates.StdTemplateProxy());
             info.Register<ITemplateProxy>(new Templates.SvgTemplateProxy());
+            
+            info.Register<ITemplateWhitelist>(new TemplateWhitelist<Templates.TemplateHelper>("afpl"));
+            info.Register<ITemplateWhitelist>(new TemplateWhitelist<Model.AfplAttrs>("afpl"));
         }
     }
 }

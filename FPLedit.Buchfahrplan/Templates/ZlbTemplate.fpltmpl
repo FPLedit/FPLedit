@@ -1,40 +1,38 @@
-﻿<#@ fpledit-template type="bfpl" name="Vorlage für den Zugleitbetrieb" #>
-<#@ assembly FPLedit.Buchfahrplan.dll #>
-<#@ import FPLedit.Buchfahrplan.Templates #>
-<#@ import FPLedit.Buchfahrplan.Model #>
+﻿<#@ fpledit-template type="bfpl" version="2" name="Vorlage für den Zugleitbetrieb" #>
 
-<#@ define string GetWelle(ref int counter, IStation sta, int route, Train tra, TemplateHelper helper)
+<#
+function GetWelle(/* ref int */ counter, /* IStation */ sta, /* int */ route, /* Train */ tra, /* TemplateHelper */ helper)
 {
-    if (counter > 0)
+    if (counter.val > 0)
     {
-        counter--;
+        counter.val--;
         return "";
     }
     else if (sta.Wellenlinien.GetValue(route) != 0)
     {
         var w = sta.Wellenlinien.GetValue(route);
         var stas = helper.GetStations(tra);
-        stas = stas.Skip(stas.IndexOf(sta)).ToList();
-        counter = stas.TakeWhile(s => s.Wellenlinien.GetValue(route) == w).Count(); //TODO: Better data structure
-        return string.Format("<td class=\"zug welle welle{0}\" rowspan=\"{1}\"></td>", w, counter--);
+        stas = stas.skip(stas.indexOf(sta));
+        counter.val = stas.takeWhile(s => s.Wellenlinien.GetValue(route) == w).length; //TODO: Better data structure
+        return "<td class=\"zug welle welle" + w + "\" data-c=\"" + counter.val + "\" rowspan=\"" + counter.val-- + "\"></td>";
     }
 
     return "<td class=\"zug welle\"></td>";
-} #>
+}
 
-<#
-string font = "serif";
-string additionalCss = "";
-bool showDays = false, showComments = false;
+let font = "serif";
+let additionalCss = "";
+let showDays = false, showComments = false;
 // Initialisierung
-TemplateHelper helper = new TemplateHelper(tt);
+let helper = new TemplateHelper(tt);
 
-BfplAttrs attrs = BfplAttrs.GetAttrs(tt);
+let attrs = BfplAttrs.GetAttrs(tt);
 if (attrs != null)
 {
     if (attrs.Font != "")
         font = attrs.Font;
-    additionalCss = attrs.Css ?? "";
+    if (attrs.Css != null)
+        additionalCss = attrs.Css;
 	showDays = attrs.ShowDays;
 	showComments = attrs.ShowComments;
 }
@@ -55,7 +53,7 @@ if (attrs != null)
 			margin-bottom:65px;
 		}
 		body {
-			font-family:<#= font #>, serif;
+			font-family:"<#= font #>", serif;
 		}
 		table:not(.first) {
 			page-break-before:always;
@@ -147,7 +145,7 @@ if (attrs != null)
 			}
 		}
 
-		<#= global::ResourceHelper.GetStringResource("Buchfahrplan.Resources.WellenCss.css") #>
+		{{##WELLEN_CSS##}}
 		</style>
 		<style id="add-css">
 			<#= additionalCss #>
@@ -156,8 +154,10 @@ if (attrs != null)
 	<body>
 		<div>
 			<#
-			bool first = true; // No pagebreak before first train
-			foreach (Train tra in helper.GetTrains()) { #>
+			let first = true; // No pagebreak before first train
+			let trains = helper.GetTrains();
+			for (let ti = 0; ti < trains.length; ti++) { 
+			    let tra = trains[ti]; #>
 			<table id="<#= helper.HtmlName(tra.TName, "train-") #>" class="<#= first ? "first" : "" #>">
 				<# first = false; #>
 				<col style="width:50px;">
@@ -173,7 +173,7 @@ if (attrs != null)
 				<tr>
 					<td colspan="10" class="linename"><#= tra.GetLineName() #></td>
 				</tr>
-				<# if (showComments && tra.Comment != null && tra.Comment != "") { #>
+				<# if (showComments && tra.Comment != null && tra.Comment !== "") { #>
 				<tr>
 					<td colspan="10" class="comment"><#= tra.Comment #></td>
 				</tr>
@@ -210,41 +210,41 @@ if (attrs != null)
 					<td class="spaltenkopf klein last">Zuglauf-<br>meldung<br>durch</td>
 				</tr>
 				<#
-				int rs_counter = 0;
-				string last_vmax = "";
-				var stations = helper.GetStations(tra);
-				int route = Timetable.LINEAR_ROUTE_ID;
-				foreach (var entity in stations) {
+				let rs_counter = { val: 0 };
+				let last_vmax = "";
+				let stations = helper.GetStations(tra);
+				let route = Timetable.LINEAR_ROUTE_ID;
+				for (let si = 0; si < stations.length; si++) {				
+				    let entity = stations[si];
 				#>
 				<tr class="<#= helper.HtmlName(entity.SName, "station-") #>">
 					<#
-						if (entity != stations.Last() && tt.Type == TimetableType.Network) {
-							var sta1 = stations[stations.IndexOf(entity) + 1];
-							route = entity.Routes.Where(r => sta1.Routes.Contains(r)).ToArray()[0];
+						if (entity != stations.last() && tt.Type == TimetableType.Network) {
+							let sta1 = stations[stations.indexOf(entity) + 1];
+							route = entity.Routes.filter(r => sta1.Routes.includes(r))[0];
 						}
-						var pos = entity.Positions.GetPosition(route);
-						var cur_vmax = entity.Vmax.GetValue(route);
+						let pos = entity.Positions.GetPosition(route);
+						let cur_vmax = entity.Vmax.GetValue(route);
 					#>
-					<td class="zug first"><#= pos.HasValue ? pos.Value.ToString("0.0") : "" #></td>
+					<td class="zug first"><#= pos != null ? pos.toFixed(1) : "" #></td>
 					<td class="zug"><#= cur_vmax == last_vmax ? "" : cur_vmax #></td>
 					<# last_vmax = cur_vmax; #>
 					<td class="zug stat"><#= entity.SName #></td>
-					<#= GetWelle(ref rs_counter, entity, route, tra, helper) #>
+					<#= GetWelle(rs_counter, entity, route, tra, helper) #>
 
 					<#
-					if (entity.GetType() == typeof(Station)) {
-						Station s = (Station)entity;
-						var ardp = tra.GetArrDep(s);
-						var ar = ardp.Arrival.ToShortTimeString();
-						var dp = ardp.Departure.ToShortTimeString();
-						var zlm = ardp.Zuglaufmeldung;
+					if (clr_typename(entity) == "Station") {
+						let ardp = tra.GetArrDep(entity);
+						let ar = TimeSpanExtensions.ToShortTimeString(ardp.Arrival);
+						let dp = TimeSpanExtensions.ToShortTimeString(ardp.Departure);
+						let zlm = ardp.Zuglaufmeldung;
 					#>
-					<td class="zug klein"><#= helper.TrapezHalt(tra, s) #></td>
+					<td class="zug klein"><#= helper.TrapezHalt(tra, entity) #></td>
 					<td class="zug"><#= (ar != "00:00" && ar != dp) ? ar : "" #></td>
 					<td class="zug"><#= dp != "00:00" ? dp : "" #></td>
-					<td class="zug klein"><#= helper.Kreuzt(tra, s) #></td>
-					<td class="zug klein"><#= helper.Ueberholt(tra, s) #></td>
-					<td class="zug klein last"><#= zlm ?? "" #></td>
+					<td class="zug klein"><#= helper.Kreuzt(tra, entity) #></td>
+					<td class="zug klein"><#= helper.Ueberholt(tra, entity) #></td>
+					<td class="zug klein last"><#= zlm || "" #></td>
 
 					<# } else { #>
 					<td class="zug klein"><!--Trapeztafel--></td>
@@ -253,11 +253,11 @@ if (attrs != null)
 					<td class="zug klein"><!--Kreuzung--></td>
 					<td class="zug klein"><!--überholt--></td>
 					<td class="zug klein last"><!--Zuglaufmeldung--></td>
-					<# } #>
+					<# } // if #>
 				</tr>
-				<# } #>
+				<# } // for(si<stations.length) #>
 			</table>
-			<# } #>
+			<# } // for(ti<trains.length) #>
 		</div>
 	</body>
 </html>

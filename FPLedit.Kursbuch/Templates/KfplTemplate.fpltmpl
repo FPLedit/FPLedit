@@ -1,41 +1,37 @@
-﻿<#@ fpledit-template type="kfpl" name="Standardvorlage (DB-Kursbuch)" #>
-<#@ assembly FPLedit.Kursbuch.dll #>
-<#@ import FPLedit.Kursbuch.Templates #>
-<#@ import FPLedit.Kursbuch.Model #>
+﻿<#@ fpledit-template type="kfpl" version="2" name="Standardvorlage (DB-Kursbuch)" #>
 
-<#@ define string Sign(Train t) {
+<#
+function Sign( /* Train */ t) {
     return "";
 }
-#>
 
-<#@ define string Remarks(Station s, Station[] route) {
-    if (route.FirstOrDefault() == s)
+function Remarks( /* Station */ s, /* Station[] */ route) {
+    if (route.first() == s)
 		return "ab";
-	if (route.LastOrDefault() == s)
+	if (route.last() == s)
 		return "an";
 	return "";
 }
-#>
 
-<#
-RouteValueCollection<string> kbsn = null;
-string font = "Arial"; //TODO: KBZiffern
-string heFont = "\"Arial Black\"";
-string additionalCss = "";
+let kbsn = null;
+let font = "Arial"; //TODO: KBZiffern
+let heFont = "\"Arial Black\"";
+let additionalCss = "";
 
-TrainDirection TOP_DIRECTION = TrainDirection.ti;
-TrainDirection BOTTOM_DIRECTION = TrainDirection.ta;
+let TOP_DIRECTION = TrainDirection.ti;
+let BOTTOM_DIRECTION = TrainDirection.ta;
 
-TemplateHelper helper = new TemplateHelper(tt);
+let helper = new TemplateHelper(tt);
 
-KfplAttrs attrs = KfplAttrs.GetAttrs(tt);
+let attrs = KfplAttrs.GetAttrs(tt);
 if (attrs != null)
 {
     if (attrs.Font != "")
         font = attrs.Font;
     if (attrs.HeFont != "")
         heFont = attrs.HeFont;
-    additionalCss = attrs.Css ?? "";
+    if (attrs.Css != null)
+        additionalCss = attrs.Css;
     if (attrs.KBSn != null)
         kbsn = attrs.KBSn;
 }
@@ -51,8 +47,7 @@ if (attrs != null)
 			font-family:<#= font #>,sans-serif;
 		}
 		table {
-			border-collapse:
-			collapse;
+			border-collapse: collapse;
 			border:none;
 			margin-bottom: 20px;
 			margin-left: auto;
@@ -159,59 +154,69 @@ if (attrs != null)
 	</head>
 
 	<body>
-	<# foreach (var route in tt.GetRoutes()) { #>
+	<# for (let i = 0; i < tt.GetRoutes().length; i++) {
+	 let route = tt.GetRoutes()[i];
+	 #>
 	<p class="heading">
-		<span class="line"><#= kbsn.GetValue(route.Index) #> <#= helper.GetRouteName(route, TOP_DIRECTION) #> </span>
+		<span class="line"><#= kbsn.GetValue(route.Index) || '' #> <#= helper.GetRouteName(route, TOP_DIRECTION) #> </span>
 		<span class="back">und zurück</span>
 	</p>
 	<#
-		var dirs = new[] { TOP_DIRECTION, BOTTOM_DIRECTION };
-		foreach (var direction in dirs) {
-		var trains = helper.GetTrains(route, direction);
-		var stations = helper.GetStations(route, direction);
+		let dirs = [ TOP_DIRECTION, BOTTOM_DIRECTION ];
+		for (let di = 0; di < dirs.length; di++) {
+		let direction = dirs[di];
+		let trains = helper.GetTrains(route, direction);
+		let stations = helper.GetStations(route, direction);
 	#>
 	<table cellspacing="0" cellpadding="0">
-		<tr>
-			<!-- rowspan="2" wenn Klassen hinzugefügt -->
-			<td class="kmcap"><p>km</td>
-			<!-- bottom entfernen, wenn Klassen hinzugefügt -->
-			<td colspan="2" class="caption top bottom"><p><span>Zug Nr.</span></p></td>
-			<# foreach (var t in trains) {
-				var lastt = trains.Last() == t ? " last-t" : "";
-			#>
-				<td class="tn<#= lastt #>"><span><#= Sign(t) #><#= t.TName.Replace(" ", "&nbsp;") #></span></td>
-			<# } #>
-		</tr>
-		<!--<tr>
-			<td class="caption bottom"><p><span>Klasse</span></p></td>
-			<# foreach (var t in trains) {
-				var lastt = trains.Last() == t ? " last-t" : "";
-			#>
-			<td class="kl<#= lastt #>"><span>2. oG</span></td>
-			<# } #>
-		</tr>-->
-		<#
-		foreach (var sta in stations) { #>
-		<tr>
-			<# var last = stations.Last() == sta ? " last" : ""; #>
-			<td class="km<#= last #>"><span><#= sta.Positions.GetPosition(route.Index).Value.ToString("0.0") #></span></td>
-			<td class="sta<#= last #>"><span><#= sta.SName.Replace(" ", "&nbsp;") #></span></td>
-			<td class="remarks<#= last #>"><span><#= Remarks(sta, stations) #></span></td>
+        <tr>
+            <!-- rowspan="2" wenn Klassen hinzugefügt -->
+            <td class="kmcap"><p>km</td>
+            <!-- bottom entfernen, wenn Klassen hinzugefügt -->
+            <td colspan="2" class="caption top bottom"><p><span>Zug Nr.</span></p></td>
+            <# for (let ti = 0; ti < trains.length; ti++) {
+                var t = trains[ti];
+                var lastt = trains.last() == t ? " last-t" : "";
+            #>
+                <td class="tn<#= lastt #>"><span><#= Sign(t) #><#= t.TName.replace(" ", "&nbsp;") #></span></td>
+            <# } #>
+        </tr>
+        <!--<tr>
+            <td class="caption bottom"><p><span>Klasse</span></p></td>
+            <# for (let ti = 0; ti < trains.length; ti++) {
+                var t = trains[ti];
+                var lastt = trains.last() == t ? " last-t" : "";
+            #>
+            <td class="kl<#= lastt #>"><span>2. oG</span></td>
+            <# } #>
+        </tr>-->
+        <#
+    		for (let si = 0; si < stations.length; si++) {
+    		    var sta = stations[si];
+    		#>
+            <tr>
+                <# let s_last = stations.last() == sta ? " last" : ""; #>
+                <td class="km<#= s_last #>"><span><#= (+sta.Positions.GetPosition(route.Index)).toFixed(1) #></span></td>
+                <td class="sta<#= s_last #>"><span><#= sta.SName.replace(" ", "&nbsp;") #></span></td>
+                <td class="remarks<#= s_last #>"><span><#= Remarks(sta, stations) #></span></td>
+ 
+    			<# for (let ti2 = 0; ti2 < trains.length; ti2++) {
+    			    var t = trains[ti2];
+    			    
+                    let times = "...";
+                    s_last += trains.last() == t ? " last-t" : "";
 
-			<# foreach (var t in trains) {
-				var times = "...";
-				last += trains.Last() == t ? " last-t" : "";
-				if (t.GetPath().Contains(sta))
-				{
-					var time = t.GetArrDep(sta).Departure;
-					if (time == default(TimeSpan)) time =  t.GetArrDep(sta).Arrival;
-					if (time == default(TimeSpan)) times = "...";
-					else times = time.ToString(@"hh\:mm");
-				}
-			#>
-			<td class="ti<#= last #>"><span><#= times #></span></td>
-			<# } #>
-		</tr>
+                    if (t.GetPath().Contains(sta))
+                    {
+                        let time = t.GetArrDep(sta).Departure;
+                        if (time == new TimeSpan()) time =  t.GetArrDep(sta).Arrival;
+                        if (time == new TimeSpan()) times = "...";
+                        else times = time.ToString("hh\\:mm");
+                    }
+                #>
+                <td class="ti<#= s_last #>"><span><#= times #></span></td>
+                <# } #>
+            </tr>
 		<# } #>
 	</table>
 	<# }

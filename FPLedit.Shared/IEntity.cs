@@ -5,6 +5,7 @@ using System.Text;
 
 namespace FPLedit.Shared
 {
+    [Templating.TemplateSafe]
     public interface IEntity
     {
         T GetAttribute<T>(string key, T defaultValue = default);

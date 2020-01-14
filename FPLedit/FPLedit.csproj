@@ -29,7 +29,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\build_scripts\ResourceHelper.cs" Link="Properties\ResourceHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="**/*.xeto" />
+    <EmbeddedResource Include="**/*.js" />
     <EmbeddedResource Include="Resources\*" />
     <EmbeddedResource Include="..\build_scripts\Info.txt" Link="Resources\Info.txt" />
     <EmbeddedResource Include="..\build_tmp\extensions.sig" Link="Resources\extensions.sig" />
@@ -39,6 +43,9 @@
     <ProjectReference Include="..\FPLedit.Shared.Rendering\FPLedit.Shared.Rendering.csproj" />
     <ProjectReference Include="..\FPLedit.Shared.UI\FPLedit.Shared.UI.csproj" />
     <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Jint" Version="3.0.0-beta-1632" />
   </ItemGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="powershell -executionpolicy bypass -nologo -File $(SolutionDir)/build_scripts/vsbuild-pre.ps1 $(SolutionDir) $(TargetDir) $(ConfigurationName)" />

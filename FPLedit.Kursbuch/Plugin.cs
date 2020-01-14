@@ -1,6 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using FPLedit.Kursbuch.Forms;
-using FPLedit.Kursbuch.Templates;
 using FPLedit.Shared;
 using FPLedit.Shared.Filetypes;
 using FPLedit.Shared.Templating;
@@ -18,7 +18,10 @@ namespace FPLedit.Kursbuch
             info.Register<IFilterableUi>(new FilterableHandler());
             info.Register<IDesignableUiProxy>(new SettingsControlProxy());
 
-            info.Register<ITemplateProxy>(new TemplateProxy());
+            info.Register<ITemplateProxy>(new Templates.TemplateProxy());
+            
+            info.Register<ITemplateWhitelist>(new TemplateWhitelist<Templates.TemplateHelper>("kfpl"));
+            info.Register<ITemplateWhitelist>(new TemplateWhitelist<Model.KfplAttrs>("kfpl"));
 
             info.Register<ITimetableTypeChangeAction>(new FixAttrsAction());
         }

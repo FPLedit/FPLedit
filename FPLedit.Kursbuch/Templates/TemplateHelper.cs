@@ -7,13 +7,13 @@ namespace FPLedit.Kursbuch.Templates
 {
     public class TemplateHelper
     {
-        public Timetable TT { get; private set; }
+        private readonly Timetable tt;
 
         private readonly FilterRule[] trules, srules;
 
         public TemplateHelper(Timetable tt)
         {
-            TT = tt;
+            this.tt = tt;
 
             var filterable = new Forms.FilterableHandler();
 
@@ -35,11 +35,11 @@ namespace FPLedit.Kursbuch.Templates
             var stas = GetStations(route, dir).ToList();
             var times = new Dictionary<Train, TimeSpan>();
 
-            foreach (var t in TT.Trains)
+            foreach (var t in tt.Trains)
             {
-                if (!trules.All(r => !r.Matches(t)))
+                if (trules.Any(r => r.Matches(t)))
                     continue;
-                if (TT.Type == TimetableType.Linear) // Züge in linearen Fahrplänen sind recht einfach
+                if (tt.Type == TimetableType.Linear) // Züge in linearen Fahrplänen sind recht einfach
                 {
                     if (t.Direction != dir)
                         continue;

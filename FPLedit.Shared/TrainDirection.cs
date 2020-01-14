@@ -5,6 +5,7 @@ using System.Text;
 
 namespace FPLedit.Shared
 {
+    [Templating.TemplateSafe]
     public enum TrainDirection
     {
         ti, // train in

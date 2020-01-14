@@ -8,13 +8,12 @@ namespace FPLedit.Aushangfahrplan.Templates
 {
     public class TemplateHelper
     {
-        public Timetable TT { get; private set; }
-
+        private readonly Timetable tt;
         private readonly FilterRule[] trules, srules;
 
         public TemplateHelper(Timetable tt)
         {
-            TT = tt;
+            this.tt = tt;
 
             var filterable = new Forms.FilterableHandler();
 
@@ -24,7 +23,7 @@ namespace FPLedit.Aushangfahrplan.Templates
 
         public Station[] GetStations()
         {
-            var x = TT.Stations
+            var x = tt.Stations
                 .Where(s => srules.All(r => !r.Matches(s)))
                 .Where(s => GetTrains(s).Length > 0)
                 .ToArray();
@@ -33,7 +32,7 @@ namespace FPLedit.Aushangfahrplan.Templates
 
         private Train[] GetTrains(Station sta)
         {
-            return TT.Trains.Where(t => t.GetPath().Contains(sta)
+            return tt.Trains.Where(t => t.GetPath().Contains(sta)
                 && t.GetArrDep(sta).Departure != default
                 && trules.All(r => !r.Matches(t)))
                 .OrderBy(t => t.GetArrDep(sta).Departure)
@@ -42,11 +41,12 @@ namespace FPLedit.Aushangfahrplan.Templates
 
         #region Last stations
 
-        public Station[] GetLastStations(TrainDirection dir, Station sta, IEnumerable<Train> trainsInThisDir)
+        public Station[] GetLastStations(TrainDirection dir, Station sta, IEnumerable<object> trainsInThisDirObj)
         {
-            if (TT.Type == TimetableType.Linear)
+            var trainsInThisDir = trainsInThisDirObj.Cast<Train>(); // From JS.
+            if (tt.Type == TimetableType.Linear)
             {
-                var lSta = TT.GetStationsOrderedByDirection(dir).LastOrDefault();
+                var lSta = tt.GetStationsOrderedByDirection(dir).LastOrDefault();
                 if (lSta != sta)
                     return new[] { lSta };
                 return Array.Empty<Station>();
@@ -102,15 +102,15 @@ namespace FPLedit.Aushangfahrplan.Templates
 
         private Station[] GetStationsInDir(TrainDirection dir, Station sta)
         {
-            if (TT.Type == TimetableType.Linear)
+            if (tt.Type == TimetableType.Linear)
             {
-                var stas = TT.GetStationsOrderedByDirection(dir);
+                var stas = tt.GetStationsOrderedByDirection(dir);
                 return stas.Skip(stas.IndexOf(sta) + 1).ToArray();
             }
             var stasAfter = new List<Station>();
             foreach (var rt in sta.Routes)
             {
-                var route = TT.GetRoute(rt);
+                var route = tt.GetRoute(rt);
                 var pos = sta.Positions.GetPosition(rt);
                 var nextStations = dir == TrainDirection.ti ?
                     route.Stations.Where(s => s.Positions.GetPosition(rt) > pos) : // ti

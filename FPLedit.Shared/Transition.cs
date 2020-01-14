@@ -9,6 +9,7 @@ namespace FPLedit.Shared
     [Serializable]
     [DebuggerDisplay("From {First} to {Next}")]
     [XElmName("tra")]
+    [Templating.TemplateSafe]
     public class Transition : Entity
     {
         public Transition(Timetable tt) : base("tra", tt)

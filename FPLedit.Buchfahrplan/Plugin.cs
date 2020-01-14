@@ -18,6 +18,10 @@ namespace FPLedit.Buchfahrplan
 
             info.Register<ITemplateProxy>(new Templates.StdTemplate());
             info.Register<ITemplateProxy>(new Templates.ZlbTemplate());
+            
+            info.Register<ITemplateWhitelist>(new TemplateWhitelist<Templates.TemplateHelper>("bfpl"));
+            info.Register<ITemplateWhitelist>(new TemplateWhitelist<Model.BfplAttrs>("bfpl"));
+            info.Register<ITemplateWhitelist>(new TemplateWhitelist<Model.BfplPoint>("bfpl"));
         }
     }
 }

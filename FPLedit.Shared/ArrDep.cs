@@ -9,6 +9,7 @@ namespace FPLedit.Shared
     // Schöner deutscher Begriff: Fahrtzeiteintrag
     [Serializable]
     [XElmName("t")]
+    [Templating.TemplateSafe]
     public class ArrDep : Entity
     {
         public IChildrenCollection<ShuntMove> ShuntMoves { get; private set; }
@@ -105,6 +106,6 @@ namespace FPLedit.Shared
             ShuntMoves.Clear();
             foreach (var shunt in copy.ShuntMoves)
                 ShuntMoves.Add(shunt.Clone<ShuntMove>());
-         }
+        }
     }
 }

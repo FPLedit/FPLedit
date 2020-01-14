@@ -1,4 +1,4 @@
-using Eto.Forms;
+﻿using Eto.Forms;
 using System;
 using System.Collections.Generic;
 using Eto.Drawing;
@@ -135,7 +135,7 @@ namespace FPLedit
 
             // Vorlagen laden
             templatePath = Settings.Get("tmpl.root", templatePath);
-            templateManager = new TemplateManager(registry, Logger, Settings);
+            templateManager = new TemplateManager(registry, this);
             templateManager.LoadTemplates(templatePath);
             if (OptionsParser.TemplateDebug)
                 Task.Run(() => Application.Instance.Invoke(() => templateManager.DebugCompileAll()));

@@ -12,45 +12,35 @@ namespace FPLedit.Templating
     internal class TemplateManager : ITemplateManager
     {
         private readonly RegisterStore store;
-        private readonly ILog logger;
-        private readonly ISettings settings;
+        private readonly IInfo info;
         private readonly List<string> enabledTemplates;
         private List<TemplateHost> templates;
 
-        public TemplateManager(RegisterStore store, ILog logger, ISettings settings)
+        public TemplateManager(RegisterStore store, IInfo info)
         {
             this.store = store;
-            this.logger = logger;
-            this.settings = settings;
+            this.info = info;
 
-            try
-            {
-                if (Directory.Exists(TemplateCompiler.CompilerTemp))
-                    Directory.Delete(TemplateCompiler.CompilerTemp, true);
-                Directory.CreateDirectory(TemplateCompiler.CompilerTemp);
-            }
-            catch { }
-
-            enabledTemplates = settings.Get("tmpl.enabled", "").Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            enabledTemplates = info.Settings.Get("tmpl.enabled", "").Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
         }
 
         public void LoadTemplates(string templateRoot)
         {
             // Registrierte (Standard-)Templates laden
             var instances = store.GetRegistered<ITemplateProxy>();
-            templates = instances.Select(t => new TemplateHost(t.GetTemplateCode(), t.TemplateIdentifier, logger, true)).ToList();
+            templates = instances.Select(t => new TemplateHost(t.GetTemplateCode(), t.TemplateIdentifier, this.info, true)).ToList();
 
             // Weitere Templates aus Dateien laden
             var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), templateRoot);
-            var info = new DirectoryInfo(path);
-            if (!info.Exists)
+            var dir = new DirectoryInfo(path);
+            if (!dir.Exists)
                 return;
 
-            var files = info.GetFiles("*.fpltmpl");
+            var files = dir.GetFiles("*.fpltmpl");
             foreach (var file in files)
             {
                 var content = File.ReadAllText(file.FullName);
-                templates.Add(new TemplateHost(content, file.Name, logger, enabledTemplates.Contains(file.Name)));
+                templates.Add(new TemplateHost(content, file.Name, this.info, enabledTemplates.Contains(file.Name)));
             }
         }
 
@@ -73,14 +63,14 @@ namespace FPLedit.Templating
             if (enabledTemplates.Contains(fn))
                 return;
             enabledTemplates.Add(fn);
-            settings.Set("tmpl.enabled", string.Join(";", enabledTemplates));
+            info.Settings.Set("tmpl.enabled", string.Join(";", enabledTemplates));
         }
 
         internal void DisableTemplate(ITemplate tmpl)
         {
             var fn = Path.GetFileName(tmpl.Identifier);
             enabledTemplates.Remove(fn);
-            settings.Set("tmpl.enabled", string.Join(";", enabledTemplates));
+            info.Settings.Set("tmpl.enabled", string.Join(";", enabledTemplates));
         }
     }
 }

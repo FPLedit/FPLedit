@@ -82,5 +82,9 @@ namespace FPLedit.Templating
             if (currentName != "")
                 throw new FormatException("Unvollständige Deklaration: " + args);
         }
+
+        public bool Require(params string[] keys) => keys.Any(k => !ParsedArgs.ContainsKey(k));
+
+        public string this[string idx] => ParsedArgs[idx];
     }
 }
