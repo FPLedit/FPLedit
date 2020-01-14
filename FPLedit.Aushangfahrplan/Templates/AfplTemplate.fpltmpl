@@ -1,6 +1,0 @@
-﻿<#@ fpledit-template type="afpl" name="Standard (DRG aus Malsch)" #>
-
-<#
-string abfahrtSVG = "Abfahrt";
-#>
-

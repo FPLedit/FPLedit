@@ -42,7 +42,7 @@ namespace FPLedit.Buchfahrplan.Templates
             return "&nbsp;&nbsp;" + days;
         }
 
-        public List<IStation> GetStations(Train train)
+        public IStation[] GetStations(Train train)
         {
             List<IStation> points = new List<IStation>();
             var fstations = train.GetPath().Where(s => filterable.LoadStationRules(tt).All(r => !r.Matches(s))); // Filter
@@ -73,7 +73,7 @@ namespace FPLedit.Buchfahrplan.Templates
                 points.InsertRange(points.IndexOf(sta0) + 1, pointsBetween);
                 i += pointsBetween.Count();
             }
-            return points;
+            return points.ToArray();
         }
 
         public Train[] GetTrains()

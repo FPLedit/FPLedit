@@ -8,33 +8,19 @@ namespace FPLedit.Buchfahrplan.Templates
     {
         public string TemplateIdentifier => "builtin:FPLedit.Buchfahrplan/Templates/StdTemplate.fpltmpl";
 
-        public string GetTemplateCode()
-        {
-            var a = Assembly.GetAssembly(GetType());
-            string name = "FPLedit.Buchfahrplan.Templates.StdTemplate.fpltmpl";
+        public string GetTemplateCode() => ResourceHelper.GetStringResource("Buchfahrplan.Templates.StdTemplate.fpltmpl")
+            .Replace("{{##WELLEN_CSS##}}", ResourceHelper.GetStringResource("Buchfahrplan.Resources.WellenCss.css"));
 
-            using (var stream = a.GetManifestResourceStream(name))
-            using (var sr = new StreamReader(stream))
-                return sr.ReadToEnd();
-        }
-        
-        public bool Javascript => false;
+        public bool Javascript => true;
     }
-
+    
     public class ZlbTemplate : ITemplateProxy
     {
         public string TemplateIdentifier => "builtin:FPLedit.Buchfahrplan/Templates/ZlbTemplate.fpltmpl";
 
-        public string GetTemplateCode()
-        {
-            var a = Assembly.GetAssembly(GetType());
-            string name = "FPLedit.Buchfahrplan.Templates.ZlbTemplate.fpltmpl";
+        public string GetTemplateCode() => ResourceHelper.GetStringResource("Buchfahrplan.Templates.ZlbTemplate.fpltmpl")
+            .Replace("{{##WELLEN_CSS##}}", ResourceHelper.GetStringResource("Buchfahrplan.Resources.WellenCss.css"));
 
-            using (var stream = a.GetManifestResourceStream(name))
-            using (var sr = new StreamReader(stream))
-                return sr.ReadToEnd();
-        }
-        
-        public bool Javascript => false;
+        public bool Javascript => true;
     }
 }
