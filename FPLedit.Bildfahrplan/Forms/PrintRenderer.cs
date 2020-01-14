@@ -11,7 +11,7 @@ namespace FPLedit.Bildfahrplan.Forms
 {
     internal class PrintRenderer : IDisposable
     {
-        private readonly IInfo info;
+        private readonly IPluginInterface pluginInterface;
         private readonly Timetable tt;
         private readonly int route;
         private readonly TimetableStyle attrs;
@@ -19,10 +19,10 @@ namespace FPLedit.Bildfahrplan.Forms
         private PrintDocument doc;
         private TimeSpan? last;
 
-        public PrintRenderer(IInfo info, int route)
+        public PrintRenderer(IPluginInterface pluginInterface, int route)
         {
-            this.info = info;
-            this.tt = info.Timetable;
+            this.pluginInterface = pluginInterface;
+            this.tt = pluginInterface.Timetable;
             this.route = route;
             attrs = new TimetableStyle(tt);
         }
@@ -36,7 +36,7 @@ namespace FPLedit.Bildfahrplan.Forms
         {
             using (var dlg = new PrintDialog { AllowSelection = false })
             {
-                if (dlg.ShowDialog(info.RootForm) == DialogResult.Ok)
+                if (dlg.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
                 {
                     doc = new PrintDocument();
                     doc.PrintPage += Doc_PrintPage;

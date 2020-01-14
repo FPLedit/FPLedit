@@ -19,7 +19,7 @@ using FPLedit.Extensibility;
 
 namespace FPLedit
 {
-    public class MainForm : FForm, IInfo, IRestartable, ILastFileHandler
+    public class MainForm : FForm, IPluginInterface, IRestartable, ILastFileHandler
     {
         #region Controls
 #pragma warning disable CS0649
@@ -337,8 +337,8 @@ namespace FPLedit
         }
         #endregion
 
-        #region IInfo
-        dynamic IInfo.Menu => Menu;
+        #region IPluginInterface
+        dynamic IPluginInterface.Menu => Menu;
 
         public ITemplateManager TemplateManager => templateManager;
 

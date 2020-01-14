@@ -12,9 +12,9 @@ namespace FPLedit.Aushangfahrplan
     {
         public string Filter => "Aushangfahrplan als HTML Datei (*.html)|*.html";
 
-        internal bool Exp(Timetable tt, string filename, IInfo info, bool tryout_console)
+        internal bool Exp(Timetable tt, string filename, IPluginInterface pluginInterface, bool tryout_console)
         {
-            var chooser = new AfplTemplateChooser(info);
+            var chooser = new AfplTemplateChooser(pluginInterface);
 
             ITemplate templ = chooser.GetTemplate(tt);
             string cont = templ.GenerateResult(tt);
@@ -30,7 +30,7 @@ namespace FPLedit.Aushangfahrplan
             return true;
         }
 
-        public bool Export(Timetable tt, string filename, IInfo info)
-            => Exp(tt, filename, info, false);
+        public bool Export(Timetable tt, string filename, IPluginInterface pluginInterface)
+            => Exp(tt, filename, pluginInterface, false);
     }
 }

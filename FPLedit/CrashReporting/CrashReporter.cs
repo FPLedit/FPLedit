@@ -15,11 +15,11 @@ namespace FPLedit.CrashReporting
         private const string CRASH_DIR = "crash/";
         private const string REPORT_DIR = CRASH_DIR + "report/";
 
-        private readonly IInfo info;
+        private readonly IPluginInterface pluginInterface;
 
-        public CrashReporter(IInfo info)
+        public CrashReporter(IPluginInterface pluginInterface)
         {
-            this.info = info;
+            this.pluginInterface = pluginInterface;
         }
 
         public void Report(CrashReport report)
@@ -27,23 +27,23 @@ namespace FPLedit.CrashReporting
             var reportText = report.Serialize();
             try
             {
-                var dir = info.GetTemp(REPORT_DIR);
+                var dir = pluginInterface.GetTemp(REPORT_DIR);
                 if (!Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
 
-                var fn_tt = info.GetTemp(REPORT_DIR + "crash_tt.fpl");
-                if (info.Timetable != null)
-                    new Shared.Filetypes.XMLExport().Export(info.Timetable, fn_tt, info);
+                var fn_tt = pluginInterface.GetTemp(REPORT_DIR + "crash_tt.fpl");
+                if (pluginInterface.Timetable != null)
+                    new Shared.Filetypes.XMLExport().Export(pluginInterface.Timetable, fn_tt, pluginInterface);
                 else if (File.Exists(fn_tt))
                     File.Delete(fn_tt);
 
-                var fn_report = info.GetTemp(REPORT_DIR + "crash_report.xml");
+                var fn_report = pluginInterface.GetTemp(REPORT_DIR + "crash_report.xml");
                 File.WriteAllText(fn_report, reportText);
 
-                var fn_fileinfo = info.GetTemp(CRASH_DIR + "crash.file");
-                File.WriteAllText(fn_fileinfo, info.FileState.FileName);
+                var fn_fileinfo = pluginInterface.GetTemp(CRASH_DIR + "crash.file");
+                File.WriteAllText(fn_fileinfo, pluginInterface.FileState.FileName);
 
-                var fn_crash = info.GetTemp(CRASH_DIR + "crash.flag");
+                var fn_crash = pluginInterface.GetTemp(CRASH_DIR + "crash.flag");
                 File.WriteAllText(fn_crash, "1");
 
                 MessageBox.Show("Es ist ein unerwarteter Fehler in FPLedit aufgetreten." + Environment.NewLine + Environment.NewLine +
@@ -65,19 +65,19 @@ namespace FPLedit.CrashReporting
         }
 
         // Crash flag
-        public bool HasCurrentReport => File.Exists(info.GetTemp(CRASH_DIR + "crash.flag"));
+        public bool HasCurrentReport => File.Exists(pluginInterface.GetTemp(CRASH_DIR + "crash.flag"));
 
-        public void RemoveCrashFlag() => File.Delete(info.GetTemp(CRASH_DIR + "crash.flag"));
+        public void RemoveCrashFlag() => File.Delete(pluginInterface.GetTemp(CRASH_DIR + "crash.flag"));
 
 
         // Timetable backup after Crash
-        public bool HasCurrentTtBackup => HasCurrentReport && File.Exists(info.GetTemp(REPORT_DIR + "crash_tt.fpl"));
+        public bool HasCurrentTtBackup => HasCurrentReport && File.Exists(pluginInterface.GetTemp(REPORT_DIR + "crash_tt.fpl"));
 
-        public string CrashTtFileName => HasCurrentTtBackup ? info.GetTemp(REPORT_DIR + "crash_tt.fpl") : throw new NotSupportedException();
+        public string CrashTtFileName => HasCurrentTtBackup ? pluginInterface.GetTemp(REPORT_DIR + "crash_tt.fpl") : throw new NotSupportedException();
 
-        public string OrigTtFileName => HasCurrentTtBackup ? File.ReadAllText(info.GetTemp(CRASH_DIR + "crash.file")) : throw new NotSupportedException();
+        public string OrigTtFileName => HasCurrentTtBackup ? File.ReadAllText(pluginInterface.GetTemp(CRASH_DIR + "crash.file")) : throw new NotSupportedException();
 
         // Repor file
-        public string ReportFn => HasCurrentReport ? info.GetTemp(REPORT_DIR + "crash_report.xml") : throw new NotSupportedException();
+        public string ReportFn => HasCurrentReport ? pluginInterface.GetTemp(REPORT_DIR + "crash_report.xml") : throw new NotSupportedException();
     }
 }

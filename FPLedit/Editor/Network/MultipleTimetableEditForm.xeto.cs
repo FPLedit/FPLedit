@@ -15,7 +15,7 @@ namespace FPLedit.Editor.Network
         private readonly SingleTimetableEditControl editor;
 #pragma warning restore CS0649
 
-        private readonly IInfo info;
+        private readonly IPluginInterface pluginInterface;
         private readonly object backupHandle;
 
         private MultipleTimetableEditForm()
@@ -32,16 +32,16 @@ namespace FPLedit.Editor.Network
                                       // Important: After AddCloseHandler, otherwise it will destroy Timetable instance in mpmode!
         }
 
-        public MultipleTimetableEditForm(IInfo info) : this()
+        public MultipleTimetableEditForm(IPluginInterface pluginInterface) : this()
         {
-            this.info = info;
-            backupHandle = info.BackupTimetable();
+            this.pluginInterface = pluginInterface;
+            backupHandle = pluginInterface.BackupTimetable();
 
             //editor.Initialize(info.Timetable, t);
             //Title = Title.Replace("{train}", t.TName);
 
             trainDropDown.ItemTextBinding = Binding.Property<Train, string>(tr => tr.TName);
-            trainDropDown.DataStore = info.Timetable.Trains;
+            trainDropDown.DataStore = pluginInterface.Timetable.Trains;
             trainDropDown.SelectedIndexChanged += TrainDropDown_SelectedIndexChanged;
             trainDropDown.SelectedIndex = 0;
         }
@@ -52,7 +52,7 @@ namespace FPLedit.Editor.Network
             if (editor.Initialized)
                 editor.ApplyChanges();
 
-            editor.Initialize(info.Timetable, t);
+            editor.Initialize(pluginInterface.Timetable, t);
         }
 
         #region Events
@@ -63,14 +63,14 @@ namespace FPLedit.Editor.Network
             if (!editor.ApplyChanges())
                 return;
 
-            info.ClearBackup(backupHandle);
+            pluginInterface.ClearBackup(backupHandle);
             this.NClose();
         }
 
         private void CancelButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Cancel;
-            info.RestoreTimetable(backupHandle);
+            pluginInterface.RestoreTimetable(backupHandle);
 
             this.NClose();
         }

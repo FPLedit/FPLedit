@@ -12,13 +12,13 @@ namespace FPLedit.Buchfahrplan.Forms
     {
         public string DisplayName => "Buchfahrplan";
 
-        public void Show(IInfo info)
+        public void Show(IPluginInterface pluginInterface)
         {
             HtmlExport exp = new HtmlExport();
-            string path = info.GetTemp("buchfahrplan.html");
+            string path = pluginInterface.GetTemp("buchfahrplan.html");
 
-            bool tryoutConsole = info.Settings.Get<bool>("bfpl.console");
-            bool success = exp.Exp(info.Timetable, path, info, tryoutConsole);
+            bool tryoutConsole = pluginInterface.Settings.Get<bool>("bfpl.console");
+            bool success = exp.Exp(pluginInterface.Timetable, path, pluginInterface, tryoutConsole);
 
             if (success)
                 OpenHelper.Open(path);

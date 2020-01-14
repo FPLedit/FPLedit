@@ -12,15 +12,15 @@ namespace FPLedit.Buchfahrplan.Forms
     {
         public string DisplayName => "Höchstgeschwindigkeiten ändern";
 
-        public void Show(IInfo info, Route route)
+        public void Show(IPluginInterface pluginInterface, Route route)
         {
-            info.StageUndoStep();
-            using (var svf = new VelocityForm(info, route))
+            pluginInterface.StageUndoStep();
+            using (var svf = new VelocityForm(pluginInterface, route))
                 if (svf.ShowModal() == DialogResult.Ok)
-                    info.SetUnsaved();
+                    pluginInterface.SetUnsaved();
         }
 
-        public bool IsEnabled(IInfo info)
-            => info.FileState.Opened;
+        public bool IsEnabled(IPluginInterface pluginInterface)
+            => pluginInterface.FileState.Opened;
     }
 }

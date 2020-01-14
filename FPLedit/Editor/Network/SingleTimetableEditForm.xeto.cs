@@ -14,7 +14,7 @@ namespace FPLedit.Editor.Network
         private readonly SingleTimetableEditControl editor;
 #pragma warning restore CS0649
 
-        private readonly IInfo info;
+        private readonly IPluginInterface pluginInterface;
         private readonly object backupHandle;
 
         private SingleTimetableEditForm()
@@ -31,12 +31,12 @@ namespace FPLedit.Editor.Network
                                       // Important: After AddCloseHandler, otherwise it will destroy Timetable instance in mpmode!
         }
 
-        public SingleTimetableEditForm(IInfo info, Train t) : this()
+        public SingleTimetableEditForm(IPluginInterface pluginInterface, Train t) : this()
         {
-            this.info = info;
-            backupHandle = info.BackupTimetable();
+            this.pluginInterface = pluginInterface;
+            backupHandle = pluginInterface.BackupTimetable();
 
-            editor.Initialize(info.Timetable, t);
+            editor.Initialize(pluginInterface.Timetable, t);
             Title = Title.Replace("{train}", t.TName);
         }
 
@@ -48,14 +48,14 @@ namespace FPLedit.Editor.Network
             if (!editor.ApplyChanges())
                 return;
 
-            info.ClearBackup(backupHandle);
+            pluginInterface.ClearBackup(backupHandle);
             this.NClose();
         }
 
         private void CancelButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Cancel;
-            info.RestoreTimetable(backupHandle);
+            pluginInterface.RestoreTimetable(backupHandle);
 
             this.NClose();
         }

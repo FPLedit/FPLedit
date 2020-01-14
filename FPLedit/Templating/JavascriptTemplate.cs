@@ -19,16 +19,16 @@ namespace FPLedit.Templating
         public string TemplateSource { get; }
         public string CompiledCode { get; }
 
-        private readonly IInfo info;
+        private readonly IPluginInterface pluginInterface;
         private readonly string nl = Environment.NewLine;
 
         private const int CURRENT_VERSION = 2;
 
-        public JavascriptTemplate(string code, string identifier, IInfo info)
+        public JavascriptTemplate(string code, string identifier, IPluginInterface pluginInterface)
         {
             TemplateSource = code;
             Identifier = identifier;
-            this.info = info;
+            this.pluginInterface = pluginInterface;
 
             CompiledCode = ParseTemplate();
         }
@@ -123,7 +123,7 @@ namespace FPLedit.Templating
         public string GenerateResult(Timetable tt)
         {
             // Allowed types whitlisted by extensions (for this specific template type or generic (e-.g. type == null)).
-            var extensionAllowedTypes = info.GetRegistered<ITemplateWhitelist>()
+            var extensionAllowedTypes = pluginInterface.GetRegistered<ITemplateWhitelist>()
                 .Where(w => w.TemplateType == TemplateType || w.TemplateType == null)
                 .Select(w => w.GetWhitelistType());
             // Globally whitelisted: From FPLedit.Shared, marked with TemplateSafeAttribute.
@@ -140,8 +140,8 @@ namespace FPLedit.Templating
 
             return engine
                 .SetValue("tt", tt)
-                .SetValue("debug", new Action<object>((o) => info.Logger.Info($"{o?.GetType()?.FullName ?? "null"}: {o ?? "null"}")))
-                .SetValue("debug_print", new Action<object>((o) => info.Logger.Info($"{o}")))
+                .SetValue("debug", new Action<object>((o) => pluginInterface.Logger.Info($"{o?.GetType()?.FullName ?? "null"}: {o ?? "null"}")))
+                .SetValue("debug_print", new Action<object>((o) => pluginInterface.Logger.Info($"{o}")))
                 .SetValue("clr_typename", new Func<object,string>(o => o.GetType().Name))
                 .SetValue("clr_typefullname", new Func<object,string>(o => o.GetType().FullName))
                 .Execute(ResourceHelper.GetStringResource("Templating.TemplatePolyfills.js")) // Load polyfills

@@ -11,9 +11,9 @@ namespace FPLedit.Logger
     {
         private readonly string filename;
 
-        public TempLogger(IInfo info)
+        public TempLogger(IPluginInterface pluginInterface)
         {
-            filename = info.GetTemp("fpledit_log.txt");
+            filename = pluginInterface.GetTemp("fpledit_log.txt");
 
             var fi = new FileInfo(filename);
             if (fi.Exists && fi.Length > 10240) // > 10KB

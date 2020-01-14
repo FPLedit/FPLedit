@@ -9,8 +9,8 @@ namespace FPLedit.Shared.Ui
     {
         string DisplayName { get; }
 
-        void Show(IInfo info, Route route);
+        void Show(IPluginInterface pluginInterface, Route route);
 
-        bool IsEnabled(IInfo info);
+        bool IsEnabled(IPluginInterface pluginInterface);
     }
 }

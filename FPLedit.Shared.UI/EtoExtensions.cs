@@ -13,9 +13,9 @@ namespace FPLedit.Shared.UI
     public static class EtoExtensions
     {
         private static SizeManager sizeManager;
-        public static void Initialize(IInfo info)
+        public static void Initialize(IPluginInterface pluginInterface)
         {
-            sizeManager = new SizeManager(info.Settings);
+            sizeManager = new SizeManager(pluginInterface.Settings);
         }
 
 #pragma warning disable IDE0060 // Nicht verwendete Parameter entfernen

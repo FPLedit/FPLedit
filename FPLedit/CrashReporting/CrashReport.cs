@@ -63,13 +63,13 @@ namespace FPLedit.CrashReporting
         {
         }
 
-        internal ExtensionInfo(PluginInfo info)
+        internal ExtensionInfo(PluginInfo plugin)
         {
-            Name = info.Name;
-            Author = info.Author;
-            Version = info.Version;
-            Url = info.Url;
-            FullName = info.FullName;
+            Name = plugin.Name;
+            Author = plugin.Author;
+            Version = plugin.Version;
+            Url = plugin.Url;
+            FullName = plugin.FullName;
         }
 
         public string Name { get; set; }

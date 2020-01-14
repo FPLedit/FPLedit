@@ -11,7 +11,7 @@ namespace FPLedit.Bildfahrplan.Forms
 {
     public partial class StationStyleForm : FDialog<DialogResult>
     {
-        private readonly IInfo info;
+        private readonly IPluginInterface pluginInterface;
         private readonly Timetable tt;
         private readonly TimetableStyle attrs;
         private readonly ColorCollection cc;
@@ -22,16 +22,16 @@ namespace FPLedit.Bildfahrplan.Forms
         private readonly GridView gridView;
 #pragma warning restore CS0649
 
-        public StationStyleForm(IInfo info)
+        public StationStyleForm(IPluginInterface pluginInterface)
         {
-            this.info = info;
-            tt = info.Timetable;
+            this.pluginInterface = pluginInterface;
+            tt = pluginInterface.Timetable;
             attrs = new TimetableStyle(tt);
-            backupHandle = info.BackupTimetable();
+            backupHandle = pluginInterface.BackupTimetable();
 
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            cc = new ColorCollection(info.Settings);
+            cc = new ColorCollection(pluginInterface.Settings);
             ds = new DashStyleHelper();
 
             gridView.AddColumn<Station>(t => t.SName, "Name");
@@ -58,7 +58,7 @@ namespace FPLedit.Bildfahrplan.Forms
             {
                 var station = (Station)gridView.SelectedItem;
 
-                using (var sef = new StationStyleEditForm(station, info.Settings))
+                using (var sef = new StationStyleEditForm(station, pluginInterface.Settings))
                     if (sef.ShowModal(this) == DialogResult.Ok)
                         UpdateStations();
             }
@@ -69,14 +69,14 @@ namespace FPLedit.Bildfahrplan.Forms
         private void CancelButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Cancel;
-            info.RestoreTimetable(backupHandle);
+            pluginInterface.RestoreTimetable(backupHandle);
             this.NClose();
         }
 
         private void CloseButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Ok;
-            info.ClearBackup(backupHandle);
+            pluginInterface.ClearBackup(backupHandle);
             this.NClose();
         }
 

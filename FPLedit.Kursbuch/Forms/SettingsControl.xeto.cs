@@ -31,12 +31,12 @@ namespace FPLedit.Kursbuch.Forms
 
         private readonly Dictionary<int, string> setRouteNumbers;
 
-        public SettingsControl(Timetable tt, IInfo info)
+        public SettingsControl(Timetable tt, IPluginInterface pluginInterface)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            settings = info.Settings;
-            chooser = new KfplTemplateChooser(info);
+            settings = pluginInterface.Settings;
+            chooser = new KfplTemplateChooser(pluginInterface);
             templateComboBox.ItemTextBinding = Binding.Property<ITemplate, string>(t => t.TemplateName);
             templateComboBox.DataStore = chooser.AvailableTemplates;
 

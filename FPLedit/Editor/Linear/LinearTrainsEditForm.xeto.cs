@@ -10,7 +10,7 @@ namespace FPLedit.Editor.Linear
 {
     internal class LinearTrainsEditForm : BaseTrainsEditor
     {
-        private readonly IInfo info;
+        private readonly IPluginInterface pluginInterface;
         private readonly Timetable tt;
         private readonly object backupHandle;
 
@@ -24,12 +24,12 @@ namespace FPLedit.Editor.Linear
 
         private GridView active;
 
-        public LinearTrainsEditForm(IInfo info) : base(info.Timetable)
+        public LinearTrainsEditForm(IPluginInterface pluginInterface) : base(pluginInterface.Timetable)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
-            this.info = info;
-            tt = info.Timetable;
-            backupHandle = info.BackupTimetable();
+            this.pluginInterface = pluginInterface;
+            tt = pluginInterface.Timetable;
+            backupHandle = pluginInterface.BackupTimetable();
 
             InitListView(topGridView);
             InitListView(bottomGridView);
@@ -85,7 +85,7 @@ namespace FPLedit.Editor.Linear
 
         private void CloseButton_Click(object sender, EventArgs e)
         {
-            info.ClearBackup(backupHandle);
+            pluginInterface.ClearBackup(backupHandle);
             Result = DialogResult.Ok;
             this.NClose();
         }
@@ -93,7 +93,7 @@ namespace FPLedit.Editor.Linear
         private void CancelButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Cancel;
-            info.RestoreTimetable(backupHandle);
+            pluginInterface.RestoreTimetable(backupHandle);
             this.NClose();
         }
 

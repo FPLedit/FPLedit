@@ -12,9 +12,9 @@ namespace FPLedit.Kursbuch.Forms
     {
         public string DisplayName => "Kursbuch";
 
-        public Control GetControl(IInfo info)
+        public Control GetControl(IPluginInterface pluginInterface)
         {
-            return new SettingsControl(info.Timetable, info);
+            return new SettingsControl(pluginInterface.Timetable, pluginInterface);
         }
     }
 }

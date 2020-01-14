@@ -17,7 +17,7 @@ namespace FPLedit.Buchfahrplan.Forms
         private readonly Button deleteButton;
 #pragma warning restore CS0649
 
-        private readonly IInfo info;
+        private readonly IPluginInterface pluginInterface;
         private readonly Route route;
         private readonly Timetable tt;
         private readonly BfplAttrs attrs;
@@ -40,10 +40,10 @@ namespace FPLedit.Buchfahrplan.Forms
             this.AddSizeStateHandler();
         }
 
-        public VelocityForm(IInfo info, Route route) : this()
+        public VelocityForm(IPluginInterface pluginInterface, Route route) : this()
         {
-            this.info = info;
-            tt = info.Timetable;
+            this.pluginInterface = pluginInterface;
+            tt = pluginInterface.Timetable;
             this.route = route;
 
             attrs = BfplAttrs.GetAttrs(tt);
@@ -53,7 +53,7 @@ namespace FPLedit.Buchfahrplan.Forms
                 tt.Children.Add(attrs.XMLEntity);
             }
 
-            backupHandle = info.BackupTimetable();
+            backupHandle = pluginInterface.BackupTimetable();
             UpdateListView();
         }
 
@@ -131,14 +131,14 @@ namespace FPLedit.Buchfahrplan.Forms
         private void CancelButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Cancel;
-            info.RestoreTimetable(backupHandle);
+            pluginInterface.RestoreTimetable(backupHandle);
             this.NClose();
         }
 
         private void CloseButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Ok;
-            info.ClearBackup(backupHandle);
+            pluginInterface.ClearBackup(backupHandle);
 
             this.NClose();
         }

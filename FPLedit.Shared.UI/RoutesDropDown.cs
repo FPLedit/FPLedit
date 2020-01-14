@@ -7,15 +7,15 @@ namespace FPLedit.Shared.UI
 {
     public class RoutesDropDown : DropDown
     {
-        private IInfo info;
+        private IPluginInterface pluginInterface;
         private string lastFn;
         private int selectedRoute;
 
-        public void Initialize(IInfo info)
+        public void Initialize(IPluginInterface pluginInterface)
         {
-            this.info = info;
+            this.pluginInterface = pluginInterface;
 
-            info.FileStateChanged += (s, e) =>
+            pluginInterface.FileStateChanged += (s, e) =>
             {
                 ReloadRouteNames(lastFn != e.FileState.FileName);
                 lastFn = e.FileState.FileName;
@@ -40,7 +40,7 @@ namespace FPLedit.Shared.UI
             get => selectedRoute;
             set
             {
-                var routes = GetRouteNames(info.Timetable);
+                var routes = GetRouteNames(pluginInterface.Timetable);
 
                 if (!routes.Any(r => (int)r.Tag == value))
                     throw new ArgumentOutOfRangeException($"Route {value} does not exist");
@@ -77,7 +77,7 @@ namespace FPLedit.Shared.UI
 
         private void ReloadRouteNames(bool forceReload)
         {
-            if (info.Timetable == null)
+            if (pluginInterface.Timetable == null)
             {
                 Items.Clear();
                 return;
@@ -86,7 +86,7 @@ namespace FPLedit.Shared.UI
             int oldSelected = -1;
             if (SelectedValue != null)
                 oldSelected = (int)((ListItem)SelectedValue).Tag;
-            var routes = GetRouteNames(info.Timetable);
+            var routes = GetRouteNames(pluginInterface.Timetable);
             Items.Clear();
             Items.AddRange(routes);
 

@@ -13,7 +13,7 @@ namespace FPLedit.Buchfahrplan
     {
         public string DisplayName => "Buchfahrplan";
 
-        public Control GetControl(IInfo info)
-            => new SettingsControl(info.Timetable, info);
+        public Control GetControl(IPluginInterface pluginInterface)
+            => new SettingsControl(pluginInterface.Timetable, pluginInterface);
     }
 }

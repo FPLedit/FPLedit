@@ -12,13 +12,13 @@ namespace FPLedit.Aushangfahrplan.Forms
     {
         public string DisplayName => "Aushangfahrplan";
 
-        public void Show(IInfo info)
+        public void Show(IPluginInterface pluginInterface)
         {
             HtmlExport exp = new HtmlExport();
-            string path = info.GetTemp("afpl.html");
+            string path = pluginInterface.GetTemp("afpl.html");
 
-            bool tryoutConsole = info.Settings.Get<bool>("afpl.console");
-            bool success = exp.Exp(info.Timetable, path, info, tryoutConsole);
+            bool tryoutConsole = pluginInterface.Settings.Get<bool>("afpl.console");
+            bool success = exp.Exp(pluginInterface.Timetable, path, pluginInterface, tryoutConsole);
 
             if (success)
                 OpenHelper.Open(path);

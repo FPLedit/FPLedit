@@ -38,16 +38,16 @@ namespace FPLedit.Editor.Network
 
         private readonly RouteEditState stateSetRoute, stateChangeRoute, stateAddWaypoints;
 
-        private TrainPathForm(IInfo info, bool waypointsAllowed, Train train = null)
+        private TrainPathForm(IPluginInterface pluginInterface, bool waypointsAllowed, Train train = null)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            pathfinder = new Pathfinder(info.Timetable);
+            pathfinder = new Pathfinder(pluginInterface.Timetable);
 
             networkRenderer.StationMovingEnabled = false;
             networkRenderer.HighlightBetweenStations = true;
             networkRenderer.SelectedRoute = -1;
-            networkRenderer.SetTimetable(info.Timetable);
+            networkRenderer.SetTimetable(pluginInterface.Timetable);
             networkRenderer.DisableTopBorder = true;
             networkRenderer.StationClicked += HandleStationClick;
 
@@ -89,9 +89,9 @@ namespace FPLedit.Editor.Network
             this.AddSizeStateHandler();
         }
 
-        public static TrainPathForm EditPath(IInfo info, Train tra)
+        public static TrainPathForm EditPath(IPluginInterface pluginInterface, Train tra)
         {
-            var tpf = new TrainPathForm(info, false, tra); // Disable waypoints, because we don't know old waypoints
+            var tpf = new TrainPathForm(pluginInterface, false, tra); // Disable waypoints, because we don't know old waypoints
             tpf.Title = tpf.Title.Replace("{train}", tra.TName);
 
             tpf.Transition(tpf.stateChangeRoute);
@@ -99,9 +99,9 @@ namespace FPLedit.Editor.Network
             return tpf;
         }
 
-        public static TrainPathForm NewTrain(IInfo info)
+        public static TrainPathForm NewTrain(IPluginInterface pluginInterface)
         {
-            var tpf = new TrainPathForm(info, info.Timetable.HasRouteCycles) // Set waypoints state according to timetable
+            var tpf = new TrainPathForm(pluginInterface, pluginInterface.Timetable.HasRouteCycles) // Set waypoints state according to timetable
             {
                 Title = "Fahrtstrecke für neuen Zug auswählen"
             };

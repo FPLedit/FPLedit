@@ -7,7 +7,7 @@ namespace FPLedit.Shared
 {
     public interface IImport
     {
-        Timetable Import(string filename, IInfo info, ILog replaceLog = null);
+        Timetable Import(string filename, IPluginInterface pluginInterface, ILog replaceLog = null);
 
         string Filter { get; }
     }

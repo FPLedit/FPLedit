@@ -47,9 +47,9 @@ namespace FPLedit.NonDefaultFiletypes
             return elm;
         }
 
-        public bool Export(Timetable tt, string filename, IInfo info)
+        public bool Export(Timetable tt, string filename, IPluginInterface pluginInterface)
         {
-            if (info.Timetable.Type == TimetableType.Network)
+            if (pluginInterface.Timetable.Type == TimetableType.Network)
             {
                 MessageBox.Show("Der aktuelle Fahrplan ist ein Netzwerk-Fahrplan. Aus diesem erweiterten Fahrplanformat können aus technischen Gründen nicht alle von FPLedit angelegten Daten gelöscht werden.");
                 return false;
@@ -61,7 +61,7 @@ namespace FPLedit.NonDefaultFiletypes
             if (res == DialogResult.No)
                 return false;
 
-            bool debug = info.Settings.Get<bool>("xml.indent");
+            bool debug = pluginInterface.Settings.Get<bool>("xml.indent");
 #if DEBUG
             debug = true;
 #endif
@@ -80,7 +80,7 @@ namespace FPLedit.NonDefaultFiletypes
             }
             catch (Exception ex)
             {
-                info.Logger.Error("XMLExport: " + ex.Message);
+                pluginInterface.Logger.Error("XMLExport: " + ex.Message);
                 return false;
             }
         }

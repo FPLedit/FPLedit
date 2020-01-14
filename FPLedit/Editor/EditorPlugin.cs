@@ -11,7 +11,7 @@ namespace FPLedit.Editor
 {
     public class EditorPlugin : IPlugin
     {
-        private IInfo info;
+        private IPluginInterface pluginInterface;
 
         private int dialogOffset;
         private IEditingDialog[] dialogs;
@@ -21,85 +21,85 @@ namespace FPLedit.Editor
         private ButtonMenuItem editTrainsItem, designItem, filterItem; // Type="Both"
         private ButtonMenuItem editRoot, previewRoot, undoItem; // Type="Both"
 
-        public void Init(IInfo info)
+        public void Init(IPluginInterface pluginInterface)
         {
-            this.info = info;
-            info.FileStateChanged += Info_FileStateChanged;
-            info.ExtensionsLoaded += Info_ExtensionsLoaded;
+            this.pluginInterface = pluginInterface;
+            pluginInterface.FileStateChanged += PluginInterface_FileStateChanged;
+            pluginInterface.ExtensionsLoaded += PluginInterface_ExtensionsLoaded;
 
-            info.Register<IExport>(new FPLedit.NonDefaultFiletypes.CleanedXMLExport());
-            info.Register<ITimetableCheck>(new FPLedit.TimetableChecks.TransitionsCheck());
-            info.Register<ITimetableCheck>(new FPLedit.TimetableChecks.DayOverflowCheck());
-            info.Register<ITimetableInitAction>(new FPLedit.TimetableChecks.UpdateColorsAction());
-            info.Register<ITimetableInitAction>(new FPLedit.TimetableChecks.FixNetworkAttributesAction());
+            pluginInterface.Register<IExport>(new FPLedit.NonDefaultFiletypes.CleanedXMLExport());
+            pluginInterface.Register<ITimetableCheck>(new FPLedit.TimetableChecks.TransitionsCheck());
+            pluginInterface.Register<ITimetableCheck>(new FPLedit.TimetableChecks.DayOverflowCheck());
+            pluginInterface.Register<ITimetableInitAction>(new FPLedit.TimetableChecks.UpdateColorsAction());
+            pluginInterface.Register<ITimetableInitAction>(new FPLedit.TimetableChecks.FixNetworkAttributesAction());
 
-            if (Environment.OSVersion.Platform != PlatformID.Win32NT || info.Settings.Get<bool>("mp-compat.route-edit-button"))
-                info.Register<IRouteAction>(new Network.EditRouteAction());
+            if (Environment.OSVersion.Platform != PlatformID.Win32NT || pluginInterface.Settings.Get<bool>("mp-compat.route-edit-button"))
+                pluginInterface.Register<IRouteAction>(new Network.EditRouteAction());
 
-            editRoot = ((MenuBar)info.Menu).CreateItem("Bearbeiten");
+            editRoot = ((MenuBar)pluginInterface.Menu).CreateItem("Bearbeiten");
 
-            undoItem = editRoot.CreateItem("Rückgängig", enabled: false, clickHandler: (s, e) => info.Undo());
+            undoItem = editRoot.CreateItem("Rückgängig", enabled: false, clickHandler: (s, e) => pluginInterface.Undo());
             undoItem.Shortcut = Keys.Control | Keys.Z;
 
             editRoot.Items.Add(new SeparatorMenuItem());
 
             editLineItem = editRoot.CreateItem("Strecke bearbeiten (linear)", enabled: false,
-                clickHandler: (s, e) => ShowForm(new LineEditForm(info, Timetable.LINEAR_ROUTE_ID)));
+                clickHandler: (s, e) => ShowForm(new LineEditForm(pluginInterface, Timetable.LINEAR_ROUTE_ID)));
 
             editTrainsItem = editRoot.CreateItem("Züge bearbeiten", enabled: false);
             editTrainsItem.Click += (s, e) =>
             {
-                if (info.Timetable.Type == TimetableType.Linear)
-                    ShowForm(new Linear.LinearTrainsEditForm(info));
-                else ShowForm(new Network.NetworkTrainsEditForm(info));
+                if (pluginInterface.Timetable.Type == TimetableType.Linear)
+                    ShowForm(new Linear.LinearTrainsEditForm(pluginInterface));
+                else ShowForm(new Network.NetworkTrainsEditForm(pluginInterface));
             };
 
             editTimetableItem = editRoot.CreateItem("Fahrplan bearbeiten", enabled: false);
             editTimetableItem.Click += (s, e) =>
             {
-                if (info.Timetable.Type == TimetableType.Linear)
-                    ShowForm(new Linear.LinearTimetableEditForm(info));
-                else ShowForm(new Network.MultipleTimetableEditForm(info));
+                if (pluginInterface.Timetable.Type == TimetableType.Linear)
+                    ShowForm(new Linear.LinearTimetableEditForm(pluginInterface));
+                else ShowForm(new Network.MultipleTimetableEditForm(pluginInterface));
             };
 
             editRoot.Items.Add(new SeparatorMenuItem());
 
-            designItem = editRoot.CreateItem("Fahrplandarstellung", enabled: false, clickHandler: (s, e) => ShowForm(new RenderSettingsForm(info)));
-            filterItem = editRoot.CreateItem("Filterregeln", enabled: false, clickHandler: (s, e) => ShowForm(new Filters.FilterForm(info)));
+            designItem = editRoot.CreateItem("Fahrplandarstellung", enabled: false, clickHandler: (s, e) => ShowForm(new RenderSettingsForm(pluginInterface)));
+            filterItem = editRoot.CreateItem("Filterregeln", enabled: false, clickHandler: (s, e) => ShowForm(new Filters.FilterForm(pluginInterface)));
 
-            previewRoot = ((MenuBar)info.Menu).CreateItem("Vorschau");
+            previewRoot = ((MenuBar)pluginInterface.Menu).CreateItem("Vorschau");
         }
 
         private void ShowForm(Dialog<DialogResult> form)
         {
-            info.StageUndoStep();
+            pluginInterface.StageUndoStep();
             if (form.ShowModal(Program.App.MainForm) == DialogResult.Ok)
-                info.SetUnsaved();
+                pluginInterface.SetUnsaved();
             form.Dispose();
         }
 
-        private void Info_ExtensionsLoaded(object sender, EventArgs e)
+        private void PluginInterface_ExtensionsLoaded(object sender, EventArgs e)
         {
-            var previewables = info.GetRegistered<IPreviewable>();
+            var previewables = pluginInterface.GetRegistered<IPreviewable>();
             if (previewables.Length == 0)
-                info.Menu.Items.Remove(previewRoot); // Ausblenden in der harten Art
+                pluginInterface.Menu.Items.Remove(previewRoot); // Ausblenden in der harten Art
 
             foreach (var prev in previewables)
-                previewRoot.CreateItem(prev.DisplayName, enabled: false, clickHandler: (s, ev) => prev.Show(info));
+                previewRoot.CreateItem(prev.DisplayName, enabled: false, clickHandler: (s, ev) => prev.Show(pluginInterface));
 
-            dialogs = info.GetRegistered<IEditingDialog>();
+            dialogs = pluginInterface.GetRegistered<IEditingDialog>();
             if (dialogs.Length > 0)
                 editRoot.Items.Add(new SeparatorMenuItem());
 
             dialogOffset = editRoot.Items.Count;
             foreach (var dialog in dialogs)
-                editRoot.CreateItem(dialog.DisplayName, enabled: dialog.IsEnabled(info), clickHandler: (s, ev) => dialog.Show(info));
+                editRoot.CreateItem(dialog.DisplayName, enabled: dialog.IsEnabled(pluginInterface), clickHandler: (s, ev) => dialog.Show(pluginInterface));
 
-            hasFilterables = info.GetRegistered<IFilterableUi>().Length > 0;
-            hasDesignables = info.GetRegistered<IDesignableUiProxy>().Length > 0;
+            hasFilterables = pluginInterface.GetRegistered<IFilterableUi>().Length > 0;
+            hasDesignables = pluginInterface.GetRegistered<IDesignableUiProxy>().Length > 0;
         }
 
-        private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)
+        private void PluginInterface_FileStateChanged(object sender, FileStateChangedEventArgs e)
         {
             editLineItem.Enabled = e.FileState.Opened;
             editTrainsItem.Enabled = e.FileState.Opened && e.FileState.LineCreated;
@@ -114,12 +114,12 @@ namespace FPLedit.Editor
             for (int i = 0; i < dialogs.Length; i++)
             {
                 var elem = editRoot.Items[dialogOffset + i];
-                elem.Enabled = dialogs[i].IsEnabled(info);
+                elem.Enabled = dialogs[i].IsEnabled(pluginInterface);
             }
 
             // Im Netzwerk-Modus nicht verwendete Menü-Einträge ausblenden
-            if (info.Timetable != null)
-                editLineItem.Enabled = info.Timetable.Type != TimetableType.Network;
+            if (pluginInterface.Timetable != null)
+                editLineItem.Enabled = pluginInterface.Timetable.Type != TimetableType.Network;
         }
     }
 }

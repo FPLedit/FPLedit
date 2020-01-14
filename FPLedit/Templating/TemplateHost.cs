@@ -25,15 +25,15 @@ namespace FPLedit.Templating
 
         public bool Enabled { get; private set; }
 
-        public TemplateHost(string content, string identifier, IInfo info, bool enabled)
+        public TemplateHost(string content, string identifier, IPluginInterface pluginInterface, bool enabled)
         {
-            logger = info.Logger;
+            logger = pluginInterface.Logger;
             Identifier = identifier;
             Enabled = enabled;
             
             try
             {
-                tmpl = new JavascriptTemplate(content, identifier, info);
+                tmpl = new JavascriptTemplate(content, identifier, pluginInterface);
                 
                 if (tmpl?.TemplateType == null)
                     logger.Warning(

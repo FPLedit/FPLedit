@@ -41,8 +41,8 @@ namespace FPLedit
 
         private static void UnhandledException(object sender, Eto.UnhandledExceptionEventArgs e)
         {
-            var info = new CrashReport(mainForm.extensionManager, e.ExceptionObject as Exception);
-            crashReporter.Report(info);
+            var report = new CrashReport(mainForm.extensionManager, e.ExceptionObject as Exception);
+            crashReporter.Report(report);
 
             ExceptionQuit = true;
             Process.Start(Assembly.GetEntryAssembly().Location);

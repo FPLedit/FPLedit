@@ -11,7 +11,7 @@ namespace FPLedit.Editor.Rendering
 {
     public class NetworkEditingControl : Panel
     {
-        private IInfo info;
+        private IPluginInterface pluginInterface;
 
 #pragma warning disable CS0649
         private readonly RoutesDropDown routesDropDown;
@@ -26,28 +26,28 @@ namespace FPLedit.Editor.Rendering
             Eto.Serialization.Xaml.XamlReader.Load(this);
         }
 
-        public void Initialize(IInfo info)
+        public void Initialize(IPluginInterface pluginInterface)
         {
-            this.info = info;
-            routesDropDown.Initialize(info);
-            info.FileStateChanged += (s, e) =>
+            this.pluginInterface = pluginInterface;
+            routesDropDown.Initialize(pluginInterface);
+            pluginInterface.FileStateChanged += (s, e) =>
             {
                 ReloadTimetable();
                 newButton.Enabled = routesDropDown.Enabled = newLineButton.Enabled = e.FileState.Opened;
-                routesDropDown.Visible = info.FileState.Opened;
+                routesDropDown.Visible = pluginInterface.FileState.Opened;
 
-                newLineButton.Visible = joinLineButton.Visible = divider1.Visible = routesDropDown.Visible = info.FileState.Opened && info.Timetable.Type == TimetableType.Network;
-                newLineButton.Enabled = joinLineButton.Enabled = info.FileState.Opened && info.Timetable.Type == TimetableType.Network && info.Timetable.GetRoutes().Any();
+                newLineButton.Visible = joinLineButton.Visible = divider1.Visible = routesDropDown.Visible = pluginInterface.FileState.Opened && pluginInterface.Timetable.Type == TimetableType.Network;
+                newLineButton.Enabled = joinLineButton.Enabled = pluginInterface.FileState.Opened && pluginInterface.Timetable.Type == TimetableType.Network && pluginInterface.Timetable.GetRoutes().Any();
 
                 foreach (Control c in toolbar.Controls)
                 {
                     if (c.Tag is IRouteAction act)
-                        c.Enabled = act.IsEnabled(info);
+                        c.Enabled = act.IsEnabled(pluginInterface);
                 }
             };
-            info.ExtensionsLoaded += (s, e) =>
+            pluginInterface.ExtensionsLoaded += (s, e) =>
             {
-                var actions = info.GetRegistered<IRouteAction>();
+                var actions = pluginInterface.GetRegistered<IRouteAction>();
                 if (actions.Length > 0)
                     toolbar.Items.Add(new Divider());
 
@@ -58,8 +58,8 @@ namespace FPLedit.Editor.Rendering
                         Text = action.DisplayName,
                         Tag = action,
                     };
-                    btn.Enabled = action.IsEnabled(info);
-                    btn.Click += (se, ev) => action.Show(info, info.Timetable?.GetRoute(routesDropDown.SelectedRoute));
+                    btn.Enabled = action.IsEnabled(pluginInterface);
+                    btn.Click += (se, ev) => action.Show(pluginInterface, pluginInterface.Timetable?.GetRoute(routesDropDown.SelectedRoute));
                     toolbar.Items.Add(btn);
                 }
             };
@@ -67,12 +67,12 @@ namespace FPLedit.Editor.Rendering
             routesDropDown.SelectedRouteChanged += (s, e) =>
             {
                 networkRenderer.SelectedRoute = routesDropDown.SelectedRoute;
-                info.FileState.SelectedRoute = routesDropDown.SelectedRoute;
+                pluginInterface.FileState.SelectedRoute = routesDropDown.SelectedRoute;
             };
 
             networkRenderer.StationDoubleClicked += (s, e) =>
             {
-                info.StageUndoStep();
+                pluginInterface.StageUndoStep();
                 var sta = (Station)s;
                 var r = routesDropDown.SelectedRoute;
                 if (sta.Routes.Length == 1)
@@ -87,7 +87,7 @@ namespace FPLedit.Editor.Rendering
                 if (nsf.ShowModal(this) == DialogResult.Ok)
                 {
                     ReloadTimetable();
-                    info.SetUnsaved();
+                    pluginInterface.SetUnsaved();
                 }
             };
             networkRenderer.StationRightClicked += (s, e) =>
@@ -96,58 +96,58 @@ namespace FPLedit.Editor.Rendering
                 var itm = menu.CreateItem("Löschen");
                 itm.Click += (se, ar) =>
                 {
-                    info.StageUndoStep();
-                    info.Timetable.RemoveStation((Station)s);
+                    pluginInterface.StageUndoStep();
+                    pluginInterface.Timetable.RemoveStation((Station)s);
                     ReloadTimetable();
-                    info.SetUnsaved();
+                    pluginInterface.SetUnsaved();
                 };
                 menu.Show(this);
             };
             networkRenderer.NewRouteAdded += (s, args) =>
             {
-                (info.FileState as FileState).Saved = false;
+                (pluginInterface.FileState as FileState).Saved = false;
                 routesDropDown.SelectedRoute = args.Value;
             };
-            networkRenderer.StationMoveEnd += (s, args) => (info.FileState as FileState).Saved = false;
+            networkRenderer.StationMoveEnd += (s, args) => (pluginInterface.FileState as FileState).Saved = false;
             newButton.Click += (s, e) =>
             {
-                info.StageUndoStep();
-                var nsf = new EditStationForm(info.Timetable, routesDropDown.SelectedRoute);
+                pluginInterface.StageUndoStep();
+                var nsf = new EditStationForm(pluginInterface.Timetable, routesDropDown.SelectedRoute);
                 if (nsf.ShowModal(this) == DialogResult.Ok)
                 {
                     Station sta = nsf.Station;
-                    if (info.Timetable.Type == TimetableType.Network)
+                    if (pluginInterface.Timetable.Type == TimetableType.Network)
                     {
                         var handler = new StaPosHandler();
-                        handler.SetMiddlePos(routesDropDown.SelectedRoute, sta, info.Timetable);
+                        handler.SetMiddlePos(routesDropDown.SelectedRoute, sta, pluginInterface.Timetable);
                         var r = sta.Routes.ToList();
                         r.Add(networkRenderer.SelectedRoute);
                         sta.Routes = r.ToArray();
                     }
-                    info.Timetable.AddStation(sta, routesDropDown.SelectedRoute);
-                    info.SetUnsaved();
+                    pluginInterface.Timetable.AddStation(sta, routesDropDown.SelectedRoute);
+                    pluginInterface.SetUnsaved();
                     ReloadTimetable();
                 }
             };
             newLineButton.Click += (s, e) =>
             {
-                info.StageUndoStep();
-                var nlf = new EditStationForm(info.Timetable);
+                pluginInterface.StageUndoStep();
+                var nlf = new EditStationForm(pluginInterface.Timetable);
                 if (nlf.ShowModal(this) == DialogResult.Ok)
                 {
                     networkRenderer.StartAddStation(nlf.Station, nlf.Position);
-                    info.SetUnsaved();
+                    pluginInterface.SetUnsaved();
                 }
             };
             joinLineButton.Click += (s, e) =>
             {
-                info.StageUndoStep();
+                pluginInterface.StageUndoStep();
                 var epf = new EditPositionForm();
                 if (epf.ShowModal(this) == DialogResult.Ok)
                 {
                     networkRenderer.StartJoinLines(epf.Position);
                     ReloadTimetable();
-                    info.SetUnsaved();
+                    pluginInterface.SetUnsaved();
                 }
             };
 
@@ -155,7 +155,7 @@ namespace FPLedit.Editor.Rendering
         }
 
         public void ReloadTimetable()
-            => networkRenderer.SetTimetable(info.Timetable);
+            => networkRenderer.SetTimetable(pluginInterface.Timetable);
 
         public void DispatchKeystroke(KeyEventArgs e)
             => networkRenderer.DispatchKeystroke(e);

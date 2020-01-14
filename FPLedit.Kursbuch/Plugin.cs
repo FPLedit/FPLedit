@@ -11,19 +11,19 @@ namespace FPLedit.Kursbuch
     [Plugin("Modul für Tabellenfahrpläne", Vi.PFrom, Vi.PUpTo, Author = "Manuel Huber")]
     public class Plugin : IPlugin
     {
-        public void Init(IInfo info)
+        public void Init(IPluginInterface pluginInterface)
         {
-            info.Register<IExport>(new HtmlExport());
-            info.Register<IPreviewable>(new Preview());
-            info.Register<IFilterableUi>(new FilterableHandler());
-            info.Register<IDesignableUiProxy>(new SettingsControlProxy());
+            pluginInterface.Register<IExport>(new HtmlExport());
+            pluginInterface.Register<IPreviewable>(new Preview());
+            pluginInterface.Register<IFilterableUi>(new FilterableHandler());
+            pluginInterface.Register<IDesignableUiProxy>(new SettingsControlProxy());
 
-            info.Register<ITemplateProxy>(new Templates.TemplateProxy());
+            pluginInterface.Register<ITemplateProxy>(new Templates.TemplateProxy());
             
-            info.Register<ITemplateWhitelist>(new TemplateWhitelist<Templates.TemplateHelper>("kfpl"));
-            info.Register<ITemplateWhitelist>(new TemplateWhitelist<Model.KfplAttrs>("kfpl"));
+            pluginInterface.Register<ITemplateWhitelist>(new TemplateWhitelist<Templates.TemplateHelper>("kfpl"));
+            pluginInterface.Register<ITemplateWhitelist>(new TemplateWhitelist<Model.KfplAttrs>("kfpl"));
 
-            info.Register<ITimetableTypeChangeAction>(new FixAttrsAction());
+            pluginInterface.Register<ITimetableTypeChangeAction>(new FixAttrsAction());
         }
     }
 

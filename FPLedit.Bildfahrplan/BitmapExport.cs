@@ -13,7 +13,7 @@ namespace FPLedit.Bildfahrplan
     {
         public string Filter => "Bildfahrplan als PNG (*.png)|*.png";
 
-        public bool Export(Timetable tt, string filename, IInfo info)
+        public bool Export(Timetable tt, string filename, IPluginInterface pluginInterface)
         {
             try
             {

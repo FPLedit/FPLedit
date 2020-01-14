@@ -12,7 +12,7 @@ namespace FPLedit.Aushangfahrplan.Forms
     {
         public string DisplayName => "Aushangfahrplan";
 
-        public Control GetControl(IInfo info)
-            => new SettingsControl(info.Timetable, info);
+        public Control GetControl(IPluginInterface pluginInterface)
+            => new SettingsControl(pluginInterface.Timetable, pluginInterface);
     }
 }

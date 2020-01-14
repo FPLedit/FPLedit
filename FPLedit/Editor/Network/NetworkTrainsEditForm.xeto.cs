@@ -12,7 +12,7 @@ namespace FPLedit.Editor.Network
 {
     internal class NetworkTrainsEditForm : BaseTrainsEditor
     {
-        private readonly IInfo info;
+        private readonly IPluginInterface pluginInterface;
         private readonly Timetable tt;
         private readonly object backupHandle;
 
@@ -20,13 +20,13 @@ namespace FPLedit.Editor.Network
         private readonly GridView gridView;
 #pragma warning restore CS0649
 
-        public NetworkTrainsEditForm(IInfo info) : base(info.Timetable)
+        public NetworkTrainsEditForm(IPluginInterface pluginInterface) : base(pluginInterface.Timetable)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            this.info = info;
-            tt = info.Timetable;
-            backupHandle = info.BackupTimetable();
+            this.pluginInterface = pluginInterface;
+            tt = pluginInterface.Timetable;
+            backupHandle = pluginInterface.BackupTimetable();
 
             gridView.AddColumn<Train>(t => t.TName, "Zugnummer");
             gridView.AddColumn<Train>(t => t.Locomotive, "Tfz");
@@ -77,7 +77,7 @@ namespace FPLedit.Editor.Network
             {
                 var train = (Train)view.SelectedItem;
 
-                using (var tte = new SingleTimetableEditForm(info, train))
+                using (var tte = new SingleTimetableEditForm(pluginInterface, train))
                     tte.ShowModal(this);
             }
             else if (message)
@@ -90,7 +90,7 @@ namespace FPLedit.Editor.Network
             {
                 var train = (Train)view.SelectedItem;
 
-                using (var tpf = TrainPathForm.EditPath(info, train))
+                using (var tpf = TrainPathForm.EditPath(pluginInterface, train))
                     if (tpf.ShowModal(this) == DialogResult.Ok)
                         UpdateListView(view, TrainDirection.tr);
             }
@@ -104,7 +104,7 @@ namespace FPLedit.Editor.Network
             {
                 var train = (Train)view.SelectedItem;
 
-                using (var tcf = new TrainCopyDialog(train, info.Timetable))
+                using (var tcf = new TrainCopyDialog(train, pluginInterface.Timetable))
                     tcf.ShowModal(this);
 
                 UpdateListView(view, TrainDirection.tr);
@@ -115,12 +115,12 @@ namespace FPLedit.Editor.Network
 
         private void NewTrain(GridView view)
         {
-            using (var tpf = TrainPathForm.NewTrain(info))
+            using (var tpf = TrainPathForm.NewTrain(pluginInterface))
             {
                 if (tpf.ShowModal(this) != DialogResult.Ok)
                     return;
 
-                using (var tef = new TrainEditForm(info.Timetable, TrainDirection.tr, tpf.Path))
+                using (var tef = new TrainEditForm(pluginInterface.Timetable, TrainDirection.tr, tpf.Path))
                 {
                     if (tef.ShowModal(this) == DialogResult.Ok)
                     {
@@ -134,7 +134,7 @@ namespace FPLedit.Editor.Network
 
         private void CloseButton_Click(object sender, EventArgs e)
         {
-            info.ClearBackup(backupHandle);
+            pluginInterface.ClearBackup(backupHandle);
             Result = DialogResult.Ok;
             this.NClose();
         }
@@ -142,7 +142,7 @@ namespace FPLedit.Editor.Network
         private void CancelButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Cancel;
-            info.RestoreTimetable(backupHandle);
+            pluginInterface.RestoreTimetable(backupHandle);
             this.NClose();
         }
 

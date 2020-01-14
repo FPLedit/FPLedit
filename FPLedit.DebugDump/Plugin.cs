@@ -19,13 +19,13 @@ namespace FPLedit.DebugDump
         private DirectoryInfo dir;
         private int sessionCounter = 0;
         private string session;
-        private IInfo info;
+        private IPluginInterface pluginInterface;
 
-        public void Init(IInfo info)
+        public void Init(IPluginInterface pluginInterface)
         {
             XMLEntity last = new XMLEntity("dummy");
 
-            this.info = info;
+            this.pluginInterface = pluginInterface;
 
             session = Guid.NewGuid().ToString();
             basePath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "ttDumps", session);
@@ -39,23 +39,23 @@ namespace FPLedit.DebugDump
             {
                 var w = (Window)se;
                 var n = w.GetType().FullName;
-                w.Shown += (s, e) => info.Logger.Debug("Form shown: " + n);
-                w.Closed += (s, e) => info.Logger.Debug("Form closed: " + n);
+                w.Shown += (s, e) => pluginInterface.Logger.Debug("Form shown: " + n);
+                w.Closed += (s, e) => pluginInterface.Logger.Debug("Form closed: " + n);
             };
 
             var logPath = Path.Combine(basePath, "session.log");
-            dynamic l = info.Logger;
+            dynamic l = pluginInterface.Logger;
             l.Loggers.Add(new FileLogger(logPath));
 
             // Log Timetable changes
-            info.FileStateChanged += (s, e) =>
+            pluginInterface.FileStateChanged += (s, e) =>
             {
                 try
                 {
-                    if (info.Timetable == null || XDiff(last, info.Timetable.XMLEntity))
+                    if (pluginInterface.Timetable == null || XDiff(last, pluginInterface.Timetable.XMLEntity))
                         return;
 
-                    var clone = info.Timetable.Clone();
+                    var clone = pluginInterface.Timetable.Clone();
                     var exp = new XMLExport();
 
                     var fn = Path.Combine(basePath, $"fpldump-{sessionCounter++}.fpl");
@@ -67,22 +67,22 @@ namespace FPLedit.DebugDump
                     x.SetAttribute("pf", Environment.OSVersion.Platform.ToString());
 
                     clone.Children.Add(x);
-                    exp.Export(clone, fn, info);
-                    info.Logger.Debug("Dump erstellt: " + fn);
+                    exp.Export(clone, fn, pluginInterface);
+                    pluginInterface.Logger.Debug("Dump erstellt: " + fn);
 
-                    var clone2 = info.Timetable.Clone();
+                    var clone2 = pluginInterface.Timetable.Clone();
                     last = clone2.XMLEntity;
                 }
                 catch { }
             };
 
-            info.ExtensionsLoaded += (s, e) =>
+            pluginInterface.ExtensionsLoaded += (s, e) =>
             {
-                info.Logger.Info("DebugDump aktiviert. Session: " + session);
-                info.Logger.Debug("Enabled extensions: " + info.Settings.Get("extmgr.enabled", ""));
+                pluginInterface.Logger.Info("DebugDump aktiviert. Session: " + session);
+                pluginInterface.Logger.Debug("Enabled extensions: " + pluginInterface.Settings.Get("extmgr.enabled", ""));
             };
 
-            var tmpDir = info.GetTemp("");
+            var tmpDir = pluginInterface.GetTemp("");
             var watcher = new FileSystemWatcher(tmpDir, "*.*")
             {
                 NotifyFilter = NotifyFilters.LastWrite
@@ -98,7 +98,7 @@ namespace FPLedit.DebugDump
             if (!orig.Exists)
                 return;
             var fn = Path.Combine(basePath, $"tmpdump-{sessionCounter++}-{Path.GetFileNameWithoutExtension(orig.Name)}{orig.Extension}");
-            info.Logger.Debug("Dump erstellt: " + fn);
+            pluginInterface.Logger.Debug("Dump erstellt: " + fn);
             orig.CopyTo(fn);
         }
 

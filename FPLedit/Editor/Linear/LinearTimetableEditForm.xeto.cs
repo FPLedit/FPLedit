@@ -13,17 +13,17 @@ namespace FPLedit.Editor.Linear
         private readonly LinearTimetableEditControl editor;
 #pragma warning restore CS0649
 
-        private readonly IInfo info;
+        private readonly IPluginInterface pluginInterface;
         private readonly object backupHandle;
 
-        public LinearTimetableEditForm(IInfo info)
+        public LinearTimetableEditForm(IPluginInterface pluginInterface)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            this.info = info;
-            backupHandle = info.BackupTimetable();
+            this.pluginInterface = pluginInterface;
+            backupHandle = pluginInterface.BackupTimetable();
 
-            editor.Initialize(info.Timetable);
+            editor.Initialize(pluginInterface.Timetable);
 
             KeyDown += editor.HandleControlKeystroke;
 
@@ -43,14 +43,14 @@ namespace FPLedit.Editor.Linear
             if (!editor.ApplyChanges())
                 return;
 
-            info.ClearBackup(backupHandle);
+            pluginInterface.ClearBackup(backupHandle);
             this.NClose();
         }
 
         private void CancelButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Cancel;
-            info.RestoreTimetable(backupHandle);
+            pluginInterface.RestoreTimetable(backupHandle);
 
             this.NClose();
         }

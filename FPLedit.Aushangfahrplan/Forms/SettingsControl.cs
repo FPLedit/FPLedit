@@ -26,12 +26,12 @@ namespace FPLedit.Aushangfahrplan.Forms
         private readonly TextArea cssTextBox;
 #pragma warning restore CS0649
 
-        public SettingsControl(Timetable tt, IInfo info)
+        public SettingsControl(Timetable tt, IPluginInterface pluginInterface)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            settings = info.Settings;
-            chooser = new AfplTemplateChooser(info);
+            settings = pluginInterface.Settings;
+            chooser = new AfplTemplateChooser(pluginInterface);
             templateComboBox.ItemTextBinding = Binding.Property<ITemplate, string>(t => t.TemplateName);
             templateComboBox.DataStore = chooser.AvailableTemplates;
 

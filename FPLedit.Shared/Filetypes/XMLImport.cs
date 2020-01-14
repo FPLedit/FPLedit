@@ -10,7 +10,7 @@ namespace FPLedit.Shared.Filetypes
     {
         public string Filter => "Fahrplan Dateien (*.fpl)|*.fpl";
 
-        public Timetable Import(string filename, IInfo info, ILog replaceLog = null)
+        public Timetable Import(string filename, IPluginInterface pluginInterface, ILog replaceLog = null)
         {
             try
             {
@@ -19,19 +19,19 @@ namespace FPLedit.Shared.Filetypes
                 XMLEntity en = new XMLEntity(el);
                 var tt = new Timetable(en);
 
-                var actions = info.GetRegistered<ITimetableInitAction>();
+                var actions = pluginInterface.GetRegistered<ITimetableInitAction>();
                 foreach (var action in actions)
                 {
                     var message = action.Init(tt);
                     if (message != null)
-                        info.Logger.Warning(message);
+                        pluginInterface.Logger.Warning(message);
                 }
 
                 return tt;
             }
             catch (Exception ex)
             {
-                var log = replaceLog ?? info.Logger;
+                var log = replaceLog ?? pluginInterface.Logger;
                 log.Error("XMLImporter: " + ex.Message);
                 return null;
             }

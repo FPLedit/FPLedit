@@ -13,42 +13,42 @@ namespace FPLedit.jTrainGraphStarter
     [Plugin("Starter für jTrainGraph", Vi.PFrom, Vi.PUpTo, Author = "Manuel Huber")]
     public class Plugin : IPlugin
     {
-        IInfo info;
+        IPluginInterface pluginInterface;
         ButtonMenuItem startItem;
 
-        public void Init(IInfo info)
+        public void Init(IPluginInterface pluginInterface)
         {
-            this.info = info;
-            info.FileStateChanged += Info_FileStateChanged;
+            this.pluginInterface = pluginInterface;
+            pluginInterface.FileStateChanged += PluginInterface_FileStateChanged;
 
-            var item = ((MenuBar)info.Menu).CreateItem("jTrainGraph");
+            var item = ((MenuBar)pluginInterface.Menu).CreateItem("jTrainGraph");
 
             startItem = item.CreateItem("jTrainGraph starten", enabled: false);
             startItem.Click += (s, e) =>
             {
-                if (info.Timetable.Type == TimetableType.Linear)
+                if (pluginInterface.Timetable.Type == TimetableType.Linear)
                     StartLinear();
                 else
-                    StartNetwork(info.FileState.SelectedRoute);
+                    StartNetwork(pluginInterface.FileState.SelectedRoute);
             };
 
-            item.CreateItem("Einstellungen", clickHandler: (s, e) => (new SettingsForm(info.Settings)).ShowModal(info.RootForm));
+            item.CreateItem("Einstellungen", clickHandler: (s, e) => (new SettingsForm(pluginInterface.Settings)).ShowModal(pluginInterface.RootForm));
         }
 
-        private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)
+        private void PluginInterface_FileStateChanged(object sender, FileStateChangedEventArgs e)
         {
             startItem.Enabled = e.FileState.Opened;
 
-            startItem.Text = (e.FileState.Opened && info.Timetable.Type == TimetableType.Network) ?
+            startItem.Text = (e.FileState.Opened && pluginInterface.Timetable.Type == TimetableType.Network) ?
                 "jTrainGraph starten (aktuelle Route)" : "jTrainGraph starten";
         }
 
         private void StartLinear()
         {
-            var backupHandle = info.BackupTimetable();
+            var backupHandle = pluginInterface.BackupTimetable();
             try
             {
-                bool showMessage = info.Settings.Get("jTGStarter.show-message", true);
+                bool showMessage = pluginInterface.Settings.Get("jTGStarter.show-message", true);
 
                 if (showMessage)
                 {
@@ -59,25 +59,25 @@ namespace FPLedit.jTrainGraphStarter
                         return;
                 }
 
-                info.Save(false);
+                pluginInterface.Save(false);
 
-                StartJtg(info.FileState.FileName, () => info.Reload());
-                info.ClearBackup(backupHandle);
+                StartJtg(pluginInterface.FileState.FileName, () => pluginInterface.Reload());
+                pluginInterface.ClearBackup(backupHandle);
             }
             catch (Exception e)
             {
-                info.Logger.Error("Beim Verwenden von jTrainGraph ist ein unerwarteter Fehler aufgetreten! " + e);
-                info.Logger.LogException(e);
-                info.RestoreTimetable(backupHandle);
+                pluginInterface.Logger.Error("Beim Verwenden von jTrainGraph ist ein unerwarteter Fehler aufgetreten! " + e);
+                pluginInterface.Logger.LogException(e);
+                pluginInterface.RestoreTimetable(backupHandle);
             }
         }
 
         private void StartNetwork(int route)
         {
-            var backupHandle = info.BackupTimetable();
+            var backupHandle = pluginInterface.BackupTimetable();
             try
             {
-                bool showMessage = info.Settings.Get("jTGStarter.show-message", true);
+                bool showMessage = pluginInterface.Settings.Get("jTGStarter.show-message", true);
 
                 if (showMessage)
                 {
@@ -90,36 +90,36 @@ namespace FPLedit.jTrainGraphStarter
                         return;
                 }
 
-                var targetVersion = info.Settings.GetEnum("jTGStarter.target-version", JTGShared.DEFAULT_TT_VERSION);
+                var targetVersion = pluginInterface.Settings.GetEnum("jTGStarter.target-version", JTGShared.DEFAULT_TT_VERSION);
 
                 var exporter = new Shared.Filetypes.XMLExport();
                 var importer = new Shared.Filetypes.XMLImport();
-                var sync = new TimetableRouteSync(info.Timetable, route);
+                var sync = new TimetableRouteSync(pluginInterface.Timetable, route);
                 var rtt = sync.GetRouteTimetable(targetVersion);
-                var fn = info.GetTemp(Guid.NewGuid().ToString() + "-route-" + route + ".fpl");
-                exporter.Export(rtt, fn, info);
+                var fn = pluginInterface.GetTemp(Guid.NewGuid().ToString() + "-route-" + route + ".fpl");
+                exporter.Export(rtt, fn, pluginInterface);
 
                 StartJtg(fn, () =>
                 {
-                    info.StageUndoStep();
-                    var crtt = importer.Import(fn, info, new SilentLogger(info.Logger));
+                    pluginInterface.StageUndoStep();
+                    var crtt = importer.Import(fn, pluginInterface, new SilentLogger(pluginInterface.Logger));
                     sync.SyncBack(crtt);
-                    info.SetUnsaved();
+                    pluginInterface.SetUnsaved();
                 });
-                info.ClearBackup(backupHandle);
+                pluginInterface.ClearBackup(backupHandle);
             }
             catch (Exception e)
             {
-                info.Logger.Error("Beim Verwenden von jTrainGraph ist ein unerwarteter Fehler aufgetreten! " + e);
-                info.Logger.LogException(e);
-                info.RestoreTimetable(backupHandle);
+                pluginInterface.Logger.Error("Beim Verwenden von jTrainGraph ist ein unerwarteter Fehler aufgetreten! " + e);
+                pluginInterface.Logger.LogException(e);
+                pluginInterface.RestoreTimetable(backupHandle);
             }
         }
 
         private void StartJtg(string fnArg, Action finished)
         {
-            string javapath = info.Settings.Get("jTGStarter.javapath", "java");
-            string jtgPath = info.Settings.Get("jTGStarter.jtgpath", JTGShared.DEFAULT_FILENAME);
+            string javapath = pluginInterface.Settings.Get("jTGStarter.javapath", "java");
+            string jtgPath = pluginInterface.Settings.Get("jTGStarter.jtgpath", JTGShared.DEFAULT_FILENAME);
 
             var compat = JTGShared.JTGCompatCheck(jtgPath);
             if (!compat.Compatible)
@@ -128,7 +128,7 @@ namespace FPLedit.jTrainGraphStarter
                     "jTrainGraphStarter: Fehler", MessageBoxType.Error);
                 return;
             }
-            if (info.Timetable.Version != compat.Version && info.Timetable.Type != TimetableType.Network)
+            if (pluginInterface.Timetable.Version != compat.Version && pluginInterface.Timetable.Type != TimetableType.Network)
             {
                 MessageBox.Show("Die gewählte Version von jTrainGraph ist wahrscheinlich nicht mit der aktuellen Fahrplandatei kompatibel.",
                     "jTrainGraphStarter: Fehler", MessageBoxType.Error);
@@ -147,17 +147,17 @@ namespace FPLedit.jTrainGraphStarter
                 try
                 {
                     p.Start();
-                    info.Logger.Info("Wartet darauf, dass jTrainGraph beendet wird...");
+                    pluginInterface.Logger.Info("Wartet darauf, dass jTrainGraph beendet wird...");
                     p.WaitForExit();
-                    info.Logger.Info("jTrainGraph beendet! Lade Datei neu...");
+                    pluginInterface.Logger.Info("jTrainGraph beendet! Lade Datei neu...");
 
                     if (p.ExitCode != 0)
                         throw new Exception("Process exited with error code " + p.ExitCode);
                 }
                 catch (Exception e)
                 {
-                    info.Logger.Error("Fehler beim Starten von jTrainGraph: Möglicherweise ist das jTrainGraphStarter Plugin falsch konfiguriert! Zur Konfiguration siehe jTrainGraph > Einstellungen");
-                    info.Logger.LogException(e);
+                    pluginInterface.Logger.Error("Fehler beim Starten von jTrainGraph: Möglicherweise ist das jTrainGraphStarter Plugin falsch konfiguriert! Zur Konfiguration siehe jTrainGraph > Einstellungen");
+                    pluginInterface.Logger.LogException(e);
                     return;
                 }
 
@@ -166,8 +166,8 @@ namespace FPLedit.jTrainGraphStarter
             }
             catch (Exception e)
             {
-                info.Logger.Error("jTrainGraphStarter: " + e.Message);
-                info.Logger.LogException(e);
+                pluginInterface.Logger.Error("jTrainGraphStarter: " + e.Message);
+                pluginInterface.Logger.LogException(e);
             }
         }
     }

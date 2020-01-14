@@ -10,7 +10,7 @@ namespace FPLedit.Bildfahrplan.Model
 {
     internal abstract class Style
     {
-        internal static IInfo info;
+        internal static IPluginInterface pluginInterface;
 
         private readonly Timetable _parent;
 
@@ -19,7 +19,7 @@ namespace FPLedit.Bildfahrplan.Model
         public Style(Timetable tt)
         {
             _parent = tt;
-            overrideEntityStyle = info.Settings.Get<bool>("bifpl.override-entity-styles");
+            overrideEntityStyle = pluginInterface.Settings.Get<bool>("bifpl.override-entity-styles");
         }
 
         protected MColor ParseColor(string def, MColor defaultValue)

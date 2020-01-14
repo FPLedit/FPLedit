@@ -18,7 +18,7 @@ namespace FPLedit
         private readonly IExport save;
 
         private readonly Window parent;
-        private readonly IInfo info;
+        private readonly IPluginInterface pluginInterface;
         private readonly ILastFileHandler lfh;
         private readonly UndoManager undo;
 
@@ -28,10 +28,10 @@ namespace FPLedit
         public event EventHandler FileOpened;
         public event EventHandler<FileStateChangedEventArgs> FileStateChanged;
 
-        public FileHandler(Window parent, IInfo info, ILastFileHandler lfh, UndoManager undo)
+        public FileHandler(Window parent, IPluginInterface pluginInterface, ILastFileHandler lfh, UndoManager undo)
         {
             this.parent = parent;
-            this.info = info;
+            this.pluginInterface = pluginInterface;
             this.lfh = lfh;
             this.undo = undo;
 
@@ -51,7 +51,7 @@ namespace FPLedit
 
             FileOpened += (s, e) => MaybeUpgradeTtVersion();
 
-            SetLastPath(info.Settings.Get("files.lastpath", ""));
+            SetLastPath(pluginInterface.Settings.Get("files.lastpath", ""));
         }
 
         #region FileState
@@ -71,11 +71,11 @@ namespace FPLedit
         #region Export / Import
         internal void Import()
         {
-            var importers = info.GetRegistered<IImport>();
+            var importers = pluginInterface.GetRegistered<IImport>();
 
             if (importers.Length == 0)
             {
-                info.Logger.Error("Keine Importer gefunden, Import nicht möglich!");
+                pluginInterface.Logger.Error("Keine Importer gefunden, Import nicht möglich!");
                 return;
             }
 
@@ -84,11 +84,11 @@ namespace FPLedit
             if (importFileDialog.ShowDialog(parent) == DialogResult.Ok)
             {
                 IImport import = importers[importFileDialog.CurrentFilterIndex - 1];
-                info.Logger.Info("Öffne Datei " + importFileDialog.FileName);
-                Timetable = import.Import(importFileDialog.FileName, info);
+                pluginInterface.Logger.Info("Öffne Datei " + importFileDialog.FileName);
+                Timetable = import.Import(importFileDialog.FileName, pluginInterface);
                 if (Timetable == null)
                     return;
-                info.Logger.Info("Datei erfolgeich geöffnet!");
+                pluginInterface.Logger.Info("Datei erfolgeich geöffnet!");
                 FileState.Opened = true;
                 FileState.Saved = true;
                 FileState.FileName = importFileDialog.FileName;
@@ -100,19 +100,19 @@ namespace FPLedit
         {
             if (exportFileDialog.ShowDialog(parent) == DialogResult.Ok)
             {
-                var exporters = info.GetRegistered<IExport>();
+                var exporters = pluginInterface.GetRegistered<IExport>();
                 IExport export = exporters[exportFileDialog.CurrentFilterIndex];
                 string filename = exportFileDialog.FileName;
 
-                info.Logger.Info("Exportiere in Datei " + filename);
-                bool ret = export.Export(Timetable, filename, info);
+                pluginInterface.Logger.Info("Exportiere in Datei " + filename);
+                bool ret = export.Export(Timetable, filename, pluginInterface);
                 if (ret == false)
                 {
-                    info.Logger.Error("Exportieren fehlgeschlagen!");
+                    pluginInterface.Logger.Error("Exportieren fehlgeschlagen!");
                     return;
                 }
-                info.Logger.Info("Exportieren erfolgreich abgeschlossen!");
-                info.Settings.Set("exporter.last", exportFileDialog.CurrentFilterIndex);
+                pluginInterface.Logger.Info("Exportieren erfolgreich abgeschlossen!");
+                pluginInterface.Settings.Set("exporter.last", exportFileDialog.CurrentFilterIndex);
             }
         }
 
@@ -122,7 +122,7 @@ namespace FPLedit
             importFileDialog.AddLegacyFilter(importers.Select(im => im.Filter).ToArray());
 
             // Letzten Exporter auswählen
-            int exporter_idx = info.Settings.Get("exporter.last", -1);
+            int exporter_idx = pluginInterface.Settings.Get("exporter.last", -1);
             if (exporter_idx > -1 && exporters.Length > exporter_idx)
                 exportFileDialog.CurrentFilterIndex = exporter_idx + 1;
         }
@@ -146,14 +146,14 @@ namespace FPLedit
 
         internal void InternalOpen(string filename)
         {
-            info.Logger.Info("Öffne Datei " + filename);
-            Timetable = open.Import(filename, info);
+            pluginInterface.Logger.Info("Öffne Datei " + filename);
+            Timetable = open.Import(filename, pluginInterface);
             if (Timetable == null)
-                info.Logger.Error("Fehler beim Öffnen der Datei!");
+                pluginInterface.Logger.Error("Fehler beim Öffnen der Datei!");
             else
-                info.Logger.Info("Datei erfolgeich geöffnet!");
+                pluginInterface.Logger.Info("Datei erfolgeich geöffnet!");
             if (Timetable?.UpgradeMessage != null)
-                info.Logger.Warning(Timetable.UpgradeMessage);
+                pluginInterface.Logger.Warning(Timetable.UpgradeMessage);
             FileState.Opened = Timetable != null;
             FileState.Saved = Timetable != null;
             FileState.FileName = Timetable != null ? filename : null;
@@ -184,11 +184,11 @@ namespace FPLedit
             if (!filename.EndsWith(".fpl"))
                 filename += ".fpl";
 
-            info.Logger.Info("Speichere Datei " + filename);
-            bool ret = save.Export(Timetable, filename, info);
+            pluginInterface.Logger.Info("Speichere Datei " + filename);
+            bool ret = save.Export(Timetable, filename, pluginInterface);
             if (ret == false)
                 return;
-            info.Logger.Info("Speichern erfolgreich abgeschlossen!");
+            pluginInterface.Logger.Info("Speichern erfolgreich abgeschlossen!");
             FileState.Saved = true;
             FileState.FileName = filename;
         }
@@ -202,7 +202,7 @@ namespace FPLedit
             FileState.Saved = false;
             FileState.FileName = null;
             undo.ClearHistory();
-            info.Logger.Info("Neue Datei erstellt");
+            pluginInterface.Logger.Info("Neue Datei erstellt");
             FileOpened?.Invoke(this, null);
         }
         #endregion
@@ -217,7 +217,7 @@ namespace FPLedit
                 openFileDialog.Directory = uri;
                 saveFileDialog.Directory = uri;
             }
-            info.Settings.Set("files.lastpath", lastPath);
+            pluginInterface.Settings.Set("files.lastpath", lastPath);
         }
         #endregion
 
@@ -236,11 +236,11 @@ namespace FPLedit
                 sfd.AddLegacyFilter(exp.Filter);
                 if (sfd.ShowDialog(parent) == DialogResult.Ok)
                 {
-                    info.Logger.Info("Konvertiere Datei...");
-                    bool ret = exp.Export(Timetable, sfd.FileName, info);
+                    pluginInterface.Logger.Info("Konvertiere Datei...");
+                    bool ret = exp.Export(Timetable, sfd.FileName, pluginInterface);
                     if (ret == false)
                         return;
-                    info.Logger.Info("Konvertieren erfolgreich abgeschlossen!");
+                    pluginInterface.Logger.Info("Konvertieren erfolgreich abgeschlossen!");
                     InternalOpen(sfd.FileName);
                 }
             }
@@ -263,11 +263,11 @@ namespace FPLedit
                 sfd.AddLegacyFilter(exp.Filter);
                 if (sfd.ShowDialog(parent) == DialogResult.Ok)
                 {
-                    info.Logger.Info("Konvertiere Datei...");
-                    bool ret = exp.Export(Timetable, sfd.FileName, info);
+                    pluginInterface.Logger.Info("Konvertiere Datei...");
+                    bool ret = exp.Export(Timetable, sfd.FileName, pluginInterface);
                     if (ret == false)
                         return;
-                    info.Logger.Info("Konvertieren erfolgreich abgeschlossen!");
+                    pluginInterface.Logger.Info("Konvertieren erfolgreich abgeschlossen!");
                     InternalOpen(sfd.FileName);
                 }
             }

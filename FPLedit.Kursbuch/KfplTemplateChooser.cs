@@ -9,7 +9,7 @@ namespace FPLedit.Kursbuch
         protected override string ElemName => "kfpl_attrs";
         protected override string AttrName => "tmpl";
 
-        public KfplTemplateChooser(IInfo info) : base("kfpl", info)
+        public KfplTemplateChooser(IPluginInterface pluginInterface) : base("kfpl", pluginInterface)
         {
         }
     }

@@ -9,6 +9,6 @@ namespace FPLedit.Shared.Ui
     {
         string DisplayName { get; }
 
-        void Show(IInfo info);
+        void Show(IPluginInterface pluginInterface);
     }
 }

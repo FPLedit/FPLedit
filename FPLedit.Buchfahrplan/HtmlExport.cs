@@ -14,9 +14,9 @@ namespace FPLedit.Buchfahrplan
     {
         public string Filter => "Buchfahrplan als HTML Datei (*.html)|*.html";
 
-        internal bool Exp(Timetable timetable, string filename, IInfo info, bool tryout_console)
+        internal bool Exp(Timetable timetable, string filename, IPluginInterface pluginInterface, bool tryout_console)
         {
-            BfplTemplateChooser chooser = new BfplTemplateChooser(info);
+            BfplTemplateChooser chooser = new BfplTemplateChooser(pluginInterface);
 
             ITemplate tmpl = chooser.GetTemplate(timetable);
             string cont = tmpl.GenerateResult(timetable);
@@ -32,7 +32,7 @@ namespace FPLedit.Buchfahrplan
             return true;
         }
 
-        public bool Export(Timetable timetable, string filename, IInfo info)
-            => Exp(timetable, filename, info, false);
+        public bool Export(Timetable timetable, string filename, IPluginInterface pluginInterface)
+            => Exp(timetable, filename, pluginInterface, false);
     }
 }

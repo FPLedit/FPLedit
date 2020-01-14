@@ -15,7 +15,7 @@ namespace FPLedit.Editor
         private readonly CheckBox expertCheckBox;
 #pragma warning restore CS0649
 
-        private readonly IInfo info;
+        private readonly IPluginInterface pluginInterface;
         private readonly List<ISaveHandler> saveHandlers;
         private readonly List<IExpertHandler> expertHandlers;
 
@@ -29,18 +29,18 @@ namespace FPLedit.Editor
             this.AddSizeStateHandler();
         }
 
-        public RenderSettingsForm(IInfo info) : this()
+        public RenderSettingsForm(IPluginInterface pluginInterface) : this()
         {
-            this.info = info;
+            this.pluginInterface = pluginInterface;
 
-            var designables = info.GetRegistered<IDesignableUiProxy>();
+            var designables = pluginInterface.GetRegistered<IDesignableUiProxy>();
 
             tabControl.SuspendLayout();
             tabControl.Pages.Clear();
 
             foreach (var d in designables)
             {
-                var c = d.GetControl(info);
+                var c = d.GetControl(pluginInterface);
                 var tp = new TabPage(c)
                 {
                     Text = d.DisplayName
@@ -56,14 +56,14 @@ namespace FPLedit.Editor
 
             tabControl.ResumeLayout();
 
-            expertCheckBox.Checked = info.Settings.Get<bool>("std.expert");
+            expertCheckBox.Checked = pluginInterface.Settings.Get<bool>("std.expert");
             expertCheckBox.CheckedChanged += ExpertCheckBox_CheckedChanged;
             ExpertCheckBox_CheckedChanged(this, null);
         }
 
         private void CloseButton_Click(object sender, EventArgs e)
         {
-            info.Settings.Set("std.expert", expertCheckBox.Checked.Value);
+            pluginInterface.Settings.Set("std.expert", expertCheckBox.Checked.Value);
             saveHandlers.ForEach(sh => sh.Save());
             Close(DialogResult.Ok);
         }

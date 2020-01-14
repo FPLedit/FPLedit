@@ -14,26 +14,26 @@ namespace FPLedit.TimetableChecks
         private FForm form;
         private GridView gridView;
 
-        public TimetableCheckRunner(IInfo info)
+        public TimetableCheckRunner(IPluginInterface pluginInterface)
         {
-            var checks = info.GetRegistered<ITimetableCheck>();
+            var checks = pluginInterface.GetRegistered<ITimetableCheck>();
 
-            info.FileStateChanged += (s, e) =>
+            pluginInterface.FileStateChanged += (s, e) =>
             {
-                if (info.Timetable == null)
+                if (pluginInterface.Timetable == null)
                     return;
 
                 var list = new List<string>();
 
                 foreach (var check in checks)
-                    list.AddRange(check.Check(info.Timetable));
+                    list.AddRange(check.Check(pluginInterface.Timetable));
 
                 if (list.Any() && form == null)
                     GetForm().Show();
                 if (gridView != null)
                     gridView.DataStore = list;
             };
-            info.AppClosing += (s, e) => form?.Close();
+            pluginInterface.AppClosing += (s, e) => form?.Close();
         }
 
         public void Dispose()

@@ -54,15 +54,15 @@ namespace FPLedit.Extensibility
             Name = a.Name;
         }
 
-        public void TryInit(IInfo info)
+        public void TryInit(IPluginInterface pluginInterface)
         {
             try
             {
-                plugin.Init(info);
+                plugin.Init(pluginInterface);
             }
             catch (Exception ex)
             {
-                info.Logger.Error("Fehler beim Initialisieren einer Erweiterung: " + plugin.GetType().FullName + ": " + ex.Message);
+                pluginInterface.Logger.Error("Fehler beim Initialisieren einer Erweiterung: " + plugin.GetType().FullName + ": " + ex.Message);
             }
         }
     }

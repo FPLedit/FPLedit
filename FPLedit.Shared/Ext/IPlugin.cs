@@ -7,6 +7,6 @@ namespace FPLedit.Shared
 {
     public interface IPlugin
     {
-        void Init(IInfo info);
+        void Init(IPluginInterface pluginInterface);
     }
 }

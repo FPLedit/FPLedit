@@ -14,12 +14,12 @@ namespace FPLedit.Extensibility
 
         public bool EnabledModified { get; private set; }
 
-        private readonly IInfo info;
+        private readonly IPluginInterface pluginInterface;
         private readonly UpdateManager update;
 
-        public ExtensionManager(IInfo info, UpdateManager update)
+        public ExtensionManager(IPluginInterface pluginInterface, UpdateManager update)
         {
-            this.info = info;
+            this.pluginInterface = pluginInterface;
             this.update = update;
         }
 
@@ -29,7 +29,7 @@ namespace FPLedit.Extensibility
 
             var signatureVerifier = new AssemblySignatureVerifier();
 
-            var enabledPlugins = info.Settings.Get("extmgr.enabled", "").Split(';');
+            var enabledPlugins = pluginInterface.Settings.Get("extmgr.enabled", "").Split(';');
             var currentVersion = update.CurrentVersion;
 
             var path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
@@ -65,19 +65,19 @@ namespace FPLedit.Extensibility
                         {
                             IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
 
-                            var info = new PluginInfo(plugin, securityContext);
-                            Plugins.Add(info);
+                            var pluginInfo = new PluginInfo(plugin, securityContext);
+                            Plugins.Add(pluginInfo);
                         }
                         else
                         {
-                            var info = new PluginInfo(type, securityContext);
-                            Plugins.Add(info);
+                            var pluginInfo = new PluginInfo(type, securityContext);
+                            Plugins.Add(pluginInfo);
                         }
                     }
                 }
                 catch (FileLoadException)
                 {
-                    info.Logger.Warning("Erweiterung " + file.Name + " konnte nicht geladen werden, bitte überprüfen ob diese noch geblockt ist!");
+                    pluginInterface.Logger.Warning("Erweiterung " + file.Name + " konnte nicht geladen werden, bitte überprüfen ob diese noch geblockt ist!");
                 }
                 catch
                 {
@@ -85,25 +85,25 @@ namespace FPLedit.Extensibility
             }
         }
 
-        public void Activate(PluginInfo info)
+        public void Activate(PluginInfo pluginInfo)
         {
-            if (info.Enabled)
+            if (pluginInfo.Enabled)
                 return;
-            info.Enabled = true;
+            pluginInfo.Enabled = true;
             EnabledModified = true;
         }
 
-        public void Deactivate(PluginInfo info)
+        public void Deactivate(PluginInfo pluginInfo)
         {
-            if (!info.Enabled)
+            if (!pluginInfo.Enabled)
                 return;
-            info.Enabled = false;
+            pluginInfo.Enabled = false;
             EnabledModified = true;
         }
 
         public void WriteConfig()
         {
-            info.Settings.Set("extmgr.enabled", string.Join(";", Plugins.Where(p => p.Enabled).Select(p => p.FullName)));
+            pluginInterface.Settings.Set("extmgr.enabled", string.Join(";", Plugins.Where(p => p.Enabled).Select(p => p.FullName)));
         }
 
         private int VersionCompare(Version v1, Version v2)
@@ -131,11 +131,11 @@ namespace FPLedit.Extensibility
 
         public void InitActivatedExtensions()
         {
-            new Editor.EditorPlugin().Init(info);
+            new Editor.EditorPlugin().Init(pluginInterface);
 
             var enabled_plgs = Plugins.Where(p => p.Enabled);
             foreach (var plugin in enabled_plgs)
-                plugin.TryInit(info);
+                plugin.TryInit(pluginInterface);
         }
     }
 }

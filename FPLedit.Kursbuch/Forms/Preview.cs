@@ -14,13 +14,13 @@ namespace FPLedit.Kursbuch.Forms
     {
         public string DisplayName => "Kursbuch";
 
-        public void Show(IInfo info)
+        public void Show(IPluginInterface pluginInterface)
         {
             HtmlExport exp = new HtmlExport();
-            string path = info.GetTemp("kfpl.html");
+            string path = pluginInterface.GetTemp("kfpl.html");
 
-            bool tryoutConsole = info.Settings.Get<bool>("kfpl.console");
-            bool success = exp.Exp(info.Timetable, path, info, tryoutConsole);
+            bool tryoutConsole = pluginInterface.Settings.Get<bool>("kfpl.console");
+            bool success = exp.Exp(pluginInterface.Timetable, path, pluginInterface, tryoutConsole);
 
             if (success)
                 OpenHelper.Open(path);

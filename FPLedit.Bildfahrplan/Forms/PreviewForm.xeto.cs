@@ -17,32 +17,32 @@ namespace FPLedit.Bildfahrplan.Forms
         private readonly CheckBox splitCheckBox;
 #pragma warning restore CS0649
 
-        private readonly IInfo info;
+        private readonly IPluginInterface pluginInterface;
         private readonly AsyncDoubleBufferedGraph adbg;
         private Point? scrollPosition = new Point(0, 0);
         private Renderer renderer;
 
-        public PreviewForm(IInfo info)
+        public PreviewForm(IPluginInterface pluginInterface)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            this.info = info;
-            info.FileStateChanged += Info_FileStateChanged;
+            this.pluginInterface = pluginInterface;
+            pluginInterface.FileStateChanged += PluginInterface_FileStateChanged;
 
             Resizable = Platform.IsWpf;
 
-            var mainForm = (FForm)info.RootForm;
+            var mainForm = (FForm)pluginInterface.RootForm;
             if (Screen != null && mainForm.Bounds.TopRight.X + 500 < Screen.Bounds.Width)
                 Location = mainForm.Bounds.TopRight + new Point(10, 0);
 
             routesDropDown.SelectedRouteChanged += (s, e) => ResetRenderer();
             dtc.ValueChanged += (s, e) => ResetRenderer();
 
-            splitCheckBox.Checked = info.Settings.Get<bool>("bifpl.lock-stations");
+            splitCheckBox.Checked = pluginInterface.Settings.Get<bool>("bifpl.lock-stations");
             splitCheckBox.CheckedChanged += (s, e) =>
             {
                 ResetRenderer();
-                info.Settings.Set("bifpl.lock-stations", splitCheckBox.Checked.Value);
+                pluginInterface.Settings.Set("bifpl.lock-stations", splitCheckBox.Checked.Value);
             };
 
             adbg = new AsyncDoubleBufferedGraph(panel)
@@ -56,17 +56,17 @@ namespace FPLedit.Bildfahrplan.Forms
             };
 
             // Initialisierung der Daten
-            dtc.Initialize(info);
-            routesDropDown.Initialize(info);
+            dtc.Initialize(pluginInterface);
+            routesDropDown.Initialize(pluginInterface);
         }
 
         private void PreferencesButton_Click(object sender, EventArgs e)
         {
-            info.StageUndoStep();
-            using (var cnf = new ConfigForm(info.Timetable, info.Settings))
+            pluginInterface.StageUndoStep();
+            using (var cnf = new ConfigForm(pluginInterface.Timetable, pluginInterface.Settings))
                 cnf.ShowModal(this);
             ResetRenderer();
-            info.SetUnsaved();
+            pluginInterface.SetUnsaved();
         }
 
         private void Hpanel_Paint(object sender, PaintEventArgs e)
@@ -82,7 +82,7 @@ namespace FPLedit.Bildfahrplan.Forms
 
         private void ResetRenderer()
         {
-            renderer = new Renderer(info.Timetable, routesDropDown.SelectedRoute);
+            renderer = new Renderer(pluginInterface.Timetable, routesDropDown.SelectedRoute);
             if (!scrollPosition.HasValue)
                 scrollPosition = new Point(0, 0);
             panel.Height = renderer.GetHeight(!splitCheckBox.Checked.Value);
@@ -92,7 +92,7 @@ namespace FPLedit.Bildfahrplan.Forms
             hpanel.Invalidate();
         }
 
-        private void Info_FileStateChanged(object sender, FileStateChangedEventArgs e)
+        private void PluginInterface_FileStateChanged(object sender, FileStateChangedEventArgs e)
         {
             scrollPosition = scrollable.ScrollPosition;
 

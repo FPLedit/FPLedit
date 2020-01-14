@@ -10,6 +10,6 @@ namespace FPLedit.Shared.Ui
     {
         string DisplayName { get; }
 
-        Control GetControl(IInfo info);
+        Control GetControl(IPluginInterface pluginInterface);
     }
 }

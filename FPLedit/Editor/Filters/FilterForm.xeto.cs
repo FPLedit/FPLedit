@@ -11,7 +11,7 @@ namespace FPLedit.Editor.Filters
     internal class FilterForm : FDialog<DialogResult>
     {
         private readonly FilterableContainer[] fcontainers;
-        private readonly IInfo info;
+        private readonly IPluginInterface pluginInterface;
 
         private List<FilterRule> curTrainRules, curStationRules;
 
@@ -20,14 +20,14 @@ namespace FPLedit.Editor.Filters
         private readonly ListBox typeListBox;
 #pragma warning restore CS0649
 
-        public FilterForm(IInfo info)
+        public FilterForm(IPluginInterface pluginInterface)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            this.info = info;
-            var tt = info.Timetable;
+            this.pluginInterface = pluginInterface;
+            var tt = pluginInterface.Timetable;
 
-            var filterables = info.GetRegistered<IFilterableUi>();
+            var filterables = pluginInterface.GetRegistered<IFilterableUi>();
             fcontainers = filterables.Select(f => new FilterableContainer()
             {
                 Filterable = f,
@@ -159,7 +159,7 @@ namespace FPLedit.Editor.Filters
         private void CloseButton_Click(object sender, EventArgs e)
         {
             foreach (var fcon in fcontainers)
-                fcon.Filterable.SaveFilter(info.Timetable, fcon.StationRules, fcon.TrainRules);
+                fcon.Filterable.SaveFilter(pluginInterface.Timetable, fcon.StationRules, fcon.TrainRules);
 
             Close(DialogResult.Ok);
         }

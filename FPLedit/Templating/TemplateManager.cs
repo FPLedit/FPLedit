@@ -12,23 +12,23 @@ namespace FPLedit.Templating
     internal class TemplateManager : ITemplateManager
     {
         private readonly RegisterStore store;
-        private readonly IInfo info;
+        private readonly IPluginInterface pluginInterface;
         private readonly List<string> enabledTemplates;
         private List<TemplateHost> templates;
 
-        public TemplateManager(RegisterStore store, IInfo info)
+        public TemplateManager(RegisterStore store, IPluginInterface pluginInterface)
         {
             this.store = store;
-            this.info = info;
+            this.pluginInterface = pluginInterface;
 
-            enabledTemplates = info.Settings.Get("tmpl.enabled", "").Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            enabledTemplates = pluginInterface.Settings.Get("tmpl.enabled", "").Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
         }
 
         public void LoadTemplates(string templateRoot)
         {
             // Registrierte (Standard-)Templates laden
             var instances = store.GetRegistered<ITemplateProxy>();
-            templates = instances.Select(t => new TemplateHost(t.GetTemplateCode(), t.TemplateIdentifier, this.info, true)).ToList();
+            templates = instances.Select(t => new TemplateHost(t.GetTemplateCode(), t.TemplateIdentifier, this.pluginInterface, true)).ToList();
 
             // Weitere Templates aus Dateien laden
             var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), templateRoot);
@@ -40,7 +40,7 @@ namespace FPLedit.Templating
             foreach (var file in files)
             {
                 var content = File.ReadAllText(file.FullName);
-                templates.Add(new TemplateHost(content, file.Name, this.info, enabledTemplates.Contains(file.Name)));
+                templates.Add(new TemplateHost(content, file.Name, this.pluginInterface, enabledTemplates.Contains(file.Name)));
             }
         }
 
@@ -63,14 +63,14 @@ namespace FPLedit.Templating
             if (enabledTemplates.Contains(fn))
                 return;
             enabledTemplates.Add(fn);
-            info.Settings.Set("tmpl.enabled", string.Join(";", enabledTemplates));
+            pluginInterface.Settings.Set("tmpl.enabled", string.Join(";", enabledTemplates));
         }
 
         internal void DisableTemplate(ITemplate tmpl)
         {
             var fn = Path.GetFileName(tmpl.Identifier);
             enabledTemplates.Remove(fn);
-            info.Settings.Set("tmpl.enabled", string.Join(";", enabledTemplates));
+            pluginInterface.Settings.Set("tmpl.enabled", string.Join(";", enabledTemplates));
         }
     }
 }

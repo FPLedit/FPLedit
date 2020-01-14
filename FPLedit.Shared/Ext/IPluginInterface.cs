@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace FPLedit.Shared
 {
-    public interface IInfo
+    public interface IPluginInterface
     {
         Timetable Timetable { get; }
 

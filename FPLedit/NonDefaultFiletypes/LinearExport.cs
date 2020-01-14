@@ -11,7 +11,7 @@ namespace FPLedit.NonDefaultFiletypes
     {
         public string Filter => "Fahrplan Dateien (*.fpl)|*.fpl";
 
-        public bool Export(Timetable tt, string filename, IInfo info)
+        public bool Export(Timetable tt, string filename, IPluginInterface pluginInterface)
         {
             if (tt.Type == TimetableType.Linear)
                 throw new Exception("Der Fahrplan ist bereits ein Linear-Fahrplan");
@@ -35,7 +35,7 @@ namespace FPLedit.NonDefaultFiletypes
                 sta.RemoveAttribute("fpl-id");
             }
 
-            var actions = info.GetRegistered<ITimetableTypeChangeAction>();
+            var actions = pluginInterface.GetRegistered<ITimetableTypeChangeAction>();
             foreach (var action in actions)
                 action.ToLinear(clone);
 
@@ -73,7 +73,7 @@ namespace FPLedit.NonDefaultFiletypes
 
             ColorTimetableConverter.ConvertAll(clone);
 
-            return new XMLExport().Export(clone, filename, info);
+            return new XMLExport().Export(clone, filename, pluginInterface);
         }
     }
 }

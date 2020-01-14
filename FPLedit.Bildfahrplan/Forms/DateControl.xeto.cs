@@ -24,9 +24,9 @@ namespace FPLedit.Bildfahrplan.Forms
             daysBoxes = new[] { mondayCheckBox, tuesdayCheckBox, wednesdayCheckBox, thursdayCheckBox, fridayCheckBox, saturdayCheckBox, sundayCheckBox };
         }
 
-        public void Initialize(IInfo info)
+        public void Initialize(IPluginInterface pluginInterface)
         {
-            attrs = new TimetableStyle(info.Timetable);
+            attrs = new TimetableStyle(pluginInterface.Timetable);
 
             for (int i = 0; i < attrs.RenderDays.Length; i++)
             {

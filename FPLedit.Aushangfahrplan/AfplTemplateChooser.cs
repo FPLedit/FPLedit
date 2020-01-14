@@ -9,7 +9,7 @@ namespace FPLedit.Aushangfahrplan
         protected override string ElemName => "afpl_attrs";
         protected override string AttrName => "tmpl";
 
-        public AfplTemplateChooser(IInfo info) : base("afpl", info)
+        public AfplTemplateChooser(IPluginInterface pluginInterface) : base("afpl", pluginInterface)
         {
         }
     }

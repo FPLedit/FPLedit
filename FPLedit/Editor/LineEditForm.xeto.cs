@@ -11,7 +11,7 @@ namespace FPLedit.Editor
 {
     internal class LineEditForm : FDialog<DialogResult>
     {
-        private readonly IInfo info;
+        private readonly IPluginInterface pluginInterface;
         private readonly Timetable tt;
         private readonly int route;
         private readonly object backupHandle;
@@ -23,15 +23,15 @@ namespace FPLedit.Editor
 
         private List<Station> stations;
 
-        public LineEditForm(IInfo info, int route)
+        public LineEditForm(IPluginInterface pluginInterface, int route)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            this.info = info;
-            tt = info.Timetable;
+            this.pluginInterface = pluginInterface;
+            tt = pluginInterface.Timetable;
             this.route = route;
 
-            backupHandle = info.BackupTimetable();
+            backupHandle = pluginInterface.BackupTimetable();
 
             if (tt.Type == TimetableType.Network)
                 loadLineButton.Visible = false;
@@ -109,10 +109,10 @@ namespace FPLedit.Editor
                 {
                     Station sta = nsf.Station;
 
-                    if (info.Timetable.Type == TimetableType.Network)
+                    if (pluginInterface.Timetable.Type == TimetableType.Network)
                     {
                         var handler = new Rendering.StaPosHandler();
-                        handler.SetMiddlePos(route, sta, info.Timetable);
+                        handler.SetMiddlePos(route, sta, pluginInterface.Timetable);
                         var r = sta.Routes.ToList();
                         r.Add(route);
                         sta.Routes = r.ToArray();
@@ -128,7 +128,7 @@ namespace FPLedit.Editor
         {
             if (tt.Stations.Count != 0)
                 return;
-            if (info.Timetable.Type == TimetableType.Network)
+            if (pluginInterface.Timetable.Type == TimetableType.Network)
                 throw new Exception("Streckendateien können bei Netzwerk-Fahrplänen nicht geladen werden!");
 
             IImport timport = new XMLImport();
@@ -141,7 +141,7 @@ namespace FPLedit.Editor
                 if (ofd.ShowDialog(this) == DialogResult.Ok)
                 {
                     IImport import = Path.GetExtension(ofd.FileName) == ".fpl" ? timport : simport;
-                    var ntt = import.Import(ofd.FileName, info);
+                    var ntt = import.Import(ofd.FileName, pluginInterface);
                     foreach (var station in ntt.Stations)
                         tt.AddStation(station, Timetable.LINEAR_ROUTE_ID);
                     // ntt will be destroyed by decoupling stations, do not use afterwards!
@@ -153,7 +153,7 @@ namespace FPLedit.Editor
 
         private void CloseButton_Click(object sender, EventArgs e)
         {
-            info.ClearBackup(backupHandle);
+            pluginInterface.ClearBackup(backupHandle);
             Result = DialogResult.Ok;
             this.NClose();
         }
@@ -161,7 +161,7 @@ namespace FPLedit.Editor
         private void CancelButton_Click(object sender, EventArgs e)
         {
             Result = DialogResult.Cancel;
-            info.RestoreTimetable(backupHandle);
+            pluginInterface.RestoreTimetable(backupHandle);
 
             this.NClose();
         }

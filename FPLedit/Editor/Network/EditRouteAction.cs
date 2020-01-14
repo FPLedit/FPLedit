@@ -12,15 +12,15 @@ namespace FPLedit.Editor.Network
     {
         public string DisplayName => "Stationen dieser Strecke bearbeiten";
 
-        public bool IsEnabled(IInfo info)
-            => info.FileState.Opened;
+        public bool IsEnabled(IPluginInterface pluginInterface)
+            => pluginInterface.FileState.Opened;
 
-        public void Show(IInfo info, Route route)
+        public void Show(IPluginInterface pluginInterface, Route route)
         {
-            info.StageUndoStep();
-            using (var lef = new LineEditForm(info, route.Index))
-                if (lef.ShowModal(info.RootForm) == DialogResult.Ok)
-                    info.SetUnsaved();
+            pluginInterface.StageUndoStep();
+            using (var lef = new LineEditForm(pluginInterface, route.Index))
+                if (lef.ShowModal(pluginInterface.RootForm) == DialogResult.Ok)
+                    pluginInterface.SetUnsaved();
         }
     }
 }
