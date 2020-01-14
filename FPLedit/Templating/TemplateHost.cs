@@ -25,7 +25,7 @@ namespace FPLedit.Templating
 
         public bool Enabled { get; private set; }
 
-        public TemplateHost(string content, string identifier, IInfo info, bool enabled, bool js)
+        public TemplateHost(string content, string identifier, IInfo info, bool enabled)
         {
             logger = info.Logger;
             Identifier = identifier;
@@ -33,10 +33,7 @@ namespace FPLedit.Templating
             
             try
             {
-                if (!js)
-                    tmpl = new Template(content);
-                else
-                    tmpl = new JavascriptTemplate(content, identifier, info);
+                tmpl = new JavascriptTemplate(content, identifier, info);
                 
                 if (tmpl?.TemplateType == null)
                     logger.Warning(

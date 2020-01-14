@@ -2,7 +2,7 @@
 
 namespace FPLedit.Shared
 {
-    [TemplateSafe]
+    [Templating.TemplateSafe]
     public interface ITimetable
     {
         TimetableType Type { get; }

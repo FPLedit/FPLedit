@@ -11,7 +11,7 @@ namespace FPLedit.Shared
 {
     [Serializable]
     [DebuggerDisplay("Name: {XName}, Children: {Children.Count}, Attrs: {AttributeDebugger,nq}")]
-    [TemplateSafe]
+    [Templating.TemplateSafe]
     public sealed class XMLEntity : IEntity
     {
         public string XName { get; set; }

@@ -13,7 +13,7 @@ namespace FPLedit.Shared
     //    "=..." -> gleich
     //    "!<pattern>" -> negiert
     [Serializable]
-    [TemplateSafe]
+    [Templating.TemplateSafe]
     public class FilterRule
     {
         public string Pattern { get; private set; }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace FPLedit.Shared
 {
     [Serializable]
-    [TemplateSafe]
+    [Templating.TemplateSafe]
     public class ObservableChildrenCollection<T> : ObservableCollection<T>, IChildrenCollection<T> where T : Entity
     {
         private readonly Entity parentEntity;

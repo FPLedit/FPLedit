@@ -21,14 +21,6 @@ namespace FPLedit.Templating
             this.store = store;
             this.info = info;
 
-            try
-            {
-                if (Directory.Exists(TemplateCompiler.CompilerTemp))
-                    Directory.Delete(TemplateCompiler.CompilerTemp, true);
-                Directory.CreateDirectory(TemplateCompiler.CompilerTemp);
-            }
-            catch { }
-
             enabledTemplates = info.Settings.Get("tmpl.enabled", "").Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
         }
 
@@ -36,7 +28,7 @@ namespace FPLedit.Templating
         {
             // Registrierte (Standard-)Templates laden
             var instances = store.GetRegistered<ITemplateProxy>();
-            templates = instances.Select(t => new TemplateHost(t.GetTemplateCode(), t.TemplateIdentifier, this.info, true, t.Javascript)).ToList();
+            templates = instances.Select(t => new TemplateHost(t.GetTemplateCode(), t.TemplateIdentifier, this.info, true)).ToList();
 
             // Weitere Templates aus Dateien laden
             var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), templateRoot);
@@ -48,7 +40,7 @@ namespace FPLedit.Templating
             foreach (var file in files)
             {
                 var content = File.ReadAllText(file.FullName);
-                templates.Add(new TemplateHost(content, file.Name, this.info, enabledTemplates.Contains(file.Name), true));
+                templates.Add(new TemplateHost(content, file.Name, this.info, enabledTemplates.Contains(file.Name)));
             }
         }
 

@@ -8,7 +8,7 @@ namespace FPLedit.Shared
     [Serializable]
     [DebuggerDisplay("{SName} [{GetAttribute(\"km\", \"\")}]")]
     [XElmName("sta")]
-    [TemplateSafe]
+    [Templating.TemplateSafe]
     public sealed class Station : Entity, IStation
     {
         public IChildrenCollection<Track> Tracks { get; private set; }

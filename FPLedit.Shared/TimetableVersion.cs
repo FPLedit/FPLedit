@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FPLedit.Shared
 {
-    [TemplateSafe]
+    [Templating.TemplateSafe]
     public enum TimetableVersion : int
     {
         JTG2_x = 008,
@@ -14,7 +14,7 @@ namespace FPLedit.Shared
         Extended_FPL = 100,
     }
 
-    [TemplateSafe]
+    [Templating.TemplateSafe]
     public static class TimetableVersionExt
     {
         public static string ToNumberString(this TimetableVersion version)

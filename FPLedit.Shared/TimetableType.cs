@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FPLedit.Shared
 {
-    [TemplateSafe]
+    [Templating.TemplateSafe]
     public enum TimetableType
     {
         Linear,

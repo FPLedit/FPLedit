@@ -7,7 +7,7 @@ using System.Text;
 namespace FPLedit.Shared
 {
     [DebuggerStepThrough]
-    [TemplateSafe]
+    [Templating.TemplateSafe]
     public struct Days : IEquatable<Days>, IEquatable<string>
     {
         private readonly bool[] internalDays;

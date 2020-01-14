@@ -6,7 +6,7 @@ using System.Linq;
 namespace FPLedit.Shared
 {
     [Serializable]
-    [TemplateSafe]
+    [Templating.TemplateSafe]
     public class PositionCollection
     {
         private readonly IStation sta;

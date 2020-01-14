@@ -8,7 +8,7 @@ using System.Text;
 namespace FPLedit.Shared
 {
     [Serializable]
-    [TemplateSafe]
+    [Templating.TemplateSafe]
     public abstract class Entity : IEntity
     {
         public XMLEntity XMLEntity { get; private set; }
