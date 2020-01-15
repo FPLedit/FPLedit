@@ -60,8 +60,7 @@ namespace FPLedit.Shared
         {
             if (_parent.Type == TimetableType.Network)
                 return InternalGetArrDeps().Select(ardp => _parent.GetStationById(ardp.StationId)).ToList();
-            else
-                return _parent.GetStationsOrderedByDirection(Direction);
+            return _parent.GetStationsOrderedByDirection(Direction);
         }
 
         public ArrDep AddArrDep(Station sta, int route)
@@ -172,21 +171,21 @@ namespace FPLedit.Shared
 
         #endregion
 
-        [XAttrName("fpl-tfz")]
+        [XAttrName("fpl-tfz", IsFpleditElement = true)]
         public string Locomotive
         {
             get => GetAttribute("fpl-tfz", "");
             set => SetAttribute("fpl-tfz", value);
         }
 
-        [XAttrName("fpl-mbr")]
+        [XAttrName("fpl-mbr", IsFpleditElement = true)]
         public string Mbr
         {
             get => GetAttribute("fpl-mbr", "");
             set => SetAttribute("fpl-mbr", value);
         }
 
-        [XAttrName("fpl-last")]
+        [XAttrName("fpl-last", IsFpleditElement = true)]
         public string Last
         {
             get => GetAttribute("fpl-last", "");
@@ -213,7 +212,7 @@ namespace FPLedit.Shared
         {
             if (tt.Type == TimetableType.Network && dir != TrainDirection.tr)
                 throw new NotSupportedException("Netzwerk-Fahrpläne haben keine gerichteten Züge");
-            else if (tt.Type == TimetableType.Linear && dir == TrainDirection.tr)
+            if (tt.Type == TimetableType.Linear && dir == TrainDirection.tr)
                 throw new NotSupportedException("Lineare Fahrpläne haben haben nur gerichtete Züge");
         }
 

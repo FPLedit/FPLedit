@@ -27,13 +27,13 @@ namespace FPLedit.Shared
             set => XMLEntity.Children = value;
         }
 
-        public Entity(string xn, Timetable tt)
+        protected Entity(string xn, Timetable tt)
         {
             XMLEntity = new XMLEntity(xn);
             _parent = tt;
         }
 
-        public Entity(XMLEntity en, Timetable tt)
+        protected Entity(XMLEntity en, Timetable tt)
         {
             XMLEntity = en;
             _parent = tt;

@@ -1,12 +1,12 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace FPLedit.Shared
+namespace FPLedit.Shared.Helpers
 {
     /// <summary>
     /// Helper class to shim Process.Start on corefx systems
     /// </summary>
-    public class OpenHelper
+    public static class OpenHelper
     {
         public static void Open(string url)
         {

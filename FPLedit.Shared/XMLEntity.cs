@@ -66,7 +66,7 @@ namespace FPLedit.Shared
     {
         public XElmNameAttribute(params string[] names)
         {
-            Names = names;
+            this.Names = names;
         }
 
         public string[] Names { get; }
@@ -83,5 +83,7 @@ namespace FPLedit.Shared
         }
 
         public string Name { get; }
+        
+        public bool IsFpleditElement { get; set; }
     }
 }

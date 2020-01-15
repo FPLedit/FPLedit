@@ -39,13 +39,8 @@ namespace FPLedit.Shared
             return new Days(days);
         }
 
-        public string ToBinString()
-        {
-            string ret = "";
-            for (int i = 0; i < internalDays.Length; i++)
-                ret += internalDays[i] ? "1" : "0";
-            return ret;
-        }
+        public string ToBinString() 
+            => internalDays.Aggregate("", (current, t) => current + (t ? "1" : "0"));
 
         public string DaysToString(bool veryShort = false)
         {
@@ -97,7 +92,7 @@ namespace FPLedit.Shared
         public override int GetHashCode()
         {
             var ret = 0;
-            for (int i = 0; i < 7; i++)
+            for (var i = 0; i < 7; i++)
                 ret |= (internalDays[i] ? 1 : 0) << i;
 
             return ret;

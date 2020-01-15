@@ -27,7 +27,7 @@ namespace FPLedit.Editor
             pluginInterface.FileStateChanged += PluginInterface_FileStateChanged;
             pluginInterface.ExtensionsLoaded += PluginInterface_ExtensionsLoaded;
 
-            pluginInterface.Register<IExport>(new FPLedit.NonDefaultFiletypes.CleanedXMLExport());
+            pluginInterface.Register<IExport>(new FPLedit.NonDefaultFiletypes.CleanedXmlExport());
             pluginInterface.Register<ITimetableCheck>(new FPLedit.TimetableChecks.TransitionsCheck());
             pluginInterface.Register<ITimetableCheck>(new FPLedit.TimetableChecks.DayOverflowCheck());
             pluginInterface.Register<ITimetableInitAction>(new FPLedit.TimetableChecks.UpdateColorsAction());

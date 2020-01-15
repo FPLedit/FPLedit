@@ -14,7 +14,7 @@ namespace FPLedit.Shared
     {
         public IChildrenCollection<ShuntMove> ShuntMoves { get; private set; }
 
-        [XAttrName("fpl-id")]
+        [XAttrName("fpl-id", IsFpleditElement = true)]
         public int StationId
         {
             get
@@ -45,14 +45,14 @@ namespace FPLedit.Shared
             set => SetNotEmptyTime(value, "d");
         }
 
-        [XAttrName("fpl-tr")]
+        [XAttrName("fpl-tr", IsFpleditElement = true)]
         public bool TrapeztafelHalt
         {
             get => Convert.ToBoolean(GetAttribute<int>("fpl-tr"));
             set => SetAttribute("fpl-tr", value ? "1" : "0");
         }
 
-        [XAttrName("fpl-zlm")]
+        [XAttrName("fpl-zlm", IsFpleditElement = true)]
         public string Zuglaufmeldung
         {
             get => GetAttribute<string>("fpl-zlm");

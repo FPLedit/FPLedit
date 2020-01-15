@@ -1,4 +1,4 @@
-﻿using Eto.Forms;
+using Eto.Forms;
 using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Xml.Linq;
 
 namespace FPLedit.NonDefaultFiletypes
 {
-    internal class CleanedXMLExport : IExport
+    internal class CleanedXmlExport : IExport
     {
         public string Filter => "Bereinigte Fahrplan Dateien (*.fpl)|*.fpl";
 
@@ -20,6 +20,7 @@ namespace FPLedit.NonDefaultFiletypes
             "kfpl_attrs",   // Kursbucheigenschaften
         };
 
+        //TODO: Better method to remove all known attributes? (yes, use attributes)
         private readonly string[] attrs_names = new[]
         {
             "fpl-vmax",     // Höchstgeschwindigkeit
@@ -37,8 +38,8 @@ namespace FPLedit.NonDefaultFiletypes
             if (node.Value != null)
                 elm.SetValue(node.Value);
 
-            var f_attrs = node.Attributes.Where(a => !attrs_names.Contains(a.Key));
-            foreach (var attr in f_attrs)
+            var fAttrs = node.Attributes.Where(a => !attrs_names.Contains(a.Key));
+            foreach (var attr in fAttrs)
                 elm.SetAttributeValue(attr.Key, attr.Value);
 
             var f_nodes = node.Children.Where(c => !node_names.Contains(c.XName));

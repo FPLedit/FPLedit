@@ -38,11 +38,11 @@ namespace FPLedit.Shared
         public RouteValueCollection<int> LineTracksRight
             => new RouteValueCollection<int>(this, _parent, "tr", "1", s => int.Parse(s), i => i.ToString());
 
-        [XAttrName("fpl-wl")]
+        [XAttrName("fpl-wl", IsFpleditElement = true)]
         public RouteValueCollection<int> Wellenlinien
             => new RouteValueCollection<int>(this, _parent, "fpl-wl", "0", s => int.Parse(s), i => i.ToString());
 
-        [XAttrName("fpl-vmax")]
+        [XAttrName("fpl-vmax", IsFpleditElement = true)]
         public RouteValueCollection<string> Vmax
             => new RouteValueCollection<string>(this, _parent, "fpl-vmax", "", s => s, s => s);
 
@@ -54,7 +54,7 @@ namespace FPLedit.Shared
         public RouteValueCollection<string> DefaultTrackLeft
             => new RouteValueCollection<string>(this, _parent, "dTa", "", s => s, s => s);
 
-        [XAttrName("fpl-id")]
+        [XAttrName("fpl-id", IsFpleditElement = true)]
         public int Id
         {
             get
@@ -71,7 +71,7 @@ namespace FPLedit.Shared
             }
         }
 
-        [XAttrName("fpl-rt")]
+        [XAttrName("fpl-rt", IsFpleditElement = true)]
         public int[] Routes
         {
             get

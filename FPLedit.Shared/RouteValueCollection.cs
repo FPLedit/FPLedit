@@ -60,8 +60,8 @@ namespace FPLedit.Shared
             {
                 var parts = p.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
 
-                int route = int.Parse(parts[0]);
-                T value = convTo(parts.Length == 2 ? parts[1] : defaultVal);
+                var route = int.Parse(parts[0]);
+                var value = convTo(parts.Length == 2 ? parts[1] : defaultVal);
                 values.Add(route, value);
             }
         }

@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FPLedit.Shared.Helpers;
 
 namespace FPLedit
 {
@@ -40,9 +41,9 @@ namespace FPLedit
 
         private void VersionCheck()
         {
-            mg.CheckResult = (new_avail, vi) =>
+            mg.CheckResult = (newAvail, vi) =>
             {
-                if (new_avail)
+                if (newAvail)
                 {
                     string nl = Environment.NewLine;
                     DialogResult res = MessageBox.Show($"Eine neue Programmversion ({vi.NewVersion.ToString()}) ist verfügbar!{nl}{vi.Description ?? ""}{nl}Jetzt zur Download-Seite wechseln, um die neue Version herunterzuladen?",

@@ -16,6 +16,7 @@ using FPLedit.Config;
 using FPLedit.Shared.Rendering;
 using System.Threading.Tasks;
 using FPLedit.Extensibility;
+using FPLedit.Shared.Helpers;
 
 namespace FPLedit
 {

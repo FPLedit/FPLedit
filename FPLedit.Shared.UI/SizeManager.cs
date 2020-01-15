@@ -36,8 +36,8 @@ namespace FPLedit.Shared.UI
 
         private IEnumerable<SizeEntry> ParseSettings()
         {
-            var sizes = settings.Get(SETTINGS_KEY, "");
-            var forms = sizes.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            var loadedSizes = settings.Get(SETTINGS_KEY, "");
+            var forms = loadedSizes.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var form in forms)
             {
                 var parts = form.Split(':');
@@ -107,7 +107,7 @@ namespace FPLedit.Shared.UI
 
         private class SizeEntry
         {
-            public string TypeName;
+            public readonly string TypeName;
             public int Width;
             public int Height;
             public bool Resized;
