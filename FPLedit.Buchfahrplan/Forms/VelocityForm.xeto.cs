@@ -48,10 +48,7 @@ namespace FPLedit.Buchfahrplan.Forms
 
             attrs = BfplAttrs.GetAttrs(tt);
             if (attrs == null)
-            {
-                attrs = new BfplAttrs(tt);
-                tt.Children.Add(attrs.XMLEntity);
-            }
+                attrs = BfplAttrs.CreateAttrs(tt);
 
             backupHandle = pluginInterface.BackupTimetable();
             UpdateListView();
@@ -62,7 +59,7 @@ namespace FPLedit.Buchfahrplan.Forms
             List<IStation> points = new List<IStation>();
             points.AddRange(route.Stations);
             if (attrs != null)
-                points.AddRange(attrs.GetPoints(route.Index));
+                points.AddRange(attrs.GetRoutePoints(route.Index));
 
             gridView.DataStore = points.OrderBy(o => o.Positions.GetPosition(route.Index));
         }
@@ -73,7 +70,7 @@ namespace FPLedit.Buchfahrplan.Forms
             {
                 if (vef.ShowModal(this) == DialogResult.Ok)
                 {
-                    var p = (BfplPoint)vef.Station;
+                    var p = (BfplPoint) vef.Station;
 
                     var pos = p.Positions.GetPosition(route.Index);
                     if (pos < route.MinPosition || pos > route.MaxPosition)
@@ -81,6 +78,7 @@ namespace FPLedit.Buchfahrplan.Forms
                         MessageBox.Show($"Die Position muss im Streckenbereich liegen, also zwischen {route.MinPosition} und {route.MaxPosition}!", "FPLedit");
                         return;
                     }
+
                     if (attrs != null)
                         attrs.AddPoint(p);
                     UpdateListView();
@@ -92,7 +90,7 @@ namespace FPLedit.Buchfahrplan.Forms
         {
             if (gridView.SelectedItem != null)
             {
-                var sta = (IStation)gridView.SelectedItem;
+                var sta = (IStation) gridView.SelectedItem;
 
                 using (var vef = new VelocityEditForm(sta, route.Index))
                     if (vef.ShowModal(this) == DialogResult.Ok)
@@ -117,7 +115,6 @@ namespace FPLedit.Buchfahrplan.Forms
 
                     UpdateListView();
                 }
-
             }
             else if (message)
                 MessageBox.Show("Zuerst muss eine Zeile ausgewählt werden!", "Löschen");
@@ -144,6 +141,7 @@ namespace FPLedit.Buchfahrplan.Forms
         }
 
         #region Events
+
         private void EditButton_Click(object sender, EventArgs e)
             => EditPoint();
 
@@ -152,6 +150,7 @@ namespace FPLedit.Buchfahrplan.Forms
 
         private void DeleteButton_Click(object sender, EventArgs e)
             => RemovePoint();
+
         #endregion
     }
 }

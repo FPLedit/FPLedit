@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace FPLedit.Shared.Ui
+namespace FPLedit.Shared
 {
-    public interface IEditingDialog
+    public interface IRouteAction
     {
         string DisplayName { get; }
 
-        void Show(IPluginInterface pluginInterface);
+        void Show(IPluginInterface pluginInterface, Route route);
 
         bool IsEnabled(IPluginInterface pluginInterface);
     }

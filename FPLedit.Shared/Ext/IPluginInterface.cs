@@ -42,14 +42,4 @@ namespace FPLedit.Shared
         event EventHandler FileOpened;
         event EventHandler AppClosing;
     }
-
-    public class FileStateChangedEventArgs : EventArgs
-    {
-        public IFileState FileState { get; private set; }
-
-        public FileStateChangedEventArgs(IFileState state)
-        {
-            FileState = state;
-        }
-    }
 }

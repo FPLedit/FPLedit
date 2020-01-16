@@ -24,7 +24,7 @@ namespace FPLedit.Shared.Filetypes
             return elm;
         }
 
-        public bool Export(Timetable tt, string filename, IPluginInterface pluginInterface)
+        public bool Export(Timetable tt, string filename, IPluginInterface pluginInterface, string[] flags = null)
         {
             bool debug = pluginInterface.Settings.Get<bool>("xml.indent");
 #if DEBUG

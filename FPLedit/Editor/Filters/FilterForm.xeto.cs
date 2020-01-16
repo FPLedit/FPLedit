@@ -1,6 +1,5 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
-using FPLedit.Shared.Ui;
 using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
@@ -27,7 +26,7 @@ namespace FPLedit.Editor.Filters
             this.pluginInterface = pluginInterface;
             var tt = pluginInterface.Timetable;
 
-            var filterables = pluginInterface.GetRegistered<IFilterableUi>();
+            var filterables = pluginInterface.GetRegistered<IFilterableProvider>();
             fcontainers = filterables.Select(f => new FilterableContainer()
             {
                 Filterable = f,
@@ -171,7 +170,7 @@ namespace FPLedit.Editor.Filters
 
         private class FilterableContainer
         {
-            public IFilterableUi Filterable;
+            public IFilterableProvider Filterable;
             public List<FilterRule> TrainRules, StationRules;
         }
     }

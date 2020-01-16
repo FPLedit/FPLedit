@@ -1,7 +1,6 @@
 ﻿using Eto.Drawing;
 using Eto.Forms;
 using FPLedit.Shared;
-using FPLedit.Shared.Ui;
 using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;

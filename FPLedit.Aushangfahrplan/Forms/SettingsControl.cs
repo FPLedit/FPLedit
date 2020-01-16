@@ -3,19 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using FPLedit.Shared;
 using FPLedit.Aushangfahrplan.Model;
-using System.Diagnostics;
-using FPLedit.Shared.Ui;
 using Eto.Forms;
 using FPLedit.Shared.Templating;
 using FPLedit.Shared.UI;
 
 namespace FPLedit.Aushangfahrplan.Forms
 {
-    public partial class SettingsControl : Panel, ISaveHandler, IExpertHandler
+    public class SettingsControl : Panel, IAppearanceHandler
     {
         private readonly ISettings settings;
         private readonly AfplAttrs attrs;
-        private readonly AfplTemplateChooser chooser;
 
 #pragma warning disable CS0649
         private readonly DropDown templateComboBox;
@@ -31,7 +28,7 @@ namespace FPLedit.Aushangfahrplan.Forms
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
             settings = pluginInterface.Settings;
-            chooser = new AfplTemplateChooser(pluginInterface);
+            var chooser = new AfplTemplateChooser(pluginInterface);
             templateComboBox.ItemTextBinding = Binding.Property<ITemplate, string>(t => t.TemplateName);
             templateComboBox.DataStore = chooser.AvailableTemplates;
 
@@ -47,10 +44,7 @@ namespace FPLedit.Aushangfahrplan.Forms
                 tracksCheckBox.Checked = attrs.ShowTracks;
             }
             else
-            {
-                attrs = new AfplAttrs(tt);
-                tt.Children.Add(attrs.XMLEntity);
-            }
+                attrs = AfplAttrs.CreateAttrs(tt);
 
             var tmpl = chooser.GetTemplate(tt);
             templateComboBox.SelectedValue = tmpl;

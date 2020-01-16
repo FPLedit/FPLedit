@@ -1,7 +1,6 @@
 ﻿using FPLedit.Bildfahrplan.Forms;
 using FPLedit.Bildfahrplan.Model;
 using FPLedit.Shared;
-using FPLedit.Shared.Ui;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,12 +17,12 @@ namespace FPLedit.Bildfahrplan
             Style.pluginInterface = pluginInterface;
 
             var dpf = new DynamicPreview();
-            pluginInterface.Register<IPreviewable>(dpf);
+            pluginInterface.Register<IPreviewProxy>(dpf);
             pluginInterface.AppClosing += (s, e) => dpf.Close();
         }
     }
 
-    public sealed class DynamicPreview : IPreviewable, IDisposable
+    public sealed class DynamicPreview : IPreviewProxy, IDisposable
     {
         private bool opened = false;
         private PreviewForm dpf;

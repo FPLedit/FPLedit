@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using FPLedit.Shared;
-using System.Diagnostics;
-using FPLedit.Shared.Ui;
 using Eto.Forms;
 using FPLedit.Shared.Templating;
 using FPLedit.Buchfahrplan.Model;
@@ -11,11 +9,10 @@ using FPLedit.Shared.UI;
 
 namespace FPLedit.Buchfahrplan.Forms
 {
-    public partial class SettingsControl : Panel, ISaveHandler, IExpertHandler
+    public class SettingsControl : Panel, IAppearanceHandler
     {
         private readonly ISettings settings;
         private readonly BfplAttrs attrs;
-        private readonly BfplTemplateChooser chooser;
 
 #pragma warning disable CS0649
         private readonly DropDown templateComboBox;
@@ -31,7 +28,7 @@ namespace FPLedit.Buchfahrplan.Forms
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
             settings = pluginInterface.Settings;
-            chooser = new BfplTemplateChooser(pluginInterface);
+            var chooser = new BfplTemplateChooser(pluginInterface);
             templateComboBox.ItemTextBinding = Binding.Property<ITemplate, string>(t => t.TemplateName);
             templateComboBox.DataStore = chooser.AvailableTemplates;
 
@@ -46,10 +43,7 @@ namespace FPLedit.Buchfahrplan.Forms
                 daysCheckBox.Checked = attrs.ShowDays;
             }
             else
-            {
-                attrs = new BfplAttrs(tt);
-                tt.Children.Add(attrs.XMLEntity);
-            }
+                attrs = BfplAttrs.CreateAttrs(tt);
 
             var tmpl = chooser.GetTemplate(tt);
             templateComboBox.SelectedValue = tmpl;

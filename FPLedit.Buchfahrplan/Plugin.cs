@@ -1,7 +1,8 @@
 ﻿using FPLedit.Shared;
 using FPLedit.Shared.Templating;
-using FPLedit.Shared.Ui;
 using System;
+using FPLedit.Buchfahrplan.Model;
+using FPLedit.Shared.DefaultImplementations;
 
 namespace FPLedit.Buchfahrplan
 {
@@ -10,10 +11,13 @@ namespace FPLedit.Buchfahrplan
     {
         public void Init(IPluginInterface pluginInterface)
         {
-            pluginInterface.Register<IExport>(new HtmlExport());
-            pluginInterface.Register<IDesignableUiProxy>(new SettingsControlProxy());
-            pluginInterface.Register<IFilterableUi>(new Forms.FilterableHandler());
-            pluginInterface.Register<IPreviewable>(new Forms.Preview());
+            var export = new BasicTemplateExport("Buchfahrplan als HTML Datei (*.html)|*.html", new BfplTemplateChooser(pluginInterface));
+            var preview = new BasicPreview("bfpl", "Buchfahrplan", export);
+            pluginInterface.Register<IExport>(export);
+            pluginInterface.Register<IPreviewProxy>(preview);
+            
+            pluginInterface.Register<IAppearanceControl>(new SettingsControlProxy());
+            pluginInterface.Register<IFilterableProvider>(new BasicFilterableProvider("Buchfahrplan", BfplAttrs.GetAttrs, BfplAttrs.CreateAttrs));
             pluginInterface.Register<IRouteAction>(new Forms.VelocityDialogProxy());
 
             pluginInterface.Register<ITemplateProxy>(new Templates.StdTemplate());

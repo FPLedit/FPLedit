@@ -11,7 +11,7 @@ namespace FPLedit.NonDefaultFiletypes
     {
         public string Filter => "Fahrplan Dateien (*.fpl)|*.fpl";
 
-        public bool Export(Timetable tt, string filename, IPluginInterface pluginInterface)
+        public bool Export(Timetable tt, string filename, IPluginInterface pluginInterface, string[] flags = null)
         {
             if (tt.Type == TimetableType.Linear)
                 throw new Exception("Der Fahrplan ist bereits ein Linear-Fahrplan");

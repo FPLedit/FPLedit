@@ -8,7 +8,7 @@ using Eto.Forms;
 
 namespace FPLedit.Bildfahrplan.Forms
 {
-    public partial class DateControl : Panel
+    public class DateControl : Panel
     {
         public event EventHandler ValueChanged;
 

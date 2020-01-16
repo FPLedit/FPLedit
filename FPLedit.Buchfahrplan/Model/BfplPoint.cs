@@ -9,7 +9,7 @@ using System.Text;
 namespace FPLedit.Buchfahrplan.Model
 {
     [Serializable]
-    [DebuggerDisplay("Point {SName} [{Kilometre}]")]
+    [DebuggerDisplay("Point {SName} [{Positions}]")]
     [XElmName("p", IsFpleditElement = true)]
     public sealed class BfplPoint : Entity, IStation
     {

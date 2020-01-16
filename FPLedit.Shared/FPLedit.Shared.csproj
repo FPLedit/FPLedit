@@ -13,6 +13,15 @@
     <Reference Include="Eto">
       <HintPath>..\libs\Eto.dll</HintPath>
     </Reference>
-    <Reference Include="System.Runtime.InteropServices.RuntimeInformation" />
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation" />    
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\*" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\build_scripts\ResourceHelper.cs" Link="Properties\ResourceHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Ui" />
   </ItemGroup>
 </Project>

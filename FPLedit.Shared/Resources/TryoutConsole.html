@@ -1,6 +1,6 @@
-﻿<script>
-// CSS-Tryout-Console , generiert von FPLedit
-var tryout_code = `<style>
+<script>
+    // CSS-Tryout-Console , generiert von FPLedit
+    var tryout_code = `<style>
 #tryout-console {
 	position:absolute;
 	top: 10px;
@@ -22,11 +22,11 @@ var tryout_code = `<style>
 	<button onclick="add_css.innerHTML = tryout_textarea.value;">CSS setzen!</button><br>
 	<a href="#" onclick="tryout_console.style.display='none';return false;">CSS Konsole schließen</a>
 </div>`;
-document.write(tryout_code);
+    document.write(tryout_code);
 
-var tryout_textarea = document.querySelector("#tryout-ta");
-var tryout_console = document.querySelector("#tryout-console");
-var add_css = document.querySelector("#add-css");
+    var tryout_textarea = document.querySelector("#tryout-ta");
+    var tryout_console = document.querySelector("#tryout-console");
+    var add_css = document.querySelector("#add-css");
 
-tryout_textarea.innerHTML = add_css.innerHTML.trim();
+    tryout_textarea.innerHTML = add_css.innerHTML.trim();
 </script>

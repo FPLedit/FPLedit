@@ -1,7 +1,8 @@
 ﻿using FPLedit.Aushangfahrplan.Forms;
+using FPLedit.Aushangfahrplan.Model;
 using FPLedit.Shared;
+using FPLedit.Shared.DefaultImplementations;
 using FPLedit.Shared.Templating;
-using FPLedit.Shared.Ui;
 
 namespace FPLedit.Aushangfahrplan
 {
@@ -10,10 +11,13 @@ namespace FPLedit.Aushangfahrplan
     {
         public void Init(IPluginInterface pluginInterface)
         {
-            pluginInterface.Register<IExport>(new HtmlExport());
-            pluginInterface.Register<IDesignableUiProxy>(new SettingsControlProxy());
-            pluginInterface.Register<IFilterableUi>(new FilterableHandler());
-            pluginInterface.Register<IPreviewable>(new Preview());
+            var export = new BasicTemplateExport("Aushangfahrplan HTML Datei (*.html)|*.html", new AfplTemplateChooser(pluginInterface));
+            var preview = new BasicPreview("Aushangfahrplan", "Kursbuch", export);
+            pluginInterface.Register<IExport>(export);
+            pluginInterface.Register<IPreviewProxy>(preview);
+            
+            pluginInterface.Register<IAppearanceControl>(new SettingsControlProxy());
+            pluginInterface.Register<IFilterableProvider>(new BasicFilterableProvider("Aushangfahrplan", AfplAttrs.GetAttrs, AfplAttrs.CreateAttrs));
 
             pluginInterface.Register<ITemplateProxy>(new Templates.StdTemplateProxy());
             pluginInterface.Register<ITemplateProxy>(new Templates.SvgTemplateProxy());

@@ -7,7 +7,7 @@ using System.Text;
 namespace FPLedit.Kursbuch.Model
 {
     [XElmName("kfpl_attrs", IsFpleditElement = true)]
-    public class KfplAttrs : Entity
+    public class KfplAttrs : Entity, IPatternProvider
     {
         [XAttrName("font")]
         public string Font
@@ -71,11 +71,11 @@ namespace FPLedit.Kursbuch.Model
             set => SetAttribute("sp", value);
         }
 
-        public KfplAttrs(Timetable tt) : base("kfpl_attrs", tt)
+        private KfplAttrs(Timetable tt) : base("kfpl_attrs", tt)
         {
         }
 
-        public KfplAttrs(XMLEntity en, Timetable tt) : base(en, tt)
+        private KfplAttrs(XMLEntity en, Timetable tt) : base(en, tt)
         {
         }
 
@@ -85,6 +85,13 @@ namespace FPLedit.Kursbuch.Model
             if (attrsEn != null)
                 return new KfplAttrs(attrsEn, tt);
             return null;
+        }
+        
+        public static KfplAttrs CreateAttrs(Timetable tt)
+        {
+            var attrs = new KfplAttrs(tt);
+            tt.Children.Add(attrs.XMLEntity);
+            return attrs;
         }
     }
 }

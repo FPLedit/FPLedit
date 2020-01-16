@@ -15,4 +15,14 @@ namespace FPLedit.Shared
 
         public T Value { get; private set; }
     }
+
+    public class FileStateChangedEventArgs : EventArgs
+    {
+        public IFileState FileState { get; private set; }
+
+        public FileStateChangedEventArgs(IFileState state)
+        {
+            FileState = state;
+        }
+    }
 }

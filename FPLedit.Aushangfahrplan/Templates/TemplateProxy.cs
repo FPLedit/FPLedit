@@ -1,6 +1,4 @@
 ﻿using FPLedit.Shared.Templating;
-using System.IO;
-using System.Reflection;
 
 namespace FPLedit.Aushangfahrplan.Templates
 {
@@ -11,8 +9,6 @@ namespace FPLedit.Aushangfahrplan.Templates
         public string GetTemplateCode()
             => GeneratePreamble("Standard (DRG aus Malsch)", "Abfahrt") +
                ResourceHelper.GetStringResource("Aushangfahrplan.Templates.AfplCommon.fpltmpl");
-        
-        public bool Javascript => true;
     }
 
     internal class SvgTemplateProxy : BaseTemplateProxy, ITemplateProxy
@@ -22,8 +18,6 @@ namespace FPLedit.Aushangfahrplan.Templates
         public string GetTemplateCode()
             => GeneratePreamble(@"Wie Standard, mit Schriftzug \""Abfahrt\"" in Originalschrift", ResourceHelper.GetStringResource("Aushangfahrplan.Resources.abfahrt-text.svg")) + 
                ResourceHelper.GetStringResource("Aushangfahrplan.Templates.AfplCommon.fpltmpl");
-        
-        public bool Javascript => true;
     }
 
     internal class BaseTemplateProxy

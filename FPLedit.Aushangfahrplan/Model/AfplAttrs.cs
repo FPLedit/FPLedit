@@ -7,7 +7,7 @@ using System.Text;
 namespace FPLedit.Aushangfahrplan.Model
 {
     [XElmName("afpl-attrs", IsFpleditElement = true)]
-    public class AfplAttrs : Entity
+    public class AfplAttrs : Entity, IPatternProvider
     {
         [XAttrName("font")]
         public string Font
@@ -74,11 +74,11 @@ namespace FPLedit.Aushangfahrplan.Model
             set => SetAttribute("shT", value.ToString().ToLower());
         }
 
-        public AfplAttrs(Timetable tt) : base("afpl_attrs", tt)
+        private AfplAttrs(Timetable tt) : base("afpl_attrs", tt)
         {
         }
 
-        public AfplAttrs(XMLEntity en, Timetable tt) : base(en, tt)
+        private AfplAttrs(XMLEntity en, Timetable tt) : base(en, tt)
         {
         }
 
@@ -88,6 +88,13 @@ namespace FPLedit.Aushangfahrplan.Model
             if (attrsEn != null)
                 return new AfplAttrs(attrsEn, tt);
             return null;
+        }
+
+        public static AfplAttrs CreateAttrs(Timetable tt)
+        {
+            var attrs = new AfplAttrs(tt);
+            tt.Children.Add(attrs.XMLEntity);
+            return attrs;
         }
     }
 }

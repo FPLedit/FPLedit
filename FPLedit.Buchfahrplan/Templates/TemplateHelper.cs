@@ -1,11 +1,11 @@
 ﻿using FPLedit.Buchfahrplan.Model;
 using FPLedit.Shared;
-using FPLedit.Shared.Ui;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using FPLedit.Shared.DefaultImplementations;
 
 namespace FPLedit.Buchfahrplan.Templates
 {
@@ -13,11 +13,11 @@ namespace FPLedit.Buchfahrplan.Templates
     {
         private readonly BfplAttrs attrs;
         private readonly Timetable tt;
-        private readonly IFilterableUi filterable;
+        private readonly IFilterableProvider filterable;
 
         public TemplateHelper(Timetable tt)
         {
-            filterable = new Forms.FilterableHandler();
+            filterable = new BasicFilterableProvider("Buchfahrplan", BfplAttrs.GetAttrs, BfplAttrs.CreateAttrs);
             this.tt = tt;
             attrs = BfplAttrs.GetAttrs(tt);
         }

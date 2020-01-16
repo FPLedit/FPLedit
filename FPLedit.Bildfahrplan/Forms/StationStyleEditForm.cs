@@ -8,7 +8,7 @@ using FPLedit.Shared.UI;
 
 namespace FPLedit.Bildfahrplan.Forms
 {
-    public partial class StationStyleEditForm : FDialog<DialogResult>
+    public class StationStyleEditForm : FDialog<DialogResult>
     {
         public Station Station { get; set; }
 

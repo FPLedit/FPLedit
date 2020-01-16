@@ -8,7 +8,7 @@ using FPLedit.Shared.UI;
 
 namespace FPLedit.Bildfahrplan.Forms
 {
-    public partial class TrainColorEditForm : FDialog<DialogResult>
+    public class TrainColorEditForm : FDialog<DialogResult>
     {
         public Train Train { get; set; }
 

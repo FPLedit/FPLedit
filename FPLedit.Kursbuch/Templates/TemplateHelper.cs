@@ -2,6 +2,8 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using FPLedit.Kursbuch.Model;
+using FPLedit.Shared.DefaultImplementations;
 
 namespace FPLedit.Kursbuch.Templates
 {
@@ -15,7 +17,7 @@ namespace FPLedit.Kursbuch.Templates
         {
             this.tt = tt;
 
-            var filterable = new Forms.FilterableHandler();
+            var filterable = new BasicFilterableProvider("Kursbuch", KfplAttrs.GetAttrs, KfplAttrs.CreateAttrs);
 
             trules = filterable.LoadTrainRules(tt).ToArray();
             srules = filterable.LoadStationRules(tt).ToArray();

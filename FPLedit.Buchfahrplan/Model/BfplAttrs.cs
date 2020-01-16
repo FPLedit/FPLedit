@@ -7,7 +7,7 @@ using System.Text;
 namespace FPLedit.Buchfahrplan.Model
 {
     [XElmName("bfpl_attrs", IsFpleditElement = true)]
-    public class BfplAttrs : Entity
+    public class BfplAttrs : Entity, IPatternProvider
     {
         public List<BfplPoint> Points { get; private set; }
 
@@ -76,12 +76,12 @@ namespace FPLedit.Buchfahrplan.Model
             set => SetAttribute("shD", value.ToString().ToLower());
         }
 
-        public BfplAttrs(Timetable tt) : base("bfpl_attrs", tt)
+        private BfplAttrs(Timetable tt) : base("bfpl_attrs", tt)
         {
             Points = new List<BfplPoint>();
         }
 
-        public BfplAttrs(XMLEntity en, Timetable tt) : base(en, tt)
+        private BfplAttrs(XMLEntity en, Timetable tt) : base(en, tt)
         {
             Points = new List<BfplPoint>();
             foreach (var c in en.Children.Where(x => x.XName == "p")) // Filtert andere Elemente
@@ -96,7 +96,7 @@ namespace FPLedit.Buchfahrplan.Model
             return null;
         }
 
-        public BfplPoint[] GetPoints(int route)
+        public BfplPoint[] GetRoutePoints(int route)
         {
             if (_parent.Type == TimetableType.Linear && route == Timetable.LINEAR_ROUTE_ID)
                 return Points.ToArray();
@@ -113,6 +113,13 @@ namespace FPLedit.Buchfahrplan.Model
         {
             Points.Remove(p);
             XMLEntity.Children.Remove(p.XMLEntity);
+        }
+        
+        public static BfplAttrs CreateAttrs(Timetable tt)
+        {
+            var attrs = new BfplAttrs(tt);
+            tt.Children.Add(attrs.XMLEntity);
+            return attrs;
         }
     }
 }

@@ -13,7 +13,7 @@ namespace FPLedit.NonDefaultFiletypes
     {
         public string Filter => "Fahrplan Dateien (*.fpl)|*.fpl";
 
-        public bool Export(Timetable tt, string filename, IPluginInterface pluginInterface)
+        public bool Export(Timetable tt, string filename, IPluginInterface pluginInterface, string[] flags = null)
         {
             if (tt.Version.Compare(TimetableVersion.JTG3_1) >= 0)
                 throw new Exception("Nur mit jTrainGraph 2.x oder 3.0x erstellte Fahrpläne können aktualisiert werden.");

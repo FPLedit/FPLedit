@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace FPLedit.Shared.Ui
+namespace FPLedit.Shared
 {
-    public interface IFilterableUi
+    public interface IFilterableProvider
     {
         string DisplayName { get; }
 

@@ -1,6 +1,5 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
-using FPLedit.Shared.Ui;
 using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
@@ -14,7 +13,7 @@ namespace FPLedit.Editor
         private IPluginInterface pluginInterface;
 
         private int dialogOffset;
-        private IEditingDialog[] dialogs;
+        private IEditMenuItemProxy[] dialogs;
         private bool hasFilterables, hasDesignables;
 
         private ButtonMenuItem editLineItem, editTimetableItem; // Type="Network"
@@ -80,14 +79,14 @@ namespace FPLedit.Editor
 
         private void PluginInterface_ExtensionsLoaded(object sender, EventArgs e)
         {
-            var previewables = pluginInterface.GetRegistered<IPreviewable>();
+            var previewables = pluginInterface.GetRegistered<IPreviewProxy>();
             if (previewables.Length == 0)
                 pluginInterface.Menu.Items.Remove(previewRoot); // Ausblenden in der harten Art
 
             foreach (var prev in previewables)
                 previewRoot.CreateItem(prev.DisplayName, enabled: false, clickHandler: (s, ev) => prev.Show(pluginInterface));
 
-            dialogs = pluginInterface.GetRegistered<IEditingDialog>();
+            dialogs = pluginInterface.GetRegistered<IEditMenuItemProxy>();
             if (dialogs.Length > 0)
                 editRoot.Items.Add(new SeparatorMenuItem());
 
@@ -95,8 +94,8 @@ namespace FPLedit.Editor
             foreach (var dialog in dialogs)
                 editRoot.CreateItem(dialog.DisplayName, enabled: dialog.IsEnabled(pluginInterface), clickHandler: (s, ev) => dialog.Show(pluginInterface));
 
-            hasFilterables = pluginInterface.GetRegistered<IFilterableUi>().Length > 0;
-            hasDesignables = pluginInterface.GetRegistered<IDesignableUiProxy>().Length > 0;
+            hasFilterables = pluginInterface.GetRegistered<IFilterableProvider>().Length > 0;
+            hasDesignables = pluginInterface.GetRegistered<IAppearanceControl>().Length > 0;
         }
 
         private void PluginInterface_FileStateChanged(object sender, FileStateChangedEventArgs e)

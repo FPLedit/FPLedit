@@ -1,4 +1,4 @@
-using Eto.Forms;
+﻿using Eto.Forms;
 using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
@@ -48,7 +48,7 @@ namespace FPLedit.NonDefaultFiletypes
             return elm;
         }
 
-        public bool Export(Timetable tt, string filename, IPluginInterface pluginInterface)
+        public bool Export(Timetable tt, string filename, IPluginInterface pluginInterface, string[] flags = null)
         {
             if (pluginInterface.Timetable.Type == TimetableType.Network)
             {

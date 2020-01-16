@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using FPLedit.Shared;
 using System.Diagnostics;
-using FPLedit.Shared.Ui;
 using Eto.Forms;
 using FPLedit.Shared.Templating;
 using FPLedit.Kursbuch.Model;
@@ -11,11 +10,10 @@ using FPLedit.Shared.UI;
 
 namespace FPLedit.Kursbuch.Forms
 {
-    public partial class SettingsControl : Panel, ISaveHandler, IExpertHandler
+    public class SettingsControl : Panel, IAppearanceHandler
     {
         private readonly ISettings settings;
         private readonly KfplAttrs attrs;
-        private readonly KfplTemplateChooser chooser;
 
         private const string NO_KBS_TEXT = "<keine Nummer>";
 
@@ -36,7 +34,7 @@ namespace FPLedit.Kursbuch.Forms
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
             settings = pluginInterface.Settings;
-            chooser = new KfplTemplateChooser(pluginInterface);
+            var chooser = new KfplTemplateChooser(pluginInterface);
             templateComboBox.ItemTextBinding = Binding.Property<ITemplate, string>(t => t.TemplateName);
             templateComboBox.DataStore = chooser.AvailableTemplates;
 
@@ -51,10 +49,7 @@ namespace FPLedit.Kursbuch.Forms
                 cssTextBox.Text = attrs.Css ?? "";
             }
             else
-            {
-                attrs = new KfplAttrs(tt);
-                tt.Children.Add(attrs.XMLEntity);
-            }
+                attrs = KfplAttrs.CreateAttrs(tt);
 
             setRouteNumbers = new Dictionary<int, string>();
             var col = kbsnListView.AddColumn(new TextBoxCell

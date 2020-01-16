@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace FPLedit.Bildfahrplan.Forms
 {
-    public partial class TrainColorForm : FDialog<DialogResult>
+    public class TrainColorForm : FDialog<DialogResult>
     {
         private readonly IPluginInterface pluginInterface;
         private readonly Timetable tt;

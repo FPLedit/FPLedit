@@ -1,6 +1,4 @@
 ﻿using FPLedit.Shared.Templating;
-using System.IO;
-using System.Reflection;
 
 namespace FPLedit.Kursbuch.Templates
 {
@@ -9,7 +7,5 @@ namespace FPLedit.Kursbuch.Templates
         public string TemplateIdentifier => "builtin:FPLedit.Kursbuch/Templates/KfplTemplate.fpltmpl";
 
         public string GetTemplateCode() => ResourceHelper.GetStringResource("Kursbuch.Templates.KfplTemplate.fpltmpl");
-
-        public bool Javascript => true;
     }
 }

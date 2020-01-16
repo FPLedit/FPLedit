@@ -3,6 +3,7 @@ using FPLedit.Shared;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using FPLedit.Shared.DefaultImplementations;
 
 namespace FPLedit.Aushangfahrplan.Templates
 {
@@ -15,7 +16,7 @@ namespace FPLedit.Aushangfahrplan.Templates
         {
             this.tt = tt;
 
-            var filterable = new Forms.FilterableHandler();
+            var filterable = new BasicFilterableProvider("Aushangfahrplan", AfplAttrs.GetAttrs, AfplAttrs.CreateAttrs);
 
             trules = filterable.LoadTrainRules(tt).ToArray();
             srules = filterable.LoadStationRules(tt).ToArray();

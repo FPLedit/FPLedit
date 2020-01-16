@@ -8,11 +8,11 @@ namespace FPLedit.Shared
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public class PluginAttribute : Attribute
     {
-        private readonly string _name, _minVer, _maxVer;
+        public string Name { get; }
 
-        public string Name => _name;
-        public string MinVer => _minVer;
-        public string MaxVer => _maxVer;
+        public string MinVer { get; }
+
+        public string MaxVer { get; }
 
         public string Author { get; set; }
 
@@ -22,9 +22,9 @@ namespace FPLedit.Shared
 
         public PluginAttribute(string name, string minVer, string maxVer)
         {
-            _name = name;
-            _minVer = minVer;
-            _maxVer = maxVer;
+            Name = name;
+            MinVer = minVer;
+            MaxVer = maxVer;
         }
     }
 }

@@ -1,6 +1,4 @@
 ﻿using FPLedit.Shared.Templating;
-using System.IO;
-using System.Reflection;
 
 namespace FPLedit.Buchfahrplan.Templates
 {
@@ -10,8 +8,6 @@ namespace FPLedit.Buchfahrplan.Templates
 
         public string GetTemplateCode() => ResourceHelper.GetStringResource("Buchfahrplan.Templates.StdTemplate.fpltmpl")
             .Replace("{{##WELLEN_CSS##}}", ResourceHelper.GetStringResource("Buchfahrplan.Resources.WellenCss.css"));
-
-        public bool Javascript => true;
     }
     
     public class ZlbTemplate : ITemplateProxy
@@ -20,7 +16,5 @@ namespace FPLedit.Buchfahrplan.Templates
 
         public string GetTemplateCode() => ResourceHelper.GetStringResource("Buchfahrplan.Templates.ZlbTemplate.fpltmpl")
             .Replace("{{##WELLEN_CSS##}}", ResourceHelper.GetStringResource("Buchfahrplan.Resources.WellenCss.css"));
-
-        public bool Javascript => true;
     }
 }

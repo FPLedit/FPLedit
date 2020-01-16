@@ -1,6 +1,5 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
-using FPLedit.Shared.Ui;
 using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
@@ -16,15 +15,13 @@ namespace FPLedit.Editor
 #pragma warning restore CS0649
 
         private readonly IPluginInterface pluginInterface;
-        private readonly List<ISaveHandler> saveHandlers;
-        private readonly List<IExpertHandler> expertHandlers;
+        private readonly List<IAppearanceHandler> handlers;
 
         private RenderSettingsForm()
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            saveHandlers = new List<ISaveHandler>();
-            expertHandlers = new List<IExpertHandler>();
+            handlers = new List<IAppearanceHandler>();
 
             this.AddSizeStateHandler();
         }
@@ -33,7 +30,7 @@ namespace FPLedit.Editor
         {
             this.pluginInterface = pluginInterface;
 
-            var designables = pluginInterface.GetRegistered<IDesignableUiProxy>();
+            var designables = pluginInterface.GetRegistered<IAppearanceControl>();
 
             tabControl.SuspendLayout();
             tabControl.Pages.Clear();
@@ -48,10 +45,8 @@ namespace FPLedit.Editor
                 c.BackgroundColor = tp.BackgroundColor;
                 tabControl.Pages.Add(tp);
 
-                if (c is ISaveHandler sh)
-                    saveHandlers.Add(sh);
-                if (c is IExpertHandler eh)
-                    expertHandlers.Add(eh);
+                if (c is IAppearanceHandler sh)
+                    handlers.Add(sh);
             }
 
             tabControl.ResumeLayout();
@@ -64,7 +59,7 @@ namespace FPLedit.Editor
         private void CloseButton_Click(object sender, EventArgs e)
         {
             pluginInterface.Settings.Set("std.expert", expertCheckBox.Checked.Value);
-            saveHandlers.ForEach(sh => sh.Save());
+            handlers.ForEach(sh => sh.Save());
             Close(DialogResult.Ok);
         }
 
@@ -72,6 +67,6 @@ namespace FPLedit.Editor
             => Close(DialogResult.Cancel);
 
         private void ExpertCheckBox_CheckedChanged(object sender, EventArgs e)
-            => expertHandlers.ForEach(eh => eh.SetExpertMode(expertCheckBox.Checked.Value));
+            => handlers.ForEach(eh => eh.SetExpertMode(expertCheckBox.Checked.Value));
     }
 }
