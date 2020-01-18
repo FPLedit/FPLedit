@@ -25,6 +25,8 @@ namespace FPLedit.Shared
         void Save(bool forceSaveAs);
         void Reload();
         string GetTemp(string filename);
+        string ExecutablePath { get; }
+        string ExecutableDir { get; }
 
         // Undo
         void Undo();
@@ -35,6 +37,9 @@ namespace FPLedit.Shared
 
         ILog Logger { get; }
         ISettings Settings { get; }
+        /// <remarks>
+        /// This property is only available after the <see cref="ExtensionsLoaded"/> event is invoked and thus cannot be used in <see cref="IPlugin.Init"/>.
+        /// </remarks>
         ITemplateManager TemplateManager { get; }
 
         event EventHandler<FileStateChangedEventArgs> FileStateChanged;

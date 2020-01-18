@@ -14,7 +14,7 @@ namespace FPLedit.Kursbuch
     {
         public void Init(IPluginInterface pluginInterface)
         {
-            var export = new BasicTemplateExport("Tabellenfahrplan/Kursbuch als HTML Datei (*.html)|*.html", new KfplTemplateChooser(pluginInterface));
+            var export = new BasicTemplateExport("Tabellenfahrplan/Kursbuch als HTML Datei (*.html)|*.html", pi => new KfplTemplateChooser(pi));
             var preview = new BasicPreview("kfpl", "Kursbuch", export);
             pluginInterface.Register<IExport>(export);
             pluginInterface.Register<IPreviewProxy>(preview);

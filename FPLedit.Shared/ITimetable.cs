@@ -25,7 +25,7 @@ namespace FPLedit.Shared
         void AddTransition(Train first, Train next);
         void SetTransition(Train first, Train newNext);
         Train GetTransition(Train first);
-        IEnumerable<Train> GetTransitions(Train first);
+        IEnumerable<Train> GetFollowingTransitions(Train first);
         void RemoveTransition(Train tra, bool onlyAsFirst = true);
 
         Timetable Clone();

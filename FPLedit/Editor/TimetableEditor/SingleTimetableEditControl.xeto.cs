@@ -166,7 +166,7 @@ namespace FPLedit.Editor.TimetableEditor
             view.SelectedRowsChanged += (s, e) =>
             {
                 var selected = (DataElement)view.SelectedItem;
-                shuntButton.Enabled = (selected != null) ? selected.Station.Tracks.Any() : false;
+                shuntButton.Enabled = selected?.Station.Tracks.Any() ?? false;
             };
         }
 

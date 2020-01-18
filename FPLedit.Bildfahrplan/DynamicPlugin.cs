@@ -10,16 +10,19 @@ using System.Threading.Tasks;
 namespace FPLedit.Bildfahrplan
 {
     [Plugin("Dynamische Bildfahrplan-Vorschau", Vi.PFrom, Vi.PUpTo, Author = "Manuel Huber")]
-    public class DynamicPlugin : IPlugin
+    public sealed class DynamicPlugin : IPlugin, IDisposable
     {
+        private DynamicPreview dpf;
         public void Init(IPluginInterface pluginInterface)
         {
             Style.pluginInterface = pluginInterface;
 
-            var dpf = new DynamicPreview();
+            dpf = new DynamicPreview();
             pluginInterface.Register<IPreviewProxy>(dpf);
             pluginInterface.AppClosing += (s, e) => dpf.Close();
         }
+
+        public void Dispose() => dpf?.Dispose();
     }
 
     public sealed class DynamicPreview : IPreviewProxy, IDisposable
@@ -33,7 +36,6 @@ namespace FPLedit.Bildfahrplan
         {
             if (!opened)
             {
-                var route = (pluginInterface.Timetable.Type == TimetableType.Network) ? pluginInterface.FileState.SelectedRoute : Timetable.LINEAR_ROUTE_ID;
                 dpf = new PreviewForm(pluginInterface);
                 dpf.Closed += (s, e) => opened = false;
                 dpf.Show();

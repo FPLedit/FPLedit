@@ -170,13 +170,13 @@ namespace FPLedit.Shared
 
         public List<Station> GetStationsOrderedByDirection(TrainDirection direction = TrainDirection.ti)
         {
-            float linearOrder(Station s) => s.Positions.GetPosition(LINEAR_ROUTE_ID).Value;
+            float LinearOrder(Station s) => s.Positions.GetPosition(LINEAR_ROUTE_ID).Value;
 
             if (Type == TimetableType.Network)
                 throw new NotSupportedException("Netzwerk-Fahrpläne haben keine Richtung!");
             return (direction == TrainDirection.ta ?
-                Stations.OrderByDescending(linearOrder)
-                : Stations.OrderBy(linearOrder)).ToList();
+                Stations.OrderByDescending(LinearOrder)
+                : Stations.OrderBy(LinearOrder)).ToList();
         }
 
         public string GetLineName(TrainDirection direction)
@@ -431,9 +431,9 @@ namespace FPLedit.Shared
 
         public void SetTransition(Train first, Train newNext)
         {
-            var trans = transitions.Where(t => t.First == first.Id);
+            var trans = transitions.Where(t => t.First == first.Id).ToArray();
 
-            if (trans.Count() == 0 && newNext != null)
+            if (!trans.Any() && newNext != null)
                 AddTransition(first, newNext);
             else if (trans.Count() > 1)
                 throw new Exception("Mehr als eine Transition mit angegebenem ersten Zug gefunden!");
@@ -450,9 +450,9 @@ namespace FPLedit.Shared
 
         public Train GetTransition(int tid)
         {
-            var trans = transitions.Where(t => t.First == tid);
+            var trans = transitions.Where(t => t.First == tid).ToArray();
 
-            if (trans.Count() == 0)
+            if (!trans.Any())
                 return null;
             if (trans.Count() > 1)
                 throw new Exception("Mehr als eine Transition mit angegebenem ersten Zug gefunden!");
@@ -460,9 +460,9 @@ namespace FPLedit.Shared
             return GetTrainById(trans.First().Next);
         }
 
-        public IEnumerable<Train> GetTransitions(Train first)
+        public IEnumerable<Train> GetFollowingTransitions(Train first)
         {
-            Train tra = first;
+            var tra = first;
             while ((tra = GetTransition(tra)) != null)
                 yield return tra;
         }
@@ -471,7 +471,7 @@ namespace FPLedit.Shared
 
         public void RemoveTransition(int tid, bool onlyAsFirst = true)
         {
-            var trans = transitions.Where(t => t.First == tid || (!onlyAsFirst && t.Next == tid));
+            var trans = transitions.Where(t => t.First == tid || (!onlyAsFirst && t.Next == tid)).ToArray();
             foreach (var transition in trans)
                 trElm.Children.Remove(transition.XMLEntity);
             transitions.RemoveAll(t => trans.Contains(t));

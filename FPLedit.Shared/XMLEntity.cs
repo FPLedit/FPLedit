@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
 
 namespace FPLedit.Shared
@@ -59,6 +57,22 @@ namespace FPLedit.Shared
         public void RemoveAttribute(string key) => Attributes.Remove(key);
 
         private string AttributeDebugger => string.Join(", ", Attributes.ToList().Select(a => a.Key + "=" + a.Value));
+        
+        
+        public bool XDiff(XMLEntity other)
+        {
+            if (XName != other.XName)
+                return false;
+            if (Value != other.Value)
+                return false;
+            if (Attributes.Count != other.Attributes.Count)
+                return false;
+            if (Attributes.Any(a => a.Value != other.GetAttribute<string>(a.Key, null)))
+                return false;
+            if (Children.Count != other.Children.Count)
+                return false;
+            return Children.All(c => c.XDiff(other.Children[Children.IndexOf(c)]));
+        }
     }
 
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
@@ -66,7 +80,7 @@ namespace FPLedit.Shared
     {
         public XElmNameAttribute(params string[] names)
         {
-            this.Names = names;
+            Names = names;
         }
 
         public string[] Names { get; }

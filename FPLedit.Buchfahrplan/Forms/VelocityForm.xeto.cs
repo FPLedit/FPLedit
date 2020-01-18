@@ -79,8 +79,7 @@ namespace FPLedit.Buchfahrplan.Forms
                         return;
                     }
 
-                    if (attrs != null)
-                        attrs.AddPoint(p);
+                    attrs?.AddPoint(p);
                     UpdateListView();
                 }
             }
@@ -108,11 +107,9 @@ namespace FPLedit.Buchfahrplan.Forms
 
                 if (sta is Station)
                     throw new NotSupportedException("Bahnhöfe können nicht gelöscht werden!");
-                else if (sta is BfplPoint point)
+                if (sta is BfplPoint point)
                 {
-                    if (attrs != null)
-                        attrs.RemovePoint(point);
-
+                    attrs?.RemovePoint(point);
                     UpdateListView();
                 }
             }

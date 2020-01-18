@@ -11,7 +11,7 @@ namespace FPLedit.Aushangfahrplan
     {
         public void Init(IPluginInterface pluginInterface)
         {
-            var export = new BasicTemplateExport("Aushangfahrplan HTML Datei (*.html)|*.html", new AfplTemplateChooser(pluginInterface));
+            var export = new BasicTemplateExport("Aushangfahrplan HTML Datei (*.html)|*.html", pi => new AfplTemplateChooser(pi));
             var preview = new BasicPreview("Aushangfahrplan", "Kursbuch", export);
             pluginInterface.Register<IExport>(export);
             pluginInterface.Register<IPreviewProxy>(preview);

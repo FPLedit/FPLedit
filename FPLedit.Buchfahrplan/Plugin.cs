@@ -11,7 +11,7 @@ namespace FPLedit.Buchfahrplan
     {
         public void Init(IPluginInterface pluginInterface)
         {
-            var export = new BasicTemplateExport("Buchfahrplan als HTML Datei (*.html)|*.html", new BfplTemplateChooser(pluginInterface));
+            var export = new BasicTemplateExport("Buchfahrplan als HTML Datei (*.html)|*.html", pi => new BfplTemplateChooser(pi));
             var preview = new BasicPreview("bfpl", "Buchfahrplan", export);
             pluginInterface.Register<IExport>(export);
             pluginInterface.Register<IPreviewProxy>(preview);

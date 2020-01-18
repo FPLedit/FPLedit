@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using FPLedit.Shared.Templating;
@@ -6,18 +7,18 @@ namespace FPLedit.Shared.DefaultImplementations
 {
     public sealed class BasicTemplateExport : IExport
     {
-        private readonly BaseTemplateChooser chooser;
-        
+        private readonly Func<IPluginInterface, BaseTemplateChooser> getChooser;
         public string Filter { get; }
         
-        public BasicTemplateExport(string filter, BaseTemplateChooser chooser)
+        public BasicTemplateExport(string filter, Func<IPluginInterface, BaseTemplateChooser> getChooser)
         {
+            this.getChooser = getChooser;
             Filter = filter;
-            this.chooser = chooser;
         }
 
         public bool Export(Timetable tt, string filename, IPluginInterface pluginInterface, string[] flags = null)
         {
+            var chooser = getChooser(pluginInterface);
             var templ = chooser.GetTemplate(tt);
             string cont = templ.GenerateResult(tt);
 

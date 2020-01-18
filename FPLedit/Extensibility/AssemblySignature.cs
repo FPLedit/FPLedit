@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace FPLedit.Extensibility
@@ -21,7 +20,8 @@ namespace FPLedit.Extensibility
 
             var x = new XmlSerializer(typeof(RSAParameters));
             using (var stream = EtoExtensions.GetResource(null, "Resources.extensions.pubkey"))
-                pubkey = (RSAParameters)x.Deserialize(stream);
+            using (var reader = new XmlTextReader(stream) { DtdProcessing = DtdProcessing.Prohibit, XmlResolver = null })
+                pubkey = (RSAParameters)x.Deserialize(reader);
         }
 
         private IEnumerable<AssemblySignature> LoadSignatures()
@@ -39,7 +39,7 @@ namespace FPLedit.Extensibility
                         continue;
 
                     var signatureArray = new byte[parts[1].Length / 2];
-                    for (int i = 0; i < parts[1].Length; i += 2)
+                    for (var i = 0; i < parts[1].Length; i += 2)
                         signatureArray[i / 2] = Convert.ToByte(parts[1].Substring(i, 2), 16);
 
                     yield return new AssemblySignature()
@@ -70,9 +70,7 @@ namespace FPLedit.Extensibility
 
                 var sigDeformatter = new RSAPKCS1SignatureDeformatter(rsa);
                 sigDeformatter.SetHashAlgorithm("SHA256");
-                if (sigDeformatter.VerifySignature(hash, signature.Signature))
-                    return SecurityContext.Official;
-                return SecurityContext.ThirdParty;
+                return sigDeformatter.VerifySignature(hash, signature.Signature) ? SecurityContext.Official : SecurityContext.ThirdParty;
             }
         }
 

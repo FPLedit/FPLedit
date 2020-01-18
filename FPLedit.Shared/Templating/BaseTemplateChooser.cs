@@ -10,7 +10,7 @@ namespace FPLedit.Shared.Templating
 
         protected abstract string AttrName { get; }
 
-        public BaseTemplateChooser(string type, IPluginInterface pluginInterface)
+        protected BaseTemplateChooser(string type, IPluginInterface pluginInterface)
         {
             AvailableTemplates = pluginInterface.TemplateManager.GetTemplates(type);
         }

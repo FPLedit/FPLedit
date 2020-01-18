@@ -3,23 +3,19 @@ using FPLedit.Shared;
 using FPLedit.Shared.Filetypes;
 using FPLedit.Shared.UI;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.DebugDump
 {
     [Plugin("DebugDump", Vi.PFrom, Vi.PUpTo, Author = "Manuel Huber")]
-    public class Plugin : IPlugin
+    public sealed class Plugin : IPlugin, IDisposable
     {
         private string basePath;
         private DirectoryInfo dir;
         private int sessionCounter = 0;
         private string session;
         private IPluginInterface pluginInterface;
+        private FileSystemWatcher watcher;
 
         public void Init(IPluginInterface pluginInterface)
         {
@@ -28,7 +24,7 @@ namespace FPLedit.DebugDump
             this.pluginInterface = pluginInterface;
 
             session = Guid.NewGuid().ToString();
-            basePath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "ttDumps", session);
+            basePath = Path.Combine(pluginInterface.ExecutableDir, "ttDumps", session);
             dir = new DirectoryInfo(basePath);
 
             if (!dir.Exists)
@@ -52,7 +48,7 @@ namespace FPLedit.DebugDump
             {
                 try
                 {
-                    if (pluginInterface.Timetable == null || XDiff(last, pluginInterface.Timetable.XMLEntity))
+                    if (pluginInterface.Timetable == null || last.XDiff(pluginInterface.Timetable.XMLEntity))
                         return;
 
                     var clone = pluginInterface.Timetable.Clone();
@@ -73,7 +69,7 @@ namespace FPLedit.DebugDump
                     var clone2 = pluginInterface.Timetable.Clone();
                     last = clone2.XMLEntity;
                 }
-                catch { }
+                catch {}
             };
 
             pluginInterface.ExtensionsLoaded += (s, e) =>
@@ -83,7 +79,7 @@ namespace FPLedit.DebugDump
             };
 
             var tmpDir = pluginInterface.GetTemp("");
-            var watcher = new FileSystemWatcher(tmpDir, "*.*")
+            watcher = new FileSystemWatcher(tmpDir, "*.*")
             {
                 NotifyFilter = NotifyFilters.LastWrite
             };
@@ -102,27 +98,6 @@ namespace FPLedit.DebugDump
             orig.CopyTo(fn);
         }
 
-        private bool XDiff(XMLEntity x1, XMLEntity x2)
-        {
-            if (x1.XName != x2.XName)
-                return false;
-            if (x1.Value != x2.Value)
-                return false;
-            if (x1.Attributes.Count != x2.Attributes.Count)
-                return false;
-            foreach (var a in x1.Attributes)
-            {
-                if (a.Value != x2.GetAttribute<string>(a.Key, null))
-                    return false;
-            }
-            if (x1.Children.Count != x2.Children.Count)
-                return false;
-            foreach (var c in x1.Children)
-            {
-                if (!XDiff(c, x2.Children[x1.Children.IndexOf(c)]))
-                    return false;
-            }
-            return true;
-        }
+        public void Dispose() => watcher?.Dispose();
     }
 }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.IO;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Reflection;
 using FPLedit.Shared;
 using FPLedit.Shared.Templating;
 using FPLedit.Shared.UI;
@@ -256,7 +257,7 @@ namespace FPLedit
             if (FileState.Opened)
                 Settings.Set("restart.file", FileState.FileName);
 
-            Process.Start(System.Reflection.Assembly.GetEntryAssembly().Location);
+            Process.Start(ExecutablePath);
             Program.App.Quit();
         }
 
@@ -342,6 +343,10 @@ namespace FPLedit
         dynamic IPluginInterface.Menu => Menu;
 
         public ITemplateManager TemplateManager => templateManager;
+
+        public string ExecutablePath => Assembly.GetEntryAssembly().Location;
+
+        public string ExecutableDir => Path.GetDirectoryName(ExecutablePath);
 
         public dynamic RootForm => this;
 

@@ -6,7 +6,7 @@ namespace FPLedit.Shared.DefaultImplementations
 {
     public abstract class BaseFilterableProvider
     {
-        protected List<FilterRule> trainRules, stationRules;
+        private List<FilterRule> trainRules, stationRules;
 
         private void Init(Timetable tt)
         {
