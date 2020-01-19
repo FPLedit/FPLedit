@@ -211,7 +211,7 @@ if (attrs != null)
                         let time = t.GetArrDep(sta).Departure;
                         if (time == new TimeEntry()) time =  t.GetArrDep(sta).Arrival;
                         if (time == new TimeEntry()) times = "...";
-                        else times = time.ToString("hh\\:mm");
+                        else times = time.ToShortTimeString();
                     }
                 #>
                 <td class="ti<#= s_last #>"><span><#= times #></span></td>

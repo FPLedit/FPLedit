@@ -11,6 +11,9 @@ namespace FPLedit.Shared.Tests
             var timeEntry = new TimeEntry();
             Assert.AreEqual(timeEntry, TimeEntry.Zero);
             
+            Assert.AreEqual(TimeEntry.Zero, new TimeEntry());
+            Assert.AreEqual(TimeEntry.Zero, default(TimeEntry));
+            
             timeEntry = new TimeEntry(10, 20);
             Assert.AreEqual(10, timeEntry.Hours);
             Assert.AreEqual(20, timeEntry.Minutes);
