@@ -5,6 +5,7 @@ using Eto.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FPLedit.Shared;
 
 namespace FPLedit.Bildfahrplan.Render
 {
@@ -19,7 +20,7 @@ namespace FPLedit.Bildfahrplan.Render
             this.parent = parent;
         }
 
-        public void Render(Graphics g, Margins margin, TimeSpan startTime, TimeSpan endTime, float width)
+        public void Render(Graphics g, Margins margin, TimeEntry startTime, TimeEntry endTime, float width)
         {
             var timeFont = (Font)attrs.TimeFont; // Reminder: Do not dispose, will be disposed with MFont instance!
             using (var timeBrush = new SolidBrush((Color)attrs.TimeColor))
@@ -31,7 +32,7 @@ namespace FPLedit.Bildfahrplan.Render
                     var offset = margin.Top + l * attrs.HeightPerHour / 60f;
                     g.DrawLine(hour ? hourPen : minutePen, margin.Left - 5, offset, width - margin.Right, offset); // Linie
 
-                    var text = new TimeSpan(0, l + startTime.GetMinutes(), 0).ToString(Renderer.TIME_FORMAT);
+                    var text = new TimeEntry(0, l + startTime.GetMinutes()).ToShortTimeString();
                     var size = g.MeasureString(timeFont, text);
                     g.DrawText(timeFont, timeBrush, margin.Left - 5 - size.Width, offset - (size.Height / 2), text); // Beschriftung
                     hour = !hour;

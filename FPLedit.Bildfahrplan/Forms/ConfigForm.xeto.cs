@@ -64,8 +64,8 @@ namespace FPLedit.Bildfahrplan.Forms
 
             heightPerHourTextBox.TextBinding.AddFloatConvBinding<TimetableStyle, TextControl>(s => s.HeightPerHour);
 
-            startTimeTextBox.TextBinding.AddTimeSpanConvBinding<TimetableStyle, TextControl>(s => s.StartTime);
-            endTimeTextBox.TextBinding.AddTimeSpanConvBinding<TimetableStyle, TextControl>(s => s.EndTime);
+            startTimeTextBox.TextBinding.AddTimeEntryConvBinding<TimetableStyle, TextControl>(s => s.StartTime);
+            endTimeTextBox.TextBinding.AddTimeEntryConvBinding<TimetableStyle, TextControl>(s => s.EndTime);
 
             includeKilometreCheckBox.CheckedBinding.BindDataContext<TimetableStyle>(s => s.DisplayKilometre);
             drawStationNamesCheckBox.CheckedBinding.BindDataContext<TimetableStyle>(s => s.DrawHeader);
@@ -105,11 +105,11 @@ namespace FPLedit.Bildfahrplan.Forms
                 return ts;
             }).Where(t => t != default);
 
-            var offset = new TimeSpan(0, 5, 0);
-            var max = new TimeSpan(23, 59, 59);
+            var offset = new TimeEntry(0, 5);
+            var max = new TimeEntry(24, 0);
             var start = times.DefaultIfEmpty().Min();
             var end = times.DefaultIfEmpty(max).Max();
-            attrs.StartTime = start > default(TimeSpan) + offset ? start - offset : default;
+            attrs.StartTime = start > default(TimeEntry) + offset ? start - offset : default;
             attrs.EndTime = end < max - offset ? end + offset : max;
 
             startTimeTextBox.UpdateBindings(BindingUpdateMode.Destination);

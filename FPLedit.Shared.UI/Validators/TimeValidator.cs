@@ -20,7 +20,7 @@ namespace FPLedit.Shared.UI.Validators
         {
             if (AllowEmpty && Control.Text == "")
                 return true;
-            return TimeSpan.TryParse(Control.Text.Replace("24:", "1.00:"), out var ts) && ts < new TimeSpan(1, 0, 0, 1);
+            return TimeEntry.TryParse(Control.Text, out var ts) && ts <= new TimeEntry(24, 0);
         }
     }
 }

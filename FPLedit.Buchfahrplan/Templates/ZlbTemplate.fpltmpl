@@ -235,8 +235,8 @@ if (attrs != null)
 					<#
 					if (clr_typename(entity) == "Station") {
 						let ardp = tra.GetArrDep(entity);
-						let ar = TimeSpanExtensions.ToShortTimeString(ardp.Arrival);
-						let dp = TimeSpanExtensions.ToShortTimeString(ardp.Departure);
+						let ar = ardp.Arrival.ToShortTimeString();
+						let dp = ardp.Departure.ToShortTimeString();
 						let zlm = ardp.Zuglaufmeldung;
 					#>
 					<td class="zug klein"><#= helper.TrapezHalt(tra, entity) #></td>

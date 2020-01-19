@@ -66,7 +66,7 @@ namespace FPLedit.Editor.TimetableEditor
             Initialized = true;
         }
 
-        private CustomCell GetCell(Func<ArrDep, TimeSpan> time, bool arrival)
+        private CustomCell GetCell(Func<ArrDep, TimeEntry> time, bool arrival)
         {
             var cc = new CustomCell
             {

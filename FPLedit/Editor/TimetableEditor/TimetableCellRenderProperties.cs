@@ -19,7 +19,7 @@ namespace FPLedit.Editor.TimetableEditor
         public Font Font { get; set; }
         public bool ReadOnly { get; set; }
 
-        public TimetableCellRenderProperties(Func<ArrDep, TimeSpan> time, Station sta, bool arrival, BaseTimetableDataElement data)
+        public TimetableCellRenderProperties(Func<ArrDep, TimeEntry> time, Station sta, bool arrival, BaseTimetableDataElement data)
         {
             if (fn == null || fb == null || errorColor == null)
             {

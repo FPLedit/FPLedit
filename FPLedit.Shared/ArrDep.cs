@@ -32,14 +32,14 @@ namespace FPLedit.Shared
         }
 
         [XAttrName("a")]
-        public TimeSpan Arrival
+        public TimeEntry Arrival
         {
             get => GetTimeValue("a");
             set => SetNotEmptyTime(value, "a");
         }
 
         [XAttrName("d")]
-        public TimeSpan Departure
+        public TimeEntry Departure
         {
             get => GetTimeValue("d");
             set => SetNotEmptyTime(value, "d");
@@ -74,7 +74,7 @@ namespace FPLedit.Shared
         }
 
         // Meta-Properties
-        public TimeSpan FirstSetTime
+        public TimeEntry FirstSetTime
             => Arrival == default ? Departure : Arrival;
 
         public bool HasMinOneTimeSet

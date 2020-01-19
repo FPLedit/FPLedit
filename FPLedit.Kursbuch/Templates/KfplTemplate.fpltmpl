@@ -209,8 +209,8 @@ if (attrs != null)
                     if (t.GetPath().Contains(sta))
                     {
                         let time = t.GetArrDep(sta).Departure;
-                        if (time == new TimeSpan()) time =  t.GetArrDep(sta).Arrival;
-                        if (time == new TimeSpan()) times = "...";
+                        if (time == new TimeEntry()) time =  t.GetArrDep(sta).Arrival;
+                        if (time == new TimeEntry()) times = "...";
                         else times = time.ToString("hh\\:mm");
                     }
                 #>

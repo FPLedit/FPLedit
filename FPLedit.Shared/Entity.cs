@@ -59,16 +59,16 @@ namespace FPLedit.Shared
             }
         }
 
-        protected void SetNotEmptyTime(TimeSpan time, string key)
+        protected void SetNotEmptyTime(TimeEntry time, string key)
         {
             var t = time.ToShortTimeString();
             SetAttribute(key, t != "00:00" ? t : "");
         }
 
-        protected TimeSpan GetTimeValue(string key)
+        protected TimeEntry GetTimeValue(string key)
         {
             var val = GetAttribute(key, "");
-            TimeSpan.TryParse(val, out var ts);
+            TimeEntry.TryParse(val, out var ts);
             return ts;
         }
     }

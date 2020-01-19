@@ -38,13 +38,13 @@ namespace FPLedit.Shared.UI
             });
         }
 
-        public static void AddTimeSpanConvBinding<TValue, T1>(this BindableBinding<T1, string> binding, Expression<Func<TValue, TimeSpan>> property)
+        public static void AddTimeEntryConvBinding<TValue, T1>(this BindableBinding<T1, string> binding, Expression<Func<TValue, TimeEntry>> property)
             where T1 : IBindable
         {
-            string convFromTs(TimeSpan ts) => ts.ToShortTimeString();
-            TimeSpan convToTs(string s)
+            string convFromTs(TimeEntry ts) => ts.ToShortTimeString();
+            TimeEntry convToTs(string s)
             {
-                TimeSpan.TryParse(s.Replace("24:", "1.00:"), out var ts);
+                TimeEntry.TryParse(s.Replace("24:", "1.00:"), out var ts);
                 return ts;
             };
 

@@ -16,7 +16,7 @@ namespace FPLedit.TimetableChecks
             foreach (var train in tt.Trains)
             {
                 var arrdeps = new TrainPathData(train._parent, train);
-                TimeSpan last = default;
+                TimeEntry last = default;
                 bool hasOverflow = false;
                 foreach (var arrdep in arrdeps.PathEntries)
                 {

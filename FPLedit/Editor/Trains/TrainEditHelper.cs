@@ -55,7 +55,7 @@ namespace FPLedit.Editor.Trains
 
         private void InternalCopyArrDeps(Train source, Train destination, int offsetMin)
         {
-            var offset = new TimeSpan(0, offsetMin, 0);
+            var offset = new TimeEntry(0, offsetMin);
             var path = source.GetPath();
 
             foreach (var sta in path)
@@ -112,8 +112,8 @@ namespace FPLedit.Editor.Trains
             Train[] trains() => tt.Trains.Where(t => t.Direction == dir)
                 .Where(t => t.GetPath().Contains(sta)).ToArray();
 
-            TimeSpan TimeSelector(Train train) => train.GetArrDep(sta).FirstSetTime;
-            bool TimeComparer(TimeSpan cur, TimeSpan next) => (cur != default) && (next != default) && (cur > next);
+            TimeEntry TimeSelector(Train train) => train.GetArrDep(sta).FirstSetTime;
+            bool TimeComparer(TimeEntry cur, TimeEntry next) => (cur != default) && (next != default) && (cur > next);
 
             InternalSort(tt, trains, TimeSelector, TimeComparer);
         }

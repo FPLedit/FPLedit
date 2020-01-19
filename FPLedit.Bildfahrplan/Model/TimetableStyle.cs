@@ -17,14 +17,14 @@ namespace FPLedit.Bildfahrplan.Model
             this.tt = tt;
         }
 
-        public TimeSpan StartTime
+        public TimeEntry StartTime
         {
             get
             {
                 int minutes = tt.GetAttribute<int>("tMin", -1);
                 if (minutes == -1)
                     minutes = 0;
-                return new TimeSpan(0, minutes, 0);
+                return new TimeEntry(0, minutes);
             }
             set
             {
@@ -33,14 +33,14 @@ namespace FPLedit.Bildfahrplan.Model
             }
         }
 
-        public TimeSpan EndTime
+        public TimeEntry EndTime
         {
             get
             {
                 int minutes = tt.GetAttribute<int>("tMax", -1);
                 if (minutes == -1)
                     minutes = 1440;
-                return new TimeSpan(0, minutes, 0);
+                return new TimeEntry(0, minutes);
             }
             set
             {

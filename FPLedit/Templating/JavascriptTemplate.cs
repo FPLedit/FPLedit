@@ -130,7 +130,7 @@ namespace FPLedit.Templating
             var allowedTypes = typeof(Timetable).Assembly.GetTypes()
                 .Where(type => type.GetCustomAttributes(typeof(TemplateSafeAttribute), true).Length > 0)
                 .Concat(extensionAllowedTypes)
-                .Concat(new[] { typeof(TimeSpan), typeof(Enumerable), }); // Also whitelist type used for time entries
+                .Concat(new[] { typeof(Enumerable), }); // Also whitelist type used for LINQ
 
             var engine = new Engine();
             foreach (var type in allowedTypes) // Register all allowed types

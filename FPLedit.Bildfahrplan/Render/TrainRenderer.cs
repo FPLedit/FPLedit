@@ -13,13 +13,13 @@ namespace FPLedit.Bildfahrplan.Render
         private readonly Timetable tt;
         private Margins margin = new Margins(10, 20, 20, 20);
         private readonly TimetableStyle attrs;
-        private readonly TimeSpan startTime;
+        private readonly TimeEntry startTime;
         private readonly Dictionary<Station, StationX> stationOffsets;
         private Train[] trainCache;
 
         private readonly DashStyleHelper ds = new DashStyleHelper();
 
-        public TrainRenderer(List<Station> stations, Timetable tt, Margins margin, TimeSpan startTime, Dictionary<Station, StationX> stationOffsets)
+        public TrainRenderer(List<Station> stations, Timetable tt, Margins margin, TimeEntry startTime, Dictionary<Station, StationX> stationOffsets)
         {
             this.stations = stations;
             this.tt = tt;
@@ -159,9 +159,9 @@ namespace FPLedit.Bildfahrplan.Render
         }
 
         #region Render helpers
-        private float GetTimeY(TimeSpan time) => margin.Top + ((time - startTime).GetMinutes() * attrs.HeightPerHour / 60f);
+        private float GetTimeY(TimeEntry time) => margin.Top + ((time - startTime).GetMinutes() * attrs.HeightPerHour / 60f);
 
-        PointF? GetGutterPoint(bool arrival, bool dir, StationX sx, TimeSpan time)
+        PointF? GetGutterPoint(bool arrival, bool dir, StationX sx, TimeEntry time)
         {
             if (time == default)
                 return null;
@@ -169,7 +169,7 @@ namespace FPLedit.Bildfahrplan.Render
             return new PointF(margin.Left + x, GetTimeY(time));
         }
 
-        PointF? GetInternalPoint(StationX sx, TimeSpan time, string track)
+        PointF? GetInternalPoint(StationX sx, TimeEntry time, string track)
         {
             if (time == default || track == null || !sx.TrackOffsets.TryGetValue(track, out float x))
                 return null;
