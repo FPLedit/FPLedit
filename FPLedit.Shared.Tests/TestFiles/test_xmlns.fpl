@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jTrainGraph_timetable xmlns:fpl="fahrplan.manuelhu.de/xmlns" test="xy" version="008" name="" tMin="-1" tMax="-1" d="1111111" bgC="weiß" sFont="font(SansSerif;0;12)" trFont="font(SansSerif;0;12)" hFont="font(SansSerif;0;12)" tFont="font(SansSerif;0;12)" sHor="true" sLine="0" shKm="false" sStation="-1" eStation="-1" cNr="1" exW="-1" exH="-1" shV="false">
+    <fpl:bfpl_attrs tmpl="FPLedit.Buchfahrplan.Templates.BuchfahrplanTemplate" font="">
+        <css xmlns="" />
+    </fpl:bfpl_attrs>
+    <stations />
+    <trains />
+</jTrainGraph_timetable>
