@@ -27,7 +27,7 @@ namespace FPLedit.Shared
         public TimeEntry Add(TimeEntry entry) => new TimeEntry(Hours + entry.Hours, Minutes + entry.Minutes);
         public TimeEntry Substract(TimeEntry entry) => new TimeEntry(Hours - entry.Hours, Minutes - entry.Minutes);
 
-        public int GetMinutes() => Hours * 60 + Minutes;
+        public int GetTotalMinutes() => Hours * 60 + Minutes;
 
         public int CompareTo(TimeEntry other)
         {

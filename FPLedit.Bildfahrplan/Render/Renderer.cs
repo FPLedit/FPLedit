@@ -110,7 +110,7 @@ namespace FPLedit.Bildfahrplan.Render
             // MarginLeft berechnen
             List<float> tsizes = new List<float>();
             foreach (var l in GetTimeLines(out bool _, startTime, endTime))
-                tsizes.Add(g.MeasureString(timeFont, new TimeEntry(0, l + startTime.GetMinutes()).ToShortTimeString()).Width);
+                tsizes.Add(g.MeasureString(timeFont, new TimeEntry(0, l + startTime.GetTotalMinutes()).ToShortTimeString()).Width);
             result.Left = tsizes.Max() + result.Left;
             return result;
         }
@@ -128,7 +128,7 @@ namespace FPLedit.Bildfahrplan.Render
             while (true)
             {
                 min += minutesToNextLine;
-                if (min > end.GetMinutes() - start.GetMinutes())
+                if (min > end.GetTotalMinutes() - start.GetTotalMinutes())
                     break;
                 lines.Add(min);
                 minutesToNextLine = 30;
@@ -143,7 +143,7 @@ namespace FPLedit.Bildfahrplan.Render
             using (var g = new Graphics(image))
             {
                 var m = CalcMargins(g, margin, stations, start, end, drawHeader);
-                return (int)(m.Top + m.Bottom + (end - start).GetMinutes() * attrs.HeightPerHour / 60f);
+                return (int)(m.Top + m.Bottom + (end - start).GetTotalMinutes() * attrs.HeightPerHour / 60f);
             }
         }
 

@@ -17,67 +17,67 @@ namespace FPLedit.Shared.Tests
             timeEntry = new TimeEntry(10, 20);
             Assert.AreEqual(10, timeEntry.Hours);
             Assert.AreEqual(20, timeEntry.Minutes);
-            Assert.AreEqual(620, timeEntry.GetMinutes());
+            Assert.AreEqual(620, timeEntry.GetTotalMinutes());
 
             timeEntry = new TimeEntry(10, 80);
             Assert.AreEqual(11, timeEntry.Hours);
             Assert.AreEqual(20, timeEntry.Minutes);
-            Assert.AreEqual(680, timeEntry.GetMinutes());
+            Assert.AreEqual(680, timeEntry.GetTotalMinutes());
             
             timeEntry = new TimeEntry(10, 60);
             Assert.AreEqual(11, timeEntry.Hours);
             Assert.AreEqual(0, timeEntry.Minutes);
-            Assert.AreEqual(660, timeEntry.GetMinutes());
+            Assert.AreEqual(660, timeEntry.GetTotalMinutes());
             
             timeEntry = new TimeEntry(10, 59);
             Assert.AreEqual(10, timeEntry.Hours);
             Assert.AreEqual(59, timeEntry.Minutes);
-            Assert.AreEqual(659, timeEntry.GetMinutes());
+            Assert.AreEqual(659, timeEntry.GetTotalMinutes());
             
             timeEntry = new TimeEntry(10, 61);
             Assert.AreEqual(11, timeEntry.Hours);
             Assert.AreEqual(1, timeEntry.Minutes);
-            Assert.AreEqual(661, timeEntry.GetMinutes());
+            Assert.AreEqual(661, timeEntry.GetTotalMinutes());
             
             timeEntry = new TimeEntry(24, 0);
             Assert.AreEqual(24, timeEntry.Hours);
             Assert.AreEqual(0, timeEntry.Minutes);
-            Assert.AreEqual(1440, timeEntry.GetMinutes());
+            Assert.AreEqual(1440, timeEntry.GetTotalMinutes());
             
             timeEntry = new TimeEntry(24, 61);
             Assert.AreEqual(25, timeEntry.Hours);
             Assert.AreEqual(1, timeEntry.Minutes);
-            Assert.AreEqual(1501, timeEntry.GetMinutes());
+            Assert.AreEqual(1501, timeEntry.GetTotalMinutes());
             
             timeEntry = new TimeEntry(0, 1440);
             Assert.AreEqual(24, timeEntry.Hours);
             Assert.AreEqual(0, timeEntry.Minutes);
-            Assert.AreEqual(1440, timeEntry.GetMinutes());
+            Assert.AreEqual(1440, timeEntry.GetTotalMinutes());
             
             timeEntry = new TimeEntry(-10, -20);
             Assert.AreEqual(-10, timeEntry.Hours);
             Assert.AreEqual(-20, timeEntry.Minutes);
-            Assert.AreEqual(-620, timeEntry.GetMinutes());
+            Assert.AreEqual(-620, timeEntry.GetTotalMinutes());
             
             timeEntry = new TimeEntry(0, -5);
             Assert.AreEqual(0, timeEntry.Hours);
             Assert.AreEqual(-5, timeEntry.Minutes);
-            Assert.AreEqual(-5, timeEntry.GetMinutes());
+            Assert.AreEqual(-5, timeEntry.GetTotalMinutes());
             
             timeEntry = new TimeEntry(10, -5);
             Assert.AreEqual(9, timeEntry.Hours);
             Assert.AreEqual(55, timeEntry.Minutes);
-            Assert.AreEqual(595, timeEntry.GetMinutes());
+            Assert.AreEqual(595, timeEntry.GetTotalMinutes());
             
             timeEntry = new TimeEntry(-10, -60);
             Assert.AreEqual(-11, timeEntry.Hours);
             Assert.AreEqual(0, timeEntry.Minutes);
-            Assert.AreEqual(-660, timeEntry.GetMinutes());
+            Assert.AreEqual(-660, timeEntry.GetTotalMinutes());
             
             timeEntry = new TimeEntry(-10, 60);
             Assert.AreEqual(-9, timeEntry.Hours);
             Assert.AreEqual(0, timeEntry.Minutes);
-            Assert.AreEqual(-540, timeEntry.GetMinutes());
+            Assert.AreEqual(-540, timeEntry.GetTotalMinutes());
         }
 
         [Test]

@@ -159,7 +159,7 @@ namespace FPLedit.Bildfahrplan.Render
         }
 
         #region Render helpers
-        private float GetTimeY(TimeEntry time) => margin.Top + ((time - startTime).GetMinutes() * attrs.HeightPerHour / 60f);
+        private float GetTimeY(TimeEntry time) => margin.Top + ((time - startTime).GetTotalMinutes() * attrs.HeightPerHour / 60f);
 
         PointF? GetGutterPoint(bool arrival, bool dir, StationX sx, TimeEntry time)
         {

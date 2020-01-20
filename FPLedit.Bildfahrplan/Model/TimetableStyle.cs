@@ -28,7 +28,7 @@ namespace FPLedit.Bildfahrplan.Model
             }
             set
             {
-                int minutes = value.GetMinutes();
+                int minutes = value.GetTotalMinutes();
                 tt.SetAttribute("tMin", minutes.ToString());
             }
         }
@@ -44,7 +44,7 @@ namespace FPLedit.Bildfahrplan.Model
             }
             set
             {
-                int minutes = value.GetMinutes();
+                int minutes = value.GetTotalMinutes();
                 tt.SetAttribute("tMax", minutes.ToString());
             }
         }
