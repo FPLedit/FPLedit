@@ -6,6 +6,7 @@ namespace FPLedit.Shared.Tests
     public class StressTests
     {
         [Test]
+        [Category("Stress")]
         public void GenerateHugeTimetable()
         {
             // this should not fail

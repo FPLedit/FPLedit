@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jTrainGraph_timetable version="010" name="Bildfahrplan Strecke Alexisbad - Harzgerode" tMin="511" tMax="1024" d="1111111" bgC="weiß" sFont="font(SansSerif;1;12)" trFont="font(SansSerif;0;12)" hFont="font(SansSerif;0;12)" tFont="font(SansSerif;0;12)" sHor="false" sLine="0" shKm="true" sStation="-1" eStation="-1" cNr="1" exW="200" exH="2625" shV="false">
+  <stations>
+    <sta name="Alexisbad" km="0.0" cl="orange" sh="true" sz="1" sy="0" fpl-vmax="20" fpl-wl="3" tr="2" />
+    <sta name="Anschl Ziegelwerk" km="2.6" cl="orange" sh="true" sz="1" sy="4" fpl-vmax="20" fpl-wl="3" />
+    <sta name="Harzgerode" km="2.9" cl="orange" sh="true" sz="1" sy="0" fpl-vmax="20" fpl-wl="3" />
+  </stations>
+  <trains>
+    <ti name="69711" cm="" cl="schwarz" sh="true" sz="1" sy="0" d="1111111" id="0" fpl-mbr="" fpl-last="" fpl-tfz="99">
+      <t a="" d="08:31" fpl-tr="0" />
+      <t a="" d="" fpl-tr="0" />
+      <t a="08:41" d="" fpl-tr="0" fpl-zlm="Tf" />
+    </ti>
+	<ti name="69712" cm="" cl="schwarz" sh="true" sz="1" sy="0" d="1111111" id="1" fpl-mbr="" fpl-last="" fpl-tfz="99">
+      <t a="" d="09:31" fpl-tr="0" />
+      <t a="" d="" fpl-tr="0" />
+      <t a="09:41" d="" fpl-tr="0" fpl-zlm="Tf" />
+    </ti>
+    <ti name="14451" cm="" cl="schwarz" sh="true" sz="1" sy="0" d="1111111" id="10" fpl-mbr="" fpl-last="" fpl-tfz="99">
+      <t a="" d="11:40" fpl-tr="0" />
+      <t a="" d="" fpl-tr="0" />
+      <t a="11:50" d="" fpl-tr="0" fpl-zlm="Tf" />
+    </ti>
+    <ti name="69724" cm="" cl="schwarz" sh="true" sz="1" sy="0" d="1111111" id="10" fpl-mbr="" fpl-last="" fpl-tfz="99">
+      <t a="" d="14:15" fpl-tr="0" />
+      <t a="" d="" fpl-tr="0" />
+      <t a="14:25" d="" fpl-tr="0" fpl-zlm="Tf" />
+    </ti>
+	<ti name="69725" cm="" cl="schwarz" sh="true" sz="1" sy="0" d="1111111" id="11" fpl-mbr="" fpl-last="" fpl-tfz="99">
+      <t a="" d="15:15" fpl-tr="0" />
+      <t a="" d="" fpl-tr="0" />
+      <t a="15:25" d="" fpl-tr="0" fpl-zlm="Tf" />
+    </ti>
+  </trains>
+  <transitions>
+	<tra first="0" next="1" />
+	<tra first="1" next="10" />
+	<tra first="10" next="11" />
+  </transitions>
+</jTrainGraph_timetable>

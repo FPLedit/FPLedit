@@ -8,3 +8,5 @@ using System.Runtime.InteropServices;
 // Used for COM
 [assembly: ComVisible(false)]
 [assembly: Guid("b2894876-2d93-4bb9-ae30-1ccbac8303de")]
+
+[assembly: InternalsVisibleTo("FPLedit.Tests")]

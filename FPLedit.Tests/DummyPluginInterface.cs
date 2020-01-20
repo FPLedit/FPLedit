@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using FPLedit.Shared;
 using FPLedit.Shared.Templating;
 
-namespace FPLedit.Shared.Tests
+namespace FPLedit.Tests
 {
     public class DummyPluginInterface : IPluginInterface
     {

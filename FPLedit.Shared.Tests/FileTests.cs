@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.IO;
 using System.Net;
 using System.Xml.Linq;
@@ -17,9 +18,24 @@ namespace FPLedit.Shared.Tests
             Assert.Throws<NotSupportedException>(() => new XMLEntity(el));
 
             Assert.Throws<LogErrorException>(() => new XMLImport().Import(PrepareTemp(text), new DummyPluginInterface()));
-            
-            // Empty file
+        }
+
+        [Test]
+        public void EmptyFileTest()
+        {
             Assert.Throws<LogErrorException>(() => new XMLImport().Import(PrepareTemp(""), new DummyPluginInterface()));
+        }
+
+        [Test]
+        public void DuplicateStationIdTest()
+        {
+            var text = Load("test_duplicate_ids.fpl");
+            Timetable tt = new XMLImport().Import(PrepareTemp(text), new DummyPluginInterface());
+            Assert.IsNotNull(tt);
+            Assert.IsTrue(tt.UpgradeMessage.Contains("Verknüpfungen"));
+            
+            
+            // TODO: Check for changed ids, removed transitions
         }
 
         private string Load(string dotPath) => ResourceHelper.GetStringResource("Shared.Tests.TestFiles." + dotPath);
