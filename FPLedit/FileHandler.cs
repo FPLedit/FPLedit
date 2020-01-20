@@ -17,7 +17,6 @@ namespace FPLedit
         private readonly IImport open;
         private readonly IExport save;
 
-        private readonly Window parent;
         private readonly IPluginInterface pluginInterface;
         private readonly ILastFileHandler lfh;
         private readonly UndoManager undo;
@@ -28,9 +27,8 @@ namespace FPLedit
         public event EventHandler FileOpened;
         public event EventHandler<FileStateChangedEventArgs> FileStateChanged;
 
-        public FileHandler(Window parent, IPluginInterface pluginInterface, ILastFileHandler lfh, UndoManager undo)
+        public FileHandler(IPluginInterface pluginInterface, ILastFileHandler lfh, UndoManager undo)
         {
-            this.parent = parent;
             this.pluginInterface = pluginInterface;
             this.lfh = lfh;
             this.undo = undo;
@@ -81,7 +79,7 @@ namespace FPLedit
 
             if (!NotifyIfUnsaved())
                 return;
-            if (importFileDialog.ShowDialog(parent) == DialogResult.Ok)
+            if (importFileDialog.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
             {
                 IImport import = importers[importFileDialog.CurrentFilterIndex - 1];
                 pluginInterface.Logger.Info("Öffne Datei " + importFileDialog.FileName);
@@ -98,7 +96,7 @@ namespace FPLedit
 
         internal void Export()
         {
-            if (exportFileDialog.ShowDialog(parent) == DialogResult.Ok)
+            if (exportFileDialog.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
             {
                 var exporters = pluginInterface.GetRegistered<IExport>();
                 IExport export = exporters[exportFileDialog.CurrentFilterIndex];
@@ -133,7 +131,7 @@ namespace FPLedit
         {
             if (!NotifyIfUnsaved())
                 return;
-            if (openFileDialog.ShowDialog(parent) == DialogResult.Ok)
+            if (openFileDialog.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
             {
                 InternalOpen(openFileDialog.FileName);
                 UpdateLastPath(openFileDialog);
@@ -170,7 +168,7 @@ namespace FPLedit
 
             if (saveAs)
             {
-                if (saveFileDialog.ShowDialog(parent) != DialogResult.Ok)
+                if (saveFileDialog.ShowDialog(pluginInterface.RootForm) != DialogResult.Ok)
                     return;
                 filename = saveFileDialog.FileName;
                 UpdateLastPath(saveFileDialog);
@@ -234,7 +232,7 @@ namespace FPLedit
             using (var sfd = new SaveFileDialog())
             {
                 sfd.AddLegacyFilter(exp.Filter);
-                if (sfd.ShowDialog(parent) == DialogResult.Ok)
+                if (sfd.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
                 {
                     pluginInterface.Logger.Info("Konvertiere Datei...");
                     bool ret = exp.Export(Timetable, sfd.FileName, pluginInterface);
@@ -261,7 +259,7 @@ namespace FPLedit
             using (var sfd = new SaveFileDialog())
             {
                 sfd.AddLegacyFilter(exp.Filter);
-                if (sfd.ShowDialog(parent) == DialogResult.Ok)
+                if (sfd.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
                 {
                     pluginInterface.Logger.Info("Konvertiere Datei...");
                     bool ret = exp.Export(Timetable, sfd.FileName, pluginInterface);

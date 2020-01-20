@@ -15,9 +15,12 @@ namespace FPLedit.Templating
         private readonly IPluginInterface pluginInterface;
         private readonly List<string> enabledTemplates;
         private List<TemplateHost> templates;
+        
+        public string TemplatePath { get; }
 
-        public TemplateManager(RegisterStore store, IPluginInterface pluginInterface)
+        public TemplateManager(RegisterStore store, IPluginInterface pluginInterface, string templatePath)
         {
+            this.TemplatePath = templatePath;
             this.store = store;
             this.pluginInterface = pluginInterface;
 

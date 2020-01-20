@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit
 {
-    static class Program
+    internal static class Program
     {
         public static Application App { get; private set; }
 
@@ -25,7 +25,7 @@ namespace FPLedit
         /// </summary>
         [STAThread]
         [LoaderOptimization(LoaderOptimization.MultiDomainHost)] // Hopefully it doesn't break any things
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             OptionsParser.Init(args);
 
@@ -35,13 +35,13 @@ namespace FPLedit
 #endif
 
             mainForm = new MainForm();
-            crashReporter = mainForm.crashReporter;
+            crashReporter = mainForm.CrashReporter;
             App.Run(mainForm);
         }
 
         private static void UnhandledException(object sender, Eto.UnhandledExceptionEventArgs e)
         {
-            var report = new CrashReport(mainForm.extensionManager, e.ExceptionObject as Exception);
+            var report = new CrashReport(mainForm.Bootstrapper.ExtensionManager, e.ExceptionObject as Exception);
             crashReporter.Report(report);
 
             ExceptionQuit = true;

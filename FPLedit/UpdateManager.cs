@@ -13,7 +13,7 @@ namespace FPLedit
 {
     internal class UpdateManager
     {
-        public string CheckUrl { get; private set; }
+        public string CheckUrl { get; }
 
         public Action<bool, VersionInfo> CheckResult { get; set; }
 
@@ -21,7 +21,7 @@ namespace FPLedit
 
         public Action<Exception> CheckError { get; set; }
 
-        public Version CurrentVersion { get; private set; }
+        public Version CurrentVersion { get; }
 
         public bool AutoUpdateEnabled
         {

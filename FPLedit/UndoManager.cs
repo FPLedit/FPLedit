@@ -24,7 +24,7 @@ namespace FPLedit
 
         public Timetable Undo()
         {
-            if (!steps.Any(s => s != null))
+            if (steps.All(s => s == null))
                 return null;
 
             // Pop

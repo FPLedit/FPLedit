@@ -23,13 +23,13 @@ namespace FPLedit
 
         private readonly DirectoryInfo templatesDir;
 
-        public TemplatesForm(TemplateManager manager, string templateRoot)
+        public TemplatesForm(TemplateManager manager)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
             this.manager = manager;
             var appPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            templatesDir = new DirectoryInfo(Path.Combine(appPath, templateRoot));
+            templatesDir = new DirectoryInfo(Path.Combine(appPath, manager.TemplatePath));
 
             var buildName = new Func<string, string>((x) => x.StartsWith("builtin:") ? "(integriert)" : x);
             gridView.AddColumn<ITemplate>(t => ((TemplateHost)t).Enabled ? "X" : "", "Aktiviert");
