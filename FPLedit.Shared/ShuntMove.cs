@@ -34,7 +34,7 @@ namespace FPLedit.Shared
         }
 
         [XAttrName("ti")]
-        public TimeSpan Time
+        public TimeEntry Time
         {
             get => GetTimeValue("ti");
             set => SetNotEmptyTime(value, "ti");

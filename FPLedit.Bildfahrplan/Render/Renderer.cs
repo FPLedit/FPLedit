@@ -14,8 +14,6 @@ namespace FPLedit.Bildfahrplan.Render
         private readonly Timetable tt;
         private readonly int route;
 
-        internal const string TIME_FORMAT = @"hh\:mm";
-
         private Margins margin = new Margins(10, 20, 20, 20);
         internal float width = 0, height = 0;
 
@@ -31,7 +29,7 @@ namespace FPLedit.Bildfahrplan.Render
         public void Draw(Graphics g, bool drawHeader)
             => Draw(g, attrs.StartTime, attrs.EndTime, drawHeader);
 
-        public void Draw(Graphics g, TimeSpan startTime, TimeSpan endTime, bool drawHeader)
+        public void Draw(Graphics g, TimeEntry startTime, TimeEntry endTime, bool drawHeader)
         {
             g.Clear((Color)attrs.BgColor);
 
@@ -86,7 +84,7 @@ namespace FPLedit.Bildfahrplan.Render
             headerRenderer.Render(g, margin, width, height, true);
         }
 
-        internal Margins CalcMargins(Graphics g, Margins orig, IEnumerable<Station> stations, TimeSpan startTime, TimeSpan endTime, bool drawHeader)
+        internal Margins CalcMargins(Graphics g, Margins orig, IEnumerable<Station> stations, TimeEntry startTime, TimeEntry endTime, bool drawHeader)
         {
             if (orig.Calced)
                 return orig;
@@ -112,12 +110,12 @@ namespace FPLedit.Bildfahrplan.Render
             // MarginLeft berechnen
             List<float> tsizes = new List<float>();
             foreach (var l in GetTimeLines(out bool _, startTime, endTime))
-                tsizes.Add(g.MeasureString(timeFont, new TimeSpan(0, l + startTime.GetMinutes(), 0).ToString(TIME_FORMAT)).Width);
+                tsizes.Add(g.MeasureString(timeFont, new TimeEntry(0, l + startTime.GetTotalMinutes()).ToShortTimeString()).Width);
             result.Left = tsizes.Max() + result.Left;
             return result;
         }
 
-        internal List<int> GetTimeLines(out bool hourStart, TimeSpan start, TimeSpan end)
+        internal List<int> GetTimeLines(out bool hourStart, TimeEntry start, TimeEntry end)
         {
             List<int> lines = new List<int>();
             int minutesToNextLine = 60 - start.Minutes;
@@ -130,7 +128,7 @@ namespace FPLedit.Bildfahrplan.Render
             while (true)
             {
                 min += minutesToNextLine;
-                if (min > end.GetMinutes() - start.GetMinutes())
+                if (min > end.GetTotalMinutes() - start.GetTotalMinutes())
                     break;
                 lines.Add(min);
                 minutesToNextLine = 30;
@@ -138,14 +136,14 @@ namespace FPLedit.Bildfahrplan.Render
             return lines;
         }
 
-        public int GetHeight(TimeSpan start, TimeSpan end, bool drawHeader)
+        public int GetHeight(TimeEntry start, TimeEntry end, bool drawHeader)
         {
             var stations = tt.GetRoute(route).GetOrderedStations();
             using (var image = new Bitmap(new Size(1, 1), PixelFormat.Format24bppRgb))
             using (var g = new Graphics(image))
             {
                 var m = CalcMargins(g, margin, stations, start, end, drawHeader);
-                return (int)(m.Top + m.Bottom + (end - start).GetMinutes() * attrs.HeightPerHour / 60f);
+                return (int)(m.Top + m.Bottom + (end - start).GetTotalMinutes() * attrs.HeightPerHour / 60f);
             }
         }
 

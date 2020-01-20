@@ -20,9 +20,9 @@ namespace FPLedit.Editor.TimetableEditor
         {
             var a = ArrDeps[sta];
             if (arrival)
-                a.Arrival = TimeSpan.Parse(time);
+                a.Arrival = TimeEntry.Parse(time);
             else
-                a.Departure = TimeSpan.Parse(time);
+                a.Departure = TimeEntry.Parse(time);
             ArrDeps[sta] = a;
         }
 

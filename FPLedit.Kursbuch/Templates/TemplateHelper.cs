@@ -35,7 +35,7 @@ namespace FPLedit.Kursbuch.Templates
         public Train[] GetTrains(Route route, TrainDirection dir)
         {
             var stas = GetStations(route, dir).ToList();
-            var times = new Dictionary<Train, TimeSpan>();
+            var times = new Dictionary<Train, TimeEntry>();
 
             foreach (var t in tt.Trains)
             {

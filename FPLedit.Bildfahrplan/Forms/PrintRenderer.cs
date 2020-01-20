@@ -17,7 +17,7 @@ namespace FPLedit.Bildfahrplan.Forms
         private readonly TimetableStyle attrs;
 
         private PrintDocument doc;
-        private TimeSpan? last;
+        private TimeEntry? last;
 
         public PrintRenderer(IPluginInterface pluginInterface, int route)
         {
@@ -63,11 +63,11 @@ namespace FPLedit.Bildfahrplan.Forms
                 last = null;
         }
 
-        private TimeSpan GetTimeByHeight(Renderer renderer, TimeSpan start, int height)
+        private TimeEntry GetTimeByHeight(Renderer renderer, TimeEntry start, int height)
         {
-            var cur = start + new TimeSpan(0, 60 - start.Minutes, 0); // to full hour
-            var oneHour = new TimeSpan(1, 0, 0);
-            TimeSpan last = cur;
+            var cur = start + new TimeEntry(0, (byte)(60 - start.Minutes)); // to full hour
+            var oneHour = new TimeEntry(1, 0);
+            TimeEntry last = cur;
             float h = renderer.GetHeight(start, cur, true);
             while (true)
             {

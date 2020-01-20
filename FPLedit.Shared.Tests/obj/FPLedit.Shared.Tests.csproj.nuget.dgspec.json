@@ -1,0 +1,138 @@
+{
+  "format": 1,
+  "restore": {
+    "/shared/VS-Projects/Buchfahrplan/Buchfahrplan/FPLedit.Shared.Tests/FPLedit.Shared.Tests.csproj": {}
+  },
+  "projects": {
+    "/shared/VS-Projects/Buchfahrplan/Buchfahrplan/FPLedit.Shared.Tests/FPLedit.Shared.Tests.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/shared/VS-Projects/Buchfahrplan/Buchfahrplan/FPLedit.Shared.Tests/FPLedit.Shared.Tests.csproj",
+        "projectName": "FPLedit.Shared.Tests",
+        "projectPath": "/shared/VS-Projects/Buchfahrplan/Buchfahrplan/FPLedit.Shared.Tests/FPLedit.Shared.Tests.csproj",
+        "packagesPath": "/home/manuel/.nuget/packages/",
+        "outputPath": "/shared/VS-Projects/Buchfahrplan/Buchfahrplan/FPLedit.Shared.Tests/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/manuel/.config/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net461"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net461": {
+            "projectReferences": {
+              "/shared/VS-Projects/Buchfahrplan/Buchfahrplan/FPLedit.Shared/FPLedit.Shared.csproj": {
+                "projectPath": "/shared/VS-Projects/Buchfahrplan/Buchfahrplan/FPLedit.Shared/FPLedit.Shared.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net461": {
+          "dependencies": {
+            "Microsoft.CodeAnalysis.FxCopAnalyzers": {
+              "target": "Package",
+              "version": "[2.9.3, )"
+            },
+            "Microsoft.CodeAnalysis.VersionCheckAnalyzer": {
+              "target": "Package",
+              "version": "[2.9.3, )"
+            },
+            "Microsoft.CodeQuality.Analyzers": {
+              "target": "Package",
+              "version": "[2.9.3, )"
+            },
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[16.4.0, )"
+            },
+            "Microsoft.NetCore.Analyzers": {
+              "target": "Package",
+              "version": "[2.9.3, )"
+            },
+            "Microsoft.NetFramework.Analyzers": {
+              "target": "Package",
+              "version": "[2.9.3, )"
+            },
+            "NUnit3TestAdapter": {
+              "target": "Package",
+              "version": "[3.15.1, )"
+            },
+            "nunit": {
+              "target": "Package",
+              "version": "[3.12.0, )"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.1.101/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/shared/VS-Projects/Buchfahrplan/Buchfahrplan/FPLedit.Shared/FPLedit.Shared.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/shared/VS-Projects/Buchfahrplan/Buchfahrplan/FPLedit.Shared/FPLedit.Shared.csproj",
+        "projectName": "FPLedit.Shared",
+        "projectPath": "/shared/VS-Projects/Buchfahrplan/Buchfahrplan/FPLedit.Shared/FPLedit.Shared.csproj",
+        "packagesPath": "/home/manuel/.nuget/packages/",
+        "outputPath": "/shared/VS-Projects/Buchfahrplan/Buchfahrplan/FPLedit.Shared/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/manuel/.config/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net461"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net461": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net461": {
+          "dependencies": {
+            "Microsoft.CodeAnalysis.FxCopAnalyzers": {
+              "target": "Package",
+              "version": "[2.9.3, )"
+            },
+            "Microsoft.CodeAnalysis.VersionCheckAnalyzer": {
+              "target": "Package",
+              "version": "[2.9.3, )"
+            },
+            "Microsoft.CodeQuality.Analyzers": {
+              "target": "Package",
+              "version": "[2.9.3, )"
+            },
+            "Microsoft.NetCore.Analyzers": {
+              "target": "Package",
+              "version": "[2.9.3, )"
+            },
+            "Microsoft.NetFramework.Analyzers": {
+              "target": "Package",
+              "version": "[2.9.3, )"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.1.101/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

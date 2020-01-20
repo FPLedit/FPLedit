@@ -209,9 +209,9 @@ if (attrs != null)
                     if (t.GetPath().Contains(sta))
                     {
                         let time = t.GetArrDep(sta).Departure;
-                        if (time == new TimeSpan()) time =  t.GetArrDep(sta).Arrival;
-                        if (time == new TimeSpan()) times = "...";
-                        else times = time.ToString("hh\\:mm");
+                        if (time == new TimeEntry()) time =  t.GetArrDep(sta).Arrival;
+                        if (time == new TimeEntry()) times = "...";
+                        else times = time.ToShortTimeString();
                     }
                 #>
                 <td class="ti<#= s_last #>"><span><#= times #></span></td>

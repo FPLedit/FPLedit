@@ -4,7 +4,7 @@ function GetDays(/* Train */ t) {
     return t.Days.DaysToString(true);
 }
 
-function GetTimeString(/* TimeSpan */ t) {
+function GetTimeString(/* TimeEntry */ t) {
     return t.Hours.toFixed(0) + "<sup>" + t.Minutes.toFixed(0).toString().padStart(2, '0') + "</sup>";
 }
 

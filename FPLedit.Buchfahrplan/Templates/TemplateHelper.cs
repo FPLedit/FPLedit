@@ -128,10 +128,10 @@ namespace FPLedit.Buchfahrplan.Templates
 
         private Train IntersectTrains(Train ot, Station s, bool kreuzung)
         {
-            TimeSpan start = ot.GetArrDep(s).Arrival;
-            TimeSpan end = ot.GetArrDep(s).Departure;
+            TimeEntry start = ot.GetArrDep(s).Arrival;
+            TimeEntry end = ot.GetArrDep(s).Departure;
 
-            if (start == TimeSpan.Zero || end == TimeSpan.Zero)
+            if (start == TimeEntry.Zero || end == TimeEntry.Zero)
                 return null;
 
             Func<Train, bool> pred = (t => t.Direction == ot.Direction); // Überholung
@@ -143,10 +143,10 @@ namespace FPLedit.Buchfahrplan.Templates
                 if (train == ot || !train.GetPath().Contains(s))
                     continue;
 
-                TimeSpan start2 = train.GetArrDep(s).Arrival;
-                TimeSpan end2 = train.GetArrDep(s).Departure;
+                TimeEntry start2 = train.GetArrDep(s).Arrival;
+                TimeEntry end2 = train.GetArrDep(s).Departure;
 
-                if (start2 == TimeSpan.Zero || end2 == TimeSpan.Zero)
+                if (start2 == TimeEntry.Zero || end2 == TimeEntry.Zero)
                     continue;
 
                 var st = start < start2 ? start2 : start;

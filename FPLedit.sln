@@ -61,6 +61,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.DebugDump", "FPLedi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Shared.Rendering", "FPLedit.Shared.Rendering\FPLedit.Shared.Rendering.csproj", "{7D24F283-5220-42E0-83F9-76297A4BD03D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Shared.Tests", "FPLedit.Shared.Tests\FPLedit.Shared.Tests.csproj", "{7F8AF3E4-F2F6-4D4E-9E1F-0483E5BAE8E0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{83B63C9D-A034-42FF-B874-FDC7834408B0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -106,6 +110,10 @@ Global
 		{7D24F283-5220-42E0-83F9-76297A4BD03D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D24F283-5220-42E0-83F9-76297A4BD03D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D24F283-5220-42E0-83F9-76297A4BD03D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F8AF3E4-F2F6-4D4E-9E1F-0483E5BAE8E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F8AF3E4-F2F6-4D4E-9E1F-0483E5BAE8E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F8AF3E4-F2F6-4D4E-9E1F-0483E5BAE8E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F8AF3E4-F2F6-4D4E-9E1F-0483E5BAE8E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -117,6 +125,7 @@ Global
 		{678843A1-1DFA-46EC-A15B-9C0AF7FCBBF0} = {5A859144-0558-4FEB-965B-BFD83D9336A9}
 		{77EE9755-CE3E-4B7B-AEF1-474B228E7B50} = {5A859144-0558-4FEB-965B-BFD83D9336A9}
 		{CA3BB2AD-517E-475F-B7D7-ABA69AC31A96} = {5A859144-0558-4FEB-965B-BFD83D9336A9}
+		{7F8AF3E4-F2F6-4D4E-9E1F-0483E5BAE8E0} = {83B63C9D-A034-42FF-B874-FDC7834408B0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {107802F1-1F23-4BD1-9933-33EE9D8A6035}

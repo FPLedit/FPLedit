@@ -68,7 +68,7 @@ namespace FPLedit.Editor.Linear
             Initialized = true;
         }
 
-        private CustomCell GetCell(Func<ArrDep, TimeSpan> time, Station sta, bool arrival, GridView view)
+        private CustomCell GetCell(Func<ArrDep, TimeEntry> time, Station sta, bool arrival, GridView view)
         {
             var cc = new CustomCell
             {
