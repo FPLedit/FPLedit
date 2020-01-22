@@ -3,20 +3,18 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using FPLedit.Config;
 using System.IO;
 
 namespace FPLedit
 {
-    internal class Settings : ISettings
+    internal sealed class Settings : ISettings
     {
         private readonly ConfigFile config;
 
         public Settings()
         {
-            var path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            var path = PathManager.Instance.AppDirectory;
             path = Path.Combine(path, "fpledit.conf");
 
             config = new ConfigFile(TryGetUserPath() ?? path);
@@ -26,7 +24,7 @@ namespace FPLedit
         {
             try
             {
-                var appPath = Assembly.GetEntryAssembly().Location;
+                var appPath = PathManager.Instance.AppFilePath;
                 var appConfig = ConfigurationManager.OpenExeConfiguration(appPath);
                 return appConfig.AppSettings.Settings["config.path"].Value;
             }

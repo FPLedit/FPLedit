@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 
 namespace FPLedit
 {
@@ -28,8 +27,7 @@ namespace FPLedit
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
             this.manager = manager;
-            var appPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            templatesDir = new DirectoryInfo(Path.Combine(appPath, manager.TemplatePath));
+            templatesDir = new DirectoryInfo(Path.Combine(PathManager.Instance.AppDirectory, manager.TemplatePath));
 
             var buildName = new Func<string, string>((x) => x.StartsWith("builtin:") ? "(integriert)" : x);
             gridView.AddColumn<ITemplate>(t => ((TemplateHost)t).Enabled ? "X" : "", "Aktiviert");
@@ -151,7 +149,7 @@ namespace FPLedit
 
         private void EditButton_Click(object sender, EventArgs e)
         {
-            if (gridView.SelectedRows.Count() == 0)
+            if (!gridView.SelectedRows.Any())
                 return;
 
             // May not always work

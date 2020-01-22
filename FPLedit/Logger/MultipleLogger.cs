@@ -6,7 +6,7 @@ using System.Text;
 
 namespace FPLedit.Logger
 {
-    public class MultipleLogger : ILog
+    public sealed class MultipleLogger : ILog
     {
         public List<ILog> Loggers { get; }
 

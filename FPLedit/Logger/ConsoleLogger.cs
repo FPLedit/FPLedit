@@ -6,7 +6,7 @@ using System.Text;
 
 namespace FPLedit.Logger
 {
-    public class ConsoleLogger : ILog
+    public sealed class ConsoleLogger : ILog
     {
         public void Error(string message)
             => Console.WriteLine("[ERROR] " + message);

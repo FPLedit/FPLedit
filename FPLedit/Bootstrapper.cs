@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.Threading.Tasks;
 using Eto.Forms;
 using FPLedit.Config;
@@ -12,15 +11,15 @@ using FPLedit.Templating;
 
 namespace FPLedit
 {
-    internal class Bootstrapper : IDisposable, IPluginInterface
+    internal sealed class Bootstrapper : IPluginInterface, IDisposable
     {
         private const string DEFAULT_TEMPLATE_PATH = "templates";
 
         private readonly RegisterStore registry;
         private readonly UndoManager undo;
         private readonly Dictionary<object, Timetable> timetableBackup;
-        internal readonly UpdateManager update;
-        
+
+        public UpdateManager Update { get; }
         public FileHandler FileHandler { get; }
         public ExtensionManager ExtensionManager { get; }
         public ISettings Settings { get; }
@@ -45,9 +44,9 @@ namespace FPLedit
             Menu = rootForm.Menu;
             Settings = new Settings();
             registry = new RegisterStore();
-            update = new UpdateManager(Settings);
+            Update = new UpdateManager(Settings);
             undo = new UndoManager();
-            ExtensionManager = new ExtensionManager(this, update);
+            ExtensionManager = new ExtensionManager(this, Update);
             FileHandler = new FileHandler(this, lfh, undo);
             
             FileHandler.FileOpened += (o, args) => FileOpened?.Invoke(o, args);
@@ -113,13 +112,13 @@ namespace FPLedit
         #endregion
 
         #region IPluginInterface Misc Implementations
-        
-        public string ExecutablePath => Assembly.GetEntryAssembly().Location;
 
-        public string ExecutableDir => Path.GetDirectoryName(ExecutablePath);
+        public string ExecutablePath => PathManager.Instance.AppFilePath;
+
+        public string ExecutableDir => PathManager.Instance.AppDirectory;
         
         public void Register<T>(T obj)
-            => registry.Register<T>(obj);
+            => registry.Register(obj);
 
         public T[] GetRegistered<T>()
             => registry.GetRegistered<T>();

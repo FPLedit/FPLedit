@@ -1,18 +1,14 @@
 ﻿using FPLedit.Extensibility;
-using FPLedit.Shared;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
-using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace FPLedit.CrashReporting
 {
-    public class CrashReport
+    public sealed class CrashReport
     {
         public ExceptionInfo Exception { get; set; }
 
@@ -36,7 +32,7 @@ namespace FPLedit.CrashReporting
             SafeAction(() => Time = DateTime.Now);
             SafeAction(() => Exception = new ExceptionInfo(x));
             SafeAction(() => Extensions = mg.Plugins.Where(p => p.Enabled).Select(p => new ExtensionInfo(p)).ToArray());
-            SafeAction(() => Version = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion);
+            SafeAction(() => Version = FileVersionInfo.GetVersionInfo(PathManager.Instance.AppFilePath).ProductVersion);
             SafeAction(() => OS = Environment.OSVersion.ToString());
             SafeAction(() => Assemblies = AppDomain.CurrentDomain.GetAssemblies().Select(a => a.GetName().Name).ToArray());
         }
@@ -57,7 +53,7 @@ namespace FPLedit.CrashReporting
         }
     }
 
-    public class ExtensionInfo
+    public sealed class ExtensionInfo
     {
         public ExtensionInfo()
         {
@@ -83,7 +79,7 @@ namespace FPLedit.CrashReporting
         public string FullName { get; set; }
     }
 
-    public class ExceptionInfo
+    public sealed class ExceptionInfo
     {
         public ExceptionInfo()
         {

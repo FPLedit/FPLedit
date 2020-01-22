@@ -5,7 +5,7 @@ using FPLedit.Shared;
 
 namespace FPLedit
 {
-    public class LastFileHandler : ILastFileHandler
+    public sealed class LastFileHandler : ILastFileHandler
     {
         private List<string> lastFiles;
         private IPluginInterface pluginInterface;

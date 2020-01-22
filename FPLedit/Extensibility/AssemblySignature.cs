@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 
 namespace FPLedit.Extensibility
 {
-    internal class AssemblySignatureVerifier
+    internal sealed class AssemblySignatureVerifier
     {
         private readonly AssemblySignature[] signatures;
         private readonly RSAParameters pubkey;
@@ -20,8 +20,8 @@ namespace FPLedit.Extensibility
 
             var x = new XmlSerializer(typeof(RSAParameters));
             using (var stream = EtoExtensions.GetResource(null, "Resources.extensions.pubkey"))
-            using (var reader = new XmlTextReader(stream) { DtdProcessing = DtdProcessing.Prohibit, XmlResolver = null })
-                pubkey = (RSAParameters)x.Deserialize(reader);
+            using (var reader = new XmlTextReader(stream) {DtdProcessing = DtdProcessing.Prohibit, XmlResolver = null})
+                pubkey = (RSAParameters) x.Deserialize(reader);
         }
 
         private IEnumerable<AssemblySignature> LoadSignatures()

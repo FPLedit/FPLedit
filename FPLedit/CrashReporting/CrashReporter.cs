@@ -1,16 +1,11 @@
 ﻿using Eto.Forms;
-using FPLedit.Extensibility;
 using FPLedit.Shared;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.CrashReporting
 {
-    internal class CrashReporter
+    internal sealed class CrashReporter
     {
         private const string CRASH_DIR = "crash/";
         private const string REPORT_DIR = CRASH_DIR + "report/";

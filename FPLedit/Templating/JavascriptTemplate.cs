@@ -11,7 +11,7 @@ using Jint;
 namespace FPLedit.Templating
 {
     // Based on: https://www.codeproject.com/Articles/15728/Write-your-own-Code-Generator-or-Template-Engine-i
-    internal class JavascriptTemplate : ITemplate
+    internal sealed class JavascriptTemplate : ITemplate
     {
         public string TemplateType { get; private set; }
         public string TemplateName { get; private set; }
@@ -63,7 +63,7 @@ namespace FPLedit.Templating
             if (tparams["version"] != CURRENT_VERSION.ToString())
                 throw new Exception($"Template-version mismatch! (Current: {CURRENT_VERSION} vs {tparams["version"]})");
             TemplateType = tparams["type"];
-            TemplateName = "JS: " + tparams["name"];
+            TemplateName = tparams["name"];
             return ""; // remove this match.
         }
 

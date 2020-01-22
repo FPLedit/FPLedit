@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace FPLedit
 {
-    internal class FileHandler : IDisposable
+    internal sealed class FileHandler : IDisposable
     {
         private readonly SaveFileDialog saveFileDialog, exportFileDialog;
         private readonly OpenFileDialog openFileDialog, importFileDialog;

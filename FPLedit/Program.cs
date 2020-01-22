@@ -2,12 +2,8 @@
 using FPLedit.Config;
 using FPLedit.CrashReporting;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace FPLedit
 {
@@ -24,9 +20,10 @@ namespace FPLedit
         /// Der Haupteinstiegspunkt für die Anwendung.
         /// </summary>
         [STAThread]
-        [LoaderOptimization(LoaderOptimization.MultiDomainHost)] // Hopefully it doesn't break any things
         private static void Main(string[] args)
         {
+            PathManager.Instance.AppFilePath = Assembly.GetExecutingAssembly().Location;
+            
             OptionsParser.Init(args);
 
             App = new Application();
@@ -45,7 +42,7 @@ namespace FPLedit
             crashReporter.Report(report);
 
             ExceptionQuit = true;
-            Process.Start(Assembly.GetEntryAssembly().Location);
+            Process.Start(PathManager.Instance.AppFilePath);
             Environment.Exit(-1);
         }
     }

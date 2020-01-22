@@ -5,13 +5,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Text;
 using System.Xml;
 
 namespace FPLedit
 {
-    internal class UpdateManager
+    internal sealed class UpdateManager
     {
         public string CheckUrl { get; }
 
@@ -36,7 +35,7 @@ namespace FPLedit
             this.settings = settings;
             CheckUrl = settings.Get("updater.url", "https://fahrplan.manuelhu.de/versioninfo.xml");
 
-            string versionString = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
+            string versionString = FileVersionInfo.GetVersionInfo(PathManager.Instance.AppFilePath).ProductVersion;
             CurrentVersion = new Version(versionString);
         }
 
@@ -44,13 +43,13 @@ namespace FPLedit
         {
             var doc = new XmlDocument { XmlResolver = null };
 
-            var settings = new XmlReaderSettings()
+            var xmlReaderSettings = new XmlReaderSettings()
             {
                 DtdProcessing = DtdProcessing.Prohibit,
                 XmlResolver = null,
             };
 
-            using (var reader = XmlReader.Create(new System.IO.StringReader(xml), settings))
+            using (var reader = XmlReader.Create(new System.IO.StringReader(xml), xmlReaderSettings))
                 doc.Load(reader);
 
             var ver = doc.DocumentElement.SelectSingleNode("/info/version");
@@ -136,12 +135,12 @@ namespace FPLedit
                     log.Info($"Sie benutzen die aktuelleste Version von FPLedit ({CurrentVersion.ToString()})!");
             };
 
-            TextResult = t => log.Info(t);
+            TextResult = log.Info;
 
             CheckAsync();
         }
 
-        public class VersionInfo
+        public struct VersionInfo
         {
             public string DownloadUrl;
             public Version NewVersion;

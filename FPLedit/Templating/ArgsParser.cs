@@ -1,25 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace FPLedit.Templating
 {
-    internal class ArgsParser
+    internal sealed class ArgsParser
     {
         private readonly string args;
         private readonly char[] chars;
+        private readonly Dictionary<string, string> parsedArgs;
 
         public ArgsParser(string args)
         {
             this.args = args;
             chars = args.ToCharArray();
 
-            ParsedArgs = new Dictionary<string, string>();
+            parsedArgs = new Dictionary<string, string>();
             ParseArgs();
         }
-
-        public Dictionary<string, string> ParsedArgs { get; private set; }
 
         // Format name="value" name="value"
         private void ParseArgs()
@@ -59,7 +57,7 @@ namespace FPLedit.Templating
                     if (ch == '"' && !hadEscapeCharacter) // String-Ende
                     {
                         isInString = false;
-                        ParsedArgs.Add(currentName, currentValue);
+                        parsedArgs.Add(currentName, currentValue);
                         currentName = "";
                         currentValue = "";
                         continue;
@@ -83,8 +81,8 @@ namespace FPLedit.Templating
                 throw new FormatException("Unvollständige Deklaration: " + args);
         }
 
-        public bool Require(params string[] keys) => keys.Any(k => !ParsedArgs.ContainsKey(k));
+        public bool Require(params string[] keys) => keys.Any(k => !parsedArgs.ContainsKey(k));
 
-        public string this[string idx] => ParsedArgs[idx];
+        public string this[string idx] => parsedArgs[idx];
     }
 }

@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace FPLedit
 {
-    internal class FileState : IFileState
+    internal sealed class FileState : IFileState
     {
         private bool opened, saved;
         private string fileName;

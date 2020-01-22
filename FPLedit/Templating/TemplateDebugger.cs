@@ -7,7 +7,7 @@ using FPLedit.Shared.UI;
 
 namespace FPLedit.Templating
 {
-    internal class TemplateDebugger : FForm
+    internal sealed class TemplateDebugger : FForm
     {
         private readonly TextArea generatedCode;
 

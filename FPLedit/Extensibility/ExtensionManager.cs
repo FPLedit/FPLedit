@@ -1,16 +1,15 @@
 ﻿using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 
 namespace FPLedit.Extensibility
 {
-    internal class ExtensionManager
+    internal sealed class ExtensionManager
     {
-        public ReadOnlyCollection<PluginInfo> Plugins => plugins.AsReadOnly();
+        public IEnumerable<PluginInfo> Plugins => plugins.AsReadOnly();
         private List<PluginInfo> plugins;
         private List<IDisposable> disposablePlugins;
 

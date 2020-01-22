@@ -6,9 +6,9 @@ using System.Text;
 
 namespace FPLedit
 {
-    internal class UndoManager
+    internal sealed class UndoManager
     {
-        const int MAX_STEPS = 2;
+        private const int MAX_STEPS = 2;
 
         private Timetable[] steps;
         private int pointer;

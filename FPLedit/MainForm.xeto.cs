@@ -91,7 +91,7 @@ namespace FPLedit
             InitializeMenus();
 
             Shown += (s, e) => LoadStartFile();
-            Shown += (s, e) => Bootstrapper.update.AutoUpdateCheck(Bootstrapper.Logger);
+            Shown += (s, e) => Bootstrapper.Update.AutoUpdateCheck(Bootstrapper.Logger);
 
             checkRunner = new TimetableChecks.TimetableCheckRunner(Bootstrapper); // CheckRunner initialisieren
 
@@ -175,7 +175,7 @@ namespace FPLedit
             if (Bootstrapper.FileState.Opened)
                 Bootstrapper.Settings.Set("restart.file", Bootstrapper.FileState.FileName);
 
-            Process.Start(Bootstrapper.ExecutablePath);
+            Process.Start(PathManager.Instance.AppFilePath);
             Program.App.Quit();
         }
 

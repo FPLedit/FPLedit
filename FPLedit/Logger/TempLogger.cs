@@ -7,7 +7,7 @@ using System.Text;
 
 namespace FPLedit.Logger
 {
-    public class TempLogger : ILog
+    public sealed class TempLogger : ILog
     {
         private readonly string filename;
 
@@ -39,8 +39,8 @@ namespace FPLedit.Logger
 
         private void Write(string message, string type)
         {
-            using (StreamWriter r = new StreamWriter(filename, true))
-                r.WriteLine(DateTime.Now.ToString() + ": [" + type + "] " + message);
+            using (var r = new StreamWriter(filename, true))
+                r.WriteLine(DateTime.Now.ToString("s") + ": [" + type + "] " + message);
         }
     }
 }

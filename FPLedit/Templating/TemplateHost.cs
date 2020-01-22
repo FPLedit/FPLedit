@@ -10,7 +10,7 @@ namespace FPLedit.Templating
     /// <summary>
     /// Exception-Handling for compiled templates.
     /// </summary>
-    internal class TemplateHost : ITemplate
+    internal sealed class TemplateHost : ITemplate
     {
         private readonly ITemplate tmpl;
         private readonly ILog logger;

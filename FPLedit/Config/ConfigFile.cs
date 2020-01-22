@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.Config
 {
-    internal class ConfigFile
+    internal sealed class ConfigFile
     {
         private readonly List<ILine> lines;
         private readonly string filename;
@@ -43,7 +41,7 @@ namespace FPLedit.Config
         public void Set(string key, string value)
         {
             if (KeyExists(key))
-                lines.OfType<ValueLine>().FirstOrDefault(vl => vl.Key == key).Value = value;
+                lines.OfType<ValueLine>().First(vl => vl.Key == key).Value = value;
             else
                 lines.Add(new ValueLine(key, value));
         }
@@ -64,14 +62,14 @@ namespace FPLedit.Config
             File.WriteAllText(filename, text);
         }
 
-        interface ILine
+        private interface ILine
         {
             string Output { get; }
         }
 
-        class ValueLine : ILine
+        private class ValueLine : ILine
         {
-            public string Key { get; set; }
+            public string Key { get; }
             public string Value { get; set; }
             public string Output => $"{Key}=\"{Value}\"";
 
@@ -91,13 +89,13 @@ namespace FPLedit.Config
             }
         }
 
-        class CommentLine : ILine
+        private class CommentLine : ILine
         {
             public string Comment { get; set; }
             public string Output => Comment;
         }
 
-        class EmptyLine : ILine
+        private class EmptyLine : ILine
         {
             public string Output => "";
         }

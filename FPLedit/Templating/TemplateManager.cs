@@ -34,7 +34,7 @@ namespace FPLedit.Templating
             templates = instances.Select(t => new TemplateHost(t.GetTemplateCode(), t.TemplateIdentifier, this.pluginInterface, true)).ToList();
 
             // Weitere Templates aus Dateien laden
-            var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), templateRoot);
+            var path = Path.Combine(PathManager.Instance.AppDirectory, templateRoot);
             var dir = new DirectoryInfo(path);
             if (!dir.Exists)
                 return;

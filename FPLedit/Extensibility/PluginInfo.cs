@@ -1,12 +1,10 @@
 ﻿using FPLedit.Shared;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Reflection;
 
 namespace FPLedit.Extensibility
 {
-    internal class PluginInfo
+    internal sealed class PluginInfo
     {
         private readonly IPlugin plugin;
 
@@ -16,13 +14,13 @@ namespace FPLedit.Extensibility
 
         public string Author { get; private set; }
 
-        public string Version { get; set; }
+        public string Version { get; private set; }
 
-        public string Url { get; set; }
+        public string Url { get; private set; }
 
-        public string FullName { get; private set; }
+        public string FullName { get; }
 
-        public SecurityContext SecurityContext { get; private set; }
+        public SecurityContext SecurityContext { get; }
 
         public PluginInfo(IPlugin plugin, SecurityContext securityContext)
         {
@@ -43,15 +41,13 @@ namespace FPLedit.Extensibility
 
         private void ExtractPluginInformation(Type t)
         {
-            var attrs = t.GetCustomAttributes(typeof(PluginAttribute), false);
-            Name = "<Fehler beim Laden>";
-            if (attrs.Length != 1)
+            var a = t.GetCustomAttribute<PluginAttribute>(false);
+            Name = a?.Name ?? "<Fehler beim Laden>";
+            if (a == null)
                 return;
-            var a = attrs[0] as PluginAttribute;
             Author = a.Author;
             Version = a.Version;
             Url = a.Web;
-            Name = a.Name;
         }
 
         public void TryInit(IPluginInterface pluginInterface)

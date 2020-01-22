@@ -31,7 +31,7 @@ namespace FPLedit
             var disabled_plgs = manager.Plugins.Where(p => !p.Enabled);
 
             foreach (var plg in enabled_plgs)
-                enabledListBox.Items.Add(new ListItem() { Text = plg.Name, Tag = plg });
+                enabledListBox.Items.Add(new ListItem { Text = plg.Name, Tag = plg });
             enabledListBox.SelectedIndexChanged += (s, a) => ItemSelected(enabledListBox);
             enabledListBox.GotFocus += (s, a) =>
             {
@@ -40,7 +40,7 @@ namespace FPLedit
             };
 
             foreach (var plg in disabled_plgs)
-                disabledListBox.Items.Add(new ListItem() { Text = plg.Name, Tag = plg });
+                disabledListBox.Items.Add(new ListItem { Text = plg.Name, Tag = plg });
             disabledListBox.SelectedIndexChanged += (s, a) => ItemSelected(disabledListBox);
             disabledListBox.GotFocus += (s, a) =>
             {
