@@ -4,24 +4,23 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyCompany("Manuel Huber")]
 [assembly: AssemblyProduct("FPLedit")]
-[assembly: AssemblyCopyright("Copyright © 2015-2019 Manuel Huber")]
+[assembly: AssemblyCopyright("Copyright Â© 2015-2020 Manuel Huber")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-// Versionsinformationen für eine Assembly bestehen aus den folgenden vier Werten:
-//
-//      Hauptversion
-//      Nebenversion
-//      Buildnummer
-//      Revision
-//
-// Sie können alle Werte angeben oder die standardmäßigen Build- und Revisionsnummern
-// übernehmen, indem Sie "*" eingeben:
-// [assembly: AssemblyVersion("1.0.*")]
+// Version number format for assemblies: Major.Minor.Build.Revision
+// [assembly: AssemblyVersion("1.0.*")] to auto-generate build- and  revision numbers
 [assembly: AssemblyVersion("1.0.0.0")] // Do not change
 [assembly: AssemblyFileVersion(Vi.FileVersion)] // File Version -> increment for fixes
 
 [assembly: AssemblyInformationalVersion(Vi.InformationalVersion)] // Display Version
+
+// Include assembly configuration hints
+#if DEBUG
+[assembly: AssemblyConfiguration("Debug")]
+#else
+[assembly: AssemblyConfiguration("Release")]
+#endif
 
 // Central version information used in plugins & main application
 internal static class Vi

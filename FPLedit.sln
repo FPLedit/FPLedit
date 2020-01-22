@@ -35,10 +35,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libs", "libs", "{A2218283-EAF1-4F5C-9E8A-DC6BDDEB1830}"
 	ProjectSection(SolutionItems) = preProject
 		libs\Eto.dll = libs\Eto.dll
-		libs\Eto.Gtk.dll = libs\Eto.Gtk.dll
 		libs\Eto.Gtk3.dll = libs\Eto.Gtk3.dll
 		libs\Eto.Serialization.Xaml.dll = libs\Eto.Serialization.Xaml.dll
-		libs\Eto.WinForms.dll = libs\Eto.WinForms.dll
 		libs\Eto.Wpf.dll = libs\Eto.Wpf.dll
 		libs\LICENSE.txt = libs\LICENSE.txt
 	EndProjectSection

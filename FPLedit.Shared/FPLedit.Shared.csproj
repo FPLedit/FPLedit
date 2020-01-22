@@ -21,7 +21,4 @@
   <ItemGroup>
     <Compile Include="..\build_scripts\ResourceHelper.cs" Link="Properties\ResourceHelper.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Ui" />
-  </ItemGroup>
 </Project>

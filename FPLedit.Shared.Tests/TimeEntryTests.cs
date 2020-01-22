@@ -1,5 +1,6 @@
 using System;
 using NUnit.Framework;
+// ReSharper disable EqualExpressionComparison
 
 namespace FPLedit.Shared.Tests
 {
