@@ -16,7 +16,7 @@ using FPLedit.Shared.Helpers;
 
 namespace FPLedit
 {
-    public class MainForm : FForm, IRestartable
+    internal class MainForm : FForm, IRestartable
     {
         #region Controls
 #pragma warning disable CS0649
@@ -28,8 +28,7 @@ namespace FPLedit
 
         internal CrashReporting.CrashReporter CrashReporter { get; }
         internal Bootstrapper Bootstrapper { get; }
-        
-        
+
         private TimetableChecks.TimetableCheckRunner checkRunner;
         private readonly LastFileHandler lfh;
 
@@ -40,35 +39,35 @@ namespace FPLedit
 
             lfh = new LastFileHandler();
             lfh.LastFilesUpdates += UpdateLastFilesMenu;
+            
+            // Bootstrap the first main components
             Bootstrapper = new Bootstrapper(this, lfh);
-            lfh.Initialize(Bootstrapper);
             
-            // Wichtig, damit pii die Erweiterungen initialisieren kann
-            EtoExtensions.Initialize(Bootstrapper); // Eto-UI-Erweiterungen initialiseren
-            
-            Bootstrapper.BootstrapExtensions();
-
+            // Initialize CrashReporter, so it can be used early
             CrashReporter = new CrashReporting.CrashReporter(Bootstrapper);
+            
+            // Wire up missin pieces in file handling
+            lfh.Initialize(Bootstrapper);
 
-            networkEditingControl.Initialize(Bootstrapper);
-
+            // Initailize some loosely coupled UI components, so that extensions can use them
+            EtoExtensions.Initialize(Bootstrapper); // Initialize Eto extensions
+            FontCollection.InitAsync(); // Load list of available fonts, async, as this should not be needed by any extension.
+            TemplateDebugger.GetInstance().AttachDebugger(new GuiTemplateDebugger()); // Attach javascript debugger form
+            
+            Timetable.DefaultLinearVersion = Bootstrapper.Settings.GetEnum("core.default-file-format", Timetable.DefaultLinearVersion);
+            
+            // Load logger before extensions
             var logger = new MultipleLogger(logTextBox);
             if (Bootstrapper.Settings.Get("log.enable-file", false))
                 logger.Loggers.Add(new TempLogger(Bootstrapper));
             if (OptionsParser.MPCompatLog)
                 logger.Loggers.Add(new ConsoleLogger());
             Bootstrapper.InjectLogger(logger);
+            
+            // Now we can load extensions and templates
+            Bootstrapper.BootstrapExtensions();
 
-            KeyDown += (s, e) =>
-            {
-                if (e.Key == Keys.R || e.Key == Keys.Escape)
-                    networkEditingControl.DispatchKeystroke(e);
-            };
-
-            Bootstrapper.FileStateChanged += FileHandler_FileStateChanged;
-            Bootstrapper.FileOpened += (s, e) => networkEditingControl.ResetPan();
-
-            Init();
+            InitMain();
         }
 
         private void FileHandler_FileStateChanged(object sender, FileStateChangedEventArgs e)
@@ -82,14 +81,22 @@ namespace FPLedit
 
         #region Initialization
 
-        private void Init()
+        private void InitMain()
         {
-            Timetable.DefaultLinearVersion = Bootstrapper.Settings.GetEnum("core.default-file-format", Timetable.DefaultLinearVersion);
-            FontCollection.InitAsync(); // Asynchron Liste von verfügbaren Schriftarten laden
+            // Initilize main UI component
+            networkEditingControl.Initialize(Bootstrapper);
+            Bootstrapper.FileOpened += (s, e) => networkEditingControl.ResetPan();
+            KeyDown += (s, e) =>
+            {
+                if (e.Key == Keys.R || e.Key == Keys.Escape)
+                    networkEditingControl.DispatchKeystroke(e);
+            };
+
             this.AddSizeStateHandler();
 
             InitializeMenus();
 
+            Bootstrapper.FileStateChanged += FileHandler_FileStateChanged;
             Shown += (s, e) => LoadStartFile();
             Shown += (s, e) => Bootstrapper.Update.AutoUpdateCheck(Bootstrapper.Logger);
 
@@ -223,32 +230,15 @@ namespace FPLedit
         #endregion
 
         #region Events
-        private void SaveMenu_Click(object sender, EventArgs e)
-            => Bootstrapper.Save(false);
-
-        private void OpenMenu_Click(object sender, EventArgs e)
-            => Bootstrapper.Open();
-
-        private void SaveAsMenu_Click(object sender, EventArgs e)
-            => Bootstrapper.Save(true);
-
-        private void ImportMenu_Click(object sender, EventArgs e)
-            => Bootstrapper.FileHandler.Import();
-
-        private void ExportMenu_Click(object sender, EventArgs e)
-            => Bootstrapper.FileHandler.Export();
-
-        private void QuitMenu_Click(object sender, EventArgs e)
-            => Close();
-
-        private void LinearNewMenu_Click(object sender, EventArgs e)
-            => Bootstrapper.FileHandler.New(TimetableType.Linear);
-
-        private void NetworkNewMenu_Click(object sender, EventArgs e)
-            => Bootstrapper.FileHandler.New(TimetableType.Network);
-
-        private void ConvertMenu_Click(object sender, EventArgs e)
-            => Bootstrapper.FileHandler.ConvertTimetable();
+        private void SaveMenu_Click(object sender, EventArgs e) => Bootstrapper.Save(false);
+        private void OpenMenu_Click(object sender, EventArgs e) => Bootstrapper.Open();
+        private void SaveAsMenu_Click(object sender, EventArgs e) => Bootstrapper.Save(true);
+        private void ImportMenu_Click(object sender, EventArgs e) => Bootstrapper.FileHandler.Import();
+        private void ExportMenu_Click(object sender, EventArgs e) => Bootstrapper.FileHandler.Export();
+        private void QuitMenu_Click(object sender, EventArgs e) => Close();
+        private void LinearNewMenu_Click(object sender, EventArgs e) => Bootstrapper.FileHandler.New(TimetableType.Linear);
+        private void NetworkNewMenu_Click(object sender, EventArgs e) => Bootstrapper.FileHandler.New(TimetableType.Network);
+        private void ConvertMenu_Click(object sender, EventArgs e) => Bootstrapper.FileHandler.ConvertTimetable();
         #endregion
 
         protected override void Dispose(bool disposing)

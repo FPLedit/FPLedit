@@ -7,15 +7,48 @@ using FPLedit.Shared.UI;
 
 namespace FPLedit.Templating
 {
-    internal sealed class TemplateDebugger : FForm
+    internal sealed class TemplateDebugger : ITemplateDebugger
     {
-        private readonly TextArea generatedCode;
+        private ITemplateDebugger child;
+
+        public void SetContext(JavascriptTemplate template)
+            => child?.SetContext(template);
+
+        public void Navigate(int line, int column) // We have an error.
+            => child?.Navigate(line, column);
+        
+        public void OpenDebugger() // We have an error, so show this form.
+            => child?.OpenDebugger();
+
+        public void AttachDebugger(ITemplateDebugger debugger)
+            => child = debugger;
+
+        private TemplateDebugger()
+        {
+        }
+
+        private static TemplateDebugger instance;
+
+        public static TemplateDebugger GetInstance()
+        {
+            if (instance == null)
+                instance = new TemplateDebugger();
+            return instance;
+        }
+    }
+
+    internal sealed class GuiTemplateDebugger : ITemplateDebugger, IDisposable
+    {
+        private FForm form;
+        private TextArea generatedCode;
+        private bool opened;
 
         public void SetContext(JavascriptTemplate template)
         {
-            Visible = false; // Hide until we have an error.
+            EnsureForm();
+            form.Visible = false; // Hide until we have an error.
             
-            Title = "Generated code: " + template.Identifier;
+            form.Title = "Generated code: " + template.Identifier;
             
             var line = 1;
             generatedCode.Text = string.Join(Environment.NewLine,template.CompiledCode
@@ -26,6 +59,7 @@ namespace FPLedit.Templating
 
         public void Navigate(int line, int column) // We have an error.
         {
+            EnsureForm();
             var lines = generatedCode.Text.Split(new[] {Environment.NewLine}, StringSplitOptions.None);
             var start = string.Join(Environment.NewLine, lines.Take(line - 1)).Length + Environment.NewLine.Length;
             var end = string.Join(Environment.NewLine, lines.Take(line)).Length;
@@ -36,35 +70,47 @@ namespace FPLedit.Templating
         
         public void OpenDebugger() // We have an error, so show this form.
         {
-            Show();
-            Focus();
+            EnsureForm();
+            form.Show();
+            form.Focus();
         }
 
-        private TemplateDebugger()
+        public GuiTemplateDebugger()
         {
-            generatedCode = new TextArea
-            {
-                ReadOnly = true,
-                Wrap = false,
-                Font = Fonts.Monospace(10),
-            };
-            Content = generatedCode;
-            Size = new Size(800, 800);
+            
         }
 
-        private static TemplateDebugger _instance;
-        private static bool _opened;
-
-        public static TemplateDebugger GetInstance()
+        private void EnsureForm()
         {
-            if (!_opened)
+            if (!opened)
             {
-                _instance = new TemplateDebugger();
-                _instance.Closed += (s, e) => _opened = false;
-                _opened = true;
+                generatedCode = new TextArea
+                {
+                    ReadOnly = true,
+                    Wrap = false,
+                    Font = Fonts.Monospace(10),
+                };
+                form = new FForm
+                {
+                    Content = generatedCode, 
+                    Size = new Size(800, 800)
+                };
+                form.Closed += (s, e) => opened = false;
+                opened = true;
             }
-
-            return _instance;
         }
+
+        public void Dispose()
+        {
+            form?.Dispose();
+            generatedCode?.Dispose();
+        }
+    }
+
+    internal interface ITemplateDebugger
+    {
+        void SetContext(JavascriptTemplate template);
+        void Navigate(int line, int column);
+        void OpenDebugger();
     }
 }

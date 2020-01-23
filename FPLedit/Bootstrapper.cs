@@ -55,6 +55,9 @@ namespace FPLedit
 
         public void BootstrapExtensions()
         {
+            if (Logger == null)
+                throw new InvalidOperationException("Bootstrapper was not fully initialized before attempted to load extensions!");
+            
             // Extensions laden & initialisieren (=> Initialisiert Importer/Exporter)
             ExtensionManager.LoadExtensions();
             ExtensionManager.InitActivatedExtensions();

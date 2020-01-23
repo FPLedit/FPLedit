@@ -59,6 +59,11 @@ namespace FPLedit.Templating
                 logger.Error($"Fehler im Template {Identifier}: {ex.Message} in line {ex.LineNumber}, column {ex.Column}");
                 TemplateDebugger.GetInstance().Navigate(ex.LineNumber, ex.Column);
             }
+            catch (Esprima.ParserException ex)
+            {
+                logger.Error($"Fehler im Template {Identifier}: {ex.Message} in line {ex.LineNumber}, column {ex.Column}");
+                TemplateDebugger.GetInstance().Navigate(ex.LineNumber, ex.Column);
+            }
             catch (Exception ex)
             {
                 logger.Error("Fehler im Template " + Identifier + ": " + ex.Message);
