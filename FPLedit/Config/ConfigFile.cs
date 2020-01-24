@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace FPLedit.Config
 {
+    //TODO: One loophole remaining: the config file could be made resad-only after openening FPLedit.
     internal sealed class ConfigFile
     {
         private readonly List<ILine> lines;
@@ -16,6 +17,11 @@ namespace FPLedit.Config
             this.filename = filename;
 
             Parse();
+        }
+        
+        public ConfigFile()
+        {
+            lines = new List<ILine>();
         }
 
         private void Parse()
@@ -29,7 +35,7 @@ namespace FPLedit.Config
                 if (l.Trim() == "")
                     lines.Add(new EmptyLine());
                 else if (l.Trim().StartsWith("#"))
-                    lines.Add(new CommentLine() { Comment = l });
+                    lines.Add(new CommentLine() {Comment = l});
                 else
                     lines.Add(new ValueLine(l));
             }
@@ -58,6 +64,8 @@ namespace FPLedit.Config
 
         public void Save()
         {
+            if (filename == null)
+                return; // We hav no backing file.
             var text = string.Join("\n", lines.Select(l => l.Output));
             File.WriteAllText(filename, text);
         }

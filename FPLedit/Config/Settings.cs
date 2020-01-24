@@ -1,36 +1,38 @@
 ﻿using FPLedit.Shared;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using FPLedit.Config;
 using System.IO;
 
-namespace FPLedit
+namespace FPLedit.Config
 {
     internal sealed class Settings : ISettings
     {
         private readonly ConfigFile config;
+        private readonly bool isReadonly;
 
         public Settings()
         {
-            var path = PathManager.Instance.AppDirectory;
-            path = Path.Combine(path, "fpledit.conf");
+            var path = Path.Combine(PathManager.Instance.AppDirectory, "fpledit.conf");
 
-            config = new ConfigFile(TryGetUserPath() ?? path);
-        }
-
-        private string TryGetUserPath()
-        {
             try
             {
-                var appPath = PathManager.Instance.AppFilePath;
-                var appConfig = ConfigurationManager.OpenExeConfiguration(appPath);
-                return appConfig.AppSettings.Settings["config.path"].Value;
+                config = new ConfigFile(path);
+                var userPath = config.Get("config.path_redirect");
+                if (userPath != null && File.Exists(userPath))
+                    config = new ConfigFile(userPath);
             }
             catch
             {
-                return null;
+                config = new ConfigFile(); // Get in-memory config-backend as we cannot read the specified files (e.g. they do exist but are not readable).
+                isReadonly = true;
+            }
+
+            try
+            {
+                config.Save(); // Try to save current config file.
+            }
+            catch
+            {
+                isReadonly = true; // We cannot use this file. Thus, we block write access to it.
             }
         }
 
@@ -56,13 +58,15 @@ namespace FPLedit
         public void Remove(string key)
         {
             config.Remove(key);
-            config.Save();
+            if (!isReadonly)
+                config.Save();
         }
 
         public void Set(string key, string value)
         {
             config.Set(key, value);
-            config.Save();
+            if (!isReadonly)
+                config.Save();
         }
 
         public void Set(string key, bool value)
