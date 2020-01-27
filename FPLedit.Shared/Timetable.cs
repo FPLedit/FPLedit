@@ -14,6 +14,7 @@ namespace FPLedit.Shared
     public sealed class Timetable : Entity, ITimetable
     {
         public const int LINEAR_ROUTE_ID = 0;
+        public const int UNASSIGNED_ROUTE_ID = -1;
         public static TimetableVersion DefaultLinearVersion { get; set; } = TimetableVersion.JTG3_0;
 
         private readonly XMLEntity sElm, tElm, trElm;
@@ -124,7 +125,7 @@ namespace FPLedit.Shared
 
             var upgradeMessages = new List<string>();
 
-            // BUG in FPLedit 1.5.3 bis 2.0.0 muss nachträglich korrigiert werden
+            // Bug in FPLedit 1.5.3 bis 2.0.0 muss nachträglich korrigiert werden
             // In manchen Fällen wurden Zug-Ids doppelt vergeben
             var duplicate_tra_ids = trains.GroupBy(t => t.Id).Where(g => g.Count() > 1).Select(g => g.ToArray());
             if (duplicate_tra_ids.Any()) // Wir haben doppelte IDs
@@ -341,6 +342,7 @@ namespace FPLedit.Shared
             if (Type == TimetableType.Linear && index == LINEAR_ROUTE_ID)
                 return new Route(LINEAR_ROUTE_ID, Stations);
             var stas = Stations.Where(s => s.Routes.Contains(index)).ToList();
+            //TODO: What happens when route does not exist (or tt is linear & index != LINEAR_ROUTE_ID (e.g. update-context??)
             return new Route(index, stas);
         }
 

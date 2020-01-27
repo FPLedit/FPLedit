@@ -190,16 +190,15 @@ namespace FPLedit.Editor.Trains
                 Prefix = prefix;
             }
 
-            public string Prefix { get; set; }
-            public int Number { get; set; }
-
-            public string Full { get; set; }
+            public string Prefix { get; }
+            public int Number { get; }
+            public string Full { get; }
 
             public bool CompareTo(NameParts np2, bool excludePrefix)
             {
                 if (excludePrefix)
                     return Prefix == np2.Prefix && Number.CompareTo(np2.Number) > 0;
-                return Full.CompareTo(np2.Full) > 0;
+                return string.Compare(Full, np2.Full, StringComparison.Ordinal) > 0;
             }
         }
     }

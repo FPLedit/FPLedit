@@ -19,7 +19,7 @@ namespace FPLedit.Editor.Filters
 #pragma warning restore CS0649
         private readonly SelectionUI<PatternSelectionType> typeSelection;
 
-        public FilterRule Pattern { get; set; }
+        public FilterRule Pattern { get; private set; }
 
         public EditPatternForm(FilterRule rule, string property) : this(property)
         {

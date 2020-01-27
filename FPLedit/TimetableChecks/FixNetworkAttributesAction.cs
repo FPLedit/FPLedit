@@ -11,7 +11,7 @@ namespace FPLedit.TimetableChecks
     {
         public string Init(Timetable tt)
         {
-            // BUG in FPledit 1.5.4 bis 2.0.0 muss nachträglich korrigiert werden
+            // Bug in FPledit 1.5.4 bis 2.0.0 muss nachträglich korrigiert werden
             // Vmax/Wellenlinien bei Stationen wurden nicht routenspezifisch gespeichert
             if (tt.Type == TimetableType.Network)
             {

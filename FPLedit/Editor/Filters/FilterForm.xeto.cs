@@ -93,7 +93,6 @@ namespace FPLedit.Editor.Filters
                     if (epf.ShowModal(this) == DialogResult.Ok)
                     {
                         patterns[view.SelectedRow] = epf.Pattern;
-
                         UpdateListView(view, patterns);
                     }
                 }
@@ -109,7 +108,6 @@ namespace FPLedit.Editor.Filters
                 if (epf.ShowModal(this) == DialogResult.Ok)
                 {
                     patterns.Add(epf.Pattern);
-
                     UpdateListView(view, patterns);
                 }
             }
@@ -119,16 +117,11 @@ namespace FPLedit.Editor.Filters
         {
             switch (type)
             {
-                case FilterType.StartsWith:
-                    return negate ? "beginnt nicht mit" : "beginnt mit";
-                case FilterType.EndsWidth:
-                    return negate ? "endet nicht mit" : "endet mit";
-                case FilterType.Contains:
-                    return negate ? "enthält nicht" : "enthält";
-                case FilterType.Equals:
-                    return negate ? "ist nicht" : "ist";
-                default:
-                    return "";
+                case FilterType.StartsWith: return negate ? "beginnt nicht mit" : "beginnt mit";
+                case FilterType.EndsWidth: return negate ? "endet nicht mit" : "endet mit";
+                case FilterType.Contains: return negate ? "enthält nicht" : "enthält";
+                case FilterType.Equals: return negate ? "ist nicht" : "ist";
+                default: return "";
             }
         }
 

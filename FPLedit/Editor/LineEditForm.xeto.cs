@@ -75,9 +75,9 @@ namespace FPLedit.Editor
 
         private void EditStation(bool message = true)
         {
-            if (gridView.SelectedItems.Count() > 0)
+            if (gridView.SelectedItems.Any())
             {
-                Station station = (Station)gridView.SelectedItem;
+                var station = (Station)gridView.SelectedItem;
 
                 using (var nsf = new EditStationForm(station, route))
                     nsf.ShowModal(this);
@@ -90,11 +90,10 @@ namespace FPLedit.Editor
 
         private void DeleteStation(bool message = true)
         {
-            if (gridView.SelectedItems.Count() > 0)
+            if (gridView.SelectedItems.Any())
             {
-                Station sta = (Station)gridView.SelectedItem;
+                var sta = (Station)gridView.SelectedItem;
                 tt.RemoveStation(sta);
-
                 UpdateStations();
             }
             else if (message)
@@ -103,11 +102,11 @@ namespace FPLedit.Editor
 
         private void NewStation()
         {
-            using (EditStationForm nsf = new EditStationForm(tt, route))
+            using (var nsf = new EditStationForm(tt, route))
             {
                 if (nsf.ShowModal(this) == DialogResult.Ok)
                 {
-                    Station sta = nsf.Station;
+                    var sta = nsf.Station;
 
                     if (pluginInterface.Timetable.Type == TimetableType.Network)
                     {

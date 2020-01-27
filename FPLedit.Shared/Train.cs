@@ -79,6 +79,7 @@ namespace FPLedit.Shared
                 var prev = r.ElementAtOrDefault(i1 - 1);
                 var next = r.ElementAtOrDefault(i1 + 1);
 
+                //TODO: For last station of route?
                 if (prev != null && p.Contains(prev) && next != null && p.Contains(next))
                     idx = p.IndexOf(prev) + 1;
                 else

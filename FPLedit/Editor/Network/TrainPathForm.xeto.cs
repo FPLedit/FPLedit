@@ -9,6 +9,7 @@ using System.Linq;
 
 namespace FPLedit.Editor.Network
 {
+    //TODO: Refactor out logic code
     internal class TrainPathForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
@@ -263,9 +264,7 @@ namespace FPLedit.Editor.Network
 
         private void HandleStationClick(object sender, EventArgs e)
         {
-            if (currentState == null || currentState.StationClicked == null)
-                return;
-            currentState.StationClicked((Station)sender);
+            currentState?.StationClicked?.Invoke((Station)sender);
         }
 
         private class RouteEditState

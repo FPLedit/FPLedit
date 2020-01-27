@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using FPLedit.Shared.Helpers;
 
 namespace FPLedit.Shared
 {
@@ -35,6 +36,16 @@ namespace FPLedit.Shared
             return null;
         }
 
+        /// <summary>
+        /// <para>Directly sets position on a given route.</para>
+        /// <para>THIS IS POTENTIALLY DANGEROUS AND COULD MESS UP THE TIMETABLE IF APPLIED ON A REGISTERED STATION, as it does not update train ArrDep entry order.</para>
+        /// <para>Use <see cref="StationMoveHelper"/> as a safe(r) replacement for moving Station.</para>
+        /// 
+        /// <para>This is probably safe when you generate timetable files from scratch, or use it on custom non-<see cref="Station"/> <see cref="IStation"/>-Entity types, as long as they are not entangled with trains.</para>
+        /// </summary>
+        /// <remarks>If applied on existing stations: <see cref="StationMoveHelper.PerformUnsafeMove"/> on why this is even worse than that method (and what could possibly go wrong).</remarks>
+        /// <param name="route"></param>
+        /// <param name="km"></param>
         public void SetPosition(int route, float km)
         {
             positions[route] = km;

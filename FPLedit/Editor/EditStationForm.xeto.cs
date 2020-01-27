@@ -6,6 +6,7 @@ using FPLedit.Shared.UI.Validators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FPLedit.Shared.Helpers;
 
 namespace FPLedit.Editor
 {
@@ -17,11 +18,9 @@ namespace FPLedit.Editor
         private readonly TextBox nameTextBox, positionTextBox;
         private readonly StationRenderer stationRenderer;
 #pragma warning restore CS0649
-        private readonly NotEmptyValidator nameValidator;
-        private readonly NumberValidator positionValidator;
         private readonly ValidatorCollection validators;
 
-        public Station Station { get; set; }
+        public Station Station { get; }
 
         public float Position { get; private set; }
 
@@ -34,8 +33,8 @@ namespace FPLedit.Editor
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            positionValidator = new NumberValidator(positionTextBox, false, false, errorMessage: "Bitte eine Zahl als Position eingeben!");
-            nameValidator = new NotEmptyValidator(nameTextBox, errorMessage: "Bitte einen Bahnhofsnamen eingeben!");
+            var positionValidator = new NumberValidator(positionTextBox, false, false, errorMessage: "Bitte eine Zahl als Position eingeben!");
+            var nameValidator = new NotEmptyValidator(nameTextBox, errorMessage: "Bitte einen Bahnhofsnamen eingeben!");
             validators = new ValidatorCollection(positionValidator, nameValidator);
 
             this.Shown += (s, e) =>
@@ -51,6 +50,7 @@ namespace FPLedit.Editor
                     this.Height += diff;
                     stationRendererHeight = stationRenderer.Height;
                 }
+
                 if (WindowShown && stationRenderer.Width > stationRendererWidth)
                 {
                     var diff = stationRenderer.Width - stationRendererWidth;
@@ -63,7 +63,7 @@ namespace FPLedit.Editor
         /// <summary>
         /// Form to create a new station without a given route id.
         /// </summary>
-        public EditStationForm(Timetable tt) : this(tt, -1)
+        public EditStationForm(Timetable tt) : this(tt, Timetable.UNASSIGNED_ROUTE_ID)
         {
         }
 
@@ -108,85 +108,32 @@ namespace FPLedit.Editor
 
         private void CloseButton_Click(object sender, EventArgs e)
         {
-            string name = nameTextBox.Text;
-
             if (!validators.IsValid)
             {
                 MessageBox.Show("Bitte erst alle Fehler beheben:" + Environment.NewLine + validators.Message);
                 return;
             }
+            
+            if (existingStation && route == Timetable.UNASSIGNED_ROUTE_ID)
+                throw new InvalidOperationException("Invalid state: No assigned route but Station marked as existing.");
 
+            Station.SName = nameTextBox.Text;
+            
+            // Set position.
             var newPos = float.Parse(positionTextBox.Text);
-            bool resetArdep = false;
-
-            if (existingStation)
-            {
-                var tt = Station._parent;
-                var rt = tt.GetRoute(route).GetOrderedStations();
-                var idx = rt.IndexOf(Station);
-
-                float? min = null, max = null;
-                if (idx != rt.Count - 1)
-                    max = rt[idx + 1].Positions.GetPosition(route);
-                if (idx != 0)
-                    min = rt[idx - 1].Positions.GetPosition(route);
-
-                if ((min.HasValue && newPos < min) || (max.HasValue && newPos > max))
-                {
-                    var res = MessageBox.Show("ACHTUNG: Sie versuchen eine Station durch eine Positionsänderung auf der Strecke zwischen zwei andere Bahnhöfe zu verschieben. Dies wird, wenn Züge über diese Strecke angelegt wurden, zu unerwarteten Effekten führen. Trotzdem fortfahren?",
-                        "FPLedit", MessageBoxButtons.YesNo, MessageBoxType.Warning);
-                    if (res == DialogResult.No)
-                        return;
-                    else
-                        resetArdep = true;
-                }
-            }
-
-            var ardeps = new Dictionary<Train, ArrDep>();
-            if (resetArdep)
-            {
-                foreach (var tra in Station._parent.Trains)
-                {
-                    var path = tra.GetPath();
-                    var idx = path.IndexOf(Station);
-                    if (idx == -1) // Station not in path; not applicable to train.
-                        continue;
-
-                    // Filter out trains that don't use the current editing sessions route id.
-                    var prev = path.ElementAtOrDefault(idx - 1);
-                    var next = path.ElementAtOrDefault(idx + 1);
-
-                    var empty = Array.Empty<int>();
-                    var routes = empty.Concat(prev?.Routes ?? empty).Concat(next?.Routes ?? empty);
-                    if (!routes.Contains(route))
-                        continue;
-
-                    var arrDep = tra.GetArrDep(Station);
-                    ardeps[tra] = arrDep.Clone<ArrDep>();
-                    tra.RemoveArrDep(Station);
-                }
-            }
-
-            if (route != -1)
-                Station.Positions.SetPosition(route, newPos);
-            else
+            if (route == Timetable.UNASSIGNED_ROUTE_ID)
                 Position = newPos;
-            Station.SName = name;
-
-            if (resetArdep)
+            else if (!StationMoveHelper.TrySafeMove(Station, existingStation, newPos, route))
             {
-                var trainsDataLoss = new List<string>();
-                foreach (var ardp in ardeps)
-                {
-                    var a = ardp.Key.AddArrDep(Station, route);
-                    a?.ApplyCopy(ardp.Value);
-                    if (a == null)
-                        trainsDataLoss.Add(ardp.Key.TName);
-                }
-                if (trainsDataLoss.Any()) //TODO: Is this safeguard message really needed (or should we throw?)
-                    MessageBox.Show($"Unerwarteter Datenverlust beim Umschreiben der Züge: {string.Join(",", trainsDataLoss)}", "FPLedit", MessageBoxType.Error);
+                // We tried a safe move, but it is not possible.
+                var res = MessageBox.Show("ACHTUNG: Sie versuchen Stationen einer Strecke durch eine Positionsänderung zwischen zwei andere Bahnhöfe zu verschieben und damit die Stationen umzusortieren.\n\nDies wird IN JEDEM FALL bei Zügen, die über diese Strecke verkehren, zu unerwarteten und Effekten und Fehlern führen und wird mit großer Wahrscheinlickeit zu Nebeneffekten an anderen Stellen führen und benötigt manuelle Nacharbeit. Diese Aktion wird nicht empfohlen.\n\n(Sie können stattdessen die alte Station löschen und eine neue anlegen). Trotzdem fortfahren und Stationen umzusortieren (auf eigenes Risiko)?",
+                    "FPLedit", MessageBoxButtons.YesNo, MessageBoxType.Warning);
+                if (res == DialogResult.No)
+                    return; // Do not proceed as user does not want to destroy his timetable.
+                // User definitely wants to do evil things. Proceed.
+                StationMoveHelper.PerformUnsafeMove(Station, existingStation, newPos, route); //TODO: Maybe catch and restore some sort of backup
             }
-
+            
             // Update track data.
             if (!stationRenderer.CommitNameEdit())
                 return;
