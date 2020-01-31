@@ -2,6 +2,7 @@
 using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Eto.Drawing;
 using System.Linq;
 using System.Text;
@@ -11,9 +12,7 @@ namespace FPLedit.Bildfahrplan
 {
     public class BitmapExport : IExport
     {
-        public string Filter => "Bildfahrplan als PNG (*.png)|*.png";
-
-        public bool Export(Timetable tt, string filename, IPluginInterface pluginInterface, string[] flags = null)
+        public bool Export(Timetable tt, Stream stream, IPluginInterface pluginInterface, string[] flags = null) 
         {
             try
             {
@@ -22,7 +21,7 @@ namespace FPLedit.Bildfahrplan
                 using (var g = new Graphics(bmp))
                 {
                     renderer.Draw(g, true);
-                    bmp.Save(filename, ImageFormat.Png);
+                    bmp.Save(stream, ImageFormat.Png);
                 }
                 return true;
             }
@@ -30,6 +29,14 @@ namespace FPLedit.Bildfahrplan
             {
                 return false;
             }
+        }
+
+        public string Filter => "Bildfahrplan als PNG (*.png)|*.png";
+
+        public bool Export(Timetable tt, string filename, IPluginInterface pluginInterface, string[] flags = null)
+        {
+            using (var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.Write))
+                return Export(tt, stream, pluginInterface, flags);
         }
     }
 }

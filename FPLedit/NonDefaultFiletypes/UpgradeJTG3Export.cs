@@ -3,6 +3,7 @@ using FPLedit.Shared.Filetypes;
 using FPLedit.Shared.Rendering;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace FPLedit.NonDefaultFiletypes
     {
         public string Filter => "Fahrplan Dateien (*.fpl)|*.fpl";
 
-        public bool Export(Timetable tt, string filename, IPluginInterface pluginInterface, string[] flags = null)
+        public bool Export(Timetable tt, Stream stream, IPluginInterface pluginInterface, string[] flags = null)
         {
             if (tt.Version.Compare(TimetableVersion.JTG3_1) >= 0)
                 throw new Exception("Nur mit jTrainGraph 2.x oder 3.0x erstellte Fahrpläne können aktualisiert werden.");
@@ -49,7 +50,13 @@ namespace FPLedit.NonDefaultFiletypes
 
             ColorTimetableConverter.ConvertAll(clone);
 
-            return new XMLExport().Export(clone, filename, pluginInterface);
+            return new XMLExport().Export(clone, stream, pluginInterface);
+        }
+        
+        public bool Export(Timetable tt, string filename, IPluginInterface pluginInterface, string[] flags = null)
+        {
+            using (var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.Write))
+                return Export(tt, stream, pluginInterface, flags);
         }
     }
 }

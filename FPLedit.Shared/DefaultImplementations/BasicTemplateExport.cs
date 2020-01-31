@@ -16,7 +16,7 @@ namespace FPLedit.Shared.DefaultImplementations
             Filter = filter;
         }
 
-        public bool Export(Timetable tt, string filename, IPluginInterface pluginInterface, string[] flags = null)
+        public bool Export(Timetable tt, Stream stream, IPluginInterface pluginInterface, string[] flags = null)
         {
             var chooser = getChooser(pluginInterface);
             var templ = chooser.GetTemplate(tt);
@@ -28,9 +28,16 @@ namespace FPLedit.Shared.DefaultImplementations
             if (flags?.Contains("tryout_console") ?? false)
                 cont += ResourceHelper.GetStringResource("Shared.Resources.TryoutConsole.html");
 
-            File.WriteAllText(filename, cont);
+            using (var sw = new StreamWriter(stream))
+                sw.Write(cont);
 
             return true;
+        }
+        
+        public bool Export(Timetable tt, string filename, IPluginInterface pluginInterface, string[] flags = null)
+        {
+            using (var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.Write))
+                return Export(tt, stream, pluginInterface, flags);
         }
     }
 }

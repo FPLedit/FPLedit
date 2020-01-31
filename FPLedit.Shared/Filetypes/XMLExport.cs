@@ -1,6 +1,5 @@
-﻿using FPLedit.Shared;
-using System;
-using System.Collections.Generic;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
@@ -10,8 +9,10 @@ namespace FPLedit.Shared.Filetypes
 {
     public class XMLExport : IExport
     {
+        public const string FLAG_INDENT_XML = "indent_xml";
+        
         public string Filter => "Fahrplan Dateien (*.fpl)|*.fpl";
-
+        
         private XElement BuildNode(XMLEntity node)
         {
             XElement elm = new XElement(node.XName);
@@ -26,7 +27,13 @@ namespace FPLedit.Shared.Filetypes
 
         public bool Export(Timetable tt, string filename, IPluginInterface pluginInterface, string[] flags = null)
         {
-            bool debug = pluginInterface.Settings.Get<bool>("xml.indent");
+            using (var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.Write))
+                return Export(tt, stream, pluginInterface, flags);
+        }
+        
+        public bool Export(Timetable tt, Stream stream, IPluginInterface pluginInterface, string[] flags = null)
+        {
+            bool debug = pluginInterface.Settings.Get<bool>("xml.indent") || flags.Contains("indent_xml");
 #if DEBUG
             debug = true;
 #endif
@@ -34,7 +41,8 @@ namespace FPLedit.Shared.Filetypes
             {
                 var ttElm = BuildNode(tt.XMLEntity);
 
-                using (var writer = new XmlTextWriter(filename, new UTF8Encoding(false)))
+                using (var sw = new StreamWriter(stream, Encoding.UTF8, 1024, true))
+                using (var writer = new XmlTextWriter(sw))
                 {
                     if (debug)
                         writer.Formatting = Formatting.Indented;

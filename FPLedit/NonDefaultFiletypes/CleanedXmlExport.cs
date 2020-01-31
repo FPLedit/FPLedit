@@ -2,6 +2,7 @@
 using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
@@ -48,7 +49,7 @@ namespace FPLedit.NonDefaultFiletypes
             return elm;
         }
 
-        public bool Export(Timetable tt, string filename, IPluginInterface pluginInterface, string[] flags = null)
+        public bool Export(Timetable tt, Stream stream, IPluginInterface pluginInterface, string[] flags = null)
         {
             if (pluginInterface.Timetable.Type == TimetableType.Network)
             {
@@ -71,7 +72,7 @@ namespace FPLedit.NonDefaultFiletypes
                 var clone = tt.Clone(); // Klon zum anschließenden Verwerfen!
                 var ttElm = BuildNode(clone.XMLEntity);
 
-                using (var writer = new XmlTextWriter(filename, new UTF8Encoding(false)))
+                using (var writer = new XmlTextWriter(stream, new UTF8Encoding(false)))
                 {
                     if (debug)
                         writer.Formatting = Formatting.Indented;
@@ -84,6 +85,12 @@ namespace FPLedit.NonDefaultFiletypes
                 pluginInterface.Logger.Error("XMLExport: " + ex.Message);
                 return false;
             }
+        }
+        
+        public bool Export(Timetable tt, string filename, IPluginInterface pluginInterface, string[] flags = null)
+        {
+            using (var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.Write))
+                return Export(tt, stream, pluginInterface, flags);
         }
     }
 }
