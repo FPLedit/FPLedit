@@ -149,14 +149,18 @@ namespace FPLedit
                 lastMenu.Enabled = false;
 
             // Hilfe Menü nach den Erweiterungen zusammenbasteln
-            var helpItem = Menu.CreateItem("Hilfe");
-            helpItem.CreateItem("Erweiterungen", clickHandler: (s, ev) => new ExtensionsForm(Bootstrapper.ExtensionManager, this).ShowModal(this));
-            helpItem.CreateItem("Vorlagen", clickHandler: (s, ev) => new TemplatesForm(Bootstrapper.TemplateManager as TemplateManager).ShowModal(this));
-            helpItem.Items.Add(new SeparatorMenuItem());
-            helpItem.CreateItem("Fenstergößen löschen", clickHandler: (s, ev) => SizeManager.Reset());
-            helpItem.Items.Add(new SeparatorMenuItem());
-            helpItem.CreateItem("Online Hilfe", clickHandler: (s, ev) => OpenHelper.Open("https://fahrplan.manuelhu.de/"));
-            helpItem.CreateItem("Info", clickHandler: (s, ev) => new InfoForm(Bootstrapper.Settings).ShowModal(this));
+            if (Menu.HelpMenu.Items.Any())
+                Menu.HelpMenu.Items.Add(new SeparatorMenuItem());
+            Menu.HelpMenu.CreateItem("Erweiterungen", clickHandler: (s, ev) => new ExtensionsForm(Bootstrapper.ExtensionManager, this).ShowModal(this));
+            Menu.HelpMenu.CreateItem("Vorlagen", clickHandler: (s, ev) => new TemplatesForm(Bootstrapper.TemplateManager as TemplateManager).ShowModal(this));
+            Menu.HelpMenu.Items.Add(new SeparatorMenuItem());
+            Menu.HelpMenu.CreateItem("Fenstergößen löschen", clickHandler: (s, ev) => SizeManager.Reset());
+            Menu.HelpMenu.Items.Add(new SeparatorMenuItem());
+            Menu.HelpMenu.CreateItem("Online Hilfe", clickHandler: (s, ev) => OpenHelper.Open("https://fahrplan.manuelhu.de/"));
+            Menu.HelpMenu.CreateItem("Info", clickHandler: (s, ev) => new InfoForm(Bootstrapper.Settings).ShowModal(this));
+            
+            // Finalize Help Menu
+            Menu.HelpMenu.Text = "Hilfe";
         }
 
         private void UpdateLastFilesMenu(object sender, EventArgs e)
