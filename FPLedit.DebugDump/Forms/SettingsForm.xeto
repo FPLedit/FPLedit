@@ -1,0 +1,45 @@
+﻿<e:SettingsForm
+  xmlns="clr-namespace:Eto.Forms;assembly=Eto"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:e="clr-namespace:FPLedit.DebugDump.Forms;assembly=FPLedit.DebugDump"
+  DefaultButton="{x:Reference closeButton}"
+  Title="Debug Dump Einstellungen" Resizable="false">
+  <StackLayout>
+    <TableLayout>
+      <TableRow>
+        <TableLayout Spacing="5,5" Padding="10,10,10,10">
+          <TableRow>
+            <Label>Ordner für Aufzeichnungen</Label>
+            <StackLayout>
+              <StackLayout Orientation="Horizontal" Spacing="5">
+                <TextBox x:Name="pathTextBox" Width="240"/>
+                <Button Click="SelectTargetDir_Click">...</Button>
+              </StackLayout>
+            </StackLayout>
+          </TableRow>
+        </TableLayout>
+      </TableRow>
+    </TableLayout>
+    <StackLayout Padding="5">
+      <!-- hack this text contains "\n" as a quick fix for an eto problem. See EtoExtensions.WordWrap. -->
+      <Label x:Name="helpLabel">
+HINWEISE:\n
+Debug Dump ist ein Tool, um Daten zur Fehlerbehebung in FPLedit zu sammeln. Dumps können unter Umständen persönliche Daten enthalten, wenn Sie solche in ihre Fahrplandateien oder FPLedit allgemein eingeben, darunter auch absolute Dateipfade. Wenn Sie einen Dump per Mail an den Entwickler übermitteln, stimmen Sie der Verwendung dieser Daten zur Fehlerbehebung zu.\n
+Natürlich können Sie jederzeit dieser Nutzung nachträglich widersprechen und Löschung verlangen. FPLedit wird dabei niemals selbsttätig einen Dump versenden.\n
+Vorher können Sie das unten aufgeführte Tool nutzen, um die aufgezeichneten Daten einzusehen.\n\n
+
+Bei der Aufzeichnung können größere Datenmengen anfallen. Sie sollten diese also nur aktivieren, wenn Sie die Funktion auch verwenden.
+       </Label>
+    </StackLayout>
+    <StackLayout Padding="5">
+        <Button Click="ViewDump_Click">Aufgezeichneten Dump ansehen</Button>
+    </StackLayout>
+    <TableLayout Spacing="5,5" Padding="10,10,10,10">
+      <TableRow>
+        <CheckBox x:Name="recordCheckBox" Text="Aufzeichnung aktivieren (ab dem nächsten Programmstart wirksam)" />
+        <TableCell ScaleWidth="true" />
+        <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click" />
+      </TableRow>
+    </TableLayout>
+  </StackLayout>
+</e:SettingsForm>

@@ -1,0 +1,34 @@
+﻿<e:InspectForm
+    xmlns="clr-namespace:Eto.Forms;assembly=Eto"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:e="clr-namespace:FPLedit.DebugDump.Forms;assembly=FPLedit.DebugDump"
+    DefaultButton="{x:Reference closeButton}"
+    Title="Aufgeichneter Debug Dump" Resizable="true" Size="850, 650">
+  <TableLayout Padding="10,10,10,10" Spacing="5,5">
+    <TableRow ScaleHeight="true">
+      <TableCell><!-- left column -->
+        <TableLayout Padding="10,10,10,10" Spacing="5,5">
+          <TableRow ScaleHeight="true">
+            <ListBox x:Name="eventListBox" Width="300" />
+          </TableRow>
+          <TextArea x:Name="propertyTextArea" Height="150" Width="300" ReadOnly="true" />
+        </TableLayout>
+      </TableCell><!-- /left column -->
+      <TableCell ScaleWidth="true"><!-- right column -->
+        <GroupBox Text="Data-Einträge">
+          <TableLayout Padding="10,10,10,10" Spacing="5,5">
+            <DropDown x:Name="dataDropDown" />
+            <TableRow ScaleHeight="true">
+              <TextArea x:Name="dataTextArea" ReadOnly="true" />
+            </TableRow>
+          <Button Click="SaveFile">Als Datei speichern</Button>  
+          </TableLayout>
+        </GroupBox>
+      </TableCell><!-- /right column -->
+    </TableRow>
+    <TableRow><!-- bottom actions -->
+      <TableCell />
+      <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click" />
+    </TableRow><!-- /bottom actions -->
+  </TableLayout>
+</e:InspectForm>

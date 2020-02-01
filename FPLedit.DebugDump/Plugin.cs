@@ -4,100 +4,50 @@ using FPLedit.Shared.Filetypes;
 using FPLedit.Shared.UI;
 using System;
 using System.IO;
+using System.Linq;
+using System.Xml;
+using FPLedit.DebugDump.Forms;
 
 namespace FPLedit.DebugDump
 {
     [Plugin("DebugDump", Vi.PFrom, Vi.PUpTo, Author = "Manuel Huber")]
     public sealed class Plugin : IPlugin, IDisposable
     {
-        private string basePath;
-        private DirectoryInfo dir;
-        private int sessionCounter = 0;
-        private string session;
         private IPluginInterface pluginInterface;
-        private FileSystemWatcher watcher;
+        private DebugListener listener;
+
 
         public void Init(IPluginInterface pluginInterface)
         {
-            XMLEntity last = new XMLEntity("dummy");
-
             this.pluginInterface = pluginInterface;
 
-            session = Guid.NewGuid().ToString();
-            basePath = Path.Combine(pluginInterface.ExecutableDir, "ttDumps", session);
-            dir = new DirectoryInfo(basePath);
-
-            if (!dir.Exists)
-                dir.Create();
-
-            // Log UI interaction
-            FFormHandler.Init += (se, a) =>
+            if (pluginInterface.Settings.Get<bool>("dump.record"))
             {
-                var w = (Window)se;
-                var n = w.GetType().FullName;
-                w.Shown += (s, e) => pluginInterface.Logger.Debug("Form shown: " + n);
-                w.Closed += (s, e) => pluginInterface.Logger.Debug("Form closed: " + n);
-            };
+                var defaultPath = pluginInterface.GetTemp("..");
+                var basePath = pluginInterface.Settings.Get("dump.path", defaultPath);
+                if (basePath == "")
+                    basePath = defaultPath;
+                basePath = Path.GetFullPath(basePath);
+                if (!Directory.Exists(basePath))
+                    Directory.CreateDirectory(basePath);
+                
+                listener = new DebugListener();
+                listener.StartSession(pluginInterface, basePath);
+            }
 
-            var logPath = Path.Combine(basePath, "session.log");
-            dynamic l = pluginInterface.Logger;
-            l.Loggers.Add(new FileLogger(logPath));
-
-            // Log Timetable changes
-            pluginInterface.FileStateChanged += (s, e) =>
-            {
-                try
-                {
-                    if (pluginInterface.Timetable == null || last.XDiff(pluginInterface.Timetable.XMLEntity))
-                        return;
-
-                    var clone = pluginInterface.Timetable.Clone();
-                    var exp = new XMLExport();
-
-                    var fn = Path.Combine(basePath, $"fpldump-{sessionCounter++}.fpl");
-
-                    var x = new XMLEntity("dump-info");
-                    x.SetAttribute("session", session);
-                    x.SetAttribute("date", DateTime.Now.ToShortDateString());
-                    x.SetAttribute("time", DateTime.Now.ToShortTimeString());
-                    x.SetAttribute("pf", Environment.OSVersion.Platform.ToString());
-
-                    clone.Children.Add(x);
-                    exp.SafeExport(clone, fn, pluginInterface);
-                    pluginInterface.Logger.Debug("Dump erstellt: " + fn);
-
-                    var clone2 = pluginInterface.Timetable.Clone();
-                    last = clone2.XMLEntity;
-                }
-                catch {}
-            };
-
-            pluginInterface.ExtensionsLoaded += (s, e) =>
-            {
-                pluginInterface.Logger.Info("DebugDump aktiviert. Session: " + session);
-                pluginInterface.Logger.Debug("Enabled extensions: " + pluginInterface.Settings.Get("extmgr.enabled", ""));
-            };
-
-            var tmpDir = pluginInterface.GetTemp("");
-            watcher = new FileSystemWatcher(tmpDir, "*.*")
-            {
-                NotifyFilter = NotifyFilters.LastWrite
-            };
-            watcher.Changed += WatcherEvent;
-            watcher.Created += WatcherEvent;
-            watcher.EnableRaisingEvents = true;
+            pluginInterface.ExtensionsLoaded += PluginInterfaceOnExtensionsLoaded;
         }
 
-        private void WatcherEvent(object sender, FileSystemEventArgs e)
+        private void PluginInterfaceOnExtensionsLoaded(object sender, EventArgs e)
         {
-            var orig = new FileInfo(e.FullPath);
-            if (!orig.Exists)
-                return;
-            var fn = Path.Combine(basePath, $"tmpdump-{sessionCounter++}-{Path.GetFileNameWithoutExtension(orig.Name)}{orig.Extension}");
-            pluginInterface.Logger.Debug("Dump erstellt: " + fn);
-            orig.CopyTo(fn);
+            var menu = pluginInterface.HelpMenu as ButtonMenuItem;
+            menu.CreateItem("Debug Dump", true, (s, args) =>
+            {
+                using (var sf = new SettingsForm(pluginInterface.Settings))
+                    sf.ShowModal();
+            });
         }
 
-        public void Dispose() => watcher?.Dispose();
+        public void Dispose() => listener?.Dispose();
     }
 }
