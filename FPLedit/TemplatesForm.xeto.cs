@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace FPLedit
 {
-    internal class TemplatesForm : Dialog
+    internal class TemplatesForm : FDialog
     {
 #pragma warning disable CS0649
         private readonly GridView gridView;

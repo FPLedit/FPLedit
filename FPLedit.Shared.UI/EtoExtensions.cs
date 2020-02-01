@@ -82,21 +82,27 @@ namespace FPLedit.Shared.UI
 
         public static void WordWrap(this Label label, int maxWidth)
         {
+            var origLines = label.Text.Split('\n');
             var lines = new List<string>();
-            var words = label.Text.Split(' ');
-            var line = "";
-            for (int i = 0; i < words.Length; i++)
+            foreach (var origLine in origLines)
             {
-                var nline = line + words[i] + " ";
-                if (label.Font.MeasureString(nline.Substring(0, nline.Length - 1)).Width > maxWidth)
+                var words = origLine.Split(' ');
+                var line = "";
+                for (int i = 0; i < words.Length; i++)
                 {
-                    lines.Add(line);
-                    line = words[i] + " ";
+                    var nline = line + words[i] + " ";
+                    if (label.Font.MeasureString(nline.Substring(0, nline.Length - 1)).Width > maxWidth)
+                    {
+                        lines.Add(line);
+                        line = words[i] + " ";
+                    }
+                    else
+                        line = nline;
                 }
-                else
-                    line = nline;
+
+                lines.Add(line);
             }
-            lines.Add(line);
+
             label.Text = string.Join(Environment.NewLine, lines);
         }
 

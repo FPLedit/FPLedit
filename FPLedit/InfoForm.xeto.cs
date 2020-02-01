@@ -13,11 +13,11 @@ using FPLedit.Shared.Helpers;
 
 namespace FPLedit
 {
-    internal class InfoForm : Dialog
+    internal class InfoForm : FDialog
     {
 #pragma warning disable CS0649
         private readonly TextArea licenseTextArea;
-        private readonly Label versionLabel;
+        private readonly Label versionLabel, privacyLabel;
         private readonly CheckBox updateCheckBox;
         private readonly Button checkButton;
 #pragma warning restore CS0649
@@ -37,6 +37,8 @@ namespace FPLedit
             versionLabel.Text = versionLabel.Text.Replace("{version}", mg.CurrentVersion.ToString());
             versionLabel.Font = new Font(versionLabel.Font.FamilyName, versionLabel.Font.Size, FontStyle.Bold);
             updateCheckBox.Checked = mg.AutoUpdateEnabled;
+            
+            privacyLabel.WordWrap(430);
         }
 
         private void VersionCheck()
@@ -46,7 +48,7 @@ namespace FPLedit
                 if (newAvail)
                 {
                     string nl = Environment.NewLine;
-                    DialogResult res = MessageBox.Show($"Eine neue Programmversion ({vi.NewVersion.ToString()}) ist verfügbar!{nl}{vi.Description ?? ""}{nl}Jetzt zur Download-Seite wechseln, um die neue Version herunterzuladen?",
+                    DialogResult res = MessageBox.Show($"Eine neue Programmversion ({vi.NewVersion}) ist verfügbar!{nl}{vi.Description ?? ""}{nl}Jetzt zur Download-Seite wechseln, um die neue Version herunterzuladen?",
                         "Neue FPLedit-Version verfügbar", MessageBoxButtons.YesNo);
 
                     if (res == DialogResult.Yes)

@@ -35,7 +35,7 @@
     <TableRow>
       <StackLayout Orientation="Vertical" Spacing="5">
         <CheckBox x:Name="updateCheckBox">Automatische Überprüfung auf Updates beim Programmstart aktivieren.</CheckBox>
-        <Label>Datenschutz: Dabei wird Ihre IP-Adresse und der verwendete Betriebssystemtyp an den Server übermittelt; Die IP-Adresse wird nur anonymisiert in Log-Dateien gespeichert; ein Rückschluss auf einzelne Benutzer ist daher nicht möglich.</Label>
+        <Label x:Name="privacyLabel">Datenschutz: Dabei wird Ihre IP-Adresse und der verwendete Betriebssystemtyp an den Server übermittelt; Die IP-Adresse wird nur anonymisiert in Log-Dateien gespeichert; ein Rückschluss auf einzelne Benutzer ist daher nicht möglich.</Label>
       </StackLayout>
     </TableRow>
     <TableRow>
