@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
+using Force.DeepCloner;
 
 namespace FPLedit.Shared
 {
@@ -48,16 +45,7 @@ namespace FPLedit.Shared
         public void RemoveAttribute(string key)
             => XMLEntity.RemoveAttribute(key);
 
-        public T Clone<T>() where T : Entity
-        {
-            using (MemoryStream stream = new MemoryStream())
-            {
-                BinaryFormatter formatter = new BinaryFormatter();
-                formatter.Serialize(stream, this);
-                stream.Seek(0, SeekOrigin.Begin);
-                return (T)formatter.Deserialize(stream);
-            }
-        }
+        public T Clone<T>() where T : Entity => (T)this.DeepClone();
 
         protected void SetNotEmptyTime(TimeEntry time, string key)
         {

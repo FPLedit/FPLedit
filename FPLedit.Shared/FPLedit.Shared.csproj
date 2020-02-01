@@ -21,4 +21,7 @@
   <ItemGroup>
     <Compile Include="..\build_scripts\ResourceHelper.cs" Link="Properties\ResourceHelper.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="DeepCloner" Version="0.10.2" />
+  </ItemGroup>
 </Project>

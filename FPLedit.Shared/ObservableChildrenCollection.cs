@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.Shared
 {
@@ -13,17 +11,27 @@ namespace FPLedit.Shared
     public class ObservableChildrenCollection<T> : ObservableCollection<T>, IChildrenCollection<T> where T : Entity
     {
         private readonly Entity parentEntity;
+        private readonly string childXName;
+        private readonly bool initialized;
 
         public ObservableChildrenCollection(Entity parent, string childXName, Timetable tt)
         {
+            initialized = false;
             parentEntity = parent;
+            this.childXName = childXName;
 
             foreach (var c in parentEntity.Children.Where(x => x.XName == childXName)) // Filtert andere Elemente
                 Add((T)Activator.CreateInstance(typeof(T), c, tt));
 
-            CollectionChanged += (s, e) =>
-            {
-                /*
+            initialized = true;
+        }
+
+        protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
+        {
+            if (!initialized)
+                return;
+            
+            /*
                  * CheatSheet for ObservableCollection.CollectionChanged
                  * | Action        | NewItems       | OldItems      | NewStartIndex        | OldStartIndex          |
                  * |---------------|----------------|---------------|----------------------|------------------------|
@@ -33,26 +41,27 @@ namespace FPLedit.Shared
                  * | Replace       | new item       | old item      | item index     ==      item index             |
                  * | Reset         | null           | null          | -1                   | -1                     |
                  */
-                switch (e.Action)
-                {
-                    case NotifyCollectionChangedAction.Add:
-                        InsertItem(e);
-                        break;
-                    case NotifyCollectionChangedAction.Remove:
-                        RemoveItem(e);
-                        break;
-                    case NotifyCollectionChangedAction.Replace:
-                    case NotifyCollectionChangedAction.Move:
-                        RemoveItem(e);
-                        InsertItem(e);
-                        break;
-                    case NotifyCollectionChangedAction.Reset:
-                        parentEntity.Children.RemoveAll(x => x.XName == childXName);
-                        break;
-                    default:
-                        throw new InvalidOperationException("Unerwartete Listenaktion");
-                }
-            };
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    InsertItem(e);
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    RemoveItem(e);
+                    break;
+                case NotifyCollectionChangedAction.Replace:
+                case NotifyCollectionChangedAction.Move:
+                    RemoveItem(e);
+                    InsertItem(e);
+                    break;
+                case NotifyCollectionChangedAction.Reset:
+                    parentEntity.Children.RemoveAll(x => x.XName == childXName);
+                    break;
+                default:
+                    throw new InvalidOperationException("Unerwartete Listenaktion");
+            }
+            
+            base.OnCollectionChanged(e);
         }
 
         private void InsertItem(NotifyCollectionChangedEventArgs e)
