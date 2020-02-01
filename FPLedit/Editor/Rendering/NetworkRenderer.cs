@@ -1,4 +1,4 @@
-﻿using Eto.Drawing;
+using Eto.Drawing;
 using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.Rendering;
@@ -461,7 +461,7 @@ namespace FPLedit.Editor.Rendering
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            if (DateTime.Now.Ticks <= lastClick + CLICK_TIME)
+            if (e.Buttons == MouseButtons.Primary && DateTime.Now.Ticks >= lastClick + CLICK_TIME)
             {
                 foreach (var args in panels.ToArray())
                     args.HandleClick(new Point(e.Location), new Point(_pan));

@@ -91,16 +91,24 @@ namespace FPLedit.Editor.Rendering
             };
             networkRenderer.StationRightClicked += (s, e) =>
             {
-                var menu = new ContextMenu();
-                var itm = menu.CreateItem("Löschen");
-                itm.Click += (se, ar) =>
+                // hack: Eto crashes if using contextmenu on gtk
+                // var menu = new ContextMenu();
+                // var itm = menu.CreateItem("Löschen");
+                // itm.Click += (se, ar) =>
+                // {
+                //     pluginInterface.StageUndoStep();
+                //     pluginInterface.Timetable.RemoveStation((Station)s);
+                //     ReloadTimetable();
+                //     pluginInterface.SetUnsaved();
+                // };
+                // menu.Show(this);
+                if (MessageBox.Show("Soll die Station wirklich gelöscht werden?", "Station löschen", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     pluginInterface.StageUndoStep();
                     pluginInterface.Timetable.RemoveStation((Station)s);
                     ReloadTimetable();
                     pluginInterface.SetUnsaved();
-                };
-                menu.Show(this);
+                }
             };
             networkRenderer.NewRouteAdded += (s, args) =>
             {
