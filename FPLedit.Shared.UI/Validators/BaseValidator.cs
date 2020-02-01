@@ -9,19 +9,22 @@ namespace FPLedit.Shared.UI.Validators
 {
     public abstract class BaseValidator
     {
+        private readonly Color defaultColor;
+        
         public TextBox Control { get; }
 
-        public Color ErrorColor { get; set; }
+        public Color ErrorColor { get; }
 
-        public bool EnableErrorColoring { get; set; }
+        public bool EnableErrorColoring { get; }
 
-        public string ErrorMessage { get; set; }
-
+        public string ErrorMessage { get; }
+        
         public bool Valid => IsValid();
 
         public BaseValidator(TextBox control, bool validateOnType, bool enableErrorColoring = true, string errorMessage = null)
         {
-            this.Control = control;
+            Control = control;
+            defaultColor = control.BackgroundColor;
             EnableErrorColoring = enableErrorColoring;
             ErrorColor = new Color(Colors.Red, 0.4f);
             ErrorMessage = errorMessage;
@@ -34,10 +37,10 @@ namespace FPLedit.Shared.UI.Validators
 
         private void Validate()
         {
-            bool valid = IsValid();
+            var valid = IsValid();
 
             if (EnableErrorColoring)
-                Control.BackgroundColor = valid ? Colors.White : ErrorColor;
+                Control.BackgroundColor = valid ? defaultColor : ErrorColor;
             Control.ToolTip = valid ? null : ErrorMessage;
         }
 

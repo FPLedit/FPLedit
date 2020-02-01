@@ -13,9 +13,6 @@ namespace FPLedit.Shared.UI.Validators
         {
         }
 
-        protected override bool IsValid()
-        {
-            return Control.Text != "";
-        }
+        protected override bool IsValid() => Control.Text != "";
     }
 }
