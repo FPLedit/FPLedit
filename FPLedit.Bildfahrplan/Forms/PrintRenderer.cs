@@ -36,7 +36,7 @@ namespace FPLedit.Bildfahrplan.Forms
         {
             using (var dlg = new PrintDialog { AllowSelection = false })
             {
-                if (dlg.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
+                if (dlg.ShowDialog((Window)pluginInterface.RootForm) == DialogResult.Ok)
                 {
                     doc = new PrintDocument();
                     doc.PrintPage += Doc_PrintPage;

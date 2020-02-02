@@ -4,8 +4,6 @@ using FPLedit.Bildfahrplan.Model;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace FPLedit.Bildfahrplan
 {
@@ -72,7 +70,7 @@ namespace FPLedit.Bildfahrplan
         private void ShowForm(Dialog<DialogResult> form)
         {
             pluginInterface.StageUndoStep();
-            if (form.ShowModal(pluginInterface.RootForm) == DialogResult.Ok)
+            if (form.ShowModal((Window)pluginInterface.RootForm) == DialogResult.Ok)
                 pluginInterface.SetUnsaved();
             form.Dispose();
         }
