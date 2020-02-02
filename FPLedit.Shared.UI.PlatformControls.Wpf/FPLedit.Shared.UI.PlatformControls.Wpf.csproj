@@ -11,12 +11,6 @@
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Eto">
-      <HintPath>..\libs\Eto.dll</HintPath>
-    </Reference>
-    <Reference Include="Eto.Wpf">
-      <HintPath>..\libs\Eto.Wpf.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="WindowsBase" />
@@ -24,5 +18,9 @@
   <ItemGroup>
     <ProjectReference Include="..\FPLedit.Shared.UI.PlatformControls\FPLedit.Shared.UI.PlatformControls.csproj" />
     <ProjectReference Include="..\FPLedit.Shared.UI\FPLedit.Shared.UI.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Eto.Forms" Version="2.5.0-rc.5" />
+    <PackageReference Include="Eto.Platform.Wpf" Version="2.5.0-rc.5" />
   </ItemGroup>
 </Project>

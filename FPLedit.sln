@@ -32,15 +32,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Aushangfahrplan", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Kursbuch", "FPLedit.Kursbuch\FPLedit.Kursbuch.csproj", "{678843A1-1DFA-46EC-A15B-9C0AF7FCBBF0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libs", "libs", "{A2218283-EAF1-4F5C-9E8A-DC6BDDEB1830}"
-	ProjectSection(SolutionItems) = preProject
-		libs\Eto.dll = libs\Eto.dll
-		libs\Eto.Gtk3.dll = libs\Eto.Gtk3.dll
-		libs\Eto.Serialization.Xaml.dll = libs\Eto.Serialization.Xaml.dll
-		libs\Eto.Wpf.dll = libs\Eto.Wpf.dll
-		libs\LICENSE.txt = libs\LICENSE.txt
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit", "FPLedit\FPLedit.csproj", "{386836E8-5885-4ED1-B350-CE2BBEC5367E}"
 	ProjectSection(ProjectDependencies) = postProject
 		{C9D85138-EABB-47C1-8765-0F204E81FA5C} = {C9D85138-EABB-47C1-8765-0F204E81FA5C}

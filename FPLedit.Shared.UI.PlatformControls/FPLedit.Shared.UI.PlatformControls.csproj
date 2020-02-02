@@ -10,12 +10,10 @@
         <DebugType>pdbonly</DebugType>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="Eto">
-            <HintPath>..\libs\Eto.dll</HintPath>
-        </Reference>
-    </ItemGroup>
-    <ItemGroup>
         <ProjectReference Include="..\FPLedit.Shared.Rendering\FPLedit.Shared.Rendering.csproj" />
         <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="Eto.Forms" Version="2.5.0-rc.5" />
     </ItemGroup>
 </Project>

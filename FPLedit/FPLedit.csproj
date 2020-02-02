@@ -13,12 +13,6 @@
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Eto">
-      <HintPath>..\libs\Eto.dll</HintPath>
-    </Reference>
-    <Reference Include="Eto.Serialization.Xaml">
-      <HintPath>..\libs\Eto.Serialization.Xaml.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Net.Http" />
   </ItemGroup>
@@ -45,6 +39,10 @@
     <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Eto.Forms" Version="2.5.0-rc.5" />
+    <PackageReference Include="Eto.Platform.Gtk" Version="2.5.0-rc.5" />
+    <PackageReference Include="Eto.Platform.Wpf" Version="2.5.0-rc.5" />
+    <PackageReference Include="Eto.Serialization.Xaml" Version="2.5.0-rc.5" />
     <PackageReference Include="Jint" Version="3.0.0-beta-1632" />
   </ItemGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">

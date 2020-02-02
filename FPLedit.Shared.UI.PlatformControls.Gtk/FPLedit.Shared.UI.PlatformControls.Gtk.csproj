@@ -12,21 +12,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GtkSharp" Version="3.22.24.37" />
+    <PackageReference Include="Eto.Forms" Version="2.5.0-rc.5" />
+    <PackageReference Include="Eto.Platform.Gtk" Version="2.5.0-rc.5" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\FPLedit.Shared.UI.PlatformControls\FPLedit.Shared.UI.PlatformControls.csproj" />
     <ProjectReference Include="..\FPLedit.Shared.UI\FPLedit.Shared.UI.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Eto">
-      <HintPath>..\libs\Eto.dll</HintPath>
-    </Reference>
-    <Reference Include="Eto.Gtk">
-      <HintPath>..\libs\Eto.Gtk.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>
