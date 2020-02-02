@@ -1,5 +1,5 @@
 ﻿using Eto.GtkSharp.Forms.Cells;
-using FPLedit.Shared.UI.PlatformDependant;
+using FPLedit.Shared.UI.PlatformControls;
 using System;
 using System.Collections.Generic;
 using System.Linq;

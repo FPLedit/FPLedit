@@ -6,8 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FPLedit.Shared.UI;
 using System.Linq.Expressions;
-using FPLedit.Shared.UI.PlatformDependant;
-using FPLedit.Editor.TimetableEditor;
+using FPLedit.Shared.UI.PlatformControls;
 
 namespace FPLedit.Editor.TimetableEditor
 {

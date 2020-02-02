@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FPLedit.Shared.UI.PlatformDependant
+namespace FPLedit.Shared.UI.PlatformControls
 {
     class ListItemTextBinding : PropertyBinding<string>
     {

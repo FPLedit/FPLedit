@@ -2,6 +2,7 @@
   <PropertyGroup>
     <ProjectGuid>{31A934E6-51C8-4CDB-B671-D76049C956A8}</ProjectGuid>
     <TargetFramework>net461</TargetFramework>
+    <RootNamespace>FPLedit.Shared.UI.Wpf</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -21,6 +22,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FPLedit.Shared.UI.PlatformControls\FPLedit.Shared.UI.PlatformControls.csproj" />
     <ProjectReference Include="..\FPLedit.Shared.UI\FPLedit.Shared.UI.csproj" />
   </ItemGroup>
 </Project>

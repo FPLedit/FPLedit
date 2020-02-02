@@ -1,10 +1,5 @@
 ﻿using Eto;
-using FPLedit.Shared.UI.PlatformDependant;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using FPLedit.Shared.UI.PlatformControls;
 
 [assembly: ExportInitializer(typeof(FPLedit.Shared.UI.Wpf.PlatformInitializer))]
 

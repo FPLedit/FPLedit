@@ -32,7 +32,7 @@ namespace FPLedit
 #endif
 
             // Load platform dependant Eto controls provided by FPLedit.Shared.UI
-            Eto.Platform.Instance.LoadAssembly($"FPLedit.Shared.UI");
+            Eto.Platform.Instance.LoadAssembly("FPLedit.Shared.UI.PlatformControls");
 
             mainForm = new MainForm();
             crashReporter = mainForm.CrashReporter;

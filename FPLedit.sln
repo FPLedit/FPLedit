@@ -65,9 +65,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{83B63C9D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Tests", "FPLedit.Tests\FPLedit.Tests.csproj", "{6999ADEC-37DC-4B78-A6F3-B18C4B429506}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Shared.UI.Wpf", "FPLedit.Shared.UI.Wpf\FPLedit.Shared.UI.Wpf.csproj", "{31A934E6-51C8-4CDB-B671-D76049C956A8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Shared.UI.PlatformControls.Wpf", "FPLedit.Shared.UI.PlatformControls.Wpf\FPLedit.Shared.UI.PlatformControls.Wpf.csproj", "{31A934E6-51C8-4CDB-B671-D76049C956A8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPLedit.Shared.UI.Gtk", "FPLedit.Shared.UI.Gtk\FPLedit.Shared.UI.Gtk.csproj", "{5C173B7B-44B8-474F-8C12-FEC12A5F0F94}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPLedit.Shared.UI.PlatformControls.Gtk", "FPLedit.Shared.UI.PlatformControls.Gtk\FPLedit.Shared.UI.PlatformControls.Gtk.csproj", "{5C173B7B-44B8-474F-8C12-FEC12A5F0F94}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Shared.UI.PlatformControls", "FPLedit.Shared.UI.PlatformControls\FPLedit.Shared.UI.PlatformControls.csproj", "{08482F0A-70E8-4869-B27E-14A3280684BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -130,6 +132,10 @@ Global
 		{5C173B7B-44B8-474F-8C12-FEC12A5F0F94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C173B7B-44B8-474F-8C12-FEC12A5F0F94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C173B7B-44B8-474F-8C12-FEC12A5F0F94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08482F0A-70E8-4869-B27E-14A3280684BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08482F0A-70E8-4869-B27E-14A3280684BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08482F0A-70E8-4869-B27E-14A3280684BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08482F0A-70E8-4869-B27E-14A3280684BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

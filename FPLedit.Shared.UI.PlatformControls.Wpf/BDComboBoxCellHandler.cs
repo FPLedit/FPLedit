@@ -1,13 +1,13 @@
 ﻿using Eto;
 using Eto.Wpf;
 using Eto.Wpf.Forms.Cells;
-using FPLedit.Shared.UI.PlatformDependant;
 using System;
 using swc = System.Windows.Controls;
 using sw = System.Windows;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using FPLedit.Shared.UI.PlatformControls;
 
 namespace FPLedit.Shared.UI.Wpf
 {

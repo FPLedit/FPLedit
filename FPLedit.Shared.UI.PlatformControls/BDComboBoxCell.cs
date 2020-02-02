@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FPLedit.Shared.UI.PlatformDependant
+namespace FPLedit.Shared.UI.PlatformControls
 {
     /// <summary>
 	/// Cell to present a combo box in a <see cref="Grid"/>.
