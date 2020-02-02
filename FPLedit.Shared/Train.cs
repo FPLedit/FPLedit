@@ -5,7 +5,6 @@ using System.Linq;
 
 namespace FPLedit.Shared
 {
-    [Serializable]
     [DebuggerDisplay("{TName}")]
     [XElmName("ti", "ta", "tr")]
     [Templating.TemplateSafe]

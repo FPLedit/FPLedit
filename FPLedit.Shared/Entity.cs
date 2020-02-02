@@ -4,7 +4,6 @@ using Force.DeepCloner;
 
 namespace FPLedit.Shared
 {
-    [Serializable]
     [Templating.TemplateSafe]
     public abstract class Entity : IEntity
     {

@@ -5,7 +5,6 @@ using System.Linq;
 
 namespace FPLedit.Shared
 {
-    [Serializable]
     [XElmName("jTrainGraph_stations")]
     public sealed class StationsList : Entity
     {

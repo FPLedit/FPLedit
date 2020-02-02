@@ -10,7 +10,8 @@
       "net461"
     ],
     "sources": {
-      "https://api.nuget.org/v3/index.json": {}
+      "https://api.nuget.org/v3/index.json": {},
+      "https://www.myget.org/F/eto/api/v3/index.json": {}
     },
     "frameworks": {
       "net461": {

@@ -7,7 +7,6 @@ using System.Xml.Linq;
 
 namespace FPLedit.Shared
 {
-    [Serializable]
     [DebuggerDisplay("Name: {XName}, Children: {Children.Count}, Attrs: {AttributeDebugger,nq}")]
     [Templating.TemplateSafe]
     public sealed class XMLEntity : IEntity

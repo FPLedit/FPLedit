@@ -6,8 +6,6 @@ using System.Text;
 
 namespace FPLedit.Shared
 {
-    // Schöner deutscher Begriff: Fahrtzeiteintrag
-    [Serializable]
     [XElmName("t")]
     [Templating.TemplateSafe]
     public class ArrDep : Entity

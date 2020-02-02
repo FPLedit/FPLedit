@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Shared
 {
-    [Serializable]
     [XElmName("shMove")]
     [Templating.TemplateSafe]
     public class ShuntMove : Entity

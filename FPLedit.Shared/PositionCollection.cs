@@ -6,7 +6,6 @@ using FPLedit.Shared.Helpers;
 
 namespace FPLedit.Shared
 {
-    [Serializable]
     [Templating.TemplateSafe]
     public class PositionCollection
     {

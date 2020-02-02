@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Shared
 {
-    [Serializable]
     [XElmName("track")]
     [Templating.TemplateSafe]
     public class Track : Entity

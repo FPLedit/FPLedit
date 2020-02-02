@@ -6,7 +6,6 @@ using System.Text;
 
 namespace FPLedit.Shared
 {
-    [Serializable]
     [DebuggerDisplay("From {First} to {Next}")]
     [XElmName("tra")]
     [Templating.TemplateSafe]

@@ -6,7 +6,6 @@ using System.Linq;
 
 namespace FPLedit.Shared
 {
-    [Serializable]
     [Templating.TemplateSafe]
     public class ObservableChildrenCollection<T> : ObservableCollection<T>, IChildrenCollection<T> where T : Entity
     {

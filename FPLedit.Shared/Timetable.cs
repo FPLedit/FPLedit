@@ -7,7 +7,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace FPLedit.Shared
 {
-    [Serializable]
     [DebuggerDisplay("{TTName}")]
     [XElmName("jTrainGraph_timetable")]
     [Templating.TemplateSafe]
@@ -49,7 +48,6 @@ namespace FPLedit.Shared
 
         public List<Transition> Transitions => transitions;
 
-        [field: NonSerialized]
         public string UpgradeMessage { get; private set; }
 
         public Timetable(TimetableType type) : base("jTrainGraph_timetable", null) // Root without parent

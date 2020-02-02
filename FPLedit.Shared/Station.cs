@@ -5,7 +5,6 @@ using System.Linq;
 
 namespace FPLedit.Shared
 {
-    [Serializable]
     [DebuggerDisplay("{SName} [{GetAttribute(\"km\", \"\")}]")]
     [XElmName("sta")]
     [Templating.TemplateSafe]

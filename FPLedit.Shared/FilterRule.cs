@@ -12,7 +12,6 @@ namespace FPLedit.Shared
     //    "$..." -> endet mit
     //    "=..." -> gleich
     //    "!<pattern>" -> negiert
-    [Serializable]
     [Templating.TemplateSafe]
     public class FilterRule
     {
