@@ -2,7 +2,7 @@
 using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
-using Eto.Drawing;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -67,7 +67,7 @@ namespace FPLedit.Bildfahrplan.Render
 
                 using (var pen = new Pen((Color)style.CalcedColor, style.CalcedWidth)
                 {
-                    DashStyle = ds.ParseDashstyle(style.CalcedLineStyle)
+                    DashPattern = ds.ParseDashstyle(style.CalcedLineStyle)
                 })
                 using (var brush = new SolidBrush((Color)style.CalcedColor))
                 {
@@ -98,11 +98,11 @@ namespace FPLedit.Bildfahrplan.Render
 
                         if (attrs.StationVertical)
                         {
-                            g.SaveTransform();
+                            var container = g.BeginContainer();
                             g.TranslateTransform(margin.Left + posX.Center + (size.Height / 2), margin.Top - 8 - addOffset - size.Width);
                             g.RotateTransform(90);
                             g.DrawText(stationFont, brush, 0, 0, display);
-                            g.RestoreTransform();
+                            g.EndContainer(container);
                         }
                         else
                             g.DrawText(stationFont, brush, margin.Left + posX.Center - (size.Width / 2), margin.Top - size.Height - addOffset - 5, display);

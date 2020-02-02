@@ -107,6 +107,12 @@ namespace FPLedit.Bildfahrplan.Model
             set => tt.SetAttribute("shMu", value.ToString());
         }
 
+        public bool DrawNetworkTrains
+        {
+            get => tt.GetAttribute<bool>("fpl-dnt", true);
+            set => tt.SetAttribute("fpl-dnt", value.ToString());
+        }
+
         #region Fonts
 
         public MFont StationFont

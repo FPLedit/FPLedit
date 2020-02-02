@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿
+using Eto.Forms;
 using FPLedit.Bildfahrplan.Model;
 using FPLedit.Shared;
 using FPLedit.Shared.UI.Validators;
@@ -18,7 +19,7 @@ namespace FPLedit.Bildfahrplan.Forms
         private readonly TextBox heightPerHourTextBox;
         private readonly TextBox startTimeTextBox;
         private readonly TextBox endTimeTextBox;
-        private readonly CheckBox includeKilometreCheckBox, drawStationNamesCheckBox, stationVerticalCheckBox, multitrackCheckBox;
+        private readonly CheckBox includeKilometreCheckBox, drawStationNamesCheckBox, stationVerticalCheckBox, multitrackCheckBox, networkTrainsCheckBox;
 #pragma warning restore CS0649
         private readonly NumberValidator heightPerHourValidator;
         private readonly TimeValidator startTimeValidator, endTimeValidator;
@@ -71,6 +72,9 @@ namespace FPLedit.Bildfahrplan.Forms
             drawStationNamesCheckBox.CheckedBinding.BindDataContext<TimetableStyle>(s => s.DrawHeader);
             stationVerticalCheckBox.CheckedBinding.BindDataContext<TimetableStyle>(s => s.StationVertical);
             multitrackCheckBox.CheckedBinding.BindDataContext<TimetableStyle>(s => s.MultiTrack);
+            networkTrainsCheckBox.CheckedBinding.BindDataContext<TimetableStyle>(s => s.DrawNetworkTrains);
+
+            networkTrainsCheckBox.Enabled = tt.Type == TimetableType.Network;
 
             attrs = new TimetableStyle(tt);
             DataContext = attrs;

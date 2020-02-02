@@ -36,7 +36,7 @@ namespace FPLedit.Bildfahrplan.Forms
         {
             using (var dlg = new PrintDialog { AllowSelection = false })
             {
-                if (dlg.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
+                if (dlg.ShowDialog((Window)pluginInterface.RootForm) == DialogResult.Ok)
                 {
                     doc = new PrintDocument();
                     doc.PrintPage += Doc_PrintPage;
@@ -55,7 +55,12 @@ namespace FPLedit.Bildfahrplan.Forms
             int height = (int)e.PageSize.Height;
             var start = last ?? attrs.StartTime;
             last = GetTimeByHeight(renderer, start, height);
-            renderer.Draw(e.Graphics, start, last.Value, true);
+
+            using (var ib = new ImageBridge(e.Graphics.ClipBounds))
+            {
+                renderer.Draw(ib.Graphics, start, last.Value, true);
+                ib.CoptyToEto(e.Graphics);
+            }
 
             if (last.Value < attrs.EndTime)
                 doc.PageCount++;

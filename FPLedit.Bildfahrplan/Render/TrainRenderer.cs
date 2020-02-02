@@ -2,7 +2,8 @@
 using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
-using Eto.Drawing;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 
 namespace FPLedit.Bildfahrplan.Render
@@ -40,7 +41,7 @@ namespace FPLedit.Bildfahrplan.Render
 
             using (var pen = new Pen((Color)style.CalcedColor, style.CalcedWidth)
             {
-                DashStyle = ds.ParseDashstyle(style.CalcedLineStyle)
+                DashPattern = ds.ParseDashstyle(style.CalcedLineStyle)
             })
             using (var brush = new SolidBrush((Color)style.CalcedColor))
             {
@@ -48,11 +49,13 @@ namespace FPLedit.Bildfahrplan.Render
                 bool hadFirstArrival = false, hadLastDeparture = false, isFirst = true;
                 var stas = dir ? Enumerable.Reverse(stations) : stations;
 
+                int trainTravelsRouteCount = 0;
                 foreach (var sta in stas)
                 {
                     if (!ardps.ContainsKey(sta))
                         continue;
                     var ardp = ardps[sta];
+                    trainTravelsRouteCount++;
 
                     if (!ardp.HasMinOneTimeSet)
                         continue;
@@ -76,11 +79,16 @@ namespace FPLedit.Bildfahrplan.Render
                 }
 
                 // Halbe Linien bei Abfahrten / Ankünften ohne Gegenstelle
-                var hly = !dir ? 20 : -20;
-                if (hadLastDeparture)
-                    points.Add(points.Last() + new Size(50, hly));
-                if (hadFirstArrival)
-                    points.Insert(0, points.First() - new Size(50, hly));
+                if (attrs.DrawNetworkTrains)
+                {
+                    var hly = !dir ? 20 : -20;
+                    if (hadLastDeparture)
+                        points.Add(points.Last() + new Size(50, hly));
+                    if (hadFirstArrival)
+                        points.Insert(0, points.First() - new Size(50, hly));
+                }
+                else if (trainTravelsRouteCount <= 1)
+                        return; // This train has only one station on this route and we don't draw network trains.
 
                 // Verbindung zum Folgezug
                 var transition = tt.GetTransition(train);
@@ -127,7 +135,7 @@ namespace FPLedit.Bildfahrplan.Render
                                     p.AddLine(points[i], points[i + 1]);
                                     break;
                                 case StationLineStyle.Cubic:
-                                    var control2 = points[i + 1] + (!isTransition ? bezierOffset : -bezierOffsetT);
+                                    var control2 = points[i + 1] + (!isTransition ? bezierOffset : (SizeF.Empty-bezierOffsetT));
                                     p.AddBezier(points[i], points[i] - bezierOffset, control2, points[i + 1]);
                                     break;
                             }
@@ -147,11 +155,11 @@ namespace FPLedit.Bildfahrplan.Render
                         float tx = xs.Min() + (xs.Max() - xs.Min()) / 2;
 
                         float angle = CalcAngle(ys, xs, train);
-                        g.SaveTransform();
+                        var container = g.BeginContainer();
                         g.TranslateTransform(tx, ty);
                         g.RotateTransform(-angle);
                         g.DrawText(trainFont, brush, -(size.Width / 2), -(size.Height / 2), train.TName);
-                        g.RestoreTransform();
+                        g.EndContainer(container);
                     }
                     g.DrawPath(pen, p);
                 }

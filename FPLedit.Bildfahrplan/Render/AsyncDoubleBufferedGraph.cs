@@ -28,21 +28,25 @@ namespace FPLedit.Bildfahrplan.Render
                 return;
 
             if (renderer.width != panel.Width)
-            {
-                renderer.width = panel.Width;
-                Invalidate();
-            }
+                Invalidate(true);
 
             if (buffer == null && !generatingBuffer)
             {
                 generatingBuffer = true;
                 Task.Run(() =>
                 {
+                    renderer.width = panel.Width;
                     var newBuffer = new Bitmap(panel.Width, renderer.GetHeight(drawHeader), PixelFormat.Format32bppRgb);
-                    using (var g2 = new Graphics(newBuffer))
-                        renderer.Draw(g2, drawHeader);
+                    using (var ib = new ImageBridge(panel.Width, renderer.GetHeight(drawHeader)))
+                    using (var etoGraphics = new Graphics(newBuffer))
+                    {
+                        renderer.Draw(ib.Graphics, drawHeader);
+                        ib.CoptyToEto(etoGraphics);
+                    }
+
                     lock (bufferLock)
                     {
+                        buffer?.Dispose();
                         buffer = newBuffer;
                     }
                     generatingBuffer = false;
@@ -50,6 +54,7 @@ namespace FPLedit.Bildfahrplan.Render
                     {
                         panel.Invalidate();
                         RenderingFinished?.Invoke();
+                        GC.Collect();
                     });
                 });
             }
@@ -61,16 +66,23 @@ namespace FPLedit.Bildfahrplan.Render
                 g.DrawText(font, Colors.Black, (panel.Width - t.Width) / 2, (panel.Height - t.Height) / 2, text);
             }
             else if (buffer != null)
-                g.DrawImage(buffer, 0f, 0f);
+            {
+                lock (bufferLock)
+                    g.DrawImage(buffer, 0f, 0f);
+            }
         }
 
-        public void Invalidate()
+        public void Invalidate() => Invalidate(false);
+
+        private void Invalidate(bool invalidatingControl)
         {
             lock (bufferLock)
             {
                 buffer?.Dispose();
                 buffer = null;
-                panel.Invalidate();
+                if (!invalidatingControl)
+                    panel.Invalidate();
+                GC.Collect();
             }
         }
 
