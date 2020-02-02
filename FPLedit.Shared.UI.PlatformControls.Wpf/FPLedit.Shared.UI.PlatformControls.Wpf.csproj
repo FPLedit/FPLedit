@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <ProjectGuid>{B8BA56BA-15FC-4D2E-8929-FDD6C6E13B5A}</ProjectGuid>
+    <ProjectGuid>{31A934E6-51C8-4CDB-B671-D76049C956A8}</ProjectGuid>
     <TargetFramework>net461</TargetFramework>
+    <RootNamespace>FPLedit.Shared.UI.Wpf</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -10,20 +11,16 @@
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\build_scripts\ResourceHelper.cs" Link="Properties\ResourceHelper.cs" />
-    <EmbeddedResource Include="Resources/*" />
-    <EmbeddedResource Include="**/*.fpltmpl" />
-    <EmbeddedResource Include="**/*.xeto" />
-  </ItemGroup>
-  <ItemGroup>
+    <ProjectReference Include="..\FPLedit.Shared.UI.PlatformControls\FPLedit.Shared.UI.PlatformControls.csproj" />
     <ProjectReference Include="..\FPLedit.Shared.UI\FPLedit.Shared.UI.csproj" />
-    <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Eto.Forms" Version="2.5.0-rc.5" />
-    <PackageReference Include="Eto.Serialization.Xaml" Version="2.5.0-rc.5" />
+    <PackageReference Include="Eto.Platform.Wpf" Version="2.5.0-rc.5" />
   </ItemGroup>
 </Project>

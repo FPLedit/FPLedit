@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>FPLedit.Shared.UI.Gtk</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Eto.Forms" Version="2.5.0-rc.5" />
+    <PackageReference Include="Eto.Platform.Gtk" Version="2.5.0-rc.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FPLedit.Shared.UI.PlatformControls\FPLedit.Shared.UI.PlatformControls.csproj" />
+    <ProjectReference Include="..\FPLedit.Shared.UI\FPLedit.Shared.UI.csproj" />
+  </ItemGroup>
+
+</Project>

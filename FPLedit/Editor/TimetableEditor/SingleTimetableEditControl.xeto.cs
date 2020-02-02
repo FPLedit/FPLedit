@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FPLedit.Shared.UI;
 using System.Linq.Expressions;
-using FPLedit.Editor.TimetableEditor;
+using FPLedit.Shared.UI.PlatformControls;
 
 namespace FPLedit.Editor.TimetableEditor
 {
@@ -14,7 +14,6 @@ namespace FPLedit.Editor.TimetableEditor
     {
 #pragma warning disable CS0649
         private readonly GridView dataGridView;
-        private readonly Button internalToggle;
         private readonly ToggleButton trapeztafelToggle;
         private readonly Button zlmButton, shuntButton;
         private readonly TableLayout actionsLayout;
@@ -32,13 +31,12 @@ namespace FPLedit.Editor.TimetableEditor
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            trapeztafelToggle = new ToggleButton(internalToggle);
-            trapeztafelToggle.ToggleClick += TrapeztafelToggle_Click;
+            trapeztafelToggle.Click += TrapeztafelToggle_Click;
             base.Init(trapeztafelToggle, actionsLayout);
 
             KeyDown += HandleControlKeystroke;
 
-            internalToggle.Image = new Bitmap(this.GetResource("Resources.trapeztafel.png"));
+            trapeztafelToggle.Image = new Bitmap(this.GetResource("Resources.trapeztafel.png"));
         }
 
         public void HandleControlKeystroke(object sender, KeyEventArgs e)
@@ -120,7 +118,7 @@ namespace FPLedit.Editor.TimetableEditor
         {
             trapeztafelToggle.Checked = data.ArrDeps[sta].TrapeztafelHalt;
 
-            internalToggle.Enabled = arrival && !data.IsFirst(sta);
+            trapeztafelToggle.Enabled = arrival && !data.IsFirst(sta);
             zlmButton.Enabled = arrival ^ data.IsFirst(sta);
         }
 

@@ -10,14 +10,6 @@
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Eto">
-      <HintPath>..\libs\Eto.dll</HintPath>
-    </Reference>
-    <Reference Include="Eto.Serialization.Xaml">
-      <HintPath>..\libs\Eto.Serialization.Xaml.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="..\build_scripts\ResourceHelper.cs" Link="Properties\ResourceHelper.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -28,5 +20,9 @@
     <EmbeddedResource Include="**/*.xeto" />
     <EmbeddedResource Include="Resources\*" />
     <EmbeddedResource Include="**\*.fpltmpl" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Eto.Forms" Version="2.5.0-rc.5" />
+    <PackageReference Include="Eto.Serialization.Xaml" Version="2.5.0-rc.5" />
   </ItemGroup>
 </Project>

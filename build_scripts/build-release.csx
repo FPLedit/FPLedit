@@ -2,7 +2,7 @@
  * FPLedit Release-Prozess
  * Erstellt aus einem Ordner mit Kompilaten eine ZIP-Datei
  * Aufruf: build-release.csx $(TargetDir)
- * Version 0.5 / (c) Manuel Huber 2019
+ * Version 0.6 / (c) Manuel Huber 2019
  */
 
 #r "System.IO.Compression.FileSystem.dll"
@@ -10,8 +10,10 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Diagnostics;
 using System.IO.Compression;
+using System.Collections.Generic;
 
 Console.WriteLine("Post-Build: Erstelle Binärpaket!");
 
@@ -32,6 +34,9 @@ foreach (var f in files)
     Console.WriteLine(f.Name);
 }
 
+Console.WriteLine("Entferne FPLedit.Shared.UI.Gtk.deps.json");
+File.Delete(Path.Combine(output_path, "FPLedit.Shared.UI.Gtk.deps.json"));
+
 Console.WriteLine("Entferne Installer!");
 files = info.GetFiles("FPLedit.Installer.exe");
 foreach (var f in files)
@@ -44,15 +49,19 @@ foreach (var f in files)
  * TASK: Move eto files
  */
 Console.WriteLine("Verschiebe Eto-Bibliotheken!");
-files = info.GetFiles("Eto.*");
-var eto_dest = info.CreateSubdirectory("eto");
-foreach (var f in files)
+
+var dll_files = info.GetFiles("*.dll").Select(f => f.Name);
+var fpledit_files = info.GetFiles("FPLedit.*").Select(f => f.Name);
+var dll_fns_move = dll_files.Except(fpledit_files);
+var eto_dest = info.CreateSubdirectory("lib");
+foreach (var f in dll_fns_move)
 {
-    var fname = Path.Combine(eto_dest.FullName, f.Name);
-    if (File.Exists(fname)) // Datei existiert bereits
-        File.Delete(fname);
-    f.MoveTo(fname);
-    Console.WriteLine(f.Name);
+    var src_fn = Path.Combine(info.FullName, f);
+    var dst_fn = Path.Combine(eto_dest.FullName, f);
+    if (File.Exists(dst_fn)) // Datei existiert bereits
+        File.Delete(dst_fn);
+    File.Move(src_fn, dst_fn);
+    Console.WriteLine(f);
 }
 
 Console.WriteLine();
@@ -99,3 +108,11 @@ else
 }
 
 Console.WriteLine("Post-Build erfolgreich abgeschlossen!");
+
+
+private class FileInfoComparer : IEqualityComparer<FileInfo>
+{
+    public bool Equals(FileInfo x, FileInfo y) => x == null ? y == null : (x.Name.Equals(y.Name, StringComparison.CurrentCultureIgnoreCase) && x.Length == y.Length);
+
+    public int GetHashCode(FileInfo obj) => obj.GetHashCode();
+}

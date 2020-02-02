@@ -64,15 +64,15 @@
               <TableRow>
                 <TableLayout Spacing="5,5">
                   <TableRow>
-                    <Button x:Name="wShort" ToolTip="Werktags (Montag - Samstag)">W</Button>
-                    <Button x:Name="wSaShort" ToolTip="Werktags (außer Samstag)">W (Sa)</Button>
+                    <ToggleButton x:Name="wShort" ToolTip="Werktags (Montag - Samstag)">W</ToggleButton>
+                    <ToggleButton x:Name="wSaShort" ToolTip="Werktags (außer Samstag)">W (Sa)</ToggleButton>
                   </TableRow>
                   <TableRow>
-                    <Button x:Name="sShort" ToolTip="Sonn- und Feiertags">S</Button>
-                    <Button x:Name="aShort" ToolTip="Alle aktivieren">Alle</Button>
+                    <ToggleButton x:Name="sShort" ToolTip="Sonn- und Feiertags">S</ToggleButton>
+                    <ToggleButton x:Name="aShort" ToolTip="Alle aktivieren">Alle</ToggleButton>
                   </TableRow>
                   <TableRow>
-                    <Button x:Name="zShort" ToolTip="Keine aktivieren">Keine</Button>
+                    <ToggleButton x:Name="zShort" ToolTip="Keine aktivieren">Keine</ToggleButton>
                   </TableRow>
                 </TableLayout>
               </TableRow>

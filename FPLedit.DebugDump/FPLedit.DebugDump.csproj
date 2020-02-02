@@ -10,16 +10,14 @@
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Eto">
-      <HintPath>..\libs\Eto.dll</HintPath>
-    </Reference>
-    <Reference Include="Eto.Serialization.Xaml">
-      <HintPath>..\libs\Eto.Serialization.Xaml.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FPLedit.Shared.UI\FPLedit.Shared.UI.csproj" />
     <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Eto.Forms" Version="2.5.0-rc.5" />
+    <PackageReference Include="Eto.Serialization.Xaml" Version="2.5.0-rc.5" />
   </ItemGroup>
 </Project>

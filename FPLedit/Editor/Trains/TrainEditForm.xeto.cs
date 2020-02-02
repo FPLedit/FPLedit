@@ -15,7 +15,8 @@ namespace FPLedit.Editor.Trains
         private readonly TextBox nameTextBox, commentTextBox;
         private readonly CheckBox mondayCheckBox, tuesdayCheckBox, wednesdayCheckBox, thursdayCheckBox, fridayCheckBox, saturdayCheckBox, sundayCheckBox;
         private readonly ComboBox locomotiveComboBox, mbrComboBox, lastComboBox;
-        private readonly Button wShort, wSaShort, sShort, aShort, zShort, fillButton;
+        private readonly ToggleButton wShort, wSaShort, sShort, aShort, zShort;
+        private readonly Button fillButton;
         private readonly SingleTimetableEditControl editor;
         private readonly DropDown transitionDropDown;
         private readonly GroupBox transitionsGroupBox;
@@ -57,6 +58,14 @@ namespace FPLedit.Editor.Trains
             lastComboBox.Items.AddRange(GetAllItems(tt, t => t.Last));
             mbrComboBox.Items.AddRange(GetAllItems(tt, t => t.Mbr));
 
+            var shortcuts = new[] { wShortcut, wExclSaShortcut, sShortcut, aShortcut, zShortcut };
+            shortcutsToggle = new[] { wShort, wSaShort, sShort, aShort, zShort };
+            for (int i = 0; i < shortcutsToggle.Length; i++)
+            {
+                shortcutsToggle[i].Tag = shortcuts[i];
+                shortcutsToggle[i].Click += ApplyShortcutBtn;
+            }
+
             KeyDown += (s, e) =>
             {
                 if (!e.Control)
@@ -78,20 +87,6 @@ namespace FPLedit.Editor.Trains
 
                 e.Handled = handled;
             };
-
-            var shortcutsButtons = new[] { wShort, wSaShort, sShort, aShort, zShort };
-            var shortcuts = new[] { wShortcut, wExclSaShortcut, sShortcut, aShortcut, zShortcut };
-            shortcutsToggle = new ToggleButton[shortcuts.Length];
-            for (int i = 0; i < shortcutsButtons.Length; i++)
-            {
-                var toggle = new ToggleButton(shortcutsButtons[i])
-                {
-                    Tag = shortcuts[i],
-                    AllowDisable = false
-                };
-                toggle.ToggleClick += ApplyShortcutBtn;
-                shortcutsToggle[i] = toggle;
-            }
         }
 
         public TrainEditForm(Train train) : this(train._parent)
@@ -196,20 +191,32 @@ namespace FPLedit.Editor.Trains
         }
 
         #region Shortcut buttons
+        private bool applyingShortcut;
         private void ApplyShortcutBtn(object sender, EventArgs e)
         {
             var btn = (ToggleButton)sender;
+            shortcutsToggle.All(t => t.Checked = false);
             if (btn.Tag is Days days)
                 ApplyShortcut(days);
+            EnableShortcuts();
         }
 
         private void ApplyShortcut(Days days)
         {
+            applyingShortcut = true;
             for (int i = 0; i < days.Length; i++)
                 daysBoxes[i].Checked = days[i];
+            applyingShortcut = false;
         }
 
         private void CheckBoxStateChanged(object sender, EventArgs e)
+        {
+            if (applyingShortcut)
+                return;
+            EnableShortcuts();
+        }
+
+        private void EnableShortcuts()
         {
             var cur = new Days(daysBoxes.Select(b => b.Checked.Value).ToArray());
             foreach (var item in shortcutsToggle)
