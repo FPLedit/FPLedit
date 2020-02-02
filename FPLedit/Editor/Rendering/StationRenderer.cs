@@ -5,18 +5,17 @@ using FPLedit.Shared.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace FPLedit.Editor.Rendering
 {
-    public class StationRenderer : Drawable
+    public sealed class StationRenderer : Drawable
     {
-        const int INDENT = 20;
-        const int LINE_HEIGHT = 30;
+        private const int INDENT = 20;
+        private const int LINE_HEIGHT = 30;
         private readonly Font font = new Font(FontFamilies.SansFamilyName, 8);
         private readonly Pen dashedPen = new Pen(Colors.Black, 1) { DashStyle = DashStyles.Dash };
+        private readonly Color textColor, bgColor;
 
         private readonly List<RenderBtn<Track>> buttons = new List<RenderBtn<Track>>();
         private readonly PixelLayout layout;
@@ -52,14 +51,17 @@ namespace FPLedit.Editor.Rendering
         {
             layout = new PixelLayout();
             Content = layout;
+            
+            textColor = SystemColors.ControlText;
+            bgColor = SystemColors.ControlBackground;
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
             // Reset
-            e.Graphics.Clear(Colors.White);
+            e.Graphics.Clear(bgColor);
             buttons.Clear();
-            
+
             int midx = Width / 2;
             
             // Richtungsangaben ermitteln
@@ -73,11 +75,11 @@ namespace FPLedit.Editor.Rendering
 
             // Richtungsangaben zeichnen
             if (prev != null)
-                e.Graphics.DrawText(font, Colors.Black, 5, 5, "von " + prev.SName);
+                e.Graphics.DrawText(font, textColor, 5, 5, "von " + prev.SName);
             if (next != null)
             {
                 var nextSize = e.Graphics.MeasureString(font, "nach " + next.SName);
-                e.Graphics.DrawText(font, Colors.Black, Width - 5 - nextSize.Width, 5, "nach " + next.SName);
+                e.Graphics.DrawText(font, textColor, Width - 5 - nextSize.Width, 5, "nach " + next.SName);
             }
 
             var leftdefaultTrack = _station.Tracks.IndexOf(_station.Tracks.FirstOrDefault(t => t.Name == _station.DefaultTrackLeft.GetValue(_route)));
@@ -122,22 +124,22 @@ namespace FPLedit.Editor.Rendering
                 rightIndent = Width - rightIndent;
 
                 // Gleiselinie zeichnen
-                e.Graphics.DrawLine(Colors.Black, leftIndent, y, rightIndent, y);
+                e.Graphics.DrawLine(textColor, leftIndent, y, rightIndent, y);
 
                 // Gleisverbindungen zeichnen
                 if (trackIndex < leftdefaultTrack)
-                    e.Graphics.DrawLine(Colors.Black, leftIndent, y, leftIndent - INDENT, y + LINE_HEIGHT);
+                    e.Graphics.DrawLine(textColor, leftIndent, y, leftIndent - INDENT, y + LINE_HEIGHT);
                 else if (trackIndex > leftdefaultTrack)
-                    e.Graphics.DrawLine(Colors.Black, leftIndent, y, leftIndent - INDENT, y - LINE_HEIGHT);
+                    e.Graphics.DrawLine(textColor, leftIndent, y, leftIndent - INDENT, y - LINE_HEIGHT);
 
                 if (trackIndex < rightdefaultTrack)
-                    e.Graphics.DrawLine(Colors.Black, rightIndent, y, rightIndent + INDENT, y + LINE_HEIGHT);
+                    e.Graphics.DrawLine(textColor, rightIndent, y, rightIndent + INDENT, y + LINE_HEIGHT);
                 else if (trackIndex > rightdefaultTrack)
-                    e.Graphics.DrawLine(Colors.Black, rightIndent, y, rightIndent + INDENT, y - LINE_HEIGHT);
+                    e.Graphics.DrawLine(textColor, rightIndent, y, rightIndent + INDENT, y - LINE_HEIGHT);
 
                 // Gleisnamen als Button hinzufügen
                 var textSize = e.Graphics.MeasureString(font, track.Name);
-                var nameBtn = new RenderBtn<Track>(track, new Point(midx - (int)(textSize.Width / 2) - 5, y - 8), new Size((int)textSize.Width + 5, 16), Colors.White, track.Name);
+                var nameBtn = new RenderBtn<Track>(track, new Point(midx - (int)(textSize.Width / 2) - 5, y - 8), new Size((int)textSize.Width + 5, 16), bgColor, track.Name, textColor);
                 nameBtn.Click += NameBtn_Click;
                 buttons.Add(nameBtn);
 

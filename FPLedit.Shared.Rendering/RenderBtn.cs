@@ -1,9 +1,5 @@
 ﻿using Eto.Drawing;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.Shared.Rendering
 {
@@ -19,7 +15,9 @@ namespace FPLedit.Shared.Rendering
 
         public Rectangle Rect => new Rectangle(Location, Size);
 
-        public Color Color { get; set; }
+        public Color BackgroundColor { get; set; }
+        
+        public Color? ForegroundColor { get; set; }
 
         public string Text { get; set; }
 
@@ -29,12 +27,13 @@ namespace FPLedit.Shared.Rendering
 
         public event EventHandler DoubleClick;
 
-        public RenderBtn(T data, Point loc, Size size, Color c, string text = "")
+        public RenderBtn(T data, Point loc, Size size, Color bg, string text = "", Color? fg = null)
         {
             Tag = data;
             Location = loc;
             Size = size;
-            Color = c;
+            BackgroundColor = bg;
+            ForegroundColor = fg;
             Text = text;
         }
 
@@ -58,11 +57,12 @@ namespace FPLedit.Shared.Rendering
 
         public void Draw(Graphics g)
         {
-            g.FillRectangle(Color, Rect);
+            g.FillRectangle(BackgroundColor, Rect);
             if (Text != null && Text != "")
             {
                 var size = g.MeasureString(font, Text);
-                g.DrawText(font, Colors.Black, Rect.MiddleX - (size.Width / 2), Rect.MiddleY - (size.Height / 2), Text);
+                var color = ForegroundColor ?? Colors.Black;
+                g.DrawText(font, color, Rect.MiddleX - (size.Width / 2), Rect.MiddleY - (size.Height / 2), Text);
             }
         }
 

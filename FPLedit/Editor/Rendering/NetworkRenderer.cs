@@ -1,4 +1,4 @@
-using Eto.Drawing;
+﻿using Eto.Drawing;
 using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.Rendering;
@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace FPLedit.Editor.Rendering
 {
-    public class NetworkRenderer : Drawable
+    public sealed class NetworkRenderer : Drawable
     {
         private PointF mousePosition = new PointF();
 
@@ -16,6 +16,7 @@ namespace FPLedit.Editor.Rendering
         private readonly List<RenderBtn<Station>> panels = new List<RenderBtn<Station>>();
         private readonly Font font;
         private readonly Pen linePen, highlightPen;
+        private readonly Color systemBgColor, systemTextColor;
 
         protected override void Dispose(bool disposing)
         {
@@ -94,8 +95,11 @@ namespace FPLedit.Editor.Rendering
 
         public NetworkRenderer()
         {
+            systemBgColor = SystemColors.ControlBackground;
+            systemTextColor = SystemColors.ControlText;
+            
             font = new Font(FontFamilies.SansFamilyName, 8);
-            linePen = new Pen(Colors.Black, 2f);
+            linePen = new Pen(systemTextColor, 2f);
             highlightPen = new Pen(Colors.Red, 2f);
             handler = new StaPosHandler();
 
@@ -131,7 +135,7 @@ namespace FPLedit.Editor.Rendering
         {
             this.SuspendLayout();
             // Reset
-            e.Graphics.Clear(Colors.White);
+            e.Graphics.Clear(systemBgColor);
             panels.Clear();
 
             e.Graphics.TranslateTransform(_pan);
@@ -175,7 +179,7 @@ namespace FPLedit.Editor.Rendering
                         text += km + "|";
                     }
                     text = text.Substring(0, text.Length - 1) + ")";
-                    g.DrawText(font, Brushes.Black, new Point(0, 0), text);
+                    g.DrawText(font, systemTextColor, new Point(0, 0), text);
 
                     g.RestoreTransform();
 
@@ -199,7 +203,7 @@ namespace FPLedit.Editor.Rendering
                             case Modes.JoinRoutes: ApplyJoinMode(args, sta); break;
                         }
                     }
-                    args.Color = panelColor;
+                    args.BackgroundColor = panelColor;
                 }
             }
 

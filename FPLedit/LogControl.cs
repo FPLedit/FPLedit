@@ -8,18 +8,21 @@ using System.Linq;
 
 namespace FPLedit
 {
-    public class LogControl : RichTextArea, ILog
+    public sealed class LogControl : RichTextArea, ILog
     {
+        private readonly Color systemText;
         private readonly ContextMenu menu;
         private bool showDebug;
 
-        public LogControl() : base()
+        public LogControl()
         {
             ReadOnly = true;
 
             menu = new ContextMenu();
             menu.CreateItem("Alles löschen", clickHandler: (s, e) => Text = "");
             menu.CreateCheckItem("Debug-Informationen anzeigen", changeHandler: (s, e) => showDebug = ((CheckMenuItem)s).Checked);
+
+            systemText = SystemColors.ControlText;
         }
 
         #region Log
@@ -30,7 +33,7 @@ namespace FPLedit
             => WriteMl("[WARNUNG] " + message, Colors.Orange);
 
         public void Info(string message)
-            => WriteMl("[INFO] " + message, Colors.Black);
+            => WriteMl("[INFO] " + message, systemText);
 
         public void LogException(Exception e)
         {
@@ -55,13 +58,13 @@ namespace FPLedit
             int idx, last;
             if (Environment.OSVersion.Platform == PlatformID.Unix)
             {
-                idx = Text.LastIndexOf(message);
+                idx = Text.LastIndexOf(message, StringComparison.Ordinal);
                 last = Text.Length;
             }
             else
             {
                 var lines = string.Join("", Text.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
-                idx = lines.LastIndexOf(message);
+                idx = lines.LastIndexOf(message, StringComparison.Ordinal);
                 last = lines.Length;
             }
 
