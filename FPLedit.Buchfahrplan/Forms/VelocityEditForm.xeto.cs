@@ -40,10 +40,11 @@ namespace FPLedit.Buchfahrplan.Forms
 
         public VelocityEditForm(Timetable tt, int route) : this()
         {
-            Station = new BfplPoint(tt);
+            var point = new BfplPoint(tt);
             // Add route if it's a network timetbale
             if (tt.Type == TimetableType.Network)
-                Station.Routes = new int[] { route };
+                point._InternalAddRoute(route);
+            Station = point;
             isPoint = true;
             this.route = route;
         }

@@ -10,7 +10,7 @@ namespace FPLedit.Shared
     [Templating.TemplateSafe]
     public sealed class Station : Entity, IStation
     {
-        public IChildrenCollection<Track> Tracks { get; private set; }
+        public IChildrenCollection<Track> Tracks { get; }
 
         public Station(XMLEntity en, Timetable tt) : base(en, tt)
         {
@@ -62,10 +62,12 @@ namespace FPLedit.Shared
                     throw new NotSupportedException("Lineare Strecken haben keine Bahnhofs-Ids");
                 return GetAttribute<int>("fpl-id");
             }
-            set
+            internal set
             {
                 if (_parent.Type == TimetableType.Linear)
-                    throw new NotSupportedException("Lineare Strecken haben keine Bahnhofs-Ids");
+                    throw new NotSupportedException("Lineare Strecken haben keine Bahnhofs-Ids!");
+                if (GetAttribute<string>("fpl-id") != null)
+                    throw new NotSupportedException("Station hat bereits eine Id!");
                 SetAttribute("fpl-id", value.ToString());
             }
         }
@@ -81,12 +83,26 @@ namespace FPLedit.Shared
                     .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                     .Select(s => int.Parse(s)).ToArray();
             }
-            set
+            private set
             {
                 if (_parent.Type == TimetableType.Linear)
                     throw new NotSupportedException("Lineare Strecken haben keine Routen-Ids");
                 SetAttribute("fpl-rt", string.Join(",", value));
             }
+        }
+        
+        internal void _InternalAddRoute(int route)
+        {
+            var list = Routes.ToList();
+            list.Add(route);
+            Routes = list.ToArray();
+        }
+        
+        internal void _InternalRemoveRoute(int route)
+        {
+            var list = Routes.ToList();
+            list.Remove(route);
+            Routes = list.ToArray();
         }
     }
 }

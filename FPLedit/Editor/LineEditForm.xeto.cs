@@ -112,9 +112,7 @@ namespace FPLedit.Editor
                     {
                         var handler = new Rendering.StaPosHandler();
                         handler.SetMiddlePos(route, sta, pluginInterface.Timetable);
-                        var r = sta.Routes.ToList();
-                        r.Add(route);
-                        sta.Routes = r.ToArray();
+                        tt.StationAddRoute(sta, route);
                     }
 
                     tt.AddStation(sta, route);

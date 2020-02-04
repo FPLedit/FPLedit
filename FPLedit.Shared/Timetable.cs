@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
 
 namespace FPLedit.Shared
 {
-    [DebuggerDisplay("{TTName}")]
+    [DebuggerDisplay("{" + nameof(TTName) + "}")]
     [XElmName("jTrainGraph_timetable")]
     [Templating.TemplateSafe]
     public sealed class Timetable : Entity, ITimetable
@@ -17,12 +15,14 @@ namespace FPLedit.Shared
         public static TimetableVersion DefaultLinearVersion { get; set; } = TimetableVersion.JTG3_0;
 
         private readonly XMLEntity sElm, tElm, trElm;
+        
+        private int nextStaId = 0, nextRtId = 0, nextTraId = 0;
 
+        #region XmlAttributes
+        
         [XAttrName("version")]
         public TimetableVersion Version => (TimetableVersion)GetAttribute("version", 0);
         public TimetableType Type => Version == TimetableVersion.Extended_FPL ? TimetableType.Network : TimetableType.Linear;
-
-        private int nextStaId = 0, nextRtId = 0, nextTraId = 0;
 
         [XAttrName("name")]
         public string TTName
@@ -37,18 +37,20 @@ namespace FPLedit.Shared
             get => GetAttribute("dTt", 10);
             set => SetAttribute("dTt", value.ToString());
         }
+        
+        #endregion
 
         private List<Station> stations;
         private readonly List<Train> trains;
         private readonly List<Transition> transitions;
 
-        public List<Station> Stations => stations;
+        public IList<Station> Stations => stations.AsReadOnly();
 
-        public List<Train> Trains => trains;
+        public IList<Train> Trains => trains.AsReadOnly();
 
-        public List<Transition> Transitions => transitions;
+        public IList<Transition> Transitions => transitions.AsReadOnly();
 
-        public string UpgradeMessage { get; private set; }
+        public string UpgradeMessage { get; }
 
         public Timetable(TimetableType type) : base("jTrainGraph_timetable", null) // Root without parent
         {
@@ -56,7 +58,7 @@ namespace FPLedit.Shared
             trains = new List<Train>();
             transitions = new List<Transition>();
 
-            SetAttribute("version", type == TimetableType.Network ? "100" : DefaultLinearVersion.ToNumberString()); // version="100" nicht kompatibel mit jTrainGraph
+            SetAttribute("version", type == TimetableType.Network ? TimetableVersion.Extended_FPL.ToNumberString() : DefaultLinearVersion.ToNumberString()); // version="100" nicht kompatibel mit jTrainGraph
             sElm = new XMLEntity("stations");
             tElm = new XMLEntity("trains");
             trElm = new XMLEntity("transitions");
@@ -304,18 +306,27 @@ namespace FPLedit.Shared
         #endregion
 
         #region Hilfsmethoden für Routen
+
+        public void StationAddRoute(Station sta, int route)
+        {
+            sta._InternalAddRoute(route);
+        }
+        
+        public void StationRemoveRoute(Station sta, int route)
+        {
+            sta._InternalRemoveRoute(route);
+        }
+        
         // "Eröffnet" eine neue Strecke zwischen zwei Bahnhöfen
         public int AddRoute(Station exisitingStartStation, Station newStation, float newStartPosition, float newPosition)
         {
             if (Type == TimetableType.Linear)
                 throw new NotSupportedException("Lineare Strecken haben keine Routen!");
             var idx = ++nextRtId;
-            var r1 = exisitingStartStation.Routes.ToList();
-            var r2 = newStation.Routes.ToList();
-            r1.Add(idx);
-            r2.Add(idx);
-            exisitingStartStation.Routes = r1.ToArray();
-            newStation.Routes = r2.ToArray();
+
+            StationAddRoute(exisitingStartStation, idx);
+            StationAddRoute(newStation, idx);
+            
             exisitingStartStation.Positions.SetPosition(idx, newStartPosition);
             newStation.Positions.SetPosition(idx, newStartPosition);
             return idx;
@@ -327,6 +338,7 @@ namespace FPLedit.Shared
             if (Type == TimetableType.Network)
             {
                 var routesIndices = Stations.SelectMany(s => s.Routes).Distinct();
+                //TODO: This step takes a lot of time.
                 foreach (var ri in routesIndices)
                     routes.Add(GetRoute(ri));
             }
@@ -350,9 +362,7 @@ namespace FPLedit.Shared
         {
             if (Type == TimetableType.Linear)
                 throw new NotSupportedException("Lineare Strecken haben keine Routen!");
-            var routes = sta2.Routes.ToList();
-            routes.Add(route);
-            sta2.Routes = routes.ToArray();
+            StationAddRoute(sta2, route);
             sta2.Positions.SetPosition(route, newKm);
         }
 
@@ -390,8 +400,12 @@ namespace FPLedit.Shared
 
         public bool RouteConnectsDirectly(int routeToCheck, Station sta1, Station sta2)
         {
-            var path = GetRoute(routeToCheck)?.Stations;
-            return Math.Abs(path.IndexOf(sta1) - path.IndexOf(sta2)) == 1;
+            var path = GetRoute(routeToCheck).Stations;
+            var idx1 = path.IndexOf(sta1);
+            var idx2 = path.IndexOf(sta2);
+            if (idx1 == -1 || idx2 == -1)
+                return false;
+            return Math.Abs(idx1 - idx2) == 1;
         }
 
         public int GetDirectlyConnectingRoute(Station sta1, Station sta2)
@@ -405,15 +419,11 @@ namespace FPLedit.Shared
 
             foreach (var route in GetRoutes())
             {
-                if (route.Stations.Count() >= 2)
+                if (route.Stations.Count >= 2)
                     continue;
 
                 foreach (var rsta in route.Stations)
-                {
-                    var list = rsta.Routes.ToList();
-                    list.Remove(route.Index);
-                    rsta.Routes = list.ToArray();
-                }
+                    StationRemoveRoute(rsta, route.Index);
             }
         }
         #endregion
@@ -437,9 +447,9 @@ namespace FPLedit.Shared
 
             if (!trans.Any() && newNext != null)
                 AddTransition(first, newNext);
-            else if (trans.Count() > 1)
+            else if (trans.Length > 1)
                 throw new Exception("Mehr als eine Transition mit angegebenem ersten Zug gefunden!");
-            else if (trans.Count() == 1)
+            else if (trans.Length == 1)
             {
                 if (newNext != null)
                     trans.First().Next = newNext.Id;
@@ -450,13 +460,13 @@ namespace FPLedit.Shared
 
         public Train GetTransition(Train first) => GetTransition(first.Id);
 
-        public Train GetTransition(int tid)
+        public Train GetTransition(int firstTrainId)
         {
-            var trans = transitions.Where(t => t.First == tid).ToArray();
+            var trans = transitions.Where(t => t.First == firstTrainId).ToArray();
 
             if (!trans.Any())
                 return null;
-            if (trans.Count() > 1)
+            if (trans.Length > 1)
                 throw new Exception("Mehr als eine Transition mit angegebenem ersten Zug gefunden!");
 
             return GetTrainById(trans.First().Next);
@@ -471,9 +481,9 @@ namespace FPLedit.Shared
 
         public void RemoveTransition(Train tra, bool onlyAsFirst = true) => RemoveTransition(tra.Id, onlyAsFirst);
 
-        public void RemoveTransition(int tid, bool onlyAsFirst = true)
+        public void RemoveTransition(int firstTrainId, bool onlyAsFirst = true)
         {
-            var trans = transitions.Where(t => t.First == tid || (!onlyAsFirst && t.Next == tid)).ToArray();
+            var trans = transitions.Where(t => t.First == firstTrainId || (!onlyAsFirst && t.Next == firstTrainId)).ToArray();
             foreach (var transition in trans)
                 trElm.Children.Remove(transition.XMLEntity);
             transitions.RemoveAll(t => trans.Contains(t));

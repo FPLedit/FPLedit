@@ -8,7 +8,7 @@ namespace FPLedit.Shared
 {
     [DebuggerStepThrough]
     [Templating.TemplateSafe]
-    public struct Days : IEquatable<Days>, IEquatable<string>
+    public readonly struct Days : IEquatable<Days>, IEquatable<string>
     {
         private readonly bool[] internalDays;
 

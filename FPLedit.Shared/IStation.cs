@@ -8,7 +8,7 @@ namespace FPLedit.Shared
     [Templating.TemplateSafe]
     public interface IStation : IEntity
     {
-        int Id { get; set; }
+        int Id { get; }
 
         string SName { get; set; }
 
@@ -18,6 +18,6 @@ namespace FPLedit.Shared
 
         RouteValueCollection<string> Vmax { get; }
 
-        int[] Routes { get; set; }
+        int[] Routes { get; }
     }
 }
