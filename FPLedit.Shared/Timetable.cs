@@ -339,8 +339,10 @@ namespace FPLedit.Shared
         {
             if (Type == TimetableType.Linear && index == LINEAR_ROUTE_ID)
                 return new Route(LINEAR_ROUTE_ID, Stations);
-            var stas = Stations.Where(s => s.Routes.Contains(index)).ToList();
-            //TODO: What happens when route does not exist (or tt is linear & index != LINEAR_ROUTE_ID (e.g. update-context??)
+            if (Type == TimetableType.Linear && index != LINEAR_ROUTE_ID)
+                throw new NotSupportedException("Lineare Strecken haben keine Routen!");
+            
+            var stas = Stations.Where(s => s.Routes.Contains(index));
             return new Route(index, stas);
         }
 
@@ -388,7 +390,7 @@ namespace FPLedit.Shared
 
         public bool RouteConnectsDirectly(int routeToCheck, Station sta1, Station sta2)
         {
-            var path = GetRoute(routeToCheck)?.GetOrderedStations();
+            var path = GetRoute(routeToCheck)?.Stations;
             return Math.Abs(path.IndexOf(sta1) - path.IndexOf(sta2)) == 1;
         }
 
@@ -403,7 +405,7 @@ namespace FPLedit.Shared
 
             foreach (var route in GetRoutes())
             {
-                if (route.Stations.Count >= 2)
+                if (route.Stations.Count() >= 2)
                     continue;
 
                 foreach (var rsta in route.Stations)

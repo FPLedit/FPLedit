@@ -159,7 +159,7 @@ namespace FPLedit.Editor.Rendering
             foreach (var r in routes)
             {
                 Point? lastP = null;
-                foreach (var sta in r.GetOrderedStations())
+                foreach (var sta in r.Stations)
                 {
                     var pos = stapos[sta];
                     var p = OFFSET + pos;

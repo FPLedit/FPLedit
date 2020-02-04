@@ -10,9 +10,9 @@ namespace FPLedit.Bildfahrplan.Render
 {
     internal class TrainRenderer
     {
-        private readonly List<Station> stations; // Selected route, ordered
+        private readonly IEnumerable<Station> stations; // Selected route, ordered
         private readonly Timetable tt;
-        private Margins margin = new Margins(10, 20, 20, 20);
+        private readonly Margins margin;
         private readonly TimetableStyle attrs;
         private readonly TimeEntry startTime;
         private readonly Dictionary<Station, StationX> stationOffsets;
@@ -20,7 +20,7 @@ namespace FPLedit.Bildfahrplan.Render
 
         private readonly DashStyleHelper ds = new DashStyleHelper();
 
-        public TrainRenderer(List<Station> stations, Timetable tt, Margins margin, TimeEntry startTime, Dictionary<Station, StationX> stationOffsets)
+        public TrainRenderer(IEnumerable<Station> stations, Timetable tt, Margins margin, TimeEntry startTime, Dictionary<Station, StationX> stationOffsets)
         {
             this.stations = stations;
             this.tt = tt;
@@ -225,7 +225,7 @@ namespace FPLedit.Bildfahrplan.Render
                     var intersect = stasAfter.Intersect(p)
                         .Where(s => ardeps[s].HasMinOneTimeSet);
 
-                    if (intersect.Count() == 0)
+                    if (!intersect.Any())
                         return false;
 
                     var time1 = ardeps[intersect.First()].FirstSetTime;

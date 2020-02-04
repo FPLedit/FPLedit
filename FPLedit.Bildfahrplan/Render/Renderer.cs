@@ -34,7 +34,7 @@ namespace FPLedit.Bildfahrplan.Render
         {
             g.Clear((Color)attrs.BgColor);
 
-            var stations = tt.GetRoute(route).GetOrderedStations();
+            var stations = tt.GetRoute(route).Stations;
 
             if (!margin.Calced)
                 margin = CalcMargins(g, margin, stations, startTime, endTime, drawHeader);
@@ -74,7 +74,7 @@ namespace FPLedit.Bildfahrplan.Render
         {
             g.Clear((Color)attrs.BgColor);
 
-            var stations = tt.GetRoute(route).GetOrderedStations();
+            var stations = tt.GetRoute(route).Stations;
 
             var margin = CalcMargins(g, new Margins(11, 20, 20, 0), stations, attrs.StartTime, attrs.EndTime, true);
 
@@ -139,7 +139,7 @@ namespace FPLedit.Bildfahrplan.Render
 
         public int GetHeight(TimeEntry start, TimeEntry end, bool drawHeader)
         {
-            var stations = tt.GetRoute(route).GetOrderedStations();
+            var stations = tt.GetRoute(route).Stations;
             using (var image = new Bitmap(1, 1, PixelFormat.Format24bppRgb))
             using (var g = Graphics.FromImage(image))
             {

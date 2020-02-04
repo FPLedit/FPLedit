@@ -72,7 +72,7 @@ namespace FPLedit.Shared
             }
             else
             {
-                var r = _parent.GetRoute(route).GetOrderedStations();
+                var r = _parent.GetRoute(route).Stations;
                 var i1 = r.IndexOf(sta);
                 var p = GetPath();
                 var prev = r.ElementAtOrDefault(i1 - 1);

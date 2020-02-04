@@ -42,7 +42,7 @@ namespace FPLedit.NonDefaultFiletypes
 
             clone.SetAttribute("version", Timetable.DefaultLinearVersion.ToNumberString());
 
-            var sortedStations = clone.GetRoutes()[Timetable.LINEAR_ROUTE_ID].GetOrderedStations();
+            var sortedStations = clone.GetRoutes()[Timetable.LINEAR_ROUTE_ID].Stations;
 
             foreach (var t in clone.Trains)
             {

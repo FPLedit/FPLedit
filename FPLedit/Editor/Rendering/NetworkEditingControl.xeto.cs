@@ -82,7 +82,7 @@ namespace FPLedit.Editor.Rendering
                         "FPLedit", MessageBoxButtons.OK, MessageBoxType.Warning);
                     return;
                 }
-                var nsf = new EditStationForm(sta, r);
+                var nsf = new EditStationForm(pluginInterface, sta, r);
                 if (nsf.ShowModal(this) == DialogResult.Ok)
                 {
                     ReloadTimetable();
@@ -91,24 +91,16 @@ namespace FPLedit.Editor.Rendering
             };
             networkRenderer.StationRightClicked += (s, e) =>
             {
-                // hack: Eto crashes if using contextmenu on gtk
-                // var menu = new ContextMenu();
-                // var itm = menu.CreateItem("Löschen");
-                // itm.Click += (se, ar) =>
-                // {
-                //     pluginInterface.StageUndoStep();
-                //     pluginInterface.Timetable.RemoveStation((Station)s);
-                //     ReloadTimetable();
-                //     pluginInterface.SetUnsaved();
-                // };
-                // menu.Show(this);
-                if (MessageBox.Show("Soll die Station wirklich gelöscht werden?", "Station löschen", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                var menu = new ContextMenu();
+                var itm = menu.CreateItem("Löschen");
+                itm.Click += (se, ar) =>
                 {
                     pluginInterface.StageUndoStep();
                     pluginInterface.Timetable.RemoveStation((Station)s);
                     ReloadTimetable();
                     pluginInterface.SetUnsaved();
-                }
+                };
+                menu.Show(this);
             };
             networkRenderer.NewRouteAdded += (s, args) =>
             {
@@ -119,7 +111,7 @@ namespace FPLedit.Editor.Rendering
             newButton.Click += (s, e) =>
             {
                 pluginInterface.StageUndoStep();
-                var nsf = new EditStationForm(pluginInterface.Timetable, routesDropDown.SelectedRoute);
+                var nsf = new EditStationForm(pluginInterface, pluginInterface.Timetable, routesDropDown.SelectedRoute);
                 if (nsf.ShowModal(this) == DialogResult.Ok)
                 {
                     Station sta = nsf.Station;
@@ -139,7 +131,7 @@ namespace FPLedit.Editor.Rendering
             newLineButton.Click += (s, e) =>
             {
                 pluginInterface.StageUndoStep();
-                var nlf = new EditStationForm(pluginInterface.Timetable);
+                var nlf = new EditStationForm(pluginInterface, pluginInterface.Timetable);
                 if (nlf.ShowModal(this) == DialogResult.Ok)
                 {
                     networkRenderer.StartAddStation(nlf.Station, nlf.Position);

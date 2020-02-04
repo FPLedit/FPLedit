@@ -11,13 +11,13 @@ namespace FPLedit.Bildfahrplan.Render
 {
     internal class HeaderRenderer
     {
-        private readonly List<Station> stations;
+        private readonly IEnumerable<Station> stations;
         private readonly int route;
         private readonly TimetableStyle attrs;
 
         private readonly DashStyleHelper ds = new DashStyleHelper();
 
-        public HeaderRenderer(List<Station> stations, TimetableStyle attrs, int route)
+        public HeaderRenderer(IEnumerable<Station> stations, TimetableStyle attrs, int route)
         {
             this.stations = stations;
             this.route = route;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
@@ -8,29 +9,31 @@ namespace FPLedit.Shared
     [Templating.TemplateSafe]
     public class Route
     {
+        private readonly Station[] stations;
+        
         public int Index { get; }
 
-        public List<Station> Stations { get; }
+        public IList<Station> Stations => Array.AsReadOnly(stations);
 
         public float MinPosition
-            => Stations.Min(s => s.Positions.GetPosition(Index)) ?? 0f;
+            => Exists ? stations[0].Positions.GetPosition(Index) ?? 0f : 0f;
 
         public float MaxPosition
-            => Stations.Max(s => s.Positions.GetPosition(Index)) ?? 0f;
+            => Exists ? stations[stations.Length - 1].Positions.GetPosition(Index) ?? 0f : 0f;
 
-        public Route(int index, List<Station> stations)
+        public bool Exists => stations.Length > 0;
+
+        internal Route(int index, IEnumerable<Station> stations)
         {
             Index = index;
-            Stations = stations;
+            this.stations = stations.OrderBy(s => s.Positions.GetPosition(Index)).ToArray();
         }
 
         public string GetRouteName()
         {
-            var st = GetOrderedStations();
-            return (st.FirstOrDefault()?.SName ?? "") + " - " + (st.LastOrDefault()?.SName ?? "");
+            if (!Exists)
+                return "<leer>";
+            return stations[0].SName + " - " + stations[stations.Length - 1].SName; // this will always work, as stations.Length >= 1
         }
-
-        public List<Station> GetOrderedStations()
-            => Stations.OrderBy(s => s.Positions.GetPosition(Index)).ToList();
     }
 }

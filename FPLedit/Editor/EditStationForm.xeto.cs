@@ -12,6 +12,7 @@ namespace FPLedit.Editor
 {
     internal class EditStationForm : FDialog<DialogResult>
     {
+        private readonly IPluginInterface pluginInterface;
         private readonly int route;
 
 #pragma warning disable CS0649
@@ -29,8 +30,9 @@ namespace FPLedit.Editor
 
         private int stationRendererHeight, stationRendererWidth;
 
-        private EditStationForm()
+        private EditStationForm(IPluginInterface pluginInterface)
         {
+            this.pluginInterface = pluginInterface;
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
             var positionValidator = new NumberValidator(positionTextBox, false, false, errorMessage: "Bitte eine Zahl als Position eingeben!");
@@ -63,14 +65,14 @@ namespace FPLedit.Editor
         /// <summary>
         /// Form to create a new station without a given route id.
         /// </summary>
-        public EditStationForm(Timetable tt) : this(tt, Timetable.UNASSIGNED_ROUTE_ID)
+        public EditStationForm(IPluginInterface pluginInterface, Timetable tt) : this(pluginInterface, tt, Timetable.UNASSIGNED_ROUTE_ID)
         {
         }
 
         /// <summary>
         /// Form to create a new station with a given route id.
         /// </summary>
-        public EditStationForm(Timetable tt, int route) : this()
+        public EditStationForm(IPluginInterface pluginInterface, Timetable tt, int route) : this(pluginInterface)
         {
             Title = "Neue Station erstellen";
             this.route = route;
@@ -88,7 +90,7 @@ namespace FPLedit.Editor
         /// <summary>
         /// Form to edit a station (with given route id);
         /// </summary>
-        public EditStationForm(Station station, int route) : this()
+        public EditStationForm(IPluginInterface pluginInterface, Station station, int route) : this(pluginInterface)
         {
             Title = "Station bearbeiten";
             nameTextBox.Text = station.SName;
@@ -131,7 +133,20 @@ namespace FPLedit.Editor
                 if (res == DialogResult.No)
                     return; // Do not proceed as user does not want to destroy his timetable.
                 // User definitely wants to do evil things. Proceed.
-                StationMoveHelper.PerformUnsafeMove(Station, existingStation, newPos, route); //TODO: Maybe catch and restore some sort of backup
+                var backup = pluginInterface.BackupTimetable();
+                try
+                {
+                    StationMoveHelper.PerformUnsafeMove(Station, existingStation, newPos, route);
+                }
+                catch
+                {
+                    pluginInterface.RestoreTimetable(backup);
+                    MessageBox.Show("Beim Anwenden ist (wie zu erwarten) ein Problem aufgetreten. Es wurden keine Änderungen vorgenommen.", "FPLedit", MessageBoxType.Error);
+                }
+                finally
+                {
+                    pluginInterface.ClearBackup(backup);
+                }
             }
             
             // Update track data.

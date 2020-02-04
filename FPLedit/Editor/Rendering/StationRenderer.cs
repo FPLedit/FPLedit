@@ -65,7 +65,7 @@ namespace FPLedit.Editor.Rendering
             int midx = Width / 2;
             
             // Richtungsangaben ermitteln
-            var route = _station._parent.GetRoute(_route).GetOrderedStations();
+            var route = _station._parent.GetRoute(_route).Stations;
             var staIdx = route.IndexOf(_station);
             var prev = route.ElementAtOrDefault(staIdx - 1);
             var next = route.ElementAtOrDefault(staIdx + 1);

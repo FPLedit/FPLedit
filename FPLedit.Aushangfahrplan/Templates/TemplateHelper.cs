@@ -66,7 +66,7 @@ namespace FPLedit.Aushangfahrplan.Templates
 
             foreach (var rt in visitedRoutes)
             {
-                var route = sta._parent.GetRoute(rt).GetOrderedStations();
+                var route = sta._parent.GetRoute(rt).Stations;
                 stasAfter.Add(route.First());
                 stasAfter.Add(route.Last());
             }

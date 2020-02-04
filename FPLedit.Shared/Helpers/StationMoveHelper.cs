@@ -28,7 +28,7 @@ namespace FPLedit.Shared.Helpers
                 return false;
 
             var tt = sta._parent;
-            var rt = tt.GetRoute(route).GetOrderedStations();
+            var rt = tt.GetRoute(route).Stations;
             var idx = rt.IndexOf(sta);
 
             float? min = null, max = null;

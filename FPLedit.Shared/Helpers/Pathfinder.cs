@@ -38,7 +38,7 @@ namespace FPLedit.Shared.Helpers
         {
             foreach (var ri in sta.Routes)
             {
-                var route = tt.GetRoute(ri).GetOrderedStations();
+                var route = tt.GetRoute(ri).Stations;
                 var idx = route.IndexOf(sta);
 
                 if (idx > 0)

@@ -21,7 +21,7 @@ namespace FPLedit.Editor
         private readonly Button loadLineButton;
 #pragma warning restore CS0649
 
-        private List<Station> stations;
+        private IList<Station> stations;
 
         public LineEditForm(IPluginInterface pluginInterface, int route)
         {
@@ -66,7 +66,7 @@ namespace FPLedit.Editor
 
         private void UpdateStations()
         {
-            stations = tt.GetRoute(route).GetOrderedStations();
+            stations = tt.GetRoute(route).Stations;
 
             gridView.DataStore = stations;
 
@@ -79,7 +79,7 @@ namespace FPLedit.Editor
             {
                 var station = (Station)gridView.SelectedItem;
 
-                using (var nsf = new EditStationForm(station, route))
+                using (var nsf = new EditStationForm(pluginInterface, station, route))
                     nsf.ShowModal(this);
 
                 UpdateStations();
@@ -102,7 +102,7 @@ namespace FPLedit.Editor
 
         private void NewStation()
         {
-            using (var nsf = new EditStationForm(tt, route))
+            using (var nsf = new EditStationForm(pluginInterface, tt, route))
             {
                 if (nsf.ShowModal(this) == DialogResult.Ok)
                 {

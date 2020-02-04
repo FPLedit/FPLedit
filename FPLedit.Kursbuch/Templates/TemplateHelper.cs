@@ -25,7 +25,7 @@ namespace FPLedit.Kursbuch.Templates
 
         public Station[] GetStations(Route route, TrainDirection dir)
         {
-            var stas = route.GetOrderedStations().Where(s => srules.All(r => !r.Matches(s)))
+            var stas = route.Stations.Where(s => srules.All(r => !r.Matches(s)))
                 .ToArray();
             if (dir == TrainDirection.ta)
                 return stas.Reverse().ToArray();
