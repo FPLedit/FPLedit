@@ -31,6 +31,10 @@ namespace FPLedit
 
         private TimetableChecks.TimetableCheckRunner checkRunner;
         private readonly LastFileHandler lfh;
+        
+        public static string LocEditMenu = "Bearbeiten";
+        public static string LocPreviewMenu = "Vorschau";
+        public static string LocHelpMenu = "Hilfe";
 
         public MainForm()
         {
@@ -65,6 +69,7 @@ namespace FPLedit
             Bootstrapper.InjectLogger(logger);
             
             // Now we can load extensions and templates
+            Bootstrapper.ExtensionManager.InjectPlugin(new Editor.EditorPlugin(), 0);
             Bootstrapper.BootstrapExtensions();
 
             InitMain();
@@ -149,18 +154,16 @@ namespace FPLedit
                 lastMenu.Enabled = false;
 
             // Hilfe Menü nach den Erweiterungen zusammenbasteln
-            if (Menu.HelpMenu.Items.Any())
-                Menu.HelpMenu.Items.Add(new SeparatorMenuItem());
-            Menu.HelpMenu.CreateItem("Erweiterungen", clickHandler: (s, ev) => new ExtensionsForm(Bootstrapper.ExtensionManager, this).ShowModal(this));
-            Menu.HelpMenu.CreateItem("Vorlagen", clickHandler: (s, ev) => new TemplatesForm(Bootstrapper.TemplateManager as TemplateManager).ShowModal(this));
-            Menu.HelpMenu.Items.Add(new SeparatorMenuItem());
-            Menu.HelpMenu.CreateItem("Fenstergößen löschen", clickHandler: (s, ev) => SizeManager.Reset());
-            Menu.HelpMenu.Items.Add(new SeparatorMenuItem());
-            Menu.HelpMenu.CreateItem("Online Hilfe", clickHandler: (s, ev) => OpenHelper.Open("https://fahrplan.manuelhu.de/"));
-            Menu.HelpMenu.CreateItem("Info", clickHandler: (s, ev) => new InfoForm(Bootstrapper.Settings).ShowModal(this));
-            
-            // Finalize Help Menu
-            Menu.HelpMenu.Text = "Hilfe";
+            var helpMenu = (ButtonMenuItem)Menu.GetItem(LocHelpMenu);
+            if (helpMenu.Items.Any())
+                helpMenu.Items.Add(new SeparatorMenuItem());
+            helpMenu.CreateItem("Erweiterungen", clickHandler: (s, ev) => new ExtensionsForm(Bootstrapper.ExtensionManager, this).ShowModal(this));
+            helpMenu.CreateItem("Vorlagen", clickHandler: (s, ev) => new TemplatesForm(Bootstrapper.TemplateManager as TemplateManager).ShowModal(this));
+            helpMenu.Items.Add(new SeparatorMenuItem());
+            helpMenu.CreateItem("Fenstergößen löschen", clickHandler: (s, ev) => SizeManager.Reset());
+            helpMenu.Items.Add(new SeparatorMenuItem());
+            helpMenu.CreateItem("Online Hilfe", clickHandler: (s, ev) => OpenHelper.Open("https://fahrplan.manuelhu.de/"));
+            helpMenu.CreateItem("Info", clickHandler: (s, ev) => new InfoForm(Bootstrapper.Settings).ShowModal(this));
         }
 
         private void UpdateLastFilesMenu(object sender, EventArgs e)

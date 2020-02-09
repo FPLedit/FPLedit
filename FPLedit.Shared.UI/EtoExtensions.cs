@@ -67,6 +67,8 @@ namespace FPLedit.Shared.UI
             return itm;
         }
 
+        public static MenuItem GetItem(this ISubmenu parent, string text) => parent.Items.FirstOrDefault(i => i.Text == text);
+
         public static CheckMenuItem CreateCheckItem(this ISubmenu parent, string text, bool isChecked = false, EventHandler<EventArgs> changeHandler = null)
         {
             var itm = new CheckMenuItem

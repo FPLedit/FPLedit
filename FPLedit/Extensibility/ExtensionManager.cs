@@ -10,24 +10,32 @@ namespace FPLedit.Extensibility
     internal sealed class ExtensionManager
     {
         public IEnumerable<PluginInfo> Plugins => plugins.AsReadOnly();
-        private List<PluginInfo> plugins;
-        private List<IDisposable> disposablePlugins;
+        private readonly List<PluginInfo> plugins;
+        private readonly List<IDisposable> disposablePlugins;
 
         public bool EnabledModified { get; private set; }
 
         private readonly IPluginInterface pluginInterface;
         private readonly UpdateManager update;
 
+        private bool filesLoaded, pluginsInitialized;
+
         public ExtensionManager(IPluginInterface pluginInterface, UpdateManager update)
         {
             this.pluginInterface = pluginInterface;
             this.update = update;
+            
+            plugins = new List<PluginInfo>();
+            disposablePlugins = new List<IDisposable>();
         }
 
         public void LoadExtensions()
         {
-            plugins = new List<PluginInfo>();
-            disposablePlugins = new List<IDisposable>();
+            if (pluginsInitialized)
+                throw new InvalidOperationException("Extensions have already been initialized!");
+            if (filesLoaded)
+                throw new InvalidOperationException("Extensions already loaded from filesystem!");
+            filesLoaded = true;
 
             var signatureVerifier = new AssemblySignatureVerifier();
 
@@ -108,6 +116,15 @@ namespace FPLedit.Extensibility
             pluginInterface.Settings.Set("extmgr.enabled", string.Join(";", plugins.Where(p => p.Enabled).Select(p => p.FullName)));
         }
 
+        public void InjectPlugin(IPlugin plugin, int position)
+        {
+            if (pluginsInitialized)
+                throw new InvalidOperationException("Extensions have already been initialized!");
+            plugins.Insert(position, new PluginInfo(plugin, SecurityContext.Official));
+            if (plugin is IDisposable d)
+                disposablePlugins.Add(d); // Order does not matter here.
+        }
+
         private int VersionCompare(Version v1, Version v2)
         {
             if (v1 == null || v2 == null)
@@ -133,10 +150,12 @@ namespace FPLedit.Extensibility
 
         public void InitActivatedExtensions()
         {
-            new Editor.EditorPlugin().Init(pluginInterface);
-
-            var enabled_plgs = plugins.Where(p => p.Enabled);
-            foreach (var plugin in enabled_plgs)
+            if (pluginsInitialized)
+                throw new InvalidOperationException("Extensions have already been initialized!");
+            pluginsInitialized = true;
+            
+            var enabledPlugins = plugins.Where(p => p.Enabled);
+            foreach (var plugin in enabledPlugins)
                 plugin.TryInit(pluginInterface);
         }
     }

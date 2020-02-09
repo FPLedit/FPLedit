@@ -34,6 +34,10 @@ namespace FPLedit.Shared
 
         dynamic Menu { get; }
         dynamic RootForm { get; }
+        /// <summary>
+        /// Use this instead of <see cref="Menu"/>.HelpMenu.
+        /// </summary>
+        dynamic HelpMenu { get; }
 
         ILog Logger { get; }
         ISettings Settings { get; }

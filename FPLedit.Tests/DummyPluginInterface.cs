@@ -81,6 +81,7 @@ namespace FPLedit.Tests
 
         public dynamic Menu => throw new NotImplementedException();
         public dynamic RootForm => throw new NotImplementedException();
+        public dynamic HelpMenu => throw new NotImplementedException();
         public ILog Logger { get; }
         public ISettings Settings { get; }
         public ITemplateManager TemplateManager => throw new NotImplementedException();

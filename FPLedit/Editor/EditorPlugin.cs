@@ -35,7 +35,7 @@ namespace FPLedit.Editor
             if (Environment.OSVersion.Platform != PlatformID.Win32NT || pluginInterface.Settings.Get<bool>("mp-compat.route-edit-button"))
                 pluginInterface.Register<IRouteAction>(new Network.EditRouteAction());
 
-            editRoot = ((MenuBar)pluginInterface.Menu).CreateItem("Bearbeiten");
+            editRoot = (ButtonMenuItem)((MenuBar)pluginInterface.Menu).GetItem(MainForm.LocEditMenu);
 
             undoItem = editRoot.CreateItem("Rückgängig", enabled: false, clickHandler: (s, e) => pluginInterface.Undo());
             undoItem.Shortcut = Keys.Control | Keys.Z;
@@ -66,7 +66,7 @@ namespace FPLedit.Editor
             designItem = editRoot.CreateItem("Fahrplandarstellung", enabled: false, clickHandler: (s, e) => ShowForm(new RenderSettingsForm(pluginInterface)));
             filterItem = editRoot.CreateItem("Filterregeln", enabled: false, clickHandler: (s, e) => ShowForm(new Filters.FilterForm(pluginInterface)));
 
-            previewRoot = ((MenuBar)pluginInterface.Menu).CreateItem("Vorschau");
+            previewRoot = (ButtonMenuItem)((MenuBar)pluginInterface.Menu).GetItem(MainForm.LocPreviewMenu);
         }
 
         private void ShowForm(Dialog<DialogResult> form)

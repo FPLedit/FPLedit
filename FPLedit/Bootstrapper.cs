@@ -7,6 +7,7 @@ using FPLedit.Config;
 using FPLedit.Extensibility;
 using FPLedit.Shared;
 using FPLedit.Shared.Templating;
+using FPLedit.Shared.UI;
 using FPLedit.Templating;
 
 namespace FPLedit
@@ -27,6 +28,7 @@ namespace FPLedit
         public ILog Logger { get; private set; }
         public dynamic RootForm { get; }
         public dynamic Menu { get; }
+        public dynamic HelpMenu { get; }
 
         public Timetable Timetable => FileHandler.Timetable;
         public IFileState FileState => FileHandler.FileState;
@@ -42,6 +44,7 @@ namespace FPLedit
             
             RootForm = rootForm;
             Menu = rootForm.Menu;
+            HelpMenu = rootForm.Menu.GetItem(MainForm.LocHelpMenu);
             Settings = new Settings();
             registry = new RegisterStore();
             Update = new UpdateManager(Settings);

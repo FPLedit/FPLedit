@@ -23,6 +23,9 @@
         <SeparatorMenuItem />
         <ButtonMenuItem Text="Beenden" Click="QuitMenu_Click" />
       </ButtonMenuItem>
+      <ButtonMenuItem Text="{x:Static c:MainForm.LocEditMenu}" />
+      <ButtonMenuItem Text="Vorschau" />
+      <ButtonMenuItem Order="10000" Text="Hilfe" />
     </MenuBar>
   </c:MainForm.Menu>
   <TableLayout>
@@ -30,7 +33,7 @@
       <editor:NetworkEditingControl x:Name="networkEditingControl" />
     </TableRow>
     <TableRow>
-      <c:LogControl x:Name="logTextBox" Height="100"></c:LogControl>
+      <c:LogControl x:Name="logTextBox" Height="100" />
     </TableRow>
   </TableLayout>
 </c:MainForm>
