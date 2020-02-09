@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Editor
 {
-    internal class EditPositionForm : FDialog<DialogResult>
+    internal sealed class EditPositionForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
         private readonly TextBox positionTextBox;

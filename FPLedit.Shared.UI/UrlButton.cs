@@ -8,7 +8,7 @@ using FPLedit.Shared.Helpers;
 
 namespace FPLedit.Shared.UI
 {
-    public class UrlButton : Eto.Forms.LinkButton
+    public sealed class UrlButton : Eto.Forms.LinkButton
     {
         public string Url { get; set; }
 

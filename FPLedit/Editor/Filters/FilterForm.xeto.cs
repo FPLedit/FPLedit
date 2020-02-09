@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace FPLedit.Editor.Filters
 {
-    internal class FilterForm : FDialog<DialogResult>
+    internal sealed class FilterForm : FDialog<DialogResult>
     {
         private readonly FilterableContainer[] fcontainers;
         private readonly IPluginInterface pluginInterface;

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Editor.Trains
 {
-    internal class TrainCopyDialog : FDialog<DialogResult>
+    internal sealed class TrainCopyDialog : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
         private readonly TextBox offsetTextBox, nameTextBox, changeTextBox, countTextBox;

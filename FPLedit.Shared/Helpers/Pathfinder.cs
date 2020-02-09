@@ -7,7 +7,7 @@ namespace FPLedit.Shared.Helpers
     /// <summary>
     /// Findet den kürzesten Weg zwischen zwei Stationen
     /// </summary>
-    public class Pathfinder
+    public sealed class Pathfinder
     {
         private readonly Timetable tt;
 

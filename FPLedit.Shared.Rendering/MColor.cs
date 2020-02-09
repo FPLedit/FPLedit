@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Shared.Rendering
 {
-    public class MColor
+    public sealed class MColor
     {
         public byte R { get; set; }
 

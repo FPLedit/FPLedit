@@ -9,7 +9,7 @@ namespace FPLedit.Editor.Rendering
     /// <summary>
     /// Manages the display position for station rendering in <see cref="NetworkRenderer"/>.
     /// </summary>
-    internal class StaPosHandler
+    internal sealed class StaPosHandler
     {
         private Point GetPoint(Station sta)
         {

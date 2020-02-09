@@ -8,7 +8,7 @@ namespace FPLedit.Shared
 {
     [XElmName("track")]
     [Templating.TemplateSafe]
-    public class Track : Entity
+    public sealed class Track : Entity
     {
         public Track(Timetable tt) : base("track", tt)
         {

@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace FPLedit.Shared.UI
 {
-    public class FontComboBox
+    public sealed class FontComboBox
     {
         private readonly ComboBox box;
         private readonly Label label;

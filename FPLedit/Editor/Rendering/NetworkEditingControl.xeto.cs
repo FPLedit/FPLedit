@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace FPLedit.Editor.Rendering
 {
-    public class NetworkEditingControl : Panel
+    internal sealed class NetworkEditingControl : Panel
     {
         private IPluginInterface pluginInterface;
 

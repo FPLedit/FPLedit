@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.TimetableChecks
 {
-    internal class TransitionsCheck : ITimetableCheck
+    internal sealed class TransitionsCheck : ITimetableCheck
     {
         public string Display => "Ungültige Folgezüge";
 

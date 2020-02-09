@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace FPLedit.Editor.Trains
 {
-    internal class TrainEditForm : FDialog<DialogResult>
+    internal sealed class TrainEditForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
         private readonly TextBox nameTextBox, commentTextBox;

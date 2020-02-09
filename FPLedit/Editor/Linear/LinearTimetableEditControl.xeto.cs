@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace FPLedit.Editor.Linear
 {
-    internal class LinearTimetableEditControl : BaseTimetableEditControl
+    internal sealed class LinearTimetableEditControl : BaseTimetableEditControl
     {
         private const TrainDirection TOP_DIRECTION = TrainDirection.ti;
         private const TrainDirection BOTTOM_DIRECTION = TrainDirection.ta;

@@ -8,7 +8,7 @@ namespace FPLedit.Shared
 {
     [XElmName("t")]
     [Templating.TemplateSafe]
-    public class ArrDep : Entity
+    public sealed class ArrDep : Entity
     {
         public IChildrenCollection<ShuntMove> ShuntMoves { get; private set; }
 

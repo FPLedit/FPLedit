@@ -7,7 +7,7 @@ using System.Xml.Linq;
 
 namespace FPLedit.Shared.Filetypes
 {
-    public class XMLExport : IExport
+    public sealed class XMLExport : IExport
     {
         public const string FLAG_INDENT_XML = "indent_xml";
         

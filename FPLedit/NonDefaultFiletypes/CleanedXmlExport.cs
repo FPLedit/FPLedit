@@ -10,7 +10,7 @@ using System.Xml.Linq;
 
 namespace FPLedit.NonDefaultFiletypes
 {
-    internal class CleanedXmlExport : IExport
+    internal sealed class CleanedXmlExport : IExport
     {
         public string Filter => "Bereinigte Fahrplan Dateien (*.fpl)|*.fpl";
 

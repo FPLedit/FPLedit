@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit
 {
-    internal class ExtensionsForm : FDialog
+    internal sealed class ExtensionsForm : FDialog
     {
         private readonly ExtensionManager manager;
         private readonly IRestartable restartable;

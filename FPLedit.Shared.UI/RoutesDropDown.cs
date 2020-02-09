@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace FPLedit.Shared.UI
 {
-    public class RoutesDropDown : DropDown
+    public sealed class RoutesDropDown : DropDown
     {
         private IPluginInterface pluginInterface;
         private string lastFn;

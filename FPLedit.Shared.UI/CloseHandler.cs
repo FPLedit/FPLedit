@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Shared.UI
 {
-    internal class CloseHandler
+    internal sealed class CloseHandler
     {
         internal static List<CloseHandler> ActiveHandlers = new List<CloseHandler>();
 

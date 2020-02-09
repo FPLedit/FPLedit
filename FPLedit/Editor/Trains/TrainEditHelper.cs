@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace FPLedit.Editor.Trains
 {
-    internal class TrainEditHelper
+    internal sealed class TrainEditHelper
     {
         public Train CopyTrain(Train orig, int offsetMin, string name, bool copyAll)
         {

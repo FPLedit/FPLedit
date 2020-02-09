@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.TimetableChecks
 {
-    public class FixNetworkAttributesAction : ITimetableInitAction
+    internal sealed class FixNetworkAttributesAction : ITimetableInitAction
     {
         public string Init(Timetable tt)
         {

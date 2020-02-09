@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Editor.Trains
 {
-    internal class BaseTrainsEditor : FDialog<DialogResult>
+    internal abstract class BaseTrainsEditor : FDialog<DialogResult>
     {
         private readonly Timetable tt;
         public BaseTrainsEditor(Timetable tt)

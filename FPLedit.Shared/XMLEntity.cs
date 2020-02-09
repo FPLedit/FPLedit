@@ -75,7 +75,7 @@ namespace FPLedit.Shared
     }
 
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-    public class XElmNameAttribute : Attribute
+    public sealed class XElmNameAttribute : Attribute
     {
         public XElmNameAttribute(params string[] names)
         {
@@ -88,7 +88,7 @@ namespace FPLedit.Shared
     }
 
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    public class XAttrNameAttribute : Attribute
+    public sealed class XAttrNameAttribute : Attribute
     {
         public XAttrNameAttribute(string name)
         {

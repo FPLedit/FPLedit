@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace FPLedit.NonDefaultFiletypes
 {
-    internal class NetworkExport : BaseConverterFileType, IExport
+    internal sealed class NetworkExport : BaseConverterFileType, IExport
     {
         public string Filter => "Fahrplan Dateien (*.fpl)|*.fpl";
 

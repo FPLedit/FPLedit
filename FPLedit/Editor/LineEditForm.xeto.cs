@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace FPLedit.Editor
 {
-    internal class LineEditForm : FDialog<DialogResult>
+    internal sealed class LineEditForm : FDialog<DialogResult>
     {
         private readonly IPluginInterface pluginInterface;
         private readonly Timetable tt;

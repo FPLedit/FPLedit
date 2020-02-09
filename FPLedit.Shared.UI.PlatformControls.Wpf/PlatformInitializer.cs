@@ -5,7 +5,7 @@ using FPLedit.Shared.UI.PlatformControls;
 
 namespace FPLedit.Shared.UI.Wpf
 {
-    public class PlatformInitializer : IPlatformInitializer
+    public sealed class PlatformInitializer : IPlatformInitializer
     {
         public void Initialize(Platform platform)
         {

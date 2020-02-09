@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace FPLedit.Shared.Helpers
 {
-    public class TimeNormalizer
+    public sealed class TimeNormalizer
     {
         private readonly Regex verifyRegex;
 

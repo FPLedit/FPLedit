@@ -11,7 +11,7 @@ using Gtk;
 
 namespace FPLedit.Shared.UI.Gtk
 {
-    public class BDComboBoxCellHandler : SingleCellHandler<CellRendererCombo, BDComboBoxCell, BDComboBoxCell.ICallback>, BDComboBoxCell.IHandler
+    public sealed class BDComboBoxCellHandler : SingleCellHandler<CellRendererCombo, BDComboBoxCell, BDComboBoxCell.ICallback>, BDComboBoxCell.IHandler
     {
         readonly ListStore listStore;
         private IEnumerable<object> currentDataStore = null;

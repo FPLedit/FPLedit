@@ -13,7 +13,7 @@ using FPLedit.Shared.Helpers;
 
 namespace FPLedit
 {
-    internal class InfoForm : FDialog
+    internal sealed class InfoForm : FDialog
     {
 #pragma warning disable CS0649
         private readonly TextArea licenseTextArea;

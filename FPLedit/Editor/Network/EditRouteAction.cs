@@ -7,7 +7,7 @@ using System.Text;
 
 namespace FPLedit.Editor.Network
 {
-    public class EditRouteAction : IRouteAction
+    internal sealed class EditRouteAction : IRouteAction
     {
         public string DisplayName => "Stationen dieser Strecke bearbeiten";
 

@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace FPLedit.Editor.Linear
 {
-    internal class LinearTimetableEditForm : FDialog<DialogResult>
+    internal sealed class LinearTimetableEditForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
         private readonly LinearTimetableEditControl editor;

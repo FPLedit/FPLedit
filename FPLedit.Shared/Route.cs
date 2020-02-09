@@ -7,7 +7,7 @@ using System.Text;
 namespace FPLedit.Shared
 {
     [Templating.TemplateSafe]
-    public class Route
+    public sealed class Route
     {
         private readonly Station[] stations;
         

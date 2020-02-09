@@ -8,7 +8,7 @@ using System.Text;
 
 namespace FPLedit.Editor
 {
-    public class EditorPlugin : IPlugin
+    internal sealed class EditorPlugin : IPlugin
     {
         private IPluginInterface pluginInterface;
 

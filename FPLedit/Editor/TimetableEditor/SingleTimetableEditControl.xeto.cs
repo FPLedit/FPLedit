@@ -10,7 +10,7 @@ using FPLedit.Shared.UI.PlatformControls;
 
 namespace FPLedit.Editor.TimetableEditor
 {
-    internal class SingleTimetableEditControl : BaseTimetableEditControl
+    internal sealed class SingleTimetableEditControl : BaseTimetableEditControl
     {
 #pragma warning disable CS0649
         private readonly GridView dataGridView;

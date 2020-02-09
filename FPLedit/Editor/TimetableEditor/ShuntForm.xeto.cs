@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace FPLedit.Editor.TimetableEditor
 {
-    internal class ShuntForm : FDialog<DialogResult>
+    internal sealed class ShuntForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
         private readonly GridView gridView;

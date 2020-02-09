@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Shared.UI.PlatformControls
 {
-    class ListItemTextBinding : PropertyBinding<string>
+    internal sealed class ListItemTextBinding : PropertyBinding<string>
     {
         public ListItemTextBinding()
             : base("Text")
@@ -31,7 +31,7 @@ namespace FPLedit.Shared.UI.PlatformControls
         }
     }
 
-    class ListItemKeyBinding : PropertyBinding<string>
+    internal sealed class ListItemKeyBinding : PropertyBinding<string>
     {
         public ListItemKeyBinding()
             : base("Key")

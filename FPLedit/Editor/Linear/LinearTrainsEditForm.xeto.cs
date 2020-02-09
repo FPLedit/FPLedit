@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace FPLedit.Editor.Linear
 {
-    internal class LinearTrainsEditForm : BaseTrainsEditor
+    internal sealed class LinearTrainsEditForm : BaseTrainsEditor
     {
         private readonly IPluginInterface pluginInterface;
         private readonly Timetable tt;

@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace FPLedit.Editor
 {
-    internal class RenderSettingsForm : FDialog<DialogResult>
+    internal sealed class RenderSettingsForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
         private readonly TabControl tabControl;

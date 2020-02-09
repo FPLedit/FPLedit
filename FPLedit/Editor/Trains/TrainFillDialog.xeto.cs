@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace FPLedit.Editor.Trains
 {
-    internal class TrainFillDialog : FDialog<DialogResult>
+    internal sealed class TrainFillDialog : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
         private readonly DropDown trainsComboBox;

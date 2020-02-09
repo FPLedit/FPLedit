@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FPLedit
 {
-    public sealed class RegisterStore : IDisposable
+    internal sealed class RegisterStore : IDisposable
     {
         private readonly Dictionary<Type, List<object>> store;
         private readonly List<IDisposable> disposableReferences;

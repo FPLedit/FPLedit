@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Shared.UI
 {
-    public class SizeManager
+    public sealed class SizeManager
     {
         private readonly ISettings settings;
         private readonly List<SizeEntry> sizes;

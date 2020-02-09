@@ -8,7 +8,7 @@ using FPLedit.Editor.TimetableEditor;
 
 namespace FPLedit.Editor.Network
 {
-    internal class MultipleTimetableEditForm : FDialog<DialogResult>
+    internal sealed class MultipleTimetableEditForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
         private readonly DropDown trainDropDown;

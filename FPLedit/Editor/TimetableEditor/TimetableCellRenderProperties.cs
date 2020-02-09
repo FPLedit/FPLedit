@@ -5,7 +5,7 @@ using System;
 
 namespace FPLedit.Editor.TimetableEditor
 {
-    internal class TimetableCellRenderProperties
+    internal sealed class TimetableCellRenderProperties
     {
         private static Font fn, fb;
         private static Color? errorColor, bgColor, textColor;

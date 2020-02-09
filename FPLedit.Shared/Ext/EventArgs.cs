@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Shared
 {
-    public class EventArgs<T> : EventArgs
+    public sealed class EventArgs<T> : EventArgs
     {
         public EventArgs(T value)
         {
@@ -16,7 +16,7 @@ namespace FPLedit.Shared
         public T Value { get; private set; }
     }
 
-    public class FileStateChangedEventArgs : EventArgs
+    public sealed class FileStateChangedEventArgs : EventArgs
     {
         public IFileState FileState { get; private set; }
 

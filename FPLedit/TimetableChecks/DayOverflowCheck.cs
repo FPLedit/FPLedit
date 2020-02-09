@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.TimetableChecks
 {
-    internal class DayOverflowCheck : ITimetableCheck
+    internal sealed class DayOverflowCheck : ITimetableCheck
     {
         public string Display => "Zugverkehr über Mitternacht";
 

@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace FPLedit.Editor.Rendering
 {
-    public sealed class StationRenderer : Drawable
+    internal sealed class StationRenderer : Drawable
     {
         private const int INDENT = 20;
         private const int LINE_HEIGHT = 30;

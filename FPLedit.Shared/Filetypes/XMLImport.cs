@@ -7,7 +7,7 @@ using System.Xml.Linq;
 
 namespace FPLedit.Shared.Filetypes
 {
-    public class XMLImport : IImport
+    public sealed class XMLImport : IImport
     {
         public string Filter => "Fahrplan Dateien (*.fpl)|*.fpl";
 

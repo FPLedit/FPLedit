@@ -6,7 +6,7 @@ using System.Text;
 namespace FPLedit.Shared
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-    public class PluginAttribute : Attribute
+    public sealed class PluginAttribute : Attribute
     {
         public string Name { get; }
 

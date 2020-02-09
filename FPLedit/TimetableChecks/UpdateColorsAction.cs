@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace FPLedit.TimetableChecks
 {
-    public class UpdateColorsAction : ITimetableInitAction
+    internal sealed class UpdateColorsAction : ITimetableInitAction
     {
         public string Init(Timetable tt)
         {

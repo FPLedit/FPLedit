@@ -10,7 +10,7 @@ using System.Linq;
 namespace FPLedit.Editor.Network
 {
     //TODO: Refactor out logic code
-    internal class TrainPathForm : FDialog<DialogResult>
+    internal sealed class TrainPathForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
         private readonly NetworkRenderer networkRenderer;

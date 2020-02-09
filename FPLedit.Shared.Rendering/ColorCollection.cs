@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace FPLedit.Shared.Rendering
 {
-    public class ColorCollection
+    public sealed class ColorCollection
     {
         private readonly Dictionary<string, MColor> colors = new Dictionary<string, MColor>()
         {

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.NonDefaultFiletypes
 {
-    internal class UpgradeJTG3Export : IExport
+    internal sealed class UpgradeJTG3Export : IExport
     {
         public string Filter => "Fahrplan Dateien (*.fpl)|*.fpl";
 

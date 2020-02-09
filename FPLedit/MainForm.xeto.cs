@@ -16,7 +16,7 @@ using FPLedit.Shared.Helpers;
 
 namespace FPLedit
 {
-    internal class MainForm : FForm, IRestartable
+    internal sealed class MainForm : FForm, IRestartable
     {
         #region Controls
 #pragma warning disable CS0649

@@ -10,7 +10,7 @@ using FPLedit.Shared.Helpers;
 
 namespace FPLedit.CrashReporting
 {
-    internal class CrashForm : FDialog<DialogResult>
+    internal sealed class CrashForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
         private readonly Label fnLabel;

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.TimetableChecks
 {
-    internal class TimetableCheckRunner : IDisposable
+    internal sealed class TimetableCheckRunner : IDisposable
     {
         private FForm form;
         private GridView gridView;

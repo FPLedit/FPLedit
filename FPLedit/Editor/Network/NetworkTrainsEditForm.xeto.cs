@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Editor.Network
 {
-    internal class NetworkTrainsEditForm : BaseTrainsEditor
+    internal sealed class NetworkTrainsEditForm : BaseTrainsEditor
     {
         private readonly IPluginInterface pluginInterface;
         private readonly Timetable tt;

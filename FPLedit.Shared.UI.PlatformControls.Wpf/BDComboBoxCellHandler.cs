@@ -11,7 +11,7 @@ using FPLedit.Shared.UI.PlatformControls;
 
 namespace FPLedit.Shared.UI.Wpf
 {
-    public class BDComboBoxCellHandler : CellHandler<swc.DataGridComboBoxColumn, BDComboBoxCell, BDComboBoxCell.ICallback>, BDComboBoxCell.IHandler
+    public sealed class BDComboBoxCellHandler : CellHandler<swc.DataGridComboBoxColumn, BDComboBoxCell, BDComboBoxCell.ICallback>, BDComboBoxCell.IHandler
     {
         string GetValue(object dataItem)
         {

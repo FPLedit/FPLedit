@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace FPLedit
 {
-    public sealed class LogControl : RichTextArea, ILog
+    internal sealed class LogControl : RichTextArea, ILog
     {
         private readonly Color systemText;
         private readonly ContextMenu menu;

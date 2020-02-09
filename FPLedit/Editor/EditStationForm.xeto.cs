@@ -10,7 +10,7 @@ using FPLedit.Shared.Helpers;
 
 namespace FPLedit.Editor
 {
-    internal class EditStationForm : FDialog<DialogResult>
+    internal sealed class EditStationForm : FDialog<DialogResult>
     {
         private readonly IPluginInterface pluginInterface;
         private readonly int route;

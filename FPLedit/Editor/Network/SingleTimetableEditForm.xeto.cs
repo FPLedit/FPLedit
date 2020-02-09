@@ -8,7 +8,7 @@ using FPLedit.Editor.TimetableEditor;
 
 namespace FPLedit.Editor.Network
 {
-    internal class SingleTimetableEditForm : FDialog<DialogResult>
+    internal sealed class SingleTimetableEditForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
         private readonly SingleTimetableEditControl editor;

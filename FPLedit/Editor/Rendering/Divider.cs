@@ -3,7 +3,7 @@ using Eto.Forms;
 
 namespace FPLedit.Editor.Rendering
 {
-    internal class Divider : Panel
+    internal sealed class Divider : Panel
     {
         public Divider()
         {

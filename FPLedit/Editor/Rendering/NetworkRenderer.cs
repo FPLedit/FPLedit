@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace FPLedit.Editor.Rendering
 {
-    public sealed class NetworkRenderer : Drawable
+    internal sealed class NetworkRenderer : Drawable
     {
         private PointF mousePosition = new PointF();
 

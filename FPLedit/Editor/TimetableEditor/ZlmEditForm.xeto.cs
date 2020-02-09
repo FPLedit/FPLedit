@@ -4,7 +4,7 @@ using System;
 
 namespace FPLedit.Editor.TimetableEditor
 {
-    internal class ZlmEditForm : FDialog<DialogResult>
+    internal sealed class ZlmEditForm : FDialog<DialogResult>
     {
         #pragma warning disable CS0649
         private readonly TextBox zlmTextBox;

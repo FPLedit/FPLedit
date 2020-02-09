@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Editor.Filters
 {
-    internal class EditPatternForm : FDialog<DialogResult>
+    internal sealed class EditPatternForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
         private readonly TextBox searchTextBox;
