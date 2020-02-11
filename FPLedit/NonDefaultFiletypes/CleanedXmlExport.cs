@@ -1,7 +1,6 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -84,15 +83,6 @@ namespace FPLedit.NonDefaultFiletypes
             {
                 pluginInterface.Logger.Error("XMLExport: " + ex.Message);
                 return false;
-            }
-        }
-        
-        public bool Export(Timetable tt, string filename, IPluginInterface pluginInterface, string[] flags = null)
-        {
-            using (var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.Write))
-            {
-                stream.SetLength(0);
-                return Export(tt, stream, pluginInterface, flags);
             }
         }
     }

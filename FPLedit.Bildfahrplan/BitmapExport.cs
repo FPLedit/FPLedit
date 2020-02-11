@@ -1,13 +1,8 @@
 ﻿using FPLedit.Bildfahrplan.Render;
 using FPLedit.Shared;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.Bildfahrplan
 {
@@ -33,14 +28,5 @@ namespace FPLedit.Bildfahrplan
         }
 
         public string Filter => "Bildfahrplan als PNG (*.png)|*.png";
-
-        public bool Export(Timetable tt, string filename, IPluginInterface pluginInterface, string[] flags = null)
-        {
-            using (var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.Write))
-            {
-                stream.SetLength(0);
-                return Export(tt, stream, pluginInterface, flags);
-            }
-        }
     }
 }

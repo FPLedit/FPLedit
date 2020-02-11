@@ -7,6 +7,8 @@ namespace FPLedit.Shared.DefaultImplementations
 {
     public sealed class BasicTemplateExport : IExport
     {
+        public const string FLAG_TYROUT_CONSOLE = "tryout_console";
+        
         private readonly Func<IPluginInterface, BaseTemplateChooser> getChooser;
         public string Filter { get; }
         
@@ -25,22 +27,13 @@ namespace FPLedit.Shared.DefaultImplementations
             if (cont == null)
                 return false;
 
-            if (flags?.Contains("tryout_console") ?? false)
+            if (flags?.Contains(FLAG_TYROUT_CONSOLE) ?? false)
                 cont += ResourceHelper.GetStringResource("Shared.Resources.TryoutConsole.html");
 
             using (var sw = new StreamWriter(stream))
                 sw.Write(cont);
 
             return true;
-        }
-        
-        public bool Export(Timetable tt, string filename, IPluginInterface pluginInterface, string[] flags = null)
-        {
-            using (var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.Write))
-            {
-                stream.SetLength(0);
-                return Export(tt, stream, pluginInterface, flags);
-            }
         }
     }
 }

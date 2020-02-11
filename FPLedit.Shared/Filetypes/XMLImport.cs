@@ -37,11 +37,5 @@ namespace FPLedit.Shared.Filetypes
                 return null;
             }
         }
-        
-        public Timetable Import(string filename, IPluginInterface pluginInterface, ILog replaceLog = null)
-        {
-            using (var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.Read))
-                return Import(stream, pluginInterface, replaceLog);
-        }
     }
 }

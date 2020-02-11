@@ -22,7 +22,7 @@ namespace FPLedit.Shared.DefaultImplementations
             string path = pluginInterface.GetTemp(templateType + ".html");
 
             bool tryoutConsole = pluginInterface.Settings.Get<bool>(templateType + ".console");
-            bool success = export.Export(pluginInterface.Timetable, path, pluginInterface, tryoutConsole ? new [] { "tryout_console" } : Array.Empty<string>());
+            bool success = export.Export(pluginInterface.Timetable, path, pluginInterface, tryoutConsole ? new [] { BasicTemplateExport.FLAG_TYROUT_CONSOLE } : Array.Empty<string>());
 
             if (success)
                 OpenHelper.Open(path);

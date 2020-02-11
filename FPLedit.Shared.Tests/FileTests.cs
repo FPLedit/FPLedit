@@ -1,7 +1,6 @@
 using System;
-using System.ComponentModel;
 using System.IO;
-using System.Net;
+using System.Text;
 using System.Xml.Linq;
 using FPLedit.Shared.Filetypes;
 using NUnit.Framework;
@@ -17,35 +16,40 @@ namespace FPLedit.Shared.Tests
             var el = XElement.Parse(text);
             Assert.Throws<NotSupportedException>(() => new XMLEntity(el));
 
-            Assert.Throws<LogErrorException>(() => new XMLImport().Import(PrepareTemp(text), new DummyPluginInterface()));
+            using (var s = PrepareTemp(text))
+                Assert.Throws<LogErrorException>(() => new XMLImport().Import(s, new DummyPluginInterface()));
         }
 
         [Test]
         public void EmptyFileTest()
         {
-            Assert.Throws<LogErrorException>(() => new XMLImport().Import(PrepareTemp(""), new DummyPluginInterface()));
+            using (var s = PrepareTemp(""))
+                Assert.Throws<LogErrorException>(() => new XMLImport().Import(s, new DummyPluginInterface()));
         }
 
         [Test]
         public void DuplicateStationIdTest()
         {
             var text = Load("test_duplicate_ids.fpl");
-            Timetable tt = new XMLImport().Import(PrepareTemp(text), new DummyPluginInterface());
-            Assert.IsNotNull(tt);
-            Assert.IsTrue(tt.UpgradeMessage.Contains("Verknüpfungen"));
-            
-            
-            // TODO: Check for changed ids, removed transitions
+            using (var s = PrepareTemp(text))
+            {
+                var tt = new XMLImport().Import(s, new DummyPluginInterface());
+                Assert.IsNotNull(tt);
+                Assert.IsTrue(tt.UpgradeMessage.Contains("Verknüpfungen"));
+
+                // TODO: Check for changed ids, removed transitions
+            }
         }
 
         private string Load(string dotPath) => ResourceHelper.GetStringResource("Shared.Tests.TestFiles." + dotPath);
 
-        private string PrepareTemp(string text)
+        private Stream PrepareTemp(string text)
         {
-            var rand = new Random();
-            var path = Path.Combine(Path.GetTempPath(), "fpledit-test-" + rand.Next(100) + ".fpl");
-            File.WriteAllText(path, text);
-            return path;
+            var ms = new MemoryStream();
+            using (var sw = new StreamWriter(ms, Encoding.UTF8, 1024, true))
+                sw.Write(text);
+            ms.Seek(0, SeekOrigin.Begin);
+            return ms;
         }
     }
 }
