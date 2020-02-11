@@ -13,7 +13,7 @@
             <GridView x:Name="gridView"></GridView>
           </TableCell>
           <StackLayout Spacing="5">
-            <Button Click="EditButton_Click">Darstellung bearbeiten</Button>
+            <Button Click="ResetButton_Click">Darstellung zurücksetzen</Button>
           </StackLayout>
         </TableRow>
       </TableLayout>

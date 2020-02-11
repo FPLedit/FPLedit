@@ -12,7 +12,7 @@ namespace FPLedit.Shared.UI
     public static class ExtBind
     {
         public static IIndirectBinding<string> ColorBinding(ColorCollection cc)
-            => Binding.Property<string, string>(c => cc.ToName(ColorFormatter.FromHexString(c)));
+            => Binding.Delegate<string, string>(c => cc.ToName(ColorFormatter.FromHexString(c)));
 
         public static void AddIntConvBinding<TValue, T1>(this BindableBinding<T1, string> binding, Expression<Func<TValue, int>> property)
             where T1 : IBindable

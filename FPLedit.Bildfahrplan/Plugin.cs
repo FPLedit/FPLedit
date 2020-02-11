@@ -28,7 +28,7 @@ namespace FPLedit.Bildfahrplan
             showItem = graphItem.CreateItem("Anzeigen", enabled: false, clickHandler: ShowItem_Click);
             configItem = graphItem.CreateItem("Darstellung ändern", enabled: false, clickHandler: (s, ev) => ShowForm(new ConfigForm(pluginInterface.Timetable, pluginInterface.Settings)));
             printItem = graphItem.CreateItem("Drucken", enabled: false, clickHandler: PrintItem_Click);
-            trainColorItem = graphItem.CreateItem("Zugdarstellung ändern", enabled: false, clickHandler: (s, ev) => ShowForm(new TrainColorForm(pluginInterface)));
+            trainColorItem = graphItem.CreateItem("Zugdarstellung ändern", enabled: false, clickHandler: (s, ev) => ShowForm(new TrainStyleForm(pluginInterface)));
             stationStyleItem = graphItem.CreateItem("Stationsdarstellung ändern", enabled: false, clickHandler: (s, ev) => ShowForm(new StationStyleForm(pluginInterface)));
             overrideItem = graphItem.CreateCheckItem("Verwende nur Plandarstellung", isChecked: pluginInterface.Settings.Get<bool>("bifpl.override-entity-styles"),
                 changeHandler: OverrideItem_CheckedChanged);

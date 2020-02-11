@@ -20,10 +20,23 @@ namespace FPLedit.Shared.Rendering
             G = g;
             B = b;
         }
+        
+        public string Hex
+        {
+            get => ColorFormatter.ToString(this);
+            set
+            {
+                var c = ColorFormatter.FromHexString(value);
+                R = c.R;
+                G = c.G;
+                B = c.B;
+            }
+        }
 
-        public static bool operator ==(MColor c1, MColor c2) => c1.Equals(c2);
+        public static bool operator ==(MColor c1, MColor c2) =>
+            (ReferenceEquals(c1, null) && (ReferenceEquals(c2, null)) || (!ReferenceEquals(c1, null) && c1.Equals(c2)) || (!ReferenceEquals(c2, null) && c2.Equals(c1)));
 
-        public static bool operator !=(MColor c1, MColor c2) => !c1.Equals(c2);
+        public static bool operator !=(MColor c1, MColor c2) => !(c1 == c2);
 
         public override bool Equals(object obj)
             => obj is MColor c2 && this.R == c2.R && this.G == c2.G && this.B == c2.B;

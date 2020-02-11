@@ -122,6 +122,9 @@ namespace FPLedit.Shared.UI
 
         public static GridColumn AddDropDownColumn<T>(this GridView view, Expression<Func<T, object>> value, IEnumerable<object> dataStore, string header, bool editable = false)
             => view.AddColumn(new ComboBoxCell { Binding = Binding.Property(value), DataStore = dataStore }, header, editable);
+        
+        public static GridColumn AddDropDownColumn<T>(this GridView view, Expression<Func<T, object>> value, IEnumerable<object> dataStore, IIndirectBinding<string> textBinding, string header, bool editable = false)
+            => view.AddColumn(new ComboBoxCell { Binding = Binding.Property(value), DataStore = dataStore, ComboTextBinding = textBinding }, header, editable);
 
         public static GridColumn AddColumn(this GridView view, Cell cell, string header, bool editable = false)
         {
