@@ -15,7 +15,7 @@ namespace FPLedit.NonDefaultFiletypes
         public bool Export(Timetable tt, Stream stream, IPluginInterface pluginInterface, string[] flags = null)
         {
             if (tt.Type == TimetableType.Network)
-                throw new Exception("Der Fahrplan ist bereits ein Netzwerk-Fahrplan");
+                throw new TimetableTypeNotSupportedException(TimetableType.Network, "convert to network");
 
             var clone = tt.Clone();
 

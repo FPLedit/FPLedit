@@ -125,7 +125,7 @@ namespace FPLedit.Editor
             if (tt.Stations.Count != 0)
                 return;
             if (pluginInterface.Timetable.Type == TimetableType.Network)
-                throw new Exception("Streckendateien können bei Netzwerk-Fahrplänen nicht geladen werden!");
+                throw new TimetableTypeNotSupportedException(TimetableType.Network, "load line file");
 
             IImport timport = new XMLImport();
             IImport simport = new NonDefaultFiletypes.XMLStationsImport();

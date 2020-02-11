@@ -91,7 +91,7 @@ namespace FPLedit.Templating
                 // Find corresponding (=next) end tag
                 var blockEndIdx = code.IndexOf(endTag, blockStartIdx, StringComparison.Ordinal);
                 if (blockEndIdx < 0) // This code block does not end. Throw.
-                    throw new Exception("Error parsing template script: No closing code block tag found.");
+                    throw new FormatException("Error parsing template script: No closing code block tag found.");
 
                 scriptBuilder.Append(code.Substring(blockStartIdx, blockEndIdx - blockStartIdx + startTag.Length)); // Add this code block to output.
 

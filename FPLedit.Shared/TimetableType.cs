@@ -11,4 +11,13 @@ namespace FPLedit.Shared
         Linear,
         Network
     }
+    
+    
+    public class TimetableTypeNotSupportedException : NotSupportedException
+    {
+        public TimetableTypeNotSupportedException(TimetableType type, string feature) 
+            : base("Timetable file of type " + type + " does not support the following feature: " + feature)
+        {
+        }
+    }
 }

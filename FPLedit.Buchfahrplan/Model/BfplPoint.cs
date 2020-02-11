@@ -41,7 +41,7 @@ namespace FPLedit.Buchfahrplan.Model
             get
             {
                 if (_parent.Type == TimetableType.Linear)
-                    throw new NotSupportedException("Lineare Strecken haben keine Routen-Ids");
+                    throw new TimetableTypeNotSupportedException(TimetableType.Linear, "Station.Routes");
                 return GetAttribute("fpl-rt", "")
                     .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                     .Select(s => int.Parse(s)).ToArray();
@@ -49,7 +49,7 @@ namespace FPLedit.Buchfahrplan.Model
             private set
             {
                 if (_parent.Type == TimetableType.Linear)
-                    throw new NotSupportedException("Lineare Strecken haben keine Routen-Ids");
+                    throw new TimetableTypeNotSupportedException(TimetableType.Linear, "Station.Routes");
                 SetAttribute("fpl-rt", string.Join(",", value));
             }
         }
@@ -58,8 +58,8 @@ namespace FPLedit.Buchfahrplan.Model
 
         public int Id
         {
-            get => throw new NotSupportedException("Points haben keine Id!");
-            set => throw new NotSupportedException("Points haben keine Id!");
+            get => throw new InvalidOperationException("Points haben keine Id!");
+            set => throw new InvalidOperationException("Points haben keine Id!");
         }
         
         internal void _InternalAddRoute(int route)

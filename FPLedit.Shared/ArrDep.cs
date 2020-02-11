@@ -18,13 +18,13 @@ namespace FPLedit.Shared
             get
             {
                 if (_parent.Type == TimetableType.Linear)
-                    throw new NotSupportedException("Lineare Strecken haben keine Bahnhofs-Ids");
+                    throw new TimetableTypeNotSupportedException(TimetableType.Linear, "station ids");
                 return GetAttribute<int>("fpl-id");
             }
             set
             {
                 if (_parent.Type == TimetableType.Linear)
-                    throw new NotSupportedException("Lineare Strecken haben keine Bahnhofs-Ids");
+                    throw new TimetableTypeNotSupportedException(TimetableType.Linear, "station ids");
                 SetAttribute("fpl-id", value.ToString());
             }
         }

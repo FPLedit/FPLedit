@@ -106,7 +106,7 @@ namespace FPLedit.Buchfahrplan.Forms
                 var sta = gridView.SelectedItem;
 
                 if (sta is Station)
-                    throw new NotSupportedException("Bahnhöfe können nicht gelöscht werden!");
+                    throw new InvalidOperationException("Invalid state: Stations cannot be deleted with this function.");
                 if (sta is BfplPoint point)
                 {
                     attrs?.RemovePoint(point);

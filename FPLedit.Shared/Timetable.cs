@@ -69,7 +69,7 @@ namespace FPLedit.Shared
         internal Timetable(XMLEntity en) : base(en, null)
         {
             if (!Enum.IsDefined(typeof(TimetableVersion), Version))
-                throw new Exception("Unbekannte Dateiversion. Nur mit jTrainGraph 2 oder 3.0 erstellte Dateien können geöffnet werden!");
+                throw new NotSupportedException("Unbekannte Dateiversion. Nur mit jTrainGraph 2 oder 3.0 erstellte Dateien können geöffnet werden!");
 
             stations = new List<Station>();
             sElm = Children.FirstOrDefault(x => x.XName == "stations");
@@ -87,7 +87,7 @@ namespace FPLedit.Shared
             trains = new List<Train>();
             tElm = Children.FirstOrDefault(x => x.XName == "trains");
             if (sElm == null && tElm != null)
-                throw new Exception("Kein <stations>-Element vorhanden, dafür aber <trains>!");
+                throw new NotSupportedException("Kein <stations>-Element vorhanden, dafür aber <trains>!");
 
             if (tElm != null)
             {
@@ -174,7 +174,7 @@ namespace FPLedit.Shared
             float LinearOrder(Station s) => s.Positions.GetPosition(LINEAR_ROUTE_ID).Value;
 
             if (Type == TimetableType.Network)
-                throw new NotSupportedException("Netzwerk-Fahrpläne haben keine Richtung!");
+                throw new TimetableTypeNotSupportedException(TimetableType.Network, "direction");
             return (direction == TrainDirection.ta
                 ? Stations.OrderByDescending(LinearOrder)
                 : Stations.OrderBy(LinearOrder)).ToList();
@@ -183,7 +183,7 @@ namespace FPLedit.Shared
         public string GetLineName(TrainDirection direction)
         {
             if (Type == TimetableType.Network)
-                throw new NotSupportedException("Netzwerk-Fahrpläne haben keine Richtung!");
+                throw new TimetableTypeNotSupportedException(TimetableType.Network, "direction");
             var stas = GetStationsOrderedByDirection(direction);
             return stas.First().SName + " - " + stas.Last().SName;
         }
@@ -212,7 +212,7 @@ namespace FPLedit.Shared
             if (Type == TimetableType.Linear)
             {
                 if (route != LINEAR_ROUTE_ID)
-                    throw new NotSupportedException("Lineare Strecken haben keine Route-Ids");
+                    throw new TimetableTypeNotSupportedException(TimetableType.Linear, "routes");
                 stations = GetStationsOrderedByDirection();
                 var idx = stations.IndexOf(sta); // Index vorläufig ermitteln
 
@@ -270,7 +270,7 @@ namespace FPLedit.Shared
         public Station GetStationById(int id)
         {
             if (Type == TimetableType.Linear)
-                throw new NotSupportedException("Lineare Strecken haben keine Stations-Ids!");
+                throw new TimetableTypeNotSupportedException(TimetableType.Linear, "station ids");
             return stations.FirstOrDefault(s => s.Id == id);
         }
 
@@ -361,7 +361,7 @@ namespace FPLedit.Shared
         public int AddRoute(Station exisitingStartStation, Station newStation, float newStartPosition, float newPosition)
         {
             if (Type == TimetableType.Linear)
-                throw new NotSupportedException("Lineare Strecken haben keine Routen!");
+                throw new TimetableTypeNotSupportedException(TimetableType.Linear, "routes");
             if (newStation.Routes.Length > 0)
                 throw new ArgumentException(nameof(newStation) + " has already some routes and is not plain.");
             
@@ -394,7 +394,7 @@ namespace FPLedit.Shared
             if (Type == TimetableType.Linear && index == LINEAR_ROUTE_ID)
                 return new Route(LINEAR_ROUTE_ID, Stations);
             if (Type == TimetableType.Linear && index != LINEAR_ROUTE_ID)
-                throw new NotSupportedException("Lineare Strecken haben keine Routen!");
+                throw new TimetableTypeNotSupportedException(TimetableType.Linear, "routes");
 
             var stas = Stations.Where(s => s.Routes.Contains(index));
             return new Route(index, stas);
@@ -410,7 +410,7 @@ namespace FPLedit.Shared
         public void JoinRoutes(int route, Station station, float newKm)
         {
             if (Type == TimetableType.Linear)
-                throw new NotSupportedException("Lineare Strecken haben keine Routen!");
+                throw new TimetableTypeNotSupportedException(TimetableType.Linear, "routes");
             if (station.Routes.Contains(route))
                 throw new ArgumentException(nameof(station) + " is already on route " + route);
             
@@ -423,7 +423,7 @@ namespace FPLedit.Shared
             get
             {
                 if (Type == TimetableType.Linear)
-                    throw new NotSupportedException("Lineare Strecken haben keine Routen!");
+                    throw new TimetableTypeNotSupportedException(TimetableType.Linear, "routes");
 
                 var junctions = Stations.Where(s => s.Routes.Count() > 1);
                 var rids = junctions.SelectMany(s => s.Routes).ToList();

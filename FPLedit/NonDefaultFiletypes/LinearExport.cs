@@ -15,9 +15,9 @@ namespace FPLedit.NonDefaultFiletypes
         public bool Export(Timetable tt, Stream filename, IPluginInterface pluginInterface, string[] flags = null)
         {
             if (tt.Type == TimetableType.Linear)
-                throw new Exception("Der Fahrplan ist bereits ein Linear-Fahrplan");
+                throw new TimetableTypeNotSupportedException(TimetableType.Linear, "convert to linear");
             if (tt.GetRoutes().Count() != 1)
-                throw new Exception("Der Fahrplan hat mehr als eine oder keine Strecke");
+                throw new NotSupportedException("Der Fahrplan hat mehr als eine oder keine Strecke");
 
             var clone = tt.Clone();
 

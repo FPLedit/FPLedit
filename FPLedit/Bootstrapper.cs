@@ -110,7 +110,7 @@ namespace FPLedit
         public void RestoreTimetable(object backupHandle)
         {
             if (!timetableBackup.TryGetValue(backupHandle, out Timetable backupTt))
-                throw new Exception("Invalid timetable backup handle!");
+                throw new ArgumentException(nameof(backupHandle) + " is invalid!");
             FileHandler.Timetable = backupTt;
             ClearBackup(backupHandle);
         }

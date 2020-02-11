@@ -12,7 +12,7 @@ namespace FPLedit.Shared
 
         public StationsList() : base("jTrainGraph_stations", null) // Root without parent
         {
-            throw new NotSupportedException("Generieren von Streckendateien nicht möglich!");
+            throw new InvalidOperationException("Generieren von Streckendateien nicht möglich!");
         }
 
         public StationsList(XMLEntity en) : base(en, null) // Root without parent

@@ -43,7 +43,7 @@ namespace FPLedit.Shared
                 case FilterType.EndsWidth:
                     return negate ^ s.EndsWith(rest);
                 default:
-                    throw new Exception("Unbekannter Regel-Typ: " + Pattern);
+                    throw new FormatException("Unbekannter Regel-Typ: " + Pattern);
             }
         }
 

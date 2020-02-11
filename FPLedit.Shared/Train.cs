@@ -36,7 +36,7 @@ namespace FPLedit.Shared
         public void AddAllArrDeps(IEnumerable<Station> path)
         {
             if (_parent.Type != TimetableType.Network)
-                throw new Exception("Lineare Fahrpläne haben keine Laufwege!");
+                throw new TimetableTypeNotSupportedException(TimetableType.Linear, "AddAllArrDeps of path");
             foreach (var sta in path)
             {
                 var ardp = new ArrDep(_parent)
@@ -50,7 +50,7 @@ namespace FPLedit.Shared
         public void AddLinearArrDeps()
         {
             if (_parent.Type == TimetableType.Network)
-                throw new Exception("Bei Netzwerk-Fahrplänen nicht möglich!");
+                throw new TimetableTypeNotSupportedException(TimetableType.Network, "Add linear ArrDeps");
             foreach (var sta in _parent.Stations)
                 AddArrDep(sta, Timetable.LINEAR_ROUTE_ID);
         }
@@ -210,9 +210,9 @@ namespace FPLedit.Shared
         public Train(TrainDirection dir, Timetable tt) : base(dir.ToString(), tt)
         {
             if (tt.Type == TimetableType.Network && dir != TrainDirection.tr)
-                throw new NotSupportedException("Netzwerk-Fahrpläne haben keine gerichteten Züge");
+                throw new TimetableTypeNotSupportedException(TimetableType.Network, "trains with direction");
             if (tt.Type == TimetableType.Linear && dir == TrainDirection.tr)
-                throw new NotSupportedException("Lineare Fahrpläne haben haben nur gerichtete Züge");
+                throw new TimetableTypeNotSupportedException(TimetableType.Linear, "trains without direction");
         }
 
         public Train(XMLEntity en, Timetable tt) : base(en, tt)

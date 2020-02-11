@@ -59,15 +59,15 @@ namespace FPLedit.Shared
             get
             {
                 if (_parent.Type == TimetableType.Linear)
-                    throw new NotSupportedException("Lineare Strecken haben keine Bahnhofs-Ids");
+                    throw new TimetableTypeNotSupportedException(TimetableType.Linear, "station ids");
                 return GetAttribute<int>("fpl-id");
             }
             internal set
             {
                 if (_parent.Type == TimetableType.Linear)
-                    throw new NotSupportedException("Lineare Strecken haben keine Bahnhofs-Ids!");
+                    throw new TimetableTypeNotSupportedException(TimetableType.Linear, "station ids");
                 if (GetAttribute<string>("fpl-id") != null)
-                    throw new NotSupportedException("Station hat bereits eine Id!");
+                    throw new InvalidOperationException("Station hat bereits eine Id!");
                 SetAttribute("fpl-id", value.ToString());
             }
         }
@@ -86,7 +86,7 @@ namespace FPLedit.Shared
             private set
             {
                 if (_parent.Type == TimetableType.Linear)
-                    throw new NotSupportedException("Lineare Strecken haben keine Routen-Ids");
+                    throw new TimetableTypeNotSupportedException(TimetableType.Linear, "route ids");
                 SetAttribute("fpl-rt", string.Join(",", value));
             }
         }
