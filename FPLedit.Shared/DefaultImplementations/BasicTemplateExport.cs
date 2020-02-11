@@ -37,7 +37,10 @@ namespace FPLedit.Shared.DefaultImplementations
         public bool Export(Timetable tt, string filename, IPluginInterface pluginInterface, string[] flags = null)
         {
             using (var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.Write))
+            {
+                stream.SetLength(0);
                 return Export(tt, stream, pluginInterface, flags);
+            }
         }
     }
 }
