@@ -30,12 +30,13 @@ namespace FPLedit.Shared.Tests
                         });
                     }
 
-                    tt.AddStation(sta, i);
-                    
                     if (j == 1 && i > 0)
                         tt.AddRoute(branchS, sta, 0f, 1f);
                     else
+                    {
+                        tt.AddStation(sta, i);
                         sta.Positions.SetPosition(i, j);
+                    }
                 }
             }
         }

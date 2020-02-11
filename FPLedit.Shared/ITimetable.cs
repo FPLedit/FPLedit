@@ -23,7 +23,7 @@ namespace FPLedit.Shared
         void StationAddRoute(Station sta, int route);
         void StationRemoveRoute(Station sta, int route);
         int AddRoute(Station exisitingStartStation, Station newStation, float newStartPosition, float newPosition);
-        void JoinRoutes(int route, Station sta2, float newKm);
+        void JoinRoutes(int route, Station station, float newKm);
         Route GetRoute(int index);
         Route[] GetRoutes();
         bool RouteConnectsDirectly(int routeToCheck, Station sta1, Station sta2);

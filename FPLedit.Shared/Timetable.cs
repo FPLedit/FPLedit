@@ -192,18 +192,27 @@ namespace FPLedit.Shared
 
         #region Hilfsmethoden für andere Entitäten
 
+        /// <summary>
+        /// This method adds a non-existent Station to an existing route in this timetable.
+        /// </summary>
+        /// <param name="sta"></param>
+        /// <param name="route"></param>
         public void AddStation(Station sta, int route)
         {
             sta._parent = this;
 
-            // Neue Id an Station vergeben
             if (Type == TimetableType.Network)
-                sta.Id = ++nextStaId;
+            {
+                if (sta.GetAttribute<string>("fpl-id") != null)
+                    throw new ArgumentException(nameof(sta) + "has already been registered!");
+                sta.Id = ++nextStaId; // Neue Id an Station vergeben
+            }
 
             stations.Add(sta);
             if (Type == TimetableType.Linear)
             {
-                route = LINEAR_ROUTE_ID;
+                if (route != LINEAR_ROUTE_ID)
+                    throw new NotSupportedException("Lineare Strecken haben keine Route-Ids");
                 stations = GetStationsOrderedByDirection();
                 var idx = stations.IndexOf(sta); // Index vorläufig ermitteln
 
@@ -231,6 +240,10 @@ namespace FPLedit.Shared
                 t.AddArrDep(sta, route);
         }
 
+        /// <summary>
+        /// This method removes the given Station from this timetable instance.
+        /// </summary>
+        /// <param name="sta"></param>
         public void RemoveStation(Station sta)
         {
             foreach (var train in Trains)
@@ -285,7 +298,7 @@ namespace FPLedit.Shared
             tElm.Children.Remove(tra.XMLEntity);
         }
 
-        public void InternalRenameAllTrainTracksAtStation(Station sta, string oldTrackName, string newTrackName)
+        public void _InternalRenameAllTrainTracksAtStation(Station sta, string oldTrackName, string newTrackName)
         {
             foreach (var tra in Trains)
             {
@@ -313,7 +326,7 @@ namespace FPLedit.Shared
         private Dictionary<int, Route> routeCache;
 
         /// <summary>
-        /// This helper function has not to be called when <see cref="AddStation"/> has already been called with this staion & route;
+        /// This function adds an additional new route to an already added station.
         /// </summary>
         /// <param name="sta"></param>
         /// <param name="route"></param>
@@ -326,7 +339,6 @@ namespace FPLedit.Shared
         private void RebuildRouteCache(int route)
         {
             //routeCache[route] = GetRoute();
-            //throw new NotImplementedException();
         }
 
         public void StationRemoveRoute(Station sta, int route)
@@ -335,18 +347,28 @@ namespace FPLedit.Shared
                 RebuildRouteCache(route);
         }
 
-        // "Eröffnet" eine neue Strecke zwischen zwei Bahnhöfen
+        /// <summary>
+        /// Adds a new route between <paramref name="exisitingStartStation"/> and <paramref name="newStation"/>. <paramref name="newStation"/> has to be a new station not added to the timetable yet.
+        /// It will create a new route containing only <paramref name="exisitingStartStation"/> @position <paramref name="newStartPosition"/> and <paramref name="newStation"/> @position <paramref name="newPosition"/>
+        /// It will also add <paramref name="newStation"/> to the timetable.
+        /// </summary>
+        /// <param name="exisitingStartStation"></param>
+        /// <param name="newStation">This station has to be "plain", e.g. have no routes & no associated positions.</param>
+        /// <param name="newStartPosition"></param>
+        /// <param name="newPosition"></param>
+        /// <returns>The index of the newly added route.</returns>
+        /// <exception cref="NotSupportedException">If called on a linear timetable.</exception>
         public int AddRoute(Station exisitingStartStation, Station newStation, float newStartPosition, float newPosition)
         {
-            //TODO: What happens when this connection already exists?
-            //TODO: What happens when newStation is already registered?
-            //TODO: Add station.
             if (Type == TimetableType.Linear)
                 throw new NotSupportedException("Lineare Strecken haben keine Routen!");
+            if (newStation.Routes.Length > 0)
+                throw new ArgumentException(nameof(newStation) + " has already some routes and is not plain.");
+            
             var idx = ++nextRtId;
 
             StationAddRoute(exisitingStartStation, idx);
-            StationAddRoute(newStation, idx);
+            AddStation(newStation, idx); // this will call StationAddRoute.
 
             exisitingStartStation.Positions.SetPosition(idx, newStartPosition);
             newStation.Positions.SetPosition(idx, newStartPosition);
@@ -378,13 +400,22 @@ namespace FPLedit.Shared
             return new Route(index, stas);
         }
 
-        public void JoinRoutes(int route, Station sta2, float newKm)
+        /// <summary>
+        /// Connects an alredy existing station with another route to create circular networks.
+        /// </summary>
+        /// <param name="route">The pre-existing route to be added to the stations.</param>
+        /// <param name="station"></param>
+        /// <param name="newKm">The new position of <paramref name="station"/> on <paramref name="route"/>.</param>
+        /// <exception cref="NotSupportedException">If called on a linear timetable.</exception>
+        public void JoinRoutes(int route, Station station, float newKm)
         {
-            //TODO: What happens when this connection already exists?
             if (Type == TimetableType.Linear)
                 throw new NotSupportedException("Lineare Strecken haben keine Routen!");
-            StationAddRoute(sta2, route);
-            sta2.Positions.SetPosition(route, newKm);
+            if (station.Routes.Contains(route))
+                throw new ArgumentException(nameof(station) + " is already on route " + route);
+            
+            StationAddRoute(station, route);
+            station.Positions.SetPosition(route, newKm);
         }
 
         public bool HasRouteCycles

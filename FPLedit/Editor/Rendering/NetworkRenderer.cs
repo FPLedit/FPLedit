@@ -282,7 +282,6 @@ namespace FPLedit.Editor.Rendering
         {
             mode = Modes.Normal;
             var rtIdx = tt.AddRoute(sta, tmp_sta, 0, tmp_km);
-            tt.AddStation(tmp_sta, rtIdx); //TODO: Remove need to call this in model. Should be handled by AddRoute.
             handler.WriteStapos(tt, stapos);
             tmp_sta = null;
 

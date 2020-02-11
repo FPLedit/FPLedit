@@ -21,7 +21,7 @@ namespace FPLedit.NonDefaultFiletypes
                 var list = new StationsList(en);
                 var tt = new Timetable(TimetableType.Linear);
                 foreach (var i in list.Stations)
-                    tt.AddStation(i, 0);
+                    tt.AddStation(i, Timetable.LINEAR_ROUTE_ID);
                 return tt;
             }
             catch (Exception ex)

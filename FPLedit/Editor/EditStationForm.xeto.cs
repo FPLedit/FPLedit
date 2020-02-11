@@ -159,7 +159,7 @@ namespace FPLedit.Editor
             foreach (var track in trackStation.Tracks)
                 Station.Tracks.Add(track);
             foreach (var rename in stationRenderer.TrackRenames)
-                Station._parent.InternalRenameAllTrainTracksAtStation(Station, rename.Key, rename.Value);
+                Station._parent._InternalRenameAllTrainTracksAtStation(Station, rename.Key, rename.Value);
 
             Close(DialogResult.Ok);
         }
