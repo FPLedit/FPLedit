@@ -1,15 +1,14 @@
 ﻿using Eto.Drawing;
-using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FPLedit.Editor.Rendering
+namespace FPLedit.Shared.Rendering
 {
     /// <summary>
-    /// Manages the display position for station rendering in <see cref="NetworkRenderer"/>.
+    /// Manages the display position for station rendering.
     /// </summary>
-    internal sealed class StaPosHandler
+    public sealed class StaPosHandler
     {
         private Point GetPoint(Station sta)
         {

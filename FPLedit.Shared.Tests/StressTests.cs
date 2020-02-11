@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using Eto.Drawing;
+using FPLedit.Shared.Rendering;
 using NUnit.Framework;
 
 namespace FPLedit.Shared.Tests
@@ -11,6 +14,8 @@ namespace FPLedit.Shared.Tests
         {
             // this should not fail
             Timetable tt = new Timetable(TimetableType.Network);
+            var handler = new StaPosHandler();
+            Dictionary<Station, Point> stapos = new Dictionary<Station, Point>();
             var rand = new Random();
             Station branchS = null;
             for (int i = 0; i < 2000; i++)
@@ -37,8 +42,10 @@ namespace FPLedit.Shared.Tests
                         tt.AddStation(sta, i);
                         sta.Positions.SetPosition(i, j);
                     }
+                    stapos.Add(sta, new Point(j * 70, i * 70));
                 }
             }
+            handler.WriteStapos(tt, stapos);
         }
     }
 }

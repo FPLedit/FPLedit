@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using FPLedit.Shared.Rendering;
 
 namespace FPLedit.Editor
 {
@@ -110,7 +111,7 @@ namespace FPLedit.Editor
 
                     if (pluginInterface.Timetable.Type == TimetableType.Network)
                     {
-                        var handler = new Rendering.StaPosHandler();
+                        var handler = new StaPosHandler();
                         handler.SetMiddlePos(route, sta, pluginInterface.Timetable);
                     }
 

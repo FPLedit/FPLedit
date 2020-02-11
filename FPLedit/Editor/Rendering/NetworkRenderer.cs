@@ -139,7 +139,7 @@ namespace FPLedit.Editor.Rendering
             panels.Clear();
 
             e.Graphics.TranslateTransform(_pan);
-            DrawNetwork(e.Graphics);
+            DrawNetwork(e.Graphics, - _pan, - _pan + Bounds.Size);
             e.Graphics.TranslateTransform(-_pan);
 
             // Draw Status strings & border on top of network
@@ -150,10 +150,12 @@ namespace FPLedit.Editor.Rendering
             base.OnPaint(e);
         }
 
-        private void DrawNetwork(Graphics g)
+        private void DrawNetwork(Graphics g, PointF leftTop, PointF bottomRight)
         {
             if (routes == null || routes.Length == 0)
                 return;
+            
+            Rectangle rec = new Rectangle((Point)leftTop, (Point)bottomRight);
 
             Station lastSta = null;
             foreach (var r in routes)
@@ -165,45 +167,56 @@ namespace FPLedit.Editor.Rendering
                     var p = OFFSET + pos;
                     var x = OFFSET_X + pos.X;
                     var y = OFFSET_Y + pos.Y;
+                    bool doRender = rec.Contains(x, y);
 
-                    g.SaveTransform();
-                    g.TranslateTransform(x + 6, y + 7);
-                    g.RotateTransform(60);
-
-                    var text = sta.SName + " (";
-                    foreach (var ri in sta.Routes)
+                    // Render text only when it is (reasonably) inside viewport
+                    if (doRender || rec.Intersects(new Rectangle(p, p + new Point(500, 500))))
                     {
-                        var km = sta.Positions.GetPosition(ri).Value.ToString("0.0");
-                        if (ri == SelectedRoute && sta.Routes.Length > 1)
-                            km = "▶" + km;
-                        text += km + "|";
+                        var text = sta.SName + " (";
+                        foreach (var ri in sta.Routes)
+                        {
+                            var km = sta.Positions.GetPosition(ri).Value.ToString("0.0");
+                            if (ri == SelectedRoute && sta.Routes.Length > 1)
+                                km = "▶" + km;
+                            text += km + "|";
+                        }
+
+                        text = text.Substring(0, text.Length - 1) + ")";
+                        
+                        g.SaveTransform();
+                        g.TranslateTransform(x + 6, y + 7);
+                        g.RotateTransform(60);
+                        g.DrawText(font, systemTextColor, new Point(0, 0), text);
+                        g.RestoreTransform();
                     }
-                    text = text.Substring(0, text.Length - 1) + ")";
-                    g.DrawText(font, systemTextColor, new Point(0, 0), text);
 
-                    g.RestoreTransform();
-
-                    var tPen = GetLinePen(r.Index, sta, lastSta);
-                    if (lastP.HasValue)
+                    if (lastP.HasValue && (rec.Intersects(new Rectangle(OFFSET + lastP.Value, p)) || rec.Intersects(new Rectangle(p, OFFSET + lastP.Value))))
+                    {
+                        var tPen = GetLinePen(r.Index, sta, lastSta);
                         g.DrawLine(tPen, p, OFFSET + lastP.Value);
+                    }
+
                     lastP = pos;
                     lastSta = sta;
 
-                    var panelColor = _highlightedPath.ContainsStation(sta) ? Colors.Red : Colors.Gray;
-                    RenderBtn<Station> args = panels.FirstOrDefault(pa => pa.Tag == sta);
-                    if (args == null)
+                    if (doRender)
                     {
-                        args = new RenderBtn<Station>(sta, new Point(x - 5, y - 5), new Size(10, 10), panelColor);
-                        panels.Add(args);
-                        // Wire events
-                        switch (mode)
+                        var panelColor = _highlightedPath.ContainsStation(sta) ? Colors.Red : Colors.Gray;
+                        RenderBtn<Station> args = panels.FirstOrDefault(pa => pa.Tag == sta);
+                        if (args == null)
                         {
-                            case Modes.Normal: ApplyNormalMode(args, sta); break;
-                            case Modes.AddRoute: ApplyAddMode(args, sta); break;
-                            case Modes.JoinRoutes: ApplyJoinMode(args, sta); break;
+                            args = new RenderBtn<Station>(sta, new Point(x - 5, y - 5), new Size(10, 10), panelColor);
+                            panels.Add(args);
+                            // Wire events
+                            switch (mode)
+                            {
+                                case Modes.Normal: ApplyNormalMode(args, sta); break;
+                                case Modes.AddRoute: ApplyAddMode(args, sta); break;
+                                case Modes.JoinRoutes: ApplyJoinMode(args, sta); break;
+                            }
                         }
+                        args.BackgroundColor = panelColor;
                     }
-                    args.BackgroundColor = panelColor;
                 }
             }
 
@@ -322,7 +335,7 @@ namespace FPLedit.Editor.Rendering
             ReloadTimetable();
         }
 
-        public void AbortAddStation()
+        private void AbortAddStation()
         {
             if (tmp_sta == null) // Nicht benötigt
                 return;

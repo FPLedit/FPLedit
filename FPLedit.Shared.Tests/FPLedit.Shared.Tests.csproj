@@ -13,6 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\FPLedit.Shared.Rendering\FPLedit.Shared.Rendering.csproj" />
       <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj" />
     </ItemGroup>
 

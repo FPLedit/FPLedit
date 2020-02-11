@@ -5,6 +5,7 @@ using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FPLedit.Shared.Rendering;
 
 namespace FPLedit.Editor.Rendering
 {
