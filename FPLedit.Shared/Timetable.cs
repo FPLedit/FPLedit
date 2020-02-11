@@ -167,17 +167,18 @@ namespace FPLedit.Shared
             UpgradeMessage = string.Join(Environment.NewLine, upgradeMessages);
             if (UpgradeMessage == "")
                 UpgradeMessage = null;
+            
+            // Finally initialize route cache structure
+            routeCache = GetRoutes().ToDictionary(r => r.Index, r => r);
         }
 
         public List<Station> GetStationsOrderedByDirection(TrainDirection direction = TrainDirection.ti)
         {
-            float LinearOrder(Station s) => s.Positions.GetPosition(LINEAR_ROUTE_ID).Value;
-
             if (Type == TimetableType.Network)
                 throw new TimetableTypeNotSupportedException(TimetableType.Network, "direction");
             return (direction == TrainDirection.ta
-                ? Stations.OrderByDescending(LinearOrder)
-                : Stations.OrderBy(LinearOrder)).ToList();
+                ? GetRoute(LINEAR_ROUTE_ID).Stations.Reverse()
+                : GetRoute(LINEAR_ROUTE_ID).Stations).ToList();
         }
 
         public string GetLineName(TrainDirection direction)
@@ -238,6 +239,8 @@ namespace FPLedit.Shared
             // Auch bei allen Zügen hinzufügen
             foreach (var t in Trains)
                 t.AddArrDep(sta, route);
+            
+            RebuildRouteCache(route);
         }
 
         /// <summary>
@@ -250,7 +253,8 @@ namespace FPLedit.Shared
                 train.RemoveArrDep(sta);
 
             var needsCleanup = stations.First() == sta || stations.Last() == sta;
-
+            var routes = sta.Routes;
+            
             sta._parent = null;
             stations.Remove(sta);
             sElm.Children.Remove(sta.XMLEntity);
@@ -265,6 +269,10 @@ namespace FPLedit.Shared
             // Es können verwaiste Routen entstehen
             if (Type == TimetableType.Network)
                 RemoveOrphanedRoutes();
+            
+            // Rebuild route cache
+            foreach (var route in routes)
+                RebuildRouteCache(route);
         }
 
         public Station GetStationById(int id)
@@ -338,7 +346,10 @@ namespace FPLedit.Shared
 
         private void RebuildRouteCache(int route)
         {
-            //routeCache[route] = GetRoute();
+            if (routeCache == null)
+                return;
+            var stas = Stations.Where(s => s.Routes.Contains(route));
+            routeCache[route] = new Route(route, stas);
         }
 
         public void StationRemoveRoute(Station sta, int route)
@@ -372,11 +383,15 @@ namespace FPLedit.Shared
 
             exisitingStartStation.Positions.SetPosition(idx, newStartPosition);
             newStation.Positions.SetPosition(idx, newStartPosition);
+            
+            RebuildRouteCache(idx); // Create cache entry
             return idx;
         }
 
         public Route[] GetRoutes()
         {
+            if (routeCache != null && routeCache.Any())
+                return routeCache.Select(kvp => kvp.Value).ToArray();
             if (Type == TimetableType.Network)
             {
                 var routesJoin = Stations.SelectMany(s => s.Routes.Select(r => new {r, s}))
@@ -396,8 +411,13 @@ namespace FPLedit.Shared
             if (Type == TimetableType.Linear && index != LINEAR_ROUTE_ID)
                 throw new TimetableTypeNotSupportedException(TimetableType.Linear, "routes");
 
-            var stas = Stations.Where(s => s.Routes.Contains(index));
-            return new Route(index, stas);
+            if (routeCache != null && routeCache.TryGetValue(index, out var route))
+                return route;
+            RebuildRouteCache(index);
+            
+            if (routeCache != null && routeCache.TryGetValue(index, out var route2))
+                return route2;
+            return new Route(index, Array.Empty<Station>());
         }
 
         /// <summary>
@@ -416,6 +436,7 @@ namespace FPLedit.Shared
             
             StationAddRoute(station, route);
             station.Positions.SetPosition(route, newKm);
+            RebuildRouteCache(route);
         }
 
         public bool HasRouteCycles
