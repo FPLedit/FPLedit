@@ -27,8 +27,8 @@ namespace FPLedit
             manager = mg;
             this.restartable = restartable;
 
-            var enabled_plgs = manager.Plugins.Where(p => p.Enabled);
-            var disabled_plgs = manager.Plugins.Where(p => !p.Enabled);
+            var enabled_plgs = manager.Plugins.Where(p => p.Enabled && !p.IsBuiltin);
+            var disabled_plgs = manager.Plugins.Where(p => !p.Enabled && !p.IsBuiltin);
 
             foreach (var plg in enabled_plgs)
                 enabledListBox.Items.Add(new ListItem { Text = plg.Name, Tag = plg });

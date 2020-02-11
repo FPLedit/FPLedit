@@ -7,6 +7,8 @@ namespace FPLedit.Extensibility
     internal sealed class PluginInfo
     {
         private readonly IPlugin plugin;
+        
+        public bool IsBuiltin { get; }
 
         public bool Enabled { get; set; }
 
@@ -22,11 +24,12 @@ namespace FPLedit.Extensibility
 
         public SecurityContext SecurityContext { get; }
 
-        public PluginInfo(IPlugin plugin, SecurityContext securityContext)
+        public PluginInfo(IPlugin plugin, SecurityContext securityContext, bool isBuiltin = false)
         {
             FullName = plugin.GetType().FullName;
             ExtractPluginInformation(plugin.GetType());
             this.plugin = plugin;
+            this.IsBuiltin = isBuiltin;
             Enabled = true;
             SecurityContext = securityContext;
         }

@@ -120,7 +120,7 @@ namespace FPLedit.Extensibility
         {
             if (pluginsInitialized)
                 throw new InvalidOperationException("Extensions have already been initialized!");
-            plugins.Insert(position, new PluginInfo(plugin, SecurityContext.Official));
+            plugins.Insert(position, new PluginInfo(plugin, SecurityContext.Official, isBuiltin: true));
             if (plugin is IDisposable d)
                 disposablePlugins.Add(d); // Order does not matter here.
         }
