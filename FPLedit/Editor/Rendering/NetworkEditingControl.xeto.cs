@@ -119,9 +119,8 @@ namespace FPLedit.Editor.Rendering
                     {
                         var handler = new StaPosHandler();
                         handler.SetMiddlePos(routesDropDown.SelectedRoute, sta, pluginInterface.Timetable);
-                        pluginInterface.Timetable.StationAddRoute(sta, networkRenderer.SelectedRoute);
                     }
-                    pluginInterface.Timetable.AddStation(sta, routesDropDown.SelectedRoute);
+                    pluginInterface.Timetable.AddStation(sta, networkRenderer.SelectedRoute);
                     pluginInterface.SetUnsaved();
                     ReloadTimetable();
                 }

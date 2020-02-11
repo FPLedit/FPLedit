@@ -91,18 +91,24 @@ namespace FPLedit.Shared
             }
         }
         
-        internal void _InternalAddRoute(int route)
+        internal bool _InternalAddRoute(int route)
         {
+            if (Routes.Contains(route)) 
+                return false;
             var list = Routes.ToList();
             list.Add(route);
             Routes = list.ToArray();
+            return true;
         }
         
-        internal void _InternalRemoveRoute(int route)
+        internal bool _InternalRemoveRoute(int route)
         {
+            if (Routes.Contains(route)) 
+                return false;
             var list = Routes.ToList();
             list.Remove(route);
             Routes = list.ToArray();
+            return true;
         }
     }
 }
