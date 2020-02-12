@@ -15,12 +15,21 @@ namespace FPLedit.Shared
 
     public static class ExportExt
     {
-        public static bool Export(this IExport exp, Timetable tt, string filename, IPluginInterface pluginInterface, string[] flags = null)
+        public static bool SafeExport(this IExport exp, Timetable tt, string filename, IPluginInterface pluginInterface, string[] flags = null)
         {
-            using (var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.Write))
+            try
             {
-                stream.SetLength(0);
-                return exp.Export(tt, stream, pluginInterface, flags);
+                using (var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.Write))
+                {
+                    stream.SetLength(0);
+                    return exp.Export(tt, stream, pluginInterface, flags);
+                }
+            }
+            catch (Exception ex)
+            {
+                pluginInterface.Logger.Error( exp.GetType().Name + ": " + ex.Message);
+                pluginInterface.Logger.LogException(ex);
+                return false;
             }
         }
     }

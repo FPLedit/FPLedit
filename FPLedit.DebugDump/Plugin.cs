@@ -63,7 +63,7 @@ namespace FPLedit.DebugDump
                     x.SetAttribute("pf", Environment.OSVersion.Platform.ToString());
 
                     clone.Children.Add(x);
-                    exp.Export(clone, fn, pluginInterface);
+                    exp.SafeExport(clone, fn, pluginInterface);
                     pluginInterface.Logger.Debug("Dump erstellt: " + fn);
 
                     var clone2 = pluginInterface.Timetable.Clone();

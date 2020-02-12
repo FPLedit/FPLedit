@@ -7,29 +7,22 @@ using System.Xml.Linq;
 
 namespace FPLedit.NonDefaultFiletypes
 {
-    internal sealed class XMLStationsImport : IImport
+    internal sealed class XmlStationsImport : IImport
     {
         public string Filter => "Streckendateien (*.str)|*.str";
 
         public Timetable Import(Stream stream, IPluginInterface pluginInterface, ILog replaceLog = null)
         {
-            try
-            {
-                XElement el = XElement.Load(stream);
+            var xElement = XElement.Load(stream);
 
-                XMLEntity en = new XMLEntity(el);
-                var list = new StationsList(en);
-                var tt = new Timetable(TimetableType.Linear);
-                foreach (var i in list.Stations)
-                    tt.AddStation(i, Timetable.LINEAR_ROUTE_ID);
-                return tt;
-            }
-            catch (Exception ex)
-            {
-                var log = replaceLog ?? pluginInterface.Logger;
-                log.Error("XMLStationsImporter: " + ex.Message);
-                return null;
-            }
+            var xmlEntity = new XMLEntity(xElement);
+            var list = new StationsList(xmlEntity);
+            
+            var tt = new Timetable(TimetableType.Linear);
+            foreach (var i in list.Stations)
+                tt.AddStation(i, Timetable.LINEAR_ROUTE_ID);
+            
+            return tt;
         }
     }
 }

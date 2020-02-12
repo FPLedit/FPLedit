@@ -13,29 +13,20 @@ namespace FPLedit.Shared.Filetypes
 
         public Timetable Import(Stream stream, IPluginInterface pluginInterface, ILog replaceLog = null)
         {
-            try
+            var xElement = XElement.Load(stream);
+
+            var xmlEntity = new XMLEntity(xElement);
+            var tt = new Timetable(xmlEntity);
+
+            var actions = pluginInterface.GetRegistered<ITimetableInitAction>();
+            foreach (var action in actions)
             {
-                XElement el = XElement.Load(stream);
-
-                XMLEntity en = new XMLEntity(el);
-                var tt = new Timetable(en);
-
-                var actions = pluginInterface.GetRegistered<ITimetableInitAction>();
-                foreach (var action in actions)
-                {
-                    var message = action.Init(tt);
-                    if (message != null)
-                        pluginInterface.Logger.Warning(message);
-                }
-
-                return tt;
+                var message = action.Init(tt);
+                if (message != null)
+                    pluginInterface.Logger.Warning(message);
             }
-            catch (Exception ex)
-            {
-                var log = replaceLog ?? pluginInterface.Logger;
-                log.Error("XMLImporter: " + ex.Message);
-                return null;
-            }
+
+            return tt;
         }
     }
 }

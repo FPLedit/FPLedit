@@ -129,7 +129,7 @@ namespace FPLedit.Editor
                 throw new TimetableTypeNotSupportedException(TimetableType.Network, "load line file");
 
             IImport timport = new XMLImport();
-            IImport simport = new NonDefaultFiletypes.XMLStationsImport();
+            IImport simport = new NonDefaultFiletypes.XmlStationsImport();
 
             using (var ofd = new OpenFileDialog())
             {
@@ -138,7 +138,7 @@ namespace FPLedit.Editor
                 if (ofd.ShowDialog(this) == DialogResult.Ok)
                 {
                     IImport import = Path.GetExtension(ofd.FileName) == ".fpl" ? timport : simport;
-                    var ntt = import.Import(ofd.FileName, pluginInterface);
+                    var ntt = import.SafeImport(ofd.FileName, pluginInterface);
                     foreach (var station in ntt.Stations)
                         tt.AddStation(station, Timetable.LINEAR_ROUTE_ID);
                     // ntt will be destroyed by decoupling stations, do not use afterwards!

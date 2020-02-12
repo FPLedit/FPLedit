@@ -15,10 +15,20 @@ namespace FPLedit.Shared
     
     public static class ImportExt
     {
-        public static Timetable Import(this IImport imp, string filename, IPluginInterface pluginInterface, ILog replaceLog = null)
+        public static Timetable SafeImport(this IImport imp, string filename, IPluginInterface pluginInterface, ILog replaceLog = null)
         {
-            using (var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.Read))
-                return imp.Import(stream, pluginInterface, replaceLog);
+            try
+            {
+                using (var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.Read))
+                    return imp.Import(stream, pluginInterface, replaceLog);
+            }
+            catch (Exception ex)
+            {
+                var log = replaceLog ?? pluginInterface.Logger;
+                log.Error(imp.GetType().Name + ": " + ex.Message);
+                log.LogException(ex);
+                return null;
+            }
         }
     }
 }

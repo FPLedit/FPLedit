@@ -97,12 +97,12 @@ namespace FPLedit.jTrainGraphStarter
                 var sync = new TimetableRouteSync(pluginInterface.Timetable, route);
                 var rtt = sync.GetRouteTimetable(targetVersion);
                 var fn = pluginInterface.GetTemp(Guid.NewGuid().ToString() + "-route-" + route + ".fpl");
-                exporter.Export(rtt, fn, pluginInterface);
+                exporter.SafeExport(rtt, fn, pluginInterface);
 
                 StartJtg(fn, () =>
                 {
                     pluginInterface.StageUndoStep();
-                    var crtt = importer.Import(fn, pluginInterface, new SilentLogger(pluginInterface.Logger));
+                    var crtt = importer.SafeImport(fn, pluginInterface, new SilentLogger(pluginInterface.Logger));
                     sync.SyncBack(crtt);
                     pluginInterface.SetUnsaved();
                 });

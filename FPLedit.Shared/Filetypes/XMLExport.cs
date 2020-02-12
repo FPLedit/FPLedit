@@ -15,14 +15,14 @@ namespace FPLedit.Shared.Filetypes
         
         private XElement BuildNode(XMLEntity node)
         {
-            XElement elm = new XElement(node.XName);
+            var xElement = new XElement(node.XName);
             if (node.Value != null)
-                elm.SetValue(node.Value);
+                xElement.SetValue(node.Value);
             foreach (var attr in node.Attributes)
-                elm.SetAttributeValue(attr.Key, attr.Value);
+                xElement.SetAttributeValue(attr.Key, attr.Value);
             foreach (var ch in node.Children)
-                elm.Add(BuildNode(ch));
-            return elm;
+                xElement.Add(BuildNode(ch));
+            return xElement;
         }
         
         public bool Export(Timetable tt, Stream stream, IPluginInterface pluginInterface, string[] flags = null)
@@ -31,24 +31,16 @@ namespace FPLedit.Shared.Filetypes
 #if DEBUG
             debug = true;
 #endif
-            try
-            {
-                var ttElm = BuildNode(tt.XMLEntity);
+            var ttElm = BuildNode(tt.XMLEntity);
 
-                using (var sw = new StreamWriter(stream, Encoding.UTF8, 1024, true))
-                using (var writer = new XmlTextWriter(sw))
-                {
-                    if (debug)
-                        writer.Formatting = Formatting.Indented;
-                    ttElm.Save(writer);
-                }
-                return true;
-            }
-            catch (Exception ex)
+            using (var sw = new StreamWriter(stream, Encoding.UTF8, 1024, true))
+            using (var writer = new XmlTextWriter(sw))
             {
-                pluginInterface.Logger.Error("XMLExport: " + ex.Message);
-                return false;
+                if (debug)
+                    writer.Formatting = Formatting.Indented;
+                ttElm.Save(writer);
             }
+            return true;
         }
     }
 }

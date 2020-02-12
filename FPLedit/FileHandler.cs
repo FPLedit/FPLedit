@@ -83,7 +83,7 @@ namespace FPLedit
             {
                 IImport import = importers[importFileDialog.CurrentFilterIndex - 1];
                 pluginInterface.Logger.Info("Öffne Datei " + importFileDialog.FileName);
-                Timetable = import.Import(importFileDialog.FileName, pluginInterface);
+                Timetable = import.SafeImport(importFileDialog.FileName, pluginInterface);
                 if (Timetable == null)
                     return;
                 pluginInterface.Logger.Info("Datei erfolgeich geöffnet!");
@@ -103,7 +103,7 @@ namespace FPLedit
                 string filename = exportFileDialog.FileName;
 
                 pluginInterface.Logger.Info("Exportiere in Datei " + filename);
-                bool ret = export.Export(Timetable, filename, pluginInterface);
+                bool ret = export.SafeExport(Timetable, filename, pluginInterface);
                 if (ret == false)
                 {
                     pluginInterface.Logger.Error("Exportieren fehlgeschlagen!");
@@ -145,7 +145,7 @@ namespace FPLedit
         internal void InternalOpen(string filename)
         {
             pluginInterface.Logger.Info("Öffne Datei " + filename);
-            Timetable = open.Import(filename, pluginInterface);
+            Timetable = open.SafeImport(filename, pluginInterface);
             if (Timetable == null)
                 pluginInterface.Logger.Error("Fehler beim Öffnen der Datei!");
             else
@@ -183,7 +183,7 @@ namespace FPLedit
                 filename += ".fpl";
 
             pluginInterface.Logger.Info("Speichere Datei " + filename);
-            bool ret = save.Export(Timetable, filename, pluginInterface);
+            bool ret = save.SafeExport(Timetable, filename, pluginInterface);
             if (ret == false)
                 return;
             pluginInterface.Logger.Info("Speichern erfolgreich abgeschlossen!");
@@ -235,7 +235,7 @@ namespace FPLedit
                 if (sfd.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
                 {
                     pluginInterface.Logger.Info("Konvertiere Datei...");
-                    bool ret = exp.Export(Timetable, sfd.FileName, pluginInterface);
+                    bool ret = exp.SafeExport(Timetable, sfd.FileName, pluginInterface);
                     if (ret == false)
                         return;
                     pluginInterface.Logger.Info("Konvertieren erfolgreich abgeschlossen!");
@@ -262,7 +262,7 @@ namespace FPLedit
                 if (sfd.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
                 {
                     pluginInterface.Logger.Info("Konvertiere Datei...");
-                    bool ret = exp.Export(Timetable, sfd.FileName, pluginInterface);
+                    bool ret = exp.SafeExport(Timetable, sfd.FileName, pluginInterface);
                     if (ret == false)
                         return;
                     pluginInterface.Logger.Info("Konvertieren erfolgreich abgeschlossen!");

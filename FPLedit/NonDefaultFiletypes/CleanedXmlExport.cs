@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
+using FPLedit.Shared.Filetypes;
 
 namespace FPLedit.NonDefaultFiletypes
 {
@@ -13,7 +14,7 @@ namespace FPLedit.NonDefaultFiletypes
     {
         public string Filter => "Bereinigte Fahrplan Dateien (*.fpl)|*.fpl";
 
-        private readonly string[] node_names = new[]
+        private readonly string[] nodeNames =
         {
             "bfpl_attrs",   // Buchfahrplaneigenschaften
             "afpl_attrs",   // Aushangfahrplaneigenschaften
@@ -21,7 +22,7 @@ namespace FPLedit.NonDefaultFiletypes
         };
 
         //TODO: Better method to remove all known attributes? (yes, use attributes)
-        private readonly string[] attrs_names = new[]
+        private readonly string[] attrsNames =
         {
             "fpl-vmax",     // Höchstgeschwindigkeit
             "fpl-wl",       // Wellenlinien
@@ -32,27 +33,22 @@ namespace FPLedit.NonDefaultFiletypes
             "fpl-last",     // max. Last eines Zuges
         };
 
-        private XElement BuildNode(XMLEntity node)
+        private void ProcessEntity(XMLEntity node)
         {
-            XElement elm = new XElement(node.XName);
-            if (node.Value != null)
-                elm.SetValue(node.Value);
+            foreach (var attr in attrsNames)
+                node.RemoveAttribute(attr);
 
-            var fAttrs = node.Attributes.Where(a => !attrs_names.Contains(a.Key));
-            foreach (var attr in fAttrs)
-                elm.SetAttributeValue(attr.Key, attr.Value);
+            node.Children.RemoveAll(x => nodeNames.Contains(x.XName));
 
-            var f_nodes = node.Children.Where(c => !node_names.Contains(c.XName));
-            foreach (var ch in f_nodes)
-                elm.Add(BuildNode(ch));
-            return elm;
+            foreach (var ch in node.Children)
+                ProcessEntity(ch);
         }
 
         public bool Export(Timetable tt, Stream stream, IPluginInterface pluginInterface, string[] flags = null)
         {
             if (pluginInterface.Timetable.Type == TimetableType.Network)
             {
-                MessageBox.Show("Der aktuelle Fahrplan ist ein Netzwerk-Fahrplan. Aus diesem erweiterten Fahrplanformat können aus technischen Gründen nicht alle von FPLedit angelegten Daten gelöscht werden.");
+                MessageBox.Show("Der aktuelle Fahrplan ist ein Netzwerk-Fahrplan. Aus diesem erweiterten Fahrplanformat können aus technischen Gründen keine von FPLedit angelegten Daten gelöscht werden.");
                 return false;
             }
 
@@ -62,28 +58,10 @@ namespace FPLedit.NonDefaultFiletypes
             if (res == DialogResult.No)
                 return false;
 
-            bool debug = pluginInterface.Settings.Get<bool>("xml.indent");
-#if DEBUG
-            debug = true;
-#endif
-            try
-            {
-                var clone = tt.Clone(); // Klon zum anschließenden Verwerfen!
-                var ttElm = BuildNode(clone.XMLEntity);
+            var clone = tt.Clone(); // Klon zum anschließenden Verwerfen!
+            ProcessEntity(clone.XMLEntity);
 
-                using (var writer = new XmlTextWriter(stream, new UTF8Encoding(false)))
-                {
-                    if (debug)
-                        writer.Formatting = Formatting.Indented;
-                    ttElm.Save(writer);
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                pluginInterface.Logger.Error("XMLExport: " + ex.Message);
-                return false;
-            }
+            return new XMLExport().Export(clone, stream, pluginInterface, flags);
         }
     }
 }
