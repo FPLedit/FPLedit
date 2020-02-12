@@ -34,16 +34,11 @@ namespace FPLedit.Buchfahrplan.Forms
 
             var fntComboBox = new FontComboBox(fontComboBox, exampleLabel);
 
-            attrs = BfplAttrs.GetAttrs(tt);
-            if (attrs != null)
-            {
-                fontComboBox.Text = attrs.Font;
-                cssTextBox.Text = attrs.Css ?? "";
-                commentCheckBox.Checked = attrs.ShowComments;
-                daysCheckBox.Checked = attrs.ShowDays;
-            }
-            else
-                attrs = BfplAttrs.CreateAttrs(tt);
+            attrs = BfplAttrs.GetAttrs(tt) ?? BfplAttrs.CreateAttrs(tt);
+            fontComboBox.Text = attrs.Font ?? "";
+            cssTextBox.Text = attrs.Css ?? "";
+            commentCheckBox.Checked = attrs.ShowComments;
+            daysCheckBox.Checked = attrs.ShowDays;
 
             var tmpl = chooser.GetTemplate(tt);
             templateComboBox.SelectedValue = tmpl;

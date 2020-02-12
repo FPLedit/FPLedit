@@ -41,15 +41,10 @@ namespace FPLedit.Kursbuch.Forms
             var fntComboBox = new FontComboBox(fontComboBox, exampleLabel);
             var hefntComboBox = new FontComboBox(hefontComboBox, heexampleLabel);
 
-            attrs = KfplAttrs.GetAttrs(tt);
-            if (attrs != null)
-            {
-                fontComboBox.Text = attrs.Font;
-                hefontComboBox.Text = attrs.HeFont;
-                cssTextBox.Text = attrs.Css ?? "";
-            }
-            else
-                attrs = KfplAttrs.CreateAttrs(tt);
+            attrs = KfplAttrs.GetAttrs(tt) ?? KfplAttrs.CreateAttrs(tt);
+            fontComboBox.Text = attrs.Font;
+            hefontComboBox.Text = attrs.HeFont;
+            cssTextBox.Text = attrs.Css ?? "";
 
             setRouteNumbers = new Dictionary<int, string>();
             var col = kbsnListView.AddColumn(new TextBoxCell

@@ -4,7 +4,7 @@
   xmlns:e="clr-namespace:FPLedit.Editor;assembly=FPLedit"
   xmlns:sys="clr-namespace:System;assembly=mscorlib"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
-  Title="Fahrplandarstellung" ClientSize="550,400" Resizable="true">
+  Title="Fahrplandarstellung" ClientSize="750,400" Resizable="true">
   <TableLayout>
     <TableRow ScaleHeight="true">
       <TableCell ScaleWidth="true">

@@ -35,18 +35,13 @@ namespace FPLedit.Aushangfahrplan.Forms
             var fntComboBox = new FontComboBox(fontComboBox, exampleLabel);
             var hwfntComboBox = new FontComboBox(hwfontComboBox, hwexampleLabel);
 
-            attrs = AfplAttrs.GetAttrs(tt);
-            if (attrs != null)
-            {
-                fontComboBox.Text = attrs.Font;
-                hwfontComboBox.Text = attrs.HwFont;
-                cssTextBox.Text = attrs.Css ?? "";
-                tracksCheckBox.Checked = attrs.ShowTracks;
-            }
-            else
-                attrs = AfplAttrs.CreateAttrs(tt);
+            attrs = AfplAttrs.GetAttrs(tt) ?? AfplAttrs.CreateAttrs(tt);
+            fontComboBox.Text = attrs.Font;
+            hwfontComboBox.Text = attrs.HwFont;
+            cssTextBox.Text = attrs.Css ?? "";
+            tracksCheckBox.Checked = attrs.ShowTracks;
 
-            var tmpl = chooser.GetTemplate(tt);
+                var tmpl = chooser.GetTemplate(tt);
             templateComboBox.SelectedValue = tmpl;
 
             consoleCheckBox.Checked = settings.Get<bool>("afpl.console");
