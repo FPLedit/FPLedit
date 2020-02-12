@@ -4,35 +4,21 @@ using System.IO;
 
 namespace FPLedit.Config
 {
-    internal sealed class Settings : ISettings
+    internal sealed class Settings : ISettings, IDisposable
     {
-        private readonly ConfigFile config;
-        private readonly bool isReadonly;
+        private ConfigFile config;
+        public bool IsReadonly => config.IsReadonly;
 
-        public Settings()
+        public Settings(Stream stream)
         {
-            var path = Path.Combine(PathManager.Instance.AppDirectory, "fpledit.conf");
-
             try
             {
-                config = new ConfigFile(path);
-                var userPath = config.Get("config.path_redirect");
-                if (userPath != null && File.Exists(userPath))
-                    config = new ConfigFile(userPath);
+                config = new ConfigFile(stream, false);
             }
             catch
             {
+                config?.Dispose(); // Dispose our last try to get a config file
                 config = new ConfigFile(); // Get in-memory config-backend as we cannot read the specified files (e.g. they do exist but are not readable).
-                isReadonly = true;
-            }
-
-            try
-            {
-                config.Save(); // Try to save current config file.
-            }
-            catch
-            {
-                isReadonly = true; // We cannot use this file. Thus, we block write access to it.
             }
         }
 
@@ -58,14 +44,14 @@ namespace FPLedit.Config
         public void Remove(string key)
         {
             config.Remove(key);
-            if (!isReadonly)
+            if (!IsReadonly)
                 config.Save();
         }
 
         public void Set(string key, string value)
         {
             config.Set(key, value);
-            if (!isReadonly)
+            if (!IsReadonly)
                 config.Save();
         }
 
@@ -80,6 +66,18 @@ namespace FPLedit.Config
             var underlying = Enum.GetUnderlyingType(typeof(T));
             var x = (int)Convert.ChangeType(value, underlying);
             Set(key, x);
+        }
+
+        public void Dispose()
+        {
+            config?.Dispose();
+            config = null;
+            GC.SuppressFinalize(this);
+        }
+
+        ~Settings()
+        {
+            Dispose();
         }
     }
 }

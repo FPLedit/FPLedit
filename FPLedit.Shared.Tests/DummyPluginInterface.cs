@@ -99,6 +99,8 @@ namespace FPLedit.Shared.Tests
             this.settings = settings;
         }
 
+        public bool IsReadonly => false;
+
         public T Get<T>(string key, T defaultValue = default)
         {
             settings.TryGetValue(key, out var val);

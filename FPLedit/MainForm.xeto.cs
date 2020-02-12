@@ -71,6 +71,9 @@ namespace FPLedit
             // Now we can load extensions and templates
             Bootstrapper.ExtensionManager.InjectPlugin(new Editor.EditorPlugin(), 0);
             Bootstrapper.BootstrapExtensions();
+            
+            if (Bootstrapper.Settings.IsReadonly)
+                Bootstrapper.Logger.Warning("Die Einstellungsdatei ist nicht schreibbar. Änderungen an Programmeinstellungen werden verworfen.");
 
             InitMain();
         }

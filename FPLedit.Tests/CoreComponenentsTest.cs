@@ -1,5 +1,6 @@
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using FPLedit.Config;
 using NUnit.Framework;
 
@@ -40,10 +41,11 @@ namespace FPLedit.Tests
         [Test]
         public void SettingsTest()
         {
-            PathManager.Instance.AppFilePath = Path.GetTempFileName(); // Set root to temp
-            var settings = new Settings();
-            
-            //TODO: finish
+            using (var ms = new MemoryStream())
+            using (var settings = new Settings(ms))
+            {
+                //TODO: finish
+            }
         }
     }
     

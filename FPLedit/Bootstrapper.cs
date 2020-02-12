@@ -18,12 +18,13 @@ namespace FPLedit
 
         private readonly RegisterStore registry;
         private readonly UndoManager undo;
+        private readonly Settings settings;
         private readonly Dictionary<object, Timetable> timetableBackup;
 
         public UpdateManager Update { get; }
         public FileHandler FileHandler { get; }
         public ExtensionManager ExtensionManager { get; }
-        public ISettings Settings { get; }
+        public ISettings Settings => settings;
         public ITemplateManager TemplateManager { get; private set; }
         public ILog Logger { get; private set; }
         public dynamic RootForm { get; }
@@ -42,10 +43,12 @@ namespace FPLedit
         {
             timetableBackup = new Dictionary<object, Timetable>();
             
+            var configPath = Path.Combine(PathManager.Instance.AppDirectory, "fpledit.conf");
+            
             RootForm = rootForm;
             Menu = rootForm.Menu;
             HelpMenu = rootForm.Menu.GetItem(MainForm.LocHelpMenu);
-            Settings = new Settings();
+            settings = new Settings(GetConfigStream(configPath));
             registry = new RegisterStore();
             Update = new UpdateManager(Settings);
             undo = new UndoManager();
@@ -154,6 +157,46 @@ namespace FPLedit
         
         #endregion
         
+        #region Config stream initialization
+        
+        private FileStream GetFileStreamWithMaxPermissions(string filename)
+        {
+            try
+            {
+                // try getting write access
+                return File.Open(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read);
+            }
+            catch
+            {
+                try
+                {
+                    return File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite); // try again with just read access
+                }
+                catch
+                {
+                }
+            }
+            return null;
+        }
+
+        private Stream GetConfigStream(string path)
+        {
+            var stream = GetFileStreamWithMaxPermissions(path); // try to open normal settings file
+            var config = new ConfigFile(stream, true); // create a temporay ConfigFile
+            var userPath = config.Get("config.path_redirect");
+            config.Dispose();
+            if (userPath != null && File.Exists(userPath))
+            {
+                stream.Close(); // We don't need the old stream any more.
+                stream.Dispose();
+                stream = GetFileStreamWithMaxPermissions(userPath);
+            }
+
+            return stream;
+        }
+        
+        #endregion
+        
         public void InjectLogger(ILog logger)
         {
             Logger = logger;
@@ -163,6 +206,7 @@ namespace FPLedit
         {
             FileHandler?.Dispose();
             registry?.Dispose();
+            settings?.Dispose();
         }
     }
 }

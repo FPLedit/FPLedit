@@ -6,34 +6,20 @@ using System.Text;
 
 namespace FPLedit.Config
 {
-    //TODO: One loophole remaining: the config file could be made resad-only after openening FPLedit.
-    //TODO: Concurrency when two or more instances are open?
     internal sealed class ConfigFile : IDisposable
     {
         private readonly List<ILine> lines;
 
-        private readonly FileStream stream;
+        private Stream stream;
+        private readonly bool leaveOpen;
 
-        public ConfigFile(string filename)
+        public bool IsReadonly => stream == null || !stream.CanWrite;
+
+        public ConfigFile(Stream stream, bool leaveOpen)
         {
             lines = new List<ILine>();
-
-            try
-            {
-                // try getting write access
-                stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read);
-            }
-            catch
-            {
-                try
-                {
-                    // try again with just read access
-                    stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
-                }
-                catch
-                {
-                }
-            }
+            this.stream = stream;
+            this.leaveOpen = leaveOpen;
 
             Parse();
         }
@@ -47,6 +33,9 @@ namespace FPLedit.Config
         {
             if (stream == null)
                 return;
+
+            if (stream.Position != 0L && stream.CanSeek)
+                stream.Seek(0, SeekOrigin.Begin);
 
             using (var sr = new StreamReader(stream, Encoding.UTF8, false, 1024, true))
             {
@@ -132,21 +121,21 @@ namespace FPLedit.Config
             public string Output => "";
         }
 
-        private void Dispose(bool disposing)
-        {
-            if (disposing)
-                stream?.Dispose();
-        }
-
         public void Dispose()
         {
-            Dispose(true);
+            if (!leaveOpen)
+            {
+                stream?.Close();
+                stream?.Dispose();
+                stream = null;
+            }
+
             GC.SuppressFinalize(this);
         }
 
         ~ConfigFile()
         {
-            Dispose(false);
+            Dispose();
         }
     }
 }

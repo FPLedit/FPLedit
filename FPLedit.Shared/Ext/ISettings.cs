@@ -7,6 +7,8 @@ namespace FPLedit.Shared
 {
     public interface ISettings
     {
+        bool IsReadonly { get; }
+        
         T Get<T>(string key, T defaultValue = default);
 
         T GetEnum<T>(string key, T defaultValue = default) where T : Enum;
