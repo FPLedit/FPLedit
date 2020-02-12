@@ -2,23 +2,42 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace FPLedit.Config
 {
     //TODO: One loophole remaining: the config file could be made resad-only after openening FPLedit.
-    internal sealed class ConfigFile
+    //TODO: Concurrency when two or more instances are open?
+    internal sealed class ConfigFile : IDisposable
     {
         private readonly List<ILine> lines;
-        private readonly string filename;
+
+        private readonly FileStream stream;
 
         public ConfigFile(string filename)
         {
             lines = new List<ILine>();
-            this.filename = filename;
+
+            try
+            {
+                // try getting write access
+                stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read);
+            }
+            catch
+            {
+                try
+                {
+                    // try again with just read access
+                    stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
+                }
+                catch
+                {
+                }
+            }
 
             Parse();
         }
-        
+
         public ConfigFile()
         {
             lines = new List<ILine>();
@@ -26,18 +45,21 @@ namespace FPLedit.Config
 
         private void Parse()
         {
-            if (!File.Exists(filename))
+            if (stream == null)
                 return;
 
-            var ll = File.ReadAllLines(filename);
-            foreach (var l in ll)
+            using (var sr = new StreamReader(stream, Encoding.UTF8, false, 1024, true))
             {
-                if (l.Trim() == "")
-                    lines.Add(new EmptyLine());
-                else if (l.Trim().StartsWith("#"))
-                    lines.Add(new CommentLine() {Comment = l});
-                else
-                    lines.Add(new ValueLine(l));
+                string line;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    if (line.Trim() == "")
+                        lines.Add(new EmptyLine());
+                    else if (line.Trim().StartsWith("#"))
+                        lines.Add(new CommentLine() {Comment = line});
+                    else
+                        lines.Add(new ValueLine(line));
+                }
             }
         }
 
@@ -64,10 +86,12 @@ namespace FPLedit.Config
 
         public void Save()
         {
-            if (filename == null)
+            if (stream == null)
                 return; // We hav no backing file.
             var text = string.Join("\n", lines.Select(l => l.Output));
-            File.WriteAllText(filename, text);
+            stream.SetLength(0);
+            using (var sw = new StreamWriter(stream, Encoding.UTF8, 1024, true))
+                sw.Write(text);
         }
 
         private interface ILine
@@ -106,6 +130,23 @@ namespace FPLedit.Config
         private class EmptyLine : ILine
         {
             public string Output => "";
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+                stream?.Dispose();
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        ~ConfigFile()
+        {
+            Dispose(false);
         }
     }
 }
