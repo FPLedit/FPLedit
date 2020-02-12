@@ -3,6 +3,7 @@ using FPLedit.Config;
 using FPLedit.CrashReporting;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 
 namespace FPLedit
@@ -23,7 +24,7 @@ namespace FPLedit
         private static void Main(string[] args)
         {
             PathManager.Instance.AppFilePath = Assembly.GetExecutingAssembly().Location;
-            
+
             OptionsParser.Init(args);
 
             App = new Application();
@@ -36,6 +37,18 @@ namespace FPLedit
 
             mainForm = new MainForm();
             crashReporter = mainForm.CrashReporter;
+            
+            // Close all other windows when attempting to close main form.
+            mainForm.Closing += (s, e) =>
+            {
+                var windows = App.Windows.ToArray();
+                foreach (var window in windows)
+                {
+                    if (window.Visible && window != mainForm)
+                        window.Close();
+                }
+            };
+            
             App.Run(mainForm);
         }
 
