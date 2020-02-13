@@ -326,6 +326,18 @@ namespace FPLedit.Shared
                 }
             }
         }
+        
+        public void _InternalSwapTrainOrder(Train t1, Train t2)
+        {
+            var idx = trains.IndexOf(t1);
+            var xidx = tElm.Children.IndexOf(t1.XMLEntity);
+
+            trains.Remove(t2);
+            tElm.Children.Remove(t2.XMLEntity);
+
+            trains.Insert(idx, t2);
+            tElm.Children.Insert(xidx, t2.XMLEntity);
+        }
 
         #endregion
 

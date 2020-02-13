@@ -138,25 +138,11 @@ namespace FPLedit.Editor.Trains
 
                     if (comparer(firstVal, secondVal))
                     {
-                        SwapTrains(tt, train, next);
+                        tt._InternalSwapTrainOrder(train, next);
                         t = trains();
                     }
                 }
             }
-        }
-
-        private void SwapTrains(Timetable tt, Train t1, Train t2)
-        {
-            var tElm = tt.XMLEntity.Children.FirstOrDefault(x => x.XName == "trains");
-
-            var idx = tt.Trains.IndexOf(t1);
-            var xidx = tElm.Children.IndexOf(t1.XMLEntity);
-
-            tt.Trains.Remove(t2);
-            tElm.Children.Remove(t2.XMLEntity);
-
-            tt.Trains.Insert(idx, t2);
-            tElm.Children.Insert(xidx, t2.XMLEntity);
         }
 
         private static int RemoveNamePrefix(string name, out string prefix)

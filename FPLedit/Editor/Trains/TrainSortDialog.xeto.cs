@@ -32,13 +32,12 @@ namespace FPLedit.Editor.Trains
             stationsComboBox.ItemTextBinding = Binding.Property<Station, string>(s => s.SName);
             stationsComboBox.DataStore = tt.Stations;
 
-            //TODO: Investigate & re-enable linear sorting top-to-bottom/bottom-to-top
-            //if (dir == TrainDirection.tr) // Netzwerk-Fahrplan
-            //{
-            //    // deaktiviert "von unten nach oben", "von oben nach unten"
-            //    sortSelection.DisableOption(SortSelectionType.TimeDown);
-            //    sortSelection.DisableOption(SortSelectionType.TimeUp);
-            //}
+            if (dir == TrainDirection.tr) // Netzwerk-Fahrplan
+            {
+                // deaktiviert "von unten nach oben", "von oben nach unten" in Netzwerk-Fahrplänen
+                sortSelection.DisableOption(SortSelectionType.TimeDown);
+                sortSelection.DisableOption(SortSelectionType.TimeUp);
+            }
         }
 
         private void SelectMode(SortSelectionType option)
@@ -64,8 +63,8 @@ namespace FPLedit.Editor.Trains
                 case SortSelectionType.Name:        th.SortTrainsName(tt, direction, false); break;
                 case SortSelectionType.TrainNumber: th.SortTrainsName(tt, direction, true); break;
                 case SortSelectionType.TimeStation: th.SortTrainsAtStation(tt, direction, (Station)stationsComboBox.SelectedValue); break;
-                //case SortSelectionType.TimeDown:    th.SortTrainsAllStations(tt, direction, true); break;
-                //case SortSelectionType.TimeUp:      th.SortTrainsAllStations(tt, direction, false); break;
+                case SortSelectionType.TimeDown:    th.SortTrainsAllStations(tt, direction, true); break;
+                case SortSelectionType.TimeUp:      th.SortTrainsAllStations(tt, direction, false); break;
             }
 
             Close(DialogResult.Ok);
@@ -86,13 +85,12 @@ namespace FPLedit.Editor.Trains
             Name,
             [SelectionName("Nach Zugnummern (Name ohne Zugart)")]
             TrainNumber,
-            [SelectionName("Nach Zeit, an Station")]
+            [SelectionName("An einer Station nach Zeit")]
             TimeStation,
-            //TODO: Investigate & re-enable linear sorting top-to-bottom/bottom-to-top
-            //[SelectionName("Von oben nach unten")]
-            //TimeDown,
-            //[SelectionName("Von unten nach oben")]
-            //TimeUp,
+            [SelectionName("An allen Stationen, in Fahrtrichtung")]
+            TimeDown,
+            [SelectionName("An allen Stationen, entgegen Fahrtrichtung")]
+            TimeUp,
         }
     }
 }
