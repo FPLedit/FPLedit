@@ -30,7 +30,7 @@ namespace FPLedit
             templatesDir = new DirectoryInfo(Path.Combine(PathManager.Instance.AppDirectory, manager.TemplatePath));
 
             var buildName = new Func<string, string>((x) => x.StartsWith("builtin:") ? "(integriert)" : x);
-            gridView.AddColumn<ITemplate>(t => ((TemplateHost)t).Enabled ? "X" : "", "Aktiviert");
+            gridView.AddCheckColumn<ITemplate>(t => ((TemplateHost)t).Enabled, "Aktiviert");
             gridView.AddColumn<ITemplate>(t => t.TemplateName, "Name");
             gridView.AddColumn<ITemplate>(t => buildName(t.Identifier), "Dateiname");
             gridView.AddColumn<ITemplate>(t => t.TemplateType, "Typ");

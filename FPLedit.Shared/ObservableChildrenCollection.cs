@@ -31,15 +31,15 @@ namespace FPLedit.Shared
                 return;
             
             /*
-                 * CheatSheet for ObservableCollection.CollectionChanged
-                 * | Action        | NewItems       | OldItems      | NewStartIndex        | OldStartIndex          |
-                 * |---------------|----------------|---------------|----------------------|------------------------|
-                 * | Add == Insert | inserted items | null          | index of added items | -1                     |
-                 * | Remove        | null           | deleted items | -1                   | index of deleted items |
-                 * | Move          | moved items  ==  moved items   | new index            | old index              |
-                 * | Replace       | new item       | old item      | item index     ==      item index             |
-                 * | Reset         | null           | null          | -1                   | -1                     |
-                 */
+             * CheatSheet for ObservableCollection.CollectionChanged
+             * | Action        | NewItems       | OldItems      | NewStartIndex        | OldStartIndex          |
+             * |---------------|----------------|---------------|----------------------|------------------------|
+             * | Add == Insert | inserted items | null          | index of added items | -1                     |
+             * | Remove        | null           | deleted items | -1                   | index of deleted items |
+             * | Move          | moved items  ==  moved items   | new index            | old index              |
+             * | Replace       | new item       | old item      | item index     ==      item index             |
+             * | Reset         | null           | null          | -1                   | -1                     |
+             */
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
