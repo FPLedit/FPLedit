@@ -7,7 +7,7 @@
   Title="Züge sortieren" Resizable="false">
   <StackLayout>
     <StackLayout Spacing="5" Padding="10,10,10,10">
-      <StackLayout Orientation="Vertical" x:Name="sortSelectionStack" />
+      <StackLayout Orientation="Vertical" x:Name="sortSelectionStack" Spacing="5" />
       <StackLayout Orientation="Horizontal" Spacing="5">
         <Label>Station</Label>
         <DropDown Width="150" Enabled="false" x:Name="stationsComboBox"/>

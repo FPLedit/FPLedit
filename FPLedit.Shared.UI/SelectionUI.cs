@@ -1,27 +1,19 @@
-﻿using Eto.Drawing;
-using Eto.Forms;
+﻿using Eto.Forms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.Shared.UI
 {
     public sealed class SelectionUI<T> : IDisposable where T : Enum
     {
         private readonly Action<T> selectedEvent;
-        private readonly DropDown dropDown;
-        private readonly Color origBackground;
+
         private readonly ActionInfo[] actions;
 
         private ActionInfo selectedState;
 
         public T SelectedState => selectedState.Value;
-
-        public Color ErrorColor { get; set; } = new Color(Colors.Red, 0.4f);
-
-        public bool EnableErrorColoring { get; set; } = true;
 
         public bool EnabledOptionSelected => selectedState.Enabled;
 
@@ -34,43 +26,27 @@ namespace FPLedit.Shared.UI
             if (actions.Length == 0)
                 return;
 
-            if (EnableRadioButtons)
+            RadioButton master = null;
+
+            for (int i = 0; i < actions.Length; i++)
             {
-                RadioButton rbf = null;
-
-                for (int i = 0; i < actions.Length; i++)
+                var ac = actions[i];
+                var rb = new RadioButton(master)
                 {
-                    var ac = actions[i];
-                    var rb = new RadioButton(rbf)
-                    {
-                        Text = ac.Name,
-                        Checked = rbf == null
-                    };
-                    if (rbf == null)
-                        rbf = rb;
-
-                    var tmp = i;
-                    rb.CheckedChanged += (s, e) =>
-                    {
-                        if (rb.Checked)
-                            InternalSelect(ac.Value);
-                    };
-
-                    st.Items.Add(rb);
-                    ac.RadioButton = rb;
-                }
-            }
-            else
-            {
-                dropDown = new DropDown
-                {
-                    DataStore = actions.Cast<object>(),
-                    ItemTextBinding = Binding.Property<string, string>(s => s)
+                    Text = ac.Name,
+                    Checked = i == 0
                 };
-                dropDown.SelectedIndexChanged += (s, e) => InternalSelect(((ActionInfo)dropDown.SelectedValue).Value);
-                dropDown.SelectedIndex = 0;
-                origBackground = dropDown.BackgroundColor;
-                st.Items.Add(dropDown);
+                if (master == null)
+                    master = rb;
+
+                rb.CheckedChanged += (s, e) =>
+                {
+                    if (rb.Checked)
+                        InternalSelect(ac.Value);
+                };
+
+                st.Items.Add(rb);
+                ac.RadioButton = rb;
             }
         }
 
@@ -83,7 +59,7 @@ namespace FPLedit.Shared.UI
                 var memInfo = type.GetMember(val.ToString());
                 var mem = memInfo.FirstOrDefault(m => m.DeclaringType == type);
                 var attributes = mem.GetCustomAttributes(typeof(SelectionNameAttribute), false);
-                var name = ((SelectionNameAttribute)attributes.FirstOrDefault())?.Name;
+                var name = ((SelectionNameAttribute) attributes.FirstOrDefault())?.Name;
                 yield return new ActionInfo(val, name);
             }
         }
@@ -91,46 +67,34 @@ namespace FPLedit.Shared.UI
         public void DisableOption(T option)
         {
             var state = GetState(option);
-            if (EnableRadioButtons)
-                state.RadioButton.Enabled = false;
-            state.Enabled = false;
+            state.RadioButton.Enabled = false;
         }
 
         public void ChangeSelection(T option)
         {
             var state = GetState(option);
-            if (EnableRadioButtons)
-                state.RadioButton.Checked = true;
-            else
-                dropDown.SelectedValue = state;
+            state.RadioButton.Checked = true;
         }
 
         private void InternalSelect(T option)
         {
             selectedState = GetState(option);
             selectedEvent?.Invoke(option);
-
-            if (!EnableRadioButtons && EnableErrorColoring)
-                dropDown.BackgroundColor = !selectedState.Enabled ? ErrorColor : origBackground;
         }
 
         public void Dispose()
         {
-            dropDown?.Dispose();
-            if (EnableRadioButtons)
-                foreach (var rb in actions)
-                    rb.RadioButton?.Dispose();
+            foreach (var rb in actions)
+                rb.RadioButton?.Dispose();
         }
-
-        private bool EnableRadioButtons => Eto.Platform.Instance.IsWpf;
 
         private ActionInfo GetState(T value) => actions.First(v => v.Value.Equals(value));
 
         private class ActionInfo
         {
-            public string Name;
+            public readonly string Name;
             public T Value;
-            public bool Enabled;
+            public readonly bool Enabled;
             public RadioButton RadioButton;
 
             public ActionInfo(T value, string name)
