@@ -85,6 +85,8 @@ namespace FPLedit.Shared
         public string[] Names { get; }
 
         public bool IsFpleditElement { get; set; }
+
+        public string[] ParentElements { get; set; }
     }
 
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]

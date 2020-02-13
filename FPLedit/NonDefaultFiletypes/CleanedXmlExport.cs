@@ -1,11 +1,10 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Xml;
-using System.Xml.Linq;
+using System.Reflection;
 using FPLedit.Shared.Filetypes;
 
 namespace FPLedit.NonDefaultFiletypes
@@ -14,31 +13,84 @@ namespace FPLedit.NonDefaultFiletypes
     {
         public string Filter => "Bereinigte Fahrplan Dateien (*.fpl)|*.fpl";
 
-        private readonly string[] nodeNames =
-        {
-            "bfpl_attrs",   // Buchfahrplaneigenschaften
-            "afpl_attrs",   // Aushangfahrplaneigenschaften
-            "kfpl_attrs",   // Kursbucheigenschaften
-        };
+        private readonly Dictionary<string, List<string>> nodeNames;
+        private readonly Dictionary<string, List<string>> attrsNames;
+        private bool namesCreated;
 
-        //TODO: Better method to remove all known attributes? (yes, use attributes)
-        private readonly string[] attrsNames =
+        public CleanedXmlExport()
         {
-            "fpl-vmax",     // Höchstgeschwindigkeit
-            "fpl-wl",       // Wellenlinien
-            "fpl-tr",       // Trapeztafel
-            "fpl-zlm",      // Zuglaufmeldung
-            "fpl-tfz",      // Triebfahrzeug
-            "fpl-mbr",      // Mindestbremshundertstel
-            "fpl-last",     // max. Last eines Zuges
-        };
+            nodeNames = new Dictionary<string, List<string>>
+            {
+                [""] = new List<string>() // Initialize store for elememnts without parents
+            };
+            attrsNames = new Dictionary<string, List<string>>();
+        }
+
+        private void LoadRemovableXmlNames()
+        {
+            var types = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.Contains("FPLedit"));
+            foreach (var assembly in types)
+            {
+                try
+                {
+                    foreach (var type in assembly.GetTypes())
+                    {
+                        if (!type.IsClass || !type.IsPublic || type.IsAbstract)
+                            continue;
+
+                        var elm = type.GetCustomAttribute<XElmNameAttribute>(false);
+                        if (elm == null)
+                            continue; // This class represents no model element
+                        
+                        if (elm.IsFpleditElement)
+                        {
+                            if (elm.ParentElements != null && elm.ParentElements.Any())
+                            {
+                                foreach (var parent in elm.ParentElements)
+                                {
+                                    if (!nodeNames.ContainsKey(parent))
+                                        nodeNames[parent] = new List<string>();
+                                    nodeNames[parent].AddRange(elm.Names);
+                                }
+                            }
+                            else
+                                nodeNames[""].AddRange(elm.Names);
+                        }
+
+                        
+                        var attrsToRemove = type
+                            .GetProperties()
+                            .Select(p => p.GetCustomAttribute<XAttrNameAttribute>())
+                            .Where(p => p != null && p.IsFpleditElement)
+                            .Select(p => p.Name).ToArray();
+
+                        if (attrsToRemove.Length == 0)
+                            continue;
+
+                        foreach (var name in elm.Names)
+                        {
+                            if (!attrsNames.ContainsKey(name))
+                                attrsNames[name] = new List<string>();
+                            attrsNames[name].AddRange(attrsToRemove);
+                        }
+                    }
+                }
+                catch
+                {
+                }
+            }
+        }
 
         private void ProcessEntity(XMLEntity node)
         {
-            foreach (var attr in attrsNames)
-                node.RemoveAttribute(attr);
+            if (attrsNames.TryGetValue(node.XName, out var localAttrsNames))
+                foreach (var attr in localAttrsNames)
+                    node.RemoveAttribute(attr);
 
-            node.Children.RemoveAll(x => nodeNames.Contains(x.XName));
+            IEnumerable<string> removeNodeNames = nodeNames[""];
+            if (nodeNames.TryGetValue(node.XName, out var localNodeNames))
+                removeNodeNames = removeNodeNames.Concat(localNodeNames);
+            node.Children.RemoveAll(x => removeNodeNames.Contains(x.XName));
 
             foreach (var ch in node.Children)
                 ProcessEntity(ch);
@@ -46,6 +98,10 @@ namespace FPLedit.NonDefaultFiletypes
 
         public bool Export(Timetable tt, Stream stream, IPluginInterface pluginInterface, string[] flags = null)
         {
+            if (!namesCreated)
+                LoadRemovableXmlNames();
+            namesCreated = true;
+            
             if (pluginInterface.Timetable.Type == TimetableType.Network)
             {
                 MessageBox.Show("Der aktuelle Fahrplan ist ein Netzwerk-Fahrplan. Aus diesem erweiterten Fahrplanformat können aus technischen Gründen keine von FPLedit angelegten Daten gelöscht werden.");

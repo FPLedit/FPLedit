@@ -6,7 +6,7 @@ using System.Text;
 
 namespace FPLedit.Aushangfahrplan.Model
 {
-    [XElmName("afpl-attrs", IsFpleditElement = true)]
+    [XElmName("afpl_attrs", IsFpleditElement = true)]
     public class AfplAttrs : Entity, IPatternProvider
     {
         [XAttrName("font")]
