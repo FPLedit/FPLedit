@@ -16,7 +16,7 @@ namespace FPLedit.Buchfahrplan
             pluginInterface.Register<IExport>(export);
             pluginInterface.Register<IPreviewProxy>(preview);
             
-            pluginInterface.Register<IAppearanceControl>(new SettingsControlProxy());
+            pluginInterface.Register<IAppearanceControl>(new BasicAppearanceControl(pi => new Forms.SettingsControl(pi), "Buchfahrplan"));
             pluginInterface.Register<IFilterableProvider>(FilterableProvider);
             pluginInterface.Register<IRouteAction>(new Forms.VelocityDialogProxy());
 

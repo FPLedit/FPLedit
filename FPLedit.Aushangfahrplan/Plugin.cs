@@ -16,7 +16,7 @@ namespace FPLedit.Aushangfahrplan
             pluginInterface.Register<IExport>(export);
             pluginInterface.Register<IPreviewProxy>(preview);
             
-            pluginInterface.Register<IAppearanceControl>(new SettingsControlProxy());
+            pluginInterface.Register<IAppearanceControl>(new BasicAppearanceControl(pi => new SettingsControl(pi), "Aushangfahrplan"));
             pluginInterface.Register<IFilterableProvider>(FilterableProvider);
 
             pluginInterface.Register<ITemplateProxy>(new Templates.StdTemplateProxy());

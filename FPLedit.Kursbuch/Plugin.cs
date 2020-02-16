@@ -20,7 +20,7 @@ namespace FPLedit.Kursbuch
             pluginInterface.Register<IPreviewProxy>(preview);
             
             pluginInterface.Register<IFilterableProvider>(FilterableProvider);
-            pluginInterface.Register<IAppearanceControl>(new SettingsControlProxy());
+            pluginInterface.Register<IAppearanceControl>(new BasicAppearanceControl(pi => new SettingsControl(pi), "Kursbuch"));
 
             pluginInterface.Register<ITemplateProxy>(new Templates.TemplateProxy());
             
