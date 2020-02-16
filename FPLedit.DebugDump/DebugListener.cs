@@ -17,14 +17,15 @@ namespace FPLedit.DebugDump
         public void StartSession(IPluginInterface pluginInterface, string basePath)
         {
             session = Guid.NewGuid().ToString();
-            var fn = Path.Combine(basePath, $"fpledit-dump-{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.fpldmp"); 
+            var fn = Path.Combine(basePath, $"fpledit-dump-{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.fpldmp");
             writer = new DumpWriter(fn);
-            
+
             // Output some messages before starting so that user is informed better (and does not forget to turn it off!)
             pluginInterface.Logger.Warning("Debug Dump ist aktiviert! Dies kann dazu führen, dass große Datenmengen aufgezeichnet werden.\nSession file: " + fn + "\n----------");
 
-            dynamic l = pluginInterface.Logger;
-            l.Loggers.Add(new DumpLogger(writer));
+            var l = pluginInterface.Logger;
+            if (l.CanAttach)
+                l.AttachLogger(new DumpLogger(writer));
 
             AddDumpUiInteraction();
             AddTimetableListener(pluginInterface);
@@ -34,10 +35,7 @@ namespace FPLedit.DebugDump
                 writer.WriteEvent(DumpEventType.DebugDumpInternal, "Session started", session);
                 writer.WriteEvent(DumpEventType.DebugDumpInternal, "Enabled extensions", pluginInterface.Settings.Get("extmgr.enabled", ""));
             };
-            pluginInterface.AppClosing += (s, e) =>
-            {
-                writer.WriteEvent(DumpEventType.DebugDumpInternal, "Gracefully terminating session", session);
-            };
+            pluginInterface.AppClosing += (s, e) => { writer.WriteEvent(DumpEventType.DebugDumpInternal, "Gracefully terminating session", session); };
 
             var tmpDir = pluginInterface.GetTemp("");
             watcher = new FileSystemWatcher(tmpDir, "*.*")
@@ -98,10 +96,10 @@ namespace FPLedit.DebugDump
                     case DropDown dd:
                         dd.SelectedIndexChanged += (sender, args) => writer.WriteEvent(DumpEventType.UiInteraction, "DropDown", path + "/" + dd.ID, "event: SelectedIndexChanged", dd.SelectedIndex.ToString());
                         break;
-                    case RadioButton rb: 
+                    case RadioButton rb:
                         rb.CheckedChanged += (sender, args) => writer.WriteEvent(DumpEventType.UiInteraction, "RadioButton", path + "/" + rb.Text, "event: CheckedChanged", rb.Checked.ToString());
                         break;
-                    case CheckBox rb: 
+                    case CheckBox rb:
                         rb.CheckedChanged += (sender, args) => writer.WriteEvent(DumpEventType.UiInteraction, "CheckBox", path + "/" + rb.Text, "event: CheckedChanged", rb.Checked.ToString());
                         break;
                     case Container ct:

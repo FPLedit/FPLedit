@@ -9,6 +9,12 @@ namespace FPLedit.Logger
 {
     public sealed class TempLogger : ILog
     {
+        public bool CanAttach => false;
+
+        public void AttachLogger(ILog other)
+        {
+        }
+        
         private readonly string filename;
 
         public TempLogger(IPluginInterface pluginInterface)

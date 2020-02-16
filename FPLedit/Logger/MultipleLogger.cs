@@ -3,51 +3,66 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Eto.Forms;
 
 namespace FPLedit.Logger
 {
     public sealed class MultipleLogger : ILog
     {
-        public List<ILog> Loggers { get; }
-
-        public MultipleLogger()
-        {
-            Loggers = new List<ILog>();
-        }
+        private readonly List<ILog> loggers;
 
         public MultipleLogger(params ILog[] logger)
         {
-            Loggers = new List<ILog>(logger);
+            loggers = new List<ILog>(logger);
         }
+
+        public bool CanAttach => true;
+
+        public void AttachLogger(ILog other) => loggers.Add(other);
 
         public void Error(string message)
         {
-            foreach (var log in Loggers)
-                log.Error(message);
+            Application.Instance.Invoke(() =>
+            {
+                foreach (var log in loggers)
+                    log.Error(message);
+            });
         }
 
         public void Info(string message)
         {
-            foreach (var log in Loggers)
-                log.Info(message);
+            Application.Instance.Invoke(() =>
+            {
+                foreach (var log in loggers)
+                    log.Info(message);
+            });
         }
 
         public void Warning(string message)
         {
-            foreach (var log in Loggers)
-                log.Warning(message);
+            Application.Instance.Invoke(() =>
+            {
+                foreach (var log in loggers)
+                    log.Warning(message);
+            });
         }
 
         public void LogException(Exception e)
         {
-            foreach (var log in Loggers)
-                log.LogException(e);
+            Application.Instance.Invoke(() =>
+            {
+                foreach (var log in loggers)
+                    log.LogException(e);
+            });
         }
 
         public void Debug(string message)
         {
-            foreach (var log in Loggers)
-                log.Debug(message);
+            Application.Instance.Invoke(() =>
+            {
+                foreach (var log in loggers)
+                    log.Debug(message);
+            });
         }
     }
 }

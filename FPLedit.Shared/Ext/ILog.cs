@@ -7,6 +7,10 @@ namespace FPLedit.Shared
 {
     public interface ILog
     {
+        bool CanAttach { get; }
+
+        void AttachLogger(ILog other);
+        
         void Error(string message);
 
         void Warning(string message);

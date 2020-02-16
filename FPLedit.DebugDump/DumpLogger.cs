@@ -12,6 +12,12 @@ namespace FPLedit.DebugDump
             this.writer = writer;
         }
 
+        public bool CanAttach => false;
+
+        public void AttachLogger(ILog other)
+        {
+        }
+
         public void Error(string message)
             => Write(message, "EROR");
 

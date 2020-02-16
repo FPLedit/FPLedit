@@ -63,9 +63,9 @@ namespace FPLedit
             // Load logger before extensions
             var logger = new MultipleLogger(logTextBox);
             if (Bootstrapper.Settings.Get("log.enable-file", false))
-                logger.Loggers.Add(new TempLogger(Bootstrapper));
+                logger.AttachLogger(new TempLogger(Bootstrapper));
             if (OptionsParser.MPCompatLog)
-                logger.Loggers.Add(new ConsoleLogger());
+                logger.AttachLogger(new ConsoleLogger());
             Bootstrapper.InjectLogger(logger);
             
             // Now we can load extensions and templates

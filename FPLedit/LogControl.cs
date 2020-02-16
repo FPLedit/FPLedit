@@ -26,6 +26,12 @@ namespace FPLedit
         }
 
         #region Log
+        public bool CanAttach => false;
+
+        public void AttachLogger(ILog other)
+        {
+        }
+        
         public void Error(string message)
             => WriteMl("[FEHLER] " + message, Colors.Red);
 

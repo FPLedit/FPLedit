@@ -8,6 +8,12 @@ namespace FPLedit.Logger
 {
     public sealed class ConsoleLogger : ILog
     {
+        public bool CanAttach => false;
+
+        public void AttachLogger(ILog other)
+        {
+        }
+    
         public void Error(string message)
             => Console.WriteLine("[ERROR] " + message);
 

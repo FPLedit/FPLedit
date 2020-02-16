@@ -130,6 +130,12 @@ namespace FPLedit.Tests
 
     public class TestLogger : ILog
     {
+        public bool CanAttach => false;
+
+        public void AttachLogger(ILog other)
+        {
+        }
+        
         public void Error(string message) => throw new LogErrorException("Error: " + message);
 
         public void Warning(string message) => throw new LogWarningException("Warning: " + message);
