@@ -8,14 +8,14 @@ namespace FPLedit.Shared
 {
     public interface IImport
     {
-        Timetable Import(Stream stream, IPluginInterface pluginInterface, ILog replaceLog = null);
+        Timetable Import(Stream stream, IReducedPluginInterface pluginInterface, ILog replaceLog = null);
 
         string Filter { get; }
     }
     
     public static class ImportExt
     {
-        public static Timetable SafeImport(this IImport imp, string filename, IPluginInterface pluginInterface, ILog replaceLog = null)
+        public static Timetable SafeImport(this IImport imp, string filename, IReducedPluginInterface pluginInterface, ILog replaceLog = null)
         {
             try
             {

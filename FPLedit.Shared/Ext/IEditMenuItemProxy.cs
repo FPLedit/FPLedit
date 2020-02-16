@@ -4,7 +4,7 @@
     {
         string DisplayName { get; }
 
-        void Show(IPluginInterface pluginInterface);
+        void Invoke(IPluginInterface pluginInterface);
 
         bool IsEnabled(IPluginInterface pluginInterface);
     }

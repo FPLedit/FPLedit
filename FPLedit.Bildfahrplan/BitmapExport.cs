@@ -8,7 +8,7 @@ namespace FPLedit.Bildfahrplan
 {
     public class BitmapExport : IExport
     {
-        public bool Export(Timetable tt, Stream stream, IPluginInterface pluginInterface, string[] flags = null) 
+        public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[] flags = null) 
         {
             Renderer renderer = new Renderer(tt, Timetable.LINEAR_ROUTE_ID);
             using (var bmp = new Bitmap(1000, renderer.GetHeight(true), PixelFormat.Format32bppArgb))

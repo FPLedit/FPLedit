@@ -11,7 +11,7 @@ namespace FPLedit.Buchfahrplan
         protected override string ElemName => "bfpl_attrs";
         protected override string AttrName => "tmpl";
 
-        public BfplTemplateChooser(IPluginInterface pluginInterface) : base("bfpl", pluginInterface)
+        public BfplTemplateChooser(IReducedPluginInterface pluginInterface) : base("bfpl", pluginInterface)
         {
         }
     }

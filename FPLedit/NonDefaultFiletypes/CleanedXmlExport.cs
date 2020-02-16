@@ -96,13 +96,13 @@ namespace FPLedit.NonDefaultFiletypes
                 ProcessEntity(ch);
         }
 
-        public bool Export(Timetable tt, Stream stream, IPluginInterface pluginInterface, string[] flags = null)
+        public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[] flags = null)
         {
             if (!namesCreated)
                 LoadRemovableXmlNames();
             namesCreated = true;
             
-            if (pluginInterface.Timetable.Type == TimetableType.Network)
+            if (tt.Type == TimetableType.Network)
             {
                 MessageBox.Show("Der aktuelle Fahrplan ist ein Netzwerk-Fahrplan. Aus diesem erweiterten Fahrplanformat können aus technischen Gründen keine von FPLedit angelegten Daten gelöscht werden.");
                 return false;

@@ -12,7 +12,7 @@ namespace FPLedit.NonDefaultFiletypes
     {
         public string Filter => "Fahrplan Dateien (*.fpl)|*.fpl";
 
-        public bool Export(Timetable tt, Stream stream, IPluginInterface pluginInterface, string[] flags = null)
+        public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[] flags = null)
         {
             if (tt.Type == TimetableType.Network)
                 throw new TimetableTypeNotSupportedException(TimetableType.Network, "convert to network");

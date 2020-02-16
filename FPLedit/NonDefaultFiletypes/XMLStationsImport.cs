@@ -11,7 +11,7 @@ namespace FPLedit.NonDefaultFiletypes
     {
         public string Filter => "Streckendateien (*.str)|*.str";
 
-        public Timetable Import(Stream stream, IPluginInterface pluginInterface, ILog replaceLog = null)
+        public Timetable Import(Stream stream, IReducedPluginInterface pluginInterface, ILog replaceLog = null)
         {
             var xElement = XElement.Load(stream);
 

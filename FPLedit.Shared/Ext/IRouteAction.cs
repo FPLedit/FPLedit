@@ -9,7 +9,7 @@ namespace FPLedit.Shared
     {
         string DisplayName { get; }
 
-        void Show(IPluginInterface pluginInterface, Route route);
+        void Invoke(IPluginInterface pluginInterface, Route route);
 
         bool IsEnabled(IPluginInterface pluginInterface);
     }

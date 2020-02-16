@@ -11,7 +11,7 @@ namespace FPLedit.Buchfahrplan.Forms
     {
         public string DisplayName => "Höchstgeschwindigkeiten ändern";
 
-        public void Show(IPluginInterface pluginInterface, Route route)
+        public void Invoke(IPluginInterface pluginInterface, Route route)
         {
             pluginInterface.StageUndoStep();
             using (var svf = new VelocityForm(pluginInterface, route))

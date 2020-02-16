@@ -59,7 +59,7 @@ namespace FPLedit.Editor.Rendering
                         Tag = action,
                     };
                     btn.Enabled = action.IsEnabled(pluginInterface);
-                    btn.Click += (se, ev) => action.Show(pluginInterface, pluginInterface.Timetable?.GetRoute(routesDropDown.SelectedRoute));
+                    btn.Click += (se, ev) => action.Invoke(pluginInterface, pluginInterface.Timetable?.GetRoute(routesDropDown.SelectedRoute));
                     toolbar.Items.Add(btn);
                 }
             };

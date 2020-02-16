@@ -92,7 +92,7 @@ namespace FPLedit.Editor
 
             dialogOffset = editRoot.Items.Count;
             foreach (var dialog in dialogs)
-                editRoot.CreateItem(dialog.DisplayName, enabled: dialog.IsEnabled(pluginInterface), clickHandler: (s, ev) => dialog.Show(pluginInterface));
+                editRoot.CreateItem(dialog.DisplayName, enabled: dialog.IsEnabled(pluginInterface), clickHandler: (s, ev) => dialog.Invoke(pluginInterface));
 
             hasFilterables = pluginInterface.GetRegistered<IFilterableProvider>().Length > 0;
             hasDesignables = pluginInterface.GetRegistered<IAppearanceControl>().Length > 0;
