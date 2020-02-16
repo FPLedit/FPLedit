@@ -11,13 +11,13 @@ namespace FPLedit.Buchfahrplan
     {
         public void Init(IPluginInterface pluginInterface)
         {
-            var export = new BasicTemplateExport("Buchfahrplan als HTML Datei (*.html)|*.html", pi => new BfplTemplateChooser(pi));
+            var export = new BasicTemplateExport("Buchfahrplan als HTML Datei (*.html)|*.html", GetTemplateChooser);
             var preview = new BasicPreview("bfpl", "Buchfahrplan", export);
             pluginInterface.Register<IExport>(export);
             pluginInterface.Register<IPreviewProxy>(preview);
             
             pluginInterface.Register<IAppearanceControl>(new SettingsControlProxy());
-            pluginInterface.Register<IFilterableProvider>(new BasicFilterableProvider("Buchfahrplan", BfplAttrs.GetAttrs, BfplAttrs.CreateAttrs));
+            pluginInterface.Register<IFilterableProvider>(FilterableProvider);
             pluginInterface.Register<IRouteAction>(new Forms.VelocityDialogProxy());
 
             pluginInterface.Register<ITemplateProxy>(new Templates.StdTemplate());
@@ -27,5 +27,10 @@ namespace FPLedit.Buchfahrplan
             pluginInterface.Register<ITemplateWhitelist>(new TemplateWhitelist<Model.BfplAttrs>("bfpl"));
             pluginInterface.Register<ITemplateWhitelist>(new TemplateWhitelist<Model.BfplPoint>("bfpl"));
         }
+        
+        internal static IFilterableProvider FilterableProvider => new BasicFilterableProvider("Buchfahrplan", BfplAttrs.GetAttrs, BfplAttrs.CreateAttrs);
+        
+        internal static ITemplateChooser GetTemplateChooser(IReducedPluginInterface pi) 
+            => new BasicTemplateChooser(pi, "bfpl", "bfpl_attrs", "tmpl", "builtin:FPLedit.Buchfahrplan/Templates/StdTemplate.fpltmpl");
     }
 }

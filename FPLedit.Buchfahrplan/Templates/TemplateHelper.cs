@@ -17,7 +17,7 @@ namespace FPLedit.Buchfahrplan.Templates
 
         public TemplateHelper(Timetable tt)
         {
-            filterable = new BasicFilterableProvider("Buchfahrplan", BfplAttrs.GetAttrs, BfplAttrs.CreateAttrs);
+            filterable = Plugin.FilterableProvider;
             this.tt = tt;
             attrs = BfplAttrs.GetAttrs(tt);
         }

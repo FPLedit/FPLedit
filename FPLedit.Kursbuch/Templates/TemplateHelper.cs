@@ -17,7 +17,7 @@ namespace FPLedit.Kursbuch.Templates
         {
             this.tt = tt;
 
-            var filterable = new BasicFilterableProvider("Kursbuch", KfplAttrs.GetAttrs, KfplAttrs.CreateAttrs);
+            var filterable = Plugin.FilterableProvider;
 
             trules = filterable.LoadTrainRules(tt).ToArray();
             srules = filterable.LoadStationRules(tt).ToArray();

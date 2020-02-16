@@ -9,10 +9,10 @@ namespace FPLedit.Shared.DefaultImplementations
     {
         public const string FLAG_TYROUT_CONSOLE = "tryout_console";
         
-        private readonly Func<IReducedPluginInterface, BaseTemplateChooser> getChooser;
+        private readonly Func<IReducedPluginInterface, ITemplateChooser> getChooser;
         public string Filter { get; }
         
-        public BasicTemplateExport(string filter, Func<IReducedPluginInterface, BaseTemplateChooser> getChooser)
+        public BasicTemplateExport(string filter, Func<IReducedPluginInterface, ITemplateChooser> getChooser)
         {
             this.getChooser = getChooser;
             Filter = filter;

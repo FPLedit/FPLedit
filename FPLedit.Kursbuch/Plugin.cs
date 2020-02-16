@@ -14,12 +14,12 @@ namespace FPLedit.Kursbuch
     {
         public void Init(IPluginInterface pluginInterface)
         {
-            var export = new BasicTemplateExport("Tabellenfahrplan/Kursbuch als HTML Datei (*.html)|*.html", pi => new KfplTemplateChooser(pi));
+            var export = new BasicTemplateExport("Tabellenfahrplan/Kursbuch als HTML Datei (*.html)|*.html", GetTemplateChooser);
             var preview = new BasicPreview("kfpl", "Kursbuch", export);
             pluginInterface.Register<IExport>(export);
             pluginInterface.Register<IPreviewProxy>(preview);
             
-            pluginInterface.Register<IFilterableProvider>(new BasicFilterableProvider("Kursbuch", KfplAttrs.GetAttrs, KfplAttrs.CreateAttrs));
+            pluginInterface.Register<IFilterableProvider>(FilterableProvider);
             pluginInterface.Register<IAppearanceControl>(new SettingsControlProxy());
 
             pluginInterface.Register<ITemplateProxy>(new Templates.TemplateProxy());
@@ -29,6 +29,11 @@ namespace FPLedit.Kursbuch
 
             pluginInterface.Register<ITimetableTypeChangeAction>(new FixAttrsAction());
         }
+
+        internal static IFilterableProvider FilterableProvider => new BasicFilterableProvider("Kursbuch", KfplAttrs.GetAttrs, KfplAttrs.CreateAttrs);
+        
+        internal static ITemplateChooser GetTemplateChooser(IReducedPluginInterface pi) 
+            => new BasicTemplateChooser(pi, "kfpl", "kfpl_attrs", "tmpl", "builtin:FPLedit.Kursbuch/Templates/KfplTemplate.fpltmpl");
     }
 
     public class FixAttrsAction : BaseConverterFileType, ITimetableTypeChangeAction

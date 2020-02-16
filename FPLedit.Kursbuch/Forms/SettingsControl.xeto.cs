@@ -34,7 +34,7 @@ namespace FPLedit.Kursbuch.Forms
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
             settings = pluginInterface.Settings;
-            var chooser = new KfplTemplateChooser(pluginInterface);
+            var chooser = Plugin.GetTemplateChooser(pluginInterface);
             templateComboBox.ItemTextBinding = Binding.Property<ITemplate, string>(t => t.TemplateName);
             templateComboBox.DataStore = chooser.AvailableTemplates;
 
