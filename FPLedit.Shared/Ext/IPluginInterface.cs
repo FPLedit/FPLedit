@@ -27,6 +27,8 @@ namespace FPLedit.Shared
         // Undo
         void Undo();
         void StageUndoStep();
+        
+        new ISettings Settings { get; }
 
         event EventHandler<FileStateChangedEventArgs> FileStateChanged;
         event EventHandler ExtensionsLoaded;
@@ -40,7 +42,7 @@ namespace FPLedit.Shared
         T[] GetRegistered<T>();
         
         ILog Logger { get; }
-        ISettings Settings { get; }
+        IReadOnlySettings Settings { get; }
         
         /// <remarks>
         /// This property is only available after the <see cref="IPluginInterface.ExtensionsLoaded"/> event is invoked and thus cannot be used in <see cref="IPlugin.Init"/>.

@@ -28,7 +28,7 @@ namespace FPLedit
 
         internal CrashReporting.CrashReporter CrashReporter { get; }
         internal Bootstrapper Bootstrapper { get; }
-
+        
         private TimetableChecks.TimetableCheckRunner checkRunner;
         private readonly LastFileHandler lfh;
         
@@ -58,11 +58,11 @@ namespace FPLedit
             FontCollection.InitAsync(); // Load list of available fonts, async, as this should not be needed by any extension.
             TemplateDebugger.GetInstance().AttachDebugger(new GuiTemplateDebugger()); // Attach javascript debugger form
             
-            Timetable.DefaultLinearVersion = Bootstrapper.Settings.GetEnum("core.default-file-format", Timetable.DefaultLinearVersion);
+            Timetable.DefaultLinearVersion = Bootstrapper.FullSettings.GetEnum("core.default-file-format", Timetable.DefaultLinearVersion);
             
             // Load logger before extensions
             var logger = new MultipleLogger(logTextBox);
-            if (Bootstrapper.Settings.Get("log.enable-file", false))
+            if (Bootstrapper.FullSettings.Get("log.enable-file", false))
                 logger.AttachLogger(new TempLogger(Bootstrapper));
             if (OptionsParser.MPCompatLog)
                 logger.AttachLogger(new ConsoleLogger());
@@ -72,7 +72,7 @@ namespace FPLedit
             Bootstrapper.ExtensionManager.InjectPlugin(new Editor.EditorPlugin(), 0);
             Bootstrapper.BootstrapExtensions();
             
-            if (Bootstrapper.Settings.IsReadonly)
+            if (Bootstrapper.FullSettings.IsReadonly)
                 Bootstrapper.Logger.Warning("Die Einstellungsdatei ist nicht schreibbar. Änderungen an Programmeinstellungen werden verworfen.");
 
             InitMain();
@@ -135,13 +135,13 @@ namespace FPLedit
         {
             // Parameter: Fpledit.exe [Dateiname] ODER Datei aus Restart
             var fn = OptionsParser.OpenFilename;
-            fn = Bootstrapper.Settings.Get("restart.file", fn);
+            fn = Bootstrapper.FullSettings.Get("restart.file", fn);
             if (fn != null && File.Exists(fn))
             {
                 Bootstrapper.FileHandler.InternalOpen(fn);
                 lfh.AddLastFile(fn);
             }
-            Bootstrapper.Settings.Remove("restart.file");
+            Bootstrapper.FullSettings.Remove("restart.file");
         }
 
         private void InitializeMenus()
@@ -166,7 +166,7 @@ namespace FPLedit
             helpMenu.CreateItem("Fenstergößen löschen", clickHandler: (s, ev) => SizeManager.Reset());
             helpMenu.Items.Add(new SeparatorMenuItem());
             helpMenu.CreateItem("Online Hilfe", clickHandler: (s, ev) => OpenHelper.Open("https://fahrplan.manuelhu.de/"));
-            helpMenu.CreateItem("Info", clickHandler: (s, ev) => new InfoForm(Bootstrapper.Settings).ShowModal(this));
+            helpMenu.CreateItem("Info", clickHandler: (s, ev) => new InfoForm(Bootstrapper.FullSettings).ShowModal(this));
         }
 
         private void UpdateLastFilesMenu(object sender, EventArgs e)
@@ -190,7 +190,7 @@ namespace FPLedit
             if (!Bootstrapper.FileHandler.NotifyIfUnsaved())
                 return;
             if (Bootstrapper.FileState.Opened)
-                Bootstrapper.Settings.Set("restart.file", Bootstrapper.FileState.FileName);
+                Bootstrapper.FullSettings.Set("restart.file", Bootstrapper.FileState.FileName);
 
             Process.Start(PathManager.Instance.AppFilePath);
             Program.App.Quit();
@@ -198,7 +198,7 @@ namespace FPLedit
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            if (!Bootstrapper.Settings.KeyExists("restart.file") && !Program.ExceptionQuit)
+            if (!Bootstrapper.FullSettings.KeyExists("restart.file") && !Program.ExceptionQuit)
             {
                 lfh.Persist();
                 if (!Bootstrapper.FileHandler.NotifyIfUnsaved())

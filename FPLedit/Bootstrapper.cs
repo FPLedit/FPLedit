@@ -12,7 +12,7 @@ using FPLedit.Templating;
 
 namespace FPLedit
 {
-    internal sealed class Bootstrapper : IPluginInterface, IDisposable
+    internal sealed class Bootstrapper : IPluginInterface, IReducedPluginInterface, IDisposable
     {
         private const string DEFAULT_TEMPLATE_PATH = "templates";
 
@@ -24,7 +24,9 @@ namespace FPLedit
         public UpdateManager Update { get; }
         public FileHandler FileHandler { get; }
         public ExtensionManager ExtensionManager { get; }
-        public ISettings Settings => settings;
+        ISettings IPluginInterface.Settings => settings;
+        IReadOnlySettings IReducedPluginInterface.Settings => settings;
+        public ISettings FullSettings => settings;
         public ITemplateManager TemplateManager { get; private set; }
         public ILog Logger { get; private set; }
         public dynamic RootForm { get; }
@@ -50,7 +52,7 @@ namespace FPLedit
             HelpMenu = rootForm.Menu.GetItem(MainForm.LocHelpMenu);
             settings = new Settings(GetConfigStream(configPath));
             registry = new RegisterStore();
-            Update = new UpdateManager(Settings);
+            Update = new UpdateManager(settings);
             undo = new UndoManager();
             ExtensionManager = new ExtensionManager(this, Update);
             FileHandler = new FileHandler(this, lfh, undo);
@@ -74,7 +76,7 @@ namespace FPLedit
             FileHandler.InitializeExportImport(exporters, importers);
             
             // Vorlagen laden
-            var templatePath = Settings.Get("tmpl.root", DEFAULT_TEMPLATE_PATH);
+            var templatePath = settings.Get("tmpl.root", DEFAULT_TEMPLATE_PATH);
             var templateManager = new TemplateManager(registry, this, templatePath);
             templateManager.LoadTemplates(templatePath);
             if (OptionsParser.TemplateDebug)

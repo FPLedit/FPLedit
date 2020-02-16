@@ -5,16 +5,8 @@ using System.Text;
 
 namespace FPLedit.Shared
 {
-    public interface ISettings
+    public interface ISettings : IReadOnlySettings
     {
-        bool IsReadonly { get; }
-        
-        T Get<T>(string key, T defaultValue = default);
-
-        T GetEnum<T>(string key, T defaultValue = default) where T : Enum;
-
-        bool KeyExists(string key);
-
         void Set(string key, string value);
 
         void Set(string key, bool value);
@@ -24,5 +16,16 @@ namespace FPLedit.Shared
         void SetEnum<T>(string key, T value) where T : Enum;
 
         void Remove(string key);
+    }
+    
+    public interface IReadOnlySettings
+    {
+        bool IsReadonly { get; }
+        
+        T Get<T>(string key, T defaultValue = default);
+
+        T GetEnum<T>(string key, T defaultValue = default) where T : Enum;
+
+        bool KeyExists(string key);
     }
 }
