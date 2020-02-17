@@ -4,60 +4,12 @@ using FPLedit.Shared.Templating;
 
 namespace FPLedit.Shared.Tests
 {
-    public class DummyPluginInterface : IPluginInterface
+    public class DummyPluginInterface : IReducedPluginInterface
     {
         public DummyPluginInterface()
         {
             Logger = new TestLogger();
             Settings = new TestSettings(new Dictionary<string, string>());
-        }
-
-        public Timetable Timetable => throw new NotImplementedException();
-        public IFileState FileState => throw new NotImplementedException();
-
-        public void SetUnsaved()
-        {
-            throw new NotImplementedException();
-        }
-
-        public object BackupTimetable()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RestoreTimetable(object backupHandle)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ClearBackup(object backupHandle)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Register<T>(T elem)
-        {
-            throw new NotImplementedException();
-        }
-
-        public T[] GetRegistered<T>()
-        {
-            return Array.Empty<T>();
-        }
-
-        public void Open()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Save(bool forceSaveAs)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Reload()
-        {
-            throw new NotImplementedException();
         }
 
         public string GetTemp(string filename)
@@ -68,26 +20,11 @@ namespace FPLedit.Shared.Tests
         public string ExecutablePath => throw new NotImplementedException();
         public string ExecutableDir => throw new NotImplementedException();
 
-        public void Undo()
-        {
-            throw new NotImplementedException();
-        }
+        public T[] GetRegistered<T>() => Array.Empty<T>();
 
-        public void StageUndoStep()
-        {
-            throw new NotImplementedException();
-        }
-
-        public dynamic Menu => throw new NotImplementedException();
-        public dynamic RootForm => throw new NotImplementedException();
-        public dynamic HelpMenu => throw new NotImplementedException();
         public ILog Logger { get; }
-        public ISettings Settings { get; }
+        public IReadOnlySettings Settings { get; }
         public ITemplateManager TemplateManager => throw new NotImplementedException();
-        public event EventHandler<FileStateChangedEventArgs> FileStateChanged;
-        public event EventHandler ExtensionsLoaded;
-        public event EventHandler FileOpened;
-        public event EventHandler AppClosing;
     }
 
     public class TestSettings : ISettings
