@@ -6,6 +6,7 @@ using FPLedit.Shared.UI;
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace FPLedit
 {
@@ -99,18 +100,20 @@ namespace FPLedit
             if (exportFileDialog.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
             {
                 var exporters = pluginInterface.GetRegistered<IExport>();
-                IExport export = exporters[exportFileDialog.CurrentFilterIndex];
-                string filename = exportFileDialog.FileName;
+                var export = exporters[exportFileDialog.CurrentFilterIndex];
+                var filename = exportFileDialog.FileName;
+                pluginInterface.Settings.Set("exporter.last", exportFileDialog.CurrentFilterIndex);
 
                 pluginInterface.Logger.Info("Exportiere in Datei " + filename);
-                bool ret = export.SafeExport(Timetable, filename, pluginInterface);
-                if (ret == false)
+                var tsk = export.GetAsyncSafeExport(Timetable.Clone(), filename, pluginInterface);
+                tsk.ContinueWith((t, o) =>
                 {
-                    pluginInterface.Logger.Error("Exportieren fehlgeschlagen!");
-                    return;
-                }
-                pluginInterface.Logger.Info("Exportieren erfolgreich abgeschlossen!");
-                pluginInterface.Settings.Set("exporter.last", exportFileDialog.CurrentFilterIndex);
+                    if (t.Result == false)
+                        pluginInterface.Logger.Error("Exportieren fehlgeschlagen!");
+                    else
+                        pluginInterface.Logger.Info("Exportieren erfolgreich abgeschlossen!");
+                }, null, TaskScheduler.Default);
+                tsk.Start();
             }
         }
 
