@@ -12,13 +12,13 @@ namespace FPLedit.Templating
         private ITemplateDebugger child;
 
         public void SetContext(JavascriptTemplate template)
-            => child?.SetContext(template);
+            => Application.Instance.Invoke(() => child?.SetContext(template));
 
         public void Navigate(int line, int column) // We have an error.
-            => child?.Navigate(line, column);
+            => Application.Instance.Invoke(() => child?.Navigate(line, column));
         
         public void OpenDebugger() // We have an error, so show this form.
-            => child?.OpenDebugger();
+            => Application.Instance.Invoke(() => child?.OpenDebugger());
 
         public void AttachDebugger(ITemplateDebugger debugger)
             => child = debugger;

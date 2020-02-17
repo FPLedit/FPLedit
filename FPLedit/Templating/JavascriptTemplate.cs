@@ -19,12 +19,12 @@ namespace FPLedit.Templating
         public string TemplateSource { get; }
         public string CompiledCode { get; }
 
-        private readonly IPluginInterface pluginInterface;
+        private readonly IReducedPluginInterface pluginInterface;
         private readonly string nl = Environment.NewLine;
 
         private const int CURRENT_VERSION = 2;
 
-        public JavascriptTemplate(string code, string identifier, IPluginInterface pluginInterface)
+        public JavascriptTemplate(string code, string identifier, IReducedPluginInterface pluginInterface)
         {
             TemplateSource = code;
             Identifier = identifier;

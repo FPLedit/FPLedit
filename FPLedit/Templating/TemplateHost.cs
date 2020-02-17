@@ -25,7 +25,7 @@ namespace FPLedit.Templating
 
         public bool Enabled { get; private set; }
 
-        public TemplateHost(string content, string identifier, IPluginInterface pluginInterface, bool enabled)
+        public TemplateHost(string content, string identifier, IReducedPluginInterface pluginInterface, bool enabled)
         {
             logger = pluginInterface.Logger;
             Identifier = identifier;

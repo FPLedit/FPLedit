@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using FPLedit.Shared.Templating;
 
 namespace FPLedit.Shared.DefaultImplementations
@@ -30,7 +31,7 @@ namespace FPLedit.Shared.DefaultImplementations
             if (flags?.Contains(FLAG_TYROUT_CONSOLE) ?? false)
                 cont += ResourceHelper.GetStringResource("Shared.Resources.TryoutConsole.html");
 
-            using (var sw = new StreamWriter(stream))
+            using (var sw = new StreamWriter(stream, Encoding.UTF8, 1024, true))
                 sw.Write(cont);
 
             return true;
