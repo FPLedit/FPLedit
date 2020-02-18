@@ -19,10 +19,10 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\abfahrt-text.svg" />
     <EmbeddedResource Include="**/*.fpltmpl" />
-    <EmbeddedResource Include="**/*.xeto" />
+    <!--<EmbeddedResource Include="**/*.xeto" />-->
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Eto.Forms" Version="2.5.0-rc.5" />
-    <PackageReference Include="Eto.Serialization.Xaml" Version="2.5.0-rc.5" />
+    <PackageReference Include="Eto.Forms" Version="2.5.0-rc.6" />
+    <PackageReference Include="Eto.Serialization.Xaml" Version="2.5.0-rc.6" />
   </ItemGroup>
 </Project>

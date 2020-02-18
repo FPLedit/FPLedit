@@ -16,11 +16,11 @@
     <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="**/*.xeto" />
+    <!--<EmbeddedResource Include="**/*.xeto" />-->
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Eto.Forms" Version="2.5.0-rc.5" />
-    <PackageReference Include="Eto.Serialization.Xaml" Version="2.5.0-rc.5" />
+    <PackageReference Include="Eto.Forms" Version="2.5.0-rc.6" />
+    <PackageReference Include="Eto.Serialization.Xaml" Version="2.5.0-rc.6" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
   </ItemGroup>

@@ -13,14 +13,14 @@
     <Compile Include="..\build_scripts\ResourceHelper.cs" Link="Properties\ResourceHelper.cs" />
     <EmbeddedResource Include="Resources/*" />
     <EmbeddedResource Include="**/*.fpltmpl" />
-    <EmbeddedResource Include="**/*.xeto" />
+    <!--<EmbeddedResource Include="**/*.xeto" />-->
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FPLedit.Shared.UI\FPLedit.Shared.UI.csproj" />
     <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Eto.Forms" Version="2.5.0-rc.5" />
-    <PackageReference Include="Eto.Serialization.Xaml" Version="2.5.0-rc.5" />
+    <PackageReference Include="Eto.Forms" Version="2.5.0-rc.6" />
+    <PackageReference Include="Eto.Serialization.Xaml" Version="2.5.0-rc.6" />
   </ItemGroup>
 </Project>

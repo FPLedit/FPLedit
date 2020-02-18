@@ -25,7 +25,7 @@
     <Compile Include="..\build_scripts\ResourceHelper.cs" Link="Properties\ResourceHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="**/*.xeto" />
+    <!--<EmbeddedResource Include="**/*.xeto" />-->
     <EmbeddedResource Include="**/*.js" />
     <EmbeddedResource Include="Resources\*" />
     <EmbeddedResource Include="..\build_scripts\Info.txt" Link="Resources\Info.txt" />
@@ -39,10 +39,10 @@
     <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Eto.Forms" Version="2.5.0-rc.5" />
-    <PackageReference Include="Eto.Platform.Gtk" Version="2.5.0-rc.5" />
-    <PackageReference Include="Eto.Platform.Wpf" Version="2.5.0-rc.5" />
-    <PackageReference Include="Eto.Serialization.Xaml" Version="2.5.0-rc.5" />
+    <PackageReference Include="Eto.Forms" Version="2.5.0-rc.6" />
+    <PackageReference Include="Eto.Platform.Gtk" Version="2.5.0-rc.6" />
+    <PackageReference Include="Eto.Platform.Wpf" Version="2.5.0-rc.6" />
+    <PackageReference Include="Eto.Serialization.Xaml" Version="2.5.0-rc.6" />
     <PackageReference Include="Jint" Version="3.0.0-beta-1632" />
   </ItemGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
