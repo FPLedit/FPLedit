@@ -123,8 +123,8 @@ namespace FPLedit.Editor.Trains
 
             if (tt.Version != TimetableVersion.JTG2_x)
             {
-                transitionDropDown.DataStore = tt.Trains.Where(t => t != Train);
                 transitionDropDown.ItemTextBinding = Binding.Property<Train, string>(t => t.TName);
+                transitionDropDown.DataStore = tt.Trains.Where(t => t != Train);
                 transitionDropDown.SelectedValue = tt.GetTransition(Train);
             }
             else

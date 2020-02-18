@@ -22,8 +22,8 @@ namespace FPLedit.Shared.UI
             // Asynchrones Laden der Font-Liste, um Performance-Problemen vorzubeugen
             Application.Instance.AsyncInvoke(() =>
             {
-                box.DataStore = FontCollection.Families;
                 box.ItemTextBinding = Binding.Property<string, string>(s => s);
+                box.DataStore = FontCollection.Families;
             });
 
             box.TextChanged += TextChanged;

@@ -15,8 +15,8 @@ namespace FPLedit.Shared.UI
             var cc = new ColorCollection(settings);
 
             var p = GetProperty<T>(property);
-            dropDown.DataStore = cc.ColorHexStrings;
             dropDown.ItemTextBinding = ExtBind.ColorBinding(cc);
+            dropDown.DataStore = cc.ColorHexStrings;
             dropDown.SelectedValueBinding.BindDataContext<T>(a => ColorFormatter.ToString((MColor)p.GetValue(a)),
                 (a, val) => p.SetValue(a, ColorFormatter.FromHexString((string)val)));
         }
@@ -59,8 +59,8 @@ namespace FPLedit.Shared.UI
         public static void Enum<T, TEnum>(DropDown dropDown, string property, Dictionary<TEnum, string> display) where TEnum : Enum
         {
             var p = GetProperty<T>(property);
-            dropDown.DataStore = display.Keys.Cast<object>();
             dropDown.ItemTextBinding = Binding.Property<TEnum, string>(s => display[s]);
+            dropDown.DataStore = display.Keys.Cast<object>();
             dropDown.SelectedValueBinding.BindDataContext<T>(s => (TEnum)p.GetValue(s), (s, v) => p.SetValue(s, v));
         }
 
