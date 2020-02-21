@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>{0B7A9395-3318-41A1-85D3-EECA6A868FA7}</ProjectGuid>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -18,8 +18,8 @@
     <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Eto.Forms" Version="2.5.0-rc.6" />
-    <PackageReference Include="Eto.Serialization.Xaml" Version="2.5.0-rc.6" />
+    <PackageReference Include="Eto.Forms" Version="2.5.0" />
+    <PackageReference Include="Eto.Serialization.Xaml" Version="2.5.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.Win32.Registry" Version="4.7.0" />
   </ItemGroup>

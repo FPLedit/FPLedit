@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28729.10
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Shared", "FPLedit.Shared\FPLedit.Shared.csproj", "{CE38D005-22B2-4B15-80BA-614F038240FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPLedit.Shared", "FPLedit.Shared\FPLedit.Shared.csproj", "{CE38D005-22B2-4B15-80BA-614F038240FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Buchfahrplan", "FPLedit.Buchfahrplan\FPLedit.Buchfahrplan.csproj", "{B8BA56BA-15FC-4D2E-8929-FDD6C6E13B5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPLedit.Buchfahrplan", "FPLedit.Buchfahrplan\FPLedit.Buchfahrplan.csproj", "{B8BA56BA-15FC-4D2E-8929-FDD6C6E13B5A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", "{5A859144-0558-4FEB-965B-BFD83D9336A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.jTrainGraphStarter", "FPLedit.jTrainGraphStarter\FPLedit.jTrainGraphStarter.csproj", "{0B7A9395-3318-41A1-85D3-EECA6A868FA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPLedit.jTrainGraphStarter", "FPLedit.jTrainGraphStarter\FPLedit.jTrainGraphStarter.csproj", "{0B7A9395-3318-41A1-85D3-EECA6A868FA7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build_scripts", "build_scripts", "{A63B9FD7-0C3A-4C99-905C-52C85CA8D2E0}"
 	ProjectSection(SolutionItems) = preProject
@@ -28,39 +28,41 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build_scripts", "build_scri
 		build_scripts\vsbuild-pre.ps1 = build_scripts\vsbuild-pre.ps1
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Aushangfahrplan", "FPLedit.Aushangfahrplan\FPLedit.Aushangfahrplan.csproj", "{C9D85138-EABB-47C1-8765-0F204E81FA5C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPLedit.Aushangfahrplan", "FPLedit.Aushangfahrplan\FPLedit.Aushangfahrplan.csproj", "{C9D85138-EABB-47C1-8765-0F204E81FA5C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Kursbuch", "FPLedit.Kursbuch\FPLedit.Kursbuch.csproj", "{678843A1-1DFA-46EC-A15B-9C0AF7FCBBF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPLedit.Kursbuch", "FPLedit.Kursbuch\FPLedit.Kursbuch.csproj", "{678843A1-1DFA-46EC-A15B-9C0AF7FCBBF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit", "FPLedit\FPLedit.csproj", "{386836E8-5885-4ED1-B350-CE2BBEC5367E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPLedit", "FPLedit\FPLedit.csproj", "{386836E8-5885-4ED1-B350-CE2BBEC5367E}"
 	ProjectSection(ProjectDependencies) = postProject
 		{C9D85138-EABB-47C1-8765-0F204E81FA5C} = {C9D85138-EABB-47C1-8765-0F204E81FA5C}
 		{77EE9755-CE3E-4B7B-AEF1-474B228E7B50} = {77EE9755-CE3E-4B7B-AEF1-474B228E7B50}
+		{5C173B7B-44B8-474F-8C12-FEC12A5F0F94} = {5C173B7B-44B8-474F-8C12-FEC12A5F0F94}
 		{0B7A9395-3318-41A1-85D3-EECA6A868FA7} = {0B7A9395-3318-41A1-85D3-EECA6A868FA7}
 		{678843A1-1DFA-46EC-A15B-9C0AF7FCBBF0} = {678843A1-1DFA-46EC-A15B-9C0AF7FCBBF0}
 		{CA3BB2AD-517E-475F-B7D7-ABA69AC31A96} = {CA3BB2AD-517E-475F-B7D7-ABA69AC31A96}
 		{B8BA56BA-15FC-4D2E-8929-FDD6C6E13B5A} = {B8BA56BA-15FC-4D2E-8929-FDD6C6E13B5A}
+		{31A934E6-51C8-4CDB-B671-D76049C956A8} = {31A934E6-51C8-4CDB-B671-D76049C956A8}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Shared.UI", "FPLedit.Shared.UI\FPLedit.Shared.UI.csproj", "{5A1A083A-1308-488A-8A6B-ED8C1936B7C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPLedit.Shared.UI", "FPLedit.Shared.UI\FPLedit.Shared.UI.csproj", "{5A1A083A-1308-488A-8A6B-ED8C1936B7C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Bildfahrplan", "FPLedit.Bildfahrplan\FPLedit.Bildfahrplan.csproj", "{77EE9755-CE3E-4B7B-AEF1-474B228E7B50}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPLedit.Bildfahrplan", "FPLedit.Bildfahrplan\FPLedit.Bildfahrplan.csproj", "{77EE9755-CE3E-4B7B-AEF1-474B228E7B50}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.DebugDump", "FPLedit.DebugDump\FPLedit.DebugDump.csproj", "{CA3BB2AD-517E-475F-B7D7-ABA69AC31A96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPLedit.DebugDump", "FPLedit.DebugDump\FPLedit.DebugDump.csproj", "{CA3BB2AD-517E-475F-B7D7-ABA69AC31A96}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Shared.Rendering", "FPLedit.Shared.Rendering\FPLedit.Shared.Rendering.csproj", "{7D24F283-5220-42E0-83F9-76297A4BD03D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPLedit.Shared.Rendering", "FPLedit.Shared.Rendering\FPLedit.Shared.Rendering.csproj", "{7D24F283-5220-42E0-83F9-76297A4BD03D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Shared.Tests", "FPLedit.Shared.Tests\FPLedit.Shared.Tests.csproj", "{7F8AF3E4-F2F6-4D4E-9E1F-0483E5BAE8E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPLedit.Shared.Tests", "FPLedit.Shared.Tests\FPLedit.Shared.Tests.csproj", "{7F8AF3E4-F2F6-4D4E-9E1F-0483E5BAE8E0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{83B63C9D-A034-42FF-B874-FDC7834408B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Tests", "FPLedit.Tests\FPLedit.Tests.csproj", "{6999ADEC-37DC-4B78-A6F3-B18C4B429506}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPLedit.Tests", "FPLedit.Tests\FPLedit.Tests.csproj", "{6999ADEC-37DC-4B78-A6F3-B18C4B429506}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Shared.UI.PlatformControls.Wpf", "FPLedit.Shared.UI.PlatformControls.Wpf\FPLedit.Shared.UI.PlatformControls.Wpf.csproj", "{31A934E6-51C8-4CDB-B671-D76049C956A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPLedit.Shared.UI.PlatformControls.Wpf", "FPLedit.Shared.UI.PlatformControls.Wpf\FPLedit.Shared.UI.PlatformControls.Wpf.csproj", "{31A934E6-51C8-4CDB-B671-D76049C956A8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPLedit.Shared.UI.PlatformControls.Gtk", "FPLedit.Shared.UI.PlatformControls.Gtk\FPLedit.Shared.UI.PlatformControls.Gtk.csproj", "{5C173B7B-44B8-474F-8C12-FEC12A5F0F94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Shared.UI.PlatformControls", "FPLedit.Shared.UI.PlatformControls\FPLedit.Shared.UI.PlatformControls.csproj", "{08482F0A-70E8-4869-B27E-14A3280684BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPLedit.Shared.UI.PlatformControls", "FPLedit.Shared.UI.PlatformControls\FPLedit.Shared.UI.PlatformControls.csproj", "{08482F0A-70E8-4869-B27E-14A3280684BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -110,11 +112,9 @@ Global
 		{7F8AF3E4-F2F6-4D4E-9E1F-0483E5BAE8E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7F8AF3E4-F2F6-4D4E-9E1F-0483E5BAE8E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F8AF3E4-F2F6-4D4E-9E1F-0483E5BAE8E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7F8AF3E4-F2F6-4D4E-9E1F-0483E5BAE8E0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6999ADEC-37DC-4B78-A6F3-B18C4B429506}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6999ADEC-37DC-4B78-A6F3-B18C4B429506}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6999ADEC-37DC-4B78-A6F3-B18C4B429506}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6999ADEC-37DC-4B78-A6F3-B18C4B429506}.Release|Any CPU.Build.0 = Release|Any CPU
 		{31A934E6-51C8-4CDB-B671-D76049C956A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{31A934E6-51C8-4CDB-B671-D76049C956A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31A934E6-51C8-4CDB-B671-D76049C956A8}.Release|Any CPU.ActiveCfg = Release|Any CPU

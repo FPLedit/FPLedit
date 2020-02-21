@@ -23,7 +23,7 @@
     </TableRow>
     <TableRow>
       <StackLayout>
-        <Label>© 2015-2019 Manuel Huber</Label>
+        <Label>© 2015-2020 Manuel Huber</Label>
         <fui:UrlButton Url="https://fahrplan.manuelhu.de/">Online-Dokumentation</fui:UrlButton>
       </StackLayout>
     </TableRow>

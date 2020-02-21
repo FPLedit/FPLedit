@@ -1,7 +1,7 @@
 /*
  * FPLedit Release-Prozess
  * Includes zur Generierung einer einheitlichen Lizenz
- * Version 0.3 / (c) Manuel Huber 2019
+ * Version 0.4 / (c) Manuel Huber 2020
  */
 
 using System;
@@ -59,4 +59,12 @@ string AddNewlines(string text, int length = 75)
     }
 
     return ret;
+}
+
+void Warning(string text) {
+    Console.WriteLine($"BUILD_SCRIPTS(1,1,1,2): warning: [BUILD] {text}");
+}
+
+void Error(string text) {
+    Console.WriteLine($"BUILD_SCRIPTS(1,1,1,2): error: [BUILD] {text}");
 }

@@ -4,6 +4,8 @@
  * Aufruf: build-pre.csx $(SolutionDir) $(TargetDir)
  * Version 0.3 / (c) Manuel Huber 2020
  */
+ 
+#load "includes.csx"
 
 using System;
 using System.IO;

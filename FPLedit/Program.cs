@@ -1,4 +1,4 @@
-﻿using Eto.Forms;
+using Eto.Forms;
 using FPLedit.Config;
 using FPLedit.CrashReporting;
 using System;
@@ -32,8 +32,15 @@ namespace FPLedit
             App.UnhandledException += UnhandledException;
 #endif
 
-            // Load platform dependant Eto controls provided by FPLedit.Shared.UI
-            Eto.Platform.Instance.LoadAssembly("FPLedit.Shared.UI.PlatformControls");
+            // Load platform dependant Eto controls provided by FPLedit.Shared.UI.PlatformControls
+            const string platformAssembly = "FPLedit.Shared.UI.PlatformControls";
+            Eto.Platform.Instance.LoadAssembly(platformAssembly);
+            var testPlatform = Eto.Platform.Instance.Find(typeof(Shared.UI.PlatformControls.BDComboBoxCell));
+            if (testPlatform == null)
+            {
+                MessageBox.Show($"Benötigte Platttform-Erweiterungen ({platformAssembly}.[Platform].dll) nicht gefunden! Ist dies ein vollständiger FPLedit-Build?\n\nLaden Sie bitte FPLedit neu herunter oder wenden sich an den FPLedit-Enwtickler!", "FPLedit-Ladefehler", MessageBoxType.Error);
+                return;
+            }
 
             mainForm = new MainForm();
             crashReporter = mainForm.CrashReporter;

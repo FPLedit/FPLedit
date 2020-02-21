@@ -29,7 +29,7 @@ internal static class Vi
      * FOR EVERY RELEASE: Increment the following version entries
      * The rest ist updated automatically
      */
-    private const string Major = "2", Minor = "1", Patch = "1";
+    private const string Major = "2", Minor = "2", Patch = "0";
 
     /*
      * It shouldn't be necessary to update the following entries.
