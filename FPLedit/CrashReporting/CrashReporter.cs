@@ -54,7 +54,7 @@ namespace FPLedit.CrashReporting
         {
             if (!HasCurrentTtBackup)
                 return;
-            fh.InternalOpen(CrashTtFileName);
+            fh.InternalOpen(CrashTtFileName, false);
             fh.FileState.Saved = false;
             fh.FileState.FileName = OrigTtFileName != "" ? OrigTtFileName : null;
         }

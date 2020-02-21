@@ -5,6 +5,11 @@ using FPLedit.Shared;
 
 namespace FPLedit
 {
+    internal interface ILastFileHandler
+    {
+        void AddLastFile(string fn);
+    }
+    
     internal sealed class LastFileHandler : ILastFileHandler
     {
         private List<string> lastFiles;

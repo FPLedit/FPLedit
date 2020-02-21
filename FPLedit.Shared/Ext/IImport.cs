@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace FPLedit.Shared
 {
@@ -42,5 +43,8 @@ namespace FPLedit.Shared
                 return null;
             }
         }
+        
+        public static Task<Timetable?> GetAsyncSafeImport(this IImport imp, string filename, IReducedPluginInterface pluginInterface) 
+            => new Task<Timetable?>(() => imp.SafeImport(filename, pluginInterface));
     }
 }

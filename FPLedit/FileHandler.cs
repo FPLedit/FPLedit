@@ -26,6 +26,8 @@ namespace FPLedit
         private Timetable timetable;
 
         private readonly BinaryCacheFile cache;
+        
+        public bool AsyncBlockingOperation { get; private set; }
 
         public Timetable Timetable
         {
@@ -72,6 +74,7 @@ namespace FPLedit
         }
 
         #region FileState
+
         public void SetUnsaved()
         {
             undo.AddUndoStep();
@@ -83,11 +86,16 @@ namespace FPLedit
             FileState.UpdateMetaProperties(Timetable, undo);
             FileStateChanged?.Invoke(this, new FileStateChangedEventArgs(FileState));
         }
+
         #endregion
 
         #region Export / Import
+
         internal void Import()
         {
+            if (!NotifyIfAsyncOperationInProgress())
+                return;
+            
             var importers = pluginInterface.GetRegistered<IImport>();
 
             if (importers.Length == 0)
@@ -96,26 +104,56 @@ namespace FPLedit
                 return;
             }
 
-            if (!NotifyIfUnsaved())
+            if (!NotifyIfUnsaved(false))
                 return;
+
+            var (rev, frev) = (FileState.RevisionCounter, FileState.FileNameRevisionCounter);
+
             if (importFileDialog.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
             {
                 IImport import = importers[importFileDialog.CurrentFilterIndex - 1];
-                pluginInterface.Logger.Info("Öffne Datei " + importFileDialog.FileName);
-                Timetable = import.SafeImport(importFileDialog.FileName, pluginInterface);
-                if (Timetable == null)
-                    return;
-                pluginInterface.Logger.Info("Datei erfolgeich geöffnet!");
-                FileState.Opened = true;
-                FileState.Saved = true;
-                FileState.FileName = importFileDialog.FileName;
-                undo.ClearHistory();
-                cache.Clear();
+                pluginInterface.Logger.Info("Importiere Datei " + importFileDialog.FileName);
+                
+                InternalCloseFile();
+
+                var tsk = import.GetAsyncSafeImport(importFileDialog.FileName, pluginInterface);
+                tsk.ContinueWith((Task<Timetable> t, object o) =>
+                {
+                    Application.Instance.Invoke(() =>
+                    {
+                        if (t.Result == null)
+                        {
+                            pluginInterface.Logger.Error("Importieren fehlgeschlagen!");
+                            return;
+                        }
+
+                        pluginInterface.Logger.Info("Datei erfolgreich importiert!");
+
+                        if (FileState.RevisionCounter != rev || FileState.FileNameRevisionCounter != frev)
+                            if (!NotifyIfUnsaved(true)) // Ask again
+                                return;
+
+                        FileState.Opened = true;
+                        FileState.Saved = true;
+                        FileState.FileName = importFileDialog.FileName;
+                        undo.ClearHistory();
+                        Timetable = t.Result;
+
+                        // Exit blocking operation
+                        AsyncBlockingOperation = false;
+                    });
+                }, null, TaskScheduler.Default);
+                
+                // Start async operation, but we should not be able to start any other file operation in between.
+                AsyncBlockingOperation = true;
+                tsk.Start();
             }
         }
 
         internal void Export()
         {
+            if (!NotifyIfAsyncOperationInProgress())
+                return;
             if (exportFileDialog.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
             {
                 var exporters = pluginInterface.GetRegistered<IExport>();
@@ -132,7 +170,7 @@ namespace FPLedit
                     else
                         pluginInterface.Logger.Info("Exportieren erfolgreich abgeschlossen!");
                 }, null, TaskScheduler.Default);
-                tsk.Start();
+                tsk.Start(); // Non-blocking operation.
             }
         }
 
@@ -146,26 +184,32 @@ namespace FPLedit
             if (exporter_idx > -1 && exporters.Length > exporter_idx)
                 exportFileDialog.CurrentFilterIndex = exporter_idx + 1;
         }
+
         #endregion
 
         #region Open / Save / New
+        
         public void Open()
         {
+            if (!NotifyIfAsyncOperationInProgress())
+                return;
             if (!NotifyIfUnsaved())
                 return;
             if (openFileDialog.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
             {
-                InternalOpen(openFileDialog.FileName);
+                InternalOpen(openFileDialog.FileName, true);
                 UpdateLastPath(openFileDialog);
                 lfh.AddLastFile(openFileDialog.FileName);
             }
         }
 
         public void Reload()
-            => InternalOpen(FileState.FileName);
+            => InternalOpen(FileState.FileName, false);
 
-        internal void InternalOpen(string filename)
+        internal void InternalOpen(string filename, bool doAsync)
         {
+            InternalCloseFile();
+
             pluginInterface.Logger.Info("Öffne Datei " + filename);
             
             // Load sidecar cache file.
@@ -183,22 +227,56 @@ namespace FPLedit
                 }
             }
             
-            Timetable = open.SafeImport(filename, pluginInterface);
-            if (Timetable == null)
-                pluginInterface.Logger.Error("Fehler beim Öffnen der Datei!");
-            else
-                pluginInterface.Logger.Info("Datei erfolgeich geöffnet!");
-            FileState.Opened = Timetable != null;
-            FileState.Saved = Timetable != null;
-            FileState.FileName = Timetable != null ? filename : null;
-            undo.ClearHistory();
+            var (rev, frev) = (FileState.RevisionCounter, FileState.FileNameRevisionCounter);
+            
+            var tsk = open.GetAsyncSafeImport(filename, pluginInterface);
+            tsk.ContinueWith((Task<Timetable> t, object o) =>
+            {
+                Application.Instance.Invoke(() =>
+                {
+                    if (t.Result == null)
+                    {
+                        pluginInterface.Logger.Error("Fehler beim Öffnen der Datei!");
+                        return;
+                    }
 
-            if (Timetable != null)
-                FileOpened?.Invoke(this, null);
+                    pluginInterface.Logger.Info("Datei erfolgeich geöffnet!");
+
+                    if (FileState.RevisionCounter != rev || FileState.FileNameRevisionCounter != frev)
+                        if (!NotifyIfUnsaved(true)) // Ask again
+                            return;
+
+                    undo.ClearHistory();
+                    Timetable = t.Result;
+
+                    FileState.Opened = Timetable != null;
+                    FileState.Saved = Timetable != null;
+                    FileState.FileName = Timetable != null ? filename : null;
+
+                    // Exit blocking operation
+                    AsyncBlockingOperation = false;
+
+                    if (Timetable != null)
+                        FileOpened?.Invoke(this, null);
+                });
+            }, null, TaskScheduler.Default);
+                
+            // Start async operation, but we should not be able to start any other file operation in between.
+            AsyncBlockingOperation = true;
+            if (doAsync)
+                tsk.Start();
+            else
+                tsk.RunSynchronously();
         }
 
         public void Save(bool forceSaveAs)
+            => Save(forceSaveAs, true);
+        
+        private void Save(bool forceSaveAs, bool doAsync)
         {
+            if (!NotifyIfAsyncOperationInProgress())
+                return;
+            
             string filename = FileState.FileName;
 
             bool saveAs = forceSaveAs || filename == null || filename == "" || Path.GetExtension(filename) != ".fpl";
@@ -211,58 +289,100 @@ namespace FPLedit
                 UpdateLastPath(saveFileDialog);
                 lfh.AddLastFile(saveFileDialog.FileName);
             }
-            InternalSave(filename);
+
+            InternalSave(filename, doAsync);
         }
 
-        private void InternalSave(string filename)
+        private void InternalSave(string filename, bool doAsync)
         {
             if (!filename.EndsWith(".fpl"))
                 filename += ".fpl";
 
-            pluginInterface.Logger.Info("Speichere Datei " + filename);
-            bool ret = save.SafeExport(Timetable, filename, pluginInterface);
-            if (ret == false)
-                return;
-            pluginInterface.Logger.Info("Speichern erfolgreich abgeschlossen!");
-            FileState.Saved = true;
-            FileState.FileName = filename;
-            
-            // Create or delete sidecar file.
-            var cacheFile = filename + "-cache";
-            var bytes = File.ReadAllBytes(filename);
-            if (cache.Any() && cache.ShouldWriteCacheFile(Timetable, pluginInterface.Settings))
-            {
-                using (var sha256 = SHA256.Create())
-                {
-                    var hash = string.Join("", sha256.ComputeHash(bytes).Select(b => b.ToString("X2")));
+            var (rev, frev) = (FileState.RevisionCounter, FileState.FileNameRevisionCounter);
 
-                    using (var stream = File.Open(cacheFile, FileMode.OpenOrCreate, FileAccess.Write))
+            pluginInterface.Logger.Info("Speichere Datei " + filename);
+            
+            var clone = Timetable.Clone();
+            
+            var tsk = save.GetAsyncSafeExport(clone, filename, pluginInterface);
+            tsk.ContinueWith((t, o) =>
+            {
+                Application.Instance.Invoke(() =>
+                {
+                    if (t.Result == false)
                     {
-                        stream.SetLength(0);
-                        cache.Write(stream, hash);
+                        pluginInterface.Logger.Error("Speichern fehlgeschlagen!");
+                        return;
                     }
-                }
-            }
-            else if (File.Exists(cacheFile)) // Delete cache file if we don't need one.
-                File.Delete(cacheFile);
+
+                    pluginInterface.Logger.Info("Speichern erfolgreich abgeschlossen!");
+
+                    if (FileState.RevisionCounter == rev)
+                        FileState.Saved = true;
+                    if (FileState.FileNameRevisionCounter == frev)
+                        FileState.FileName = filename;
+                    if (FileState.RevisionCounter != rev || FileState.FileNameRevisionCounter != frev)
+                        pluginInterface.Logger.Warning("Während dem Speichern wurde der Zustand verändert, daher ist Datei auf der Festplatte nicht mehr aktuell.");
+
+                    // Create or delete sidecar file.
+                    var cacheFile = filename + "-cache";
+                    var bytes = File.ReadAllBytes(filename);
+                    if (cache.Any() && cache.ShouldWriteCacheFile(clone, pluginInterface.Settings))
+                    {
+                        using (var sha256 = SHA256.Create())
+                        {
+                            var hash = string.Join("", sha256.ComputeHash(bytes).Select(b => b.ToString("X2")));
+
+                            using (var stream = File.Open(cacheFile, FileMode.OpenOrCreate, FileAccess.Write))
+                            {
+                                stream.SetLength(0);
+                                cache.Write(stream, hash);
+                            }
+                        }
+                    }
+                    else if (File.Exists(cacheFile)) // Delete cache file if we don't need one.
+                        File.Delete(cacheFile);
+                });
+            }, null, TaskScheduler.Default);
+            if (doAsync)
+                tsk.Start();
+            else
+                tsk.RunSynchronously();
         }
 
         internal void New(TimetableType type)
         {
+            if (!NotifyIfAsyncOperationInProgress())
+                return;
             if (!NotifyIfUnsaved())
                 return;
+            
             Timetable = new Timetable(type);
             FileState.Opened = true;
             FileState.Saved = false;
             FileState.FileName = null;
             undo.ClearHistory();
-            pluginInterface.Logger.Info("Neue Datei erstellt");
             cache.Clear();
+            
+            pluginInterface.Logger.Info("Neue Datei erstellt");
             FileOpened?.Invoke(this, null);
         }
+        
+        private void InternalCloseFile()
+        {
+            Timetable = null;
+            FileState.Opened = false;
+            FileState.Saved = false;
+            FileState.FileName = null;
+            
+            cache.Clear();
+            undo.ClearHistory();
+        }
+
         #endregion
 
         #region Last Directory Helper
+
         private void UpdateLastPath(FileDialog dialog) => SetLastPath(Path.GetDirectoryName(dialog.FileName));
 
         private void SetLastPath(string lastPath)
@@ -272,14 +392,20 @@ namespace FPLedit
                 openFileDialog.Directory = uri;
                 saveFileDialog.Directory = uri;
             }
+
             pluginInterface.Settings.Set("files.lastpath", lastPath);
         }
+
         #endregion
 
         #region Conversion Helpers
+
         internal void ConvertTimetable()
         {
-            IExport exp = (Timetable.Type == TimetableType.Linear) ? (IExport)new NetworkExport() : new LinearExport();
+            if (!NotifyIfAsyncOperationInProgress())
+                return;
+            
+            IExport exp = (Timetable.Type == TimetableType.Linear) ? (IExport) new NetworkExport() : new LinearExport();
             string orig = (Timetable.Type == TimetableType.Linear) ? "Linear-Fahrplan" : "Netzwerk-Fahrplan";
             string dest = (Timetable.Type == TimetableType.Linear) ? "Netzwerk-Fahrplan" : "Linear-Fahrplan";
 
@@ -297,7 +423,7 @@ namespace FPLedit
                     if (ret == false)
                         return;
                     pluginInterface.Logger.Info("Konvertieren erfolgreich abgeschlossen!");
-                    InternalOpen(sfd.FileName);
+                    InternalOpen(sfd.FileName, true);
                 }
             }
         }
@@ -306,9 +432,12 @@ namespace FPLedit
         {
             if (Timetable == null || Timetable.Version.Compare(Timetable.DefaultLinearVersion) >= 0)
                 return;
+            
+            if (!NotifyIfAsyncOperationInProgress())
+                return;
 
             var res = MessageBox.Show("Diese Fahrplandatei ist im Dateiformat von jTrainGraph 2.x bzw. 3.0x erstellt worden. Im Format von jTrainGraph 3.1x stehen mehr Funktionen zur Verfügung." +
-                " Soll das Format jetzt aktualisiert werden? ACHTUNG: Die Datei kann danach nicht mehr mit jTrainGraph 2.x oder 3.0x berabeitet werden!", "FPLedit",
+                                      " Soll das Format jetzt aktualisiert werden? ACHTUNG: Die Datei kann danach nicht mehr mit jTrainGraph 2.x oder 3.0x berabeitet werden!", "FPLedit",
                 MessageBoxButtons.YesNo, MessageBoxType.Question);
             if (res != DialogResult.Yes)
                 return;
@@ -325,23 +454,36 @@ namespace FPLedit
                     if (ret == false)
                         return;
                     pluginInterface.Logger.Info("Konvertieren erfolgreich abgeschlossen!");
-                    InternalOpen(sfd.FileName);
+                    InternalOpen(sfd.FileName, true);
                 }
             }
         }
+
         #endregion
 
-        internal bool NotifyIfUnsaved()
+        internal bool NotifyIfUnsaved(bool asyncChange = false)
         {
             if (!FileState.Saved && FileState.Opened)
             {
-                DialogResult res = MessageBox.Show("Wollen Sie die noch nicht gespeicherten Änderungen speichern?",
+                DialogResult res = MessageBox.Show(asyncChange ? "Während dem Ladevorgang wurden Daten geändert. Sollen diese noch einmal in die letzte Datei geschrieben werden?" : "Wollen Sie die noch nicht gespeicherten Änderungen speichern?",
                     "FPLedit", MessageBoxButtons.YesNoCancel);
 
                 if (res == DialogResult.Yes)
-                    Save(false);
+                    Save(false, doAsync: false);
                 return res != DialogResult.Cancel;
             }
+
+            return true;
+        }
+
+        private bool NotifyIfAsyncOperationInProgress()
+        {
+            if (AsyncBlockingOperation)
+            {
+                pluginInterface.Logger.Error("Eine andere Dateioperation ist bereits im Gange!");
+                return false;
+            }
+
             return true;
         }
 
@@ -356,10 +498,5 @@ namespace FPLedit
             if (importFileDialog != null && !importFileDialog.IsDisposed)
                 importFileDialog.Dispose();
         }
-    }
-
-    internal interface ILastFileHandler
-    {
-        void AddLastFile(string fn);
     }
 }

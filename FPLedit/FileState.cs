@@ -20,9 +20,22 @@ namespace FPLedit
 
         public bool CanGoBack { get; private set; }
 
-        public string FileName { get => fileName; set => TriggerEvent(fileName = value); }
+        public string FileName
+        {
+            get => fileName;
+            set
+            {
+                if (value != fileName)
+                    FileNameRevisionCounter++;
+                TriggerEvent(fileName = value);
+            }
+        }
 
         public int SelectedRoute { get; set; }
+
+        internal int RevisionCounter { get; private set; }
+        
+        internal int FileNameRevisionCounter { get; private set; }
 
         public void UpdateMetaProperties(Timetable tt, UndoManager undo)
         {
@@ -31,9 +44,11 @@ namespace FPLedit
             CanGoBack = undo.CanGoBack;
         }
 
-#pragma warning disable IDE0060 // Nicht verwendete Parameter entfernen
-        private void TriggerEvent(object o) => FileStateInternalChanged?.Invoke(this, new FileStateChangedEventArgs(this));
-#pragma warning restore IDE0060 // Nicht verwendete Parameter entfernen
+        private void TriggerEvent(object o)
+        {
+            RevisionCounter++;
+            FileStateInternalChanged?.Invoke(this, new FileStateChangedEventArgs(this));
+        }
 
         internal event EventHandler<FileStateChangedEventArgs> FileStateInternalChanged;
     }

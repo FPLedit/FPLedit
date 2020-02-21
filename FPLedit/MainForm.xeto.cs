@@ -189,7 +189,7 @@ namespace FPLedit
             fn = Bootstrapper.FullSettings.Get("restart.file", fn);
             if (fn != null && File.Exists(fn))
             {
-                Bootstrapper.FileHandler.InternalOpen(fn);
+                Bootstrapper.FileHandler.InternalOpen(fn, true);
                 lfh.AddLastFile(fn);
             }
             Bootstrapper.FullSettings.Remove("restart.file");
@@ -204,7 +204,7 @@ namespace FPLedit
                 itm.Click += (s, a) =>
                 {
                     if (Bootstrapper.FileHandler.NotifyIfUnsaved())
-                        Bootstrapper.FileHandler.InternalOpen(lf);
+                        Bootstrapper.FileHandler.InternalOpen(lf, true);
                 };
             }
         }
@@ -257,7 +257,7 @@ namespace FPLedit
 
             if (!Bootstrapper.FileHandler.NotifyIfUnsaved())
                 return;
-            Bootstrapper.FileHandler.InternalOpen(files[0].LocalPath);
+            Bootstrapper.FileHandler.InternalOpen(files[0].LocalPath, true);
 
             base.OnDragDrop(e);
         }
