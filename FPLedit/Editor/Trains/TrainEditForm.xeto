@@ -1,4 +1,4 @@
-﻿<e:TrainEditForm
+<e:TrainEditForm
   xmlns="clr-namespace:Eto.Forms;assembly=Eto"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.Editor.Trains;assembly=FPLedit"
@@ -90,7 +90,7 @@
         </StackLayout>
       </TableCell><!-- /left column -->
       <TableCell><!-- right column -->
-        <GroupBox Text="Fahrplan">
+        <GroupBox Text="Fahrplan" Height="400">
           <et:SingleTimetableEditControl x:Name="editor">
             <et:SingleTimetableEditControl.ActionButtons>
               <Button x:Name="fillButton" Text="Von anderem Zug..." Click="FillButton_Click"></Button>

@@ -1,4 +1,4 @@
-﻿<e:SingleTimetableEditControl
+<e:SingleTimetableEditControl
   xmlns="clr-namespace:Eto.Forms;assembly=Eto"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.Editor.TimetableEditor;assembly=FPLedit"
@@ -8,7 +8,9 @@
       <TableLayout Spacing="5,5" Padding="10,10,10,10">
         <TableRow ScaleHeight="True">
           <TableCell ScaleWidth="true">
-            <GridView x:Name="dataGridView" />
+              <Scrollable ExpandContentWidth="true" ExpandContentHeight="true">
+                <GridView x:Name="dataGridView" />
+              </Scrollable>
           </TableCell>
         </TableRow>
       </TableLayout>
