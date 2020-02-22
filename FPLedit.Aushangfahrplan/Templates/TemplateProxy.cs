@@ -22,7 +22,13 @@ namespace FPLedit.Aushangfahrplan.Templates
 
     internal class BaseTemplateProxy
     {
-        protected string GeneratePreamble(string name, string svg) 
-            => $@"<#@ fpledit-template type=""afpl"" version=""2"" name=""{name}"" #>" + "\n" + $@"<# var abfahrtSVG = ""{svg}""; #>";
+        protected string GeneratePreamble(string name, string svg)
+        {
+            svg = svg.Replace("\\", "\\\\");
+            svg = svg.Replace("\"", "\\\"");
+            svg = svg.Replace("\n", "");
+            svg = svg.Replace("\r", "");
+            return $@"<#@ fpledit-template type=""afpl"" version=""2"" name=""{name}"" #>" + "\n" + $@"<# var abfahrtSVG = ""{svg}""; #>";
+        }
     }
 }
