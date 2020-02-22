@@ -53,8 +53,13 @@ foreach (var f in files)
     Console.WriteLine(f.Name);
 }
 
-Console.WriteLine("Entferne FPLedit.Shared.UI.Gtk.deps.json");
-File.Delete(Path.Combine(output_path, "FPLedit.Shared.UI.Gtk.deps.json"));
+Console.WriteLine("Entferne *.deps.json");
+files = info.GetFiles("*.deps.json");
+foreach (var f in files)
+{
+    File.Delete(f.FullName);
+    Console.WriteLine(f.Name);
+}
 
 Console.WriteLine("Entferne Installer!");
 files = info.GetFiles("FPLedit.Installer.exe");
@@ -65,9 +70,9 @@ foreach (var f in files)
 }
 
 /*
- * TASK: Move eto files
+ * TASK: Move library files
  */
-Console.WriteLine("Verschiebe Eto-Bibliotheken!");
+Console.WriteLine("Verschiebe Bibliotheken!");
 
 var dll_files = info.GetFiles("*.dll").Select(f => f.Name);
 var fpledit_files = info.GetFiles("FPLedit.*").Select(f => f.Name);
@@ -108,7 +113,7 @@ if (doc != null && File.Exists(doc))
     doc_generated = true;
 }
 else
-    Warning($"Umgebungsvariable FPLEDIT_DOK nicht gesetzt bzw. die Datei (= Wert der Variablen) existiert nicht! Das generierte Programmpaket enthält keine Dokumentation!");
+    Warning("Umgebungsvariable FPLEDIT_DOK nicht gesetzt bzw. die Datei (= Wert der Variablen) existiert nicht! Das generierte Programmpaket enthält keine Dokumentation!");
 
 /*
  * TASK: Build ZIP file
