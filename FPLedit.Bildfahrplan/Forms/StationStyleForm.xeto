@@ -4,26 +4,24 @@
   xmlns:e="clr-namespace:FPLedit.Bildfahrplan.Forms;assembly=FPLedit.Bildfahrplan"
   xmlns:sys="clr-namespace:System;assembly=mscorlib"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
-  Title="Stationsdarstellung ändern" Size="580,530" Resizable="true">
+  Title="Stationsdarstellung ändern" Size="620,530" Resizable="true">
   <TableLayout Spacing="5,5" Padding="10,10,10,10">
     <TableRow ScaleHeight="true">
       <TableLayout Spacing="5,5">
         <TableRow ScaleHeight="True">
           <TableCell ScaleWidth="true">
-            <GridView x:Name="gridView"></GridView>
+            <GridView x:Name="gridView" />
           </TableCell>
-          <StackLayout Spacing="5">
-            <Button Click="ResetButton_Click">Darstellung zurücksetzen</Button>
-          </StackLayout>
         </TableRow>
       </TableLayout>
     </TableRow>
     <TableRow>
       <TableLayout Spacing="5,5">
         <TableRow>
+          <Button Click="ResetButton_Click">Eintrag zurücksetzen</Button>
           <TableCell ScaleWidth="true" />
-          <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click"></Button>
-          <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click"></Button>
+          <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click" />
+          <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click" />
         </TableRow>
       </TableLayout>
     </TableRow>
