@@ -11,7 +11,7 @@ using FPLedit.Shared.UI;
 
 namespace FPLedit.jTrainGraphStarter
 {
-    internal class SettingsForm : FDialog<DialogResult>
+    internal sealed class SettingsForm : FDialog<DialogResult>
     {
         private readonly ISettings settings;
 
@@ -37,10 +37,10 @@ namespace FPLedit.jTrainGraphStarter
             versionComboBox.ItemTextBinding = Binding.Property<VersionItem, string>(vi => vi.Name);
 
             javaPathTextBox.Text = settings.Get("jTGStarter.javapath", "");
-            jtgPathTextBox.Text = settings.Get("jTGStarter.jtgpath", JTGShared.DEFAULT_FILENAME);
+            jtgPathTextBox.Text = settings.Get("jTGStarter.jtgpath", JtgShared.DEFAULT_FILENAME);
             messageCheckBox.Checked = !settings.Get("jTGStarter.show-message", true);
 
-            var targetVersion = settings.GetEnum("jTGStarter.target-version", JTGShared.DEFAULT_TT_VERSION);
+            var targetVersion = settings.GetEnum("jTGStarter.target-version", JtgShared.DEFAULT_TT_VERSION);
             var vidx = Array.FindIndex(versions, v => v.Version == targetVersion);
             versionComboBox.SelectedIndex = vidx == -1 ? 0 : vidx;
         }
@@ -49,7 +49,7 @@ namespace FPLedit.jTrainGraphStarter
         {
             bool jtgexists = File.Exists(jtgPathTextBox.Text) || ExecutableExists(jtgPathTextBox.Text);
             bool javaexists = ExecutableExists(javaPathTextBox.Text);
-            var compat = JTGShared.JTGCompatCheck(jtgPathTextBox.Text);
+            var compat = JtgShared.JtgCompatCheck(jtgPathTextBox.Text);
 
             if (!javaexists || !jtgexists || !compat.Compatible)
             {
@@ -83,7 +83,7 @@ namespace FPLedit.jTrainGraphStarter
                 {
                     jtgPathTextBox.Text = ofd.FileName;
 
-                    var compat = JTGShared.JTGCompatCheck(jtgPathTextBox.Text);
+                    var compat = JtgShared.JtgCompatCheck(jtgPathTextBox.Text);
                     if (compat.Version.HasValue)
                         versionComboBox.SelectedValue = versionComboBox.DataStore.
                             FirstOrDefault(i => ((VersionItem)i).Version == compat.Version);

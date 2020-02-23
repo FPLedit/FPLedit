@@ -3,7 +3,7 @@ using System;
 
 namespace FPLedit.DebugDump
 {
-    public class DumpLogger : ILog
+    internal class DumpLogger : ILog
     {
         private readonly DumpWriter writer;
 

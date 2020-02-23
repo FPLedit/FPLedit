@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace FPLedit.DebugDump
 {
-    public sealed class DumpReader
+    internal sealed class DumpReader
     {
         public DumpEvent[] Events { get; }
 

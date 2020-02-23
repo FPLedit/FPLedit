@@ -9,7 +9,7 @@ using FPLedit.Shared;
 
 namespace FPLedit.Bildfahrplan.Render
 {
-    internal class TimeRenderer
+    internal sealed class TimeRenderer
     {
         private readonly TimetableStyle attrs;
         private readonly Renderer parent;

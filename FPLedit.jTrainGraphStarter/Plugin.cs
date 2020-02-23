@@ -11,7 +11,7 @@ using System.Text;
 namespace FPLedit.jTrainGraphStarter
 {
     [Plugin("Starter für jTrainGraph", Vi.PFrom, Vi.PUpTo, Author = "Manuel Huber")]
-    public class Plugin : IPlugin
+    public sealed class Plugin : IPlugin
     {
         IPluginInterface pluginInterface;
         ButtonMenuItem startItem;
@@ -90,7 +90,7 @@ namespace FPLedit.jTrainGraphStarter
                         return;
                 }
 
-                var targetVersion = pluginInterface.Settings.GetEnum("jTGStarter.target-version", JTGShared.DEFAULT_TT_VERSION);
+                var targetVersion = pluginInterface.Settings.GetEnum("jTGStarter.target-version", JtgShared.DEFAULT_TT_VERSION);
 
                 var exporter = new Shared.Filetypes.XMLExport();
                 var importer = new Shared.Filetypes.XMLImport();
@@ -119,9 +119,9 @@ namespace FPLedit.jTrainGraphStarter
         private void StartJtg(string fnArg, Action finished)
         {
             string javapath = pluginInterface.Settings.Get("jTGStarter.javapath", "java");
-            string jtgPath = pluginInterface.Settings.Get("jTGStarter.jtgpath", JTGShared.DEFAULT_FILENAME);
+            string jtgPath = pluginInterface.Settings.Get("jTGStarter.jtgpath", JtgShared.DEFAULT_FILENAME);
 
-            var compat = JTGShared.JTGCompatCheck(jtgPath);
+            var compat = JtgShared.JtgCompatCheck(jtgPath);
             if (!compat.Compatible)
             {
                 MessageBox.Show("Die gewählte Version von jTrainGraph ist wahrscheinlich nicht mit FPledit kompatibel. Bitte verwenden Sie jTrainGraph 2.02 - 2.03 oder 3.03 (und höher)!",

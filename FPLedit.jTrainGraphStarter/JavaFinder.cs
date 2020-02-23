@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace FPLedit.jTrainGraphStarter
 {
-    internal class JavaFinder
+    internal static class JavaFinder
     {
         public static string JavaGuess()
         {
             if (Environment.OSVersion.Platform != PlatformID.Win32NT)
                 return "java"; // Not supported
 
-            string[] keys = new string[]
+            string[] keys = 
             {
                 @"HKEY_LOCAL_MACHINE\Software\JavaSoft\Java Runtime Environment",
                 @"HKEY_LOCAL_MACHINE\Software\Wow6432Node\JavaSoft\Java Runtime Environment",
@@ -25,13 +25,13 @@ namespace FPLedit.jTrainGraphStarter
             foreach (var key in keys)
             {
                 var x = (string)Registry.GetValue(key, "CurrentVersion", null);
-                if (x == null || x == "")
+                if (string.IsNullOrEmpty(x))
                     continue;
 
                 var key2 = $@"{key}\{x}";
                 var home = (string)Registry.GetValue(key2, "JavaHome", null);
 
-                if (home == null || home == "")
+                if (string.IsNullOrEmpty(home))
                     continue;
                 return home + @"\bin\javaw.exe";
             }

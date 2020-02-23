@@ -7,9 +7,9 @@ using System.Text;
 namespace FPLedit.Buchfahrplan.Model
 {
     [XElmName("bfpl_attrs", IsFpleditElement = true)]
-    public class BfplAttrs : Entity, IPatternProvider
+    public sealed class BfplAttrs : Entity, IPatternProvider
     {
-        public List<BfplPoint> Points { get; private set; }
+        public List<BfplPoint> Points { get; }
 
         [XAttrName("font")]
         public string Font

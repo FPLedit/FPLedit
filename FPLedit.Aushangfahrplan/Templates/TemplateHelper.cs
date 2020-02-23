@@ -7,7 +7,7 @@ using FPLedit.Shared.DefaultImplementations;
 
 namespace FPLedit.Aushangfahrplan.Templates
 {
-    public class TemplateHelper
+    public sealed class TemplateHelper
     {
         private readonly Timetable tt;
         private readonly FilterRule[] trules, srules;

@@ -8,7 +8,7 @@ using System.Text;
 
 namespace FPLedit.Bildfahrplan.Model
 {
-    internal class TimetableStyle : Style
+    internal sealed class TimetableStyle : Style
     {
         private readonly Timetable tt;
 

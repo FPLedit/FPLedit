@@ -7,7 +7,7 @@ using System.Text;
 
 namespace FPLedit.Bildfahrplan.Model
 {
-    internal class StationStyle : Style
+    internal sealed class StationStyle : Style
     {
         public Station Station { get; }
         

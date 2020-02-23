@@ -3,7 +3,7 @@ using System.IO;
 
 namespace FPLedit.DebugDump
 {
-    public sealed class DumpWriter : IDisposable
+    internal sealed class DumpWriter : IDisposable
     {
         private readonly BinaryWriter writer;
         private readonly FileStream fs;

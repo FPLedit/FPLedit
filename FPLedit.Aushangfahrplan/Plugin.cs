@@ -7,7 +7,7 @@ using FPLedit.Shared.Templating;
 namespace FPLedit.Aushangfahrplan
 {
     [Plugin("Modul für Aushangfahrpläne", Vi.PFrom, Vi.PUpTo, Author = "Manuel Huber")]
-    public class Plugin : IPlugin
+    public sealed class Plugin : IPlugin
     {
         public void Init(IPluginInterface pluginInterface)
         {

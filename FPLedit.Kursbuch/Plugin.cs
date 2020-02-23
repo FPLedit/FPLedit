@@ -10,7 +10,7 @@ using FPLedit.Shared.Templating;
 namespace FPLedit.Kursbuch
 {
     [Plugin("Modul für Tabellenfahrpläne", Vi.PFrom, Vi.PUpTo, Author = "Manuel Huber")]
-    public class Plugin : IPlugin
+    public sealed class Plugin : IPlugin
     {
         public void Init(IPluginInterface pluginInterface)
         {
@@ -36,7 +36,7 @@ namespace FPLedit.Kursbuch
             => new BasicTemplateChooser(pi, "kfpl", "kfpl_attrs", "tmpl", "builtin:FPLedit.Kursbuch/Templates/KfplTemplate.fpltmpl");
     }
 
-    public class FixAttrsAction : BaseConverterFileType, ITimetableTypeChangeAction
+    public sealed class FixAttrsAction : BaseConverterFileType, ITimetableTypeChangeAction
     {
         public void ToLinear(Timetable tt)
         {

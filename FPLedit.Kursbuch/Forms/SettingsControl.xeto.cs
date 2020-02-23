@@ -10,7 +10,7 @@ using FPLedit.Shared.UI;
 
 namespace FPLedit.Kursbuch.Forms
 {
-    public class SettingsControl : Panel, IAppearanceHandler
+    internal sealed class SettingsControl : Panel, IAppearanceHandler
     {
         private readonly ISettings settings;
         private readonly KfplAttrs attrs;

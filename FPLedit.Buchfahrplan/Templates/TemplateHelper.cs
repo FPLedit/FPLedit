@@ -9,7 +9,7 @@ using FPLedit.Shared.DefaultImplementations;
 
 namespace FPLedit.Buchfahrplan.Templates
 {
-    public class TemplateHelper
+    public sealed class TemplateHelper
     {
         private readonly BfplAttrs attrs;
         private readonly Timetable tt;

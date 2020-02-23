@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Buchfahrplan.Forms
 {
-    internal class VelocityForm : FDialog<DialogResult>
+    internal sealed class VelocityForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
         private readonly GridView gridView;

@@ -7,7 +7,7 @@ using FPLedit.Shared.DefaultImplementations;
 
 namespace FPLedit.Kursbuch.Templates
 {
-    public class TemplateHelper
+    public sealed class TemplateHelper
     {
         private readonly Timetable tt;
 

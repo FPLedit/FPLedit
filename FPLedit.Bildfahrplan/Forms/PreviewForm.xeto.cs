@@ -7,7 +7,7 @@ using System;
 
 namespace FPLedit.Bildfahrplan.Forms
 {
-    internal class PreviewForm : FForm
+    internal sealed class PreviewForm : FForm
     {
 #pragma warning disable CS0649
         private readonly Drawable panel, hpanel;

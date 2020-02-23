@@ -9,7 +9,7 @@ using System.Text;
 
 namespace FPLedit.jTrainGraphStarter
 {
-    internal class TimetableRouteSync : BaseConverterFileType
+    internal sealed class TimetableRouteSync : BaseConverterFileType
     {
         private readonly Timetable orig;
         private readonly int routeIndex;

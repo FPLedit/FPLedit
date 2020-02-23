@@ -11,7 +11,7 @@ using FPLedit.Shared.UI;
 
 namespace FPLedit.DebugDump.Forms
 {
-    internal class InspectForm : FDialog<DialogResult>
+    internal sealed class InspectForm : FDialog<DialogResult>
     {
         private readonly DumpEvent[] events;
         private DumpEvent currentEvent;

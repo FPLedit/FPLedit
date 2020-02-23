@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Buchfahrplan.Forms
 {
-    internal class VelocityEditForm : FDialog<DialogResult>
+    internal sealed class VelocityEditForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
         private readonly TextBox nameTextBox, positionTextBox, velocityTextBox;

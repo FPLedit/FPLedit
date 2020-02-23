@@ -7,22 +7,20 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Bildfahrplan.Render
 {
-    internal class StationX
+    internal class StationRenderProps
     {
         public static int IndividualTrackOffset => 15;
 
-        public float Left { get; private set; }
-        public float Right { get; private set; }
+        public float Left { get; }
+        public float Right { get; }
         public float Center => (Left + Right) / 2;
 
-        public Dictionary<string, float> TrackOffsets { get; private set; }
+        public Dictionary<string, float> TrackOffsets { get; }
 
-        public Station Station { get; private set; }
-        public float CurKilometer { get; private set; }
+        public float CurKilometer { get; }
 
-        public StationX(Station sta, float kil, float left, bool includeTracks = false)
+        public StationRenderProps(Station sta, float kil, float left, bool includeTracks = false)
         {
-            Station = sta;
             CurKilometer = kil;
 
             TrackOffsets = new Dictionary<string, float>();

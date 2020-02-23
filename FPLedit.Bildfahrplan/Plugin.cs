@@ -9,7 +9,7 @@ namespace FPLedit.Bildfahrplan
 {
 #if !DISABLE_EDIT_BIFPL
     [Plugin("Modul für Bildfahrpläne", Vi.PFrom, Vi.PUpTo, Author = "Manuel Huber")]
-    public class Plugin : IPlugin
+    public sealed class Plugin : IPlugin
     {
         private IPluginInterface pluginInterface;
         private ButtonMenuItem showItem, configItem, trainColorItem, stationStyleItem, printItem;

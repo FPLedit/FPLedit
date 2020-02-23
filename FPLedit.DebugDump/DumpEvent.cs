@@ -2,7 +2,7 @@ using System;
 
 namespace FPLedit.DebugDump
 {
-    public class DumpEvent
+    internal class DumpEvent
     {
         public DumpEvent(DumpEventType type, DateTimeOffset time, string[] data)
         {
@@ -16,7 +16,7 @@ namespace FPLedit.DebugDump
         public string[] Data { get; }
     }
     
-    public enum DumpEventType : byte
+    internal enum DumpEventType : byte
     {
         TimetableChange = 1,
         Log = 2,

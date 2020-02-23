@@ -2,24 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using FPLedit.Shared;
-using FPLedit.Aushangfahrplan.Model;
 using Eto.Forms;
 using FPLedit.Shared.Templating;
+using FPLedit.Buchfahrplan.Model;
 using FPLedit.Shared.UI;
 
-namespace FPLedit.Aushangfahrplan.Forms
+namespace FPLedit.Buchfahrplan.Forms
 {
-    public class SettingsControl : Panel, IAppearanceHandler
+    internal sealed class SettingsControl : Panel, IAppearanceHandler
     {
         private readonly ISettings settings;
-        private readonly AfplAttrs attrs;
+        private readonly BfplAttrs attrs;
 
 #pragma warning disable CS0649
         private readonly DropDown templateComboBox;
-        private readonly ComboBox fontComboBox, hwfontComboBox;
-        private readonly Label exampleLabel, hwexampleLabel, cssLabel;
+        private readonly ComboBox fontComboBox;
+        private readonly Label exampleLabel, cssLabel;
         private readonly UrlButton cssHelpLinkLabel;
-        private readonly CheckBox tracksCheckBox, consoleCheckBox;
+        private readonly CheckBox consoleCheckBox, commentCheckBox, daysCheckBox;
         private readonly TextArea cssTextBox;
 #pragma warning restore CS0649
 
@@ -34,32 +34,31 @@ namespace FPLedit.Aushangfahrplan.Forms
             templateComboBox.DataStore = chooser.AvailableTemplates;
 
             var fntComboBox = new FontComboBox(fontComboBox, exampleLabel);
-            var hwfntComboBox = new FontComboBox(hwfontComboBox, hwexampleLabel);
 
-            attrs = AfplAttrs.GetAttrs(tt) ?? AfplAttrs.CreateAttrs(tt);
-            fontComboBox.Text = attrs.Font;
-            hwfontComboBox.Text = attrs.HwFont;
+            attrs = BfplAttrs.GetAttrs(tt) ?? BfplAttrs.CreateAttrs(tt);
+            fontComboBox.Text = attrs.Font ?? "";
             cssTextBox.Text = attrs.Css ?? "";
-            tracksCheckBox.Checked = attrs.ShowTracks;
+            commentCheckBox.Checked = attrs.ShowComments;
+            daysCheckBox.Checked = attrs.ShowDays;
 
-                var tmpl = chooser.GetTemplate(tt);
+            var tmpl = chooser.GetTemplate(tt);
             templateComboBox.SelectedValue = tmpl;
 
-            consoleCheckBox.Checked = settings.Get<bool>("afpl.console");
+            consoleCheckBox.Checked = settings.Get<bool>("bfpl.console");
         }
 
         public void Save()
         {
             attrs.Font = fontComboBox.Text;
-            attrs.HwFont = hwfontComboBox.Text;
             attrs.Css = cssTextBox.Text;
-            attrs.ShowTracks = tracksCheckBox.Checked.Value;
+            attrs.ShowComments = commentCheckBox.Checked.Value;
+            attrs.ShowDays = daysCheckBox.Checked.Value;
 
             var tmpl = (ITemplate)templateComboBox.SelectedValue;
             if (tmpl != null)
                 attrs.Template = tmpl.Identifier;
 
-            settings.Set("afpl.console", consoleCheckBox.Checked.Value);
+            settings.Set("bfpl.console", consoleCheckBox.Checked.Value);
         }
 
         public void SetExpertMode(bool enabled)

@@ -7,7 +7,7 @@ using Eto.Forms;
 
 namespace FPLedit.Buchfahrplan.Forms
 {
-    public class VelocityDialogProxy : IRouteAction
+    internal sealed class VelocityRouteAction : IRouteAction
     {
         public string DisplayName => "Höchstgeschwindigkeiten ändern";
 

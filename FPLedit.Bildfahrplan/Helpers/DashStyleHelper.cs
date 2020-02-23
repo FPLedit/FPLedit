@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace FPLedit.Bildfahrplan
 {
-    internal class DashStyleHelper
+    internal sealed class DashStyleHelper
     {
         private readonly List<DashStyle> types = new List<DashStyle>
         {

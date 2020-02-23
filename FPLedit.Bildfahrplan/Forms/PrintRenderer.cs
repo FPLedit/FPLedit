@@ -9,7 +9,7 @@ using System.Text;
 
 namespace FPLedit.Bildfahrplan.Forms
 {
-    internal class PrintRenderer : IDisposable
+    internal sealed class PrintRenderer : IDisposable
     {
         private readonly IPluginInterface pluginInterface;
         private readonly Timetable tt;

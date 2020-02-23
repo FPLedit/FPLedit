@@ -6,7 +6,7 @@ using System.Text;
 
 namespace FPLedit.jTrainGraphStarter
 {
-    internal class SilentLogger : ILog
+    internal sealed class SilentLogger : ILog
     {
         public bool CanAttach => false;
 

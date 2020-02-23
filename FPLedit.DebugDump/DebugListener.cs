@@ -7,7 +7,7 @@ using FPLedit.Shared.UI;
 
 namespace FPLedit.DebugDump
 {
-    public sealed class DebugListener : IDisposable
+    internal sealed class DebugListener : IDisposable
     {
         private FileSystemWatcher watcher;
         private DumpWriter writer;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Bildfahrplan.Model
 {
-    public enum StationLineStyle
+    internal enum StationLineStyle
     {
         None = 0,
         Normal = 1,

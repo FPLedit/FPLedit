@@ -5,7 +5,7 @@ using FPLedit.Shared.UI;
 
 namespace FPLedit.DebugDump.Forms
 {
-    internal class SettingsForm : FDialog<DialogResult>
+    internal sealed class SettingsForm : FDialog<DialogResult>
     {
         private readonly ISettings settings;
 

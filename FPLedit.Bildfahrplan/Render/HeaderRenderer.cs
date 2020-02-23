@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Bildfahrplan.Render
 {
-    internal class HeaderRenderer
+    internal sealed class HeaderRenderer
     {
         private readonly IEnumerable<Station> stations;
         private readonly int route;
@@ -24,20 +24,20 @@ namespace FPLedit.Bildfahrplan.Render
             this.attrs = attrs;
         }
 
-        public Dictionary<Station, StationX> Render(Graphics g, Margins margin, float width, float height, bool drawHeader)
+        public Dictionary<Station, StationRenderProps> Render(Graphics g, Margins margin, float width, float height, bool drawHeader)
         {
             var stationFont = (Font)attrs.StationFont; // Reminder: Do not dispose, will be disposed with MFont instance!
             var firstStation = stations.First();
             var lastStation = stations.Last();
-            var stationOffsets = new Dictionary<Station, StationX>();
+            var stationOffsets = new Dictionary<Station, StationRenderProps>();
 
             var allTrackCount = stations.Select(s => s.Tracks.Count).Sum();
             var stasWithTracks = stations.Count(s => s.Tracks.Any());
-            var allTrackWidth = (stasWithTracks + allTrackCount) * StationX.IndividualTrackOffset;
+            var allTrackWidth = (stasWithTracks + allTrackCount) * StationRenderProps.IndividualTrackOffset;
 
             var emSize = g.MeasureString(stationFont, "M").Width;
 
-            StationX lastPos = null;
+            StationRenderProps lastPos = null;
             foreach (var sta in stations)
             {
                 var style = new StationStyle(sta, attrs);
@@ -48,16 +48,16 @@ namespace FPLedit.Bildfahrplan.Render
                 if (!kil.HasValue || !length.HasValue)
                     throw new Exception("Unerwarteter Fehler beim Rendern der Route!");
 
-                StationX posX;
+                StationRenderProps posX;
                 if (!attrs.MultiTrack)
-                    posX = new StationX(sta, kil.Value, ((kil / length) * (width - margin.Right - margin.Left)).Value);
+                    posX = new StationRenderProps(sta, kil.Value, ((kil / length) * (width - margin.Right - margin.Left)).Value);
                 else
                 {
                     var availWidth = width - margin.Right - margin.Left - allTrackWidth;
                     var lastKil = lastPos?.CurKilometer ?? 0f;
                     var lastRight = lastPos?.Right ?? 0f;
                     var leftOffset = (((kil / length) - (lastKil / length)) * availWidth).Value;
-                    posX = new StationX(sta, kil.Value, lastRight + leftOffset, true);
+                    posX = new StationRenderProps(sta, kil.Value, lastRight + leftOffset, true);
                 }
                 lastPos = posX;
                 stationOffsets.Add(sta, posX);

@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace FPLedit.Bildfahrplan.Render
 {
-    internal class Profiler
+    internal sealed class Profiler
     {
         private readonly Stopwatch stopWatch;
         private readonly string prefix;

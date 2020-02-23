@@ -9,40 +9,39 @@ using System.Threading.Tasks;
 
 namespace FPLedit.jTrainGraphStarter
 {
-    internal class JTGShared
+    internal static class JtgShared
     {
         public const string DEFAULT_FILENAME = "jTrainGraph_310.jar";
         public const TimetableVersion DEFAULT_TT_VERSION = TimetableVersion.JTG3_1;
 
-        public static JTGCompatibility JTGCompatCheck(string jTGPath)
+        public static JtgCompatibility JtgCompatCheck(string jTgPath)
         {
-            var fn = Path.GetFileNameWithoutExtension(jTGPath);
+            var fn = Path.GetFileNameWithoutExtension(jTgPath);
 
             var match = Regex.Match(fn, @"jTrainGraph_(\d)(\d{2})");
-            if (match != null && match.Groups.Count == 3)
+            if (match != null && match.Success && match.Groups.Count == 3)
             {
                 var major = int.Parse(match.Groups[1].Value);
                 var minor = int.Parse(match.Groups[2].Value);
 
                 if (major == 2)
-                    return new JTGCompatibility(minor > 1, TimetableVersion.JTG2_x); // Ab 2.01
-                else if (major == 3 && minor < 10)
-                    return new JTGCompatibility(minor > 2, TimetableVersion.JTG3_0); // Ab 3.03
-                else if (major == 3)
-                    return new JTGCompatibility(minor == 10, TimetableVersion.JTG3_1);
-                else
-                    return new JTGCompatibility(false); // Neue Hauptversion, wahrscheinlich inkompatibel
+                    return new JtgCompatibility(minor > 1, TimetableVersion.JTG2_x); // Ab 2.01
+                if (major == 3 && minor < 10)
+                    return new JtgCompatibility(minor > 2, TimetableVersion.JTG3_0); // Ab 3.03
+                if (major == 3)
+                    return new JtgCompatibility(minor == 10, TimetableVersion.JTG3_1);
+                return new JtgCompatibility(false); // Neue Hauptversion, wahrscheinlich inkompatibel
             }
-            return new JTGCompatibility(true); // Hier gibt es keine Informationen, also "kompatibel"
+            return new JtgCompatibility(true); // Hier gibt es keine Informationen, also "kompatibel"
         }
     }
 
-    internal struct JTGCompatibility
+    internal struct JtgCompatibility
     {
-        public bool Compatible;
-        public TimetableVersion? Version;
+        public readonly bool Compatible;
+        public readonly TimetableVersion? Version;
 
-        public JTGCompatibility(bool compatible, TimetableVersion? version = null)
+        public JtgCompatibility(bool compatible, TimetableVersion? version = null)
         {
             Compatible = compatible;
             Version = compatible ? version : null;

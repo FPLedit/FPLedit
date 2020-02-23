@@ -10,10 +10,10 @@ using System.Runtime.CompilerServices;
 
 namespace FPLedit.Bildfahrplan.Render
 {
-    internal class ImageBridge : IDisposable
+    internal sealed class ImageBridge : IDisposable
     {
         private readonly sd.Bitmap sdBuffer;
-        private sd.Graphics sdGraphics;
+        private readonly sd.Graphics sdGraphics;
 
         public sd.Graphics Graphics => sdGraphics;
 

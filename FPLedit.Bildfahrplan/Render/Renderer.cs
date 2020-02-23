@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Bildfahrplan.Render
 {
-    internal class Renderer
+    internal sealed class Renderer
     {
         private readonly Timetable tt;
         private readonly int route;

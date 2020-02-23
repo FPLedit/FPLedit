@@ -8,19 +8,19 @@ using System.Linq;
 
 namespace FPLedit.Bildfahrplan.Render
 {
-    internal class TrainRenderer
+    internal sealed class TrainRenderer
     {
         private readonly IEnumerable<Station> stations; // Selected route, ordered
         private readonly Timetable tt;
         private readonly Margins margin;
         private readonly TimetableStyle attrs;
         private readonly TimeEntry startTime;
-        private readonly Dictionary<Station, StationX> stationOffsets;
+        private readonly Dictionary<Station, StationRenderProps> stationOffsets;
         private Train[] trainCache;
 
         private readonly DashStyleHelper ds = new DashStyleHelper();
 
-        public TrainRenderer(IEnumerable<Station> stations, Timetable tt, Margins margin, TimeEntry startTime, Dictionary<Station, StationX> stationOffsets)
+        public TrainRenderer(IEnumerable<Station> stations, Timetable tt, Margins margin, TimeEntry startTime, Dictionary<Station, StationRenderProps> stationOffsets)
         {
             this.stations = stations;
             this.tt = tt;
@@ -169,7 +169,7 @@ namespace FPLedit.Bildfahrplan.Render
         #region Render helpers
         private float GetTimeY(TimeEntry time) => margin.Top + ((time - startTime).GetTotalMinutes() * attrs.HeightPerHour / 60f);
 
-        PointF? GetGutterPoint(bool arrival, bool dir, StationX sx, TimeEntry time)
+        PointF? GetGutterPoint(bool arrival, bool dir, StationRenderProps sx, TimeEntry time)
         {
             if (time == default)
                 return null;
@@ -177,7 +177,7 @@ namespace FPLedit.Bildfahrplan.Render
             return new PointF(margin.Left + x, GetTimeY(time));
         }
 
-        PointF? GetInternalPoint(StationX sx, TimeEntry time, string track)
+        PointF? GetInternalPoint(StationRenderProps sx, TimeEntry time, string track)
         {
             if (time == default || track == null || !sx.TrackOffsets.TryGetValue(track, out float x))
                 return null;
