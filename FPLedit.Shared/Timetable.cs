@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -162,14 +162,43 @@ namespace FPLedit.Shared
                 else if (!tids.Contains(tra.Next))
                     RemoveTransition(tra.Next, false);
             }
+            
+            // Finally initialize route cache structure
+            routeCache = GetRoutes().ToDictionary(r => r.Index, r => r);
+            
+            /*
+             * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+             * WARNING ROUTE CACHE IS NOW ACTIVE.
+             * DON'T CHANGE ANYTHING LOWLEVEL WITHOUT MANUAL REBUILD!
+             * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+             */
+            
+            // Bug in FPLedit 2.1 muss nachträglich klar gemacht werden.
+            // Durch Nutzerinteraction konnten "ambiguous routes" entstehen.
+            // Eine Korrektur ist nicht möglich.
+            if (Type == TimetableType.Network && HasRouteCycles)
+            {
+                var hasAmbiguousRoutes = false;
+                // All stations that are junction points.
+                var maybeAffectedRoutes = GetCyclicRoutes();
+                var junctions = Stations.Where(s => s.IsJunction && s.Routes.Intersect(maybeAffectedRoutes).Any()).ToArray();
+                for (int i = 0; i < junctions.Length - 1; i++)
+                {
+                    for (int j = i + 1; j < junctions.Length; j++)
+                    {
+                        hasAmbiguousRoutes |= (junctions[i].Routes.Intersect(junctions[j].Routes).DefaultIfEmpty(-1)
+                            .Count(r => RouteConnectsDirectly(r, junctions[i], junctions[j])) > 1);
+                    }
+                }
+
+                if (hasAmbiguousRoutes)
+                    upgradeMessages.Add("Die Datei enthält zusammengfefallene Strecken, das heißt zwei Stationen sind auf mehr als einer Route ohne Zwischenstation verbunden. FPLedit kann sich danach komisch verhalten und Züge zufällig über die eine oder andere Strecke leiten. Eine Korrektur ist leider nicht möglich.");
+            }
 
 
             UpgradeMessage = string.Join(Environment.NewLine, upgradeMessages);
             if (UpgradeMessage == "")
                 UpgradeMessage = null;
-            
-            // Finally initialize route cache structure
-            routeCache = GetRoutes().ToDictionary(r => r.Index, r => r);
         }
 
         public List<Station> GetStationsOrderedByDirection(TrainDirection direction = TrainDirection.ti)
@@ -458,35 +487,40 @@ namespace FPLedit.Shared
                 if (Type == TimetableType.Linear)
                     throw new TimetableTypeNotSupportedException(TimetableType.Linear, "routes");
 
-                var junctions = Stations.Where(s => s.IsJunction); // All stations that are junction points.
-                var rids = junctions.SelectMany(s => s.Routes).ToList(); // All routes participating in junctions (should be all).
+                return GetCyclicRoutes().Any();
+            }
+        }
 
-                // Gets all routes, that have only one occurence in the juction-route graph above, so they have a "loose" end.
-                int[] GetSingles() => rids
-                    .GroupBy(r => r)
-                    .Where(g => g.Count() == 1)
-                    .Select(g => g.Key)
-                    .ToArray();
+        private IList<int> GetCyclicRoutes()
+        {
+            var junctions = Stations.Where(s => s.IsJunction); // All stations that are junction points.
+            var rids = junctions.SelectMany(s => s.Routes).ToList(); // All routes participating in junctions (should be all).
 
-                int[] singles = GetSingles();
-                while (singles.Any())
+            // Gets all routes, that have only one occurence in the juction-route graph above, so they have a "loose" end.
+            int[] GetSingles() => rids
+                .GroupBy(r => r)
+                .Where(g => g.Count() == 1)
+                .Select(g => g.Key)
+                .ToArray();
+
+            int[] singles = GetSingles();
+            while (singles.Any())
+            {
+                for (int i = 0; i < singles.Length; i++)
                 {
-                    for (int i = 0; i < singles.Length; i++)
-                    {
-                        var s = singles[i];
-                        // Find junction
-                        var j = junctions.First(t => t.Routes.Contains(s)); // We only have one.
-                        var r = j.Routes;
-                        if (r.Length == 2) // Eliminate one instance of each route id, if only two remain at this station (which becomes a "loose" end now).
-                            rids.Remove(r.First(t => t != s));
-                        rids.Remove(s);
-                    }
-
-                    singles = GetSingles();
+                    var s = singles[i];
+                    // Find junction
+                    var j = junctions.First(t => t.Routes.Contains(s)); // We only have one.
+                    var r = j.Routes;
+                    if (r.Length == 2) // Eliminate one instance of each route id, if only two remain at this station (which becomes a "loose" end now).
+                        rids.Remove(r.First(t => t != s));
+                    rids.Remove(s);
                 }
 
-                return rids.Any();
+                singles = GetSingles();
             }
+
+            return rids;
         }
 
         public bool RouteConnectsDirectly(int routeToCheck, Station sta1, Station sta2)
