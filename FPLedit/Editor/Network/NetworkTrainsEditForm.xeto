@@ -10,12 +10,12 @@
       <TableLayout Spacing="5,5" Padding="10,10,10,10">
         <TableRow ScaleHeight="True">
           <TableCell ScaleWidth="true">
-            <GridView x:Name="gridView"></GridView>
+            <GridView x:Name="gridView" />
           </TableCell>
           <StackLayout Spacing="5" HorizontalContentAlignment="Stretch">
-            <Button Click="TopNewButton_Click">Neuer Zug</Button>
-            <Button Click="TopEditButton_Click">Zug bearbeiten</Button>
-            <Button Click="TopDeleteButton_Click">Zug löschen</Button>
+            <Button Click="NewButton_Click">Neuer Zug</Button>
+            <Button Click="EditButton_Click">Zug bearbeiten</Button>
+            <Button Click="DeleteButton_Click">Zug löschen</Button>
             <Button Click="CopyButton_Click">Zug kopieren/verschieben</Button>
             <!-- Spacer: -->
             <Label />
@@ -32,8 +32,8 @@
       <TableLayout Spacing="5,5" Padding="10,10,10,10">
         <TableRow>
           <TableCell ScaleWidth="true" />
-          <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click"></Button>
-          <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click"></Button>
+          <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click" />
+          <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click" />
         </TableRow>
       </TableLayout>
     </TableRow>

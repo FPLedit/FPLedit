@@ -146,13 +146,13 @@ namespace FPLedit.Editor.Network
             this.NClose();
         }
 
-        private void TopNewButton_Click(object sender, EventArgs e)
+        private void NewButton_Click(object sender, EventArgs e)
             => NewTrain(gridView);
 
-        private void TopEditButton_Click(object sender, EventArgs e)
+        private void EditButton_Click(object sender, EventArgs e)
             => EditTrain(gridView, TrainDirection.tr);
 
-        private void TopDeleteButton_Click(object sender, EventArgs e)
+        private void DeleteButton_Click(object sender, EventArgs e)
             => DeleteTrain(gridView, TrainDirection.tr);
 
         private void EditTimetableButton_Click(object sender, EventArgs e)
