@@ -1,13 +1,14 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using FPLedit.Shared.DefaultImplementations;
 
 namespace FPLedit.Shared
 {
     /// <summary>
     /// Basic interface to provide exporter capabalities.
     /// </summary>
-    /// <remarks>See <see cref="FPLedit.Shared.DefaultImplementations.BasicTemplateExport"/> for a default implementation.</remarks>
+    /// <remarks>See <see cref="DefaultTemplateExport"/> for a default implementation.</remarks>
     public interface IExport
     {
         /// <summary>

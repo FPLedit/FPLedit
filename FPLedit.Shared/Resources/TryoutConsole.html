@@ -1,6 +1,6 @@
 <script>
     // CSS-Tryout-Console , generiert von FPLedit
-    var tryout_code = `<style>
+    const tryout_code = `<style>
 #tryout-console {
 	position:absolute;
 	top: 10px;
@@ -24,9 +24,9 @@
 </div>`;
     document.write(tryout_code);
 
-    var tryout_textarea = document.querySelector("#tryout-ta");
-    var tryout_console = document.querySelector("#tryout-console");
-    var add_css = document.querySelector("#add-css");
+    const tryout_textarea = document.querySelector("#tryout-ta");
+    const tryout_console = document.querySelector("#tryout-console");
+    const add_css = document.querySelector("#add-css");
 
     tryout_textarea.innerHTML = add_css.innerHTML.trim();
 </script>

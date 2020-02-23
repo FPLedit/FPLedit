@@ -6,14 +6,14 @@ using FPLedit.Shared.Templating;
 
 namespace FPLedit.Shared.DefaultImplementations
 {
-    public sealed class BasicTemplateExport : IExport
+    public sealed class DefaultTemplateExport : IExport
     {
         public const string FLAG_TYROUT_CONSOLE = "tryout_console";
         
         private readonly Func<IReducedPluginInterface, ITemplateChooser> getChooser;
         public string Filter { get; }
         
-        public BasicTemplateExport(string filter, Func<IReducedPluginInterface, ITemplateChooser> getChooser)
+        public DefaultTemplateExport(string filter, Func<IReducedPluginInterface, ITemplateChooser> getChooser)
         {
             this.getChooser = getChooser;
             Filter = filter;

@@ -11,24 +11,24 @@ namespace FPLedit.Aushangfahrplan
     {
         public void Init(IPluginInterface pluginInterface)
         {
-            var export = new BasicTemplateExport("Aushangfahrplan HTML Datei (*.html)|*.html", GetTemplateChooser);
-            var preview = new BasicPreview("afpl", "Aushangfahrplan", export);
+            var export = new DefaultTemplateExport("Aushangfahrplan HTML Datei (*.html)|*.html", GetTemplateChooser);
+            var preview = new DefaultPreview("afpl", "Aushangfahrplan", export);
             pluginInterface.Register<IExport>(export);
-            pluginInterface.Register<IPreviewProxy>(preview);
+            pluginInterface.Register<IPreviewAction>(preview);
             
-            pluginInterface.Register<IAppearanceControl>(new BasicAppearanceControl(pi => new SettingsControl(pi), "Aushangfahrplan"));
-            pluginInterface.Register<IFilterableProvider>(FilterableProvider);
+            pluginInterface.Register<IAppearanceControl>(new DefaultAppearanceControl(pi => new SettingsControl(pi), "Aushangfahrplan"));
+            pluginInterface.Register<IFilterRuleContainer>(FilterRuleContainer);
 
-            pluginInterface.Register<ITemplateProxy>(new Templates.StdTemplateProxy());
-            pluginInterface.Register<ITemplateProxy>(new Templates.SvgTemplateProxy());
+            pluginInterface.Register<ITemplateProvider>(new Templates.StdTemplateProvider());
+            pluginInterface.Register<ITemplateProvider>(new Templates.SvgTemplateProvider());
             
-            pluginInterface.Register<ITemplateWhitelist>(new TemplateWhitelist<Templates.TemplateHelper>("afpl"));
-            pluginInterface.Register<ITemplateWhitelist>(new TemplateWhitelist<Model.AfplAttrs>("afpl"));
+            pluginInterface.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<Templates.TemplateHelper>("afpl"));
+            pluginInterface.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<Model.AfplAttrs>("afpl"));
         }
         
-        internal static IFilterableProvider FilterableProvider => new BasicFilterableProvider("Aushangfahrplan", AfplAttrs.GetAttrs, AfplAttrs.CreateAttrs);
+        internal static IFilterRuleContainer FilterRuleContainer => new DefaultFilterRuleContainer("Aushangfahrplan", AfplAttrs.GetAttrs, AfplAttrs.CreateAttrs);
         
         internal static ITemplateChooser GetTemplateChooser(IReducedPluginInterface pi) 
-            => new BasicTemplateChooser(pi, "afpl", "afpl_attrs", "tmpl", "builtin:FPLedit.Aushangfahrplan/Templates/AfplTemplate.fpltmpl");
+            => new DefaultTemplateChooser(pi, "afpl", "afpl_attrs", "tmpl", "builtin:FPLedit.Aushangfahrplan/Templates/AfplTemplate.fpltmpl");
     }
 }

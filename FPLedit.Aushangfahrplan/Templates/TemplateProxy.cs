@@ -2,7 +2,7 @@
 
 namespace FPLedit.Aushangfahrplan.Templates
 {
-    internal sealed class StdTemplateProxy : BaseTemplateProxy, ITemplateProxy
+    internal sealed class StdTemplateProvider : BaseTemplateProxy, ITemplateProvider
     {
         public string TemplateIdentifier => "builtin:FPLedit.Aushangfahrplan/Templates/AfplTemplate.fpltmpl";
 
@@ -11,7 +11,7 @@ namespace FPLedit.Aushangfahrplan.Templates
                ResourceHelper.GetStringResource("Aushangfahrplan.Templates.AfplCommon.fpltmpl");
     }
 
-    internal sealed class SvgTemplateProxy : BaseTemplateProxy, ITemplateProxy
+    internal sealed class SvgTemplateProvider : BaseTemplateProxy, ITemplateProvider
     {
         public string TemplateIdentifier => "builtin:FPLedit.Aushangfahrplan/Templates/SvgTemplate.fpltmpl";
 

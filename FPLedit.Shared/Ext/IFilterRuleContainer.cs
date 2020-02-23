@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FPLedit.Shared
 {
-    public interface IFilterableProvider
+    public interface IFilterRuleContainer
     {
         string DisplayName { get; }
 

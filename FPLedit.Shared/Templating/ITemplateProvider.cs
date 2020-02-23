@@ -1,6 +1,6 @@
 ﻿namespace FPLedit.Shared.Templating
 {
-    public interface ITemplateProxy
+    public interface ITemplateProvider
     {
         string TemplateIdentifier { get; }
 

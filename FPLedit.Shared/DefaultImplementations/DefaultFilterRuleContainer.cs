@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace FPLedit.Shared.DefaultImplementations
 {
-    public abstract class BaseFilterableProvider
+    public abstract class BaseFilterRuleContainer
     {
         private List<FilterRule> trainRules, stationRules;
 
@@ -25,9 +25,9 @@ namespace FPLedit.Shared.DefaultImplementations
             }
         }
 
-        protected abstract IPatternProvider GetProvider(Timetable tt);
+        protected abstract IPatternSource GetProvider(Timetable tt);
         
-        protected abstract IPatternProvider CreateProvider(Timetable tt);
+        protected abstract IPatternSource CreateProvider(Timetable tt);
 
         public List<FilterRule> LoadStationRules(Timetable tt)
         {
@@ -43,26 +43,26 @@ namespace FPLedit.Shared.DefaultImplementations
         
         public void SaveFilter(Timetable tt, List<FilterRule> stationRules, List<FilterRule> trainRules)
         {
-            IPatternProvider attrs = GetProvider(tt);
+            IPatternSource attrs = GetProvider(tt);
             attrs.TrainPatterns = string.Join("|", trainRules.Select(r => r.Pattern));
             attrs.StationPatterns = string.Join("|", stationRules.Select(r => r.Pattern));
         }
     }
 
-    public sealed class BasicFilterableProvider : BaseFilterableProvider, IFilterableProvider
+    public sealed class DefaultFilterRuleContainer : BaseFilterRuleContainer, IFilterRuleContainer
     {
-        private readonly Func<Timetable, IPatternProvider> getProvider, createProvider;
+        private readonly Func<Timetable, IPatternSource> getProvider, createProvider;
         public string DisplayName { get; }
         
-        public BasicFilterableProvider(string displayName, Func<Timetable, IPatternProvider> getProvider, Func<Timetable,IPatternProvider> createProvider)
+        public DefaultFilterRuleContainer(string displayName, Func<Timetable, IPatternSource> getProvider, Func<Timetable,IPatternSource> createProvider)
         {
             this.getProvider = getProvider;
             this.createProvider = createProvider;
             DisplayName = displayName;
         }
         
-        protected override IPatternProvider GetProvider(Timetable tt) => getProvider(tt);
+        protected override IPatternSource GetProvider(Timetable tt) => getProvider(tt);
 
-        protected override IPatternProvider CreateProvider(Timetable tt) => createProvider(tt);
+        protected override IPatternSource CreateProvider(Timetable tt) => createProvider(tt);
     }
 }

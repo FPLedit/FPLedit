@@ -7,7 +7,7 @@ using System.Text;
 namespace FPLedit.Buchfahrplan.Model
 {
     [XElmName("bfpl_attrs", IsFpleditElement = true)]
-    public sealed class BfplAttrs : Entity, IPatternProvider
+    public sealed class BfplAttrs : Entity, IPatternSource
     {
         public List<BfplPoint> Points { get; }
 

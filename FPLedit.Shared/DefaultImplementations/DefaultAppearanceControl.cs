@@ -4,7 +4,7 @@ using FPLedit.Shared;
 
 namespace FPLedit.Shared.DefaultImplementations
 {
-    public class BasicAppearanceControl : IAppearanceControl
+    public class DefaultAppearanceControl : IAppearanceControl
     {
         private readonly Func<IPluginInterface, Control> getControl;
         public string DisplayName { get; }
@@ -12,7 +12,7 @@ namespace FPLedit.Shared.DefaultImplementations
         public Control GetControl(IPluginInterface pluginInterface)
             => getControl(pluginInterface);
 
-        public BasicAppearanceControl(Func<IPluginInterface, Control> getControl, string displayName)
+        public DefaultAppearanceControl(Func<IPluginInterface, Control> getControl, string displayName)
         {
             this.getControl = getControl;
             DisplayName = displayName;

@@ -7,7 +7,7 @@ using System.Text;
 namespace FPLedit.Kursbuch.Model
 {
     [XElmName("kfpl_attrs", IsFpleditElement = true)]
-    public sealed class KfplAttrs : Entity, IPatternProvider
+    public sealed class KfplAttrs : Entity, IPatternSource
     {
         [XAttrName("font")]
         public string Font

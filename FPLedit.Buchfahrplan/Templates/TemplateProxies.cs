@@ -2,7 +2,7 @@
 
 namespace FPLedit.Buchfahrplan.Templates
 {
-    public sealed class StdTemplate : ITemplateProxy
+    public sealed class StdTemplate : ITemplateProvider
     {
         public string TemplateIdentifier => "builtin:FPLedit.Buchfahrplan/Templates/StdTemplate.fpltmpl";
 
@@ -10,7 +10,7 @@ namespace FPLedit.Buchfahrplan.Templates
             .Replace("{{##WELLEN_CSS##}}", ResourceHelper.GetStringResource("Buchfahrplan.Resources.WellenCss.css"));
     }
     
-    public sealed class ZlbTemplate : ITemplateProxy
+    public sealed class ZlbTemplate : ITemplateProvider
     {
         public string TemplateIdentifier => "builtin:FPLedit.Buchfahrplan/Templates/ZlbTemplate.fpltmpl";
 

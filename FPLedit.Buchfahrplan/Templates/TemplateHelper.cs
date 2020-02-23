@@ -13,11 +13,11 @@ namespace FPLedit.Buchfahrplan.Templates
     {
         private readonly BfplAttrs attrs;
         private readonly Timetable tt;
-        private readonly IFilterableProvider filterable;
+        private readonly IFilterRuleContainer filterable;
 
         public TemplateHelper(Timetable tt)
         {
-            filterable = Plugin.FilterableProvider;
+            filterable = Plugin.FilterRuleContainer;
             this.tt = tt;
             attrs = BfplAttrs.GetAttrs(tt);
         }

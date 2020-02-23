@@ -2,21 +2,21 @@ using System;
 
 namespace FPLedit.Shared.Templating
 {
-    public interface ITemplateWhitelist
+    public interface ITemplateWhitelistEntry
     {
         string TemplateType { get;  }
         Type GetWhitelistType();
     }
     
-    public class TemplateWhitelist<T> : ITemplateWhitelist
+    public class TemplateWhitelistEntry<T> : ITemplateWhitelistEntry
     {
         public string TemplateType { get; }
         
         /// <summary>
-        /// Creates a new instance to register as <see cref="ITemplateWhitelist"/>.
+        /// Creates a new instance to register as <see cref="ITemplateWhitelistEntry"/>.
         /// </summary>
         /// <param name="templateType">Target template type to register this .NET type for, or 'null' for all.</param>
-        public TemplateWhitelist(string templateType)
+        public TemplateWhitelistEntry(string templateType)
         {
             TemplateType = templateType;
         }

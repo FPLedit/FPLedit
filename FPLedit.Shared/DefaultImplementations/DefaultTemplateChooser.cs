@@ -3,13 +3,13 @@ using FPLedit.Shared.Templating;
 
 namespace FPLedit.Shared.DefaultImplementations
 {
-    public sealed class BasicTemplateChooser : ITemplateChooser
+    public sealed class DefaultTemplateChooser : ITemplateChooser
     {
         private readonly string elemName, attrName, defaultTemplate;
         
         public ITemplate[] AvailableTemplates { get; }
 
-        public BasicTemplateChooser(IReducedPluginInterface pluginInterface, string type, string elemName, string attrName, string defaultTemplate)
+        public DefaultTemplateChooser(IReducedPluginInterface pluginInterface, string type, string elemName, string attrName, string defaultTemplate)
         {
             this.elemName = elemName;
             this.attrName = attrName;

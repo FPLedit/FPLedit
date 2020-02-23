@@ -15,11 +15,11 @@ namespace FPLedit.Shared
     [Templating.TemplateSafe]
     public sealed class FilterRule
     {
-        public string Pattern { get; private set; }
+        public string Pattern { get; }
 
         public FilterRule(string pattern)
         {
-            this.Pattern = pattern;
+            Pattern = pattern;
             if (pattern.Length < 2 || (pattern.Length < 3 && pattern[0] == '!'))
                 throw new ArgumentException("Zu kurzes Pattern!");
         }

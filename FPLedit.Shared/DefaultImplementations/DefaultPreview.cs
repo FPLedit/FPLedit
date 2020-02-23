@@ -5,14 +5,14 @@ using FPLedit.Shared.Helpers;
 
 namespace FPLedit.Shared.DefaultImplementations
 {
-    public sealed class BasicPreview : IPreviewProxy
+    public sealed class DefaultPreview : IPreviewAction
     {
         private readonly string templateType;
         private readonly IExport export;
 
         public string DisplayName { get; }
 
-        public BasicPreview(string templateType, string display, IExport export)
+        public DefaultPreview(string templateType, string display, IExport export)
         {
             this.templateType = templateType;
             this.export = export;
@@ -27,7 +27,7 @@ namespace FPLedit.Shared.DefaultImplementations
 
             var clone = pluginInterface.Timetable.Clone();
 
-            var tsk = export.GetAsyncSafeExport(clone, path, pluginInterface, tryoutConsole ? new[] {BasicTemplateExport.FLAG_TYROUT_CONSOLE} : Array.Empty<string>());
+            var tsk = export.GetAsyncSafeExport(clone, path, pluginInterface, tryoutConsole ? new[] {DefaultTemplateExport.FLAG_TYROUT_CONSOLE} : Array.Empty<string>());
             tsk.ContinueWith((t, o) =>
             {
                 if (t.Result)

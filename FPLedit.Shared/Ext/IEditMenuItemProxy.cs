@@ -1,6 +1,6 @@
 ﻿namespace FPLedit.Shared
 {
-    public interface IEditMenuItemProxy
+    public interface IEditMenuItemAction
     {
         string DisplayName { get; }
 

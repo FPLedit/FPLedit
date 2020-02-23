@@ -7,7 +7,7 @@ namespace FPLedit.Shared
     [Templating.TemplateSafe]
     public abstract class Entity : IEntity
     {
-        public XMLEntity XMLEntity { get; private set; }
+        public XMLEntity XMLEntity { get; }
 
         public Timetable _parent { get; set; }
 

@@ -8,12 +8,13 @@ using System.Text;
 
 namespace FPLedit.Editor
 {
+    //TODO: Here is more refactoring needed.
     internal sealed class EditorPlugin : IPlugin
     {
         private IPluginInterface pluginInterface;
 
         private int dialogOffset;
-        private IEditMenuItemProxy[] dialogs;
+        private IEditMenuItemAction[] editMenuActions;
         private bool hasFilterables, hasDesignables;
 
         private ButtonMenuItem editLineItem, editTimetableItem; // Type="Network"
@@ -79,22 +80,22 @@ namespace FPLedit.Editor
 
         private void PluginInterface_ExtensionsLoaded(object sender, EventArgs e)
         {
-            var previewables = pluginInterface.GetRegistered<IPreviewProxy>();
+            var previewables = pluginInterface.GetRegistered<IPreviewAction>();
             if (previewables.Length == 0)
                 pluginInterface.Menu.Items.Remove(previewRoot); // Ausblenden in der harten Art
 
             foreach (var prev in previewables)
                 previewRoot.CreateItem(prev.DisplayName, enabled: false, clickHandler: (s, ev) => prev.Show(pluginInterface));
 
-            dialogs = pluginInterface.GetRegistered<IEditMenuItemProxy>();
-            if (dialogs.Length > 0)
+            editMenuActions = pluginInterface.GetRegistered<IEditMenuItemAction>();
+            if (editMenuActions.Length > 0)
                 editRoot.Items.Add(new SeparatorMenuItem());
 
             dialogOffset = editRoot.Items.Count;
-            foreach (var dialog in dialogs)
+            foreach (var dialog in editMenuActions)
                 editRoot.CreateItem(dialog.DisplayName, enabled: dialog.IsEnabled(pluginInterface), clickHandler: (s, ev) => dialog.Invoke(pluginInterface));
 
-            hasFilterables = pluginInterface.GetRegistered<IFilterableProvider>().Length > 0;
+            hasFilterables = pluginInterface.GetRegistered<IFilterRuleContainer>().Length > 0;
             hasDesignables = pluginInterface.GetRegistered<IAppearanceControl>().Length > 0;
         }
 
@@ -110,10 +111,10 @@ namespace FPLedit.Editor
             foreach (ButtonMenuItem ddi in previewRoot.Items)
                 ddi.Enabled = e.FileState.Opened && e.FileState.LineCreated;
 
-            for (int i = 0; i < dialogs.Length; i++)
+            for (int i = 0; i < editMenuActions.Length; i++)
             {
                 var elem = editRoot.Items[dialogOffset + i];
-                elem.Enabled = dialogs[i].IsEnabled(pluginInterface);
+                elem.Enabled = editMenuActions[i].IsEnabled(pluginInterface);
             }
 
             // Im Netzwerk-Modus nicht verwendete Menü-Einträge ausblenden

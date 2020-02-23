@@ -123,7 +123,7 @@ namespace FPLedit.Templating
         public string GenerateResult(Timetable tt)
         {
             // Allowed types whitlisted by extensions (for this specific template type or generic (e-.g. type == null)).
-            var extensionAllowedTypes = pluginInterface.GetRegistered<ITemplateWhitelist>()
+            var extensionAllowedTypes = pluginInterface.GetRegistered<ITemplateWhitelistEntry>()
                 .Where(w => w.TemplateType == TemplateType || w.TemplateType == null)
                 .Select(w => w.GetWhitelistType());
             // Globally whitelisted: From FPLedit.Shared, marked with TemplateSafeAttribute.

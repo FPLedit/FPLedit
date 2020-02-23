@@ -2,7 +2,7 @@
 
 namespace FPLedit.Kursbuch.Templates
 {
-    internal sealed class TemplateProxy : ITemplateProxy
+    internal sealed class TemplateProvider : ITemplateProvider
     {
         public string TemplateIdentifier => "builtin:FPLedit.Kursbuch/Templates/KfplTemplate.fpltmpl";
 

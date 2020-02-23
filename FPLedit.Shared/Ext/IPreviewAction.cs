@@ -4,7 +4,7 @@ using System.Text;
 
 namespace FPLedit.Shared
 {
-    public interface IPreviewProxy
+    public interface IPreviewAction
     {
         string DisplayName { get; }
 

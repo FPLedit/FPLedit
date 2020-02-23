@@ -26,7 +26,7 @@ namespace FPLedit.Editor.Filters
             this.pluginInterface = pluginInterface;
             var tt = pluginInterface.Timetable;
 
-            var filterables = pluginInterface.GetRegistered<IFilterableProvider>();
+            var filterables = pluginInterface.GetRegistered<IFilterRuleContainer>();
             fcontainers = filterables.Select(f => new FilterableContainer()
             {
                 Filterable = f,
@@ -163,7 +163,7 @@ namespace FPLedit.Editor.Filters
 
         private class FilterableContainer
         {
-            public IFilterableProvider Filterable;
+            public IFilterRuleContainer Filterable;
             public List<FilterRule> TrainRules, StationRules;
         }
     }

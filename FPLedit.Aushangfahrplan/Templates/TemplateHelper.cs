@@ -16,7 +16,7 @@ namespace FPLedit.Aushangfahrplan.Templates
         {
             this.tt = tt;
 
-            var filterable = Plugin.FilterableProvider;
+            var filterable = Plugin.FilterRuleContainer;
 
             trules = filterable.LoadTrainRules(tt).ToArray();
             srules = filterable.LoadStationRules(tt).ToArray();

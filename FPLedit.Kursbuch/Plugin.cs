@@ -14,26 +14,26 @@ namespace FPLedit.Kursbuch
     {
         public void Init(IPluginInterface pluginInterface)
         {
-            var export = new BasicTemplateExport("Tabellenfahrplan/Kursbuch als HTML Datei (*.html)|*.html", GetTemplateChooser);
-            var preview = new BasicPreview("kfpl", "Kursbuch", export);
+            var export = new DefaultTemplateExport("Tabellenfahrplan/Kursbuch als HTML Datei (*.html)|*.html", GetTemplateChooser);
+            var preview = new DefaultPreview("kfpl", "Kursbuch", export);
             pluginInterface.Register<IExport>(export);
-            pluginInterface.Register<IPreviewProxy>(preview);
+            pluginInterface.Register<IPreviewAction>(preview);
             
-            pluginInterface.Register<IFilterableProvider>(FilterableProvider);
-            pluginInterface.Register<IAppearanceControl>(new BasicAppearanceControl(pi => new SettingsControl(pi), "Kursbuch"));
+            pluginInterface.Register<IFilterRuleContainer>(FilterRuleContainer);
+            pluginInterface.Register<IAppearanceControl>(new DefaultAppearanceControl(pi => new SettingsControl(pi), "Kursbuch"));
 
-            pluginInterface.Register<ITemplateProxy>(new Templates.TemplateProxy());
+            pluginInterface.Register<ITemplateProvider>(new Templates.TemplateProvider());
             
-            pluginInterface.Register<ITemplateWhitelist>(new TemplateWhitelist<Templates.TemplateHelper>("kfpl"));
-            pluginInterface.Register<ITemplateWhitelist>(new TemplateWhitelist<Model.KfplAttrs>("kfpl"));
+            pluginInterface.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<Templates.TemplateHelper>("kfpl"));
+            pluginInterface.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<Model.KfplAttrs>("kfpl"));
 
             pluginInterface.Register<ITimetableTypeChangeAction>(new FixAttrsAction());
         }
 
-        internal static IFilterableProvider FilterableProvider => new BasicFilterableProvider("Kursbuch", KfplAttrs.GetAttrs, KfplAttrs.CreateAttrs);
+        internal static IFilterRuleContainer FilterRuleContainer => new DefaultFilterRuleContainer("Kursbuch", KfplAttrs.GetAttrs, KfplAttrs.CreateAttrs);
         
         internal static ITemplateChooser GetTemplateChooser(IReducedPluginInterface pi) 
-            => new BasicTemplateChooser(pi, "kfpl", "kfpl_attrs", "tmpl", "builtin:FPLedit.Kursbuch/Templates/KfplTemplate.fpltmpl");
+            => new DefaultTemplateChooser(pi, "kfpl", "kfpl_attrs", "tmpl", "builtin:FPLedit.Kursbuch/Templates/KfplTemplate.fpltmpl");
     }
 
     public sealed class FixAttrsAction : BaseConverterFileType, ITimetableTypeChangeAction

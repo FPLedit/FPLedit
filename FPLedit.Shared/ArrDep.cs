@@ -10,7 +10,7 @@ namespace FPLedit.Shared
     [Templating.TemplateSafe]
     public sealed class ArrDep : Entity
     {
-        public IChildrenCollection<ShuntMove> ShuntMoves { get; private set; }
+        public IChildrenCollection<ShuntMove> ShuntMoves { get; }
 
         [XAttrName("fpl-id", IsFpleditElement = true)]
         public int StationId

@@ -1,6 +1,6 @@
 namespace FPLedit.Shared
 {
-    public interface IPatternProvider
+    public interface IPatternSource
     {
         string TrainPatterns { get; set; }
 

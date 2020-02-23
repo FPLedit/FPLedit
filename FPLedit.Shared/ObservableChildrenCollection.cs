@@ -25,7 +25,7 @@ namespace FPLedit.Shared
             initialized = true;
         }
 
-        protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
+        protected sealed override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
             if (!initialized)
                 return;

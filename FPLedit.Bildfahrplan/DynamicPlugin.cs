@@ -18,14 +18,14 @@ namespace FPLedit.Bildfahrplan
             Style.pluginInterface = pluginInterface;
 
             dpf = new DynamicPreview();
-            pluginInterface.Register<IPreviewProxy>(dpf);
+            pluginInterface.Register<IPreviewAction>(dpf);
             pluginInterface.AppClosing += (s, e) => dpf.Close();
         }
 
         public void Dispose() => dpf?.Dispose();
     }
 
-    public sealed class DynamicPreview : IPreviewProxy, IDisposable
+    public sealed class DynamicPreview : IPreviewAction, IDisposable
     {
         private bool opened = false;
         private PreviewForm dpf;

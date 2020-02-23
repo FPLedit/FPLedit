@@ -30,7 +30,7 @@ namespace FPLedit.Templating
         public void LoadTemplates(string templateRoot)
         {
             // Registrierte (Standard-)Templates laden
-            var instances = store.GetRegistered<ITemplateProxy>();
+            var instances = store.GetRegistered<ITemplateProvider>();
             templates = instances.Select(t => new TemplateHost(t.GetTemplateCode(), t.TemplateIdentifier, this.pluginInterface, true)).ToList();
 
             // Weitere Templates aus Dateien laden
