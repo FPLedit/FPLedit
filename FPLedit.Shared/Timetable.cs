@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -458,10 +458,15 @@ namespace FPLedit.Shared
                 if (Type == TimetableType.Linear)
                     throw new TimetableTypeNotSupportedException(TimetableType.Linear, "routes");
 
-                var junctions = Stations.Where(s => s.Routes.Count() > 1);
-                var rids = junctions.SelectMany(s => s.Routes).ToList();
+                var junctions = Stations.Where(s => s.IsJunction); // All stations that are junction points.
+                var rids = junctions.SelectMany(s => s.Routes).ToList(); // All routes participating in junctions (should be all).
 
-                int[] GetSingles() => rids.GroupBy(r => r).Where(g => g.Count() == 1).Select(g => g.Key).ToArray();
+                // Gets all routes, that have only one occurence in the juction-route graph above, so they have a "loose" end.
+                int[] GetSingles() => rids
+                    .GroupBy(r => r)
+                    .Where(g => g.Count() == 1)
+                    .Select(g => g.Key)
+                    .ToArray();
 
                 int[] singles = GetSingles();
                 while (singles.Any())
@@ -470,9 +475,9 @@ namespace FPLedit.Shared
                     {
                         var s = singles[i];
                         // Find junction
-                        var j = junctions.FirstOrDefault(t => t.Routes.Contains(s));
+                        var j = junctions.First(t => t.Routes.Contains(s)); // We only have one.
                         var r = j.Routes;
-                        if (r.Length == 2) // s und eine andere
+                        if (r.Length == 2) // Eliminate one instance of each route id, if only two remain at this station (which becomes a "loose" end now).
                             rids.Remove(r.First(t => t != s));
                         rids.Remove(s);
                     }
@@ -580,6 +585,38 @@ namespace FPLedit.Shared
         public bool HasTransition(Train tra, bool onlyAsFirst = true)
             => transitions.Any(t => t.First == tra.Id || (!onlyAsFirst && t.Next == tra.Id));
 
+        #endregion
+        
+        #region Uneindeutige Routen
+
+        /// <summary>
+        /// Decides, if, after removal of <paramref name="toDelete"/>, an ambiguous route situation would occur, that means, there will be more than one route directly connection two other stations.
+        /// </summary>
+        /// <param name="toDelete"></param>
+        /// <returns></returns>
+        public bool WouldProduceAmbiguousRoute(Station toDelete)
+        {
+            var routesToCheck = toDelete.Routes;
+            foreach (var route in routesToCheck)
+            {
+                var routeStations = GetRoute(route);
+                var junctions = routeStations.GetSurroundingStations(toDelete, 1);
+                if (junctions.Length != 3)
+                    continue; // we are ath the edge of a route.
+                var routes = junctions.SelectMany(j => j.Routes).Distinct();
+                var intersect = routes.Intersect(routesToCheck);
+  
+                var routeChandidates = routes.Except(intersect);
+                foreach (var candidate in routeChandidates)
+                {
+                    if (RouteConnectsDirectly(candidate, junctions[0], junctions[2]))
+                        return true;
+                }
+            }
+
+            return false;
+        }
+        
         #endregion
 
         [DebuggerStepThrough]

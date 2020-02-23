@@ -90,6 +90,8 @@ namespace FPLedit.Shared
                 SetAttribute("fpl-rt", string.Join(",", value));
             }
         }
+
+        public bool IsJunction => Routes.Length > 1;
         
         internal bool _InternalAddRoute(int route)
         {

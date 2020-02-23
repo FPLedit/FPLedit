@@ -35,5 +35,19 @@ namespace FPLedit.Shared
                 return "<leer>";
             return stations[0].SName + " - " + stations[stations.Length - 1].SName; // this will always work, as stations.Length >= 1
         }
+
+        public Station[] GetSurroundingStations(Station center, int radius)
+        {
+            if (radius < 0)
+                throw new ArgumentOutOfRangeException(nameof(radius));
+            var centerIndex = Array.IndexOf(stations, center);
+            var leftIndex = Math.Max(centerIndex - radius, 0);
+            var rightIndex = Math.Min(centerIndex + radius, stations.Length - 1);
+            var length = rightIndex - leftIndex + 1;
+            
+            var array = new Station[length];
+            Array.Copy(stations, array, length);
+            return array;
+        }
     }
 }

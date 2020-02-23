@@ -94,6 +94,18 @@ namespace FPLedit.Editor
             if (gridView.SelectedItems.Any())
             {
                 var sta = (Station)gridView.SelectedItem;
+                if (tt.WouldProduceAmbiguousRoute(sta))
+                {
+                    MessageBox.Show("Sie versuchen eine Station zu löschen, ohne die danach zwei Routen zusammenfallen, das heißt zwei Stationen auf mehr als einer Route ohne Zwischenstation verbunden sind.\n\n" +
+                                    "Der Konflikt kann nicht automatisch aufgehoben werden.", "FPLedit", MessageBoxType.Error);
+                    return;
+                }
+                if (sta.IsJunction)
+                {
+                    MessageBox.Show("Sie versuchen eine Station zu löschen, die an einem Kreuzungspunkt zweier Strecken liegt. Dies ist leider nicht möglich.", "FPLedit", MessageBoxType.Error);
+                    return;
+                }
+
                 tt.RemoveStation(sta);
                 UpdateStations();
             }

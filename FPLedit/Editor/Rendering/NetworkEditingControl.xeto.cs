@@ -96,8 +96,21 @@ namespace FPLedit.Editor.Rendering
                 var itm = menu.CreateItem("Löschen");
                 itm.Click += (se, ar) =>
                 {
+                    var sta = (Station) s;
+                    if (pluginInterface.Timetable.WouldProduceAmbiguousRoute(sta))
+                    {
+                        MessageBox.Show("Sie versuchen eine Station zu löschen, ohne die danach zwei Routen zusammenfallen, das heißt zwei Stationen auf mehr als einer Route ohne Zwischenstation verbunden sind.\n\n" +
+                                        "Der Konflikt kann nicht automatisch aufgehoben werden.", "FPLedit", MessageBoxType.Error);
+                        return;
+                    }
+                    if (sta.IsJunction)
+                    {
+                        MessageBox.Show("Sie versuchen eine Station zu löschen, die an einem Kreuzungspunkt zweier Strecken liegt. Dies ist leider nicht möglich.", "FPLedit", MessageBoxType.Error);
+                        return;
+                    }
+                    
                     pluginInterface.StageUndoStep();
-                    pluginInterface.Timetable.RemoveStation((Station)s);
+                    pluginInterface.Timetable.RemoveStation(sta);
                     ReloadTimetable();
                     pluginInterface.SetUnsaved();
                 };
