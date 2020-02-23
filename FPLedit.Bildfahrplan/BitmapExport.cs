@@ -6,7 +6,7 @@ using System.Drawing.Imaging;
 
 namespace FPLedit.Bildfahrplan
 {
-    public class BitmapExport : IExport
+    internal class BitmapExport : IExport
     {
         public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[] flags = null) 
         {

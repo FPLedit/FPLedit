@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Eto;
 
 namespace FPLedit.Shared.UI
 {
@@ -122,6 +123,46 @@ namespace FPLedit.Shared.UI
 
         public static GridColumn AddDropDownColumn<T>(this GridView view, Expression<Func<T, object>> value, IEnumerable<object> dataStore, string header, bool editable = false)
             => view.AddColumn(new ComboBoxCell { Binding = Binding.Property(value), DataStore = dataStore }, header, editable);
+
+        public static GridColumn AddDropDownColumn<T>(this GridView view, Expression<Func<T, object>> value, IEnumerable<object> dataStore, IIndirectBinding<string> textBinding, string header, bool editable = false)
+        {
+            var internalBinding = Binding.Property(value);
+            IIndirectBinding<object> binding = internalBinding;
+            IEnumerable<object> finalDataStore = dataStore;
+
+            // hack for eto/gtk not supporting ItemTextBinding on ComboBoxCells
+            if (Platform.Instance.IsGtk)
+            {
+                const char zws = '\u200B'; // This is a zero width (ZWS) space Unicode character.
+                
+                var lDataStore = dataStore.ToList();
+                
+                var tDataStore = lDataStore.Select(i => 
+                    string.Empty.PadLeft(lDataStore.IndexOf(i) + 1, zws) // Pad with index+1 ZWS chars to be able to check later. If no ZWS is there, this did not work.
+                    + textBinding.GetValue(i))
+                    .ToList();
+                var hasNonUnique = tDataStore.Distinct().Count() != tDataStore.Count; // Check if textBinding produced the same string for more than one data item.
+                
+                binding = Binding.Delegate<T, string>(
+                    (T s) => textBinding.GetValue(internalBinding.GetValue(s)),
+                    (T t, string s) =>
+                    {
+                        int idx = s.Split(zws).Length - 2;
+                        if (idx == -1)
+                        {
+                            idx = tDataStore.IndexOf(s); // Fallback if ZWS is not supported.
+                            if (hasNonUnique)
+                                throw new Exception("ComboBoxCell ComboTextBinding Polyfill: Duplicate text entry encountered and Zero-Width-Space Hack not supported by platform!");
+                        }
+
+                        internalBinding.SetValue(t, lDataStore[idx]);
+                    }).Cast<object>();
+                finalDataStore = tDataStore;
+            }
+
+            var cell = new ComboBoxCell {Binding = binding, DataStore = finalDataStore};
+            return view.AddColumn(cell, header, editable);
+        }
 
         public static GridColumn AddColumn(this GridView view, Cell cell, string header, bool editable = false)
         {
