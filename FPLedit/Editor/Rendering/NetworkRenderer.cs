@@ -10,13 +10,15 @@ namespace FPLedit.Editor.Rendering
 {
     internal sealed class NetworkRenderer : Drawable
     {
-        private PointF mousePosition = new PointF();
+        private PointF mousePosition = PointF.Empty;
 
         private Timetable tt;
         private readonly List<RenderBtn<Station>> panels = new List<RenderBtn<Station>>();
         private readonly Font font;
         private readonly Pen linePen, highlightPen;
         private readonly Color systemBgColor, systemTextColor;
+
+        public static readonly Keys[] DispatchableKeys = { Keys.R, Keys.S, Keys.Escape };
 
         protected override void Dispose(bool disposing)
         {
@@ -26,6 +28,13 @@ namespace FPLedit.Editor.Rendering
         }
 
         private bool IsNetwork => tt?.Type == TimetableType.Network;
+        
+        private bool _setPanCenterEnabled = true;
+        public bool SetPanCenterEnabled
+        {
+            get => _setPanCenterEnabled;
+            set { _setPanCenterEnabled = value; Invalidate(); }
+        }
 
         private bool _stationMovingEnabled = true;
         public bool StationMovingEnabled
@@ -67,7 +76,7 @@ namespace FPLedit.Editor.Rendering
             Invalidate();
         }
 
-        private PointF _pan = new PointF();
+        private PointF _pan = PointF.Empty;
         public PointF Pan
         {
             get => _pan;
@@ -239,14 +248,16 @@ namespace FPLedit.Editor.Rendering
         {
             if (!_pan.IsZero)
             {
-                string statusL = "Ansicht verschoben, [R] für Reset";
+                var statusL = "Ansicht verschoben, [R] für Reset";
+                if (SetPanCenterEnabled && IsNetwork)
+                    statusL += ", [S] zum Speichern";
                 var sizeL = g.MeasureString(font, statusL);
                 var pointL = new PointF(0, ClientSize.Height - sizeL.Height);
                 g.FillRectangle(Brushes.Orange, new RectangleF(pointL, sizeL));
                 g.DrawText(font, Brushes.Black, pointL, statusL);
             }
 
-            string statusR = GetStatusString(mode);
+            var statusR = GetStatusString(mode);
             statusR = FixedStatusString ?? statusR;
             var sizeR = g.MeasureString(font, statusR);
             var pointR = new PointF(ClientSize.Width - sizeR.Width, ClientSize.Height - sizeR.Height);
@@ -373,15 +384,28 @@ namespace FPLedit.Editor.Rendering
 
         public void DispatchKeystroke(KeyEventArgs e)
         {
-            if (e.Key == Keys.Escape)
+            switch (e.Key)
             {
-                AbortAddStation();
-                e.Handled = true;
-            }
-            if (e.Key == Keys.R)
-            {
-                Pan = new PointF();
-                e.Handled = true;
+                // See DISPATCHABLE_KEYS
+                case Keys.Escape:
+                    AbortAddStation();
+                    e.Handled = true;
+                    break;
+                case Keys.R:
+                    Pan = PointF.Empty;
+                    e.Handled = true;
+                    break;
+                case Keys.S:
+                    if (SetPanCenterEnabled && tt != null && stapos != null && IsNetwork)
+                    {
+                        e.Handled = true;
+                        var keys = stapos.Keys.ToArray();
+                        foreach (var sta in keys)
+                            stapos[sta] += (Point)Pan;
+                        handler.WriteStapos(tt, stapos);
+                        Pan = PointF.Empty;
+                    }
+                    break;
             }
         }
 
@@ -430,7 +454,7 @@ namespace FPLedit.Editor.Rendering
                     }
                 }
 
-                if (e.Buttons == MouseButtons.Primary && draggedControl == null)
+                if (e.Buttons == MouseButtons.Primary && draggedControl == null && tt != null) // Only pan if we have data & we don't drag anything
                 {
                     hasPanned = true;
                     originalPan = _pan;

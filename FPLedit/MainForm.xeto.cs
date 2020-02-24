@@ -94,11 +94,14 @@ namespace FPLedit
             // Initilize main UI component
             networkEditingControl.Initialize(Bootstrapper);
             Bootstrapper.FileOpened += (s, e) => networkEditingControl.ResetPan();
-            KeyDown += (s, e) =>
+
+            void PassKeyDown(object s, KeyEventArgs e)
             {
-                if (e.Key == Keys.R || e.Key == Keys.Escape)
+                if (NetworkRenderer.DispatchableKeys.Contains(e.Key) && e.Modifiers == Keys.None)
                     networkEditingControl.DispatchKeystroke(e);
-            };
+            }
+            KeyDown += PassKeyDown;
+            logTextBox.KeyDown += PassKeyDown; // Fix for Gtk, no harm on Wpf.
 
             this.AddSizeStateHandler();
 

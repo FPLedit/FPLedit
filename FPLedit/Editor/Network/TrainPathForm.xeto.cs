@@ -6,6 +6,7 @@ using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Jint;
 
 namespace FPLedit.Editor.Network
 {
@@ -50,6 +51,7 @@ namespace FPLedit.Editor.Network
             networkRenderer.SelectedRoute = -1;
             networkRenderer.SetTimetable(pluginInterface.Timetable);
             networkRenderer.DisableTopBorder = true;
+            networkRenderer.SetPanCenterEnabled = false;
             networkRenderer.StationClicked += HandleStationClick;
 
             globalWaypointsAllowed =
@@ -245,7 +247,7 @@ namespace FPLedit.Editor.Network
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if (e.Key == Keys.R)
+            if (e.Key == Keys.R && e.Modifiers == Keys.None)
                 networkRenderer.DispatchKeystroke(e);
             base.OnKeyDown(e);
         }

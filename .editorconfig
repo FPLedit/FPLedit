@@ -63,6 +63,7 @@ resharper_csharp_naming_rule.enum_member=AaBb_AaBb
 resharper_csharp_wrap_lines=false
 resharper_local_function_body=expression_body
 resharper_method_or_operator_body=expression_body
+resharper_space_within_single_line_array_initializer_braces=true
 resharper_use_indent_from_vs=false
 resharper_xml_wrap_lines=false
 

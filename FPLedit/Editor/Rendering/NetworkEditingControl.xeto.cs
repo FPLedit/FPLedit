@@ -171,6 +171,6 @@ namespace FPLedit.Editor.Rendering
             => networkRenderer.DispatchKeystroke(e);
 
         public void ResetPan()
-            => networkRenderer.Pan = new PointF();
+            => networkRenderer.Pan = PointF.Empty;
     }
 }
