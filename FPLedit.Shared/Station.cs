@@ -105,7 +105,7 @@ namespace FPLedit.Shared
         
         internal bool _InternalRemoveRoute(int route)
         {
-            if (Routes.Contains(route)) 
+            if (!Routes.Contains(route)) 
                 return false;
             var list = Routes.ToList();
             list.Remove(route);

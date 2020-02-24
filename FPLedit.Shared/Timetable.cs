@@ -294,14 +294,14 @@ namespace FPLedit.Shared
             // Wenn Endstationen gelöscht werden könnten sonst korrupte Dateien entstehen!
             foreach (var train in Trains)
                 train.RemoveOrphanedTimes();
-
-            // Es können verwaiste Routen entstehen
-            if (Type == TimetableType.Network)
-                RemoveOrphanedRoutes();
             
-            // Rebuild route cache
+            // Rebuild route cache (before removing orphaned routes)
             foreach (var route in routes)
                 RebuildRouteCache(route);
+
+            // Es können verwaiste Routen entstehen (requires route cache)
+            if (Type == TimetableType.Network)
+                RemoveOrphanedRoutes();
         }
 
         public Station GetStationById(int id)
