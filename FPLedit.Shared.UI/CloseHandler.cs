@@ -1,21 +1,18 @@
-﻿using Eto.Forms;
-using System;
+using Eto.Forms;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.Shared.UI
 {
     internal sealed class CloseHandler
     {
-        internal static List<CloseHandler> ActiveHandlers = new List<CloseHandler>();
+        private static readonly List<CloseHandler> activeHandlers = new List<CloseHandler>();
 
-        public Window Dialog { get; private set; }
+        public Window Dialog { get; }
 
-        public Button Accept { get; private set; }
+        public Button Accept { get; }
 
-        public Button Deny { get; private set; }
+        public Button Deny { get; }
 
         private bool isClosing;
 
@@ -26,13 +23,13 @@ namespace FPLedit.Shared.UI
             Deny = deny;
 
             Dialog.Closing += Dialog_Closing;
-            ActiveHandlers.Add(this);
+            activeHandlers.Add(this);
         }
 
         private void Dialog_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             isClosing = true;
-            Remove();
+            DetachHandler();
 
             if ((Accept != null && Accept.HasFocus) || (Deny != null && Deny.HasFocus))
                 return;
@@ -40,13 +37,35 @@ namespace FPLedit.Shared.UI
             Deny?.PerformClick();
         }
 
-        public void Remove() => ActiveHandlers.Remove(this);
+        public void DetachHandler()
+        {
+            activeHandlers.Remove(this);
+            Dialog.Closing -= Dialog_Closing;
+        }
 
+        /// <summary>
+        /// NClose removes CloseHandlers.
+        /// </summary>
+        /// <param name="dialog"></param>
         public static void NClose(Window dialog)
         {
-            var ch = ActiveHandlers.FirstOrDefault(c => c.Dialog == dialog);
+            var ch = activeHandlers.FirstOrDefault(c => c.Dialog == dialog);
             if (ch != null && !ch.isClosing)
+            {
+                ch.DetachHandler();
                 dialog.Close();
+            }
         }
+    }
+
+    public static class CloseHandlerExtensions
+    {
+        public static void AddCloseHandler(this Dialog dialog)
+            => AddCloseHandler(dialog, dialog.DefaultButton, dialog.AbortButton);
+
+        public static void AddCloseHandler(this Window dialog, Button accept, Button cancel)
+            => new CloseHandler(dialog, accept, cancel);
+
+        public static void NClose(this Window dialog) => CloseHandler.NClose(dialog);
     }
 }

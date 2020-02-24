@@ -1,4 +1,4 @@
-﻿using Eto.Forms;
+using Eto.Forms;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,16 +26,6 @@ namespace FPLedit.Shared.UI
             return assembly.GetManifestResourceStream("FPLedit." + dotFilePath);
         }
 #pragma warning restore IDE0060 // Nicht verwendete Parameter entfernen
-
-        #region Close Handlers
-        public static void AddCloseHandler(this Dialog dialog)
-            => AddCloseHandler(dialog, dialog.DefaultButton, dialog.AbortButton);
-
-        public static void AddCloseHandler(this Window dialog, Button accept, Button cancel)
-            => new CloseHandler(dialog, accept, cancel);
-
-        public static void NClose(this Window dialog) => CloseHandler.NClose(dialog);
-        #endregion
 
         public static void AddSizeStateHandler(this Window w) => sizeManager.Apply(w);
 
@@ -127,8 +117,7 @@ namespace FPLedit.Shared.UI
         public static GridColumn AddDropDownColumn<T>(this GridView view, Expression<Func<T, object>> value, IEnumerable<object> dataStore, IIndirectBinding<string> textBinding, string header, bool editable = false)
         {
             var internalBinding = Binding.Property(value);
-            IIndirectBinding<object> binding = internalBinding;
-            IEnumerable<object> finalDataStore = dataStore;
+            Cell cell;
 
             // hack for eto/gtk not supporting ItemTextBinding on ComboBoxCells
             if (Platform.Instance.IsGtk)
@@ -143,7 +132,7 @@ namespace FPLedit.Shared.UI
                     .ToList();
                 var hasNonUnique = tDataStore.Distinct().Count() != tDataStore.Count; // Check if textBinding produced the same string for more than one data item.
                 
-                binding = Binding.Delegate<T, string>(
+                var binding = Binding.Delegate<T, string>(
                     (T s) => textBinding.GetValue(internalBinding.GetValue(s)),
                     (T t, string s) =>
                     {
@@ -157,10 +146,12 @@ namespace FPLedit.Shared.UI
 
                         internalBinding.SetValue(t, lDataStore[idx]);
                     }).Cast<object>();
-                finalDataStore = tDataStore;
-            }
 
-            var cell = new ComboBoxCell {Binding = binding, DataStore = finalDataStore};
+                cell = new ComboBoxCell { Binding = binding, DataStore = tDataStore };
+            }
+            else
+                cell = new ComboBoxCell { Binding = internalBinding, DataStore = dataStore, ComboTextBinding = textBinding };
+            
             return view.AddColumn(cell, header, editable);
         }
 
