@@ -131,7 +131,7 @@ namespace FPLedit.Editor.Rendering
                     Station sta = nsf.Station;
                     if (pluginInterface.Timetable.Type == TimetableType.Network)
                     {
-                        var handler = new StaPosHandler();
+                        var handler = new StationCanvasPositionHandler();
                         handler.SetMiddlePos(routesDropDown.SelectedRoute, sta, pluginInterface.Timetable);
                     }
                     pluginInterface.Timetable.AddStation(sta, networkRenderer.SelectedRoute);

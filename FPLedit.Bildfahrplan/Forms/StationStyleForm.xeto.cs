@@ -33,7 +33,7 @@ namespace FPLedit.Bildfahrplan.Forms
             var lineWidths = Enumerable.Range(1, 5).Cast<object>().ToArray();
 
             gridView.AddColumn<StationStyle>(t => t.Station.SName, "Name");
-            gridView.AddDropDownColumn<StationStyle>(t => t.HexColor, cc.ColorHexStrings, ExtBind.ColorBinding(cc), "Farbe", true);
+            gridView.AddDropDownColumn<StationStyle>(t => t.HexColor, cc.ColorHexStrings, EtoBindingExtensions.ColorBinding(cc), "Farbe", true);
             gridView.AddDropDownColumn<StationStyle>(t => t.StationWidthInt, lineWidths, Binding.Delegate<int, string>(i => i.ToString()), "Linienstärke", true);
             gridView.AddDropDownColumn<StationStyle>(t => t.LineStyle, ds.Indices.Cast<object>(), Binding.Delegate<int, string>(i => ds.GetDescription(i)), "Linientyp", true);
             gridView.AddCheckColumn<StationStyle>(t => t.Show, "Station zeichnen", true);

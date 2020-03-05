@@ -14,7 +14,7 @@ namespace FPLedit.Shared.Tests
         {
             // this should not fail
             Timetable tt = new Timetable(TimetableType.Network);
-            var handler = new StaPosHandler();
+            var handler = new StationCanvasPositionHandler();
             Dictionary<Station, Point> stapos = new Dictionary<Station, Point>();
             var rand = new Random();
             Station branchS = null;

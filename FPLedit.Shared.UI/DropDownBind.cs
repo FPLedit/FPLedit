@@ -15,7 +15,7 @@ namespace FPLedit.Shared.UI
             var cc = new ColorCollection(settings);
 
             var p = GetProperty<T>(property);
-            dropDown.ItemTextBinding = ExtBind.ColorBinding(cc);
+            dropDown.ItemTextBinding = EtoBindingExtensions.ColorBinding(cc);
             dropDown.DataStore = cc.ColorHexStrings;
             dropDown.SelectedValueBinding.BindDataContext<T>(a => ColorFormatter.ToString((MColor)p.GetValue(a)),
                 (a, val) => p.SetValue(a, ColorFormatter.FromHexString((string)val)));

@@ -123,7 +123,7 @@ namespace FPLedit.Editor
 
                     if (pluginInterface.Timetable.Type == TimetableType.Network)
                     {
-                        var handler = new StaPosHandler();
+                        var handler = new StationCanvasPositionHandler();
                         handler.SetMiddlePos(route, sta, pluginInterface.Timetable);
                     }
 

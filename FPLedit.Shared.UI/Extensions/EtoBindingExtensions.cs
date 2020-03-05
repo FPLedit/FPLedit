@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.Shared.UI
 {
-    public static class ExtBind
+    public static class EtoBindingExtensions
     {
         public static IIndirectBinding<string> ColorBinding(ColorCollection cc)
             => Binding.Delegate<string, string>(c => cc.ToName(ColorFormatter.FromHexString(c)));

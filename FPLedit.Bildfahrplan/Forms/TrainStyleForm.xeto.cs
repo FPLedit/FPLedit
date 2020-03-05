@@ -33,7 +33,7 @@ namespace FPLedit.Bildfahrplan.Forms
             var lineWidths = Enumerable.Range(1, 5).Cast<object>().ToArray();
 
             gridView.AddColumn<TrainStyle>(t => t.Train.TName, "Zugnummer");
-            gridView.AddDropDownColumn<TrainStyle>(t => t.HexColor, cc.ColorHexStrings, ExtBind.ColorBinding(cc), "Farbe", true);
+            gridView.AddDropDownColumn<TrainStyle>(t => t.HexColor, cc.ColorHexStrings, EtoBindingExtensions.ColorBinding(cc), "Farbe", true);
             gridView.AddDropDownColumn<TrainStyle>(t => t.TrainWidthInt, lineWidths, Binding.Delegate<int, string>(i => i.ToString()), "Linienstärke", true);
             gridView.AddDropDownColumn<TrainStyle>(t => t.LineStyle, ds.Indices.Cast<object>(), Binding.Delegate<int, string>(i => ds.GetDescription(i)), "Linientyp", true);
             gridView.AddCheckColumn<TrainStyle>(t => t.Show, "Zug zeichnen", true);

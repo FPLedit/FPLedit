@@ -8,7 +8,7 @@ namespace FPLedit.Shared.Rendering
     /// <summary>
     /// Manages the display position for station rendering.
     /// </summary>
-    public sealed class StaPosHandler
+    public sealed class StationCanvasPositionHandler
     {
         private Point GetPoint(Station sta)
         {
