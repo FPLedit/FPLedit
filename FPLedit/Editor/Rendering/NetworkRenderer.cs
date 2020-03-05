@@ -22,7 +22,8 @@ namespace FPLedit.Editor.Rendering
 
         protected override void Dispose(bool disposing)
         {
-            font?.Dispose();
+            if (font != null && !font.IsDisposed)
+                font.Dispose();
             linePen?.Dispose();
             highlightPen?.Dispose();
         }
@@ -84,7 +85,7 @@ namespace FPLedit.Editor.Rendering
         }
 
 
-        private readonly StaPosHandler handler;
+        private readonly StationCanvasPositionHandler handler;
         private Dictionary<Station, Point> stapos;
         private Route[] routes;
 
@@ -110,7 +111,7 @@ namespace FPLedit.Editor.Rendering
             font = new Font(FontFamilies.SansFamilyName, 8);
             linePen = new Pen(systemTextColor, 2f);
             highlightPen = new Pen(Colors.Red, 2f);
-            handler = new StaPosHandler();
+            handler = new StationCanvasPositionHandler();
 
             MouseDown += (s, e) => PlaceStation();
             KeyDown += (s, e) => DispatchKeystroke(e);

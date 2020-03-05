@@ -47,6 +47,10 @@ namespace FPLedit.Bildfahrplan
 
         public void Close() => dpf?.Close();
 
-        public void Dispose() => dpf?.Dispose();
+        public void Dispose()
+        {
+            if (dpf != null && !dpf.IsDisposed)
+                dpf.Dispose();
+        }
     }
 }

@@ -29,7 +29,8 @@ namespace FPLedit.Bildfahrplan.Forms
 
         public void Dispose()
         {
-            doc?.Dispose();
+            if (doc != null && !doc.IsDisposed)
+                doc.Dispose();
         }
 
         public void InitPrint()

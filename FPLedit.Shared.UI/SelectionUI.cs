@@ -85,7 +85,8 @@ namespace FPLedit.Shared.UI
         public void Dispose()
         {
             foreach (var rb in actions)
-                rb.RadioButton?.Dispose();
+                if (rb.RadioButton != null && !rb.RadioButton.IsDisposed)
+                    rb.RadioButton.Dispose();
         }
 
         private ActionInfo GetState(T value) => actions.First(v => v.Value.Equals(value));

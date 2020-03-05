@@ -378,10 +378,13 @@ namespace FPLedit.Editor.Rendering
 
         protected override void Dispose(bool disposing)
         {
-            font?.Dispose();
-            layout?.Dispose();
+            if (font != null && !font.IsDisposed)
+                font.Dispose();
+            if (layout != null && !layout.IsDisposed) 
+                layout.Dispose();
             dashedPen?.Dispose();
-            editingTextBox?.Dispose();
+            if (editingTextBox != null && !editingTextBox.IsDisposed)
+                editingTextBox.Dispose();
             base.Dispose(disposing);
         }
     }

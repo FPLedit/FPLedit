@@ -291,10 +291,14 @@ namespace FPLedit
 
         public void Dispose()
         {
-            openFileDialog?.Dispose();
-            saveFileDialog?.Dispose();
-            exportFileDialog?.Dispose();
-            importFileDialog?.Dispose();
+            if (openFileDialog != null && !openFileDialog.IsDisposed)
+                openFileDialog.Dispose();
+            if (saveFileDialog != null && !saveFileDialog.IsDisposed)
+                saveFileDialog.Dispose();
+            if (exportFileDialog != null && !exportFileDialog.IsDisposed)
+                exportFileDialog.Dispose();
+            if (importFileDialog != null && !importFileDialog.IsDisposed)
+                importFileDialog.Dispose();
         }
     }
 

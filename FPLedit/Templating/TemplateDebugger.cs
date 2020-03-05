@@ -102,8 +102,10 @@ namespace FPLedit.Templating
 
         public void Dispose()
         {
-            form?.Dispose();
-            generatedCode?.Dispose();
+            if (form != null && !form.IsDisposed)
+                form.Dispose();
+            if (generatedCode != null && !generatedCode.IsDisposed)
+                generatedCode.Dispose();
         }
     }
 

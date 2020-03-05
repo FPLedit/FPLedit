@@ -46,7 +46,8 @@ namespace FPLedit.Bildfahrplan.Render
 
                     lock (bufferLock)
                     {
-                        buffer?.Dispose();
+                        if (buffer != null && !buffer.IsDisposed)
+                            buffer.Dispose();
                         buffer = newBuffer;
                     }
                     generatingBuffer = false;
@@ -78,7 +79,8 @@ namespace FPLedit.Bildfahrplan.Render
         {
             lock (bufferLock)
             {
-                buffer?.Dispose();
+                if (buffer != null && !buffer.IsDisposed)
+                    buffer.Dispose();
                 buffer = null;
                 if (!invalidatingControl)
                     panel.Invalidate();
@@ -88,9 +90,12 @@ namespace FPLedit.Bildfahrplan.Render
 
         public void Dispose()
         {
-            buffer?.Dispose();
-            panel?.Dispose();
-            font?.Dispose();
+            if (buffer != null && !buffer.IsDisposed)
+                buffer.Dispose();
+            if (panel != null && !panel.IsDisposed)
+                panel.Dispose();
+            if (font != null && !font.IsDisposed)
+                font.Dispose();
         }
     }
 }

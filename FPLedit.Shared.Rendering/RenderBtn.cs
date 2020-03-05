@@ -66,6 +66,10 @@ namespace FPLedit.Shared.Rendering
             }
         }
 
-        public void Dispose() => font?.Dispose();
+        public void Dispose()
+        {
+            if (font != null && !font.IsDisposed)
+                font.Dispose();
+        }
     }
 }

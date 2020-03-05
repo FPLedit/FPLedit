@@ -1,4 +1,4 @@
-﻿using Eto.Drawing;
+using Eto.Drawing;
 using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
@@ -53,6 +53,8 @@ namespace FPLedit
 
         private void WriteMl(string message, Color c)
         {
+            if (IsDisposed)
+                return;
             var lines = message.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var l in lines)
                 Write(l, c);
@@ -95,7 +97,8 @@ namespace FPLedit
 
         protected override void Dispose(bool disposing)
         {
-            menu?.Dispose();
+            if (menu != null && !menu.IsDisposed)
+                menu.Dispose();
             base.Dispose(disposing);
         }
     }

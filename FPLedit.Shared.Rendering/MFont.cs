@@ -62,7 +62,8 @@ namespace FPLedit.Shared.Rendering
         private void ClearInstanceCache(object o)
 #pragma warning restore IDE0060 // Nicht verwendete Parameter entfernen
         {
-            instanceCachedEto?.Dispose();
+            if (instanceCachedEto != null && !instanceCachedEto.IsDisposed)
+                instanceCachedEto.Dispose();
             instanceCachedEto = null;
             instanceCachedSD?.Dispose();
             instanceCachedSD = null;

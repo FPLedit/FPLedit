@@ -72,7 +72,8 @@ namespace FPLedit.Bildfahrplan
             pluginInterface.StageUndoStep();
             if (form.ShowModal((Window)pluginInterface.RootForm) == DialogResult.Ok)
                 pluginInterface.SetUnsaved();
-            form.Dispose();
+            if (!form.IsDisposed)
+                form.Dispose();
         }
     }
 #endif

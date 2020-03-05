@@ -75,7 +75,8 @@ namespace FPLedit.Editor
             pluginInterface.StageUndoStep();
             if (form.ShowModal(Program.App.MainForm) == DialogResult.Ok)
                 pluginInterface.SetUnsaved();
-            form.Dispose();
+            if (!form.IsDisposed)
+                form.Dispose();
         }
 
         private void PluginInterface_ExtensionsLoaded(object sender, EventArgs e)

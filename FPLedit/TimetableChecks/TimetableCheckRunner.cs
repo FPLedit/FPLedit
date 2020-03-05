@@ -38,8 +38,10 @@ namespace FPLedit.TimetableChecks
 
         public void Dispose()
         {
-            form?.Dispose();
-            gridView?.Dispose();
+            if (form != null && !form.IsDisposed)
+                form.Dispose();
+            if (gridView != null && !gridView.IsDisposed)
+                gridView.Dispose();
         }
 
         private FForm GetForm()
