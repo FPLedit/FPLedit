@@ -63,8 +63,8 @@ if (attrs != null)
 			padding-right:1px;
 			padding-left:1px;
 			color:black;
-			white-space:nowrap;
 			font-size:11.0pt;
+			word-break: break-word;
 		}
 		.tfz {
 			font-weight:400;
