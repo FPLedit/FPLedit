@@ -28,7 +28,7 @@ namespace FPLedit.Aushangfahrplan.Templates
             svg = svg.Replace("\"", "\\\"");
             svg = svg.Replace("\n", "");
             svg = svg.Replace("\r", "");
-            return $@"<#@ fpledit-template type=""afpl"" version=""2"" name=""{name}"" #>" + "\n" + $@"<# var abfahrtSVG = ""{svg}""; #>";
+            return $@"<#@ fpledit_template type=""afpl"" version=""2"" name=""{name}"" #>" + "\n" + $@"<# var abfahrtSVG = ""{svg}""; #>";
         }
     }
 }

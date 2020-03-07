@@ -1,4 +1,4 @@
-﻿<#@ fpledit-template type="kfpl" version="2" name="Standardvorlage (DB-Kursbuch)" #>
+﻿<#@ fpledit_template type="kfpl" version="2" name="Standardvorlage (DB-Kursbuch)" #>
 
 <#
 function Sign( /* Train */ t) {

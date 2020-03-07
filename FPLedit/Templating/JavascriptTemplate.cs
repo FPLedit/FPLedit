@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -42,7 +40,7 @@ namespace FPLedit.Templating
             const RegexOptions rom = RegexOptions.Multiline | RegexOptions.IgnoreCase;
 
             // Template definition tag
-            code = Regex.Replace(code, @"<#@\s*fpledit-template(.*?)#>", TemplateDefinition, rom);
+            code = Regex.Replace(code, @"<#@\s*fpledit_template(.*?)#>", TemplateDefinition, rom);
             code = code.Trim('\r', '\n', ' ', '\t');
 
             code = ProcessTextBlocks(code);
@@ -56,10 +54,10 @@ namespace FPLedit.Templating
         private string TemplateDefinition(Match m)
         {
             if (TemplateType != null)
-                throw new Exception("Nur eine fpledit-template-Direktive ist pro Vorlage erlaubt!");
+                throw new Exception("Nur eine fpledit_template-Direktive ist pro Vorlage erlaubt!");
             var tparams = new ArgsParser(m.Groups[1].ToString().Trim());
             if (tparams.Require("name", "type", "version"))
-                throw new Exception("Fehlende Angabe type, version oder name in der fpledit-template-Direktive!");
+                throw new Exception("Fehlende Angabe type, version oder name in der fpledit_template-Direktive!");
             if (tparams["version"] != CURRENT_VERSION.ToString())
                 throw new Exception($"Template-version mismatch! (Current: {CURRENT_VERSION} vs {tparams["version"]})");
             TemplateType = tparams["type"];

@@ -1,4 +1,4 @@
-﻿<#@ fpledit-template type="bfpl" version="2" name="Vorlage für den Zugleitbetrieb" #>
+﻿<#@ fpledit_template type="bfpl" version="2" name="Vorlage für den Zugleitbetrieb" #>
 
 <#
 function GetWelle(/* ref int */ counter, /* IStation */ sta, /* int */ route, /* Train */ tra, /* TemplateHelper */ helper)
