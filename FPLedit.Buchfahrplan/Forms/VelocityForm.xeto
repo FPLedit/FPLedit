@@ -10,7 +10,10 @@
       <TableLayout Spacing="5,5">
         <TableRow ScaleHeight="True">
           <TableCell ScaleWidth="true">
-            <GridView x:Name="gridView"></GridView>
+            <!-- HACK: Scrollable here is for Eto/WPF listening to DoubleClick events on Scrollbars associated with GridView -->
+            <Scrollable ExpandContentWidth="true" ExpandContentHeight="true">
+              <GridView x:Name="gridView" />
+            </Scrollable>
           </TableCell>
           <StackLayout Spacing="5">
             <Button Click="AddButton_Click">Hizufügen</Button>
@@ -24,8 +27,8 @@
       <TableLayout Spacing="5,5">
         <TableRow>
           <TableCell ScaleWidth="true" />
-          <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click"></Button>
-          <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click"></Button>
+          <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click" />
+          <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click" />
         </TableRow>
       </TableLayout>
     </TableRow>

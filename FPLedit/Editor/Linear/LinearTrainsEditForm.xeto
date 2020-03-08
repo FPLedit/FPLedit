@@ -11,10 +11,13 @@
         <TableRow ScaleHeight="True">
           <TableCell ScaleWidth="true">
             <TableLayout Spacing="5,5">
-              <Label x:Name="topLineLabel" TextAlignment="Center"></Label>
+              <Label x:Name="topLineLabel" TextAlignment="Center" />
               <TableRow ScaleHeight="True">
                 <TableCell ScaleWidth="true">
-                  <GridView x:Name="topGridView"></GridView>
+                  <!-- HACK: Scrollable here is for Eto/WPF listening to DoubleClick events on Scrollbars associated with GridView -->
+                  <Scrollable ExpandContentWidth="true" ExpandContentHeight="true">
+                    <GridView x:Name="topGridView" />
+                  </Scrollable>
                 </TableCell>
               </TableRow>
             </TableLayout>
@@ -32,10 +35,13 @@
         <TableRow ScaleHeight="True">
           <TableCell ScaleWidth="true">
             <TableLayout Spacing="5,5">
-              <Label x:Name="bottomLineLabel" TextAlignment="Center"></Label>
+              <Label x:Name="bottomLineLabel" TextAlignment="Center" />
               <TableRow ScaleHeight="True">
                 <TableCell ScaleWidth="true">
-                  <GridView x:Name="bottomGridView"></GridView>
+                  <!-- HACK: Scrollable here is for Eto/WPF listening to DoubleClick events on Scrollbars associated with GridView -->
+                  <Scrollable ExpandContentWidth="true" ExpandContentHeight="true">
+                    <GridView x:Name="bottomGridView" />
+                  </Scrollable>
                 </TableCell>
               </TableRow>
             </TableLayout>
