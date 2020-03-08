@@ -1,3 +1,6 @@
+// Uncomment the following line to enable Crash Reporter debugging 
+//#define ENABLE_CRASH_DEBUG_ENTRYPOINT
+
 using Eto.Forms;
 using FPLedit.Config;
 using FPLedit.CrashReporting;
@@ -28,7 +31,7 @@ namespace FPLedit
             OptionsParser.Init(args);
 
             App = new Application();
-#if !DEBUG || CRASH_DEBUG
+#if !DEBUG || ENABLE_CRASH_DEBUG_ENTRYPOINT
             App.UnhandledException += UnhandledException;
 #endif
 

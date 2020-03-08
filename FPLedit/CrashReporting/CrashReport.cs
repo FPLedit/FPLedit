@@ -11,21 +11,11 @@ namespace FPLedit.CrashReporting
     public sealed class CrashReport
     {
         public ExceptionInfo Exception { get; set; }
-
         public ExtensionInfo[] Extensions { get; set; }
-
         public string Version { get; set; }
-
         public string OS { get; set; }
-
         public string[] Assemblies { get; set; }
-
         public DateTime Time { get; set; }
-
-        public CrashReport()
-        {
-
-        }
 
         internal CrashReport(ExtensionManager mg, Exception x)
         {
@@ -55,10 +45,6 @@ namespace FPLedit.CrashReporting
 
     public sealed class ExtensionInfo
     {
-        public ExtensionInfo()
-        {
-        }
-
         internal ExtensionInfo(PluginInfo plugin)
         {
             Name = plugin.Name;
@@ -68,38 +54,28 @@ namespace FPLedit.CrashReporting
             FullName = plugin.FullName;
         }
 
-        public string Name { get; set; }
-
-        public string Author { get; set; }
-
-        public string Version { get; set; }
-
-        public string Url { get; set; }
-
-        public string FullName { get; set; }
+        public string Name { get; }
+        public string Author { get; }
+        public string Version { get; }
+        public string Url { get; }
+        public string FullName { get; }
     }
 
     public sealed class ExceptionInfo
     {
-        public ExceptionInfo()
-        {
-
-        }
-
         public ExceptionInfo(Exception x)
         {
+            TypeName = x.GetType().FullName;
             Message = x.Message;
             StackTrace = x.StackTrace;
             Source = x.Source;
             InnerException = x.InnerException == null ? null : new ExceptionInfo(x.InnerException);
         }
 
-        public string Message { get; set; }
-
-        public string StackTrace { get; set; }
-
-        public string Source { get; set; }
-
-        public ExceptionInfo InnerException { get; set; }
+        public string Message { get; }
+        public string StackTrace { get; }
+        public string Source { get; }
+        public string TypeName { get; }
+        public ExceptionInfo InnerException { get; }
     }
 }
