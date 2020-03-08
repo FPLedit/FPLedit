@@ -137,16 +137,31 @@ namespace FPLedit
         public string GetTemp(string filename)
         {
             var dirpath = Path.Combine(Path.GetTempPath(), "fpledit");
-            if (!Directory.Exists(dirpath))
-                Directory.CreateDirectory(dirpath);
-            return Path.Combine(dirpath, filename);
+            try
+            {
+                if (!Directory.Exists(dirpath))
+                    Directory.CreateDirectory(dirpath);
+                return Path.Combine(dirpath, filename);
+            }
+            catch
+            {
+                Logger.Warning("Temp-Datei konnte nicht angelegt werden. Fallback-Dateipfad wird verwendet. Dies wird Probleme bereiten!");
+                return Path.GetTempFileName();
+            }
         }
 
         internal void ClearTemp()
         {
             var dirpath = Path.Combine(Path.GetTempPath(), "fpledit");
-            if (Directory.Exists(dirpath))
-                Directory.Delete(dirpath, true);
+            try
+            {
+                if (Directory.Exists(dirpath))
+                    Directory.Delete(dirpath, true);
+            }
+            catch
+            {
+                Logger.Warning("Temp-Verzeichnis konnte nicht geleert werden.");
+            }
         }
 
         public void SetUnsaved() => FileHandler.SetUnsaved();
