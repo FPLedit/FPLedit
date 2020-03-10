@@ -18,6 +18,8 @@ namespace FPLedit.Config
         public static bool MPCompatLog => PresentFlags.Contains("--mp-log");
 
         public static bool TemplateDebug => PresentFlags.Contains("--tmpl-debug");
+        
+        public static bool CrashReporterDebug => PresentFlags.Contains("--crash-debug");
 
         public static void Init(string[] args)
         {

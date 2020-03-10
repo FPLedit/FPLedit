@@ -28,9 +28,13 @@ namespace FPLedit
             OptionsParser.Init(args);
 
             App = new Application();
+
+            var enableCrashReporting = OptionsParser.CrashReporterDebug;
 #if !DEBUG || ENABLE_CRASH_REPORTING_DEBUG
-            App.UnhandledException += UnhandledException;
+            enableCrashReporting = true; // Aways enable on Release builds.
 #endif
+            if (enableCrashReporting)
+                App.UnhandledException += UnhandledException;
 
             // Load platform dependant Eto controls provided by FPLedit.Shared.UI.PlatformControls
             const string platformAssembly = "FPLedit.Shared.UI.PlatformControls";
