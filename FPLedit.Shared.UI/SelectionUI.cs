@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace FPLedit.Shared.UI
 {
@@ -11,11 +12,11 @@ namespace FPLedit.Shared.UI
 
         private readonly ActionInfo[] actions;
 
-        private ActionInfo selectedState;
+        private ActionInfo selectedAction;
 
-        public T SelectedState => selectedState.Value;
+        public T SelectedState => selectedAction.Value;
 
-        public bool EnabledOptionSelected => selectedState.Enabled;
+        public bool EnabledOptionSelected => selectedAction.Enabled;
 
         public SelectionUI(Action<T> selectedEvent, StackLayout st)
         {
@@ -48,6 +49,8 @@ namespace FPLedit.Shared.UI
                 st.Items.Add(rb);
                 ac.RadioButton = rb;
             }
+
+            InternalSelect(actions[0].Value);
         }
 
         private IEnumerable<ActionInfo> GetActions(Type type)
@@ -57,9 +60,8 @@ namespace FPLedit.Shared.UI
             foreach (T val in values)
             {
                 var memInfo = type.GetMember(val.ToString());
-                var mem = memInfo.FirstOrDefault(m => m.DeclaringType == type);
-                var attributes = mem.GetCustomAttributes(typeof(SelectionNameAttribute), false);
-                var name = ((SelectionNameAttribute) attributes.FirstOrDefault())?.Name;
+                var mem = memInfo.First(m => m.DeclaringType == type);
+                var name = mem.GetCustomAttribute<SelectionNameAttribute>(false)?.Name;
                 yield return new ActionInfo(val, name);
             }
         }
@@ -68,6 +70,7 @@ namespace FPLedit.Shared.UI
         {
             var state = GetState(option);
             state.RadioButton.Enabled = false;
+            state.Enabled = false;
         }
 
         public void ChangeSelection(T option)
@@ -78,7 +81,7 @@ namespace FPLedit.Shared.UI
 
         private void InternalSelect(T option)
         {
-            selectedState = GetState(option);
+            selectedAction = GetState(option);
             selectedEvent?.Invoke(option);
         }
 
@@ -94,8 +97,8 @@ namespace FPLedit.Shared.UI
         private class ActionInfo
         {
             public readonly string Name;
-            public T Value;
-            public readonly bool Enabled;
+            public readonly T Value;
+            public bool Enabled;
             public RadioButton RadioButton;
 
             public ActionInfo(T value, string name)
@@ -111,13 +114,11 @@ namespace FPLedit.Shared.UI
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
     public class SelectionNameAttribute : Attribute
     {
-        private readonly string name;
-
-        public string Name => name;
+        public string Name { get; }
 
         public SelectionNameAttribute(string name)
         {
-            this.name = name;
+            Name = name;
         }
     }
 }
