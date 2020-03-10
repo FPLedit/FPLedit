@@ -19,34 +19,34 @@ namespace FPLedit.CrashReporting
 
         public void Report(CrashReport report)
         {
-            var reportText = report.Serialize();
             try
             {
+                var reportText = report.Serialize();
                 var dir = pluginInterface.GetTemp(REPORT_DIR);
                 if (!Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
 
-                var fn_tt = pluginInterface.GetTemp(REPORT_DIR + "crash_tt.fpl");
+                var fnTimetable = pluginInterface.GetTemp(REPORT_DIR + "crash_tt.fpl");
                 if (pluginInterface.Timetable != null)
-                    new Shared.Filetypes.XMLExport().SafeExport(pluginInterface.Timetable, fn_tt, pluginInterface);
-                else if (File.Exists(fn_tt))
-                    File.Delete(fn_tt);
+                    new Shared.Filetypes.XMLExport().SafeExport(pluginInterface.Timetable, fnTimetable, pluginInterface);
+                else if (File.Exists(fnTimetable))
+                    File.Delete(fnTimetable);
 
-                var fn_report = pluginInterface.GetTemp(REPORT_DIR + "crash_report.xml");
-                File.WriteAllText(fn_report, reportText);
+                var fnReport = pluginInterface.GetTemp(REPORT_DIR + "crash_report.xml");
+                File.WriteAllText(fnReport, reportText);
 
-                var fn_fileinfo = pluginInterface.GetTemp(CRASH_DIR + "crash.file");
-                File.WriteAllText(fn_fileinfo, pluginInterface.FileState.FileName);
+                var fnCrashFileNameFile = pluginInterface.GetTemp(CRASH_DIR + "crash.file");
+                File.WriteAllText(fnCrashFileNameFile, pluginInterface.FileState.FileName);
 
-                var fn_crash = pluginInterface.GetTemp(CRASH_DIR + "crash.flag");
-                File.WriteAllText(fn_crash, "1");
+                var fnCrashFlag = pluginInterface.GetTemp(CRASH_DIR + "crash.flag");
+                File.WriteAllText(fnCrashFlag, "1");
 
                 MessageBox.Show("Es ist ein unerwarteter Fehler in FPLedit aufgetreten." + Environment.NewLine + Environment.NewLine +
                     "FPLedit wird neu gestartet. Möglicherweise ist eine Wiederherstellung möglich.", MessageBoxType.Error);
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("Es ist ein unerwarteter Fehler in FPLedit aufgetreten. Es konnten keine weiteren Informationen gespeichert werden. FPLedit wird neu gestartet.");
+                MessageBox.Show("Es ist ein unerwarteter Fehler in FPLedit aufgetreten. Es konnten keine weiteren Informationen gespeichert werden. FPLedit wird neu gestartet.\n\n\n" + ex.Message);
             }
         }
 

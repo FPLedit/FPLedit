@@ -65,6 +65,7 @@ namespace FPLedit.Bildfahrplan
                 pr.InitPrint();
         }
 
+        // ReSharper disable once CA2000
         private void ShowItem_Click(object sender, EventArgs e) => new PreviewForm(pluginInterface).Show(); // no using intended!
 
         private void ShowForm(Dialog<DialogResult> form)

@@ -5,6 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable UnusedMember.Global
 
 namespace FPLedit.CrashReporting
 {
@@ -26,6 +30,8 @@ namespace FPLedit.CrashReporting
             SafeAction(() => OS = Environment.OSVersion.ToString());
             SafeAction(() => Assemblies = AppDomain.CurrentDomain.GetAssemblies().Select(a => a.GetName().Name).ToArray());
         }
+        
+        public CrashReport() {} // needed for Serialization
 
         public string Serialize()
         {
@@ -53,16 +59,20 @@ namespace FPLedit.CrashReporting
             Url = plugin.Url;
             FullName = plugin.FullName;
         }
+        
+        public ExtensionInfo() {} // needed for Serialization
 
-        public string Name { get; }
-        public string Author { get; }
-        public string Version { get; }
-        public string Url { get; }
-        public string FullName { get; }
+        public string Name { get; set; }
+        public string Author { get; set; }
+        public string Version { get; set; }
+        public string Url { get; set; }
+        public string FullName { get; set; }
     }
 
     public sealed class ExceptionInfo
     {
+        public ExceptionInfo() {} // needed for Serialization
+        
         public ExceptionInfo(Exception x)
         {
             TypeName = x.GetType().FullName;
@@ -72,10 +82,10 @@ namespace FPLedit.CrashReporting
             InnerException = x.InnerException == null ? null : new ExceptionInfo(x.InnerException);
         }
 
-        public string Message { get; }
-        public string StackTrace { get; }
-        public string Source { get; }
-        public string TypeName { get; }
-        public ExceptionInfo InnerException { get; }
+        public string Message { get; set; }
+        public string StackTrace { get; set; }
+        public string Source { get; set; }
+        public string TypeName { get; set; }
+        public ExceptionInfo InnerException { get; set; }
     }
 }

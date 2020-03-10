@@ -170,6 +170,11 @@ namespace FPLedit
             helpMenu.Items.Add(new SeparatorMenuItem());
             helpMenu.CreateItem("Online Hilfe", clickHandler: (s, ev) => OpenHelper.Open("https://fahrplan.manuelhu.de/"));
             helpMenu.CreateItem("Info", clickHandler: (s, ev) => new InfoForm(Bootstrapper.FullSettings).ShowModal(this));
+            
+#if DEBUG && ENABLE_CRASH_REPORTING_DEBUG
+            helpMenu.Items.Add(new SeparatorMenuItem());
+            helpMenu.CreateItem("Exception auslösen", clickHandler: (s, ev) => throw new Exception("Ausgelöste Exception"));
+#endif
         }
 
         private void UpdateLastFilesMenu(object sender, EventArgs e)
