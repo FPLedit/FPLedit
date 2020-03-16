@@ -74,7 +74,7 @@ namespace FPLedit.Shared.UI
         public static void WordWrap(this Label label, int maxWidth)
         {
             // hack as eto currently somehow does not permit multi-line texts in xaml.
-            var origLines = label.Text.Split(new [] {"\n", "\\n"}, StringSplitOptions.None);
+            var origLines = label.Text.Split(new [] {"\n", "\\n "}, StringSplitOptions.None);
             var lines = new List<string>();
             foreach (var origLine in origLines)
             {
