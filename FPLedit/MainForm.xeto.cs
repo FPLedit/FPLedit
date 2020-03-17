@@ -132,6 +132,11 @@ namespace FPLedit
                     }
                 };
             }
+            
+            // Output some version stats
+            Bootstrapper.Logger.Debug("Current version: " + FileVersionInfo.GetVersionInfo(PathManager.Instance.AppFilePath).ProductVersion);
+            Bootstrapper.Logger.Debug("Runtime version: " + System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription);
+            Bootstrapper.Logger.Debug("OS version: " + Environment.OSVersion.ToString());
         }
 
         private void LoadStartFile()
@@ -154,13 +159,13 @@ namespace FPLedit
             // Ggf. Import bzw. Export-Menü entfernen
             if (importers.Length == 0)
                 fileMenu.Items.Remove(importMenu);
-            
+
             // Ggf. Letzte Dateien Menü entfernen
             if (!lfh.Enabled)
                 lastMenu.Enabled = false;
 
             // Hilfe Menü nach den Erweiterungen zusammenbasteln
-            var helpMenu = (ButtonMenuItem)Menu.GetItem(LocHelpMenu);
+            var helpMenu = (ButtonMenuItem) Menu.GetItem(LocHelpMenu);
             if (helpMenu.Items.Any())
                 helpMenu.Items.Add(new SeparatorMenuItem());
             helpMenu.CreateItem("Erweiterungen", clickHandler: (s, ev) => new ExtensionsForm(Bootstrapper.ExtensionManager, this).ShowModal(this));
@@ -170,13 +175,13 @@ namespace FPLedit
             helpMenu.Items.Add(new SeparatorMenuItem());
             helpMenu.CreateItem("Online Hilfe", clickHandler: (s, ev) => OpenHelper.Open("https://fahrplan.manuelhu.de/"));
             helpMenu.CreateItem("Info", clickHandler: (s, ev) => new InfoForm(Bootstrapper.FullSettings).ShowModal(this));
-            
+
 #if DEBUG
             helpMenu.Items.Add(new SeparatorMenuItem());
             helpMenu.CreateItem("Exception auslösen", clickHandler: (s, ev) => throw new Exception("Ausgelöste Exception"));
 #endif
         }
-
+        
         private void UpdateLastFilesMenu(object sender, EventArgs e)
         {
             lastMenu.Items.Clear();

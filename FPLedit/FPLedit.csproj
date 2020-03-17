@@ -44,6 +44,7 @@
     <PackageReference Include="Eto.Platform.Wpf" Version="2.5.0" />
     <PackageReference Include="Eto.Serialization.Xaml" Version="2.5.0" />
     <PackageReference Include="Jint" Version="3.0.0-beta-1632" />
+    <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
   </ItemGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="powershell -executionpolicy bypass -nologo -File $(SolutionDir)/build_scripts/vsbuild-pre.ps1 $(SolutionDir) $(TargetDir) $(ConfigurationName)" />

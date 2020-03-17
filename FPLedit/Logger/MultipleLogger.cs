@@ -22,7 +22,7 @@ namespace FPLedit.Logger
 
         public void Error(string message)
         {
-            Application.Instance.Invoke(() =>
+            SafeExecute(() =>
             {
                 foreach (var log in loggers)
                     log.Error(message);
@@ -31,7 +31,7 @@ namespace FPLedit.Logger
 
         public void Info(string message)
         {
-            Application.Instance.Invoke(() =>
+            SafeExecute(() =>
             {
                 foreach (var log in loggers)
                     log.Info(message);
@@ -40,7 +40,7 @@ namespace FPLedit.Logger
 
         public void Warning(string message)
         {
-            Application.Instance.Invoke(() =>
+            SafeExecute(() =>
             {
                 foreach (var log in loggers)
                     log.Warning(message);
@@ -49,7 +49,7 @@ namespace FPLedit.Logger
 
         public void LogException(Exception e)
         {
-            Application.Instance.Invoke(() =>
+            SafeExecute(() =>
             {
                 foreach (var log in loggers)
                     log.LogException(e);
@@ -58,11 +58,19 @@ namespace FPLedit.Logger
 
         public void Debug(string message)
         {
-            Application.Instance.Invoke(() =>
+            SafeExecute(() =>
             {
                 foreach (var log in loggers)
                     log.Debug(message);
             });
+        }
+
+        private void SafeExecute(Action action)
+        {
+            if (Application.Instance.MainForm != null && !Application.Instance.IsDisposed)
+                Application.Instance.Invoke(action);
+            else
+                action();
         }
     }
 }

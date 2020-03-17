@@ -17,7 +17,8 @@ namespace FPLedit.CrashReporting
         public ExceptionInfo Exception { get; set; }
         public ExtensionInfo[] Extensions { get; set; }
         public string Version { get; set; }
-        public string OS { get; set; }
+        public string OperatingSystem { get; set; }
+        public string RuntimeVersion { get; set; }
         public string[] Assemblies { get; set; }
         public DateTime Time { get; set; }
 
@@ -27,7 +28,8 @@ namespace FPLedit.CrashReporting
             SafeAction(() => Exception = new ExceptionInfo(x));
             SafeAction(() => Extensions = mg.Plugins.Where(p => p.Enabled).Select(p => new ExtensionInfo(p)).ToArray());
             SafeAction(() => Version = FileVersionInfo.GetVersionInfo(PathManager.Instance.AppFilePath).ProductVersion);
-            SafeAction(() => OS = Environment.OSVersion.ToString());
+            SafeAction(() => RuntimeVersion = System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription);
+            SafeAction(() => OperatingSystem = Environment.OSVersion.ToString());
             SafeAction(() => Assemblies = AppDomain.CurrentDomain.GetAssemblies().Select(a => a.GetName().Name).ToArray());
         }
         
