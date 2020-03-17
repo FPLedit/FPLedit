@@ -7,7 +7,7 @@ namespace FPLedit.Editor.Trains
 {
     internal sealed class TrainEditHelper
     {
-        public Train CopyTrain(Train orig, int offsetMin, string name, bool copyAll)
+        private Train CopyTrain(Train orig, int offsetMin, string name, bool copyAll)
         {
             var t = new Train(orig.Direction, orig._parent)
             {
@@ -71,6 +71,9 @@ namespace FPLedit.Editor.Trains
 
         public Train[] CopyTrainMultiple(Train orig, int offsetMin, string name, bool copyAll, int count, int numberAdd)
         {
+            if (count < 0)
+                throw new ArgumentException("Value must be greater than or equal to zero", nameof(count));
+            
             var ret = new Train[count];
 
             var start = RemoveNamePrefix(name, out string baseName);
@@ -86,6 +89,9 @@ namespace FPLedit.Editor.Trains
 
         public void SortTrainsAllStations(Timetable tt, TrainDirection dir, bool topDown)
         {
+            if (tt.Type != TimetableType.Linear)
+                throw new TimetableTypeNotSupportedException(tt.Type, "Sorting at all stations");
+            
             var stations = tt.GetStationsOrderedByDirection(dir);
             if (!topDown)
                 stations.Reverse();
@@ -99,26 +105,26 @@ namespace FPLedit.Editor.Trains
             if (excludePrefix)
                 SortTrainsName(tt, dir, false);
 
-            Train[] trains() => tt.Trains.Where(t => t.Direction == dir).ToArray();
+            Train[] Trains() => tt.Trains.Where(t => t.Direction == dir).ToArray();
 
             NameParts NameSelector(Train train) => new NameParts(train.TName, excludePrefix);
             bool StringComparer(NameParts cur, NameParts next) => cur.CompareTo(next, excludePrefix);
 
-            InternalSort(tt, trains, NameSelector, StringComparer);
+            InternalSort(tt, Trains, NameSelector, StringComparer);
         }
 
         public void SortTrainsAtStation(Timetable tt, TrainDirection dir, Station sta)
         {
-            Train[] trains() => tt.Trains.Where(t => t.Direction == dir)
+            Train[] Trains() => tt.Trains.Where(t => t.Direction == dir)
                 .Where(t => t.GetPath().Contains(sta)).ToArray();
 
             TimeEntry TimeSelector(Train train) => train.GetArrDep(sta).FirstSetTime;
             bool TimeComparer(TimeEntry cur, TimeEntry next) => (cur != default) && (next != default) && (cur > next);
 
-            InternalSort(tt, trains, TimeSelector, TimeComparer);
+            InternalSort(tt, Trains, TimeSelector, TimeComparer);
         }
 
-        public void InternalSort<TCompare>(Timetable tt, Func<Train[]> trains, Func<Train, TCompare> selector, Func<TCompare, TCompare, bool> comparer)
+        private void InternalSort<TCompare>(Timetable tt, Func<Train[]> trains, Func<Train, TCompare> selector, Func<TCompare, TCompare, bool> comparer)
         {
             var t = trains();
             for (int n = t.Length; n > 1; n--)
@@ -147,6 +153,8 @@ namespace FPLedit.Editor.Trains
 
         private static int RemoveNamePrefix(string name, out string prefix)
         {
+            //TODO: Optimize by going backward with only one index and splitting in the end.
+            //TODO: Whitespace in the end
             var nameBase = name.Trim();
             var last = nameBase.ToCharArray().LastOrDefault();
             var num = "";

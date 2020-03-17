@@ -5,8 +5,6 @@ using FPLedit.Shared.UI.Validators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.Editor.Trains
 {
@@ -29,7 +27,7 @@ namespace FPLedit.Editor.Trains
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
             offsetValidator = new NumberValidator(offsetTextBox, false, true, errorMessage: "Bitte die Verschiebung als Zahl in Minuten angeben!");
-            countValidator = new NumberValidator(countTextBox, false, true, errorMessage: "Bitte eine gültige Anzahl neuer Züge eingeben!");
+            countValidator = new NumberValidator(countTextBox, false, true, allowNegative: false, errorMessage: "Bitte eine gültige Anzahl >0 neuer Züge eingeben!");
             changeValidator = new NumberValidator(changeTextBox, false, true, errorMessage: "Bitte eine gültige Veränderung der Zugnummer eingeben!");
 
             train = t;
