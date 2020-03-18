@@ -33,7 +33,7 @@ namespace FPLedit.Shared.Filetypes
 #endif
             var ttElm = BuildNode(tt.XMLEntity);
 
-            using (var sw = new StreamWriter(stream, Encoding.UTF8, 1024, true))
+            using (var sw = new StreamWriter(stream, new UTF8Encoding(false), 1024, true))
             using (var writer = new XmlTextWriter(sw))
             {
                 if (debug)

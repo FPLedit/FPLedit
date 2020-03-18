@@ -46,7 +46,7 @@ namespace FPLedit.Shared.Tests
         private Stream PrepareTemp(string text)
         {
             var ms = new MemoryStream();
-            using (var sw = new StreamWriter(ms, Encoding.UTF8, 1024, true))
+            using (var sw = new StreamWriter(ms, new UTF8Encoding(false), 1024, true))
                 sw.Write(text);
             ms.Seek(0, SeekOrigin.Begin);
             return ms;
