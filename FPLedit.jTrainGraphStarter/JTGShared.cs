@@ -29,7 +29,7 @@ namespace FPLedit.jTrainGraphStarter
                 if (major == 3 && minor < 10)
                     return new JtgCompatibility(minor > 2, TimetableVersion.JTG3_0); // Ab 3.03
                 if (major == 3)
-                    return new JtgCompatibility(minor == 10, TimetableVersion.JTG3_1);
+                    return new JtgCompatibility(minor >= 10 && minor < 20, TimetableVersion.JTG3_1);
                 return new JtgCompatibility(false); // Neue Hauptversion, wahrscheinlich inkompatibel
             }
             return new JtgCompatibility(true); // Hier gibt es keine Informationen, also "kompatibel"

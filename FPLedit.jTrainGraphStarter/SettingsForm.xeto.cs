@@ -79,6 +79,14 @@ namespace FPLedit.jTrainGraphStarter
             using (var ofd = new OpenFileDialog())
             {
                 ofd.AddLegacyFilter("JAR-Dateien (*.jar)|*.jar");
+                
+                if (!string.IsNullOrWhiteSpace(jtgPathTextBox.Text))
+                {
+                    var directory = Path.GetDirectoryName(jtgPathTextBox.Text);
+                    if (Directory.Exists(directory))
+                        ofd.Directory = new Uri(directory);
+                }
+
                 if (ofd.ShowDialog(this) == DialogResult.Ok)
                 {
                     jtgPathTextBox.Text = ofd.FileName;

@@ -146,9 +146,18 @@ namespace FPLedit.jTrainGraphStarter
             {
                 try
                 {
-                    p.Start();
+                    if (!p.Start())
+                        throw new Exception("Process could not be started!");
+                    
                     pluginInterface.Logger.Info("Wartet darauf, dass jTrainGraph beendet wird...");
-                    p.WaitForExit();
+
+                    bool forceExit = false;
+                    while (!p.HasExited)
+                    {
+                        if (!forceExit)
+                            p.WaitForExit(2000);
+                    }
+
                     pluginInterface.Logger.Info("jTrainGraph beendet! Lade Datei neu...");
 
                     if (p.ExitCode != 0)

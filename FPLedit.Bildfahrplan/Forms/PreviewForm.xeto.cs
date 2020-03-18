@@ -100,6 +100,9 @@ namespace FPLedit.Bildfahrplan.Forms
 
         private void PluginInterface_FileStateChanged(object sender, FileStateChangedEventArgs e)
         {
+            if (!Visible || scrollable == null || adbg == null || hpanel == null || IsDisposed)
+                return;
+            
             scrollPosition = scrollable.ScrollPosition;
 
             adbg.Invalidate();
