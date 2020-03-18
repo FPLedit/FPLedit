@@ -1,0 +1,12 @@
+<e:RunningForm
+  xmlns="clr-namespace:Eto.Forms;assembly=Eto"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:e="clr-namespace:FPLedit.jTrainGraphStarter;assembly=FPLedit.jTrainGraphStarter"
+  Title="jTrainGraph läuft..." Resizable="false">
+  <TableLayout Spacing="5,5" Padding="10,10,10,10">
+    <ProgressBar x:Name="progressBar" />
+    <Label>Bei Problemen kann jTrainGraph beendet werden. Alle in der Zwischenzeit geänderten Daten gehen verloren.</Label>
+    <Label>Nach dem Beenden von jTrainGraph schließt sich dieses Fenster von selbst.</Label>
+    <Button x:Name="closeButton" Text="jTrainGraph beenden (bei Problemen)" Click="CloseButton_Click" />
+  </TableLayout>
+</e:RunningForm>

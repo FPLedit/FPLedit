@@ -135,48 +135,26 @@ namespace FPLedit.jTrainGraphStarter
                 return;
             }
 
-            string jtgFolder = Path.GetDirectoryName(jtgPath);
-
-            Process p = new Process();
-            p.StartInfo.WorkingDirectory = jtgFolder;
-            p.StartInfo.FileName = javapath;
-            p.StartInfo.Arguments = "-jar \"" + jtgPath + "\" \"" + fnArg + "\"";
+            if (!ExecuteJTrainGraph(fnArg, jtgPath, javapath)) 
+                return;
 
             try
             {
-                try
-                {
-                    if (!p.Start())
-                        throw new Exception("Process could not be started!");
-                    
-                    pluginInterface.Logger.Info("Wartet darauf, dass jTrainGraph beendet wird...");
-
-                    bool forceExit = false;
-                    while (!p.HasExited)
-                    {
-                        if (!forceExit)
-                            p.WaitForExit(2000);
-                    }
-
-                    pluginInterface.Logger.Info("jTrainGraph beendet! Lade Datei neu...");
-
-                    if (p.ExitCode != 0)
-                        throw new Exception("Process exited with error code " + p.ExitCode);
-                }
-                catch (Exception e)
-                {
-                    pluginInterface.Logger.Error("Fehler beim Starten von jTrainGraph: Möglicherweise ist das jTrainGraphStarter Plugin falsch konfiguriert! Zur Konfiguration siehe jTrainGraph > Einstellungen");
-                    pluginInterface.Logger.LogException(e);
-                    return;
-                }
-
                 finished();
-
             }
             catch (Exception e)
             {
                 pluginInterface.Logger.Error("jTrainGraphStarter: " + e.Message);
                 pluginInterface.Logger.LogException(e);
+            }
+        }
+
+        private bool ExecuteJTrainGraph(string fnArg, string jtgPath, string javapath)
+        {
+            using (var runForm = new RunningForm(pluginInterface, fnArg, jtgPath, javapath))
+            {
+                runForm.ShowModal();
+                return runForm.JtgSuccess;
             }
         }
     }
