@@ -3,11 +3,10 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.Editor.Trains;assembly=FPLedit"
   xmlns:et="clr-namespace:FPLedit.Editor.TimetableEditor;assembly=FPLedit"
-  xmlns:sys="clr-namespace:System;assembly=mscorlib"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
-  Title="Neuen Zug erstellen" Resizable="true">
+  Title="Neuen Zug erstellen" Resizable="true" MinimumSize="1000,-1" >
   <TableLayout Padding="10,10,10,10" Spacing="5,5">
-    <TableRow>
+    <TableRow ScaleHeight="true">
       <TableCell><!-- left column -->
         <StackLayout HorizontalContentAlignment="Stretch">
           <TableLayout>
@@ -15,11 +14,11 @@
               <TableLayout Spacing="5,5">
                 <TableRow>
                   <Label>Name</Label>
-                  <TextBox x:Name="nameTextBox"></TextBox>
+                  <TextBox x:Name="nameTextBox" />
                 </TableRow>
                 <TableRow>
                   <Label>Kommentar</Label>
-                  <TextBox x:Name="commentTextBox"></TextBox>
+                  <TextBox x:Name="commentTextBox" />
                 </TableRow>
               </TableLayout>
             </TableRow>
@@ -30,15 +29,15 @@
                 <TableLayout Spacing="5,5" Padding="10,10,10,10">
                   <TableRow>
                     <Label ToolTip="Die Zuglok oder der verwendete Triebwagen.">Tfz</Label>
-                    <ComboBox x:Name="locomotiveComboBox"></ComboBox>
+                    <ComboBox x:Name="locomotiveComboBox" />
                   </TableRow>
                   <TableRow>
                     <Label ToolTip="Mindestbremshundertstel">Mbr</Label>
-                    <ComboBox x:Name="mbrComboBox"></ComboBox>
+                    <ComboBox x:Name="mbrComboBox" />
                   </TableRow>
                   <TableRow>
                     <Label>Last</Label>
-                    <ComboBox x:Name="lastComboBox"></ComboBox>
+                    <ComboBox x:Name="lastComboBox" />
                   </TableRow>
                 </TableLayout>
               </TableRow>
@@ -93,7 +92,7 @@
         <GroupBox Text="Fahrplan" Height="400">
           <et:SingleTimetableEditControl x:Name="editor">
             <et:SingleTimetableEditControl.ActionButtons>
-              <Button x:Name="fillButton" Text="Von anderem Zug..." Click="FillButton_Click"></Button>
+              <Button x:Name="fillButton" Text="Von anderem Zug..." Click="FillButton_Click" />
             </et:SingleTimetableEditControl.ActionButtons>
           </et:SingleTimetableEditControl>
         </GroupBox>
@@ -104,8 +103,8 @@
       <TableLayout Spacing="5,5" Padding="10,10,10,10">
         <TableRow>
           <TableCell ScaleWidth="true" />
-          <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click"></Button>
-          <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click"></Button>
+          <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click" />
+          <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click" />
         </TableRow>
       </TableLayout>
     </TableRow><!-- /bottom actions -->
