@@ -11,7 +11,7 @@ namespace FPLedit.jTrainGraphStarter
 {
     internal static class JtgShared
     {
-        public const string DEFAULT_FILENAME = "jTrainGraph_310.jar";
+        public const string DEFAULT_FILENAME = "jTrainGraph_311.jar";
         public const TimetableVersion DEFAULT_TT_VERSION = TimetableVersion.JTG3_1;
 
         public static JtgCompatibility JtgCompatCheck(string jTgPath)

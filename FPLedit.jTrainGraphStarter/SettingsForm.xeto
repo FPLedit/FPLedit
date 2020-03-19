@@ -14,7 +14,7 @@
             <Label>Java-Pfad</Label>
             <StackLayout>
               <StackLayout Orientation="Horizontal" Spacing="5">
-                <TextBox x:Name="javaPathTextBox" Width="240"></TextBox>
+                <TextBox x:Name="javaPathTextBox" Width="240" />
                 <Button Click="FindJavaButton_Click">Erkennen</Button>
               </StackLayout>
               <Label Width="240">i.d.R: Windows: javaw.exe, Linux: java</Label>
@@ -24,22 +24,22 @@
             <Label>Pfad zur jTrainGraph-Datei</Label>
             <StackLayout>
               <StackLayout Orientation="Horizontal" Spacing="5">
-                <TextBox x:Name="jtgPathTextBox" Width="240"></TextBox>
+                <TextBox x:Name="jtgPathTextBox" Width="240" />
                 <Button Width="50" Click="ChooseJtgButton_Click">...</Button>
               </StackLayout>
-              <Label Width="240">Anwendungsdatei von jTrainGraph (jTrainGraph_xxx.jar/exe, wobei xxx >= 202)</Label>
+              <Label Width="240">Anwendungsdatei von jTrainGraph (normalerweise jTrainGraph_xxx.jar/exe, wobei xxx eine kompatible Version von jTrainGraph ist)</Label>
             </StackLayout>
           </TableRow>
           <TableRow>
             <Label>Version von jTrainGraph</Label>
-            <DropDown Width="80" x:Name="versionComboBox"></DropDown>
+            <DropDown Width="80" x:Name="versionComboBox" />
           </TableRow>
         </TableLayout>
       </TableRow>
     </TableLayout>
     <StackLayout Padding="5">
       <StackLayout Orientation="Horizontal">
-        <Label>Weitere Hinweise:</Label>
+        <Label>Weitere Hinweise und kompatible Versionen:</Label>
         <fui:UrlButton Url="https://fahrplan.manuelhu.de/bildfahrplaene/">Dokumentation zu diesem Plugin</fui:UrlButton>
       </StackLayout>
       <StackLayout Orientation="Horizontal">
@@ -47,12 +47,14 @@
         <fui:UrlButton Url="https://jtraingraph.de">jTrainGraph herunterladen</fui:UrlButton>
       </StackLayout>
       <Label>Auch wenn jTrainGraph in der *.exe-Variante verwendet wird bitte den Java-Pfad ausfüllen!</Label>
+      <Label>Bitte verwenden Sie, wenn möglich, immer die aktuelleste jTrainGraph-Version!</Label>
+      <Label>Kompatible Versionen sind 2.02, 2.03, 3.03, 3.11</Label>
     </StackLayout>
     <TableLayout Spacing="5,5" Padding="10,10,10,10">
       <TableRow>
         <CheckBox x:Name="messageCheckBox" Text="Warnhinweis nicht bei jedem jTrainGraph-Start anzeigen" />
         <TableCell ScaleWidth="true" />
-        <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click"></Button>
+        <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click" />
       </TableRow>
     </TableLayout>
   </StackLayout>

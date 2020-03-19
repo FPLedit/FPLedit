@@ -57,7 +57,7 @@ namespace FPLedit.jTrainGraphStarter
                 if (!jtgexists)
                     text += "Die angegebene Datei für jTrainGraph wurde nicht gefunden. ";
                 if (!compat.Compatible)
-                    text += "Die gewählte Version von jTrainGraph ist wahrscheinlich nicht mit FPledit kompatibel. Bitte verwenden Sie jTrainGraph 2.02 - 2.03 oder 3.03 (und höher)! ";
+                    text += "Die gewählte Version von jTrainGraph ist wahrscheinlich nicht mit FPledit kompatibel. Bitte verwenden Sie jTrainGraph in einer kompatiblen Version! ";
                 if (!javaexists)
                     text += "Java wurde unter dem angegebenen Pfad nicht gefunden. ";
                 text += "Wollen Sie trotzdem fortfahren?";
