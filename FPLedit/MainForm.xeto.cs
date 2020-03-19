@@ -78,7 +78,7 @@ namespace FPLedit
             InitMain();
         }
 
-        private void FileHandler_FileStateChanged(object sender, FileStateChangedEventArgs e)
+        private void FileStateChanged(object sender, FileStateChangedEventArgs e)
         {
             Title = "FPLedit" + (e.FileState.Opened ? " - "
                 + (e.FileState.FileName != null ? (Path.GetFileName(e.FileState.FileName) + " ") : "")
@@ -107,7 +107,7 @@ namespace FPLedit
 
             InitializeMenus();
 
-            Bootstrapper.FileStateChanged += FileHandler_FileStateChanged;
+            Bootstrapper.FileStateChanged += FileStateChanged;
             Shown += (s, e) => LoadStartFile();
             Shown += (s, e) => Bootstrapper.Update.AutoUpdateCheck(Bootstrapper.Logger);
 

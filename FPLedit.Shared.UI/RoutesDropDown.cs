@@ -17,6 +17,9 @@ namespace FPLedit.Shared.UI
 
             pluginInterface.FileStateChanged += (s, e) =>
             {
+                if (IsDisposed)
+                    return;
+                
                 ReloadRouteNames(lastFn != e.FileState.FileName);
                 lastFn = e.FileState.FileName;
             };
@@ -86,7 +89,7 @@ namespace FPLedit.Shared.UI
             int oldSelected = -1;
             if (SelectedValue != null)
                 oldSelected = (int)((ListItem)SelectedValue).Tag;
-            var routes = GetRouteNames(pluginInterface.Timetable);
+            var routes = GetRouteNames(pluginInterface.Timetable); //TODO: Remove multiple enumeration
             Items.Clear();
             Items.AddRange(routes);
 
