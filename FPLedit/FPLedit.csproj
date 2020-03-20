@@ -4,6 +4,8 @@
     <TargetFramework>net461</TargetFramework>
     <OutputType>WinExe</OutputType>
     <ApplicationIcon>Resources\programm.ico</ApplicationIcon>
+    <Configurations>Debug;Release</Configurations>
+    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -34,11 +36,13 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FPLedit.Shared.Rendering\FPLedit.Shared.Rendering.csproj" />
-    <ProjectReference Include="..\FPLedit.Shared.UI.PlatformControls\FPLedit.Shared.UI.PlatformControls.csproj" />
     <ProjectReference Include="..\FPLedit.Shared.UI\FPLedit.Shared.UI.csproj" />
     <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Eto.DsBindComboBoxCell" Version="2.5.0" />
+    <PackageReference Include="Eto.DsBindComboBoxCell.Gtk" Version="2.5.0" />
+    <PackageReference Include="Eto.DsBindComboBoxCell.Wpf" Version="2.5.0" />
     <PackageReference Include="Eto.Forms" Version="2.5.0" />
     <PackageReference Include="Eto.Platform.Gtk" Version="2.5.0" />
     <PackageReference Include="Eto.Platform.Wpf" Version="2.5.0" />
@@ -48,8 +52,5 @@
   </ItemGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="powershell -executionpolicy bypass -nologo -File $(SolutionDir)/build_scripts/vsbuild-pre.ps1 $(SolutionDir) $(TargetDir) $(ConfigurationName)" />
-  </Target>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="powershell -executionpolicy bypass -nologo -File $(SolutionDir)/build_scripts/vsbuild-post.ps1 $(SolutionDir) $(TargetDir) $(ConfigurationName)" />
   </Target>
 </Project>

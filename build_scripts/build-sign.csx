@@ -2,11 +2,10 @@
  * FPLedit Release-Prozess
  * Erstellt kryptographische Signaturen der Erweiterungen
  * Aufruf: build-sign.csx $(SolutionDir) $(TargetDir)
- * Version 0.1 / (c) Manuel Huber 2019
+ * Version 0.2 / (c) Manuel Huber 2020
  */
 
 #r "System.Xml.dll"
-#load "includes.csx"
 
 using System;
 using System.IO;
