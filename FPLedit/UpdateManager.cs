@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Xml;
 
@@ -21,6 +22,8 @@ namespace FPLedit
         public Action<Exception> CheckError { get; set; }
 
         public Version CurrentVersion { get; }
+        
+        public string CurrentVersionDisplay { get; }
 
         public bool AutoUpdateEnabled
         {
@@ -37,6 +40,9 @@ namespace FPLedit
 
             string versionString = FileVersionInfo.GetVersionInfo(PathManager.Instance.AppFilePath).ProductVersion;
             CurrentVersion = new Version(versionString);
+
+            var attr = typeof(MainForm).Assembly.GetCustomAttribute<AssemblyVersionFlagAttribute>();
+            CurrentVersionDisplay = CurrentVersion + (attr != null ? "-" + attr.Flag : "");
         }
 
         private VersionInfo GetVersioninfoFromXml(string xml)
@@ -126,9 +132,9 @@ namespace FPLedit
             CheckResult = (new_avail, vi) =>
             {
                 if (new_avail)
-                    log.Info($"Eine neue Programmversion ({vi.NewVersion.ToString()}) ist verfügbar! {vi.Description ?? ""} Hier herunterladen: {vi.DownloadUrl}");
+                    log.Info($"Eine neue Programmversion ({vi.NewVersion}) ist verfügbar! {vi.Description ?? ""} Hier herunterladen: {vi.DownloadUrl}");
                 else
-                    log.Info($"Sie benutzen die aktuelleste Version von FPLedit ({CurrentVersion.ToString()})!");
+                    log.Info($"Sie benutzen die aktuelleste Version von FPLedit ({CurrentVersionDisplay})!");
             };
 
             TextResult = log.Info;

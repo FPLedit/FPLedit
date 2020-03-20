@@ -1,4 +1,4 @@
-#addin "Cake.FileHelpers"
+#addin "Cake.FileHelpers&version=3.2.1"
 #load "build_scripts/license.cake"
 
 //////////////////////////////////////////////////////////////////////
@@ -8,6 +8,8 @@
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
 var docInPath = Argument("doc_path", "default value") ?? EnvironmentVariable("FPLEDIT_DOK");
+var ignoreNoDoc = bool.Parse(Argument("ignore_no_doc", "false"));
+var versionSuffix = Argument("version_suffix", "");
 
 //////////////////////////////////////////////////////////////////////
 // PREPARATION
@@ -17,6 +19,7 @@ var docInPath = Argument("doc_path", "default value") ?? EnvironmentVariable("FP
 var buildDir = Directory("./bin") + Directory(configuration);
 var sourceDir = Directory(".");
 var scriptsDir = Directory("./build_scripts");
+var tempDir = Directory("./build_tmp");
 
 var sourceTempDir = Directory(System.IO.Path.GetTempPath()) + Directory("fpledit_source_build_tmp");
 
@@ -31,6 +34,7 @@ Task("Clean")
     {
         CleanDirectory(buildDir);
         CleanDirectory(sourceTempDir);
+        CreateDirectory(tempDir);
     });
 
 Task("Restore-NuGet-Packages")
@@ -39,9 +43,16 @@ Task("Restore-NuGet-Packages")
     {
         NuGetRestore("./FPLedit.sln");
     });
+    
+Task("CreateBuildFlags")
+    .IsDependentOn("Restore-NuGet-Packages")
+    .Does(() => {
+        var file = tempDir + File("BuildFlags.cs");
+        FileWriteText(file, $"[assembly: AssemblyVersionFlagAttribute(\"{versionSuffix}\")]");
+    });
 
 Task("Build")
-    .IsDependentOn("Restore-NuGet-Packages")
+    .IsDependentOn("CreateBuildFlags")
     .Does(() =>
     {
         MSBuild("./FPLedit.sln", settings => {
@@ -50,9 +61,16 @@ Task("Build")
             settings.Properties.Add("ForceConfigurationDir", new List<string> { configuration });
         });
     });
+    
+Task("DeleteBuildFlags")
+    .IsDependentOn("Build")
+    .Does(() => {
+        var file = tempDir + File("BuildFlags.cs");
+        DeleteFile(file);
+    });
 
 Task("PrepareArtifacts")
-    .IsDependentOn("Build")
+    .IsDependentOn("DeleteBuildFlags")
     .Does(() => {
     Console.WriteLine(buildDir);
         RequireFile(buildDir + File("Eto.DsBindComboBoxCell.Gtk.dll"));
@@ -71,7 +89,8 @@ Task("BuildLicenseReadme")
     .IsDependentOn("PrepareArtifacts")
     .Does(() => {
         var version = GetProductVersion(Context, buildDir + File("FPLedit.exe"));
-        var text = GetLicenseText(Context, scriptsDir + File("Info.txt"), version);
+        var version_suffix_suffix = versionSuffix == "" ? "" : ("-" + versionSuffix);
+        var text = GetLicenseText(Context, scriptsDir + File("Info.txt"), version + version_suffix_suffix);
         FileWriteText(buildDir + File("README_LICENSE.txt"), text);
     });
     
@@ -91,42 +110,15 @@ Task("BuildDocumentation")
 Task("PackRelease")
     .IsDependentOn("BuildDocumentation")
     .Does(() => {
-        var version = GetProductVersion(Context, buildDir + File("FPLedit.exe"));        
-        var file = Directory("./bin") + File($"fpledit-{version}{(doc_generated ? "" : "-nodoc")}.zip");
+        var version = GetProductVersion(Context, buildDir + File("FPLedit.exe"));
+        var nodoc_suffix = ignoreNoDoc ? "" : (doc_generated ? "" : "-nodoc");
+        var version_suffix_suffix = versionSuffix == "" ? "" : ("-" + versionSuffix);
+        var file = Directory("./bin") + File($"fpledit-{version}{version_suffix_suffix}{nodoc_suffix}.zip");
+        
         if (FileExists(file))
             throw new Exception("Zip file already exists! " + file);
         Zip(buildDir, file);
     });
-    
-/*Task("PrepareSourceArtifacts")
-    .IsDependentOn("Build")
-    .Does(() => {
-    Console.WriteLine(buildDir);
-        CreateDirectory(sourceTempDir);
-        CopyFilesRecursivelyWithExclude(Directory("."), sourceTempDir);
-    });
-    
-Task("BuildSourceLicenseReadme")
-    .IsDependentOn("PrepareSourceArtifacts")
-    .Does(() => {
-        var version = GetProductVersion(Context, buildDir + File("FPLedit.exe"));
-        var text = GetLicenseText(Context, scriptsDir + File("Info.txt"), version);
-        FileWriteText(sourceTempDir + File("README_LICENSE.txt"), text);
-    });
-
-    
-Task("PackSource")
-    .IsDependentOn("BuildSourceLicenseReadme")
-    .Does(() => {
-        var version = GetProductVersion(Context, buildDir + File("FPLedit.exe"));        
-        var file = Directory("./bin") + File($"fpledit-{version}-src.zip");
-        if (FileExists(file))
-            throw new Exception("Zip file already exists! " + file);
-        Zip(sourceTempDir, file);
-    }).Finally(() => {
-        CleanDirectory(sourceTempDir);
-        DeleteDirectory(sourceTempDir);
-    });*/
 
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
@@ -158,29 +150,3 @@ public void RequireFile(string filename)
     if (!FileExists(filename))
         throw new Exception("File " + filename + " is required");
 }
-
-/*public static void CopyFilesRecursivelyWithExclude(string sourcePath, string targetPath)
-{
-    var source = new DirectoryInfo(sourcePath);
-    var target = new DirectoryInfo(targetPath);
-    var dir_exceptions = new[] { ".git", ".vs", "bin", "obj", ".idea", "build_tmp"};
-    var ext_exceptions = new[] { ".user", ".gitignore", ".gitattributes", "increment" };
-
-    int copied = 0;
-    foreach (DirectoryInfo dir in source.GetDirectories())
-    {
-        if (dir_exceptions.Contains(dir.Name))
-            continue;
-        CopyFilesRecursivelyWithExclude(dir.FullName, target.CreateSubdirectory(dir.Name).FullName);
-        copied++;
-    }
-    foreach (FileInfo file in source.GetFiles())
-    {
-        if (ext_exceptions.Any(e => file.Name.EndsWith(e)))
-            continue;
-        file.CopyTo(System.IO.Path.Combine(target.FullName, file.Name));
-        copied++;
-    }
-    if (copied == 0) // Leere Ordner nicht mitkopieren
-        target.Delete();
-}*/
