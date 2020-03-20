@@ -2,11 +2,10 @@
  * FPLedit Release-Prozess
  * Erstellt kryptographische Schlüssel zum Signieren von Erweiterungen
  * Aufruf: generate-keypair.csx
- * Version 0.1 / (c) Manuel Huber 2019
+ * Version 0.2 / (c) Manuel Huber 2020
  */
 
 #r "System.Xml.dll"
-#load "includes.csx"
 
 using System;
 using System.IO;
@@ -17,6 +16,7 @@ if (File.Exists("extensions.pubkey") || File.Exists("extensions.privkey"))
 {
     Console.Write("Existing keypair found. Overwrite? (y/N) ");
     var choice = Console.ReadKey();
+    Console.WriteLine(); // Finish line
     if (choice.KeyChar == 'y')
         KeyGen("extensions");
 }
@@ -33,8 +33,15 @@ void KeyGen(string path)
     var pubkey = rsa.ExportParameters(false);
 
     var x = new XmlSerializer(typeof(RSAParameters));
-    using (var stream = File.OpenWrite(path + ".pubkey"))
+    using (var stream = File.OpenWrite(path + ".pubkey")) 
+    {
+        x.SetLength(0);
         x.Serialize(stream, pubkey);
+    }
     using (var stream = File.OpenWrite(path + ".privkey"))
+    {
+        x.SetLength(0);
         x.Serialize(stream, privkey);
+    }
 }
+

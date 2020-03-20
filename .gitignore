@@ -192,3 +192,7 @@ ModelManifest.xml
 
 # InnoSetup output folder
 Output/
+
+# Build related
+tools/**
+!tools/packages.config

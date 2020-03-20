@@ -2,6 +2,8 @@
   <PropertyGroup>
     <ProjectGuid>{0B7A9395-3318-41A1-85D3-EECA6A868FA7}</ProjectGuid>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Configurations>Debug;Release</Configurations>
+    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>

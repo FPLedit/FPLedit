@@ -13,5 +13,4 @@ if (Get-Command "csi" -ErrorAction SilentlyContinue) {
 
 cd "$($SolutionDir)build_scripts"
 
-& $csi @("./build-pre.csx", $SolutionDir, $TargetDir)
 & $csi @("./build-sign.csx", $SolutionDir, $TargetDir)

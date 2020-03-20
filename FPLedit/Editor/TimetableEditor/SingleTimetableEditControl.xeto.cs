@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FPLedit.Shared.UI;
 using System.Linq.Expressions;
-using FPLedit.Shared.UI.PlatformControls;
+using Eto.DsBindComboBoxCell;
 
 namespace FPLedit.Editor.TimetableEditor
 {
@@ -100,9 +100,9 @@ namespace FPLedit.Editor.TimetableEditor
             return cc;
         }
 
-        private BDComboBoxCell GetTrackCell(Expression<Func<ArrDep, string>> track)
+        private DsBindComboBoxCell GetTrackCell(Expression<Func<ArrDep, string>> track)
         {
-            var cc = new BDComboBoxCell();
+            var cc = new DsBindComboBoxCell();
 
             var shadowBinding = Binding.Property(track);
 

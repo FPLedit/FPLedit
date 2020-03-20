@@ -1,7 +1,7 @@
 <!--
   FPLedit Build Process
   Common build properties for all projects.
-  (c) Manuel Huber 2019
+  (c) Manuel Huber 2020
 -->
 
 <Project>
@@ -13,8 +13,11 @@
 
 	<!-- Output configuration -->
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <OutputPath>..\bin\$(Configuration)\</OutputPath>
+
+    <OutputPath Condition=" '$(ForceConfigurationDir)' == '' ">..\bin\$(Configuration)\</OutputPath>
+    <OutputPath Condition=" '$(ForceConfigurationDir)' != '' ">..\bin\$(ForceConfigurationDir)\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+
     <!-- Use common obj folder -->
     <IntermediateOutputPath>..\obj\$(SolutionName)\$(MSBuildProjectName)\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
@@ -22,6 +25,8 @@
   <ItemGroup>
 	  <!-- Include VersionInfo -->
 	  <Compile Include="..\build_scripts\VersionInfo.cs" Link="Properties\VersionInfo.cs" />
+	  <Compile Condition=" Exists('..\build_tmp\BuildFlags.cs') "
+          Include="..\build_tmp\BuildFlags.cs" Link="Properties\BuildFlags.cs" />
   </ItemGroup>
 
   <!-- Include Analyzers -->

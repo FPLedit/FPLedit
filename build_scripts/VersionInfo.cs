@@ -1,3 +1,4 @@
+using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -41,4 +42,14 @@ internal static class Vi
 
     public const string PVersion = InformationalVersion; // Version of plugin (normally equasls assembly major.minor.patch)
     public const string PFrom = InformationalVersion; // Compatible from - normally equals assembly version
+}
+
+internal class AssemblyVersionFlagAttribute : Attribute
+{
+    public string Flag { get; }
+
+    public AssemblyVersionFlagAttribute(string flag)
+    {
+        Flag = flag;
+    }
 }
