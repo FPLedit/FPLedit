@@ -17,7 +17,7 @@ Array.prototype.takeWhile = function(predicate) {
     if (predicate == null) {
         return this;
     }
-    for (let i = 0; i < this.length; i++) {
+    for (var i = 0; i < this.length; i++) {
         if (!predicate(this[i]))
             return this.slice(0, i); // from 0 to i-1
     }
@@ -28,7 +28,7 @@ Array.prototype.skipWhile = function(predicate) {
     if (predicate == null) {
         return this;
     }
-    for (let i = 0; i < this.length; i++) {
+    for (var i = 0; i < this.length; i++) {
         if (!predicate(this[i]))
             return this.slice(i); // from i to end
     }
@@ -45,11 +45,11 @@ Array.prototype.take = function(count) {
 
 // Dictionary helper
 function dict_last(dict, predicate) {
-    let enumerator = dict.GetEnumerator();
-    let result = {};
+    var enumerator = dict.GetEnumerator();
+    var result = {};
     while (enumerator.MoveNext()) {
-        let key = enumerator.Current.Key;
-        let value = enumerator.Current.Value;
+        var key = enumerator.Current.Key;
+        var value = enumerator.Current.Value;
         if (predicate(key, value))
             result = { key: key, value: value };
     }
@@ -57,6 +57,6 @@ function dict_last(dict, predicate) {
 }
 
 // String helpers
-const s_isNullOrEmpty = function(s) {
+var s_isNullOrEmpty = function(s) {
     return s === '' || s === undefined || s == null;
 };

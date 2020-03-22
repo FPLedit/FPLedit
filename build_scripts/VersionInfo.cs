@@ -44,6 +44,7 @@ internal static class Vi
     public const string PFrom = InformationalVersion; // Compatible from - normally equals assembly version
 }
 
+[AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false, Inherited = false)]
 internal class AssemblyVersionFlagAttribute : Attribute
 {
     public string Flag { get; }

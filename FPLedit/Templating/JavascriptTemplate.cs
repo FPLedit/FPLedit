@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Esprima;
 using FPLedit.Shared.Templating;
 using FPLedit.Shared;
 using Jint;
@@ -136,15 +138,20 @@ namespace FPLedit.Templating
 
             TemplateDebugger.GetInstance().SetContext(this); // Move "Debugger" context to current template.
 
+            const string polyFillsPath = "Templating.TemplatePolyfills.js";
+            var polyfillsParserOptions = new ParserOptions(polyFillsPath) { Tolerant = false, Loc = true, SourceType = SourceType.Module };
+            var templateCodeParserOptions = new ParserOptions(Identifier) { Loc = true };
+            
             return engine
                 .SetValue("tt", tt)
                 .SetValue("debug", new Action<object>((o) => pluginInterface.Logger.Info($"{o?.GetType()?.FullName ?? "null"}: {o ?? "null"}")))
                 .SetValue("debug_print", new Action<object>((o) => pluginInterface.Logger.Info($"{o}")))
                 .SetValue("clr_typename", new Func<object,string>(o => o.GetType().Name))
                 .SetValue("clr_typefullname", new Func<object,string>(o => o.GetType().FullName))
-                .Execute(ResourceHelper.GetStringResource("Templating.TemplatePolyfills.js")) // Load polyfills
-                .Execute("let __builder = '';") // Create output variable
-                .Execute(CompiledCode)
+                .SetValue("clr_toArray", new Func<IEnumerable<object>,object[]>(o => o.ToArray()))
+                .Execute(ResourceHelper.GetStringResource(polyFillsPath), polyfillsParserOptions) // Load polyfills
+                .Execute("var __builder = '';", polyfillsParserOptions) // Create output variable
+                .Execute(CompiledCode, templateCodeParserOptions)
                 .GetValue("__builder")
                 .ToString();
         }

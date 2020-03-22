@@ -20,13 +20,13 @@ function GetWelle(/* ref int */ counter, /* IStation */ sta, /* int */ route, /*
     return "<td class=\"zug welle\"></td>";
 }
 
-let font = "serif";
-let additionalCss = "";
-let showDays = false, showComments = false;
+var font = "serif";
+var additionalCss = "";
+var showDays = false, showComments = false;
 // Initialisierung
-let helper = new TemplateHelper(tt);
+var helper = new TemplateHelper(tt);
 
-let attrs = BfplAttrs.GetAttrs(tt);
+var attrs = BfplAttrs.GetAttrs(tt);
 if (attrs != null)
 {
     if (attrs.Font != "")
@@ -154,10 +154,10 @@ if (attrs != null)
 	<body>
 		<div>
 			<#
-			let first = true; // No pagebreak before first train
-			let trains = helper.GetTrains();
-			for (let ti = 0; ti < trains.length; ti++) { 
-			    let tra = trains[ti]; #>
+			var first = true; // No pagebreak before first train
+			var trains = helper.GetTrains();
+			for (var ti = 0; ti < trains.length; ti++) { 
+			    var tra = trains[ti]; #>
 			<table id="<#= helper.HtmlName(tra.TName, "train-") #>" class="<#= first ? "first" : "" #>">
 				<# first = false; #>
 				<col style="width:50px;">
@@ -210,21 +210,21 @@ if (attrs != null)
 					<td class="spaltenkopf klein last">Zuglauf-<br>meldung<br>durch</td>
 				</tr>
 				<#
-				let rs_counter = { val: 0 };
-				let last_vmax = "";
-				let stations = helper.GetStations(tra);
-				let route = Timetable.LINEAR_ROUTE_ID;
-				for (let si = 0; si < stations.length; si++) {				
-				    let entity = stations[si];
+				var rs_counter = { val: 0 };
+				var last_vmax = "";
+				var stations = helper.GetStations(tra);
+				var route = Timetable.LINEAR_ROUTE_ID;
+				for (var si = 0; si < stations.length; si++) {				
+				    var entity = stations[si];
 				#>
 				<tr class="<#= helper.HtmlName(entity.SName, "station-") #>">
 					<#
 						if (entity != stations.last() && tt.Type == TimetableType.Network) {
-							let sta1 = stations[stations.indexOf(entity) + 1];
+							var sta1 = stations[stations.indexOf(entity) + 1];
 							route = entity.Routes.filter(r => sta1.Routes.includes(r))[0];
 						}
-						let pos = entity.Positions.GetPosition(route);
-						let cur_vmax = entity.Vmax.GetValue(route);
+						var pos = entity.Positions.GetPosition(route);
+						var cur_vmax = entity.Vmax.GetValue(route);
 					#>
 					<td class="zug first"><#= pos != null ? pos.toFixed(1) : "" #></td>
 					<td class="zug"><#= cur_vmax == last_vmax ? "" : cur_vmax #></td>
@@ -234,10 +234,10 @@ if (attrs != null)
 
 					<#
 					if (clr_typename(entity) == "Station") {
-						let ardp = tra.GetArrDep(entity);
-						let ar = ardp.Arrival.ToShortTimeString();
-						let dp = ardp.Departure.ToShortTimeString();
-						let zlm = ardp.Zuglaufmeldung;
+						var ardp = tra.GetArrDep(entity);
+						var ar = ardp.Arrival.ToShortTimeString();
+						var dp = ardp.Departure.ToShortTimeString();
+						var zlm = ardp.Zuglaufmeldung;
 					#>
 					<td class="zug klein"><#= helper.TrapezHalt(tra, entity) #></td>
 					<td class="zug"><#= (ar != "00:00" && ar != dp) ? ar : "" #></td>

@@ -56,13 +56,19 @@ namespace FPLedit.Templating
             }
             catch (JavaScriptException ex)
             {
-                logger.Error($"Fehler im Template {Identifier}: {ex.Message} in line {ex.LineNumber}, column {ex.Column}");
-                TemplateDebugger.GetInstance().Navigate(ex.LineNumber, ex.Column);
+                var source = ex.Location.Source ?? Identifier;
+                var isModule = source != Identifier;
+                logger.Error($"Fehler im {(isModule ? "Modul" : "Template")} {source}: {ex.Message} in line {ex.LineNumber}, column {ex.Column}");
+                if (!isModule)
+                    TemplateDebugger.GetInstance().Navigate(ex.LineNumber, ex.Column);
             }
             catch (Esprima.ParserException ex)
             {
-                logger.Error($"Fehler im Template {Identifier}: {ex.Message} in line {ex.LineNumber}, column {ex.Column}");
-                TemplateDebugger.GetInstance().Navigate(ex.LineNumber, ex.Column);
+                var source = ex.SourceText ?? Identifier;
+                var isModule = source != Identifier;
+                logger.Error($"Fehler im Template {(isModule ? "Modul" : "Template")} {source}: {ex.Message} in line {ex.LineNumber}, column {ex.Column}");
+                if (!isModule)
+                    TemplateDebugger.GetInstance().Navigate(ex.LineNumber, ex.Column);
             }
             catch (Exception ex)
             {

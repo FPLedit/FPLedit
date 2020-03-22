@@ -20,13 +20,13 @@ function GetWelle(/* ref int */ counter, /* IStation */ sta, /* int */ route, /*
     return "<td class=\"zug welle\"></td>";
 }
 
-let font = "Alte DIN 1451 Mittelschrift";
-let additionalCss = "";
-let showDays = false, showComments = false;
+var font = "Alte DIN 1451 Mittelschrift";
+var additionalCss = "";
+var showDays = false, showComments = false;
 // Initialisierung
-let helper = new TemplateHelper(tt);
+var helper = new TemplateHelper(tt);
 
-let attrs = BfplAttrs.GetAttrs(tt);
+var attrs = BfplAttrs.GetAttrs(tt);
 if (attrs != null)
 {
     if (attrs.Font != "")
@@ -158,10 +158,10 @@ if (attrs != null)
 	<body>
 		<div>
 			<#
-			let first = true; // No pagebreak before first train
-			let trains = helper.GetTrains();
-			for (let ti = 0; ti < trains.length; ti++) { 
-			    let tra = trains[ti]; #>
+			var first = true; // No pagebreak before first train
+			var trains = helper.GetTrains();
+			for (var ti = 0; ti < trains.length; ti++) { 
+			    var tra = trains[ti]; #>
 			<table id="<#= helper.HtmlName(tra.TName, "train-") #>" class="<#= first ? "first" : "" #>">
 				<# first = false; #>
 				<col style="width:80px;" span=2>
@@ -202,12 +202,12 @@ if (attrs != null)
 					<td class="spaltenkopf">Ankunft</td><td class=spaltenkopf>Abfahrt<br>oder Durch-<br>fahrt</td>
 				</tr>
 				<#
-				let rs_counter = { val: 0 }; // Counter as object, to pass as reference in JS.
-				let last_vmax = "";
-				let stations = helper.GetStations(tra);
-				let route = Timetable.LINEAR_ROUTE_ID;
-				for (let si = 0; si < stations.length; si++) {
-				    let entity = stations[si];
+				var rs_counter = { val: 0 }; // Counter as object, to pass as reference in JS.
+				var last_vmax = "";
+				var stations = helper.GetStations(tra);
+				var route = Timetable.LINEAR_ROUTE_ID;
+				for (var si = 0; si < stations.length; si++) {
+				    var entity = stations[si];
 				#>
 				<tr class="<#= helper.HtmlName(entity.SName, "station-") #>">
 					<#
