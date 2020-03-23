@@ -74,6 +74,14 @@ namespace FPLedit.Aushangfahrplan.Model
             set => SetAttribute("shT", value.ToString().ToLower());
         }
 
+        [XAttrName("omit-single-tr")]
+        public bool OmitTracksWhenSingle
+        {
+            get => GetAttribute<bool>("omit-single-tr", true);
+            set => SetAttribute("omit-single-tr", value.ToString().ToLower());
+        }
+
+
         private AfplAttrs(Timetable tt) : base("afpl_attrs", tt)
         {
         }

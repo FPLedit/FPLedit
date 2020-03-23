@@ -3,7 +3,8 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.Aushangfahrplan.Forms;assembly=FPLedit.Aushangfahrplan"
   xmlns:fui="clr-namespace:FPLedit.Shared.UI;assembly=FPLedit.Shared.UI"
-  xmlns:sys="clr-namespace:System;assembly=mscorlib">
+  xmlns:sys="clr-namespace:System;assembly=mscorlib"
+  Size="900,500">
   <TableLayout Spacing="5,5" Padding="10">
     <TableRow>
       <Label>Aushangfahrplan-Vorlage</Label>
@@ -31,17 +32,23 @@
         <fui:UrlButton Url="https://fahrplan.manuelhu.de/dev/css/" x:Name="cssHelpLinkLabel">Hilfe zu CSS</fui:UrlButton>
       </StackLayout>
       <TableCell ScaleWidth="true">
-        <TextArea x:Name="cssTextBox"></TextArea>
+        <TextArea x:Name="cssTextBox" />
       </TableCell>
     </TableRow>
     <TableRow>
-      <TableCell></TableCell>
+      <TableCell />
       <TableCell ScaleWidth="true">
         <CheckBox x:Name="tracksCheckBox" Checked="true">Gleisangaben anzeigen</CheckBox>
       </TableCell>
     </TableRow>
     <TableRow>
-      <TableCell></TableCell>
+      <TableCell />
+      <TableCell ScaleWidth="true">
+        <CheckBox x:Name="omitTracksSingleCheckBox">Zeige Gleisangaben nicht, falls Bahnhof nur ein Gleis hat und kein Gleis am Zug definiert ist</CheckBox>
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell />
       <TableCell ScaleWidth="true">
         <CheckBox x:Name="consoleCheckBox">CSS-Test-Konsole bei Vorschau aktivieren (Gilt für alle Fahrpläne)</CheckBox>
       </TableCell>

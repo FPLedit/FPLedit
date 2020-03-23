@@ -68,13 +68,17 @@ function TrackCell(/* Train[] */ trains, /* TrainDirection */ dir, /* int */ i, 
     if (s_isNullOrEmpty(track) && ardp.ArrivalTrack != null)
         track = ardp.ArrivalTrack;
 
-    var pd = new TrainPathData(train._parent, train);
-    var connectingRoute = pd.GetExitRoute(sta);
+    if (s_isNullOrEmpty(track) && clr_toArray(sta.Tracks).length < 2 && omitTracksWhenSingle) {
+        track = "";
+    } else if (s_isNullOrEmpty(track)) {
+        var pd = new TrainPathData(train._parent, train);
+        var connectingRoute = pd.GetExitRoute(sta);
 
-    if (s_isNullOrEmpty(track) && dir == TrainDirection.ti)
-        track = sta.DefaultTrackRight.GetValue(connectingRoute);
-    if (s_isNullOrEmpty(track) && dir == TrainDirection.ta)
-        track = sta.DefaultTrackLeft.GetValue(connectingRoute);
+        if (dir == TrainDirection.ti)
+            track = sta.DefaultTrackRight.GetValue(connectingRoute);
+        if (s_isNullOrEmpty(track) && dir == TrainDirection.ta)
+            track = sta.DefaultTrackLeft.GetValue(connectingRoute);
+    }
 
     return "<td class=\"track\">" + track + "</td>";
 }
@@ -101,6 +105,7 @@ var font = "Arial";
 var hwFont = "serif";
 var additionalCss = "";
 var showTracks = true;
+var omitTracksWhenSingle = true;
 
 var helper = new TemplateHelper(tt);
 
@@ -113,6 +118,7 @@ if (attrs != null)
         hwFont = attrs.HwFont;
     if (attrs.Css != null)
         additionalCss = attrs.Css;
+    omitTracksWhenSingle = attrs.OmitTracksWhenSingle;
 	showTracks = attrs.ShowTracks;
 }
 

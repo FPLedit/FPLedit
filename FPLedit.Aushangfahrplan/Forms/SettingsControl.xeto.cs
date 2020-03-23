@@ -19,7 +19,7 @@ namespace FPLedit.Aushangfahrplan.Forms
         private readonly ComboBox fontComboBox, hwfontComboBox;
         private readonly Label exampleLabel, hwexampleLabel, cssLabel;
         private readonly UrlButton cssHelpLinkLabel;
-        private readonly CheckBox tracksCheckBox, consoleCheckBox;
+        private readonly CheckBox tracksCheckBox, consoleCheckBox, omitTracksSingleCheckBox;
         private readonly TextArea cssTextBox;
 #pragma warning restore CS0649
 
@@ -42,10 +42,12 @@ namespace FPLedit.Aushangfahrplan.Forms
             cssTextBox.Text = attrs.Css ?? "";
             tracksCheckBox.Checked = attrs.ShowTracks;
 
-                var tmpl = chooser.GetTemplate(tt);
+            var tmpl = chooser.GetTemplate(tt);
             templateComboBox.SelectedValue = tmpl;
 
             consoleCheckBox.Checked = settings.Get<bool>("afpl.console");
+
+            omitTracksSingleCheckBox.Checked = attrs.OmitTracksWhenSingle;
         }
 
         public void Save()
@@ -54,6 +56,7 @@ namespace FPLedit.Aushangfahrplan.Forms
             attrs.HwFont = hwfontComboBox.Text;
             attrs.Css = cssTextBox.Text;
             attrs.ShowTracks = tracksCheckBox.Checked.Value;
+            attrs.OmitTracksWhenSingle = omitTracksSingleCheckBox.Checked.Value;
 
             var tmpl = (ITemplate)templateComboBox.SelectedValue;
             if (tmpl != null)
