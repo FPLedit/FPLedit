@@ -83,6 +83,7 @@
                 <TableCell ScaleWidth="true">
                   <DropDown x:Name="transitionDropDown" />
                 </TableCell>
+                <Button x:Name="resetTransitionButton" Click="ResetTransitionButton_Click">X</Button>
               </TableRow>
             </TableLayout>
           </GroupBox><!-- /group Folgezug -->

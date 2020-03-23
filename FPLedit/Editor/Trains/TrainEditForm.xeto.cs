@@ -6,6 +6,7 @@ using FPLedit.Shared.UI.Validators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Eto.Drawing;
 
 namespace FPLedit.Editor.Trains
 {
@@ -16,7 +17,7 @@ namespace FPLedit.Editor.Trains
         private readonly CheckBox mondayCheckBox, tuesdayCheckBox, wednesdayCheckBox, thursdayCheckBox, fridayCheckBox, saturdayCheckBox, sundayCheckBox;
         private readonly ComboBox locomotiveComboBox, mbrComboBox, lastComboBox;
         private readonly ToggleButton wShort, wSaShort, sShort, aShort, zShort;
-        private readonly Button fillButton;
+        private readonly Button fillButton, resetTransitionButton;
         private readonly SingleTimetableEditControl editor;
         private readonly DropDown transitionDropDown;
         private readonly GroupBox transitionsGroupBox;
@@ -87,6 +88,8 @@ namespace FPLedit.Editor.Trains
 
                 e.Handled = handled;
             };
+
+            resetTransitionButton.TextColor = Colors.Red;
         }
 
         public TrainEditForm(Train train) : this(train._parent)
@@ -124,7 +127,7 @@ namespace FPLedit.Editor.Trains
             if (tt.Version != TimetableVersion.JTG2_x)
             {
                 transitionDropDown.ItemTextBinding = Binding.Property<Train, string>(t => t.TName);
-                transitionDropDown.DataStore = tt.Trains.Where(t => t != Train);
+                transitionDropDown.DataStore = tt.Trains.Where(t => t != Train).OrderBy(t => t.TName);
                 transitionDropDown.SelectedValue = tt.GetTransition(Train);
             }
             else
@@ -182,12 +185,16 @@ namespace FPLedit.Editor.Trains
             {
                 if (tfd.ShowModal() == DialogResult.Ok)
                 {
-                    var th = new TrainEditHelper();
                     th.FillTrain(tfd.ReferenceTrain, Train, tfd.Offset);
 
                     editor.Initialize(Train._parent, Train);
                 }
             }
+        }
+
+        private void ResetTransitionButton_Click(object sender, EventArgs e)
+        {
+            transitionDropDown.SelectedIndex = -1;
         }
 
         #region Shortcut buttons
