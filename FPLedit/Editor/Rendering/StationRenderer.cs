@@ -217,14 +217,14 @@ namespace FPLedit.Editor.Rendering
             if (!CommitNameEdit())
                 return;
 
-            var regex = new Regex(@"^Neues Gleis (\d+)$", RegexOptions.Compiled);
+            var regex = new Regex(@"^Gleis (\d+)$", RegexOptions.Compiled);
             var maxTrack = 0;
             var matchedTracks = _station.Tracks.Select(t => regex.Match(t.Name)).Where(m => m.Success);
             if (matchedTracks.Any())
                 maxTrack = matchedTracks.Select(m => int.Parse(m.Groups[1].Value)).Max();
             var track = new Track(_station._parent)
             {
-                Name = "Neues Gleis " + (maxTrack + 1)
+                Name = "Gleis " + (maxTrack + 1)
             };
 
             if (!_station.Tracks.Any())
