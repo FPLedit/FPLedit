@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Eto.Drawing;
 
 namespace FPLedit.Shared.UI
 {
@@ -78,10 +79,7 @@ namespace FPLedit.Shared.UI
             {
                 entry.Resized = true; // Wir haben einen Eintrag, also ist es schon resized.
                 if (!entry.Maximized || !w.Maximizable)
-                {
-                    w.Width = entry.Width;
-                    w.Height = entry.Height;
-                }
+                    w.Size = new Size(entry.Width, entry.Height);
                 else
                     w.Maximize();
             }
