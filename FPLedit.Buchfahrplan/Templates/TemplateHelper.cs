@@ -109,7 +109,7 @@ namespace FPLedit.Buchfahrplan.Templates
         {
             var it = IntersectTrains(ot, s, true);
             if (it == null)
-                return "";
+                return ot.GetArrDep(s).TrapeztafelHalt ? "<span class=\"trapez-tt\">" + ot.TName + "</span>" : "";
 
             var oth = ot.GetArrDep(s).TrapeztafelHalt;
             var ith = it.GetArrDep(s).TrapeztafelHalt;

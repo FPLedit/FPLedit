@@ -1,4 +1,4 @@
-﻿<#@ fpledit_template type="bfpl" version="2" name="Standard-Buchfahrplan" #>
+﻿<#@ fpledit_template type="bfpl" version="2" name="Standard-Buchfahrplan (kein voller Funktionsumfang)" #>
 
 <#
 function GetWelle(/* ref int */ counter, /* IStation */ sta, /* int */ route, /* Train */ tra, /* TemplateHelper */ helper)
