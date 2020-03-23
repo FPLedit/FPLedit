@@ -24,7 +24,7 @@
     <!--<EmbeddedResource Include="**/*.xeto" />-->
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Eto.Forms" Version="2.5.0" />
-    <PackageReference Include="Eto.Serialization.Xaml" Version="2.5.0" />
+    <PackageReference Include="Eto.Forms" Version="2.5.1-ci-20200323.6" />
+    <PackageReference Include="Eto.Serialization.Xaml" Version="2.5.1-ci-20200323.6" />
   </ItemGroup>
 </Project>
