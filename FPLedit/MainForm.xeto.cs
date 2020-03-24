@@ -16,7 +16,7 @@ using FPLedit.Shared.Helpers;
 
 namespace FPLedit
 {
-    internal sealed class MainForm : FForm, IRestartable
+    internal sealed class MainForm : FForm, IRestartable, IPlugin
     {
         #region Controls
 #pragma warning disable CS0649
@@ -67,15 +67,23 @@ namespace FPLedit
             if (OptionsParser.MPCompatLog)
                 logger.AttachLogger(new ConsoleLogger());
             Bootstrapper.InjectLogger(logger);
-            
+
             // Now we can load extensions and templates
             Bootstrapper.ExtensionManager.InjectPlugin(new Editor.EditorPlugin(), 0);
+            Bootstrapper.ExtensionManager.InjectPlugin(this, 0);
             Bootstrapper.BootstrapExtensions();
-            
+
             if (Bootstrapper.FullSettings.IsReadonly)
                 Bootstrapper.Logger.Warning("Die Einstellungsdatei ist nicht schreibbar. Änderungen an Programmeinstellungen werden verworfen.");
 
             InitMain();
+        }
+        
+        public void Init(IPluginInterface pluginInterface)
+        {
+            // Initilize main UI component
+            networkEditingControl.Initialize(pluginInterface);
+            pluginInterface.FileOpened += (s, e) => networkEditingControl.ResetPan();
         }
 
         private void FileStateChanged(object sender, FileStateChangedEventArgs e)
@@ -91,10 +99,6 @@ namespace FPLedit
 
         private void InitMain()
         {
-            // Initilize main UI component
-            networkEditingControl.Initialize(Bootstrapper);
-            Bootstrapper.FileOpened += (s, e) => networkEditingControl.ResetPan();
-
             void PassKeyDown(object s, KeyEventArgs e)
             {
                 if (NetworkRenderer.DispatchableKeys.Contains(e.Key) && e.Modifiers == Keys.None)
