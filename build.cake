@@ -7,9 +7,19 @@
 
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
+
 var docInPath = Argument("doc_path", "default value") ?? EnvironmentVariable("FPLEDIT_DOK");
 var ignoreNoDoc = bool.Parse(Argument("ignore_no_doc", "false"));
 var versionSuffix = Argument("version_suffix", "");
+
+
+var incrementVersion = false;
+
+if (Argument("auto-beta", "") != "") {
+    ignoreNoDoc = true;
+    incrementVersion = true;
+    versionSuffix = "beta";
+}
 
 //////////////////////////////////////////////////////////////////////
 // PREPARATION
@@ -21,8 +31,6 @@ var sourceDir = Directory(".");
 var scriptsDir = Directory("./build_scripts");
 var tempDir = Directory("./build_tmp");
 
-var sourceTempDir = Directory(System.IO.Path.GetTempPath()) + Directory("fpledit_source_build_tmp");
-
 var doc_generated = false;
 
 //////////////////////////////////////////////////////////////////////
@@ -33,7 +41,6 @@ Task("Clean")
     .Does(() =>
     {
         CleanDirectory(buildDir);
-        CleanDirectory(sourceTempDir);
         CreateDirectory(tempDir);
     });
 
@@ -113,7 +120,18 @@ Task("PackRelease")
         var version = GetProductVersion(Context, buildDir + File("FPLedit.exe"));
         var nodoc_suffix = ignoreNoDoc ? "" : (doc_generated ? "" : "-nodoc");
         var version_suffix_suffix = versionSuffix == "" ? "" : ("-" + versionSuffix);
-        var file = Directory("./bin") + File($"fpledit-{version}{version_suffix_suffix}{nodoc_suffix}.zip");
+        var fn = $"fpledit-{version}{version_suffix_suffix}";
+        
+        if (incrementVersion) {
+            int counter = 1;
+            while (GetFiles(Directory("./bin") + File($"{fn}{counter}*.zip")).Any()) {
+                counter++;
+            }
+            fn += counter;
+        }
+        
+        
+        var file = Directory("./bin") + File($"{fn}{nodoc_suffix}.zip");
         
         if (FileExists(file))
             throw new Exception("Zip file already exists! " + file);
