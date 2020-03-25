@@ -29,11 +29,13 @@ namespace FPLedit.CrashReporting
             SafeAction(() => Time = DateTime.Now);
             SafeAction(() => Exception = new ExceptionInfo(x));
             SafeAction(() => Extensions = mg.Plugins.Where(p => p.Enabled).Select(p => new ExtensionInfo(p)).ToArray());
-            SafeAction(() => Version = FileVersionInfo.GetVersionInfo(PathManager.Instance.AppFilePath).ProductVersion);
-            SafeAction(() => VersionFlag = typeof(MainForm).Assembly.GetCustomAttribute<AssemblyVersionFlagAttribute>()?.Flag ?? "");
-            SafeAction(() => RuntimeVersion = System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription);
-            SafeAction(() => OperatingSystem = Environment.OSVersion.ToString());
             SafeAction(() => Assemblies = AppDomain.CurrentDomain.GetAssemblies().Select(a => a.GetName().Name).ToArray());
+            
+            // Version information
+            SafeAction(() => Version = VersionInformation.BaseVersionString);
+            SafeAction(() => VersionFlag = VersionInformation.VersionFlag ?? "");
+            SafeAction(() => RuntimeVersion = VersionInformation.RuntimeVersion);
+            SafeAction(() => OperatingSystem = VersionInformation.OsVersion);
         }
         
         public CrashReport() {} // needed for Serialization

@@ -3,12 +3,7 @@ using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FPLedit.Shared.Helpers;
 
 namespace FPLedit
@@ -34,7 +29,7 @@ namespace FPLedit
             using (var sr = new StreamReader(stream))
                 licenseTextArea.Text = sr.ReadToEnd();
 
-            versionLabel.Text = versionLabel.Text.Replace("{version}", mg.CurrentVersionDisplay);
+            versionLabel.Text = versionLabel.Text.Replace("{version}", VersionInformation.DisplayVersion);
             versionLabel.Font = new Font(versionLabel.Font.FamilyName, versionLabel.Font.Size, FontStyle.Bold);
             updateCheckBox.Checked = mg.AutoUpdateEnabled;
             

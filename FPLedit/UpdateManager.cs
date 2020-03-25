@@ -2,10 +2,8 @@
 using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Text;
 using System.Xml;
 
@@ -21,9 +19,9 @@ namespace FPLedit
 
         public Action<Exception> CheckError { get; set; }
 
-        public Version CurrentVersion { get; }
+        private Version CurrentVersion { get; }
         
-        public string CurrentVersionDisplay { get; }
+        private string CurrentVersionDisplay { get; }
 
         public bool AutoUpdateEnabled
         {
@@ -38,14 +36,11 @@ namespace FPLedit
             this.settings = settings;
             CheckUrl = settings.Get("updater.url", "https://fahrplan.manuelhu.de/versioninfo.xml");
 
-            string versionString = FileVersionInfo.GetVersionInfo(PathManager.Instance.AppFilePath).ProductVersion;
-            CurrentVersion = new Version(versionString);
-
-            var attr = typeof(MainForm).Assembly.GetCustomAttribute<AssemblyVersionFlagAttribute>();
-            CurrentVersionDisplay = CurrentVersion + (attr != null ? "-" + attr.Flag : "");
+            CurrentVersion = VersionInformation.AppBaseVersion;
+            CurrentVersionDisplay = VersionInformation.DisplayVersion;
         }
 
-        private VersionInfo GetVersioninfoFromXml(string xml)
+        private VersionInfo GetUpdateInfoFromXml(string xml)
         {
             var doc = new XmlDocument { XmlResolver = null };
 
@@ -88,7 +83,7 @@ namespace FPLedit
                     {
                         try
                         {
-                            VersionInfo vi = GetVersioninfoFromXml(e.Result);
+                            VersionInfo vi = GetUpdateInfoFromXml(e.Result);
                             bool new_avail = IsNewVersion(vi.NewVersion);
 
                             CheckResult?.Invoke(new_avail, vi);

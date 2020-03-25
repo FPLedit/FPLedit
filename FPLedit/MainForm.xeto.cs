@@ -138,9 +138,9 @@ namespace FPLedit
             }
             
             // Output some version stats
-            Bootstrapper.Logger.Debug("Current version: " + Bootstrapper.Update.CurrentVersionDisplay);
-            Bootstrapper.Logger.Debug("Runtime version: " + System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription);
-            Bootstrapper.Logger.Debug("OS version: " + Environment.OSVersion.ToString());
+            Bootstrapper.Logger.Debug("Current version: " + VersionInformation.DisplayVersion);
+            Bootstrapper.Logger.Debug("Runtime version: " + VersionInformation.RuntimeVersion);
+            Bootstrapper.Logger.Debug("OS version: " + VersionInformation.OsVersion);
         }
 
         private void LoadStartFile()
