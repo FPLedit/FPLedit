@@ -3,6 +3,7 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.Editor.Trains;assembly=FPLedit"
   xmlns:et="clr-namespace:FPLedit.Editor.TimetableEditor;assembly=FPLedit"
+  xmlns:fui="clr-namespace:FPLedit.Shared.UI;assembly=FPLedit.Shared.UI"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
   Title="Neuen Zug erstellen" Resizable="true" MinimumSize="1000,700" >
   <TableLayout Padding="10,10,10,10" Spacing="5,5">
@@ -44,38 +45,7 @@
             </TableLayout>
           </GroupBox><!-- /group Erweiterte Eigenschaften (für Bfpl) -->
           <GroupBox Text="Verkehrstage">
-            <TableLayout Spacing="5,5" Padding="10,10,10,10">
-              <TableRow>
-                <TableLayout Spacing="5,5">
-                  <TableRow>
-                    <CheckBox Checked="true" x:Name="mondayCheckBox" Text="Mo" />
-                    <CheckBox Checked="true" x:Name="tuesdayCheckBox" Text="Di" />
-                    <CheckBox Checked="true" x:Name="wednesdayCheckBox" Text="Mi" />
-                    <CheckBox Checked="true" x:Name="thursdayCheckBox" Text="Do" />
-                  </TableRow>
-                  <TableRow>
-                    <CheckBox Checked="true" x:Name="fridayCheckBox" Text="Fr" />
-                    <CheckBox Checked="true" x:Name="saturdayCheckBox" Text="Sa" />
-                    <CheckBox Checked="true" x:Name="sundayCheckBox" Text="So" />
-                  </TableRow>
-                </TableLayout>
-              </TableRow>
-              <TableRow>
-                <TableLayout Spacing="5,5">
-                  <TableRow>
-                    <ToggleButton x:Name="wShort" ToolTip="Werktags (Montag - Samstag)">W</ToggleButton>
-                    <ToggleButton x:Name="wSaShort" ToolTip="Werktags (außer Samstag)">W (Sa)</ToggleButton>
-                  </TableRow>
-                  <TableRow>
-                    <ToggleButton x:Name="sShort" ToolTip="Sonn- und Feiertags">S</ToggleButton>
-                    <ToggleButton x:Name="aShort" ToolTip="Alle aktivieren">Alle</ToggleButton>
-                  </TableRow>
-                  <TableRow>
-                    <ToggleButton x:Name="zShort" ToolTip="Keine aktivieren">Keine</ToggleButton>
-                  </TableRow>
-                </TableLayout>
-              </TableRow>
-            </TableLayout>
+            <fui:DaysControlNarrow x:Name="daysControl" />
           </GroupBox><!-- /group Verkehrstage -->
           <GroupBox Text="Folgezug" x:Name="transitionsGroupBox">
             <TableLayout Spacing="5,5" Padding="10,10,10,10">

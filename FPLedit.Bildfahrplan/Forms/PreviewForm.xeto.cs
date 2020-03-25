@@ -4,6 +4,7 @@ using FPLedit.Bildfahrplan.Render;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System;
+using FPLedit.Bildfahrplan.Model;
 
 namespace FPLedit.Bildfahrplan.Forms
 {
@@ -12,7 +13,7 @@ namespace FPLedit.Bildfahrplan.Forms
 #pragma warning disable CS0649
         private readonly Drawable panel, hpanel;
         private readonly Scrollable scrollable;
-        private readonly DateControl dtc;
+        private readonly DaysControlWide dtc;
         private readonly RoutesDropDown routesDropDown;
         private readonly CheckBox splitCheckBox;
 #pragma warning restore CS0649
@@ -21,7 +22,7 @@ namespace FPLedit.Bildfahrplan.Forms
         private readonly AsyncDoubleBufferedGraph adbg;
         private Point? scrollPosition = new Point(0, 0);
         private Renderer renderer;
-
+        
         public PreviewForm(IPluginInterface pluginInterface)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
@@ -36,7 +37,12 @@ namespace FPLedit.Bildfahrplan.Forms
             this.SizeChanged += (s, e) => panel.Invalidate();
 
             routesDropDown.SelectedRouteChanged += (s, e) => ResetRenderer();
-            dtc.ValueChanged += (s, e) => ResetRenderer();
+            dtc.SelectedDaysChanged += (s, e) =>
+            {
+                var attrs = new TimetableStyle(pluginInterface.Timetable);
+                attrs.RenderDays = dtc.SelectedDays;
+                ResetRenderer();
+            };
 
             splitCheckBox.Checked = pluginInterface.Settings.Get<bool>("bifpl.lock-stations");
             splitCheckBox.CheckedChanged += (s, e) =>
@@ -56,7 +62,7 @@ namespace FPLedit.Bildfahrplan.Forms
             };
 
             // Initialisierung der Daten
-            dtc.Initialize(pluginInterface);
+            dtc.SelectedDays = new TimetableStyle(pluginInterface.Timetable).RenderDays;
             routesDropDown.Initialize(pluginInterface);
         }
 

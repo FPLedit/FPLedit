@@ -2,7 +2,6 @@
   xmlns="clr-namespace:Eto.Forms;assembly=Eto"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.Bildfahrplan.Forms;assembly=FPLedit.Bildfahrplan"
-  xmlns:sys="clr-namespace:System;assembly=mscorlib"
   xmlns:shared="clr-namespace:FPLedit.Shared.UI;assembly=FPLedit.Shared.UI"
   Title="Dynamische Bildfahrplan-Vorschau" Resizable="true" ShowInTaskbar="true"
   Maximizable="false" Height="800" Width="800">
@@ -14,7 +13,9 @@
           <Button Click="PreferencesButton_Click">Darstellung ändern</Button>
           <CheckBox x:Name="splitCheckBox">Stationen nicht mitscrollen</CheckBox>
         </StackLayout>
-        <e:DateControl x:Name="dtc" />
+        <GroupBox Text="Verkehrstage">
+          <shared:DaysControlWide x:Name="dtc" />
+        </GroupBox>
         <Drawable x:Name="hpanel" Paint="Hpanel_Paint" />
         <TableRow ScaleHeight="true">
           <Scrollable x:Name="scrollable" ExpandContentWidth="true" ExpandContentHeight="true">
