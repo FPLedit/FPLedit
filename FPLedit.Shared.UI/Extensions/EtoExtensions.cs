@@ -43,12 +43,13 @@ namespace FPLedit.Shared.UI
             }
         }
 
-        public static ButtonMenuItem CreateItem(this ISubmenu parent, string text, bool enabled = true, EventHandler<EventArgs> clickHandler = null)
+        public static ButtonMenuItem CreateItem(this ISubmenu parent, string text, bool enabled = true, EventHandler<EventArgs> clickHandler = null, Keys shortcut = default)
         {
             var itm = new ButtonMenuItem
             {
                 Text = text,
                 Enabled = enabled,
+                Shortcut = shortcut
             };
             if (clickHandler != null)
                 itm.Click += clickHandler;

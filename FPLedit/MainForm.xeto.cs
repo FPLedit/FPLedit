@@ -29,7 +29,7 @@ namespace FPLedit
         internal CrashReporting.CrashReporter CrashReporter { get; }
         internal Bootstrapper Bootstrapper { get; }
         
-        private TimetableChecks.TimetableCheckRunner checkRunner;
+        private readonly TimetableChecks.TimetableCheckRunner checkRunner;
         private readonly LastFileHandler lfh;
         
         public static string LocEditMenu = "Bearbeiten";
@@ -64,7 +64,7 @@ namespace FPLedit
             var logger = new MultipleLogger(logTextBox);
             if (Bootstrapper.FullSettings.Get("log.enable-file", false))
                 logger.AttachLogger(new TempLogger(Bootstrapper));
-            if (OptionsParser.MPCompatLog)
+            if (OptionsParser.ConsoleLog)
                 logger.AttachLogger(new ConsoleLogger());
             Bootstrapper.InjectLogger(logger);
             
@@ -74,7 +74,9 @@ namespace FPLedit
             Bootstrapper.Logger.Debug("OS version: " + VersionInformation.Current.OsVersion);
 
             // Now we can load extensions and templates
+            Bootstrapper.ExtensionManager.InjectPlugin(new CorePlugins.MenuPlugin(), 0);
             Bootstrapper.ExtensionManager.InjectPlugin(new Editor.EditorPlugin(), 0);
+            Bootstrapper.ExtensionManager.InjectPlugin(new CorePlugins.DefaultPlugin(), 0);
             Bootstrapper.ExtensionManager.InjectPlugin(this, 0);
             Bootstrapper.BootstrapExtensions();
 
@@ -126,9 +128,13 @@ namespace FPLedit
             helpMenu.CreateItem("Erweiterungen", clickHandler: (s, ev) => new ExtensionsForm(Bootstrapper.ExtensionManager, this).ShowModal(this));
             helpMenu.CreateItem("Vorlagen", clickHandler: (s, ev) => new TemplatesForm(Bootstrapper.TemplateManager as TemplateManager).ShowModal(this));
             helpMenu.Items.Add(new SeparatorMenuItem());
-            helpMenu.CreateItem("Fenstergößen löschen", clickHandler: (s, ev) => SizeManager.Reset());
+            helpMenu.CreateItem("Fenstergößen löschen", clickHandler: (s, ev) =>
+            {
+                SizeManager.Reset();
+                MessageBox.Show("Die Änderungen werden nach dem nächsten Neustart angewendet!", "FPLedit");
+            });
             helpMenu.Items.Add(new SeparatorMenuItem());
-            helpMenu.CreateItem("Online Hilfe", clickHandler: (s, ev) => OpenHelper.Open("https://fahrplan.manuelhu.de/"));
+            helpMenu.CreateItem("Online Hilfe", shortcut: Keys.F1, clickHandler: (s, ev) => OpenHelper.Open("https://fahrplan.manuelhu.de/"));
             helpMenu.CreateItem("Info", clickHandler: (s, ev) => new InfoForm(Bootstrapper.FullSettings).ShowModal(this));
 
 #if DEBUG
