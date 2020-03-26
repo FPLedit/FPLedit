@@ -4,15 +4,32 @@ using System.Reflection;
 
 namespace FPLedit
 {
-    public static class VersionInformation
+    public class VersionInformation
     {
-        public static string BaseVersionString => FileVersionInfo.GetVersionInfo(PathManager.Instance.AppFilePath).ProductVersion;
-        public static Version AppBaseVersion => new Version(BaseVersionString);
-        public static string VersionFlag => typeof(MainForm).Assembly.GetCustomAttribute<AssemblyVersionFlagAttribute>()?.Flag;
-        public static string DisplayVersion => BaseVersionString + (VersionFlag != null ? "-" + VersionFlag : "");
+        public string BaseVersionString => FileVersionInfo.GetVersionInfo(PathManager.Instance.AppFilePath).ProductVersion;
+        public Version AppBaseVersion => new Version(BaseVersionString);
+        public string VersionFlag => typeof(MainForm).Assembly.GetCustomAttribute<AssemblyVersionFlagAttribute>()?.Flag;
+        public string DisplayVersion => BaseVersionString + (VersionFlag != null ? "-" + VersionFlag : "");
 
-        public static string OsVersion => Environment.OSVersion.ToString();
+        public string OsVersion => Environment.OSVersion.ToString();
 
-        public static string RuntimeVersion => System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription;
+        public string RuntimeVersion => System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription;
+
+        // ReSharper disable once MemberCanBePrivate.Global
+        // ReSharper disable once EmptyConstructor
+        public VersionInformation()
+        {
+        }
+
+        private static VersionInformation current;
+        public static VersionInformation Current
+        {
+            get
+            {
+                if (current == null)
+                    current = new VersionInformation();
+                return current;
+            }
+        }
     }
 }

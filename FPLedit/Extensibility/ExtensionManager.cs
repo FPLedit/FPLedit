@@ -40,7 +40,7 @@ namespace FPLedit.Extensibility
             var signatureVerifier = new AssemblySignatureVerifier();
 
             var enabledPlugins = pluginInterface.Settings.Get("extmgr.enabled", "").Split(';');
-            var currentVersion = VersionInformation.AppBaseVersion;
+            var currentVersion = VersionInformation.Current.AppBaseVersion;
 
             DirectoryInfo dir = new DirectoryInfo(pluginInterface.ExecutableDir);
 

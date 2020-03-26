@@ -32,10 +32,10 @@ namespace FPLedit.CrashReporting
             SafeAction(() => Assemblies = AppDomain.CurrentDomain.GetAssemblies().Select(a => a.GetName().Name).ToArray());
             
             // Version information
-            SafeAction(() => Version = VersionInformation.BaseVersionString);
-            SafeAction(() => VersionFlag = VersionInformation.VersionFlag ?? "");
-            SafeAction(() => RuntimeVersion = VersionInformation.RuntimeVersion);
-            SafeAction(() => OperatingSystem = VersionInformation.OsVersion);
+            SafeAction(() => Version = VersionInformation.Current.BaseVersionString);
+            SafeAction(() => VersionFlag = VersionInformation.Current.VersionFlag ?? "");
+            SafeAction(() => RuntimeVersion = VersionInformation.Current.RuntimeVersion);
+            SafeAction(() => OperatingSystem = VersionInformation.Current.OsVersion);
         }
         
         public CrashReport() {} // needed for Serialization

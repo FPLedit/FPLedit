@@ -29,7 +29,7 @@ namespace FPLedit
             using (var sr = new StreamReader(stream))
                 licenseTextArea.Text = sr.ReadToEnd();
 
-            versionLabel.Text = versionLabel.Text.Replace("{version}", VersionInformation.DisplayVersion);
+            versionLabel.Text = versionLabel.Text.Replace("{version}", VersionInformation.Current.DisplayVersion);
             versionLabel.Font = new Font(versionLabel.Font.FamilyName, versionLabel.Font.Size, FontStyle.Bold);
             updateCheckBox.Checked = mg.AutoUpdateEnabled;
             

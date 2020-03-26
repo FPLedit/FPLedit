@@ -36,8 +36,8 @@ namespace FPLedit
             this.settings = settings;
             CheckUrl = settings.Get("updater.url", "https://fahrplan.manuelhu.de/versioninfo.xml");
 
-            CurrentVersion = VersionInformation.AppBaseVersion;
-            CurrentVersionDisplay = VersionInformation.DisplayVersion;
+            CurrentVersion = VersionInformation.Current.AppBaseVersion;
+            CurrentVersionDisplay = VersionInformation.Current.DisplayVersion;
         }
 
         private VersionInfo GetUpdateInfoFromXml(string xml)

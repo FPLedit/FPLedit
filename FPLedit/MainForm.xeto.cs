@@ -67,6 +67,11 @@ namespace FPLedit
             if (OptionsParser.MPCompatLog)
                 logger.AttachLogger(new ConsoleLogger());
             Bootstrapper.InjectLogger(logger);
+            
+            // Output some version stats
+            Bootstrapper.Logger.Debug("Current version: " + VersionInformation.Current.DisplayVersion);
+            Bootstrapper.Logger.Debug("Runtime version: " + VersionInformation.Current.RuntimeVersion);
+            Bootstrapper.Logger.Debug("OS version: " + VersionInformation.Current.OsVersion);
 
             // Now we can load extensions and templates
             Bootstrapper.ExtensionManager.InjectPlugin(new Editor.EditorPlugin(), 0);
@@ -75,30 +80,7 @@ namespace FPLedit
 
             if (Bootstrapper.FullSettings.IsReadonly)
                 Bootstrapper.Logger.Warning("Die Einstellungsdatei ist nicht schreibbar. Änderungen an Programmeinstellungen werden verworfen.");
-
-            InitMain();
-        }
-        
-        public void Init(IPluginInterface pluginInterface)
-        {
-            // Initilize main UI component
-            networkEditingControl.Initialize(pluginInterface);
-            pluginInterface.FileOpened += (s, e) => networkEditingControl.ResetPan();
-        }
-
-        private void FileStateChanged(object sender, FileStateChangedEventArgs e)
-        {
-            Title = "FPLedit" + (e.FileState.Opened ? " - "
-                + (e.FileState.FileName != null ? (Path.GetFileName(e.FileState.FileName) + " ") : "")
-                + (e.FileState.Saved ? "" : "*") : "");
-
-            saveMenu.Enabled = saveAsMenu.Enabled = exportMenu.Enabled = convertMenu.Enabled = e.FileState.Opened;
-        }
-
-        #region Initialization
-
-        private void InitMain()
-        {
+            
             void PassKeyDown(object s, KeyEventArgs e)
             {
                 if (NetworkRenderer.DispatchableKeys.Contains(e.Key) && e.Modifiers == Keys.None)
@@ -106,57 +88,26 @@ namespace FPLedit
             }
             KeyDown += PassKeyDown;
             logTextBox.KeyDown += PassKeyDown; // Fix for Gtk, no harm on Wpf.
-
-            this.AddSizeStateHandler();
-
-            InitializeMenus();
-
+            
+            Shown += OnShown;
             Bootstrapper.FileStateChanged += FileStateChanged;
-            Shown += (s, e) => LoadStartFile();
-            Shown += (s, e) => Bootstrapper.Update.AutoUpdateCheck(Bootstrapper.Logger);
 
             checkRunner = new TimetableChecks.TimetableCheckRunner(Bootstrapper); // CheckRunner initialisieren
-
-            // Hatten wir einen Crash beim letzten Mal?
-            if (CrashReporter.HasCurrentReport)
-            {
-                Shown += (s, e) =>
-                {
-                    try
-                    {
-                        var cf = new CrashReporting.CrashForm(CrashReporter);
-                        if (cf.ShowModal(this) == DialogResult.Ok)
-                            CrashReporter.Restore(Bootstrapper.FileHandler);
-                        CrashReporter.RemoveCrashFlag();
-                    }
-                    catch (Exception ex)
-                    {
-                        Bootstrapper.Logger.Error("Fehlermeldung des letzten Absturzes konnte nicht angezeigt werden: " + ex.Message);
-                        CrashReporter.RemoveCrashFlag(); // Der Crash crasht sogar noch die Fehlerbehandlung...
-                    }
-                };
-            }
             
-            // Output some version stats
-            Bootstrapper.Logger.Debug("Current version: " + VersionInformation.DisplayVersion);
-            Bootstrapper.Logger.Debug("Runtime version: " + VersionInformation.RuntimeVersion);
-            Bootstrapper.Logger.Debug("OS version: " + VersionInformation.OsVersion);
+            this.AddSizeStateHandler();
         }
-
-        private void LoadStartFile()
+        
+        #region Plugin Code
+        
+        public void Init(IPluginInterface pluginInterface)
         {
-            // Parameter: Fpledit.exe [Dateiname] ODER Datei aus Restart
-            var fn = OptionsParser.OpenFilename;
-            fn = Bootstrapper.FullSettings.Get("restart.file", fn);
-            if (fn != null && File.Exists(fn))
-            {
-                Bootstrapper.FileHandler.InternalOpen(fn);
-                lfh.AddLastFile(fn);
-            }
-            Bootstrapper.FullSettings.Remove("restart.file");
+            // Initilize main UI component
+            networkEditingControl.Initialize(pluginInterface);
+            pluginInterface.FileOpened += (s, e) => networkEditingControl.ResetPan();
+            pluginInterface.ExtensionsLoaded += PluginInterfaceOnExtensionsLoaded;
         }
 
-        private void InitializeMenus()
+        private void PluginInterfaceOnExtensionsLoaded(object sender, EventArgs e)
         {
             var importers = Bootstrapper.GetRegistered<IImport>();
 
@@ -185,7 +136,56 @@ namespace FPLedit
             helpMenu.CreateItem("Exception auslösen", clickHandler: (s, ev) => throw new Exception("Ausgelöste Exception"));
 #endif
         }
+
+        private void FileStateChanged(object sender, FileStateChangedEventArgs e)
+        {
+            Title = "FPLedit" + (e.FileState.Opened ? " - "
+                + (e.FileState.FileName != null ? (Path.GetFileName(e.FileState.FileName) + " ") : "")
+                + (e.FileState.Saved ? "" : "*") : "");
+
+            saveMenu.Enabled = saveAsMenu.Enabled = exportMenu.Enabled = convertMenu.Enabled = e.FileState.Opened;
+        }
         
+        #endregion
+
+        private void OnShown(object sender, EventArgs e)
+        {
+            // Hatten wir einen Crash beim letzten Mal?
+            if (CrashReporter.HasCurrentReport)
+            {
+                try
+                {
+                    using (var cf = new CrashReporting.CrashForm(CrashReporter))
+                    {
+                        if (cf.ShowModal(this) == DialogResult.Ok)
+                            CrashReporter.Restore(Bootstrapper.FileHandler);
+                        CrashReporter.RemoveCrashFlag();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Bootstrapper.Logger.Error("Fehlermeldung des letzten Absturzes konnte nicht angezeigt werden: " + ex.Message);
+                    CrashReporter.RemoveCrashFlag(); // Der Crash crasht sogar noch die Fehlerbehandlung...
+                }
+            }
+            
+            LoadStartFile();
+            Bootstrapper.Update.AutoUpdateCheck(Bootstrapper.Logger);
+        }
+
+        private void LoadStartFile()
+        {
+            // Parameter: Fpledit.exe [Dateiname] ODER Datei aus Restart
+            var fn = OptionsParser.OpenFilename;
+            fn = Bootstrapper.FullSettings.Get("restart.file", fn);
+            if (fn != null && File.Exists(fn))
+            {
+                Bootstrapper.FileHandler.InternalOpen(fn);
+                lfh.AddLastFile(fn);
+            }
+            Bootstrapper.FullSettings.Remove("restart.file");
+        }
+
         private void UpdateLastFilesMenu(object sender, EventArgs e)
         {
             lastMenu.Items.Clear();
@@ -199,8 +199,6 @@ namespace FPLedit
                 };
             }
         }
-
-        #endregion
 
         public void RestartWithCurrentFile()
         {
