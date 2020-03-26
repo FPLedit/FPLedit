@@ -4,11 +4,11 @@
   xmlns:e="clr-namespace:FPLedit.Editor;assembly=FPLedit"
   xmlns:sys="clr-namespace:System;assembly=mscorlib"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
-  Title="Fahrplandarstellung" ClientSize="750,400" Resizable="true">
+  Title="Fahrplandarstellung" ClientSize="900,400" Resizable="true">
   <TableLayout>
     <TableRow ScaleHeight="true">
       <TableCell ScaleWidth="true">
-        <TabControl x:Name="tabControl"></TabControl>
+        <TabControl x:Name="tabControl" />
       </TableCell>
     </TableRow>
     <TableRow>
@@ -16,8 +16,8 @@
         <TableRow>
           <CheckBox x:Name="expertCheckBox">Expertenmodus (CSS-Bearbeitung) aktivieren</CheckBox>
           <TableCell ScaleWidth="true" />
-          <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click"></Button>
-          <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click"></Button>
+          <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click" />
+          <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click" />
         </TableRow>
       </TableLayout>
     </TableRow>

@@ -2,7 +2,6 @@
   xmlns="clr-namespace:Eto.Forms;assembly=Eto"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.Editor;assembly=FPLedit"
-  xmlns:sys="clr-namespace:System;assembly=mscorlib"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
   Title="Strecke bearbeiten" ClientSize="530,380" Resizable="true">
   <TableLayout>
@@ -15,10 +14,11 @@
               <GridView x:Name="gridView" />
             </Scrollable>
           </TableCell>
-          <StackLayout Spacing="5">
+          <StackLayout Spacing="5" HorizontalContentAlignment="Stretch">
             <Button Click="NewButton_Click">Neue Station</Button>
             <Button Click="EditButton_Click">Station bearbeiten</Button>
             <Button Click="DeleteButton_Click">Station löschen</Button>
+            <Label /><!-- Spacer -->
             <Button Click="LoadLineButton_Click" x:Name="loadLineButton">Strecke laden</Button>
           </StackLayout>
         </TableRow>

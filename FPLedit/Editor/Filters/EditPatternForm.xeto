@@ -2,7 +2,6 @@
   xmlns="clr-namespace:Eto.Forms;assembly=Eto"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.Editor.Filters;assembly=FPLedit"
-  xmlns:sys="clr-namespace:System;assembly=mscorlib"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
   Title="Regel bearbeiten" Resizable="false">
   <TableLayout Padding="10,10,10,10">
@@ -11,15 +10,15 @@
         <Label x:Name="propertyLabel" />
         <StackLayout Spacing="5" x:Name="typeSelectionStack" />
         <CheckBox x:Name="negateCheckBox">Bedingung umkehren</CheckBox>
-        <TextBox x:Name="searchTextBox" Width="150"></TextBox>
+        <TextBox x:Name="searchTextBox" Width="150" />
       </StackLayout>
     </TableRow>
     <TableRow>
       <TableLayout Spacing="5,5">
         <TableRow>
           <TableCell ScaleWidth="true" />
-          <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click"></Button>
-          <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click"></Button>
+          <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click" />
+          <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click" />
         </TableRow>
       </TableLayout>
     </TableRow>
