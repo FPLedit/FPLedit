@@ -36,6 +36,12 @@ namespace FPLedit.Bildfahrplan.Render
             var allTrackWidth = (stasWithTracks + allTrackCount) * StationRenderProps.IndividualTrackOffset;
 
             var emSize = g.MeasureString(stationFont, "M").Width;
+            
+            var addOffset = (attrs.MultiTrack ? 
+                (attrs.TracksVertical ?  
+                    stations.SelectMany(s => s.Tracks).Max(t => g.MeasureString(t.Name, stationFont).Width) 
+                    : emSize) 
+                : 0) + 5;
 
             StationRenderProps lastPos = null;
             foreach (var sta in stations)
@@ -94,8 +100,6 @@ namespace FPLedit.Bildfahrplan.Render
                         var display = sta.ToString(attrs.DisplayKilometre, route);
                         var size = g.MeasureString(stationFont, display);
 
-                        var addOffset = attrs.MultiTrack ? emSize + 3 : 0;
-
                         if (attrs.StationVertical)
                         {
                             var container = g.BeginContainer();
@@ -112,7 +116,16 @@ namespace FPLedit.Bildfahrplan.Render
                             foreach (var track in posX.TrackOffsets)
                             {
                                 var trackSize = g.MeasureString(stationFont, track.Key);
-                                g.DrawText(stationFont, brush, margin.Left + track.Value - (trackSize.Width / 2), margin.Top - trackSize.Height - 5, track.Key);
+                                if (attrs.StationVertical)
+                                {
+                                    var container = g.BeginContainer();
+                                    g.TranslateTransform(margin.Left + track.Value + (trackSize.Height / 2), margin.Top - 8 - trackSize.Width);
+                                    g.RotateTransform(90);
+                                    g.DrawText(stationFont, brush, 0, 0, track.Key);
+                                    g.EndContainer(container);
+                                }
+                                else
+                                    g.DrawText(stationFont, brush, margin.Left + track.Value - (trackSize.Width / 2), margin.Top - trackSize.Height - 5, track.Key);
                             }
                         }
                     }

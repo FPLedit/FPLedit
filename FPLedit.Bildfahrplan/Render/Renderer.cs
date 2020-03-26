@@ -103,7 +103,12 @@ namespace FPLedit.Bildfahrplan.Render
                 sMax = emSize;
 
             if (attrs.MultiTrack)
-                sMax += emSize;
+            {
+                if (attrs.TracksVertical)
+                    sMax += stations.SelectMany(s => s.Tracks).Max(t => g.MeasureString(t.Name, stationFont).Width);
+                else
+                    sMax += emSize;
+            }
 
             result.Top = attrs.DrawHeader ? sMax + result.Top : result.Top;
             result.Top = drawHeader ? result.Top : 5;

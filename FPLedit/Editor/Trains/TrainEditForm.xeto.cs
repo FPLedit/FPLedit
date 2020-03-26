@@ -154,6 +154,6 @@ namespace FPLedit.Editor.Trains
         }
 
         private IEnumerable<ListItem> GetAllItems(Timetable tt, Func<Train, string> func)
-            => tt.Trains.Select(func).Distinct().Where(s => s != "").Select(s => new ListItem() { Text = s });
+            => tt.Trains.Select(func).Distinct().Where(s => s != "").OrderBy(s => s).Select(s => new ListItem { Text = s });
     }
 }
