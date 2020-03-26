@@ -224,7 +224,7 @@ namespace FPLedit.Editor.Network
 
             if (train != null)
             {
-                var ardps = train.GetArrDeps();
+                var ardps = train.GetArrDepsUnsorted();
 
                 foreach (var ardp in ardps) // Remove all old stations
                     train.RemoveArrDep(ardp.Key);

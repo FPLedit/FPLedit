@@ -22,7 +22,7 @@ namespace FPLedit.Shared
         ArrDep AddArrDep(Station sta, int route);
         ArrDep GetArrDep(Station sta);
         bool TryGetArrDep(Station sta, out ArrDep arrDep);
-        Dictionary<Station, ArrDep> GetArrDeps();
+        Dictionary<Station, ArrDep> GetArrDepsUnsorted();
         void RemoveArrDep(Station sta);
         void RemoveOrphanedTimes();
     }

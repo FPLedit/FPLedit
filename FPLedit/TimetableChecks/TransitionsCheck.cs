@@ -38,7 +38,7 @@ namespace FPLedit.TimetableChecks
         private IEnumerable<Station> GetSortedStations(Train train)
         {
             var path = train.GetPath();
-            var arrdeps = train.GetArrDeps();
+            var arrdeps = train.GetArrDepsUnsorted();
             foreach (var sta in path)
             {
                 if (arrdeps[sta].HasMinOneTimeSet)

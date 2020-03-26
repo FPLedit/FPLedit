@@ -4,6 +4,9 @@ using System.Linq;
 using System.Collections.Generic;
 using FPLedit.Kursbuch.Model;
 using FPLedit.Shared.DefaultImplementations;
+// ReSharper disable UnusedMember.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable ClassNeverInstantiated.Global
 
 namespace FPLedit.Kursbuch.Templates
 {
@@ -32,41 +35,48 @@ namespace FPLedit.Kursbuch.Templates
             return stas;
         }
 
-        public Train[] GetTrains(Route route, TrainDirection dir)
+        public Train[] GetTrains(Route route, TrainDirection direction)
         {
-            var stas = GetStations(route, dir).ToList();
-            var times = new Dictionary<Train, TimeEntry>();
+            var routeStations = (IList<Station>)GetStations(route, direction).ToArray();
+            var firstTimes = new Dictionary<Train, TimeEntry>();
 
             foreach (var t in tt.Trains)
             {
                 if (trules.Any(r => r.Matches(t)))
                     continue;
+                
                 if (tt.Type == TimetableType.Linear) // Züge in linearen Fahrplänen sind recht einfach
                 {
-                    if (t.Direction != dir)
+                    if (t.Direction != direction)
                         continue;
 
-                    var time = t.GetArrDeps().FirstOrDefault(a => a.Value.HasMinOneTimeSet).Value.FirstSetTime;
-                    times.Add(t, time);
-                    continue;
+                    var ardps = t.GetArrDepsUnsorted();
+                    var firstStaion = t.GetPath().FirstOrDefault(a => ardps[a].HasMinOneTimeSet);
+                    if (firstStaion == null)
+                        continue; // Something weird happened...
+                    firstTimes.Add(t, ardps[firstStaion].FirstSetTime);
                 }
-
-                var path = t.GetPath();
-                var inters = stas.Intersect(path);
-                var stas2 = inters.OrderBy(s => t.GetArrDep(s).FirstSetTime)
-                    .Where(s => t.GetArrDep(s).HasMinOneTimeSet);
-
-                if (!stas2.Any())
-                    continue;
-
-                if (stas.IndexOf(stas2.First()) < stas.IndexOf(stas2.Last()))
+                else
                 {
-                    var time = t.GetArrDep(stas2.FirstOrDefault()).FirstSetTime;
-                    times.Add(t, time);
+                    var path = t.GetPath();
+                    var sortedStopsOnRoute = routeStations
+                        .Intersect(path)
+                        .OrderBy(s => t.GetArrDep(s).FirstSetTime)
+                        .Where(s => t.GetArrDep(s).HasMinOneTimeSet)
+                        .ToArray();
+
+                    if (!sortedStopsOnRoute.Any()) // The train does not stop on this route, ignore.
+                        continue;
+
+                    if (routeStations.IndexOf(sortedStopsOnRoute.First()) < routeStations.IndexOf(sortedStopsOnRoute.Last()))
+                    {
+                        var time = t.GetArrDep(sortedStopsOnRoute.First()).FirstSetTime;
+                        firstTimes.Add(t, time);
+                    } // else: Not needed as routeStations are already sorted according to direction.
                 }
             }
 
-            return times.Keys.OrderBy(t => times[t]).ToArray();
+            return firstTimes.Keys.OrderBy(t => firstTimes[t]).ToArray();
         }
 
         public string GetRouteName(Route r, TrainDirection dir)

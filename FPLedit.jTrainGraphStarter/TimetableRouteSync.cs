@@ -59,7 +59,7 @@ namespace FPLedit.jTrainGraphStarter
             for (int ti = 0; ti < copy.Trains.Count; ti++)
             {
                 var tra = copy.Trains[ti];
-                var ardps = tra.GetArrDeps();
+                var ardps = tra.GetArrDepsUnsorted();
                 var path = tra.GetPath();
 
                 var pf = path.FirstOrDefault();

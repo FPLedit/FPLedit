@@ -78,7 +78,7 @@ namespace FPLedit.Shared
         public TrainPathData(Timetable tt, Train train) : base(tt)
         {
             var path = train.GetPath().ToArray();
-            var arrDeps = train.GetArrDeps();
+            var arrDeps = train.GetArrDepsUnsorted();
 
             entries = Init(path, (s, r) =>
             {

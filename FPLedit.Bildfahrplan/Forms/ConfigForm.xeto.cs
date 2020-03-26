@@ -102,7 +102,7 @@ namespace FPLedit.Bildfahrplan.Forms
 
         private void CalcTimesButton_Click(object sender, EventArgs e)
         {
-            var times = tt.Trains.SelectMany(t => t.GetArrDeps().Values).SelectMany(a =>
+            var times = tt.Trains.SelectMany(t => t.GetArrDepsUnsorted().Values).SelectMany(a =>
             {
                 var ts = a.ShuntMoves.Select(sm => sm.Time).ToList();
                 ts.AddRange(new[] { a.Arrival, a.Departure });

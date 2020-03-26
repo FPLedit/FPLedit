@@ -54,7 +54,7 @@ namespace FPLedit.Aushangfahrplan.Templates
             }
 
             // Alle Stationen in Zügen dieser Richtung, die nach dieser Station folgen
-            var stasInTrains = trainsInThisDir.SelectMany(t => t.GetArrDeps().Where(a => a.Value.HasMinOneTimeSet).Select(kvp => kvp.Key).SkipWhile(s => s != sta)).ToArray();
+            var stasInTrains = trainsInThisDir.SelectMany(t => t.GetArrDepsUnsorted().Where(a => a.Value.HasMinOneTimeSet).Select(kvp => kvp.Key).SkipWhile(s => s != sta)).ToArray();
 
             var connectionNodes = sta._parent.Stations.Where(s => s.Routes.Length > 1);
             var visitedConnectionNodes = connectionNodes.Intersect(stasInTrains); // Eine Hälfte der "Richtungsangaben": Verbindungsknoten im Netz
@@ -85,7 +85,7 @@ namespace FPLedit.Aushangfahrplan.Templates
             return GetTrains(sta).Where(t =>
             {
                 var p = t.GetPath();
-                var ardeps = t.GetArrDeps();
+                var ardeps = t.GetArrDepsUnsorted();
 
                 var nsta = p.Where(s => stasAfter.Contains(s)).FirstOrDefault(s => ardeps[s].HasMinOneTimeSet);
                 if (nsta == null)

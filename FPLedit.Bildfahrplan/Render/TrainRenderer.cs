@@ -36,7 +36,7 @@ namespace FPLedit.Bildfahrplan.Render
             if (!style.CalcedShow)
                 return;
 
-            var ardps = train.GetArrDeps();
+            var ardps = train.GetArrDepsUnsorted();
             var dir = GetTrainDirection(train);
 
             using (var pen = new Pen((Color)style.CalcedColor, style.CalcedWidth)
@@ -220,7 +220,7 @@ namespace FPLedit.Bildfahrplan.Render
                 trainCache = tt.Trains.Where(t =>
                 {
                     var p = t.GetPath();
-                    var ardeps = t.GetArrDeps();
+                    var ardeps = t.GetArrDepsUnsorted();
 
                     var intersect = stasAfter.Intersect(p)
                         .Where(s => ardeps[s].HasMinOneTimeSet);
@@ -247,7 +247,7 @@ namespace FPLedit.Bildfahrplan.Render
         private IEnumerable<Station> GetSortedStations(Train train)
         {
             var path = train.GetPath();
-            var arrdeps = train.GetArrDeps();
+            var arrdeps = train.GetArrDepsUnsorted();
             foreach (var sta in path)
             {
                 if (arrdeps[sta].HasMinOneTimeSet)

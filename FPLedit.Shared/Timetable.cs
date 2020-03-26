@@ -201,7 +201,7 @@ namespace FPLedit.Shared
                 UpgradeMessage = null;
         }
 
-        public List<Station> GetStationsOrderedByDirection(TrainDirection direction = TrainDirection.ti)
+        public List<Station> GetStationsOrderedByDirection(TrainDirection direction)
         {
             if (Type == TimetableType.Network)
                 throw new TimetableTypeNotSupportedException(TimetableType.Network, "direction");
@@ -243,7 +243,7 @@ namespace FPLedit.Shared
             {
                 if (route != LINEAR_ROUTE_ID)
                     throw new TimetableTypeNotSupportedException(TimetableType.Linear, "routes");
-                stations = GetStationsOrderedByDirection();
+                stations = GetStationsOrderedByDirection(TrainDirection.ti);
                 var idx = stations.IndexOf(sta); // Index vorläufig ermitteln
 
                 // Es können ja noch andere Nodes in den Children sein.
@@ -339,7 +339,7 @@ namespace FPLedit.Shared
         {
             foreach (var tra in Trains)
             {
-                var ardps = tra.GetArrDeps();
+                var ardps = tra.GetArrDepsUnsorted();
                 if (!ardps.TryGetValue(sta, out var ardp))
                     return;
                 if (ardp.ArrivalTrack == oldTrackName)

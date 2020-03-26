@@ -182,7 +182,7 @@ namespace FPLedit.Editor.Linear
             var l = tt.Trains.Where(t => t.Direction == dir).Select(tra => new DataElement()
             {
                 Train = tra,
-                ArrDeps = tra.GetArrDeps()
+                ArrDeps = tra.GetArrDepsUnsorted()
             }).ToList();
 
             view.GotFocus += (s, e) => focused = view;
