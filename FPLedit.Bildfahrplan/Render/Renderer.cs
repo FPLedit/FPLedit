@@ -82,34 +82,23 @@ namespace FPLedit.Bildfahrplan.Render
 
         private Margins CalcMargins(Graphics g, Margins orig, IEnumerable<Station> stations, TimeEntry startTime, TimeEntry endTime, bool drawHeader)
         {
-            var stationFont = (Font)attrs.StationFont;
-            var timeFont = (Font)attrs.TimeFont;
-
             var result = new Margins(orig.Left, orig.Top, orig.Right, orig.Bottom);
+            
             // MarginTop berechnen
-            float sMax = 0f;
-            var emSize = g.MeasureString(stationFont, "M").Height;
-            if (attrs.StationVertical)
-                sMax = stations.Max(sta => g.MeasureString(sta.ToString(attrs.DisplayKilometre, route), stationFont).Width);
-            else
-                sMax = emSize;
-
-            if (attrs.MultiTrack)
-            {
-                if (attrs.TracksVertical)
-                    sMax += stations.SelectMany(s => s.Tracks).Max(t => g.MeasureString(t.Name, stationFont).Width);
-                else
-                    sMax += emSize;
-            }
-
-            result.Top = attrs.DrawHeader ? sMax + result.Top : result.Top;
-            result.Top = drawHeader ? result.Top : 5;
+            var hr = new HeaderRenderer(stations, attrs, route);
+            result.Top = drawHeader ? (
+                attrs.DrawHeader ? 
+                    hr.GetMarginTop(g) + result.Top 
+                    : result.Top)
+                : 5;
 
             // MarginLeft berechnen
+            var timeFont = (Font)attrs.TimeFont;
             float tMax = 0f;
             foreach (var l in GetTimeLines(out bool _, startTime, endTime))
                 tMax = Math.Max(tMax, g.MeasureString(new TimeEntry(0, l + startTime.GetTotalMinutes()).ToShortTimeString(), timeFont).Width);
             result.Left += tMax;
+            
             return result;
         }
 

@@ -149,8 +149,8 @@ namespace FPLedit.Bildfahrplan.Render
                         var trainFont = (Font)attrs.TrainFont;
 
                         var size = g.MeasureString(trainFont, train.TName);
-                        float[] ys = new[] { points[i].Y, points[i + 1].Y };
-                        float[] xs = new[] { points[i].X, points[i + 1].X };
+                        float[] ys = { points[i].Y, points[i + 1].Y };
+                        float[] xs = { points[i].X, points[i + 1].X };
                         float ty = ys.Min() + (ys.Max() - ys.Min()) / 2 - (size.Height / 2);
                         float tx = xs.Min() + (xs.Max() - xs.Min()) / 2;
 
@@ -240,7 +240,7 @@ namespace FPLedit.Bildfahrplan.Render
 
         private float CalcAngle(float[] ys, float[] xs, Train train)
         {
-            float angle = (float)(Math.Atan2(xs.Max() - xs.Min(), ys.Max() - ys.Min()) * (180d / Math.PI));
+            var angle = (float)(Math.Atan2(xs.Max() - xs.Min(), ys.Max() - ys.Min()) * (180d / Math.PI));
             return GetTrainDirection(train) ? 90 - angle : angle - 90;
         }
 

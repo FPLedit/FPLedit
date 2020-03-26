@@ -1,10 +1,6 @@
 ﻿using FPLedit.Shared;
 using FPLedit.Shared.Rendering;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 
 namespace FPLedit.Bildfahrplan.Model
 {
@@ -100,9 +96,6 @@ namespace FPLedit.Bildfahrplan.Model
             get => tt.GetAttribute<bool>("sHor", true);
             set => tt.SetAttribute("sHor", value.ToString());
         }
-
-        //TODO: Implement as own field
-        public bool TracksVertical => StationVertical;
 
         public bool MultiTrack
         {

@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.Bildfahrplan.Render
 {
@@ -34,14 +32,7 @@ namespace FPLedit.Bildfahrplan.Render
             var allTrackCount = stations.Select(s => s.Tracks.Count).Sum();
             var stasWithTracks = stations.Count(s => s.Tracks.Any());
             var allTrackWidth = (stasWithTracks + allTrackCount) * StationRenderProps.IndividualTrackOffset;
-
-            var emSize = g.MeasureString(stationFont, "M").Width;
-            
-            var addOffset = (attrs.MultiTrack ? 
-                (attrs.TracksVertical ?  
-                    stations.SelectMany(s => s.Tracks).Max(t => g.MeasureString(t.Name, stationFont).Width) 
-                    : emSize) 
-                : 0) + 5;
+            var verticalTrackOffset = GetTrackOffset(g, stationFont) + 5;
 
             StationRenderProps lastPos = null;
             foreach (var sta in stations)
@@ -103,13 +94,13 @@ namespace FPLedit.Bildfahrplan.Render
                         if (attrs.StationVertical)
                         {
                             var container = g.BeginContainer();
-                            g.TranslateTransform(margin.Left + posX.Center + (size.Height / 2), margin.Top - 8 - addOffset - size.Width);
+                            g.TranslateTransform(margin.Left + posX.Center + (size.Height / 2), margin.Top - 8 - verticalTrackOffset - size.Width);
                             g.RotateTransform(90);
                             g.DrawText(stationFont, brush, 0, 0, display);
                             g.EndContainer(container);
                         }
                         else
-                            g.DrawText(stationFont, brush, margin.Left + posX.Center - (size.Width / 2), margin.Top - size.Height - addOffset - 5, display);
+                            g.DrawText(stationFont, brush, margin.Left + posX.Center - (size.Width / 2), margin.Top - size.Height - verticalTrackOffset - 5, display);
 
                         if (attrs.MultiTrack)
                         {
@@ -132,6 +123,33 @@ namespace FPLedit.Bildfahrplan.Render
                 } // Disposing Pens and Brushes
             }
             return stationOffsets;
+        }
+
+        public float GetMarginTop(Graphics g)
+        {
+            var stationFont = (Font)attrs.StationFont;
+            var emSize = g.MeasureString(stationFont, "M").Height;
+            
+            var sMax = attrs.StationVertical ? 
+                stations.Max(sta => g.MeasureString(sta.ToString(attrs.DisplayKilometre, route), stationFont).Width) 
+                : emSize;
+
+            sMax += GetTrackOffset(g, stationFont);
+
+            return sMax;
+        }
+
+        private float GetTrackOffset(Graphics g, Font stationFont)
+        {
+            var emSize = g.MeasureString(stationFont, "M").Height;
+            if (attrs.MultiTrack)
+            {
+                if (attrs.StationVertical)
+                    return stations.SelectMany(s => s.Tracks).Max(t => g.MeasureString(t.Name, stationFont).Width);
+                return emSize;
+            }
+
+            return 0f;
         }
     }
 }

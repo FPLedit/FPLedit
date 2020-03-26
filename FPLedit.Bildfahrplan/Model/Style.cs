@@ -1,9 +1,4 @@
 ﻿using FPLedit.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using FPLedit.Shared.Helpers;
 using FPLedit.Shared.Rendering;
 
 namespace FPLedit.Bildfahrplan.Model
@@ -16,7 +11,7 @@ namespace FPLedit.Bildfahrplan.Model
 
         protected readonly bool overrideEntityStyle;
 
-        public Style(Timetable tt)
+        protected Style(Timetable tt)
         {
             _parent = tt;
             overrideEntityStyle = pluginInterface.Settings.Get<bool>("bifpl.override-entity-styles");
