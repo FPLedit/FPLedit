@@ -11,10 +11,13 @@ namespace FPLedit.Bildfahrplan.Render
     internal class AsyncDoubleBufferedGraph : IDisposable
     {
         private Bitmap buffer;
-        private bool generatingBuffer = false;
+        private bool generatingBuffer;
+        private float lastBufferWidth;
+        
         private readonly Font font = new Font(FontFamilies.SansFamilyName, 8);
         private readonly Panel panel;
         private readonly object bufferLock = new object();
+        
         public Action RenderingFinished { get; set; }
 
         public AsyncDoubleBufferedGraph(Panel p)
@@ -27,7 +30,7 @@ namespace FPLedit.Bildfahrplan.Render
             if (renderer == null)
                 return;
 
-            if (renderer.width != panel.Width)
+            if (Math.Abs(lastBufferWidth - panel.Width) > 0.01f)
                 Invalidate(true);
 
             if (buffer == null && !generatingBuffer)
@@ -35,12 +38,12 @@ namespace FPLedit.Bildfahrplan.Render
                 generatingBuffer = true;
                 Task.Run(() =>
                 {
-                    renderer.width = panel.Width;
                     var newBuffer = new Bitmap(panel.Width, renderer.GetHeight(drawHeader), PixelFormat.Format32bppRgb);
                     using (var ib = new ImageBridge(panel.Width, renderer.GetHeight(drawHeader)))
                     using (var etoGraphics = new Graphics(newBuffer))
                     {
-                        renderer.Draw(ib.Graphics, drawHeader);
+                        renderer.Draw(ib.Graphics, drawHeader, forceWidth: panel.Width);
+                        lastBufferWidth = panel.Width;
                         ib.CoptyToEto(etoGraphics);
                     }
 

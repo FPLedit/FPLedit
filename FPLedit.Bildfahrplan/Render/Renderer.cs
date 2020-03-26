@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.Bildfahrplan.Render
 {
@@ -15,8 +13,8 @@ namespace FPLedit.Bildfahrplan.Render
         private readonly Timetable tt;
         private readonly int route;
 
-        private Margins margin = new Margins(10, 20, 20, 20);
-        internal float width = 0, height = 0;
+        private readonly Margins defaultMargin = new Margins(10, 20, 20, 20);
+        private readonly Margins deafultHeaderMargin = new Margins(11, 20, 20, 0);
 
         private readonly TimetableStyle attrs;
 
@@ -27,21 +25,18 @@ namespace FPLedit.Bildfahrplan.Render
             attrs = new TimetableStyle(tt);
         }
 
-        public void Draw(Graphics g, bool drawHeader)
-            => Draw(g, attrs.StartTime, attrs.EndTime, drawHeader);
+        public void Draw(Graphics g, bool drawHeader, float? forceWidth = null)
+            => Draw(g, attrs.StartTime, attrs.EndTime, drawHeader, forceWidth);
 
-        public void Draw(Graphics g, TimeEntry startTime, TimeEntry endTime, bool drawHeader)
+        public void Draw(Graphics g, TimeEntry startTime, TimeEntry endTime, bool drawHeader, float? forceWidth = null)
         {
             g.Clear((Color)attrs.BgColor);
 
             var stations = tt.GetRoute(route).Stations;
 
-            if (!margin.Calced)
-                margin = CalcMargins(g, margin, stations, startTime, endTime, drawHeader);
-            margin.Calced = true;
-
-            if (width == 0) width = g.ClipBounds.Width;
-            if (height == 0) height = GetHeight(startTime, endTime, drawHeader);
+            var margin = CalcMargins(g, defaultMargin, stations, startTime, endTime, drawHeader);
+            var width = forceWidth ?? g.ClipBounds.Width;
+            var height = GetHeight(startTime, endTime, drawHeader);
 
             // Zeitaufteilung
             var timeRenderer = new TimeRenderer(attrs, this);
@@ -76,24 +71,21 @@ namespace FPLedit.Bildfahrplan.Render
 
             var stations = tt.GetRoute(route).Stations;
 
-            var margin = CalcMargins(g, new Margins(11, 20, 20, 0), stations, attrs.StartTime, attrs.EndTime, true);
+            var margin = CalcMargins(g, deafultHeaderMargin, stations, attrs.StartTime, attrs.EndTime, true);
 
-            var height = GetHeight(default, default, true);
+            var height = GetHeight(TimeEntry.Zero, TimeEntry.Zero, true); // Draw empty timespan.
 
             // Stationenaufteilung
             var headerRenderer = new HeaderRenderer(stations, attrs, route);
             headerRenderer.Render(g, margin, width, height, true);
         }
 
-        internal Margins CalcMargins(Graphics g, Margins orig, IEnumerable<Station> stations, TimeEntry startTime, TimeEntry endTime, bool drawHeader)
+        private Margins CalcMargins(Graphics g, Margins orig, IEnumerable<Station> stations, TimeEntry startTime, TimeEntry endTime, bool drawHeader)
         {
-            if (orig.Calced)
-                return orig;
-
             var stationFont = (Font)attrs.StationFont;
             var timeFont = (Font)attrs.TimeFont;
 
-            var result = orig;
+            var result = new Margins(orig.Left, orig.Top, orig.Right, orig.Bottom);
             // MarginTop berechnen
             float sMax = 0f;
             var emSize = g.MeasureString(stationFont, "M").Height;
@@ -121,6 +113,7 @@ namespace FPLedit.Bildfahrplan.Render
             return result;
         }
 
+        //TODO: Possible endless loop if end < 00:00
         internal List<int> GetTimeLines(out bool hourStart, TimeEntry start, TimeEntry end)
         {
             List<int> lines = new List<int>();
@@ -148,7 +141,7 @@ namespace FPLedit.Bildfahrplan.Render
             using (var image = new Bitmap(1, 1, PixelFormat.Format24bppRgb))
             using (var g = Graphics.FromImage(image))
             {
-                var m = CalcMargins(g, margin, stations, start, end, drawHeader);
+                var m = CalcMargins(g, defaultMargin, stations, start, end, drawHeader);
                 return (int)(m.Top + m.Bottom + (end - start).GetTotalMinutes() * attrs.HeightPerHour / 60f);
             }
         }
