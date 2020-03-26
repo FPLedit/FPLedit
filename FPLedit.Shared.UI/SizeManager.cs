@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Eto.Drawing;
 
 namespace FPLedit.Shared.UI
@@ -72,14 +70,14 @@ namespace FPLedit.Shared.UI
             var entry = sizes.FirstOrDefault(s => s.TypeName == type);
             if (entry == null)
             {
-                entry = new SizeEntry(type, w.Width, w.Height, false);
+                entry = new SizeEntry(type, w.ClientSize.Width, w.ClientSize.Height, false);
                 sizes.Add(entry);
             }
             else
             {
-                entry.Resized = true; // Wir haben einen Eintrag, also ist es schon resized.
+                entry.Resized = true; // Wir haben einen Eintrag, also ist es schon resized, nur nicht geänderte werden gespeichert.
                 if (!entry.Maximized || !w.Maximizable)
-                    w.Size = new Size(entry.Width, entry.Height);
+                    w.ClientSize = new Size(entry.Width, entry.Height);
                 else
                     w.Maximize();
             }
@@ -95,9 +93,9 @@ namespace FPLedit.Shared.UI
             if (entry == null)
                 return;
 
-            entry.Resized = entry.Resized || w.Width != entry.Width || w.Height != entry.Height;
-            entry.Height = w.Height;
-            entry.Width = w.Width;
+            entry.Resized = entry.Resized || w.ClientSize.Width != entry.Width || w.ClientSize.Height != entry.Height;
+            entry.Height = w.ClientSize.Height;
+            entry.Width = w.ClientSize.Width;
             entry.Maximized = w.WindowState == WindowState.Maximized;
 
             WriteSettings();
