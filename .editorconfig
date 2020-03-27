@@ -1,3 +1,4 @@
+root = true
 
 [*]
 charset=utf-8
@@ -97,3 +98,9 @@ indent_style=space
 indent_size=2
 tab_width=2
 max_line_length=500
+
+[*.{csproj,Build.props,targets}]
+indent_style=space
+indent_size=2
+tab_width=2
+

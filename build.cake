@@ -8,17 +8,16 @@
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
 
-var docInPath = Argument("doc_path", "default value") ?? EnvironmentVariable("FPLEDIT_DOK");
-var ignoreNoDoc = bool.Parse(Argument("ignore_no_doc", "false"));
-var versionSuffix = Argument("version_suffix", "");
-
+var docInPath = Argument<string>("doc_path", null) ?? EnvironmentVariable("FPLEDIT_DOK");
+var ignoreNoDoc = Argument<string>("ignore_no_doc", null) != null;
+var preBuildVersionSuffix = Argument("version_suffix", "");
 
 var incrementVersion = false;
 
-if (Argument("auto-beta", "") != "") {
+if (Argument<string>("auto-beta", null) != null) {
     ignoreNoDoc = true;
     incrementVersion = true;
-    versionSuffix = "beta";
+    preBuildVersionSuffix = "beta"; //TODO: missing version suffix increment in version info
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -33,6 +32,23 @@ var tempDir = Directory("./build_tmp");
 
 var doc_generated = false;
 
+if (incrementVersion && string.IsNullOrEmpty(preBuildVersionSuffix))
+    throw new InvalidOperationException("No version suffix specified, but incrementVersion!");
+if (incrementVersion) 
+{
+    var currentVersion = XmlPeek(scriptsDir + File("VersionInfo.targets"), "/Project/PropertyGroup/VersionPrefix");
+    
+    var fn = $"fpledit-{currentVersion}-{preBuildVersionSuffix}";
+    
+    if (incrementVersion) {
+        int counter = 1;
+        while (GetFiles(Directory("./bin") + File($"{fn}{counter}*.zip")).Any()) {
+            counter++;
+        }
+        preBuildVersionSuffix += counter;
+    }  
+}
+
 //////////////////////////////////////////////////////////////////////
 // TASKS
 //////////////////////////////////////////////////////////////////////
@@ -41,6 +57,7 @@ Task("Clean")
     .Does(() =>
     {
         CleanDirectory(buildDir);
+        CleanDirectory(tempDir, fsi => !fsi.Path.FullPath.EndsWith(".gitignore"));
         CreateDirectory(tempDir);
     });
 
@@ -50,34 +67,22 @@ Task("Restore-NuGet-Packages")
     {
         NuGetRestore("./FPLedit.sln");
     });
-    
-Task("CreateBuildFlags")
-    .IsDependentOn("Restore-NuGet-Packages")
-    .Does(() => {
-        var file = tempDir + File("BuildFlags.cs");
-        FileWriteText(file, $"[assembly: AssemblyVersionFlagAttribute(\"{versionSuffix}\")]");
-    });
 
 Task("Build")
-    .IsDependentOn("CreateBuildFlags")
+    .IsDependentOn("Restore-NuGet-Packages")
     .Does(() =>
     {
         MSBuild("./FPLedit.sln", settings => {
             settings.SetConfiguration(configuration);
             settings.Restore = true;
             settings.Properties.Add("ForceConfigurationDir", new List<string> { configuration });
+            if (!string.IsNullOrEmpty(preBuildVersionSuffix))
+                settings.Properties.Add("versionSuffix", new List<string> { preBuildVersionSuffix });
         });
-    });
-    
-Task("DeleteBuildFlags")
-    .IsDependentOn("Build")
-    .Does(() => {
-        var file = tempDir + File("BuildFlags.cs");
-        DeleteFile(file);
     });
 
 Task("PrepareArtifacts")
-    .IsDependentOn("DeleteBuildFlags")
+    .IsDependentOn("Build")
     .Does(() => {
     Console.WriteLine(buildDir);
         RequireFile(buildDir + File("Eto.DsBindComboBoxCell.Gtk.dll"));
@@ -96,14 +101,13 @@ Task("BuildLicenseReadme")
     .IsDependentOn("PrepareArtifacts")
     .Does(() => {
         var version = GetProductVersion(Context, buildDir + File("FPLedit.exe"));
-        var version_suffix_suffix = versionSuffix == "" ? "" : ("-" + versionSuffix);
-        var text = GetLicenseText(Context, scriptsDir + File("Info.txt"), version + version_suffix_suffix);
+        var text = GetLicenseText(Context, scriptsDir + File("Info.txt"), version);
         FileWriteText(buildDir + File("README_LICENSE.txt"), text);
     });
     
 Task("BuildDocumentation")
     .IsDependentOn("BuildLicenseReadme")
-    .Does(() => {        
+    .Does(() => {
         if (docInPath != null && FileExists(docInPath))
         {
             var docOutPath = buildDir + File("doku.html");
@@ -118,20 +122,8 @@ Task("PackRelease")
     .IsDependentOn("BuildDocumentation")
     .Does(() => {
         var version = GetProductVersion(Context, buildDir + File("FPLedit.exe"));
-        var nodoc_suffix = ignoreNoDoc ? "" : (doc_generated ? "" : "-nodoc");
-        var version_suffix_suffix = versionSuffix == "" ? "" : ("-" + versionSuffix);
-        var fn = $"fpledit-{version}{version_suffix_suffix}";
-        
-        if (incrementVersion) {
-            int counter = 1;
-            while (GetFiles(Directory("./bin") + File($"{fn}{counter}*.zip")).Any()) {
-                counter++;
-            }
-            fn += counter;
-        }
-        
-        
-        var file = Directory("./bin") + File($"{fn}{nodoc_suffix}.zip");
+        var nodoc_suffix = ignoreNoDoc ? "" : (doc_generated ? "" : "-nodoc");       
+        var file = Directory("./bin") + File($"fpledit-{version}{nodoc_suffix}.zip");
         
         if (FileExists(file))
             throw new Exception("Zip file already exists! " + file);
@@ -147,7 +139,7 @@ Task("Default")
 	.Does(() => {
 	    Warning("##############################################################");
 	    
-	    if (!doc_generated)	        
+	    if (!doc_generated)
 	        Warning("No documentation built!");
 
         Warning("##############################################################");

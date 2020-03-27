@@ -1,0 +1,15 @@
+<!--
+  FPLedit Build Process
+  Common build properties for all projects.
+  (c) Manuel Huber 2020
+-->
+
+<Project>
+
+    <!-- Use the following PropertyGroup for version bump -->
+    <PropertyGroup>
+        <VersionPrefix>2.2.0</VersionPrefix>
+        <VersionSuffix Condition=" '$(VersionSuffix)' == '' " />
+    </PropertyGroup>
+  
+</Project>

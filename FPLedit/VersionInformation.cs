@@ -6,10 +6,9 @@ namespace FPLedit
 {
     public class VersionInformation
     {
-        public string BaseVersionString => FileVersionInfo.GetVersionInfo(PathManager.Instance.AppFilePath).ProductVersion;
+        private string BaseVersionString => FileVersionInfo.GetVersionInfo(PathManager.Instance.AppFilePath).FileVersion;
         public Version AppBaseVersion => new Version(BaseVersionString);
-        public string VersionFlag => typeof(MainForm).Assembly.GetCustomAttribute<AssemblyVersionFlagAttribute>()?.Flag;
-        public string DisplayVersion => BaseVersionString + (VersionFlag != null ? "-" + VersionFlag : "");
+        public string DisplayVersion => FileVersionInfo.GetVersionInfo(PathManager.Instance.AppFilePath).ProductVersion;
 
         public string OsVersion => Environment.OSVersion.ToString();
 

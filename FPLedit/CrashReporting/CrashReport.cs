@@ -1,9 +1,7 @@
 ﻿using FPLedit.Extensibility;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Xml.Serialization;
 // ReSharper disable MemberCanBePrivate.Global
@@ -18,7 +16,6 @@ namespace FPLedit.CrashReporting
         public ExceptionInfo Exception { get; set; }
         public ExtensionInfo[] Extensions { get; set; }
         public string Version { get; set; }
-        public string VersionFlag { get; set; }
         public string OperatingSystem { get; set; }
         public string RuntimeVersion { get; set; }
         public string[] Assemblies { get; set; }
@@ -32,8 +29,7 @@ namespace FPLedit.CrashReporting
             SafeAction(() => Assemblies = AppDomain.CurrentDomain.GetAssemblies().Select(a => a.GetName().Name).ToArray());
             
             // Version information
-            SafeAction(() => Version = VersionInformation.Current.BaseVersionString);
-            SafeAction(() => VersionFlag = VersionInformation.Current.VersionFlag ?? "");
+            SafeAction(() => Version = VersionInformation.Current.DisplayVersion);
             SafeAction(() => RuntimeVersion = VersionInformation.Current.RuntimeVersion);
             SafeAction(() => OperatingSystem = VersionInformation.Current.OsVersion);
         }

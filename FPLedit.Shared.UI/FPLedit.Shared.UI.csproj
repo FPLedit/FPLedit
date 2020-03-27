@@ -5,6 +5,9 @@
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyTitle>FPLedit - Shared UI components</AssemblyTitle>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
   </PropertyGroup>

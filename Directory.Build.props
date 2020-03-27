@@ -5,15 +5,25 @@
 -->
 
 <Project>
+  
+  <Import Project="build_scripts/VersionInfo.targets" />
+  <Import Project="build_scripts/GenerateVersionInfo.targets" />
+  
   <PropertyGroup>
     <!-- Common props -->
     <PathMap>$(MSBuildProjectDirectory)=fpledit-src\$(MSBuildProjectName)</PathMap>
     <LangVersion>7.3</LangVersion>
-	<CodeAnalysisRuleSet>..\build_scripts\FPLedit.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\build_scripts\FPLedit.ruleset</CodeAnalysisRuleSet>
+    
+	  <!-- Assembly info -->
+	  <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>      
+    <FileVersion>$(VersionPrefix)</FileVersion>
+    <Company>Manuel Huber</Company>
+    <Product>FPLedit</Product>
+    <Copyright>Copyright © 2015-$([System.DateTime]::Now.ToString(`yyyy`)) Manuel Huber</Copyright>   
 
-	<!-- Output configuration -->
-	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-
+    <!-- Output configuration -->
     <OutputPath Condition=" '$(ForceConfigurationDir)' == '' ">..\bin\$(Configuration)\</OutputPath>
     <OutputPath Condition=" '$(ForceConfigurationDir)' != '' ">..\bin\$(ForceConfigurationDir)\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -21,13 +31,6 @@
     <!-- Use common obj folder -->
     <IntermediateOutputPath>..\obj\$(SolutionName)\$(MSBuildProjectName)\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
-
-  <ItemGroup>
-	  <!-- Include VersionInfo & BuildFlags.cs -->
-	  <Compile Include="..\build_scripts\VersionInfo.cs" Link="Properties\VersionInfo.cs" />
-	  <Compile Condition=" Exists('..\build_tmp\BuildFlags.cs') "
-          Include="..\build_tmp\BuildFlags.cs" Link="Properties\BuildFlags.cs" />
-  </ItemGroup>
 
   <!-- Include Analyzers -->
   <ItemGroup>
@@ -37,4 +40,5 @@
     <PackageReference Include="Microsoft.NetCore.Analyzers" Version="2.9.8" />
     <PackageReference Include="Microsoft.NetFramework.Analyzers" Version="2.9.8" />
   </ItemGroup>
+
 </Project>

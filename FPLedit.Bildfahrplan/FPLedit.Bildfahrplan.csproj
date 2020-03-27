@@ -5,6 +5,10 @@
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyTitle>FPLedit - Exporter für Bildfahrpläne</AssemblyTitle>
+    <Description>Optionale Erweiterung</Description>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
   </PropertyGroup>
@@ -16,9 +20,6 @@
     <ProjectReference Include="..\FPLedit.Shared.Rendering\FPLedit.Shared.Rendering.csproj" />
     <ProjectReference Include="..\FPLedit.Shared.UI\FPLedit.Shared.UI.csproj" />
     <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <!--<EmbeddedResource Include="**/*.xeto" />-->
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Eto.Forms" Version="2.5.1-ci-20200323.6" />

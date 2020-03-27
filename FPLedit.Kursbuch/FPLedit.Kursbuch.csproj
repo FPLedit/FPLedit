@@ -5,6 +5,10 @@
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyTitle>FPLedit - Exporter für Tabellenfahrpläne</AssemblyTitle>
+    <Description>Optionale Erweiterung</Description>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
   </PropertyGroup>

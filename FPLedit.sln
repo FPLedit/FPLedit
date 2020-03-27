@@ -20,13 +20,14 @@ ProjectSection(SolutionItems) = preProject
 	build_scripts\Info.txt = build_scripts\Info.txt
 	build_scripts\license.cake = build_scripts\license.cake
 	build_scripts\ResourceHelper.cs = build_scripts\ResourceHelper.cs
-	build_scripts\VersionInfo.cs = build_scripts\VersionInfo.cs
 	build_scripts\vsbuild-pre.ps1 = build_scripts\vsbuild-pre.ps1
 	build.cake = build.cake
 	build.ps1 = build.ps1
 	build.sh = build.sh
 	NuGet.config = NuGet.config
 	Directory.Build.props = Directory.Build.props
+	build_scripts\GenerateVersionInfo.targets = build_scripts\GenerateVersionInfo.targets
+	build_scripts\VersionInfo.targets = build_scripts\VersionInfo.targets
 EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPLedit.Aushangfahrplan", "FPLedit.Aushangfahrplan\FPLedit.Aushangfahrplan.csproj", "{C9D85138-EABB-47C1-8765-0F204E81FA5C}"

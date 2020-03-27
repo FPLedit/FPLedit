@@ -1,0 +1,47 @@
+<!--
+  FPLedit Build Process
+  Common build properties for all projects.
+  (c) Manuel Huber 2020
+-->
+
+<Project>
+  
+  <PropertyGroup>
+    <!-- Include own build tool -->
+    <CoreCompileDependsOn>GenerateVersionInfoTarget;$(CoreCompileDependsOn)</CoreCompileDependsOn>
+  </PropertyGroup>
+
+  <UsingTask TaskName="GenerateVersionInfo" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" >
+    <ParameterGroup>
+      <PVersionUpTo ParameterType="System.String" Required="true" />
+      <PVersionFrom ParameterType="System.String" Required="true" />
+      <Output ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System.IO" />
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+        var code = $@"internal static class Vi
+{{ 
+    public const string PUpTo = ""{PVersionUpTo}""; // Compatible up to (normally Version without patch)
+    public const string PVersion = ""{PVersionFrom}""; // Version of plugin (normally equasls assembly major.minor.patch)
+    public const string PFrom = ""{PVersionFrom}""; // Compatible from - normally equals assembly version
+}}";
+        File.WriteAllText(Output, code);
+]]>
+      </Code>
+    </Task>
+  </UsingTask>
+  <Target Name="GenerateVersionInfoTarget" DependsOnTargets="_GenerateVersionInfoTarget">
+    <ItemGroup>
+      <Compile Include="$(IntermediateOutputPath)VersionInfo.g.cs" />
+    </ItemGroup>
+  </Target>
+  <Target Name="_GenerateVersionInfoTarget" Outputs="$(IntermediateOutputPath)VersionInfo.g.cs">
+    <GenerateVersionInfo 
+      PVersionUpTo="$([System.Version]::Parse($(VersionPrefix)).ToString(2))" 
+      PVersionFrom="$([System.Version]::Parse($(VersionPrefix)).ToString(3))" 
+      Output="$(IntermediateOutputPath)VersionInfo.g.cs" />
+  </Target>
+
+</Project>
