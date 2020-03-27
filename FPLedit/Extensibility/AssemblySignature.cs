@@ -9,52 +9,21 @@ using System.Xml.Serialization;
 
 namespace FPLedit.Extensibility
 {
-    internal sealed class AssemblySignatureVerifier
+    internal sealed partial class AssemblySignatureVerifier
     {
-        private readonly AssemblySignature[] signatures;
         private readonly RSAParameters pubkey;
 
         public AssemblySignatureVerifier()
         {
-            signatures = LoadSignatures().ToArray();
-
             var x = new XmlSerializer(typeof(RSAParameters));
-            using (var stream = EtoExtensions.GetResource(null, "Resources.extensions.pubkey"))
-            using (var reader = new XmlTextReader(stream) {DtdProcessing = DtdProcessing.Prohibit, XmlResolver = null})
+            using (var reader = new XmlTextReader(publicKey, XmlNodeType.Document, null) { DtdProcessing = DtdProcessing.Prohibit, XmlResolver = null })
                 pubkey = (RSAParameters) x.Deserialize(reader);
-        }
-
-        private IEnumerable<AssemblySignature> LoadSignatures()
-        {
-            using (var stream = EtoExtensions.GetResource(null, "Resources.extensions.sig"))
-            using (var sr = new StreamReader(stream))
-            {
-                while (!sr.EndOfStream)
-                {
-                    var line = sr.ReadLine();
-                    if (line.StartsWith("#"))
-                        continue;
-                    var parts = line.Split(':');
-                    if (parts.Length != 2)
-                        continue;
-
-                    var signatureArray = new byte[parts[1].Length / 2];
-                    for (var i = 0; i < parts[1].Length; i += 2)
-                        signatureArray[i / 2] = Convert.ToByte(parts[1].Substring(i, 2), 16);
-
-                    yield return new AssemblySignature()
-                    {
-                        FileName = parts[0],
-                        Signature = signatureArray,
-                    };
-                }
-            }
         }
 
         internal SecurityContext Validate(string fn)
         {
             var basename = Path.GetFileName(fn);
-            var signature = signatures.FirstOrDefault(s => s.FileName == basename);
+            var signature = generatedSignatures.FirstOrDefault(s => s.FileName == basename);
 
             if (signature.FileName == null)
                 return SecurityContext.ThirdParty;
@@ -76,8 +45,16 @@ namespace FPLedit.Extensibility
 
         private struct AssemblySignature
         {
-            public string FileName;
-            public byte[] Signature;
+            public readonly string FileName;
+            public readonly byte[] Signature;
+
+            public AssemblySignature(string fn, string hexSignature)
+            {
+                FileName = fn;
+                Signature = new byte[hexSignature.Length / 2];
+                for (var i = 0; i < hexSignature.Length; i += 2)
+                    Signature[i / 2] = Convert.ToByte(hexSignature.Substring(i, 2), 16);
+            }
         }
     }
 }
