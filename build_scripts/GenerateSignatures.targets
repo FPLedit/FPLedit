@@ -31,6 +31,8 @@
       <Using Namespace="System.Collections.Generic" />
       <Code Type="Method" Language="cs">
         <![CDATA[
+          const string HashAlgorithm = "SHA256";
+          
           IEnumerable<string> GetHashLines(DirectoryInfo info, string keypath)
           {
               yield return "// File created at " + DateTime.Now.ToString("G");
@@ -46,13 +48,18 @@
               foreach (var f in files)
                   yield return CreateSignature(f.FullName, keypath);
                   
-              yield return "       };";
+              yield return "        };";
               
-              var x = new XmlSerializer(typeof(RSAParameters));
-              var pubkey = File.ReadAllText(PublicKeyFile);
+              var serializer = new XmlSerializer(typeof(RSAParameters));
+              using (var stream = File.OpenRead(PublicKeyFile))
+              using (var reader = new XmlTextReader(stream) { DtdProcessing = DtdProcessing.Prohibit, XmlResolver = null })
+              {
+                  var pubkey = (RSAParameters) serializer.Deserialize(reader);
 
-              
-              yield return $@"        private const string publicKey = @""{pubkey.Replace("\"", "\"\"")}"";";
+                  yield return $@"        private static readonly byte[] pubKeyExponent = {{ {BytesToString(pubkey.Exponent)} }};";
+                  yield return $@"        private static readonly byte[] pubKeyModulus = {{ {BytesToString(pubkey.Modulus)} }};";
+              }
+              yield return $@"        private const string hashAlgorithm = ""{HashAlgorithm}"";";
               
               yield return "    }";
               yield return "}";
@@ -70,12 +77,11 @@
               rsa.ImportParameters(privkey);
           
               var sigFormatter = new RSAPKCS1SignatureFormatter(rsa);
-              sigFormatter.SetHashAlgorithm("SHA256");
+              sigFormatter.SetHashAlgorithm(HashAlgorithm);
           
               var signedHashValue = sigFormatter.CreateSignature(hash);
           
-              string hex = BitConverter.ToString(signedHashValue).Replace("-", "");
-              return $@"           new AssemblySignature(""{Path.GetFileName(fn)}"", ""{hex}""),";
+              return $@"           new AssemblySignature(""{Path.GetFileName(fn)}"", new byte[] {{ {BytesToString(signedHashValue)} }}),";
           }
           
           RSAParameters LoadParameters(string fn)
@@ -91,6 +97,11 @@
               File.WriteAllLines(OutputPath, GetHashLines(info, PrivateKeyFile).ToArray());
               Log.LogMessage(MessageImportance.High, $"Done writing {OutputPath}!");
               return true;
+          }
+          
+          public string BytesToString(byte[] bytes)
+          {
+            return string.Join(", ", bytes.Select(b => "0x" + b.ToString("X2")));
           }
         ]]>
       </Code>
