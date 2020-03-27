@@ -131,7 +131,9 @@ namespace FPLedit.Bildfahrplan.Render
             var emSize = g.MeasureString(stationFont, "M").Height;
             
             var sMax = attrs.StationVertical ? 
-                stations.Max(sta => g.MeasureString(sta.ToString(attrs.DisplayKilometre, route), stationFont).Width) 
+                (stations.Any() ?
+                    stations.Max(sta => g.MeasureString(sta.ToString(attrs.DisplayKilometre, route), stationFont).Width) 
+                    : 0)
                 : emSize;
 
             sMax += GetTrackOffset(g, stationFont);
@@ -144,8 +146,13 @@ namespace FPLedit.Bildfahrplan.Render
             var emSize = g.MeasureString(stationFont, "M").Height;
             if (attrs.MultiTrack)
             {
+                var tracks = stations.SelectMany(s => s.Tracks);
+                if (!tracks.Any())
+                    return 0;
+                
                 if (attrs.StationVertical)
-                    return stations.SelectMany(s => s.Tracks).Max(t => g.MeasureString(t.Name, stationFont).Width);
+                    return tracks.Max(t => g.MeasureString(t.Name, stationFont).Width);
+
                 return emSize;
             }
 
