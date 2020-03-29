@@ -31,10 +31,13 @@ namespace FPLedit.Shared.Helpers
             var rt = tt.GetRoute(route).Stations;
             var idx = rt.IndexOf(sta);
 
+            if (idx == -1)
+                return false; //HACK: Not on this route. Probably something weird happening, but at least try to exit gracefully.
+
             float? min = null, max = null;
-            if (idx != rt.Count - 1)
+            if (idx < rt.Count - 1)
                 max = rt[idx + 1].Positions.GetPosition(route);
-            if (idx != 0)
+            if (idx > 0)
                 min = rt[idx - 1].Positions.GetPosition(route);
 
             return ((min.HasValue && newPos < min) || (max.HasValue && newPos > max));
