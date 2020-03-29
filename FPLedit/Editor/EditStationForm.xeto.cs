@@ -154,9 +154,6 @@ namespace FPLedit.Editor
             }
             
             // Update track data.
-            if (!stationRenderer.CommitNameEdit())
-                return;
-
             Station.DefaultTrackLeft.SetValue(route, trackStation.DefaultTrackLeft.GetValue(route));
             Station.DefaultTrackRight.SetValue(route, trackStation.DefaultTrackRight.GetValue(route));
             Station.Tracks.Clear();

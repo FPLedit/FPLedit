@@ -18,9 +18,7 @@ namespace FPLedit.Editor.Rendering
         private readonly Color textColor, bgColor;
 
         private readonly List<RenderBtn<Track>> buttons = new List<RenderBtn<Track>>();
-        private readonly PixelLayout layout;
 
-        private TextBox editingTextBox;
         private RenderBtn<Track> editingButton;
 
         private Station _station;
@@ -52,9 +50,6 @@ namespace FPLedit.Editor.Rendering
 
         public StationRenderer()
         {
-            layout = new PixelLayout();
-            Content = layout;
-            
             textColor = SystemColors.ControlText;
             bgColor = SystemColors.ControlBackground;
         }
@@ -198,15 +193,12 @@ namespace FPLedit.Editor.Rendering
 
             foreach (var args in buttons)
                 args.Draw(e.Graphics);
-
+            
             base.OnPaint(e);
         }
 
         private void MoveDefaultTrack(RouteValueCollection<string> property, Track current, int offset)
         {
-            if (!CommitNameEdit())
-                return;
-
             var idx = _station.Tracks.IndexOf(current) + offset;
             if (idx < 0 || idx > _station.Tracks.Count - 1)
                 return;
@@ -217,9 +209,6 @@ namespace FPLedit.Editor.Rendering
 
         private void AddBtn_Click(object sender, EventArgs e)
         {
-            if (!CommitNameEdit())
-                return;
-
             var regex = new Regex(@"^Gleis (\d+)$", RegexOptions.Compiled);
             var maxTrack = 0;
             var matchedTracks = _station.Tracks.Select(t => regex.Match(t.Name)).Where(m => m.Success);
@@ -242,35 +231,20 @@ namespace FPLedit.Editor.Rendering
 
         private void NameBtn_Click(object sender, EventArgs e)
         {
-            if (!CommitNameEdit())
-                return;
-
             editingButton = (RenderBtn<Track>)sender;
-            editingTextBox = new TextBox() { Width = 30 + editingButton.Size.Width, Text = editingButton.Text, Font = font };
-            layout.Add(editingTextBox, editingButton.Location - new Size(25, 0));
-            editingTextBox.KeyDown += (s, args) =>
-            {
-                if (args.Key == Keys.Enter)
-                {
-                    args.Handled = true;
-                    CommitNameEdit();
-                }
-            };
+            var oldName = editingButton.Tag.Name;
+            var newName = Shared.UI.InputBox.Query(ParentWindow, "Gleisnamen bearbeiten", oldName);
+            if (newName != null && newName != oldName)
+                CommitNameEdit(oldName, newName);
         }
 
-        public bool CommitNameEdit()
+        private void CommitNameEdit(string oldName, string newName)
         {
-            if (editingTextBox == null)
-                return true;
-
-            var newName = editingTextBox.Text;
-            var oldName = editingButton.Tag.Name;
-
             var duplicate = _station.Tracks.Any(t => t != editingButton.Tag && t.Name == newName);
             if (duplicate)
             {
                 MessageBox.Show($"Ein Gleis mit der Bezeichnung {newName} ist bereits vorhanden. Bitte wählen Sie einen anderen Namen!", MessageBoxType.Error);
-                return false;
+                return;
             }
 
             // Streckengleise umbenennen
@@ -291,17 +265,11 @@ namespace FPLedit.Editor.Rendering
             editingButton.Tag.Name = newName;
             Invalidate();
 
-            layout.Remove(editingTextBox);
-            editingTextBox = null;
             editingButton = null;
-            return true;
         }
 
         private void DownBtn_Click(object sender, EventArgs e)
         {
-            if (!CommitNameEdit())
-                return;
-
             var btn = (RenderBtn<Track>)sender;
             var idx = _station.Tracks.IndexOf(btn.Tag);
             if (idx == _station.Tracks.Count - 1)
@@ -312,9 +280,6 @@ namespace FPLedit.Editor.Rendering
 
         private void UpBtn_Click(object sender, EventArgs e)
         {
-            if (!CommitNameEdit())
-                return;
-
             var btn = (RenderBtn<Track>)sender;
             var idx = _station.Tracks.IndexOf(btn.Tag);
             if (idx == 0)
@@ -325,9 +290,6 @@ namespace FPLedit.Editor.Rendering
 
         private void DeleteBtn_Click(object sender, EventArgs e)
         {
-            if (!CommitNameEdit())
-                return;
-
             var btn = (RenderBtn<Track>)sender;
             _station.Tracks.Remove(btn.Tag);
 
@@ -351,9 +313,6 @@ namespace FPLedit.Editor.Rendering
         private bool lastDoubleClick;
         protected override void OnMouseDoubleClick(MouseEventArgs e)
         {
-            if (!CommitNameEdit())
-                return;
-
             foreach (var args in buttons.ToArray())
                 args.HandleDoubleClick(new Point(e.Location), Point.Empty);
 
@@ -363,9 +322,6 @@ namespace FPLedit.Editor.Rendering
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            if (!CommitNameEdit())
-                return;
-
             if (!lastDoubleClick)
             {
                 if (e.Buttons == MouseButtons.Alternate)
@@ -385,11 +341,7 @@ namespace FPLedit.Editor.Rendering
         {
             if (font != null && !font.IsDisposed)
                 font.Dispose();
-            if (layout != null && !layout.IsDisposed) 
-                layout.Dispose();
             dashedPen?.Dispose();
-            if (editingTextBox != null && !editingTextBox.IsDisposed)
-                editingTextBox.Dispose();
             base.Dispose(disposing);
         }
     }
