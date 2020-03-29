@@ -449,7 +449,7 @@ namespace FPLedit.Shared
             AddStation(newStation, idx); // this will call StationAddRoute.
 
             exisitingStartStation.Positions.SetPosition(idx, newStartPosition);
-            newStation.Positions.SetPosition(idx, newStartPosition);
+            newStation.Positions.SetPosition(idx, newPosition);
             
             RebuildRouteCache(idx); // Create cache entry
             return idx;
