@@ -17,6 +17,8 @@ namespace FPLedit.Shared
         private readonly XMLEntity sElm, tElm, trElm;
 
         private int nextStaId = 0, nextRtId = 0, nextTraId = 0;
+        
+        private readonly Dictionary<int, Route> routeCache;
 
         #region XmlAttributes
 
@@ -166,7 +168,10 @@ namespace FPLedit.Shared
             }
             
             // Finally initialize route cache structure
-            routeCache = GetRoutes().ToDictionary(r => r.Index, r => r);
+            routeCache = _InternalGetRoutesUncached().ToDictionary(r => r.Index, r => r);
+            
+            if (routeCache == null)
+                throw new Exception("RouteCache is null!");
             
             /*
              * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -397,9 +402,7 @@ namespace FPLedit.Shared
         #endregion
 
         #region Hilfsmethoden für Routen
-
-        private Dictionary<int, Route> routeCache;
-
+        
         /// <summary>
         /// This function adds an additional new route to an already added station.
         /// </summary>
@@ -414,7 +417,7 @@ namespace FPLedit.Shared
         private void RebuildRouteCache(int route)
         {
             if (routeCache == null)
-                return;
+                throw new Exception("RouteCache is null!");
             var stas = Stations.Where(s => s.Routes.Contains(route));
             routeCache[route] = new Route(route, stas);
         }
@@ -457,8 +460,13 @@ namespace FPLedit.Shared
 
         public Route[] GetRoutes()
         {
-            if (routeCache != null && routeCache.Any())
-                return routeCache.Select(kvp => kvp.Value).ToArray();
+            if (routeCache == null)
+                throw new Exception("RouteCache is null!");
+            return routeCache.Select(kvp => kvp.Value).ToArray();
+        }
+
+        private Route[] _InternalGetRoutesUncached()
+        {
             if (Type == TimetableType.Network)
             {
                 var routesJoin = Stations.SelectMany(s => s.Routes.Select(r => new {r, s}))
@@ -477,12 +485,15 @@ namespace FPLedit.Shared
                 return new Route(LINEAR_ROUTE_ID, Stations);
             if (Type == TimetableType.Linear && index != LINEAR_ROUTE_ID)
                 throw new TimetableTypeNotSupportedException(TimetableType.Linear, "routes");
+            
+            if (routeCache == null)
+                throw new Exception("RouteCache is null!");
 
-            if (routeCache != null && routeCache.TryGetValue(index, out var route))
+            if (routeCache.TryGetValue(index, out var route))
                 return route;
             RebuildRouteCache(index);
             
-            if (routeCache != null && routeCache.TryGetValue(index, out var route2))
+            if (routeCache.TryGetValue(index, out var route2))
                 return route2;
             return new Route(index, Array.Empty<Station>());
         }
