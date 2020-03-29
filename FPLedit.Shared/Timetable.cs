@@ -344,16 +344,40 @@ namespace FPLedit.Shared
                 var ardps = tra.GetArrDepsUnsorted();
                 if (!ardps.TryGetValue(sta, out var ardp))
                     return;
+                
                 if (ardp.ArrivalTrack == oldTrackName)
                     ardp.ArrivalTrack = newTrackName;
                 if (ardp.DepartureTrack == oldTrackName)
                     ardp.DepartureTrack = newTrackName;
+                
                 foreach (var shunt in ardp.ShuntMoves)
                 {
                     if (shunt.SourceTrack == oldTrackName)
                         shunt.SourceTrack = newTrackName;
                     if (shunt.TargetTrack == oldTrackName)
                         shunt.TargetTrack = newTrackName;
+                }
+            }
+        }
+        
+        public void _InternalRemoveAllTrainTracksAtStation(Station sta, string oldTrackName)
+        {
+            foreach (var tra in Trains)
+            {
+                var ardps = tra.GetArrDepsUnsorted();
+                if (!ardps.TryGetValue(sta, out var ardp))
+                    return;
+                
+                if (ardp.ArrivalTrack == oldTrackName)
+                    ardp.ArrivalTrack = "";
+                if (ardp.DepartureTrack == oldTrackName)
+                    ardp.DepartureTrack = "";
+                
+                var fixedShunts = ardp.ShuntMoves.ToArray(); // Copy of collection so that we can remove later on.
+                foreach (var shunt in fixedShunts)
+                {
+                    if (shunt.SourceTrack == oldTrackName || shunt.TargetTrack == oldTrackName)
+                        ardp.ShuntMoves.Remove(shunt);
                 }
             }
         }

@@ -46,6 +46,9 @@ namespace FPLedit.Editor.Rendering
         }
 
         public Dictionary<string, string> TrackRenames { get; } = new Dictionary<string, string>();
+        
+        private List<string> trackRemoves = new List<string>();
+        public IList<string> TrackRemoves => trackRemoves.AsReadOnly();
 
         public StationRenderer()
         {
@@ -331,6 +334,8 @@ namespace FPLedit.Editor.Rendering
             var firstName = _station.Tracks.FirstOrDefault()?.Name;
             _station.DefaultTrackLeft.ReplaceAllValues(btn.Tag.Name, firstName);
             _station.DefaultTrackRight.ReplaceAllValues(btn.Tag.Name, firstName);
+            
+            trackRemoves.Add(btn.Tag.Name);
 
             Invalidate();
         }

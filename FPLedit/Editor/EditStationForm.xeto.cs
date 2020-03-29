@@ -46,19 +46,23 @@ namespace FPLedit.Editor
             };
             stationRenderer.SizeChanged += (s, e) =>
             {
+                var size = ClientSize;
+                
                 if (WindowShown && stationRenderer.Height > stationRendererHeight)
                 {
                     var diff = stationRenderer.Height - stationRendererHeight;
-                    this.Height += diff;
+                    size.Height += diff;
                     stationRendererHeight = stationRenderer.Height;
                 }
 
                 if (WindowShown && stationRenderer.Width > stationRendererWidth)
                 {
                     var diff = stationRenderer.Width - stationRendererWidth;
-                    this.Width += diff;
+                    size.Width += diff;
                     stationRendererWidth = stationRenderer.Width;
                 }
+
+                ClientSize = size;
             };
         }
 
@@ -123,7 +127,7 @@ namespace FPLedit.Editor
             
             // Set position.
             var newPos = float.Parse(positionTextBox.Text);
-            if (route == Timetable.UNASSIGNED_ROUTE_ID)
+            if (route == Timetable.UNASSIGNED_ROUTE_ID) // We have a new station on a new route
                 Position = newPos;
             else if (!StationMoveHelper.TrySafeMove(Station, existingStation, newPos, route))
             {
@@ -160,6 +164,8 @@ namespace FPLedit.Editor
                 Station.Tracks.Add(track);
             foreach (var rename in stationRenderer.TrackRenames)
                 Station._parent._InternalRenameAllTrainTracksAtStation(Station, rename.Key, rename.Value);
+            foreach (var remove in stationRenderer.TrackRemoves)
+                Station._parent._InternalRemoveAllTrainTracksAtStation(Station, remove);
 
             Close(DialogResult.Ok);
         }
