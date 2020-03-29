@@ -64,6 +64,8 @@ namespace FPLedit.Shared
             trElm = new XMLEntity("transitions");
             Children.Add(sElm);
             Children.Add(tElm);
+            
+            routeCache = new Dictionary<int, Route>(); // Initialize empty route cache.
         }
 
         internal Timetable(XMLEntity en) : base(en, null)
