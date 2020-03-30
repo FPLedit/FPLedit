@@ -37,6 +37,7 @@ namespace FPLedit.Shared
                 case FilterType.Contains:
                     return negate ^ s.Contains(rest);
                 case FilterType.Equals:
+                case FilterType.StationType:
                     return negate ^ s == rest;
                 case FilterType.StartsWith:
                     return negate ^ s.StartsWith(rest);
@@ -64,10 +65,18 @@ namespace FPLedit.Shared
         public string SearchString => Pattern.Substring((Pattern[0] == '!') ? 2 : 1);
 
         public bool Matches(Train t)
-            => Matches(t.TName);
+        {
+            if (FilterType == FilterType.StationType)
+                throw new InvalidOperationException("Cannot apply StationType filter to train!");
+            return Matches(t.TName);
+        }
 
         public bool Matches(Station s)
-           => Matches(s.SName);
+        {
+            if (FilterType == FilterType.StationType)
+                return Matches(s.StationType);
+            return Matches(s.SName);
+        }
     }
 
     public enum FilterType
@@ -76,5 +85,12 @@ namespace FPLedit.Shared
         Equals = '=',
         StartsWith = '^',
         EndsWidth = '$',
+        StationType = '#',
+    }
+
+    public enum FilterTarget
+    {
+        Train,
+        Station,
     }
 }

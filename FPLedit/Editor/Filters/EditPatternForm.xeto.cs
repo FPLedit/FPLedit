@@ -21,7 +21,7 @@ namespace FPLedit.Editor.Filters
 
         public FilterRule Pattern { get; private set; }
 
-        public EditPatternForm(FilterRule rule, string property) : this(property)
+        public EditPatternForm(FilterRule rule, string property, FilterTarget target) : this(property, target)
         {
             Pattern = rule;
             searchTextBox.Text = rule.SearchString;
@@ -30,13 +30,15 @@ namespace FPLedit.Editor.Filters
             typeSelection.ChangeSelection((PatternSelectionType)rule.FilterType);
         }
 
-        public EditPatternForm(string property)
+        public EditPatternForm(string property, FilterTarget target)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
             propertyLabel.Text = property;
 
             typeSelection = new SelectionUI<PatternSelectionType>(null, typeSelectionStack);
+            if (target == FilterTarget.Train)
+                typeSelection.DisableOption(PatternSelectionType.StationType);
         }
 
         private void CloseButton_Click(object sender, EventArgs e)
@@ -77,6 +79,8 @@ namespace FPLedit.Editor.Filters
             Contains = ' ',
             [SelectionName("ist")]
             Equals = '=',
+            [SelectionName("Betriebsst.-Typ ist")]
+            StationType = '#',
         }
     }
 }

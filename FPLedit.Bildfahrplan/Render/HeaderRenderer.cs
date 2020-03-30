@@ -88,7 +88,7 @@ namespace FPLedit.Bildfahrplan.Render
                     // Stationsnamen
                     if (attrs.DrawHeader)
                     {
-                        var display = sta.ToString(attrs.DisplayKilometre, route);
+                        var display = StationDisplay(sta);
                         var size = g.MeasureString(stationFont, display);
 
                         if (attrs.StationVertical)
@@ -125,6 +125,8 @@ namespace FPLedit.Bildfahrplan.Render
             return stationOffsets;
         }
 
+        private string StationDisplay(Station sta) => sta.ToString(attrs.DisplayKilometre, route) + (!string.IsNullOrWhiteSpace(sta.StationCode) ? $" ({sta.StationCode})" : "");
+
         public float GetMarginTop(Graphics g)
         {
             var stationFont = (Font)attrs.StationFont;
@@ -132,7 +134,7 @@ namespace FPLedit.Bildfahrplan.Render
             
             var sMax = attrs.StationVertical ? 
                 (stations.Any() ?
-                    stations.Max(sta => g.MeasureString(sta.ToString(attrs.DisplayKilometre, route), stationFont).Width) 
+                    stations.Max(sta => g.MeasureString(StationDisplay(sta), stationFont).Width) 
                     : 0)
                 : emSize;
 

@@ -82,13 +82,13 @@ namespace FPLedit.Editor.Filters
                 MessageBox.Show("Zuerst muss eine Regel ausgewählt werden!", "Regel löschen");
         }
 
-        private void EditEntry(GridView view, List<FilterRule> patterns, string property, bool message=true)
+        private void EditEntry(GridView view, List<FilterRule> patterns, string property, FilterTarget target, bool message=true)
         {
             if (view.SelectedItem != null)
             {
                 var frule = (FilterRule)view.SelectedItem;
 
-                using (var epf = new EditPatternForm(frule, property))
+                using (var epf = new EditPatternForm(frule, property, target))
                 {
                     if (epf.ShowModal(this) == DialogResult.Ok)
                     {
@@ -101,9 +101,9 @@ namespace FPLedit.Editor.Filters
                 MessageBox.Show("Zuerst muss eine Regel ausgewählt werden!", "Regel bearbeiten");
         }
 
-        private void AddEntry(GridView view, List<FilterRule> patterns, string property)
+        private void AddEntry(GridView view, List<FilterRule> patterns, string property, FilterTarget target)
         {
-            using (var epf = new EditPatternForm(property))
+            using (var epf = new EditPatternForm(property, target))
             {
                 if (epf.ShowModal(this) == DialogResult.Ok)
                 {
@@ -121,6 +121,7 @@ namespace FPLedit.Editor.Filters
                 case FilterType.EndsWidth: return negate ? "endet nicht mit" : "endet mit";
                 case FilterType.Contains: return negate ? "enthält nicht" : "enthält";
                 case FilterType.Equals: return negate ? "ist nicht" : "ist";
+                case FilterType.StationType: return negate ? "Betriebsst.-Typ ist nicht" : "Betriebsst.-Typ ist";
                 default: return "";
             }
         }
@@ -128,19 +129,19 @@ namespace FPLedit.Editor.Filters
         #region Events
 
         private void AddTrainPattButton_Click(object sender, EventArgs e)
-            => AddEntry(trainPattListView, curTrainRules, "Zugname");
+            => AddEntry(trainPattListView, curTrainRules, "Zugname", FilterTarget.Train);
 
         private void EditTrainPattButton_Click(object sender, EventArgs e)
-            => EditEntry(trainPattListView, curTrainRules, "Zugname");
+            => EditEntry(trainPattListView, curTrainRules, "Zugname", FilterTarget.Train);
 
         private void DeleteTrainPattButton_Click(object sender, EventArgs e)
             => DeleteEntry(trainPattListView, curTrainRules);
 
         private void AddStationPattButton_Click(object sender, EventArgs e)
-            => AddEntry(stationPattListView, curStationRules, "Stationsname");
+            => AddEntry(stationPattListView, curStationRules, "Stationsname", FilterTarget.Station);
 
         private void EditStationPattButton_Click(object sender, EventArgs e)
-            => EditEntry(stationPattListView, curStationRules, "Stationsname");
+            => EditEntry(stationPattListView, curStationRules, "Stationsname", FilterTarget.Station);
 
         private void DeleteStationPattButton_Click(object sender, EventArgs e)
             => DeleteEntry(stationPattListView, curStationRules);
