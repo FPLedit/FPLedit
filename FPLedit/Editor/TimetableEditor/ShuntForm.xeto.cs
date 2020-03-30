@@ -30,8 +30,10 @@ namespace FPLedit.Editor.TimetableEditor
 
             arrivalLabel.Font = new Font(arrivalLabel.Font.FamilyName, arrivalLabel.Font.Size, FontStyle.Bold);
             departureLabel.Font = new Font(departureLabel.Font.FamilyName, departureLabel.Font.Size, FontStyle.Bold);
+            
             arrivalLabel.Text = arrivalLabel.Text.Replace("{time}", arrDep.Arrival != default ? arrDep.Arrival.ToShortTimeString() : "-");
             arrivalLabel.Text = arrivalLabel.Text.Replace("{track}", arrDep.ArrivalTrack);
+            
             departureLabel.Text = departureLabel.Text.Replace("{time}", arrDep.Departure != default ? arrDep.Departure.ToShortTimeString() : "-");
             departureLabel.Text = departureLabel.Text.Replace("{track}", arrDep.DepartureTrack);
 
@@ -94,16 +96,18 @@ namespace FPLedit.Editor.TimetableEditor
                 MessageBox.Show("Einige Rangierfahrten befinden sich außerhalb des Zeitfensters des Aufenthalts an der Station!", "FPLedit", MessageBoxType.Error);
                 return;
             }
-            if (arrDep.ShuntMoves.Last().TargetTrack != arrDep.DepartureTrack)
+            
+            if (!string.IsNullOrEmpty(arrDep.DepartureTrack) && arrDep.ShuntMoves.Last().TargetTrack != arrDep.DepartureTrack)
             {
                 var res = MessageBox.Show("Die letzte Rangierfahrt endet nicht am Abfahrtsgleis! Trotzdem fortfahren?", "FPLedit", MessageBoxButtons.YesNo, MessageBoxType.Warning);
                 if (res == DialogResult.No) return;
             }
-            if (arrDep.ShuntMoves.Last().TargetTrack != arrDep.DepartureTrack)
+            if (!string.IsNullOrEmpty(arrDep.ArrivalTrack) && arrDep.ShuntMoves.First().SourceTrack != arrDep.ArrivalTrack)
             {
                 var res = MessageBox.Show("Die erste Rangierfahrt beginnt nicht am Ankunftsgleis! Trotzdem fortfahren?", "FPLedit", MessageBoxButtons.YesNo, MessageBoxType.Warning);
                 if (res == DialogResult.No) return;
             }
+            
             Close(DialogResult.Ok);
         }
 
