@@ -113,6 +113,16 @@ namespace FPLedit.Editor.TimetableEditor
             cc.DataStoreBinding = Binding.Delegate<DataElement, IEnumerable<object>>(d => d.GetTrackDataStore());
             return cc;
         }
+        
+        private CheckBoxCell GetCheckCell(Expression<Func<ArrDep, bool>> check)
+        {
+            var cc = new CheckBoxCell();
+            
+            var shadowBinding = Binding.Property(check);
+            
+            cc.Binding = Binding.Delegate<DataElement, bool>(d => shadowBinding.GetValue(d.ArrDeps[d.Station])).Cast<bool?>();
+            return cc;
+        }
 
         protected override void CellSelected(BaseTimetableDataElement data, Station sta, bool arrival)
         {
@@ -154,6 +164,7 @@ namespace FPLedit.Editor.TimetableEditor
             {
                 view.AddColumn(GetTrackCell(t => t.ArrivalTrack), "Ankunftsgleis", editable: true);
                 view.AddColumn(GetTrackCell(t => t.DepartureTrack), "Abfahrtsgleis", editable: true);
+                view.AddColumn(GetCheckCell(t => t.ShuntMoves.Any()), "Rangiert", editable: false);
             }
             else
                 shuntButton.Visible = false;
