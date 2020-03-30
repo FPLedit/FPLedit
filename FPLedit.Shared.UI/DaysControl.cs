@@ -112,7 +112,7 @@ namespace FPLedit.Shared.UI
         }
     }
 
-    public class DaysControlNarrow : DaysControl
+    public sealed class DaysControlNarrow : DaysControl
     {
         public DaysControlNarrow()
         {
@@ -121,7 +121,7 @@ namespace FPLedit.Shared.UI
         }
     }
     
-    public class DaysControlWide : DaysControl
+    public sealed class DaysControlWide : DaysControl
     {
         public DaysControlWide()
         {

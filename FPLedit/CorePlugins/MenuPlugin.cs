@@ -5,7 +5,7 @@ using FPLedit.Shared.UI;
 
 namespace FPLedit.CorePlugins
 {
-    internal class MenuPlugin : IPlugin
+    internal sealed class MenuPlugin : IPlugin
     {
         private IPluginInterface pluginInterface;
         private ButtonMenuItem editRoot, previewRoot;

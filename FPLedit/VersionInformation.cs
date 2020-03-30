@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace FPLedit
 {
-    public class VersionInformation
+    public sealed class VersionInformation
     {
         private string BaseVersionString => FileVersionInfo.GetVersionInfo(PathManager.Instance.AppFilePath).FileVersion;
         public Version AppBaseVersion => new Version(BaseVersionString);
