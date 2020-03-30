@@ -4,6 +4,7 @@ using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using FPLedit.Shared.UI.Validators;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using FPLedit.Shared.Helpers;
@@ -16,8 +17,10 @@ namespace FPLedit.Editor
         private readonly int route;
 
 #pragma warning disable CS0649
-        private readonly TextBox nameTextBox, positionTextBox;
+        private readonly TextBox nameTextBox, positionTextBox, codeTextBox;
+        private readonly ComboBox typeComboBox;
         private readonly StationRenderer stationRenderer;
+        private readonly Label typeLabel, codeLabel;
 #pragma warning restore CS0649
         private readonly ValidatorCollection validators;
 
@@ -64,6 +67,8 @@ namespace FPLedit.Editor
 
                 ClientSize = size;
             };
+
+            typeComboBox.Visible = typeLabel.Visible = codeTextBox.Visible = codeLabel.Visible = FeatureFlags.AdditionalStationAttributes;
         }
 
         /// <summary>
@@ -99,6 +104,7 @@ namespace FPLedit.Editor
             Title = "Station bearbeiten";
             nameTextBox.Text = station.SName;
             positionTextBox.Text = station.Positions.GetPosition(route).Value.ToString("0.0");
+            
             Station = station;
             this.route = route;
 
@@ -110,6 +116,13 @@ namespace FPLedit.Editor
 
             if (station._parent.Version.Compare(TimetableVersion.JTG3_1) < 0)
                 stationRenderer.Visible = false;
+            
+            if (FeatureFlags.AdditionalStationAttributes)
+            {
+                codeTextBox.Text = station.StationCode;
+                typeComboBox.Text = station.StationType;
+                typeComboBox.DataStore = station._parent.Stations.Select(s => s.StationType).Distinct().Where(s => s != "").OrderBy(s => s).Select(s => new ListItem { Text = s });
+            }
         }
 
         private void CloseButton_Click(object sender, EventArgs e)
@@ -125,6 +138,12 @@ namespace FPLedit.Editor
 
             Station.SName = nameTextBox.Text;
             
+            if (FeatureFlags.AdditionalStationAttributes)
+            {
+                Station.StationCode = codeTextBox.Text;
+                Station.StationType = typeComboBox.Text;
+            }
+
             // Set position.
             var newPos = float.Parse(positionTextBox.Text);
             if (route == Timetable.UNASSIGNED_ROUTE_ID) // We have a new station on a new route

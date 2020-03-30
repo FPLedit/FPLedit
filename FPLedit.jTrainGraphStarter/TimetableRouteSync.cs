@@ -125,7 +125,7 @@ namespace FPLedit.jTrainGraphStarter
                     continue;
 
                 //TODO: Better method to remove all known attributes?
-                foreach (var a in new[] { "km", "kml", "kmr", "fpl-rt", "fpl-id", "fpl-wl", "fpl-vmax", "tr", "dTi", "dTa" })
+                foreach (var a in new[] { "km", "kml", "kmr", "fpl-rt", "fpl-id", "fpl-wl", "fpl-vmax", "fpl-tp", "fpl-cd", "tr", "dTi", "dTa" })
                     srSta.RemoveAttribute(a); // Alte Angaben entfernen
 
                 sta.Attributes = AttrDiff(sta, srSta);

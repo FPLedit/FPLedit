@@ -29,6 +29,20 @@ namespace FPLedit.Shared
             get => GetAttribute("name", "");
             set => SetAttribute("name", value);
         }
+        
+        [XAttrName("fpl-cd", IsFpleditElement = true)]
+        public string StationCode
+        {
+            get => GetAttribute("fpl-cd", "");
+            set => SetAttribute("fpl-cd", value);
+        }
+        
+        [XAttrName("fpl-tp", IsFpleditElement = true)]
+        public string StationType
+        {
+            get => GetAttribute("fpl-tp", "");
+            set => SetAttribute("fpl-tp", value);
+        }
 
         public PositionCollection Positions
             => new PositionCollection(this, _parent);

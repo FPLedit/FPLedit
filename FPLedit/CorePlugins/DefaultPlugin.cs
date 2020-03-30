@@ -10,6 +10,7 @@ namespace FPLedit.CorePlugins
             pluginInterface.Register<ITimetableCheck>(new TimetableChecks.TransitionsCheck());
             pluginInterface.Register<ITimetableCheck>(new TimetableChecks.TrainsTrackCheck());
             pluginInterface.Register<ITimetableCheck>(new TimetableChecks.DayOverflowCheck());
+            pluginInterface.Register<ITimetableCheck>(new TimetableChecks.StationCodeCheck());
             pluginInterface.Register<ITimetableInitAction>(new TimetableChecks.UpdateColorsAction());
             pluginInterface.Register<ITimetableInitAction>(new TimetableChecks.FixNetworkAttributesAction());
         }

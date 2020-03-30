@@ -72,6 +72,9 @@ namespace FPLedit
             Bootstrapper.Logger.Debug("Current version: " + VersionInformation.Current.DisplayVersion);
             Bootstrapper.Logger.Debug("Runtime version: " + VersionInformation.Current.RuntimeVersion);
             Bootstrapper.Logger.Debug("OS version: " + VersionInformation.Current.OsVersion);
+            
+            // Init feature flags
+            FeatureFlags.Initialize(((IReducedPluginInterface)Bootstrapper).Settings);
 
             // Now we can load extensions and templates
             Bootstrapper.ExtensionManager.InjectPlugin(new CorePlugins.MenuPlugin(), 0);
