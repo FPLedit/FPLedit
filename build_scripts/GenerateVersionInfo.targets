@@ -21,12 +21,12 @@
       <Using Namespace="System.IO" />
       <Code Type="Fragment" Language="cs">
         <![CDATA[
-        var code = $@"internal static class Vi
-{{ 
-    public const string PUpTo = ""{PVersionUpTo}""; // Compatible up to (normally Version without patch)
-    public const string PVersion = ""{PVersionFrom}""; // Version of plugin (normally equasls assembly major.minor.patch)
-    public const string PFrom = ""{PVersionFrom}""; // Compatible from - normally equals assembly version
-}}";
+        var code = @"internal static class Vi
+{ 
+    public const string PUpTo = """ + PVersionUpTo + @"""; // Compatible up to (normally Version without patch)
+    public const string PVersion = """ + PVersionFrom + @"""; // Version of plugin (normally equasls assembly major.minor.patch)
+    public const string PFrom = """ + PVersionFrom + @"""; // Compatible from - normally equals assembly version
+}";
         File.WriteAllText(Output, code);
 ]]>
       </Code>

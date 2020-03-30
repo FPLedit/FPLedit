@@ -38,9 +38,9 @@
               yield return "// File created at " + DateTime.Now.ToString("G");
               yield return "// Do not edit, changes will be overwritten!";
               
-              yield return $"namespace {Namespace}";
+              yield return "namespace " + Namespace;
               yield return "{";
-              yield return $"    internal sealed partial class {TypeName}";
+              yield return "    internal sealed partial class " + TypeName;
               yield return "    {";
               yield return "        private readonly AssemblySignature[] generatedSignatures = {";
               
@@ -56,10 +56,10 @@
               {
                   var pubkey = (RSAParameters) serializer.Deserialize(reader);
 
-                  yield return $@"        private static readonly byte[] pubKeyExponent = {{ {BytesToString(pubkey.Exponent)} }};";
-                  yield return $@"        private static readonly byte[] pubKeyModulus = {{ {BytesToString(pubkey.Modulus)} }};";
+                  yield return @"        private static readonly byte[] pubKeyExponent = { " + BytesToString(pubkey.Exponent) + " };";
+                  yield return @"        private static readonly byte[] pubKeyModulus = { " + BytesToString(pubkey.Modulus) + " };";
               }
-              yield return $@"        private const string hashAlgorithm = ""{HashAlgorithm}"";";
+              yield return "        private const string hashAlgorithm = \"" + HashAlgorithm + "\";";
               
               yield return "    }";
               yield return "}";
@@ -81,7 +81,7 @@
           
               var signedHashValue = sigFormatter.CreateSignature(hash);
           
-              return $@"           new AssemblySignature(""{Path.GetFileName(fn)}"", new byte[] {{ {BytesToString(signedHashValue)} }}),";
+              return "           new AssemblySignature(\"" + Path.GetFileName(fn) + "\", new byte[] { " + BytesToString(signedHashValue) + " }),";
           }
           
           RSAParameters LoadParameters(string fn)
@@ -92,10 +92,10 @@
           }
           
           public override bool Execute() {
-              Log.LogMessage(MessageImportance.High, $"Creating extension signatures!\nUsing private key {PrivateKeyFile}!");
+              Log.LogMessage(MessageImportance.High, "Creating extension signatures!\nUsing private key " + PrivateKeyFile + "!");
               DirectoryInfo info = new DirectoryInfo(BinaryPath);
               File.WriteAllLines(OutputPath, GetHashLines(info, PrivateKeyFile).ToArray());
-              Log.LogMessage(MessageImportance.High, $"Done writing {OutputPath}!");
+              Log.LogMessage(MessageImportance.High, "Done writing " + OutputPath + "!");
               return true;
           }
           
