@@ -43,7 +43,7 @@ function DirCell( /* Train[] */ trains, /* int */ i) {
     if (train == null)
         return "<td class=\"direction\"></td>";
  
-    return "<td class=\"direction\">" + dict_last(train.GetArrDeps(), (k, v) => v.HasMinOneTimeSet).key.SName + "</td>";
+    return "<td class=\"direction\">" + dict_last(train.GetArrDepsUnsorted(), (k, v) => v.HasMinOneTimeSet).key.SName + "</td>";
 }
 
 function DirHeader(/* bool */ showText) {

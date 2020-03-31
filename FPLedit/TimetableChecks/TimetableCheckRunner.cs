@@ -31,7 +31,7 @@ namespace FPLedit.TimetableChecks
                 if (list.Any() && form == null)
                     GetForm().Show();
                 if (gridView != null)
-                    gridView.DataStore = list;
+                    gridView.DataStore = list.ToArray();
             };
             pluginInterface.AppClosing += (s, e) => form?.Close();
         }
