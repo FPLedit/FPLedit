@@ -75,11 +75,13 @@ namespace FPLedit.Shared.UI
             }
             else
             {
-                entry.Resized = true; // Wir haben einen Eintrag, also ist es schon resized, nur nicht geänderte werden gespeichert.
-                if (!entry.Maximized || !w.Maximizable)
-                    w.ClientSize = new Size(entry.Width, entry.Height);
-                else
-                    w.Maximize();
+                if (entry.Resized)
+                {
+                    if (!entry.Maximized || !w.Maximizable)
+                        w.ClientSize = new Size(entry.Width, entry.Height);
+                    else
+                        w.Maximize();
+                }
             }
         }
 
