@@ -55,28 +55,44 @@ namespace FPLedit.Editor.TimetableEditor
             RefreshList();
         }
 
-        private void RefreshList()
+        protected override void OnKeyDown(KeyEventArgs e)
         {
-            gridView.DataStore = arrDep.ShuntMoves.ToArray(); // Array is here to prevent unpredictable crashes with ObservableCollection as DataStore.
+            if (e.Key == Keys.Delete)
+            {
+                e.Handled = true;
+                RemoveShunt();
+            }
+            if (e.Key == Keys.N && e.Control)
+            {
+                e.Handled = true;
+                NewShunt();
+            }
+            base.OnKeyDown(e);
         }
 
-        private void AddButton_Click(object sender, EventArgs e)
+        private void RefreshList()
+        {
+            if (!gridView.IsDisposed && gridView.Visible && gridView != null)
+                gridView.DataStore = arrDep.ShuntMoves.ToArray(); // Array is here to prevent unpredictable crashes with ObservableCollection as DataStore.
+        }
+
+        private void NewShunt()
         {
             var shunt = new ShuntMove(station._parent);
             arrDep.ShuntMoves.Add(shunt);
             RefreshList();
         }
 
-        private void RemoveButton_Click(object sender, EventArgs e)
+        private void RemoveShunt()
         {
             if (gridView.SelectedItem == null)
                 return;
 
-            arrDep.ShuntMoves.Remove((ShuntMove)gridView.SelectedItem);
+            arrDep.ShuntMoves.Remove((ShuntMove) gridView.SelectedItem);
             RefreshList();
         }
 
-        private void SortButton_Click(object sender, EventArgs e)
+        private void SortShunts()
         {
             arrDep.ShuntMoves.Sort(s => s.Time);
             RefreshList();
@@ -123,5 +139,9 @@ namespace FPLedit.Editor.TimetableEditor
 
             Close(DialogResult.Cancel);
         }
+        
+        private void AddButton_Click(object sender, EventArgs e) => NewShunt();
+        private void RemoveButton_Click(object sender, EventArgs e) => RemoveShunt();
+        private void SortButton_Click(object sender, EventArgs e) => SortShunts();
     }
 }

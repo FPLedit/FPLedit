@@ -30,7 +30,7 @@ namespace FPLedit.TimetableChecks
 
                 if (list.Any() && form == null)
                     GetForm().Show();
-                if (gridView != null)
+                if (gridView != null && gridView.Visible)
                     gridView.DataStore = list.ToArray();
             };
             pluginInterface.AppClosing += (s, e) => form?.Close();
@@ -62,7 +62,11 @@ namespace FPLedit.TimetableChecks
                 Size = new Eto.Drawing.Size(600, 400),
                 Title = "Überprüfungen",
             };
-            form.Closing += (s, e) => this.form = null;
+            form.Closing += (s, e) =>
+            {
+                this.form = null;
+                this.gridView = null;
+            };
             return form;
         }
     }
