@@ -34,8 +34,8 @@
     <TableRow>
       <TableLayout Spacing="5,5" Padding="10,10,10,10" x:Name="actionsLayout"><!-- buttons table -->
         <TableRow>
-          <ToggleButton x:Name="trapeztafelToggle" Text="T" />
-          <Button Text="Zuglaufmeldung durch" x:Name="zlmButton" Click="ZlmButton_Click" />
+          <ToggleButton x:Name="trapeztafelToggle" Text="&amp;T" />
+          <Button Text="&amp;Zuglaufmeldung durch" x:Name="zlmButton" Click="ZlmButton_Click" />
           <TableCell ScaleWidth="true" />
         </TableRow>
       </TableLayout>

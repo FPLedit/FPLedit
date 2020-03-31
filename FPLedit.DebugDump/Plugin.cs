@@ -41,7 +41,7 @@ namespace FPLedit.DebugDump
         private void PluginInterfaceOnExtensionsLoaded(object sender, EventArgs e)
         {
             var menu = pluginInterface.HelpMenu as ButtonMenuItem;
-            menu.CreateItem("Debug Dump", true, (s, args) =>
+            menu.CreateItem("Debug Dum&p", true, (s, args) =>
             {
                 using (var sf = new SettingsForm(pluginInterface.Settings))
                     sf.ShowModal();

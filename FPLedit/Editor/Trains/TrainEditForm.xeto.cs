@@ -120,7 +120,8 @@ namespace FPLedit.Editor.Trains
             Train.Comment = commentTextBox.Text;
             Train.Days = daysControl.SelectedDays;
 
-            editor.ApplyChanges();
+            if (!editor.ApplyChanges())
+                return;
 
             if (tt.Version != TimetableVersion.JTG2_x)
                 tt.SetTransition(Train, (Train)transitionDropDown.SelectedValue);

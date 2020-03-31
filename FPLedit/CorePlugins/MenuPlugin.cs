@@ -29,7 +29,7 @@ namespace FPLedit.CorePlugins
                 pluginInterface.Menu.Items.Remove(previewRoot); // Ausblenden in der harten Art
 
             foreach (var prev in previewables)
-                previewRoot.CreateItem(prev.DisplayName, enabled: false, clickHandler: (s, ev) => prev.Show(pluginInterface));
+                previewRoot.CreateItem(prev.MenuName, enabled: false, clickHandler: (s, ev) => prev.Show(pluginInterface));
 
             editMenuActions = pluginInterface.GetRegistered<IEditMenuItemAction>();
             if (editMenuActions.Length > 0)

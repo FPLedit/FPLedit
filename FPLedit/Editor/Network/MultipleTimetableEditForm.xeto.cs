@@ -55,6 +55,16 @@ namespace FPLedit.Editor.Network
             editor.Initialize(pluginInterface.Timetable, t);
         }
 
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.Control && (e.Key == Keys.D0 || e.Key == Keys.Keypad0))
+            {
+                trainDropDown.Focus();
+                e.Handled = true;
+            }
+            base.OnKeyDown(e);
+        }
+
         #region Events
         private void CloseButton_Click(object sender, EventArgs e)
         {

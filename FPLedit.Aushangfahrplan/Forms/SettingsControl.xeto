@@ -3,7 +3,6 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.Aushangfahrplan.Forms;assembly=FPLedit.Aushangfahrplan"
   xmlns:fui="clr-namespace:FPLedit.Shared.UI;assembly=FPLedit.Shared.UI"
-  xmlns:sys="clr-namespace:System;assembly=mscorlib"
   Size="900,500">
   <TableLayout Spacing="5,5" Padding="10">
     <TableRow>

@@ -17,11 +17,11 @@
           <TextBox x:Name="positionTextBox" Width="150" />
         </TableRow>
         <TableRow>
-          <Label x:Name="codeLabel">Betriebsst.-Abk.</Label>
+          <Label>Betriebsst.-Abk.</Label>
           <TextBox x:Name="codeTextBox" Width="150" />
         </TableRow>
         <TableRow>
-          <Label x:Name="typeLabel">Betriebsst.-Typ</Label>
+          <Label>Betriebsst.-Typ</Label>
           <ComboBox x:Name="typeComboBox" Width="150" />
         </TableRow>
       </TableLayout>

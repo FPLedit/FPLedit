@@ -32,9 +32,9 @@ namespace FPLedit
         private readonly TimetableChecks.TimetableCheckRunner checkRunner;
         private readonly LastFileHandler lfh;
         
-        public static string LocEditMenu = "Bearbeiten";
-        public static string LocPreviewMenu = "Vorschau";
-        public static string LocHelpMenu = "Hilfe";
+        public static string LocEditMenu = "&Bearbeiten";
+        public static string LocPreviewMenu = "&Vorschau";
+        public static string LocHelpMenu = "&Hilfe";
 
         public MainForm()
         {
@@ -88,7 +88,7 @@ namespace FPLedit
             
             void PassKeyDown(object s, KeyEventArgs e)
             {
-                if (NetworkRenderer.DispatchableKeys.Contains(e.Key) && e.Modifiers == Keys.None)
+                if ((NetworkRenderer.DispatchableKeys.Contains(e.Key) || NetworkEditingControl.DispatchableKeys.Contains(e.Key)) && e.Modifiers == Keys.None)
                     networkEditingControl.DispatchKeystroke(e);
             }
             KeyDown += PassKeyDown;

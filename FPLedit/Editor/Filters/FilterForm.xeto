@@ -23,9 +23,9 @@
                 </TableRow>
                 <TableRow>
                   <StackLayout Spacing="5" Orientation="Horizontal">
-                    <Button Click="AddTrainPattButton_Click">Hinzufügen</Button>
-                    <Button Click="EditTrainPattButton_Click">Bearbeiten</Button>
-                    <Button Click="DeleteTrainPattButton_Click">Löschen</Button>
+                    <Button Click="AddTrainPattButton_Click">&amp;Hinzufügen</Button>
+                    <Button Click="EditTrainPattButton_Click">&amp;Bearbeiten</Button>
+                    <Button Click="DeleteTrainPattButton_Click">&amp;Löschen</Button>
                   </StackLayout>
                 </TableRow>
               </TableLayout>
@@ -41,9 +41,9 @@
                 </TableRow>
                 <TableRow>
                   <StackLayout Spacing="5" Orientation="Horizontal">
-                    <Button Click="AddStationPattButton_Click">Hinzufügen</Button>
-                    <Button Click="EditStationPattButton_Click">Bearbeiten</Button>
-                    <Button Click="DeleteStationPattButton_Click">Löschen</Button>
+                    <Button Click="AddStationPattButton_Click">H&amp;inzufügen</Button>
+                    <Button Click="EditStationPattButton_Click">B&amp;earbeiten</Button>
+                    <Button Click="DeleteStationPattButton_Click">Lö&amp;schen</Button>
                   </StackLayout>
                 </TableRow>
               </TableLayout>

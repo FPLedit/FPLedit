@@ -1,15 +1,11 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace FPLedit.Editor.Network
 {
     internal sealed class EditRouteAction : IRouteAction
     {
-        public string DisplayName => "Stationen dieser Strecke bearbeiten";
+        public string DisplayName => "Stationen dieser Strecke b&earbeiten";
 
         public bool IsEnabled(IPluginInterface pluginInterface)
             => pluginInterface.FileState.Opened;

@@ -66,6 +66,8 @@ namespace FPLedit.Editor.Linear
                 EditTrain(active, dir, false);
             else if (e.Key == Keys.N && e.Control)
                 NewTrain(active, dir);
+            else if (e.Key == Keys.C && e.Control)
+                CopyTrain(active, dir);
         }
 
         private void InitListView(GridView view)

@@ -11,12 +11,16 @@ namespace FPLedit.Shared.DefaultImplementations
         private readonly IExport export;
 
         public string DisplayName { get; }
+        
+        public string MenuName { get; }
 
-        public DefaultPreview(string templateType, string display, IExport export)
+        public DefaultPreview(string templateType, string display, IExport export, string menu = null)
         {
             this.templateType = templateType;
             this.export = export;
             DisplayName = display;
+            if (menu == null)
+                MenuName = "&" + DisplayName;
         }
 
         public void Show(IPluginInterface pluginInterface)

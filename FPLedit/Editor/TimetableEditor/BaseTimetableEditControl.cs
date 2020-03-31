@@ -113,9 +113,12 @@ namespace FPLedit.Editor.TimetableEditor
             view.ReloadData(view.SelectedRow);
         }
 
-        protected void HandleKeystroke(KeyEventArgs e, GridView view)
+        protected virtual void HandleKeystroke(KeyEventArgs e, GridView view)
         {
             if (view == null)
+                return;
+
+            if (e.Handled)
                 return;
 
             if (e.Key == Keys.Enter)
@@ -148,9 +151,11 @@ namespace FPLedit.Editor.TimetableEditor
                     return;
 
                 e.Handled = true;
+
                 var data = (BaseTimetableDataElement)view.SelectedItem;
                 if (data == null || data.GetStation() == null || data.SelectedTextBox == null)
                     return;
+
                 FormatCell(data, data.GetStation(), data.IsSelectedArrival, data.SelectedTextBox);
 
                 var target = GetNextEditingPosition(data, view, e);
@@ -158,6 +163,11 @@ namespace FPLedit.Editor.TimetableEditor
 
                 view.ReloadData(view.SelectedRow); // Commit current data
                 view.BeginEdit(target.X, target.Y);
+            }
+            else if (e.Key == Keys.Escape)
+            {
+                e.Handled = true;
+                view.CancelEdit();
             }
             else
             {
@@ -168,7 +178,7 @@ namespace FPLedit.Editor.TimetableEditor
                 if (data == null || data.SelectedTextBox == null)
                     return;
                 var tb = data.SelectedTextBox;
-                if (tb.HasFocus) // Wir können "echt" editieren
+                if (tb.HasFocus || tb.ReadOnly) // Wir können "echt" editieren / sind read-Only
                     return;
                 if (char.IsLetterOrDigit(e.KeyChar) || char.IsPunctuation(e.KeyChar))
                 {

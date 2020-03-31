@@ -9,7 +9,7 @@ namespace FPLedit.Buchfahrplan.Forms
 {
     internal sealed class VelocityRouteAction : IRouteAction
     {
-        public string DisplayName => "Höchstgeschwindigkeiten ändern";
+        public string DisplayName => "Höchst&geschwindigkeiten ändern";
 
         public void Invoke(IPluginInterface pluginInterface, Route route)
         {

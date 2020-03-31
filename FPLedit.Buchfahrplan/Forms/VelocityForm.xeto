@@ -15,9 +15,9 @@
             </Scrollable>
           </TableCell>
           <StackLayout Spacing="5" HorizontalContentAlignment="Stretch">
-            <Button Click="AddButton_Click">Wechsel hizufügen</Button>
-            <Button Click="EditButton_Click">Eintrag bearbeiten</Button>
-            <Button x:Name="deleteButton" Click="DeleteButton_Click">Wechsel löschen</Button>
+            <Button Click="AddButton_Click">Wechsel &amp;hizufügen</Button>
+            <Button Click="EditButton_Click">Eintrag &amp;bearbeiten</Button>
+            <Button x:Name="deleteButton" Click="DeleteButton_Click">Wechsel &amp;löschen</Button>
           </StackLayout>
         </TableRow>
       </TableLayout>

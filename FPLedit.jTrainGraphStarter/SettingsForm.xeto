@@ -3,7 +3,6 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.jTrainGraphStarter;assembly=FPLedit.jTrainGraphStarter"
   xmlns:fui="clr-namespace:FPLedit.Shared.UI;assembly=FPLedit.Shared.UI"
-  xmlns:sys="clr-namespace:System;assembly=mscorlib"
   DefaultButton="{x:Reference closeButton}"
   Title="jTrainGraphStarter Einstellungen" Resizable="false">
   <StackLayout>

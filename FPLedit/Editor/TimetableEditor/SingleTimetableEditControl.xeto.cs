@@ -35,6 +35,7 @@ namespace FPLedit.Editor.TimetableEditor
             base.Init(trapeztafelToggle, actionsLayout);
 
             KeyDown += HandleControlKeystroke;
+            dataGridView.KeyDown += HandleControlKeystroke;
 
             trapeztafelToggle.Image = new Bitmap(this.GetResource("Resources.trapeztafel.png"));
         }
@@ -51,6 +52,13 @@ namespace FPLedit.Editor.TimetableEditor
                 e.Handled = true;
                 Zuglaufmeldung(dataGridView);
             }
+            else if (e.Key == Keys.R)
+            {
+                e.Handled = true;
+                Shunt(dataGridView);
+            }
+            else 
+                HandleKeystroke(e, dataGridView);
         }
 
         public void Initialize(Timetable tt, Train t)
@@ -203,6 +211,24 @@ namespace FPLedit.Editor.TimetableEditor
             }
             return true;
         }
+        
+        private void Shunt(GridView view)
+        {
+            if (view.SelectedRow == -1)
+                return;
+
+            var data = (DataElement) view.SelectedItem;
+            var sta = data.Station;
+
+            var arrDep = data.ArrDeps[sta];
+
+            using (var shf = new ShuntForm(arrDep, sta))
+                if (shf.ShowModal(this) != DialogResult.Ok)
+                    return;
+
+            view.ReloadData(view.SelectedRow);
+        }
+
 
         #region Events
         public bool ApplyChanges()
@@ -214,22 +240,8 @@ namespace FPLedit.Editor.TimetableEditor
         private void ZlmButton_Click(object sender, EventArgs e)
             => Zuglaufmeldung(dataGridView);
 
-        private void ShuntButton_Click(object sender, EventArgs e)
-        {
-            if (dataGridView.SelectedRow == -1)
-                return;
-
-            var data = (DataElement)dataGridView.SelectedItem;
-            var sta = data.Station;
-
-            var arrDep = data.ArrDeps[sta];
-
-            using (var shf = new ShuntForm(arrDep, sta))
-                if (shf.ShowModal(this) != DialogResult.Ok)
-                    return;
-
-            dataGridView.ReloadData(dataGridView.SelectedRow);
-        }
+        private void ShuntButton_Click(object sender, EventArgs e) => Shunt(dataGridView);
+        
         #endregion
     }
 }

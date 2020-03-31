@@ -29,14 +29,14 @@ namespace FPLedit.Editor
 
             editRoot = (ButtonMenuItem)((MenuBar)pluginInterface.Menu).GetItem(MainForm.LocEditMenu);
 
-            undoItem = editRoot.CreateItem("Rückgängig", enabled: false, shortcut: Keys.Control | Keys.Z, clickHandler: (s, e) => pluginInterface.Undo());
+            undoItem = editRoot.CreateItem("&Rückgängig", enabled: false, shortcut: Keys.Control | Keys.Z, clickHandler: (s, e) => pluginInterface.Undo());
 
             editRoot.Items.Add(new SeparatorMenuItem());
 
-            editLineItem = editRoot.CreateItem("Strecke bearbeiten (linear)", enabled: false,
+            editLineItem = editRoot.CreateItem("&Strecke bearbeiten (linear)", enabled: false, shortcut: Keys.Control | Keys.L,
                 clickHandler: (s, e) => ShowForm(new LineEditForm(pluginInterface, Timetable.LINEAR_ROUTE_ID)));
 
-            editTrainsItem = editRoot.CreateItem("Züge bearbeiten", enabled: false);
+            editTrainsItem = editRoot.CreateItem("&Züge bearbeiten", enabled: false, shortcut: Keys.Control | Keys.R);
             editTrainsItem.Click += (s, e) =>
             {
                 if (pluginInterface.Timetable.Type == TimetableType.Linear)
@@ -44,7 +44,7 @@ namespace FPLedit.Editor
                 else ShowForm(new Network.NetworkTrainsEditForm(pluginInterface));
             };
 
-            editTimetableItem = editRoot.CreateItem("Fahrplan bearbeiten", enabled: false);
+            editTimetableItem = editRoot.CreateItem("&Fahrplan bearbeiten", enabled: false , shortcut: Keys.Control | Keys.T);
             editTimetableItem.Click += (s, e) =>
             {
                 if (pluginInterface.Timetable.Type == TimetableType.Linear)
@@ -54,8 +54,8 @@ namespace FPLedit.Editor
 
             editRoot.Items.Add(new SeparatorMenuItem());
 
-            designItem = editRoot.CreateItem("Fahrplandarstellung", enabled: false, clickHandler: (s, e) => ShowForm(new RenderSettingsForm(pluginInterface)));
-            filterItem = editRoot.CreateItem("Filterregeln", enabled: false, clickHandler: (s, e) => ShowForm(new Filters.FilterForm(pluginInterface)));
+            designItem = editRoot.CreateItem("Fahrplan&darstellung", enabled: false, clickHandler: (s, e) => ShowForm(new RenderSettingsForm(pluginInterface)));
+            filterItem = editRoot.CreateItem("Fi&lterregeln", enabled: false, clickHandler: (s, e) => ShowForm(new Filters.FilterForm(pluginInterface)));
         }
 
         private void ShowForm(Dialog<DialogResult> form)

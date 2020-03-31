@@ -20,6 +20,8 @@ namespace FPLedit.Editor.Rendering
         private readonly Divider divider1;
         private readonly StackLayout toolbar;
 #pragma warning restore CS0649
+        
+        public static readonly Keys[] DispatchableKeys = { Keys.Home };
 
         public NetworkEditingControl()
         {
@@ -168,7 +170,19 @@ namespace FPLedit.Editor.Rendering
             => networkRenderer.SetTimetable(pluginInterface.Timetable);
 
         public void DispatchKeystroke(KeyEventArgs e)
-            => networkRenderer.DispatchKeystroke(e);
+        {
+            switch (e.Key)
+            {
+                // See DISPATCHABLE_KEYS
+                case Keys.Home:
+                    routesDropDown.Focus();
+                    e.Handled = true;
+                    break;
+            }
+            
+            if (!e.Handled)
+                networkRenderer.DispatchKeystroke(e);
+        }
 
         public void ResetPan()
             => networkRenderer.Pan = PointF.Empty;

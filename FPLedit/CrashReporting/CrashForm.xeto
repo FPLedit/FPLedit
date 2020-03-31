@@ -2,7 +2,6 @@
   xmlns="clr-namespace:Eto.Forms;assembly=Eto"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.CrashReporting;assembly=FPLedit"
-  xmlns:sys="clr-namespace:System;assembly=mscorlib"
   DefaultButton="{x:Reference restoreButton}" AbortButton="{x:Reference cancelButton}"
   Title="Fehler im FPLedit" ClientSize="380,-1" Resizable="false">
   <StackLayout Spacing="5" HorizontalContentAlignment="Stretch" Padding="10,10,10,10">

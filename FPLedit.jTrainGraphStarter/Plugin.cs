@@ -16,9 +16,9 @@ namespace FPLedit.jTrainGraphStarter
             this.pluginInterface = pluginInterface;
             pluginInterface.FileStateChanged += PluginInterface_FileStateChanged;
 
-            var item = ((MenuBar)pluginInterface.Menu).CreateItem("jTrainGraph");
+            var item = ((MenuBar)pluginInterface.Menu).CreateItem("&jTrainGraph");
 
-            startItem = item.CreateItem("jTrainGraph starten", enabled: false);
+            startItem = item.CreateItem("jTrain&Graph starten", enabled: false);
             startItem.Click += (s, e) =>
             {
                 if (pluginInterface.Timetable.Type == TimetableType.Linear)
@@ -27,7 +27,7 @@ namespace FPLedit.jTrainGraphStarter
                     StartNetwork(pluginInterface.FileState.SelectedRoute);
             };
 
-            item.CreateItem("Einstellungen", clickHandler: (s, e) => (new SettingsForm(pluginInterface.Settings)).ShowModal(pluginInterface.RootForm));
+            item.CreateItem("Einstell&ungen", clickHandler: (s, e) => (new SettingsForm(pluginInterface.Settings)).ShowModal(pluginInterface.RootForm));
         }
 
         private void PluginInterface_FileStateChanged(object sender, FileStateChangedEventArgs e)
@@ -35,7 +35,7 @@ namespace FPLedit.jTrainGraphStarter
             startItem.Enabled = e.FileState.Opened;
 
             startItem.Text = (e.FileState.Opened && pluginInterface.Timetable.Type == TimetableType.Network) ?
-                "jTrainGraph starten (aktuelle Route)" : "jTrainGraph starten";
+                "jTrain&Graph starten (aktuelle Route)" : "jTrain&Graph starten";
         }
 
         private void StartLinear()

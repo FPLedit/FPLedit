@@ -2,7 +2,6 @@
   xmlns="clr-namespace:Eto.Forms;assembly=Eto"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.Editor.TimetableEditor;assembly=FPLedit"
-  xmlns:sys="clr-namespace:System;assembly=mscorlib"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
   Title="Rangierfahrten am Bahnhof {station}" ClientSize="410,370" Resizable="true">
   <TableLayout Spacing="5,5" Padding="10,10,10,10">
@@ -10,7 +9,7 @@
       <Label x:Name="arrivalLabel">Ankunft: {time} / Gleis {track}</Label>
     </TableRow>
     <TableRow ScaleHeight="True">
-      <GridView x:Name="gridView"></GridView>
+      <GridView x:Name="gridView" />
     </TableRow>
     <TableRow>
       <Label x:Name="departureLabel">Abfahrt: {time} / Gleis {track}</Label>
@@ -18,9 +17,9 @@
     <TableRow>
       <TableLayout Spacing="5,5">
         <TableRow>
-          <Button x:Name="addButton" Click="AddButton_Click">Hinzufügen</Button>
-          <Button x:Name="removeButton" Click="RemoveButton_Click">Löschen</Button>
-          <Button Click="SortButton_Click">Sortieren</Button>
+          <Button x:Name="addButton" Click="AddButton_Click">&amp;Hinzufügen</Button>
+          <Button x:Name="removeButton" Click="RemoveButton_Click">&amp;Löschen</Button>
+          <Button Click="SortButton_Click">S&amp;ortieren</Button>
           <TableCell ScaleWidth="True" />
         </TableRow>
       </TableLayout>
@@ -29,8 +28,8 @@
       <TableLayout Spacing="5,5">
         <TableRow>
           <TableCell ScaleWidth="True" />
-          <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click"></Button>
-          <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click"></Button>
+          <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click" />
+          <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click" />
         </TableRow>
       </TableLayout>
     </TableRow>

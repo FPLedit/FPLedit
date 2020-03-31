@@ -4,7 +4,6 @@
   xmlns:er="clr-namespace:FPLedit.Editor.Rendering;assembly=FPLedit"
   xmlns:en="clr-namespace:FPLedit.Editor.Network;assembly=FPLedit"
   xmlns:fui="clr-namespace:FPLedit.Shared.UI;assembly=FPLedit.Shared.UI"
-  xmlns:sys="clr-namespace:System;assembly=mscorlib"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
   Title="Fahrtstrecke bearbeiten: {train}" ClientSize="780,370" Resizable="true">
   <TableLayout Padding="10,10,10,10" Spacing="5,5">

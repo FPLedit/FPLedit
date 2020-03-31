@@ -10,7 +10,7 @@
       <TableLayout>
         <StackLayout Orientation="Horizontal" VerticalContentAlignment="Center" Spacing="5" Padding="5,5,5,5">
           <shared:RoutesDropDown x:Name="routesDropDown" />
-          <Button Click="PreferencesButton_Click">Darstellung ändern</Button>
+          <Button Click="PreferencesButton_Click">&amp;Darstellung ändern</Button>
           <CheckBox x:Name="splitCheckBox">Stationen nicht mitscrollen</CheckBox>
         </StackLayout>
         <GroupBox Text="Verkehrstage">

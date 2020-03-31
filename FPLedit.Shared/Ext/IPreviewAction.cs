@@ -7,6 +7,8 @@ namespace FPLedit.Shared
     public interface IPreviewAction
     {
         string DisplayName { get; }
+        
+        string MenuName { get; }
 
         void Show(IPluginInterface pluginInterface);
     }
