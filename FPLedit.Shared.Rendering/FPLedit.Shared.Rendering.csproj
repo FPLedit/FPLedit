@@ -18,7 +18,7 @@
     <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Eto.Forms" Version="2.5.1-ci-20200323.6" />
+    <PackageReference Include="Eto.Forms" Version="$(EtoVersion)" />
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
   </ItemGroup>
 </Project>

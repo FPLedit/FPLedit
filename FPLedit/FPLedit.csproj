@@ -46,13 +46,13 @@
     <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Eto.DsBindComboBoxCell" Version="2.5.1-ci-20200323.6" />
-    <PackageReference Include="Eto.DsBindComboBoxCell.Gtk" Version="2.5.1-ci-20200323.6" />
-    <PackageReference Include="Eto.DsBindComboBoxCell.Wpf" Version="2.5.1-ci-20200323.6" />
-    <PackageReference Include="Eto.Forms" Version="2.5.1-ci-20200323.6" />
-    <PackageReference Include="Eto.Platform.Gtk" Version="2.5.1-ci-20200323.6" />
-    <PackageReference Include="Eto.Platform.Wpf" Version="2.5.1-ci-20200323.6" />
-    <PackageReference Include="Eto.Serialization.Xaml" Version="2.5.1-ci-20200323.6" />
+    <PackageReference Include="Eto.DsBindComboBoxCell" Version="$(EtoVersion)" />
+    <PackageReference Include="Eto.DsBindComboBoxCell.Gtk" Version="$(EtoVersion)" />
+    <PackageReference Include="Eto.DsBindComboBoxCell.Wpf" Version="$(EtoVersion)" />
+    <PackageReference Include="Eto.Forms" Version="$(EtoVersion)" />
+    <PackageReference Include="Eto.Platform.Gtk" Version="$(EtoVersion)" />
+    <PackageReference Include="Eto.Platform.Wpf" Version="$(EtoVersion)" />
+    <PackageReference Include="Eto.Serialization.Xaml" Version="$(EtoVersion)" />
     <PackageReference Include="Jint" Version="3.0.0-beta-1715" />
     <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
   </ItemGroup>
