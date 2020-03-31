@@ -90,6 +90,9 @@ namespace FPLedit.Bildfahrplan.Render
                 else if (trainTravelsRouteCount <= 1)
                         return; // This train has only one station on this route and we don't draw network trains.
 
+                if (points.Count == 0)
+                    return; // This train is not travelling on this route
+
                 // Verbindung zum Folgezug
                 var transition = tt.GetTransition(train);
                 if (transition != null && !hadLastDeparture && attrs.StationLines != StationLineStyle.None)

@@ -51,7 +51,7 @@ namespace FPLedit.Bildfahrplan.Forms
                 pluginInterface.Settings.Set("bifpl.lock-stations", splitCheckBox.Checked.Value);
             };
 
-            adbg = new AsyncDoubleBufferedGraph(panel)
+            adbg = new AsyncDoubleBufferedGraph(panel, pluginInterface)
             {
                 RenderingFinished = () =>
                 {

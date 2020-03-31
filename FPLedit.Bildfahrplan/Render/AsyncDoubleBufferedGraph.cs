@@ -1,27 +1,27 @@
 ﻿using Eto.Drawing;
 using Eto.Forms;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using FPLedit.Shared;
 
 namespace FPLedit.Bildfahrplan.Render
 {
     internal class AsyncDoubleBufferedGraph : IDisposable
     {
         private Bitmap buffer;
-        private bool generatingBuffer;
+        private bool generatingBuffer, hadCrash;
         private float lastBufferWidth;
         
-        private readonly Font font = new Font(FontFamilies.SansFamilyName, 8);
+        private readonly IPluginInterface pluginInterface;
+        private readonly Font font = new Font(FontFamilies.SansFamilyName, 12);
         private readonly Panel panel;
         private readonly object bufferLock = new object();
-        
+
         public Action RenderingFinished { get; set; }
 
-        public AsyncDoubleBufferedGraph(Panel p)
+        public AsyncDoubleBufferedGraph(Panel p, IPluginInterface pluginInterface)
         {
+            this.pluginInterface = pluginInterface;
             panel = p;
         }
 
@@ -33,27 +33,48 @@ namespace FPLedit.Bildfahrplan.Render
             if (Math.Abs(lastBufferWidth - panel.Width) > 0.01f)
                 Invalidate(true);
 
-            if (buffer == null && !generatingBuffer)
+            if (!hadCrash && buffer == null && !generatingBuffer)
             {
                 generatingBuffer = true;
                 Task.Run(() =>
                 {
-                    var newBuffer = new Bitmap(panel.Width, renderer.GetHeight(drawHeader), PixelFormat.Format32bppRgb);
-                    using (var ib = new ImageBridge(panel.Width, renderer.GetHeight(drawHeader)))
-                    using (var etoGraphics = new Graphics(newBuffer))
+                    Bitmap newBuffer = null;
+                    try
                     {
-                        renderer.Draw(ib.Graphics, drawHeader, forceWidth: panel.Width);
-                        lastBufferWidth = panel.Width;
-                        ib.CoptyToEto(etoGraphics);
+                        newBuffer = new Bitmap(panel.Width, renderer.GetHeight(drawHeader), PixelFormat.Format32bppRgb);
+                        using (var ib = new ImageBridge(panel.Width, renderer.GetHeight(drawHeader)))
+                        using (var etoGraphics = new Graphics(newBuffer))
+                        {
+                            renderer.Draw(ib.Graphics, drawHeader, forceWidth: panel.Width);
+                            lastBufferWidth = panel.Width;
+                            ib.CoptyToEto(etoGraphics);
+                        }
+
+                        lock (bufferLock)
+                        {
+                            if (buffer != null && !buffer.IsDisposed)
+                                buffer.Dispose();
+                            buffer = newBuffer;
+                        }
+
+                        generatingBuffer = false;
+                    }
+                    catch (Exception ex)
+                    {
+                        pluginInterface.Logger.LogException(ex);
+                        lock (bufferLock)
+                        {
+                            if (buffer != null && !buffer.IsDisposed)
+                                buffer.Dispose();
+                        }
+
+                        if (newBuffer != null && !newBuffer.IsDisposed)
+                            newBuffer.Dispose();
+
+                        generatingBuffer = false;
+                        hadCrash = true;
                     }
 
-                    lock (bufferLock)
-                    {
-                        if (buffer != null && !buffer.IsDisposed)
-                            buffer.Dispose();
-                        buffer = newBuffer;
-                    }
-                    generatingBuffer = false;
                     Application.Instance.Invoke(() =>
                     {
                         panel.Invalidate();
@@ -62,17 +83,24 @@ namespace FPLedit.Bildfahrplan.Render
                     });
                 });
             }
-            else if (buffer == null && generatingBuffer)
+            else if (!hadCrash && buffer == null && generatingBuffer)
             {
                 g.Clear(Colors.White);
-                var text = "Generiere Bildfahplan...";
+                var text = "Generiere Bildfahrplan...";
                 var t = g.MeasureString(font, text);
-                g.DrawText(font, Colors.Black, (panel.Width - t.Width) / 2, (panel.Height - t.Height) / 2, text);
+                g.DrawText(font, Colors.Black, (panel.Width - t.Width) / 2, 30, text);
             }
-            else if (buffer != null)
+            else if (!hadCrash && buffer != null)
             {
                 lock (bufferLock)
                     g.DrawImage(buffer, 0f, 0f);
+            }
+            else // We had a crash
+            {
+                g.Clear(Colors.White);
+                var text = "Fehler beim Rendern (siehe Log)...";
+                var t = g.MeasureString(font, text);
+                g.DrawText(font, Colors.Red, (panel.Width - t.Width) / 2, 30, text);
             }
         }
 

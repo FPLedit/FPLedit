@@ -43,7 +43,7 @@ namespace FPLedit
 
         public void LogException(Exception e)
         {
-            if (showDebug) WriteMl("[EXCEPTION] " + e.GetExceptionDetails(), Colors.Red);
+            WriteMl("[EXCEPTION] " + e.GetExceptionDetails(), Colors.Red);
         }
 
         public void Debug(string message)
