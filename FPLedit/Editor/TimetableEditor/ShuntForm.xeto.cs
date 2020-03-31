@@ -48,7 +48,6 @@ namespace FPLedit.Editor.TimetableEditor
 
             gridView.SelectedItemsChanged += (s, e) => removeButton.Enabled = gridView.SelectedItem != null;
 
-
             this.AddSizeStateHandler();
 
             shuntBackup = arrDep.ShuntMoves.Select(s => s.Clone<ShuntMove>()).ToList();
@@ -58,7 +57,7 @@ namespace FPLedit.Editor.TimetableEditor
 
         private void RefreshList()
         {
-            gridView.DataStore = arrDep.ShuntMoves;
+            gridView.DataStore = arrDep.ShuntMoves.ToArray(); // Array is here to prevent unpredictable crashes with ObservableCollection as DataStore.
         }
 
         private void AddButton_Click(object sender, EventArgs e)
@@ -96,13 +95,16 @@ namespace FPLedit.Editor.TimetableEditor
                 MessageBox.Show("Einige Rangierfahrten befinden sich außerhalb des Zeitfensters des Aufenthalts an der Station!", "FPLedit", MessageBoxType.Error);
                 return;
             }
-            
-            if (!string.IsNullOrEmpty(arrDep.DepartureTrack) && arrDep.ShuntMoves.Last().TargetTrack != arrDep.DepartureTrack)
+
+            var lastShuntTarget = arrDep.ShuntMoves.LastOrDefault()?.TargetTrack;
+            if (!string.IsNullOrEmpty(arrDep.DepartureTrack) && lastShuntTarget != null && lastShuntTarget != arrDep.DepartureTrack)
             {
                 var res = MessageBox.Show("Die letzte Rangierfahrt endet nicht am Abfahrtsgleis! Trotzdem fortfahren?", "FPLedit", MessageBoxButtons.YesNo, MessageBoxType.Warning);
                 if (res == DialogResult.No) return;
             }
-            if (!string.IsNullOrEmpty(arrDep.ArrivalTrack) && arrDep.ShuntMoves.First().SourceTrack != arrDep.ArrivalTrack)
+
+            var firstShuntSource = arrDep.ShuntMoves.FirstOrDefault()?.SourceTrack;
+            if (!string.IsNullOrEmpty(arrDep.ArrivalTrack) && firstShuntSource != null && firstShuntSource != arrDep.ArrivalTrack)
             {
                 var res = MessageBox.Show("Die erste Rangierfahrt beginnt nicht am Ankunftsgleis! Trotzdem fortfahren?", "FPLedit", MessageBoxButtons.YesNo, MessageBoxType.Warning);
                 if (res == DialogResult.No) return;
@@ -113,6 +115,8 @@ namespace FPLedit.Editor.TimetableEditor
 
         private void CancelButton_Click(object sender, EventArgs e)
         {
+            gridView.DataStore = null; // Disconnect DataStore to prevent exceptions when modifying collection afterwards.
+            
             arrDep.ShuntMoves.Clear();
             foreach (var shunt in shuntBackup)
                 arrDep.ShuntMoves.Add(shunt);

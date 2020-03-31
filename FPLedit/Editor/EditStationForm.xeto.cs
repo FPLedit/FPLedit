@@ -1,4 +1,4 @@
-﻿using Eto.Forms;
+using Eto.Forms;
 using FPLedit.Editor.Rendering;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
@@ -18,7 +18,6 @@ namespace FPLedit.Editor
         private readonly TextBox nameTextBox, positionTextBox, codeTextBox;
         private readonly ComboBox typeComboBox;
         private readonly StationRenderer stationRenderer;
-        private readonly Label typeLabel, codeLabel;
 #pragma warning restore CS0649
         private readonly ValidatorCollection validators;
 
@@ -48,12 +47,14 @@ namespace FPLedit.Editor
             stationRenderer.SizeChanged += (s, e) =>
             {
                 var size = ClientSize;
+                var changed = false;
                 
                 if (WindowShown && stationRenderer.Height > stationRendererHeight)
                 {
                     var diff = stationRenderer.Height - stationRendererHeight;
                     size.Height += diff;
                     stationRendererHeight = stationRenderer.Height;
+                    changed = true;
                 }
 
                 if (WindowShown && stationRenderer.Width > stationRendererWidth)
@@ -61,9 +62,11 @@ namespace FPLedit.Editor
                     var diff = stationRenderer.Width - stationRendererWidth;
                     size.Width += diff;
                     stationRendererWidth = stationRenderer.Width;
+                    changed = true;
                 }
 
-                ClientSize = size;
+                if (changed)
+                    ClientSize = size;
             };
             
             typeComboBox.DataStore = tt.Stations.Select(s => s.StationType).Distinct().Where(s => s != "").OrderBy(s => s).Select(s => new ListItem { Text = s });
