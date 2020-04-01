@@ -3,9 +3,10 @@ using FPLedit.Bildfahrplan.Model;
 using FPLedit.Bildfahrplan.Render;
 using FPLedit.Shared;
 using System;
-using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
-using System.Text;
+using FPLedit.Shared.UI;
+using Print = System.Drawing.Printing;
 
 namespace FPLedit.Bildfahrplan.Forms
 {
@@ -16,7 +17,7 @@ namespace FPLedit.Bildfahrplan.Forms
         private readonly int route;
         private readonly TimetableStyle attrs;
 
-        private PrintDocument doc;
+        private Print.PrintDocument doc;
         private TimeEntry? last;
 
         public PrintRenderer(IPluginInterface pluginInterface, int route)
@@ -29,67 +30,125 @@ namespace FPLedit.Bildfahrplan.Forms
 
         public void Dispose()
         {
-            if (doc != null && !doc.IsDisposed)
+            if (doc != null)
                 doc.Dispose();
         }
 
         public void InitPrint()
         {
-            using (var dlg = new PrintDialog { AllowSelection = false })
+            var printers = Print.PrinterSettings.InstalledPrinters.Cast<string>().ToArray();
+            
+            using (doc = new Print.PrintDocument())
+            using (var form = new FDialog<string>())
+            using (var printerDropDown = new DropDown { DataStore = printers })
+            using (var paperDropDown = new DropDown())
+            using (var landscapeChk = new CheckBox { Text = "Querformat" })
+            using (var printButton = new Button { Text = "Drucken" })
+            using (var stack = new StackLayout(printerDropDown, paperDropDown, landscapeChk, printButton) { Orientation = Orientation.Horizontal, Padding = new Eto.Drawing.Padding(10), Spacing = 5 })
             {
-                if (dlg.ShowDialog((Window)pluginInterface.RootForm) == DialogResult.Ok)
-                {
-                    doc = new PrintDocument();
-                    doc.PrintPage += Doc_PrintPage;
-                    doc.Name = "Bildfahrplan generiert mit FPLedit";
-                    doc.PageCount = 1;
+                form.Content = stack;
+                form.DefaultButton = printButton;
+                form.Title = "Bildfahrplan drucken";
 
-                    doc.PrintSettings = dlg.PrintSettings;
-                    doc.Print();
+                printButton.Click += (s, e) =>
+                {
+                    form.Result = (string)printerDropDown.SelectedValue;
+                    form.Close();
+                };
+
+                printerDropDown.SelectedIndexChanged += (s, e) =>
+                {
+                    doc.PrinterSettings.PrinterName = (string)printerDropDown.SelectedValue;
+                    var paper =  doc.PrinterSettings.PaperSizes.Cast<Print.PaperSize>().Select(p => p.PaperName).ToArray();
+                    var a4Index = Array.IndexOf(paper, "A4");
+                    paperDropDown.DataStore = paper;
+                    paperDropDown.SelectedIndex = (a4Index != -1) ? a4Index : 0;
+                };
+
+                printerDropDown.SelectedIndex = 0;
+
+                if (form.ShowModal() != null)
+                {
+                    doc.PrintPage += Doc_PrintPage;
+                    doc.DocumentName = "Bildfahrplan generiert mit FPLedit";
+                    
+                    doc.PrinterSettings.PrinterName = form.Result;
+                    
+                    doc.DefaultPageSettings.Margins = new Print.Margins(50, 50, 50, 50); // not working (turning page????)
+                    
+                    var paperSize = doc.PrinterSettings.PaperSizes[paperDropDown.SelectedIndex];
+                    //HACK: Do not use doc.DefaultPageSettings.Landscape on Linux, as it will lead to awkwardly turned rendering areas, ???)
+                    if (landscapeChk.Checked.Value)
+                        doc.DefaultPageSettings.PaperSize = new Print.PaperSize(paperSize.PaperName, paperSize.Height, paperSize.Width);
+                    else
+                        doc.DefaultPageSettings.PaperSize = paperSize;
+
+                    if (!doc.PrinterSettings.IsValid)
+                        MessageBox.Show("Ungültige Druckereinstellungen!", "FPLedit", MessageBoxType.Error);
+                    else
+                    {
+                        try
+                        {
+                            doc.Print();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Fehler beim Drucken! " + ex.Message, "FPLedit", MessageBoxType.Error);
+                        }
+                    }
                 }
             }
         }
-
-        private void Doc_PrintPage(object sender, PrintPageEventArgs e)
+        private void Doc_PrintPage(object sender, Print.PrintPageEventArgs e)
         {
+            // Exclude page margins to begin with
+            e.Graphics.SetClip(new RectangleF(e.PageSettings.Margins.Left, e.PageSettings.Margins.Top, e.MarginBounds.Width, e.MarginBounds.Height));
+            
             var renderer = new Renderer(tt, route);
-            int height = (int)e.PageSize.Height;
-            var start = last ?? attrs.StartTime;
-            last = GetTimeByHeight(renderer, start, height);
+            int height = e.PageSettings.Bounds.Height + e.PageSettings.Margins.Bottom + e.PageSettings.Margins.Top;
+            int width = e.PageSettings.Bounds.Width + e.PageSettings.Margins.Left + e.PageSettings.Margins.Right;
+            
+            var margin = new Margins(e.PageSettings.Margins.Left, e.PageSettings.Margins.Top, e.PageSettings.Margins.Right, e.PageSettings.Margins.Bottom);
+            renderer.SetMargins(margin);
 
-            using (var ib = new ImageBridge(e.Graphics.ClipBounds))
+            var start = last ?? attrs.StartTime;
+            last = GetTimeByHeight(e.Graphics, renderer, start, height);
+
+            //HACK: Draw with the help of an extra buffer (prevent bug from Sstem.Drawing.Commons on Linux, applying some transformation state to pages...)
+            using (var bitmap = new Bitmap(width, height))
+            using (var gr = Graphics.FromImage(bitmap))
             {
-                renderer.Draw(ib.Graphics, start, last.Value, true);
-                ib.CoptyToEto(e.Graphics);
+                gr.PageUnit = GraphicsUnit.Display;
+                renderer.Draw(gr, start, last.Value, true, width);
+                e.Graphics.DrawImage(bitmap, 0, 0, width, height);
             }
 
             if (last.Value < attrs.EndTime)
-                doc.PageCount++;
+                e.HasMorePages = true;
             else
                 last = null;
         }
 
-        private TimeEntry GetTimeByHeight(Renderer renderer, TimeEntry start, int height)
+        private TimeEntry GetTimeByHeight(Graphics g, Renderer renderer, TimeEntry start, int height)
         {
-            var cur = start + new TimeEntry(0, (byte)(60 - start.Minutes)); // to full hour
+            var cur = start + new TimeEntry(0, (byte) (60 - start.Minutes)); // to next full hour
             var oneHour = new TimeEntry(1, 0);
-            TimeEntry last = cur;
-            float h = renderer.GetHeight(start, cur, true);
+            TimeEntry end = cur;
+            float h = renderer.GetHeight(g, start, cur, true);
             while (true)
             {
                 cur += oneHour;
-                h += attrs.HeightPerHour;
+                h += attrs.HeightPerHour * (oneHour.GetTotalMinutes() / 60f);
                 if (h >= height)
                 {
-                    cur = last;
+                    cur = end;
                     if (cur > attrs.EndTime)
                         return attrs.EndTime;
-                    return last;
+                    return end;
                 }
-                last = cur;
+
+                end = cur;
             }
         }
-
-
     }
 }
