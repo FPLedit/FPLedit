@@ -13,7 +13,7 @@ namespace FPLedit.Bildfahrplan.Render
         private readonly Timetable tt;
         private readonly int route;
 
-        private readonly Margins defaultMargin = new Margins(10, 20, 20, 20);
+        private Margins defaultMargin = new Margins(10, 20, 20, 20);
         private readonly Margins deafultHeaderMargin = new Margins(11, 20, 20, 0);
 
         private readonly TimetableStyle attrs;
@@ -23,6 +23,11 @@ namespace FPLedit.Bildfahrplan.Render
             tt = timetable;
             this.route = route;
             attrs = new TimetableStyle(tt);
+        }
+
+        public void SetMargins(Margins margins)
+        {
+            defaultMargin = margins;
         }
 
         public void Draw(Graphics g, bool drawHeader, float? forceWidth = null)
@@ -36,7 +41,7 @@ namespace FPLedit.Bildfahrplan.Render
 
             var margin = CalcMargins(g, defaultMargin, stations, startTime, endTime, drawHeader);
             var width = forceWidth ?? g.ClipBounds.Width;
-            var height = GetHeight(startTime, endTime, drawHeader);
+            var height = GetHeight(g, startTime, endTime, drawHeader);
 
             // Zeitaufteilung
             var timeRenderer = new TimeRenderer(attrs, this);
@@ -48,10 +53,7 @@ namespace FPLedit.Bildfahrplan.Render
 
             // Züge
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            var clip = g.ClipBounds;
-            clip.Y += margin.Top;
-            clip.Height -= (margin.Top + margin.Bottom + 1);
-            g.SetClip(clip);
+            g.SetClip(new RectangleF(margin.Left, margin.Top, width - margin.Left - margin.Right, height - margin.Bottom - margin.Top));
 
             var trains = tt.Trains.Where(t =>
             {
@@ -73,7 +75,7 @@ namespace FPLedit.Bildfahrplan.Render
 
             var margin = CalcMargins(g, deafultHeaderMargin, stations, attrs.StartTime, attrs.EndTime, true);
 
-            var height = GetHeight(TimeEntry.Zero, TimeEntry.Zero, true); // Draw empty timespan.
+            var height = GetHeight(g, TimeEntry.Zero, TimeEntry.Zero, true); // Draw empty timespan.
 
             // Stationenaufteilung
             var headerRenderer = new HeaderRenderer(stations, attrs, route);
@@ -82,7 +84,8 @@ namespace FPLedit.Bildfahrplan.Render
 
         private Margins CalcMargins(Graphics g, Margins orig, IEnumerable<Station> stations, TimeEntry startTime, TimeEntry endTime, bool drawHeader)
         {
-            var result = new Margins(orig.Left, orig.Top, orig.Right, orig.Bottom);
+            const int additionalMargin = 5;
+            var result = new Margins(orig.Left + additionalMargin, orig.Top + additionalMargin, orig.Right + additionalMargin, orig.Bottom + additionalMargin);
             
             // MarginTop berechnen
             var hr = new HeaderRenderer(stations, attrs, route);
@@ -124,18 +127,21 @@ namespace FPLedit.Bildfahrplan.Render
             return lines;
         }
 
-        public int GetHeight(TimeEntry start, TimeEntry end, bool drawHeader)
+        public int GetHeightExternal(TimeEntry start, TimeEntry end, bool drawHeader)
         {
-            var stations = tt.GetRoute(route).Stations;
             using (var image = new Bitmap(1, 1, PixelFormat.Format24bppRgb))
             using (var g = Graphics.FromImage(image))
-            {
-                var m = CalcMargins(g, defaultMargin, stations, start, end, drawHeader);
-                return (int)(m.Top + m.Bottom + (end - start).GetTotalMinutes() * attrs.HeightPerHour / 60f);
-            }
+                return GetHeight(g, start, end, drawHeader);
+        }
+        
+        public int GetHeight(Graphics g, TimeEntry start, TimeEntry end, bool drawHeader)
+        {
+            var stations = tt.GetRoute(route).Stations;
+            var m = CalcMargins(g, defaultMargin, stations, start, end, drawHeader);
+            return (int)(m.Top + m.Bottom + (end - start).GetTotalMinutes() * attrs.HeightPerHour / 60f);
         }
 
-        public int GetHeight(bool drawHeader)
-            => GetHeight(attrs.StartTime, attrs.EndTime, drawHeader);
+        public int GetHeightExternal(bool drawHeader)
+            => GetHeightExternal(attrs.StartTime, attrs.EndTime, drawHeader);
     }
 }
