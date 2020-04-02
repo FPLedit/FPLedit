@@ -3,6 +3,7 @@ using FPLedit.Bildfahrplan.Model;
 using FPLedit.Bildfahrplan.Render;
 using FPLedit.Shared;
 using System;
+using System.Data;
 using System.Drawing;
 using System.Linq;
 using FPLedit.Shared.UI;
@@ -139,28 +140,46 @@ namespace FPLedit.Bildfahrplan.Forms
                 last = null;
         }
 
-        //TODO: Does not work if height is not enough for at least one hour (or to next hour, see A5 landscape)
-        //TODO: Remaining time < 1h is put to next page if cur+rest would fit, but cur+1h would not
         private TimeEntry GetTimeByHeight(Graphics g, Renderer renderer, TimeEntry start, int height)
         {
-            var cur = start + new TimeEntry(0, (byte) (60 - start.Minutes)); // to next full hour
-            var oneHour = new TimeEntry(1, 0);
-            TimeEntry end = cur;
-            float h = renderer.GetHeight(g, start, cur, true);
-            while (true)
-            {
-                cur += oneHour;
-                h += attrs.HeightPerHour * (oneHour.GetTotalMinutes() / 60f);
-                if (h >= height)
-                {
-                    cur = end;
-                    if (cur > attrs.EndTime)
-                        return attrs.EndTime;
-                    return end;
-                }
+            var fillUpMinutes = (byte) (60 - start.Minutes);
+            var restMinutes = attrs.EndTime.Minutes;
+            
+            var headerHeight = renderer.GetHeight(g, default, default, true);
 
-                end = cur;
+            var spanMinutes = attrs.EndTime.GetTotalMinutes() - start.GetTotalMinutes();
+
+            if (fillUpMinutes * (attrs.HeightPerHour / 60f) + headerHeight > height) // Not even the next hour does fit on the page.
+            {
+                var end =  start + new TimeEntry(0, (int) ((height - headerHeight) / (attrs.HeightPerHour / 60f)));
+                if (end >= attrs.EndTime)
+                    return attrs.EndTime;
+                return end;
             }
+
+            var fullTimeHeight = height - headerHeight;
+
+            if (fullTimeHeight < attrs.HeightPerHour) // Not even 1 full hour does fit on the page.
+            {
+                int minutes = (int) (fullTimeHeight / (attrs.HeightPerHour / 60f));
+                var end = start + new TimeEntry(0, minutes);
+                if (end >= attrs.EndTime)
+                    return attrs.EndTime;
+                return end;
+            }
+            
+            var fullHourHeight = fullTimeHeight - fillUpMinutes * (attrs.HeightPerHour / 60f);
+
+            int fullHours = (int) (fullHourHeight / (attrs.HeightPerHour));
+
+            if (fullHourHeight - fullHours * attrs.HeightPerHour > (attrs.HeightPerHour / 60f) * restMinutes && fullHours * 60 + fillUpMinutes + restMinutes >= spanMinutes)
+            {
+                var end = start + new TimeEntry(fullHours, restMinutes + fillUpMinutes);
+                if (end > attrs.EndTime)
+                    return attrs.EndTime;
+                return end;
+            }
+            return  start + new TimeEntry(fullHours, fillUpMinutes);
         }
     }
 }

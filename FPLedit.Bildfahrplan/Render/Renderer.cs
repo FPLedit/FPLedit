@@ -106,6 +106,7 @@ namespace FPLedit.Bildfahrplan.Render
         }
 
         //TODO: Possible endless loop if end < 00:00
+        //TODO: May produce additional lines not required at the end if start - end > 4min & start is full hour.
         internal List<int> GetTimeLines(out bool hourStart, TimeEntry start, TimeEntry end)
         {
             List<int> lines = new List<int>();
