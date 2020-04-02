@@ -1,4 +1,4 @@
-﻿using Eto.Forms;
+using Eto.Forms;
 using FPLedit.Bildfahrplan.Model;
 using FPLedit.Bildfahrplan.Render;
 using FPLedit.Shared;
@@ -71,17 +71,22 @@ namespace FPLedit.Bildfahrplan.Forms
                 {
                     doc.PrintPage += Doc_PrintPage;
                     doc.DocumentName = "Bildfahrplan generiert mit FPLedit";
-                    
+
                     doc.PrinterSettings.PrinterName = form.Result;
-                    
+
                     doc.DefaultPageSettings.Margins = new Print.Margins(50, 50, 50, 50); // not working (turning page????)
-                    
-                    var paperSize = doc.PrinterSettings.PaperSizes[paperDropDown.SelectedIndex];
-                    //HACK: Do not use doc.DefaultPageSettings.Landscape on Linux, as it will lead to awkwardly turned rendering areas, ???)
-                    if (landscapeChk.Checked.Value)
-                        doc.DefaultPageSettings.PaperSize = new Print.PaperSize(paperSize.PaperName, paperSize.Height, paperSize.Width);
+
+                    if (Eto.Platform.Instance.IsGtk)
+                    {
+                        var paperSize = doc.PrinterSettings.PaperSizes[paperDropDown.SelectedIndex];
+                        //HACK: Do not use doc.DefaultPageSettings.Landscape on Linux, as it will lead to awkwardly turned rendering areas, ???)
+                        if (landscapeChk.Checked.Value)
+                            doc.DefaultPageSettings.PaperSize = new Print.PaperSize(paperSize.PaperName, paperSize.Height, paperSize.Width);
+                        else
+                            doc.DefaultPageSettings.PaperSize = paperSize;
+                    }
                     else
-                        doc.DefaultPageSettings.PaperSize = paperSize;
+                        doc.DefaultPageSettings.Landscape = landscapeChk.Checked.Value;
 
                     if (!doc.PrinterSettings.IsValid)
                         MessageBox.Show("Ungültige Druckereinstellungen!", "FPLedit", MessageBoxType.Error);
@@ -105,8 +110,8 @@ namespace FPLedit.Bildfahrplan.Forms
             e.Graphics.SetClip(new RectangleF(e.PageSettings.Margins.Left, e.PageSettings.Margins.Top, e.MarginBounds.Width, e.MarginBounds.Height));
             
             var renderer = new Renderer(tt, route);
-            int height = e.PageSettings.Bounds.Height + e.PageSettings.Margins.Bottom + e.PageSettings.Margins.Top;
-            int width = e.PageSettings.Bounds.Width + e.PageSettings.Margins.Left + e.PageSettings.Margins.Right;
+            int height = e.MarginBounds.Height + e.PageSettings.Margins.Bottom + e.PageSettings.Margins.Top;
+            int width = e.MarginBounds.Width + e.PageSettings.Margins.Left + e.PageSettings.Margins.Right;
             
             var margin = new Margins(e.PageSettings.Margins.Left, e.PageSettings.Margins.Top, e.PageSettings.Margins.Right, e.PageSettings.Margins.Bottom);
             renderer.SetMargins(margin);
@@ -114,14 +119,19 @@ namespace FPLedit.Bildfahrplan.Forms
             var start = last ?? attrs.StartTime;
             last = GetTimeByHeight(e.Graphics, renderer, start, height);
 
-            //HACK: Draw with the help of an extra buffer (prevent bug from Sstem.Drawing.Commons on Linux, applying some transformation state to pages...)
-            using (var bitmap = new Bitmap(width, height))
-            using (var gr = Graphics.FromImage(bitmap))
+            if (Eto.Platform.Instance.IsGtk)
             {
-                gr.PageUnit = GraphicsUnit.Display;
-                renderer.Draw(gr, start, last.Value, true, width);
-                e.Graphics.DrawImage(bitmap, 0, 0, width, height);
+                //HACK: Draw with the help of an extra buffer (prevent bug from System.Drawing.Commons on Linux, applying some transformation state to pages...)
+                using (var bitmap = new Bitmap(width, height))
+                using (var gr = Graphics.FromImage(bitmap))
+                {
+                    gr.PageUnit = GraphicsUnit.Display;
+                    renderer.Draw(gr, start, last.Value, true, width);
+                    e.Graphics.DrawImage(bitmap, 0, 0, width, height);
+                }
             }
+            else
+                renderer.Draw(e.Graphics, start, last.Value, true, width);
 
             if (last.Value < attrs.EndTime)
                 e.HasMorePages = true;
@@ -129,6 +139,8 @@ namespace FPLedit.Bildfahrplan.Forms
                 last = null;
         }
 
+        //TODO: Does not work if height is not enough for at least one hour (or to next hour, see A5 landscape)
+        //TODO: Remaining time < 1h is put to next page if cur+rest would fit, but cur+1h would not
         private TimeEntry GetTimeByHeight(Graphics g, Renderer renderer, TimeEntry start, int height)
         {
             var cur = start + new TimeEntry(0, (byte) (60 - start.Minutes)); // to next full hour
