@@ -622,10 +622,16 @@ namespace FPLedit.Shared
             }
         }
 
-        public Train GetTransition(Train first) => GetTransition(first.Id);
+        public Train GetTransition(Train first)
+        {
+            return first != null ? GetTransition(first.Id) : null;
+        } 
 
         public Train GetTransition(int firstTrainId)
         {
+            if (firstTrainId == -1)
+                return null;
+            
             var trans = transitions.Where(t => t.First == firstTrainId).ToArray();
 
             if (!trans.Any())

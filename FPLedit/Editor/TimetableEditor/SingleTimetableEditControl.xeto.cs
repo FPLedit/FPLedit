@@ -220,6 +220,9 @@ namespace FPLedit.Editor.TimetableEditor
             var data = (DataElement) view.SelectedItem;
             var sta = data.Station;
 
+            if (!sta.Tracks.Any()) // We have no tracks.
+                return;
+
             var arrDep = data.ArrDeps[sta];
 
             using (var shf = new ShuntForm(arrDep, sta))

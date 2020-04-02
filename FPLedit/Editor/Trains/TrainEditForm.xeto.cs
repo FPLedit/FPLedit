@@ -24,6 +24,8 @@ namespace FPLedit.Editor.Trains
         private readonly NotEmptyValidator nameValidator;
 
         public Train Train { get; }
+        
+        public Train NextTrain { get; private set;  }
 
         private readonly Timetable tt;
         private readonly TrainEditHelper th;
@@ -64,6 +66,13 @@ namespace FPLedit.Editor.Trains
             InitializeTrain();
         }
 
+        /// <summary>
+        /// Use <see cref="NextTrain"/> to wire up transitionms, if <see cref="NextTrain"/> is not null...
+        /// This form will NOT wire up transitions itself!
+        /// </summary>
+        /// <param name="tt"></param>
+        /// <param name="direction"></param>
+        /// <param name="path"></param>
         public TrainEditForm(Timetable tt, TrainDirection direction, List<Station> path = null) : this(tt)
         {
             Train = new Train(direction, tt);
@@ -124,7 +133,12 @@ namespace FPLedit.Editor.Trains
                 return;
 
             if (tt.Version != TimetableVersion.JTG2_x)
-                tt.SetTransition(Train, (Train)transitionDropDown.SelectedValue);
+            {
+                if (Train.Id == -1)
+                    NextTrain = (Train) transitionDropDown.SelectedValue;
+                else
+                    tt.SetTransition(Train, (Train)transitionDropDown.SelectedValue);
+            }
 
             Close(DialogResult.Ok);
         }

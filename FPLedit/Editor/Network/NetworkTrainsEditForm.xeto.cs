@@ -125,6 +125,8 @@ namespace FPLedit.Editor.Network
                     if (tef.ShowModal(this) == DialogResult.Ok)
                     {
                         tt.AddTrain(tef.Train, true);
+                        if (tef.NextTrain != null)
+                            tt.SetTransition(tef.Train, tef.NextTrain);
 
                         UpdateListView(view, TrainDirection.tr);
                     }
