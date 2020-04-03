@@ -41,8 +41,8 @@ namespace FPLedit.Bildfahrplan.Render
                     Bitmap newBuffer = null;
                     try
                     {
-                        newBuffer = new Bitmap(panel.Width, renderer.GetHeight(drawHeader), PixelFormat.Format32bppRgb);
-                        using (var ib = new ImageBridge(panel.Width, renderer.GetHeight(drawHeader)))
+                        newBuffer = new Bitmap(panel.Width, renderer.GetHeightExternal(drawHeader), PixelFormat.Format32bppRgb);
+                        using (var ib = new ImageBridge(panel.Width, renderer.GetHeightExternal(drawHeader)))
                         using (var etoGraphics = new Graphics(newBuffer))
                         {
                             renderer.Draw(ib.Graphics, drawHeader, forceWidth: panel.Width);

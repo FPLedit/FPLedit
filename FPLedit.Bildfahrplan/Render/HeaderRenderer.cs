@@ -15,6 +15,8 @@ namespace FPLedit.Bildfahrplan.Render
 
         private readonly DashStyleHelper ds = new DashStyleHelper();
 
+        private const int TOP_GAP = 5;
+        
         public HeaderRenderer(IEnumerable<Station> stations, TimetableStyle attrs, int route)
         {
             this.stations = stations;
@@ -32,7 +34,7 @@ namespace FPLedit.Bildfahrplan.Render
             var allTrackCount = stations.Select(s => s.Tracks.Count).Sum();
             var stasWithTracks = stations.Count(s => s.Tracks.Any());
             var allTrackWidth = (stasWithTracks + allTrackCount) * StationRenderProps.IndividualTrackOffset;
-            var verticalTrackOffset = GetTrackOffset(g, stationFont) + 5;
+            var verticalTrackOffset = GetTrackOffset(g, stationFont) + TOP_GAP;
 
             StationRenderProps lastPos = null;
             foreach (var sta in stations)
@@ -71,15 +73,15 @@ namespace FPLedit.Bildfahrplan.Render
                     if (!attrs.MultiTrack)
                     {
                         // Linie (Single-Track-Mode)
-                        g.DrawLine(pen, margin.Left + posX.Center, margin.Top - 5, margin.Left + posX.Center, height - margin.Bottom);
+                        g.DrawLine(pen, margin.Left + posX.Center, margin.Top - TOP_GAP, margin.Left + posX.Center, height - margin.Bottom);
                     }
                     else
                     {
                         // Linie (Multi-Track-Mode)
-                        g.DrawLine(pen, margin.Left + posX.Left, margin.Top - 5, margin.Left + posX.Left, height - margin.Bottom);
+                        g.DrawLine(pen, margin.Left + posX.Left, margin.Top - TOP_GAP, margin.Left + posX.Left, height - margin.Bottom);
                         foreach (var trackX in posX.TrackOffsets)
-                            g.DrawLine(pen, margin.Left + trackX.Value, margin.Top - 5, margin.Left + trackX.Value, height - margin.Bottom);
-                        g.DrawLine(pen, margin.Left + posX.Right, margin.Top - 5, margin.Left + posX.Right, height - margin.Bottom);
+                            g.DrawLine(pen, margin.Left + trackX.Value, margin.Top - TOP_GAP, margin.Left + trackX.Value, height - margin.Bottom);
+                        g.DrawLine(pen, margin.Left + posX.Right, margin.Top - TOP_GAP, margin.Left + posX.Right, height - margin.Bottom);
                     }
 
                     if (!drawHeader)
@@ -100,7 +102,7 @@ namespace FPLedit.Bildfahrplan.Render
                             g.EndContainer(container);
                         }
                         else
-                            g.DrawText(stationFont, brush, margin.Left + posX.Center - (size.Width / 2), margin.Top - size.Height - verticalTrackOffset - 5, display);
+                            g.DrawText(stationFont, brush, margin.Left + posX.Center - (size.Width / 2), margin.Top - size.Height - verticalTrackOffset - TOP_GAP, display);
 
                         if (attrs.MultiTrack)
                         {
@@ -116,7 +118,7 @@ namespace FPLedit.Bildfahrplan.Render
                                     g.EndContainer(container);
                                 }
                                 else
-                                    g.DrawText(stationFont, brush, margin.Left + track.Value - (trackSize.Width / 2), margin.Top - trackSize.Height - 5, track.Key);
+                                    g.DrawText(stationFont, brush, margin.Left + track.Value - (trackSize.Width / 2), margin.Top - trackSize.Height - TOP_GAP, track.Key);
                             }
                         }
                     }
@@ -138,8 +140,8 @@ namespace FPLedit.Bildfahrplan.Render
                     : 0)
                 : emSize;
 
-            sMax += GetTrackOffset(g, stationFont);
-
+            sMax += GetTrackOffset(g, stationFont) + TOP_GAP + 3;
+            
             return sMax;
         }
 

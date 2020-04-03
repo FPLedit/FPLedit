@@ -25,8 +25,10 @@ namespace FPLedit.Bildfahrplan
             pluginInterface.Register<IPreviewAction>(dpf);
             pluginInterface.AppClosing += (s, e) => dpf.Close();
 
+#if !DEBUG
             if (pluginInterface.Settings.Get<bool>("feature.enable-full-graph-editor"))
             {
+#endif
                 pluginInterface.Register<IExport>(new BitmapExport());
                 
                 pluginInterface.FileStateChanged += PluginInterface_FileStateChanged;
@@ -40,17 +42,23 @@ namespace FPLedit.Bildfahrplan
                 stationStyleItem = graphItem.CreateItem("&Stationsdarstellung ändern", enabled: false, clickHandler: (s, ev) => ShowForm(new StationStyleForm(pluginInterface)));
                 overrideItem = graphItem.CreateCheckItem("Verwende nur &Plandarstellung", isChecked: pluginInterface.Settings.Get<bool>("bifpl.override-entity-styles"),
                     changeHandler: OverrideItem_CheckedChanged);
+#if !DEBUG
             }
+#endif
         }
         
         private void PrintItem_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("WARNUNG! Die Folgende Funktion ist experimentell und ungetest. Fortfahren?", "FPLedit", MessageBoxButtons.YesNo, MessageBoxType.Warning) == DialogResult.Yes)
+#if !DEBUG
+            if (MessageBox.Show("WARNUNG! Die folgende Funktion ist experimentell und ungetest. Fortfahren?", "FPLedit", MessageBoxButtons.YesNo, MessageBoxType.Warning) == DialogResult.Yes)
             {
+#endif
                 var route = (pluginInterface.Timetable.Type == TimetableType.Network) ? pluginInterface.FileState.SelectedRoute : Timetable.LINEAR_ROUTE_ID;
                 using (var pr = new PrintRenderer(pluginInterface, route))
                     pr.InitPrint();
+#if !DEBUG
             }
+#endif
         }
 
         private void ShowItem_Click(object sender, EventArgs e) => dpf.Show(pluginInterface);

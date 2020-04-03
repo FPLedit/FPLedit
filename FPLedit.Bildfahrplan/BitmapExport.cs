@@ -11,7 +11,7 @@ namespace FPLedit.Bildfahrplan
         public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[] flags = null) 
         {
             Renderer renderer = new Renderer(tt, Timetable.LINEAR_ROUTE_ID);
-            using (var bmp = new Bitmap(1000, renderer.GetHeight(true), PixelFormat.Format32bppArgb))
+            using (var bmp = new Bitmap(1000, renderer.GetHeightExternal(true), PixelFormat.Format32bppArgb))
             using (var g = Graphics.FromImage(bmp))
             {
                 renderer.Draw(g, true);

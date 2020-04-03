@@ -157,12 +157,15 @@ namespace FPLedit.Bildfahrplan.Render
                         float ty = ys.Min() + (ys.Max() - ys.Min()) / 2 - (size.Height / 2);
                         float tx = xs.Min() + (xs.Max() - xs.Min()) / 2;
 
-                        float angle = CalcAngle(ys, xs, train);
-                        var container = g.BeginContainer();
-                        g.TranslateTransform(tx, ty);
-                        g.RotateTransform(-angle);
-                        g.DrawText(trainFont, brush, -(size.Width / 2), -(size.Height / 2), train.TName);
-                        g.EndContainer(container);
+                        if (g.Clip.IsVisible(new PointF(tx, ty))) // translated drawing does not respect clip (Idk why)
+                        {
+                            float angle = CalcAngle(ys, xs, train);
+                            var container = g.BeginContainer();
+                            g.TranslateTransform(tx, ty);
+                            g.RotateTransform(-angle);
+                            g.DrawText(trainFont, brush, -(size.Width / 2), -(size.Height / 2), train.TName);
+                            g.EndContainer(container);
+                        }
                     }
                     g.DrawPath(pen, p);
                 }

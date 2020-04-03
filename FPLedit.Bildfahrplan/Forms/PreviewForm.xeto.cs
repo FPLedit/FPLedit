@@ -97,8 +97,8 @@ namespace FPLedit.Bildfahrplan.Forms
             renderer = new Renderer(pluginInterface.Timetable, routesDropDown.SelectedRoute);
             if (!scrollPosition.HasValue)
                 scrollPosition = new Point(0, 0);
-            panel.Height = renderer.GetHeight(!splitCheckBox.Checked.Value);
-            hpanel.Height = splitCheckBox.Checked.Value ? renderer.GetHeight(default, default, true) : 0;
+            panel.Height = renderer.GetHeightExternal(!splitCheckBox.Checked.Value);
+            hpanel.Height = splitCheckBox.Checked.Value ? renderer.GetHeightExternal(default, default, true) : 0;
 
             adbg.Invalidate();
             hpanel.Invalidate();
