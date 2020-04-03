@@ -1,10 +1,7 @@
 ﻿using FPLedit.Bildfahrplan.Model;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FPLedit.Shared;
 
 namespace FPLedit.Bildfahrplan.Render
@@ -12,12 +9,10 @@ namespace FPLedit.Bildfahrplan.Render
     internal sealed class TimeRenderer
     {
         private readonly TimetableStyle attrs;
-        private readonly Renderer parent;
 
-        public TimeRenderer(TimetableStyle attrs, Renderer parent)
+        public TimeRenderer(TimetableStyle attrs)
         {
             this.attrs = attrs;
-            this.parent = parent;
         }
 
         public void Render(Graphics g, Margins margin, TimeEntry startTime, TimeEntry endTime, float width)
@@ -27,7 +22,7 @@ namespace FPLedit.Bildfahrplan.Render
             using (var minutePen = new Pen((Color)attrs.TimeColor, attrs.MinuteTimeWidth))
             using (var hourPen = new Pen((Color)attrs.TimeColor, attrs.HourTimeWidth))
             {
-                foreach (var l in parent.GetTimeLines(out bool hour, startTime, endTime))
+                foreach (var l in GetTimeLines(out bool hour, startTime, endTime))
                 {
                     var offset = margin.Top + l * attrs.HeightPerHour / 60f;
                     g.DrawLine(hour ? hourPen : minutePen, margin.Left - 5, offset, width - margin.Right, offset); // Linie
@@ -38,6 +33,48 @@ namespace FPLedit.Bildfahrplan.Render
                     hour = !hour;
                 }
             }
+        }
+
+        public float GetMarginLeftOffset(Graphics g, TimeEntry startTime, TimeEntry endTime)
+        {
+            var timeFont = (Font)attrs.TimeFont; // Reminder: Do not dispose, will be disposed with MFont instance!
+            return GetTimeLines(out _, startTime, endTime)
+                .Select(l => g.MeasureString((startTime + new TimeEntry(0, l)).ToShortTimeString(), timeFont).Width)
+                .Concat(new[] { 0f }).Max();
+        }
+        
+        private List<int> GetTimeLines(out bool isStartFullHour, TimeEntry start, TimeEntry end)
+        {
+            if (end < start) // prevent endless loop
+            {
+                isStartFullHour = false;
+                return new List<int>();
+            }
+
+            List<int> lines = new List<int>();
+
+            void MaybeAddLine(int minutesFromStart)
+            {
+                if (start + new TimeEntry(0, minutesFromStart) <= end)
+                    lines.Add(minutesFromStart);
+            }
+
+            int minutesToNextLine = 60 - start.Minutes;
+            if (minutesToNextLine == 60)
+                MaybeAddLine(0);
+            if (minutesToNextLine >= 30)
+                MaybeAddLine(minutesToNextLine - 30);
+            isStartFullHour = lines.Count != 1;
+            int min = 0;
+            while (true)
+            {
+                min += minutesToNextLine;
+                if (min > end.GetTotalMinutes() - start.GetTotalMinutes())
+                    break;
+                MaybeAddLine(min);
+                minutesToNextLine = 30;
+            }
+            return lines;
         }
     }
 }

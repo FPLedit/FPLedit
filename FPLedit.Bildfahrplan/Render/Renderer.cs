@@ -1,6 +1,5 @@
 ﻿using FPLedit.Bildfahrplan.Model;
 using FPLedit.Shared;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -44,7 +43,7 @@ namespace FPLedit.Bildfahrplan.Render
             var height = GetHeight(g, startTime, endTime, drawHeader);
 
             // Zeitaufteilung
-            var timeRenderer = new TimeRenderer(attrs, this);
+            var timeRenderer = new TimeRenderer(attrs);
             timeRenderer.Render(g, margin, startTime, endTime, width);
 
             // Stationenaufteilung
@@ -96,36 +95,10 @@ namespace FPLedit.Bildfahrplan.Render
                 : 5;
 
             // MarginLeft berechnen
-            var timeFont = (Font)attrs.TimeFont;
-            float tMax = 0f;
-            foreach (var l in GetTimeLines(out bool _, startTime, endTime))
-                tMax = Math.Max(tMax, g.MeasureString(new TimeEntry(0, l + startTime.GetTotalMinutes()).ToShortTimeString(), timeFont).Width);
-            result.Left += tMax;
+            var tr = new TimeRenderer(attrs);
+            result.Left += tr.GetMarginLeftOffset(g, startTime, endTime);
             
             return result;
-        }
-
-        //TODO: Possible endless loop if end < 00:00
-        //TODO: May produce additional lines not required at the end if start - end > 4min & start is full hour.
-        internal List<int> GetTimeLines(out bool hourStart, TimeEntry start, TimeEntry end)
-        {
-            List<int> lines = new List<int>();
-            int minutesToNextLine = 60 - start.Minutes;
-            if (minutesToNextLine == 60)
-                lines.Add(0);
-            if (minutesToNextLine >= 30)
-                lines.Add(minutesToNextLine - 30);
-            hourStart = lines.Count != 1;
-            int min = 0;
-            while (true)
-            {
-                min += minutesToNextLine;
-                if (min > end.GetTotalMinutes() - start.GetTotalMinutes())
-                    break;
-                lines.Add(min);
-                minutesToNextLine = 30;
-            }
-            return lines;
         }
 
         public int GetHeightExternal(TimeEntry start, TimeEntry end, bool drawHeader)
