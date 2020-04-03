@@ -28,7 +28,6 @@ if (Argument<string>("auto-beta", null) != null) {
 var buildDir = Directory("./bin") + Directory(configuration);
 var sourceDir = Directory(".");
 var scriptsDir = Directory("./build_scripts");
-var tempDir = Directory("./build_tmp");
 
 var doc_generated = false;
 
@@ -57,8 +56,6 @@ Task("Clean")
     .Does(() =>
     {
         CleanDirectory(buildDir);
-        CleanDirectory(tempDir, fsi => !fsi.Path.FullPath.EndsWith(".gitignore"));
-        CreateDirectory(tempDir);
     });
 
 Task("Restore-NuGet-Packages")
