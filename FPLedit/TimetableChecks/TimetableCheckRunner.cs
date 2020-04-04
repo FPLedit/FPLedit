@@ -4,7 +4,7 @@ using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FPLedit.TimetableChecks
@@ -13,6 +13,11 @@ namespace FPLedit.TimetableChecks
     {
         private FForm form;
         private GridView gridView;
+
+        private CancellationTokenSource cancelTokenSource;
+        private Task lastTask;
+
+        private readonly object uiLock = new object();
 
         public TimetableCheckRunner(IPluginInterface pluginInterface)
         {
@@ -23,15 +28,40 @@ namespace FPLedit.TimetableChecks
                 if (pluginInterface.Timetable == null)
                     return;
 
-                var list = new List<string>();
+                var clone = pluginInterface.Timetable.Clone();
+                
+                if (lastTask != null && cancelTokenSource != null && !lastTask.IsCompleted && !cancelTokenSource.IsCancellationRequested)
+                    cancelTokenSource.Cancel();
 
-                foreach (var check in checks)
-                    list.AddRange(check.Check(pluginInterface.Timetable));
+                cancelTokenSource = new CancellationTokenSource();
 
-                if (list.Any() && form == null)
-                    GetForm().Show();
-                if (gridView != null && gridView.Visible)
-                    gridView.DataStore = list.ToArray();
+                lastTask = new Task(tk =>
+                {
+                    var token = (CancellationToken)tk;
+                    
+                    var list = new List<string>();
+
+                    foreach (var check in checks)
+                    {
+                        token.ThrowIfCancellationRequested();
+                        list.AddRange(check.Check(clone));
+                    }
+                    
+                    token.ThrowIfCancellationRequested();
+
+                    Application.Instance.Invoke(() =>
+                    {
+                        lock (uiLock)
+                        {
+                            if (list.Any() && form == null)
+                                GetForm().Show();
+                            if (gridView != null && gridView.Visible)
+                                gridView.DataStore = list.ToArray();
+                        }
+                    });
+                }, cancelTokenSource.Token, cancelTokenSource.Token);
+
+                lastTask.Start();
             };
             pluginInterface.AppClosing += (s, e) => form?.Close();
         }
