@@ -35,9 +35,9 @@ namespace FPLedit.Shared.Tests
             {
                 var tt = new XMLImport().Import(s, new DummyPluginInterface());
                 Assert.IsNotNull(tt);
-                Assert.IsTrue(tt.UpgradeMessage.Contains("Verknüpfungen"));
+                //Assert.IsTrue(tt.UpgradeMessage.Contains("Verknüpfungen"));
 
-                // TODO: Check for changed ids, removed transitions
+                // TODO: Check for changed ids, removed transitions (first: use 
             }
         }
 

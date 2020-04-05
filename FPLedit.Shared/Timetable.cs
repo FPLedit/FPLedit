@@ -53,8 +53,6 @@ namespace FPLedit.Shared
 
         public IList<Transition> Transitions => transitions.AsReadOnly();
 
-        public string UpgradeMessage { get; } //TODO: Replace with Init actions
-
         /// <summary>
         /// Create a new new empty timetable file of the given timetable type.
         /// </summary>
@@ -135,29 +133,6 @@ namespace FPLedit.Shared
                 nextRtId = stations.SelectMany(s => s.Routes).DefaultIfEmpty().Max();
             }
 
-            var upgradeMessages = new List<string>();
-
-            // Bug in FPLedit 1.5.3 bis 2.0.0 muss nachträglich korrigiert werden
-            // In manchen Fällen wurden Zug-Ids doppelt vergeben
-            var duplicate_tra_ids = trains.GroupBy(t => t.Id).Where(g => g.Count() > 1).Select(g => g.ToArray());
-            if (duplicate_tra_ids.Any()) // Wir haben doppelte IDs
-            {
-                if (transitions.Count > 0)
-                {
-                    var duplicate_transitions = duplicate_tra_ids.Where(dup => HasTransition(dup[0], false)).ToArray();
-                    foreach (var dup in duplicate_transitions)
-                        RemoveTransition(dup[0], false); // Transitions mit dieser Id entfernen
-
-                    if (duplicate_transitions.Any())
-                        upgradeMessages.Add("Aufgrund eines Fehlers in früheren Versionen von FPLedit mussten leider einige Verknüpfungen zu Folgezügen aufgehoben werden. Die betroffenen Züge sind: "
-                                            + string.Join(", ", duplicate_transitions.SelectMany(dup => dup.Select(t => t.TName))));
-                }
-
-                // Korrektur ohne Side-Effects möglich, alle doppelten Zug-Ids werden neu vergeben
-                foreach (var dup in duplicate_tra_ids)
-                    dup.Skip(1).All((t) => { t.Id = ++nextTraId; return true; });
-            }
-
             // Zügen ohne IDs diese neu zuweisen
             foreach (var train in trains)
             {
@@ -174,7 +149,7 @@ namespace FPLedit.Shared
                 else if (!tids.Contains(tra.Next))
                     RemoveTransition(tra.Next, false);
             }
-            
+
             // Finally initialize route cache structure
             routeCache = _InternalGetRoutesUncached().ToDictionary(r => r.Index, r => r);
             
@@ -187,34 +162,9 @@ namespace FPLedit.Shared
              * DON'T CHANGE ANYTHING LOWLEVEL WITHOUT MANUAL REBUILD!
              * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
              */
-            
-            // Bug in FPLedit 2.1 muss nachträglich klar gemacht werden.
-            // Durch Nutzerinteraction konnten "ambiguous routes" entstehen.
-            // Eine Korrektur ist nicht möglich.
-            if (Type == TimetableType.Network && HasRouteCycles)
-            {
-                var hasAmbiguousRoutes = false;
-                // All stations that are junction points.
-                var maybeAffectedRoutes = GetCyclicRoutes();
-                var junctions = Stations.Where(s => s.IsJunction && s.Routes.Intersect(maybeAffectedRoutes).Any()).ToArray();
-                for (int i = 0; i < junctions.Length - 1; i++)
-                {
-                    for (int j = i + 1; j < junctions.Length; j++)
-                    {
-                        hasAmbiguousRoutes |= (junctions[i].Routes.Intersect(junctions[j].Routes).DefaultIfEmpty(-1)
-                            .Count(r => RouteConnectsDirectly(r, junctions[i], junctions[j])) > 1);
-                    }
-                }
-
-                if (hasAmbiguousRoutes)
-                    upgradeMessages.Add("Die Datei enthält zusammengfefallene Strecken, das heißt zwei Stationen sind auf mehr als einer Route ohne Zwischenstation verbunden. FPLedit kann sich danach komisch verhalten und Züge zufällig über die eine oder andere Strecke leiten. Eine Korrektur ist leider nicht möglich.");
-            }
-
-
-            UpgradeMessage = string.Join(Environment.NewLine, upgradeMessages);
-            if (UpgradeMessage == "")
-                UpgradeMessage = null;
         }
+
+        public int NextTrainId() => ++nextTraId;
 
         #region Hilfsmethoden für Stationen
 
@@ -508,7 +458,7 @@ namespace FPLedit.Shared
             }
         }
 
-        private IList<int> GetCyclicRoutes()
+        public IList<int> GetCyclicRoutes()
         {
             var junctions = Stations.Where(s => s.IsJunction); // All stations that are junction points.
             var rids = junctions.SelectMany(s => s.Routes).ToList(); // All routes participating in junctions (should be all).

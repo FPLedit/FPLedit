@@ -153,8 +153,6 @@ namespace FPLedit
                 pluginInterface.Logger.Error("Fehler beim Öffnen der Datei!");
             else
                 pluginInterface.Logger.Info("Datei erfolgeich geöffnet!");
-            if (Timetable?.UpgradeMessage != null)
-                pluginInterface.Logger.Warning(Timetable.UpgradeMessage);
             FileState.Opened = Timetable != null;
             FileState.Saved = Timetable != null;
             FileState.FileName = Timetable != null ? filename : null;
