@@ -4,15 +4,45 @@ using System.Runtime.InteropServices;
 namespace FPLedit.Shared.Helpers
 {
     /// <summary>
-    /// Helper class to shim Process.Start on corefx systems
+    /// Helper class to shim Process.Start on corefx systems, mainly for opening file & web addresses.
     /// </summary>
     public static class OpenHelper
     {
-        public static void Open(string url)
+        public static Process Open(string url)
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                var p = TryStartShellExecute(url);
+                if (p != null)
+                    return p;
+            }
+
+
+            try
+            {
+                // hack because of this: https://github.com/dotnet/corefx/issues/10361
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                    return Process.Start(new ProcessStartInfo("cmd", $"/c start {url.Replace("&", "^&")}") { CreateNoWindow = true });
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                    return Process.Start("xdg-open", url);
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                    return Process.Start("open", url);
+            }
+            catch
+            {
+                var p = TryStartShellExecute(url);
+                if (p != null)
+                    return p;
+            }
+
+            return null;
+        }
+
+        private static Process TryStartShellExecute(string url)
         {
             try
             {
-                Process.Start(new ProcessStartInfo()
+                return Process.Start(new ProcessStartInfo()
                 {
                     UseShellExecute = true,
                     FileName = url,
@@ -20,15 +50,7 @@ namespace FPLedit.Shared.Helpers
             }
             catch
             {
-                // hack because of this: https://github.com/dotnet/corefx/issues/10361
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                    Process.Start(new ProcessStartInfo("cmd", $"/c start {url.Replace("&", "^&")}") { CreateNoWindow = true });
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                    Process.Start("xdg-open", url);
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                    Process.Start("open", url);
-                else
-                    throw;
+                return null;
             }
         }
     }
