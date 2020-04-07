@@ -1,15 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace FPLedit.Shared
 {
-    public interface ITimetableCheck
+    /// <summary>
+    /// Registrable action hook that is executed each time the timetable is modified, to provide feedback to the user.
+    /// </summary>
+    public interface ITimetableCheck : IRegistrableComponent
     {
+        /// <summary>
+        /// Display name of this timetable check.
+        /// </summary>
         string Display { get; }
-
+        
+        /// <summary>
+        /// Perform the timetable check.
+        /// </summary>
+        /// <param name="tt">Read-only copy of the current timetable.</param>
+        /// <remarks>This method must be thread-safe and MUST NOT call into UI directly, as it might be called on a non-UI thread.</remarks>
         IEnumerable<string> Check(Timetable tt);
     }
 }

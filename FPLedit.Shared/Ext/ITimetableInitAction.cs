@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FPLedit.Shared
+﻿namespace FPLedit.Shared
 {
-    public interface ITimetableInitAction
+    /// <summary>
+    /// Registrable action hook that is executed once a timetable file is loaded.
+    /// </summary>
+    public interface ITimetableInitAction : IRegistrableComponent
     {
         string Init(Timetable tt);
     }

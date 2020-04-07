@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FPLedit.Shared
+﻿namespace FPLedit.Shared
 {
-    public interface ITimetableTypeChangeAction
+    /// <summary>
+    /// Registrable action hook that is executed once a timetable file is converted between Linear and Network Timetable types.
+    /// </summary>
+    public interface ITimetableTypeChangeAction : IRegistrableComponent
     {
         void ToLinear(Timetable tt);
 

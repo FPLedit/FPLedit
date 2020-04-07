@@ -128,11 +128,10 @@ namespace FPLedit
 
         public string ExecutableDir => PathManager.Instance.AppDirectory;
         
-        public void Register<T>(T obj)
+        public void Register<T>(T obj) where T : IRegistrableComponent
             => registry.Register(obj);
 
-        public T[] GetRegistered<T>()
-            => registry.GetRegistered<T>();
+        public T[] GetRegistered<T>() => registry.GetRegistered<T>();
 
         public string GetTemp(string filename)
         {

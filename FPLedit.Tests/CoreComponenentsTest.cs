@@ -2,6 +2,7 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using FPLedit.Config;
+using FPLedit.Shared;
 using NUnit.Framework;
 
 namespace FPLedit.Tests
@@ -49,8 +50,8 @@ namespace FPLedit.Tests
         }
     }
     
-    internal interface ITest1 {}
-    internal interface ITest2 {}
+    internal interface ITest1 : IRegistrableComponent {}
+    internal interface ITest2 : IRegistrableComponent{}
     internal class Test11 : ITest1 {}
     internal class Test12 : ITest1 {}
     internal class Test21 : ITest2 {}

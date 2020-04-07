@@ -9,7 +9,7 @@ namespace FPLedit.Shared
     /// Basic interface to provide exporter capabalities.
     /// </summary>
     /// <remarks>See <see cref="DefaultTemplateExport"/> for a default implementation.</remarks>
-    public interface IExport
+    public interface IExport : IRegistrableComponent
     {
         /// <summary>
         /// Invokes the exporter.
@@ -22,6 +22,9 @@ namespace FPLedit.Shared
         /// <remarks>This method must be thread-safe and MUST NOT call into UI directly, as it might be called on a non-UI thread.</remarks>
         bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[] flags = null);
 
+        /// <summary>
+        /// Filetype filter of the form "description|pattern", e.g. "Description (*.ext)|*.ext"
+        /// </summary>
         string Filter { get; }
     }
 

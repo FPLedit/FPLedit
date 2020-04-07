@@ -1,11 +1,9 @@
 ﻿using FPLedit.Shared.Templating;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace FPLedit.Shared
 {
-    public interface IPluginInterface : IReducedPluginInterface, IUiPluginInterface
+    public interface IPluginInterface : IReducedPluginInterface, IUiPluginInterface, IRegistry
     {
         Timetable Timetable { get; }
 
@@ -15,9 +13,6 @@ namespace FPLedit.Shared
         object BackupTimetable();
         void RestoreTimetable(object backupHandle);
         void ClearBackup(object backupHandle);
-
-        // Regsitry (active)
-        void Register<T>(T elem);
 
         // FileHandling
         void Open();
@@ -34,6 +29,12 @@ namespace FPLedit.Shared
         event EventHandler ExtensionsLoaded;
         event EventHandler FileOpened;
         event EventHandler AppClosing;
+    }
+
+    public interface IRegistry
+    {
+        // Regsitry (active)
+        void Register<T>(T elem) where T : IRegistrableComponent;
     }
 
     public interface IReducedPluginInterface
@@ -62,6 +63,5 @@ namespace FPLedit.Shared
         /// Use this instead of <see cref="Menu"/>.HelpMenu.
         /// </summary>
         dynamic HelpMenu { get; }
-
     }
 }

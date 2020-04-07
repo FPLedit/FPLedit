@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using FPLedit.Shared;
 
 namespace FPLedit
 {
-    internal sealed class RegisterStore : IDisposable
+    internal sealed class RegisterStore : IRegistry, IDisposable
     {
         private readonly Dictionary<Type, List<object>> store;
         private readonly List<IDisposable> disposableReferences;
@@ -16,7 +17,7 @@ namespace FPLedit
             disposableReferences = new List<IDisposable>();
         }
 
-        public void Register<T>(T elem)
+        public void Register<T>(T elem) where T : IRegistrableComponent
         {
             Type t = typeof(T);
             if (!store.ContainsKey(t))
