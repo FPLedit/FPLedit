@@ -3,7 +3,7 @@ using System;
 
 namespace FPLedit.Shared
 {
-    public interface IPluginInterface : IReducedPluginInterface, IUiPluginInterface, IRegistry
+    public interface IPluginInterface : IReducedPluginInterface, IUiPluginInterface
     {
         Timetable Timetable { get; }
 
@@ -31,7 +31,7 @@ namespace FPLedit.Shared
         event EventHandler AppClosing;
     }
 
-    public interface IRegistry
+    public interface IComponentRegistry
     {
         // Regsitry (active)
         void Register<T>(T elem) where T : IRegistrableComponent;

@@ -11,7 +11,7 @@ namespace FPLedit.jTrainGraphStarter
         IPluginInterface pluginInterface;
         ButtonMenuItem startItem;
 
-        public void Init(IPluginInterface pluginInterface)
+        public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
         {
             this.pluginInterface = pluginInterface;
             pluginInterface.FileStateChanged += PluginInterface_FileStateChanged;

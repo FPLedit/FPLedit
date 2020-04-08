@@ -104,7 +104,7 @@ namespace FPLedit
         
         #region Plugin Code
         
-        public void Init(IPluginInterface pluginInterface)
+        public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
         {
             // Initilize main UI component
             networkEditingControl.Initialize(pluginInterface);

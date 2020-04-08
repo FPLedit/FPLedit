@@ -53,11 +53,11 @@ namespace FPLedit.Extensibility
             Url = a.Web;
         }
 
-        public void TryInit(IPluginInterface pluginInterface)
+        public void TryInit(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
         {
             try
             {
-                plugin.Init(pluginInterface);
+                plugin.Init(pluginInterface, componentRegistry);
             }
             catch (Exception ex)
             {

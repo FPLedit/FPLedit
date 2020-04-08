@@ -6,7 +6,7 @@ using FPLedit.Shared;
 
 namespace FPLedit
 {
-    internal sealed class RegisterStore : IRegistry, IDisposable
+    internal sealed class RegisterStore : IComponentRegistry, IDisposable
     {
         private readonly Dictionary<Type, List<object>> store;
         private readonly List<IDisposable> disposableReferences;

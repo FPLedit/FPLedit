@@ -16,20 +16,20 @@ namespace FPLedit.Bildfahrplan
         private ButtonMenuItem showItem, configItem, trainColorItem, stationStyleItem, printItem;
         private CheckMenuItem overrideItem;
         
-        public void Init(IPluginInterface pluginInterface)
+        public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
         {
             this.pluginInterface = pluginInterface;
             Style.pluginInterface = pluginInterface;
 
             dpf = new DynamicPreview();
-            pluginInterface.Register<IPreviewAction>(dpf);
+            componentRegistry.Register<IPreviewAction>(dpf);
             pluginInterface.AppClosing += (s, e) => dpf.Close();
 
 #if !DEBUG
             if (pluginInterface.Settings.Get<bool>("feature.enable-full-graph-editor"))
             {
 #endif
-                pluginInterface.Register<IExport>(new BitmapExport());
+                componentRegistry.Register<IExport>(new BitmapExport());
                 
                 pluginInterface.FileStateChanged += PluginInterface_FileStateChanged;
                 

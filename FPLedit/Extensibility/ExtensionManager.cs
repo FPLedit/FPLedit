@@ -148,7 +148,7 @@ namespace FPLedit.Extensibility
             return 0;
         }
 
-        public void InitActivatedExtensions()
+        public void InitActivatedExtensions(IComponentRegistry componentRegistry)
         {
             if (pluginsInitialized)
                 throw new InvalidOperationException("Extensions have already been initialized!");
@@ -156,7 +156,7 @@ namespace FPLedit.Extensibility
             
             var enabledPlugins = plugins.Where(p => p.Enabled);
             foreach (var plugin in enabledPlugins)
-                plugin.TryInit(pluginInterface);
+                plugin.TryInit(pluginInterface, componentRegistry);
         }
     }
 }

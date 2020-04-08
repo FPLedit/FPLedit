@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace FPLedit.Shared
+﻿namespace FPLedit.Shared
 {
     /// <summary>
     /// Base interface for all extensions.
@@ -11,6 +6,6 @@ namespace FPLedit.Shared
     /// <remarks>All external inheritors must have a <see cref="PluginAttribute"/> to be discovered by FPLedit.</remarks>
     public interface IPlugin
     {
-        void Init(IPluginInterface pluginInterface);
+        void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry);
     }
 }

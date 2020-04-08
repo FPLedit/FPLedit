@@ -12,22 +12,22 @@ namespace FPLedit.Kursbuch
     [Plugin("Modul für Tabellenfahrpläne", Vi.PFrom, Vi.PUpTo, Author = "Manuel Huber")]
     public sealed class Plugin : IPlugin
     {
-        public void Init(IPluginInterface pluginInterface)
+        public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
         {
             var export = new DefaultTemplateExport("Tabellenfahrplan/Kursbuch als HTML Datei (*.html)|*.html", GetTemplateChooser);
             var preview = new DefaultPreview("kfpl", "Kursbuch", export);
-            pluginInterface.Register<IExport>(export);
-            pluginInterface.Register<IPreviewAction>(preview);
+            componentRegistry.Register<IExport>(export);
+            componentRegistry.Register<IPreviewAction>(preview);
             
-            pluginInterface.Register<IFilterRuleContainer>(FilterRuleContainer);
-            pluginInterface.Register<IAppearanceControl>(new DefaultAppearanceControl(pi => new SettingsControl(pi), "Kursbuch"));
+            componentRegistry.Register<IFilterRuleContainer>(FilterRuleContainer);
+            componentRegistry.Register<IAppearanceControl>(new DefaultAppearanceControl(pi => new SettingsControl(pi), "Kursbuch"));
 
-            pluginInterface.Register<ITemplateProvider>(new Templates.TemplateProvider());
+            componentRegistry.Register<ITemplateProvider>(new Templates.TemplateProvider());
             
-            pluginInterface.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<Templates.TemplateHelper>("kfpl"));
-            pluginInterface.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<Model.KfplAttrs>("kfpl"));
+            componentRegistry.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<Templates.TemplateHelper>("kfpl"));
+            componentRegistry.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<Model.KfplAttrs>("kfpl"));
 
-            pluginInterface.Register<ITimetableTypeChangeAction>(new FixAttrsAction());
+            componentRegistry.Register<ITimetableTypeChangeAction>(new FixAttrsAction());
         }
 
         internal static IFilterRuleContainer FilterRuleContainer => new DefaultFilterRuleContainer("Kursbuch", KfplAttrs.GetAttrs, KfplAttrs.CreateAttrs);

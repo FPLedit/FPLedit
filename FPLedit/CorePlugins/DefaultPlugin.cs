@@ -4,15 +4,15 @@ namespace FPLedit.CorePlugins
 {
     public sealed class DefaultPlugin : IPlugin
     {
-        public void Init(IPluginInterface pluginInterface)
+        public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
         {
-            pluginInterface.Register<IExport>(new NonDefaultFiletypes.CleanedXmlExport());
-            pluginInterface.Register<ITimetableCheck>(new TimetableChecks.TransitionsCheck());
-            pluginInterface.Register<ITimetableCheck>(new TimetableChecks.TrainsTrackCheck());
-            pluginInterface.Register<ITimetableCheck>(new TimetableChecks.DayOverflowCheck());
-            pluginInterface.Register<ITimetableCheck>(new TimetableChecks.StationCodeCheck());
-            pluginInterface.Register<ITimetableInitAction>(new TimetableChecks.UpdateColorsAction());
-            pluginInterface.Register<ITimetableInitAction>(new TimetableChecks.FixNetworkAttributesAction());
+            componentRegistry.Register<IExport>(new NonDefaultFiletypes.CleanedXmlExport());
+            componentRegistry.Register<ITimetableCheck>(new TimetableChecks.TransitionsCheck());
+            componentRegistry.Register<ITimetableCheck>(new TimetableChecks.TrainsTrackCheck());
+            componentRegistry.Register<ITimetableCheck>(new TimetableChecks.DayOverflowCheck());
+            componentRegistry.Register<ITimetableCheck>(new TimetableChecks.StationCodeCheck());
+            componentRegistry.Register<ITimetableInitAction>(new TimetableChecks.UpdateColorsAction());
+            componentRegistry.Register<ITimetableInitAction>(new TimetableChecks.FixNetworkAttributesAction());
         }
     }
 }

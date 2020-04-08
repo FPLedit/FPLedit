@@ -18,14 +18,14 @@ namespace FPLedit.Editor
         private ButtonMenuItem editTrainsItem, designItem, filterItem; // Type="Both"
         private ButtonMenuItem editRoot, undoItem; // Type="Both"
 
-        public void Init(IPluginInterface pluginInterface)
+        public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
         {
             this.pluginInterface = pluginInterface;
             pluginInterface.FileStateChanged += PluginInterface_FileStateChanged;
             pluginInterface.ExtensionsLoaded += PluginInterface_ExtensionsLoaded;
             
             if (Environment.OSVersion.Platform != PlatformID.Win32NT || pluginInterface.Settings.Get<bool>("mp-compat.route-edit-button"))
-                pluginInterface.Register<IRouteAction>(new Network.EditRouteAction());
+                componentRegistry.Register<IRouteAction>(new Network.EditRouteAction());
 
             editRoot = (ButtonMenuItem)((MenuBar)pluginInterface.Menu).GetItem(MainForm.LocEditMenu);
 

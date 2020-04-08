@@ -9,21 +9,21 @@ namespace FPLedit.Aushangfahrplan
     [Plugin("Modul für Aushangfahrpläne", Vi.PFrom, Vi.PUpTo, Author = "Manuel Huber")]
     public sealed class Plugin : IPlugin
     {
-        public void Init(IPluginInterface pluginInterface)
+        public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
         {
             var export = new DefaultTemplateExport("Aushangfahrplan HTML Datei (*.html)|*.html", GetTemplateChooser);
             var preview = new DefaultPreview("afpl", "Aushangfahrplan", export);
-            pluginInterface.Register<IExport>(export);
-            pluginInterface.Register<IPreviewAction>(preview);
+            componentRegistry.Register<IExport>(export);
+            componentRegistry.Register<IPreviewAction>(preview);
             
-            pluginInterface.Register<IAppearanceControl>(new DefaultAppearanceControl(pi => new SettingsControl(pi), "Aushangfahrplan"));
-            pluginInterface.Register<IFilterRuleContainer>(FilterRuleContainer);
+            componentRegistry.Register<IAppearanceControl>(new DefaultAppearanceControl(pi => new SettingsControl(pi), "Aushangfahrplan"));
+            componentRegistry.Register<IFilterRuleContainer>(FilterRuleContainer);
 
-            pluginInterface.Register<ITemplateProvider>(new Templates.StdTemplateProvider());
-            pluginInterface.Register<ITemplateProvider>(new Templates.SvgTemplateProvider());
+            componentRegistry.Register<ITemplateProvider>(new Templates.StdTemplateProvider());
+            componentRegistry.Register<ITemplateProvider>(new Templates.SvgTemplateProvider());
             
-            pluginInterface.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<Templates.TemplateHelper>("afpl"));
-            pluginInterface.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<Model.AfplAttrs>("afpl"));
+            componentRegistry.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<Templates.TemplateHelper>("afpl"));
+            componentRegistry.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<Model.AfplAttrs>("afpl"));
         }
         
         internal static IFilterRuleContainer FilterRuleContainer => new DefaultFilterRuleContainer("Aushangfahrplan", AfplAttrs.GetAttrs, AfplAttrs.CreateAttrs);

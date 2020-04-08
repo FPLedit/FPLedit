@@ -17,7 +17,7 @@ namespace FPLedit.DebugDump
         private DebugListener listener;
 
 
-        public void Init(IPluginInterface pluginInterface)
+        public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
         {
             this.pluginInterface = pluginInterface;
 

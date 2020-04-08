@@ -12,7 +12,7 @@ namespace FPLedit.CorePlugins
         private int dialogOffset;
         private IEditMenuItemAction[] editMenuActions;
 
-        public void Init(IPluginInterface pluginInterface)
+        public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
         {
             this.pluginInterface = pluginInterface;
             pluginInterface.ExtensionsLoaded += PluginInterface_ExtensionsLoaded;
