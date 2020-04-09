@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -642,7 +642,7 @@ namespace FPLedit.Shared
         public IEnumerable<Train> GetFollowingTransitions(Train first)
         {
             var tra = first;
-            while ((tra = GetTransition(tra)) != null)
+            while ((tra = GetTransition(tra)) != null && tra != first)
                 yield return tra;
         }
 

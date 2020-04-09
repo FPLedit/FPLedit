@@ -73,14 +73,14 @@ namespace FPLedit.Editor
         }
 
         /// <summary>
-        /// Form to create a new station without a given route id.
+        /// Form to create a new station without a given route index.
         /// </summary>
         public EditStationForm(IPluginInterface pluginInterface, Timetable tt) : this(pluginInterface, tt, Timetable.UNASSIGNED_ROUTE_ID)
         {
         }
 
         /// <summary>
-        /// Form to create a new station with a given route id.
+        /// Form to create a new station with a given route index.
         /// </summary>
         public EditStationForm(IPluginInterface pluginInterface, Timetable tt, int route) : this(tt, pluginInterface)
         {
@@ -98,7 +98,7 @@ namespace FPLedit.Editor
         }
 
         /// <summary>
-        /// Form to edit a station (with given route id);
+        /// Form to edit a station (with given route index);
         /// </summary>
         public EditStationForm(IPluginInterface pluginInterface, Station station, int route) : this(station._parent, pluginInterface)
         {
