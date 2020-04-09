@@ -39,10 +39,10 @@ namespace FPLedit.Editor.Trains
 
         public void FillTrain(Train orig, Train target, int offsetMin)
         {
-            var path = orig.GetPath();
-
             if (orig._parent.Type == TimetableType.Network)
-                target.AddAllArrDeps(path);
+                throw new TimetableTypeNotSupportedException(TimetableType.Network, "fill trains");
+            if (orig.Direction != target.Direction || orig == target)
+                throw new InvalidOperationException("Invalid call to FillTrain: Either the trains have not the same direction or are equal.");
 
             InternalCopyArrDeps(orig, target, offsetMin);
         }
