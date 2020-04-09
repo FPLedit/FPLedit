@@ -55,7 +55,7 @@ namespace FPLedit.Editor.Trains
             {
                 if (tef.ShowModal(this) == DialogResult.Ok)
                 {
-                    tt.AddTrain(tef.Train, true);
+                    tt.AddTrain(tef.Train);
                     if (tef.NextTrain != null)
                         tt.SetTransition(tef.Train, tef.NextTrain);
 

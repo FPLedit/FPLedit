@@ -83,7 +83,7 @@ namespace FPLedit.Editor.Trains
                             continue;
                     }
 
-                    tt.AddTrain(newTrain, true);
+                    tt.AddTrain(newTrain);
                 }
             }
             else

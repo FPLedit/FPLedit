@@ -14,7 +14,7 @@ namespace FPLedit.Shared
         int DefaultPrePostTrackTime { get; set; }
 
         void AddStation(Station sta, int route);
-        void AddTrain(Train tra, bool hasArDeps = false);
+        void AddTrain(Train tra);
         Train GetTrainById(int id);
         void RemoveStation(Station sta);
         void RemoveTrain(Train tra);

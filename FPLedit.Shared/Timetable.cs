@@ -208,6 +208,7 @@ namespace FPLedit.Shared
                 UpgradeMessage = null;
         }
 
+        //TODO: Throw if direction == tr
         public List<Station> GetStationsOrderedByDirection(TrainDirection direction)
         {
             if (Type == TimetableType.Network)
@@ -318,13 +319,9 @@ namespace FPLedit.Shared
             return stations.FirstOrDefault(s => s.Id == id);
         }
 
-        public void AddTrain(Train tra, bool hasArDeps = false)
+        public void AddTrain(Train tra)
         {
             tra.Id = ++nextTraId;
-
-            if (!hasArDeps && Type == TimetableType.Linear)
-                tra.AddLinearArrDeps();
-
             tra._parent = this;
             trains.Add(tra);
             tElm.Children.Add(tra.XMLEntity);
