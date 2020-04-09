@@ -6,6 +6,10 @@ using FPLedit.Shared.Helpers;
 
 namespace FPLedit.Shared
 {
+    /// <summary>
+    /// A PositionCollection (PosCol) allows to define position (chainage) attributes which allow for different values
+    /// on each individual route.
+    /// </summary>
     [Templating.TemplateSafe]
     public class PositionCollection
     {
@@ -13,6 +17,11 @@ namespace FPLedit.Shared
         private readonly Dictionary<int, float> positions;
         private readonly Timetable tt;
 
+        /// <summary>
+        /// Creates a new PosColl.
+        /// </summary>
+        /// <param name="s">The station this PC should operate on..</param>
+        /// <param name="tt">The parent timetable of the station <paramref name="s"/>.</param>
         public PositionCollection(IStation s, Timetable tt)
         {
             sta = s;
@@ -24,10 +33,16 @@ namespace FPLedit.Shared
                 ParseNetwork();
         }
 
-        public void TestForErrors() // Do nothing. Contructor is enough.
+        /// <summary>
+        /// This method does nothing, but can be used to test for errors if the PosColl is constructed on-demand.
+        /// </summary>
+        public void TestForErrors()
         {
         }
 
+        /// <summary>
+        /// Returns the position - or null - on the given route.
+        /// </summary>
         public float? GetPosition(int route)
         {
             if (positions.TryGetValue(route, out float val))
@@ -51,6 +66,9 @@ namespace FPLedit.Shared
             Write();
         }
 
+        /// <summary>
+        /// Parse the position data data from a multi-route context (e.g. Network timetable).
+        /// </summary>
         private void ParseNetwork()
         {
             var toParse = sta.GetAttribute("km", ""); // Format EXTENDED_FPL, km ist gut
@@ -64,6 +82,9 @@ namespace FPLedit.Shared
             }
         }
 
+        /// <summary>
+        /// Parse the position data if there is only one route and we are not in a multi-route context (e.g. linear timetable).
+        /// </summary>
         private void ParseLinear()
         {
             string toParse;
@@ -79,6 +100,11 @@ namespace FPLedit.Shared
             positions.Add(Timetable.LINEAR_ROUTE_ID, float.Parse(toParse, CultureInfo.InvariantCulture));
         }
 
+        /// <summary>
+        /// Write all positions back to the XML attribute.
+        /// </summary>
+        /// <param name="forceType">Force either network or linear mode (only to be used by conversions!).</param>
+        /// <param name="forceVersion">Force the target timetable version (only to be used by conversions!).</param>
         public void Write(TimetableType? forceType = null, TimetableVersion? forceVersion = null)
         {
             var t = forceType ?? tt.Type;

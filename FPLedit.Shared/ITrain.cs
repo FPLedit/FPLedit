@@ -65,7 +65,7 @@ namespace FPLedit.Shared
         /// Inserts the given time entry for the station added after creation of the train.
         /// </summary>
         /// <param name="sta"></param>
-        /// <param name="route">The route id, at which the station is used, or <see cref="Timetable.LINEAR_ROUTE_ID"/> if the timetable is linear.</param>
+        /// <param name="route">The route index, at which the station is used, or <see cref="Timetable.LINEAR_ROUTE_ID"/> if the timetable is linear.</param>
         /// <returns>The newly added time entry.</returns>
         ArrDep AddArrDep(Station sta, int route);
         /// <summary>

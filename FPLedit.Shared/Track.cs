@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FPLedit.Shared
+﻿namespace FPLedit.Shared
 {
+    /// <summary>
+    /// Represents a single track definition of a <see cref="Station"/>, as used in <see cref="Station.Tracks"/>
+    /// </summary>
     [XElmName("track")]
     [Templating.TemplateSafe]
     public sealed class Track : Entity
@@ -14,6 +11,7 @@ namespace FPLedit.Shared
         {
         }
 
+        /// <inheritdoc />
         public Track(XMLEntity en, Timetable tt) : base(en, tt)
         {
         }

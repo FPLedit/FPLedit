@@ -5,19 +5,20 @@ using System.Linq;
 
 namespace FPLedit.Shared
 {
+    /// <summary>
+    /// Root object used to import linear line files. (*.str)
+    /// </summary>
     [XElmName("jTrainGraph_stations")]
     public sealed class StationsList : Entity
     {
-        public ReadOnlyCollection<Station> Stations { get; private set; }
-
-        public StationsList() : base("jTrainGraph_stations", null) // Root without parent
-        {
-            throw new InvalidOperationException("Generieren von Streckendateien nicht möglich!");
-        }
+        /// <summary>
+        /// All statuins that were defined in this file.
+        /// </summary>
+        public IList<Station> Stations { get; }
 
         public StationsList(XMLEntity en) : base(en, null) // Root without parent
         {
-            Stations = Children.Where(x => x.XName == "sta") // Filtert andere Elemente
+            Stations = Children.Where(x => x.XName == "sta") // Filters other elements
                 .Select(x => new Station(x, null))
                 .ToList().AsReadOnly();
         }

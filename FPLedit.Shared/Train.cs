@@ -79,7 +79,7 @@ namespace FPLedit.Shared
         public ArrDep AddArrDep(Station sta, int route)
         {
             int idx;
-            if (_parent.Type == TimetableType.Linear) //TODO: Throw if linear && route id != 0.
+            if (_parent.Type == TimetableType.Linear) //TODO: Throw if linear && route index != 0.
             {
                 var stas = _parent.GetStationsOrderedByDirection(TrainDirection.ti); // All arrdeps are sorted in line direction if linear
                 idx = stas.IndexOf(sta);

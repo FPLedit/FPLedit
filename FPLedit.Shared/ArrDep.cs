@@ -1,17 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 
 namespace FPLedit.Shared
 {
+    /// <summary>
+    /// Object model type that represents a single stop with time data and all additional data. It is always part of a train.
+    /// </summary>
+    /// <remarks>You can use <see cref="Train"/>.*ArrDeps* functions to manipulate single ArrDep entries of a given train.</remarks>
     [XElmName("t")]
     [Templating.TemplateSafe]
     public sealed class ArrDep : Entity
     {
+        /// <summary>
+        /// Collection that allows to modify the shunt moves at this train stop.
+        /// </summary>
         public IChildrenCollection<ShuntMove> ShuntMoves { get; }
 
+        /// <summary>
+        /// Unique identifier of the station of this stop. This is only available when the parent timetable is a network timetable.
+        /// </summary>
+        /// <exception cref="TimetableTypeNotSupportedException">The parent timetable is not a network timetable.</exception>
         [XAttrName("fpl-id", IsFpleditElement = true)]
         public int StationId
         {
@@ -29,20 +36,30 @@ namespace FPLedit.Shared
             }
         }
 
+        /// <summary>
+        /// Arrival time.
+        /// </summary>
         [XAttrName("a")]
         public TimeEntry Arrival
         {
-            get => GetTimeValue("a");
-            set => SetNotEmptyTime(value, "a");
+            get => GetTimeAttributeValue("a");
+            set => SetNotEmptyTimeAttribute("a", value);
         }
 
+        /// <summary>
+        /// Departure time.
+        /// </summary>
         [XAttrName("d")]
         public TimeEntry Departure
         {
-            get => GetTimeValue("d");
-            set => SetNotEmptyTime(value, "d");
+            get => GetTimeAttributeValue("d");
+            set => SetNotEmptyTimeAttribute("d", value);
         }
 
+        /// <summary>
+        /// Optional boolean flag: Whether the train has to stop in front of the "Trapeztafel" (German railway signal Ne 1)
+        /// before entering the station. Commonly on branch lines without much signalisation. May be shown in some outputs.
+        /// </summary>
         [XAttrName("fpl-tr", IsFpleditElement = true)]
         public bool TrapeztafelHalt
         {
@@ -50,13 +67,26 @@ namespace FPLedit.Shared
             set => SetAttribute("fpl-tr", value ? "1" : "0");
         }
 
+        /// <summary>
+        /// Optional metdata, whether and who has to give a "Zuglaufmeldung" (German railway security construct typically
+        /// used on branch lines without much signalisation). May be shown in some outputs.
+        /// </summary>
         [XAttrName("fpl-zlm", IsFpleditElement = true)]
         public string Zuglaufmeldung
         {
             get => GetAttribute<string>("fpl-zlm");
             set => SetAttribute("fpl-zlm", value);
         }
-
+        
+        /// <summary>
+        /// Optional value denoting a special track used for arrival at the given station. The track must be defined in
+        /// the corresponding Station. If this is set to null, default values might be used or templates might fall back
+        /// to <see cref="DepartureTrack"/>.
+        /// </summary>
+        /// <seealso cref="Station.Tracks"/>
+        /// <seealso cref="Station.DefaultTrackLeft"/>
+        /// <seealso cref="Station.DefaultTrackRight"/>
+        /// <seealso cref="Track"/>
         [XAttrName("at")]
         public string ArrivalTrack
         {
@@ -64,6 +94,15 @@ namespace FPLedit.Shared
             set => SetAttribute("at", value);
         }
 
+        /// <summary>
+        /// Optional value denoting a special track used for departure at the given station. The track must be defined in
+        /// the corresponding Station. If this is set to null, default values might be used or templates might fall back
+        /// to <see cref="ArrivalTrack"/>.
+        /// </summary>
+        /// <seealso cref="Station.Tracks"/>
+        /// <seealso cref="Station.DefaultTrackLeft"/>
+        /// <seealso cref="Station.DefaultTrackRight"/>
+        /// <seealso cref="Track"/>
         [XAttrName("dt")]
         public string DepartureTrack
         {
@@ -71,10 +110,18 @@ namespace FPLedit.Shared
             set => SetAttribute("dt", value);
         }
 
-        // Meta-Properties
+        /// <summary>
+        /// Returns the lowest time value set either on <see cref="Arrival"/> or <see cref="Departure"/> - or
+        /// <see cref="TimeEntry.Zero"/> if no time entry is set.
+        /// </summary>
+        /// <seealso cref="HasMinOneTimeSet"/>
         public TimeEntry FirstSetTime
             => Arrival == default ? Departure : Arrival;
 
+        /// <summary>
+        /// Meta-property (readonly) stating, whether the train actually has any time entry (<see cref="Arrival"/> or
+        /// <see cref="Departure"/>) set at this station.
+        /// </summary>
         public bool HasMinOneTimeSet
             => FirstSetTime != default;
 
@@ -83,6 +130,7 @@ namespace FPLedit.Shared
             ShuntMoves = new ObservableChildrenCollection<ShuntMove>(this, "shMove", _parent);
         }
 
+        /// <inheritdoc />
         public ArrDep(XMLEntity en, Timetable tt) : base(en, tt)
         {
             ShuntMoves = new ObservableChildrenCollection<ShuntMove>(this, "shMove", _parent);
@@ -91,7 +139,6 @@ namespace FPLedit.Shared
         /// <summary>
         /// Applies every data value from another instance - except StationID.
         /// </summary>
-        /// <param name="copy"></param>
         public void ApplyCopy(ArrDep copy)
         {
             Arrival = copy.Arrival;

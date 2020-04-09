@@ -7,10 +7,16 @@ using System.Xml.Linq;
 
 namespace FPLedit.Shared
 {
+    /// <summary>
+    /// Type of the XML tree, used as a base for the object model. Represents a single XML node.
+    /// </summary>
     [DebuggerDisplay("Name: {XName}, Children: {Children.Count}, Attrs: {AttributeDebugger,nq}")]
     [Templating.TemplateSafe]
     public sealed class XMLEntity : IEntity
     {
+        /// <summary>
+        /// Name of the XML node. Naming rules apply.
+        /// </summary>
         public string XName { get; set; }
 
         public Dictionary<string, string> Attributes { get; set; }
@@ -57,7 +63,10 @@ namespace FPLedit.Shared
 
         private string AttributeDebugger => string.Join(", ", Attributes.ToList().Select(a => a.Key + "=" + a.Value));
         
-        
+        /// <summary>
+        /// Returns if this entity is different on the top level or any child level, from the given other entity. This is a deep-compare operation.
+        /// </summary>
+        /// <returns>True, if both XMLentities are "equal".</returns>
         public bool XDiff(XMLEntity other)
         {
             if (XName != other.XName)

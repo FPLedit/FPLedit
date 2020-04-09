@@ -17,6 +17,7 @@ namespace FPLedit.Shared
         /// </summary>
         string DisplayName { get; }
 
+        //TODO: Convert to IEnumerable.
         /// <summary>
         /// Action that is triggered when the given filter rules should be commited to the Timetable.
         /// </summary>

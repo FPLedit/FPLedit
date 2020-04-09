@@ -3,6 +3,9 @@ using FPLedit.Shared.Helpers;
 
 namespace FPLedit.Shared
 {
+    /// <summary>
+    /// Represents a single read-only time value, counting hours and minutes.
+    /// </summary>
     [Templating.TemplateSafe]
     public readonly struct TimeEntry : IComparable, IComparable<TimeEntry>, IEquatable<TimeEntry>
     {

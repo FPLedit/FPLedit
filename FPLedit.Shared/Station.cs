@@ -5,24 +5,36 @@ using System.Linq;
 
 namespace FPLedit.Shared
 {
+    /// <summary>
+    /// This object model type represents a single railway station (with tracks, platforms, etc.) in the network, bound
+    /// on one or more "Routes". Trains can stop at this type of <see cref="IStation"/>.
+    /// </summary>
     [DebuggerDisplay("{SName} [{GetAttribute(\"km\", \"\")}]")]
     [XElmName("sta")]
     [Templating.TemplateSafe]
     public sealed class Station : Entity, IStation
     {
+        /// <summary>
+        /// Collection that allows to modify the tracks of this station.
+        /// </summary>
         public IChildrenCollection<Track> Tracks { get; }
 
+        /// <inheritdoc />
         public Station(XMLEntity en, Timetable tt) : base(en, tt)
         {
             Positions.TestForErrors();
             Tracks = new ObservableChildrenCollection<Track>(this, "track", _parent);
         }
 
+        /// <summary>
+        /// Create a new empty station and associate it with the given timetable.
+        /// </summary>
         public Station(Timetable tt) : base("sta", tt)
         {
             Tracks = new ObservableChildrenCollection<Track>(this, "track", _parent);
         }
 
+        /// <inheritdoc />
         [XAttrName("name")]
         public string SName
         {
@@ -30,6 +42,9 @@ namespace FPLedit.Shared
             set => SetAttribute("name", value);
         }
         
+        /// <summary>
+        /// Optional metadata entry that contains the user-set station code. May be displayed on some outputs. 
+        /// </summary>
         [XAttrName("fpl-cd", IsFpleditElement = true)]
         public string StationCode
         {
@@ -37,6 +52,9 @@ namespace FPLedit.Shared
             set => SetAttribute("fpl-cd", value);
         }
         
+        /// <summary>
+        /// Optional metadata entry that contains the user-set station type. May be displayed on some outputs. 
+        /// </summary>
         [XAttrName("fpl-tp", IsFpleditElement = true)]
         public string StationType
         {
@@ -44,29 +62,44 @@ namespace FPLedit.Shared
             set => SetAttribute("fpl-tp", value);
         }
 
+        /// <inheritdoc />
         public PositionCollection Positions
             => new PositionCollection(this, _parent);
 
+        /// <summary>
+        /// Track count on the route (not the station). Depends on route index. The track count counts against the default line direction.
+        /// </summary>
         [XAttrName("tr")]
         public RouteValueCollection<int> LineTracksRight
             => new RouteValueCollection<int>(this, _parent, "tr", "1", s => int.Parse(s), i => i.ToString());
 
+        /// <inheritdoc />
         [XAttrName("fpl-wl", IsFpleditElement = true)]
         public RouteValueCollection<int> Wellenlinien
             => new RouteValueCollection<int>(this, _parent, "fpl-wl", "0", s => int.Parse(s), i => i.ToString());
 
+        /// <inheritdoc />
         [XAttrName("fpl-vmax", IsFpleditElement = true)]
         public RouteValueCollection<string> Vmax
             => new RouteValueCollection<string>(this, _parent, "fpl-vmax", "", s => s, s => s);
 
+        /// <summary>
+        /// Deafult track against the route direction. Depends on route index.
+        /// </summary>
+        /// <remarks>Tracks must be registered beforehand at <see cref="Tracks"/>.</remarks>
         [XAttrName("dTi")]
         public RouteValueCollection<string> DefaultTrackRight
             => new RouteValueCollection<string>(this, _parent, "dTi", "", s => s, s => s);
 
+        /// <summary>
+        /// Deafult track in the route direction. Depends on route index.
+        /// </summary>
+        /// <remarks>Tracks must be registered beforehand at <see cref="Tracks"/>.</remarks>
         [XAttrName("dTa")]
         public RouteValueCollection<string> DefaultTrackLeft
             => new RouteValueCollection<string>(this, _parent, "dTa", "", s => s, s => s);
 
+        /// <inheritdoc />
         [XAttrName("fpl-id", IsFpleditElement = true)]
         public int Id
         {
@@ -86,6 +119,8 @@ namespace FPLedit.Shared
             }
         }
 
+        /// <inheritdoc />
+        /// <exception cref="TimetableTypeNotSupportedException">If setting this value on a linear timetable.</exception>
         [XAttrName("fpl-rt", IsFpleditElement = true)]
         public int[] Routes
         {
@@ -105,6 +140,9 @@ namespace FPLedit.Shared
             }
         }
 
+        /// <summary>
+        /// Returns if this station connects more than one route.
+        /// </summary>
         public bool IsJunction => Routes.Length > 1;
         
         internal bool _InternalAddRoute(int route)

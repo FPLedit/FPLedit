@@ -1,17 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 
 namespace FPLedit.Shared
 {
+    /// <summary>
+    /// Data type, which contains boolean flags for weekdays.
+    /// </summary>
     [DebuggerStepThrough]
     [Templating.TemplateSafe]
     public readonly struct Days : IEquatable<Days>, IEquatable<string>
     {
         private readonly bool[] internalDays;
 
+        /// <summary>
+        /// Retrieves the boolean flag of the given day. Days are indexed starting with 0 (Monday) until 6 (Sunday).
+        /// </summary>
+        /// <exception cref="IndexOutOfRangeException">An index lower than 0 or higher than 6 has been used.</exception>
         public bool this[int index]
         {
             get
@@ -22,6 +27,9 @@ namespace FPLedit.Shared
             }
         }
 
+        /// <summary>
+        /// Returns the length of the week.
+        /// </summary>
         public int Length => 7;
 
         public Days(bool[] data)
@@ -31,6 +39,12 @@ namespace FPLedit.Shared
             internalDays = data;
         }
 
+        /// <summary>
+        /// Parse the given binary string representation (7 times 1 or 0, start at Monday) to a <see cref="Days"/> value.
+        /// </summary>
+        /// <param name="binary">Binary string of length 7.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException">The length of the bitsrtring is not 7.</exception>
         public static Days Parse(string binary)
         {
             if (binary.Length != 7)
@@ -39,6 +53,9 @@ namespace FPLedit.Shared
             return new Days(days);
         }
 
+        /// <summary>
+        /// Generates a seven-bit binary string represenatation of the current Days value.
+        /// </summary>
         public string ToBinString() 
             => internalDays.Aggregate("", (current, t) => current + (t ? "1" : "0"));
 
@@ -68,6 +85,10 @@ namespace FPLedit.Shared
             return string.Join(", ", str.Where(o => o != null));
         }
 
+        /// <summary>
+        /// Returns whether this intance and <paramref name="daysB"/> have days in common.
+        /// </summary>
+        /// <seealso cref="IntersectingDays"/>
         public bool IsIntersecting(Days daysB)
         {
             for (int i = 0; i < 7; i++)
@@ -77,6 +98,10 @@ namespace FPLedit.Shared
             return false;
         }
 
+        /// <summary>
+        /// Retunrns the days, that this instance and <paramref name="daysB"/> have in common.
+        /// </summary>
+        /// <seealso cref="IsIntersecting"/>
         public Days IntersectingDays(Days daysB)
         {
             var res = new bool[7];
@@ -85,6 +110,13 @@ namespace FPLedit.Shared
                     res[i] = true;
             return new Days(res);
         }
+        
+        /// <summary>
+        /// Returns, whether the given binary string representation equals this Days instance.
+        /// </summary>
+        /// <param name="compare"></param>
+        /// <returns></returns>
+        private bool EqualsString(string compare) => Parse(compare).Equals(this);
 
         public override bool Equals(object obj)
             => obj is Days d && internalDays.SequenceEqual(d.internalDays);
@@ -97,8 +129,6 @@ namespace FPLedit.Shared
 
             return ret;
         }
-
-        private bool EqualsString(string compare) => Parse(compare).Equals(this);
 
         public bool Equals(Days other) => Equals((object)other);
 

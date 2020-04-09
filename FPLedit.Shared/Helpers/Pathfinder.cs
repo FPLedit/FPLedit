@@ -5,8 +5,9 @@ using System.Linq;
 namespace FPLedit.Shared.Helpers
 {
     /// <summary>
-    /// Findet den kürzesten Weg zwischen zwei Stationen
+    /// Helper to find a path between two stations.
     /// </summary>
+    [Templating.TemplateSafe]
     public sealed class Pathfinder
     {
         private readonly Timetable tt;
@@ -16,14 +17,21 @@ namespace FPLedit.Shared.Helpers
             this.tt = tt;
         }
 
+        /// <summary>
+        /// Find a (but not necessarily the shortest) path between two stations.
+        /// </summary>
+        /// <param name="start">Start station.</param>
+        /// <param name="dest">Destination station.</param>
+        /// <param name="waypoints">Waypoints that will be respected in the order they are passed.</param>
+        /// <exception cref="ArgumentException">One or more of the stations are not part of the timetable.</exception>
         public List<Station> GetPath(Station start, Station dest, params Station[] waypoints)
         {
-            if (!tt.Stations.Contains(start) || !tt.Stations.Contains(dest))
-                throw new ArgumentException("Start- oder Zielstation noch nicht im Fahrplan enthalten");
-
             var points = new List<Station>(waypoints);
             points.Insert(0, start);
             points.Add(dest);
+            
+            if (points.Any(p => !tt.Stations.Contains(p)))
+                throw new ArgumentException("Start-, Ziel- oder Wegbpunktstation noch nicht im Fahrplan enthalten");
 
             var ret = new List<Station>();
             for (int i = 0; i < points.Count - 1; i++)

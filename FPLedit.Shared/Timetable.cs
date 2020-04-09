@@ -1,10 +1,11 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
 namespace FPLedit.Shared
 {
+    /// <inheritdoc cref="ITimetable" />
     [DebuggerDisplay("{" + nameof(TTName) + "}")]
     [XElmName("jTrainGraph_timetable")]
     [Templating.TemplateSafe]
@@ -52,8 +53,11 @@ namespace FPLedit.Shared
 
         public IList<Transition> Transitions => transitions.AsReadOnly();
 
-        public string UpgradeMessage { get; }
+        public string UpgradeMessage { get; } //TODO: Replace with Init actions
 
+        /// <summary>
+        /// Create a new new empty timetable file of the given timetable type.
+        /// </summary>
         public Timetable(TimetableType type) : base("jTrainGraph_timetable", null) // Root without parent
         {
             stations = new List<Station>();
@@ -70,6 +74,10 @@ namespace FPLedit.Shared
             routeCache = new Dictionary<int, Route>(); // Initialize empty route cache.
         }
 
+        /// <summary>
+        /// Create a timetable instance from the given <see cref="XMLEntity"/>.
+        /// </summary>
+        /// <exception cref="NotSupportedException">FPLedit does not support this timetable's <see cref="TimetableVersion"/>.</exception>
         internal Timetable(XMLEntity en) : base(en, null)
         {
             if (!Enum.IsDefined(typeof(TimetableVersion), Version))
@@ -208,35 +216,14 @@ namespace FPLedit.Shared
                 UpgradeMessage = null;
         }
 
-        //TODO: Throw if direction == tr
-        public List<Station> GetStationsOrderedByDirection(TrainDirection direction)
-        {
-            if (Type == TimetableType.Network)
-                throw new TimetableTypeNotSupportedException(TimetableType.Network, "direction");
-            return (direction == TrainDirection.ta
-                ? GetRoute(LINEAR_ROUTE_ID).Stations.Reverse()
-                : GetRoute(LINEAR_ROUTE_ID).Stations).ToList();
-        }
+        #region Hilfsmethoden für Stationen
 
-        public string GetLineName(TrainDirection direction)
-        {
-            if (Type == TimetableType.Network)
-                throw new TimetableTypeNotSupportedException(TimetableType.Network, "direction");
-            var stas = GetStationsOrderedByDirection(direction);
-            return stas.First().SName + " - " + stas.Last().SName;
-        }
-
-        public Timetable Clone() => Clone<Timetable>();
-
-        #region Hilfsmethoden für andere Entitäten
-
-        /// <summary>
-        /// This method adds a non-existent Station to an existing route in this timetable.
-        /// </summary>
-        /// <param name="sta"></param>
-        /// <param name="route"></param>
+        /// <inheritdoc />
+        /// <exception cref="ArgumentException">The station has already been registered</exception>
+        /// <exception cref="TimetableTypeNotSupportedException">The timetable is linear but the given route index is not zero.</exception>
         public void AddStation(Station sta, int route)
         {
+            //TODO: Really throw if station already exists.
             sta._parent = this;
 
             if (Type == TimetableType.Network)
@@ -280,10 +267,7 @@ namespace FPLedit.Shared
             RebuildRouteCache(route);
         }
 
-        /// <summary>
-        /// This method removes the given Station from this timetable instance.
-        /// </summary>
-        /// <param name="sta"></param>
+        /// <inheritdoc />
         public void RemoveStation(Station sta)
         {
             foreach (var train in Trains)
@@ -312,24 +296,34 @@ namespace FPLedit.Shared
                 RemoveOrphanedRoutes();
         }
 
+        /// <inheritdoc />
+        /// <exception cref="TimetableTypeNotSupportedException">Operation was applied to a linear timetable.</exception>
         public Station GetStationById(int id)
         {
             if (Type == TimetableType.Linear)
                 throw new TimetableTypeNotSupportedException(TimetableType.Linear, "station ids");
             return stations.FirstOrDefault(s => s.Id == id);
         }
+        
+        #endregion
+        
+        #region Hilfsmethoden für Züge
 
+        /// <inheritdoc />
         public void AddTrain(Train tra)
         {
+            //TODO: Really do nothing if train already exists.
             tra.Id = ++nextTraId;
             tra._parent = this;
             trains.Add(tra);
             tElm.Children.Add(tra.XMLEntity);
         }
 
+        /// <inheritdoc />
         public Train GetTrainById(int id)
             => trains.FirstOrDefault(t => t.Id == id);
 
+        /// <inheritdoc />
         public void RemoveTrain(Train tra)
         {
             RemoveTransition(tra, false); // Remove "orphaned" transitions
@@ -400,17 +394,6 @@ namespace FPLedit.Shared
 
         #region Hilfsmethoden für Routen
         
-        /// <summary>
-        /// This function adds an additional new route to an already added station.
-        /// </summary>
-        /// <param name="sta"></param>
-        /// <param name="route"></param>
-        public void StationAddRoute(Station sta, int route)
-        {
-            if (sta._InternalAddRoute(route))
-                RebuildRouteCache(route);
-        }
-
         private void RebuildRouteCache(int route)
         {
             if (routeCache == null)
@@ -418,24 +401,38 @@ namespace FPLedit.Shared
             var stas = Stations.Where(s => s.Routes.Contains(route));
             routeCache[route] = new Route(route, stas);
         }
+        
+        private Route[] _InternalGetRoutesUncached()
+        {
+            if (Type == TimetableType.Network)
+            {
+                var routesJoin = Stations.SelectMany(s => s.Routes.Select(r => new {r, s}))
+                    .GroupBy(o => o.r)
+                    .Select(g => new Route(g.Key, g.Select(o => o.s))).ToArray();
+                return routesJoin;
+            }
 
+            // TimetableType.Linear
+            return new[] { new Route(LINEAR_ROUTE_ID, Stations) };
+        }
+        
+        /// <inheritdoc />
+        public void StationAddRoute(Station sta, int route)
+        {
+            if (sta._InternalAddRoute(route))
+                RebuildRouteCache(route);
+        }
+
+        /// <inheritdoc />
         public void StationRemoveRoute(Station sta, int route)
         {
             if (sta._InternalRemoveRoute(route))
                 RebuildRouteCache(route);
         }
 
-        /// <summary>
-        /// Adds a new route between <paramref name="exisitingStartStation"/> and <paramref name="newStation"/>. <paramref name="newStation"/> has to be a new station not added to the timetable yet.
-        /// It will create a new route containing only <paramref name="exisitingStartStation"/> @position <paramref name="newStartPosition"/> and <paramref name="newStation"/> @position <paramref name="newPosition"/>
-        /// It will also add <paramref name="newStation"/> to the timetable.
-        /// </summary>
-        /// <param name="exisitingStartStation"></param>
-        /// <param name="newStation">This station has to be "plain", e.g. have no routes & no associated positions.</param>
-        /// <param name="newStartPosition"></param>
-        /// <param name="newPosition"></param>
-        /// <returns>The index of the newly added route.</returns>
-        /// <exception cref="NotSupportedException">If called on a linear timetable.</exception>
+        /// <inheritdoc />
+        /// <exception cref="TimetableTypeNotSupportedException">Operation was applied to a linear timetable.</exception>
+        /// <exception cref="ArgumentException"><paramref name="newStation"/> already had some routes.</exception>
         public int AddRoute(Station exisitingStartStation, Station newStation, float newStartPosition, float newPosition)
         {
             if (Type == TimetableType.Linear)
@@ -455,6 +452,7 @@ namespace FPLedit.Shared
             return idx;
         }
 
+        /// <inheritdoc />
         public Route[] GetRoutes()
         {
             if (routeCache == null)
@@ -462,20 +460,8 @@ namespace FPLedit.Shared
             return routeCache.Select(kvp => kvp.Value).ToArray();
         }
 
-        private Route[] _InternalGetRoutesUncached()
-        {
-            if (Type == TimetableType.Network)
-            {
-                var routesJoin = Stations.SelectMany(s => s.Routes.Select(r => new {r, s}))
-                    .GroupBy(o => o.r)
-                    .Select(g => new Route(g.Key, g.Select(o => o.s))).ToArray();
-                return routesJoin;
-            }
-
-            // TimetableType.Linear
-            return new[] { new Route(LINEAR_ROUTE_ID, Stations) };
-        }
-
+        /// <inheritdoc />
+        /// <exception cref="TimetableTypeNotSupportedException">If called on a linear timetable.</exception>
         public Route GetRoute(int index)
         {
             if (Type == TimetableType.Linear && index == LINEAR_ROUTE_ID)
@@ -495,13 +481,9 @@ namespace FPLedit.Shared
             return new Route(index, Array.Empty<Station>());
         }
 
-        /// <summary>
-        /// Connects an alredy existing station with another route to create circular networks.
-        /// </summary>
-        /// <param name="route">The pre-existing route to be added to the stations.</param>
-        /// <param name="station"></param>
-        /// <param name="newKm">The new position of <paramref name="station"/> on <paramref name="route"/>.</param>
-        /// <exception cref="NotSupportedException">If called on a linear timetable.</exception>
+        /// <inheritdoc />
+        /// <exception cref="TimetableTypeNotSupportedException">If called on a linear timetable.</exception>
+        /// <exception cref="ArgumentException"><paramref name="station"/> already serves the Route <paramref name="route"/></exception>
         public void JoinRoutes(int route, Station station, float newKm)
         {
             if (Type == TimetableType.Linear)
@@ -514,6 +496,7 @@ namespace FPLedit.Shared
             RebuildRouteCache(route);
         }
 
+        /// <inheritdoc />
         public bool HasRouteCycles
         {
             get
@@ -546,7 +529,7 @@ namespace FPLedit.Shared
                     // Find junction
                     var j = junctions.First(t => t.Routes.Contains(s)); // We only have one.
                     var r = j.Routes;
-                    if (r.Length == 2) // Eliminate one instance of each route id, if only two remain at this station (which becomes a "loose" end now).
+                    if (r.Length == 2) // Eliminate one instance of each route index, if only two remain at this station (which becomes a "loose" end now).
                         rids.Remove(r.First(t => t != s));
                     rids.Remove(s);
                 }
@@ -557,6 +540,7 @@ namespace FPLedit.Shared
             return rids;
         }
 
+        /// <inheritdoc />
         public bool RouteConnectsDirectly(int routeToCheck, Station sta1, Station sta2)
         {
             var path = GetRoute(routeToCheck).Stations;
@@ -567,6 +551,7 @@ namespace FPLedit.Shared
             return Math.Abs(idx1 - idx2) == 1;
         }
 
+        /// <inheritdoc />
         public int GetDirectlyConnectingRoute(Station sta1, Station sta2)
             => sta1.Routes.Intersect(sta2.Routes).DefaultIfEmpty(-1)
                 .FirstOrDefault(r => RouteConnectsDirectly(r, sta1, sta2));
@@ -590,7 +575,10 @@ namespace FPLedit.Shared
 
         #region Hilfsmethoden für Umläufe
 
-        public void AddTransition(Train first, Train next)
+        /// <summary>
+        /// Private helper function to create a new transition. Only exposed via <see cref="SetTransition"/>.
+        /// </summary>
+        private void AddTransition(Train first, Train next)
         {
             if (next == null) return;
             var transition = new Transition(this)
@@ -602,6 +590,7 @@ namespace FPLedit.Shared
             transitions.Add(transition);
         }
 
+        /// <inheritdoc />
         public void SetTransition(Train first, Train newNext)
         {
             var trans = transitions.Where(t => t.First == first.Id).ToArray();
@@ -619,11 +608,13 @@ namespace FPLedit.Shared
             }
         }
 
+        /// <inheritdoc />
         public Train GetTransition(Train first)
         {
             return first != null ? GetTransition(first.Id) : null;
         } 
 
+        /// <inheritdoc />
         public Train GetTransition(int firstTrainId)
         {
             if (firstTrainId == -1)
@@ -639,6 +630,7 @@ namespace FPLedit.Shared
             return GetTrainById(trans.First().Next);
         }
 
+        /// <inheritdoc />
         public IEnumerable<Train> GetFollowingTransitions(Train first)
         {
             var tra = first;
@@ -646,8 +638,10 @@ namespace FPLedit.Shared
                 yield return tra;
         }
 
-        public void RemoveTransition(Train tra, bool onlyAsFirst = true) => RemoveTransition(tra.Id, onlyAsFirst);
+        /// <inheritdoc />
+        public void RemoveTransition(Train first, bool onlyAsFirst = true) => RemoveTransition(first.Id, onlyAsFirst);
 
+        /// <inheritdoc />
         public void RemoveTransition(int firstTrainId, bool onlyAsFirst = true)
         {
             var trans = transitions.Where(t => t.First == firstTrainId || (!onlyAsFirst && t.Next == firstTrainId)).ToArray();
@@ -656,6 +650,7 @@ namespace FPLedit.Shared
             transitions.RemoveAll(t => trans.Contains(t));
         }
 
+        /// <inheritdoc />
         public bool HasTransition(Train tra, bool onlyAsFirst = true)
             => transitions.Any(t => t.First == tra.Id || (!onlyAsFirst && t.Next == tra.Id));
 
@@ -663,11 +658,7 @@ namespace FPLedit.Shared
         
         #region Uneindeutige Routen
 
-        /// <summary>
-        /// Decides, if, after removal of <paramref name="toDelete"/>, an ambiguous route situation would occur, that means, there will be more than one route directly connection two other stations.
-        /// </summary>
-        /// <param name="toDelete"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public bool WouldProduceAmbiguousRoute(Station toDelete)
         {
             var routesToCheck = toDelete.Routes;
@@ -692,9 +683,39 @@ namespace FPLedit.Shared
         }
         
         #endregion
+        
+        /// <inheritdoc />
+        public Timetable Clone() => Clone<Timetable>();
 
         [DebuggerStepThrough]
         public override string ToString()
             => string.Join(" | ", GetRoutes().Select(r => r.GetRouteName()));
+        
+        #region Legacy linear APIs
+        //TODO: Move those to seperate API interface?
+        
+        //TODO: Throw if direction == tr
+        /// <inheritdoc />
+        /// <exception cref="TimetableTypeNotSupportedException">Operation was applied to a network timetable.</exception>
+        public List<Station> GetStationsOrderedByDirection(TrainDirection direction)
+        {
+            if (Type == TimetableType.Network)
+                throw new TimetableTypeNotSupportedException(TimetableType.Network, "direction");
+            return (direction == TrainDirection.ta
+                ? GetRoute(LINEAR_ROUTE_ID).Stations.Reverse()
+                : GetRoute(LINEAR_ROUTE_ID).Stations).ToList();
+        }
+
+        /// <inheritdoc />
+        /// <exception cref="TimetableTypeNotSupportedException">Operation was applied to a network timetable.</exception>
+        public string GetLineName(TrainDirection direction)
+        {
+            if (Type == TimetableType.Network)
+                throw new TimetableTypeNotSupportedException(TimetableType.Network, "direction");
+            var stas = GetStationsOrderedByDirection(direction);
+            return stas.First().SName + " - " + stas.Last().SName;
+        }
+        
+        #endregion
     }
 }

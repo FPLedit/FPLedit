@@ -5,6 +5,7 @@ namespace FPLedit.Shared
     /// <summary>
     /// Registrable Proxy interface to provide a control that will be shown in the timetable appearance form (`Bearbeiten > Fahrplandarstellung`)
     /// </summary>
+    /// <remarks>See <see cref="DefaultImplementations.DefaultAppearanceControl"/> for a default implementation.</remarks>
     public interface IAppearanceControl : IRegistrableComponent
     {
         /// <summary>

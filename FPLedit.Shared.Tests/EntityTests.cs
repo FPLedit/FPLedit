@@ -72,12 +72,6 @@ namespace FPLedit.Shared.Tests
             x.Children.RemoveAt(0);
             Assert.AreEqual(0, x.Children.Count);
             Assert.AreEqual(0, x.XMLEntity.Children.Count);
-            
-            // Collections tauschen
-            x.Children.Add(x2);
-            x.Children = new List<XMLEntity>();
-            Assert.IsEmpty(x.Children);
-            Assert.IsEmpty(x.XMLEntity.Attributes);
         }
 
         [Test]

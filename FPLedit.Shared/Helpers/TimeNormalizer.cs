@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace FPLedit.Shared.Helpers
 {
+    /// <summary>
+    /// Helper class to normalize user-typed <see cref="TimeEntry"/>s.
+    /// </summary>
     public sealed class TimeNormalizer
     {
         private readonly Regex verifyRegex;
@@ -17,6 +16,28 @@ namespace FPLedit.Shared.Helpers
                 RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
         }
 
+        /// <summary>
+        /// Normalizes the input supplied as parameter.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// The following formats are recognized, each letter represents one digit:
+        /// <list type="bullet">
+        /// <item><description>hh:mm</description></item>
+        /// <item><description>h:mm</description></item>
+        /// <item><description>h:m</description></item>
+        /// <item><description>hh:m</description></item>
+        /// <item><description>h:</description></item>
+        /// <item><description>:m</description></item>
+        /// <item><description>:mm</description></item>
+        /// <item><description>hh:</description></item>
+        /// <item><description>hhmm</description></item>
+        /// <item><description>hmm</description></item>
+        /// <item><description>mm</description></item>
+        /// <item><description>m</description></item>
+        /// </list>
+        /// </remarks>
         public string Normalize(string input)
         {
             var m = verifyRegex.Matches(input);

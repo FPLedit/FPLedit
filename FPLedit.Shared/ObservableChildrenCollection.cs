@@ -6,6 +6,11 @@ using System.Linq;
 
 namespace FPLedit.Shared
 {
+    /// <summary>
+    /// A collection of XML children of a given type that can be monitored and modified while modifying the underlying
+    /// XML structure in the correct way.
+    /// </summary>
+    /// <typeparam name="T">Entity type of the children.</typeparam>
     [Templating.TemplateSafe]
     public class ObservableChildrenCollection<T> : ObservableCollection<T>, IChildrenCollection<T> where T : Entity
     {
@@ -13,6 +18,12 @@ namespace FPLedit.Shared
         private readonly string childXName;
         private readonly bool initialized;
 
+        /// <summary>
+        /// Creates a new ObservableChildrenCollection (OSC).
+        /// </summary>
+        /// <param name="parent">Parent entity, of which the childfren will be listed.</param>
+        /// <param name="childXName">XML node name of the child type.</param>
+        /// <param name="tt">Parent timetable.</param>
         public ObservableChildrenCollection(Entity parent, string childXName, Timetable tt)
         {
             initialized = false;
@@ -87,6 +98,11 @@ namespace FPLedit.Shared
             parentEntity.Children.RemoveAll(t => toRemove.Contains(t));
         }
 
+        /// <summary>
+        /// Sort the collection, reflecting the changes also in the XML tree.
+        /// </summary>
+        /// <param name="comparer">Function to retreive the value being compared, for each child.</param>
+        /// <typeparam name="TCompare">Type that will be compared for each child.</typeparam>
         public void Sort<TCompare>(Func<T, TCompare> comparer) where TCompare : IComparable
         {
             for (int n = Count; n > 1; n--)
@@ -107,9 +123,22 @@ namespace FPLedit.Shared
         }
     }
 
+    /// <summary>
+    /// Base interface for a collection with movable and sortable elements.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public interface IChildrenCollection<T> : IList<T>
     {
+        /// <summary>
+        /// Move one element from <paramref name="oldIndex"/> to <paramref name="newIndex"/>.
+        /// </summary>
         void Move(int oldIndex, int newIndex);
+        
+        /// <summary>
+        /// Sort the collection.
+        /// </summary>
+        /// <param name="comparer">Function to retreive the value being compared, for each child.</param>
+        /// <typeparam name="TCompare">Type that will be compared for each child.</typeparam>
         void Sort<TCompare>(Func<T, TCompare> comparer) where TCompare : IComparable;
     }
 }

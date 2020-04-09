@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace FPLedit.Shared
+﻿namespace FPLedit.Shared
 {
+    /// <summary>
+    /// File version of the timetable format.
+    /// </summary>
+    /// <remarks><see cref="ITimetable.Version"/> may have other values from those defined in the enum, but those are not supported.</remarks>
     [Templating.TemplateSafe]
     public enum TimetableVersion : int
     {
@@ -17,16 +16,21 @@ namespace FPLedit.Shared
     [Templating.TemplateSafe]
     public static class TimetableVersionExt
     {
+        /// <summary>
+        /// Returns a three digit decimal string representation of theis Timetable Version.
+        /// </summary>
         public static string ToNumberString(this TimetableVersion version)
             => ((int)version).ToString("000");
 
         /// <summary>
-        /// Vergleicht zwei TimetableVersions.
+        /// Compares two timetable versions.
         /// </summary>
         /// <returns>
-		/// Kleiner als 0: Diese Instanz ist kleiner als <paramref name="value" />.
-		/// 0: Diese Instanz ist gleich <paramref name="value" />.
-		/// Größer als 0: Diese Instanz ist größer als <paramref name="value" />.
+        /// <list type="bullet">
+		/// <item><description>Less than zero: This instance is smaller than <paramref name="value" />.</description></item>
+		/// <item><description>Zero: This instance equals <paramref name="value" />.</description></item>
+		/// <item><description>Greater than zero: Diese Instanz ist größer als <paramref name="value" />.</description></item>
+		/// </list>
         /// </returns>
         public static int Compare(this TimetableVersion version, TimetableVersion value)
             => ((int)version).CompareTo((int)value);

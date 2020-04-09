@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace FPLedit.Shared
+﻿namespace FPLedit.Shared
 {
     /// <summary>
     /// Specifies the direction of the train.

@@ -3,7 +3,7 @@
     /// <summary>
     /// Registrable component to provide a menu item in the preview menu.
     /// </summary>
-    /// <remarks><see cref="DefaultImplementations.DefaultPreview"/> for a default implementation.</remarks>
+    /// <remarks>See <see cref="DefaultImplementations.DefaultPreview"/> for a default implementation.</remarks>
     public interface IPreviewAction : IRegistrableComponent
     {
         /// <summary>

@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace FPLedit.Shared.Helpers
 {
     /// <summary>
-    /// Helper class to shim Process.Start on corefx systems, mainly for opening file & web addresses.
+    /// Helper class to shim Process.Start on corefx systems, mainly for opening file and web addresses.
     /// </summary>
     public static class OpenHelper
     {
@@ -16,7 +16,6 @@ namespace FPLedit.Shared.Helpers
                 if (p != null)
                     return p;
             }
-
 
             try
             {

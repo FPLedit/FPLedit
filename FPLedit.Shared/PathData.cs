@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.Shared
 {
+    /// <summary>
+    /// Provides a convenient API to work with fixed paths.
+    /// </summary>
     [Templating.TemplateSafe]
     public class PathData
     {
@@ -14,6 +15,9 @@ namespace FPLedit.Shared
 
         private readonly Timetable tt;
 
+        /// <summary>
+        /// Creates a new PathData instance with the given stations.
+        /// </summary>
         public PathData(Timetable tt, IEnumerable<Station> path) : this(tt)
         {
             entries = Init(path.ToArray(), (s, r) => new PathEntry(s, r));
@@ -24,6 +28,13 @@ namespace FPLedit.Shared
             this.tt = tt;
         }
 
+        /// <summary>
+        /// Initialization method. Can be used to implement custom flavoured PathData types.
+        /// </summary>
+        /// <param name="path">The stations of this path.</param>
+        /// <param name="instanciator">A custom instanciator used to create the path entries.</param>
+        /// <typeparam name="T">The type of entries used.</typeparam>
+        /// <returns></returns>
         protected T[] Init<T>(IReadOnlyList<Station> path, Func<Station, int, T> instanciator) where T : PathEntry
         {
             int lastRoute = -1;
@@ -38,9 +49,15 @@ namespace FPLedit.Shared
             }).ToArray();
         }
 
+        /// <summary>
+        /// Returns the next station after the given station, fóllowing this path, or null.
+        /// </summary>
         public Station NextStation(Station sta)
             => entries.SkipWhile(pe => pe.Station != sta).Skip(1).FirstOrDefault()?.Station;
 
+        /// <summary>
+        /// Get the route this path exits the given station on.
+        /// </summary>
         public int GetExitRoute(Station sta)
         {
             if (sta == entries.LastOrDefault()?.Station)
@@ -49,8 +66,14 @@ namespace FPLedit.Shared
             return tt.GetDirectlyConnectingRoute(sta, next);
         }
 
+        /// <summary>
+        /// Returns whether this path contains the given station.
+        /// </summary>
         public bool ContainsStation(Station sta) => Array.IndexOf(PathEntries, sta) != -1;
 
+        /// <summary>
+        /// Returns whether this path connects the two given stations directly.
+        /// </summary>
         public bool IsDirectlyConnected(Station sta1, Station sta2)
         {
             var path = GetRawPath().ToArray();
@@ -66,11 +89,21 @@ namespace FPLedit.Shared
             return false;
         }
 
+        /// <summary>
+        /// Returns only the raw stations used in this path, without any additional information.
+        /// </summary>
         public IEnumerable<Station> GetRawPath() => entries.Select(e => e.Station);
 
+        /// <summary>
+        /// Get an empty <see cref="PathData"/>-Instance.
+        /// </summary>
         public static PathData Empty(Timetable tt) => new PathData(tt, Array.Empty<Station>());
     }
-
+    
+    /// <summary>
+    /// Specific PathData, initialized with just a a train, containing the whole path & time entries for this train.
+    /// </summary>
+    [Templating.TemplateSafe]
     public class TrainPathData : PathData
     {
         public new TrainPathEntry[] PathEntries => (TrainPathEntry[])entries;
@@ -88,6 +121,10 @@ namespace FPLedit.Shared
         }
     }
 
+    /// <summary>
+    /// Entry of a default <see cref="PathData"/> structure. Represents one station on a specific route.
+    /// </summary>
+    [Templating.TemplateSafe]
     public class PathEntry
     {
         public PathEntry(Station station, int routeIndex)
@@ -96,11 +133,15 @@ namespace FPLedit.Shared
             RouteIndex = routeIndex;
         }
 
-        public Station Station { get; private set; }
+        public Station Station { get; }
 
-        public int RouteIndex { get; private set; }
+        public int RouteIndex { get; }
     }
-
+    
+    /// <summary>
+    /// Entry of a <see cref="TrainPathData"/>. Represents one station on a specific route with attached time entry data.
+    /// </summary>
+    [Templating.TemplateSafe]
     public class TrainPathEntry : PathEntry
     {
         public TrainPathEntry(Station station, ArrDep arrDep, int routeIndex) : base(station, routeIndex)
@@ -108,6 +149,6 @@ namespace FPLedit.Shared
             ArrDep = arrDep;
         }
 
-        public ArrDep ArrDep { get; private set; }
+        public ArrDep ArrDep { get; }
     }
 }

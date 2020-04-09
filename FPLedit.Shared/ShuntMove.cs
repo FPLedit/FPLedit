@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FPLedit.Shared
+﻿namespace FPLedit.Shared
 {
     [XElmName("shMove")]
     [Templating.TemplateSafe]
@@ -35,8 +29,8 @@ namespace FPLedit.Shared
         [XAttrName("ti")]
         public TimeEntry Time
         {
-            get => GetTimeValue("ti");
-            set => SetNotEmptyTime(value, "ti");
+            get => GetTimeAttributeValue("ti");
+            set => SetNotEmptyTimeAttribute("ti", value);
         }
 
         [XAttrName("ea")]
