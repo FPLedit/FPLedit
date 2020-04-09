@@ -10,12 +10,13 @@ namespace FPLedit.Shared
         /// <summary>
         /// Name that is used as display name in the type selector.
         /// </summary>
+        /// <remarks>Must always return the same value.</remarks>
         string DisplayName { get; }
 
         /// <summary>
         /// Returns the Eto Control that will be used in the timetable appearance form.
         /// </summary>
-        /// <remarks>Return value must implement <see cref="IAppearanceHandler"/>!</remarks>
+        /// <remarks>The returned Control must implement <see cref="IAppearanceHandler"/> to be able to listen to events!</remarks>
         Control GetControl(IPluginInterface pluginInterface);
     }
 }

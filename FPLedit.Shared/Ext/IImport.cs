@@ -14,13 +14,14 @@ namespace FPLedit.Shared
         /// <param name="stream"></param>
         /// <param name="pluginInterface">A reduced PluginInterface that provides limited core features from FPledit.</param>
         /// <param name="replaceLog">The importer should log to this logger if it is not null.</param>
-        /// <returns>The newly iumported Timetable instance, otherwise null.</returns>
+        /// <returns>The newly imported Timetable instance, otherwise null.</returns>
         /// <remarks>This method must be thread-safe and MUST NOT call into UI directly, as it might be called on a non-UI thread.</remarks>
         Timetable Import(Stream stream, IReducedPluginInterface pluginInterface, ILog replaceLog = null);
 
         /// <summary>
         /// Filetype filter of the form "description|pattern", e.g. "Description (*.ext)|*.ext"
         /// </summary>
+        /// <remarks>Must always return the same value.</remarks>
         string Filter { get; }
     }
     

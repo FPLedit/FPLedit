@@ -8,7 +8,7 @@ namespace FPLedit.Shared
     public interface ITimetableCheck : IRegistrableComponent
     {
         /// <summary>
-        /// Display name of this timetable check.
+        /// Display name of this timetable check. This might be shwon to the user in the future. It should be rather unique.
         /// </summary>
         string Display { get; }
         

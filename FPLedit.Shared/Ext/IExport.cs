@@ -6,7 +6,7 @@ using FPLedit.Shared.DefaultImplementations;
 namespace FPLedit.Shared
 {
     /// <summary>
-    /// Basic interface to provide exporter capabalities.
+    /// Basic interface to provide exporter capabalities. Also a registrable component.
     /// </summary>
     /// <remarks>See <see cref="DefaultTemplateExport"/> for a default implementation.</remarks>
     public interface IExport : IRegistrableComponent
@@ -18,18 +18,28 @@ namespace FPLedit.Shared
         /// <param name="stream"></param>
         /// <param name="pluginInterface">A reduced PluginInterface that provides limited core features from FPledit.</param>
         /// <param name="flags">Exporter flags.</param>
-        /// <returns></returns>
+        /// <returns>If the operation was successful.</returns>
         /// <remarks>This method must be thread-safe and MUST NOT call into UI directly, as it might be called on a non-UI thread.</remarks>
         bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[] flags = null);
 
         /// <summary>
         /// Filetype filter of the form "description|pattern", e.g. "Description (*.ext)|*.ext"
         /// </summary>
+        /// <remarks>Must always return the same value.</remarks>
         string Filter { get; }
     }
 
     public static class ExportExt
     {
+        /// <summary>
+        /// This function provides a safe way to execute any exporter to write to a file directly.
+        /// </summary>
+        /// <param name="exp">The exporter to be used.</param>
+        /// <param name="tt">A readonly copy of the current timetable.</param>
+        /// <param name="filename"></param>
+        /// <param name="pluginInterface">A reduced PluginInterface that provides limited core features from FPledit.</param>
+        /// <param name="flags">Exporter flags.</param>
+        /// <returns>If the operation was successful.</returns>
         public static bool SafeExport(this IExport exp, Timetable tt, string filename, IReducedPluginInterface pluginInterface, string[] flags = null)
         {
             try
@@ -48,6 +58,15 @@ namespace FPLedit.Shared
             }
         }
 
+        /// <summary>
+        /// This function provides a safe way to async-execute any exporter to write to a file directly.
+        /// </summary>
+        /// <param name="exp">The exporter to be used.</param>
+        /// <param name="tt">A readonly copy of the current timetable.</param>
+        /// <param name="filename"></param>
+        /// <param name="pluginInterface">A reduced PluginInterface that provides limited core features from FPledit.</param>
+        /// <param name="flags">Exporter flags.</param>
+        /// <returns>A Task that has not been started yet, which can be used to execute the exporter.</returns>
         public static Task<bool> GetAsyncSafeExport(this IExport exp, Timetable tt, string filename, IReducedPluginInterface pluginInterface, string[] flags = null) 
             => new Task<bool>(() => exp.SafeExport(tt, filename, pluginInterface, flags));
     }

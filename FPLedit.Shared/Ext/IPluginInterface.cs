@@ -33,7 +33,6 @@ namespace FPLedit.Shared
 
     public interface IComponentRegistry
     {
-        // Regsitry (active)
         void Register<T>(T elem) where T : IRegistrableComponent;
     }
 

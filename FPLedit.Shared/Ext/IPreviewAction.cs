@@ -9,11 +9,13 @@
         /// <summary>
         /// Display name of the preview.
         /// </summary>
+        /// <remarks>Must always return the same value.</remarks>
         string DisplayName { get; }
         
         /// <summary>
-        /// Text of the menu item.
+        /// Text of the menu item, which can contain the character "&" to provide a keyboard shortcut.
         /// </summary>
+        /// <remarks>Must always return the same value.</remarks>
         string MenuName { get; }
 
         /// <summary>
