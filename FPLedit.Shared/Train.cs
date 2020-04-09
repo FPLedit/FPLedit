@@ -5,11 +5,15 @@ using System.Linq;
 
 namespace FPLedit.Shared
 {
+    /// <summary>
+    /// Object model class representing a single train of this timetable.
+    /// </summary>
     [DebuggerDisplay("{" + nameof(TName) + "}")]
     [XElmName("ti", "ta", "tr")]
     [Templating.TemplateSafe]
     public sealed class Train : Entity, ITrain
     {
+        /// <inheritdoc />
         [XAttrName("name")]
         public string TName
         {
@@ -17,6 +21,7 @@ namespace FPLedit.Shared
             set => SetAttribute("name", value);
         }
 
+        /// <inheritdoc />
         [XAttrName("id")]
         public int Id
         {
@@ -24,6 +29,7 @@ namespace FPLedit.Shared
             set => SetAttribute("id", value.ToString());
         }
 
+        /// <inheritdoc />
         [XAttrName("islink")]
         public bool IsLink
         {
@@ -33,10 +39,13 @@ namespace FPLedit.Shared
 
         #region Handling der Fahrtzeiteneinträge
 
+        /// <inheritdoc />
         public void AddAllArrDeps(IEnumerable<Station> path)
         {
             if (_parent.Type != TimetableType.Network)
                 throw new TimetableTypeNotSupportedException(TimetableType.Linear, "AddAllArrDeps of path");
+            if (InternalGetArrDeps().Any())
+                throw new InvalidOperationException("Train.AddAllArrDeps can only be used on empty trains.");
             foreach (var sta in path)
             {
                 var ardp = new ArrDep(_parent)
@@ -47,14 +56,18 @@ namespace FPLedit.Shared
             }
         }
 
+        /// <inheritdoc />
         public void AddLinearArrDeps()
         {
             if (_parent.Type == TimetableType.Network)
                 throw new TimetableTypeNotSupportedException(TimetableType.Network, "Add linear ArrDeps");
+            if (InternalGetArrDeps().Any())
+                throw new InvalidOperationException("Train.AddLinearArrDeps can only be used on empty trains.");
             foreach (var sta in _parent.Stations)
                 AddArrDep(sta, Timetable.LINEAR_ROUTE_ID);
         }
 
+        /// <inheritdoc />
         public List<Station> GetPath()
         {
             if (_parent.Type == TimetableType.Network)
@@ -62,10 +75,11 @@ namespace FPLedit.Shared
             return _parent.GetStationsOrderedByDirection(Direction);
         }
 
+        /// <inheritdoc />
         public ArrDep AddArrDep(Station sta, int route)
         {
             int idx;
-            if (_parent.Type == TimetableType.Linear)
+            if (_parent.Type == TimetableType.Linear) //TODO: Throw if linear && route id != 0.
             {
                 var stas = _parent.GetStationsOrderedByDirection(TrainDirection.ti); // All arrdeps are sorted in line direction if linear
                 idx = stas.IndexOf(sta);
@@ -91,6 +105,7 @@ namespace FPLedit.Shared
             return ardp;
         }
 
+        /// <inheritdoc />
         public ArrDep GetArrDep(Station sta)
         {
             if (TryGetArrDep(sta, out var arrDep))
@@ -98,6 +113,7 @@ namespace FPLedit.Shared
             throw new Exception($"No ArrDep found for station {sta.SName}!");
         }
 
+        /// <inheritdoc />
         public bool TryGetArrDep(Station sta, out ArrDep arrDep)
         {
             var tElems = InternalGetArrDeps();
@@ -112,11 +128,7 @@ namespace FPLedit.Shared
             return arrDep != null;
         }
 
-        /// <summary>
-        /// This functions return value contains all <see cref="ArrDep"/>s of this train, but sorting may not be preserved. (It is a dictionary!) Use <see cref="GetPath"/> to get the correct sorted stations.
-        /// </summary>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
+        /// <inheritdoc />
         public Dictionary<Station, ArrDep> GetArrDepsUnsorted()
         {
             var ret = new Dictionary<Station, ArrDep>();
@@ -135,6 +147,7 @@ namespace FPLedit.Shared
             return ret;
         }
 
+        /// <inheritdoc />
         public void RemoveArrDep(Station sta)
         {
             var tElems = InternalGetArrDeps();
@@ -154,9 +167,7 @@ namespace FPLedit.Shared
             Children.Remove(tElm.XMLEntity);
         }
 
-        /// <summary>
-        /// Cleans up orphaned time entries after deleting stations (e.g. arrival time at the first station)
-        /// </summary>
+        /// <inheritdoc />
         public void RemoveOrphanedTimes()
         {
             var stas = _parent.Type == TimetableType.Linear
@@ -176,13 +187,13 @@ namespace FPLedit.Shared
         /// <summary>
         /// Returns all set arrdeps of this train.
         /// On Linear timetables, this includes also empty entries.
-        /// LINEAR ENTRIES ARE SORTED TI
+        /// LINEAR ENTRIES ARE SORTED IN TrainDirection.ti
         /// </summary>
-        /// <returns></returns>
         private ArrDep[] InternalGetArrDeps() => Children.Where(x => x.XName == "t").Select(x => new ArrDep(x, _parent)).ToArray();
 
         #endregion
 
+        /// <inheritdoc />
         [XAttrName("fpl-tfz", IsFpleditElement = true)]
         public string Locomotive
         {
@@ -190,6 +201,7 @@ namespace FPLedit.Shared
             set => SetAttribute("fpl-tfz", value);
         }
 
+        /// <inheritdoc />
         [XAttrName("fpl-mbr", IsFpleditElement = true)]
         public string Mbr
         {
@@ -197,6 +209,7 @@ namespace FPLedit.Shared
             set => SetAttribute("fpl-mbr", value);
         }
 
+        /// <inheritdoc />
         [XAttrName("fpl-last", IsFpleditElement = true)]
         public string Last
         {
@@ -204,8 +217,10 @@ namespace FPLedit.Shared
             set => SetAttribute("fpl-last", value);
         }
 
+        /// <inheritdoc />
         public TrainDirection Direction => (TrainDirection)Enum.Parse(typeof(TrainDirection), XMLEntity.XName);
 
+        /// <inheritdoc />
         [XAttrName("cm")]
         public string Comment
         {
@@ -213,6 +228,7 @@ namespace FPLedit.Shared
             set => SetAttribute("cm", value);
         }
 
+        /// <inheritdoc />
         [XAttrName("d")]
         public Days Days
         {
@@ -220,6 +236,13 @@ namespace FPLedit.Shared
             set => SetAttribute("d", value.ToBinString());
         }
 
+        /// <summary>
+        /// Creates a new train instance, without pre-existing data.
+        /// </summary>
+        /// <param name="dir">Direction of the newly created train. Only directions supported by the current Timetable type are allowed.</param>
+        /// <param name="tt">The parent timetable instance.</param>
+        /// <exception cref="TimetableTypeNotSupportedException">The given <see cref="TrainDirection" /> is not allowed in the current timetable type.</exception>#
+        /// <remarks>The new <see cref="XMLEntity"/> will not be wird up in the XML tree.</remarks>
         public Train(TrainDirection dir, Timetable tt) : base(dir.ToString(), tt)
         {
             if (tt.Type == TimetableType.Network && dir != TrainDirection.tr)
@@ -228,6 +251,7 @@ namespace FPLedit.Shared
                 throw new TimetableTypeNotSupportedException(TimetableType.Linear, "trains without direction");
         }
 
+        /// <inheritdoc />
         public Train(XMLEntity en, Timetable tt) : base(en, tt)
         {
             if (Children.Count(x => x.XName == "t") > tt.Stations.Count)
@@ -237,11 +261,5 @@ namespace FPLedit.Shared
         [DebuggerStepThrough]
         public override string ToString()
             => TName;
-
-        public string GetLineName()
-        {
-            var path = GetPath();
-            return path.First().SName + " - " + path.Last().SName;
-        }
     }
 }

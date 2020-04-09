@@ -16,7 +16,7 @@ namespace FPLedit.NonDefaultFiletypes
         {
             if (tt.Type == TimetableType.Linear)
                 throw new TimetableTypeNotSupportedException(TimetableType.Linear, "convert to linear");
-            if (tt.GetRoutes().Count() != 1)
+            if (tt.GetRoutes().Length != 1)
                 throw new NotSupportedException("Der Fahrplan hat mehr als eine oder keine Strecke");
 
             var clone = tt.Clone();
@@ -25,7 +25,7 @@ namespace FPLedit.NonDefaultFiletypes
             foreach (var orig in clone.Trains)
                 trainPaths[orig] = new TrainPathData(clone, orig);
 
-            var route = clone.GetRoutes().FirstOrDefault().Index;
+            var route = clone.GetRoutes().Single().Index;
 
             foreach (var sta in clone.Stations)
             {
@@ -62,8 +62,8 @@ namespace FPLedit.NonDefaultFiletypes
 
                 t.XMLEntity.XName = dir.ToString();
 
-                t.Children.Clear();
-                t.AddLinearArrDeps();
+                t.Children.Clear(); // Clear all existing arrdeps...
+                t.AddLinearArrDeps(); // ...and re-add all linear ones.
 
                 foreach (var sta in data.PathEntries)
                 {
