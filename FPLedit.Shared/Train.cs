@@ -63,7 +63,7 @@ namespace FPLedit.Shared
                 throw new TimetableTypeNotSupportedException(TimetableType.Network, "Add linear ArrDeps");
             if (InternalGetArrDeps().Any())
                 throw new InvalidOperationException("Train.AddLinearArrDeps can only be used on empty trains.");
-            foreach (var sta in _parent.Stations)
+            foreach (var sta in _parent.GetLinearStationsOrderedByDirection(TrainDirection.ti)) // All arrdeps are sorted in line direction if linear
                 AddArrDep(sta, Timetable.LINEAR_ROUTE_ID);
         }
 
@@ -79,9 +79,11 @@ namespace FPLedit.Shared
         public ArrDep AddArrDep(Station sta, int route)
         {
             int idx;
-            if (_parent.Type == TimetableType.Linear) //TODO: Throw if linear && route index != 0.
+            if (_parent.Type == TimetableType.Linear)
             {
-                var stas = _parent.GetLinearStationsOrderedByDirection(TrainDirection.ti); // All arrdeps are sorted in line direction if linear
+                if (route != Timetable.LINEAR_ROUTE_ID)
+                    throw new TimetableTypeNotSupportedException(TimetableType.Linear, "routes");
+                var stas = _parent.GetLinearStationsOrderedByDirection(TrainDirection.ti);
                 idx = stas.IndexOf(sta);
             }
             else

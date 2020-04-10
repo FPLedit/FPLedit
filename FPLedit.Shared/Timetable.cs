@@ -169,11 +169,10 @@ namespace FPLedit.Shared
         #region Hilfsmethoden für Stationen
 
         /// <inheritdoc />
-        /// <exception cref="ArgumentException">The station has already been registered</exception>
+        /// <exception cref="ArgumentException">The station has already been registered and the timetable is a network timetable.</exception>
         /// <exception cref="TimetableTypeNotSupportedException">The timetable is linear but the given route index is not zero.</exception>
         public void AddStation(Station sta, int route)
         {
-            //TODO: Really throw if station already exists.
             sta._parent = this;
 
             if (Type == TimetableType.Network)
@@ -262,7 +261,9 @@ namespace FPLedit.Shared
         /// <inheritdoc />
         public void AddTrain(Train tra)
         {
-            //TODO: Really do nothing if train already exists.
+            if (Trains.Contains(tra))
+                return;
+            
             tra.Id = ++nextTraId;
             tra._parent = this;
             trains.Add(tra);

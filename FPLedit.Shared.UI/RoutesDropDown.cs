@@ -89,7 +89,7 @@ namespace FPLedit.Shared.UI
             int oldSelected = -1;
             if (SelectedValue != null)
                 oldSelected = (int)((ListItem)SelectedValue).Tag;
-            var routes = GetRouteNames(pluginInterface.Timetable); //TODO: Remove multiple enumeration
+            var routes = GetRouteNames(pluginInterface.Timetable).ToList();
             Items.Clear();
             Items.AddRange(routes);
 

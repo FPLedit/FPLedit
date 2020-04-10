@@ -29,8 +29,7 @@ namespace FPLedit.Editor.Trains
             if (orig._parent.Type == TimetableType.Network)
                 t.AddAllArrDeps(path);
             else
-                foreach (var sta in orig._parent.Stations)
-                    t.AddArrDep(sta, Timetable.LINEAR_ROUTE_ID);
+                t.AddLinearArrDeps();
 
             InternalCopyArrDeps(orig, t, offsetMin);
 
@@ -153,21 +152,17 @@ namespace FPLedit.Editor.Trains
 
         private static int RemoveNamePrefix(string name, out string prefix)
         {
-            //TODO: Optimize by going backward with only one index and splitting in the end.
-            //TODO: Whitespace in the end
             var nameBase = name.Trim();
-            var last = nameBase.ToCharArray().LastOrDefault();
-            var num = "";
-            while (char.IsDigit(last))
-            {
-                num = last + num;
-                nameBase = nameBase.Substring(0, nameBase.Length - 1);
-                last = nameBase.ToCharArray().LastOrDefault();
-            }
+            var array = nameBase.ToCharArray();
 
+            int i = array.Length - 1;
+            while (i >= 0 && char.IsDigit(array[i]))
+                i--;
+            
+            prefix = nameBase.Substring(0, i + 1);
+            var num = nameBase.Substring(i + 1, nameBase.Length - i - 1);
             int.TryParse(num, out int start); // Startnummer
-
-            prefix = nameBase;
+            
             return start;
         }
 
