@@ -23,31 +23,19 @@ namespace FPLedit.Shared.DefaultImplementations
             {
                 var hle = hadLastEscape;
                 hadLastEscape = false;
-                if (last == '\\' && !hle) // Escape sequence handling, only if we had not an escape sequence the
-                                          // last time ('\\' woulb be the second char of an escaped backslash)
+                if (last == '|' && chars[i] == '|' && !hle) // Escape sequence handling, only if we had not an escape sequence the last time.
                 {
-                    switch (chars[i])
-                    {
-                        case '\\':
-                            lastPattern += '\\';
-                            break;
-                        case '|':
-                            lastPattern += '|';
-                            break;
-                        default: // Lenient handling for unknown escape sequences.
-                            lastPattern += '\\';
-                            lastPattern += chars[i];
-                            break;
-                    }
-
+                    lastPattern += '|';
                     hadLastEscape = true;
                 }
-                else if (chars[i] == '|' && !string.IsNullOrEmpty(lastPattern)) // Normal end sequence.
+                else if (last == '|' && chars[i] != '|' && !hle) // Normal end sequence.
                 {
-                    yield return new FilterRule(lastPattern);
+                    if (!string.IsNullOrEmpty(lastPattern))
+                        yield return new FilterRule(lastPattern);
                     lastPattern = "";
                 }
-                else if (chars[i] != '\\') // prevent directly adding escape char.
+
+                if (chars[i] != '|')
                     lastPattern += chars[i];
 
                 last = chars[i];
@@ -61,8 +49,7 @@ namespace FPLedit.Shared.DefaultImplementations
         {
             var patterns = rules
                 .Select(r => r.Pattern
-                    .Replace("\\", "\\\\") // Escape backslashes.
-                    .Replace("|", "\\|")); // Escape pipes.
+                    .Replace("|", "||")); // Escape pipes.
             return string.Join("|", patterns);
         }
 
