@@ -27,22 +27,27 @@ namespace FPLedit.Bildfahrplan.Forms
 
         private readonly TimetableStyle attrs;
         private readonly Timetable tt;
+        private readonly IPluginInterface pluginInterface;
+        private readonly object backupHandle;
 
-        public ConfigForm(Timetable tt, ISettings settings)
+        public ConfigForm(Timetable tt, IPluginInterface pluginInterface)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
+            backupHandle = pluginInterface.BackupTimetable();
+
             this.tt = tt;
+            this.pluginInterface = pluginInterface;
 
             heightPerHourValidator = new NumberValidator(heightPerHourTextBox, false, false, errorMessage: "Bitte eine Zahl als Höhe pro Stunde angeben!");
             startTimeValidator = new TimeValidator(startTimeTextBox, false, errorMessage: "Bitte eine gültige Uhrzeit im Format hh:mm angeben!");
             endTimeValidator = new TimeValidator(endTimeTextBox, false, errorMessage: "Bitte eine gültige Uhrzeit im Format hh:mm angeben!");
             validators = new ValidatorCollection(heightPerHourValidator, startTimeValidator, endTimeValidator);
 
-            DropDownBind.Color<TimetableStyle>(settings, bgColorComboBox, "BgColor");
-            DropDownBind.Color<TimetableStyle>(settings, stationColorComboBox, "StationColor");
-            DropDownBind.Color<TimetableStyle>(settings, timeColorComboBox, "TimeColor");
-            DropDownBind.Color<TimetableStyle>(settings, trainColorComboBox, "TrainColor");
+            DropDownBind.Color<TimetableStyle>(pluginInterface.Settings, bgColorComboBox, "BgColor");
+            DropDownBind.Color<TimetableStyle>(pluginInterface.Settings, stationColorComboBox, "StationColor");
+            DropDownBind.Color<TimetableStyle>(pluginInterface.Settings, timeColorComboBox, "TimeColor");
+            DropDownBind.Color<TimetableStyle>(pluginInterface.Settings, trainColorComboBox, "TrainColor");
 
             DropDownBind.Font<TimetableStyle>(stationFontComboBox, stationFontSizeComboBox, "StationFont");
             DropDownBind.Font<TimetableStyle>(timeFontComboBox, timeFontSizeComboBox, "TimeFont");
@@ -90,12 +95,22 @@ namespace FPLedit.Bildfahrplan.Forms
                 return;
             }
 
+            if (attrs.StartTime > attrs.EndTime)
+            {
+                MessageBox.Show("Die Startzeit muss vor der Endzeit liegen!");
+                return;
+            }
+            
+            pluginInterface.ClearBackup(backupHandle);
+
             Result = DialogResult.Ok;
             this.NClose();
         }
 
         private void CancelButton_Click(object sender, EventArgs e)
         {
+            pluginInterface.RestoreTimetable(backupHandle);
+            
             Result = DialogResult.Cancel;
             this.NClose();
         }

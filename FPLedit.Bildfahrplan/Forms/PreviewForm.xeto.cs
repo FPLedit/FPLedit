@@ -69,7 +69,7 @@ namespace FPLedit.Bildfahrplan.Forms
         private void PreferencesButton_Click(object sender, EventArgs e)
         {
             pluginInterface.StageUndoStep();
-            using (var cnf = new ConfigForm(pluginInterface.Timetable, pluginInterface.Settings))
+            using (var cnf = new ConfigForm(pluginInterface.Timetable, pluginInterface))
                 cnf.ShowModal(this);
             ResetRenderer();
             pluginInterface.SetUnsaved();

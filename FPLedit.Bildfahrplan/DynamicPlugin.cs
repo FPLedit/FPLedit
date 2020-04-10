@@ -36,7 +36,7 @@ namespace FPLedit.Bildfahrplan
                 var graphItem = ((MenuBar)pluginInterface.Menu).CreateItem("B&ildfahrplan");
 
                 showItem = graphItem.CreateItem("&Anzeigen", enabled: false, clickHandler: ShowItem_Click);
-                configItem = graphItem.CreateItem("Darste&llung ändern", enabled: false, clickHandler: (s, ev) => ShowForm(new ConfigForm(pluginInterface.Timetable, pluginInterface.Settings)));
+                configItem = graphItem.CreateItem("Darste&llung ändern", enabled: false, clickHandler: (s, ev) => ShowForm(new ConfigForm(pluginInterface.Timetable, pluginInterface)));
                 printItem = graphItem.CreateItem("&Drucken", enabled: false, clickHandler: PrintItem_Click);
                 trainColorItem = graphItem.CreateItem("&Zugdarstellung ändern", enabled: false, clickHandler: (s, ev) => ShowForm(new TrainStyleForm(pluginInterface)));
                 stationStyleItem = graphItem.CreateItem("&Stationsdarstellung ändern", enabled: false, clickHandler: (s, ev) => ShowForm(new StationStyleForm(pluginInterface)));
