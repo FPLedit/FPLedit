@@ -209,7 +209,7 @@ namespace FPLedit.Bildfahrplan.Render
         private Station[] GetStationsInDir(TrainDirection dir)
         {
             if (tt.Type == TimetableType.Linear)
-                return tt.GetStationsOrderedByDirection(dir).ToArray();
+                return tt.GetLinearStationsOrderedByDirection(dir).ToArray();
 
             var route = stations.ToList(); // Kopie erzeugen
             if (dir == TrainDirection.ta)

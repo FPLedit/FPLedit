@@ -34,8 +34,8 @@ namespace FPLedit.Editor.Linear
             InitListView(topGridView);
             InitListView(bottomGridView);
 
-            topLineLabel.Text = "Züge " + tt.GetLineName(TOP_DIRECTION);
-            bottomLineLabel.Text = "Züge " + tt.GetLineName(BOTTOM_DIRECTION);
+            topLineLabel.Text = "Züge " + tt.GetLinearLineName(TOP_DIRECTION);
+            bottomLineLabel.Text = "Züge " + tt.GetLinearLineName(BOTTOM_DIRECTION);
             UpdateListView(topGridView, TOP_DIRECTION);
             UpdateListView(bottomGridView, BOTTOM_DIRECTION);
 

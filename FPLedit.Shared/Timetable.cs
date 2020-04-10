@@ -238,7 +238,7 @@ namespace FPLedit.Shared
             {
                 if (route != LINEAR_ROUTE_ID)
                     throw new TimetableTypeNotSupportedException(TimetableType.Linear, "routes");
-                stations = GetStationsOrderedByDirection(TrainDirection.ti);
+                stations = GetLinearStationsOrderedByDirection(TrainDirection.ti);
                 var idx = stations.IndexOf(sta); // Index vorläufig ermitteln
 
                 // Es können ja noch andere Nodes in den Children sein.
@@ -692,15 +692,17 @@ namespace FPLedit.Shared
             => string.Join(" | ", GetRoutes().Select(r => r.GetRouteName()));
         
         #region Legacy linear APIs
-        //TODO: Move those to seperate API interface?
         
-        //TODO: Throw if direction == tr
         /// <inheritdoc />
-        /// <exception cref="TimetableTypeNotSupportedException">Operation was applied to a network timetable.</exception>
-        public List<Station> GetStationsOrderedByDirection(TrainDirection direction)
+        /// <exception cref="TimetableTypeNotSupportedException">Operation was applied to a network timetable, or with a network type direction (tr).</exception>
+        [Obsolete("Use route-based approach instead.")]
+        public List<Station> GetLinearStationsOrderedByDirection(TrainDirection direction)
         {
             if (Type == TimetableType.Network)
                 throw new TimetableTypeNotSupportedException(TimetableType.Network, "direction");
+            if (direction == TrainDirection.tr)
+                throw new TimetableTypeNotSupportedException(TimetableType.Network, "direction value tr");
+            
             return (direction == TrainDirection.ta
                 ? GetRoute(LINEAR_ROUTE_ID).Stations.Reverse()
                 : GetRoute(LINEAR_ROUTE_ID).Stations).ToList();
@@ -708,11 +710,19 @@ namespace FPLedit.Shared
 
         /// <inheritdoc />
         /// <exception cref="TimetableTypeNotSupportedException">Operation was applied to a network timetable.</exception>
-        public string GetLineName(TrainDirection direction)
+        [Obsolete("Use route-based approach instead.")]
+        public string GetLinearLineName(TrainDirection direction)
         {
             if (Type == TimetableType.Network)
                 throw new TimetableTypeNotSupportedException(TimetableType.Network, "direction");
-            var stas = GetStationsOrderedByDirection(direction);
+            if (direction == TrainDirection.tr)
+                throw new TimetableTypeNotSupportedException(TimetableType.Network, "direction value tr");
+
+            var stas = GetLinearStationsOrderedByDirection(direction);
+
+            if (!stas.Any())
+                return "";
+            
             return stas.First().SName + " - " + stas.Last().SName;
         }
         

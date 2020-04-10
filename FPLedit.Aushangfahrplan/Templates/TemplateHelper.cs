@@ -47,7 +47,7 @@ namespace FPLedit.Aushangfahrplan.Templates
             var trainsInThisDir = trainsInThisDirObj.Cast<Train>(); // From JS.
             if (tt.Type == TimetableType.Linear)
             {
-                var lSta = tt.GetStationsOrderedByDirection(dir).LastOrDefault();
+                var lSta = tt.GetLinearStationsOrderedByDirection(dir).LastOrDefault();
                 if (lSta != sta)
                     return new[] { lSta };
                 return Array.Empty<Station>();
@@ -105,7 +105,7 @@ namespace FPLedit.Aushangfahrplan.Templates
         {
             if (tt.Type == TimetableType.Linear)
             {
-                var stas = tt.GetStationsOrderedByDirection(dir);
+                var stas = tt.GetLinearStationsOrderedByDirection(dir);
                 return stas.Skip(stas.IndexOf(sta) + 1).ToArray();
             }
             var stasAfter = new List<Station>();

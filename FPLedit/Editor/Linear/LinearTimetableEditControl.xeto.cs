@@ -57,8 +57,8 @@ namespace FPLedit.Editor.Linear
         {
             this.tt = tt;
 
-            topLineLabel.Text = "Züge " + this.tt.GetLineName(TOP_DIRECTION);
-            bottomLineLabel.Text = "Züge " + this.tt.GetLineName(BOTTOM_DIRECTION);
+            topLineLabel.Text = "Züge " + this.tt.GetLinearLineName(TOP_DIRECTION);
+            bottomLineLabel.Text = "Züge " + this.tt.GetLinearLineName(BOTTOM_DIRECTION);
 
             InitializeGridView(topDataGridView, TOP_DIRECTION);
             InitializeGridView(bottomDataGridView, BOTTOM_DIRECTION);
@@ -167,7 +167,7 @@ namespace FPLedit.Editor.Linear
 
         private void InitializeGridView(GridView view, TrainDirection dir)
         {
-            var stations = tt.GetStationsOrderedByDirection(dir);
+            var stations = tt.GetLinearStationsOrderedByDirection(dir);
 
             view.AddColumn<DataElement>(t => t.Train.TName, "Zugnummer");
             foreach (var sta in stations)
