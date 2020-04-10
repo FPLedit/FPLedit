@@ -6,46 +6,71 @@ namespace FPLedit.Shared.DefaultImplementations
 {
     public abstract class BaseFilterRuleContainer
     {
-        private List<FilterRule> trainRules, stationRules;
-
-        private void Init(Timetable tt)
-        {
-            var attrs = GetProvider(tt);
-            if (attrs != null)
-            {
-                trainRules = attrs.TrainPatterns.Split('|').Where(p => p != "").Select(p => new FilterRule(p)).ToList();
-                stationRules = attrs.StationPatterns.Split('|').Where(p => p != "").Select(p => new FilterRule(p)).ToList();
-            }
-            else
-            {
-                attrs = CreateProvider(tt);
-
-                trainRules = new List<FilterRule>();
-                stationRules = new List<FilterRule>();
-            }
-        }
-
         protected abstract IPatternSource GetProvider(Timetable tt);
-        
         protected abstract IPatternSource CreateProvider(Timetable tt);
 
-        public List<FilterRule> LoadStationRules(Timetable tt)
+        public IEnumerable<FilterRule> LoadStationRules(Timetable tt) => Parse(GetProvider(tt)?.StationPatterns ?? "");
+
+        public IEnumerable<FilterRule> LoadTrainRules(Timetable tt) => Parse(GetProvider(tt)?.TrainPatterns ?? "");
+
+        private IEnumerable<FilterRule> Parse(string s)
         {
-            Init(tt);
-            return stationRules;
+            string lastPattern = "";
+            char last = '\0';
+            bool hadLastEscape = false;
+            var chars = s.ToCharArray();
+            for (int i = 0; i < chars.Length; i++)
+            {
+                var hle = hadLastEscape;
+                hadLastEscape = false;
+                if (last == '\\' && !hle) // Escape sequence handling, only if we had not an escape sequence the
+                                          // last time ('\\' woulb be the second char of an escaped backslash)
+                {
+                    switch (chars[i])
+                    {
+                        case '\\':
+                            lastPattern += '\\';
+                            break;
+                        case '|':
+                            lastPattern += '|';
+                            break;
+                        default: // Lenient handling for unknown escape sequences.
+                            lastPattern += '\\';
+                            lastPattern += chars[i];
+                            break;
+                    }
+
+                    hadLastEscape = true;
+                }
+                else if (chars[i] == '|' && !string.IsNullOrEmpty(lastPattern)) // Normal end sequence.
+                {
+                    yield return new FilterRule(lastPattern);
+                    lastPattern = "";
+                }
+                else if (chars[i] != '\\') // prevent directly adding escape char.
+                    lastPattern += chars[i];
+
+                last = chars[i];
+            }
+            
+            if (!string.IsNullOrEmpty(lastPattern))
+                yield return new FilterRule(lastPattern);
         }
 
-        public List<FilterRule> LoadTrainRules(Timetable tt)
+        private string Serialize(IEnumerable<FilterRule> rules)
         {
-            Init(tt);
-            return trainRules;
+            var patterns = rules
+                .Select(r => r.Pattern
+                    .Replace("\\", "\\\\") // Escape backslashes.
+                    .Replace("|", "\\|")); // Escape pipes.
+            return string.Join("|", patterns);
         }
-        
-        public void SaveFilter(Timetable tt, List<FilterRule> stationRules, List<FilterRule> trainRules)
+
+        public void SaveFilter(Timetable tt, IEnumerable<FilterRule> newStationRules, IEnumerable<FilterRule> newTrainRules)
         {
-            IPatternSource attrs = GetProvider(tt);
-            attrs.TrainPatterns = string.Join("|", trainRules.Select(r => r.Pattern));
-            attrs.StationPatterns = string.Join("|", stationRules.Select(r => r.Pattern));
+            IPatternSource attrs = GetProvider(tt) ?? CreateProvider(tt);
+            attrs.TrainPatterns = Serialize(newTrainRules);
+            attrs.StationPatterns = Serialize(newStationRules);
         }
     }
 

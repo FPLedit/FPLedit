@@ -30,8 +30,8 @@ namespace FPLedit.Editor.Filters
             fcontainers = filterables.Select(f => new FilterableContainer()
             {
                 Filterable = f,
-                StationRules = f.LoadStationRules(tt),
-                TrainRules = f.LoadTrainRules(tt),
+                StationRules = f.LoadStationRules(tt).ToList(),
+                TrainRules = f.LoadTrainRules(tt).ToList(),
             }).ToArray();
 
             typeListBox.Items.AddRange(filterables.Select(f => new ListItem() { Text = f.DisplayName }));

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace FPLedit.Shared
 {
@@ -17,20 +14,19 @@ namespace FPLedit.Shared
         /// </summary>
         string DisplayName { get; }
 
-        //TODO: Convert to IEnumerable.
         /// <summary>
         /// Action that is triggered when the given filter rules should be commited to the Timetable.
         /// </summary>
-        void SaveFilter(Timetable tt, List<FilterRule> stationRules, List<FilterRule> trainRules);
+        void SaveFilter(Timetable tt, IEnumerable<FilterRule> stationRules, IEnumerable<FilterRule> trainRules);
 
         /// <summary>
         /// Function invoked to retrieve the curretn train rules from the current Timetable.
         /// </summary>
-        List<FilterRule> LoadTrainRules(Timetable tt);
+        IEnumerable<FilterRule> LoadTrainRules(Timetable tt);
         
         /// <summary>
         /// Function invoked to retrieve the current station rules from the current Timetable.
         /// </summary>
-        List<FilterRule> LoadStationRules(Timetable tt);
+        IEnumerable<FilterRule> LoadStationRules(Timetable tt);
     }
 }
