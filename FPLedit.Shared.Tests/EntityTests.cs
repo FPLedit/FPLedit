@@ -94,16 +94,5 @@ namespace FPLedit.Shared.Tests
             Assert.AreEqual("d", en.Children[1].Value);
             Assert.AreEqual(tt, en._parent);
         }
-
-        public class TestEntity : Entity
-        {
-            public TestEntity(string xn, Timetable tt) : base(xn, tt)
-            {
-            }
-
-            public TestEntity(XMLEntity en, Timetable tt) : base(en, tt)
-            {
-            }
-        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FPLedit.Shared.Helpers;
 
 namespace FPLedit.Shared
 {
@@ -12,6 +13,8 @@ namespace FPLedit.Shared
     [Templating.TemplateSafe]
     public class RouteValueCollection<T>
     {
+        private static readonly EscapeSplitHelper escape = new EscapeSplitHelper(';');
+        
         private readonly IEntity entity;
         private readonly Dictionary<int, T> values;
         private readonly Timetable tt;
@@ -32,7 +35,7 @@ namespace FPLedit.Shared
         /// <param name="convFrom">Function to deserialize <typeparamref name="T"/> from a string. Special rules apply. See remarks.</param>
         /// <param name="optional">Specifies if this attribute is optional.</param>
         /// <remarks>
-        /// The characters ":" and ";" must not be used in the serialized string representation.
+        /// The character ";" will be escaped in the serialized string.
         /// </remarks>
         public RouteValueCollection(IEntity e, Timetable tt, string attr, string defaultVal, Func<string, T> convTo, Func<T, string> convFrom, bool optional = true)
         {
@@ -84,10 +87,10 @@ namespace FPLedit.Shared
         private void ParseNetwork()
         {
             var toParse = entity.GetAttribute(attr, "");
-            var rts = toParse.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            var rts = escape.SplitEscaped(toParse);
             foreach (var p in rts)
             {
-                var parts = p.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                var parts = p.Split(new[] { ':' }, 2, StringSplitOptions.RemoveEmptyEntries);
 
                 var route = int.Parse(parts[0]);
                 var value = convTo(parts.Length == 2 ? parts[1] : defaultVal);
@@ -126,7 +129,7 @@ namespace FPLedit.Shared
             else
             {
                 var posStrings = values.Select(kvp => kvp.Key + ":" + convFrom(kvp.Value));
-                text = string.Join(";", posStrings);
+                text = escape.JoinEscaped(posStrings);
             }
             entity.SetAttribute(attr, text);
         }

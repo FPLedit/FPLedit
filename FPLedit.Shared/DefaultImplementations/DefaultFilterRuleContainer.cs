@@ -1,56 +1,25 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FPLedit.Shared.Helpers;
 
 namespace FPLedit.Shared.DefaultImplementations
 {
     public abstract class BaseFilterRuleContainer
     {
+        private static readonly EscapeSplitHelper escape = new EscapeSplitHelper('|');
+        
         protected abstract IPatternSource GetProvider(Timetable tt);
         protected abstract IPatternSource CreateProvider(Timetable tt);
 
-        public IEnumerable<FilterRule> LoadStationRules(Timetable tt) => Parse(GetProvider(tt)?.StationPatterns ?? "");
+        public IEnumerable<FilterRule> LoadStationRules(Timetable tt) => escape.SplitEscaped(GetProvider(tt)?.StationPatterns ?? "").Select(s => new FilterRule(s));
 
-        public IEnumerable<FilterRule> LoadTrainRules(Timetable tt) => Parse(GetProvider(tt)?.TrainPatterns ?? "");
-
-        private IEnumerable<FilterRule> Parse(string s)
-        {
-            string lastPattern = "";
-            char last = '\0';
-            bool hadLastEscape = false;
-            var chars = s.ToCharArray();
-            for (int i = 0; i < chars.Length; i++)
-            {
-                var hle = hadLastEscape;
-                hadLastEscape = false;
-                if (last == '|' && chars[i] == '|' && !hle) // Escape sequence handling, only if we had not an escape sequence the last time.
-                {
-                    lastPattern += '|';
-                    hadLastEscape = true;
-                }
-                else if (last == '|' && chars[i] != '|' && !hle) // Normal end sequence.
-                {
-                    if (!string.IsNullOrEmpty(lastPattern))
-                        yield return new FilterRule(lastPattern);
-                    lastPattern = "";
-                }
-
-                if (chars[i] != '|')
-                    lastPattern += chars[i];
-
-                last = chars[i];
-            }
-            
-            if (!string.IsNullOrEmpty(lastPattern))
-                yield return new FilterRule(lastPattern);
-        }
+        public IEnumerable<FilterRule> LoadTrainRules(Timetable tt) => escape.SplitEscaped(GetProvider(tt)?.TrainPatterns ?? "").Select(s => new FilterRule(s));
 
         private string Serialize(IEnumerable<FilterRule> rules)
         {
-            var patterns = rules
-                .Select(r => r.Pattern
-                    .Replace("|", "||")); // Escape pipes.
-            return string.Join("|", patterns);
+            var patterns = rules.Select(r => r.Pattern);
+            return escape.JoinEscaped(patterns);
         }
 
         public void SaveFilter(Timetable tt, IEnumerable<FilterRule> newStationRules, IEnumerable<FilterRule> newTrainRules)

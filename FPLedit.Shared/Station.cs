@@ -67,7 +67,7 @@ namespace FPLedit.Shared
             => new PositionCollection(this, _parent);
 
         /// <summary>
-        /// Track count on the route (not the station). Depends on route index. The track count counts against the default line direction.
+        /// Track count on the route (not the station), to the right of the station. Depends on route index.
         /// </summary>
         [XAttrName("tr")]
         public RouteValueCollection<int> LineTracksRight
