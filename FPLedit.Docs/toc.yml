@@ -1,0 +1,7 @@
+#- name: Articles
+#  href: articles/
+- name: API Documentation
+  href: api/
+  homepage: api/index.md
+- name: FPLedit website
+  href: https://fahrplan.manuelhu.de/

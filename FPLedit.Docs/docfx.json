@@ -1,0 +1,79 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "src": "../",
+          "files": [
+            "FPLedit.Shared/FPLedit.Shared.csproj"
+          ]
+        }
+      ],
+      "dest": "api",
+      "disableGitFeatures": false,
+      "disableDefaultFilter": false
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [
+          "api/**.yml",
+          "api/index.md"
+        ]
+      },
+      {
+        "files": [
+          "articles/**.md",
+          "articles/**/toc.yml",
+          "toc.yml",
+          "*.md"
+        ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "images/**",
+          "favicon.ico",
+          "logo.svg",
+          "robots.txt"
+        ]
+      }
+    ],
+    "overwrite": [
+      {
+        "files": [
+          "apidoc/**.md"
+        ],
+        "exclude": [
+          "obj/**"
+        ]
+      }
+    ],
+    "globalMetadata": {
+      "_appTitle": "FPLedit developer documentation",
+      "_appFooter": "Made with ❤️ by Manuel Huber &middot; <a href=\\\"https://www.manuelhu.de/impressum.html\\\" rel=\\\"nofollow\\\">Impressum</a> &middot; <a href=\\\"https://www.manuelhu.de/datenschutz.html\\\", rel=\\\"nofollow\\\">Datenschutzerkl&auml;rung</a> &middot; Generated with DocFX",
+      "_enableSearch": true,
+      "_appFaviconPath": "favicon.ico",
+      "_appLogoPath": "logo.svg"
+      /*"_gitContribute": {
+        "repo": "https://github.com/FPLedit/FPLedit",
+        "branch": "develop",
+        "apiSpecFolder": "FPLedit.Docs/apidoc"
+      },
+      "_gitUrlPattern": "github" */
+    },
+    "dest": "../bin/api-doc",
+    "template": [
+      "statictoc"
+    ],
+    "postProcessors": [],
+    "markdownEngineName": "markdig",
+    "noLangKeyword": false,
+    "keepFileLink": false,
+    "cleanupCacheHistory": false,
+    "disableGitFeatures": false,
+    "intermediateFolder" : "../obj/FPLedit.Docs/intermediate"
+  }
+}

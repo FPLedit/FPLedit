@@ -57,6 +57,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{83B63C9D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPLedit.Tests", "FPLedit.Tests\FPLedit.Tests.csproj", "{6999ADEC-37DC-4B78-A6F3-B18C4B429506}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Docs", "FPLedit.Docs\FPLedit.Docs.csproj", "{E83DBE22-B03E-43EB-98F7-98F5B0B6AADF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -108,6 +110,10 @@ Global
 		{6999ADEC-37DC-4B78-A6F3-B18C4B429506}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6999ADEC-37DC-4B78-A6F3-B18C4B429506}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6999ADEC-37DC-4B78-A6F3-B18C4B429506}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E83DBE22-B03E-43EB-98F7-98F5B0B6AADF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E83DBE22-B03E-43EB-98F7-98F5B0B6AADF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E83DBE22-B03E-43EB-98F7-98F5B0B6AADF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E83DBE22-B03E-43EB-98F7-98F5B0B6AADF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
