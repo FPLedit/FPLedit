@@ -42,8 +42,8 @@ namespace FPLedit.NonDefaultFiletypes
                 var nextId = clone.Trains.DefaultIfEmpty().Max(t => t?.Id) ?? 0;
                 foreach (var orig in clone.Trains)
                 {
-                    if (orig.Id == -1)
-                        orig.Id = ++nextId;
+                    if (orig is IWritableTrain wot && wot.Id == -1)
+                        wot.Id = ++nextId;
                 }
 
             }

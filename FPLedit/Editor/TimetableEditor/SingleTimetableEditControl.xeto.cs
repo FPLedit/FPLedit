@@ -19,7 +19,7 @@ namespace FPLedit.Editor.TimetableEditor
 #pragma warning restore CS0649
 
         private Timetable tt;
-        private Train train;
+        private IWritableTrain train;
         private List<Station> path;
 
         private const string NO_TRACK = "<Kein Gleis>";
@@ -60,7 +60,7 @@ namespace FPLedit.Editor.TimetableEditor
                 HandleKeystroke(e, dataGridView);
         }
 
-        public void Initialize(Timetable tt, Train t)
+        public void Initialize(Timetable tt, IWritableTrain t)
         {
             this.tt = tt;
 
@@ -198,7 +198,7 @@ namespace FPLedit.Editor.TimetableEditor
                 return ds;
             }
 
-            public DataElement(Train tra, Station sta, ArrDep arrDep)
+            public DataElement(ITrain tra, Station sta, ArrDep arrDep)
             {
                 Train = tra;
                 ArrDeps = new Dictionary<Station, ArrDep>(1) { [sta] = arrDep };

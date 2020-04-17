@@ -11,20 +11,26 @@ namespace FPLedit.Shared
         /// <summary>
         /// The unique identifier of this train.
         /// </summary>
-        int Id { get; set; }
+        int Id { get; }
         /// <summary>
-        /// Specifies whether this train is linked to a base train.
+        /// Retuns the name of this train.
         /// </summary>
-        /// <remarks>Liunked trains are currentlxy not supported by FPLedit.</remarks>
-        bool IsLink { get; set; }
+        string TName { get; }
         /// <summary>
         /// Optional comment. May be shown in some output formats.
         /// </summary>
-        string Comment { get; set; }
+        string Comment { get; }
+
+        /// <summary>
+        /// Specifies whether this train is linked to a base train.
+        /// </summary>
+        /// <remarks>Linked trains are currentlxy not supported by FPLedit.</remarks>
+        bool IsLink { get; }
+
         /// <summary>
         /// All weekdays this train is running.
         /// </summary>
-        Days Days { get; set; }
+        Days Days { get; }
         /// <summary>
         /// Retrieves the train's direction according to the XML element name.
         /// </summary>
@@ -33,41 +39,20 @@ namespace FPLedit.Shared
         /// <summary>
         /// Optional metadata entry that contains the uses-supplied weight of this train. May be shown in some output formats.
         /// </summary>
-        string Last { get; set; }
+        string Last { get; }
         /// <summary>
         /// Optional metadata entry that contains the uses-supplied locmotive tractioning this train. May be shown in some output formats.
         /// </summary>
-        string Locomotive { get; set; }
+        string Locomotive { get; }
         /// <summary>
         /// Optional metadata entry that contains the uses-supplied minimum brake percent of this train. May be shown in some output formats.
         /// </summary>
-        string Mbr { get; set; }
-        /// <summary>
-        /// Retuns the name of this train.
-        /// </summary>
-        string TName { get; set; }
+        string Mbr { get; }
 
-        /// <summary>
-        /// Add a new time entry for all stations in the gievn path. This operation is only applicable to Network Timetables.
-        /// </summary>
-        /// <remarks>This can only be applied when the train currently has no time entries.</remarks>
-        void AddAllArrDeps(IEnumerable<Station> path);
-        /// <summary>
-        /// Prepares the train for use in a linear timetable and adds all station entries ordered in line direction.
-        /// </summary>
-        /// <remarks>This can only be applied when the train currently has no time entries.</remarks>
-        void AddLinearArrDeps();
         /// <summary>
         /// Returns the full path of this train, ordered by the running direction. In linear timetables it returns the full line, ordered in the running direction of the train.
         /// </summary>
         List<Station> GetPath();
-        /// <summary>
-        /// Inserts the given time entry for the station added after creation of the train.
-        /// </summary>
-        /// <param name="sta"></param>
-        /// <param name="route">The route index, at which the station is used, or <see cref="Timetable.LINEAR_ROUTE_ID"/> if the timetable is linear.</param>
-        /// <returns>The newly added time entry.</returns>
-        ArrDep AddArrDep(Station sta, int route);
         /// <summary>
         /// Returns the time entry at the given station, throws if not found.
         /// </summary>
@@ -84,6 +69,40 @@ namespace FPLedit.Shared
         /// </summary>
         /// <returns></returns>
         Dictionary<Station, ArrDep> GetArrDepsUnsorted();
+    }
+
+    public interface IWritableTrain : ITrain
+    {
+        /// <summary>
+        /// The unique identifier of this train.
+        /// </summary>
+        new int Id { get; set; }
+        /// <summary>
+        /// Retuns the name of this train.
+        /// </summary>
+        new string TName { get; set; }
+        /// <summary>
+        /// Optional comment. May be shown in some output formats.
+        /// </summary>
+        new string Comment { get; set; }
+
+        /// <summary>
+        /// Add a new time entry for all stations in the gievn path. This operation is only applicable to Network Timetables.
+        /// </summary>
+        /// <remarks>This can only be applied when the train currently has no time entries.</remarks>
+        void AddAllArrDeps(IEnumerable<Station> path);
+        /// <summary>
+        /// Prepares the train for use in a linear timetable and adds all station entries ordered in line direction.
+        /// </summary>
+        /// <remarks>This can only be applied when the train currently has no time entries.</remarks>
+        void AddLinearArrDeps();
+        /// <summary>
+        /// Inserts the given time entry for the station added after creation of the train.
+        /// </summary>
+        /// <param name="sta"></param>
+        /// <param name="route">The route index, at which the station is used, or <see cref="Timetable.LINEAR_ROUTE_ID"/> if the timetable is linear.</param>
+        /// <returns>The newly added time entry.</returns>
+        ArrDep AddArrDep(Station sta, int route);
         /// <summary>
         /// Removes the time entry of the given station. May require removing the station from the timetable altogether, to keep the timetable consistent.
         /// </summary>

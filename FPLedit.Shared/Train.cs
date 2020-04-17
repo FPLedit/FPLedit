@@ -11,7 +11,7 @@ namespace FPLedit.Shared
     [DebuggerDisplay("{" + nameof(TName) + "}")]
     [XElmName("ti", "ta", "tr")]
     [Templating.TemplateSafe]
-    public sealed class Train : Entity, ITrain
+    public sealed class Train : Entity, IWritableTrain
     {
         /// <inheritdoc />
         [XAttrName("name")]
@@ -31,11 +31,7 @@ namespace FPLedit.Shared
 
         /// <inheritdoc />
         [XAttrName("islink")]
-        public bool IsLink
-        {
-            get => GetAttribute<bool>("islink");
-            set => SetAttribute("islink", value.ToString());
-        }
+        public bool IsLink => false;
 
         #region Handling der Fahrtzeiteneinträge
 

@@ -93,11 +93,14 @@ namespace FPLedit.Shared.Helpers
                 return false;
             }
 
-            var ardeps = new Dictionary<Train, ArrDep>();
+            var ardeps = new Dictionary<IWritableTrain, ArrDep>();
             var emptyArray = Array.Empty<int>();
 
             foreach (var tra in sta._parent.Trains)
             {
+                if (!(tra is IWritableTrain wt))
+                    continue;
+                
                 var path = tra.GetPath();
                 var idx = path.IndexOf(sta);
                 if (idx == -1) // Station not in path; not applicable to train.
@@ -113,8 +116,8 @@ namespace FPLedit.Shared.Helpers
 
                 // This train runs over this station on this route, so we need to update it.
                 var arrDep = tra.GetArrDep(sta);
-                ardeps[tra] = arrDep.Copy();
-                tra.RemoveArrDep(sta);
+                ardeps[wt] = arrDep.Copy();
+                wt.RemoveArrDep(sta);
             }
 
             sta.Positions.SetPosition(route, newPos);

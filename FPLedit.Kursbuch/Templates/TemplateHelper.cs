@@ -35,10 +35,10 @@ namespace FPLedit.Kursbuch.Templates
             return stas;
         }
 
-        public Train[] GetTrains(Route route, TrainDirection direction)
+        public ITrain[] GetTrains(Route route, TrainDirection direction)
         {
             var routeStations = (IList<Station>)GetStations(route, direction).ToArray();
-            var firstTimes = new Dictionary<Train, TimeEntry>();
+            var firstTimes = new Dictionary<ITrain, TimeEntry>();
 
             foreach (var t in tt.Trains)
             {

@@ -23,7 +23,7 @@ namespace FPLedit.Shared
         /// <summary>
         /// A read-only list of all trains associated with this timetbale.
         /// </summary>
-        IList<Train> Trains { get; }
+        IList<ITrain> Trains { get; }
         /// <summary>
         /// A read-only list of all transitions associated with this timetbale.
         /// </summary>
@@ -52,18 +52,18 @@ namespace FPLedit.Shared
         void RemoveStation(Station sta);
 
         /// <summary>
-        /// This method adds a non-existent <see cref="Train"/> to this timetable.
+        /// This method adds a non-existent <see cref="ITrain"/> to this timetable.
         /// </summary>
         /// <remarks>Adding an already added train will do nothing</remarks>
-        void AddTrain(Train tra);
+        void AddTrain(ITrain tra);
         /// <summary>
         /// Retrieve a train by it's unique id. This only works in network timetables.
         /// </summary>
-        Train GetTrainById(int id);
+        ITrain GetTrainById(int id);
         /// <summary>
         /// This method removes the given Train from this timetable instance.
         /// </summary>
-        void RemoveTrain(Train tra);
+        void RemoveTrain(ITrain tra);
 
         /// <summary>
         /// Speicifies whether this train contains cyclic routes.
@@ -127,17 +127,17 @@ namespace FPLedit.Shared
         /// <summary>
         /// Creates or sets the transaition between the two trains: From <paramref name="first"/> to <paramref name="newNext"/>.
         /// </summary>
-        void SetTransition(Train first, Train newNext);
+        void SetTransition(ITrain first, ITrain newNext);
         /// <summary>
         /// Get the next train, following a single transition, if one exists.
         /// </summary>
         /// <returns>The next train or null, if none exists.</returns>
-        Train GetTransition(Train first);
+        ITrain GetTransition(ITrain first);
         /// <summary>
         /// Get the next train, following a single transition, if one exists.
         /// </summary>
         /// <returns>The next train or null, if none exists.</returns>
-        Train GetTransition(int firstTrainId);
+        ITrain GetTransition(int firstTrainId);
         /// <summary>
         /// Get all next train, following all transitions as long as possible.
         /// </summary>
@@ -146,13 +146,13 @@ namespace FPLedit.Shared
         /// If the loop with transitions is closed, it will only return the trains that are encountered before
         /// reaching the <paramref name="first"/> train again.
         /// </remarks>
-        IEnumerable<Train> GetFollowingTransitions(Train first);
+        IEnumerable<ITrain> GetFollowingTransitions(ITrain first);
         /// <summary>
         /// Removes the transition starting with this train.
         /// </summary>
         /// <param name="first">The train to search.</param>
         /// <param name="onlyAsFirst">If false, also remove all transitions leading to this train, thus removing all transitions referencing this train.</param>
-        void RemoveTransition(Train first, bool onlyAsFirst = true);
+        void RemoveTransition(ITrain first, bool onlyAsFirst = true);
         /// <summary>
         /// Removes the transition starting with this train.
         /// </summary>
@@ -165,7 +165,7 @@ namespace FPLedit.Shared
         /// <param name="tra">The train to search.</param>
         /// <param name="onlyAsFirst">If false, also check all transitions leading to this train, thus returning if any transition references this train..</param>
         /// <returns></returns>
-        bool HasTransition(Train tra, bool onlyAsFirst = true);
+        bool HasTransition(ITrain tra, bool onlyAsFirst = true);
 
         /// <summary>
         /// Create a deep copy (including XML-tree) of this timetable instance.

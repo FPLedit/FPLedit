@@ -46,7 +46,7 @@ namespace FPLedit.Editor.Trains
             InternalCopyArrDeps(orig, target, offsetMin);
         }
 
-        public IEnumerable<Train> FillCandidates(Train tra)
+        public IEnumerable<ITrain> FillCandidates(ITrain tra)
             => tra._parent.Trains.Where(t => t.Direction == tra.Direction && t != tra);
 
         public void MoveTrain(Train t, int offsetMin)
@@ -104,9 +104,9 @@ namespace FPLedit.Editor.Trains
             if (excludePrefix)
                 SortTrainsName(tt, dir, false);
 
-            Train[] Trains() => tt.Trains.Where(t => t.Direction == dir).ToArray();
+            ITrain[] Trains() => tt.Trains.Where(t => t.Direction == dir).ToArray();
 
-            NameParts NameSelector(Train train) => new NameParts(train.TName, excludePrefix);
+            NameParts NameSelector(ITrain train) => new NameParts(train.TName, excludePrefix);
             bool StringComparer(NameParts cur, NameParts next) => cur.CompareTo(next, excludePrefix);
 
             InternalSort(tt, Trains, NameSelector, StringComparer);
@@ -114,16 +114,16 @@ namespace FPLedit.Editor.Trains
 
         public void SortTrainsAtStation(Timetable tt, TrainDirection dir, Station sta)
         {
-            Train[] Trains() => tt.Trains.Where(t => t.Direction == dir)
+            ITrain[] Trains() => tt.Trains.Where(t => t.Direction == dir)
                 .Where(t => t.GetPath().Contains(sta)).ToArray();
 
-            TimeEntry TimeSelector(Train train) => train.GetArrDep(sta).FirstSetTime;
+            TimeEntry TimeSelector(ITrain train) => train.GetArrDep(sta).FirstSetTime;
             bool TimeComparer(TimeEntry cur, TimeEntry next) => (cur != default) && (next != default) && (cur > next);
 
             InternalSort(tt, Trains, TimeSelector, TimeComparer);
         }
 
-        private void InternalSort<TCompare>(Timetable tt, Func<Train[]> trains, Func<Train, TCompare> selector, Func<TCompare, TCompare, bool> comparer)
+        private void InternalSort<TCompare>(Timetable tt, Func<ITrain[]> trains, Func<ITrain, TCompare> selector, Func<TCompare, TCompare, bool> comparer)
         {
             var t = trains();
             for (int n = t.Length; n > 1; n--)

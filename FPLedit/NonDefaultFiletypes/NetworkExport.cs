@@ -19,7 +19,7 @@ namespace FPLedit.NonDefaultFiletypes
 
             var clone = tt.Clone();
 
-            var trainPaths = new Dictionary<Train, TrainPathData>();
+            var trainPaths = new Dictionary<ITrain, TrainPathData>();
             foreach (var orig in clone.Trains)
                 trainPaths[orig] = new TrainPathData(clone, orig);
 
@@ -45,14 +45,17 @@ namespace FPLedit.NonDefaultFiletypes
             {
                 var data = trainPaths[train];
 
-                train.Children.Clear();
-                train.AddAllArrDeps(data.GetRawPath());
-                train.XMLEntity.XName = "tr";
+                if (!(train is IWritableTrain wt))
+                    continue;
+
+                wt.Children.Clear();
+                wt.AddAllArrDeps(data.GetRawPath());
+                wt.XMLEntity.XName = "tr";
 
                 foreach (var sta in data.PathEntries)
                 {
                     if (sta.ArrDep != null)
-                        train.GetArrDep(sta.Station).ApplyCopy(sta.ArrDep);
+                        wt.GetArrDep(sta.Station).ApplyCopy(sta.ArrDep);
                 }
             }
 

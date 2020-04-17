@@ -163,7 +163,7 @@ namespace FPLedit.Editor.Linear
             public override Station GetStation() => SelectedStation;
         }
 
-        private string GetTransition(Train t) => tt.GetTransition(t)?.TName ?? "";
+        private string GetTransition(ITrain t) => tt.GetTransition(t)?.TName ?? "";
 
         private void InitializeGridView(GridView view, TrainDirection dir)
         {
@@ -193,7 +193,7 @@ namespace FPLedit.Editor.Linear
             view.DataStore = l;
         }
 
-        private bool UpdateTrainDataFromGrid(Train train, GridView view)
+        private bool UpdateTrainDataFromGrid(ITrain train, GridView view)
         {
             foreach (DataElement row in view.DataStore)
             {

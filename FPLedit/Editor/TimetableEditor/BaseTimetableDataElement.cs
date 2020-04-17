@@ -8,7 +8,7 @@ namespace FPLedit.Editor.TimetableEditor
 {
     internal abstract class BaseTimetableDataElement
     {
-        public Train Train { get; set; }
+        public ITrain Train { get; set; }
 
         public Dictionary<Station, ArrDep> ArrDeps { get; set; }
 

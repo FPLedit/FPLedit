@@ -31,7 +31,7 @@ namespace FPLedit.Aushangfahrplan.Templates
             return x;
         }
 
-        private Train[] GetTrains(Station sta)
+        private ITrain[] GetTrains(Station sta)
         {
             return tt.Trains.Where(t => t.GetPath().Contains(sta)
                 && t.GetArrDep(sta).Departure != default
@@ -77,7 +77,7 @@ namespace FPLedit.Aushangfahrplan.Templates
 
         #region Trains at station
 
-        public Train[] GetTrains(TrainDirection dir, Station sta)
+        public ITrain[] GetTrains(TrainDirection dir, Station sta)
         {
             var stasAfter = GetStationsInDir(dir, sta);
             var stasBefore = GetStationsInDir(dir == TrainDirection.ta ? TrainDirection.ti : TrainDirection.ta, sta);

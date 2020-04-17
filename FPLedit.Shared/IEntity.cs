@@ -8,7 +8,11 @@ namespace FPLedit.Shared
     /// </summary>
     [Templating.TemplateSafe]
     public interface IEntity
-    {
+    { 
+        XMLEntity XMLEntity { get; }
+        
+        Timetable _parent { get; set; }
+        
         /// <summary>
         /// Gets or sets all XML attributes of the underlying XML node.
         /// </summary>

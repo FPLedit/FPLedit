@@ -35,7 +35,7 @@ namespace FPLedit.TimetableChecks
             }
         }
 
-        private IEnumerable<Station> GetSortedStations(Train train)
+        private IEnumerable<Station> GetSortedStations(ITrain train)
         {
             var path = train.GetPath();
             var arrdeps = train.GetArrDepsUnsorted();

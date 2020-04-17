@@ -25,7 +25,7 @@ namespace FPLedit.Editor.Trains
 
         public Train Train { get; }
         
-        public Train NextTrain { get; private set;  }
+        public ITrain NextTrain { get; private set;  }
 
         private readonly Timetable tt;
         private readonly TrainEditHelper th;
@@ -135,9 +135,9 @@ namespace FPLedit.Editor.Trains
             if (tt.Version != TimetableVersion.JTG2_x)
             {
                 if (Train.Id == -1)
-                    NextTrain = (Train) transitionDropDown.SelectedValue;
+                    NextTrain = (ITrain) transitionDropDown.SelectedValue;
                 else
-                    tt.SetTransition(Train, (Train)transitionDropDown.SelectedValue);
+                    tt.SetTransition(Train, (ITrain)transitionDropDown.SelectedValue);
             }
 
             Close(DialogResult.Ok);
@@ -168,7 +168,7 @@ namespace FPLedit.Editor.Trains
             transitionDropDown.SelectedIndex = -1;
         }
 
-        private IEnumerable<ListItem> GetAllItems(Timetable tt, Func<Train, string> func)
+        private IEnumerable<ListItem> GetAllItems(Timetable tt, Func<ITrain, string> func)
             => tt.Trains.Select(func).Distinct().Where(s => s != "").OrderBy(s => s).Select(s => new ListItem { Text = s });
     }
 }

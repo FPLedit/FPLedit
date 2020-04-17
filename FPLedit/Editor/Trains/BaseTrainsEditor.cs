@@ -1,18 +1,14 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.Editor.Trains
 {
     internal abstract class BaseTrainsEditor : FDialog<DialogResult>
     {
         private readonly Timetable tt;
+
         public BaseTrainsEditor(Timetable tt)
         {
             this.tt = tt;
@@ -27,7 +23,7 @@ namespace FPLedit.Editor.Trains
         {
             if (view.SelectedItem != null)
             {
-                tt.RemoveTrain((Train)view.SelectedItem);
+                tt.RemoveTrain((ITrain) view.SelectedItem);
 
                 UpdateListView(view, dir);
             }
@@ -39,11 +35,12 @@ namespace FPLedit.Editor.Trains
         {
             if (view.SelectedItem != null)
             {
-                Train train = (Train)view.SelectedItem;
+                ITrain train = (ITrain) view.SelectedItem;
 
-                using (var tef = new TrainEditForm(train))
-                    if (tef.ShowModal(this) == DialogResult.Ok)
-                        UpdateListView(view, dir);
+                if (train is Train tra)
+                    using (var tef = new TrainEditForm(tra))
+                        if (tef.ShowModal(this) == DialogResult.Ok)
+                            UpdateListView(view, dir);
             }
             else if (message)
                 MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug bearbeiten");
@@ -68,7 +65,7 @@ namespace FPLedit.Editor.Trains
         {
             if (view.SelectedItem != null)
             {
-                var train = (Train)view.SelectedItem;
+                var train = (Train) view.SelectedItem;
 
                 using (var tcf = new TrainCopyDialog(train, tt))
                     tcf.ShowModal(this);

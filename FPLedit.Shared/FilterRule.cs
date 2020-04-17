@@ -78,7 +78,7 @@ namespace FPLedit.Shared
         /// Returns if a given train matches this pattern.
         /// </summary>
         /// <exception cref="InvalidOperationException">The type of this FilterRule is "StationType" (#). </exception>
-        public bool Matches(Train t)
+        public bool Matches(ITrain t)
         {
             if (FilterType == FilterType.StationType)
                 throw new InvalidOperationException("Cannot apply StationType filter to train!");

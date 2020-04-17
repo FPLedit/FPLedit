@@ -12,7 +12,7 @@ namespace FPLedit.Shared
     /// </summary>
     [DebuggerDisplay("Name: {XName}, Children: {Children.Count}, Attrs: {AttributeDebugger,nq}")]
     [Templating.TemplateSafe]
-    public sealed class XMLEntity : IEntity
+    public sealed class XMLEntity
     {
         /// <summary>
         /// Name of the XML node. Naming rules apply.

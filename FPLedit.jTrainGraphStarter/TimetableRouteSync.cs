@@ -14,13 +14,13 @@ namespace FPLedit.jTrainGraphStarter
         private readonly Timetable orig;
         private readonly int routeIndex;
 
-        private readonly List<Train> trainMap;
+        private readonly List<ITrain> trainMap;
 
         public TimetableRouteSync(Timetable tt, int routeIndex)
         {
             orig = tt;
             this.routeIndex = routeIndex;
-            trainMap = new List<Train>();
+            trainMap = new List<ITrain>();
         }
 
         #region Network -> Route
@@ -74,12 +74,15 @@ namespace FPLedit.jTrainGraphStarter
                 tra.SetAttribute("fpl-sync-id", syncId++.ToString());
                 trainMap.Add(tra); // Der Index wird immer um 1 hochegzählt, daher brauchts hier kein Dictionary
 
-                // Fahrtzeiteneinträge setzen
-                tra.Children.Clear();
-                tra.AddAllArrDeps(sortedStations);
-                foreach (var ardp in ardps)
-                    if (sortedStations.Contains(ardp.Key))
-                        tra.GetArrDep(ardp.Key).ApplyCopy(ardp.Value);
+                if (tra is IWritableTrain wt)
+                {
+                    // Fahrtzeiteneinträge setzen
+                    wt.Children.Clear();
+                    wt.AddAllArrDeps(sortedStations);
+                    foreach (var ardp in ardps)
+                        if (sortedStations.Contains(ardp.Key))
+                            wt.GetArrDep(ardp.Key).ApplyCopy(ardp.Value);
+                }
 
                 // Lineare Fahrtrichtung bestimmen
                 var sta1 = ardps.FirstOrDefault().Key;
@@ -144,7 +147,7 @@ namespace FPLedit.jTrainGraphStarter
             }
         }
 
-        private Dictionary<string, string> AttrDiff(Entity xold, Entity xnew)
+        private Dictionary<string, string> AttrDiff(IEntity xold, IEntity xnew)
         {
             var result = new[] { xold.Attributes, xnew.Attributes }.SelectMany(dict => dict)
                          .ToLookup(pair => pair.Key, pair => pair.Value)

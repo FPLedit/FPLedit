@@ -21,7 +21,7 @@ namespace FPLedit.NonDefaultFiletypes
 
             var clone = tt.Clone();
 
-            var trainPaths = new Dictionary<Train, TrainPathData>();
+            var trainPaths = new Dictionary<ITrain, TrainPathData>();
             foreach (var orig in clone.Trains)
                 trainPaths[orig] = new TrainPathData(clone, orig);
 
@@ -61,9 +61,12 @@ namespace FPLedit.NonDefaultFiletypes
                     dir = TrainDirection.ta;
 
                 t.XMLEntity.XName = dir.ToString();
+                
+                if (!(t is IWritableTrain wt))
+                    continue;
 
-                t.Children.Clear(); // Clear all existing arrdeps...
-                t.AddLinearArrDeps(); // ...and re-add all linear ones.
+                wt.Children.Clear(); // Clear all existing arrdeps...
+                wt.AddLinearArrDeps(); // ...and re-add all linear ones.
 
                 foreach (var sta in data.PathEntries)
                 {

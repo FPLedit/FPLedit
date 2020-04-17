@@ -32,7 +32,7 @@ namespace FPLedit.Buchfahrplan.Templates
                 .ToLower();
         }
 
-        public string GetDaysHtml(Train tra, bool showDays)
+        public string GetDaysHtml(ITrain tra, bool showDays)
         {
             var days = tra.Days.DaysToString(true);
             if (!showDays || days == "")
@@ -43,7 +43,7 @@ namespace FPLedit.Buchfahrplan.Templates
             return "&nbsp;&nbsp;" + days;
         }
 
-        public IStation[] GetStations(Train train)
+        public IStation[] GetStations(ITrain train)
         {
             List<IStation> points = new List<IStation>();
             var fstations = train.GetPath().Where(s => filterable.LoadStationRules(tt).All(r => !r.Matches(s))); // Filter
@@ -77,7 +77,7 @@ namespace FPLedit.Buchfahrplan.Templates
             return points.ToArray();
         }
 
-        public Train[] GetTrains()
+        public ITrain[] GetTrains()
         {
             return tt.Trains.Where(t => filterable.LoadTrainRules(tt).All(r => !r.Matches(t))).ToArray();
         }
@@ -89,19 +89,19 @@ namespace FPLedit.Buchfahrplan.Templates
             return "";
         }
 
-        public string Kreuzt(Train ot, Station s)
+        public string Kreuzt(ITrain ot, Station s)
         {
             return string.Join(", ", analyzer.CrossingAtStation(ot, s)
                 .Select(tr => tr.TName + " " + IntersectDaysSt(ot, tr)));
         }
 
-        public string Ueberholt(Train ot, Station s)
+        public string Ueberholt(ITrain ot, Station s)
         {
             return string.Join(", ", analyzer.OvertakeAtStation(ot, s)
                 .Select(tr => tr.TName + " " + IntersectDaysSt(ot, tr)));
         }
 
-        public string TrapezHalt(Train probeTrain, Station s)
+        public string TrapezHalt(ITrain probeTrain, Station s)
         {
             var trapez = analyzer.TrapezAtStation(probeTrain, s);
 
@@ -112,7 +112,7 @@ namespace FPLedit.Buchfahrplan.Templates
 
             return "";
         }
-
+        
         private string IntersectDaysSt(ITrain ot, ITrain t) 
             => DaysToStringNotEqual(ot, ot.Days.IntersectingDays(t.Days));
 

@@ -13,7 +13,7 @@ namespace FPLedit.TimetableChecks
 
             // Bug in FPLedit 1.5.3 bis 2.0.0 muss nachträglich korrigiert werden
             // In manchen Fällen wurden Zug-Ids doppelt vergeben
-            var duplicate_tra_ids = tt.Trains.GroupBy(t => t.Id).Where(g => g.Count() > 1).Select(g => g.ToArray());
+            var duplicate_tra_ids = tt.Trains.OfType<IWritableTrain>().GroupBy(t => t.Id).Where(g => g.Count() > 1).Select(g => g.ToArray());
             if (duplicate_tra_ids.Any()) // Wir haben doppelte IDs
             {
                 if (tt.Transitions.Any())

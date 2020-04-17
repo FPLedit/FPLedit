@@ -26,13 +26,13 @@ namespace FPLedit.Editor.Network
             tt = pluginInterface.Timetable;
             backupHandle = pluginInterface.BackupTimetable();
 
-            gridView.AddColumn<Train>(t => t.TName, "Zugnummer");
-            gridView.AddColumn<Train>(t => t.Locomotive, "Tfz");
-            gridView.AddColumn<Train>(t => t.Mbr, "Mbr");
-            gridView.AddColumn<Train>(t => t.Last, "Last");
-            gridView.AddColumn<Train>(t => t.Days.DaysToString(false), "Verkehrstage");
-            gridView.AddColumn<Train>(t => BuildPath(t), "Laufweg");
-            gridView.AddColumn<Train>(t => t.Comment, "Kommentar");
+            gridView.AddColumn<ITrain>(t => t.TName, "Zugnummer");
+            gridView.AddColumn<ITrain>(t => t.Locomotive, "Tfz");
+            gridView.AddColumn<ITrain>(t => t.Mbr, "Mbr");
+            gridView.AddColumn<ITrain>(t => t.Last, "Last");
+            gridView.AddColumn<ITrain>(t => t.Days.DaysToString(false), "Verkehrstage");
+            gridView.AddColumn<ITrain>(t => BuildPath(t), "Laufweg");
+            gridView.AddColumn<ITrain>(t => t.Comment, "Kommentar");
 
             gridView.MouseDoubleClick += (s, e) => EditTrain(gridView, TrainDirection.tr, false);
 
@@ -69,7 +69,7 @@ namespace FPLedit.Editor.Network
                 NewTrain(gridView);
         }
 
-        private string BuildPath(Train t)
+        private string BuildPath(ITrain t)
         {
             var path = t.GetPath();
             return path.FirstOrDefault()?.SName + " - " + path.LastOrDefault()?.SName;

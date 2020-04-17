@@ -16,7 +16,7 @@ namespace FPLedit.Bildfahrplan.Render
         private readonly TimetableStyle attrs;
         private readonly TimeEntry startTime;
         private readonly Dictionary<Station, StationRenderProps> stationOffsets;
-        private Train[] trainCache;
+        private ITrain[] trainCache;
 
         private readonly DashStyleHelper ds = new DashStyleHelper();
 
@@ -30,7 +30,7 @@ namespace FPLedit.Bildfahrplan.Render
             attrs = new TimetableStyle(tt);
         }
 
-        public void Render(Graphics g, Train train)
+        public void Render(Graphics g, ITrain train)
         {
             var style = new TrainStyle(train, attrs);
             if (!style.CalcedShow)
@@ -201,7 +201,7 @@ namespace FPLedit.Bildfahrplan.Render
         #endregion
 
         #region Direction helpers
-        private bool GetTrainDirection(Train train)
+        private bool GetTrainDirection(ITrain train)
         {
             if (tt.Type == TimetableType.Linear)
                 return train.Direction == TrainDirection.ta;
@@ -221,7 +221,7 @@ namespace FPLedit.Bildfahrplan.Render
             return route.ToArray();
         }
 
-        private Train[] GetTrains(TrainDirection dir)
+        private ITrain[] GetTrains(TrainDirection dir)
         {
             if (trainCache == null)
             {
@@ -247,13 +247,13 @@ namespace FPLedit.Bildfahrplan.Render
         }
         #endregion
 
-        private float CalcAngle(float[] ys, float[] xs, Train train)
+        private float CalcAngle(float[] ys, float[] xs, ITrain train)
         {
             var angle = (float)(Math.Atan2(xs.Max() - xs.Min(), ys.Max() - ys.Min()) * (180d / Math.PI));
             return GetTrainDirection(train) ? 90 - angle : angle - 90;
         }
 
-        private IEnumerable<Station> GetSortedStations(Train train)
+        private IEnumerable<Station> GetSortedStations(ITrain train)
         {
             var path = train.GetPath();
             var arrdeps = train.GetArrDepsUnsorted();

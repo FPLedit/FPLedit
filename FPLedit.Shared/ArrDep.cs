@@ -5,7 +5,7 @@ namespace FPLedit.Shared
     /// <summary>
     /// Object model type that represents a single stop with time data and all additional data. It is always part of a train.
     /// </summary>
-    /// <remarks>You can use <see cref="Train"/>.*ArrDeps* functions to manipulate single ArrDep entries of a given train.</remarks>
+    /// <remarks>You can use <see cref="IWritableTrain"/>.*ArrDeps* functions to manipulate single ArrDep entries of a given train.</remarks>
     [XElmName("t")]
     [Templating.TemplateSafe]
     public sealed class ArrDep : Entity

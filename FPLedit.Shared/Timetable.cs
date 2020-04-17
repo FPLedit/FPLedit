@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -45,12 +45,12 @@ namespace FPLedit.Shared
         #endregion
 
         private List<Station> stations;
-        private readonly List<Train> trains;
+        private readonly List<ITrain> trains;
         private readonly List<Transition> transitions;
 
         public IList<Station> Stations => stations.AsReadOnly();
 
-        public IList<Train> Trains => trains.AsReadOnly();
+        public IList<ITrain> Trains => trains.AsReadOnly();
 
         public IList<Transition> Transitions => transitions.AsReadOnly();
 
@@ -60,7 +60,7 @@ namespace FPLedit.Shared
         public Timetable(TimetableType type) : base("jTrainGraph_timetable", null) // Root without parent
         {
             stations = new List<Station>();
-            trains = new List<Train>();
+            trains = new List<ITrain>();
             transitions = new List<Transition>();
 
             SetAttribute("version", type == TimetableType.Network ? TimetableVersion.Extended_FPL.ToNumberString() : DefaultLinearVersion.ToNumberString()); // version="100" nicht kompatibel mit jTrainGraph
@@ -95,7 +95,7 @@ namespace FPLedit.Shared
                 Children.Add(sElm);
             }
 
-            trains = new List<Train>();
+            trains = new List<ITrain>();
             tElm = Children.FirstOrDefault(x => x.XName == "trains");
             if (sElm == null && tElm != null)
                 throw new NotSupportedException("Kein <stations>-Element vorhanden, dafür aber <trains>!");
@@ -104,6 +104,7 @@ namespace FPLedit.Shared
             {
                 var directions = Enum.GetNames(typeof(TrainDirection));
                 foreach (var c in tElm.Children.Where(x => directions.Contains(x.XName))) // Filtert andere Elemente
+                    //TODO: Check for linked trains
                     trains.Add(new Train(c, this));
             }
             else
@@ -137,8 +138,8 @@ namespace FPLedit.Shared
             // Zügen ohne IDs diese neu zuweisen
             foreach (var train in trains)
             {
-                if (train.Id == -1)
-                    train.Id = ++nextTraId;
+                if (train is IWritableTrain wt && wt.Id == -1)
+                    wt.Id = ++nextTraId;
             }
 
             // Clean up invalid transitions
@@ -212,7 +213,8 @@ namespace FPLedit.Shared
 
             // Auch bei allen Zügen hinzufügen
             foreach (var t in Trains)
-                t.AddArrDep(sta, route);
+                if (t is IWritableTrain wt)
+                    wt.AddArrDep(sta, route);
             
             RebuildRouteCache(route);
         }
@@ -221,7 +223,8 @@ namespace FPLedit.Shared
         public void RemoveStation(Station sta)
         {
             foreach (var train in Trains)
-                train.RemoveArrDep(sta);
+                if (train is IWritableTrain wt)
+                    wt.RemoveArrDep(sta);
 
             var needsCleanup = stations.First() == sta || stations.Last() == sta;
             var routes = sta.Routes;
@@ -235,7 +238,8 @@ namespace FPLedit.Shared
 
             // Wenn Endstationen gelöscht werden könnten sonst korrupte Dateien entstehen!
             foreach (var train in Trains)
-                train.RemoveOrphanedTimes();
+                if (train is IWritableTrain wt)
+                    wt.RemoveOrphanedTimes();
             
             // Rebuild route cache (before removing orphaned routes)
             foreach (var route in routes)
@@ -260,23 +264,24 @@ namespace FPLedit.Shared
         #region Hilfsmethoden für Züge
 
         /// <inheritdoc />
-        public void AddTrain(Train tra)
+        public void AddTrain(ITrain tra)
         {
             if (Trains.Contains(tra))
                 return;
             
-            tra.Id = ++nextTraId;
+            if (tra is IWritableTrain wt)
+                wt.Id = ++nextTraId;
             tra._parent = this;
             trains.Add(tra);
             tElm.Children.Add(tra.XMLEntity);
         }
 
         /// <inheritdoc />
-        public Train GetTrainById(int id)
+        public ITrain GetTrainById(int id)
             => trains.FirstOrDefault(t => t.Id == id);
 
         /// <inheritdoc />
-        public void RemoveTrain(Train tra)
+        public void RemoveTrain(ITrain tra)
         {
             RemoveTransition(tra, false); // Remove "orphaned" transitions
 
@@ -330,7 +335,7 @@ namespace FPLedit.Shared
             }
         }
         
-        public void _InternalSwapTrainOrder(Train t1, Train t2)
+        public void _InternalSwapTrainOrder(ITrain t1, ITrain t2)
         {
             var idx = trains.IndexOf(t1);
             var xidx = tElm.Children.IndexOf(t1.XMLEntity);
@@ -530,7 +535,7 @@ namespace FPLedit.Shared
         /// <summary>
         /// Private helper function to create a new transition. Only exposed via <see cref="SetTransition"/>.
         /// </summary>
-        private void AddTransition(Train first, Train next)
+        private void AddTransition(ITrain first, ITrain next)
         {
             if (next == null) return;
             var transition = new Transition(this)
@@ -543,7 +548,7 @@ namespace FPLedit.Shared
         }
 
         /// <inheritdoc />
-        public void SetTransition(Train first, Train newNext)
+        public void SetTransition(ITrain first, ITrain newNext)
         {
             var trans = transitions.Where(t => t.First == first.Id).ToArray();
 
@@ -561,13 +566,13 @@ namespace FPLedit.Shared
         }
 
         /// <inheritdoc />
-        public Train GetTransition(Train first)
+        public ITrain GetTransition(ITrain first)
         {
             return first != null ? GetTransition(first.Id) : null;
         } 
 
         /// <inheritdoc />
-        public Train GetTransition(int firstTrainId)
+        public ITrain GetTransition(int firstTrainId)
         {
             if (firstTrainId == -1)
                 return null;
@@ -583,7 +588,7 @@ namespace FPLedit.Shared
         }
 
         /// <inheritdoc />
-        public IEnumerable<Train> GetFollowingTransitions(Train first)
+        public IEnumerable<ITrain> GetFollowingTransitions(ITrain first)
         {
             var tra = first;
             while ((tra = GetTransition(tra)) != null && tra != first)
@@ -591,7 +596,7 @@ namespace FPLedit.Shared
         }
 
         /// <inheritdoc />
-        public void RemoveTransition(Train first, bool onlyAsFirst = true) => RemoveTransition(first.Id, onlyAsFirst);
+        public void RemoveTransition(ITrain first, bool onlyAsFirst = true) => RemoveTransition(first.Id, onlyAsFirst);
 
         /// <inheritdoc />
         public void RemoveTransition(int firstTrainId, bool onlyAsFirst = true)
@@ -603,7 +608,7 @@ namespace FPLedit.Shared
         }
 
         /// <inheritdoc />
-        public bool HasTransition(Train tra, bool onlyAsFirst = true)
+        public bool HasTransition(ITrain tra, bool onlyAsFirst = true)
             => transitions.Any(t => t.First == tra.Id || (!onlyAsFirst && t.Next == tra.Id));
 
         #endregion
