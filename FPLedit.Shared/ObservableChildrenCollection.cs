@@ -141,4 +141,25 @@ namespace FPLedit.Shared
         /// <typeparam name="TCompare">Type that will be compared for each child.</typeparam>
         void Sort<TCompare>(Func<T, TCompare> comparer) where TCompare : IComparable;
     }
+    
+    public static class ObservableCollectionExtensions
+    {
+        public static int RemoveAll<T>(this IList<T> coll, Func<T, bool> condition)
+        {
+            var itemsToRemove = coll.Where(condition).ToArray();
+
+            foreach (var itemToRemove in itemsToRemove)
+            {
+                coll.Remove(itemToRemove);
+            }
+
+            return itemsToRemove.Length;
+        }
+
+        public static void InsertRange<T>(this IList<T> coll, int index, IEnumerable<T> range)
+        {
+            foreach (var r in range)
+                coll.Insert(index++, r);
+        }
+    }
 }

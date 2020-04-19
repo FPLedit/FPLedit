@@ -23,7 +23,7 @@ namespace FPLedit.Shared
         }
 
         /// <inheritdoc />
-        public List<XMLEntity> Children => XMLEntity.Children;
+        public IList<XMLEntity> Children => XMLEntity.Children;
 
         /// <summary>
         /// Creates a new instance of this entity type, specifying the XML node name.
@@ -33,6 +33,7 @@ namespace FPLedit.Shared
         protected Entity(string xn, Timetable tt)
         {
             XMLEntity = new XMLEntity(xn);
+            XMLEntity.ChildrenChangedRecursive += (s, e) => OnChildrenChanged();
             _parent = tt;
         }
 
@@ -45,6 +46,7 @@ namespace FPLedit.Shared
         protected Entity(XMLEntity en, Timetable tt)
         {
             XMLEntity = en;
+            XMLEntity.ChildrenChangedRecursive += (s, e) => OnChildrenChanged();
             _parent = tt;
         }
 
@@ -54,11 +56,17 @@ namespace FPLedit.Shared
 
         /// <inheritdoc />
         public void SetAttribute(string key, string value)
-            => XMLEntity.SetAttribute(key, value);
+        {
+            XMLEntity.SetAttribute(key, value);
+            OnSetAttribute(key, value);
+        }
 
         /// <inheritdoc />
         public void RemoveAttribute(string key)
-            => XMLEntity.RemoveAttribute(key);
+        {
+            XMLEntity.RemoveAttribute(key);
+            OnRemoveAttribute(key);
+        }
 
         protected void SetNotEmptyTimeAttribute(string key, TimeEntry time)
         {
@@ -72,5 +80,11 @@ namespace FPLedit.Shared
             TimeEntry.TryParse(val, out var ts);
             return ts;
         }
+
+        public virtual void OnSetAttribute(string key, string value) { }
+        
+        public virtual void OnRemoveAttribute(string key) { }
+        
+        public virtual void OnChildrenChanged() { }
     }
 }

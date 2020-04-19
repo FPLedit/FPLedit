@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -14,6 +16,10 @@ namespace FPLedit.Shared
     [Templating.TemplateSafe]
     public sealed class XMLEntity
     {
+        private XMLEntity ParentElement { get; set; }
+        
+        private readonly ObservableCollection<XMLEntity> children;
+
         /// <summary>
         /// Name of the XML node. Naming rules apply.
         /// </summary>
@@ -21,15 +27,27 @@ namespace FPLedit.Shared
 
         public Dictionary<string, string> Attributes { get; set; }
 
-        public List<XMLEntity> Children { get; set; }
+        public IList<XMLEntity> Children => children;
 
         public string Value { get; set; }
+
+        /// <summary>
+        /// This event will be called when one of the children of this element (or any element in the XML subtree below)
+        /// is changed (attributes and/or children elements).
+        /// </summary>
+        public event EventHandler ChildrenChangedRecursive;
+        
+        /// <summary>
+        /// This event will beraised when the children collection of this entity will be modified.
+        /// </summary>
+        public event EventHandler ChildrenChangedDirect;
 
         public XMLEntity(string xname)
         {
             XName = xname;
             Attributes = new Dictionary<string, string>();
-            Children = new List<XMLEntity>();
+            children = new ObservableCollection<XMLEntity>();
+            children.CollectionChanged += ChildrenOnCollectionChanged;
         }
 
         public XMLEntity(XElement el)
@@ -40,10 +58,34 @@ namespace FPLedit.Shared
             if (el.Attributes().Any(a => a.Name.Namespace != XNamespace.None))
                 throw new NotSupportedException("Dateien mit XML-Namensräumen werden nicht unterstützt!");
             Attributes = el.Attributes().ToDictionary(a => a.Name.LocalName, a => (string)a);
-            Children = new List<XMLEntity>();
             Value = el.Nodes().OfType<XText>().FirstOrDefault()?.Value;
+            
+            children = new ObservableCollection<XMLEntity>();
             foreach (var c in el.Nodes().OfType<XElement>())
-                Children.Add(new XMLEntity(c));
+            {
+                var xEntity = new XMLEntity(c);
+                xEntity.ParentElement = this;
+                children.Add(xEntity);
+            }
+
+            children.CollectionChanged += ChildrenOnCollectionChanged;
+        }
+
+        private void ChildrenOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
+                foreach (XMLEntity item in e.NewItems)
+                    item.ParentElement = this;
+            
+            ChildrenChangedRecursive?.Invoke(this, e);
+            ChildrenChangedDirect?.Invoke(this, e);
+            ParentElement?.NotifyChildChanged(this);
+        }
+
+        private void NotifyChildChanged(XMLEntity child)
+        {
+            ChildrenChangedRecursive?.Invoke(this, new EventArgs());
+            ParentElement?.NotifyChildChanged(this);
         }
 
         public T GetAttribute<T>(string key, T defaultValue = default)
@@ -57,9 +99,17 @@ namespace FPLedit.Shared
             return defaultValue;
         }
 
-        public void SetAttribute(string key, string value) => Attributes[key] = value;
+        public void SetAttribute(string key, string value)
+        {
+            Attributes[key] = value;
+            ParentElement?.NotifyChildChanged(this);
+        }
 
-        public void RemoveAttribute(string key) => Attributes.Remove(key);
+        public void RemoveAttribute(string key)
+        {
+            Attributes.Remove(key);
+            ParentElement?.NotifyChildChanged(this);
+        }
 
         private string AttributeDebugger => string.Join(", ", Attributes.ToList().Select(a => a.Key + "=" + a.Value));
         

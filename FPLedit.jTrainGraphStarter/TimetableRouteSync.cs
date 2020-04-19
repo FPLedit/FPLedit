@@ -48,12 +48,13 @@ namespace FPLedit.jTrainGraphStarter
             var sortedStations = copy.Stations.OrderBy(s => s.Positions.GetPosition(routeIndex)).ToList();
 
             var stasElm = copy.Children.First(x => x.XName == "stations");
-            stasElm.Children = stasElm.Children.OrderBy(c =>
+            stasElm.Children.Clear();
+            stasElm.Children.InsertRange(0, stasElm.Children.OrderBy(c =>
             {
                 if (c.XName == "sta")
                     return copy.Stations.FirstOrDefault(s => s.XMLEntity == c)?.Positions.GetPosition(routeIndex);
                 return null;
-            }).ToList();
+            }));
 
             int syncId = 0;
             for (int ti = 0; ti < copy.Trains.Count; ti++)

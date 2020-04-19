@@ -20,7 +20,7 @@ namespace FPLedit.Shared
         /// <summary>
         /// Gets all children of the underlying XML node. The collection can be modified.
         /// </summary>
-        List<XMLEntity> Children { get; }
+        IList<XMLEntity> Children { get; }
         
         /// <summary>
         /// Get an attribute of the underlying XML node.
