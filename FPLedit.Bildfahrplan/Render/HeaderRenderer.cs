@@ -95,11 +95,13 @@ namespace FPLedit.Bildfahrplan.Render
 
                         if (attrs.StationVertical)
                         {
-                            var container = g.BeginContainer();
+                            var matrix = g.Transform.Clone();
+                            
                             g.TranslateTransform(margin.Left + posX.Center + (size.Height / 2), margin.Top - 8 - verticalTrackOffset - size.Width);
                             g.RotateTransform(90);
                             g.DrawText(stationFont, brush, 0, 0, display);
-                            g.EndContainer(container);
+
+                            g.Transform = matrix;
                         }
                         else
                             g.DrawText(stationFont, brush, margin.Left + posX.Center - (size.Width / 2), margin.Top - size.Height - verticalTrackOffset - TOP_GAP, display);
@@ -111,11 +113,13 @@ namespace FPLedit.Bildfahrplan.Render
                                 var trackSize = g.MeasureString(stationFont, track.Key);
                                 if (attrs.StationVertical)
                                 {
-                                    var container = g.BeginContainer();
+                                    var matrix = g.Transform.Clone();
+                                    
                                     g.TranslateTransform(margin.Left + track.Value + (trackSize.Height / 2), margin.Top - 8 - trackSize.Width);
                                     g.RotateTransform(90);
                                     g.DrawText(stationFont, brush, 0, 0, track.Key);
-                                    g.EndContainer(container);
+                                    
+                                    g.Transform = matrix;
                                 }
                                 else
                                     g.DrawText(stationFont, brush, margin.Left + track.Value - (trackSize.Width / 2), margin.Top - trackSize.Height - TOP_GAP, track.Key);

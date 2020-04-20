@@ -160,11 +160,14 @@ namespace FPLedit.Bildfahrplan.Render
                         if (g.Clip.IsVisible(new PointF(tx, ty))) // translated drawing does not respect clip (Idk why)
                         {
                             float angle = CalcAngle(ys, xs, train);
-                            var container = g.BeginContainer();
+                            
+                            var matrix = g.Transform.Clone();
+                            
                             g.TranslateTransform(tx, ty);
                             g.RotateTransform(-angle);
                             g.DrawText(trainFont, brush, -(size.Width / 2), -(size.Height / 2), train.TName);
-                            g.EndContainer(container);
+                            
+                            g.Transform = matrix;
                         }
                     }
                     g.DrawPath(pen, p);
