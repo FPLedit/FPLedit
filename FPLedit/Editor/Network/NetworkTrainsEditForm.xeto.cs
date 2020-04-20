@@ -26,6 +26,7 @@ namespace FPLedit.Editor.Network
             tt = pluginInterface.Timetable;
             backupHandle = pluginInterface.BackupTimetable();
 
+            gridView.AddColumn<ITrain>(t => t.IsLink ? "L" : "", "");
             gridView.AddColumn<ITrain>(t => t.TName, "Zugnummer");
             gridView.AddColumn<ITrain>(t => t.Locomotive, "Tfz");
             gridView.AddColumn<ITrain>(t => t.Mbr, "Mbr");
@@ -79,11 +80,14 @@ namespace FPLedit.Editor.Network
         {
             if (view.SelectedItem != null)
             {
-                var train = (Train)view.SelectedItem;
-
-                using (var tpf = TrainPathForm.EditPath(pluginInterface, train))
-                    if (tpf.ShowModal(this) == DialogResult.Ok)
-                        UpdateListView(view, TrainDirection.tr);
+                if (view.SelectedItem is Train train)
+                {
+                    using (var tpf = TrainPathForm.EditPath(pluginInterface, train))
+                        if (tpf.ShowModal(this) == DialogResult.Ok)
+                            UpdateListView(view, TrainDirection.tr);
+                }
+                else if (message)
+                        MessageBox.Show("Verlinke Züge können nicht bearbeitet werden.", "Zug bearbeiten");
             }
             else if (message)
                 MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Laufweg bearbeiten");
@@ -93,12 +97,15 @@ namespace FPLedit.Editor.Network
         {
             if (view.SelectedItem != null)
             {
-                var train = (Train)view.SelectedItem;
+                if (view.SelectedItem is Train train)
+                {
+                    using (var tcf = new TrainCopyDialog(train, pluginInterface.Timetable))
+                        tcf.ShowModal(this);
 
-                using (var tcf = new TrainCopyDialog(train, pluginInterface.Timetable))
-                    tcf.ShowModal(this);
-
-                UpdateListView(view, TrainDirection.tr);
+                    UpdateListView(view, TrainDirection.tr);
+                }
+                else if (message)
+                    MessageBox.Show("Verlinke Züge können nicht kopiert werden.", "Zug bearbeiten");
             }
             else if (message)
                 MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug kopieren");

@@ -6,14 +6,16 @@ using System.Linq;
 namespace FPLedit.Shared
 {
     /// <summary>
-    /// Object model class representing a single train of this timetable.
+    /// Object model class representing a single train (default flavour) of this timetable.
     /// </summary>
     [DebuggerDisplay("{" + nameof(TName) + "}")]
     [XElmName("ti", "ta", "tr")]
     [Templating.TemplateSafe]
     public sealed class Train : Entity, IWritableTrain
     {
-        /// <inheritdoc />
+        private TrainLink[] trainLinks;
+
+        /// <inheritdoc cref="IWritableTrain" />
         [XAttrName("name")]
         public string TName
         {
@@ -21,7 +23,7 @@ namespace FPLedit.Shared
             set => SetAttribute("name", value);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc cref="IWritableTrain"  />
         [XAttrName("id")]
         public int Id
         {
@@ -33,7 +35,7 @@ namespace FPLedit.Shared
         [XAttrName("islink")]
         public bool IsLink => false;
 
-        #region Handling der Fahrtzeiteneinträge
+        #region Handling of Timetable Entries
 
         /// <inheritdoc />
         public void AddAllArrDeps(IEnumerable<Station> path)
@@ -74,13 +76,15 @@ namespace FPLedit.Shared
         /// <inheritdoc />
         public ArrDep AddArrDep(Station sta, int route)
         {
-            int idx;
+            // Filter other elements in front 
+            int idx = Children.TakeWhile(x => x.XName != ArrDep.DEFAULT_X_NAME).Count();
+            
             if (_parent.Type == TimetableType.Linear)
             {
                 if (route != Timetable.LINEAR_ROUTE_ID)
                     throw new TimetableTypeNotSupportedException(TimetableType.Linear, "routes");
                 var stas = _parent.GetLinearStationsOrderedByDirection(TrainDirection.ti);
-                idx = stas.IndexOf(sta);
+                idx += stas.IndexOf(sta);
             }
             else
             {
@@ -91,7 +95,7 @@ namespace FPLedit.Shared
                 var next = r.ElementAtOrDefault(i1 + 1);
 
                 if (prev != null && p.Contains(prev) && next != null && p.Contains(next))
-                    idx = p.IndexOf(prev) + 1;
+                    idx += p.IndexOf(prev) + 1;
                 else
                     return null; // Betrifft diesen Zug nicht (wenn sta letzte/erste Station der Route: der Zug befährt die Route nur bis davor/danach)
             }
@@ -187,7 +191,7 @@ namespace FPLedit.Shared
         /// On Linear timetables, this includes also empty entries.
         /// LINEAR ENTRIES ARE SORTED IN TrainDirection.ti
         /// </summary>
-        private ArrDep[] InternalGetArrDeps() => Children.Where(x => x.XName == "t").Select(x => new ArrDep(x, _parent)).ToArray();
+        private ArrDep[] InternalGetArrDeps() => Children.Where(x => x.XName == ArrDep.DEFAULT_X_NAME).Select(x => new ArrDep(x, _parent)).ToArray();
 
         #endregion
 
@@ -218,7 +222,7 @@ namespace FPLedit.Shared
         /// <inheritdoc />
         public TrainDirection Direction => (TrainDirection)Enum.Parse(typeof(TrainDirection), XMLEntity.XName);
 
-        /// <inheritdoc />
+        /// <inheritdoc cref="IWritableTrain" />
         [XAttrName("cm")]
         public string Comment
         {
@@ -247,6 +251,8 @@ namespace FPLedit.Shared
                 throw new TimetableTypeNotSupportedException(TimetableType.Network, "trains with direction");
             if (tt.Type == TimetableType.Linear && dir == TrainDirection.tr)
                 throw new TimetableTypeNotSupportedException(TimetableType.Linear, "trains without direction");
+
+            trainLinks = Array.Empty<TrainLink>();
         }
 
         /// <inheritdoc />
@@ -254,11 +260,63 @@ namespace FPLedit.Shared
         {
             if (Children.Count(x => x.XName == "t") > tt.Stations.Count)
                 throw new Exception("Zu viele Fahrtzeiteneinträge im Vergleich zur Stationsanzahl!");
+            
+            trainLinks = Children.Where(x => x.XName == "tl").Select(x => new TrainLink(x, this)).ToArray();
         }
 
         [DebuggerStepThrough]
         public override string ToString()
             => TName;
+
+        public TrainLink[] TrainLinks
+            => trainLinks;
+
+        #region Update hooks for linked trains
+        
+        public override void OnRemoveAttribute(string key)
+        {
+            if (key == "islink")
+                return;
+            
+            foreach (var link in TrainLinks)
+                link.ApplyToChildren(lt => lt.RemoveAttribute(key));
+            
+            base.OnRemoveAttribute(key);
+        }
+
+        public override void OnSetAttribute(string key, string value)
+        {
+            if (key == "islink")
+                return;
+            
+            foreach (var link in TrainLinks)
+                link.ApplyToChildren(lt => lt.SetAttribute(key, value));
+            
+            base.OnSetAttribute(key, value);
+        }
+
+        public override void OnChildrenChanged()
+        {
+            foreach (var link in TrainLinks)
+            {
+                link.ApplyToChildren(lt =>
+                {
+                    lt.ArrDepCacheValid = false; // Invalidate cache
+                    
+                    var path = _parent.Type == TimetableType.Linear
+                        ? _parent.GetLinearStationsOrderedByDirection(TrainDirection.ti) // All arrdeps are sorted in line direction if linear...
+                        : lt.GetPath();
+                    var arrdeps = lt.GetArrDepsUnsorted();
+                    lt.Children.Clear();
+                    foreach (var sta in path)
+                        lt.Children.Add(arrdeps[sta].XMLEntity);
+                });
+            }
+            
+            base.OnChildrenChanged();
+        }
+        
+        #endregion
 
         /// <inheritdoc />
         // ReSharper disable once UnusedMember.Global

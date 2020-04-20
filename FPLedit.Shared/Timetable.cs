@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -54,6 +54,8 @@ namespace FPLedit.Shared
 
         public IList<Transition> Transitions => transitions.AsReadOnly();
 
+        public event EventHandler TrainsChanged;
+
         /// <summary>
         /// Create a new new empty timetable file of the given timetable type.
         /// </summary>
@@ -103,9 +105,61 @@ namespace FPLedit.Shared
             if (tElm != null)
             {
                 var directions = Enum.GetNames(typeof(TrainDirection));
-                foreach (var c in tElm.Children.Where(x => directions.Contains(x.XName))) // Filtert andere Elemente
-                    //TODO: Check for linked trains
-                    trains.Add(new Train(c, this));
+                var trainElements = tElm.Children.Where(x => directions.Contains(x.XName)).ToArray();
+                var trainLinkElements = new Dictionary<(TrainDirection, int), TrainLink>();
+                var linkedTrainsMap = new Stack<(int, XMLEntity)>();
+
+                var counters = new Dictionary<string, int>(3)
+                {
+                    [TrainDirection.ta.ToString()] = 0,
+                    [TrainDirection.ti.ToString()] = 0,
+                    [TrainDirection.tr.ToString()] = 0,
+                };
+                foreach (var c in trainElements) // Filtert andere Elemente
+                {
+                    if (!c.GetAttribute<bool>("islink"))
+                    {
+                        var train = new Train(c, this);
+                        trains.Add(train);
+                        foreach (var link in train.TrainLinks)
+                            foreach (var linkIndex in link.TrainIndices)
+                                trainLinkElements.Add((link.ParentTrain.Direction, linkIndex), link);
+                    }
+                    else
+                        linkedTrainsMap.Push((counters[c.XName], c));
+
+                    counters[c.XName]++;
+                }
+                
+                // Correction to compensate deleted orphaned trains.
+                var indexCorrection = new Dictionary<string, int>(3)
+                {
+                    [TrainDirection.ta.ToString()] = 0,
+                    [TrainDirection.ti.ToString()] = 0,
+                    [TrainDirection.tr.ToString()] = 0,
+                };
+                var trainsToAdd = new List<(int, LinkedTrain)>();
+                // Match linked trains
+                while (linkedTrainsMap.Any())
+                {
+                    var (idx, xmlEntity) = linkedTrainsMap.Pop();
+                    var direction = (TrainDirection)Enum.Parse(typeof(TrainDirection), xmlEntity.XName);
+                    if (trainLinkElements.TryGetValue((direction, idx), out var linkElement))
+                    {
+                        var linkedTrain = new LinkedTrain(linkElement, Array.IndexOf(linkElement.TrainIndices, idx), xmlEntity);
+                        trainsToAdd.Add((idx + indexCorrection[xmlEntity.XName], linkedTrain));
+                        linkElement._InternalInjectLinkedTrain(linkedTrain);
+                    }
+                    else
+                    {
+                        // This XML node has no corresponding parent train/link element, so we can delete it.
+                        tElm.Children.Remove(xmlEntity);
+                        indexCorrection[xmlEntity.XName]--;
+                    }
+                }
+
+                foreach (var (idx, lt) in trainsToAdd.OrderBy(e => e.Item1))
+                    trains.Insert(idx, lt);
             }
             else
             {
@@ -113,12 +167,15 @@ namespace FPLedit.Shared
                 Children.Add(tElm);
             }
 
+            tElm.ChildrenChangedDirect += (s, e) => TrainsChanged?.Invoke(s, e);
+
             transitions = new List<Transition>();
             trElm = Children.FirstOrDefault(x => x.XName == "transitions");
             if (trElm != null)
             {
-                foreach (var c in trElm.Children.Where(x => x.XName == "tra")) // Filtert andere Elemente
-                    transitions.Add(new Transition(c, this));
+                //TODO: Re-enable transitions with support for links
+                //foreach (var c in trElm.Children.Where(x => x.XName == "tra")) // Filtert andere Elemente
+                    //transitions.Add(new Transition(c, this));
             }
             else
             {
@@ -278,7 +335,7 @@ namespace FPLedit.Shared
 
         /// <inheritdoc />
         public ITrain GetTrainById(int id)
-            => trains.FirstOrDefault(t => t.Id == id);
+            => trains.FirstOrDefault(t => t.Id == id && !t.IsLink);
 
         /// <inheritdoc />
         public void RemoveTrain(ITrain tra)

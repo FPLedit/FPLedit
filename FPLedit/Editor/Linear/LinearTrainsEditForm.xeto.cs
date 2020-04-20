@@ -71,6 +71,7 @@ namespace FPLedit.Editor.Linear
 
         private void InitListView(GridView view, Button[] buttons)
         {
+            view.AddColumn<ITrain>(t => t.IsLink ? "L" : "", "");
             view.AddColumn<ITrain>(t => t.TName, "Zugnummer");
             view.AddColumn<ITrain>(t => t.Locomotive, "Tfz");
             view.AddColumn<ITrain>(t => t.Mbr, "Mbr");

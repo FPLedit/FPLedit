@@ -23,9 +23,14 @@ namespace FPLedit.Editor.Trains
         {
             if (view.SelectedItem != null)
             {
-                tt.RemoveTrain((ITrain) view.SelectedItem);
+                if (view.SelectedItem is Train train)
+                {
+                    tt.RemoveTrain(train);
 
-                UpdateListView(view, dir);
+                    UpdateListView(view, dir);
+                }
+                else if (message)
+                    MessageBox.Show("Verlinke Züge können nicht gelöscht werden.", "Zug bearbeiten");
             }
             else if (message)
                 MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug löschen");
@@ -35,12 +40,14 @@ namespace FPLedit.Editor.Trains
         {
             if (view.SelectedItem != null)
             {
-                ITrain train = (ITrain) view.SelectedItem;
-
-                if (train is Train tra)
+                if (view.SelectedItem is Train tra)
+                {
                     using (var tef = new TrainEditForm(tra))
                         if (tef.ShowModal(this) == DialogResult.Ok)
                             UpdateListView(view, dir);
+                }
+                else if (message)
+                    MessageBox.Show("Verlinke Züge können nicht bearbeitet werden.", "Zug bearbeiten");
             }
             else if (message)
                 MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug bearbeiten");
@@ -65,12 +72,15 @@ namespace FPLedit.Editor.Trains
         {
             if (view.SelectedItem != null)
             {
-                var train = (Train) view.SelectedItem;
+                if (view.SelectedItem is Train train)
+                {
+                    using (var tcf = new TrainCopyDialog(train, tt))
+                        tcf.ShowModal(this);
 
-                using (var tcf = new TrainCopyDialog(train, tt))
-                    tcf.ShowModal(this);
-
-                UpdateListView(view, dir);
+                    UpdateListView(view, dir);
+                }
+                else if (message)
+                    MessageBox.Show("Verlinke Züge können nicht kopiert werden.", "Zug bearbeiten");
             }
             else if (message)
                 MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug kopieren");

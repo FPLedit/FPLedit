@@ -6,10 +6,12 @@ namespace FPLedit.Shared
     /// Object model type that represents a single stop with time data and all additional data. It is always part of a train.
     /// </summary>
     /// <remarks>You can use <see cref="IWritableTrain"/>.*ArrDeps* functions to manipulate single ArrDep entries of a given train.</remarks>
-    [XElmName("t")]
+    [XElmName(DEFAULT_X_NAME)]
     [Templating.TemplateSafe]
     public sealed class ArrDep : Entity
     {
+        public const string DEFAULT_X_NAME = "t";
+        
         /// <summary>
         /// Collection that allows to modify the shunt moves at this train stop.
         /// </summary>
@@ -125,7 +127,7 @@ namespace FPLedit.Shared
         public bool HasMinOneTimeSet
             => FirstSetTime != default;
 
-        public ArrDep(Timetable tt) : base("t", tt)
+        public ArrDep(Timetable tt) : base(DEFAULT_X_NAME, tt)
         {
             ShuntMoves = new ObservableChildrenCollection<ShuntMove>(this, "shMove", _parent);
         }
