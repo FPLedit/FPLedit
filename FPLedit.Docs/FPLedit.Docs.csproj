@@ -24,4 +24,24 @@
     <Folder Include="apidoc" />
     <Folder Include="images" />
   </ItemGroup>
+  <Target Name="Cleanup" AfterTargets="DocGenerateMetadata">
+    <PropertyGroup>
+      <_CleanupDocFxOutputDirectory>$(IntermediateOutputPath)/api_gen</_CleanupDocFxOutputDirectory>
+    </PropertyGroup>
+    <ItemGroup>
+      <DocfxGeneratedFiles Include="$(MSBuildProjectDirectory)/api/*.yml" />
+      <DocfxGeneratedFiles Include="$(MSBuildProjectDirectory)/api/.manifest*" />
+    </ItemGroup>
+    
+    <Message Text="Cleanup: Moving generated files to $(_CleanupDocFxOutputDirectory)..." />
+    <MakeDir Directories="$(_DocFxOutputDirectory)" />
+    <Move
+      SourceFiles="@(DocfxGeneratedFiles)"
+      DestinationFolder="$(_CleanupDocFxOutputDirectory)" />
+    
+    <Message Text="Cleanup: Moving generated log file to $(IntermediateOutputPath)..." />
+    <Move
+      SourceFiles="$(MSBuildProjectDirectory)/log.txt"
+      DestinationFolder="$(IntermediateOutputPath)" />
+  </Target>
 </Project>

@@ -101,7 +101,7 @@ namespace FPLedit.Shared
     }
     
     /// <summary>
-    /// Specific PathData, initialized with just a a train, containing the whole path & time entries for this train.
+    /// Specific PathData, initialized with just a a train, containing the whole path &amp; time entries for this train.
     /// </summary>
     [Templating.TemplateSafe]
     public class TrainPathData : PathData

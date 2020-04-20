@@ -27,7 +27,7 @@ namespace FPLedit.Shared
         /// <summary>
         /// Creates a new RVC.
         /// </summary>
-        /// <param name="e">The entity this RVC should operate on, read values from & write vTalues to.</param>
+        /// <param name="e">The entity this RVC should operate on, read values from &amp; write vTalues to.</param>
         /// <param name="tt">The parent timetable of the entity <paramref name="e"/>.</param>
         /// <param name="attr">The XML attribute name this RVC should read from and write to.</param>
         /// <param name="defaultVal">Default value that is used when the given attribute is not present. As serialized string.</param>

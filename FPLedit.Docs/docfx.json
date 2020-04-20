@@ -74,6 +74,6 @@
     "keepFileLink": false,
     "cleanupCacheHistory": false,
     "disableGitFeatures": false,
-    "intermediateFolder" : "../obj/FPLedit.Docs/intermediate"
+    "intermediateFolder" : "../obj/FPLedit/FPLedit.Docs/intermediate"
   }
 }

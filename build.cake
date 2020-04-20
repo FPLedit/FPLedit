@@ -17,7 +17,7 @@ var incrementVersion = false;
 if (Argument<string>("auto-beta", null) != null) {
     ignoreNoDoc = true;
     incrementVersion = true;
-    preBuildVersionSuffix = "beta"; //TODO: missing version suffix increment in version info
+    preBuildVersionSuffix = "beta";
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -26,6 +26,7 @@ if (Argument<string>("auto-beta", null) != null) {
 
 // Define directories.
 var buildDir = Directory("./bin") + Directory(configuration);
+var buildDocDir = Directory("./bin") + Directory("api-doc");
 var sourceDir = Directory(".");
 var scriptsDir = Directory("./build_scripts");
 
@@ -56,6 +57,7 @@ Task("Clean")
     .Does(() =>
     {
         CleanDirectory(buildDir);
+        CleanDirectory(buildDocDir);
     });
 
 Task("Restore-NuGet-Packages")
@@ -137,7 +139,7 @@ Task("Default")
 	    Warning("##############################################################");
 	    
 	    if (!doc_generated)
-	        Warning("No documentation built!");
+	        Warning("No user documentation built!");
 
         Warning("##############################################################");
 	});
