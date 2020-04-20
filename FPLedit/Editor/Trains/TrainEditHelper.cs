@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FPLedit.Shared.Helpers;
 
 namespace FPLedit.Editor.Trains
 {
@@ -75,11 +76,12 @@ namespace FPLedit.Editor.Trains
             
             var ret = new Train[count];
 
-            var start = RemoveNamePrefix(name, out string baseName);
+            var np = new TrainNameParts(name);
+            var start = np.Number;
 
             for (int i = 0; i < count; i++)
             {
-                var n = baseName + (start + numberAdd * (i + 1)).ToString();
+                var n = np.BaseName + (start + numberAdd * (i + 1)).ToString();
                 ret[i] = CopyTrain(orig, offsetMin * (i + 1), n, copyAll);
             }
 
@@ -106,8 +108,8 @@ namespace FPLedit.Editor.Trains
 
             ITrain[] Trains() => tt.Trains.Where(t => t.Direction == dir).ToArray();
 
-            NameParts NameSelector(ITrain train) => new NameParts(train.TName, excludePrefix);
-            bool StringComparer(NameParts cur, NameParts next) => cur.CompareTo(next, excludePrefix);
+            TrainNameParts NameSelector(ITrain train) => new TrainNameParts(train.TName);
+            bool StringComparer(TrainNameParts cur, TrainNameParts next) => cur.CompareTo(next, excludePrefix);
 
             InternalSort(tt, Trains, NameSelector, StringComparer);
         }
@@ -147,47 +149,6 @@ namespace FPLedit.Editor.Trains
                         t = trains();
                     }
                 }
-            }
-        }
-
-        private static int RemoveNamePrefix(string name, out string prefix)
-        {
-            var nameBase = name.Trim();
-            var array = nameBase.ToCharArray();
-
-            int i = array.Length - 1;
-            while (i >= 0 && char.IsDigit(array[i]))
-                i--;
-            
-            prefix = nameBase.Substring(0, i + 1);
-            var num = nameBase.Substring(i + 1, nameBase.Length - i - 1);
-            int.TryParse(num, out int start); // Startnummer
-            
-            return start;
-        }
-
-        private struct NameParts
-        {
-            public NameParts(string full, bool calcPrefix) : this()
-            {
-                Full = full;
-
-                if (!calcPrefix)
-                    return;
-
-                Number = RemoveNamePrefix(Full, out var prefix);
-                Prefix = prefix;
-            }
-
-            public string Prefix { get; }
-            public int Number { get; }
-            public string Full { get; }
-
-            public bool CompareTo(NameParts np2, bool excludePrefix)
-            {
-                if (excludePrefix)
-                    return Prefix == np2.Prefix && Number.CompareTo(np2.Number) > 0;
-                return string.Compare(Full, np2.Full, StringComparison.Ordinal) > 0;
             }
         }
     }
