@@ -149,8 +149,12 @@ namespace FPLedit.Shared
             Zuglaufmeldung = copy.Zuglaufmeldung;
 
             ShuntMoves.Clear();
-            foreach (var shunt in copy.ShuntMoves)
-                ShuntMoves.Add(shunt.Clone<ShuntMove>());
+            foreach (var copyShunt in copy.ShuntMoves)
+            {
+                var newShunt = new ShuntMove(_parent);
+                newShunt.ApplyCopy(copyShunt);
+                ShuntMoves.Add(newShunt);
+            }
         }
     }
 }

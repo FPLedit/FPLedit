@@ -39,5 +39,13 @@
             get => GetAttribute<bool>("ea");
             set => SetAttribute("ea", value.ToString().ToLower());
         }
+
+        public void ApplyCopy(ShuntMove copy)
+        {
+            SourceTrack = copy.SourceTrack;
+            TargetTrack = copy.TargetTrack;
+            Time = copy.Time;
+            EmptyAfterwards = copy.EmptyAfterwards;
+        }
     }
 }
