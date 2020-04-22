@@ -78,6 +78,7 @@ namespace FPLedit.jTrainGraphStarter
         {
             using (var ofd = new OpenFileDialog())
             {
+                ofd.Title = "jTrainGraph-Programmdatei wählen";
                 ofd.AddLegacyFilter("JAR-Dateien (*.jar)|*.jar");
                 
                 if (!string.IsNullOrWhiteSpace(jtgPathTextBox.Text))

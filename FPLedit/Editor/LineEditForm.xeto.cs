@@ -145,6 +145,7 @@ namespace FPLedit.Editor
 
             using (var ofd = new OpenFileDialog())
             {
+                ofd.Title = "Streckendatei wählen";
                 ofd.AddLegacyFilter(timport.Filter, simport.Filter);
 
                 if (ofd.ShowDialog(this) == DialogResult.Ok)

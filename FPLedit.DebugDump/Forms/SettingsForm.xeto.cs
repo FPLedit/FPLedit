@@ -50,6 +50,7 @@ namespace FPLedit.DebugDump.Forms
         {
             using (var ofd = new OpenFileDialog())
             {
+                ofd.Title = "Dump auswählen";
                 ofd.AddLegacyFilter("*.fpldmp|*.fpldmp");
                 if (ofd.ShowDialog(this) == DialogResult.Ok)
                 {

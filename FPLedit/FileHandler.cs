@@ -40,10 +40,10 @@ namespace FPLedit
             open = new XMLImport();
             save = new XMLExport();
 
-            saveFileDialog = new SaveFileDialog();
-            openFileDialog = new OpenFileDialog();
-            exportFileDialog = new SaveFileDialog();
-            importFileDialog = new OpenFileDialog();
+            saveFileDialog = new SaveFileDialog { Title = "Fahrplandatei speichern" };
+            openFileDialog = new OpenFileDialog { Title = "Fahrplandatei öffnen" };
+            exportFileDialog = new SaveFileDialog { Title = "Fahrplandatei exportieren" };
+            importFileDialog = new OpenFileDialog { Title = "Datei importieren" };
 
             saveFileDialog.AddLegacyFilter(save.Filter);
             openFileDialog.AddLegacyFilter(open.Filter);
@@ -232,6 +232,7 @@ namespace FPLedit
 
             using (var sfd = new SaveFileDialog())
             {
+                sfd.Title = "Zieldatei für Konvertierung wählen";
                 sfd.AddLegacyFilter(exp.Filter);
                 if (sfd.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
                 {
@@ -259,6 +260,7 @@ namespace FPLedit
             var exp = new UpgradeJTG3Export();
             using (var sfd = new SaveFileDialog())
             {
+                sfd.Title = "Zieldatei für Konvertierung wählen";
                 sfd.AddLegacyFilter(exp.Filter);
                 if (sfd.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
                 {
