@@ -9,9 +9,14 @@ namespace FPLedit.Shared
     public interface ITrain : IEntity
     {
         /// <summary>
-        /// The unique identifier of this train.
+        /// The (not necessarily unique) identifier of this train.
         /// </summary>
+        /// <remarks>Train IDs may be shared by multiple linked trains.</remarks>
         int Id { get; }
+        /// <summary>
+        /// The unique identifier of this train, suitable for referencing this train in other places.
+        /// </summary>
+        string QualifiedId { get; }
         /// <summary>
         /// Retuns the name of this train.
         /// </summary>
@@ -116,5 +121,7 @@ namespace FPLedit.Shared
         /// Get a display name for the path of the train.
         /// </summary>
         string GetLineName();
+
+        TrainLink[] TrainLinks { get; }
     }
 }

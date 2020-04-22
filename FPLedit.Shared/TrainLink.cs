@@ -10,10 +10,10 @@ namespace FPLedit.Shared
     [Templating.TemplateSafe]
     public class TrainLink : Entity
     {
-        private readonly List<LinkedTrain> linkedTrains;
+        private readonly LinkedTrain[] linkedTrains;
         public Train ParentTrain { get; }
 
-        public IEnumerable<ITrain> LinkedTrains => linkedTrains;
+        public IList<LinkedTrain> LinkedTrains => Array.AsReadOnly(linkedTrains);
         
         [XAttrName("tln")]
         public ITrainLinkNameCalculator TrainNamingScheme
@@ -47,7 +47,7 @@ namespace FPLedit.Shared
         public int TrainCount
         {
             get => GetAttribute<int>("tlc");
-            set => SetAttribute("tlc", value.ToString());
+            private set => SetAttribute("tlc", value.ToString());
         }
 
         public int TrainLinkIndex => Array.IndexOf(ParentTrain.TrainLinks, this); // Index in parentTrain's TrainLink collection
@@ -59,24 +59,25 @@ namespace FPLedit.Shared
             set => SetAttribute("tlt", value.ToString());
         }
         
-        public TrainLink(Train parentTrain) : base("tl", parentTrain._parent)
+        public TrainLink(Train parentTrain, int count) : base("tl", parentTrain._parent)
         {
             ParentTrain = parentTrain;
-            linkedTrains = new List<LinkedTrain>();
+            linkedTrains = new LinkedTrain[count];
             _parent.TrainsChanged += TrainsChanged;
+            TrainCount = count;
         }
 
         /// <inheritdoc />
         public TrainLink(XMLEntity en, Train parentTrain) : base(en, parentTrain._parent)
         {
             ParentTrain = parentTrain;
-            linkedTrains = new List<LinkedTrain>();
+            linkedTrains = new LinkedTrain[TrainCount];
             _parent.TrainsChanged += TrainsChanged;
         }
 
-        internal void _InternalInjectLinkedTrain(LinkedTrain train)
+        internal void _InternalInjectLinkedTrain(LinkedTrain train, int counting)
         {
-            linkedTrains.Add(train);
+            linkedTrains[counting] = train;
         }
 
         public string GetChildTrainName(int countingIndex)
@@ -183,7 +184,8 @@ namespace FPLedit.Shared
 
         public IEnumerable<string> Serialize() => new []{ PREFIX, trainName.FullName, increment.ToString() };
 
-        public string GetTrainName(int countingIndex) => trainName.BaseName + (trainName.Number + (countingIndex * increment));
+        public string GetTrainName(int countingIndex) => 
+            trainName.BaseName + (trainName.Number + (countingIndex + 1) * increment).ToString(new string('0', trainName.NumberLength));
     }
     
     public class SpecialTrainNameCalculator : ITrainLinkNameCalculator

@@ -14,6 +14,10 @@ namespace FPLedit.Shared
         private readonly TrainLink link;
         private readonly int countingIndex;
 
+        public TrainLink Link => link;
+
+        public int LinkCountingIndex => countingIndex;
+
         private Dictionary<Station, ArrDep> arrDepCache = new Dictionary<Station, ArrDep>();
         internal bool ArrDepCacheValid { private get; set; } = false;
 
@@ -24,6 +28,8 @@ namespace FPLedit.Shared
             get => GetAttribute<int>("id", -1);
             //set => SetAttribute("id", value.ToString());
         }
+
+        public string QualifiedId => Id + ";" + link.TrainLinkIndex + ";" + countingIndex;
 
         public string TName => link.GetChildTrainName(countingIndex);
 

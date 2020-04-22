@@ -20,16 +20,16 @@ namespace FPLedit.Shared
         }
 
         [XAttrName("first")]
-        public int First
+        public string First
         {
-            get => GetAttribute<int>("first");
+            get => GetAttribute<string>("first");
             set => SetAttribute("first", value.ToString());
         }
 
         [XAttrName("next")]
-        public int Next
+        public string Next
         {
-            get => GetAttribute<int>("next");
+            get => GetAttribute<string>("next");
             set => SetAttribute("next", value.ToString());
         }
     }

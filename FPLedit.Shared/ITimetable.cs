@@ -57,9 +57,13 @@ namespace FPLedit.Shared
         /// <remarks>Adding an already added train will do nothing</remarks>
         void AddTrain(ITrain tra);
         /// <summary>
-        /// Retrieve a train by it's unique id. This only works in network timetables.
+        /// Retrieve a train by it's (not neccessaryly) unique id. This only works in network timetables.
         /// </summary>
         ITrain GetTrainById(int id);
+        /// <summary>
+        /// Retrieve a train by it's unique id. This only works in network timetables.
+        /// </summary>
+        ITrain GetTrainByQualifiedId(string id);
         /// <summary>
         /// This method removes the given Train from this timetable instance.
         /// </summary>
@@ -137,7 +141,7 @@ namespace FPLedit.Shared
         /// Get the next train, following a single transition, if one exists.
         /// </summary>
         /// <returns>The next train or null, if none exists.</returns>
-        ITrain GetTransition(int firstTrainId);
+        ITrain GetTransition(string firstQualifiedTrainId);
         /// <summary>
         /// Get all next train, following all transitions as long as possible.
         /// </summary>
@@ -156,9 +160,9 @@ namespace FPLedit.Shared
         /// <summary>
         /// Removes the transition starting with this train.
         /// </summary>
-        /// <param name="firstTrainId">The id of the train to search.</param>
+        /// <param name="firstQualifiedTrainId">The qualified id of the train to search.</param>
         /// <param name="onlyAsFirst">If false, also remove all transitions leading to this train, thus removing all transitions referencing this train.</param>
-        void RemoveTransition(int firstTrainId, bool onlyAsFirst = true);
+        void RemoveTransition(string firstQualifiedTrainId, bool onlyAsFirst = true);
         /// <summary>
         /// Returns, if a transition with the given train as first train exists.
         /// </summary>

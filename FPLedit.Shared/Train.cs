@@ -31,6 +31,8 @@ namespace FPLedit.Shared
             set => SetAttribute("id", value.ToString());
         }
 
+        public string QualifiedId => Id.ToString();
+
         /// <inheritdoc />
         [XAttrName("islink")]
         public bool IsLink => false;

@@ -146,9 +146,10 @@ namespace FPLedit.Shared
                     var direction = (TrainDirection)Enum.Parse(typeof(TrainDirection), xmlEntity.XName);
                     if (trainLinkElements.TryGetValue((direction, idx), out var linkElement))
                     {
-                        var linkedTrain = new LinkedTrain(linkElement, Array.IndexOf(linkElement.TrainIndices, idx), xmlEntity);
+                        var counting = Array.IndexOf(linkElement.TrainIndices, idx);
+                        var linkedTrain = new LinkedTrain(linkElement, counting, xmlEntity);
                         trainsToAdd.Add((idx + indexCorrection[xmlEntity.XName], linkedTrain));
-                        linkElement._InternalInjectLinkedTrain(linkedTrain);
+                        linkElement._InternalInjectLinkedTrain(linkedTrain, counting);
                     }
                     else
                     {
@@ -173,9 +174,8 @@ namespace FPLedit.Shared
             trElm = Children.FirstOrDefault(x => x.XName == "transitions");
             if (trElm != null)
             {
-                //TODO: Re-enable transitions with support for links
-                //foreach (var c in trElm.Children.Where(x => x.XName == "tra")) // Filtert andere Elemente
-                    //transitions.Add(new Transition(c, this));
+                foreach (var c in trElm.Children.Where(x => x.XName == "tra")) // Filtert andere Elemente
+                    transitions.Add(new Transition(c, this));
             }
             else
             {
@@ -200,7 +200,7 @@ namespace FPLedit.Shared
             }
 
             // Clean up invalid transitions
-            var tids = trains.Select(t => t.Id).ToArray();
+            var tids = trains.Select(t => t.QualifiedId).ToArray();
             foreach (var tra in Transitions.ToArray())
             {
                 if (!tids.Contains(tra.First))
@@ -336,6 +336,10 @@ namespace FPLedit.Shared
         /// <inheritdoc />
         public ITrain GetTrainById(int id)
             => trains.FirstOrDefault(t => t.Id == id && !t.IsLink);
+        
+        /// <inheritdoc />
+        public ITrain GetTrainByQualifiedId(string qid)
+            => trains.FirstOrDefault(t => t.QualifiedId == qid);
 
         /// <inheritdoc />
         public void RemoveTrain(ITrain tra)
@@ -597,8 +601,8 @@ namespace FPLedit.Shared
             if (next == null) return;
             var transition = new Transition(this)
             {
-                First = first.Id,
-                Next = next.Id
+                First = first.QualifiedId,
+                Next = next.QualifiedId
             };
             trElm.Children.Add(transition.XMLEntity);
             transitions.Add(transition);
@@ -607,7 +611,7 @@ namespace FPLedit.Shared
         /// <inheritdoc />
         public void SetTransition(ITrain first, ITrain newNext)
         {
-            var trans = transitions.Where(t => t.First == first.Id).ToArray();
+            var trans = transitions.Where(t => t.First == first.QualifiedId).ToArray();
 
             if (!trans.Any() && newNext != null)
                 AddTransition(first, newNext);
@@ -616,7 +620,7 @@ namespace FPLedit.Shared
             else if (trans.Length == 1)
             {
                 if (newNext != null)
-                    trans.First().Next = newNext.Id;
+                    trans.First().Next = newNext.QualifiedId;
                 else
                     RemoveTransition(first);
             }
@@ -625,13 +629,39 @@ namespace FPLedit.Shared
         /// <inheritdoc />
         public ITrain GetTransition(ITrain first)
         {
-            return first != null ? GetTransition(first.Id) : null;
-        } 
+            if (first == null)
+                return null;
+            if (!first.IsLink)
+                return GetTransition(first.QualifiedId);
+
+            var linkedTrain = (LinkedTrain) first;
+            var link = linkedTrain.Link;
+            if (!link.CopyTransitions)
+                return null;
+            var parentNext = GetTransition(link.ParentTrain);
+            if (parentNext == null)
+                return null;
+            if ((parentNext is IWritableTrain wt) && link.TrainLinkIndex < wt.TrainLinks.Length)
+            {
+                var nextLink = wt.TrainLinks[link.TrainLinkIndex];
+                if (nextLink == null || linkedTrain.LinkCountingIndex >= nextLink.TrainCount)
+                    return null;
+                return nextLink.LinkedTrains[linkedTrain.LinkCountingIndex];
+            } 
+            if (parentNext.IsLink && parentNext is LinkedTrain lt)
+            {
+                if (linkedTrain.LinkCountingIndex + lt.LinkCountingIndex + 1 >= lt.Link.TrainCount)
+                    return null;
+                return lt.Link.LinkedTrains[linkedTrain.LinkCountingIndex + lt.LinkCountingIndex + 1];
+            }
+
+            return null;
+        }
 
         /// <inheritdoc />
-        public ITrain GetTransition(int firstTrainId)
+        public ITrain GetTransition(string firstTrainId)
         {
-            if (firstTrainId == -1)
+            if (firstTrainId == "-1" || string.IsNullOrWhiteSpace(firstTrainId))
                 return null;
             
             var trans = transitions.Where(t => t.First == firstTrainId).ToArray();
@@ -641,7 +671,7 @@ namespace FPLedit.Shared
             if (trans.Length > 1)
                 throw new Exception("Mehr als eine Transition mit angegebenem ersten Zug gefunden!");
 
-            return GetTrainById(trans.First().Next);
+            return GetTrainByQualifiedId(trans.First().Next);
         }
 
         /// <inheritdoc />
@@ -653,10 +683,10 @@ namespace FPLedit.Shared
         }
 
         /// <inheritdoc />
-        public void RemoveTransition(ITrain first, bool onlyAsFirst = true) => RemoveTransition(first.Id, onlyAsFirst);
+        public void RemoveTransition(ITrain first, bool onlyAsFirst = true) => RemoveTransition(first.QualifiedId, onlyAsFirst);
 
         /// <inheritdoc />
-        public void RemoveTransition(int firstTrainId, bool onlyAsFirst = true)
+        public void RemoveTransition(string firstTrainId, bool onlyAsFirst = true)
         {
             var trans = transitions.Where(t => t.First == firstTrainId || (!onlyAsFirst && t.Next == firstTrainId)).ToArray();
             foreach (var transition in trans)
@@ -666,7 +696,7 @@ namespace FPLedit.Shared
 
         /// <inheritdoc />
         public bool HasTransition(ITrain tra, bool onlyAsFirst = true)
-            => transitions.Any(t => t.First == tra.Id || (!onlyAsFirst && t.Next == tra.Id));
+            => transitions.Any(t => t.First == tra.QualifiedId || (!onlyAsFirst && t.Next == tra.QualifiedId));
 
         #endregion
         

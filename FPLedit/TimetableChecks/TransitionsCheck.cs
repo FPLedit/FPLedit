@@ -1,9 +1,6 @@
 ﻿using FPLedit.Shared;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.TimetableChecks
 {
@@ -15,8 +12,8 @@ namespace FPLedit.TimetableChecks
         {
             foreach (var tra in tt.Transitions)
             {
-                var first = tt.GetTrainById(tra.First);
-                var next = tt.GetTrainById(tra.Next);
+                var first = tt.GetTrainByQualifiedId(tra.First);
+                var next = tt.GetTrainByQualifiedId(tra.Next);
 
                 if (first == null || next == null)
                    continue;
