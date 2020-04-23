@@ -23,7 +23,7 @@ namespace FPLedit.Shared
             if (Minutes < 0 && Hours > 0)
             {
                 Hours--;
-                Minutes = (short)(60 + Minutes); //Minutes is negative
+                Minutes = (short)(60 + Minutes); // Minutes are negative
             }
         }
 
@@ -31,6 +31,8 @@ namespace FPLedit.Shared
         public TimeEntry Substract(TimeEntry entry) => new TimeEntry(Hours - entry.Hours, Minutes - entry.Minutes);
 
         public int GetTotalMinutes() => Hours * 60 + Minutes;
+        
+        public TimeEntry Normalize() => new TimeEntry(Hours % 24, Minutes);
 
         public int CompareTo(TimeEntry other)
         {
@@ -82,19 +84,18 @@ namespace FPLedit.Shared
         public static bool TryParse(string s, out TimeEntry entry)
         {
             entry = new TimeEntry();
-            if (normalizer.Normalize(s) == null)
+            var time = normalizer.ParseTime(s, true);
+            if (!time.HasValue)
                 return false;
-            var ret = TimeSpan.TryParse(s.Replace("24:", "1.00:"), out var ts);
-            entry = new TimeEntry(ts.Days * 24 + ts.Hours, ts.Minutes);
-            return ret;
+            entry = new TimeEntry(time.Value.hours, time.Value.minutes);
+            return true;
         }
         
         public static TimeEntry Parse(string s)
         {
-            if (normalizer.Normalize(s) == null)
+            if (!TryParse(s, out var entry))
                 throw new FormatException("TimeEntry Format not recognized");
-            var te =  (TimeEntry)TimeSpan.Parse(s.Replace("24:", "1.00:"));
-            return te;
+            return entry;
         }
     }
 }

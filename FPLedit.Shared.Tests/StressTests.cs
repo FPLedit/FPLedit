@@ -10,6 +10,7 @@ namespace FPLedit.Shared.Tests
     {
         [Test]
         [Category("Stress")]
+        [Ignore("Stress test - only used to generate test files")]
         public void GenerateHugeTimetable()
         {
             // this should not fail

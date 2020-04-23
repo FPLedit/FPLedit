@@ -187,6 +187,7 @@ namespace FPLedit.Shared.Tests
         public void ParseTests()
         {
             Assert.AreEqual(TimeEntry.Zero, TimeEntry.Parse("0:0"));
+            Assert.AreEqual(TimeEntry.Zero, TimeEntry.Parse(":"));
             Assert.AreEqual(TimeEntry.Zero, TimeEntry.Parse("0"));
             Assert.AreEqual(TimeEntry.Zero, TimeEntry.Parse("00:0"));
             Assert.AreEqual(TimeEntry.Zero, TimeEntry.Parse("0:00"));
@@ -194,8 +195,9 @@ namespace FPLedit.Shared.Tests
             Assert.AreEqual(new TimeEntry(24, 0), TimeEntry.Parse("24:00"));
             Assert.AreEqual(new TimeEntry(24, 0), TimeEntry.Parse("24:0"));
             Assert.AreEqual(new TimeEntry(24, 1), TimeEntry.Parse("24:01"));
+            Assert.AreEqual(new TimeEntry(26, 1), TimeEntry.Parse("26:01"));
 
-            Assert.Throws<FormatException>(() => TimeEntry.Parse(":"));
+            //Assert.Throws<FormatException>(() => TimeEntry.Parse(":"));
             Assert.Throws<FormatException>(() => TimeEntry.Parse(""));
             Assert.Throws<FormatException>(() => TimeEntry.Parse("."));
             Assert.Throws<FormatException>(() => TimeEntry.Parse("a"));
@@ -217,14 +219,17 @@ namespace FPLedit.Shared.Tests
             Assert.AreEqual(TimeEntry.Zero, o);
             Assert.AreEqual(true, TimeEntry.TryParse("00:00", out o));
             Assert.AreEqual(TimeEntry.Zero, o);
+            Assert.AreEqual(true, TimeEntry.TryParse(":", out o));
+            Assert.AreEqual(TimeEntry.Zero, o);
             Assert.AreEqual(true, TimeEntry.TryParse("24:00", out o));
             Assert.AreEqual(new TimeEntry(24, 0), o);
             Assert.AreEqual(true, TimeEntry.TryParse("24:0", out o));
             Assert.AreEqual(new TimeEntry(24, 0), o);
             Assert.AreEqual(true, TimeEntry.TryParse("24:01", out o));
             Assert.AreEqual(new TimeEntry(24, 1), o);
+            Assert.AreEqual(true, TimeEntry.TryParse("26:01", out o));
+            Assert.AreEqual(new TimeEntry(26, 1), o);
             
-            Assert.AreEqual(false, TimeEntry.TryParse(":", out o));
             Assert.AreEqual(false, TimeEntry.TryParse("", out o));
             Assert.AreEqual(false, TimeEntry.TryParse(".", out o));
             Assert.AreEqual(false, TimeEntry.TryParse("a", out o));

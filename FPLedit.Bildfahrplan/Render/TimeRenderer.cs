@@ -27,7 +27,7 @@ namespace FPLedit.Bildfahrplan.Render
                     var offset = margin.Top + l * attrs.HeightPerHour / 60f;
                     g.DrawLine(hour ? hourPen : minutePen, margin.Left - 5, offset, width - margin.Right, offset); // Linie
 
-                    var text = new TimeEntry(0, l + startTime.GetTotalMinutes()).ToShortTimeString();
+                    var text = new TimeEntry(0, l + startTime.GetTotalMinutes()).Normalize().ToShortTimeString();
                     var size = g.MeasureString(timeFont, text);
                     g.DrawText(timeFont, timeBrush, margin.Left - 5 - size.Width, offset - (size.Height / 2), text); // Beschriftung
                     hour = !hour;
@@ -39,7 +39,7 @@ namespace FPLedit.Bildfahrplan.Render
         {
             var timeFont = (Font)attrs.TimeFont; // Reminder: Do not dispose, will be disposed with MFont instance!
             return GetTimeLines(out _, startTime, endTime)
-                .Select(l => g.MeasureString((startTime + new TimeEntry(0, l)).ToShortTimeString(), timeFont).Width)
+                .Select(l => g.MeasureString((startTime + new TimeEntry(0, l)).Normalize().ToShortTimeString(), timeFont).Width)
                 .Concat(new[] { 0f }).Max();
         }
         

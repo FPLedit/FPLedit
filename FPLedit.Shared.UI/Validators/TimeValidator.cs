@@ -1,8 +1,4 @@
 ﻿using Eto.Forms;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace FPLedit.Shared.UI.Validators
 {
@@ -10,17 +6,20 @@ namespace FPLedit.Shared.UI.Validators
     {
         public bool AllowEmpty { get; set; }
 
-        public TimeValidator(TextBox control, bool allowEmpty, bool enableErrorColoring = true, string errorMessage = null)
+        private readonly TimeEntry maximum;
+
+        public TimeValidator(TextBox control, bool allowEmpty, bool enableErrorColoring = true, string errorMessage = null, TimeEntry? maximum = null)
             : base(control, true, enableErrorColoring, errorMessage)
         {
             AllowEmpty = allowEmpty;
+            this.maximum = maximum ?? new TimeEntry(24, 0);
         }
 
         protected override bool IsValid()
         {
             if (AllowEmpty && Control.Text == "")
                 return true;
-            return TimeEntry.TryParse(Control.Text, out var ts) && ts <= new TimeEntry(24, 0);
+            return TimeEntry.TryParse(Control.Text, out var ts) && ts <= maximum;
         }
     }
 }
