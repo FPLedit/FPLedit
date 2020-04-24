@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<jTrainGraph_timetable version="100">
+  <stations>
+    <sta name="A" km="0:0.0;1:0.0;2:0.0" dTa="0:" dTi="0:" fpl-pos="171;136" fpl-id="1" fpl-rt="0,1,2" />
+    <sta name="C" km="0:10.0;1:22.0;2:4.0" dTa="0:" dTi="0:" fpl-pos="477;140" fpl-id="3" fpl-rt="0,1,2" />
+    <sta name="unten" dTa="-1:" dTi="-1:" fpl-id="5" fpl-rt="2" km="2:0.0" fpl-pos="370;256" />
+  </stations>
+  <trains>
+    <tr name="Test" fpl-tfz="" fpl-mbr="" fpl-last="" cm="" d="1111111" id="1">
+      <t fpl-id="1" a="" />
+      <t fpl-id="3" d="" />
+    </tr>
+  </trains>
+  <transitions />
+</jTrainGraph_timetable>

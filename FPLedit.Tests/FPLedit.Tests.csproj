@@ -20,4 +20,9 @@
       <ProjectReference Include="..\FPLedit\FPLedit.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Include="..\build_scripts\ResourceHelper.cs" Link="Properties\ResourceHelper.cs" />
+      <EmbeddedResource Include="TestFiles/*" />
+    </ItemGroup>
+
 </Project>

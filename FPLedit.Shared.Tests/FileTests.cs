@@ -17,28 +17,14 @@ namespace FPLedit.Shared.Tests
             Assert.Throws<NotSupportedException>(() => new XMLEntity(el));
 
             using (var s = PrepareTemp(text))
-                Assert.Throws<LogErrorException>(() => new XMLImport().Import(s, new DummyPluginInterface()));
+                Assert.Throws<NotSupportedException>(() => new XMLImport().Import(s, new DummyPluginInterface()));
         }
 
         [Test]
         public void EmptyFileTest()
         {
             using (var s = PrepareTemp(""))
-                Assert.Throws<LogErrorException>(() => new XMLImport().Import(s, new DummyPluginInterface()));
-        }
-
-        [Test]
-        public void DuplicateStationIdTest()
-        {
-            var text = Load("test_duplicate_ids.fpl");
-            using (var s = PrepareTemp(text))
-            {
-                var tt = new XMLImport().Import(s, new DummyPluginInterface());
-                Assert.IsNotNull(tt);
-                //Assert.IsTrue(tt.UpgradeMessage.Contains("Verknüpfungen"));
-
-                // TODO: Check for changed ids, removed transitions (first: use 
-            }
+                Assert.Throws<System.Xml.XmlException>(() => new XMLImport().Import(s, new DummyPluginInterface()));
         }
 
         private string Load(string dotPath) => ResourceHelper.GetStringResource("Shared.Tests.TestFiles." + dotPath);

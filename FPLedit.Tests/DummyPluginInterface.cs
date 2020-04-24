@@ -1,16 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using FPLedit.Shared;
 using FPLedit.Shared.Templating;
 
 namespace FPLedit.Tests
 {
-    public class DummyPluginInterface : IReducedPluginInterface
+    internal class DummyPluginInterface : IPluginInterface
     {
         public DummyPluginInterface()
         {
             Logger = new TestLogger();
             Settings = new TestSettings(new Dictionary<string, string>());
+            Registry = new RegisterStore();
         }
 
         public string GetTemp(string filename)
@@ -21,11 +23,74 @@ namespace FPLedit.Tests
         public string ExecutablePath => throw new NotImplementedException();
         public string ExecutableDir => throw new NotImplementedException();
 
-        public T[] GetRegistered<T>() => Array.Empty<T>();
+        public T[] GetRegistered<T>() => Registry.GetRegistered<T>();
 
         public ILog Logger { get; }
+
+        public Timetable Timetable => throw new NotImplementedException();
+
+        public IFileState FileState => throw new NotImplementedException();
+
+        public void SetUnsaved()
+        {
+            throw new NotImplementedException();
+        }
+
+        public object BackupTimetable() => throw new NotImplementedException();
+
+        public void RestoreTimetable(object backupHandle)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ClearBackup(object backupHandle)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Open()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Save(bool forceSaveAs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Reload()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Undo()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void StageUndoStep()
+        {
+            throw new NotImplementedException();
+        }
+
+        ISettings IPluginInterface.Settings => throw new NotImplementedException();
+
+        public event EventHandler<FileStateChangedEventArgs> FileStateChanged;
+        public event EventHandler ExtensionsLoaded;
+        public event EventHandler FileOpened;
+        public event EventHandler AppClosing;
         public IReadOnlySettings Settings { get; }
         public ITemplateManager TemplateManager => throw new NotImplementedException();
+
+        public int HadWarning(string search) => ((TestLogger) Logger).HadWarning(search);
+
+        public RegisterStore Registry { get; }
+
+        public dynamic Menu => throw new NotImplementedException();
+
+        public dynamic RootForm => throw new NotImplementedException();
+
+        public dynamic HelpMenu => throw new NotImplementedException();
     }
 
     public class TestSettings : ISettings
@@ -67,6 +132,15 @@ namespace FPLedit.Tests
 
     public class TestLogger : ILog
     {
+        private List<string> warnings = new List<string>();
+
+        public int HadWarning(string search)
+        {
+            var warns = warnings.Where(s => s.Contains(search)).ToList();
+            warnings.RemoveAll(w => warns.Contains(w));
+            return warns.Count;
+        }
+        
         public bool CanAttach => false;
 
         public void AttachLogger(ILog other)
@@ -75,7 +149,7 @@ namespace FPLedit.Tests
         
         public void Error(string message) => throw new LogErrorException("Error: " + message);
 
-        public void Warning(string message) => throw new LogWarningException("Warning: " + message);
+        public void Warning(string message) => warnings.Add(message);
 
         public void Info(string message) => Console.WriteLine("Info: " + message);
 
