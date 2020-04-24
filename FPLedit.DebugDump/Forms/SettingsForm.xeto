@@ -21,13 +21,11 @@
       </TableRow>
     </TableLayout>
     <StackLayout Padding="5">
-      <!-- hack this text contains "\n" as a quick fix for an eto problem. See EtoExtensions.WordWrap. -->
-      <Label x:Name="helpLabel" xml:space="preserve">\n
-HINWEISE:\n
-Debug Dump ist ein Tool, um Daten zur Fehlerbehebung in FPLedit zu sammeln. Dumps können unter Umständen persönliche Daten enthalten, wenn Sie solche in ihre Fahrplandateien oder FPLedit allgemein eingeben, darunter auch absolute Dateipfade. Wenn Sie einen Dump per Mail an den Entwickler übermitteln, stimmen Sie der Verwendung dieser Daten zur Fehlerbehebung zu.\n
-Natürlich können Sie jederzeit dieser Nutzung nachträglich widersprechen und Löschung verlangen. FPLedit wird dabei niemals selbsttätig einen Dump versenden.\n
-Vorher können Sie das unten aufgeführte Tool nutzen, um die aufgezeichneten Daten einzusehen.\n
-\n
+      <Label x:Name="helpLabel" xml:space="preserve">HINWEISE:
+Debug Dump ist ein Tool, um Daten zur Fehlerbehebung in FPLedit zu sammeln. Dumps können unter Umständen persönliche Daten enthalten, wenn Sie solche in ihre Fahrplandateien oder FPLedit allgemein eingeben, darunter auch absolute Dateipfade. Wenn Sie einen Dump per Mail an den Entwickler übermitteln, stimmen Sie der Verwendung dieser Daten zur Fehlerbehebung zu.
+Natürlich können Sie jederzeit dieser Nutzung nachträglich widersprechen und Löschung verlangen. FPLedit wird dabei niemals selbsttätig einen Dump versenden.
+Vorher können Sie das unten aufgeführte Tool nutzen, um die aufgezeichneten Daten einzusehen.
+
 Bei der Aufzeichnung können größere Datenmengen anfallen. Sie sollten diese also nur aktivieren, wenn Sie die Funktion auch verwenden.
       </Label>
     </StackLayout>
