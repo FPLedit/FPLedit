@@ -1,0 +1,158 @@
+<!--
+  FPLedit Build Process
+  Common build properties for all projects.
+  (c) Manuel Huber 2020
+-->
+
+<Project>
+  <!--
+  * THE FOLLOWING CODE IS SPECIFIC TO THE FPLEDIT USER DOCUMENTATION REPO STRUCTURE
+  * DO NOT USE IT OTHERWISE
+  *
+  * IT WILL NOT BUILD IF ENV VARIABLE FPLEDIT_DOK IS NOT SET.
+  -->
+  
+  <!-- Prepare our conditions -->
+  <PropertyGroup>
+    <_OfflineDoc_HasDocumentationEnv Condition=" ( $(FPLEDIT_DOK) != '' ) And Exists( '$(FPLEDIT_DOK)' ) And ( $(Configuration) == 'Release' )">true</_OfflineDoc_HasDocumentationEnv>
+  </PropertyGroup>
+  
+  <!-- Set parameters -->
+  <Choose>
+    <When Condition=" $(_OfflineDoc_HasDocumentationEnv) == 'true' ">
+      <PropertyGroup>
+        <OfflineDoc_BuildPdf>false</OfflineDoc_BuildPdf><!-- TODO: Enable pdf generation (if it works) -->
+        <OfflineDoc_HtmlOutputFile>$(OutputPath)/Dokumentation.html</OfflineDoc_HtmlOutputFile>
+        <OfflineDoc_PdfOutputFile>$(OutputPath)/Dokumentation.pdf</OfflineDoc_PdfOutputFile>
+        <OfflineDoc_SiteFolder>$(FPLEDIT_DOK)</OfflineDoc_SiteFolder>
+      </PropertyGroup>
+      
+      <PropertyGroup>
+        <!-- Include as pre-tool -->
+        <CoreCompileDependsOn>OfflineDoc_Build;$(CoreCompileDependsOn)</CoreCompileDependsOn>
+      </PropertyGroup>
+    </When>
+  </Choose>
+
+  <!-- Generation targets, generic -->
+  <Target Name="OfflineDoc_Build" DependsOnTargets="_OfflineDoc_HugoTransform">
+    <Message IsCritical="true" Importance="high" Text="$(OfflineDoc_OutputFolder)" />
+    <_OfflineDoc_EmbedOfflineFilesTask
+      InputFile="$([System.IO.Path]::Combine( $(OfflineDoc_OutputFolder), 'offline-idx.html' ))"
+      ContentFolder="$([System.IO.Path]::Combine( '$(OfflineDoc_SiteFolder)', 'content' ))"
+      OutputFile="$(OfflineDoc_HtmlOutputFile)"
+      UrlBase="https://fahrplan.manuelhu.de" />
+    <Exec
+      Condition=" $(OfflineDoc_BuildPdf) == 'true' "
+      Command="wkhtmltopdf --zoom 1.3 $(OfflineDoc_HtmlOutputFile) $(OfflineDoc_PdfOutputFile)" />
+  </Target>
+
+  <!-- Internal targets -->
+  <Target Name="_OfflineDoc_PrepareProperties">
+    <PropertyGroup>
+      <OfflineDoc_SiteFolder Condition=" $(OfflineDoc_SiteFolder) == '' ">.</OfflineDoc_SiteFolder>
+      <OfflineDoc_OutputFolder>$([System.IO.Path]::Combine( '$(OfflineDoc_SiteFolder)', 'public' ))</OfflineDoc_OutputFolder>
+      <OfflineDoc_ContentFolder>$([System.IO.Path]::Combine( '$(OfflineDoc_SiteFolder)', 'content' ))</OfflineDoc_ContentFolder>
+      <OfflineDoc_HtmlOutputFile Condition=" $(OfflineDoc_HtmlOutputFile) == '' ">$([System.IO.Path]::Combine( $(OfflineDoc_OutputFolder), 'offline-doc.html' ))</OfflineDoc_HtmlOutputFile>
+      <OfflineDoc_PdfOutputFile Condition=" $(OfflineDoc_PdfOutputFile) == '' ">$([System.IO.Path]::Combine( $(OfflineDoc_OutputFolder), 'offline-doc.pdf' ))</OfflineDoc_PdfOutputFile>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="_OfflineDoc_SassTransform" DependsOnTargets="_OfflineDoc_PrepareProperties">
+    <ItemGroup>
+      <SassFile Include="themes/hugo-material-docs/src/application.scss">
+        <OutputFile>themes/hugo-material-docs/static/stylesheets/application.css</OutputFile>
+      </SassFile>
+    </ItemGroup>
+    <Exec Command="sass $([System.IO.Path]::Combine( $(OfflineDoc_SiteFolder), %(SassFile.Identity) ))  $([System.IO.Path]::Combine( $(OfflineDoc_SiteFolder), %(SassFile.OutputFile) )) --no-source-map --style compressed" />
+  </Target>
+
+  <Target Name="_OfflineDoc_HugoTransform" DependsOnTargets="_OfflineDoc_SassTransform">
+    <Exec Command="hugo -s $(OfflineDoc_SiteFolder) -d $(OfflineDoc_OutputFolder)" />
+  </Target>
+
+  <UsingTask TaskName="_OfflineDoc_EmbedOfflineFilesTask" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" >
+    <ParameterGroup>
+      <InputFile ParameterType="System.String" Required="true" />
+      <ContentFolder ParameterType="System.String" Required="true" />
+      <OutputFile ParameterType="System.String" Required="true" />
+      <UrlBase ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System" />
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Linq" />
+      <Using Namespace="System.Text.RegularExpressions" />
+      <Using Namespace="System.Collections.Generic" />
+      <Code Type="Method" Language="cs">
+        <![CDATA[
+        Dictionary<string, string> files = new Dictionary<string, string>();
+   
+        string ConvertImage(string path)
+        {
+            var bytes = File.ReadAllBytes(path);
+            var ext = Path.GetExtension(path).Replace(".", "");
+            return "data:image/" + ext + ";base64," + Convert.ToBase64String(bytes);
+        }
+
+        string ConvertLink(string href, string[] anchors)
+        {
+            if (!href.StartsWith("mailto:") && !href.StartsWith("http") && !href.StartsWith("#") && !href.StartsWith("/files/"))
+            {
+                href = string.Join("", href.Split('/'));
+                return anchors.Contains(href) ? '#' + href : null;
+            }
+            else if (href.StartsWith("/files/"))
+                return UrlBase + href;
+            return href;
+        }
+
+        void CollectFiles(string dir)
+        {
+            foreach (string d in Directory.GetDirectories(dir))
+            {
+                foreach (string f in Directory.GetFiles(d, "*.png"))
+                    files.Add(Path.GetFileName(f), f);
+                CollectFiles(d);
+            }
+        }
+
+        public override bool Execute() {
+            Log.LogMessage(MessageImportance.High, "Embedding images for offline use...!");
+
+            CollectFiles(ContentFolder);
+
+            var text = File.ReadAllText(InputFile);
+            text = Regex.Replace(text, "<img.+?src=[\"'](.+?)[\"'].*?>", (m) =>
+            {
+                var path = m.Groups[1].Value;
+                var fn = Path.GetFileName(m.Groups[1].Value);
+                if (!files.ContainsKey(fn))
+                {
+                    Log.LogError("File " + fn + " not found!");
+                    return m.Groups[0].Value;
+                }
+                return m.Groups[0].Value.Replace(path, ConvertImage(files[fn]));
+            }, RegexOptions.IgnoreCase);
+
+            var anchors = Regex.Matches(text, "id=\\\"(\\w+)\\\"").Cast<Match>().Select(m => m.Groups[1].Value).ToArray();
+
+            text = Regex.Replace(text, "<a\\s+(?:[^>]*\\s+)?href=([\"'])(.*?)\\1>(.*?)</a>", (m) =>
+            {
+                var path = m.Groups[2].Value;
+                var new_href = ConvertLink(path, anchors);
+                if (new_href != null)
+                    return m.Groups[0].Value.Replace(path, new_href);
+                return m.Groups[3].Value;
+            }, RegexOptions.IgnoreCase);
+
+            File.WriteAllText(OutputFile, text);
+
+            Log.LogMessage(MessageImportance.High, "Done writing " + OutputFile + "!");
+            return true;
+        }
+        ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+</Project>

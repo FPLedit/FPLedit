@@ -1,5 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="$(SolutionDir)/build_scripts/GenerateSignatures.targets" />
+  <Import Project="$(SolutionDir)/build_scripts/GenerateUserDocumentation.targets" />
   <PropertyGroup>
     <ProjectGuid>{386836E8-5885-4ED1-B350-CE2BBEC5367E}</ProjectGuid>
     <TargetFramework>net461</TargetFramework>

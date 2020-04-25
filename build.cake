@@ -8,7 +8,7 @@
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
 
-var docInPath = Argument<string>("doc_path", null) ?? EnvironmentVariable("FPLEDIT_DOK");
+var docInPath = EnvironmentVariable("FPLEDIT_DOK");
 var ignoreNoDoc = Argument<string>("ignore_no_doc", null) != null;
 var preBuildVersionSuffix = Argument("version_suffix", "");
 
@@ -104,21 +104,8 @@ Task("BuildLicenseReadme")
         FileWriteText(buildDir + File("README_LICENSE.txt"), text);
     });
     
-Task("BuildDocumentation")
-    .IsDependentOn("BuildLicenseReadme")
-    .Does(() => {
-        if (docInPath != null && FileExists(docInPath))
-        {
-            var docOutPath = buildDir + File("doku.html");
-            if (FileExists(docOutPath))
-                DeleteFile(docOutPath);
-            CopyFile(docInPath, docOutPath);
-            doc_generated = true;
-        }
-    });
-    
 Task("PackRelease")
-    .IsDependentOn("BuildDocumentation")
+    .IsDependentOn("BuildLicenseReadme")
     .Does(() => {
         var version = GetProductVersion(Context, buildDir + File("FPLedit.exe"));
         var nodoc_suffix = ignoreNoDoc ? "" : (doc_generated ? "" : "-nodoc");       
@@ -138,7 +125,7 @@ Task("Default")
 	.Does(() => {
 	    Warning("##############################################################");
 	    
-	    if (!doc_generated)
+	    if (docInPath == null || docInPath == "")
 	        Warning("No user documentation built!");
 
         Warning("##############################################################");
