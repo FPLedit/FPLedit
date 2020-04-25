@@ -35,13 +35,11 @@
     
     <Message Text="Cleanup: Moving generated files to $(_CleanupDocFxOutputDirectory)..." />
     <MakeDir Directories="$(_DocFxOutputDirectory)" />
-    <Move
-      SourceFiles="@(DocfxGeneratedFiles)"
-      DestinationFolder="$(_CleanupDocFxOutputDirectory)" />
+    <Move SourceFiles="@(DocfxGeneratedFiles)" DestinationFolder="$(_CleanupDocFxOutputDirectory)" />
     
     <Message Text="Cleanup: Moving generated log file to $(IntermediateOutputPath)..." />
-    <Move
-      SourceFiles="$(MSBuildProjectDirectory)/log.txt"
-      DestinationFolder="$(IntermediateOutputPath)" />
+    <Move SourceFiles="$(MSBuildProjectDirectory)/log.txt" DestinationFolder="$(IntermediateOutputPath)" />
   </Target>
+  
+  <Import Project="GenerateMetadataFile.targets" />
 </Project>

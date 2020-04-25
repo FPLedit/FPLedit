@@ -1,0 +1,46 @@
+<Project>
+
+  <PropertyGroup>
+    <!-- Include own build tool -->
+    <CoreCompileDependsOn>GenerateGlobalMetadataFile;$(CoreCompileDependsOn)</CoreCompileDependsOn>
+  </PropertyGroup>
+  
+  <Target Name="GenerateGlobalMetadataFile" Outputs="$(IntermediateOutputPath)../globalMetadata.g.json">
+    <PropertyGroup>
+      <Suffix Condition=" $(VersionSuffix) != '' ">-$(VersionSuffix)</Suffix>
+    </PropertyGroup>
+    <GenerateGlobalMetadataFileTask 
+      OutputPath="$(IntermediateOutputPath)../globalMetadata.g.json"
+      Version="$(VersionPrefix)$(Suffix)"
+      InputPath="$(MSBuildProjectDirectory)/globalMetadataTemplate.json" />
+  </Target>
+
+  <!-- h a c k for msbuild, as it changes \ (escape character) to / before writing to file -->
+  <UsingTask TaskName="GenerateGlobalMetadataFileTask" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" >
+    <ParameterGroup>
+      <OutputPath ParameterType="System.String" Required="true" />
+      <InputPath ParameterType="System.String" Required="true" />
+      <Version ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System" />
+      <Using Namespace="System.IO" />
+      <Code Type="Method" Language="cs">
+        <![CDATA[
+          const string HashAlgorithm = "SHA256";
+                 
+          public override bool Execute() {
+              Log.LogMessage(MessageImportance.High, "Creating global Metadata file!");
+              var content = File.ReadAllText(InputPath)
+                .Replace("{version}", Version)
+                .Replace("{date}", DateTime.Now.ToShortDateString());
+              File.WriteAllText(OutputPath, content);
+              Log.LogMessage(MessageImportance.High, "Done writing " + OutputPath + "!");
+              return true;
+          }
+        ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+
+</Project>

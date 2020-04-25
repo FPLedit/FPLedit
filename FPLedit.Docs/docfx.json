@@ -51,9 +51,12 @@
         ]
       }
     ],
+    "globalMetadataFiles": [
+      "../obj/FPLedit/FPLedit.Docs/globalMetadata.g.json"
+    ],
     "globalMetadata": {
       "_appTitle": "FPLedit developer documentation",
-      "_appFooter": "Made with ❤️ by Manuel Huber &middot; <a href=\\\"https://www.manuelhu.de/impressum.html\\\" rel=\\\"nofollow\\\">Impressum</a> &middot; <a href=\\\"https://www.manuelhu.de/datenschutz.html\\\", rel=\\\"nofollow\\\">Datenschutzerkl&auml;rung</a> &middot; Generated with DocFX",
+     // "_appFooter": "Made with ❤️ by Manuel Huber &middot; <a href=\\\"https://www.manuelhu.de/impressum.html\\\" rel=\\\"nofollow\\\">Impressum</a> &middot; <a href=\\\"https://www.manuelhu.de/datenschutz.html\\\", rel=\\\"nofollow\\\">Datenschutzerkl&auml;rung</a> &middot; Generated with DocFX",
       "_enableSearch": true,
       "_appFaviconPath": "favicon.ico",
       "_appLogoPath": "logo.svg"
