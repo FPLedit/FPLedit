@@ -21,7 +21,6 @@
             <Button Click="CopyButton_Click">Zug kopieren/verschieben</Button>
             <!-- Spacer: -->
             <Label />
-            <Button Click="EditTimetableButton_Click">Fahrplan bearbeiten</Button>
             <Button Click="EditPathButton_Click">Laufweg bearbeiten</Button>
             <!-- Spacer: -->
             <Label />

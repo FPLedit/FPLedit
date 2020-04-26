@@ -53,8 +53,6 @@ namespace FPLedit.Editor.Network
         {
             if (e.Key == Keys.Delete)
                 DeleteTrain(gridView, TrainDirection.tr, false);
-            else if ((e.Key == Keys.T && e.Control))
-                EditTimetable(gridView, false);
             else if ((e.Key == Keys.C && e.Control))
                 CopyTrain(gridView, false);
             else if ((e.Key == Keys.P && e.Control))
@@ -69,19 +67,6 @@ namespace FPLedit.Editor.Network
         {
             var path = t.GetPath();
             return path.FirstOrDefault()?.SName + " - " + path.LastOrDefault()?.SName;
-        }
-
-        private void EditTimetable(GridView view, bool message = true)
-        {
-            if (view.SelectedItem != null)
-            {
-                var train = (Train)view.SelectedItem;
-
-                using (var tte = new SingleTimetableEditForm(pluginInterface, train))
-                    tte.ShowModal(this);
-            }
-            else if (message)
-                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug-Fahrplan bearbeiten");
         }
 
         private void EditPath(GridView view, bool message = true)
@@ -156,9 +141,6 @@ namespace FPLedit.Editor.Network
 
         private void DeleteButton_Click(object sender, EventArgs e)
             => DeleteTrain(gridView, TrainDirection.tr);
-
-        private void EditTimetableButton_Click(object sender, EventArgs e)
-            => EditTimetable(gridView);
 
         private void CopyButton_Click(object sender, EventArgs e)
             => CopyTrain(gridView);
