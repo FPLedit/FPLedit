@@ -42,11 +42,11 @@ namespace FPLedit.CrashReporting
                 File.WriteAllText(fnCrashFlag, "1");
 
                 MessageBox.Show("Es ist ein unerwarteter Fehler in FPLedit aufgetreten." + Environment.NewLine + Environment.NewLine +
-                    "FPLedit wird neu gestartet. Möglicherweise ist eine Wiederherstellung möglich.", MessageBoxType.Error);
+                                "FPLedit wird neu gestartet. Möglicherweise ist eine Wiederherstellung möglich.", "FPLedit", MessageBoxType.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Es ist ein unerwarteter Fehler in FPLedit aufgetreten. Es konnten keine weiteren Informationen gespeichert werden. FPLedit wird neu gestartet.\n\n\n" + ex.Message);
+                MessageBox.Show("Es ist ein unerwarteter Fehler in FPLedit aufgetreten. Es konnten keine weiteren Informationen gespeichert werden. FPLedit wird neu gestartet.\n\n\n" + ex.Message, "FPLedit");
             }
         }
 
