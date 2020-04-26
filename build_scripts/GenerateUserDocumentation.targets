@@ -21,8 +21,7 @@
   <Choose>
     <When Condition=" $(_OfflineDoc_HasDocumentationEnv) == 'true' ">
       <PropertyGroup>
-        <OfflineDoc_BuildPdf>false</OfflineDoc_BuildPdf><!-- TODO: Enable pdf generation (if it works) -->
-        <OfflineDoc_HtmlOutputFile>$(OutputPath)/Dokumentation.html</OfflineDoc_HtmlOutputFile>
+        <OfflineDoc_BuildPdf>true</OfflineDoc_BuildPdf>
         <OfflineDoc_PdfOutputFile>$(OutputPath)/Dokumentation.pdf</OfflineDoc_PdfOutputFile>
         <OfflineDoc_SiteFolder>$(FPLEDIT_DOK)</OfflineDoc_SiteFolder>
       </PropertyGroup>
@@ -44,7 +43,8 @@
       UrlBase="https://fahrplan.manuelhu.de" />
     <Exec
       Condition=" $(OfflineDoc_BuildPdf) == 'true' "
-      Command="wkhtmltopdf --zoom 1.3 $(OfflineDoc_HtmlOutputFile) $(OfflineDoc_PdfOutputFile)" />
+      Command="pandoc $([System.IO.Path]::GetFileName( '$(OfflineDoc_HtmlOutputFile)' ) ) -f html+tex_math_dollars -t latex --template=../template --pdf-engine=xelatex --toc --metadata-file=offline-latex.tex -N -o $([System.IO.Path]::GetFullPath( $(OfflineDoc_PdfOutputFile) ) )"
+      WorkingDirectory="$([System.IO.Path]::GetDirectoryName( '$(OfflineDoc_HtmlOutputFile)' ) )" />
   </Target>
 
   <!-- Internal targets -->
