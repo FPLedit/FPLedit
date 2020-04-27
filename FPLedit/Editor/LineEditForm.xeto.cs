@@ -13,9 +13,8 @@ namespace FPLedit.Editor
     internal sealed class LineEditForm : FDialog<DialogResult>
     {
         private readonly IPluginInterface pluginInterface;
-        private readonly Timetable tt;
         private readonly int route;
-        private readonly object backupHandle;
+        private object backupHandle;
 
 #pragma warning disable CS0649
         private readonly GridView gridView;
@@ -29,14 +28,9 @@ namespace FPLedit.Editor
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
             this.pluginInterface = pluginInterface;
-            tt = pluginInterface.Timetable;
             this.route = route;
 
-            backupHandle = pluginInterface.BackupTimetable();
-
-            if (tt.Type == TimetableType.Network)
-                loadLineButton.Visible = false;
-
+            
             gridView.AddColumn<Station>(s => s.SName, "Bahnhof");
             gridView.AddColumn<Station>(s => s.Positions.GetPosition(route).ToString(), "Position");
 
@@ -46,11 +40,28 @@ namespace FPLedit.Editor
                 KeyDown += HandleKeystroke;
             else
                 gridView.KeyDown += HandleKeystroke;
+            
+            pluginInterface.FileStateChanged += (s, e) =>
+            {
+                pluginInterface.ClearBackup(backupHandle);
+                backupHandle = null;
+                Initialize(pluginInterface);
+            };
 
-            UpdateStations();
+            Initialize(pluginInterface);
 
             this.AddCloseHandler();
             this.AddSizeStateHandler();
+        }
+
+        private void Initialize(IPluginInterface pluginInterface)
+        {
+            backupHandle = pluginInterface.BackupTimetable();
+            
+            if (pluginInterface.Timetable.Type == TimetableType.Network)
+                loadLineButton.Visible = false;
+
+            UpdateStations();
         }
 
         private void HandleKeystroke(object sender, KeyEventArgs e)
@@ -67,11 +78,11 @@ namespace FPLedit.Editor
 
         private void UpdateStations()
         {
-            stations = tt.GetRoute(route).Stations;
+            stations = pluginInterface.Timetable.GetRoute(route).Stations;
 
             gridView.DataStore = stations;
 
-            loadLineButton.Enabled = tt.Stations.Count == 0;
+            loadLineButton.Enabled = pluginInterface.Timetable.Stations.Count == 0;
         }
 
         private void EditStation(bool message = true)
@@ -94,7 +105,7 @@ namespace FPLedit.Editor
             if (gridView.SelectedItems.Any())
             {
                 var sta = (Station)gridView.SelectedItem;
-                if (tt.WouldProduceAmbiguousRoute(sta))
+                if (pluginInterface.Timetable.WouldProduceAmbiguousRoute(sta))
                 {
                     MessageBox.Show("Sie versuchen eine Station zu löschen, ohne die danach zwei Routen zusammenfallen, das heißt zwei Stationen auf mehr als einer Route ohne Zwischenstation verbunden sind.\n\n" +
                                     "Der Konflikt kann nicht automatisch aufgehoben werden.", "FPLedit", MessageBoxType.Error);
@@ -106,7 +117,7 @@ namespace FPLedit.Editor
                     return;
                 }
 
-                tt.RemoveStation(sta);
+                pluginInterface.Timetable.RemoveStation(sta);
                 UpdateStations();
             }
             else if (message)
@@ -115,7 +126,7 @@ namespace FPLedit.Editor
 
         private void NewStation()
         {
-            using (var nsf = new EditStationForm(pluginInterface, tt, route))
+            using (var nsf = new EditStationForm(pluginInterface, pluginInterface.Timetable, route))
             {
                 if (nsf.ShowModal(this) == DialogResult.Ok)
                 {
@@ -127,7 +138,7 @@ namespace FPLedit.Editor
                         handler.SetMiddlePos(route, sta, pluginInterface.Timetable);
                     }
 
-                    tt.AddStation(sta, route);
+                    pluginInterface.Timetable.AddStation(sta, route);
                     UpdateStations();
                 }
             }
@@ -135,7 +146,7 @@ namespace FPLedit.Editor
 
         private void LoadLine()
         {
-            if (tt.Stations.Count != 0)
+            if (pluginInterface.Timetable.Stations.Count != 0)
                 return;
             if (pluginInterface.Timetable.Type == TimetableType.Network)
                 throw new TimetableTypeNotSupportedException(TimetableType.Network, "load line file");
@@ -153,7 +164,7 @@ namespace FPLedit.Editor
                     IImport import = Path.GetExtension(ofd.FileName) == ".fpl" ? timport : simport;
                     var ntt = import.SafeImport(ofd.FileName, pluginInterface);
                     foreach (var station in ntt.Stations)
-                        tt.AddStation(station, Timetable.LINEAR_ROUTE_ID);
+                        pluginInterface.Timetable.AddStation(station, Timetable.LINEAR_ROUTE_ID);
                     // ntt will be destroyed by decoupling stations, do not use afterwards!
                 }
             }
