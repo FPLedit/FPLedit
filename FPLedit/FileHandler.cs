@@ -22,7 +22,17 @@ namespace FPLedit
         private readonly ILastFileHandler lfh;
         private readonly UndoManager undo;
 
-        public Timetable Timetable { get; set; }
+        private Timetable timetable;
+
+        public Timetable Timetable
+        {
+            get => timetable;
+            set
+            {
+                timetable = value;
+                FileStateChanged?.Invoke(this, new FileStateChangedEventArgs(FileState));
+            }
+        }
         public FileState FileState { get; }
 
         public event EventHandler FileOpened;
