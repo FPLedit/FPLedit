@@ -15,7 +15,7 @@
     <LangVersion>7.3</LangVersion>
     <CodeAnalysisRuleSet>..\build_scripts\FPLedit.ruleset</CodeAnalysisRuleSet>
     
-    <EtoVersion>2.5.1-ci-20200323.6</EtoVersion>
+    <EtoVersion>2.5.1-ci-20200427.1</EtoVersion>
     
 	  <!-- Assembly info -->
 	  <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
