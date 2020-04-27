@@ -19,8 +19,7 @@ namespace FPLedit.Shared.DefaultImplementations
             this.templateType = templateType;
             this.export = export;
             DisplayName = display;
-            if (menu == null)
-                MenuName = "&" + DisplayName;
+            MenuName = menu ?? "&" + DisplayName;
         }
 
         public void Show(IPluginInterface pluginInterface)

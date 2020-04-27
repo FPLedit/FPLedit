@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using FPLedit.Shared.Filetypes;
 
 namespace FPLedit.NonDefaultFiletypes
 {
     internal sealed class XmlStationsImport : IImport
     {
-        public string Filter => "Streckendateien (*.str)|*.str";
+        public string Filter => "Lineare Streckendateien (*.str)|*.str";
 
         public Timetable Import(Stream stream, IReducedPluginInterface pluginInterface, ILog replaceLog = null)
         {

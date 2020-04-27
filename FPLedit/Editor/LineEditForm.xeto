@@ -18,8 +18,6 @@
             <Button Click="NewButton_Click">&amp;Neue Station</Button>
             <Button Click="EditButton_Click">Station &amp;bearbeiten</Button>
             <Button Click="DeleteButton_Click">Station &amp;löschen</Button>
-            <Label /><!-- Spacer -->
-            <Button Click="LoadLineButton_Click" x:Name="loadLineButton">S&amp;trecke laden</Button>
           </StackLayout>
         </TableRow>
       </TableLayout>

@@ -18,7 +18,6 @@ namespace FPLedit.Editor
 
 #pragma warning disable CS0649
         private readonly GridView gridView;
-        private readonly Button loadLineButton;
 #pragma warning restore CS0649
 
         private IList<Station> stations;
@@ -58,9 +57,6 @@ namespace FPLedit.Editor
         {
             backupHandle = pluginInterface.BackupTimetable();
             
-            if (pluginInterface.Timetable.Type == TimetableType.Network)
-                loadLineButton.Visible = false;
-
             UpdateStations();
         }
 
@@ -68,8 +64,6 @@ namespace FPLedit.Editor
         {
             if (e.Key == Keys.Delete)
                 DeleteStation(false);
-            else if (e.Key == Keys.L && e.Control)
-                LoadLine();
             else if (e.Key == Keys.B && e.Control)
                 EditStation(false);
             else if (e.Key == Keys.N && e.Control)
@@ -81,8 +75,6 @@ namespace FPLedit.Editor
             stations = pluginInterface.Timetable.GetRoute(route).Stations;
 
             gridView.DataStore = stations;
-
-            loadLineButton.Enabled = pluginInterface.Timetable.Stations.Count == 0;
         }
 
         private void EditStation(bool message = true)
@@ -144,34 +136,6 @@ namespace FPLedit.Editor
             }
         }
 
-        private void LoadLine()
-        {
-            if (pluginInterface.Timetable.Stations.Count != 0)
-                return;
-            if (pluginInterface.Timetable.Type == TimetableType.Network)
-                throw new TimetableTypeNotSupportedException(TimetableType.Network, "load line file");
-
-            IImport timport = new XMLImport();
-            IImport simport = new NonDefaultFiletypes.XmlStationsImport();
-
-            using (var ofd = new OpenFileDialog())
-            {
-                ofd.Title = "Streckendatei wählen";
-                ofd.AddLegacyFilter(timport.Filter, simport.Filter);
-
-                if (ofd.ShowDialog(this) == DialogResult.Ok)
-                {
-                    IImport import = Path.GetExtension(ofd.FileName) == ".fpl" ? timport : simport;
-                    var ntt = import.SafeImport(ofd.FileName, pluginInterface);
-                    foreach (var station in ntt.Stations)
-                        pluginInterface.Timetable.AddStation(station, Timetable.LINEAR_ROUTE_ID);
-                    // ntt will be destroyed by decoupling stations, do not use afterwards!
-                }
-            }
-
-            UpdateStations();
-        }
-
         private void CloseButton_Click(object sender, EventArgs e)
         {
             pluginInterface.ClearBackup(backupHandle);
@@ -195,8 +159,5 @@ namespace FPLedit.Editor
 
         private void NewButton_Click(object sender, EventArgs e)
             => NewStation();
-
-        private void LoadLineButton_Click(object sender, EventArgs e)
-            => LoadLine();
     }
 }
