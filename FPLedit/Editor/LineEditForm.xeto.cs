@@ -1,10 +1,7 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
-using FPLedit.Shared.Filetypes;
 using FPLedit.Shared.UI;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using FPLedit.Shared.Rendering;
 
@@ -20,7 +17,7 @@ namespace FPLedit.Editor
         private readonly GridView gridView;
 #pragma warning restore CS0649
 
-        private IList<Station> stations;
+        private Station[] stations;
 
         public LineEditForm(IPluginInterface pluginInterface, int route)
         {
@@ -39,24 +36,28 @@ namespace FPLedit.Editor
                 KeyDown += HandleKeystroke;
             else
                 gridView.KeyDown += HandleKeystroke;
-            
-            pluginInterface.FileStateChanged += (s, e) =>
-            {
-                pluginInterface.ClearBackup(backupHandle);
-                backupHandle = null;
-                Initialize(pluginInterface);
-            };
 
-            Initialize(pluginInterface);
+            pluginInterface.FileStateChanged += OnFileStateChanged;
+            Closing += (s, e) => pluginInterface.FileStateChanged -= OnFileStateChanged;
+
+            InitializeGrid();
 
             this.AddCloseHandler();
             this.AddSizeStateHandler();
         }
+        
+        private void OnFileStateChanged(object s, FileStateChangedEventArgs e)
+        {
+            if (!Visible || IsDisposed) return;
 
-        private void Initialize(IPluginInterface pluginInterface)
+            pluginInterface.ClearBackup(backupHandle);
+            backupHandle = null;
+            InitializeGrid();
+        }
+
+        private void InitializeGrid()
         {
             backupHandle = pluginInterface.BackupTimetable();
-            
             UpdateStations();
         }
 
@@ -72,7 +73,7 @@ namespace FPLedit.Editor
 
         private void UpdateStations()
         {
-            stations = pluginInterface.Timetable.GetRoute(route).Stations;
+            stations = pluginInterface.Timetable.GetRoute(route).Stations.ToArray();
 
             gridView.DataStore = stations;
         }
