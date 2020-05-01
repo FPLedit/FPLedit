@@ -92,5 +92,10 @@ namespace FPLedit.Shared
         /// Cleans up orphaned time entries after deleting stations (e.g. arrival time at the first station)
         /// </summary>
         void RemoveOrphanedTimes();
+
+        /// <summary>
+        /// Get a display name for the path of the train.
+        /// </summary>
+        string GetLineName();
     }
 }

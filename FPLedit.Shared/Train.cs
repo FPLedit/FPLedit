@@ -263,5 +263,13 @@ namespace FPLedit.Shared
         [DebuggerStepThrough]
         public override string ToString()
             => TName;
+
+        /// <inheritdoc />
+        // ReSharper disable once UnusedMember.Global
+        public string GetLineName()
+        {
+            var path = GetPath();
+            return path.First().SName + " - " + path.Last().SName;
+        }
     }
 }
