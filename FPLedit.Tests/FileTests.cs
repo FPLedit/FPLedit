@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -48,6 +49,16 @@ namespace FPLedit.Tests
             }
         }
         
+        [Test]
+        public void NetworkFileWithLinearStationsTest()
+        {
+            var text = Load("test_network_with_linear_positions.fpl");
+            using (var s = PrepareTemp(text))
+            {
+                Assert.Throws<FormatException>(() => new XMLImport().Import(s, new DummyPluginInterface()));
+            }
+        }
+
         private string Load(string dotPath) => ResourceHelper.GetStringResource("Tests.TestFiles." + dotPath);
 
         private Stream PrepareTemp(string text)
