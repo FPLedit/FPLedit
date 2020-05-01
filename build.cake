@@ -27,6 +27,7 @@ if (Argument<string>("auto-beta", null) != null) {
 // Define directories.
 var buildDir = Directory("./bin") + Directory(configuration);
 var buildDocDir = Directory("./bin") + Directory("api-doc");
+var buildLibDir = buildDir + Directory("lib");
 var sourceDir = Directory(".");
 var scriptsDir = Directory("./build_scripts");
 
@@ -90,22 +91,33 @@ Task("PrepareArtifacts")
         DeleteFiles(buildDir + File("*.pdb"));
         DeleteFiles(buildDir + File("*.deps.json"));
         
-        var libDir = buildDir + Directory("lib");
-        CreateDirectory(libDir);
-        MoveFiles(buildDir + File("*.dll"), libDir);
-        MoveFiles(libDir + File("FPLedit.*"), buildDir);
+        CreateDirectory(buildLibDir);
+        MoveFiles(buildDir + File("*.dll"), buildLibDir);
+        MoveFiles(buildLibDir + File("FPLedit.*"), buildDir);
     });
     
 Task("BuildLicenseReadme")
     .IsDependentOn("PrepareArtifacts")
     .Does(() => {
         var version = GetProductVersion(Context, buildDir + File("FPLedit.exe"));
-        var text = GetLicenseText(Context, scriptsDir + File("Info.txt"), version);
+        var text = GetLicenseText(Context, 
+            scriptsDir + Directory("info") + File("Info.txt"), 
+            scriptsDir + Directory("info") + File("3rd-party.txt"), 
+            version);
         FileWriteText(buildDir + File("README_LICENSE.txt"), text);
     });
     
-Task("PackRelease")
+Task("BundleThirdParty")
     .IsDependentOn("BuildLicenseReadme")
+    .Does(() => {
+        var licenseDir = buildLibDir + Directory("licenses");
+        CleanDirectory(licenseDir);
+        CopyFiles(scriptsDir + Directory("info") + File("3rd-party.txt"), licenseDir);
+        CopyFiles(scriptsDir + Directory("info") + Directory("3rd-party") + File("*.txt"), licenseDir);
+    });
+    
+Task("PackRelease")
+    .IsDependentOn("BundleThirdParty")
     .Does(() => {
         var version = GetProductVersion(Context, buildDir + File("FPLedit.exe"));
         var nodoc_suffix = ignoreNoDoc ? "" : (doc_generated ? "" : "-nodoc");       

@@ -11,7 +11,7 @@ namespace FPLedit
     internal sealed class InfoForm : FDialog
     {
 #pragma warning disable CS0649
-        private readonly TextArea licenseTextArea;
+        private readonly TextArea licenseTextArea, thirdPartyTextArea;
         private readonly Label versionLabel, privacyLabel;
         private readonly CheckBox updateCheckBox;
         private readonly Button checkButton;
@@ -28,6 +28,10 @@ namespace FPLedit
             using (var stream = this.GetResource("Resources.Info.txt"))
             using (var sr = new StreamReader(stream))
                 licenseTextArea.Text = sr.ReadToEnd();
+            
+            using (var stream = this.GetResource("Resources.3rd-party.txt"))
+            using (var sr = new StreamReader(stream))
+                thirdPartyTextArea.Text = sr.ReadToEnd();
 
             versionLabel.Text = versionLabel.Text.Replace("{version}", VersionInformation.Current.DisplayVersion);
             versionLabel.Font = new Font(versionLabel.Font.FamilyName, versionLabel.Font.Size, FontStyle.Bold);

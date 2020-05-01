@@ -39,7 +39,8 @@
   <ItemGroup>
     <EmbeddedResource Include="**/*.js" />
     <EmbeddedResource Include="Resources\*" />
-    <EmbeddedResource Include="..\build_scripts\Info.txt" Link="Resources\Info.txt" />
+    <EmbeddedResource Include="..\build_scripts\info\Info.txt" Link="Resources\Info.txt" />
+    <EmbeddedResource Include="..\build_scripts\info\3rd-party.txt" Link="Resources\3rd-party.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FPLedit.Shared.Rendering\FPLedit.Shared.Rendering.csproj" />

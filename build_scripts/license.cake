@@ -1,17 +1,27 @@
-public static string GetLicenseText(ICakeContext context, string template, string version)
-{
-    var info = context.FileReadText(template);
-    
+public static string GetLicenseText(ICakeContext context, string licensePath, string thirdPartyInfoPath, string version)
+{   
     var template_header = @"FPLedit Version {0}
-    
-    (c) 2015-{1} Manuel Huber
-    https://fahrplan.manuelhu.de/
-    
-    ";
 
-    var tmpl = template_header + AddNewlines(info);
-    var year = DateTime.Now.Year;
-    return string.Format(tmpl, version, year);
+(c) 2015-{1} Manuel Huber
+https://fahrplan.manuelhu.de/
+
+Informationenn zu eingebundenen Bibliotheken finden Sie am Ende dieser Datei oder im Ordner lib/licenses.
+
+";
+
+    var text = string.Format(template_header, version, DateTime.Now.Year);     
+    text += context.FileReadText(licensePath);    
+    text += @"
+
+
+=========================================
+EINGEBUNDENE BIBLIOTHEKEN
+=========================================
+
+";
+    
+    text += context.FileReadText(thirdPartyInfoPath);
+    return AddNewlines(text);
 }
 
 

@@ -1,0 +1,30 @@
+FPLedit verwendet mehrere Bibliotheken anderer Entwickler, die im Folgenden aufgelistet sind.
+Die Volltexte der Lizenzen finden Sie als Textdatei im Ordner lib/licenses.
+
+* FPLedit verwendet die Bibliothek Eto.Forms zur Darstellung der Benutzerschnittstelle.
+  The BSD-3 License
+  <https://github.com/picoe/Eto>
+
+* Eto verwendet unter Linux die GtkSharp-Bibliotheken zur Darstellung.
+  GNU Library General Public License
+  <https://github.com/GtkSharp/GtkSharp>
+  
+* Eto und FPLedit verwendet Portable.Xaml zum Initialisieren der Benutzerschnittstelle.
+  MIT X11 License
+  <https://github.com/cwensley/Portable.Xaml/blob/develop/LICENSE.txt> 
+  
+* FPLedit verwendet die Bibliothek Jint zum Interpretieren der generierten Javascript-Templates.
+  BSD 3-Clause License
+  <https://github.com/sebastienros/jint>
+
+* Jint verwendet Esprima-dotnet.
+  BSD 3-Clause License
+  <https://github.com/sebastienros/esprima-dotnet>
+
+* FPLedit verwendet DeepCloner.
+  MIT-License
+  <https://github.com/force-net/DeepCloner>
+
+* FPLedit verwendet als Basis .NET Standard 2.0 und andere .NET-Pakete.
+  MIT-License
+  <https://github.com/dotnet/runtime>

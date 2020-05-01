@@ -27,15 +27,22 @@
       </StackLayout>
     </TableRow>
     <TableRow ScaleHeight="True">
-      <GroupBox Text="Lizenz / Hinweise">
-        <TextArea ReadOnly="true" x:Name="licenseTextArea" />
-      </GroupBox>
+      <TabControl>
+        <TabPage Text="Hinweise und Lizenz">
+          <TextArea ReadOnly="true" x:Name="licenseTextArea" />
+        </TabPage>
+        <TabPage Text="Eingebundene Bibliotheken">
+          <TextArea ReadOnly="true" x:Name="thirdPartyTextArea" />
+        </TabPage>
+      </TabControl>
     </TableRow>
     <TableRow>
-      <StackLayout Orientation="Vertical" Spacing="5">
-        <CheckBox x:Name="updateCheckBox">Automatische Überprüfung auf Updates beim Programmstart aktivieren.</CheckBox>
-        <Label x:Name="privacyLabel">Datenschutz: Dabei wird Ihre IP-Adresse und der verwendete Betriebssystemtyp an den Server übermittelt; Die IP-Adresse wird nur anonymisiert in Log-Dateien gespeichert; ein Rückschluss auf einzelne Benutzer ist daher nicht möglich.</Label>
-      </StackLayout>
+      <GroupBox Text="Automatische Überprüfung auf Updates">
+        <StackLayout Orientation="Vertical" Spacing="5" Padding="10,10,10,10">
+          <CheckBox x:Name="updateCheckBox">Automatische Überprüfung auf Updates beim Programmstart aktivieren.</CheckBox>
+          <Label x:Name="privacyLabel">Datenschutz: Dabei wird Ihre IP-Adresse und der verwendete Betriebssystemtyp an den Server übermittelt; Die IP-Adresse wird nur anonymisiert in Log-Dateien gespeichert; ein Rückschluss auf einzelne Benutzer ist daher nicht möglich.</Label>
+        </StackLayout>
+      </GroupBox>
     </TableRow>
     <TableRow>
       <Button x:Name="closeButton" Click="CloseButton_Click">Schließen</Button>
