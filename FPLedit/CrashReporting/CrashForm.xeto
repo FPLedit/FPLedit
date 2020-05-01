@@ -3,10 +3,10 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.CrashReporting;assembly=FPLedit"
   DefaultButton="{x:Reference restoreButton}" AbortButton="{x:Reference cancelButton}"
-  Title="Fehler im FPLedit" ClientSize="380,-1" Resizable="false">
+  Title="Fehler in FPLedit" Resizable="false">
   <StackLayout Spacing="5" HorizontalContentAlignment="Stretch" Padding="10,10,10,10">
     <Label>In FPLedit ist ein interner Fehler aufgetreten. Weiterführende Informationen wurden gesammelt:</Label>
-    <TextArea ReadOnly="true" x:Name="infoTextBox" Width="500" Height="300" />
+    <TextArea ReadOnly="true" x:Name="infoTextBox" Size="200, 400" />
     <GroupBox Text="Fehler melden">
       <StackLayout Spacing="5" HorizontalContentAlignment="Stretch" Padding="5,5,5,5">
         <Label>Diese können an den Autor von FPLedit weitergegeben werden, um zur Fehlerbehebung beizutragen.</Label>
