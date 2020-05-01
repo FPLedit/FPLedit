@@ -1,5 +1,6 @@
 #addin "Cake.FileHelpers&version=3.2.1"
 #load "build_scripts/license.cake"
+using System.Text.RegularExpressions;
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -42,11 +43,15 @@ if (incrementVersion)
     var fn = $"fpledit-{currentVersion}-{preBuildVersionSuffix}";
     
     if (incrementVersion) {
-        int counter = 1;
-        while (GetFiles(Directory("./bin") + File($"{fn}{counter}*.zip")).Any()) {
-            counter++;
-        }
-        preBuildVersionSuffix += counter;
+        var files = GetFiles(Directory("./bin") + File($"{fn}*.zip")).Select(fp => fp.GetFilename().ToString());
+        var regex = new Regex($@"^{fn}(\d*).*\.zip$");
+        
+        var counter = files
+            .Select(fn => regex.Match(fn))
+            .Where(match => match.Success && match.Groups.Count == 2)
+            .Max(match => int.Parse(match.Groups[1].Value));
+        
+        preBuildVersionSuffix += (counter + 1);
     }  
 }
 
