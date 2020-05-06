@@ -8,7 +8,7 @@ namespace FPLedit.Shared
     /// Provides a convenient API to work with fixed paths.
     /// </summary>
     [Templating.TemplateSafe]
-    public class PathData
+    public class PathData : ISortedStations
     {
         protected PathEntry[] entries;
         public PathEntry[] PathEntries => entries;
@@ -88,6 +88,35 @@ namespace FPLedit.Shared
             }
             return false;
         }
+        
+        /// <summary>
+        /// Returns +/-<paramref name="radius"/> stations around the given <paramref name="center"/> station, following
+        /// the order of the current path.
+        /// </summary>
+        /// <remarks>
+        /// The result will be silently truncated, if there are less than <paramref name="radius"/> stations on
+        /// either side of the <paramref name="center"/> station.
+        /// </remarks>
+        /// <exception cref="ArgumentOutOfRangeException">The radius was not positive.</exception>
+        public Station[] GetSurroundingStations(Station center, int radius)
+        {
+            if (radius < 0)
+                throw new ArgumentOutOfRangeException(nameof(radius));
+            
+            var stations = GetRawPath().ToArray();
+
+            var centerIndex = Array.IndexOf(stations, center);
+            if (centerIndex < 0)
+                return Array.Empty<Station>(); // Not in the current path
+
+            var leftIndex = Math.Max(centerIndex - radius, 0);
+            var rightIndex = Math.Min(centerIndex + radius, stations.Length - 1);
+            var length = rightIndex - leftIndex + 1;
+            
+            var array = new Station[length];
+            Array.Copy(stations, array, length);
+            return array;
+        }
 
         /// <summary>
         /// Returns only the raw stations used in this path, without any additional information.
@@ -108,7 +137,7 @@ namespace FPLedit.Shared
     {
         public new TrainPathEntry[] PathEntries => (TrainPathEntry[])entries;
 
-        public TrainPathData(Timetable tt, Train train) : base(tt)
+        public TrainPathData(Timetable tt, ITrain train) : base(tt)
         {
             var path = train.GetPath().ToArray();
             var arrDeps = train.GetArrDepsUnsorted();

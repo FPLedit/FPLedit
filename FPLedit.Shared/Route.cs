@@ -8,7 +8,7 @@ namespace FPLedit.Shared
     /// helper class (not part of the obecjt model), representing one of the routes the current timetable instance consists of.
     /// </summary>
     [Templating.TemplateSafe]
-    public sealed class Route
+    public sealed class Route : ISortedStations
     {
         private readonly Station[] stations;
         
