@@ -19,6 +19,7 @@
     <ItemGroup>
       <ProjectReference Include="..\FPLedit.Shared.Rendering\FPLedit.Shared.Rendering.csproj" />
       <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj" />
+      <ProjectReference Include="..\FPLedit.Tests.Common\FPLedit.Tests.Common.csproj" />
     </ItemGroup>
 
     <ItemGroup>

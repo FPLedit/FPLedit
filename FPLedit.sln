@@ -57,6 +57,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPLedit.Tests", "FPLedit.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Docs", "FPLedit.Docs\FPLedit.Docs.csproj", "{E83DBE22-B03E-43EB-98F7-98F5B0B6AADF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPLedit.Tests.Common", "FPLedit.Tests.Common\FPLedit.Tests.Common.csproj", "{FCC648B5-611A-4A1B-8D6E-14BD16B1BB17}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -111,6 +113,10 @@ Global
 		{E83DBE22-B03E-43EB-98F7-98F5B0B6AADF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E83DBE22-B03E-43EB-98F7-98F5B0B6AADF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E83DBE22-B03E-43EB-98F7-98F5B0B6AADF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCC648B5-611A-4A1B-8D6E-14BD16B1BB17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCC648B5-611A-4A1B-8D6E-14BD16B1BB17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCC648B5-611A-4A1B-8D6E-14BD16B1BB17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCC648B5-611A-4A1B-8D6E-14BD16B1BB17}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -124,6 +130,7 @@ Global
 		{CA3BB2AD-517E-475F-B7D7-ABA69AC31A96} = {5A859144-0558-4FEB-965B-BFD83D9336A9}
 		{7F8AF3E4-F2F6-4D4E-9E1F-0483E5BAE8E0} = {83B63C9D-A034-42FF-B874-FDC7834408B0}
 		{6999ADEC-37DC-4B78-A6F3-B18C4B429506} = {83B63C9D-A034-42FF-B874-FDC7834408B0}
+		{FCC648B5-611A-4A1B-8D6E-14BD16B1BB17} = {83B63C9D-A034-42FF-B874-FDC7834408B0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {107802F1-1F23-4BD1-9933-33EE9D8A6035}
