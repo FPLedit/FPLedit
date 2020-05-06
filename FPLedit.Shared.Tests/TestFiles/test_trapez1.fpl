@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jTrainGraph_timetable version="100" name="" tMin="-1" tMax="-1" d="1111111">
+  <stations>
+    <sta name="A" km="0:0.0" fpl-id="1" fpl-rt="0" />
+    <sta name="B" km="0:1.0" fpl-id="2" fpl-rt="0" />
+    <sta name="C" km="0:2.0" fpl-id="3" fpl-rt="0" />
+  </stations>
+  <trains>
+    <!-- test case (normal trapez) -->
+    <tr name="P-normal" cm="" d="1111100" id="">
+      <t fpl-id="1" a="" d="02:00" />
+      <t fpl-id="2" a="02:10" d="02:17" fpl-tr="1" />
+      <t fpl-id="3" a="02:20" d="" />
+    </tr>
+    <tr name="C-normal" cm="" d="1111111" id="">
+      <t fpl-id="3" a="" d="02:00" />
+      <t fpl-id="2" a="02:09" d="02:12" />
+      <t fpl-id="1" a="02:20" d="" />
+    </tr>
+    
+    <!-- test case (only one train with trapez) -->
+    <tr name="P-single" cm="" d="1111100" id="">
+      <t fpl-id="1" a="" d="03:00" />
+      <t fpl-id="2" a="03:10" d="03:17" fpl-tr="1" />
+      <t fpl-id="3" a="03:20" d="" />
+    </tr>
+    
+    <!-- test case (multiple stopping) -->
+    <tr name="P-multiple" cm="" d="1111100" id="">
+      <t fpl-id="1" a="" d="03:00" />
+      <t fpl-id="2" a="04:10" d="04:17" fpl-tr="1" />
+      <t fpl-id="3" a="04:20" d="" />
+    </tr>
+    <tr name="C-multiple" cm="" d="1111111" id="">
+      <t fpl-id="3" a="" d="04:00" />#
+      <t fpl-id="2" a="04:09" d="04:12" fpl-tr="1" />
+      <t fpl-id="1" a="04:20" d="" />
+    </tr>
+    <tr name="P-multiple2" cm="" d="1111100" id="">
+      <t fpl-id="1" a="" d="03:02" />
+      <t fpl-id="2" a="04:12" d="04:19" fpl-tr="1" />
+      <t fpl-id="3" a="04:22" d="" />
+    </tr>
+  </trains>
+</jTrainGraph_timetable>

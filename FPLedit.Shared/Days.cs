@@ -8,6 +8,7 @@ namespace FPLedit.Shared
     /// Data type, which contains boolean flags for weekdays.
     /// </summary>
     [DebuggerStepThrough]
+    [DebuggerDisplay("Days: \"{ToBinString()}\"")]
     [Templating.TemplateSafe]
     public readonly struct Days : IEquatable<Days>, IEquatable<string>
     {
@@ -106,8 +107,18 @@ namespace FPLedit.Shared
         {
             var res = new bool[7];
             for (int i = 0; i < 7; i++)
-                if (this[i] && daysB[i])
-                    res[i] = true;
+                res[i] = this[i] && daysB[i];
+            return new Days(res);
+        }
+
+        /// <summary>
+        /// Returns all day flags that either this or the the other given instance have set.
+        /// </summary>
+        public Days Union(Days daysB)
+        {
+            var res = new bool[7];
+            for (int i = 0; i < 7; i++)
+                res[i] = this[i] || daysB[i];
             return new Days(res);
         }
         
@@ -137,5 +148,15 @@ namespace FPLedit.Shared
         public static bool operator !=(Days d1, Days d2) => !d1.Equals(d2);
 
         public static bool operator ==(Days d1, Days d2) => d1.Equals(d2);
+
+        /// <summary>
+        /// A days object, that has no flags set.
+        /// </summary>
+        public static readonly Days None = Parse("0000000");
+        
+        /// <summary>
+        /// A days object, that has all flags set.
+        /// </summary>
+        public static readonly Days All = Parse("1111111");
     }
 }

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jTrainGraph_timetable version="010" name="" tMin="-1" tMax="-1" d="1111111">
+  <stations>
+    <sta name="A" km="0.0" />
+    <sta name="B" km="1.0" />
+    <sta name="C" km="2.0" />
+  </stations>
+  <trains>
+    <!-- test case (overlap at end) -->
+    <ti name="P-overlap-end" cm="" d="1111100" id="">
+      <t a="" d="01:00" />
+      <t a="01:10" d="01:17" />
+      <t a="01:20" d="" />
+    </ti>
+    <ti name="C-overlap-end" cm="" d="1111111" id="">
+      <t a="" d="01:07" />
+      <t a="01:12" d="01:20" />
+      <t a="01:30" d="" />
+    </ti>
+    
+    <!-- test case (overlap at begin) -->
+    <ti name="P-overlap-begin" cm="" d="1111100" id="">
+      <t a="" d="02:00" />
+      <t a="02:10" d="02:17" />
+      <t a="02:20" d="" />
+    </ti>
+    <ti name="C-overlap-begin" cm="" d="1111111" id="">
+      <t a="" d="02:00" />
+      <t a="02:09" d="02:12" />
+      <t a="02:20" d="" />
+    </ti>
+    
+    <!-- test case (overlap in middle) -->
+    <ti name="P-overlap-middle" cm="" d="1111100" id="">
+      <t a="" d="03:00" />
+      <t a="03:10" d="03:17" />
+      <t a="03:20" d="" />
+    </ti>
+    <ti name="C-overlap-middle" cm="" d="1111111" id="">
+      <t a="" d="03:00" />
+      <t a="03:11" d="03:12" />
+      <t a="03:20" d="" />
+    </ti>
+    
+    <!-- test case (stop of second < 1min) -->
+    <ta name="P-no-minutes" cm="" d="1111100" id="">      
+      <t a="11:30" d="" />
+      <t a="11:10" d="11:20" />
+      <t a="" d="11:00" />
+    </ta>
+    <ta name="C-no-minutes" cm="" d="1111111" id="">
+      <t a="11:30" d="" />      
+      <t a="11:12" d="11:12" />
+      <t a="" d="11:07" />
+    </ta>
+    
+    <!-- test case (stop of second < 1min) -->
+    <ti name="P-no-minutes-double" cm="" d="1111100" id="">
+      <t a="" d="12:00" />
+      <t a="12:10" d="12:20" />
+      <t a="12:30" d="" />
+    </ti>
+    <ti name="C-no-minutes-double1" cm="" d="1111111" id="">
+      <t a="" d="12:07" />
+      <t a="12:12" d="12:12" />
+      <t a="12:30" d="" />
+    </ti>
+    <ti name="C-no-minutes-double2" cm="" d="1111111" id="">
+      <t a="" d="12:08" />
+      <t a="12:12" d="12:12" />
+      <t a="12:31" d="" />
+    </ti>
+  </trains>
+</jTrainGraph_timetable>

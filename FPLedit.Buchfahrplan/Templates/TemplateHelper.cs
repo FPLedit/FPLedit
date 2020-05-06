@@ -3,9 +3,8 @@ using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using FPLedit.Shared.DefaultImplementations;
+using FPLedit.Shared.Analyzers;
 
 namespace FPLedit.Buchfahrplan.Templates
 {
@@ -14,12 +13,14 @@ namespace FPLedit.Buchfahrplan.Templates
         private readonly BfplAttrs attrs;
         private readonly Timetable tt;
         private readonly IFilterRuleContainer filterable;
+        private readonly IntersectionAnalyzer analyzer;
 
         public TemplateHelper(Timetable tt)
         {
             filterable = Plugin.FilterRuleContainer;
             this.tt = tt;
             attrs = BfplAttrs.GetAttrs(tt);
+            analyzer = new IntersectionAnalyzer(tt);
         }
 
         public string HtmlName(string name, string prefix)
@@ -69,95 +70,53 @@ namespace FPLedit.Buchfahrplan.Templates
                 var minPos = Math.Min(sta0.Positions.GetPosition(route).Value, sta1.Positions.GetPosition(route).Value);
 
                 var p1 = tt.Type == TimetableType.Network ? p.Where(po => po.Routes.Contains(route)) : p;
-                var pointsBetween = p1.Where(po => po.Positions.GetPosition(route) > minPos && po.Positions.GetPosition(route) < maxPos);
+                var pointsBetween = p1.Where(po => po.Positions.GetPosition(route) > minPos && po.Positions.GetPosition(route) < maxPos).ToArray();
                 points.InsertRange(points.IndexOf(sta0) + 1, pointsBetween);
-                i += pointsBetween.Count();
+                i += pointsBetween.Length;
             }
             return points.ToArray();
         }
 
         public Train[] GetTrains()
         {
-            return tt.Trains.Where(t => filterable.LoadTrainRules(tt).All(r => !r.Matches(t)))
-                .ToArray();
+            return tt.Trains.Where(t => filterable.LoadTrainRules(tt).All(r => !r.Matches(t))).ToArray();
         }
 
         public string OptAttr(string caption, string value)
         {
-            if (value != null && value != "")
+            if (!string.IsNullOrEmpty(value))
                 return caption + " " + value;
             return "";
         }
 
         public string Kreuzt(Train ot, Station s)
         {
-            var t = IntersectTrains(ot, s, true);
-            if (t == null)
-                return "";
-            return t.TName + " " + IntersectDaysSt(ot, t);
+            return string.Join(", ", analyzer.CrossingAtStation(ot, s)
+                .Select(tr => tr.TName + " " + IntersectDaysSt(ot, tr)));
         }
 
         public string Ueberholt(Train ot, Station s)
         {
-            var t = IntersectTrains(ot, s, false);
-            if (t == null)
-                return "";
-            return t.TName + " " + IntersectDaysSt(ot, t);
+            return string.Join(", ", analyzer.OvertakeAtStation(ot, s)
+                .Select(tr => tr.TName + " " + IntersectDaysSt(ot, tr)));
         }
 
-        public string TrapezHalt(Train ot, Station s)
+        public string TrapezHalt(Train probeTrain, Station s)
         {
-            var it = IntersectTrains(ot, s, true);
-            if (it == null)
-                return ot.GetArrDep(s).TrapeztafelHalt ? "<span class=\"trapez-tt\">" + ot.TName + "</span>" : "";
+            var trapez = analyzer.TrapezAtStation(probeTrain, s);
 
-            var oth = ot.GetArrDep(s).TrapeztafelHalt;
-            var ith = it.GetArrDep(s).TrapeztafelHalt;
+            if (trapez.IsStopping)
+                return "<span class=\"trapez-tt\">" + probeTrain.TName + "</span> " + DaysToStringNotEqual(probeTrain, trapez.StopDays);
+            if (trapez.IntersectingTrainsStopping.Any())
+                return string.Join(", ", trapez.IntersectingTrainsStopping.Select(t => t.TName)) + " " + DaysToStringNotEqual(probeTrain, trapez.StopDays);
 
-            if (oth && !ith)
-                return "<span class=\"trapez-tt\">" + ot.TName + "</span> " + IntersectDaysSt(ot, it);
-            if (ith && !oth)
-                return it.TName + " " + IntersectDaysSt(ot, it);
-            if (ith && oth)
-                return "<span class=\"trapez-tt\">" + ot.TName + "</span> " + IntersectDaysSt(ot, it);
             return "";
         }
 
-        private string IntersectDaysSt(Train ot, Train t)
-            => ot.Days.IntersectingDays(t.Days).DaysToString(true);
+        private string IntersectDaysSt(ITrain ot, ITrain t) 
+            => DaysToStringNotEqual(ot, ot.Days.IntersectingDays(t.Days));
 
-        private Train IntersectTrains(Train ot, Station s, bool kreuzung)
-        {
-            TimeEntry start = ot.GetArrDep(s).Arrival;
-            TimeEntry end = ot.GetArrDep(s).Departure;
-
-            if (start == TimeEntry.Zero || end == TimeEntry.Zero)
-                return null;
-
-            Func<Train, bool> pred = (t => t.Direction == ot.Direction); // Überholung
-            if (kreuzung)
-                pred = (t => t.Direction != ot.Direction); // Kreuzung
-
-            foreach (var train in tt.Trains.Where(pred))
-            {
-                if (train == ot || !train.GetPath().Contains(s))
-                    continue;
-
-                TimeEntry start2 = train.GetArrDep(s).Arrival;
-                TimeEntry end2 = train.GetArrDep(s).Departure;
-
-                if (start2 == TimeEntry.Zero || end2 == TimeEntry.Zero)
-                    continue;
-
-                var st = start < start2 ? start2 : start;
-                var en = end < end2 ? end : end2;
-                var crossing = st < en ? true : false;
-
-                if (crossing && ot.Days.IsIntersecting(train.Days))
-                    return train;
-            }
-
-            return null;
-        }
+        private static string DaysToStringNotEqual(ITrain ot, Days days)
+            => days == ot.Days ? "" : days.DaysToString(true);
     }
 }
