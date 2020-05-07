@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
-using FPLedit.Tests.Common;
+using FPLedit.Tests.Common.TestClasses;
 using NUnit.Framework;
 
 namespace FPLedit.Shared.Tests

@@ -1,15 +1,14 @@
 using System;
-using System.IO;
 using System.Linq;
-using System.Text;
 using FPLedit.Shared;
 using FPLedit.Shared.Filetypes;
+using FPLedit.Tests.Common;
 using FPLedit.TimetableChecks;
 using NUnit.Framework;
 
 namespace FPLedit.Tests
 {
-    public class FileTests
+    public class FileTests : BaseFileTests
     {
         [Test]
         public void DuplicateStationIdTest()
@@ -57,17 +56,6 @@ namespace FPLedit.Tests
             {
                 Assert.Throws<FormatException>(() => new XMLImport().Import(s, new DummyPluginInterface()));
             }
-        }
-
-        private string Load(string dotPath) => ResourceHelper.GetStringResource("Tests.TestFiles." + dotPath);
-
-        private Stream PrepareTemp(string text)
-        {
-            var ms = new MemoryStream();
-            using (var sw = new StreamWriter(ms, new UTF8Encoding(false), 1024, true))
-                sw.Write(text);
-            ms.Seek(0, SeekOrigin.Begin);
-            return ms;
         }
     }
 }

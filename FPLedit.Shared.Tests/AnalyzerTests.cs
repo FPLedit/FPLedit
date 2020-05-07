@@ -2,6 +2,7 @@ using System.IO;
 using System.Linq;
 using FPLedit.Shared.Analyzers;
 using FPLedit.Shared.Filetypes;
+using FPLedit.Tests.Common;
 using NUnit.Framework;
 
 namespace FPLedit.Shared.Tests

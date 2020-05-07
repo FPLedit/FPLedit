@@ -2,7 +2,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 
-namespace FPLedit.Shared.Tests
+namespace FPLedit.Tests.Common
 {
     public abstract class BaseFileTests
     {

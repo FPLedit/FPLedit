@@ -1,6 +1,6 @@
 using FPLedit.Shared;
 
-namespace FPLedit.Tests.Common
+namespace FPLedit.Tests.Common.TestClasses
 {
     public class TestEntity : Entity
     {
