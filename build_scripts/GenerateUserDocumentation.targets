@@ -58,16 +58,7 @@
     </PropertyGroup>
   </Target>
 
-  <Target Name="_OfflineDoc_SassTransform" DependsOnTargets="_OfflineDoc_PrepareProperties">
-    <ItemGroup>
-      <SassFile Include="themes/hugo-material-docs/src/application.scss">
-        <OutputFile>themes/hugo-material-docs/static/stylesheets/application.css</OutputFile>
-      </SassFile>
-    </ItemGroup>
-    <Exec Command="sass $([System.IO.Path]::Combine( $(OfflineDoc_SiteFolder), %(SassFile.Identity) ))  $([System.IO.Path]::Combine( $(OfflineDoc_SiteFolder), %(SassFile.OutputFile) )) --no-source-map --style compressed" />
-  </Target>
-
-  <Target Name="_OfflineDoc_HugoTransform" DependsOnTargets="_OfflineDoc_SassTransform">
+  <Target Name="_OfflineDoc_HugoTransform" DependsOnTargets="_OfflineDoc_PrepareProperties">
     <Exec Command="hugo -s $(OfflineDoc_SiteFolder) -d $(OfflineDoc_OutputFolder)" />
   </Target>
 

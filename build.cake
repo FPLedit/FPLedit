@@ -32,8 +32,6 @@ var buildLibDir = buildDir + Directory("lib");
 var sourceDir = Directory(".");
 var scriptsDir = Directory("./build_scripts");
 
-var doc_generated = false;
-
 if (incrementVersion && string.IsNullOrEmpty(preBuildVersionSuffix))
     throw new InvalidOperationException("No version suffix specified, but incrementVersion!");
 if (incrementVersion) 
@@ -125,7 +123,7 @@ Task("PackRelease")
     .IsDependentOn("BundleThirdParty")
     .Does(() => {
         var version = GetProductVersion(Context, buildDir + File("FPLedit.exe"));
-        var nodoc_suffix = ignoreNoDoc ? "" : (doc_generated ? "" : "-nodoc");       
+        var nodoc_suffix = ignoreNoDoc ? "" : ((docInPath == null || docInPath == "") ? "" : "-nodoc");       
         var file = Directory("./bin") + File($"fpledit-{version}{nodoc_suffix}.zip");
         
         if (FileExists(file))
