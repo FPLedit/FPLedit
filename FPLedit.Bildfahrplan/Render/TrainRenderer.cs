@@ -259,8 +259,9 @@ namespace FPLedit.Bildfahrplan.Render
             var arrdeps = train.GetArrDepsUnsorted();
             foreach (var sta in path)
             {
-                if (arrdeps[sta].HasMinOneTimeSet)
-                    yield return sta;
+                if (arrdeps.TryGetValue(sta, out var ar))
+                    if (ar.HasMinOneTimeSet)
+                        yield return sta;
             }
         }
     }

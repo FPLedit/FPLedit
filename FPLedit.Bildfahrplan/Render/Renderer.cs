@@ -52,7 +52,7 @@ namespace FPLedit.Bildfahrplan.Render
 
             // Züge
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            g.SetClip(new RectangleF(margin.Left, margin.Top, width - margin.Left - margin.Right, height - margin.Bottom - margin.Top));
+            g.SetClip(new RectangleF(0 /*margin.Left*/, margin.Top, width /*- margin.Left - margin.Right*/, height - margin.Bottom - margin.Top));
 
             var trains = tt.Trains.Where(t =>
             {
