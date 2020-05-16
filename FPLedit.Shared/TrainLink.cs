@@ -115,10 +115,41 @@ namespace FPLedit.Shared
             return clone;
         }
 
-        public void ApplyToChildren(Action<LinkedTrain> action)
+        private void ApplyToChildren(Action<LinkedTrain> action)
         {
             foreach (var train in linkedTrains)
-                action(train);
+            {
+                if (train != null)
+                    action(train);
+            }
+        }
+
+        public void Apply(bool applyTimes, bool applyAttributes)
+        {
+            ApplyToChildren(lt =>
+            {
+                if (applyTimes)
+                {
+                    lt.ArrDepCacheValid = false; // Invalidate cache
+
+                    var path = _parent.Type == TimetableType.Linear
+                        ? _parent.GetLinearStationsOrderedByDirection(TrainDirection.ti) // All arrdeps are sorted in line direction if linear...
+                        : lt.GetPath();
+                    var arrdeps = lt.GetArrDepsUnsorted();
+                    lt.Children.Clear();
+                    foreach (var sta in path)
+                        lt.Children.Add(arrdeps[sta].XMLEntity);
+                }
+
+                if (applyAttributes)
+                {
+                    lt.Attributes.Clear();
+                    foreach (var attr in ParentTrain.Attributes)
+                        lt.SetAttribute(attr.Key, attr.Value);
+                    lt.SetAttribute("islink", "true");
+                    lt.SetAttribute("name", lt.TName);
+                }
+            });
         }
 
         private void TrainsChanged(object sender, EventArgs e)

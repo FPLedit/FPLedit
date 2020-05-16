@@ -13,7 +13,7 @@ namespace FPLedit.Shared
     [Templating.TemplateSafe]
     public sealed class Train : Entity, IWritableTrain
     {
-        private TrainLink[] trainLinks;
+        private readonly List<TrainLink> trainLinks;
 
         /// <inheritdoc cref="IWritableTrain" />
         [XAttrName("name")]
@@ -254,7 +254,7 @@ namespace FPLedit.Shared
             if (tt.Type == TimetableType.Linear && dir == TrainDirection.tr)
                 throw new TimetableTypeNotSupportedException(TimetableType.Linear, "trains without direction");
 
-            trainLinks = Array.Empty<TrainLink>();
+            trainLinks = new List<TrainLink>();
         }
 
         /// <inheritdoc />
@@ -263,7 +263,7 @@ namespace FPLedit.Shared
             if (Children.Count(x => x.XName == "t") > tt.Stations.Count)
                 throw new Exception("Zu viele Fahrtzeiteneinträge im Vergleich zur Stationsanzahl!");
             
-            trainLinks = Children.Where(x => x.XName == "tl").Select(x => new TrainLink(x, this)).ToArray();
+            trainLinks = Children.Where(x => x.XName == "tl").Select(x => new TrainLink(x, this)).ToList();
         }
 
         [DebuggerStepThrough]
@@ -271,7 +271,17 @@ namespace FPLedit.Shared
             => TName;
 
         public TrainLink[] TrainLinks
-            => trainLinks;
+            => trainLinks.ToArray();
+
+        public void AddLink(TrainLink link)
+        {
+            var idx = -1;
+            var last = Children.LastOrDefault(x => x.XName == "tl");
+            if (last != null)
+                idx = Children.IndexOf(last);
+            Children.Insert(idx + 1, link.XMLEntity);
+            trainLinks.Add(link);
+        }
 
         #region Update hooks for linked trains
         
@@ -281,7 +291,7 @@ namespace FPLedit.Shared
                 return;
             
             foreach (var link in TrainLinks)
-                link.ApplyToChildren(lt => lt.RemoveAttribute(key));
+                link.Apply(false, true);
             
             base.OnRemoveAttribute(key);
         }
@@ -292,7 +302,7 @@ namespace FPLedit.Shared
                 return;
             
             foreach (var link in TrainLinks)
-                link.ApplyToChildren(lt => lt.SetAttribute(key, value));
+                link.Apply(false, true);
             
             base.OnSetAttribute(key, value);
         }
@@ -300,24 +310,11 @@ namespace FPLedit.Shared
         public override void OnChildrenChanged()
         {
             foreach (var link in TrainLinks)
-            {
-                link.ApplyToChildren(lt =>
-                {
-                    lt.ArrDepCacheValid = false; // Invalidate cache
-                    
-                    var path = _parent.Type == TimetableType.Linear
-                        ? _parent.GetLinearStationsOrderedByDirection(TrainDirection.ti) // All arrdeps are sorted in line direction if linear...
-                        : lt.GetPath();
-                    var arrdeps = lt.GetArrDepsUnsorted();
-                    lt.Children.Clear();
-                    foreach (var sta in path)
-                        lt.Children.Add(arrdeps[sta].XMLEntity);
-                });
-            }
+                link.Apply(true, false);
             
             base.OnChildrenChanged();
         }
-        
+
         #endregion
 
         /// <inheritdoc />

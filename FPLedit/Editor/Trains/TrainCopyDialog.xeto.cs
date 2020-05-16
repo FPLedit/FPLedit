@@ -42,14 +42,13 @@ namespace FPLedit.Editor.Trains
 
         private void SelectMode(CopySelectionMode mode)
         {
-            var copy = mode == CopySelectionMode.Copy;
-
-            extendedOptionsTable.Visible = copyOptionsTable.Visible = copy;
+            extendedOptionsTable.Visible = copyOptionsTable.Visible = (mode == CopySelectionMode.Copy || modeSelect.SelectedState == CopySelectionMode.Link);
+            copyAllCheckBox.Visible = mode == CopySelectionMode.Copy;
         }
 
         private void CloseButton_Click(object sender, EventArgs e)
         {
-            var copy = modeSelect.SelectedState == 0;
+            var copy = modeSelect.SelectedState == CopySelectionMode.Copy || modeSelect.SelectedState == CopySelectionMode.Link;
 
             if (!offsetValidator.Valid || (copy && (!countValidator.Valid || !changeValidator.Valid)))
             {
@@ -67,7 +66,7 @@ namespace FPLedit.Editor.Trains
             var th = new TrainEditHelper();
             var offset = int.Parse(offsetTextBox.Text);
 
-            if (copy)
+            if (modeSelect.SelectedState == CopySelectionMode.Copy)
             {
                 var count = int.Parse(countTextBox.Text);
                 var add = int.Parse(changeTextBox.Text);
@@ -85,6 +84,13 @@ namespace FPLedit.Editor.Trains
 
                     tt.AddTrain(newTrain);
                 }
+            }
+            else if (modeSelect.SelectedState == CopySelectionMode.Link)
+            {
+                var count = int.Parse(countTextBox.Text);
+                var add = int.Parse(changeTextBox.Text);
+
+                th.LinkTrainMultiple(train, offset, nameTextBox.Text, count, add);
             }
             else
                 th.MoveTrain(train, offset);
@@ -106,7 +112,9 @@ namespace FPLedit.Editor.Trains
             [SelectionName("Zug kopieren")]
             Copy,
             [SelectionName("Zug verschieben")]
-            Move
+            Move,
+            [SelectionName("Zug verlinken")]
+            Link
         }
     }
 }

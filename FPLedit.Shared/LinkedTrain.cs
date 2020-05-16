@@ -23,11 +23,7 @@ namespace FPLedit.Shared
 
         /// <inheritdoc />
         [XAttrName("id")]
-        public int Id
-        {
-            get => GetAttribute<int>("id", -1);
-            //set => SetAttribute("id", value.ToString());
-        }
+        public int Id => GetAttribute<int>("id", -1);
 
         public string QualifiedId => Id + ";" + link.TrainLinkIndex + ";" + countingIndex;
 
@@ -89,6 +85,16 @@ namespace FPLedit.Shared
             this.link = link;
             this.countingIndex = countingIndex;
             baseTrain = link.ParentTrain;
+        }
+        
+        public LinkedTrain(TrainLink link, int countingIndex) : base(link.ParentTrain.XMLEntity.XName, link._parent)
+        {
+            this.link = link;
+            this.countingIndex = countingIndex;
+            baseTrain = link.ParentTrain;
+            link._InternalInjectLinkedTrain(this, countingIndex);
+
+            link.Apply(true, true);
         }
     }
 }

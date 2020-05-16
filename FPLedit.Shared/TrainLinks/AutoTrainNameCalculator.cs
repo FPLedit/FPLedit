@@ -27,5 +27,13 @@ namespace FPLedit.Shared
 
         public string GetTrainName(int countingIndex) => 
             trainName.BaseName + (trainName.Number + (countingIndex + 1) * increment).ToString(new string('0', trainName.NumberLength));
+        
+        public AutoTrainNameCalculator() {}
+
+        public AutoTrainNameCalculator(string originalName, int increment)
+        {
+            trainName = new TrainNameParts(originalName);
+            this.increment = increment;
+        }
     }
 }

@@ -87,6 +87,26 @@ namespace FPLedit.Editor.Trains
 
             return ret;
         }
+        
+        public void LinkTrainMultiple(Train orig, int offsetMin, string name, int count, int numberAdd)
+        {
+            if (count < 0)
+                throw new ArgumentException("Value must be greater than or equal to zero", nameof(count));
+
+            var link = new TrainLink(orig, count)
+            {
+                TimeDifference = offsetMin, 
+                TimeOffset = 0, 
+                TrainNamingScheme = new AutoTrainNameCalculator(name, numberAdd)
+            };
+            orig.AddLink(link);
+
+            for (int i = 0; i < count; i++)
+            {
+                var linkedTrain = new LinkedTrain(link, i);
+                orig._parent.AddTrain(linkedTrain);
+            }
+        }
 
         public void SortTrainsAllStations(Timetable tt, TrainDirection dir, bool topDown)
         {

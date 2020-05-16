@@ -728,6 +728,20 @@ namespace FPLedit.Shared
         
         #endregion
         
+        #region Hilfsmethoden für Links
+
+        public void RemoveLink(TrainLink link)
+        {
+            foreach (var train in link.LinkedTrains)
+                RemoveTrain(train);
+            
+            link.ParentTrain.Children.Remove(link.XMLEntity);
+            
+            //TODO: Rewrite other qualified IDs
+        }
+        
+        #endregion
+        
         /// <inheritdoc />
         public Timetable Clone() => this.DeepClone();
 
