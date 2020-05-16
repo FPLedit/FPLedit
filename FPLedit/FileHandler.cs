@@ -30,7 +30,8 @@ namespace FPLedit
             set
             {
                 timetable = value;
-                FileStateChanged?.Invoke(this, new FileStateChangedEventArgs(FileState));
+                if (value != null)
+                    FileStateChanged?.Invoke(this, new FileStateChangedEventArgs(FileState));
             }
         }
         public FileState FileState { get; }
