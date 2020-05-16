@@ -283,6 +283,12 @@ namespace FPLedit.Shared
             trainLinks.Add(link);
         }
 
+        internal void RemoveLink(TrainLink link)
+        {
+            Children.Remove(link.XMLEntity);
+            trainLinks.Remove(link);
+        }
+
         #region Update hooks for linked trains
         
         public override void OnRemoveAttribute(string key)

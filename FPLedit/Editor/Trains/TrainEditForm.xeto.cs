@@ -20,6 +20,7 @@ namespace FPLedit.Editor.Trains
         private readonly DropDown transitionDropDown;
         private readonly GroupBox transitionsGroupBox;
         private readonly DaysControlNarrow daysControl;
+        private readonly GridView linkGridView;
 #pragma warning restore CS0649
         private readonly NotEmptyValidator nameValidator;
 
@@ -49,6 +50,10 @@ namespace FPLedit.Editor.Trains
             KeyDown += (s, e) => daysControl.HandleKeypress(e);
 
             resetTransitionButton.TextColor = Colors.Red;
+
+            linkGridView.AddColumn<TrainLink>(tl => tl.TrainCount.ToString(), "Anzahl");
+            linkGridView.AddColumn<TrainLink>(tl => new TimeEntry(0, tl.TimeOffset).ToShortTimeString(), "Erster Abstand");
+            linkGridView.AddColumn<TrainLink>(tl => new TimeEntry(0, tl.TimeDifference).ToShortTimeString(), "Zeitdifferenz");
         }
 
         public TrainEditForm(Train train) : this(train._parent)
@@ -103,6 +108,8 @@ namespace FPLedit.Editor.Trains
             arrDepBackup = Train.GetArrDepsUnsorted()
                 .Select(kvp => new KeyValuePair<Station, ArrDep>(kvp.Key, kvp.Value.Copy()))
                 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+            linkGridView.DataStore = Train.TrainLinks;
         }
 
         private void CloseButton_Click(object sender, EventArgs e)
@@ -166,6 +173,17 @@ namespace FPLedit.Editor.Trains
         private void ResetTransitionButton_Click(object sender, EventArgs e)
         {
             transitionDropDown.SelectedIndex = -1;
+        }
+
+        private void DeleteLinkButton_Click(object sender, EventArgs e)
+        {
+            if (linkGridView.SelectedItem != null)
+            {
+                tt.RemoveLink((TrainLink) linkGridView.SelectedItem);
+                linkGridView.DataStore = Train.TrainLinks;
+            }
+            else
+                MessageBox.Show("Erst muss eine Verknüpfung zum Löschen ausgewählt werden!");
         }
 
         private IEnumerable<ListItem> GetAllItems(Timetable tt, Func<ITrain, string> func)

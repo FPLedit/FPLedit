@@ -734,10 +734,28 @@ namespace FPLedit.Shared
         {
             foreach (var train in link.LinkedTrains)
                 RemoveTrain(train);
+
+            string DoTraReplace(string qid)
+            {
+                if (!qid.Contains(';'))
+                    return qid;
+                var parts = qid.Split(';');
+                if (parts[0] != link.ParentTrain.QualifiedId)
+                    return qid;
+                if (int.Parse(parts[1]) > link.TrainLinkIndex)
+                    return string.Join(";", parts[0], int.Parse(parts[1]) - 1, parts[2]);
+                if (int.Parse(parts[1]) == link.TrainLinkIndex)
+                    throw new Exception("Found unexpected train qid " + qid);
+                return qid;
+            }
+
+            foreach (var transition in Transitions)
+            {
+                transition.First = DoTraReplace(transition.First);
+                transition.Next = DoTraReplace(transition.Next);
+            }
             
-            link.ParentTrain.Children.Remove(link.XMLEntity);
-            
-            //TODO: Rewrite other qualified IDs
+            link.ParentTrain.RemoveLink(link);
         }
         
         #endregion

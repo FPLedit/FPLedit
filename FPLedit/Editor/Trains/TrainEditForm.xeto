@@ -57,6 +57,12 @@
               </TableRow>
             </TableLayout>
           </GroupBox><!-- /group Folgezug -->
+          <GroupBox Text="Verknüpfungen" x:Name="linkGroupBox">
+            <StackLayout Padding="10,10,10,10" Spacing="5" Orientation="Vertical" HorizontalContentAlignment="Stretch">
+              <GridView x:Name="linkGridView" />
+              <Button Click="DeleteLinkButton_Click">Verknüpfung löschen</Button>
+            </StackLayout>
+          </GroupBox><!-- /group Verknüpfungen -->
         </StackLayout>
       </TableCell><!-- /left column -->
       <TableCell><!-- right column -->
