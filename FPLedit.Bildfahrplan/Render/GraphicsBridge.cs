@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using sd = System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ed = Eto.Drawing;
-using System.IO;
 using System.Runtime.CompilerServices;
 
 namespace FPLedit.Bildfahrplan.Render
@@ -28,14 +23,25 @@ namespace FPLedit.Bildfahrplan.Render
         {
         }
 
-        public ed.Bitmap LockEtoBitmap()
+        private ed.Bitmap LockEtoBitmap()
         {
             sdGraphics?.Flush();
-            using (var ms = new MemoryStream())
+            
+            var sdData = sdBuffer.LockBits(new sd.Rectangle(0, 0, sdBuffer.Width, sdBuffer.Height), sd.Imaging.ImageLockMode.ReadOnly, sdBuffer.PixelFormat);
+            var byteLength = sdData.Height * sdData.Width * (((int) sdBuffer.PixelFormat >> 11) & 31);
+            
+            var etoBuffer = new ed.Bitmap(sdBuffer.Width, sdBuffer.Height, ed.PixelFormat.Format32bppRgb);
+            var etoData = etoBuffer.Lock();
+
+            unsafe
             {
-                sdBuffer.Save(ms, sd.Imaging.ImageFormat.Png);
-                return new ed.Bitmap(ms.ToArray());
+                Buffer.MemoryCopy((void*) sdData.Scan0, (void*) etoData.Data, byteLength, byteLength);
             }
+            
+            etoData.Dispose();
+            sdBuffer.UnlockBits(sdData);
+            
+            return etoBuffer;
         }
 
         public void CoptyToEto(ed.Graphics graphics)

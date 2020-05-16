@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FPLedit.Shared.Rendering
+﻿namespace FPLedit.Shared.Rendering
 {
     public sealed class MColor
     {
@@ -50,7 +44,11 @@ namespace FPLedit.Shared.Rendering
             => Eto.Drawing.Color.FromArgb(m.R, m.G, m.B, 255);
 
         public static explicit operator System.Drawing.Color(MColor m)
-            => System.Drawing.Color.FromArgb(255, m.R, m.G, m.B);
+        {
+            if (Eto.Platform.Instance.IsGtk)
+                return System.Drawing.Color.FromArgb(255, m.B, m.G, m.R);
+            return System.Drawing.Color.FromArgb(255, m.R, m.G, m.B);
+        }
 
         public static MColor White => new MColor(255, 255, 255);
     }

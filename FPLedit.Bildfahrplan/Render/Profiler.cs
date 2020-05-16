@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace FPLedit.Bildfahrplan.Render
@@ -21,7 +22,7 @@ namespace FPLedit.Bildfahrplan.Render
         public void Profile(string text)
         {
 #if DEBUG
-            Trace.WriteLine($"[PROF|{prefix}] {text} {stopWatch.ElapsedMilliseconds}\n");
+            Console.WriteLine($"[PROF|{prefix}] {text} {stopWatch.ElapsedMilliseconds}\n");
             stopWatch.Restart();
 #endif
         }
