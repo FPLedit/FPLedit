@@ -108,17 +108,56 @@ namespace FPLedit.Editor.TimetableEditor
             return cc;
         }
 
-        private DsBindComboBoxCell GetTrackCell(Expression<Func<ArrDep, string>> track)
+        private CustomCell GetTrackCell(Expression<Func<ArrDep, string>> track, bool arrival)
         {
-            var cc = new DsBindComboBoxCell();
-
             var shadowBinding = Binding.Property(track);
 
-            cc.Binding = Binding.Delegate<DataElement, string>(
-                d => shadowBinding.GetValue(d.ArrDeps[d.Station]),
-                (d, t) => shadowBinding.SetValue(d.ArrDeps[d.Station], t == (string)d.GetTrackDataStore().FirstOrDefault() ? "" : t))
-                .Cast<object>();
-            cc.DataStoreBinding = Binding.Delegate<DataElement, IEnumerable<object>>(d => d.GetTrackDataStore());
+            var cc = new CustomCell()
+            {
+                CreateCell = args => new DropDown(),
+                ConfigureCell = (args, control) =>
+                {
+                    var tb = (DropDown)control;
+                    var data = (DataElement)args.Item;
+
+                    var ds = data.GetTrackDataStore().ToArray();
+
+                    tb.DataStore = ds;
+                    tb.Enabled = data.GetTrackDataStore().Count() > 1;
+
+                    tb.SelectedIndexChanged += (s, e) =>
+                    {
+                        var t = (string)tb.SelectedValue;
+                        shadowBinding.SetValue(data.ArrDeps[data.Station], t == (string) ds.FirstOrDefault() ? "" : t);
+                    };
+                    tb.SelectedValue = shadowBinding.GetValue(data.ArrDeps[data.Station]);
+
+                    tb.KeyDown += (s, e) => HandleKeystroke(e, dataGridView);
+                    tb.GotFocus += (s, e) =>
+                    {
+                        data.IsSelectedArrival = arrival;
+                        data.SelectedTextBox = null;
+                        data.SelectedDropDown = tb;
+                    };
+
+                    if (mpmode)
+                    {
+                        data.IsSelectedArrival = arrival;
+                        data.SelectedTextBox = null;
+                        data.SelectedDropDown = tb;
+                        tb.Focus();
+                    }
+                }
+            };
+            cc.Paint += (s, e) =>
+            {
+                if (!mpmode)
+                    return;
+
+                var data = (DataElement)e.Item;
+                new TimetableCellRenderProperties2(shadowBinding.GetValue(data.ArrDeps[data.Station])).Render(e.Graphics, e.ClipRectangle);
+            
+            };
             return cc;
         }
         
@@ -142,7 +181,7 @@ namespace FPLedit.Editor.TimetableEditor
 
         private class DataElement : BaseTimetableDataElement
         {
-            public Station Station { get; set; }
+            public Station Station { get; }
 
             public override Station GetStation() => Station;
 
@@ -170,8 +209,8 @@ namespace FPLedit.Editor.TimetableEditor
 
             if (tt.Version.Compare(TimetableVersion.JTG3_1) >= 0)
             {
-                view.AddColumn(GetTrackCell(t => t.ArrivalTrack), "Ankunftsgleis", editable: true);
-                view.AddColumn(GetTrackCell(t => t.DepartureTrack), "Abfahrtsgleis", editable: true);
+                view.AddColumn(GetTrackCell(t => t.ArrivalTrack, true), "Ankunftsgleis", editable: true);
+                view.AddColumn(GetTrackCell(t => t.DepartureTrack, false), "Abfahrtsgleis", editable: true);
                 view.AddColumn(GetCheckCell(t => t.ShuntMoves.Any()), "Rangiert", editable: false);
             }
             else
@@ -190,12 +229,28 @@ namespace FPLedit.Editor.TimetableEditor
         protected override Point GetNextEditingPosition(BaseTimetableDataElement data, GridView view, KeyEventArgs e)
         {
             var arrival = data.IsSelectedArrival;
-            var idx = arrival ? 2 : 1;
-            int row;
+            var isTime = data.SelectedTextBox == null;
+            int idx = (arrival ? 1 : 2) + (isTime ? 2 : 0);
+            int row = view.SelectedRow;
             if (!e.Control)
-                row = view.SelectedRow + (arrival ? 0 : 1);
+            {
+                idx++;
+                if (idx > 4)
+                {
+                    idx = 1;
+                    row++;
+                }
+            }
             else
-                row = view.SelectedRow - (arrival ? 1 : 0);
+            {
+                idx--;
+                if (idx < 1)
+                {
+                    idx = 4;
+                    row--;
+                }
+            }
+
             return new Point(row, idx);
         }
 

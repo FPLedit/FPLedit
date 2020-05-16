@@ -153,10 +153,11 @@ namespace FPLedit.Editor.TimetableEditor
                 e.Handled = true;
 
                 var data = (BaseTimetableDataElement)view.SelectedItem;
-                if (data == null || data.GetStation() == null || data.SelectedTextBox == null)
+                if (data == null || data.GetStation() == null)
                     return;
 
-                FormatCell(data, data.GetStation(), data.IsSelectedArrival, data.SelectedTextBox);
+                if (data.SelectedTextBox !=  null)
+                    FormatCell(data, data.GetStation(), data.IsSelectedArrival, data.SelectedTextBox);
 
                 var target = GetNextEditingPosition(data, view, e);
                 //Console.WriteLine("Next pos: " + target.ToString());
@@ -168,6 +169,29 @@ namespace FPLedit.Editor.TimetableEditor
             {
                 e.Handled = true;
                 view.CancelEdit();
+            }
+            if (e.Key == Keys.Down)
+            {
+                var data = (BaseTimetableDataElement)view.SelectedItem;
+                if (data == null || data.GetStation() == null || data.SelectedDropDown == null)
+                    return;
+                
+                e.Handled = true;
+                var idx = data.SelectedDropDown.SelectedIndex + 1;
+                if (idx < data.SelectedDropDown.DataStore.Count())
+                    data.SelectedDropDown.SelectedIndex = idx;
+                
+            }
+            if (e.Key == Keys.Up)
+            {
+                var data = (BaseTimetableDataElement)view.SelectedItem;
+                if (data == null || data.GetStation() == null || data.SelectedDropDown == null)
+                    return;
+                
+                e.Handled = true;
+                var idx = data.SelectedDropDown.SelectedIndex - 1;
+                if (idx >= 0)
+                    data.SelectedDropDown.SelectedIndex = idx;
             }
             else
             {

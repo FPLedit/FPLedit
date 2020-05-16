@@ -9,7 +9,7 @@ namespace FPLedit.Editor.TimetableEditor
     {
         private static Font fn, fb;
         private static Color? errorColor, bgColor, textColor;
-        
+
         public string Text { get; set; }
         public Color Background { get; set; }
         public Font Font { get; set; }
@@ -70,7 +70,50 @@ namespace FPLedit.Editor.TimetableEditor
         {
             g.Clear(Colors.Transparent);
             g.FillRectangle(Background, clip);
-            
+
+            // Adjust text color, if contrast is too low.
+            var tc = textColor.Value;
+            var lt = 0.2126 * textColor.Value.R + 0.7152 * textColor.Value.G + 0.0722 * textColor.Value.B;
+            var lb = 0.2126 * Background.R + 0.7152 * Background.G + 0.0722 * Background.B;
+            if (lb - lb > 0 && lb - lt < 0.1)
+                tc = Colors.White;
+            if (lt - lb > 0 && lt - lb < 0.1)
+                tc = Colors.Black;
+
+            g.DrawText(Font, tc, new PointF(clip.Left + 2, clip.Top + 2), Text ?? "");
+            g.DrawRectangle(textColor.Value, clip);
+        }
+    }
+
+    internal sealed class TimetableCellRenderProperties2
+    {
+        private static Font fn, fb;
+        private static Color? bgColor, textColor;
+
+        public string Text { get; }
+        public Color Background { get; }
+        public Font Font { get; }
+
+        public TimetableCellRenderProperties2(string text)
+        {
+            if (fn == null || fb == null || bgColor == null || textColor == null)
+            {
+                fb = SystemFonts.Bold();
+                fn = SystemFonts.Default();
+                bgColor = SystemColors.ControlBackground;
+                textColor = SystemColors.ControlText;
+            }
+
+            Background = bgColor.Value;
+            Font = fn;
+            Text = text;
+        }
+
+        public void Render(Graphics g, RectangleF clip)
+        {
+            g.Clear(Colors.Transparent);
+            g.FillRectangle(Background, clip);
+
             // Adjust text color, if contrast is too low.
             var tc = textColor.Value;
             var lt = 0.2126 * textColor.Value.R + 0.7152 * textColor.Value.G + 0.0722 * textColor.Value.B;

@@ -15,6 +15,8 @@ namespace FPLedit.Editor.TimetableEditor
         public bool IsSelectedArrival { get; set; }
 
         public TextBox SelectedTextBox { get; set; }
+        
+        public DropDown SelectedDropDown { get; set; }
 
         public void SetTime(Station sta, bool arrival, string time)
         {
