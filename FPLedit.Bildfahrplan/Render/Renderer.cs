@@ -54,12 +54,7 @@ namespace FPLedit.Bildfahrplan.Render
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             g.SetClip(new RectangleF(0 /*margin.Left*/, margin.Top, width /*- margin.Left - margin.Right*/, height - margin.Bottom - margin.Top));
 
-            var trains = tt.Trains.Where(t =>
-            {
-                for (int i = 0; i < 6; i++)
-                    if (attrs.RenderDays[i] && t.Days[i]) return true;
-                return false;
-            });
+            var trains = tt.Trains.Where(t => t.Days.IsIntersecting(attrs.RenderDays));
             var trainRenderer = new TrainRenderer(stations, tt, margin, startTime, stationOffsets);
             foreach (var train in trains)
                 trainRenderer.Render(g, train);
