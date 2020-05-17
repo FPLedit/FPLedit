@@ -87,9 +87,7 @@ Task("Build")
 Task("PrepareArtifacts")
     .IsDependentOn("Build")
     .Does(() => {
-    Console.WriteLine(buildDir);
-        RequireFile(buildDir + File("Eto.DsBindComboBoxCell.Gtk.dll"));
-        RequireFile(buildDir + File("Eto.DsBindComboBoxCell.Wpf.dll"));
+        Console.WriteLine(buildDir);
     
         DeleteFiles(buildDir + File("*.pdb"));
         DeleteFiles(buildDir + File("*.deps.json"));

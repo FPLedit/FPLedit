@@ -48,9 +48,6 @@
     <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Eto.DsBindComboBoxCell" Version="$(EtoVersion)" />
-    <PackageReference Include="Eto.DsBindComboBoxCell.Gtk" Version="$(EtoVersion)" />
-    <PackageReference Include="Eto.DsBindComboBoxCell.Wpf" Version="$(EtoVersion)" />
     <PackageReference Include="Eto.Forms" Version="$(EtoVersion)" />
     <PackageReference Include="Eto.Platform.Gtk" Version="$(EtoVersion)" />
     <PackageReference Include="Eto.Platform.Wpf" Version="$(EtoVersion)" />
