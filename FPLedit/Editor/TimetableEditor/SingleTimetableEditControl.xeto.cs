@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using FPLedit.Shared.UI;
 using System.Linq.Expressions;
-using Eto.DsBindComboBoxCell;
 
 namespace FPLedit.Editor.TimetableEditor
 {
@@ -57,7 +56,7 @@ namespace FPLedit.Editor.TimetableEditor
                 e.Handled = true;
                 Shunt(dataGridView);
             }
-            else 
+            else
                 HandleKeystroke(e, dataGridView);
         }
 
@@ -79,8 +78,8 @@ namespace FPLedit.Editor.TimetableEditor
                 CreateCell = args => new TextBox(),
                 ConfigureCell = (args, control) =>
                 {
-                    var tb = (TextBox)control;
-                    var data = (DataElement)args.Item;
+                    var tb = (TextBox) control;
+                    var data = (DataElement) args.Item;
                     new TimetableCellRenderProperties(time, data.Station, arrival, data).Apply(tb);
 
                     if (mpmode)
@@ -90,19 +89,28 @@ namespace FPLedit.Editor.TimetableEditor
                         // Wir gehen hier gleich in den vollen EditMode rein
                         tb.CaretIndex = 0;
                         tb.SelectAll();
-                        CellSelected(data, data.Station, arrival); data.IsSelectedArrival = arrival; data.SelectedTextBox = tb;
+                        CellSelected(data, data.Station, arrival);
+                        data.IsSelectedArrival = arrival;
+                        data.SelectedTextBox = tb;
                     }
 
-                    tb.GotFocus += (s, e) => { CellSelected(data, data.Station, arrival); data.IsSelectedArrival = arrival; data.SelectedTextBox = tb; };
-                    tb.LostFocus += (s, e) => { FormatCell(data, data.Station, arrival, tb); new TimetableCellRenderProperties(time, data.Station, arrival, data).Apply(tb); };
+                    tb.GotFocus += (s, e) =>
+                    {
+                        CellSelected(data, data.Station, arrival);
+                        data.IsSelectedArrival = arrival;
+                        data.SelectedTextBox = tb;
+                    };
+                    tb.LostFocus += (s, e) =>
+                    {
+                        FormatCell(data, data.Station, arrival, tb);
+                        new TimetableCellRenderProperties(time, data.Station, arrival, data).Apply(tb);
+                    };
                 }
             };
             cc.Paint += (s, e) =>
             {
-                if (!mpmode)
-                    return;
-
-                var data = (DataElement)e.Item;
+                if (!mpmode) return;
+                var data = (DataElement) e.Item;
                 new TimetableCellRenderProperties(time, data.Station, arrival, data).Render(e.Graphics, e.ClipRectangle);
             };
             return cc;
@@ -112,63 +120,61 @@ namespace FPLedit.Editor.TimetableEditor
         {
             var shadowBinding = Binding.Property(track);
 
-            var cc = new CustomCell()
+            var cc = new CustomCell
             {
                 CreateCell = args => new DropDown(),
                 ConfigureCell = (args, control) =>
                 {
-                    var tb = (DropDown)control;
-                    var data = (DataElement)args.Item;
+                    var dd = (DropDown) control;
+                    var data = (DataElement) args.Item;
 
                     var ds = data.GetTrackDataStore().ToArray();
 
-                    tb.DataStore = ds;
-                    tb.Enabled = data.GetTrackDataStore().Count() > 1;
+                    dd.DataStore = ds;
+                    dd.Enabled = data.GetTrackDataStore().Count() > 1;
+                    if (data.IsFirst(data.Station) && arrival || data.IsLast(data.Station) && !arrival)
+                        dd.Enabled = false;
 
-                    tb.SelectedIndexChanged += (s, e) =>
+                    dd.SelectedIndexChanged += (s, e) =>
                     {
-                        var t = (string)tb.SelectedValue;
+                        var t = (string) dd.SelectedValue;
                         shadowBinding.SetValue(data.ArrDeps[data.Station], t == (string) ds.FirstOrDefault() ? "" : t);
                     };
-                    tb.SelectedValue = shadowBinding.GetValue(data.ArrDeps[data.Station]);
+                    dd.SelectedValue = shadowBinding.GetValue(data.ArrDeps[data.Station]);
 
-                    tb.KeyDown += (s, e) => HandleKeystroke(e, dataGridView);
-                    tb.GotFocus += (s, e) =>
+                    dd.KeyDown += (s, e) => HandleKeystroke(e, dataGridView);
+                    dd.GotFocus += (s, e) =>
                     {
                         data.IsSelectedArrival = arrival;
                         data.SelectedTextBox = null;
-                        data.SelectedDropDown = tb;
+                        data.SelectedDropDown = dd;
                     };
 
                     if (mpmode)
                     {
                         data.IsSelectedArrival = arrival;
                         data.SelectedTextBox = null;
-                        data.SelectedDropDown = tb;
-                        tb.Focus();
+                        data.SelectedDropDown = dd;
+                        dd.Focus();
                     }
                 }
             };
             cc.Paint += (s, e) =>
             {
-                if (!mpmode)
-                    return;
-
-                var data = (DataElement)e.Item;
+                if (!mpmode) return;
+                var data = (DataElement) e.Item;
                 new TimetableCellRenderProperties2(shadowBinding.GetValue(data.ArrDeps[data.Station])).Render(e.Graphics, e.ClipRectangle);
-            
             };
             return cc;
         }
-        
+
         private CheckBoxCell GetCheckCell(Expression<Func<ArrDep, bool>> check)
         {
-            var cc = new CheckBoxCell();
-            
             var shadowBinding = Binding.Property(check);
-            
-            cc.Binding = Binding.Delegate<DataElement, bool>(d => shadowBinding.GetValue(d.ArrDeps[d.Station])).Cast<bool?>();
-            return cc;
+            return new CheckBoxCell
+            {
+                Binding = Binding.Delegate<DataElement, bool>(d => shadowBinding.GetValue(d.ArrDeps[d.Station])).Cast<bool?>()
+            };
         }
 
         protected override void CellSelected(BaseTimetableDataElement data, Station sta, bool arrival)
@@ -221,7 +227,7 @@ namespace FPLedit.Editor.TimetableEditor
             view.DataStore = path.Select(sta => new DataElement(train, sta, train.GetArrDep(sta))).ToList();
             view.SelectedRowsChanged += (s, e) =>
             {
-                var selected = (DataElement)view.SelectedItem;
+                var selected = (DataElement) view.SelectedItem;
                 shuntButton.Enabled = selected?.Station.Tracks.Any() ?? false;
             };
         }
@@ -264,9 +270,10 @@ namespace FPLedit.Editor.TimetableEditor
                     return false;
                 }
             }
+
             return true;
         }
-        
+
         private void Shunt(GridView view)
         {
             if (view.SelectedRow == -1)
@@ -287,19 +294,16 @@ namespace FPLedit.Editor.TimetableEditor
             view.ReloadData(view.SelectedRow);
         }
 
-
         #region Events
-        public bool ApplyChanges()
-            => UpdateTrainDataFromGrid(dataGridView);
 
-        private void TrapeztafelToggle_Click(object sender, EventArgs e)
-            => Trapez(dataGridView);
+        public bool ApplyChanges() => UpdateTrainDataFromGrid(dataGridView);
 
-        private void ZlmButton_Click(object sender, EventArgs e)
-            => Zuglaufmeldung(dataGridView);
+        private void TrapeztafelToggle_Click(object sender, EventArgs e) => Trapez(dataGridView);
+
+        private void ZlmButton_Click(object sender, EventArgs e) => Zuglaufmeldung(dataGridView);
 
         private void ShuntButton_Click(object sender, EventArgs e) => Shunt(dataGridView);
-        
+
         #endregion
     }
 }
