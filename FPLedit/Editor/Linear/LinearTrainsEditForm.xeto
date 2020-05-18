@@ -23,9 +23,9 @@
           </TableCell>
           <StackLayout Spacing="5" HorizontalContentAlignment="Stretch">
             <Button Click="TopNewButton_Click">Neuer Zug</Button>
-            <Button Click="TopEditButton_Click">Zug bearbeiten</Button>
-            <Button Click="TopDeleteButton_Click">Zug löschen</Button>
-            <Button Click="TopCopyButton_Click">Zug kopieren/verschieben</Button>
+            <Button Click="TopEditButton_Click" x:Name="topEditButton" Enabled="false">Zug bearbeiten</Button>
+            <Button Click="TopDeleteButton_Click" x:Name="topDeleteButton" Enabled="false">Zug löschen</Button>
+            <Button Click="TopCopyButton_Click" x:Name="topCopyButton" Enabled="false">Zug kopieren/verschieben</Button>
             <!-- Spacer: -->
             <Label />
             <Button Click="TopSortButton_Click">Züge sortieren</Button>
@@ -47,9 +47,9 @@
           </TableCell>
           <StackLayout Spacing="5" HorizontalContentAlignment="Stretch">
             <Button Click="BottomNewButton_Click">Neuer Zug</Button>
-            <Button Click="BottomEditButton_Click">Zug bearbeiten</Button>
-            <Button Click="BottomDeleteButton_Click">Zug löschen</Button>
-            <Button Click="BottomCopyButton_Click">Zug kopieren/verschieben</Button>
+            <Button Click="BottomEditButton_Click" x:Name="bottomEditButton" Enabled="false">Zug bearbeiten</Button>
+            <Button Click="BottomDeleteButton_Click" x:Name="bottomDeleteButton" Enabled="false">Zug löschen</Button>
+            <Button Click="BottomCopyButton_Click" x:Name="bottomCopyButton" Enabled="false">Zug kopieren/verschieben</Button>
             <!-- Spacer: -->
             <Label />
             <Button Click="BottomSortButton_Click">Züge sortieren</Button>

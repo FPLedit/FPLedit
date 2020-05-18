@@ -3,10 +3,7 @@ using FPLedit.Editor.Trains;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.Editor.Network
 {
@@ -18,6 +15,7 @@ namespace FPLedit.Editor.Network
 
 #pragma warning disable CS0649
         private readonly GridView gridView;
+        private readonly Button editPathButton, editButton, deleteButton, copyButton;
 #pragma warning restore CS0649
 
         public NetworkTrainsEditForm(IPluginInterface pluginInterface) : base(pluginInterface.Timetable)
@@ -44,9 +42,17 @@ namespace FPLedit.Editor.Network
                 KeyDown += HandleKeystroke;
             else
                 gridView.KeyDown += HandleKeystroke;
+            
+            gridView.SelectedItemsChanged += GridViewOnSelectedItemsChanged;
 
             this.AddCloseHandler();
             this.AddSizeStateHandler();
+        }
+
+        private void GridViewOnSelectedItemsChanged(object sender, EventArgs e)
+        {
+            editButton.Enabled = deleteButton.Enabled = copyButton.Enabled = editPathButton.Enabled
+                = gridView.SelectedItem != null && !((ITrain) gridView.SelectedItem).IsLink;
         }
 
         private void HandleKeystroke(object sender, KeyEventArgs e)

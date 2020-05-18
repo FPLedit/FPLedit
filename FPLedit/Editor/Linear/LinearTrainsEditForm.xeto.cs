@@ -3,8 +3,6 @@ using FPLedit.Editor.Trains;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace FPLedit.Editor.Linear
 {
@@ -17,6 +15,7 @@ namespace FPLedit.Editor.Linear
 #pragma warning disable CS0649
         private readonly GridView topGridView, bottomGridView;
         private readonly Label topLineLabel, bottomLineLabel;
+        private readonly Button topEditButton, topDeleteButton, topCopyButton, bottomEditButton, bottomDeleteButton, bottomCopyButton;
 #pragma warning restore CS0649
 
         private const TrainDirection TOP_DIRECTION = TrainDirection.ti;
@@ -31,8 +30,8 @@ namespace FPLedit.Editor.Linear
             tt = pluginInterface.Timetable;
             backupHandle = pluginInterface.BackupTimetable();
 
-            InitListView(topGridView);
-            InitListView(bottomGridView);
+            InitListView(topGridView, new []{ topEditButton, topDeleteButton, topCopyButton });
+            InitListView(bottomGridView, new []{ bottomEditButton, bottomDeleteButton, bottomCopyButton });
 
             topLineLabel.Text = "Züge " + tt.GetLinearLineName(TOP_DIRECTION);
             bottomLineLabel.Text = "Züge " + tt.GetLinearLineName(BOTTOM_DIRECTION);
@@ -70,7 +69,7 @@ namespace FPLedit.Editor.Linear
                 CopyTrain(active, dir);
         }
 
-        private void InitListView(GridView view)
+        private void InitListView(GridView view, Button[] buttons)
         {
             view.AddColumn<Train>(t => t.TName, "Zugnummer");
             view.AddColumn<Train>(t => t.Locomotive, "Tfz");
@@ -83,6 +82,12 @@ namespace FPLedit.Editor.Linear
 
             if (!Eto.Platform.Instance.IsWpf)
                 view.KeyDown += HandleKeystroke;
+
+            view.SelectedItemsChanged += (s, e) =>
+            {
+                foreach (var button in buttons)
+                    button.Enabled = view.SelectedItem != null && !((ITrain) view.SelectedItem).IsLink;
+            };
         }
 
         private void CloseButton_Click(object sender, EventArgs e)

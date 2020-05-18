@@ -16,12 +16,12 @@
           </TableCell>
           <StackLayout Spacing="5" HorizontalContentAlignment="Stretch">
             <Button Click="NewButton_Click">Neuer Zug</Button>
-            <Button Click="EditButton_Click">Zug bearbeiten</Button>
-            <Button Click="DeleteButton_Click">Zug löschen</Button>
-            <Button Click="CopyButton_Click">Zug kopieren/verschieben</Button>
+            <Button Click="EditButton_Click" x:Name="editButton" Enabled="false">Zug bearbeiten</Button>
+            <Button Click="DeleteButton_Click" x:Name="deleteButton" Enabled="false">Zug löschen</Button>
+            <Button Click="CopyButton_Click" x:Name="copyButton" Enabled="false">Zug kopieren/verschieben</Button>
             <!-- Spacer: -->
             <Label />
-            <Button Click="EditPathButton_Click">Laufweg bearbeiten</Button>
+            <Button Click="EditPathButton_Click" x:Name="editPathButton">Laufweg bearbeiten</Button>
             <!-- Spacer: -->
             <Label />
             <Button Click="SortButton_Click">Züge sortieren</Button>
