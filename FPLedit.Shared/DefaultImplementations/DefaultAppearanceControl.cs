@@ -1,6 +1,5 @@
 ﻿using System;
 using Eto.Forms;
-using FPLedit.Shared;
 
 namespace FPLedit.Shared.DefaultImplementations
 {

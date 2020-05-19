@@ -1,8 +1,4 @@
-﻿using FPLedit.Shared;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Xml.Linq;
 
 namespace FPLedit.Shared.Filetypes

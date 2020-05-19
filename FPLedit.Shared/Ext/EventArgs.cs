@@ -9,12 +9,12 @@ namespace FPLedit.Shared
             Value = value;
         }
 
-        public T Value { get; private set; }
+        public T Value { get; }
     }
 
     public sealed class FileStateChangedEventArgs : EventArgs
     {
-        public IFileState FileState { get; private set; }
+        public IFileState FileState { get; }
 
         public FileStateChangedEventArgs(IFileState state)
         {

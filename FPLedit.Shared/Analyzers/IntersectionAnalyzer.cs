@@ -51,12 +51,7 @@ namespace FPLedit.Shared.Analyzers
             if (!its.Any()) // We had no intersecting train, so we should return the trains days itself.
                 days = Days.All;
 
-            return new TrapezEntry
-            {
-                IsStopping = train.GetArrDep(station).TrapeztafelHalt,
-                IntersectingTrainsStopping = stoppingTrains.ToArray(),
-                StopDays = train.Days.IntersectingDays(days),
-            };
+            return new TrapezEntry(train.GetArrDep(station).TrapeztafelHalt, stoppingTrains.ToArray(), train.Days.IntersectingDays(days));
         }
 
         private IEnumerable<ITrain> IntersectTrainsAtStations(ITrain ot, Station s, bool crossing)
@@ -118,8 +113,15 @@ namespace FPLedit.Shared.Analyzers
 
     public sealed class TrapezEntry
     {
-        public bool IsStopping { get; set; }
-        public ITrain[] IntersectingTrainsStopping { get; set; }
-        public Days StopDays { get; set; }
+        public TrapezEntry(bool isStopping, ITrain[] intersectingTrainsStopping, Days stopDays)
+        {
+            IsStopping = isStopping;
+            IntersectingTrainsStopping = intersectingTrainsStopping;
+            StopDays = stopDays;
+        }
+
+        public bool IsStopping { get; }
+        public ITrain[] IntersectingTrainsStopping { get; }
+        public Days StopDays { get; }
     }
 }
