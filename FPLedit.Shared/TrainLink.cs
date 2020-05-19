@@ -130,8 +130,6 @@ namespace FPLedit.Shared
             {
                 if (applyTimes)
                 {
-                    lt.ArrDepCacheValid = false; // Invalidate cache
-
                     var path = _parent.Type == TimetableType.Linear
                         ? _parent.GetLinearStationsOrderedByDirection(TrainDirection.ti) // All arrdeps are sorted in line direction if linear...
                         : lt.GetPath();

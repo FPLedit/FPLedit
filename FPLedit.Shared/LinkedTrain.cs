@@ -18,9 +18,6 @@ namespace FPLedit.Shared
 
         public int LinkCountingIndex => countingIndex;
 
-        private Dictionary<Station, ArrDep> arrDepCache = new Dictionary<Station, ArrDep>();
-        internal bool ArrDepCacheValid { private get; set; } = false;
-
         /// <inheritdoc />
         [XAttrName("id")]
         public int Id => GetAttribute<int>("id", -1);
@@ -54,9 +51,6 @@ namespace FPLedit.Shared
 
         public bool TryGetArrDep(Station sta, out ArrDep arrDep)
         {
-            if (ArrDepCacheValid)
-                return arrDepCache.TryGetValue(sta, out arrDep);
-            
             var ret = baseTrain.TryGetArrDep(sta, out var tempArrDep);
             if (ret)
                 arrDep = link.ProcessArrDep(tempArrDep, countingIndex);
@@ -67,17 +61,11 @@ namespace FPLedit.Shared
 
         public Dictionary<Station, ArrDep> GetArrDepsUnsorted()
         {
-            if (!ArrDepCacheValid)
-            {
-                arrDepCache = baseTrain
-                    .GetArrDepsUnsorted()
-                    .ToDictionary(
-                        kvp => kvp.Key,
-                        kvp => link.ProcessArrDep(kvp.Value, countingIndex));
-                ArrDepCacheValid = true;
-            }
-
-            return arrDepCache;
+            return baseTrain
+                .GetArrDepsUnsorted()
+                .ToDictionary(
+                    kvp => kvp.Key,
+                    kvp => link.ProcessArrDep(kvp.Value, countingIndex));
         }
 
         public LinkedTrain(TrainLink link, int countingIndex, XMLEntity entity) : base(entity, link._parent)
