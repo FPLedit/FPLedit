@@ -101,7 +101,7 @@ namespace FPLedit.Editor.Trains
             fillButton.Visible = tt.Type == TimetableType.Linear && th.FillCandidates(Train).Any();
 
             arrDepBackup = Train.GetArrDepsUnsorted()
-                .Select(kvp => new KeyValuePair<Station, ArrDep>(kvp.Key, kvp.Value.Clone<ArrDep>()))
+                .Select(kvp => new KeyValuePair<Station, ArrDep>(kvp.Key, kvp.Value.Copy()))
                 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
         }
 

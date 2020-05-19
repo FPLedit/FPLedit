@@ -81,6 +81,20 @@ namespace FPLedit.Shared
                 return false;
             return Children.All(c => c.XDiff(other.Children[Children.IndexOf(c)]));
         }
+
+        /// <summary>
+        /// Create a copy of this XML entities' XML tree.
+        /// </summary>
+        public XMLEntity XClone()
+        {
+            var clone = new XMLEntity(XName);
+            foreach (var attr in Attributes)
+                clone.SetAttribute(attr.Key, attr.Value);
+            foreach (var child in Children)
+                clone.Children.Add(child.XClone());
+
+            return clone;
+        }
     }
 
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]

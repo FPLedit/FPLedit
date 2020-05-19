@@ -89,7 +89,7 @@ namespace FPLedit.Editor
             existingStation = false;
             Station = new Station(tt);
 
-            trackStation = Station.Clone<Station>();
+            trackStation = Station.Copy();
             stationRenderer.Station = trackStation;
             stationRenderer.Route = route;
 
@@ -111,7 +111,7 @@ namespace FPLedit.Editor
 
             existingStation = true;
 
-            trackStation = Station.Clone<Station>();
+            trackStation = Station.Copy();
             stationRenderer.Station = trackStation;
             stationRenderer.Route = route;
 

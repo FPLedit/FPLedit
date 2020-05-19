@@ -50,7 +50,7 @@ namespace FPLedit.Editor.TimetableEditor
 
             this.AddSizeStateHandler();
 
-            shuntBackup = arrDep.ShuntMoves.Select(s => s.Clone<ShuntMove>()).ToList();
+            shuntBackup = arrDep.Copy().ShuntMoves.ToList();
 
             RefreshList();
         }

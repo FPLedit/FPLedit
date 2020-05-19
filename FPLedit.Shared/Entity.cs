@@ -60,12 +60,6 @@ namespace FPLedit.Shared
         public void RemoveAttribute(string key)
             => XMLEntity.RemoveAttribute(key);
 
-        /// <summary>
-        /// Create a deep clone of the current entity object.
-        /// </summary>
-        /// <typeparam name="T">Type of the current entity, needs to be specified.</typeparam>
-        public T Clone<T>() where T : Entity => (T)this.DeepClone();
-
         protected void SetNotEmptyTimeAttribute(string key, TimeEntry time)
         {
             var t = time.ToShortTimeString();

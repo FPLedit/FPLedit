@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Force.DeepCloner;
 
 namespace FPLedit.Shared
 {
@@ -636,7 +637,7 @@ namespace FPLedit.Shared
         #endregion
         
         /// <inheritdoc />
-        public Timetable Clone() => Clone<Timetable>();
+        public Timetable Clone() => this.DeepClone();
 
         [DebuggerStepThrough]
         public override string ToString()

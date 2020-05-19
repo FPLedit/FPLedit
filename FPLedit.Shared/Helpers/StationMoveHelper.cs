@@ -113,7 +113,7 @@ namespace FPLedit.Shared.Helpers
 
                 // This train runs over this station on this route, so we need to update it.
                 var arrDep = tra.GetArrDep(sta);
-                ardeps[tra] = arrDep.Clone<ArrDep>();
+                ardeps[tra] = arrDep.Copy();
                 tra.RemoveArrDep(sta);
             }
 

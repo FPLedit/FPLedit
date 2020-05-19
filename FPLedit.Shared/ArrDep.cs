@@ -156,5 +156,15 @@ namespace FPLedit.Shared
                 ShuntMoves.Add(newShunt);
             }
         }
+
+        /// <summary>
+        /// Create a copy of this ArrDep. This is not a deep copy, as it preserves the parent timetable.
+        /// </summary>
+        public ArrDep Copy()
+        {
+            var copy = new ArrDep(_parent);
+            copy.ApplyCopy(this);
+            return copy;
+        }
     }
 }

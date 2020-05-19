@@ -59,7 +59,7 @@ namespace FPLedit.Editor.Trains
 
             foreach (var sta in path)
             {
-                var ardp = source.GetArrDep(sta).Clone<ArrDep>();
+                var ardp = source.GetArrDep(sta).Copy();
                 if (sta != path.First() && ardp.Arrival != default)
                     ardp.Arrival = ardp.Arrival.Add(offset);
                 if (sta != path.Last() && ardp.Departure != default)
