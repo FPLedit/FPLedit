@@ -61,6 +61,16 @@ namespace FPLedit.Shared
             get => GetAttribute("fpl-tp", "");
             set => SetAttribute("fpl-tp", value);
         }
+        
+        /// <summary>
+        /// Optional boolean flag: Whether the train stops always or only on request.
+        /// </summary>
+        [XAttrName("fpl-rq", IsFpleditElement = true)]
+        public bool RequestStop
+        {
+            get => Convert.ToBoolean(GetAttribute<int>("fpl-rq"));
+            set => SetAttribute("fpl-rq", value ? "1" : "0");
+        }
 
         /// <inheritdoc />
         public PositionCollection Positions

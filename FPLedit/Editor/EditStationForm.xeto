@@ -24,6 +24,10 @@
           <Label>Betriebsst.-Typ</Label>
           <ComboBox x:Name="typeComboBox" Width="150" />
         </TableRow>
+        <TableRow>
+          <Label />
+          <CheckBox x:Name="requestCheckBox" Text="Bedarfshalt" />
+        </TableRow>
       </TableLayout>
     </TableRow>
     <TableRow>

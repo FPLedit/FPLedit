@@ -229,8 +229,9 @@ if (attrs != null)
 						var ardp = tra.GetArrDep(entity);
 						var ar = ardp.Arrival.ToShortTimeString();
 						var dp = ardp.Departure.ToShortTimeString();
+                        var rq = ardp.RequestStop || entity.RequestStop;
 					#>
-					<td class="zug"><#= (ar != "00:00" && ar != dp) ? ar : "" #></td>
+					<td class="zug"><#= rq ? "x" : "" #><#= (ar != "00:00" && ar != dp) ? ar : "" #></td>
 					<td class="zug"><#= dp != "00:00" ? dp : "" #></td>
 					<# } else { #>
 					<td class="zug"></td>

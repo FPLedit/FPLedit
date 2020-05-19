@@ -10,6 +10,8 @@ function Remarks( /* Station */ s, /* Station[] */ route) {
 		return "ab";
 	if (route.last() == s)
 		return "an";
+    if (s.RequestStop)
+        return "X";
 	return "";
 }
 
@@ -158,7 +160,7 @@ if (attrs != null)
 	 var route = tt.GetRoutes()[i];
 	 #>
 	<p class="heading">
-		<span class="line"><#= kbsn.GetValue(route.Index) || '' #> <#= helper.GetRouteName(route, TOP_DIRECTION) #> </span>
+		<span class="line"><#= kbsn != null ? (kbsn.GetValue(route.Index) || '') : '' #> <#= helper.GetRouteName(route, TOP_DIRECTION) #> </span>
 		<span class="back">und zurück</span>
 	</p>
 	<#
@@ -208,10 +210,15 @@ if (attrs != null)
 
                     if (t.GetPath().Contains(sta))
                     {
-                        var time = t.GetArrDep(sta).Departure;
-                        if (time == new TimeEntry()) time =  t.GetArrDep(sta).Arrival;
+                        var ardp = t.GetArrDep(sta);
+                        var time = ardp.Departure;
+                        if (time == new TimeEntry()) time =  ardp.Arrival;
                         if (time == new TimeEntry()) times = "...";
                         else times = time.ToShortTimeString();
+
+                        if (times != "" && ardp.RequestStop) {
+                            times = "X " + times;
+                        }
                     }
                 #>
                 <td class="ti<#= s_last #>"><span><#= times #></span></td>

@@ -13,7 +13,7 @@ namespace FPLedit.Editor.TimetableEditor
     {
 #pragma warning disable CS0649
         private readonly GridView dataGridView;
-        private readonly ToggleButton trapeztafelToggle;
+        private readonly ToggleButton trapeztafelToggle, requestToggle;
         private readonly Button zlmButton, shuntButton;
         private readonly TableLayout actionsLayout;
 #pragma warning restore CS0649
@@ -31,12 +31,14 @@ namespace FPLedit.Editor.TimetableEditor
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
             trapeztafelToggle.Click += TrapeztafelToggle_Click;
+            requestToggle.Click += RequestToggleOnClick;
             base.Init(trapeztafelToggle, actionsLayout);
 
             KeyDown += HandleControlKeystroke;
             dataGridView.KeyDown += HandleControlKeystroke;
 
             trapeztafelToggle.Image = new Bitmap(this.GetResource("Resources.trapeztafel.png"));
+            requestToggle.Image = new Bitmap(this.GetResource("Resources.bedarf.png"));
         }
 
         public void HandleControlKeystroke(object sender, KeyEventArgs e)
@@ -45,6 +47,11 @@ namespace FPLedit.Editor.TimetableEditor
             {
                 e.Handled = true;
                 Trapez(dataGridView);
+            }
+            if (e.Key == Keys.B)
+            {
+                e.Handled = true;
+                RequestStop(dataGridView);
             }
             else if (e.Key == Keys.Z)
             {
@@ -180,8 +187,9 @@ namespace FPLedit.Editor.TimetableEditor
         protected override void CellSelected(BaseTimetableDataElement data, Station sta, bool arrival)
         {
             trapeztafelToggle.Checked = data.ArrDeps[sta].TrapeztafelHalt;
+            requestToggle.Checked = data.ArrDeps[sta].RequestStop || sta.RequestStop;
 
-            trapeztafelToggle.Enabled = arrival && !data.IsFirst(sta);
+            trapeztafelToggle.Enabled = requestToggle.Enabled = arrival && !data.IsFirst(sta) && !sta.RequestStop;
             zlmButton.Enabled = arrival ^ data.IsFirst(sta);
         }
 
@@ -196,6 +204,15 @@ namespace FPLedit.Editor.TimetableEditor
                 var ds = Station.Tracks.Select(s => s.Name).ToList();
                 ds.Insert(0, NO_TRACK);
                 return ds;
+            }
+            
+            public void SetRequestStop(Station sta, bool req)
+            {
+                if (sta.RequestStop)
+                    return;
+                var a = ArrDeps[sta];
+                a.RequestStop = req;
+                ArrDeps[sta] = a;
             }
 
             public DataElement(ITrain tra, Station sta, ArrDep arrDep)
@@ -293,15 +310,38 @@ namespace FPLedit.Editor.TimetableEditor
 
             view.ReloadData(view.SelectedRow);
         }
+        
+        private void RequestStop(GridView view)
+        {
+            if (view.SelectedRow == -1)
+                return;
+
+            var data = (DataElement)view.SelectedItem;
+
+            // Request Stop darf nur bei Ankünften sein
+            if (!data.IsSelectedArrival)
+                return;
+
+            var sta = data.GetStation();
+
+            // All traisn stop at this station.
+            if (sta.RequestStop)
+                return;
+            
+            var req = !data.ArrDeps[sta].RequestStop;
+            data.SetRequestStop(sta, req);
+
+            view.ReloadData(view.SelectedRow);
+            requestToggle.Checked = req;
+            CellSelected(data, sta, data.IsSelectedArrival);
+        }
 
         #region Events
 
         public bool ApplyChanges() => UpdateTrainDataFromGrid(dataGridView);
-
         private void TrapeztafelToggle_Click(object sender, EventArgs e) => Trapez(dataGridView);
-
+        private void RequestToggleOnClick(object sender, EventArgs e) => RequestStop(dataGridView);
         private void ZlmButton_Click(object sender, EventArgs e) => Zuglaufmeldung(dataGridView);
-
         private void ShuntButton_Click(object sender, EventArgs e) => Shunt(dataGridView);
 
         #endregion

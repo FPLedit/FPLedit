@@ -7,28 +7,32 @@ namespace FPLedit.Editor.TimetableEditor
 {
     internal sealed class TimetableCellRenderProperties
     {
-        private static Font fn, fb;
-        private static Color? errorColor, bgColor, textColor;
+        private static bool initialized;
+        private static Font fn, fb, fc, fbc;
+        private static Color errorColor, bgColor, textColor;
 
-        public string Text { get; set; }
-        public Color Background { get; set; }
-        public Font Font { get; set; }
-        public bool ReadOnly { get; set; }
+        private string Text { get; }
+        private Color Background { get; }
+        private Font Font { get; }
+        private bool ReadOnly { get; }
 
         public TimetableCellRenderProperties(Func<ArrDep, TimeEntry> time, Station sta, bool arrival, BaseTimetableDataElement data)
         {
-            if (fn == null || fb == null || errorColor == null || bgColor == null || textColor == null)
+            if (!initialized)
             {
                 fb = SystemFonts.Bold();
                 fn = SystemFonts.Default();
+                fc = SystemFonts.Cached(SystemFont.Default, null, FontDecoration.Underline);
+                fbc = SystemFonts.Cached(SystemFont.Bold, null, FontDecoration.Underline);
                 var errorHsl = Colors.Red.ToHSL();
                 errorHsl.L *= 0.8f;
                 errorColor = errorHsl.ToColor();
                 bgColor = SystemColors.ControlBackground;
                 textColor = SystemColors.ControlText;
+                initialized = true;
             }
 
-            Background = bgColor.Value;
+            Background = bgColor;
             Font = fn;
 
             var ardp = data.ArrDeps[sta];
@@ -49,13 +53,17 @@ namespace FPLedit.Editor.TimetableEditor
                 if (first && ardp.TrapeztafelHalt)
                     throw new Exception("Die erste Station darf keinen Trapeztafelhalt beinhalten!");
 
-                Background = ardp.TrapeztafelHalt ? Colors.LightGrey : bgColor.Value;
-                if (ardp.Zuglaufmeldung != null && ardp.Zuglaufmeldung != "")
+                Background = ardp.TrapeztafelHalt ? Colors.LightGrey : bgColor;
+                if (ardp.RequestStop)
+                    Font = fc;
+                if (!string.IsNullOrEmpty(ardp.Zuglaufmeldung) && !ardp.RequestStop)
                     Font = fb;
+                if (!string.IsNullOrEmpty(ardp.Zuglaufmeldung) && ardp.RequestStop)
+                    Font = fbc;
             }
 
             if (data.HasError(sta, arrival))
-                Background = errorColor.Value;
+                Background = errorColor;
         }
 
         public void Apply(TextBox tb)
@@ -64,6 +72,7 @@ namespace FPLedit.Editor.TimetableEditor
             tb.Font = Font;
             tb.ReadOnly = ReadOnly;
             tb.Text = Text ?? tb.Text;
+            tb.TextColor = AdjustTextContrastColor(textColor);
         }
 
         public void Render(Graphics g, RectangleF clip)
@@ -72,23 +81,29 @@ namespace FPLedit.Editor.TimetableEditor
             g.FillRectangle(Background, clip);
 
             // Adjust text color, if contrast is too low.
-            var tc = textColor.Value;
-            var lt = 0.2126 * textColor.Value.R + 0.7152 * textColor.Value.G + 0.0722 * textColor.Value.B;
+            var tc = AdjustTextContrastColor(textColor);
+
+            g.DrawText(Font, tc, new PointF(clip.Left + 2, clip.Top + 2), Text ?? "");
+            g.DrawRectangle(textColor, clip);
+        }
+
+        private Color AdjustTextContrastColor(Color tc)
+        {
+            var lt = 0.2126 * tc.R + 0.7152 * tc.G + 0.0722 * tc.B;
             var lb = 0.2126 * Background.R + 0.7152 * Background.G + 0.0722 * Background.B;
             if (lb - lb > 0 && lb - lt < 0.1)
                 tc = Colors.White;
             if (lt - lb > 0 && lt - lb < 0.1)
                 tc = Colors.Black;
-
-            g.DrawText(Font, tc, new PointF(clip.Left + 2, clip.Top + 2), Text ?? "");
-            g.DrawRectangle(textColor.Value, clip);
+            return tc;
         }
     }
 
     internal sealed class TimetableCellRenderProperties2
     {
+        private static bool initialized;
         private static Font fn, fb;
-        private static Color? bgColor, textColor;
+        private static Color bgColor, textColor;
 
         public string Text { get; }
         public Color Background { get; }
@@ -96,7 +111,7 @@ namespace FPLedit.Editor.TimetableEditor
 
         public TimetableCellRenderProperties2(string text)
         {
-            if (fn == null || fb == null || bgColor == null || textColor == null)
+            if (!initialized)
             {
                 fb = SystemFonts.Bold();
                 fn = SystemFonts.Default();
@@ -104,7 +119,7 @@ namespace FPLedit.Editor.TimetableEditor
                 textColor = SystemColors.ControlText;
             }
 
-            Background = bgColor.Value;
+            Background = bgColor;
             Font = fn;
             Text = text;
         }
@@ -115,8 +130,8 @@ namespace FPLedit.Editor.TimetableEditor
             g.FillRectangle(Background, clip);
 
             // Adjust text color, if contrast is too low.
-            var tc = textColor.Value;
-            var lt = 0.2126 * textColor.Value.R + 0.7152 * textColor.Value.G + 0.0722 * textColor.Value.B;
+            var tc = textColor;
+            var lt = 0.2126 * textColor.R + 0.7152 * textColor.G + 0.0722 * textColor.B;
             var lb = 0.2126 * Background.R + 0.7152 * Background.G + 0.0722 * Background.B;
             if (lb - lb > 0 && lb - lt < 0.1)
                 tc = Colors.White;
@@ -124,7 +139,7 @@ namespace FPLedit.Editor.TimetableEditor
                 tc = Colors.Black;
 
             g.DrawText(Font, tc, new PointF(clip.Left + 2, clip.Top + 2), Text ?? "");
-            g.DrawRectangle(textColor.Value, clip);
+            g.DrawRectangle(textColor, clip);
         }
     }
 }

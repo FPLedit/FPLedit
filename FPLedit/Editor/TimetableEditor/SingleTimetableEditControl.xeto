@@ -17,9 +17,10 @@
     <TableRow>
       <TableLayout Spacing="5,5" Padding="10,10,10,10" x:Name="actionsLayout">
         <TableRow>
-          <ToggleButton x:Name="trapeztafelToggle" Text="&amp;T" />
-          <Button Text="&amp;Zuglaufmeldung durch" x:Name="zlmButton" Click="ZlmButton_Click" />
-          <Button Text="&amp;Rangierfahrten" x:Name="shuntButton" Click="ShuntButton_Click" />
+          <ToggleButton x:Name="trapeztafelToggle" Text="&amp;T" Enabled="false" />
+          <ToggleButton x:Name="requestToggle" Text="&amp;B" Enabled="false" />
+          <Button Text="&amp;Zuglaufmeldung durch" x:Name="zlmButton" Click="ZlmButton_Click" Enabled="false" />
+          <Button Text="&amp;Rangierfahrten" x:Name="shuntButton" Click="ShuntButton_Click" Enabled="false" />
           <TableCell ScaleWidth="true" />
         </TableRow>
       </TableLayout>

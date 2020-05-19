@@ -165,8 +165,8 @@ if (attrs != null)
 				<col style="width:180px;">
 				<col style="width:20px;"><!-- Welle -->
 				<col style="width:62px;">
-				<col style="width:50px;">
-				<col style="width:50px;">
+				<col style="width:60px;">
+				<col style="width:60px;">
 				<tr>
 					<td colspan="10" class="trainname"><#= tra.TName #><#= helper.GetDaysHtml(tra, showDays) #></td>
 				</tr>
@@ -238,9 +238,10 @@ if (attrs != null)
 						var ar = ardp.Arrival.ToShortTimeString();
 						var dp = ardp.Departure.ToShortTimeString();
 						var zlm = ardp.Zuglaufmeldung;
+                        var rq = ardp.RequestStop || entity.RequestStop;
 					#>
 					<td class="zug klein"><#= helper.TrapezHalt(tra, entity) #></td>
-					<td class="zug"><#= (ar != "00:00" && ar != dp) ? ar : "" #></td>
+					<td class="zug"><#= rq ? "x" : "" #><#= (ar != "00:00" && ar != dp) ? ar : "" #></td>
 					<td class="zug"><#= dp != "00:00" ? dp : "" #></td>
 					<td class="zug klein"><#= helper.Kreuzt(tra, entity) #></td>
 					<td class="zug klein"><#= helper.Ueberholt(tra, entity) #></td>

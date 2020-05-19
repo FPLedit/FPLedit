@@ -17,6 +17,7 @@ namespace FPLedit.Editor
 #pragma warning disable CS0649
         private readonly TextBox nameTextBox, positionTextBox, codeTextBox;
         private readonly ComboBox typeComboBox;
+        private readonly CheckBox requestCheckBox;
         private readonly StationRenderer stationRenderer;
 #pragma warning restore CS0649
         private readonly ValidatorCollection validators;
@@ -137,6 +138,7 @@ namespace FPLedit.Editor
             
             Station.StationCode = codeTextBox.Text;
             Station.StationType = typeComboBox.Text;
+            Station.RequestStop = requestCheckBox.Checked ?? false; 
 
             // Set position.
             var newPos = float.Parse(positionTextBox.Text);

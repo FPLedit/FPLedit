@@ -68,6 +68,16 @@ namespace FPLedit.Shared
             get => Convert.ToBoolean(GetAttribute<int>("fpl-tr"));
             set => SetAttribute("fpl-tr", value ? "1" : "0");
         }
+        
+        /// <summary>
+        /// Optional boolean flag: Whether the train stops always or only on request.
+        /// </summary>
+        [XAttrName("fpl-rq", IsFpleditElement = true)]
+        public bool RequestStop
+        {
+            get => Convert.ToBoolean(GetAttribute<int>("fpl-rq"));
+            set => SetAttribute("fpl-rq", value ? "1" : "0");
+        }
 
         /// <summary>
         /// Optional metdata, whether and who has to give a "Zuglaufmeldung" (German railway security construct typically
