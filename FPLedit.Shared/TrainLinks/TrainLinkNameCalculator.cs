@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace FPLedit.Shared
 {
+    /// <summary>
+    /// Helper class for using <see cref="ITrainLinkNameCalculator"/>s.
+    /// </summary>
     [Templating.TemplateSafe]
     public static class TrainLinkNameCalculatorManager
     {
@@ -12,6 +15,9 @@ namespace FPLedit.Shared
             [SpecialTrainNameCalculator.PREFIX] = typeof(SpecialTrainNameCalculator),
         };
 
+        /// <summary>
+        /// Initialize an empty instance from a serialized string as it will be stored in the XML structure.
+        /// </summary>
         public static ITrainLinkNameCalculator Deserialize(string trainNamingScheme)
         {
             //HACK: This is intentional and may lead to a crash when a part contains a semicolon. But jTrainGraph does is like that.
@@ -30,6 +36,9 @@ namespace FPLedit.Shared
         }
 
         //HACK: This is intentional and may lead to a crash when a part contains a semicolon. But jTrainGraph does is like that.
+        /// <summary>
+        /// Serialize this instance to a string as it will be stored in the XML structure.
+        /// </summary>
         public static string Serialize(ITrainLinkNameCalculator tnc) => string.Join(";", tnc.Serialize());
     }
 }

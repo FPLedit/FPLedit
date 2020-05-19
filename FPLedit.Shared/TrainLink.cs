@@ -1,20 +1,31 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using FPLedit.Shared.Helpers;
 
 namespace FPLedit.Shared
 {
-    // countingIndex everywhere is 0 based!
+    /// <summary>
+    /// Represents a link between a <see cref="IWritableTrain"/> an a <see cref="LinkedTrain"/>.
+    /// </summary>
     [XElmName("tl", ParentElements = new[] { "ta", "ti", "tr" })]
     [Templating.TemplateSafe]
     public class TrainLink : Entity
     {
         private readonly LinkedTrain[] linkedTrains;
+        
+        /// <summary>
+        /// The parent (writable) train.
+        /// </summary>
         public Train ParentTrain { get; }
 
+        /// <summary>
+        /// All linked trains, associated with this link element. This collection cannot be edited.
+        /// </summary>
         public IList<LinkedTrain> LinkedTrains => Array.AsReadOnly(linkedTrains);
         
+        /// <summary>
+        /// The naming scheme used for this train links children.
+        /// </summary>
         [XAttrName("tln")]
         public ITrainLinkNameCalculator TrainNamingScheme
         {
@@ -22,6 +33,9 @@ namespace FPLedit.Shared
             set => SetAttribute("tln", TrainLinkNameCalculatorManager.Serialize(value));
         }
         
+        /// <summary>
+        /// Indices of the child trains. Zero based, counted on trains of this parent train's direction.
+        /// </summary>
         [XAttrName("tli")]
         internal int[] TrainIndices
         {
@@ -29,6 +43,9 @@ namespace FPLedit.Shared
             private set => SetAttribute("tli", string.Join(";", value));
         }
         
+        /// <summary>
+        /// Time difference (in minutes) between the linked trains.
+        /// </summary>
         [XAttrName("tld")]
         public int TimeDifference
         {
@@ -36,6 +53,9 @@ namespace FPLedit.Shared
             set => SetAttribute("tld", value.ToString());
         }
         
+        /// <summary>
+        /// Initial time offset before the first linked train.
+        /// </summary>
         [XAttrName("tlo")]
         public int TimeOffset
         {
@@ -43,6 +63,9 @@ namespace FPLedit.Shared
             set => SetAttribute("tlo", value.ToString());
         }
         
+        /// <summary>
+        /// Count of the linked trains, associated with this link element.
+        /// </summary>
         [XAttrName("tlc")]
         public int TrainCount
         {
@@ -50,8 +73,15 @@ namespace FPLedit.Shared
             private set => SetAttribute("tlc", value.ToString());
         }
 
+        /// <summary>
+        /// Zero-based index of this link element, in the parent trains links.
+        /// </summary>
         public int TrainLinkIndex => Array.IndexOf(ParentTrain.TrainLinks, this); // Index in parentTrain's TrainLink collection
 
+        /// <summary>
+        /// Specifies, whether applications should try to apply the parent train's transitions to linked trains.
+        /// </summary>
+        /// <remarks>This is not always possible.</remarks>
         [XAttrName("tlt")]
         public bool CopyTransitions
         {
@@ -59,6 +89,11 @@ namespace FPLedit.Shared
             set => SetAttribute("tlt", value.ToString());
         }
         
+        /// <summary>
+        /// Initializes a new train link element.
+        /// </summary>
+        /// <param name="parentTrain">THe parent train.</param>
+        /// <param name="count">The number of linke dtrains, that will be created. This cannot be mutated afterwards.</param>
         public TrainLink(Train parentTrain, int count) : base("tl", parentTrain._parent)
         {
             ParentTrain = parentTrain;
@@ -80,11 +115,20 @@ namespace FPLedit.Shared
             linkedTrains[counting] = train;
         }
 
+        /// <summary>
+        /// Get a train name for the specified train with the giving counting index.
+        /// </summary>
+        /// <param name="countingIndex">The zero-based counting index of the linked train, relative to this link.</param>
         public string GetChildTrainName(int countingIndex)
         {
             return TrainNamingScheme.GetTrainName(countingIndex);
         }
 
+        /// <summary>
+        /// Change a single timetable entry according to the properties of this link element.
+        /// </summary>
+        /// <param name="tempArrDep"></param>
+        /// <param name="countingIndex">The zero-based counting index of the linked train, relative to this link.</param>
         public ArrDep ProcessArrDep(ArrDep tempArrDep, int countingIndex)
         {
             var clone = new ArrDep(_parent);
@@ -124,6 +168,11 @@ namespace FPLedit.Shared
             }
         }
 
+        /// <summary>
+        /// Also apply all changes made to the parent train to linked trains.
+        /// </summary>
+        /// <param name="applyTimes">Specifies, whether timetable entries should be copied.</param>
+        /// <param name="applyAttributes">Specifies, whether other train attributes should be copied. This will also apply the current <see cref="TrainNamingScheme"/>.</param>
         public void Apply(bool applyTimes, bool applyAttributes)
         {
             ApplyToChildren(lt =>

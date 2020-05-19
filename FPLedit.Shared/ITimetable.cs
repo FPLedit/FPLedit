@@ -175,6 +175,11 @@ namespace FPLedit.Shared
         /// Create a deep copy (including XML-tree) of this timetable instance.
         /// </summary>
         Timetable Clone();
+
+        /// <summary>
+        /// Remove the specified link and all linked trains from this timetable. 
+        /// </summary>
+        void RemoveLink(TrainLink link);
         
         // Legacy linear APIs
         /// <summary>

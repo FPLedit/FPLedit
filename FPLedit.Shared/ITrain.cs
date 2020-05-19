@@ -76,6 +76,9 @@ namespace FPLedit.Shared
         Dictionary<Station, ArrDep> GetArrDepsUnsorted();
     }
 
+    /// <summary>
+    /// Object model, representing a single train, that can be edited.
+    /// </summary>
     public interface IWritableTrain : ITrain
     {
         /// <summary>
@@ -122,6 +125,14 @@ namespace FPLedit.Shared
         /// </summary>
         string GetLineName();
 
+        /// <summary>
+        /// All linked trains that are linked to this writable parent train.
+        /// </summary>
         TrainLink[] TrainLinks { get; }
+
+        /// <summary>
+        /// Add the given link to this train.
+        /// </summary>
+        void AddLink(TrainLink link);
     }
 }

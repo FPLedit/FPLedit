@@ -5,6 +5,9 @@ using FPLedit.Shared.Helpers;
 
 namespace FPLedit.Shared
 {
+    /// <summary>
+    /// Train name calculator, generating names based on a base train name and increment.
+    /// </summary>
     [Templating.TemplateSafe]
     public class AutoTrainNameCalculator : ITrainLinkNameCalculator
     {
@@ -13,6 +16,7 @@ namespace FPLedit.Shared
         private int increment;
         private TrainNameParts trainName;
 
+        /// <inheritdoc />
         public void Deserialize(IEnumerable<string> parts)
         {
             var partsArr = parts.ToArray();
@@ -23,13 +27,24 @@ namespace FPLedit.Shared
             increment = int.Parse(partsArr[2]);
         }
 
+        /// <inheritdoc />
         public IEnumerable<string> Serialize() => new []{ PREFIX, trainName.FullName, increment.ToString() };
 
+        /// <inheritdoc />
         public string GetTrainName(int countingIndex) => 
             trainName.BaseName + (trainName.Number + (countingIndex + 1) * increment).ToString(new string('0', trainName.NumberLength));
         
+        /// <summary>
+        /// Initialize a new empty instance.
+        /// </summary>
         public AutoTrainNameCalculator() {}
 
+        /// <summary>
+        /// Create a new instance, providing data.
+        /// </summary>
+        /// <param name="originalName">Name of the original train.</param>
+        /// <param name="increment">Increment of the train number.</param>
+        /// <remarks>Train number will be extracted with <see cref="TrainNameParts"/>.</remarks>
         public AutoTrainNameCalculator(string originalName, int increment)
         {
             trainName = new TrainNameParts(originalName);

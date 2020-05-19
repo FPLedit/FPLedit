@@ -31,6 +31,7 @@ namespace FPLedit.Shared
             set => SetAttribute("id", value.ToString());
         }
 
+        /// <inheritdoc />
         public string QualifiedId => Id.ToString();
 
         /// <inheritdoc />
@@ -270,9 +271,11 @@ namespace FPLedit.Shared
         public override string ToString()
             => TName;
 
+        /// <inheritdoc />
         public TrainLink[] TrainLinks
             => trainLinks.ToArray();
 
+        /// <inheritdoc />
         public void AddLink(TrainLink link)
         {
             var idx = -1;

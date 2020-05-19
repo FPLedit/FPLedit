@@ -730,6 +730,7 @@ namespace FPLedit.Shared
         
         #region Hilfsmethoden für Links
 
+        /// <inheritdoc />
         public void RemoveLink(TrainLink link)
         {
             foreach (var train in link.LinkedTrains)
