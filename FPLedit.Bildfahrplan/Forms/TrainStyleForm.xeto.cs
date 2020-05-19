@@ -38,7 +38,7 @@ namespace FPLedit.Bildfahrplan.Forms
             gridView.AddDropDownColumn<TrainStyle>(t => t.LineStyle, ds.Indices.Cast<object>(), Binding.Delegate<int, string>(i => ds.GetDescription(i)), "Linientyp", true);
             gridView.AddCheckColumn<TrainStyle>(t => t.Show, "Zug zeichnen", true);
 
-            gridView.DataStore = tt.Trains.Select(t => new TrainStyle(t, attrs));
+            gridView.DataStore = tt.Trains.OfType<IWritableTrain>().Select(t => new TrainStyle(t, attrs));
 
             this.AddCloseHandler();
         }

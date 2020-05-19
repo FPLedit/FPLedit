@@ -1,17 +1,15 @@
-﻿using FPLedit.Shared;
+﻿using System;
+using FPLedit.Shared;
 using FPLedit.Shared.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace FPLedit.Bildfahrplan.Model
 {
     internal sealed class TrainStyle : Style
     {
         public ITrain Train { get; }
-        
+
         private readonly TimetableStyle ttStyle;
+
         public TrainStyle(ITrain tra, TimetableStyle ttStyle) : base(tra._parent)
         {
             Train = tra;
@@ -22,9 +20,11 @@ namespace FPLedit.Bildfahrplan.Model
         {
             Train = tra;
         }
-        
+
         public void ResetDefaults()
         {
+            if (!(Train is IWritableTrain))
+                throw new InvalidOperationException("Style of linked train cannot be changed!");
             TrainColor = null;
             TrainWidth = null;
             Show = true;
@@ -34,15 +34,21 @@ namespace FPLedit.Bildfahrplan.Model
         public MColor TrainColor
         {
             get => ParseColor(Train.GetAttribute<string>("cl"), null);
-            set => Train.SetAttribute("cl", ColorToString(value ?? MColor.White));
+            set
+            {
+                if (!(Train is IWritableTrain))
+                    throw new InvalidOperationException("Style of linked train cannot be changed!");
+                Train.SetAttribute("cl", ColorToString(value ?? MColor.White));
+            }
         }
+
         public MColor CalcedColor => overrideEntityStyle ? ttStyle.TrainColor : (TrainColor ?? ttStyle.TrainColor);
         public string HexColor
         {
             get => TrainColor != null ? ColorFormatter.ToString(TrainColor, false) : null;
             set => TrainColor = ColorFormatter.FromString(value, MColor.White);
         }
-        
+
         public int? TrainWidth
         {
             get
@@ -52,26 +58,47 @@ namespace FPLedit.Bildfahrplan.Model
                     return null;
                 return val;
             }
-            set => Train.SetAttribute("sz", value.ToString());
+            set
+            {
+                if (!(Train is IWritableTrain))
+                    throw new InvalidOperationException("Style of linked train cannot be changed!");
+                Train.SetAttribute("sz", value.ToString());
+            }
         }
         public int CalcedWidth => overrideEntityStyle ? ttStyle.TrainWidth : (TrainWidth ?? ttStyle.TrainWidth);
+
         public int TrainWidthInt
         {
             get => Train.GetAttribute("sz", -1);
-            set => Train.SetAttribute("sz", value.ToString());
+            set
+            {
+                if (!(Train is IWritableTrain))
+                    throw new InvalidOperationException("Style of linked train cannot be changed!");
+                Train.SetAttribute("sz", value.ToString());
+            }
         }
 
         public bool Show
         {
             get => Train.GetAttribute("sh", true);
-            set => Train.SetAttribute("sh", value.ToString().ToLower());
+            set
+            {
+                if (!(Train is IWritableTrain))
+                    throw new InvalidOperationException("Style of linked train cannot be changed!");
+                Train.SetAttribute("sh", value.ToString().ToLower());
+            }
         }
         public bool CalcedShow => overrideEntityStyle || Show;
 
         public int LineStyle
         {
             get => Train.GetAttribute<int>("sy", 0);
-            set => Train.SetAttribute("sy", value.ToString());
+            set
+            {
+                if (!(Train is IWritableTrain))
+                    throw new InvalidOperationException("Style of linked train cannot be changed!");
+                Train.SetAttribute("sy", value.ToString());
+            }
         }
         public int CalcedLineStyle => overrideEntityStyle ? 0 : LineStyle;
     }
