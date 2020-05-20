@@ -5,6 +5,7 @@ using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FPLedit.Shared.Helpers;
 
 namespace FPLedit.Editor.TimetableEditor
 {
@@ -21,21 +22,26 @@ namespace FPLedit.Editor.TimetableEditor
 
         private readonly IEnumerable<ShuntMove> shuntBackup;
 
-        public ShuntForm(ArrDep arrDep, Station sta)
+        public ShuntForm(ITrain train, ArrDep arrDep, Station sta)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
             this.arrDep = arrDep;
             this.station = sta;
+            
+            var dir = new NetworkHelper(train._parent).GetTrainDirectionAtStation(train, sta);
+            var th = new TrackHelper();
 
             arrivalLabel.Font = new Font(arrivalLabel.Font.FamilyName, arrivalLabel.Font.Size, FontStyle.Bold);
             departureLabel.Font = new Font(departureLabel.Font.FamilyName, departureLabel.Font.Size, FontStyle.Bold);
             
+            var arrivalTrack = dir.HasValue ? th.GetTrack(train, sta, dir.Value, arrDep, TrackQuery.Departure) : "-";
             arrivalLabel.Text = arrivalLabel.Text.Replace("{time}", arrDep.Arrival != default ? arrDep.Arrival.ToShortTimeString() : "-");
-            arrivalLabel.Text = arrivalLabel.Text.Replace("{track}", arrDep.ArrivalTrack);
+            arrivalLabel.Text = arrivalLabel.Text.Replace("{track}", arrivalTrack);
             
+            var departureTrack = dir.HasValue ? th.GetTrack(train, sta, dir.Value, arrDep, TrackQuery.Departure) : "-";
             departureLabel.Text = departureLabel.Text.Replace("{time}", arrDep.Departure != default ? arrDep.Departure.ToShortTimeString() : "-");
-            departureLabel.Text = departureLabel.Text.Replace("{track}", arrDep.DepartureTrack);
+            departureLabel.Text = departureLabel.Text.Replace("{track}", departureTrack);
 
             Title = Title.Replace("{station}", station.SName);
 

@@ -304,7 +304,7 @@ namespace FPLedit.Editor.TimetableEditor
 
             var arrDep = data.ArrDeps[sta];
 
-            using (var shf = new ShuntForm(arrDep, sta))
+            using (var shf = new ShuntForm(train, arrDep, sta))
                 if (shf.ShowModal(this) != DialogResult.Ok)
                     return;
 

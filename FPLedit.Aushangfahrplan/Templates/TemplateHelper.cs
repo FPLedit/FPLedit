@@ -1,20 +1,21 @@
-﻿using FPLedit.Aushangfahrplan.Model;
-using FPLedit.Shared;
+﻿using FPLedit.Shared;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using FPLedit.Shared.DefaultImplementations;
+using FPLedit.Shared.Helpers;
 
 namespace FPLedit.Aushangfahrplan.Templates
 {
     public sealed class TemplateHelper
     {
         private readonly Timetable tt;
+        private readonly NetworkHelper nh;
         private readonly FilterRule[] trules, srules;
 
         public TemplateHelper(Timetable tt)
         {
             this.tt = tt;
+            nh = new NetworkHelper(tt);
 
             var filterable = Plugin.FilterRuleContainer;
 
@@ -24,20 +25,18 @@ namespace FPLedit.Aushangfahrplan.Templates
 
         public Station[] GetStations()
         {
-            var x = tt.Stations
+            return tt.Stations
                 .Where(s => srules.All(r => !r.Matches(s)))
-                .Where(s => GetTrains(s).Length > 0)
+                .Where(s => GetTrains(s).Any())
                 .ToArray();
-            return x;
         }
 
-        private ITrain[] GetTrains(Station sta)
+        private IEnumerable<ITrain> GetTrains(Station sta)
         {
             return tt.Trains.Where(t => t.GetPath().Contains(sta)
-                && t.GetArrDep(sta).Departure != default
-                && trules.All(r => !r.Matches(t)))
-                .OrderBy(t => t.GetArrDep(sta).Departure)
-                .ToArray();
+                                        && t.GetArrDep(sta).Departure != default
+                                        && trules.All(r => !r.Matches(t)))
+                .OrderBy(t => t.GetArrDep(sta).Departure);
         }
 
         #region Last stations
@@ -75,52 +74,6 @@ namespace FPLedit.Aushangfahrplan.Templates
         }
         #endregion
 
-        #region Trains at station
-
-        public ITrain[] GetTrains(TrainDirection dir, Station sta)
-        {
-            var stasAfter = GetStationsInDir(dir, sta);
-            var stasBefore = GetStationsInDir(dir == TrainDirection.ta ? TrainDirection.ti : TrainDirection.ta, sta);
-
-            return GetTrains(sta).Where(t =>
-            {
-                var p = t.GetPath();
-                var ardeps = t.GetArrDepsUnsorted();
-
-                var nsta = p.Where(s => stasAfter.Contains(s)).FirstOrDefault(s => ardeps[s].HasMinOneTimeSet);
-                if (nsta == null)
-                {
-                    var lsta = p.Where(s => stasBefore.Contains(s)).FirstOrDefault(s => ardeps[s].HasMinOneTimeSet);
-                    if (lsta == null)
-                        return false;
-                    var ltime = ardeps[lsta].FirstSetTime;
-                    return ltime < ardeps[sta].Departure;
-                }
-                var ntime = ardeps[nsta].FirstSetTime;
-                return ntime > ardeps[sta].Departure;
-            }).ToArray();
-        }
-
-        private Station[] GetStationsInDir(TrainDirection dir, Station sta)
-        {
-            if (tt.Type == TimetableType.Linear)
-            {
-                var stas = tt.GetLinearStationsOrderedByDirection(dir);
-                return stas.Skip(stas.IndexOf(sta) + 1).ToArray();
-            }
-            var stasAfter = new List<Station>();
-            foreach (var rt in sta.Routes)
-            {
-                var route = tt.GetRoute(rt);
-                var pos = sta.Positions.GetPosition(rt);
-                var nextStations = dir == TrainDirection.ti ?
-                    route.Stations.Where(s => s.Positions.GetPosition(rt) > pos) : // ti
-                    route.Stations.Where(s => s.Positions.GetPosition(rt) < pos); // ta
-                stasAfter.AddRange(nextStations);
-            }
-            return stasAfter.ToArray();
-        }
-
-        #endregion
+        public ITrain[] GetTrains(TrainDirection dir, Station sta) => nh.GetTrains(GetTrains(sta), dir, sta).ToArray();
     }
 }

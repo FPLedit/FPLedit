@@ -127,8 +127,18 @@ namespace FPLedit.Shared
         /// <see cref="TimeEntry.Zero"/> if no time entry is set.
         /// </summary>
         /// <seealso cref="HasMinOneTimeSet"/>
+        /// <seealso cref="LastSetTime"/>
         public TimeEntry FirstSetTime
             => Arrival == default ? Departure : Arrival;
+        
+        /// <summary>
+        /// Returns the highest time value set either on <see cref="Arrival"/> or <see cref="Departure"/> - or
+        /// <see cref="TimeEntry.Zero"/> if no time entry is set.
+        /// </summary>
+        /// <seealso cref="HasMinOneTimeSet"/>
+        /// <seealso cref="FirstSetTime"/>
+        public TimeEntry LastSetTime
+            => Departure == default ? Arrival : Departure;
 
         /// <summary>
         /// Meta-property (readonly) stating, whether the train actually has any time entry (<see cref="Arrival"/> or

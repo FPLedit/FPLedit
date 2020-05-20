@@ -50,10 +50,16 @@ namespace FPLedit.Shared
         }
 
         /// <summary>
-        /// Returns the next station after the given station, fóllowing this path, or null.
+        /// Returns the next station after the given station, following this path, or null.
         /// </summary>
         public Station NextStation(Station sta)
             => entries.SkipWhile(pe => pe.Station != sta).Skip(1).FirstOrDefault()?.Station;
+        
+        /// <summary>
+        /// Returns the previous station before the given station, following this path, or null.
+        /// </summary>
+        public Station PreviousStation(Station sta)
+            => entries.TakeWhile(pe => pe.Station != sta).LastOrDefault()?.Station;
 
         /// <summary>
         /// Get the route this path exits the given station on.
@@ -65,11 +71,22 @@ namespace FPLedit.Shared
             var next = NextStation(sta);
             return tt.GetDirectlyConnectingRoute(sta, next);
         }
+        
+        /// <summary>
+        /// Get the route this path enters the given station on.
+        /// </summary>
+        public int GetEntryRoute(Station sta)
+        {
+            if (sta == entries.FirstOrDefault()?.Station)
+                return -1;
+            var previous = PreviousStation(sta);
+            return tt.GetDirectlyConnectingRoute(sta, previous);
+        }
 
         /// <summary>
         /// Returns whether this path contains the given station.
         /// </summary>
-        public bool ContainsStation(Station sta) => Array.IndexOf(PathEntries, sta) != -1;
+        public bool ContainsStation(Station sta) => GetRawPath().Contains(sta);
 
         /// <summary>
         /// Returns whether this path connects the two given stations directly.
