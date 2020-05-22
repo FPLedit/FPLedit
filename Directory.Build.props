@@ -16,6 +16,7 @@
     <CodeAnalysisRuleSet>..\build_scripts\FPLedit.ruleset</CodeAnalysisRuleSet>
 
     <WarningsAsErrors>CS8600;CS8602;CS8603</WarningsAsErrors>
+    <MSBuildWarningsAsMessages>MSB3277</MSBuildWarningsAsMessages>
     
     <EtoVersion>2.5.1-ci-20200427.1</EtoVersion>
     
@@ -30,7 +31,6 @@
     <!-- Output configuration -->
     <OutputPath Condition=" '$(ForceConfigurationDir)' == '' ">..\bin\$(Configuration)\</OutputPath>
     <OutputPath Condition=" '$(ForceConfigurationDir)' != '' ">..\bin\$(ForceConfigurationDir)\</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 
     <!-- Use common obj folder -->
     <IntermediateOutputPath>..\obj\$(SolutionName)\$(MSBuildProjectName)\$(Configuration)\</IntermediateOutputPath>

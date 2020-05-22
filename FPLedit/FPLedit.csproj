@@ -47,6 +47,17 @@
     <ProjectReference Include="..\FPLedit.Shared.UI\FPLedit.Shared.UI.csproj" />
     <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj" />
   </ItemGroup>
+
+  <!-- Dependencies for bundling -->
+  <ItemGroup>
+    <ProjectReference Include="..\FPLedit.Buchfahrplan\FPLedit.Buchfahrplan.csproj" />
+    <ProjectReference Include="..\FPLedit.Aushangfahrplan\FPLedit.Aushangfahrplan.csproj" />
+    <ProjectReference Include="..\FPLedit.Bildfahrplan\FPLedit.Bildfahrplan.csproj" />
+    <ProjectReference Include="..\FPLedit.DebugDump\FPLedit.DebugDump.csproj" />
+    <ProjectReference Include="..\FPLedit.jTrainGraphStarter\FPLedit.jTrainGraphStarter.csproj" />
+    <ProjectReference Include="..\FPLedit.Kursbuch\FPLedit.Kursbuch.csproj" />
+  </ItemGroup>
+  
   <ItemGroup>
     <PackageReference Include="Eto.Forms" Version="$(EtoVersion)" />
     <PackageReference Include="Eto.Platform.Gtk" Version="$(EtoVersion)" />
