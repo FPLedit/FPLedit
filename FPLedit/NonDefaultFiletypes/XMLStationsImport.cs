@@ -17,10 +17,12 @@ namespace FPLedit.NonDefaultFiletypes
             var xElement = XElement.Load(stream);
 
             var xmlEntity = new XMLEntity(xElement);
-            var list = new StationsList(xmlEntity);
-            
             var tt = new Timetable(TimetableType.Linear);
-            foreach (var i in list.Stations)
+            
+            var stations = xmlEntity.Children.Where(x => x.XName == "sta") // Filters other elements
+                .Select(x => new Station(x, tt));
+            
+            foreach (var i in stations)
                 tt.AddStation(i, Timetable.LINEAR_ROUTE_ID);
             
             return tt;
