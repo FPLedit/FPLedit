@@ -15,14 +15,14 @@
         [XAttrName("so")]
         public string SourceTrack
         {
-            get => GetAttribute<string>("so");
+            get => GetAttribute<string>("so", "");
             set => SetAttribute("so", value);
         }
 
         [XAttrName("ta")]
         public string TargetTrack
         {
-            get => GetAttribute<string>("ta");
+            get => GetAttribute("ta", "");
             set => SetAttribute("ta", value);
         }
 

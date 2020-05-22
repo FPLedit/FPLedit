@@ -26,6 +26,7 @@ namespace FPLedit.Shared
         protected PathData(Timetable tt)
         {
             this.tt = tt;
+            entries = Array.Empty<PathEntry>();
         }
 
         /// <summary>
@@ -52,13 +53,13 @@ namespace FPLedit.Shared
         /// <summary>
         /// Returns the next station after the given station, following this path, or null.
         /// </summary>
-        public Station NextStation(Station sta)
+        public Station? NextStation(Station sta)
             => entries.SkipWhile(pe => pe.Station != sta).Skip(1).FirstOrDefault()?.Station;
         
         /// <summary>
         /// Returns the previous station before the given station, following this path, or null.
         /// </summary>
-        public Station PreviousStation(Station sta)
+        public Station? PreviousStation(Station sta)
             => entries.TakeWhile(pe => pe.Station != sta).LastOrDefault()?.Station;
 
         /// <summary>
@@ -67,8 +68,10 @@ namespace FPLedit.Shared
         public int GetExitRoute(Station sta)
         {
             if (sta == entries.LastOrDefault()?.Station)
-                return -1;
+                return Timetable.UNASSIGNED_ROUTE_ID;
             var next = NextStation(sta);
+            if (next == null)
+                return Timetable.UNASSIGNED_ROUTE_ID;
             return tt.GetDirectlyConnectingRoute(sta, next);
         }
         
@@ -78,8 +81,10 @@ namespace FPLedit.Shared
         public int GetEntryRoute(Station sta)
         {
             if (sta == entries.FirstOrDefault()?.Station)
-                return -1;
+                return Timetable.UNASSIGNED_ROUTE_ID;
             var previous = PreviousStation(sta);
+            if (previous == null)
+                return Timetable.UNASSIGNED_ROUTE_ID;
             return tt.GetDirectlyConnectingRoute(sta, previous);
         }
 
@@ -190,11 +195,11 @@ namespace FPLedit.Shared
     [Templating.TemplateSafe]
     public class TrainPathEntry : PathEntry
     {
-        public TrainPathEntry(Station station, ArrDep arrDep, int routeIndex) : base(station, routeIndex)
+        public TrainPathEntry(Station station, ArrDep? arrDep, int routeIndex) : base(station, routeIndex)
         {
             ArrDep = arrDep;
         }
 
-        public ArrDep ArrDep { get; }
+        public ArrDep? ArrDep { get; }
     }
 }

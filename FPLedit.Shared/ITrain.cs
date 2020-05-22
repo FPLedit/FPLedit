@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FPLedit.Shared
 {
@@ -68,7 +69,7 @@ namespace FPLedit.Shared
         /// <param name="sta">The station to look for as atime entry.</param>
         /// <param name="arrDep">Out parameter containing the found time entry, or null if the return value is false.</param>
         /// <returns>true, if the time entry was found.</returns>
-        bool TryGetArrDep(Station sta, out ArrDep arrDep);
+        bool TryGetArrDep(Station sta, [NotNullWhen(returnValue: true)] out ArrDep? arrDep);
         /// <summary>
         /// This functions return value contains all <see cref="ArrDep"/>s of this train, but sorting may not be preserved. (It is a dictionary!) Use <see cref="GetPath"/> to get the correct sorted stations.
         /// </summary>
@@ -110,7 +111,7 @@ namespace FPLedit.Shared
         /// <param name="sta"></param>
         /// <param name="route">The route index, at which the station is used, or <see cref="Timetable.LINEAR_ROUTE_ID"/> if the timetable is linear.</param>
         /// <returns>The newly added time entry.</returns>
-        ArrDep AddArrDep(Station sta, int route);
+        ArrDep? AddArrDep(Station sta, int route);
         /// <summary>
         /// Removes the time entry of the given station. May require removing the station from the timetable altogether, to keep the timetable consistent.
         /// </summary>

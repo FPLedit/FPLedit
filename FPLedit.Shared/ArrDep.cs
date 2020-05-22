@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FPLedit.Shared
 {
@@ -86,7 +87,7 @@ namespace FPLedit.Shared
         [XAttrName("fpl-zlm", IsFpleditElement = true)]
         public string Zuglaufmeldung
         {
-            get => GetAttribute<string>("fpl-zlm");
+            get => GetAttribute("fpl-zlm", "");
             set => SetAttribute("fpl-zlm", value);
         }
         
@@ -102,7 +103,7 @@ namespace FPLedit.Shared
         [XAttrName("at")]
         public string ArrivalTrack
         {
-            get => GetAttribute<string>("at");
+            get => GetAttribute("at", "");
             set => SetAttribute("at", value);
         }
 
@@ -118,7 +119,7 @@ namespace FPLedit.Shared
         [XAttrName("dt")]
         public string DepartureTrack
         {
-            get => GetAttribute<string>("dt");
+            get => GetAttribute("dt", "");
             set => SetAttribute("dt", value);
         }
 

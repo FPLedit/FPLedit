@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace FPLedit.Shared
@@ -19,7 +20,7 @@ namespace FPLedit.Shared
         [XAttrName("name")]
         public string TName
         {
-            get => GetAttribute<string>("name");
+            get => GetAttribute("name", "");
             set => SetAttribute("name", value);
         }
 
@@ -77,7 +78,7 @@ namespace FPLedit.Shared
         }
 
         /// <inheritdoc />
-        public ArrDep AddArrDep(Station sta, int route)
+        public ArrDep? AddArrDep(Station sta, int route)
         {
             // Filter other elements in front 
             int idx = Children.TakeWhile(x => x.XName != ArrDep.DEFAULT_X_NAME).Count();
@@ -119,7 +120,7 @@ namespace FPLedit.Shared
         }
 
         /// <inheritdoc />
-        public bool TryGetArrDep(Station sta, out ArrDep arrDep)
+        public bool TryGetArrDep(Station sta,  [NotNullWhen(returnValue: true)] out ArrDep? arrDep)
         {
             var tElems = InternalGetArrDeps();
             if (_parent.Type == TimetableType.Linear)
@@ -269,7 +270,7 @@ namespace FPLedit.Shared
 
         [DebuggerStepThrough]
         public override string ToString()
-            => TName;
+            => TName ?? "";
 
         /// <inheritdoc />
         public TrainLink[] TrainLinks

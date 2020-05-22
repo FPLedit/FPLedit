@@ -102,7 +102,7 @@ namespace FPLedit.Editor.TimetableEditor
             if (!data.IsFirst(sta) && !data.IsSelectedArrival)
                 return;
 
-            using (var zlmDialog = new ZlmEditForm(data.ArrDeps[sta].Zuglaufmeldung ?? ""))
+            using (var zlmDialog = new ZlmEditForm(data.ArrDeps[sta].Zuglaufmeldung))
             {
                 if (zlmDialog.ShowModal(this) != DialogResult.Ok)
                     return;

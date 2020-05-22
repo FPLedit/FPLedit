@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using FPLedit.Shared.Helpers;
 
@@ -14,15 +15,15 @@ namespace FPLedit.Shared
     public class RouteValueCollection<T>
     {
         private static readonly EscapeSplitHelper escape = new EscapeSplitHelper(';');
-        
+
         private readonly IEntity entity;
         private readonly Dictionary<int, T> values;
         private readonly Timetable tt;
         private readonly string attr, defaultVal;
         private readonly Func<string, T> convTo;
-        private readonly Func<T, string> convFrom;
+        private readonly Func<T, string?> convFrom;
         private readonly bool optional;
-        private readonly T convDefault;
+        [MaybeNull] private readonly T convDefault;
 
         /// <summary>
         /// Creates a new RVC.
@@ -37,7 +38,7 @@ namespace FPLedit.Shared
         /// <remarks>
         /// The character ";" will be escaped in the serialized string.
         /// </remarks>
-        public RouteValueCollection(IEntity e, Timetable tt, string attr, string defaultVal, Func<string, T> convTo, Func<T, string> convFrom, bool optional = true)
+        public RouteValueCollection(IEntity e, Timetable tt, string attr, string defaultVal, Func<string, T> convTo, Func<T, string?> convFrom, bool optional = true)
         {
             this.attr = attr;
             this.convFrom = convFrom;
@@ -65,9 +66,10 @@ namespace FPLedit.Shared
         /// <summary>
         /// Return the value - or the default value, if no value has been set - corresponding to the given route.
         /// </summary>
+        [return: MaybeNull]
         public T GetValue(int route)
         {
-            if (values.TryGetValue(route, out T val))
+            if (values.TryGetValue(route, out var val))
                 return val;
             return convDefault;
         }
@@ -75,9 +77,9 @@ namespace FPLedit.Shared
         /// <summary>
         /// Set the value corresponding to the given route.
         /// </summary>
-        public void SetValue(int route, T val)
+        public void SetValue(int route, [AllowNull] T val)
         {
-            values[route] = val;
+            values[route] = val!;
             Write();
         }
 
@@ -103,10 +105,10 @@ namespace FPLedit.Shared
         /// </summary>
         private void ParseLinear()
         {
-            var toParse = entity.GetAttribute<string>(attr, null);
+            var toParse = entity.GetAttribute<string>(attr);
             if (optional && toParse == null)
                 return;
-            
+
             if (toParse == null)
                 toParse = defaultVal;
             values.Add(Timetable.LINEAR_ROUTE_ID, convTo(toParse));
@@ -125,13 +127,16 @@ namespace FPLedit.Shared
             var text = "";
             var t = forceType ?? tt.Type;
             if (t == TimetableType.Linear)
-                text = convFrom(GetValue(Timetable.LINEAR_ROUTE_ID));
+                text = convFrom(GetValue(Timetable.LINEAR_ROUTE_ID)!);
             else
             {
                 var posStrings = values.Select(kvp => kvp.Key + ":" + convFrom(kvp.Value));
                 text = escape.JoinEscaped(posStrings);
             }
-            entity.SetAttribute(attr, text);
+
+            entity.SetAttribute(attr, text ?? "");
+            if (t == TimetableType.Linear && optional && text == null)
+                entity.RemoveAttribute(attr);
         }
 
         /// <summary>
@@ -142,12 +147,12 @@ namespace FPLedit.Shared
         /// <summary>
         /// Replace all opccurences of <paramref name="oldVal"/> with <paramref name="newVal" /> on all routes. 
         /// </summary>
-        public void ReplaceAllValues(T oldVal, T newVal)
+        public void ReplaceAllValues([DisallowNull] T oldVal, [DisallowNull] T newVal)
         {
             for (int i = 0; i < values.Count; i++)
             {
                 var kvp = values.ElementAt(i);
-                if (kvp.Value.Equals(oldVal))
+                if (oldVal.Equals(kvp.Value))
                     SetValue(kvp.Key, newVal);
             }
         }

@@ -30,11 +30,14 @@ namespace FPLedit.Shared
         {
             return names[countingIndex];
         }
-        
+
         /// <summary>
         /// Initialize a new empty instance.
         /// </summary>
-        public SpecialTrainNameCalculator() {}
+        public SpecialTrainNameCalculator()
+        {
+            this.names = Array.Empty<string>();
+        }
 
         /// <summary>
         /// Create a new instance, providing data.

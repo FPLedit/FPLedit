@@ -74,7 +74,7 @@ namespace FPLedit.Shared
                     return "S";
             }
 
-            string[] str = new string[7];
+            string?[] str = new string[7];
             str[0] = this[0] ? "Mo" : null;
             str[1] = this[1] ? "Di" : null;
             str[2] = this[2] ? "Mi" : null;
@@ -127,9 +127,9 @@ namespace FPLedit.Shared
         /// </summary>
         /// <param name="compare"></param>
         /// <returns></returns>
-        private bool EqualsString(string compare) => Parse(compare).Equals(this);
+        private bool EqualsString(string? compare) => compare != null && Parse(compare).Equals(this);
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
             => obj is Days d && internalDays.SequenceEqual(d.internalDays);
 
         public override int GetHashCode()
@@ -143,7 +143,7 @@ namespace FPLedit.Shared
 
         public bool Equals(Days other) => Equals((object)other);
 
-        public bool Equals(string other) => EqualsString(other);
+        public bool Equals(string? other) => EqualsString(other);
 
         public static bool operator !=(Days d1, Days d2) => !d1.Equals(d2);
 

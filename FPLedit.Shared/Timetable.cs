@@ -54,7 +54,7 @@ namespace FPLedit.Shared
 
         public IList<Transition> Transitions => transitions.AsReadOnly();
 
-        public event EventHandler TrainsChanged;
+        public event EventHandler? TrainsChanged;
 
         /// <summary>
         /// Create a new new empty timetable file of the given timetable type.
@@ -167,8 +167,6 @@ namespace FPLedit.Shared
                 tElm = new XMLEntity("trains");
                 Children.Add(tElm);
             }
-
-            tElm.ChildrenChangedDirect += (s, e) => TrainsChanged?.Invoke(s, e);
 
             transitions = new List<Transition>();
             trElm = Children.FirstOrDefault(x => x.XName == "transitions");
@@ -627,7 +625,7 @@ namespace FPLedit.Shared
         }
 
         /// <inheritdoc />
-        public ITrain GetTransition(ITrain first)
+        public ITrain? GetTransition(ITrain first)
         {
             if (first == null)
                 return null;
@@ -659,7 +657,7 @@ namespace FPLedit.Shared
         }
 
         /// <inheritdoc />
-        public ITrain GetTransition(string firstTrainId)
+        public ITrain? GetTransition(string firstTrainId)
         {
             if (firstTrainId == "-1" || string.IsNullOrWhiteSpace(firstTrainId))
                 return null;

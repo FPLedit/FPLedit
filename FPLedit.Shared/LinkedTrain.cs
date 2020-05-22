@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace FPLedit.Shared
@@ -70,14 +71,12 @@ namespace FPLedit.Shared
         }
 
         /// <inheritdoc />
-        public bool TryGetArrDep(Station sta, out ArrDep arrDep)
+        public bool TryGetArrDep(Station sta, [NotNullWhen(returnValue: true)] out ArrDep? arrDep)
         {
-            var ret = baseTrain.TryGetArrDep(sta, out var tempArrDep);
-            if (ret)
+            arrDep = null;
+            if (baseTrain.TryGetArrDep(sta, out var tempArrDep))
                 arrDep = link.ProcessArrDep(tempArrDep, countingIndex);
-            else
-                arrDep = null;
-            return ret;
+            return arrDep != null;
         }
 
         /// <inheritdoc />

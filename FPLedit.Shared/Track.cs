@@ -19,7 +19,7 @@
         [XAttrName("name")]
         public string Name
         {
-            get => GetAttribute<string>("name");
+            get => GetAttribute("name", "");
             set => SetAttribute("name", value);
         }
     }

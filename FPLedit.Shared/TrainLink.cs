@@ -29,7 +29,7 @@ namespace FPLedit.Shared
         [XAttrName("tln")]
         public ITrainLinkNameCalculator TrainNamingScheme
         {
-            get => TrainLinkNameCalculatorManager.Deserialize(GetAttribute<string>("tln"));
+            get => TrainLinkNameCalculatorManager.Deserialize(GetAttribute("tln", ""));
             set => SetAttribute("tln", TrainLinkNameCalculatorManager.Serialize(value));
         }
         
@@ -39,7 +39,7 @@ namespace FPLedit.Shared
         [XAttrName("tli")]
         internal int[] TrainIndices
         {
-            get => GetAttribute<string>("tli").Split(';').Select(s => int.Parse(s)).ToArray();
+            get => GetAttribute("tli", "").Split(';').Select(s => int.Parse(s)).ToArray();
             private set => SetAttribute("tli", string.Join(";", value));
         }
         
@@ -121,7 +121,7 @@ namespace FPLedit.Shared
         /// <param name="countingIndex">The zero-based counting index of the linked train, relative to this link.</param>
         public string GetChildTrainName(int countingIndex)
         {
-            return TrainNamingScheme.GetTrainName(countingIndex);
+            return TrainNamingScheme?.GetTrainName(countingIndex) ?? "";
         }
 
         /// <summary>
@@ -199,7 +199,7 @@ namespace FPLedit.Shared
             });
         }
 
-        private void TrainsChanged(object sender, EventArgs e)
+        private void TrainsChanged(object? sender, EventArgs e)
         {
             var trains = _parent.Trains.Where(t => t.Direction == ParentTrain.Direction).ToArray();
             TrainIndices = linkedTrains.Select(lt => Array.IndexOf(trains, lt)).ToArray();

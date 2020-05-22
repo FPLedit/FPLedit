@@ -136,12 +136,12 @@ namespace FPLedit.Shared
         /// Get the next train, following a single transition, if one exists.
         /// </summary>
         /// <returns>The next train or null, if none exists.</returns>
-        ITrain GetTransition(ITrain first);
+        ITrain? GetTransition(ITrain first);
         /// <summary>
         /// Get the next train, following a single transition, if one exists.
         /// </summary>
         /// <returns>The next train or null, if none exists.</returns>
-        ITrain GetTransition(string firstQualifiedTrainId);
+        ITrain? GetTransition(string firstQualifiedTrainId);
         /// <summary>
         /// Get all next train, following all transitions as long as possible.
         /// </summary>

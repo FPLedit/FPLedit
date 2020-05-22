@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using Force.DeepCloner;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FPLedit.Shared
 {
@@ -13,7 +14,13 @@ namespace FPLedit.Shared
     {
         public XMLEntity XMLEntity { get; }
 
-        public Timetable _parent { get; set; }
+        private Timetable? parent;
+        [NotNull]
+        public Timetable? _parent
+        {
+            get => parent ?? throw new InvalidOperationException("Tried to access parent timetable of dissociated Entity instance.");
+            set => parent = value; 
+        }
 
         /// <inheritdoc />
         public Dictionary<string, string> Attributes
@@ -30,7 +37,7 @@ namespace FPLedit.Shared
         /// </summary>
         /// <param name="xn">XML node name for the newly constructed underlying <see cref="XMLEntity" />.</param>
         /// <param name="tt">A reference to the parent timetable.</param>
-        protected Entity(string xn, Timetable tt)
+        protected Entity(string xn, Timetable? tt)
         {
             XMLEntity = new XMLEntity(xn);
             XMLEntity.ChildrenChangedRecursive += (s, e) => OnChildrenChanged();
@@ -43,7 +50,7 @@ namespace FPLedit.Shared
         /// <param name="en">The already-initialized XML Entity.</param>
         /// <param name="tt">A reference to the parent timetable.</param>
         /// <remarks>The XML entity must already be registered in the XML tree, if ist is not the top-level element itself.</remarks>
-        protected Entity(XMLEntity en, Timetable tt)
+        protected Entity(XMLEntity en, Timetable? tt)
         {
             XMLEntity = en;
             XMLEntity.ChildrenChangedRecursive += (s, e) => OnChildrenChanged();
@@ -51,8 +58,10 @@ namespace FPLedit.Shared
         }
 
         /// <inheritdoc />
-        public T GetAttribute<T>(string key, T defaultValue = default)
-            => XMLEntity.GetAttribute<T>(key, defaultValue);
+        [return: MaybeNull]
+        [return: NotNullIfNotNull("defaultValue")]
+        public T GetAttribute<T>(string key, [AllowNull] T defaultValue = default)
+            => XMLEntity.GetAttribute(key, defaultValue);
 
         /// <inheritdoc />
         public void SetAttribute(string key, string value)
@@ -76,7 +85,7 @@ namespace FPLedit.Shared
 
         protected TimeEntry GetTimeAttributeValue(string key)
         {
-            var val = GetAttribute(key, "");
+            string val = GetAttribute(key, "")!;
             TimeEntry.TryParse(val, out var ts);
             return ts;
         }

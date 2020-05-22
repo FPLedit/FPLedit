@@ -27,12 +27,12 @@ namespace FPLedit.Shared
             
             if (registered.TryGetValue(parts[0], out var tnct) && typeof(ITrainLinkNameCalculator).IsAssignableFrom(tnct))
             {
-                var tnc = (ITrainLinkNameCalculator) Activator.CreateInstance(tnct);
-                tnc.Deserialize(parts);
-                return tnc;
+                var tnc = (ITrainLinkNameCalculator?) Activator.CreateInstance(tnct);
+                tnc?.Deserialize(parts);
+                return tnc ?? throw new FormatException("Train link nameing scheme " + parts[0] + " could not be instandiated!");;
             }
 
-            return null;
+            throw new FormatException("Train link nameing scheme " + parts[0] + " not found!");
         }
 
         //HACK: This is intentional and may lead to a crash when a part contains a semicolon. But jTrainGraph does is like that.

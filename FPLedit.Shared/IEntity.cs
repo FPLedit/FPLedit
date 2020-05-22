@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FPLedit.Shared
 {
@@ -11,7 +12,7 @@ namespace FPLedit.Shared
     { 
         XMLEntity XMLEntity { get; }
         
-        Timetable _parent { get; set; }
+        [NotNull] Timetable? _parent { get; set; }
         
         /// <summary>
         /// Gets or sets all XML attributes of the underlying XML node.
@@ -29,7 +30,9 @@ namespace FPLedit.Shared
         /// <param name="defaultValue"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        T GetAttribute<T>(string key, T defaultValue = default);
+        [return: MaybeNull]
+        [return: NotNullIfNotNull("defaultValue")]
+        T GetAttribute<T>(string key, [AllowNull] T defaultValue = default);
 
         /// <summary>
         /// Set or add an attribute of the underlying XML node.

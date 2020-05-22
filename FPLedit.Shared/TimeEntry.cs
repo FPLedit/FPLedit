@@ -41,7 +41,7 @@ namespace FPLedit.Shared
             return Hours.CompareTo(other.Hours);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is TimeEntry t)
                 return Equals(t);
@@ -52,7 +52,7 @@ namespace FPLedit.Shared
 
         public bool Equals(TimeEntry obj) => obj.Hours == Hours && obj.Minutes == Minutes;
 
-        public int CompareTo(object obj)
+        public int CompareTo(object? obj)
         {
             switch (obj)
             {

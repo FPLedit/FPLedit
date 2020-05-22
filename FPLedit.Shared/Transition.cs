@@ -22,15 +22,15 @@ namespace FPLedit.Shared
         [XAttrName("first")]
         public string First
         {
-            get => GetAttribute<string>("first");
-            set => SetAttribute("first", value.ToString());
+            get => GetAttribute("first", "");
+            set => SetAttribute("first", value);
         }
 
         [XAttrName("next")]
         public string Next
         {
-            get => GetAttribute<string>("next");
-            set => SetAttribute("next", value.ToString());
+            get => GetAttribute("next", "");
+            set => SetAttribute("next", value);
         }
     }
 }

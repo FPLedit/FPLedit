@@ -31,7 +31,12 @@ namespace FPLedit.Shared
             this.childXName = childXName;
 
             foreach (var c in parentEntity.Children.Where(x => x.XName == childXName)) // Filtert andere Elemente
-                Add((T)Activator.CreateInstance(typeof(T), c, tt));
+            {
+                var entity = Activator.CreateInstance(typeof(T), c, tt);
+                if (entity == null)
+                    throw new Exception("Entity initialization failed!");
+                Add((T)entity);
+            }
 
             initialized = true;
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
@@ -16,7 +17,7 @@ namespace FPLedit.Shared
     [Templating.TemplateSafe]
     public sealed class XMLEntity
     {
-        private XMLEntity ParentElement { get; set; }
+        private XMLEntity? ParentElement { get; set; }
         
         private readonly ObservableCollection<XMLEntity> children;
 
@@ -29,18 +30,18 @@ namespace FPLedit.Shared
 
         public IList<XMLEntity> Children => children;
 
-        public string Value { get; set; }
+        public string? Value { get; set; }
 
         /// <summary>
         /// This event will be called when one of the children of this element (or any element in the XML subtree below)
         /// is changed (attributes and/or children elements).
         /// </summary>
-        public event EventHandler ChildrenChangedRecursive;
+        public event EventHandler? ChildrenChangedRecursive;
         
         /// <summary>
         /// This event will beraised when the children collection of this entity will be modified.
         /// </summary>
-        public event EventHandler ChildrenChangedDirect;
+        public event EventHandler? ChildrenChangedDirect;
 
         public XMLEntity(string xname)
         {
@@ -74,8 +75,8 @@ namespace FPLedit.Shared
         private void ChildrenOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
-                foreach (XMLEntity item in e.NewItems)
-                    item.ParentElement = this;
+                foreach (XMLEntity? item in e.NewItems)
+                    item!.ParentElement = this;
             
             ChildrenChangedRecursive?.Invoke(this, e);
             ChildrenChangedDirect?.Invoke(this, e);
@@ -87,10 +88,12 @@ namespace FPLedit.Shared
             ChildrenChangedRecursive?.Invoke(this, new EventArgs());
             ParentElement?.NotifyChildChanged(this);
         }
-
-        public T GetAttribute<T>(string key, T defaultValue = default)
+        
+        [return: MaybeNull]
+        [return: NotNullIfNotNull("defaultValue")]
+        public T GetAttribute<T>(string key, [AllowNull] T defaultValue = default)
         {
-            if (Attributes.TryGetValue(key, out string val))
+            if (Attributes.TryGetValue(key, out string? val))
             {
                 if (val == "" && typeof(T) != typeof(string))
                     return defaultValue;
@@ -125,7 +128,7 @@ namespace FPLedit.Shared
                 return false;
             if (Attributes.Count != other.Attributes.Count)
                 return false;
-            if (Attributes.Any(a => a.Value != other.GetAttribute<string>(a.Key, null)))
+            if (Attributes.Any(a => a.Value != other.GetAttribute<string>(a.Key)))
                 return false;
             if (Children.Count != other.Children.Count)
                 return false;
@@ -153,6 +156,7 @@ namespace FPLedit.Shared
         public XElmNameAttribute(params string[] names)
         {
             Names = names;
+            ParentElements = Array.Empty<string>();
         }
 
         public string[] Names { get; }
