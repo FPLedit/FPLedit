@@ -230,7 +230,7 @@ namespace FPLedit.Shared
         /// <exception cref="TimetableTypeNotSupportedException">The timetable is linear but the given route index is not zero.</exception>
         public void AddStation(Station sta, int route)
         {
-            sta._parent = this;
+            sta.ParentTimetable = this;
 
             if (Type == TimetableType.Network)
             {
@@ -284,7 +284,7 @@ namespace FPLedit.Shared
             var needsCleanup = stations.First() == sta || stations.Last() == sta;
             var routes = sta.Routes;
             
-            sta._parent = null;
+            sta.ParentTimetable = null;
             stations.Remove(sta);
             sElm.Children.Remove(sta.XMLEntity);
 
@@ -326,7 +326,7 @@ namespace FPLedit.Shared
             
             if (tra is IWritableTrain wt)
                 wt.Id = ++nextTraId;
-            tra._parent = this;
+            tra.ParentTimetable = this;
             trains.Add(tra);
             tElm.Children.Add(tra.XMLEntity);
         }
@@ -344,7 +344,7 @@ namespace FPLedit.Shared
         {
             RemoveTransition(tra, false); // Remove "orphaned" transitions
 
-            tra._parent = null;
+            tra.ParentTimetable = null;
             trains.Remove(tra);
             tElm.Children.Remove(tra.XMLEntity);
         }

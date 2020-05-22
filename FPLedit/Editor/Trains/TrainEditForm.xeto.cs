@@ -56,7 +56,7 @@ namespace FPLedit.Editor.Trains
             linkGridView.AddColumn<TrainLink>(tl => new TimeEntry(0, tl.TimeDifference).ToShortTimeString(), "Zeitdifferenz");
         }
 
-        public TrainEditForm(Train train) : this(train._parent)
+        public TrainEditForm(Train train) : this(train.ParentTimetable)
         {
             Train = train;
             nameTextBox.Text = train.TName;
@@ -92,7 +92,7 @@ namespace FPLedit.Editor.Trains
 
         private void InitializeTrain()
         {
-            editor.Initialize(Train._parent, Train);
+            editor.Initialize(Train.ParentTimetable, Train);
 
             if (tt.Version != TimetableVersion.JTG2_x)
             {
@@ -120,7 +120,7 @@ namespace FPLedit.Editor.Trains
                 return;
             }
 
-            var name_exists = Train._parent.Trains.Select(t => t.TName).Contains(nameTextBox.Text);
+            var name_exists = Train.ParentTimetable.Trains.Select(t => t.TName).Contains(nameTextBox.Text);
 
             if (name_exists)
             {
@@ -165,7 +165,7 @@ namespace FPLedit.Editor.Trains
                 {
                     th.FillTrain(tfd.ReferenceTrain, Train, tfd.Offset);
 
-                    editor.Initialize(Train._parent, Train);
+                    editor.Initialize(Train.ParentTimetable, Train);
                 }
             }
         }

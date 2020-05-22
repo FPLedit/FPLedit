@@ -27,13 +27,13 @@ namespace FPLedit.Shared
         {
             get
             {
-                if (_parent.Type == TimetableType.Linear)
+                if (ParentTimetable.Type == TimetableType.Linear)
                     throw new TimetableTypeNotSupportedException(TimetableType.Linear, "station ids");
                 return GetAttribute<int>("fpl-id");
             }
             set
             {
-                if (_parent.Type == TimetableType.Linear)
+                if (ParentTimetable.Type == TimetableType.Linear)
                     throw new TimetableTypeNotSupportedException(TimetableType.Linear, "station ids");
                 SetAttribute("fpl-id", value.ToString());
             }
@@ -150,13 +150,13 @@ namespace FPLedit.Shared
 
         public ArrDep(Timetable tt) : base(DEFAULT_X_NAME, tt)
         {
-            ShuntMoves = new ObservableChildrenCollection<ShuntMove>(this, "shMove", _parent);
+            ShuntMoves = new ObservableChildrenCollection<ShuntMove>(this, "shMove", ParentTimetable);
         }
 
         /// <inheritdoc />
         public ArrDep(XMLEntity en, Timetable tt) : base(en, tt)
         {
-            ShuntMoves = new ObservableChildrenCollection<ShuntMove>(this, "shMove", _parent);
+            ShuntMoves = new ObservableChildrenCollection<ShuntMove>(this, "shMove", ParentTimetable);
         }
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace FPLedit.Shared
             ShuntMoves.Clear();
             foreach (var copyShunt in copy.ShuntMoves)
             {
-                var newShunt = new ShuntMove(_parent);
+                var newShunt = new ShuntMove(ParentTimetable);
                 newShunt.ApplyCopy(copyShunt);
                 ShuntMoves.Add(newShunt);
             }
@@ -185,7 +185,7 @@ namespace FPLedit.Shared
         /// </summary>
         public ArrDep Copy()
         {
-            var copy = new ArrDep(_parent);
+            var copy = new ArrDep(ParentTimetable);
             copy.ApplyCopy(this);
             return copy;
         }

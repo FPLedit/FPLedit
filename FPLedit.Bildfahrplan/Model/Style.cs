@@ -5,22 +5,21 @@ namespace FPLedit.Bildfahrplan.Model
 {
     internal abstract class Style
     {
-        internal static IPluginInterface pluginInterface;
+        internal static IPluginInterface PluginInterface;
 
-        private readonly Timetable _parent;
-
-        protected readonly bool overrideEntityStyle;
+        private readonly Timetable parentTimetable;
+        protected bool OverrideEntityStyle { get; }
 
         protected Style(Timetable tt)
         {
-            _parent = tt;
-            overrideEntityStyle = pluginInterface.Settings.Get<bool>("bifpl.override-entity-styles");
+            parentTimetable = tt;
+            OverrideEntityStyle = PluginInterface.Settings.Get<bool>("bifpl.override-entity-styles");
         }
 
         protected MColor ParseColor(string def, MColor defaultValue)
             => ColorFormatter.FromString(def, defaultValue);
 
         protected string ColorToString(MColor color)
-            => ColorFormatter.ToString(color, _parent.Version == TimetableVersion.JTG2_x);
+            => ColorFormatter.ToString(color, parentTimetable.Version == TimetableVersion.JTG2_x);
     }
 }

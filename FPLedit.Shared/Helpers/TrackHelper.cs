@@ -5,7 +5,7 @@ namespace FPLedit.Shared.Helpers
     {
         public string? GetTrack(ITrain train, Station sta, TrainDirection dir, ArrDep timetableEntry, TrackQuery track)
         {
-            var path = new TrainPathData(train._parent, train);
+            var path = new TrainPathData(train.ParentTimetable, train);
             if (!path.ContainsStation(sta))
                 return null;
 

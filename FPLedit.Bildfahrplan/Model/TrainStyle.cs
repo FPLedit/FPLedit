@@ -10,13 +10,13 @@ namespace FPLedit.Bildfahrplan.Model
 
         private readonly TimetableStyle ttStyle;
 
-        public TrainStyle(ITrain tra, TimetableStyle ttStyle) : base(tra._parent)
+        public TrainStyle(ITrain tra, TimetableStyle ttStyle) : base(tra.ParentTimetable)
         {
             Train = tra;
             this.ttStyle = ttStyle;
         }
 
-        public TrainStyle(Train tra) : base(tra._parent)
+        public TrainStyle(Train tra) : base(tra.ParentTimetable)
         {
             Train = tra;
         }
@@ -42,7 +42,7 @@ namespace FPLedit.Bildfahrplan.Model
             }
         }
 
-        public MColor CalcedColor => overrideEntityStyle ? ttStyle.TrainColor : (TrainColor ?? ttStyle.TrainColor);
+        public MColor CalcedColor => OverrideEntityStyle ? ttStyle.TrainColor : (TrainColor ?? ttStyle.TrainColor);
         public string HexColor
         {
             get => TrainColor != null ? ColorFormatter.ToString(TrainColor, false) : null;
@@ -65,7 +65,7 @@ namespace FPLedit.Bildfahrplan.Model
                 Train.SetAttribute("sz", value.ToString());
             }
         }
-        public int CalcedWidth => overrideEntityStyle ? ttStyle.TrainWidth : (TrainWidth ?? ttStyle.TrainWidth);
+        public int CalcedWidth => OverrideEntityStyle ? ttStyle.TrainWidth : (TrainWidth ?? ttStyle.TrainWidth);
 
         public int TrainWidthInt
         {
@@ -88,7 +88,7 @@ namespace FPLedit.Bildfahrplan.Model
                 Train.SetAttribute("sh", value.ToString().ToLower());
             }
         }
-        public bool CalcedShow => overrideEntityStyle || Show;
+        public bool CalcedShow => OverrideEntityStyle || Show;
 
         public int LineStyle
         {
@@ -100,6 +100,6 @@ namespace FPLedit.Bildfahrplan.Model
                 Train.SetAttribute("sy", value.ToString());
             }
         }
-        public int CalcedLineStyle => overrideEntityStyle ? 0 : LineStyle;
+        public int CalcedLineStyle => OverrideEntityStyle ? 0 : LineStyle;
     }
 }

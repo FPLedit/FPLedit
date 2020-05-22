@@ -25,7 +25,7 @@ namespace FPLedit.Kursbuch.Model
 
         [XAttrName("kbsn")]
         public RouteValueCollection<string> KBSn
-            => new RouteValueCollection<string>(this, _parent, "kbsn", null, s => s, s => s);
+            => new RouteValueCollection<string>(this, ParentTimetable, "kbsn", null, s => s, s => s);
 
         [XAttrName("css")]
         public string Css

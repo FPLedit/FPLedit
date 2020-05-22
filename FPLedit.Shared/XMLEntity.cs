@@ -15,6 +15,7 @@ namespace FPLedit.Shared
     /// </summary>
     [DebuggerDisplay("Name: {XName}, Children: {Children.Count}, Attrs: {AttributeDebugger,nq}")]
     [Templating.TemplateSafe]
+    // ReSharper disable once InconsistentNaming
     public sealed class XMLEntity
     {
         private XMLEntity? ParentElement { get; set; }

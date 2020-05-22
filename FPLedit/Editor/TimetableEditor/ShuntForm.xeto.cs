@@ -29,7 +29,7 @@ namespace FPLedit.Editor.TimetableEditor
             this.arrDep = arrDep;
             this.station = sta;
             
-            var dir = new NetworkHelper(train._parent).GetTrainDirectionAtStation(train, sta);
+            var dir = new NetworkHelper(train.ParentTimetable).GetTrainDirectionAtStation(train, sta);
             var th = new TrackHelper();
 
             arrivalLabel.Font = new Font(arrivalLabel.Font.FamilyName, arrivalLabel.Font.Size, FontStyle.Bold);
@@ -84,7 +84,7 @@ namespace FPLedit.Editor.TimetableEditor
 
         private void NewShunt()
         {
-            var shunt = new ShuntMove(station._parent);
+            var shunt = new ShuntMove(station.ParentTimetable);
             arrDep.ShuntMoves.Add(shunt);
             RefreshList();
         }

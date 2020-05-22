@@ -12,13 +12,13 @@ namespace FPLedit.Bildfahrplan.Model
         public Station Station { get; }
         
         private readonly TimetableStyle ttStyle;
-        public StationStyle(Station sta, TimetableStyle ttStyle) : base(sta._parent)
+        public StationStyle(Station sta, TimetableStyle ttStyle) : base(sta.ParentTimetable)
         {
             this.Station = sta;
             this.ttStyle = ttStyle;
         }
 
-        public StationStyle(Station sta) : base(sta._parent)
+        public StationStyle(Station sta) : base(sta.ParentTimetable)
         {
             this.Station = sta;
         }
@@ -36,7 +36,7 @@ namespace FPLedit.Bildfahrplan.Model
             get => ParseColor(Station.GetAttribute<string>("cl"), null);
             set => Station.SetAttribute("cl", ColorToString(value ?? MColor.White));
         }
-        public MColor CalcedColor => overrideEntityStyle ? ttStyle.StationColor :(StationColor ?? ttStyle.StationColor);
+        public MColor CalcedColor => OverrideEntityStyle ? ttStyle.StationColor :(StationColor ?? ttStyle.StationColor);
         public string HexColor
         {
             get => StationColor != null ? ColorFormatter.ToString(StationColor, false) : null;
@@ -54,7 +54,7 @@ namespace FPLedit.Bildfahrplan.Model
             }
             set => Station.SetAttribute("sz", value.ToString());
         }
-        public int CalcedWidth => overrideEntityStyle ? ttStyle.StationWidth : (StationWidth ?? ttStyle.StationWidth);
+        public int CalcedWidth => OverrideEntityStyle ? ttStyle.StationWidth : (StationWidth ?? ttStyle.StationWidth);
         public int StationWidthInt
         {
             get => Station.GetAttribute("sz", -1);
@@ -66,13 +66,13 @@ namespace FPLedit.Bildfahrplan.Model
             get => Station.GetAttribute("sh", true);
             set => Station.SetAttribute("sh", value.ToString().ToLower());
         }
-        public bool CalcedShow => overrideEntityStyle || Show;
+        public bool CalcedShow => OverrideEntityStyle || Show;
 
         public int LineStyle
         {
             get => Station.GetAttribute("sy", 0);
             set => Station.SetAttribute("sy", value.ToString());
         }
-        public int CalcedLineStyle => overrideEntityStyle ? 0 : LineStyle;
+        public int CalcedLineStyle => OverrideEntityStyle ? 0 : LineStyle;
     }
 }

@@ -95,7 +95,7 @@ namespace FPLedit.Shared
         /// <param name="link">Parent link object.</param>
         /// <param name="countingIndex">The counting index of this train, relative to <paramref name="link"/>.</param>
         /// <param name="entity">The pre-existing xml structure.</param>
-        public LinkedTrain(TrainLink link, int countingIndex, XMLEntity entity) : base(entity, link._parent)
+        public LinkedTrain(TrainLink link, int countingIndex, XMLEntity entity) : base(entity, link.ParentTimetable)
         {
             this.link = link;
             this.countingIndex = countingIndex;
@@ -107,7 +107,7 @@ namespace FPLedit.Shared
         /// </summary>
         /// <param name="link">Parent link object.</param>
         /// <param name="countingIndex">The counting index of this train, relative to <paramref name="link"/>.</param>
-        public LinkedTrain(TrainLink link, int countingIndex) : base(link.ParentTrain.XMLEntity.XName, link._parent)
+        public LinkedTrain(TrainLink link, int countingIndex) : base(link.ParentTrain.XMLEntity.XName, link.ParentTimetable)
         {
             this.link = link;
             this.countingIndex = countingIndex;

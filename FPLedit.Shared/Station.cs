@@ -23,7 +23,7 @@ namespace FPLedit.Shared
         public Station(XMLEntity en, Timetable tt) : base(en, tt)
         {
             Positions.TestForErrors();
-            Tracks = new ObservableChildrenCollection<Track>(this, "track", _parent);
+            Tracks = new ObservableChildrenCollection<Track>(this, "track", ParentTimetable);
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace FPLedit.Shared
         /// </summary>
         public Station(Timetable tt) : base("sta", tt)
         {
-            Tracks = new ObservableChildrenCollection<Track>(this, "track", _parent);
+            Tracks = new ObservableChildrenCollection<Track>(this, "track", ParentTimetable);
         }
 
         /// <inheritdoc />
@@ -74,24 +74,24 @@ namespace FPLedit.Shared
 
         /// <inheritdoc />
         public PositionCollection Positions
-            => new PositionCollection(this, _parent);
+            => new PositionCollection(this, ParentTimetable);
 
         /// <summary>
         /// Track count on the route (not the station), to the right of the station. Depends on route index.
         /// </summary>
         [XAttrName("tr")]
         public RouteValueCollection<int> LineTracksRight
-            => new RouteValueCollection<int>(this, _parent, "tr", "1", s => int.Parse(s), i => i.ToString());
+            => new RouteValueCollection<int>(this, ParentTimetable, "tr", "1", s => int.Parse(s), i => i.ToString());
 
         /// <inheritdoc />
         [XAttrName("fpl-wl", IsFpleditElement = true)]
         public RouteValueCollection<int> Wellenlinien
-            => new RouteValueCollection<int>(this, _parent, "fpl-wl", "0", s => int.Parse(s), i => i.ToString());
+            => new RouteValueCollection<int>(this, ParentTimetable, "fpl-wl", "0", s => int.Parse(s), i => i.ToString());
 
         /// <inheritdoc />
         [XAttrName("fpl-vmax", IsFpleditElement = true)]
         public RouteValueCollection<string> Vmax
-            => new RouteValueCollection<string>(this, _parent, "fpl-vmax", "", s => s, s => s);
+            => new RouteValueCollection<string>(this, ParentTimetable, "fpl-vmax", "", s => s, s => s);
 
         /// <summary>
         /// Deafult track against the route direction. Depends on route index.
@@ -99,7 +99,7 @@ namespace FPLedit.Shared
         /// <remarks>Tracks must be registered beforehand at <see cref="Tracks"/>.</remarks>
         [XAttrName("dTi")]
         public RouteValueCollection<string> DefaultTrackRight
-            => new RouteValueCollection<string>(this, _parent, "dTi", "", s => s, s => s);
+            => new RouteValueCollection<string>(this, ParentTimetable, "dTi", "", s => s, s => s);
 
         /// <summary>
         /// Deafult track in the route direction. Depends on route index.
@@ -107,7 +107,7 @@ namespace FPLedit.Shared
         /// <remarks>Tracks must be registered beforehand at <see cref="Tracks"/>.</remarks>
         [XAttrName("dTa")]
         public RouteValueCollection<string> DefaultTrackLeft
-            => new RouteValueCollection<string>(this, _parent, "dTa", "", s => s, s => s);
+            => new RouteValueCollection<string>(this, ParentTimetable, "dTa", "", s => s, s => s);
 
         /// <inheritdoc />
         [XAttrName("fpl-id", IsFpleditElement = true)]
@@ -115,13 +115,13 @@ namespace FPLedit.Shared
         {
             get
             {
-                if (_parent.Type == TimetableType.Linear)
+                if (ParentTimetable.Type == TimetableType.Linear)
                     throw new TimetableTypeNotSupportedException(TimetableType.Linear, "station ids");
                 return GetAttribute<int>("fpl-id");
             }
             internal set
             {
-                if (_parent.Type == TimetableType.Linear)
+                if (ParentTimetable.Type == TimetableType.Linear)
                     throw new TimetableTypeNotSupportedException(TimetableType.Linear, "station ids");
                 if (GetAttribute<string>("fpl-id") != null)
                     throw new InvalidOperationException("Station hat bereits eine Id!");
@@ -136,7 +136,7 @@ namespace FPLedit.Shared
         {
             get
             {
-                if (_parent.Type == TimetableType.Linear)
+                if (ParentTimetable.Type == TimetableType.Linear)
                     return new[] { 0 };
                 return GetAttribute("fpl-rt", "")
                     .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
@@ -144,7 +144,7 @@ namespace FPLedit.Shared
             }
             private set
             {
-                if (_parent.Type == TimetableType.Linear)
+                if (ParentTimetable.Type == TimetableType.Linear)
                     throw new TimetableTypeNotSupportedException(TimetableType.Linear, "route ids");
                 SetAttribute("fpl-rt", string.Join(",", value));
             }
@@ -181,7 +181,7 @@ namespace FPLedit.Shared
         public Station Copy()
         {
             var xml = XMLEntity.XClone();
-            return new Station(xml, _parent);
+            return new Station(xml, ParentTimetable);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace FPLedit.Shared
 
         private Timetable? parent;
         [NotNull]
-        public Timetable? _parent
+        public Timetable? ParentTimetable
         {
             get => parent ?? throw new InvalidOperationException("Tried to access parent timetable of dissociated Entity instance.");
             set => parent = value; 
@@ -41,7 +41,7 @@ namespace FPLedit.Shared
         {
             XMLEntity = new XMLEntity(xn);
             XMLEntity.ChildrenChangedRecursive += (s, e) => OnChildrenChanged();
-            _parent = tt;
+            ParentTimetable = tt;
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace FPLedit.Shared
         {
             XMLEntity = en;
             XMLEntity.ChildrenChangedRecursive += (s, e) => OnChildrenChanged();
-            _parent = tt;
+            ParentTimetable = tt;
         }
 
         /// <inheritdoc />

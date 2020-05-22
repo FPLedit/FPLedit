@@ -63,13 +63,13 @@ namespace FPLedit.Editor.Rendering
             int midx = Width / 2;
             
             // Richtungsangaben ermitteln
-            var route = _station._parent.GetRoute(_route).Stations;
+            var route = _station.ParentTimetable.GetRoute(_route).Stations;
             var staIdx = route.IndexOf(_station);
             var prev = route.ElementAtOrDefault(staIdx - 1);
             var next = route.ElementAtOrDefault(staIdx + 1);
 
-            bool disableRight = _station._parent.Type == TimetableType.Network && next == null;
-            bool disableLeft = _station._parent.Type == TimetableType.Network && prev == null;
+            bool disableRight = _station.ParentTimetable.Type == TimetableType.Network && next == null;
+            bool disableLeft = _station.ParentTimetable.Type == TimetableType.Network && prev == null;
 
             // Richtungsangaben zeichnen
             if (prev != null)
@@ -84,7 +84,7 @@ namespace FPLedit.Editor.Rendering
             var rightdefaultTrack = _station.Tracks.IndexOf(_station.Tracks.FirstOrDefault(t => t.Name == _station.DefaultTrackRight.GetValue(_route)));
 
             // Netzwerk: Falls noch keine Angabe: Standardgleise setzen
-            if (_station._parent.Type == TimetableType.Network && _station.Tracks.Any())
+            if (_station.ParentTimetable.Type == TimetableType.Network && _station.Tracks.Any())
             {
                 if (disableLeft)
                     leftdefaultTrack = 0;
@@ -214,7 +214,7 @@ namespace FPLedit.Editor.Rendering
             var matchedTracks = _station.Tracks.Select(t => regex.Match(t.Name)).Where(m => m.Success);
             if (matchedTracks.Any())
                 maxTrack = matchedTracks.Select(m => int.Parse(m.Groups[1].Value)).Max();
-            var track = new Track(_station._parent)
+            var track = new Track(_station.ParentTimetable)
             {
                 Name = "Gleis " + (maxTrack + 1)
             };

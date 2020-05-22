@@ -27,7 +27,7 @@ namespace FPLedit.Shared.Helpers
             if (!existingStation)
                 return false;
 
-            var tt = sta._parent;
+            var tt = sta.ParentTimetable;
             var rt = tt.GetRoute(route).Stations;
             var idx = rt.IndexOf(sta);
 
@@ -96,7 +96,7 @@ namespace FPLedit.Shared.Helpers
             var ardeps = new Dictionary<IWritableTrain, ArrDep>();
             var emptyArray = Array.Empty<int>();
 
-            foreach (var tra in sta._parent.Trains)
+            foreach (var tra in sta.ParentTimetable.Trains)
             {
                 if (!(tra is IWritableTrain wt))
                     continue;

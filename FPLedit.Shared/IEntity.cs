@@ -12,7 +12,7 @@ namespace FPLedit.Shared
     { 
         XMLEntity XMLEntity { get; }
         
-        [NotNull] Timetable? _parent { get; set; }
+        [NotNull] Timetable? ParentTimetable { get; set; }
         
         /// <summary>
         /// Gets or sets all XML attributes of the underlying XML node.

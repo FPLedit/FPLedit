@@ -101,7 +101,7 @@ namespace FPLedit.Editor
         /// <summary>
         /// Form to edit a station (with given route index);
         /// </summary>
-        public EditStationForm(IPluginInterface pluginInterface, Station station, int route) : this(station._parent, pluginInterface)
+        public EditStationForm(IPluginInterface pluginInterface, Station station, int route) : this(station.ParentTimetable, pluginInterface)
         {
             Title = "Station bearbeiten";
             nameTextBox.Text = station.SName;
@@ -116,7 +116,7 @@ namespace FPLedit.Editor
             stationRenderer.Station = trackStation;
             stationRenderer.Route = route;
 
-            if (station._parent.Version.Compare(TimetableVersion.JTG3_1) < 0)
+            if (station.ParentTimetable.Version.Compare(TimetableVersion.JTG3_1) < 0)
                 stationRenderer.Visible = false;
             
             codeTextBox.Text = station.StationCode;
@@ -175,9 +175,9 @@ namespace FPLedit.Editor
             foreach (var track in trackStation.Tracks)
                 Station.Tracks.Add(track);
             foreach (var rename in stationRenderer.TrackRenames)
-                Station._parent._InternalRenameAllTrainTracksAtStation(Station, rename.Key, rename.Value);
+                Station.ParentTimetable._InternalRenameAllTrainTracksAtStation(Station, rename.Key, rename.Value);
             foreach (var remove in stationRenderer.TrackRemoves)
-                Station._parent._InternalRemoveAllTrainTracksAtStation(Station, remove);
+                Station.ParentTimetable._InternalRemoveAllTrainTracksAtStation(Station, remove);
 
             Close(DialogResult.Ok);
         }

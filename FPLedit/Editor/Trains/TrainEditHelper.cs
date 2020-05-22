@@ -10,7 +10,7 @@ namespace FPLedit.Editor.Trains
     {
         private Train CopyTrain(Train orig, int offsetMin, string name, bool copyAll)
         {
-            var t = new Train(orig.Direction, orig._parent)
+            var t = new Train(orig.Direction, orig.ParentTimetable)
             {
                 TName = name,
                 Comment = orig.Comment,
@@ -27,7 +27,7 @@ namespace FPLedit.Editor.Trains
 
             var path = orig.GetPath();
 
-            if (orig._parent.Type == TimetableType.Network)
+            if (orig.ParentTimetable.Type == TimetableType.Network)
                 t.AddAllArrDeps(path);
             else
                 t.AddLinearArrDeps();
@@ -39,7 +39,7 @@ namespace FPLedit.Editor.Trains
 
         public void FillTrain(Train orig, Train target, int offsetMin)
         {
-            if (orig._parent.Type == TimetableType.Network)
+            if (orig.ParentTimetable.Type == TimetableType.Network)
                 throw new TimetableTypeNotSupportedException(TimetableType.Network, "fill trains");
             if (orig.Direction != target.Direction || orig == target)
                 throw new InvalidOperationException("Invalid call to FillTrain: Either the trains have not the same direction or are equal.");
@@ -48,7 +48,7 @@ namespace FPLedit.Editor.Trains
         }
 
         public IEnumerable<ITrain> FillCandidates(ITrain tra)
-            => tra._parent.Trains.Where(t => t.Direction == tra.Direction && t != tra);
+            => tra.ParentTimetable.Trains.Where(t => t.Direction == tra.Direction && t != tra);
 
         public void MoveTrain(Train t, int offsetMin)
             => InternalCopyArrDeps(t, t, offsetMin);
@@ -104,7 +104,7 @@ namespace FPLedit.Editor.Trains
             for (int i = 0; i < count; i++)
             {
                 var linkedTrain = new LinkedTrain(link, i);
-                orig._parent.AddTrain(linkedTrain);
+                orig.ParentTimetable.AddTrain(linkedTrain);
             }
         }
 

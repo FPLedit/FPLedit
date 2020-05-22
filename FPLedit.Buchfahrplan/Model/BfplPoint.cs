@@ -29,18 +29,18 @@ namespace FPLedit.Buchfahrplan.Model
 
         [XAttrName("fpl-wl")]
         public RouteValueCollection<int> Wellenlinien
-            => new RouteValueCollection<int>(this, _parent, "fpl-wl", "0", s => int.Parse(s), i => i.ToString());
+            => new RouteValueCollection<int>(this, ParentTimetable, "fpl-wl", "0", s => int.Parse(s), i => i.ToString());
 
         [XAttrName("fpl-vmax")]
         public RouteValueCollection<string> Vmax
-            => new RouteValueCollection<string>(this, _parent, "fpl-vmax", "", s => s, s => s);
+            => new RouteValueCollection<string>(this, ParentTimetable, "fpl-vmax", "", s => s, s => s);
 
         [XAttrName("fpl-rt")]
         public int[] Routes
         {
             get
             {
-                if (_parent.Type == TimetableType.Linear)
+                if (ParentTimetable.Type == TimetableType.Linear)
                     throw new TimetableTypeNotSupportedException(TimetableType.Linear, "Station.Routes");
                 return GetAttribute("fpl-rt", "")
                     .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
@@ -48,13 +48,13 @@ namespace FPLedit.Buchfahrplan.Model
             }
             private set
             {
-                if (_parent.Type == TimetableType.Linear)
+                if (ParentTimetable.Type == TimetableType.Linear)
                     throw new TimetableTypeNotSupportedException(TimetableType.Linear, "Station.Routes");
                 SetAttribute("fpl-rt", string.Join(",", value));
             }
         }
 
-        public PositionCollection Positions => new PositionCollection(this, _parent);
+        public PositionCollection Positions => new PositionCollection(this, ParentTimetable);
 
         public int Id
         {

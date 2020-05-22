@@ -94,20 +94,20 @@ namespace FPLedit.Shared
         /// </summary>
         /// <param name="parentTrain">THe parent train.</param>
         /// <param name="count">The number of linke dtrains, that will be created. This cannot be mutated afterwards.</param>
-        public TrainLink(Train parentTrain, int count) : base("tl", parentTrain._parent)
+        public TrainLink(Train parentTrain, int count) : base("tl", parentTrain.ParentTimetable)
         {
             ParentTrain = parentTrain;
             linkedTrains = new LinkedTrain[count];
-            _parent.TrainsChanged += TrainsChanged;
+            ParentTimetable.TrainsChanged += TrainsChanged;
             TrainCount = count;
         }
 
         /// <inheritdoc />
-        public TrainLink(XMLEntity en, Train parentTrain) : base(en, parentTrain._parent)
+        public TrainLink(XMLEntity en, Train parentTrain) : base(en, parentTrain.ParentTimetable)
         {
             ParentTrain = parentTrain;
             linkedTrains = new LinkedTrain[TrainCount];
-            _parent.TrainsChanged += TrainsChanged;
+            ParentTimetable.TrainsChanged += TrainsChanged;
         }
 
         internal void _InternalInjectLinkedTrain(LinkedTrain train, int counting)
@@ -131,7 +131,7 @@ namespace FPLedit.Shared
         /// <param name="countingIndex">The zero-based counting index of the linked train, relative to this link.</param>
         public ArrDep ProcessArrDep(ArrDep tempArrDep, int countingIndex)
         {
-            var clone = new ArrDep(_parent);
+            var clone = new ArrDep(ParentTimetable);
             clone.ApplyCopy(tempArrDep);
 
             var offset = new TimeEntry(0,TimeOffset + (countingIndex + 1) * TimeDifference);
@@ -179,8 +179,8 @@ namespace FPLedit.Shared
             {
                 if (applyTimes)
                 {
-                    var path = _parent.Type == TimetableType.Linear
-                        ? _parent.GetLinearStationsOrderedByDirection(TrainDirection.ti) // All arrdeps are sorted in line direction if linear...
+                    var path = ParentTimetable.Type == TimetableType.Linear
+                        ? ParentTimetable.GetLinearStationsOrderedByDirection(TrainDirection.ti) // All arrdeps are sorted in line direction if linear...
                         : lt.GetPath();
                     var arrdeps = lt.GetArrDepsUnsorted();
                     lt.Children.Clear();
@@ -201,7 +201,7 @@ namespace FPLedit.Shared
 
         private void TrainsChanged(object? sender, EventArgs e)
         {
-            var trains = _parent.Trains.Where(t => t.Direction == ParentTrain.Direction).ToArray();
+            var trains = ParentTimetable.Trains.Where(t => t.Direction == ParentTrain.Direction).ToArray();
             TrainIndices = linkedTrains.Select(lt => Array.IndexOf(trains, lt)).ToArray();
         }
     }

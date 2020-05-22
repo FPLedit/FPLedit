@@ -19,7 +19,7 @@ namespace FPLedit.Bildfahrplan
         public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
         {
             this.pluginInterface = pluginInterface;
-            Style.pluginInterface = pluginInterface;
+            Style.PluginInterface = pluginInterface;
 
             dpf = new DynamicPreview();
             componentRegistry.Register<IPreviewAction>(dpf);
