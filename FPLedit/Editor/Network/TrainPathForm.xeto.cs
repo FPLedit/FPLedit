@@ -6,7 +6,6 @@ using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Jint;
 
 namespace FPLedit.Editor.Network
 {
