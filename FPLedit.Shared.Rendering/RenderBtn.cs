@@ -7,7 +7,7 @@ namespace FPLedit.Shared.Rendering
     {
         private readonly Font font = new Font(FontFamilies.SansFamilyName, 8);
 
-        public T Tag { get; set; }
+        public T Tag { get; }
 
         public Point Location { get; set; }
 
@@ -21,11 +21,11 @@ namespace FPLedit.Shared.Rendering
 
         public string Text { get; set; }
 
-        public event EventHandler Click;
+        public event EventHandler? Click;
 
-        public event EventHandler RightClick;
+        public event EventHandler? RightClick;
 
-        public event EventHandler DoubleClick;
+        public event EventHandler? DoubleClick;
 
         public RenderBtn(T data, Point loc, Size size, Color bg, string text = "", Color? fg = null)
         {
@@ -58,7 +58,7 @@ namespace FPLedit.Shared.Rendering
         public void Draw(Graphics g)
         {
             g.FillRectangle(BackgroundColor, Rect);
-            if (Text != null && Text != "")
+            if (!string.IsNullOrEmpty(Text))
             {
                 var size = g.MeasureString(font, Text);
                 var color = ForegroundColor ?? Colors.Black;

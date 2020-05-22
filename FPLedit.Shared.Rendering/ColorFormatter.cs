@@ -1,5 +1,4 @@
 ﻿using Eto.Drawing;
-using System;
 using System.Collections.Generic;
 
 namespace FPLedit.Shared.Rendering
@@ -11,7 +10,7 @@ namespace FPLedit.Shared.Rendering
     {
         #region Convert to string
         private static string ToHexString(MColor c)
-            => string.Format("#{0:X2}{1:X2}{2:X2}", c.R, c.G, c.B);
+            => $"#{c.R:X2}{c.G:X2}{c.B:X2}";
 
         private static string ToJtg2CustomColor(MColor c)
             => "c(" + c.R + "," + c.G + "," + c.B + ")";
@@ -21,9 +20,9 @@ namespace FPLedit.Shared.Rendering
         #endregion
 
         #region Convert from string
-        public static MColor FromHexString(string hex)
+        public static MColor? FromHexString(string hex)
         {
-            if (hex.Length != 7 || hex[0] != '#')
+            if (hex.Length != 7 || hex[0] != '#') //TODO: Better check for hex string
                 return null;
 
             return (MColor)Color.FromArgb(int.Parse(hex.Substring(1), System.Globalization.NumberStyles.HexNumber));
@@ -51,7 +50,7 @@ namespace FPLedit.Shared.Rendering
             ["magenta"] = (MColor)Colors.Magenta,
         };
 
-        public static MColor FromString(string def, MColor defaultValue)
+        public static MColor? FromString(string? def, MColor? defaultValue)
         {
             if (def == null)
                 return defaultValue;

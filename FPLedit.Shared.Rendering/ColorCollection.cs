@@ -38,7 +38,9 @@ namespace FPLedit.Shared.Rendering
                 foreach (var c in customColors)
                 {
                     var parts = c.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-                    colors.Add(parts[0], ColorFormatter.FromHexString(parts[1]));
+                    var color = ColorFormatter.FromHexString(parts[1]);
+                    if (color != null)
+                        colors.Add(parts[0], color);
                 }
             }
         }

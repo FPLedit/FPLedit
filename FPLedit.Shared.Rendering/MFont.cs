@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace FPLedit.Shared.Rendering
 {
@@ -14,17 +13,19 @@ namespace FPLedit.Shared.Rendering
         private int size;
         private MFontStyle style;
 
+        private MFont(string family, int size, MFontStyle style)
+        {
+            this.family = family;
+            this.size = size;
+            this.style = style;
+        }
+
         public static MFont Create(string family, int size, MFontStyle style = MFontStyle.Regular)
         {
             var cacheEntry = cachedM.FirstOrDefault(m => m != null && m.Family == family && m.Size == size && m.Style == style);
             if (cacheEntry == null)
             {
-                cacheEntry = new MFont
-                {
-                    Family = family,
-                    Size = size,
-                    Style = style
-                };
+                cacheEntry = new MFont(family, size, style);
                 cachedM.Add(cacheEntry);
             }
             return cacheEntry;
@@ -54,12 +55,12 @@ namespace FPLedit.Shared.Rendering
         }
 
         #region Caching (instance & global)
-        private Eto.Drawing.Font instanceCachedEto;
-        private System.Drawing.Font instanceCachedSD;
+        private Eto.Drawing.Font? instanceCachedEto;
+        private System.Drawing.Font? instanceCachedSD;
         private static readonly List<MFont> cachedM = new List<MFont>();
 
 #pragma warning disable IDE0060 // Nicht verwendete Parameter entfernen
-        private void ClearInstanceCache(object o)
+        private void ClearInstanceCache(object? o = null)
 #pragma warning restore IDE0060 // Nicht verwendete Parameter entfernen
         {
             if (instanceCachedEto != null && !instanceCachedEto.IsDisposed)
@@ -72,7 +73,7 @@ namespace FPLedit.Shared.Rendering
         public void Dispose()
         {
             GC.SuppressFinalize(this); // We don't need the finaliser any more.
-            ClearInstanceCache(null);
+            ClearInstanceCache();
         }
         ~MFont() => Dispose();
 
@@ -83,7 +84,6 @@ namespace FPLedit.Shared.Rendering
             {
                 var obj = cachedM[i];
                 obj?.Dispose();
-                cachedM[i] = null;
             }
             cachedM.Clear();
         }
