@@ -25,6 +25,9 @@ ProjectSection(SolutionItems) = preProject
 	build_scripts\VersionInfo.targets = build_scripts\VersionInfo.targets
 	build_scripts\GenerateSignatures.targets = build_scripts\GenerateSignatures.targets
 	build_scripts\GenerateUserDocumentation.proj = build_scripts\GenerateUserDocumentation.proj
+	build_scripts\GenerateSignatures.task.cs = build_scripts\GenerateSignatures.task.cs
+	build_scripts\GenerateSignatures.core.targets = build_scripts\GenerateSignatures.core.targets
+	build_scripts\GenerateSignatures.v4.0.targets = build_scripts\GenerateSignatures.v4.0.targets
 EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPLedit.Aushangfahrplan", "FPLedit.Aushangfahrplan\FPLedit.Aushangfahrplan.csproj", "{C9D85138-EABB-47C1-8765-0F204E81FA5C}"

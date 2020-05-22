@@ -51,7 +51,7 @@
     <Exec Command="hugo -s $(OfflineDoc_SiteFolder) -d $(OfflineDoc_OutputFolder)" />
   </Target>
 
-  <UsingTask TaskName="_OfflineDoc_EmbedOfflineFilesTask" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" >
+  <UsingTask TaskName="_OfflineDoc_EmbedOfflineFilesTask" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll" >
     <ParameterGroup>
       <InputFile ParameterType="System.String" Required="true" />
       <ContentFolder ParameterType="System.String" Required="true" />

@@ -2,8 +2,8 @@
   <Import Project="$(SolutionDir)/build_scripts/GenerateSignatures.targets" />
   <PropertyGroup>
     <ProjectGuid>{386836E8-5885-4ED1-B350-CE2BBEC5367E}</ProjectGuid>
-    <TargetFramework>net461</TargetFramework>
-    <OutputType>WinExe</OutputType>
+    <TargetFrameworks>net461;netcoreapp3.1</TargetFrameworks>
+    <OutputType>Exe</OutputType><!-- was: WinExe -->
     <ApplicationIcon>Resources\programm.ico</ApplicationIcon>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
@@ -53,19 +53,19 @@
   <ItemGroup>
     <ProjectReference Include="..\FPLedit.Buchfahrplan\FPLedit.Buchfahrplan.csproj" />
     <ProjectReference Include="..\FPLedit.Aushangfahrplan\FPLedit.Aushangfahrplan.csproj" />
-    <ProjectReference Include="..\FPLedit.Bildfahrplan\FPLedit.Bildfahrplan.csproj" />    
+    <ProjectReference Include="..\FPLedit.Bildfahrplan\FPLedit.Bildfahrplan.csproj" />
     <ProjectReference Include="..\FPLedit.jTrainGraphStarter\FPLedit.jTrainGraphStarter.csproj" />
     <ProjectReference Include="..\FPLedit.Kursbuch\FPLedit.Kursbuch.csproj" />
   </ItemGroup>
   <ItemGroup Condition=" $(Configuration) == 'Debug' ">
     <ProjectReference Include="..\FPLedit.DebugDump\FPLedit.DebugDump.csproj" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="Eto.Forms" Version="$(EtoVersion)" />
     <PackageReference Include="Eto.Platform.Gtk" Version="$(EtoVersion)" />
-    <PackageReference Include="Eto.Platform.Wpf" Version="$(EtoVersion)" />
-    <PackageReference Include="Eto.Platform.Mac64" Version="$(EtoVersion)" />
+    <!--<PackageReference Include="Eto.Platform.Wpf" Version="$(EtoVersion)" />-->
+    <!--<PackageReference Include="Eto.Platform.Mac64" Version="$(EtoVersion)" />-->
     <PackageReference Include="Eto.Serialization.Xaml" Version="$(EtoVersion)" />
     <PackageReference Include="Jint" Version="3.0.0-beta-1914" />
     <PackageReference Include="Mono.Options" Version="6.6.0.161" />
