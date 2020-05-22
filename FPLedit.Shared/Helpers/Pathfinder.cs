@@ -60,7 +60,7 @@ namespace FPLedit.Shared.Helpers
         {
             var visited = new HashSet<Station>();
             var queue = new Queue<Station>();
-            var parents = new Dictionary<Station, Station>();
+            var parents = new Dictionary<Station, Station?>();
             var ways = new Dictionary<Station, Station[]>();
 
             queue.Enqueue(start);
@@ -81,14 +81,14 @@ namespace FPLedit.Shared.Helpers
                         continue;
 
                     parents[n] = rail;
-                    ways[n] = ways[last ?? start].Concat(new[] { last, rail }).ToArray();
+                    ways[n] = ways[last ?? start].Concat(new[] { last, rail }).ToArray()!;
                     queue.Enqueue(n);
                 }
 
                 visited.Add(rail);
             }
 
-            return null;
+            return new List<Station>();
         }
     }
 }

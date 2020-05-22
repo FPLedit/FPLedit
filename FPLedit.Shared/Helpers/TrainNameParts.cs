@@ -66,7 +66,7 @@ namespace FPLedit.Shared.Helpers
             return (start, numberLength);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj != null && obj is TrainNameParts tnp)
                 return tnp.FullName == FullName;

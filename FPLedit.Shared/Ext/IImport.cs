@@ -16,7 +16,7 @@ namespace FPLedit.Shared
         /// <param name="replaceLog">The importer should log to this logger if it is not null.</param>
         /// <returns>The newly imported Timetable instance, otherwise null.</returns>
         /// <remarks>This method must be thread-safe and MUST NOT call into UI directly, as it might be called on a non-UI thread.</remarks>
-        Timetable Import(Stream stream, IReducedPluginInterface pluginInterface, ILog replaceLog = null);
+        Timetable? Import(Stream stream, IReducedPluginInterface pluginInterface, ILog? replaceLog = null);
 
         /// <summary>
         /// Filetype filter of the form "description|pattern", e.g. "Description (*.ext)|*.ext"
@@ -27,7 +27,7 @@ namespace FPLedit.Shared
     
     public static class ImportExt
     {
-        public static Timetable SafeImport(this IImport imp, string filename, IReducedPluginInterface pluginInterface, ILog replaceLog = null)
+        public static Timetable? SafeImport(this IImport imp, string filename, IReducedPluginInterface pluginInterface, ILog? replaceLog = null)
         {
             try
             {

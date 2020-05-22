@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using FPLedit.Shared.Templating;
 
 namespace FPLedit.Shared.DefaultImplementations
@@ -25,10 +26,11 @@ namespace FPLedit.Shared.DefaultImplementations
             var name = attrsEn?.GetAttribute<string>(attrName) ?? "";
 
             return GetTemplateByName(name) ??
-                   GetTemplateByName(defaultTemplate);
+                   GetTemplateByName(defaultTemplate) ??
+                   throw new Exception("Invalid default template " +  defaultTemplate + " specified!");
         }
 
-        private ITemplate GetTemplateByName(string name)
+        private ITemplate? GetTemplateByName(string name)
             => AvailableTemplates.FirstOrDefault(t => t.Identifier == name);
     }
 }

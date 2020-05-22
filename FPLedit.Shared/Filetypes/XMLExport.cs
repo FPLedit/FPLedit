@@ -24,7 +24,7 @@ namespace FPLedit.Shared.Filetypes
             return xElement;
         }
         
-        public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[] flags = null)
+        public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null)
         {
             bool debug = pluginInterface.Settings.Get<bool>("xml.indent") || (flags?.Contains(FLAG_INDENT_XML) ?? false);
 #if DEBUG

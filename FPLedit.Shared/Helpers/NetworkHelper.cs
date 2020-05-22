@@ -69,8 +69,8 @@ namespace FPLedit.Shared.Helpers
                 var ardeps = t.GetArrDepsUnsorted();
                 var isStopping = ardeps[sta].HasMinOneTimeSet;
                 
-                var nextStopStation = path.Where(s => stasAfter.Contains(s)).FirstOrDefault(s => ardeps[s].HasMinOneTimeSet);
-                Station lastStopStation = null;
+                Station? nextStopStation = path.Where(s => stasAfter.Contains(s)).FirstOrDefault(s => ardeps[s].HasMinOneTimeSet);
+                Station? lastStopStation = null;
                 if (nextStopStation == null || !isStopping)
                     lastStopStation = path.Where(s => stasBefore.Contains(s)).FirstOrDefault(s => ardeps[s].HasMinOneTimeSet);
 
@@ -114,8 +114,8 @@ namespace FPLedit.Shared.Helpers
             var ardeps = train.GetArrDepsUnsorted();
             var isStopping = ardeps[sta].HasMinOneTimeSet;
                 
-            var nextStopStation = path.Where(s => stasAfter.Contains(s)).FirstOrDefault(s => ardeps[s].HasMinOneTimeSet);
-            Station lastStopStation = null;
+            Station? nextStopStation = path.Where(s => stasAfter.Contains(s)).FirstOrDefault(s => ardeps[s].HasMinOneTimeSet);
+            Station? lastStopStation = null;
             if (nextStopStation == null || !isStopping)
                 lastStopStation = path.Where(s => stasBefore.Contains(s)).FirstOrDefault(s => ardeps[s].HasMinOneTimeSet);
 

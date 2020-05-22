@@ -7,7 +7,7 @@ namespace FPLedit.Shared.Filetypes
     {
         public string Filter => "Fahrplan Dateien (*.fpl)|*.fpl";
 
-        public Timetable Import(Stream stream, IReducedPluginInterface pluginInterface, ILog replaceLog = null)
+        public Timetable? Import(Stream stream, IReducedPluginInterface pluginInterface, ILog? replaceLog = null)
         {
             var xElement = XElement.Load(stream);
 

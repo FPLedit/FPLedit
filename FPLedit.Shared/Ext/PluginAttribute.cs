@@ -26,17 +26,17 @@ namespace FPLedit.Shared
         /// <summary>
         /// Display name of the extension's author.
         /// </summary>
-        public string Author { get; set; }
+        public string? Author { get; set; }
 
         /// <summary>
         /// Web link to the extension's homepage.
         /// </summary>
-        public string Web { get; set; }
+        public string? Web { get; set; }
 
         /// <summary>
         /// Version of the extension itself.
         /// </summary>
-        public string Version { get; set; }
+        public string? Version { get; set; }
 
         public PluginAttribute(string name, string minVer, string maxVer)
         {

@@ -9,7 +9,7 @@ namespace FPLedit.Shared.Helpers
     /// </summary>
     public static class OpenHelper
     {
-        public static Process Open(string url)
+        public static Process? Open(string url)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
@@ -37,7 +37,7 @@ namespace FPLedit.Shared.Helpers
             return null;
         }
 
-        private static Process TryStartShellExecute(string url)
+        private static Process? TryStartShellExecute(string url)
         {
             try
             {

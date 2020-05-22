@@ -14,7 +14,7 @@ namespace FPLedit.Shared.DefaultImplementations
         
         public string MenuName { get; }
 
-        public DefaultPreview(string templateType, string display, IExport export, string menu = null)
+        public DefaultPreview(string templateType, string display, IExport export, string? menu = null)
         {
             this.templateType = templateType;
             this.export = export;

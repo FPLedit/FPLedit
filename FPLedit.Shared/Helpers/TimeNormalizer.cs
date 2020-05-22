@@ -41,7 +41,7 @@ namespace FPLedit.Shared.Helpers
         /// <item><description>m</description></item>
         /// </list>
         /// </remarks>
-        public string Normalize(string input, bool allowOverflow = false)
+        public string? Normalize(string input, bool allowOverflow = false)
         {
             var m = verifyRegex.Matches(input);
             if (m.Count == 1)

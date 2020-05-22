@@ -3,7 +3,7 @@ namespace FPLedit.Shared.Helpers
     [Templating.TemplateSafe]
     public sealed class TrackHelper
     {
-        public string GetTrack(ITrain train, Station sta, TrainDirection dir, ArrDep timetableEntry, TrackQuery track)
+        public string? GetTrack(ITrain train, Station sta, TrainDirection dir, ArrDep timetableEntry, TrackQuery track)
         {
             var path = new TrainPathData(train._parent, train);
             if (!path.ContainsStation(sta))
@@ -27,7 +27,7 @@ namespace FPLedit.Shared.Helpers
                         : sta.DefaultTrackLeft.GetValue(exitRoute), "")));
         }
 
-        private string Fallback(string test, string fallback) => string.IsNullOrEmpty(test) ? fallback : test;
+        private string? Fallback(string? test, string? fallback) => string.IsNullOrEmpty(test) ? fallback : test;
     }
 
     [Templating.TemplateSafe]

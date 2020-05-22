@@ -14,6 +14,6 @@
 
         string TemplateSource { get; }
 
-        string GenerateResult(Timetable tt);
+        string? GenerateResult(Timetable tt);
     }
 }

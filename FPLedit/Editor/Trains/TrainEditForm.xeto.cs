@@ -122,7 +122,7 @@ namespace FPLedit.Editor.Trains
 
             var name_exists = Train._parent.Trains.Select(t => t.TName).Contains(nameTextBox.Text);
 
-            if (name_exists && Train.TName == null)
+            if (name_exists)
             {
                 if (MessageBox.Show("Ein Zug mit dem Namen \"" + nameTextBox.Text + "\" ist bereits vorhanden. Wirklich fortfahren?", "FPLedit",
                     MessageBoxButtons.YesNo) == DialogResult.No)
