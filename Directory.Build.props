@@ -12,8 +12,10 @@
   <PropertyGroup>
     <!-- Common props -->
     <PathMap>$(MSBuildProjectDirectory)=fpledit-src\$(MSBuildProjectName)</PathMap>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
     <CodeAnalysisRuleSet>..\build_scripts\FPLedit.ruleset</CodeAnalysisRuleSet>
+
+    <WarningsAsErrors>CS8600;CS8602;CS8603</WarningsAsErrors>
     
     <EtoVersion>2.5.1-ci-20200427.1</EtoVersion>
     
@@ -23,7 +25,7 @@
     <FileVersion>$(VersionPrefix)</FileVersion>
     <Company>Manuel Huber</Company>
     <Product>FPLedit</Product>
-    <Copyright>Copyright © 2015-$([System.DateTime]::Now.ToString(`yyyy`)) Manuel Huber</Copyright>   
+    <Copyright>Copyright © 2015-$([System.DateTime]::Now.ToString(`yyyy`)) Manuel Huber</Copyright>
 
     <!-- Output configuration -->
     <OutputPath Condition=" '$(ForceConfigurationDir)' == '' ">..\bin\$(Configuration)\</OutputPath>
