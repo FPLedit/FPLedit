@@ -526,7 +526,7 @@ namespace FPLedit.Shared
 
         public IList<int> GetCyclicRoutes()
         {
-            var junctions = Stations.Where(s => s.IsJunction); // All stations that are junction points.
+            var junctions = Stations.Where(s => s.IsJunction).ToArray(); // All stations that are junction points.
             var rids = junctions.SelectMany(s => s.Routes).ToList(); // All routes participating in junctions (should be all).
 
             // Gets all routes, that have only one occurence in the juction-route graph above, so they have a "loose" end.
