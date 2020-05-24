@@ -30,7 +30,7 @@ namespace FPLedit.NonDefaultFiletypes
             {
                 ConvertStationLinToNet(sta);
 
-                sta.SetAttribute("fpl-rt", rt);
+                sta.SetAttribute("fpl-rt", rt); // Normally this would need a cache invalidation, but here it does not.
                 sta.SetAttribute("fpl-pos", (y += 40).ToString() + ";0");
                 sta.SetAttribute("fpl-id", id++.ToString());
             }

@@ -129,6 +129,8 @@ namespace FPLedit.Shared
             }
         }
 
+        private int[]? routeCache;
+
         /// <inheritdoc />
         /// <exception cref="TimetableTypeNotSupportedException">If setting this value on a linear timetable.</exception>
         [XAttrName("fpl-rt", IsFpleditElement = true)]
@@ -138,15 +140,22 @@ namespace FPLedit.Shared
             {
                 if (ParentTimetable.Type == TimetableType.Linear)
                     return new[] { 0 };
-                return GetAttribute("fpl-rt", "")
-                    .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(s => int.Parse(s)).ToArray();
+                
+                if (routeCache == null)
+                {
+                    routeCache = GetAttribute("fpl-rt", "")
+                        .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                        .Select(s => int.Parse(s)).ToArray();
+                }
+
+                return routeCache;
             }
             private set
             {
                 if (ParentTimetable.Type == TimetableType.Linear)
                     throw new TimetableTypeNotSupportedException(TimetableType.Linear, "route ids");
                 SetAttribute("fpl-rt", string.Join(",", value));
+                routeCache = null;
             }
         }
 
