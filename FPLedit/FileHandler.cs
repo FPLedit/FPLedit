@@ -6,6 +6,7 @@ using FPLedit.Shared.UI;
 using System;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace FPLedit
@@ -24,6 +25,8 @@ namespace FPLedit
 
         private Timetable timetable;
 
+        private readonly BinaryCacheFile cache;
+
         public Timetable Timetable
         {
             get => timetable;
@@ -35,6 +38,8 @@ namespace FPLedit
             }
         }
         public FileState FileState { get; }
+
+        public ICacheFile Cache => cache;
 
         public event EventHandler FileOpened;
         public event EventHandler<FileStateChangedEventArgs> FileStateChanged;
@@ -62,6 +67,8 @@ namespace FPLedit
             FileOpened += (s, e) => MaybeUpgradeTtVersion();
 
             SetLastPath(pluginInterface.Settings.Get("files.lastpath", ""));
+            
+            cache = new BinaryCacheFile();
         }
 
         #region FileState
@@ -103,6 +110,7 @@ namespace FPLedit
                 FileState.Saved = true;
                 FileState.FileName = importFileDialog.FileName;
                 undo.ClearHistory();
+                cache.Clear();
             }
         }
 
@@ -159,6 +167,22 @@ namespace FPLedit
         internal void InternalOpen(string filename)
         {
             pluginInterface.Logger.Info("Öffne Datei " + filename);
+            
+            // Load sidecar cache file.
+            cache.Clear();
+            var cacheFile = filename + "-cache";
+            if (File.Exists(cacheFile))
+            {
+                var bytes = File.ReadAllBytes(filename);
+                using (var sha256 = SHA256.Create())
+                {
+                    var hash = string.Join("", sha256.ComputeHash(bytes).Select(b => b.ToString("X2")));
+
+                    using (var stream = File.Open(cacheFile, FileMode.Open))
+                        cache.Read(stream, hash);
+                }
+            }
+            
             Timetable = open.SafeImport(filename, pluginInterface);
             if (Timetable == null)
                 pluginInterface.Logger.Error("Fehler beim Öffnen der Datei!");
@@ -168,6 +192,7 @@ namespace FPLedit
             FileState.Saved = Timetable != null;
             FileState.FileName = Timetable != null ? filename : null;
             undo.ClearHistory();
+
             if (Timetable != null)
                 FileOpened?.Invoke(this, null);
         }
@@ -201,6 +226,25 @@ namespace FPLedit
             pluginInterface.Logger.Info("Speichern erfolgreich abgeschlossen!");
             FileState.Saved = true;
             FileState.FileName = filename;
+            
+            // Create or delete sidecar file.
+            var cacheFile = filename + "-cache";
+            var bytes = File.ReadAllBytes(filename);
+            if (cache.Any() && cache.ShouldWriteCacheFile(Timetable, pluginInterface.Settings))
+            {
+                using (var sha256 = SHA256.Create())
+                {
+                    var hash = string.Join("", sha256.ComputeHash(bytes).Select(b => b.ToString("X2")));
+
+                    using (var stream = File.Open(cacheFile, FileMode.OpenOrCreate, FileAccess.Write))
+                    {
+                        stream.SetLength(0);
+                        cache.Write(stream, hash);
+                    }
+                }
+            }
+            else if (File.Exists(cacheFile)) // Delete cache file if we don't need one.
+                File.Delete(cacheFile);
         }
 
         internal void New(TimetableType type)
@@ -213,6 +257,7 @@ namespace FPLedit
             FileState.FileName = null;
             undo.ClearHistory();
             pluginInterface.Logger.Info("Neue Datei erstellt");
+            cache.Clear();
             FileOpened?.Invoke(this, null);
         }
         #endregion

@@ -8,7 +8,7 @@ namespace FPLedit.TimetableChecks
 {
     internal sealed class UpdateColorsAction : ITimetableInitAction
     {
-        public string Init(Timetable tt)
+        public string Init(Timetable tt, IReducedPluginInterface pluginInterface)
         {
             // Farbangaben zwischen jTG- und FPLedit-Versionen vereinheitlichen
             ColorTimetableConverter.ConvertAll(tt);

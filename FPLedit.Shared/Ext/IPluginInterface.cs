@@ -49,6 +49,8 @@ namespace FPLedit.Shared
         /// </remarks>
         ITemplateManager TemplateManager { get; }
         
+        ICacheFile Cache { get; }
+        
         string GetTemp(string filename);
         string ExecutablePath { get; }
         string ExecutableDir { get; }

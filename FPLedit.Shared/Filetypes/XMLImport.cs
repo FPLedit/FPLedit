@@ -17,7 +17,7 @@ namespace FPLedit.Shared.Filetypes
             var actions = pluginInterface.GetRegistered<ITimetableInitAction>();
             foreach (var action in actions)
             {
-                var message = action.Init(tt);
+                var message = action.Init(tt, pluginInterface);
                 if (message != null)
                     pluginInterface.Logger.Warning(message);
             }

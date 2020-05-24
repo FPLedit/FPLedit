@@ -7,7 +7,8 @@ namespace FPLedit.TimetableChecks
 {
     public class BugFixInitAction : ITimetableInitAction
     {
-        public string Init(Timetable tt)
+        private const string KEY_AMBIGUOUS = "bugfix.corrected.ambiguous-routes";
+        public string Init(Timetable tt, IReducedPluginInterface pluginInterface)
         {
             var upgradeMessages = new List<string>();
 
@@ -35,25 +36,29 @@ namespace FPLedit.TimetableChecks
             // Bug in FPLedit 2.1 muss nachträglich klar gemacht werden.
             // Durch Nutzerinteraction konnten "ambiguous routes" entstehen.
             // Eine Korrektur ist nicht möglich.
-            if (tt.Type == TimetableType.Network && tt.HasRouteCycles)
+            if (pluginInterface.Cache.Get(KEY_AMBIGUOUS) != "1")
             {
-                var hasAmbiguousRoutes = false;
-                // All stations that are junction points.
-                var maybeAffectedRoutes = tt.GetCyclicRoutes();
-                var junctions = tt.Stations.Where(s => s.IsJunction && s.Routes.Intersect(maybeAffectedRoutes).Any()).ToArray();
-                for (int i = 0; i < junctions.Length - 1; i++)
+                if (tt.Type == TimetableType.Network && tt.HasRouteCycles)
                 {
-                    for (int j = i + 1; j < junctions.Length; j++)
+                    var hasAmbiguousRoutes = false;
+                    // All stations that are junction points.
+                    var maybeAffectedRoutes = tt.GetCyclicRoutes();
+                    var junctions = tt.Stations.Where(s => s.IsJunction && s.Routes.Intersect(maybeAffectedRoutes).Any()).ToArray();
+                    for (int i = 0; i < junctions.Length - 1; i++)
                     {
-                        hasAmbiguousRoutes |= (junctions[i].Routes.Intersect(junctions[j].Routes).DefaultIfEmpty(-1)
-                            .Count(r => tt.RouteConnectsDirectly(r, junctions[i], junctions[j])) > 1);
+                        for (int j = i + 1; j < junctions.Length; j++)
+                        {
+                            hasAmbiguousRoutes |= (junctions[i].Routes.Intersect(junctions[j].Routes).DefaultIfEmpty(-1)
+                                .Count(r => tt.RouteConnectsDirectly(r, junctions[i], junctions[j])) > 1);
+                        }
                     }
-                }
 
-                if (hasAmbiguousRoutes)
-                    upgradeMessages.Add("Die Datei enthält zusammengfefallene Strecken, das heißt zwei Stationen sind auf mehr als einer Route ohne Zwischenstation verbunden. FPLedit kann sich danach komisch verhalten und Züge zufällig über die eine oder andere Strecke leiten. Eine Korrektur ist leider nicht möglich.");
+                    if (hasAmbiguousRoutes)
+                        upgradeMessages.Add("Die Datei enthält zusammengfefallene Strecken, das heißt zwei Stationen sind auf mehr als einer Route ohne Zwischenstation verbunden. FPLedit kann sich danach komisch verhalten und Züge zufällig über die eine oder andere Strecke leiten. Eine Korrektur ist leider nicht möglich.");
+                }
+                pluginInterface.Cache.Set(KEY_AMBIGUOUS, "1");
             }
-            
+
             return upgradeMessages.Any() ? string.Join(Environment.NewLine, upgradeMessages) : null;
         }
     }

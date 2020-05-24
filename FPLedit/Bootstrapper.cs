@@ -27,6 +27,7 @@ namespace FPLedit
         ISettings IPluginInterface.Settings => settings;
         IReadOnlySettings IReducedPluginInterface.Settings => settings;
         public ISettings FullSettings => settings;
+        public ICacheFile Cache => FileHandler.Cache;
         public ITemplateManager TemplateManager { get; private set; }
         public ILog Logger { get; private set; }
         public dynamic RootForm { get; }

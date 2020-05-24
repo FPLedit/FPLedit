@@ -81,13 +81,13 @@ namespace FPLedit.Shared
             
             ChildrenChangedRecursive?.Invoke(this, e);
             ChildrenChangedDirect?.Invoke(this, e);
-            ParentElement?.NotifyChildChanged(this);
+            ParentElement?.NotifyChildChanged();
         }
 
-        private void NotifyChildChanged(XMLEntity child)
+        private void NotifyChildChanged()
         {
             ChildrenChangedRecursive?.Invoke(this, new EventArgs());
-            ParentElement?.NotifyChildChanged(this);
+            ParentElement?.NotifyChildChanged();
         }
         
         [return: MaybeNull]
@@ -106,13 +106,13 @@ namespace FPLedit.Shared
         public void SetAttribute(string key, string value)
         {
             Attributes[key] = value;
-            ParentElement?.NotifyChildChanged(this);
+            ParentElement?.NotifyChildChanged();
         }
 
         public void RemoveAttribute(string key)
         {
             Attributes.Remove(key);
-            ParentElement?.NotifyChildChanged(this);
+            ParentElement?.NotifyChildChanged();
         }
 
         private string AttributeDebugger => string.Join(", ", Attributes.ToList().Select(a => a.Key + "=" + a.Value));

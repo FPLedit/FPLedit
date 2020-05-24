@@ -55,14 +55,14 @@ namespace FPLedit.Aushangfahrplan.Forms
             attrs.Font = fontComboBox.Text;
             attrs.HwFont = hwfontComboBox.Text;
             attrs.Css = cssTextBox.Text;
-            attrs.ShowTracks = tracksCheckBox.Checked.Value;
-            attrs.OmitTracksWhenSingle = omitTracksSingleCheckBox.Checked.Value;
+            attrs.ShowTracks = tracksCheckBox.Checked ?? false;
+            attrs.OmitTracksWhenSingle = omitTracksSingleCheckBox.Checked ?? false;
 
             var tmpl = (ITemplate)templateComboBox.SelectedValue;
             if (tmpl != null)
                 attrs.Template = tmpl.Identifier;
 
-            settings.Set("afpl.console", consoleCheckBox.Checked.Value);
+            settings.Set("afpl.console", consoleCheckBox.Checked ?? false);
         }
 
         public void SetExpertMode(bool enabled)
