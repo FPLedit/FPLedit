@@ -22,7 +22,7 @@ namespace FPLedit.TimetableChecks
                     foreach (var attr in upgradeAttrs)
                     {
                         var val = sta.GetAttribute<string>(attr, null);
-                        if (val == null || val == "")
+                        if (string.IsNullOrEmpty(val))
                             continue;
                         if (val.Contains(':'))
                             continue;

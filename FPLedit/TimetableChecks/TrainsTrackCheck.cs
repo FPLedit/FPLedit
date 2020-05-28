@@ -1,8 +1,7 @@
 ﻿using FPLedit.Shared;
-using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace FPLedit.TimetableChecks
@@ -13,25 +12,27 @@ namespace FPLedit.TimetableChecks
 
         public IEnumerable<string> Check(Timetable tt)
         {
+            var result = new ConcurrentBag<string>();
             var stations = tt.Stations.ToDictionary(s => s, s => s.Tracks.Select(t => t.Name));
-            foreach (var tra in tt.Trains)
+            Parallel.ForEach(tt.Trains, tra =>
             {
                 var arrdeps = tra.GetArrDepsUnsorted();
                 foreach (var ardep in arrdeps)
                 {
                     var tracks = stations[ardep.Key].ToList();
-                    
+
                     if (!string.IsNullOrEmpty(ardep.Value.ArrivalTrack) && !tracks.Contains(ardep.Value.ArrivalTrack))
-                        yield return $"Ungültiges Ankunftsgleis: Zug {tra.TName} / Station {ardep.Key.SName} / Gleis \"{ardep.Value.ArrivalTrack}\" nicht gefunden.";
+                        result.Add($"Ungültiges Ankunftsgleis: Zug {tra.TName} / Station {ardep.Key.SName} / Gleis \"{ardep.Value.ArrivalTrack}\" nicht gefunden.");
                     if (!string.IsNullOrEmpty(ardep.Value.DepartureTrack) && !tracks.Contains(ardep.Value.DepartureTrack))
-                        yield return $"Ungültiges Abfahrtsgleis: Zug {tra.TName} / Station {ardep.Key.SName} / Gleis \"{ardep.Value.DepartureTrack}\" nicht gefunden.";
+                        result.Add($"Ungültiges Abfahrtsgleis: Zug {tra.TName} / Station {ardep.Key.SName} / Gleis \"{ardep.Value.DepartureTrack}\" nicht gefunden.");
                     foreach (var shunt in ardep.Value.ShuntMoves)
                     {
                         if ((!string.IsNullOrEmpty(shunt.SourceTrack) && !tracks.Contains(shunt.SourceTrack)) || (!string.IsNullOrEmpty(shunt.TargetTrack) && !tracks.Contains(shunt.TargetTrack)))
-                            yield return $"Ungültiges Rangiergleis: Zug {tra.TName} / Station {ardep.Key.SName} / Gleis \"{ardep.Value.DepartureTrack}\" nicht gefunden.";
+                            result.Add($"Ungültiges Rangiergleis: Zug {tra.TName} / Station {ardep.Key.SName} / Gleis \"{ardep.Value.DepartureTrack}\" nicht gefunden.");
                     }
                 }
-            }
+            });
+            return result;
         }
     }
 }
