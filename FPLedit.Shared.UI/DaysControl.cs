@@ -6,8 +6,8 @@ namespace FPLedit.Shared.UI
 {
     public abstract class DaysControl : Panel
     {
-        private CheckBox[] daysBoxes;
-        private ToggleButton[] shortcutsToggle;
+        private CheckBox[]? daysBoxes;
+        private ToggleButton[]? shortcutsToggle;
         
         private bool applyingShortcut;
         
@@ -17,7 +17,7 @@ namespace FPLedit.Shared.UI
         private readonly Days aShortcut = Days.Parse("1111111");
         private readonly Days zShortcut = Days.Parse("0000000");
 
-        public event EventHandler SelectedDaysChanged;
+        public event EventHandler? SelectedDaysChanged;
 
         protected void InitializeWithControls()
         {
@@ -50,7 +50,7 @@ namespace FPLedit.Shared.UI
 
         public Days SelectedDays
         {
-            get => new Days(daysBoxes.Select(b => b.Checked.Value).ToArray());
+            get => new Days(daysBoxes.Select(b => b.Checked!.Value).ToArray());
             set => SetDays(value);
         } 
         
@@ -58,7 +58,7 @@ namespace FPLedit.Shared.UI
         {
             applyingShortcut = true;
             for (int i = 0; i < days.Length; i++)
-                daysBoxes[i].Checked = days[i];
+                daysBoxes![i].Checked = days[i];
             applyingShortcut = false;
             
             UpdateShortcutState();
@@ -86,16 +86,16 @@ namespace FPLedit.Shared.UI
             e.Handled = handled;
         }
 
-        private void ApplyShortcutBtn(object sender, EventArgs e)
+        private void ApplyShortcutBtn(object? sender, EventArgs e)
         {
-            var btn = (ToggleButton)sender;
+            var btn = (ToggleButton)sender!;
             shortcutsToggle.All(t => t.Checked = false);
             if (btn.Tag is Days days)
                 SetDays(days);
             UpdateShortcutState();
         }
 
-        private void CheckBoxStateChanged(object sender, EventArgs e)
+        private void CheckBoxStateChanged(object? sender, EventArgs e)
         {
             if (applyingShortcut) // Don't update if we are setting days.
                 return;
@@ -105,7 +105,7 @@ namespace FPLedit.Shared.UI
         private void UpdateShortcutState()
         {
             var cur = SelectedDays;
-            foreach (var item in shortcutsToggle)
+            foreach (var item in shortcutsToggle!)
                 item.Checked = cur.Equals((Days)item.Tag);
             
             SelectedDaysChanged?.Invoke(this, new EventArgs());

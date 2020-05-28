@@ -1,9 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>{5A1A083A-1308-488A-8A6B-ED8C1936B7C4}</ProjectGuid>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netcoreapp3.1;netstandard2.0</TargetFrameworks>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyTitle>FPLedit - Shared UI components</AssemblyTitle>
@@ -21,5 +22,6 @@
   <ItemGroup>
     <PackageReference Include="Eto.Forms" Version="$(EtoVersion)" />
     <PackageReference Include="Eto.Serialization.Xaml" Version="$(EtoVersion)" />
+    <PackageReference Include="Nullable" Version="1.2.1" />
   </ItemGroup>
 </Project>

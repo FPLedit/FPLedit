@@ -29,7 +29,7 @@ namespace FPLedit.Shared.UI
             box.TextChanged += TextChanged;
         }
 
-        private void TextChanged(object sender, EventArgs e)
+        private void TextChanged(object? sender, EventArgs e)
         {
             if (box.Text == "" || label == null)
                 return;

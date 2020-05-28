@@ -3,17 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Eto;
 
 namespace FPLedit.Shared.UI
 {
     public static class EtoExtensions
     {
-        private static SizeManager sizeManager;
+        private static SizeManager? sizeManager;
         public static void Initialize(IPluginInterface pluginInterface)
         {
             sizeManager = new SizeManager(pluginInterface.Settings);
@@ -22,10 +19,11 @@ namespace FPLedit.Shared.UI
         public static Stream GetResource(this Control dialog, string dotFilePath)
         {
             var assembly = Assembly.GetCallingAssembly();
-            return assembly.GetManifestResourceStream("FPLedit." + dotFilePath);
+            return assembly.GetManifestResourceStream("FPLedit." + dotFilePath) 
+                   ?? throw new Exception("Requested resource " + "FPLedit." + dotFilePath + " not found!");; 
         }
 
-        public static void AddSizeStateHandler(this Window w) => sizeManager.Apply(w);
+        public static void AddSizeStateHandler(this Window w) => sizeManager!.Apply(w);
 
         public static void AddLegacyFilter(this FileDialog dialog, params string[] filters)
         {
@@ -43,7 +41,7 @@ namespace FPLedit.Shared.UI
             }
         }
 
-        public static ButtonMenuItem CreateItem(this ISubmenu parent, string text, bool enabled = true, EventHandler<EventArgs> clickHandler = null, Keys shortcut = default)
+        public static ButtonMenuItem CreateItem(this ISubmenu parent, string text, bool enabled = true, EventHandler<EventArgs>? clickHandler = null, Keys shortcut = default)
         {
             var itm = new ButtonMenuItem
             {
@@ -64,7 +62,7 @@ namespace FPLedit.Shared.UI
             return parent.Items.FirstOrDefault(i => i.Text == text);
         }
 
-        public static CheckMenuItem CreateCheckItem(this ISubmenu parent, string text, bool isChecked = false, EventHandler<EventArgs> changeHandler = null)
+        public static CheckMenuItem CreateCheckItem(this ISubmenu parent, string text, bool isChecked = false, EventHandler<EventArgs>? changeHandler = null)
         {
             var itm = new CheckMenuItem
             {

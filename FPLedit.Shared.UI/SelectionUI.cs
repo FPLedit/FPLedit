@@ -1,6 +1,7 @@
 ﻿using Eto.Forms;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 
@@ -12,11 +13,12 @@ namespace FPLedit.Shared.UI
 
         private readonly ActionInfo[] actions;
 
-        private ActionInfo selectedAction;
+        private ActionInfo? selectedAction;
 
-        public T SelectedState => selectedAction.Value;
-
-        public bool EnabledOptionSelected => selectedAction.Enabled;
+        [MaybeNull]
+        public T SelectedState => selectedAction != null ? selectedAction.Value : default;
+        
+        public bool EnabledOptionSelected => selectedAction?.Enabled ?? false;
 
         public SelectionUI(Action<T> selectedEvent, StackLayout st)
         {
@@ -27,7 +29,7 @@ namespace FPLedit.Shared.UI
             if (actions.Length == 0)
                 return;
 
-            RadioButton master = null;
+            RadioButton? master = null;
 
             for (int i = 0; i < actions.Length; i++)
             {
@@ -50,19 +52,21 @@ namespace FPLedit.Shared.UI
                 ac.RadioButton = rb;
             }
 
+            selectedAction = actions[0]!; // Just a fix for nullable reference types.
             InternalSelect(actions[0].Value);
         }
 
         private IEnumerable<ActionInfo> GetActions(Type type)
         {
-            var values = type.GetEnumValues();
+            var values = type.GetEnumValues().OfType<T>();
 
-            foreach (T val in values)
+            foreach (var val in values)
             {
                 var memInfo = type.GetMember(val.ToString());
                 var mem = memInfo.First(m => m.DeclaringType == type);
                 var name = mem.GetCustomAttribute<SelectionNameAttribute>(false)?.Name;
-                yield return new ActionInfo(val, name);
+                if (name != null)
+                    yield return new ActionInfo(val, name);
             }
         }
 
@@ -96,17 +100,24 @@ namespace FPLedit.Shared.UI
 
         private class ActionInfo
         {
+            private RadioButton? radioButton;
+            
             public readonly string Name;
             public readonly T Value;
             public bool Enabled;
-            public RadioButton RadioButton;
+            
+            [AllowNull, NotNull]
+            public RadioButton? RadioButton
+            {
+                get => radioButton ?? throw new Exception("");
+                set => radioButton = value;
+            }
 
             public ActionInfo(T value, string name)
             {
                 Name = name;
                 Value = value;
                 Enabled = true;
-                RadioButton = null;
             }
         }
     }

@@ -5,7 +5,7 @@ namespace FPLedit.Shared.UI
 {
     public static class FFormHandler
     {
-        public static event EventHandler Init;
+        public static event EventHandler? Init;
 
         internal static void InvokeInit(Window w) => Init?.Invoke(w, new EventArgs());
     }

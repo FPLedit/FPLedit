@@ -26,7 +26,7 @@ namespace FPLedit.Shared.UI
             activeHandlers.Add(this);
         }
 
-        private void Dialog_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Dialog_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
         {
             isClosing = true;
             DetachHandler();

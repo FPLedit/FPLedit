@@ -13,11 +13,11 @@ namespace FPLedit.Shared.UI.Validators
 
         public bool EnableErrorColoring { get; }
 
-        public string ErrorMessage { get; }
+        public string? ErrorMessage { get; }
         
         public bool Valid => IsValid();
 
-        public BaseValidator(TextBox control, bool validateOnType, bool enableErrorColoring = true, string errorMessage = null)
+        protected BaseValidator(TextBox control, bool validateOnType, bool enableErrorColoring = true, string? errorMessage = null)
         {
             Control = control;
             defaultColor = control.BackgroundColor;

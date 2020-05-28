@@ -10,7 +10,7 @@ namespace FPLedit.Shared.UI.Validators
         
         public bool AllowNegative { get; set; }
 
-        public NumberValidator(TextBox control, bool allowEmpty, bool useInt, bool allowNegative = true, bool enableErrorColoring = true, string errorMessage = null)
+        public NumberValidator(TextBox control, bool allowEmpty, bool useInt, bool allowNegative = true, bool enableErrorColoring = true, string? errorMessage = null)
             : base(control, true, enableErrorColoring, errorMessage)
         {
             AllowEmpty = allowEmpty;

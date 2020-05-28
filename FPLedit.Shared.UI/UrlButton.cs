@@ -4,7 +4,7 @@ namespace FPLedit.Shared.UI
 {
     public sealed class UrlButton : Eto.Forms.LinkButton
     {
-        public string Url { get; set; }
+        public string? Url { get; set; }
 
         public bool AllowNonHttpProtocols { get; set; } = false;
 

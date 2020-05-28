@@ -61,16 +61,16 @@ namespace FPLedit.Shared.UI
             w.Shown += WindowShown;
         }
 
-        private void WindowShown(object sender, EventArgs e)
+        private void WindowShown(object? sender, EventArgs e)
         {
-            var type = sender.GetType().FullName;
             if (!(sender is Window w))
                 return;
+            var type = sender.GetType().FullName;
 
             var entry = sizes.FirstOrDefault(s => s.TypeName == type);
             if (entry == null)
             {
-                entry = new SizeEntry(type, w.ClientSize.Width, w.ClientSize.Height, false);
+                entry = new SizeEntry(type!, w.ClientSize.Width, w.ClientSize.Height, false);
                 sizes.Add(entry);
             }
             else
@@ -85,11 +85,11 @@ namespace FPLedit.Shared.UI
             }
         }
 
-        private void CommitWindowState(object sender, System.ComponentModel.CancelEventArgs e)
+        private void CommitWindowState(object? sender, System.ComponentModel.CancelEventArgs e)
         {
-            var type = sender.GetType().FullName;
             if (!(sender is Window w))
                 return;
+            var type = sender.GetType().FullName;
 
             var entry = sizes.FirstOrDefault(s => s.TypeName == type);
             if (entry == null)

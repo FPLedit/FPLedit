@@ -9,7 +9,7 @@ namespace FPLedit.Shared.UI
         private readonly TableLayout table;
         private readonly StackLayout stack;
         private readonly TextBox tb;
-        private string ResultText { get; set; }
+        private string? ResultText { get; set; }
         
         private InputBox(string title, string defaultValue)
         {
@@ -35,20 +35,20 @@ namespace FPLedit.Shared.UI
             Resizable = false;
         }
 
-        private void AbortButtonClick(object s, EventArgs e)
+        private void AbortButtonClick(object? s, EventArgs e)
         {
             Result = DialogResult.Cancel;
             Close();
         }
 
-        private void CloseButtonClick(object s, EventArgs e)
+        private void CloseButtonClick(object? s, EventArgs e)
         {
             Result = DialogResult.Ok;
             ResultText = tb.Text;
             Close();
         }
 
-        public static string Query(Window parent, string title, string defaultValue)
+        public static string? Query(Window parent, string title, string defaultValue)
         {
             using (var f = new InputBox(title, defaultValue))
             {

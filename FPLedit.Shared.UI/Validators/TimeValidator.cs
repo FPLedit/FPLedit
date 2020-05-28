@@ -8,7 +8,7 @@ namespace FPLedit.Shared.UI.Validators
 
         private readonly TimeEntry maximum;
 
-        public TimeValidator(TextBox control, bool allowEmpty, bool enableErrorColoring = true, string errorMessage = null, TimeEntry? maximum = null)
+        public TimeValidator(TextBox control, bool allowEmpty, bool enableErrorColoring = true, string? errorMessage = null, TimeEntry? maximum = null)
             : base(control, true, enableErrorColoring, errorMessage)
         {
             AllowEmpty = allowEmpty;

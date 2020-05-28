@@ -17,7 +17,7 @@ namespace FPLedit.Shared.UI
             var p = GetProperty<T>(property);
             dropDown.ItemTextBinding = EtoBindingExtensions.ColorBinding(cc);
             dropDown.DataStore = cc.ColorHexStrings;
-            dropDown.SelectedValueBinding.BindDataContext<T>(a => ColorFormatter.ToString((MColor)p.GetValue(a)),
+            dropDown.SelectedValueBinding.BindDataContext<T>(a => ColorFormatter.ToString((MColor)p.GetValue(a)!),
                 (a, val) => p.SetValue(a, ColorFormatter.FromHexString((string)val)));
         }
 
@@ -27,7 +27,7 @@ namespace FPLedit.Shared.UI
 
             var p = GetProperty<T>(property);
             dropDown.DataStore = lineWidths;
-            dropDown.SelectedValueBinding.BindDataContext<T>(a => (int)p.GetValue(a),
+            dropDown.SelectedValueBinding.BindDataContext<T>(a => (int)p.GetValue(a)!,
                 (a, val) => p.SetValue(a, (int)val));
         }
 
@@ -36,9 +36,9 @@ namespace FPLedit.Shared.UI
             var fontSizes = Enumerable.Range(5, 15).Cast<object>().ToArray();
 
             var p = GetProperty<T>(property);
-            MFont f(T a) => (MFont)p.GetValue(a);
+            MFont GetFont(T a) => (MFont)p!.GetValue(a)!;
 
-            familyDropDown.DataStore = new string[] { "<Lade>" };
+            familyDropDown.DataStore = new [] { "<Lade>" };
             familyDropDown.SelectedIndex = 0;
 
             // Asynchrones Laden der Font-Liste, um Performance-Problemen vorzubeugen
@@ -46,14 +46,14 @@ namespace FPLedit.Shared.UI
             {
                 familyDropDown.DataStore = FontCollection.Families;
                 familyDropDown.SelectedValueBinding.BindDataContext<T>(
-                    a => f(a).Family,
-                    (a, val) => { var x = f(a); x.Family = (string)val; p.SetValue(a, x); });
+                    a => GetFont(a).Family,
+                    (a, val) => { var x = GetFont(a); x.Family = (string)val; p.SetValue(a, x); });
             });
 
             sizeDropDown.DataStore = fontSizes;
             sizeDropDown.SelectedValueBinding.BindDataContext<T>(
-                a => f(a).Size,
-                (a, val) => { var x = f(a); x.Size = (int)val; p.SetValue(a, x); });
+                a => GetFont(a).Size,
+                (a, val) => { var x = GetFont(a); x.Size = (int)val; p.SetValue(a, x); });
         }
 
         public static void Enum<T, TEnum>(DropDown dropDown, string property, Dictionary<TEnum, string> display) where TEnum : Enum
@@ -61,10 +61,11 @@ namespace FPLedit.Shared.UI
             var p = GetProperty<T>(property);
             dropDown.ItemTextBinding = Binding.Property<TEnum, string>(s => display[s]);
             dropDown.DataStore = display.Keys.Cast<object>();
-            dropDown.SelectedValueBinding.BindDataContext<T>(s => (TEnum)p.GetValue(s), (s, v) => p.SetValue(s, v));
+            dropDown.SelectedValueBinding.BindDataContext<T>(s => (TEnum)p.GetValue(s)!, (s, v) => p.SetValue(s, v));
         }
 
         private static PropertyInfo GetProperty<T>(string property)
-            => typeof(T).GetProperty(property);
+            => typeof(T).GetProperty(property) 
+               ?? throw new Exception("Property " + property + "not found on type " + typeof(T).FullName);
     }
 }

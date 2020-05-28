@@ -4,7 +4,7 @@ namespace FPLedit.Shared.UI.Validators
 {
     public sealed class NotEmptyValidator : BaseValidator
     {
-        public NotEmptyValidator(TextBox control, bool enableErrorColoring = true, string errorMessage = null)
+        public NotEmptyValidator(TextBox control, bool enableErrorColoring = true, string? errorMessage = null)
             : base(control, true, enableErrorColoring, errorMessage)
         {
         }
