@@ -45,7 +45,7 @@ namespace FPLedit.Shared
         /// <summary>
         /// Retrieve a station by it's unique id. This only works in network timetables.
         /// </summary>
-        Station GetStationById(int id);
+        Station? GetStationById(int id);
         /// <summary>
         /// This method removes the given Station from this timetable instance.
         /// </summary>
@@ -59,11 +59,11 @@ namespace FPLedit.Shared
         /// <summary>
         /// Retrieve a train by it's (not neccessaryly) unique id. This only works in network timetables.
         /// </summary>
-        ITrain GetTrainById(int id);
+        ITrain? GetTrainById(int id);
         /// <summary>
         /// Retrieve a train by it's unique id. This only works in network timetables.
         /// </summary>
-        ITrain GetTrainByQualifiedId(string id);
+        ITrain? GetTrainByQualifiedId(string id);
         /// <summary>
         /// This method removes the given Train from this timetable instance.
         /// </summary>

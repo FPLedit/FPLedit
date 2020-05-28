@@ -307,7 +307,7 @@ namespace FPLedit.Shared
 
         /// <inheritdoc />
         /// <exception cref="TimetableTypeNotSupportedException">Operation was applied to a linear timetable.</exception>
-        public Station GetStationById(int id)
+        public Station? GetStationById(int id)
         {
             if (Type == TimetableType.Linear)
                 throw new TimetableTypeNotSupportedException(TimetableType.Linear, "station ids");
@@ -332,11 +332,11 @@ namespace FPLedit.Shared
         }
 
         /// <inheritdoc />
-        public ITrain GetTrainById(int id)
+        public ITrain? GetTrainById(int id)
             => trains.FirstOrDefault(t => t.Id == id && !t.IsLink);
         
         /// <inheritdoc />
-        public ITrain GetTrainByQualifiedId(string qid)
+        public ITrain? GetTrainByQualifiedId(string qid)
             => trains.FirstOrDefault(t => t.QualifiedId == qid);
 
         /// <inheritdoc />

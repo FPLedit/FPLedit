@@ -73,7 +73,7 @@ namespace FPLedit.Shared
         public List<Station> GetPath()
         {
             if (ParentTimetable.Type == TimetableType.Network)
-                return InternalGetArrDeps().Select(ardp => ParentTimetable.GetStationById(ardp.StationId)).ToList();
+                return InternalGetArrDeps().Select(ardp => ParentTimetable.GetStationById(ardp.StationId) ?? throw new Exception("Station not found!")).ToList();
             return ParentTimetable.GetLinearStationsOrderedByDirection(Direction);
         }
 
@@ -144,6 +144,9 @@ namespace FPLedit.Shared
                 var sta = ParentTimetable.Type == TimetableType.Network
                     ? ParentTimetable.GetStationById(ardp.StationId)
                     : ParentTimetable.GetLinearStationsOrderedByDirection(TrainDirection.ti)[Array.IndexOf(ardps, ardp)]; // All arrdeps are sorted in line direction if linear
+                
+                if (sta == null)
+                    throw new Exception("Station not found!");
 
                 if (ret.ContainsKey(sta))
                     throw new Exception($"The path already contains the station \"{sta.SName}\"");
