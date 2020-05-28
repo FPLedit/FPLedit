@@ -1,5 +1,4 @@
 ﻿using System;
-using FPLedit.Shared.Helpers;
 
 namespace FPLedit.Shared.UI
 {

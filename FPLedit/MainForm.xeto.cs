@@ -137,7 +137,7 @@ namespace FPLedit
                 MessageBox.Show("Die Änderungen werden nach dem nächsten Neustart angewendet!", "FPLedit");
             });
             helpMenu.Items.Add(new SeparatorMenuItem());
-            helpMenu.CreateItem("Online Hilfe", shortcut: Keys.F1, clickHandler: (s, ev) => OpenHelper.Open("https://fahrplan.manuelhu.de/"));
+            helpMenu.CreateItem("Online Hilfe", shortcut: Keys.F1, clickHandler: (s, ev) => Bootstrapper.OpenUrl("https://fahrplan.manuelhu.de/"));
             helpMenu.CreateItem("Info", clickHandler: (s, ev) => new InfoForm(Bootstrapper.FullSettings).ShowModal(this));
 
 #if DEBUG

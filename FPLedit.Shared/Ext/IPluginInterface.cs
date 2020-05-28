@@ -64,5 +64,7 @@ namespace FPLedit.Shared
         /// Use this instead of <see cref="Menu"/>.HelpMenu.
         /// </summary>
         dynamic HelpMenu { get; }
+        
+        void OpenUrl(string address, bool isInternal = false);
     }
 }

@@ -34,7 +34,7 @@ namespace FPLedit.Shared.DefaultImplementations
             tsk.ContinueWith((t, o) =>
             {
                 if (t.Result)
-                    Application.Instance.Invoke(() => OpenHelper.Open(path));
+                    Application.Instance.Invoke(() => pluginInterface.OpenUrl(path, true));
             }, null, TaskScheduler.Default);
             tsk.Start();
         }

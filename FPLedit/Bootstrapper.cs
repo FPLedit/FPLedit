@@ -168,7 +168,9 @@ namespace FPLedit
         public void Save(bool forceSaveAs) => FileHandler.Save(forceSaveAs);
 
         public void Reload() => FileHandler.Reload();
-        
+
+        public void OpenUrl(string address, bool isInternal = false) => OpenHelper.Open(address);
+
         #endregion
         
         #region Config stream initialization
