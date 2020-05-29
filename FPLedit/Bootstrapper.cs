@@ -30,9 +30,9 @@ namespace FPLedit
         public ICacheFile Cache => FileHandler.Cache;
         public ITemplateManager TemplateManager { get; private set; }
         public ILog Logger { get; private set; }
-        public dynamic RootForm { get; }
-        public dynamic Menu { get; }
-        public dynamic HelpMenu { get; }
+        public dynamic RootForm { get; private set; }
+        public dynamic Menu { get; private set; }
+        public dynamic HelpMenu { get; private set; }
 
         public Timetable Timetable => FileHandler.Timetable;
         public IFileState FileState => FileHandler.FileState;
@@ -42,15 +42,12 @@ namespace FPLedit
         public event EventHandler AppClosing;
         public event EventHandler FileOpened;
 
-        public Bootstrapper(Window rootForm, LastFileHandler lfh)
+        public Bootstrapper(LastFileHandler lfh)
         {
             timetableBackup = new Dictionary<object, Timetable>();
             
             var configPath = Path.Combine(PathManager.Instance.AppDirectory, "fpledit.conf");
-            
-            RootForm = rootForm;
-            Menu = rootForm.Menu;
-            HelpMenu = rootForm.Menu.GetItem(MainForm.LocHelpMenu);
+
             settings = new Settings(GetConfigStream(configPath));
             registry = new RegisterStore();
             Update = new UpdateManager(settings);
@@ -60,6 +57,13 @@ namespace FPLedit
             
             FileHandler.FileOpened += (o, args) => FileOpened?.Invoke(o, args);
             FileHandler.FileStateChanged += (o, args) => FileStateChanged?.Invoke(o, args);
+        }
+
+        public void InitializeUI(Window rootForm)
+        {
+            RootForm = rootForm;
+            Menu = rootForm.Menu;
+            HelpMenu = rootForm.Menu.GetItem(MainForm.LocHelpMenu);
         }
 
         public void BootstrapExtensions()

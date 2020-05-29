@@ -3,7 +3,8 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:c="clr-namespace:FPLedit;assembly=FPLedit"
   xmlns:editor="clr-namespace:FPLedit.Editor.Rendering;assembly=FPLedit"
-  Title="FPLedit" ClientSize="980,580" AllowDrop="true">
+  Title="FPLedit" ClientSize="980,580" AllowDrop="true"
+  Shown="OnShown" KeyDown="OnKeyDown">
   <c:MainForm.Menu>
     <MenuBar>
       <ButtonMenuItem Text="&amp;Datei" x:Name="fileMenu">
@@ -41,7 +42,7 @@
       </StackLayout>
     </TableRow>
     <TableRow>
-      <c:LogControl x:Name="logTextBox" Height="100" />
+      <c:LogControl x:Name="logTextBox" Height="100" KeyDown="OnKeyDown" />
     </TableRow>
   </TableLayout>
 </c:MainForm>
