@@ -12,7 +12,6 @@ using FPLedit.Templating;
 using FPLedit.Editor.Rendering;
 using FPLedit.Config;
 using FPLedit.Shared.Rendering;
-using FPLedit.Shared.Helpers;
 
 namespace FPLedit
 {
@@ -23,6 +22,7 @@ namespace FPLedit
         private readonly LogControl logTextBox;
         private readonly ButtonMenuItem saveMenu, saveAsMenu, exportMenu, importMenu, lastMenu, fileMenu, convertMenu;
         private readonly NetworkEditingControl networkEditingControl;
+        private readonly StackLayout loadingStack;
 #pragma warning restore CS0649
         #endregion
 
@@ -96,12 +96,18 @@ namespace FPLedit
             
             Shown += OnShown;
             Bootstrapper.FileStateChanged += FileStateChanged;
+            Bootstrapper.FileHandler.AsyncOperationStateChanged += FileHandlerOnAsyncOperationStateChanged;
 
             checkRunner = new TimetableChecks.TimetableCheckRunner(Bootstrapper); // CheckRunner initialisieren
             
             this.AddSizeStateHandler();
         }
-        
+
+        private void FileHandlerOnAsyncOperationStateChanged(object sender, bool e)
+        {
+            loadingStack.Visible = e;
+        }
+
         #region Plugin Code
         
         public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)

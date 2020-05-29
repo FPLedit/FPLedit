@@ -27,7 +27,20 @@ namespace FPLedit
 
         private readonly BinaryCacheFile cache;
         
-        public bool AsyncBlockingOperation { get; private set; }
+        private bool asyncBlockingOperation;
+
+        public bool AsyncBlockingOperation
+        {
+            get => asyncBlockingOperation;
+            private set
+            {
+                if (value != asyncBlockingOperation)
+                {
+                    asyncBlockingOperation = value;
+                    Application.Instance.InvokeAsync(() => AsyncOperationStateChanged?.Invoke(this, value));
+                }
+            }
+        }
 
         public Timetable Timetable
         {
@@ -45,6 +58,7 @@ namespace FPLedit
 
         public event EventHandler FileOpened;
         public event EventHandler<FileStateChangedEventArgs> FileStateChanged;
+        public event EventHandler<bool> AsyncOperationStateChanged; 
 
         public FileHandler(IPluginInterface pluginInterface, ILastFileHandler lfh, UndoManager undo)
         {
@@ -119,7 +133,7 @@ namespace FPLedit
                 var tsk = import.GetAsyncSafeImport(importFileDialog.FileName, pluginInterface);
                 tsk.ContinueWith((Task<Timetable> t, object o) =>
                 {
-                    Application.Instance.Invoke(() =>
+                    Application.Instance.InvokeAsync(() =>
                     {
                         if (t.Result == null)
                         {
@@ -232,7 +246,7 @@ namespace FPLedit
             var tsk = open.GetAsyncSafeImport(filename, pluginInterface);
             tsk.ContinueWith((Task<Timetable> t, object o) =>
             {
-                Application.Instance.Invoke(() =>
+                Application.Instance.InvokeAsync(() =>
                 {
                     if (t.Result == null)
                     {
@@ -307,7 +321,7 @@ namespace FPLedit
             var tsk = save.GetAsyncSafeExport(clone, filename, pluginInterface);
             tsk.ContinueWith((t, o) =>
             {
-                Application.Instance.Invoke(() =>
+                Application.Instance.InvokeAsync(() =>
                 {
                     if (t.Result == false)
                     {

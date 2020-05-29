@@ -33,6 +33,14 @@
       <editor:NetworkEditingControl x:Name="networkEditingControl" />
     </TableRow>
     <TableRow>
+      <StackLayout x:Name="loadingStack" Orientation="Vertical" HorizontalContentAlignment="Center" Visible="false">
+        <StackLayout Orientation="Horizontal" VerticalContentAlignment="Stretch" Spacing="10" Padding="30">
+          <Label>Lade Datei...</Label>
+          <Spinner Enabled="true" />
+        </StackLayout>
+      </StackLayout>
+    </TableRow>
+    <TableRow>
       <c:LogControl x:Name="logTextBox" Height="100" />
     </TableRow>
   </TableLayout>
