@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
@@ -20,12 +21,11 @@ namespace FPLedit.Shared.Helpers
             try
             {
                 // hack because of this: https://github.com/dotnet/corefx/issues/10361
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                    return Process.Start(new ProcessStartInfo("cmd", $"/c start {url.Replace("&", "^&")}") { CreateNoWindow = true });
+                var escapedUrl = Uri.EscapeUriString(url);
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                    return Process.Start("xdg-open", url);
+                    return Process.Start("xdg-open", escapedUrl);
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                    return Process.Start("open", url);
+                    return Process.Start("open", escapedUrl);
             }
             catch
             {
