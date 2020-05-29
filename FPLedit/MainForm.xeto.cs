@@ -270,6 +270,7 @@ namespace FPLedit
         private void ImportMenu_Click(object sender, EventArgs e) => Bootstrapper.FileHandler.Import();
         private void ExportMenu_Click(object sender, EventArgs e) => Bootstrapper.FileHandler.Export();
         private void QuitMenu_Click(object sender, EventArgs e) => Close();
+        private void CloseFileMenu_Click(object sender, EventArgs e) => Bootstrapper.FileHandler.CloseFile();
         private void LinearNewMenu_Click(object sender, EventArgs e) => Bootstrapper.FileHandler.New(TimetableType.Linear);
         private void NetworkNewMenu_Click(object sender, EventArgs e) => Bootstrapper.FileHandler.New(TimetableType.Network);
         private void ConvertMenu_Click(object sender, EventArgs e) => Bootstrapper.FileHandler.ConvertTimetable();

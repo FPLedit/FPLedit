@@ -378,6 +378,16 @@ namespace FPLedit
             cache.Clear();
             undo.ClearHistory();
         }
+        
+        public void CloseFile()
+        {
+            if (!NotifyIfAsyncOperationInProgress())
+                return;
+            if (!NotifyIfUnsaved())
+                return;
+            
+            InternalCloseFile();
+        }
 
         #endregion
 

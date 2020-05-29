@@ -20,6 +20,7 @@
         <ButtonMenuItem Text="&amp;Exportieren" Shortcut="Control,E" x:Name="exportMenu" Enabled="false" Click="ExportMenu_Click" />
         <ButtonMenuItem Text="&amp;Konvertieren" Shortcut="Control,K" x:Name="convertMenu" Enabled="false" Click="ConvertMenu_Click" />
         <SeparatorMenuItem />
+        <ButtonMenuItem Text="Datei schließen" Click="CloseFileMenu_Click" />
         <ButtonMenuItem Text="&amp;Beenden" Click="QuitMenu_Click" />
       </ButtonMenuItem>
       <ButtonMenuItem Text="{x:Static c:MainForm.LocEditMenu}" />
