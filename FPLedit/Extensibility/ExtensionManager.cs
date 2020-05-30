@@ -44,7 +44,12 @@ namespace FPLedit.Extensibility
 
             DirectoryInfo dir = new DirectoryInfo(pluginInterface.ExecutableDir);
 
-            foreach (var file in dir.GetFiles("*.dll"))
+            // Filter some unwanted files, for performance reasons as we don't have to check them
+            var files = dir.GetFiles("*.dll")
+                .Where(FilterFileNames)
+                .ToArray();
+            
+            foreach (var file in files)
             {
                 try
                 {
@@ -94,6 +99,12 @@ namespace FPLedit.Extensibility
                 }
             }
         }
+
+        private static bool FilterFileNames(FileInfo fn) 
+            => !fn.Name.StartsWith("System.") &&
+               !fn.Name.StartsWith("Microsoft.") &&
+               !fn.Name.StartsWith("Eto.") &&
+               fn.Name != "netstandard.dll";
 
         public void Activate(PluginInfo pluginInfo)
         {
