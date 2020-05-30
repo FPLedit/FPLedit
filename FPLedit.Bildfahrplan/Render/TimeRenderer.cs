@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using FPLedit.Shared;
+using FPLedit.Shared.Rendering;
 
 namespace FPLedit.Bildfahrplan.Render
 {

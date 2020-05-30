@@ -49,11 +49,13 @@ namespace FPLedit.Shared.Rendering
 
         public static explicit operator System.Drawing.Color(MColor m)
         {
-            if (Eto.Platform.Instance.IsGtk)
+            if (ShouldSwitchColors)
                 return System.Drawing.Color.FromArgb(255, m.B, m.G, m.R);
             return System.Drawing.Color.FromArgb(255, m.R, m.G, m.B);
         }
 
         public static MColor White => new MColor(255, 255, 255);
+
+        public static bool ShouldSwitchColors => Eto.Platform.Instance.IsGtk;
     }
 }

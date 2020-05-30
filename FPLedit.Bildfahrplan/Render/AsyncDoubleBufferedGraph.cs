@@ -3,6 +3,7 @@ using Eto.Forms;
 using System;
 using System.Threading.Tasks;
 using FPLedit.Shared;
+using FPLedit.Shared.Rendering;
 
 namespace FPLedit.Bildfahrplan.Render
 {

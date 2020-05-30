@@ -5,6 +5,7 @@ using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System;
 using FPLedit.Bildfahrplan.Model;
+using FPLedit.Shared.Rendering;
 
 namespace FPLedit.Bildfahrplan.Forms
 {

@@ -39,9 +39,6 @@ namespace FPLedit
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
             Icon = new Icon(this.GetResource("Resources.programm.ico"));
-            
-            var watch = new Stopwatch();
-            watch.Start();
 
             this.lfh = lfh;
             Bootstrapper = bootstrapper;
@@ -59,9 +56,6 @@ namespace FPLedit
             Bootstrapper.BootstrapExtensions();
 
             this.AddSizeStateHandler();
-            
-            watch.Stop();
-            Console.WriteLine(watch.ElapsedMilliseconds);
         }
 
         private void FileHandlerOnAsyncOperationStateChanged(object sender, bool e)

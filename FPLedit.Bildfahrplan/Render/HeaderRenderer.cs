@@ -1,5 +1,6 @@
 ﻿using FPLedit.Bildfahrplan.Model;
 using FPLedit.Shared;
+using FPLedit.Shared.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

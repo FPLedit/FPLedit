@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 using sd = System.Drawing;
 using ed = Eto.Drawing;
-using System.Runtime.CompilerServices;
 
-namespace FPLedit.Bildfahrplan.Render
+namespace FPLedit.Shared.Rendering
 {
-    internal sealed class ImageBridge : IDisposable
+    public sealed class ImageBridge : IDisposable
     {
         private readonly sd.Bitmap sdBuffer;
         private readonly sd.Graphics sdGraphics;
@@ -28,16 +28,41 @@ namespace FPLedit.Bildfahrplan.Render
             sdGraphics?.Flush();
             
             var sdData = sdBuffer.LockBits(new sd.Rectangle(0, 0, sdBuffer.Width, sdBuffer.Height), sd.Imaging.ImageLockMode.ReadOnly, sdBuffer.PixelFormat);
-            var byteLength = sdData.Height * sdData.Width * (((int) sdBuffer.PixelFormat >> 11) & 31);
+            var bytesPerPixel = ((int) sdBuffer.PixelFormat >> 11) & 31;
+            var byteLength = sdData.Height * sdData.Width * bytesPerPixel;
             
             var etoBuffer = new ed.Bitmap(sdBuffer.Width, sdBuffer.Height, ed.PixelFormat.Format32bppRgb);
             var etoData = etoBuffer.Lock();
+            
+            if (sdData.Stride < 0)
+                throw new Exception("Negative stride value encountered!");
 
             unsafe
             {
-                Buffer.MemoryCopy((void*) sdData.Scan0, (void*) etoData.Data, byteLength, byteLength);
+                if (sdData.Stride > 0 && sdData.Stride == sdData.Width * bytesPerPixel)
+                    Buffer.MemoryCopy((void*) sdData.Scan0, (void*) etoData.Data, byteLength, byteLength);
+                else // Slightly slower route using the given stride width 
+                {
+                    var switchColors = MColor.ShouldSwitchColors;
+                    var scan = (byte*) sdData.Scan0;
+                    var bytesPerScanLine = sdData.Width * bytesPerPixel;
+                    Parallel.For(0, sdData.Height, i =>
+                    {
+                        var lineStart = (i * sdData.Stride);
+                        var line = scan + (i * sdData.Stride);
+                        for (int j = 0; j < bytesPerScanLine; j += bytesPerPixel)
+                        {
+                            var b = line[j];
+                            var g = line[j + 1];
+                            var r = line[j + 2];
+                            var a = line[j + 3];
+                            var c = ed.Color.FromArgb(switchColors ? b : r, g, switchColors ? r : b, a);
+                            etoData.SetPixel(j / bytesPerPixel, i, c);
+                        }
+                    });
+                }
             }
-            
+
             etoData.Dispose();
             sdBuffer.UnlockBits(sdData);
             
@@ -62,22 +87,5 @@ namespace FPLedit.Bildfahrplan.Render
         {
             Dispose();
         }
-    }
-
-    /// <summary>
-    /// Helper methods, aligning System.Drawing APIs a bit closer to Eto.Drawing to allow faster switching.
-    /// </summary>
-    internal static class GraphicsExt
-    {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void DrawText(this sd.Graphics graphics, sd.Font font, sd.Brush brush, float x, float y, string text)
-            => graphics.DrawString(text, font, brush, x, y);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static sd.SizeF MeasureString(this sd.Graphics graphics, sd.Font font, string text)
-            => graphics.MeasureString(text, font);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void MoveTo(this sd.Drawing2D.GraphicsPath path, sd.PointF point) => path.StartFigure();
     }
 }
