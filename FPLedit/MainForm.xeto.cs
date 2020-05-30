@@ -10,7 +10,6 @@ using FPLedit.Shared.UI;
 using FPLedit.Templating;
 using FPLedit.Editor.Rendering;
 using FPLedit.Config;
-using FPLedit.CrashReporting;
 
 namespace FPLedit
 {
@@ -25,7 +24,7 @@ namespace FPLedit
 #pragma warning restore CS0649
         #endregion
 
-        internal CrashReporter CrashReporter { get; }
+        internal CrashReporting.CrashReporter CrashReporter { get; }
         internal Bootstrapper Bootstrapper { get; }
         
         private TimetableChecks.TimetableCheckRunner checkRunner;
@@ -35,7 +34,7 @@ namespace FPLedit
         public static string LocPreviewMenu = "&Vorschau";
         public static string LocHelpMenu = "&Hilfe";
 
-        public MainForm(LastFileHandler lfh, CrashReporter crashReporter, Bootstrapper bootstrapper)
+        public MainForm(LastFileHandler lfh, CrashReporting.CrashReporter crashReporter, Bootstrapper bootstrapper)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
             Icon = new Icon(this.GetResource("Resources.programm.ico"));
@@ -51,10 +50,6 @@ namespace FPLedit
             Bootstrapper.FileStateChanged += FileStateChanged;
             Bootstrapper.FileHandler.AsyncOperationStateChanged += FileHandlerOnAsyncOperationStateChanged;
 
-            // Now we can load extensions and templates
-            Bootstrapper.ExtensionManager.InjectPlugin(this, 0);
-            Bootstrapper.BootstrapExtensions();
-
             this.AddSizeStateHandler();
         }
 
@@ -63,12 +58,6 @@ namespace FPLedit
             loadingStack.Visible = e;
         }
         
-        private void OnKeyDown(object s, KeyEventArgs e)
-        {
-            if ((NetworkRenderer.DispatchableKeys.Contains(e.Key) || NetworkEditingControl.DispatchableKeys.Contains(e.Key)) && e.Modifiers == Keys.None)
-                networkEditingControl.DispatchKeystroke(e);
-        }
-
         #region Plugin Code
         
         public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
@@ -123,8 +112,17 @@ namespace FPLedit
         }
         
         #endregion
+        
+        protected override void OnLoad(EventArgs e)
+        {
+            // Now we can load extensions and templates
+            Bootstrapper.ExtensionManager.InjectPlugin(this, 0);
+            Bootstrapper.BootstrapExtensions();
+            
+            base.OnLoad(e);
+        }
 
-        private void OnShown(object sender, EventArgs e)
+        protected override void OnShown(EventArgs e)
         {
             // Hatten wir einen Crash beim letzten Mal?
             if (CrashReporter.HasCurrentReport)
@@ -152,6 +150,8 @@ namespace FPLedit
             
             LoadStartFile();
             Bootstrapper.Update.AutoUpdateCheck(Bootstrapper.Logger);
+            
+            base.OnShown(e);
         }
 
         private void LoadStartFile()
@@ -204,6 +204,18 @@ namespace FPLedit
             }
             
             base.OnClosing(e);
+        }
+        
+        private void ProcessKeyDown(object s, KeyEventArgs e)
+        {
+            if ((NetworkRenderer.DispatchableKeys.Contains(e.Key) || NetworkEditingControl.DispatchableKeys.Contains(e.Key)) && e.Modifiers == Keys.None)
+                networkEditingControl.DispatchKeystroke(e);
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            ProcessKeyDown(null, e);
+            base.OnKeyDown(e);
         }
 
         #region Drag'n'Drop
