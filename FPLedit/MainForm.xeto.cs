@@ -145,8 +145,8 @@ namespace FPLedit
                 }
             }
             
-            if (Bootstrapper.FullSettings.IsReadonly)
-                Bootstrapper.Logger.Warning("Die Einstellungsdatei ist nicht schreibbar. Änderungen an Programmeinstellungen werden verworfen.");
+            foreach (var msg in Bootstrapper.PreBootstrapWarnings)
+                Bootstrapper.Logger.Warning(msg);
             
             checkRunner = new TimetableChecks.TimetableCheckRunner(Bootstrapper); // CheckRunner initialisieren
             

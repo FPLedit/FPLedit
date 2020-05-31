@@ -41,6 +41,8 @@ namespace FPLedit
         public event EventHandler ExtensionsLoaded;
         public event EventHandler AppClosing;
         public event EventHandler FileOpened;
+        
+        public List<string> PreBootstrapWarnings { get; } = new List<string>();
 
         public Bootstrapper(LastFileHandler lfh)
         {
@@ -204,25 +206,44 @@ namespace FPLedit
         private Stream GetConfigStream(string path)
         {
             var stream = GetFileStreamWithMaxPermissions(path); // try to open normal settings file
-            var config = new ConfigFile(stream, true); // create a temporay ConfigFile
-            var userPath = config.Get("config.path_redirect");
-            config.Dispose();
-            if (userPath != null && File.Exists(userPath))
+
+            var createInUserDirectory = false;
+            string userPath;
+            using (var config = new ConfigFile(stream, true)) // create a temporay ConfigFile
+                userPath = config.Get("config.path_redirect");
+            var userDirectory = Path.GetDirectoryName(userPath);
+            if (!string.IsNullOrEmpty(userPath) && Directory.Exists(userDirectory))
             {
                 stream.Close(); // We don't need the old stream any more.
                 stream.Dispose();
                 stream = GetFileStreamWithMaxPermissions(userPath);
+                createInUserDirectory = true;
+                
+                if (stream == null)
+                    PreBootstrapWarnings.Add($"Anlegen der angeforderten Einstellungsdatei {userPath} ist fehlgeschlagen.");
             }
+            else if (!string.IsNullOrEmpty(userPath))
+                PreBootstrapWarnings.Add($"Der als config.path_redirect angegebene Ordnerpfad {userDirectory} existiert nicht! Verwende die Einstellungsdatei im Programmverzeichnis.");
+
+            // Extract default configuration file from application reosurces if no config file exists or it is empty.
+            if (stream != null && stream.Length == 0 && stream.CanWrite)
+            {
+                if (!createInUserDirectory)
+                    using (var defaultConfigFile = ResourceHelper.GetResource("Resources.appdir.conf"))
+                        defaultConfigFile.CopyTo(stream);
+                using (var defaultConfigFile = ResourceHelper.GetResource("Resources.fpledit.conf"))
+                    defaultConfigFile.CopyTo(stream);
+            }
+            
+            if (!stream?.CanWrite ?? true)
+                PreBootstrapWarnings.Add("Keine Einstellungsdatei zum Schreiben gefunden. Änderungen an Programmeinstellungen werden verworfen.");
 
             return stream;
         }
         
         #endregion
         
-        public void InjectLogger(ILog logger)
-        {
-            Logger = logger;
-        }
+        public void InjectLogger(ILog logger) => Logger = logger;
 
         public void Dispose()
         {
