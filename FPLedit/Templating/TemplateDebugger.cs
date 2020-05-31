@@ -7,7 +7,7 @@ using FPLedit.Shared.UI;
 
 namespace FPLedit.Templating
 {
-    internal sealed class TemplateDebugger : ITemplateDebugger
+    internal sealed class TemplateDebugger : ITemplateDebugger, IDisposable
     {
         private ITemplateDebugger child;
 
@@ -34,6 +34,12 @@ namespace FPLedit.Templating
             if (instance == null)
                 instance = new TemplateDebugger();
             return instance;
+        }
+
+        public void Dispose()
+        {
+            if (child is IDisposable d)
+                d.Dispose();
         }
     }
 
@@ -73,11 +79,6 @@ namespace FPLedit.Templating
             EnsureForm();
             form.Show();
             form.Focus();
-        }
-
-        public GuiTemplateDebugger()
-        {
-            
         }
 
         private void EnsureForm()

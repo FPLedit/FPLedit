@@ -6,7 +6,7 @@ using System.Text;
 
 namespace FPLedit.Config
 {
-    internal sealed class ConfigFile : IDisposable
+    internal class ConfigFile : IDisposable
     {
         private readonly List<ILine> lines;
 
@@ -121,9 +121,10 @@ namespace FPLedit.Config
             public string Output => "";
         }
 
-        public void Dispose()
+#pragma warning disable CA1816
+        public void Dispose(bool disposeStream)
         {
-            if (!leaveOpen)
+            if (!leaveOpen && disposeStream)
             {
                 stream?.Close();
                 stream?.Dispose();
@@ -132,6 +133,10 @@ namespace FPLedit.Config
 
             GC.SuppressFinalize(this);
         }
+
+        public void Dispose()
+            => Dispose(true);
+#pragma warning restore CA1816
 
         ~ConfigFile()
         {

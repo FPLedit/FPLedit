@@ -17,7 +17,8 @@ namespace FPLedit.Config
             }
             catch
             {
-                config?.Dispose(); // Dispose our last try to get a config file
+                config?.Dispose(false); // Dispose our last try to get a config file, but not the stream itself.
+                stream?.Dispose();
                 config = new ConfigFile(); // Get in-memory config-backend as we cannot read the specified files (e.g. they do exist but are not readable).
             }
         }
@@ -27,8 +28,7 @@ namespace FPLedit.Config
             var val = config.Get(key);
             if (val != null)
                 return (T)Convert.ChangeType(val, typeof(T));
-            else
-                return defaultValue;
+            return defaultValue;
         }
 
         public T GetEnum<T>(string key, T defaultValue = default) where T : Enum

@@ -10,7 +10,13 @@ namespace FPLedit.Shared.UI
     /// <seealso cref="FPLedit.Shared.IUiPluginInterface.OpenUrl"/>
     public static class OpenHelper
     {
-        public static Process? Open(string url)
+        public static void Open(string url)
+        {
+            var proc = OpenProc(url);
+            proc?.Dispose();
+        }
+        
+        public static Process? OpenProc(string url)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {

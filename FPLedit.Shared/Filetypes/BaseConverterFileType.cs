@@ -1,10 +1,12 @@
-﻿namespace FPLedit.Shared.Filetypes
+﻿using System;
+
+namespace FPLedit.Shared.Filetypes
 {
     public abstract class BaseConverterFileType
     {
         protected void ConvertStationNetToLin(Station sta, int route, TimetableVersion targetVersion)
         {
-            float km = sta.Positions.GetPosition(route).Value;
+            float km = sta.Positions.GetPosition(route) ?? throw new Exception($"The station {sta.SName} has no position entry on route {route}!");
             sta.Positions.SetPosition(Timetable.LINEAR_ROUTE_ID, km);
             sta.Positions.Write(TimetableType.Linear, targetVersion);
 

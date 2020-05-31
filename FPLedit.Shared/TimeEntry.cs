@@ -48,7 +48,7 @@ namespace FPLedit.Shared
             return false;
         }
 
-        public override int GetHashCode() => Hours << 16 | Minutes;
+        public override int GetHashCode() => ((int)Hours << 16) | (int)Minutes;
 
         public bool Equals(TimeEntry obj) => obj.Hours == Hours && obj.Minutes == Minutes;
 

@@ -37,8 +37,14 @@ namespace FPLedit.Editor.TimetableEditor
             KeyDown += HandleControlKeystroke;
             dataGridView.KeyDown += HandleControlKeystroke;
 
-            trapeztafelToggle.Image = new Bitmap(this.GetResource("Resources.trapeztafel.png")).WithSize(new Size(50, 30));
-            requestToggle.Image = new Bitmap(this.GetResource("Resources.bedarf.png")).WithSize(new Size(50, 30));
+            trapeztafelToggle.Image = ResourceWithSize("Resources.trapeztafel.png", 50, 30);
+            requestToggle.Image = ResourceWithSize("Resources.bedarf.png", 50, 30);
+        }
+
+        private Image ResourceWithSize(string dotFilePath, int width, int height)
+        {
+            using var bmp = new Bitmap(this.GetResource("Resources.trapeztafel.png"));
+            return bmp.WithSize(width, height);
         }
 
         public void HandleControlKeystroke(object sender, KeyEventArgs e)
@@ -225,6 +231,7 @@ namespace FPLedit.Editor.TimetableEditor
 
         private void InitializeGridView(GridView view)
         {
+#pragma warning disable CA2000
             view.Columns.Clear();
             view.AddColumn<DataElement>(t => t.Station.SName, "Bahnhof");
             view.AddColumn(GetCell(t => t.Arrival, true), "Ankunft");
@@ -238,6 +245,7 @@ namespace FPLedit.Editor.TimetableEditor
             }
             else
                 shuntButton.Visible = false;
+#pragma warning restore CA2000
 
             view.KeyDown += (s, e) => HandleViewKeystroke(e, view);
 
@@ -345,5 +353,15 @@ namespace FPLedit.Editor.TimetableEditor
         private void ShuntButton_Click(object sender, EventArgs e) => Shunt(dataGridView);
 
         #endregion
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+                foreach (var col in dataGridView.Columns)
+                    if (!col.IsDisposed)
+                        col.Dispose();
+            
+            base.Dispose(disposing);
+        }
     }
 }

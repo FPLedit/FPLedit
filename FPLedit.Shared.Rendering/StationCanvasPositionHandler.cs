@@ -57,41 +57,41 @@ namespace FPLedit.Shared.Rendering
 
         public void SetMiddlePos(int route, Station m, Timetable tt)
         {
-            var km = m.Positions.GetPosition(route).Value;
+            var km = m.Positions.GetPosition(route) ?? throw new Exception($"The station {m.SName} has no position entry on route {route}!");
             var s1 = GetStationBefore(route, km, tt);
             var s2 = GetStationAfter(route, km, tt);
 
             Point pm;
             if (s1 == null && s2 == null)
                 pm = new Point(0, 0);
-            else if (s1 == null)
+            else if (s1 == null && s2 != null)
             {
                 var p2 = GetPoint(s2);
                 pm = new Point(p2.X - 80, p2.Y);
             }
-            else if (s2 == null)
+            else if (s2 == null && s1 != null)
             {
                 var p1 = GetPoint(s1);
                 pm = new Point(p1.X + 80, p1.Y);
             }
             else
             {
-                var p1 = GetPoint(s1);
-                var p2 = GetPoint(s2);
+                var p1 = GetPoint(s1!);
+                var p2 = GetPoint(s2!);
                 var x = (p1.X - p2.X) / 2;
                 var y = (p1.Y - p2.Y) / 2;
                 pm = new Point(p1.X - x, p1.Y - y);
             }
 
-            var val = pm.X.ToString() + ";" + pm.Y.ToString();
+            var val = $"{pm.X};{pm.Y}";
             m.SetAttribute("fpl-pos", val);
         }
 
-        private Station GetStationBefore(int route, float km, Timetable tt)
+        private Station? GetStationBefore(int route, float km, Timetable tt)
             => tt.Stations.LastOrDefault(s =>
                 s.Routes.Contains(route) && s.Positions.GetPosition(route) < km);
 
-        Station GetStationAfter(int route, float km, Timetable tt)
+        private Station? GetStationAfter(int route, float km, Timetable tt)
             => tt.Stations.FirstOrDefault(s =>
                 s.Routes.Contains(route) && s.Positions.GetPosition(route) > km);
     }

@@ -111,7 +111,8 @@ namespace FPLedit.Shared
             var v = forceVersion ?? tt.Version;
             if (t == TimetableType.Linear)
             {
-                var pos = GetPosition(Timetable.LINEAR_ROUTE_ID).Value.ToString("0.0", CultureInfo.InvariantCulture);
+                var posFloat = GetPosition(Timetable.LINEAR_ROUTE_ID) ?? throw new Exception("No linear position found while attempting to write linear positions.");
+                var pos = posFloat.ToString("0.0", CultureInfo.InvariantCulture);
                 if (v == TimetableVersion.JTG2_x)
                 {
                     sta.SetAttribute("km", pos);

@@ -10,8 +10,8 @@ namespace FPLedit.Shared
     [Templating.TemplateSafe]
     public class PathData : ISortedStations
     {
-        protected PathEntry[] entries;
-        public PathEntry[] PathEntries => entries;
+        protected PathEntry[] Entries { get; set; }
+        public PathEntry[] PathEntries => Entries;
 
         private readonly Timetable tt;
 
@@ -20,13 +20,13 @@ namespace FPLedit.Shared
         /// </summary>
         public PathData(Timetable tt, IEnumerable<Station> path) : this(tt)
         {
-            entries = Init(path.ToArray(), (s, r) => new PathEntry(s, r));
+            Entries = Init(path.ToArray(), (s, r) => new PathEntry(s, r));
         }
 
         protected PathData(Timetable tt)
         {
             this.tt = tt;
-            entries = Array.Empty<PathEntry>();
+            Entries = Array.Empty<PathEntry>();
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace FPLedit.Shared
         /// <param name="instanciator">A custom instanciator used to create the path entries.</param>
         /// <typeparam name="T">The type of entries used.</typeparam>
         /// <returns></returns>
-        protected T[] Init<T>(IReadOnlyList<Station> path, Func<Station, int, T> instanciator) where T : PathEntry
+        protected PathEntry[] Init<T>(IReadOnlyList<Station> path, Func<Station, int, T> instanciator) where T : PathEntry
         {
             int lastRoute = -1;
             int idx = 0;
@@ -47,27 +47,27 @@ namespace FPLedit.Shared
                 lastRoute = route;
                 idx++;
                 return instanciator(sta, route);
-            }).ToArray();
+            }).Cast<PathEntry>().ToArray();
         }
 
         /// <summary>
         /// Returns the next station after the given station, following this path, or null.
         /// </summary>
         public Station? NextStation(Station sta)
-            => entries.SkipWhile(pe => pe.Station != sta).Skip(1).FirstOrDefault()?.Station;
+            => Entries.SkipWhile(pe => pe.Station != sta).Skip(1).FirstOrDefault()?.Station;
         
         /// <summary>
         /// Returns the previous station before the given station, following this path, or null.
         /// </summary>
         public Station? PreviousStation(Station sta)
-            => entries.TakeWhile(pe => pe.Station != sta).LastOrDefault()?.Station;
+            => Entries.TakeWhile(pe => pe.Station != sta).LastOrDefault()?.Station;
 
         /// <summary>
         /// Get the route this path exits the given station on.
         /// </summary>
         public int GetExitRoute(Station sta)
         {
-            if (sta == entries.LastOrDefault()?.Station)
+            if (sta == Entries.LastOrDefault()?.Station)
                 return Timetable.UNASSIGNED_ROUTE_ID;
             var next = NextStation(sta);
             if (next == null)
@@ -80,7 +80,7 @@ namespace FPLedit.Shared
         /// </summary>
         public int GetEntryRoute(Station sta)
         {
-            if (sta == entries.FirstOrDefault()?.Station)
+            if (sta == Entries.FirstOrDefault()?.Station)
                 return Timetable.UNASSIGNED_ROUTE_ID;
             var previous = PreviousStation(sta);
             if (previous == null)
@@ -143,7 +143,7 @@ namespace FPLedit.Shared
         /// <summary>
         /// Returns only the raw stations used in this path, without any additional information.
         /// </summary>
-        public IEnumerable<Station> GetRawPath() => entries.Select(e => e.Station);
+        public IEnumerable<Station> GetRawPath() => Entries.Select(e => e.Station);
 
         /// <summary>
         /// Get an empty <see cref="PathData"/>-Instance.
@@ -157,18 +157,19 @@ namespace FPLedit.Shared
     [Templating.TemplateSafe]
     public class TrainPathData : PathData
     {
-        public new TrainPathEntry[] PathEntries => (TrainPathEntry[])entries;
+        public new TrainPathEntry[] PathEntries { get; }
 
         public TrainPathData(Timetable tt, ITrain train) : base(tt)
         {
             var path = train.GetPath().ToArray();
             var arrDeps = train.GetArrDepsUnsorted();
 
-            entries = Init(path, (s, r) =>
+            Entries = Init(path, (s, r) =>
             {
                 arrDeps.TryGetValue(s, out var ardp);
                 return new TrainPathEntry(s, ardp, r);
             });
+            PathEntries = Entries.OfType<TrainPathEntry>().ToArray();
         }
     }
 

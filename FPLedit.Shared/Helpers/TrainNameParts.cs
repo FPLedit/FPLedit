@@ -11,7 +11,7 @@ namespace FPLedit.Shared.Helpers
     /// <para>Whitespace at the end or the beginning will be ignored and removed.</para>
     /// </remarks>
     [Templating.TemplateSafe]
-    public readonly struct TrainNameParts
+    public readonly struct TrainNameParts : IEquatable<TrainNameParts>
     {
         /// <summary>
         /// Initializes a new instance with the given full train name.
@@ -75,5 +75,7 @@ namespace FPLedit.Shared.Helpers
         public override int GetHashCode() => FullName.GetHashCode();
         public static bool operator ==(TrainNameParts left, TrainNameParts right) => left.Equals(right);
         public static bool operator !=(TrainNameParts left, TrainNameParts right) => !(left == right);
+
+        public bool Equals(TrainNameParts other) => Equals((object?)other);
     }
 }

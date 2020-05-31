@@ -15,8 +15,10 @@ namespace FPLedit.jTrainGraphStarter
         {
             this.pluginInterface = pluginInterface;
             pluginInterface.FileStateChanged += PluginInterface_FileStateChanged;
-
+            
+#pragma warning disable CA2000
             var item = ((MenuBar)pluginInterface.Menu).CreateItem("&jTrainGraph");
+#pragma warning restore CA2000
 
             startItem = item.CreateItem("jTrain&Graph starten", enabled: false);
             startItem.Click += (s, e) =>
@@ -27,7 +29,9 @@ namespace FPLedit.jTrainGraphStarter
                     StartNetwork(pluginInterface.FileState.SelectedRoute);
             };
 
+#pragma warning disable CA2000
             item.CreateItem("Einstell&ungen", clickHandler: (s, e) => (new SettingsForm(pluginInterface.Settings)).ShowModal(pluginInterface.RootForm));
+#pragma warning restore CA2000
         }
 
         private void PluginInterface_FileStateChanged(object sender, FileStateChangedEventArgs e)

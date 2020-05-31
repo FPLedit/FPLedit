@@ -11,16 +11,16 @@ namespace FPLedit.Shared.Rendering
     {
         private string family;
         private int size;
-        private MFontStyle style;
+        private MFontStyles style;
 
-        private MFont(string family, int size, MFontStyle style)
+        private MFont(string family, int size, MFontStyles style)
         {
             this.family = family;
             this.size = size;
             this.style = style;
         }
 
-        public static MFont Create(string family, int size, MFontStyle style = MFontStyle.Regular)
+        public static MFont Create(string family, int size, MFontStyles style = MFontStyles.Regular)
         {
             var cacheEntry = cachedM.FirstOrDefault(m => m != null && m.Family == family && m.Size == size && m.Style == style);
             if (cacheEntry == null)
@@ -35,7 +35,7 @@ namespace FPLedit.Shared.Rendering
 
         public int Size { get => size; set => ClearInstanceCache(size = value); }
 
-        public MFontStyle Style { get => style; set => ClearInstanceCache(style = value); }
+        public MFontStyles Style { get => style; set => ClearInstanceCache(style = value); }
 
         public static explicit operator Eto.Drawing.Font(MFont m)
         {
@@ -49,14 +49,14 @@ namespace FPLedit.Shared.Rendering
 
         public static explicit operator System.Drawing.Font(MFont m)
         {
-            if (m.instanceCachedSD == null)
-                m.instanceCachedSD = new System.Drawing.Font(m.Family, m.Size, (System.Drawing.FontStyle)m.Style);
-            return m.instanceCachedSD;
+            if (m.instanceCachedSd == null)
+                m.instanceCachedSd = new System.Drawing.Font(m.Family, m.Size, (System.Drawing.FontStyle)m.Style);
+            return m.instanceCachedSd;
         }
 
         #region Caching (instance & global)
         private Eto.Drawing.Font? instanceCachedEto;
-        private System.Drawing.Font? instanceCachedSD;
+        private System.Drawing.Font? instanceCachedSd;
         private static readonly List<MFont> cachedM = new List<MFont>();
 
 #pragma warning disable IDE0060 // Nicht verwendete Parameter entfernen
@@ -66,8 +66,8 @@ namespace FPLedit.Shared.Rendering
             if (instanceCachedEto != null && !instanceCachedEto.IsDisposed)
                 instanceCachedEto.Dispose();
             instanceCachedEto = null;
-            instanceCachedSD?.Dispose();
-            instanceCachedSD = null;
+            instanceCachedSd?.Dispose();
+            instanceCachedSd = null;
         }
 
         public void Dispose()
@@ -97,7 +97,7 @@ namespace FPLedit.Shared.Rendering
 
             var parts = def.Substring(5, def.Length - 6).Split(';');
             var family = GetFontFamily(parts[0]);
-            var style = (MFontStyle)int.Parse(parts[1]);
+            var style = (MFontStyles)int.Parse(parts[1]);
             var size = int.Parse(parts[2]);
 
             return Create(family, size, style);
@@ -140,7 +140,7 @@ namespace FPLedit.Shared.Rendering
     }
 
     [Flags]
-    public enum MFontStyle
+    public enum MFontStyles
     {
         Regular = 0x0,
         Bold = 0x1,

@@ -61,6 +61,18 @@ namespace FPLedit.Shared.UI
                 return parent.Items.FirstOrDefault(i => i.Text == text.Replace("&", ""));
             return parent.Items.FirstOrDefault(i => i.Text == text);
         }
+        
+        public static void DisposeMenu(this MenuItem mi)
+        {
+            if (!mi.IsDisposed)
+            {
+                if (mi is ButtonMenuItem bmi && !bmi.IsDisposed)
+                    foreach (var mi2 in bmi.Items)
+                        DisposeMenu(mi2);
+   
+                mi.Dispose();
+            }
+        }
 
         public static CheckMenuItem CreateCheckItem(this ISubmenu parent, string text, bool isChecked = false, EventHandler<EventArgs>? changeHandler = null)
         {

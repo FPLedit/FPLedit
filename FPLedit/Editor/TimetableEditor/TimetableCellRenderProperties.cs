@@ -117,6 +117,7 @@ namespace FPLedit.Editor.TimetableEditor
                 fn = SystemFonts.Default();
                 bgColor = SystemColors.ControlBackground;
                 textColor = SystemColors.ControlText;
+                initialized = true;
             }
 
             Background = bgColor;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace FPLedit.Shared
 {
@@ -8,6 +9,11 @@ namespace FPLedit.Shared
     [Templating.TemplateSafe]
     public interface ITimetable
     {
+        /// <summary>
+        /// This event will be fired when the trains of this timetable instance are changed.
+        /// </summary>
+        event EventHandler? TrainsChanged;
+        
         /// <summary>
         /// The general type of this timetable.
         /// </summary>

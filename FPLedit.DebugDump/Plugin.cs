@@ -16,7 +16,6 @@ namespace FPLedit.DebugDump
         private IPluginInterface pluginInterface;
         private DebugListener listener;
 
-
         public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
         {
             this.pluginInterface = pluginInterface;
@@ -41,11 +40,13 @@ namespace FPLedit.DebugDump
         private void PluginInterfaceOnExtensionsLoaded(object sender, EventArgs e)
         {
             var menu = pluginInterface.HelpMenu as ButtonMenuItem;
-            menu.CreateItem("Debug Dum&p", true, (s, args) =>
+#pragma warning disable CA2000
+            menu!.CreateItem("Debug Dum&p", true, (s, args) =>
             {
                 using (var sf = new SettingsForm(pluginInterface.Settings))
                     sf.ShowModal();
             });
+#pragma warning disable CA2000
         }
 
         public void Dispose() => listener?.Dispose();

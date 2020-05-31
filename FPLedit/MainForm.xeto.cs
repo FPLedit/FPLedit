@@ -46,7 +46,7 @@ namespace FPLedit
             lfh.LastFilesUpdates += UpdateLastFilesMenu;
 
             Bootstrapper.Logger.AttachLogger(logTextBox);
-            Bootstrapper.InitializeUI(this);
+            Bootstrapper.InitializeUi(this);
             Bootstrapper.FileStateChanged += FileStateChanged;
             Bootstrapper.FileHandler.AsyncOperationStateChanged += FileHandlerOnAsyncOperationStateChanged;
 
@@ -84,6 +84,7 @@ namespace FPLedit
             var helpMenu = (ButtonMenuItem) Menu.GetItem(LocHelpMenu);
             if (helpMenu.Items.Any())
                 helpMenu.Items.Add(new SeparatorMenuItem());
+#pragma warning disable CA2000
             helpMenu.CreateItem("Erweiterungen", clickHandler: (s, ev) => new ExtensionsForm(Bootstrapper.ExtensionManager, this).ShowModal(this));
             helpMenu.CreateItem("Vorlagen", clickHandler: (s, ev) => new TemplatesForm(Bootstrapper.TemplateManager as TemplateManager).ShowModal(this));
             helpMenu.Items.Add(new SeparatorMenuItem());
@@ -100,6 +101,7 @@ namespace FPLedit
             helpMenu.Items.Add(new SeparatorMenuItem());
             helpMenu.CreateItem("Exception auslösen", clickHandler: (s, ev) => throw new Exception("Ausgelöste Exception"));
 #endif
+#pragma warning restore CA2000
         }
 
         private void FileStateChanged(object sender, FileStateChangedEventArgs e)
@@ -172,7 +174,9 @@ namespace FPLedit
             lastMenu.Items.Clear();
             foreach (var lf in lfh.LastFiles)
             {
+#pragma warning disable CA2000
                 var itm = lastMenu.CreateItem(lf);
+#pragma warning restore CA2000
                 itm.Click += (s, a) =>
                 {
                     if (Bootstrapper.FileHandler.NotifyIfUnsaved())
@@ -263,6 +267,8 @@ namespace FPLedit
         protected override void Dispose(bool disposing)
         {
             checkRunner?.Dispose();
+            foreach (var topLevelItem in Menu.Items)
+                topLevelItem.DisposeMenu();
             base.Dispose(disposing);
         }
     }

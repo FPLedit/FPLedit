@@ -13,8 +13,10 @@ namespace FPLedit.Bildfahrplan
         private IPluginInterface pluginInterface;
         private DynamicPreview dpf;
         
+#pragma warning disable CA2213
         private ButtonMenuItem showItem, configItem, trainColorItem, stationStyleItem, printItem;
         private CheckMenuItem overrideItem;
+#pragma warning restore CA2213
         
         public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
         {
@@ -33,7 +35,9 @@ namespace FPLedit.Bildfahrplan
                 
                 pluginInterface.FileStateChanged += PluginInterface_FileStateChanged;
                 
+#pragma warning disable CA2000                
                 var graphItem = ((MenuBar)pluginInterface.Menu).CreateItem("B&ildfahrplan");
+#pragma warning restore CA2000
 
                 showItem = graphItem.CreateItem("&Anzeigen", enabled: false, clickHandler: ShowItem_Click);
                 configItem = graphItem.CreateItem("Darste&llung ändern", enabled: false, clickHandler: (s, ev) => ShowForm(new ConfigForm(pluginInterface.Timetable, pluginInterface)));

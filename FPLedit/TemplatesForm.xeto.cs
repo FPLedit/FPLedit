@@ -6,7 +6,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using FPLedit.Shared.Helpers;
 
 namespace FPLedit
 {
@@ -157,16 +156,13 @@ namespace FPLedit
             var fn = Path.Combine(templatesDir.FullName, tmpl.Identifier);
             
             Stopwatch watch = new Stopwatch();
-            using (var p = OpenHelper.Open(fn))
+            using (var p = OpenHelper.OpenProc(fn))
             {
                 if (p != null)
                 {
                     watch.Start();
                     p.WaitForExit();
                     watch.Stop();
-
-                    //if (watch.ElapsedMilliseconds < 200)
-                        //MessageBox.Show($"Es konnte kein Editor gestartet werden! Bitte öffnen Sie die Datei \"{fn}\" in einem Texteditor.", "FPLedit");
                 }
                 else
                     MessageBox.Show($"Es konnte kein Editor gestartet werden! Bitte öffnen Sie die Datei \"{fn}\" in einem Texteditor.", "FPLedit");

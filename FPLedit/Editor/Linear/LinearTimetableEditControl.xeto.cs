@@ -170,6 +170,7 @@ namespace FPLedit.Editor.Linear
             var stations = tt.GetLinearStationsOrderedByDirection(dir);
 
             view.AddColumn<DataElement>(t => t.Train.TName, "Zugnummer");
+#pragma warning disable CA2000
             foreach (var sta in stations)
             {
                 if (sta != stations.First())
@@ -177,6 +178,7 @@ namespace FPLedit.Editor.Linear
                 if (sta != stations.Last())
                     view.AddColumn(GetCell(t => t.Departure, sta, false, view), sta.SName + " ab");
             }
+#pragma warning restore CA2000
             view.AddColumn<DataElement>(t => GetTransition(t.Train), "Folgezug");
 
             var l = tt.Trains.Where(t => t.Direction == dir).Select(tra => new DataElement()
@@ -243,5 +245,20 @@ namespace FPLedit.Editor.Linear
         private void ZlmButton_Click(object sender, EventArgs e)
             => ViewDependantAction(Zuglaufmeldung);
         #endregion
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                foreach (var col in topDataGridView.Columns)
+                    if (!col.IsDisposed)
+                        col.Dispose();
+                foreach (var col in bottomDataGridView.Columns)
+                    if (!col.IsDisposed)
+                        col.Dispose();
+            }
+
+            base.Dispose(disposing);
+        }
     }
 }

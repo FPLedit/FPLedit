@@ -54,6 +54,8 @@ namespace FPLedit.Shared
 
         public IList<Transition> Transitions => transitions.AsReadOnly();
 
+        /// <inheritdoc />
+        //TODO: Implement this event, why is it not implemented??
         public event EventHandler? TrainsChanged;
 
         /// <summary>

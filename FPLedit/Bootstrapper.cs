@@ -12,7 +12,7 @@ using FPLedit.Templating;
 
 namespace FPLedit
 {
-    internal sealed class Bootstrapper : IPluginInterface, IReducedPluginInterface, IDisposable
+    internal sealed class Bootstrapper : IPluginInterface, IDisposable
     {
         private const string DEFAULT_TEMPLATE_PATH = "templates";
 
@@ -48,7 +48,9 @@ namespace FPLedit
             
             var configPath = Path.Combine(PathManager.Instance.AppDirectory, "fpledit.conf");
 
+#pragma warning disable CA2000
             settings = new Settings(GetConfigStream(configPath));
+#pragma warning restore CA2000
             registry = new RegisterStore();
             Update = new UpdateManager(settings);
             undo = new UndoManager();
@@ -59,7 +61,7 @@ namespace FPLedit
             FileHandler.FileStateChanged += (o, args) => FileStateChanged?.Invoke(o, args);
         }
 
-        public void InitializeUI(Window rootForm)
+        public void InitializeUi(Window rootForm)
         {
             RootForm = rootForm;
             Menu = rootForm.Menu;
@@ -68,7 +70,7 @@ namespace FPLedit
 
         public void BootstrapExtensions()
         {
-            if (Logger == null)
+            if (Logger == null || RootForm == null)
                 throw new InvalidOperationException("Bootstrapper was not fully initialized before attempted to load extensions!");
             
             // Extensions laden & initialisieren (=> Initialisiert Importer/Exporter)
@@ -90,7 +92,7 @@ namespace FPLedit
 
             ExtensionsLoaded?.Invoke(this, new EventArgs());
             
-            (RootForm as Window).Closing += (s, e) => AppClosing?.Invoke(this, null);
+            (RootForm as Window)!.Closing += (s, e) => AppClosing?.Invoke(this, null);
         }
         
         #region Backup & Undo

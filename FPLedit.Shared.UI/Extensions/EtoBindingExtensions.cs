@@ -8,7 +8,11 @@ namespace FPLedit.Shared.UI
     public static class EtoBindingExtensions
     {
         public static IIndirectBinding<string> ColorBinding(ColorCollection cc)
-            => Binding.Delegate<string, string>(c => cc.ToName(ColorFormatter.FromHexString(c)));
+            => Binding.Delegate<string, string>(s =>
+            {
+                var c = ColorFormatter.FromHexString(s) ?? throw new Exception($"Encountered invalid hex string \"{s}\" in color conversion!");
+                return cc.ToName(c);
+            });
 
         public static void AddIntConvBinding<TValue, T1>(this BindableBinding<T1, string> binding, Expression<Func<TValue, int>> property)
             where T1 : IBindable
@@ -42,7 +46,7 @@ namespace FPLedit.Shared.UI
             {
                 TimeEntry.TryParse(s.Replace("24:", "1.00:"), out var ts);
                 return ts;
-            };
+            }
 
             binding.Convert(convToTs, convFromTs).BindDataContext(property);
         }

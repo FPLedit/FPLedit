@@ -170,7 +170,7 @@ namespace FPLedit.Editor.Network
                 Path = new[] { sta }.ToList();
                 networkRenderer.FixedStatusString = "Zielstation auswählen";
             }
-            else if (Path.Count() == 1) // We already have the first station set, so set the end of path
+            else if (Path.Count == 1) // We already have the first station set, so set the end of path
             {
                 if (sta == Path.First())
                 {

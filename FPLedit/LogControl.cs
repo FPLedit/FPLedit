@@ -19,8 +19,10 @@ namespace FPLedit
             ReadOnly = true;
 
             menu = new ContextMenu();
+#pragma warning disable CA2000
             menu.CreateItem("Alles löschen", clickHandler: (s, e) => Text = "");
             menu.CreateCheckItem("Debug-Informationen anzeigen", changeHandler: (s, e) => showDebug = ((CheckMenuItem)s).Checked);
+#pragma warning restore CA2000
 
             systemText = SystemColors.ControlText;
         }
@@ -98,7 +100,12 @@ namespace FPLedit
         protected override void Dispose(bool disposing)
         {
             if (menu != null && !menu.IsDisposed)
+            {
+                foreach (var topLevelItem in menu.Items)
+                    topLevelItem.DisposeMenu();
                 menu.Dispose();
+            }
+
             base.Dispose(disposing);
         }
     }

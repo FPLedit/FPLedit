@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
@@ -28,21 +29,25 @@ namespace FPLedit.CorePlugins
             if (previewables.Length == 0)
                 pluginInterface.Menu.Items.Remove(previewRoot); // Ausblenden in der harten Art
 
+#pragma warning disable CA2000
             foreach (var prev in previewables)
                 previewRoot.CreateItem(prev.MenuName, enabled: false, clickHandler: (s, ev) => prev.Show(pluginInterface));
+#pragma warning restore CA2000
 
             editMenuActions = pluginInterface.GetRegistered<IEditMenuItemAction>();
             if (editMenuActions.Length > 0)
                 editRoot.Items.Add(new SeparatorMenuItem());
 
             dialogOffset = editRoot.Items.Count;
+#pragma warning disable CA2000
             foreach (var dialog in editMenuActions)
                 editRoot.CreateItem(dialog.DisplayName, enabled: dialog.IsEnabled(pluginInterface), clickHandler: (s, ev) => dialog.Invoke(pluginInterface));
+#pragma warning restore CA2000
         }
         
         private void PluginInterface_FileStateChanged(object sender, FileStateChangedEventArgs e)
         {
-            foreach (ButtonMenuItem ddi in previewRoot.Items)
+            foreach (var ddi in previewRoot.Items.OfType<ButtonMenuItem>())
                 ddi.Enabled = e.FileState.Opened && e.FileState.LineCreated;
 
             for (int i = 0; i < editMenuActions.Length; i++)

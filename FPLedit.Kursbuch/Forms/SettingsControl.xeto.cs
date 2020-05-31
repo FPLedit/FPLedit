@@ -48,7 +48,8 @@ namespace FPLedit.Kursbuch.Forms
             cssTextBox.Text = attrs.Css ?? "";
 
             setRouteNumbers = new Dictionary<int, string>();
-            var col = kbsnListView.AddColumn(new TextBoxCell
+#pragma warning disable CA2000
+            kbsnListView.AddColumn(new TextBoxCell
                 {
                     Binding = Binding.Delegate<Route, string>(r =>
                     {
@@ -56,9 +57,9 @@ namespace FPLedit.Kursbuch.Forms
                         return val ?? attrs.KBSn.GetValue(r.Index) ?? NO_KBS_TEXT;
                     },
                     (r, n) => setRouteNumbers[r.Index] = n)
-                }, "Name"
+                }, "Name", editable: true
             );
-            col.Editable = true;
+#pragma warning restore CA2000
             kbsnListView.AddColumn<Route>(r => r.GetRouteName(), "Dateiname");
             kbsnListView.DataStore = tt.GetRoutes();
 
@@ -98,6 +99,16 @@ namespace FPLedit.Kursbuch.Forms
         public void SetExpertMode(bool enabled)
         {
             cssTextBox.Visible = cssLabel.Visible = cssHelpLinkLabel.Visible = consoleCheckBox.Visible = enabled;
+        }
+        
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+                foreach (var col in kbsnListView.Columns)
+                    if (!col.IsDisposed)
+                        col.Dispose();
+            
+            base.Dispose(disposing);
         }
     }
 }

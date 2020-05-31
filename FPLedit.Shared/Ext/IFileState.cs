@@ -10,7 +10,7 @@
 
         bool CanGoBack { get; }
 
-        string FileName { get; }
+        string? FileName { get; }
         int SelectedRoute { get; set; }
     }
 }
