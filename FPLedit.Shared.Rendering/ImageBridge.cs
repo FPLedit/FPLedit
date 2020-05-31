@@ -14,7 +14,7 @@ namespace FPLedit.Shared.Rendering
 
         public ImageBridge(int width, int height)
         {
-            sdBuffer = new sd.Bitmap(width, height, sd.Imaging.PixelFormat.Format32bppRgb);
+            sdBuffer = new sd.Bitmap(width, height, sd.Imaging.PixelFormat.Format32bppArgb);
             sdGraphics = sd.Graphics.FromImage(sdBuffer);
             sdGraphics.TextRenderingHint = sd.Text.TextRenderingHint.AntiAlias;
         }
@@ -31,7 +31,7 @@ namespace FPLedit.Shared.Rendering
             var bytesPerPixel = ((int) sdBuffer.PixelFormat >> 11) & 31;
             var byteLength = sdData.Height * sdData.Width * bytesPerPixel;
             
-            var etoBuffer = new ed.Bitmap(sdBuffer.Width, sdBuffer.Height, ed.PixelFormat.Format32bppRgb);
+            var etoBuffer = new ed.Bitmap(sdBuffer.Width, sdBuffer.Height, ed.PixelFormat.Format32bppRgba);
             var etoData = etoBuffer.Lock();
             
             if (sdData.Stride < 0)

@@ -63,7 +63,7 @@
     <PackageReference Include="Eto.Platform.Gtk" Version="$(EtoVersion)" />
     <PackageReference Include="Eto.Platform.Wpf" Version="$(EtoVersion)" />
     <PackageReference Include="Eto.Serialization.Xaml" Version="$(EtoVersion)" />
-    <PackageReference Include="Jint" Version="3.0.0-beta-1715" />
+    <PackageReference Include="Jint" Version="3.0.0-beta-1778" />
     <PackageReference Include="Portable.Xaml" Version="0.25.0" />
     <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
   </ItemGroup>
