@@ -39,7 +39,7 @@ namespace FPLedit.Editor.TimetableEditor
 
             Title = Title.Replace("{station}", station.SName);
 
-            var tracks = sta.Tracks.Select(t => t.Name);
+            var tracks = sta.Tracks.Select(t => t.Name).ToArray();
 
             gridView.AddColumn<ShuntMove, TimeEntry>(s => s.Time, ts => ts.ToShortTimeString(), s => { TimeEntry.TryParse(s, out var res); return res; }, "Zeit", editable: true);
             gridView.AddDropDownColumn<ShuntMove>(s => s.SourceTrack, tracks, "Startgleis", editable: true);
@@ -52,7 +52,7 @@ namespace FPLedit.Editor.TimetableEditor
 
             shuntBackup = arrDep.Copy().ShuntMoves.ToList();
 
-            RefreshList();
+            Shown += (s, e) => RefreshList();
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -72,7 +72,7 @@ namespace FPLedit.Editor.TimetableEditor
 
         private void RefreshList()
         {
-            if (!gridView.IsDisposed && gridView.Visible && gridView != null)
+            if (gridView != null && !gridView.IsDisposed && gridView.Visible)
                 gridView.DataStore = arrDep.ShuntMoves.ToArray(); // Array is here to prevent unpredictable crashes with ObservableCollection as DataStore.
         }
 
