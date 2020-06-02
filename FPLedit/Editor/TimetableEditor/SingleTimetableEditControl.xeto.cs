@@ -36,15 +36,11 @@ namespace FPLedit.Editor.TimetableEditor
 
             KeyDown += HandleControlKeystroke;
             dataGridView.KeyDown += HandleControlKeystroke;
-
-            trapeztafelToggle.Image = ResourceWithSize("Resources.trapeztafel.png", 50, 30);
-            requestToggle.Image = ResourceWithSize("Resources.bedarf.png", 50, 30);
-        }
-
-        private Image ResourceWithSize(string dotFilePath, int width, int height)
-        {
-            using var bmp = new Bitmap(this.GetResource("Resources.trapeztafel.png"));
-            return bmp.WithSize(width, height);
+            
+#pragma warning disable CA2000
+            trapeztafelToggle.Image = new Bitmap(this.GetResource("Resources.trapeztafel.png")).WithSize(50, 30);
+            requestToggle.Image = new Bitmap(this.GetResource("Resources.bedarf.png")).WithSize(50, 30);
+#pragma warning disable CA2000
         }
 
         public void HandleControlKeystroke(object sender, KeyEventArgs e)
