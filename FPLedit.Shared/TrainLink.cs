@@ -98,7 +98,7 @@ namespace FPLedit.Shared
         {
             ParentTrain = parentTrain;
             linkedTrains = new LinkedTrain[count];
-            ParentTimetable.TrainsChanged += TrainsChanged;
+            ParentTimetable.TrainsXmlCollectionChanged += TrainsXmlCollectionChanged;
             TrainCount = count;
         }
 
@@ -107,7 +107,7 @@ namespace FPLedit.Shared
         {
             ParentTrain = parentTrain;
             linkedTrains = new LinkedTrain[TrainCount];
-            ParentTimetable.TrainsChanged += TrainsChanged;
+            ParentTimetable.TrainsXmlCollectionChanged += TrainsXmlCollectionChanged;
         }
 
         internal void _InternalInjectLinkedTrain(LinkedTrain train, int counting)
@@ -199,7 +199,7 @@ namespace FPLedit.Shared
             });
         }
 
-        private void TrainsChanged(object? sender, EventArgs e)
+        private void TrainsXmlCollectionChanged(object? sender, EventArgs e)
         {
             var trains = ParentTimetable.Trains.Where(t => t.Direction == ParentTrain.Direction).ToArray();
             TrainIndices = linkedTrains.Select(lt => Array.IndexOf(trains, lt)).ToArray();

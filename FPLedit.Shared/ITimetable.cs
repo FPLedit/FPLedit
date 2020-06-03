@@ -12,7 +12,7 @@ namespace FPLedit.Shared
         /// <summary>
         /// This event will be fired when the trains of this timetable instance are changed.
         /// </summary>
-        event EventHandler? TrainsChanged;
+        event EventHandler? TrainsXmlCollectionChanged;
         
         /// <summary>
         /// The general type of this timetable.

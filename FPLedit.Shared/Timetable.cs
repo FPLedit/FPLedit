@@ -55,8 +55,7 @@ namespace FPLedit.Shared
         public IList<Transition> Transitions => transitions.AsReadOnly();
 
         /// <inheritdoc />
-        //TODO: Implement this event, why is it not implemented??
-        public event EventHandler? TrainsChanged;
+        public event EventHandler? TrainsXmlCollectionChanged;
 
         /// <summary>
         /// Create a new new empty timetable file of the given timetable type.
@@ -74,7 +73,14 @@ namespace FPLedit.Shared
             Children.Add(sElm);
             Children.Add(tElm);
             
+            tElm.ChildrenChangedDirect += OnTrainsChanged;
+            
             routeCache = new Dictionary<int, Route>(); // Initialize empty route cache.
+        }
+
+        private void OnTrainsChanged(object sender, EventArgs e)
+        {
+            TrainsXmlCollectionChanged?.Invoke(sender, e);
         }
 
         /// <summary>
@@ -169,6 +175,8 @@ namespace FPLedit.Shared
                 tElm = new XMLEntity("trains");
                 Children.Add(tElm);
             }
+            
+            tElm.ChildrenChangedDirect += OnTrainsChanged;
 
             transitions = new List<Transition>();
             trElm = Children.FirstOrDefault(x => x.XName == "transitions");
@@ -712,7 +720,7 @@ namespace FPLedit.Shared
                 var junctions = routeStations.GetSurroundingStations(toDelete, 1);
                 if (junctions.Length != 3)
                     continue; // we are ath the edge of a route.
-                var routes = junctions.SelectMany(j => j.Routes).Distinct();
+                var routes = junctions.SelectMany(j => j.Routes).Distinct().ToArray();
                 var intersect = routes.Intersect(routesToCheck);
   
                 var routeChandidates = routes.Except(intersect);
