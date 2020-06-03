@@ -81,19 +81,13 @@ namespace FPLedit.Shared
 
         private void InsertItem(NotifyCollectionChangedEventArgs e)
         {
-            var idx = e.NewStartingIndex; // Index vorläufig ermitteln
+            var idx = e.NewStartingIndex; // Get temporary index.
 
             // Es können ja noch andere Nodes in den Children sein.
             if (idx != 0)
-            {
-                var elmBefore = this[idx - 1];
-                idx = parentEntity.Children.IndexOf(elmBefore.XMLEntity) + 1;
-            }
-            else if (this.Count > idx + 1)
-            {
-                var elmAfter = this[idx + 1];
-                idx = parentEntity.Children.IndexOf(elmAfter.XMLEntity); // Davor einfügen
-            }
+                idx = parentEntity.Children.IndexOf(this[idx - 1].XMLEntity) + 1;
+            else if (Count > 1)
+                idx = parentEntity.Children.IndexOf(this[1].XMLEntity); // Insert before the next element.
             parentEntity.Children.InsertRange(idx, e.NewItems.Cast<T>().Select(t => t.XMLEntity));
         }
 

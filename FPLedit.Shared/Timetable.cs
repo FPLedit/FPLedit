@@ -18,7 +18,7 @@ namespace FPLedit.Shared
 
         private readonly XMLEntity sElm, tElm, trElm;
 
-        private int nextStaId = 0, nextRtId = 0, nextTraId = 0;
+        private int nextStaId, nextRtId, nextTraId;
         
         private readonly Dictionary<int, Route> routeCache;
 
@@ -245,8 +245,8 @@ namespace FPLedit.Shared
             if (Type == TimetableType.Network)
             {
                 if (sta.GetAttribute<string>("fpl-id") != null)
-                    throw new ArgumentException(nameof(sta) + "has already been registered!");
-                sta.Id = ++nextStaId; // Neue Id an Station vergeben
+                    throw new ArgumentException(nameof(sta) + " has already been registered!");
+                sta.Id = ++nextStaId; // Assign new id to the station.
             }
 
             stations.Add(sta);
@@ -254,20 +254,22 @@ namespace FPLedit.Shared
             {
                 if (route != LINEAR_ROUTE_ID)
                     throw new TimetableTypeNotSupportedException(TimetableType.Linear, "routes");
-                stations = GetLinearStationsOrderedByDirection(TrainDirection.ti);
-                var idx = stations.IndexOf(sta); // Index vorläufig ermitteln
+                stations = GetLinearStationsOrderedByDirection(TrainDirection.ti); // Replace collection with an ordered one.
+                var idx = stations.IndexOf(sta); // Get temporary index.
 
-                // Es können ja noch andere Nodes in den Children sein.
-                if (idx != 0)
+                // Get xml entity index of the previous/next station, to handle other xml entity types.
+                if (idx > 0)
                 {
                     var staBefore = stations[idx - 1];
                     idx = sElm.Children.IndexOf(staBefore.XMLEntity) + 1;
                 }
-                else if (stations.Count > idx + 1)
+                else if (idx == 0 && stations.Count > 1)
                 {
-                    var staAfter = stations[idx + 1];
+                    var staAfter = stations[1];
                     idx = sElm.Children.IndexOf(staAfter.XMLEntity); // Davor einfügen
                 }
+                else
+                    throw new Exception("Invalid negative index encountered!");
                 sElm.Children.Insert(idx, sta.XMLEntity);
             }
             else
@@ -276,7 +278,7 @@ namespace FPLedit.Shared
                 sElm.Children.Add(sta.XMLEntity);
             }
 
-            // Auch bei allen Zügen hinzufügen
+            // Add station to all trains.
             foreach (var t in Trains)
                 if (t is IWritableTrain wt)
                     wt.AddArrDep(sta, route);
@@ -301,16 +303,16 @@ namespace FPLedit.Shared
             if (!needsCleanup && Type == TimetableType.Linear)
                 return;
 
-            // Wenn Endstationen gelöscht werden könnten sonst korrupte Dateien entstehen!
+            // Remove orphaned time entries at new last/first stations.
             foreach (var train in Trains)
                 if (train is IWritableTrain wt)
                     wt.RemoveOrphanedTimes();
             
-            // Rebuild route cache (before removing orphaned routes)
+            // Rebuild route cache (before removing orphaned routes).
             foreach (var route in routes)
                 RebuildRouteCache(route);
 
-            // Es können verwaiste Routen entstehen (requires route cache)
+            // Remove orphaned routes, if applicable (requires route cache).
             if (Type == TimetableType.Network)
                 RemoveOrphanedRoutes();
         }
