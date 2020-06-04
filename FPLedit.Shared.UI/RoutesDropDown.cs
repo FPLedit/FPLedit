@@ -11,9 +11,9 @@ namespace FPLedit.Shared.UI
         private string? lastFn;
         private int selectedRoute;
 
-        public void Initialize(IPluginInterface pluginInterface)
+        public void Initialize(IPluginInterface pi)
         {
-            this.pluginInterface = pluginInterface;
+            pluginInterface = pi;
 
             pluginInterface.FileStateChanged += (s, e) =>
             {

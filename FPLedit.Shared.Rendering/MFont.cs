@@ -121,20 +121,20 @@ namespace FPLedit.Shared.Rendering
 
         public string FontToString()
         {
-            var family = GetFontName(Family);
-            var style = (int)Style;
-            return "font(" + family + ";" + style + ";" + Size + ")";
+            var serializedFamily = GetSerializableFontName(Family);
+            var serializedStyle = (int)Style;
+            return "font(" + serializedFamily + ";" + serializedStyle + ";" + Size + ")";
         }
 
-        private string GetFontName(string family)
+        private string GetSerializableFontName(string familyToSerialize)
         {
-            if (family == Eto.Drawing.FontFamilies.SansFamilyName)
-                return "SansSerif";
-            if (family == Eto.Drawing.FontFamilies.SerifFamilyName)
-                return "Serif";
-            if (family == Eto.Drawing.FontFamilies.MonospaceFamilyName)
-                return "Monospaced";
-            return family;
+            return familyToSerialize switch
+            {
+                Eto.Drawing.FontFamilies.SansFamilyName => "SansSerif",
+                Eto.Drawing.FontFamilies.SerifFamilyName => "Serif",
+                Eto.Drawing.FontFamilies.MonospaceFamilyName => "Monospaced",
+                _ => familyToSerialize
+            };
         }
         #endregion
     }

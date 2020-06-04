@@ -48,7 +48,6 @@ namespace FPLedit.Shared.Rendering
                     var bytesPerScanLine = sdData.Width * bytesPerPixel;
                     Parallel.For(0, sdData.Height, i =>
                     {
-                        var lineStart = (i * sdData.Stride);
                         var line = scan + (i * sdData.Stride);
                         for (int j = 0; j < bytesPerScanLine; j += bytesPerPixel)
                         {

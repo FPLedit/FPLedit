@@ -4,11 +4,11 @@ namespace FPLedit.Shared.Rendering
 {
     public sealed class MColor
     {
-        public byte R { get; set; }
+        public byte R { get; }
 
-        public byte G { get; set; }
+        public byte G { get; }
 
-        public byte B { get; set; }
+        public byte B { get; }
 
         public MColor(byte r, byte g, byte b)
         {
@@ -17,19 +17,7 @@ namespace FPLedit.Shared.Rendering
             B = b;
         }
         
-        public string Hex
-        {
-            get => ColorFormatter.ToString(this);
-            set
-            {
-                var c = ColorFormatter.FromHexString(value);
-                if (c == null)
-                    throw new ArgumentException("Provided string is not a valid hex color string!", nameof(value));
-                R = c.R;
-                G = c.G;
-                B = c.B;
-            }
-        }
+        public string Hex => ColorFormatter.ToString(this);
 
         public static bool operator ==(MColor? c1, MColor? c2) =>
             (ReferenceEquals(c1, null) && (ReferenceEquals(c2, null)) || (!ReferenceEquals(c1, null) && c1.Equals(c2)) || (!ReferenceEquals(c2, null) && c2.Equals(c1)));
@@ -45,7 +33,7 @@ namespace FPLedit.Shared.Rendering
             => new MColor((byte)sc.Rb, (byte)sc.Gb, (byte)sc.Bb);
 
         public static explicit operator Eto.Drawing.Color(MColor m)
-            => Eto.Drawing.Color.FromArgb(m.R, m.G, m.B, 255);
+            => Eto.Drawing.Color.FromArgb(m.R, m.G, m.B);
 
         public static explicit operator System.Drawing.Color(MColor m)
         {

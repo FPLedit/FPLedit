@@ -20,7 +20,7 @@ namespace FPLedit.Shared.UI
         {
             var assembly = Assembly.GetCallingAssembly();
             return assembly.GetManifestResourceStream("FPLedit." + dotFilePath) 
-                   ?? throw new Exception("Requested resource " + "FPLedit." + dotFilePath + " not found!");; 
+                   ?? throw new Exception("Requested resource " + "FPLedit." + dotFilePath + " not found!"); 
         }
 
         public static void AddSizeStateHandler(this Window w) => sizeManager!.Apply(w);

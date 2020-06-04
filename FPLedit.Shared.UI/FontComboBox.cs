@@ -2,7 +2,6 @@
 using Eto.Forms;
 using FPLedit.Shared.Rendering;
 using System;
-using System.Linq;
 
 namespace FPLedit.Shared.UI
 {
@@ -16,7 +15,7 @@ namespace FPLedit.Shared.UI
             this.box = box;
             this.label = label;
 
-            box.DataStore = new string[] { "<Lade>" };
+            box.DataStore = new [] { "<Lade>" };
             box.SelectedIndex = 0;
 
             // Asynchrones Laden der Font-Liste, um Performance-Problemen vorzubeugen
@@ -38,7 +37,10 @@ namespace FPLedit.Shared.UI
             {
                 label.Font = new Font(box.Text, 10);
             }
-            catch { }
+            catch
+            {
+                label.Visible = false;
+            }
         }
     }
 }

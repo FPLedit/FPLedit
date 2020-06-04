@@ -89,7 +89,8 @@ namespace FPLedit.Shared.UI
         private void ApplyShortcutBtn(object? sender, EventArgs e)
         {
             var btn = (ToggleButton)sender!;
-            shortcutsToggle.All(t => t.Checked = false);
+            foreach (var toggle in shortcutsToggle!)
+                toggle.Checked = false;
             if (btn.Tag is Days days)
                 SetDays(days);
             UpdateShortcutState();

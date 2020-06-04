@@ -1,6 +1,7 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared.Rendering;
 using System;
+using System.Globalization;
 using System.Linq.Expressions;
 
 namespace FPLedit.Shared.UI
@@ -31,7 +32,7 @@ namespace FPLedit.Shared.UI
         {
             var shadowBinding = Binding.Property(property);
 
-            binding.BindDataContext<TValue>(s => shadowBinding.GetValue(s).ToString(), (s, str) =>
+            binding.BindDataContext<TValue>(s => shadowBinding.GetValue(s).ToString(CultureInfo.CurrentCulture), (s, str) =>
             {
                 if (float.TryParse(str, out float i))
                     shadowBinding.SetValue(s, i);
