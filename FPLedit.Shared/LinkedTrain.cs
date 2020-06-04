@@ -30,7 +30,7 @@ namespace FPLedit.Shared
 
         /// <inheritdoc />
         [XAttrName("id")]
-        public int Id => GetAttribute<int>("id", -1);
+        public int Id => GetAttribute("id", -1);
 
         /// <inheritdoc />
         public string QualifiedId => Id + ";" + link.TrainLinkIndex + ";" + countingIndex;

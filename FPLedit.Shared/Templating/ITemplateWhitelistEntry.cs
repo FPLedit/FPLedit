@@ -21,6 +21,7 @@ namespace FPLedit.Shared.Templating
     /// Default implementation to provide an easy way to implement <see cref="ITemplateWhitelistEntry"/>.
     /// </summary>
     /// <typeparam name="T">Type to be whitelisted.</typeparam>
+    // ReSharper disable once UnusedTypeParameter
     public class TemplateWhitelistEntry<T> : ITemplateWhitelistEntry
     {
         public string TemplateType { get; }

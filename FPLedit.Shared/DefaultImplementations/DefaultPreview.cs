@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Eto.Forms;
-using FPLedit.Shared.Helpers;
 
 namespace FPLedit.Shared.DefaultImplementations
 {

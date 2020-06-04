@@ -78,7 +78,7 @@ namespace FPLedit.Shared
             routeCache = new Dictionary<int, Route>(); // Initialize empty route cache.
         }
 
-        private void OnTrainsChanged(object sender, EventArgs e)
+        private void OnTrainsChanged(object? sender, EventArgs e)
         {
             TrainsXmlCollectionChanged?.Invoke(sender, e);
         }

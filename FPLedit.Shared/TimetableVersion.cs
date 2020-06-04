@@ -5,12 +5,14 @@
     /// </summary>
     /// <remarks><see cref="ITimetable.Version"/> may have other values from those defined in the enum, but those are not supported.</remarks>
     [Templating.TemplateSafe]
-    public enum TimetableVersion : int
+    public enum TimetableVersion
     {
+        // ReSharper disable InconsistentNaming
         JTG2_x = 008,
         JTG3_0 = 009,
         JTG3_1 = 010,
         Extended_FPL = 100,
+        // ReSharper restore InconsistentNaming
     }
 
     [Templating.TemplateSafe]

@@ -28,7 +28,7 @@ namespace FPLedit.Shared
         [XAttrName("id")]
         public int Id
         {
-            get => GetAttribute<int>("id", -1);
+            get => GetAttribute("id", -1);
             set => SetAttribute("id", value.ToString());
         }
 

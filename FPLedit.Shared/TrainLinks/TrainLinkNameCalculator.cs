@@ -29,7 +29,7 @@ namespace FPLedit.Shared
             {
                 var tnc = (ITrainLinkNameCalculator?) Activator.CreateInstance(tnct);
                 tnc?.Deserialize(parts);
-                return tnc ?? throw new FormatException("Train link nameing scheme " + parts[0] + " could not be instandiated!");;
+                return tnc ?? throw new FormatException("Train link nameing scheme " + parts[0] + " could not be instandiated!");
             }
 
             throw new FormatException("Train link nameing scheme " + parts[0] + " not found!");

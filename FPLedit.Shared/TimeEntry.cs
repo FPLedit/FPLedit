@@ -48,7 +48,9 @@ namespace FPLedit.Shared
             return false;
         }
 
+        // ReSharper disable RedundantCast
         public override int GetHashCode() => ((int)Hours << 16) | (int)Minutes;
+        // ReSharper restore RedundantCast
 
         public bool Equals(TimeEntry obj) => obj.Hours == Hours && obj.Minutes == Minutes;
 

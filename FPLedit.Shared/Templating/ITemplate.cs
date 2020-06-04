@@ -6,7 +6,7 @@
     /// <remarks> No custom implementations will be used nor can be registered.</remarks>
     public interface ITemplate
     {
-        string TemplateType { get; }
+        string? TemplateType { get; }
 
         string TemplateName { get; }
 
