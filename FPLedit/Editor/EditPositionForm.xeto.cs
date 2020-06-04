@@ -1,12 +1,7 @@
 ﻿using Eto.Forms;
-using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using FPLedit.Shared.UI.Validators;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.Editor
 {

@@ -1,8 +1,6 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Xml;
@@ -124,9 +122,9 @@ namespace FPLedit
             if (!AutoUpdateEnabled)
                 return;
 
-            CheckResult = (new_avail, vi) =>
+            CheckResult = (newAvailable, vi) =>
             {
-                if (new_avail)
+                if (newAvailable)
                     log.Info($"Eine neue Programmversion ({vi.NewVersion}) ist verfügbar! {vi.Description ?? ""} Hier herunterladen: {vi.DownloadUrl}");
                 else
                     log.Info($"Sie benutzen die aktuelleste Version von FPLedit ({CurrentVersionDisplay})!");

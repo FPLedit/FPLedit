@@ -1,8 +1,6 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using FPLedit.Shared.UI;
 using FPLedit.Editor.TimetableEditor;
 
@@ -27,9 +25,10 @@ namespace FPLedit.Editor.Network
             this.AddCloseHandler();
             this.AddSizeStateHandler();
 
+            // Bugfix, Window closes on enter [Enter]
+            // Important: After AddCloseHandler, otherwise it will destroy Timetable instance in mpmode!
             if (!Platform.IsWpf)
-                DefaultButton = null; // Bugfix, Window closes on enter [Enter]
-                                      // Important: After AddCloseHandler, otherwise it will destroy Timetable instance in mpmode!
+                DefaultButton = null;
         }
 
         public MultipleTimetableEditForm(IPluginInterface pluginInterface) : this()

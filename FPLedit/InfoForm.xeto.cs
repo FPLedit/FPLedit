@@ -4,7 +4,6 @@ using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System;
 using System.IO;
-using FPLedit.Shared.Helpers;
 
 namespace FPLedit
 {

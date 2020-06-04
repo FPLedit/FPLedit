@@ -16,14 +16,12 @@ namespace FPLedit.Extensibility
         public bool EnabledModified { get; private set; }
 
         private readonly IPluginInterface pluginInterface;
-        private readonly UpdateManager update;
 
         private bool filesLoaded, pluginsInitialized;
 
-        public ExtensionManager(IPluginInterface pluginInterface, UpdateManager update)
+        public ExtensionManager(IPluginInterface pluginInterface)
         {
             this.pluginInterface = pluginInterface;
-            this.update = update;
             
             plugins = new List<PluginInfo>();
             disposablePlugins = new List<IDisposable>();

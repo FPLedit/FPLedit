@@ -26,13 +26,13 @@ namespace FPLedit.Editor.TimetableEditor
 
         protected override int FirstEditingColumn => 2; // erstes Abfahrtsfeld (Ankunft ja deaktiviert)
 
-        public SingleTimetableEditControl() : base()
+        public SingleTimetableEditControl()
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
             trapeztafelToggle.Click += TrapeztafelToggle_Click;
             requestToggle.Click += RequestToggleOnClick;
-            base.Init(trapeztafelToggle, actionsLayout);
+            Init(trapeztafelToggle, actionsLayout);
 
             KeyDown += HandleControlKeystroke;
             dataGridView.KeyDown += HandleControlKeystroke;
@@ -69,9 +69,9 @@ namespace FPLedit.Editor.TimetableEditor
                 HandleKeystroke(e, dataGridView);
         }
 
-        public void Initialize(Timetable tt, IWritableTrain t)
+        public void Initialize(Timetable timetable, IWritableTrain t)
         {
-            this.tt = tt;
+            this.tt = timetable;
 
             train = t;
             path = t.GetPath();

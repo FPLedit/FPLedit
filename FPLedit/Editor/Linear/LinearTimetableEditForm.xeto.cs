@@ -2,8 +2,6 @@
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace FPLedit.Editor.Linear
 {
@@ -30,9 +28,10 @@ namespace FPLedit.Editor.Linear
             this.AddCloseHandler();
             this.AddSizeStateHandler();
 
+            // Bugfix, Window closes on [Enter]
+            // Important: After AddCloseHandler, otherwise it will destroy Timetable instance in mpmode!
             if (!Platform.IsWpf)
-                DefaultButton = null; // Bugfix, Window closes on [Enter]
-                                      // Important: After AddCloseHandler, otherwise it will destroy Timetable instance in mpmode!
+                DefaultButton = null;
         }
 
         #region Events

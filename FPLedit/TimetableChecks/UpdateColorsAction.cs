@@ -1,8 +1,5 @@
 ﻿using FPLedit.Shared;
 using FPLedit.Shared.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace FPLedit.TimetableChecks
 {

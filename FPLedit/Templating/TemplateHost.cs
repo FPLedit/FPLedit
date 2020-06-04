@@ -1,8 +1,6 @@
 ﻿using FPLedit.Shared;
 using FPLedit.Shared.Templating;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Jint.Runtime;
 
 namespace FPLedit.Templating

@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 
 namespace FPLedit.Templating
 {
@@ -48,10 +46,10 @@ namespace FPLedit.Templating
         }
 
         public ITemplate[] GetAllTemplates()
-            => templates.ToArray();
+            => templates.Cast<ITemplate>().ToArray();
 
         public ITemplate[] GetTemplates(string type)
-            => templates.Where(t => t.Enabled && t.TemplateType == type).ToArray();
+            => templates.Where(t => t.Enabled && t.TemplateType == type).Cast<ITemplate>().ToArray();
 
         internal void DebugCompileAll()
         {

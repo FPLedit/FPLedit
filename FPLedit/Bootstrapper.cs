@@ -56,7 +56,7 @@ namespace FPLedit
             registry = new RegisterStore();
             Update = new UpdateManager(settings);
             undo = new UndoManager();
-            ExtensionManager = new ExtensionManager(this, Update);
+            ExtensionManager = new ExtensionManager(this);
             FileHandler = new FileHandler(this, lfh, undo);
             
             FileHandler.FileOpened += (o, args) => FileOpened?.Invoke(o, args);

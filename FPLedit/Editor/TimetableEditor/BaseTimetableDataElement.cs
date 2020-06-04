@@ -1,6 +1,5 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -56,7 +55,7 @@ namespace FPLedit.Editor.TimetableEditor
         public void SetError(Station sta, bool arrival, string text)
         {
             var err = errors.FirstOrDefault(e => e.Station == sta && e.Arrival == arrival);
-            if (text == null || text == "")
+            if (string.IsNullOrEmpty(text))
             {
                 if (err != null)
                     errors.Remove(err);

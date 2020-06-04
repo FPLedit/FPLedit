@@ -1,8 +1,6 @@
 ﻿using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Eto.Forms;
 
 namespace FPLedit.Logger

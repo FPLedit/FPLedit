@@ -2,8 +2,6 @@
 using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.Helpers;
-using FPLedit.Shared.UI;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
