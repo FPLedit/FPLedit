@@ -21,8 +21,6 @@ namespace FPLedit.Bildfahrplan.Forms
         private readonly TextBox endTimeTextBox;
         private readonly CheckBox includeKilometreCheckBox, drawStationNamesCheckBox, stationVerticalCheckBox, multitrackCheckBox, networkTrainsCheckBox;
 #pragma warning restore CS0649
-        private readonly NumberValidator heightPerHourValidator;
-        private readonly TimeValidator startTimeValidator, endTimeValidator;
         private readonly ValidatorCollection validators;
 
         private readonly TimetableStyle attrs;
@@ -39,9 +37,9 @@ namespace FPLedit.Bildfahrplan.Forms
             this.tt = tt;
             this.pluginInterface = pluginInterface;
 
-            heightPerHourValidator = new NumberValidator(heightPerHourTextBox, false, false, errorMessage: "Bitte eine Zahl als Höhe pro Stunde angeben!");
-            startTimeValidator = new TimeValidator(startTimeTextBox, false, errorMessage: "Bitte eine gültige Uhrzeit im Format hh:mm angeben!");
-            endTimeValidator = new TimeValidator(endTimeTextBox, false, errorMessage: "Bitte eine gültige Uhrzeit im Format hh:mm angeben!", maximum: new TimeEntry(48,0));
+            var heightPerHourValidator = new NumberValidator(heightPerHourTextBox, false, false, errorMessage: "Bitte eine Zahl als Höhe pro Stunde angeben!");
+            var startTimeValidator = new TimeValidator(startTimeTextBox, false, errorMessage: "Bitte eine gültige Uhrzeit im Format hh:mm angeben!");
+            var endTimeValidator = new TimeValidator(endTimeTextBox, false, errorMessage: "Bitte eine gültige Uhrzeit im Format hh:mm angeben!", maximum: new TimeEntry(48,0));
             validators = new ValidatorCollection(heightPerHourValidator, startTimeValidator, endTimeValidator);
 
             DropDownBind.Color<TimetableStyle>(pluginInterface.Settings, bgColorComboBox, "BgColor");

@@ -3,7 +3,7 @@ using FPLedit.Bildfahrplan.Model;
 using FPLedit.Bildfahrplan.Render;
 using FPLedit.Shared;
 using System;
-using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
 using FPLedit.Shared.UI;
@@ -35,10 +35,11 @@ namespace FPLedit.Bildfahrplan.Forms
                 doc.Dispose();
         }
 
+        [SuppressMessage("ReSharper", "AccessToDisposedClosure")]
         public void InitPrint()
         {
             var printers = Print.PrinterSettings.InstalledPrinters.Cast<string>().ToArray();
-            
+
             using (doc = new Print.PrintDocument())
             using (var form = new FDialog<string>())
             using (var printerDropDown = new DropDown { DataStore = printers })

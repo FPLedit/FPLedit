@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace FPLedit.Bildfahrplan
+namespace FPLedit.Bildfahrplan.Helpers
 {
     internal sealed class DashStyleHelper
     {

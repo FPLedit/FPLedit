@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using FPLedit.Shared;
+﻿using FPLedit.Shared;
 using Eto.Forms;
 using FPLedit.Shared.Templating;
 using FPLedit.Buchfahrplan.Model;
@@ -51,14 +48,14 @@ namespace FPLedit.Buchfahrplan.Forms
         {
             attrs.Font = fontComboBox.Text;
             attrs.Css = cssTextBox.Text;
-            attrs.ShowComments = commentCheckBox.Checked.Value;
-            attrs.ShowDays = daysCheckBox.Checked.Value;
+            attrs.ShowComments = commentCheckBox.Checked ?? false;
+            attrs.ShowDays = daysCheckBox.Checked ?? false;
 
             var tmpl = (ITemplate)templateComboBox.SelectedValue;
             if (tmpl != null)
                 attrs.Template = tmpl.Identifier;
 
-            settings.Set("bfpl.console", consoleCheckBox.Checked.Value);
+            settings.Set("bfpl.console", consoleCheckBox.Checked ?? false);
         }
 
         public void SetExpertMode(bool enabled)

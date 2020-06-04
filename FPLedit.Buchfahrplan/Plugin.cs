@@ -1,6 +1,5 @@
 ﻿using FPLedit.Shared;
 using FPLedit.Shared.Templating;
-using System;
 using FPLedit.Buchfahrplan.Model;
 using FPLedit.Shared.DefaultImplementations;
 

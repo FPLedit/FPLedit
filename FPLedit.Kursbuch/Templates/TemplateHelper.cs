@@ -1,9 +1,6 @@
 ﻿using FPLedit.Shared;
-using System;
 using System.Linq;
 using System.Collections.Generic;
-using FPLedit.Kursbuch.Model;
-using FPLedit.Shared.DefaultImplementations;
 // ReSharper disable UnusedMember.Global
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable ClassNeverInstantiated.Global

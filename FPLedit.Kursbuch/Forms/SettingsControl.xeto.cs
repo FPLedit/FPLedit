@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using FPLedit.Shared;
-using System.Diagnostics;
 using Eto.Forms;
 using FPLedit.Shared.Templating;
 using FPLedit.Kursbuch.Model;

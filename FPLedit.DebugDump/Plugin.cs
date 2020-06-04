@@ -1,11 +1,8 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
-using FPLedit.Shared.Filetypes;
 using FPLedit.Shared.UI;
 using System;
 using System.IO;
-using System.Linq;
-using System.Xml;
 using FPLedit.DebugDump.Forms;
 
 namespace FPLedit.DebugDump

@@ -1,11 +1,8 @@
 ﻿using FPLedit.Shared;
 using FPLedit.Shared.Filetypes;
 using FPLedit.Shared.Rendering;
-using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Text;
 
 namespace FPLedit.jTrainGraphStarter
 {
@@ -39,7 +36,6 @@ namespace FPLedit.jTrainGraphStarter
                 {
                     copy.RemoveStation(sta);
                     si--;
-                    continue;
                 }
             }
 

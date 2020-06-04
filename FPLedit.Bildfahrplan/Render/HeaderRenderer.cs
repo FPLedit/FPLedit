@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using FPLedit.Bildfahrplan.Helpers;
 
 namespace FPLedit.Bildfahrplan.Render
 {

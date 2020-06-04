@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using FPLedit.Shared;
+﻿using FPLedit.Shared;
 using Eto.Forms;
 
 namespace FPLedit.Buchfahrplan.Forms

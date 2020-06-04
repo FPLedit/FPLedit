@@ -23,7 +23,7 @@ namespace FPLedit.Aushangfahrplan
             componentRegistry.Register<ITemplateProvider>(new Templates.SvgTemplateProvider());
             
             componentRegistry.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<Templates.TemplateHelper>("afpl"));
-            componentRegistry.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<Model.AfplAttrs>("afpl"));
+            componentRegistry.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<AfplAttrs>("afpl"));
         }
         
         internal static IFilterRuleContainer FilterRuleContainer => new DefaultFilterRuleContainer("Aushangfahrplan", AfplAttrs.GetAttrs, AfplAttrs.CreateAttrs);

@@ -4,10 +4,6 @@ using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using FPLedit.Shared.UI.Validators;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPLedit.Buchfahrplan.Forms
 {
@@ -17,7 +13,6 @@ namespace FPLedit.Buchfahrplan.Forms
         private readonly TextBox nameTextBox, positionTextBox, velocityTextBox;
         private readonly DropDown wellenComboBox;
 #pragma warning restore CS0649
-        private readonly NumberValidator velocityValidator, positionValidator;
         private readonly ValidatorCollection validators;
 
         public IStation Station { get; set; }
@@ -29,8 +24,8 @@ namespace FPLedit.Buchfahrplan.Forms
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            velocityValidator = new NumberValidator(velocityTextBox, true, true, errorMessage: "Bitte eine Zahl als Geschwindikgeit eingeben!");
-            positionValidator = new NumberValidator(positionTextBox, false, false, errorMessage: "Bitte eine Zahl als Position eingeben!");
+            var velocityValidator = new NumberValidator(velocityTextBox, true, true, errorMessage: "Bitte eine Zahl als Geschwindikgeit eingeben!");
+            var positionValidator = new NumberValidator(positionTextBox, false, false, errorMessage: "Bitte eine Zahl als Position eingeben!");
             validators = new ValidatorCollection(velocityValidator, positionValidator);
 
             for (int i = 0; i < 4; i++)

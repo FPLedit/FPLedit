@@ -1,9 +1,5 @@
 ﻿using FPLedit.Shared;
 using FPLedit.Shared.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace FPLedit.Bildfahrplan.Model
 {

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using FPLedit.Kursbuch.Forms;
 using FPLedit.Kursbuch.Model;
 using FPLedit.Shared;
@@ -25,7 +24,7 @@ namespace FPLedit.Kursbuch
             componentRegistry.Register<ITemplateProvider>(new Templates.TemplateProvider());
             
             componentRegistry.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<Templates.TemplateHelper>("kfpl"));
-            componentRegistry.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<Model.KfplAttrs>("kfpl"));
+            componentRegistry.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<KfplAttrs>("kfpl"));
 
             componentRegistry.Register<ITimetableTypeChangeAction>(new FixAttrsAction());
         }
@@ -40,7 +39,7 @@ namespace FPLedit.Kursbuch
     {
         public void ToLinear(Timetable tt)
         {
-            var attrs = Model.KfplAttrs.GetAttrs(tt);
+            var attrs = KfplAttrs.GetAttrs(tt);
             if (attrs == null)
                 return;
             var route = tt.GetRoutes().FirstOrDefault().Index;
@@ -49,7 +48,7 @@ namespace FPLedit.Kursbuch
 
         public void ToNetwork(Timetable tt)
         {
-            var attrs = Model.KfplAttrs.GetAttrs(tt);
+            var attrs = KfplAttrs.GetAttrs(tt);
             if (attrs == null)
                 return;
             ConvertAttrLinToNet(attrs.KBSn);

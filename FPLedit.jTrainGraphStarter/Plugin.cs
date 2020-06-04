@@ -11,9 +11,9 @@ namespace FPLedit.jTrainGraphStarter
         IPluginInterface pluginInterface;
         ButtonMenuItem startItem;
 
-        public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
+        public void Init(IPluginInterface pi, IComponentRegistry componentRegistry)
         {
-            this.pluginInterface = pluginInterface;
+            pluginInterface = pi;
             pluginInterface.FileStateChanged += PluginInterface_FileStateChanged;
             
 #pragma warning disable CA2000

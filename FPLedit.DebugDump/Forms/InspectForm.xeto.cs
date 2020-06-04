@@ -1,19 +1,13 @@
 ﻿using Eto.Forms;
-using FPLedit.Shared;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FPLedit.Shared.UI;
 
 namespace FPLedit.DebugDump.Forms
 {
     internal sealed class InspectForm : FDialog<DialogResult>
     {
-        private readonly DumpEvent[] events;
         private DumpEvent currentEvent;
 
 #pragma warning disable CS0649
@@ -24,8 +18,6 @@ namespace FPLedit.DebugDump.Forms
 
         public InspectForm(DumpEvent[] events)
         {
-            this.events = events;
-
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
             eventListBox.ItemTextBinding = Binding.Property<DumpEvent, string>(evt => evt.Time.ToString("g") + " " + evt.Type);

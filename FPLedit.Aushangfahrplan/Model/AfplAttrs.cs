@@ -1,6 +1,5 @@
 ﻿using FPLedit.Shared;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -70,14 +69,14 @@ namespace FPLedit.Aushangfahrplan.Model
         [XAttrName("shT")]
         public bool ShowTracks
         {
-            get => GetAttribute<bool>("shT", true);
+            get => GetAttribute("shT", true);
             set => SetAttribute("shT", value.ToString().ToLower());
         }
 
         [XAttrName("omit-single-tr")]
         public bool OmitTracksWhenSingle
         {
-            get => GetAttribute<bool>("omit-single-tr", true);
+            get => GetAttribute("omit-single-tr", true);
             set => SetAttribute("omit-single-tr", value.ToString().ToLower());
         }
 

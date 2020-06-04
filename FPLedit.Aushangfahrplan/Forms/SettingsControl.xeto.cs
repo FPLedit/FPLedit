@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using FPLedit.Shared;
+﻿using FPLedit.Shared;
 using FPLedit.Aushangfahrplan.Model;
 using Eto.Forms;
 using FPLedit.Shared.Templating;
