@@ -93,7 +93,7 @@ namespace FPLedit
                 return;
             if (importFileDialog.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
             {
-                IImport import = importers[importFileDialog.CurrentFilterIndex - 1];
+                IImport import = importers[importFileDialog.CurrentFilterIndex];
                 pluginInterface.Logger.Info("Öffne Datei " + importFileDialog.FileName);
                 Timetable = import.SafeImport(importFileDialog.FileName, pluginInterface);
                 if (Timetable == null)
