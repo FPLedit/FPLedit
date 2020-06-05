@@ -4,6 +4,7 @@ using FPLedit.Shared;
 using FPLedit.Shared.Rendering;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -21,37 +22,44 @@ namespace FPLedit.Editor.Rendering
 
         private RenderBtn<Track> editingButton;
 
-        private Station _station;
-        public Station Station
-        {
-            get => _station;
-            set
-            {
-                _station = value;
-                this.Invalidate();
-            }
-        }
+        // Injected by InitializeWithStation.
+        private int routeIndex;
+        private Station station;
+        private Timetable tt;
 
-        private int _route;
-        public int Route
-        {
-            get => _route;
-            set
-            {
-                _route = value;
-                this.Invalidate();
-            }
-        }
+        #region Result properties
+        
+        public IRouteValueCollection<string> DefaultTrackLeft { get; private set; }
+
+        public IRouteValueCollection<string> DefaultTrackRight { get; private set; }
+
+        public ObservableCollection<Track> Tracks { get; private set; }
 
         public Dictionary<string, string> TrackRenames { get; } = new Dictionary<string, string>();
         
-        private List<string> trackRemoves = new List<string>();
-        public IList<string> TrackRemoves => trackRemoves.AsReadOnly();
+        private readonly List<string> trackRemoves = new List<string>();
+        public IEnumerable<string> TrackRemoves => trackRemoves.AsReadOnly();
+        
+        #endregion
 
         public StationRenderer()
         {
             textColor = SystemColors.ControlText;
             bgColor = SystemColors.ControlBackground;
+        }
+        
+        public void InitializeWithStation(int route, Station value)
+        {
+            routeIndex = route;
+            station = value;
+
+            tt = value._parent;
+
+            DefaultTrackLeft = value.DefaultTrackLeft.ToStandalone();
+            DefaultTrackRight = value.DefaultTrackLeft.ToStandalone();
+            Tracks = new ObservableCollection<Track>(value.Tracks.Select(t => t.Copy()));
+
+            Invalidate();
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -63,13 +71,13 @@ namespace FPLedit.Editor.Rendering
             int midx = Width / 2;
             
             // Richtungsangaben ermitteln
-            var route = _station._parent.GetRoute(_route).Stations;
-            var staIdx = route.IndexOf(_station);
+            var route = station._parent.GetRoute(routeIndex).Stations;
+            var staIdx = route.IndexOf(station);
             var prev = route.ElementAtOrDefault(staIdx - 1);
             var next = route.ElementAtOrDefault(staIdx + 1);
 
-            bool disableRight = _station._parent.Type == TimetableType.Network && next == null;
-            bool disableLeft = _station._parent.Type == TimetableType.Network && prev == null;
+            bool disableRight = tt.Type == TimetableType.Network && next == null; //TODO: Why only disable on network?
+            bool disableLeft = tt.Type == TimetableType.Network && prev == null;
 
             // Richtungsangaben zeichnen
             if (prev != null)
@@ -80,17 +88,17 @@ namespace FPLedit.Editor.Rendering
                 e.Graphics.DrawText(font, textColor, Width - 5 - nextSize.Width, 5, "nach " + next.SName);
             }
 
-            var leftdefaultTrack = _station.Tracks.IndexOf(_station.Tracks.FirstOrDefault(t => t.Name == _station.DefaultTrackLeft.GetValue(_route)));
-            var rightdefaultTrack = _station.Tracks.IndexOf(_station.Tracks.FirstOrDefault(t => t.Name == _station.DefaultTrackRight.GetValue(_route)));
+            var leftdefaultTrack = Tracks.IndexOf(Tracks.FirstOrDefault(t => t.Name == DefaultTrackLeft.GetValue(routeIndex)));
+            var rightdefaultTrack = Tracks.IndexOf(Tracks.FirstOrDefault(t => t.Name == DefaultTrackRight.GetValue(routeIndex)));
 
             // Netzwerk: Falls noch keine Angabe: Standardgleise setzen
-            if (_station._parent.Type == TimetableType.Network && _station.Tracks.Any())
+            if (tt.Type == TimetableType.Network && Tracks.Any())
             {
                 if (disableLeft)
                     leftdefaultTrack = 0;
                 else if (leftdefaultTrack == -1)
                 {
-                    MoveDefaultTrack(_station.DefaultTrackLeft, _station.Tracks.First(), 0);
+                    MoveDefaultTrack(DefaultTrackLeft, Tracks.First(), 0);
                     leftdefaultTrack = 0;
                 }
 
@@ -98,7 +106,7 @@ namespace FPLedit.Editor.Rendering
                     rightdefaultTrack = 0;
                 else if (rightdefaultTrack == -1)
                 {
-                    MoveDefaultTrack(_station.DefaultTrackRight, _station.Tracks.First(), 0);
+                    MoveDefaultTrack(DefaultTrackRight, Tracks.First(), 0);
                     rightdefaultTrack = 0;
                 }
             }
@@ -106,9 +114,9 @@ namespace FPLedit.Editor.Rendering
             int y = 30;
             int maxIndent = 0;
 
-            foreach (var track in _station.Tracks)
+            foreach (var track in Tracks)
             {
-                var trackIndex = _station.Tracks.IndexOf(track);
+                var trackIndex = Tracks.IndexOf(track);
 
                 // Einrückung des Gleisvorfeldes berehcnen
                 var leftIndent = Math.Abs(leftdefaultTrack - trackIndex) * INDENT + 60;
@@ -142,9 +150,9 @@ namespace FPLedit.Editor.Rendering
                 buttons.Add(nameBtn);
 
                 // Netzwerk: Standardgleise anderer Routen gestrichelt zeichnen.
-                if (_station.DefaultTrackLeft.ContainsValue(track.Name) && leftdefaultTrack != trackIndex)
+                if (DefaultTrackLeft.ContainsValue(track.Name) && leftdefaultTrack != trackIndex)
                     e.Graphics.DrawLine(dashedPen, 0, y, leftIndent, y);
-                if (_station.DefaultTrackRight.ContainsValue(track.Name) && rightdefaultTrack != trackIndex)
+                if (DefaultTrackRight.ContainsValue(track.Name) && rightdefaultTrack != trackIndex)
                     e.Graphics.DrawLine(dashedPen, rightIndent, y, Width, y);
 
                 // Aktions-Buttons hinzufügen
@@ -162,17 +170,17 @@ namespace FPLedit.Editor.Rendering
                 if (trackIndex == leftdefaultTrack && !disableLeft)
                 {
                     var leftUpBtn = GetButton("▲", track, 10, y);
-                    leftUpBtn.Click += (s, x) => MoveDefaultTrack(_station.DefaultTrackLeft, ((RenderBtn<Track>)s).Tag, -1);
+                    leftUpBtn.Click += (s, x) => MoveDefaultTrack(DefaultTrackLeft, ((RenderBtn<Track>)s).Tag, -1);
                     var leftDownBtn = GetButton("▼", track, 30, y);
-                    leftDownBtn.Click += (s, x) => MoveDefaultTrack(_station.DefaultTrackLeft, ((RenderBtn<Track>)s).Tag, 1);
+                    leftDownBtn.Click += (s, x) => MoveDefaultTrack(DefaultTrackLeft, ((RenderBtn<Track>)s).Tag, 1);
                 }
 
                 if (trackIndex == rightdefaultTrack && !disableRight)
                 {
                     var rightUpButton = GetButton("▲", track, Width - 46, y);
-                    rightUpButton.Click += (s, x) => MoveDefaultTrack(_station.DefaultTrackRight, ((RenderBtn<Track>)s).Tag, -1);
+                    rightUpButton.Click += (s, x) => MoveDefaultTrack(DefaultTrackRight, ((RenderBtn<Track>)s).Tag, -1);
                     var rightDownBtn = GetButton("▼", track, Width - 26, y);
-                    rightDownBtn.Click += (s, x) => MoveDefaultTrack(_station.DefaultTrackRight, ((RenderBtn<Track>)s).Tag, 1);
+                    rightDownBtn.Click += (s, x) => MoveDefaultTrack(DefaultTrackRight, ((RenderBtn<Track>)s).Tag, 1);
                 }
 
                 y += LINE_HEIGHT;
@@ -184,7 +192,7 @@ namespace FPLedit.Editor.Rendering
             buttons.Add(addBtn);
             addBtn.Click += AddBtn_Click;
 
-            var newHeight = (_station.Tracks.Count) * LINE_HEIGHT + 50;
+            var newHeight = (Tracks.Count) * LINE_HEIGHT + 50;
             if (newHeight > Height)
                 this.Height = newHeight;
 
@@ -197,13 +205,13 @@ namespace FPLedit.Editor.Rendering
             base.OnPaint(e);
         }
 
-        private void MoveDefaultTrack(RouteValueCollection<string> property, Track current, int offset)
+        private void MoveDefaultTrack(IRouteValueCollection<string> property, Track current, int offset)
         {
-            var idx = _station.Tracks.IndexOf(current) + offset;
-            if (idx < 0 || idx > _station.Tracks.Count - 1)
+            var idx = Tracks.IndexOf(current) + offset;
+            if (idx < 0 || idx > Tracks.Count - 1)
                 return;
-            var next = _station.Tracks[idx];
-            property.SetValue(_route, next.Name);
+            var next = Tracks[idx];
+            property.SetValue(routeIndex, next.Name);
             Invalidate();
         }
 
@@ -211,27 +219,27 @@ namespace FPLedit.Editor.Rendering
         {
             var regex = new Regex(@"^Gleis (\d+)$", RegexOptions.Compiled);
             var maxTrack = 0;
-            var matchedTracks = _station.Tracks.Select(t => regex.Match(t.Name)).Where(m => m.Success);
+            var matchedTracks = Tracks.Select(t => regex.Match(t.Name)).Where(m => m.Success).ToArray();
             if (matchedTracks.Any())
                 maxTrack = matchedTracks.Select(m => int.Parse(m.Groups[1].Value)).Max();
-            var track = new Track(_station._parent)
+            var track = new Track(tt)
             {
                 Name = "Gleis " + (maxTrack + 1)
             };
 
-            if (!_station.Tracks.Any())
+            if (!Tracks.Any())
             {
-                _station.DefaultTrackLeft.SetValue(_route, track.Name);
-                _station.DefaultTrackRight.SetValue(_route, track.Name);
+                DefaultTrackLeft.SetValue(routeIndex, track.Name);
+                DefaultTrackRight.SetValue(routeIndex, track.Name);
             }
-            _station.Tracks.Add(track);
+            Tracks.Add(track);
 
             Invalidate();
         }
 
         private void NameBtn_Click(object sender, EventArgs e)
         {
-            editingButton = (RenderBtn<Track>)sender;
+            editingButton = (RenderBtn<Track>) sender;
             var oldName = editingButton.Tag.Name;
             var newName = Shared.UI.InputBox.Query(ParentWindow, "Gleisnamen bearbeiten", oldName);
             if (newName != null && newName != oldName)
@@ -240,7 +248,7 @@ namespace FPLedit.Editor.Rendering
 
         private void CommitNameEdit(string oldName, string newName)
         {
-            var duplicate = _station.Tracks.Any(t => t != editingButton.Tag && t.Name == newName);
+            var duplicate = Tracks.Any(t => t != editingButton.Tag && t.Name == newName);
             if (duplicate)
             {
                 MessageBox.Show($"Ein Gleis mit der Bezeichnung {newName} ist bereits vorhanden. Bitte wählen Sie einen anderen Namen!", MessageBoxType.Error);
@@ -248,8 +256,8 @@ namespace FPLedit.Editor.Rendering
             }
 
             // Streckengleise umbenennen
-            _station.DefaultTrackLeft.ReplaceAllValues(editingButton.Tag.Name, newName);
-            _station.DefaultTrackRight.ReplaceAllValues(editingButton.Tag.Name, newName);
+            DefaultTrackLeft.ReplaceAllValues(editingButton.Tag.Name, newName);
+            DefaultTrackRight.ReplaceAllValues(editingButton.Tag.Name, newName);
 
             // Ankunfts- und Abfahrtsgleise zum umbenennen stagen
             if (TrackRenames.ContainsKey(newName))
@@ -271,31 +279,31 @@ namespace FPLedit.Editor.Rendering
         private void DownBtn_Click(object sender, EventArgs e)
         {
             var btn = (RenderBtn<Track>)sender;
-            var idx = _station.Tracks.IndexOf(btn.Tag);
-            if (idx == _station.Tracks.Count - 1)
+            var idx = Tracks.IndexOf(btn.Tag);
+            if (idx == Tracks.Count - 1)
                 return;
-            _station.Tracks.Move(idx, idx + 1);
+            Tracks.Move(idx, idx + 1);
             Invalidate();
         }
 
         private void UpBtn_Click(object sender, EventArgs e)
         {
             var btn = (RenderBtn<Track>)sender;
-            var idx = _station.Tracks.IndexOf(btn.Tag);
+            var idx = Tracks.IndexOf(btn.Tag);
             if (idx == 0)
                 return;
-            _station.Tracks.Move(idx, idx - 1);
+            Tracks.Move(idx, idx - 1);
             Invalidate();
         }
 
         private void DeleteBtn_Click(object sender, EventArgs e)
         {
             var btn = (RenderBtn<Track>)sender;
-            _station.Tracks.Remove(btn.Tag);
+            Tracks.Remove(btn.Tag);
 
-            var firstName = _station.Tracks.FirstOrDefault()?.Name;
-            _station.DefaultTrackLeft.ReplaceAllValues(btn.Tag.Name, firstName);
-            _station.DefaultTrackRight.ReplaceAllValues(btn.Tag.Name, firstName);
+            var firstName = Tracks.FirstOrDefault()?.Name;
+            DefaultTrackLeft.ReplaceAllValues(btn.Tag.Name, firstName);
+            DefaultTrackRight.ReplaceAllValues(btn.Tag.Name, firstName);
             
             trackRemoves.Add(btn.Tag.Name);
 

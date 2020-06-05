@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using Force.DeepCloner;
 using FPLedit.Shared.Helpers;
 
 namespace FPLedit.Shared
 {
     /// <summary>
     /// A RouteValueCollection (RVC) allows to define properties which allow for different values for each individual
-    /// route of a Station.
+    /// route of a Station. This RVC is associated with a XML attribute.
     /// </summary>
+    /// <remarks>Reference integrity is not guaranteed.</remarks>
     /// <typeparam name="T">Any type that is transformable to a string with reasonable effort.</typeparam>
     [Templating.TemplateSafe]
-    public class RouteValueCollection<T>
+    public class RouteValueCollection<T> : IRouteValueCollection<T>
     {
         private static readonly EscapeSplitHelper escape = new EscapeSplitHelper(';');
         
@@ -23,6 +26,26 @@ namespace FPLedit.Shared
         private readonly Func<T, string> convFrom;
         private readonly bool optional;
         private readonly T convDefault;
+        
+        /// <inheritdoc />
+        public IReadOnlyDictionary<int, T> Values => new ReadOnlyDictionary<int, T>(values);
+
+        /// <summary>
+        /// Creates a standalone copy of this RVC.
+        /// </summary>
+        public IRouteValueCollection<T> ToStandalone() 
+            => new StandaloneRouteValueCollection<T>(values.DeepClone(), convDefault);
+
+        /// <summary>
+        /// Copies all values from a (standalone) RVC back into this instance. This clears all values of this instance before.
+        /// </summary>
+        public void FromStandalone(IRouteValueCollection<T> standalone)
+        {
+            values.Clear();
+            foreach (var val in standalone.Values)
+                values[val.Key] = val.Value;
+            Write();
+        }
 
         /// <summary>
         /// Creates a new RVC.
@@ -62,9 +85,7 @@ namespace FPLedit.Shared
         {
         }
 
-        /// <summary>
-        /// Return the value - or the default value, if no value has been set - corresponding to the given route.
-        /// </summary>
+        /// <inheritdoc />
         public T GetValue(int route)
         {
             if (values.TryGetValue(route, out T val))
@@ -72,9 +93,7 @@ namespace FPLedit.Shared
             return convDefault;
         }
 
-        /// <summary>
-        /// Set the value corresponding to the given route.
-        /// </summary>
+        /// <inheritdoc />
         public void SetValue(int route, T val)
         {
             values[route] = val;
@@ -103,7 +122,7 @@ namespace FPLedit.Shared
         /// </summary>
         private void ParseLinear()
         {
-            var toParse = entity.GetAttribute<string>(attr, null);
+            var toParse = entity.GetAttribute<string>(attr);
             if (optional && toParse == null)
                 return;
             
@@ -122,7 +141,7 @@ namespace FPLedit.Shared
             if (optional && !values.Any())
                 return;
 
-            var text = "";
+            string text;
             var t = forceType ?? tt.Type;
             if (t == TimetableType.Linear)
                 text = convFrom(GetValue(Timetable.LINEAR_ROUTE_ID));
@@ -134,14 +153,10 @@ namespace FPLedit.Shared
             entity.SetAttribute(attr, text);
         }
 
-        /// <summary>
-        /// Returns whether this RVC contains the given value at any route.
-        /// </summary>
+        /// <inheritdoc />
         public bool ContainsValue(T value) => values.ContainsValue(value);
 
-        /// <summary>
-        /// Replace all opccurences of <paramref name="oldVal"/> with <paramref name="newVal" /> on all routes. 
-        /// </summary>
+        /// <inheritdoc />
         public void ReplaceAllValues(T oldVal, T newVal)
         {
             for (int i = 0; i < values.Count; i++)
@@ -151,6 +166,84 @@ namespace FPLedit.Shared
                     SetValue(kvp.Key, newVal);
             }
         }
+    }
+
+    /// <inheritdoc />
+    public sealed class StandaloneRouteValueCollection<T> : IRouteValueCollection<T>
+    {
+        private readonly Dictionary<int, T> values;
+        private readonly T defaultValue;
+
+        internal StandaloneRouteValueCollection(Dictionary<int, T> values, T defaultValue)
+        {
+            this.values = values;
+            this.defaultValue = defaultValue;
+        }
+        
+        /// <inheritdoc />
+        public IReadOnlyDictionary<int, T> Values => new ReadOnlyDictionary<int, T>(values);
+
+        /// <inheritdoc />
+        public T GetValue(int route)
+        {
+            if (values.TryGetValue(route, out T val))
+                return val;
+            return defaultValue;
+        }
+
+        /// <inheritdoc />
+        public void SetValue(int route, T val)
+        {
+            values[route] = val;
+        }
+        
+        /// <inheritdoc />
+        public bool ContainsValue(T value) => values.ContainsValue(value);
+
+        /// <inheritdoc />
+        public void ReplaceAllValues(T oldVal, T newVal)
+        {
+            for (int i = 0; i < values.Count; i++)
+            {
+                var kvp = values.ElementAt(i);
+                if (kvp.Value.Equals(oldVal))
+                    SetValue(kvp.Key, newVal);
+            }
+        }
+    }
+
+    /// <summary>
+    /// A RouteValueCollection (RVC) allows to define properties which allow for different values for each individual
+    /// route of a Station.
+    /// </summary>
+    /// <remarks>Reference integrity is not guaranteed.</remarks>
+    /// <typeparam name="T">Any type that is transformable to a string with reasonable effort.</typeparam>
+    public interface IRouteValueCollection<T>
+    {
+        /// <summary>
+        /// Returns all current values of this RouteValueCollection.
+        /// </summary>
+        IReadOnlyDictionary<int, T> Values { get; }
+        
+        /// <summary>
+        /// Return the value - or the default value, if no value has been set - corresponding to the given route.
+        /// </summary>
+        T GetValue(int route);
+
+        /// <summary>
+        /// Set the value corresponding to the given route.
+        /// </summary>
+        void SetValue(int route, T val);
+        
+        /// <summary>
+        /// Returns whether this RVC contains the given value at any route.
+        /// </summary>
+        bool ContainsValue(T value);
+
+        /// <summary>
+        /// Replace all opccurences of <paramref name="oldVal"/> with <paramref name="newVal" /> on all routes. 
+        /// </summary>
+        void ReplaceAllValues(T oldVal, T newVal);
     }
 }
 
