@@ -121,7 +121,7 @@ Task("PackRelease")
     .IsDependentOn("BundleThirdParty")
     .Does(() => {
         var version = GetProductVersion(Context, buildDir + File("FPLedit.exe"));
-        var nodoc_suffix = ignoreNoDoc ? "" : ((docInPath == null || docInPath == "") ? "" : "-nodoc");       
+        var nodoc_suffix = ignoreNoDoc ? "" : ((docInPath == null || docInPath == "") ? "-nodoc" : "");       
         var file = Directory("./bin") + File($"fpledit-{version}{nodoc_suffix}.zip");
         
         if (FileExists(file))
