@@ -27,7 +27,6 @@ namespace FPLedit.Editor
         public float Position { get; private set; }
 
         private readonly bool existingStation;
-        private readonly Station trackStation;
 
         private int stationRendererHeight, stationRendererWidth;
 
@@ -90,9 +89,7 @@ namespace FPLedit.Editor
             existingStation = false;
             Station = new Station(tt);
 
-            trackStation = Station.Copy();
-            stationRenderer.Station = trackStation;
-            stationRenderer.Route = route;
+            stationRenderer.InitializeWithStation(route, Station);
 
             if (tt.Version.Compare(TimetableVersion.JTG3_1) < 0)
                 stationRenderer.Visible = false;
@@ -112,9 +109,7 @@ namespace FPLedit.Editor
 
             existingStation = true;
 
-            trackStation = Station.Copy();
-            stationRenderer.Station = trackStation;
-            stationRenderer.Route = route;
+            stationRenderer.InitializeWithStation(route, Station);
 
             if (station.ParentTimetable.Version.Compare(TimetableVersion.JTG3_1) < 0)
                 stationRenderer.Visible = false;
@@ -169,10 +164,10 @@ namespace FPLedit.Editor
             }
             
             // Update track data.
-            Station.DefaultTrackLeft.SetValue(route, trackStation.DefaultTrackLeft.GetValue(route));
-            Station.DefaultTrackRight.SetValue(route, trackStation.DefaultTrackRight.GetValue(route));
+            Station.DefaultTrackLeft.FromStandalone(stationRenderer.DefaultTrackLeft);
+            Station.DefaultTrackRight.FromStandalone(stationRenderer.DefaultTrackRight);
             Station.Tracks.Clear();
-            foreach (var track in trackStation.Tracks)
+            foreach (var track in stationRenderer.Tracks)
                 Station.Tracks.Add(track);
             foreach (var rename in stationRenderer.TrackRenames)
                 Station.ParentTimetable._InternalRenameAllTrainTracksAtStation(Station, rename.Key, rename.Value);

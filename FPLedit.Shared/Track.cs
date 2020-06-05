@@ -22,5 +22,14 @@
             get => GetAttribute("name", "");
             set => SetAttribute("name", value);
         }
+        
+        /// <summary>
+        /// Create a copy of this Track. This is not a deep copy, as it copies only the xml tree below, and it preserves the parent timetable.
+        /// </summary>
+        public Track Copy()
+        {
+            var xml = XMLEntity.XClone();
+            return new Track(xml, ParentTimetable);
+        }
     }
 }

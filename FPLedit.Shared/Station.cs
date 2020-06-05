@@ -182,14 +182,5 @@ namespace FPLedit.Shared
             Routes = list.ToArray();
             return true;
         }
-
-        /// <summary>
-        /// Create a copy of this Station. This is not a deep copy, as it preserves the parent timetable.
-        /// </summary>
-        public Station Copy()
-        {
-            var xml = XMLEntity.XClone();
-            return new Station(xml, ParentTimetable);
-        }
     }
 }
