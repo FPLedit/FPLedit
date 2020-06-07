@@ -193,7 +193,7 @@ namespace FPLedit.Shared
         [return: MaybeNull]
         public T GetValue(int route)
         {
-            if (values.TryGetValue(route, out T val))
+            if (values.TryGetValue(route, out var val))
                 return val;
             return defaultValue;
         }
