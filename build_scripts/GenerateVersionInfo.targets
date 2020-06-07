@@ -15,6 +15,7 @@
     <ParameterGroup>
       <PVersionUpTo ParameterType="System.String" Required="true" />
       <PVersionFrom ParameterType="System.String" Required="true" />
+      <DisplayVersion ParameterType="System.String" Required="true" />
       <Output ParameterType="System.String" Required="true" />
     </ParameterGroup>
     <Task>
@@ -26,6 +27,8 @@
     public const string PUpTo = """ + PVersionUpTo + @"""; // Compatible up to (normally Version without patch)
     public const string PVersion = """ + PVersionFrom + @"""; // Version of plugin (normally equasls assembly major.minor.patch)
     public const string PFrom = """ + PVersionFrom + @"""; // Compatible from - normally equals assembly version
+    
+    public const string DisplayVersion = """ + DisplayVersion + @""";
 }";
         File.WriteAllText(Output, code);
 ]]>
@@ -41,6 +44,7 @@
     <GenerateVersionInfo 
       PVersionUpTo="$([System.Version]::Parse($(VersionPrefix)).ToString(2))" 
       PVersionFrom="$([System.Version]::Parse($(VersionPrefix)).ToString(3))" 
+      DisplayVersion="$(Version)" 
       Output="$(IntermediateOutputPath)VersionInfo.g.cs" />
   </Target>
 

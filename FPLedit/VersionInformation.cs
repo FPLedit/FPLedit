@@ -1,13 +1,12 @@
 using System;
-using System.Diagnostics;
 
 namespace FPLedit
 {
     public sealed class VersionInformation
     {
-        private string BaseVersionString => FileVersionInfo.GetVersionInfo(PathManager.Instance.AppFilePath).FileVersion;
+        private string BaseVersionString => Vi.PVersion;
         public Version AppBaseVersion => new Version(BaseVersionString);
-        public string DisplayVersion => FileVersionInfo.GetVersionInfo(PathManager.Instance.AppFilePath).ProductVersion;
+        public string DisplayVersion => Vi.DisplayVersion;
 
         public string OsVersion => Environment.OSVersion.ToString();
 
