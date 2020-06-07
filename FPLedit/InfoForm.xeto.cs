@@ -34,7 +34,7 @@ namespace FPLedit
                 thirdPartyTextArea.Text = sr.ReadToEnd();
 
             versionLabel.Text = versionLabel.Text.Replace("{version}", VersionInformation.Current.DisplayVersion);
-            versionLabel.Font = new Font(versionLabel.Font.FamilyName, versionLabel.Font.Size, FontStyle.Bold);
+            versionLabel.Font = SystemFonts.Bold();
             updateCheckBox.Checked = mg.AutoUpdateEnabled;
             
             privacyLabel.WordWrap(430);
