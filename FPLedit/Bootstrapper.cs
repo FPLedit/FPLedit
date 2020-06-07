@@ -21,6 +21,8 @@ namespace FPLedit
         private readonly Settings settings;
         private readonly Dictionary<object, Timetable> timetableBackup;
 
+        private bool extensionsPreLoaded;
+
         public UpdateManager Update { get; }
         public FileHandler FileHandler { get; }
         public ExtensionManager ExtensionManager { get; }
@@ -73,10 +75,12 @@ namespace FPLedit
         public void BootstrapExtensions()
         {
             if (Logger == null || RootForm == null)
-                throw new InvalidOperationException("Bootstrapper was not fully initialized before attempted to load extensions!");
+                throw new InvalidOperationException("Bootstrapper was not fully initialized before attempted to bootstrap extensions!");
+
+            if (!extensionsPreLoaded)
+                throw new InvalidOperationException("Extensions have not been preloaded before attempting to initializing them!");
             
-            // Extensions laden & initialisieren (=> Initialisiert Importer/Exporter)
-            ExtensionManager.LoadExtensions();
+            // Initialize (already loaded) extensions (==> base for the next steps)
             ExtensionManager.InitActivatedExtensions(registry);
             
             // Initialize Export/Import
@@ -84,7 +88,7 @@ namespace FPLedit
             var importers = GetRegistered<IImport>();
             FileHandler.InitializeExportImport(exporters, importers);
             
-            // Vorlagen laden
+            // Load templates from files & extensions
             var templatePath = settings.Get("tmpl.root", DEFAULT_TEMPLATE_PATH);
             var templateManager = new TemplateManager(registry, this, templatePath);
             templateManager.LoadTemplates(templatePath);
@@ -95,6 +99,14 @@ namespace FPLedit
             ExtensionsLoaded?.Invoke(this, new EventArgs());
             
             (RootForm as Window)!.Closing += (s, e) => AppClosing?.Invoke(this, null);
+        }
+
+        public void PreBootstrapExtensions()
+        {
+            var warns = ExtensionManager.LoadExtensions();
+            PreBootstrapWarnings.AddRange(warns);
+            
+            extensionsPreLoaded = true;
         }
         
         #region Backup & Undo

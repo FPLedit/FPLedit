@@ -27,7 +27,7 @@ namespace FPLedit.Extensibility
             disposablePlugins = new List<IDisposable>();
         }
 
-        public void LoadExtensions()
+        public IEnumerable<string> LoadExtensions()
         {
             if (pluginsInitialized)
                 throw new InvalidOperationException("Extensions have already been initialized!");
@@ -46,6 +46,8 @@ namespace FPLedit.Extensibility
             var files = dir.GetFiles("*.dll")
                 .Where(FilterFileNames)
                 .ToArray();
+            
+            var warnings = new List<string>();
             
             foreach (var file in files)
             {
@@ -90,12 +92,14 @@ namespace FPLedit.Extensibility
                 }
                 catch (FileLoadException)
                 {
-                    pluginInterface.Logger.Warning("Erweiterung " + file.Name + " konnte nicht geladen werden, bitte überprüfen ob diese noch geblockt ist!");
+                    warnings.Add($"Erweiterung {file.Name} konnte nicht geladen werden, bitte überprüfen ob diese noch geblockt ist!");
                 }
                 catch
                 {
                 }
             }
+
+            return warnings;
         }
 
         private static bool FilterFileNames(FileInfo fn) 

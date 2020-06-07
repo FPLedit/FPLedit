@@ -47,10 +47,12 @@
   <ItemGroup>
     <ProjectReference Include="..\FPLedit.Buchfahrplan\FPLedit.Buchfahrplan.csproj" />
     <ProjectReference Include="..\FPLedit.Aushangfahrplan\FPLedit.Aushangfahrplan.csproj" />
-    <ProjectReference Include="..\FPLedit.Bildfahrplan\FPLedit.Bildfahrplan.csproj" />
-    <ProjectReference Include="..\FPLedit.DebugDump\FPLedit.DebugDump.csproj" />
+    <ProjectReference Include="..\FPLedit.Bildfahrplan\FPLedit.Bildfahrplan.csproj" />    
     <ProjectReference Include="..\FPLedit.jTrainGraphStarter\FPLedit.jTrainGraphStarter.csproj" />
     <ProjectReference Include="..\FPLedit.Kursbuch\FPLedit.Kursbuch.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition=" $(Configuration) == 'Debug' ">
+    <ProjectReference Include="..\FPLedit.DebugDump\FPLedit.DebugDump.csproj" />
   </ItemGroup>
   
   <ItemGroup>

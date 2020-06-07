@@ -42,6 +42,8 @@ namespace FPLedit
                 App.UnhandledException += UnhandledException;
 
             var (lfh, bootstrapper) = InitializeMainComponents();
+            bootstrapper.PreBootstrapExtensions(); // Load extension files.
+            
             mainForm = new MainForm(lfh, crashReporter, bootstrapper);
             crashReporter = mainForm.CrashReporter;
             
