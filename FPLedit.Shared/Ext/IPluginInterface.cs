@@ -52,7 +52,6 @@ namespace FPLedit.Shared
         ICacheFile Cache { get; }
         
         string GetTemp(string filename);
-        string ExecutablePath { get; }
         string ExecutableDir { get; }
     }
 

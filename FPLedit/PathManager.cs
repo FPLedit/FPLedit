@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 
 namespace FPLedit
 {
@@ -22,17 +21,15 @@ namespace FPLedit
         {
         }
 
-        public string AppFilePath
+        public string AppDirectory
         {
             get
             {
                 if (appFilePath == null)
-                    throw new InvalidOperationException("AppFilePath is not set!");
+                    throw new InvalidOperationException(nameof(AppDirectory) + " is not set!");
                 return appFilePath;
             }
-            set => appFilePath = value ?? throw new InvalidOperationException("Tried to set AppFilePath to null!");
+            set => appFilePath = value ?? throw new ArgumentNullException(nameof(value), "Tried to set " + nameof(AppDirectory) + " to null!");
         }
-
-        public string AppDirectory => Path.GetDirectoryName(AppFilePath);
     }
 }

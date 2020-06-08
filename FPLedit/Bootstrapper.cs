@@ -145,8 +145,6 @@ namespace FPLedit
 
         #region IPluginInterface Misc Implementations
 
-        public string ExecutablePath => PathManager.Instance.AppFilePath;
-
         public string ExecutableDir => PathManager.Instance.AppDirectory;
         
         public T[] GetRegistered<T>() => registry.GetRegistered<T>();

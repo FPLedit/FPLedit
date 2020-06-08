@@ -191,9 +191,8 @@ namespace FPLedit
                 return;
             if (Bootstrapper.FileState.Opened)
                 Bootstrapper.FullSettings.Set("restart.file", Bootstrapper.FileState.FileName);
-
-            Process.Start(PathManager.Instance.AppFilePath);
-            Program.App.Quit();
+            
+            Program.App.Restart();
         }
 
         protected override void OnClosing(CancelEventArgs e)

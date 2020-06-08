@@ -12,11 +12,9 @@ namespace FPLedit.Tests
         [Test]
         public void PathManagerTests()
         {
-            PathManager.Instance.AppFilePath = "/test_root/fpledit/fpledit.exe";
-            Assert.AreEqual("/test_root/fpledit/fpledit.exe", PathManager.Instance.AppFilePath);
+            PathManager.Instance.AppDirectory = "/test_root/fpledit";
             Assert.AreEqual("/test_root/fpledit", PathManager.Instance.AppDirectory);
-            PathManager.Instance.AppFilePath = "F:/test_root/fpledit/fpledit.exe";
-            Assert.AreEqual("F:/test_root/fpledit/fpledit.exe", PathManager.Instance.AppFilePath);
+            PathManager.Instance.AppDirectory = "F:/test_root/fpledit";
             Assert.AreEqual("F:/test_root/fpledit", PathManager.Instance.AppDirectory);
         }
 

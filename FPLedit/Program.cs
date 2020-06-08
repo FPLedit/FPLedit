@@ -28,11 +28,11 @@ namespace FPLedit
         [STAThread]
         private static void Main(string[] args)
         {
-            PathManager.Instance.AppFilePath = Assembly.GetExecutingAssembly().Location;
+            App = new Application();
+
+            PathManager.Instance.AppDirectory = Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.EntryExecutable);
 
             OptionsParser.Init(args);
-
-            App = new Application();
 
             var enableCrashReporting = OptionsParser.CrashReporterDebug;
 #if !DEBUG || ENABLE_CRASH_REPORTING_DEBUG
@@ -75,7 +75,7 @@ namespace FPLedit
                 Console.Error.WriteLine(report.Serialize());
 
             ExceptionQuit = true;
-            Process.Start(PathManager.Instance.AppFilePath);
+            App.Restart();
             Environment.Exit(-1);
         }
 
