@@ -98,8 +98,14 @@ namespace FPLedit
 #pragma warning disable CA2000
             TemplateDebugger.GetInstance().AttachDebugger(new GuiTemplateDebugger()); // Attach javascript debugger form
 #pragma warning restore CA2000
-            
+
+            var origDefaultVersion = Timetable.DefaultLinearVersion;
             Timetable.DefaultLinearVersion = bootstrapper.FullSettings.GetEnum("core.default-file-format", Timetable.DefaultLinearVersion);
+            if (Timetable.DefaultLinearVersion.GetCompat() != TtVersionCompatType.ReadWrite)
+            {
+                bootstrapper.PreBootstrapWarnings.Add("Gewählte Standardversion ist nicht R/W-kompatibel!");
+                Timetable.DefaultLinearVersion = origDefaultVersion;
+            }
             
             // Load logger before extensions
             var logger = new MultipleLogger();
