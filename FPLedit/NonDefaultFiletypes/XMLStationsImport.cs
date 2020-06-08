@@ -20,15 +20,12 @@ namespace FPLedit.NonDefaultFiletypes
                 .Select(x =>
                 {
                     // Fix importing linear line files wich only support old style chainage.
-                    if (tt.Version != TimetableVersion.JTG2_x)
+                    var km = x.GetAttribute<string>("km");
+                    if (km != null)
                     {
-                        var km = x.GetAttribute<string>("km");
-                        if (km != null)
-                        {
-                            x.SetAttribute("kml", km);
-                            x.SetAttribute("kmr", km);
-                            x.RemoveAttribute("km");
-                        }
+                        x.SetAttribute("kml", km);
+                        x.SetAttribute("kmr", km);
+                        x.RemoveAttribute("km");
                     }
                     
                     return new Station(x, tt);

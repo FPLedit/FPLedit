@@ -47,7 +47,7 @@
           <GroupBox Text="Verkehrstage">
             <fui:DaysControlNarrow x:Name="daysControl" />
           </GroupBox><!-- /group Verkehrstage -->
-          <GroupBox Text="Folgezug" x:Name="transitionsGroupBox">
+          <GroupBox Text="Folgezug">
             <TableLayout Spacing="5,5" Padding="10,10,10,10">
               <TableRow>
                 <TableCell ScaleWidth="true">

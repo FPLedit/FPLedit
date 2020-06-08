@@ -99,7 +99,7 @@ namespace FPLedit.jTrainGraphStarter
 
             // Am Ende die Kilometer & anderen Attribute auf den linearen Stil setzen
             foreach (var sta in copy.Stations)
-                ConvertStationNetToLin(sta, routeIndex, targetVersion);
+                ConvertStationNetToLin(sta, routeIndex);
 
             copy.SetAttribute("version", targetVersion.ToNumberString()); // Wir gehen aus dem Extended-Modus raus
             ColorTimetableConverter.ConvertAll(copy); // Zum Ziel-Farbformat konvertieren

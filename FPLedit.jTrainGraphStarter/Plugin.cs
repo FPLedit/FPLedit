@@ -90,6 +90,9 @@ namespace FPLedit.jTrainGraphStarter
                 }
 
                 var targetVersion = pluginInterface.Settings.GetEnum("jTGStarter.target-version", JtgShared.DEFAULT_TT_VERSION);
+                
+                if (targetVersion.GetCompat() != TtVersionCompatType.ReadWrite)
+                    throw new Exception("Zielversion ist nicht R/W-Kompatibel. Bitte die Einstellungen überprüfen.");
 
                 var exporter = new Shared.Filetypes.XMLExport();
                 var importer = new Shared.Filetypes.XMLImport();

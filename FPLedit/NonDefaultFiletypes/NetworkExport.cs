@@ -57,8 +57,6 @@ namespace FPLedit.NonDefaultFiletypes
                 }
             }
 
-            ColorTimetableConverter.ConvertAll(clone);
-
             return new XMLExport().Export(clone, stream, pluginInterface);
         }
     }

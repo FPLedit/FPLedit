@@ -20,6 +20,6 @@ namespace FPLedit.Bildfahrplan.Model
             => ColorFormatter.FromString(def, defaultValue);
 
         protected string ColorToString(MColor color)
-            => ColorFormatter.ToString(color, parentTimetable.Version == TimetableVersion.JTG2_x);
+            => ColorFormatter.ToString(color);
     }
 }

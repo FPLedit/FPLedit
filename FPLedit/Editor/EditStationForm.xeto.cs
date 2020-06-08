@@ -90,9 +90,6 @@ namespace FPLedit.Editor
             Station = new Station(tt);
 
             stationRenderer.InitializeWithStation(route, Station);
-
-            if (tt.Version.Compare(TimetableVersion.JTG3_1) < 0)
-                stationRenderer.Visible = false;
         }
 
         /// <summary>
@@ -110,9 +107,6 @@ namespace FPLedit.Editor
             existingStation = true;
 
             stationRenderer.InitializeWithStation(route, Station);
-
-            if (station.ParentTimetable.Version.Compare(TimetableVersion.JTG3_1) < 0)
-                stationRenderer.Visible = false;
             
             codeTextBox.Text = station.StationCode;
             typeComboBox.Text = station.StationType;

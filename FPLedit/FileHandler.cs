@@ -463,7 +463,7 @@ namespace FPLedit
             }
 
             string newFn = null;
-            var exp = new UpgradeJTG3Export();
+            var exp = new UpgradeExport();
 
             Application.Instance.Invoke(() =>
             {
