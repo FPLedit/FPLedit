@@ -229,6 +229,10 @@ namespace FPLedit.Shared
             sta._parent = null;
             stations.Remove(sta);
             sElm.Children.Remove(sta.XMLEntity);
+            
+            // Rebuild route cache (before removing orphaned routes)
+            foreach (var route in routes)
+                RebuildRouteCache(route);
 
             if (!needsCleanup && Type == TimetableType.Linear)
                 return;
@@ -236,10 +240,6 @@ namespace FPLedit.Shared
             // Wenn Endstationen gelöscht werden könnten sonst korrupte Dateien entstehen!
             foreach (var train in Trains)
                 train.RemoveOrphanedTimes();
-            
-            // Rebuild route cache (before removing orphaned routes)
-            foreach (var route in routes)
-                RebuildRouteCache(route);
 
             // Es können verwaiste Routen entstehen (requires route cache)
             if (Type == TimetableType.Network)
