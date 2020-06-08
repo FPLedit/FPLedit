@@ -29,7 +29,7 @@ namespace FPLedit.NonDefaultFiletypes
 
             foreach (var sta in clone.Stations)
             {
-                ConvertStationNetToLin(sta, route, Timetable.DefaultLinearVersion);
+                ConvertStationNetToLin(sta, route);
 
                 sta.RemoveAttribute("fpl-rt");
                 sta.RemoveAttribute("fpl-pos");
@@ -74,8 +74,6 @@ namespace FPLedit.NonDefaultFiletypes
                         t.GetArrDep(sta.Station).ApplyCopy(sta.ArrDep);
                 }
             }
-
-            ColorTimetableConverter.ConvertAll(clone);
 
             return new XMLExport().Export(clone, stream, pluginInterface);
         }

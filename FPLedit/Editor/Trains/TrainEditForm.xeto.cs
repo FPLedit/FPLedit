@@ -18,7 +18,6 @@ namespace FPLedit.Editor.Trains
         private readonly Button fillButton, resetTransitionButton;
         private readonly SingleTimetableEditControl editor;
         private readonly DropDown transitionDropDown;
-        private readonly GroupBox transitionsGroupBox;
         private readonly DaysControlNarrow daysControl;
         private readonly GridView linkGridView;
 #pragma warning restore CS0649
@@ -94,14 +93,9 @@ namespace FPLedit.Editor.Trains
         {
             editor.Initialize(Train.ParentTimetable, Train);
 
-            if (tt.Version != TimetableVersion.JTG2_x)
-            {
-                transitionDropDown.ItemTextBinding = Binding.Property<Train, string>(t => t.TName);
-                transitionDropDown.DataStore = tt.Trains.Where(t => t != Train).OrderBy(t => t.TName);
-                transitionDropDown.SelectedValue = tt.GetTransition(Train);
-            }
-            else
-                transitionsGroupBox.Visible = false;
+            transitionDropDown.ItemTextBinding = Binding.Property<Train, string>(t => t.TName);
+            transitionDropDown.DataStore = tt.Trains.Where(t => t != Train).OrderBy(t => t.TName);
+            transitionDropDown.SelectedValue = tt.GetTransition(Train);
 
             fillButton.Visible = tt.Type == TimetableType.Linear && th.FillCandidates(Train).Any();
 
@@ -120,9 +114,9 @@ namespace FPLedit.Editor.Trains
                 return;
             }
 
-            var name_exists = Train.ParentTimetable.Trains.Select(t => t.TName).Contains(nameTextBox.Text);
+            var nameExists = Train.ParentTimetable.Trains.Select(t => t.TName).Contains(nameTextBox.Text);
 
-            if (name_exists)
+            if (nameExists)
             {
                 if (MessageBox.Show("Ein Zug mit dem Namen \"" + nameTextBox.Text + "\" ist bereits vorhanden. Wirklich fortfahren?", "FPLedit",
                     MessageBoxButtons.YesNo) == DialogResult.No)
@@ -139,13 +133,10 @@ namespace FPLedit.Editor.Trains
             if (!editor.ApplyChanges())
                 return;
 
-            if (tt.Version != TimetableVersion.JTG2_x)
-            {
-                if (Train.Id == -1)
-                    NextTrain = (ITrain) transitionDropDown.SelectedValue;
-                else
-                    tt.SetTransition(Train, (ITrain)transitionDropDown.SelectedValue);
-            }
+            if (Train.Id == -1)
+                NextTrain = (ITrain) transitionDropDown.SelectedValue;
+            else
+                tt.SetTransition(Train, (ITrain)transitionDropDown.SelectedValue);
 
             Close(DialogResult.Ok);
         }

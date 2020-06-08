@@ -14,12 +14,15 @@ namespace FPLedit.Shared.Filetypes
             var xmlEntity = new XMLEntity(xElement);
             var tt = new Timetable(xmlEntity);
 
-            var actions = pluginInterface.GetRegistered<ITimetableInitAction>();
-            foreach (var action in actions)
+            if (tt.Initialized)
             {
-                var message = action.Init(tt, pluginInterface);
-                if (message != null)
-                    pluginInterface.Logger.Warning(message);
+                var actions = pluginInterface.GetRegistered<ITimetableInitAction>();
+                foreach (var action in actions)
+                {
+                    var message = action.Init(tt, pluginInterface);
+                    if (message != null)
+                        pluginInterface.Logger.Warning(message);
+                }
             }
 
             return tt;

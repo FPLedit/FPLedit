@@ -80,8 +80,6 @@ namespace FPLedit
             saveFileDialog.AddLegacyFilter(save.Filter);
             openFileDialog.AddLegacyFilter(open.Filter);
 
-            FileOpened += (s, e) => MaybeUpgradeTtVersion();
-
             SetLastPath(pluginInterface.Settings.Get("files.lastpath", ""));
             
             cache = new BinaryCacheFile();
@@ -146,15 +144,9 @@ namespace FPLedit
                         if (FileState.RevisionCounter != rev || FileState.FileNameRevisionCounter != frev)
                             if (!NotifyIfUnsaved(true)) // Ask again
                                 return;
-
-                        FileState.Opened = true;
-                        FileState.Saved = true;
-                        FileState.FileName = importFileDialog.FileName;
+                        
                         undo.ClearHistory();
-                        Timetable = t.Result;
-
-                        // Exit blocking operation
-                        AsyncBlockingOperation = false;
+                        OpenWithVersionCheck(t.Result, importFileDialog.FileName);
                     });
                 }, null, TaskScheduler.Default);
                 
@@ -261,17 +253,8 @@ namespace FPLedit
                             return;
 
                     undo.ClearHistory();
-                    Timetable = t.Result;
 
-                    FileState.Opened = Timetable != null;
-                    FileState.Saved = Timetable != null;
-                    FileState.FileName = Timetable != null ? filename : null;
-
-                    // Exit blocking operation
-                    AsyncBlockingOperation = false;
-
-                    if (Timetable != null)
-                        FileOpened?.Invoke(this, null);
+                    OpenWithVersionCheck(t.Result, filename);
                 });
             }, null, TaskScheduler.Default);
                 
@@ -452,35 +435,68 @@ namespace FPLedit
             }
         }
 
-        private void MaybeUpgradeTtVersion()
+        private void OpenWithVersionCheck(Timetable tt, string filename)
         {
-            if (Timetable == null || Timetable.Version.Compare(Timetable.DefaultLinearVersion) >= 0)
-                return;
-            
-            if (!NotifyIfAsyncOperationInProgress())
-                return;
-
-            var res = MessageBox.Show("Diese Fahrplandatei ist im Dateiformat von jTrainGraph 2.x bzw. 3.0x erstellt worden. Im Format von jTrainGraph 3.1x stehen mehr Funktionen zur Verfügung." +
-                                      " Soll das Format jetzt aktualisiert werden? ACHTUNG: Die Datei kann danach nicht mehr mit jTrainGraph 2.x oder 3.0x berabeitet werden!", "FPLedit",
-                MessageBoxButtons.YesNo, MessageBoxType.Question);
-            if (res != DialogResult.Yes)
-                return;
-
-            var exp = new UpgradeJTG3Export();
-            using (var sfd = new SaveFileDialog())
+            //TODO: Implement user-chosen updates, if a newer version exists and both are supported.
+            var compat = tt?.Version.GetCompat();
+            if (tt == null || compat == TtVersionCompatType.ReadWrite)
             {
-                sfd.Title = "Zieldatei für Konvertierung wählen";
-                sfd.AddLegacyFilter(exp.Filter);
-                if (sfd.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
-                {
-                    pluginInterface.Logger.Info("Konvertiere Datei...");
-                    bool ret = exp.SafeExport(Timetable, sfd.FileName, pluginInterface);
-                    if (ret == false)
-                        return;
-                    pluginInterface.Logger.Info("Konvertieren erfolgreich abgeschlossen!");
-                    InternalOpen(sfd.FileName, true);
-                }
+                // this file is in a supported version (or non-existant)
+                Timetable = tt;
+                
+                FileState.Opened = tt != null;
+                FileState.Saved = tt != null;
+                FileState.FileName = tt != null ? filename : null;
+
+                AsyncBlockingOperation = false;
+
+                if (tt != null)
+                    FileOpened?.Invoke(this, null);
+                return;
             }
+
+            if (compat == TtVersionCompatType.None)
+            {
+                AsyncBlockingOperation = false;
+                pluginInterface.Logger.Error($"Diese Dateiformatsversion ({tt.Version.ToNumberString()}) wird nicht unterstützt.");
+                return;
+            }
+
+            string newFn = null;
+            var exp = new UpgradeExport();
+
+            Application.Instance.Invoke(() =>
+            {
+                var res = MessageBox.Show("Diese Fahrplandatei ist im Dateiformat von jTrainGraph 2.x bzw. 3.0x erstellt worden. Dieses Dateiformat kann von FPLedit nur noch auf neuere Versionen aktualisiert werden." +
+                                          " Soll die Datei jetzt aktualisiert werden? ACHTUNG: Die Datei kann danach nicht mehr mit jTrainGraph 2.x oder 3.0x berabeitet werden!", "FPLedit",
+                    MessageBoxButtons.YesNo, MessageBoxType.Question);
+                if (res == DialogResult.Yes)
+                {
+                    using var sfd = new SaveFileDialog();
+                    sfd.Title = "Zieldatei für Konvertierung wählen";
+                    sfd.AddLegacyFilter(exp.Filter);
+                    if (sfd.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
+                        newFn = sfd.FileName;
+                }
+            });
+            
+            if (!string.IsNullOrEmpty(newFn))
+            {
+                pluginInterface.Logger.Info("Konvertiere Datei...");
+                var ret = exp.SafeExport(tt, newFn, pluginInterface);
+                if (ret)
+                {
+                    pluginInterface.Logger.Info("Konvertieren erfolgreich abgeschlossen!");
+                    InternalOpen(newFn, false); // We are already in an async context, so we can execute synchronously.
+                    return; // Do not exit async operation.
+                }
+                
+                pluginInterface.Logger.Error("Dateikonvertierung fehlgeschlagen!");
+            }
+            else
+                pluginInterface.Logger.Warning("Dateikonvertierung abgebrochen!");
+
+            AsyncBlockingOperation = false;
         }
 
         #endregion

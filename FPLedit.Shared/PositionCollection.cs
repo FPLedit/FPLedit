@@ -87,44 +87,27 @@ namespace FPLedit.Shared
         /// </summary>
         private void ParseLinear()
         {
-            string toParse;
-            if (tt.Version == TimetableVersion.JTG2_x)
-                toParse = sta.GetAttribute("km", "0.0");
-            else // jTG 3.0
-            {
-                toParse = sta.GetAttribute("kml", "0.0");
-                var kmr = sta.GetAttribute("kmr", "0.0");
-                if (toParse != kmr)
-                    throw new NotSupportedException("Unterschiedliche kmr/kml werden aktuell von FPLedit nicht unterstützt!");
-            }
-            positions.Add(Timetable.LINEAR_ROUTE_ID, float.Parse(toParse, CultureInfo.InvariantCulture));
+            var kml = sta.GetAttribute("kml", "0.0");
+            var kmr = sta.GetAttribute("kmr", "0.0");
+            if (kml != kmr)
+                throw new NotSupportedException("Unterschiedliche kmr/kml werden aktuell von FPLedit nicht unterstützt!");
+            positions.Add(Timetable.LINEAR_ROUTE_ID, float.Parse(kml, CultureInfo.InvariantCulture));
         }
 
         /// <summary>
         /// Write all positions back to the XML attribute.
         /// </summary>
         /// <param name="forceType">Force either network or linear mode (only to be used by conversions!).</param>
-        /// <param name="forceVersion">Force the target timetable version (only to be used by conversions!).</param>
-        public void Write(TimetableType? forceType = null, TimetableVersion? forceVersion = null)
+        public void Write(TimetableType? forceType = null)
         {
             var t = forceType ?? tt.Type;
-            var v = forceVersion ?? tt.Version;
             if (t == TimetableType.Linear)
             {
                 var posFloat = GetPosition(Timetable.LINEAR_ROUTE_ID) ?? throw new Exception("No linear position found while attempting to write linear positions.");
                 var pos = posFloat.ToString("0.0", CultureInfo.InvariantCulture);
-                if (v == TimetableVersion.JTG2_x)
-                {
-                    sta.SetAttribute("km", pos);
-                    sta.RemoveAttribute("kml");
-                    sta.RemoveAttribute("kmr");
-                }
-                else // jTG 3.0
-                {
-                    sta.SetAttribute("kml", pos);
-                    sta.SetAttribute("kmr", pos);
-                    sta.RemoveAttribute("km");
-                }
+                sta.SetAttribute("kml", pos);
+                sta.SetAttribute("kmr", pos);
+                sta.RemoveAttribute("km");
             }
             else
             {

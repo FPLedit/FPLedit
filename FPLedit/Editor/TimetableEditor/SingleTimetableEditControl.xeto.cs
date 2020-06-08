@@ -232,15 +232,9 @@ namespace FPLedit.Editor.TimetableEditor
             view.AddColumn<DataElement>(t => t.Station.SName, "Bahnhof");
             view.AddColumn(GetCell(t => t.Arrival, true), "Ankunft");
             view.AddColumn(GetCell(t => t.Departure, false), "Abfahrt");
-
-            if (tt.Version.Compare(TimetableVersion.JTG3_1) >= 0)
-            {
-                view.AddColumn(GetTrackCell(t => t.ArrivalTrack, true), "Ankunftsgleis", editable: true);
-                view.AddColumn(GetTrackCell(t => t.DepartureTrack, false), "Abfahrtsgleis", editable: true);
-                view.AddColumn(GetCheckCell(t => t.ShuntMoves.Any()), "Rangiert", editable: false);
-            }
-            else
-                shuntButton.Visible = false;
+            view.AddColumn(GetTrackCell(t => t.ArrivalTrack, true), "Ankunftsgleis", editable: true);
+            view.AddColumn(GetTrackCell(t => t.DepartureTrack, false), "Abfahrtsgleis", editable: true);
+            view.AddColumn(GetCheckCell(t => t.ShuntMoves.Any()), "Rangiert", editable: false);
 #pragma warning restore CA2000
 
             view.KeyDown += (s, e) => HandleViewKeystroke(e, view);

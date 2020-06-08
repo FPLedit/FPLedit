@@ -63,20 +63,8 @@ namespace FPLedit.Bildfahrplan.Model
 
         public StationLineStyle StationLines
         {
-            get
-            {
-                if (tt.Version == TimetableVersion.JTG2_x)
-                    return tt.GetAttribute("shV", true) ? StationLineStyle.Normal : StationLineStyle.None;
-                else
-                    return (StationLineStyle)tt.GetAttribute("shV", 0);
-            }
-            set
-            {
-                if (tt.Version == TimetableVersion.JTG2_x)
-                    tt.SetAttribute("shV", (value != StationLineStyle.None).ToString().ToLower());
-                else
-                    tt.SetAttribute("shV", ((int)value).ToString());
-            }
+            get => (StationLineStyle)tt.GetAttribute("shV", 0);
+            set => tt.SetAttribute("shV", ((int)value).ToString());
         }
 
         public bool DrawHeader

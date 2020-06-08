@@ -19,10 +19,6 @@ namespace FPLedit.jTrainGraphStarter
                 var major = int.Parse(match.Groups[1].Value);
                 var minor = int.Parse(match.Groups[2].Value);
 
-                if (major == 2)
-                    return new JtgCompatibility(minor > 1, TimetableVersion.JTG2_x); // Ab 2.01
-                if (major == 3 && minor < 10)
-                    return new JtgCompatibility(minor > 2, TimetableVersion.JTG3_0); // Ab 3.03
                 if (major == 3)
                     return new JtgCompatibility(minor >= 10 && minor < 20, TimetableVersion.JTG3_1);
                 return new JtgCompatibility(false); // Neue Hauptversion, wahrscheinlich inkompatibel
