@@ -7,7 +7,7 @@ namespace FPLedit.Shared
     /// </summary>
     /// <remarks>A transition means that one train is run with the same locomotive, staff, cars or similar, but this is not enforced by FPLedit.</remarks>
     [DebuggerDisplay("From {First} to {Next}")]
-    [XElmName("tra")]
+    [XElmName("tra", ParentElements = new []{ "transitions" })]
     [Templating.TemplateSafe]
     public sealed class Transition : Entity
     {
@@ -31,6 +31,22 @@ namespace FPLedit.Shared
         {
             get => GetAttribute("next", "");
             set => SetAttribute("next", value);
+        }
+        
+        [XAttrName("df")]
+        public Days Days
+        {
+            get => Days.Parse(GetAttribute("df", "1111111"));
+            set => SetAttribute("df", value.ToBinString());
+        }
+
+        public const string LAST_STATION = "LAST";
+
+        [XAttrName("staId")]
+        public string StationId
+        {
+            get => GetAttribute("staId", "");
+            set => SetAttribute("staId", value);
         }
     }
 }
