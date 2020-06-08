@@ -5,7 +5,7 @@ namespace FPLedit
     internal sealed class PathManager
     {
         private static PathManager instance;
-        private string appFilePath;
+        private string appDirectory, settingsDirectory;
 
         public static PathManager Instance
         {
@@ -25,11 +25,17 @@ namespace FPLedit
         {
             get
             {
-                if (appFilePath == null)
+                if (appDirectory == null)
                     throw new InvalidOperationException(nameof(AppDirectory) + " is not set!");
-                return appFilePath;
+                return appDirectory;
             }
-            set => appFilePath = value ?? throw new ArgumentNullException(nameof(value), "Tried to set " + nameof(AppDirectory) + " to null!");
+            set => appDirectory = value ?? throw new ArgumentNullException(nameof(value), "Tried to set " + nameof(AppDirectory) + " to null!");
+        }
+
+        public string SettingsDirectory
+        {
+            get => settingsDirectory ?? AppDirectory;
+            set => settingsDirectory = value ?? throw new ArgumentNullException(nameof(value), "Tried to set " + nameof(SettingsDirectory) + " to null!");
         }
     }
 }

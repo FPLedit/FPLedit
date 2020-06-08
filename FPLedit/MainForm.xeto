@@ -5,7 +5,7 @@
   xmlns:editor="clr-namespace:FPLedit.Editor.Rendering;assembly=FPLedit"
   Title="FPLedit" ClientSize="980,580" AllowDrop="true">
   <c:MainForm.Menu>
-    <MenuBar>
+    <MenuBar IncludeSystemItems="None">
       <MenuBar.ApplicationItems>
         <ButtonMenuItem Text="&amp;Neu">
           <ButtonMenuItem Text="&amp;Lineare Strecke" Click="LinearNewMenu_Click" />
