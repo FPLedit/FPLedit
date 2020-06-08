@@ -19,6 +19,8 @@ namespace FPLedit.Shared
         private readonly XMLEntity sElm, tElm, trElm;
 
         private int nextStaId, nextRtId, nextTraId;
+
+        public bool Initialized { get; } = false;
         
         private readonly Dictionary<int, Route> routeCache;
 
@@ -65,6 +67,7 @@ namespace FPLedit.Shared
             stations = new List<Station>();
             trains = new List<ITrain>();
             transitions = new List<Transition>();
+            Initialized = true;
 
             SetAttribute("version", type == TimetableType.Network ? TimetableVersion.Extended_FPL.ToNumberString() : DefaultLinearVersion.ToNumberString()); // version="100" nicht kompatibel mit jTrainGraph
             sElm = new XMLEntity("stations");
@@ -87,10 +90,15 @@ namespace FPLedit.Shared
         /// Create a timetable instance from the given <see cref="XMLEntity"/>.
         /// </summary>
         /// <exception cref="NotSupportedException">FPLedit does not support this timetable's <see cref="TimetableVersion"/>.</exception>
-        internal Timetable(XMLEntity en) : base(en, null)
+        public Timetable(XMLEntity en) : base(en, null)
         {
             if (!Enum.IsDefined(typeof(TimetableVersion), Version))
                 throw new NotSupportedException("Unbekannte Dateiversion. Nur mit jTrainGraph 2 oder 3.0 erstellte Dateien können geöffnet werden!");
+
+            if (Version.GetCompat() != TtVersionCompatType.ReadWrite)
+                return; // Do not create any properties as we cannot read this format.
+
+            Initialized = true;
 
             stations = new List<Station>();
             sElm = Children.FirstOrDefault(x => x.XName == "stations");
