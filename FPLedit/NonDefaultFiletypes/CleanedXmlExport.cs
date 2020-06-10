@@ -116,10 +116,10 @@ namespace FPLedit.NonDefaultFiletypes
             if (res == DialogResult.No)
                 return false;
 
-            var clone = tt.Clone(); // Klon zum anschließenden Verwerfen!
-            ProcessEntity(clone.XMLEntity);
+            var clone = tt.XMLEntity.XClone(); // Klon zum anschließenden Verwerfen!
+            ProcessEntity(clone);
 
-            return new XMLExport().Export(clone, stream, pluginInterface, flags);
+            return new XMLExport().ExportGenericNode(clone, stream, pluginInterface, flags);
         }
     }
 }

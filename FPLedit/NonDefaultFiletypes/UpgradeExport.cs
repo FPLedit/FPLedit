@@ -18,7 +18,7 @@ namespace FPLedit.NonDefaultFiletypes
 
             var origVersion = tt.Version;
 
-            var xclone = tt.Clone().XMLEntity;
+            var xclone = tt.XMLEntity.XClone();
             xclone.SetAttribute("version", TimetableVersion.JTG3_1.ToNumberString());
 
             // UPGRADE 008 -> CURRENT
