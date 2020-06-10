@@ -66,69 +66,68 @@ namespace FPLedit.Bildfahrplan.Render
                 if (!style.CalcedShow)
                     continue;
 
-                using (var pen = new Pen((Color)style.CalcedColor, style.CalcedWidth)
+                using var pen = new Pen((Color)style.CalcedColor, style.CalcedWidth)
                 {
                     DashPattern = ds.ParseDashstyle(style.CalcedLineStyle)
-                })
-                using (var brush = new SolidBrush((Color)style.CalcedColor))
+                };
+                using var brush = new SolidBrush((Color)style.CalcedColor);
+                
+                if (!attrs.MultiTrack)
                 {
-                    if (!attrs.MultiTrack)
+                    // Linie (Single-Track-Mode)
+                    g.DrawLine(pen, margin.Left + posX.Center, margin.Top - TOP_GAP, margin.Left + posX.Center, height - margin.Bottom);
+                }
+                else
+                {
+                    // Linie (Multi-Track-Mode)
+                    g.DrawLine(pen, margin.Left + posX.Left, margin.Top - TOP_GAP, margin.Left + posX.Left, height - margin.Bottom);
+                    foreach (var trackX in posX.TrackOffsets)
+                        g.DrawLine(pen, margin.Left + trackX.Value, margin.Top - TOP_GAP, margin.Left + trackX.Value, height - margin.Bottom);
+                    g.DrawLine(pen, margin.Left + posX.Right, margin.Top - TOP_GAP, margin.Left + posX.Right, height - margin.Bottom);
+                }
+
+                if (!drawHeader)
+                    continue;
+
+                // Stationsnamen
+                if (attrs.DrawHeader)
+                {
+                    var display = StationDisplay(sta);
+                    var size = g.MeasureString(stationFont, display);
+
+                    if (attrs.StationVertical)
                     {
-                        // Linie (Single-Track-Mode)
-                        g.DrawLine(pen, margin.Left + posX.Center, margin.Top - TOP_GAP, margin.Left + posX.Center, height - margin.Bottom);
+                        var matrix = g.Transform.Clone();
+                            
+                        g.TranslateTransform(margin.Left + posX.Center + (size.Height / 2), margin.Top - 8 - verticalTrackOffset - size.Width);
+                        g.RotateTransform(90);
+                        g.DrawText(stationFont, brush, 0, 0, display);
+
+                        g.Transform = matrix;
                     }
                     else
+                        g.DrawText(stationFont, brush, margin.Left + posX.Center - (size.Width / 2), margin.Top - size.Height - verticalTrackOffset - TOP_GAP, display);
+
+                    if (attrs.MultiTrack)
                     {
-                        // Linie (Multi-Track-Mode)
-                        g.DrawLine(pen, margin.Left + posX.Left, margin.Top - TOP_GAP, margin.Left + posX.Left, height - margin.Bottom);
-                        foreach (var trackX in posX.TrackOffsets)
-                            g.DrawLine(pen, margin.Left + trackX.Value, margin.Top - TOP_GAP, margin.Left + trackX.Value, height - margin.Bottom);
-                        g.DrawLine(pen, margin.Left + posX.Right, margin.Top - TOP_GAP, margin.Left + posX.Right, height - margin.Bottom);
-                    }
-
-                    if (!drawHeader)
-                        continue;
-
-                    // Stationsnamen
-                    if (attrs.DrawHeader)
-                    {
-                        var display = StationDisplay(sta);
-                        var size = g.MeasureString(stationFont, display);
-
-                        if (attrs.StationVertical)
+                        foreach (var track in posX.TrackOffsets)
                         {
-                            var matrix = g.Transform.Clone();
-                            
-                            g.TranslateTransform(margin.Left + posX.Center + (size.Height / 2), margin.Top - 8 - verticalTrackOffset - size.Width);
-                            g.RotateTransform(90);
-                            g.DrawText(stationFont, brush, 0, 0, display);
-
-                            g.Transform = matrix;
-                        }
-                        else
-                            g.DrawText(stationFont, brush, margin.Left + posX.Center - (size.Width / 2), margin.Top - size.Height - verticalTrackOffset - TOP_GAP, display);
-
-                        if (attrs.MultiTrack)
-                        {
-                            foreach (var track in posX.TrackOffsets)
+                            var trackSize = g.MeasureString(stationFont, track.Key);
+                            if (attrs.StationVertical)
                             {
-                                var trackSize = g.MeasureString(stationFont, track.Key);
-                                if (attrs.StationVertical)
-                                {
-                                    var matrix = g.Transform.Clone();
+                                var matrix = g.Transform.Clone();
                                     
-                                    g.TranslateTransform(margin.Left + track.Value + (trackSize.Height / 2), margin.Top - 8 - trackSize.Width);
-                                    g.RotateTransform(90);
-                                    g.DrawText(stationFont, brush, 0, 0, track.Key);
+                                g.TranslateTransform(margin.Left + track.Value + (trackSize.Height / 2), margin.Top - 8 - trackSize.Width);
+                                g.RotateTransform(90);
+                                g.DrawText(stationFont, brush, 0, 0, track.Key);
                                     
-                                    g.Transform = matrix;
-                                }
-                                else
-                                    g.DrawText(stationFont, brush, margin.Left + track.Value - (trackSize.Width / 2), margin.Top - trackSize.Height - TOP_GAP, track.Key);
+                                g.Transform = matrix;
                             }
+                            else
+                                g.DrawText(stationFont, brush, margin.Left + track.Value - (trackSize.Width / 2), margin.Top - trackSize.Height - TOP_GAP, track.Key);
                         }
                     }
-                } // Disposing Pens and Brushes
+                }
             }
             return stationOffsets;
         }
