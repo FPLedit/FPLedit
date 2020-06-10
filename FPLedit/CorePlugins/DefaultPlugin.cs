@@ -15,6 +15,7 @@ namespace FPLedit.CorePlugins
             componentRegistry.Register<ITimetableInitAction>(new TimetableChecks.FixNetworkAttributesAction());
             
             componentRegistry.Register<IImport>(new NonDefaultFiletypes.XmlStationsImport());
+            componentRegistry.Register<IExport>(new NonDefaultFiletypes.StationsOnlyExport());
         }
     }
 }

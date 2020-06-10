@@ -24,13 +24,17 @@ namespace FPLedit.Shared.Filetypes
             return xElement;
         }
         
-        public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null)
+        public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null) 
+            => ExportGenericNode(tt.XMLEntity, stream, pluginInterface, flags);
+
+        public bool ExportGenericNode(XMLEntity xmlEntity, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null)
         {
             bool debug = pluginInterface.Settings.Get<bool>("xml.indent") || (flags?.Contains(FLAG_INDENT_XML) ?? false);
 #if DEBUG
             debug = true;
 #endif
-            var ttElm = BuildNode(tt.XMLEntity);
+            
+            var ttElm = BuildNode(xmlEntity);
 
             using (var sw = new StreamWriter(stream, new UTF8Encoding(false), 1024, true))
             using (var writer = new XmlTextWriter(sw))
