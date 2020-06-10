@@ -161,10 +161,15 @@ namespace FPLedit
             // Parameter: Fpledit.exe [Dateiname] ODER Datei aus Restart
             var fn = OptionsParser.OpenFilename;
             fn = Bootstrapper.FullSettings.Get("restart.file", fn);
-            if (fn != null && File.Exists(fn))
+            if (fn != null)
             {
-                Bootstrapper.FileHandler.InternalOpen(fn, true);
-                lfh.AddLastFile(fn);
+                if (File.Exists(fn))
+                {
+                    Bootstrapper.FileHandler.InternalOpen(fn, true);
+                    lfh.AddLastFile(fn);
+                }
+                else
+                    Bootstrapper.Logger.Error($"Angegebene Startdatei {fn} nicht gefunden!");
             }
             Bootstrapper.FullSettings.Remove("restart.file");
         }

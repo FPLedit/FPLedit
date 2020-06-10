@@ -2,14 +2,13 @@ using Eto.Forms;
 using FPLedit.Config;
 using FPLedit.CrashReporting;
 using System;
-using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using FPLedit.Logger;
 using FPLedit.Shared;
 using FPLedit.Shared.Rendering;
 using FPLedit.Shared.UI;
 using FPLedit.Templating;
+using Mono.Options;
 
 namespace FPLedit
 {
@@ -28,11 +27,34 @@ namespace FPLedit
         [STAThread]
         private static void Main(string[] args)
         {
+            string flagWarning = null;
+            var options = new OptionSet
+            {
+                { "log-console|mp-log", v => OptionsParser.ConsoleLog = v != null },
+                { "tmpl-debug", v => OptionsParser.TemplateDebug = v != null },
+                { "crash-debug", v => OptionsParser.CrashReporterDebug = v != null },
+                { "<>", v =>
+                    {
+                        if (OptionsParser.OpenFilename == null)
+                            OptionsParser.OpenFilename = v;
+                        else
+                            throw new Exception("Unbekanntes Flag oder doppelter Dateiname angegeben!");
+                    }
+                }
+            };
+
+            try
+            {
+                options.Parse(args);
+            }
+            catch (Exception e)
+            {
+                flagWarning = e.Message;
+            }
+
             App = new Application();
 
             PathManager.Instance.AppDirectory = Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.EntryExecutable);
-
-            OptionsParser.Init(args);
 
             var enableCrashReporting = OptionsParser.CrashReporterDebug;
 #if !DEBUG || ENABLE_CRASH_REPORTING_DEBUG
@@ -42,6 +64,9 @@ namespace FPLedit
                 App.UnhandledException += UnhandledException;
 
             var (lfh, bootstrapper) = InitializeMainComponents();
+            if (flagWarning != null)
+                bootstrapper.PreBootstrapWarnings.Add(flagWarning);
+            
             bootstrapper.PreBootstrapExtensions(); // Load extension files.
             
             mainForm = new MainForm(lfh, crashReporter, bootstrapper);
