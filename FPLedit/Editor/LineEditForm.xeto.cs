@@ -26,9 +26,12 @@ namespace FPLedit.Editor
             this.pluginInterface = pluginInterface;
             this.route = route;
 
-            
             gridView.AddColumn<Station>(s => s.SName, "Bahnhof");
-            gridView.AddColumn<Station>(s => s.Positions.GetPosition(route).ToString(), "Position");
+            gridView.AddColumn<Station>(s => s.Positions.GetPosition(route).ToString(), "abs. Kilometr.");
+            gridView.AddColumn<Station>(s => s.StationCode, "Abk.");
+            gridView.AddColumn<Station>(s => s.StationType, "Typ");
+            gridView.AddColumn<Station>(s => s.Tracks.Count.ToString(), "Anzahl Gleise");
+            gridView.AddCheckColumn<Station>(s => s.RequestStop, "Bedarfshalt");
 
             gridView.MouseDoubleClick += (s, e) => EditStation(false);
 
