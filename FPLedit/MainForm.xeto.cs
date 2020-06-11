@@ -4,7 +4,6 @@ using Eto.Drawing;
 using System.Linq;
 using System.IO;
 using System.ComponentModel;
-using System.Diagnostics;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using FPLedit.Templating;
@@ -18,7 +17,7 @@ namespace FPLedit
         #region Controls
 #pragma warning disable CS0649
         private readonly LogControl logTextBox;
-        private readonly ButtonMenuItem saveMenu, saveAsMenu, exportMenu, importMenu, lastMenu, fileMenu, convertMenu;
+        private readonly ButtonMenuItem saveMenu, saveAsMenu, exportMenu, importMenu, lastMenu, convertMenu;
         private readonly NetworkEditingControl networkEditingControl;
         private readonly StackLayout loadingStack;
 #pragma warning restore CS0649
@@ -32,7 +31,6 @@ namespace FPLedit
         
         public static string LocEditMenu = "&Bearbeiten";
         public static string LocPreviewMenu = "&Vorschau";
-        public static string LocHelpMenu = "&Hilfe";
 
         public MainForm(LastFileHandler lfh, CrashReporting.CrashReporter crashReporter, Bootstrapper bootstrapper)
         {
@@ -65,43 +63,6 @@ namespace FPLedit
             // Initilize main UI component
             networkEditingControl.Initialize(pluginInterface);
             pluginInterface.FileOpened += (s, e) => networkEditingControl.ResetPan();
-            pluginInterface.ExtensionsLoaded += PluginInterfaceOnExtensionsLoaded;
-        }
-
-        private void PluginInterfaceOnExtensionsLoaded(object sender, EventArgs e)
-        {
-            var importers = Bootstrapper.GetRegistered<IImport>();
-
-            // Ggf. Import bzw. Export-Menü entfernen
-            if (importers.Length == 0)
-                fileMenu.Items.Remove(importMenu);
-
-            // Ggf. Letzte Dateien Menü entfernen
-            if (!lfh.Enabled)
-                lastMenu.Enabled = false;
-
-            // Hilfe Menü nach den Erweiterungen zusammenbasteln
-            var helpMenu = (ButtonMenuItem) Menu.GetItem(LocHelpMenu);
-            if (helpMenu.Items.Any())
-                helpMenu.Items.Add(new SeparatorMenuItem());
-#pragma warning disable CA2000
-            helpMenu.CreateItem("Erweiterungen", clickHandler: (s, ev) => new ExtensionsForm(Bootstrapper.ExtensionManager, this).ShowModal(this));
-            helpMenu.CreateItem("Vorlagen", clickHandler: (s, ev) => new TemplatesForm(Bootstrapper.TemplateManager as TemplateManager).ShowModal(this));
-            helpMenu.Items.Add(new SeparatorMenuItem());
-            helpMenu.CreateItem("Fenstergößen löschen", clickHandler: (s, ev) =>
-            {
-                SizeManager.Reset();
-                MessageBox.Show("Die Änderungen werden nach dem nächsten Neustart angewendet!", "FPLedit");
-            });
-            helpMenu.Items.Add(new SeparatorMenuItem());
-            helpMenu.CreateItem("Online Hilfe", shortcut: Keys.F1, clickHandler: (s, ev) => Bootstrapper.OpenUrl("https://fahrplan.manuelhu.de/"));
-            helpMenu.CreateItem("Info", clickHandler: (s, ev) => new InfoForm(Bootstrapper.FullSettings).ShowModal(this));
-
-#if DEBUG
-            helpMenu.Items.Add(new SeparatorMenuItem());
-            helpMenu.CreateItem("Exception auslösen", clickHandler: (s, ev) => throw new Exception("Ausgelöste Exception"));
-#endif
-#pragma warning restore CA2000
         }
 
         private void FileStateChanged(object sender, FileStateChangedEventArgs e)
@@ -120,6 +81,23 @@ namespace FPLedit
             // Now we can load extensions and templates
             Bootstrapper.ExtensionManager.InjectPlugin(this, 0);
             Bootstrapper.BootstrapExtensions();
+            
+            var importers = Bootstrapper.GetRegistered<IImport>();
+
+            // Maybe remove import menu.
+            if (importers.Length == 0)
+                Menu.ApplicationItems.Remove(importMenu);
+
+            // Remove last files menu, if last file handling is disabled.
+            if (!lfh.Enabled)
+                lastMenu.Enabled = false;
+
+#pragma warning disable CA2000
+#if DEBUG
+            Menu.HelpMenu.Items.Add(new SeparatorMenuItem());
+            Menu.HelpMenu.CreateItem("Exception auslösen", clickHandler: (s, ev) => throw new Exception("Ausgelöste Exception"));
+#endif
+#pragma warning restore CA2000
             
             base.OnLoad(e);
         }
@@ -266,6 +244,15 @@ namespace FPLedit
         private void LinearNewMenu_Click(object sender, EventArgs e) => Bootstrapper.FileHandler.New(TimetableType.Linear);
         private void NetworkNewMenu_Click(object sender, EventArgs e) => Bootstrapper.FileHandler.New(TimetableType.Network);
         private void ConvertMenu_Click(object sender, EventArgs e) => Bootstrapper.FileHandler.ConvertTimetable();
+        private void AboutMenu_Click(object sender, EventArgs e) => new InfoForm(Bootstrapper.FullSettings).ShowModal(this);
+        private void ExtensionsMenu_Click(object sender, EventArgs e) => new ExtensionsForm(Bootstrapper.ExtensionManager, this).ShowModal(this);
+        private void TemplatesMenu_Click(object sender, EventArgs e) => new TemplatesForm(Bootstrapper.TemplateManager as TemplateManager).ShowModal(this);
+        private void HelpMenu_Click(object sender, EventArgs e) => Bootstrapper.OpenUrl("https://fahrplan.manuelhu.de/");
+        private void ResetSizesMenu_Click(object sender, EventArgs e) 
+        {
+            SizeManager.Reset();
+            MessageBox.Show("Die Änderungen werden nach dem nächsten Neustart angewendet!", "FPLedit");
+        }
         #endregion
 
         protected override void Dispose(bool disposing)

@@ -6,7 +6,7 @@
   Title="FPLedit" ClientSize="980,580" AllowDrop="true">
   <c:MainForm.Menu>
     <MenuBar>
-      <ButtonMenuItem Text="&amp;Datei" x:Name="fileMenu">
+      <MenuBar.ApplicationItems>
         <ButtonMenuItem Text="&amp;Neu">
           <ButtonMenuItem Text="&amp;Lineare Strecke" Click="LinearNewMenu_Click" />
           <ButtonMenuItem Text="&amp;Netzwerk-Fahrplan" Click="NetworkNewMenu_Click" />
@@ -21,11 +21,23 @@
         <ButtonMenuItem Text="&amp;Konvertieren" Shortcut="Control,K" x:Name="convertMenu" Enabled="false" Click="ConvertMenu_Click" />
         <SeparatorMenuItem />
         <ButtonMenuItem Text="Datei schließen" Click="CloseFileMenu_Click" />
+      </MenuBar.ApplicationItems>
+      <MenuBar.QuitItem>
         <ButtonMenuItem Text="&amp;Beenden" Click="QuitMenu_Click" />
-      </ButtonMenuItem>
+      </MenuBar.QuitItem>
+      <MenuBar.HelpItems>
+        <ButtonMenuItem Text="Erweiterungen" Click="ExtensionsMenu_Click" />
+        <ButtonMenuItem Text="Vorlagen" Click="TemplatesMenu_Click" />
+        <SeparatorMenuItem />
+        <ButtonMenuItem Text="Fenstergößen löschen" Click="ResetSizesMenu_Click" />
+        <SeparatorMenuItem />
+        <ButtonMenuItem Text="Online Hilfe" Click="HelpMenu_Click" Shortcut="F1" />
+      </MenuBar.HelpItems>
+      <MenuBar.AboutItem>
+        <ButtonMenuItem Text="Info" Click="AboutMenu_Click" />
+      </MenuBar.AboutItem>
       <ButtonMenuItem Text="{x:Static c:MainForm.LocEditMenu}" />
       <ButtonMenuItem Text="{x:Static c:MainForm.LocPreviewMenu}" />
-      <ButtonMenuItem Order="10000" Text="{x:Static c:MainForm.LocHelpMenu}" />
     </MenuBar>
   </c:MainForm.Menu>
   <TableLayout>

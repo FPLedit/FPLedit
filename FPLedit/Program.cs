@@ -53,6 +53,7 @@ namespace FPLedit
             }
 
             App = new Application();
+            App.LocalizeString += OnLocalizeString;
 
             PathManager.Instance.AppDirectory = Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.EntryExecutable);
 
@@ -89,6 +90,23 @@ namespace FPLedit
             };
             
             App.Run(mainForm);
+        }
+
+        private static void OnLocalizeString(object sender, LocalizeEventArgs e)
+        {
+            e.LocalizedText = e.Text;
+            if (sender is ButtonMenuItem.IHandler)
+            {
+                e.LocalizedText = e.Text switch
+                {
+                    "&File" => "&Datei",
+                    "&Help" => "&Hilfe",
+                    "&View" => "&Ansicht",
+                    "&Edit" => "&Bearbeiten",
+                    "Quit" => "Beenden",
+                    _ => e.Text
+                };
+            }
         }
 
         private static void UnhandledException(object sender, Eto.UnhandledExceptionEventArgs e)

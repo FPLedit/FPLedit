@@ -34,7 +34,6 @@ namespace FPLedit
         public ILog Logger { get; private set; }
         public dynamic RootForm { get; private set; }
         public dynamic Menu { get; private set; }
-        public dynamic HelpMenu { get; private set; }
 
         public Timetable Timetable => FileHandler.Timetable;
         public IFileState FileState => FileHandler.FileState;
@@ -69,7 +68,6 @@ namespace FPLedit
         {
             RootForm = rootForm;
             Menu = rootForm.Menu;
-            HelpMenu = rootForm.Menu.GetItem(MainForm.LocHelpMenu);
         }
 
         public void BootstrapExtensions()

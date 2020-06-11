@@ -36,7 +36,7 @@ namespace FPLedit.DebugDump
 
         private void PluginInterfaceOnExtensionsLoaded(object sender, EventArgs e)
         {
-            var menu = pluginInterface.HelpMenu as ButtonMenuItem;
+            var menu = pluginInterface.Menu.HelpMenu as ButtonMenuItem;
 #pragma warning disable CA2000
             menu!.CreateItem("Debug Dum&p", true, (s, args) =>
             {
