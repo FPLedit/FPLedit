@@ -1,9 +1,7 @@
 ﻿<c:ExtensionsForm
   xmlns="clr-namespace:Eto.Forms;assembly=Eto"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:c="clr-namespace:FPLedit;assembly=FPLedit"
-  DefaultButton="{x:Reference closeButton}"
-  Title="Erweiterungen" ClientSize="610,280" Resizable="true">
+  xmlns:c="clr-namespace:FPLedit.SettingsUi;assembly=FPLedit">
   <TableLayout Spacing="5,5" Padding="10,10,10,10">
     <TableRow ScaleHeight="True">
       <TableLayout Spacing="5,5">
@@ -37,8 +35,12 @@
       <TableLayout>
         <TableRow>
           <Label x:Name="infoLabel" />
-          <TableCell ScaleWidth="True" />
-          <Button x:Name="closeButton" Click="CloseButton_Click" Text="Schließen" />
+        </TableRow>
+        <TableRow>
+          <StackLayout x:Name="restartStack" Orientation="Horizontal" Visible="false" Spacing="5">
+            <Label>Die Änderungen treten erst nach dem nächsten Programmstart in Kraft.</Label>
+            <Button Click="ResetButton_Click">Jetzt neu starten</Button>
+          </StackLayout>
         </TableRow>
       </TableLayout>
     </TableRow>

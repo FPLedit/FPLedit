@@ -1,9 +1,7 @@
 ﻿<e:SettingsForm
   xmlns="clr-namespace:Eto.Forms;assembly=Eto"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:e="clr-namespace:FPLedit.DebugDump.Forms;assembly=FPLedit.DebugDump"
-  DefaultButton="{x:Reference closeButton}"
-  Title="Debug Dump Einstellungen" Resizable="false">
+  xmlns:e="clr-namespace:FPLedit.DebugDump.Forms;assembly=FPLedit.DebugDump">
   <StackLayout>
     <TableLayout>
       <TableRow>
@@ -21,7 +19,7 @@
       </TableRow>
     </TableLayout>
     <StackLayout Padding="5">
-      <Label x:Name="helpLabel" xml:space="preserve">HINWEISE:
+      <Label xml:space="preserve">HINWEISE:
 Debug Dump ist ein Tool, um Daten zur Fehlerbehebung in FPLedit zu sammeln. Dumps können unter Umständen persönliche Daten enthalten, wenn Sie solche in ihre Fahrplandateien oder FPLedit allgemein eingeben, darunter auch absolute Dateipfade. Wenn Sie einen Dump per Mail an den Entwickler übermitteln, stimmen Sie der Verwendung dieser Daten zur Fehlerbehebung zu.
 Natürlich können Sie jederzeit dieser Nutzung nachträglich widersprechen und Löschung verlangen. FPLedit wird dabei niemals selbsttätig einen Dump versenden.
 Vorher können Sie das unten aufgeführte Tool nutzen, um die aufgezeichneten Daten einzusehen.
@@ -36,7 +34,6 @@ Bei der Aufzeichnung können größere Datenmengen anfallen. Sie sollten diese a
       <TableRow>
         <CheckBox x:Name="recordCheckBox" Text="Aufzeichnung aktivieren (ab dem nächsten Programmstart wirksam)" />
         <TableCell ScaleWidth="true" />
-        <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click" />
       </TableRow>
     </TableLayout>
   </StackLayout>

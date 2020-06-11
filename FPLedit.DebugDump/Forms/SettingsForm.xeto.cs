@@ -5,14 +5,20 @@ using FPLedit.Shared.UI;
 
 namespace FPLedit.DebugDump.Forms
 {
-    internal sealed class SettingsForm : FDialog<DialogResult>
+    internal sealed class SettingsFormHandler : ISettingsControl
+    {
+        public string DisplayName => "Debug Dump";
+
+        public Control GetControl(IPluginInterface pluginInterface) => new SettingsForm(pluginInterface.Settings);
+    }
+    
+    internal sealed class SettingsForm : Panel
     {
         private readonly ISettings settings;
 
 #pragma warning disable CS0649
         private readonly TextBox pathTextBox;
         private readonly CheckBox recordCheckBox;
-        private readonly Label helpLabel;
 #pragma warning restore CS0649
 
         public SettingsForm(ISettings settings)
@@ -21,17 +27,8 @@ namespace FPLedit.DebugDump.Forms
 
             this.settings = settings;
 
-            pathTextBox.Text = settings.Get("dump.path", "");
-            recordCheckBox.Checked = settings.Get("dump.record", false);
-            
-            helpLabel.WordWrap(550);
-        }
-
-        private void CloseButton_Click(object sender, EventArgs e)
-        {
-            settings.Set("dump.record", recordCheckBox.Checked.Value);
-            settings.Set("dump.path", pathTextBox.Text);
-            Close();
+            pathTextBox.TextBinding.Bind(() => settings.Get("dump.path", ""), s => settings.Set("dump.path", s));
+            recordCheckBox.CheckedBinding.Bind(() => settings.Get("dump.record", false), b => settings.Set("dump.record", b ?? false));
         }
 
         private void SelectTargetDir_Click(object sender, EventArgs e)
@@ -56,7 +53,6 @@ namespace FPLedit.DebugDump.Forms
                 {
                     try
                     {
-
                         var reader = new DumpReader(ofd.FileName);
                         var events = reader.Events;
                         using (var isf = new InspectForm(events))

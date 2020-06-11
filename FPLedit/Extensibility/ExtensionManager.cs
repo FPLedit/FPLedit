@@ -114,6 +114,8 @@ namespace FPLedit.Extensibility
                 return;
             pluginInfo.Enabled = true;
             EnabledModified = true;
+            
+            WriteConfig();
         }
 
         public void Deactivate(PluginInfo pluginInfo)
@@ -122,9 +124,11 @@ namespace FPLedit.Extensibility
                 return;
             pluginInfo.Enabled = false;
             EnabledModified = true;
+            
+            WriteConfig();
         }
 
-        public void WriteConfig()
+        private void WriteConfig()
         {
             pluginInterface.Settings.Set("extmgr.enabled", string.Join(";", plugins.Where(p => p.Enabled).Select(p => p.FullName)));
         }

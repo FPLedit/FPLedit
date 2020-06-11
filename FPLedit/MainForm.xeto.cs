@@ -6,7 +6,6 @@ using System.IO;
 using System.ComponentModel;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
-using FPLedit.Templating;
 using FPLedit.Editor.Rendering;
 using FPLedit.Config;
 
@@ -60,9 +59,14 @@ namespace FPLedit
         
         public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
         {
-            // Initilize main UI component
+            // Initialize main UI component
             networkEditingControl.Initialize(pluginInterface);
             pluginInterface.FileOpened += (s, e) => networkEditingControl.ResetPan();
+            
+            componentRegistry.Register<ISettingsControl>(new SettingsUi.ExtensionsFormHandler(Bootstrapper.ExtensionManager, this));
+            componentRegistry.Register<ISettingsControl>(new SettingsUi.TemplatesFormHandler());
+            componentRegistry.Register<ISettingsControl>(new SettingsUi.AutomaticUpdateControl());
+            componentRegistry.Register<ISettingsControl>(new SettingsUi.WindowSizeControl());
         }
 
         private void FileStateChanged(object sender, FileStateChangedEventArgs e)
@@ -175,6 +179,8 @@ namespace FPLedit
             if (Bootstrapper.FileState.Opened)
                 Bootstrapper.FullSettings.Set("restart.file", Bootstrapper.FileState.FileName);
             
+            Close();
+            
             Program.App.Restart();
         }
 
@@ -244,15 +250,9 @@ namespace FPLedit
         private void LinearNewMenu_Click(object sender, EventArgs e) => Bootstrapper.FileHandler.New(TimetableType.Linear);
         private void NetworkNewMenu_Click(object sender, EventArgs e) => Bootstrapper.FileHandler.New(TimetableType.Network);
         private void ConvertMenu_Click(object sender, EventArgs e) => Bootstrapper.FileHandler.ConvertTimetable();
-        private void AboutMenu_Click(object sender, EventArgs e) => new InfoForm(Bootstrapper.FullSettings).ShowModal(this);
-        private void ExtensionsMenu_Click(object sender, EventArgs e) => new ExtensionsForm(Bootstrapper.ExtensionManager, this).ShowModal(this);
-        private void TemplatesMenu_Click(object sender, EventArgs e) => new TemplatesForm(Bootstrapper.TemplateManager as TemplateManager).ShowModal(this);
+        private void AboutMenu_Click(object sender, EventArgs e) => new InfoForm().ShowModal(this);
+        private void SettingsMenu_Click(object sender, EventArgs e) => new SettingsUi.SettingsForm(Bootstrapper).ShowModal(this);
         private void HelpMenu_Click(object sender, EventArgs e) => Bootstrapper.OpenUrl("https://fahrplan.manuelhu.de/");
-        private void ResetSizesMenu_Click(object sender, EventArgs e) 
-        {
-            SizeManager.Reset();
-            MessageBox.Show("Die Änderungen werden nach dem nächsten Neustart angewendet!", "FPLedit");
-        }
         #endregion
 
         protected override void Dispose(bool disposing)

@@ -26,10 +26,7 @@
         <ButtonMenuItem Text="&amp;Beenden" Click="QuitMenu_Click" />
       </MenuBar.QuitItem>
       <MenuBar.HelpItems>
-        <ButtonMenuItem Text="Erweiterungen" Click="ExtensionsMenu_Click" />
-        <ButtonMenuItem Text="Vorlagen" Click="TemplatesMenu_Click" />
-        <SeparatorMenuItem />
-        <ButtonMenuItem Text="Fenstergößen löschen" Click="ResetSizesMenu_Click" />
+        <ButtonMenuItem Text="Einstellungen" Click="SettingsMenu_Click" />
         <SeparatorMenuItem />
         <ButtonMenuItem Text="Online Hilfe" Click="HelpMenu_Click" Shortcut="F1" />
       </MenuBar.HelpItems>

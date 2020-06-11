@@ -6,10 +6,17 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using FPLedit.Shared;
 
-namespace FPLedit
+namespace FPLedit.SettingsUi
 {
-    internal sealed class TemplatesForm : FDialog
+    internal sealed class TemplatesFormHandler : ISettingsControl
+    {
+        public string DisplayName => "Vorlagen";
+        public Control GetControl(IPluginInterface pluginInterface) => new TemplatesForm(pluginInterface.TemplateManager as TemplateManager);
+    }
+    
+    internal sealed class TemplatesForm : Panel
     {
 #pragma warning disable CS0649
         private readonly GridView gridView;
@@ -48,8 +55,6 @@ namespace FPLedit
                 enableButton.Enabled = !builtin && !tmpl.Enabled;
                 disableButton.Enabled = !builtin && tmpl.Enabled;
             };
-
-            this.AddSizeStateHandler();
 
             RefreshList();
         }
@@ -91,7 +96,7 @@ namespace FPLedit
                     return; // How did we come so far?
 
                 var file = templatesDir.EnumerateFiles(tmpl.Identifier).FirstOrDefault();
-                file.Delete();
+                file?.Delete();
 
                 ReloadTemplates();
             }
@@ -155,7 +160,7 @@ namespace FPLedit
             var tmpl = templates[gridView.SelectedRow];
             var fn = Path.Combine(templatesDir.FullName, tmpl.Identifier);
             
-            Stopwatch watch = new Stopwatch();
+            var watch = new Stopwatch();
             using (var p = OpenHelper.OpenProc(fn))
             {
                 if (p != null)
@@ -169,7 +174,5 @@ namespace FPLedit
             }
             ReloadTemplates();
         }
-
-        private void CloseButton_Click(object sender, EventArgs e) => Close();
     }
 }

@@ -1,12 +1,26 @@
 ﻿using Eto.Forms;
 using FPLedit.Extensibility;
-using FPLedit.Shared.UI;
 using System;
 using System.Linq;
+using FPLedit.Shared;
 
-namespace FPLedit
+namespace FPLedit.SettingsUi
 {
-    internal sealed class ExtensionsForm : FDialog
+    internal sealed class ExtensionsFormHandler : ISettingsControl
+    {
+        private readonly ExtensionManager mg;
+        private readonly IRestartable restartable;
+
+        public ExtensionsFormHandler(ExtensionManager mg, IRestartable restartable)
+        {
+            this.mg = mg;
+            this.restartable = restartable;
+        }
+        public string DisplayName => "Erweiterungen";
+        public Control GetControl(IPluginInterface pluginInterface) => new ExtensionsForm(mg, restartable);
+    }
+    
+    internal sealed class ExtensionsForm : Panel
     {
         private readonly ExtensionManager manager;
         private readonly IRestartable restartable;
@@ -15,6 +29,7 @@ namespace FPLedit
         private readonly ListBox enabledListBox, disabledListBox;
         private readonly Button deactivateButton, activateButton;
         private readonly Label infoLabel;
+        private readonly StackLayout restartStack;
 #pragma warning restore CS0649
 
         public ExtensionsForm(ExtensionManager mg, IRestartable restartable)
@@ -24,10 +39,10 @@ namespace FPLedit
             manager = mg;
             this.restartable = restartable;
 
-            var enabled_plgs = manager.Plugins.Where(p => p.Enabled && !p.IsBuiltin);
-            var disabled_plgs = manager.Plugins.Where(p => !p.Enabled && !p.IsBuiltin);
+            var enabledPlugins = manager.Plugins.Where(p => p.Enabled && !p.IsBuiltin);
+            var disabledPlugins = manager.Plugins.Where(p => !p.Enabled && !p.IsBuiltin);
 
-            foreach (var plg in enabled_plgs)
+            foreach (var plg in enabledPlugins)
                 enabledListBox.Items.Add(new ListItem { Text = plg.Name, Tag = plg });
             enabledListBox.SelectedIndexChanged += (s, a) => ItemSelected(enabledListBox);
             enabledListBox.GotFocus += (s, a) =>
@@ -36,7 +51,7 @@ namespace FPLedit
                 activateButton.Enabled = false;
             };
 
-            foreach (var plg in disabled_plgs)
+            foreach (var plg in disabledPlugins)
                 disabledListBox.Items.Add(new ListItem { Text = plg.Name, Tag = plg });
             disabledListBox.SelectedIndexChanged += (s, a) => ItemSelected(disabledListBox);
             disabledListBox.GotFocus += (s, a) =>
@@ -44,21 +59,13 @@ namespace FPLedit
                 deactivateButton.Enabled = false;
                 activateButton.Enabled = true;
             };
-
-            this.AddSizeStateHandler();
         }
 
-        private void CloseButton_Click(object sender, EventArgs e)
+        private void ResetButton_Click(object sender, EventArgs e)
         {
-            if (manager.EnabledModified)
-            {
-                manager.WriteConfig();
-
-                var res = MessageBox.Show("Die Änderungen treten erst nach dem nächsten Programmstart in Kraft. Möchten sie das Programm jetzt neu starten?", "FPLedit", MessageBoxButtons.YesNo);
-                if (res == DialogResult.Yes)
-                    restartable.RestartWithCurrentFile();
-            }
-            Close();
+            var res = MessageBox.Show("Möchten sie das Programm jetzt neu starten?", "FPLedit", MessageBoxButtons.YesNo);
+            if (res == DialogResult.Yes)
+                restartable.RestartWithCurrentFile();
         }
 
         private void ItemSelected(ListBox lb)
@@ -83,6 +90,7 @@ namespace FPLedit
                 infoLabel.Text = "";
 
                 manager.Deactivate((PluginInfo)item.Tag);
+                restartStack.Visible = true;
             }
         }
 
@@ -107,6 +115,7 @@ namespace FPLedit
                 infoLabel.Text = "";
 
                 manager.Activate(pluginInfo);
+                restartStack.Visible = true;
             }
         }
     }
