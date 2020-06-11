@@ -19,6 +19,7 @@ namespace FPLedit.DebugDump.Forms
 #pragma warning disable CS0649
         private readonly TextBox pathTextBox;
         private readonly CheckBox recordCheckBox;
+        private readonly Label privacyLabel;
 #pragma warning restore CS0649
 
         public SettingsForm(ISettings settings)
@@ -29,6 +30,9 @@ namespace FPLedit.DebugDump.Forms
 
             pathTextBox.TextBinding.Bind(() => settings.Get("dump.path", ""), s => settings.Set("dump.path", s));
             recordCheckBox.CheckedBinding.Bind(() => settings.Get("dump.record", false), b => settings.Set("dump.record", b ?? false));
+            
+            if (Platform.IsWpf)
+                privacyLabel.WordWrap(450);
         }
 
         private void SelectTargetDir_Click(object sender, EventArgs e)

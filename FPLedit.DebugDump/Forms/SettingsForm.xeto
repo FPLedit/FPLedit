@@ -19,7 +19,7 @@
       </TableRow>
     </TableLayout>
     <StackLayout Padding="5">
-      <Label xml:space="preserve">HINWEISE:
+      <Label xml:space="preserve" x:Name="privacyLabel">HINWEISE:
 Debug Dump ist ein Tool, um Daten zur Fehlerbehebung in FPLedit zu sammeln. Dumps können unter Umständen persönliche Daten enthalten, wenn Sie solche in ihre Fahrplandateien oder FPLedit allgemein eingeben, darunter auch absolute Dateipfade. Wenn Sie einen Dump per Mail an den Entwickler übermitteln, stimmen Sie der Verwendung dieser Daten zur Fehlerbehebung zu.
 Natürlich können Sie jederzeit dieser Nutzung nachträglich widersprechen und Löschung verlangen. FPLedit wird dabei niemals selbsttätig einen Dump versenden.
 Vorher können Sie das unten aufgeführte Tool nutzen, um die aufgezeichneten Daten einzusehen.

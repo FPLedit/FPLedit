@@ -35,6 +35,9 @@ namespace FPLedit.SettingsUi
 
             typeListBox.ItemTextBinding = Binding.Property<ISettingsControl, string>(c => c.DisplayName);
             typeListBox.DataStore = settingsSections;
+
+            if (settingsSections.Length > 0)
+                typeListBox.SelectedIndex = 0;
         }
 
         private void SelectedSectionChanged(object sender, EventArgs e)
