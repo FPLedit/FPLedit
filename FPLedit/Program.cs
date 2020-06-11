@@ -109,6 +109,12 @@ namespace FPLedit
             }
         }
 
+        public static void Restart()
+        {
+            mainForm?.Close(); //HACK: Did not close old windows, when a modal dialog was open.
+            App?.Restart();
+        }
+
         private static void UnhandledException(object sender, Eto.UnhandledExceptionEventArgs e)
         {
             var report = new CrashReport(mainForm.Bootstrapper.ExtensionManager, e.ExceptionObject as Exception);
@@ -166,10 +172,12 @@ namespace FPLedit
             // Init feature flags
             FeatureFlags.Initialize(((IReducedPluginInterface)bootstrapper).Settings);
             
+            var restartable = new RestartHandler(bootstrapper);
+            
             // Add default plugins
             bootstrapper.ExtensionManager.InjectPlugin(new CorePlugins.MenuPlugin(), 0);
             bootstrapper.ExtensionManager.InjectPlugin(new Editor.EditorPlugin(), 0);
-            bootstrapper.ExtensionManager.InjectPlugin(new CorePlugins.DefaultPlugin(), 0);
+            bootstrapper.ExtensionManager.InjectPlugin(new CorePlugins.DefaultPlugin(restartable, bootstrapper), 0);
 
             return (lfh, bootstrapper);
         }

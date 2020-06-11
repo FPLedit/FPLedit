@@ -11,7 +11,7 @@ using FPLedit.Config;
 
 namespace FPLedit
 {
-    internal sealed class MainForm : FForm, IRestartable, IPlugin
+    internal sealed class MainForm : FForm, IPlugin
     {
         #region Controls
 #pragma warning disable CS0649
@@ -62,11 +62,6 @@ namespace FPLedit
             // Initialize main UI component
             networkEditingControl.Initialize(pluginInterface);
             pluginInterface.FileOpened += (s, e) => networkEditingControl.ResetPan();
-            
-            componentRegistry.Register<ISettingsControl>(new SettingsUi.ExtensionsFormHandler(Bootstrapper.ExtensionManager, this));
-            componentRegistry.Register<ISettingsControl>(new SettingsUi.TemplatesFormHandler());
-            componentRegistry.Register<ISettingsControl>(new SettingsUi.AutomaticUpdateControl());
-            componentRegistry.Register<ISettingsControl>(new SettingsUi.WindowSizeControl());
         }
 
         private void FileStateChanged(object sender, FileStateChangedEventArgs e)
@@ -170,18 +165,6 @@ namespace FPLedit
                         Bootstrapper.FileHandler.InternalOpen(lf, true);
                 };
             }
-        }
-
-        public void RestartWithCurrentFile()
-        {
-            if (!Bootstrapper.FileHandler.NotifyIfUnsaved())
-                return;
-            if (Bootstrapper.FileState.Opened)
-                Bootstrapper.FullSettings.Set("restart.file", Bootstrapper.FileState.FileName);
-            
-            Close();
-            
-            Program.App.Restart();
         }
 
         protected override void OnClosing(CancelEventArgs e)

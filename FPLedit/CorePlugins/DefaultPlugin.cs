@@ -2,8 +2,17 @@ using FPLedit.Shared;
 
 namespace FPLedit.CorePlugins
 {
-    public sealed class DefaultPlugin : IPlugin
+    internal sealed class DefaultPlugin : IPlugin
     {
+        private readonly Bootstrapper bootstrapper;
+        private readonly IRestartable restartable;
+
+        public DefaultPlugin(IRestartable restartable, Bootstrapper bootstrapper)
+        {
+            this.restartable = restartable;
+            this.bootstrapper = bootstrapper;
+        }
+
         public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
         {
             componentRegistry.Register<IExport>(new NonDefaultFiletypes.CleanedXmlExport());
@@ -16,6 +25,11 @@ namespace FPLedit.CorePlugins
             
             componentRegistry.Register<IImport>(new NonDefaultFiletypes.XmlStationsImport());
             componentRegistry.Register<IExport>(new NonDefaultFiletypes.StationsOnlyExport());
+            
+            componentRegistry.Register<ISettingsControl>(new SettingsUi.ExtensionsFormHandler(bootstrapper.ExtensionManager, restartable));
+            componentRegistry.Register<ISettingsControl>(new SettingsUi.TemplatesFormHandler());
+            componentRegistry.Register<ISettingsControl>(new SettingsUi.AutomaticUpdateControl());
+            componentRegistry.Register<ISettingsControl>(new SettingsUi.WindowSizeControl());
         }
     }
 }
