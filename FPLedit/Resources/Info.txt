@@ -1,0 +1,5 @@
+FPLedit ist ein Projekt, das primär auf (Modell-)Eisenbahnfreunde abzielt. Die Fahrpläne sind nicht nach den Betriebsrichtlinien irgendeiner Bahngesellschaft gestaltet und sind für den Betriebsdienst nicht geeignet!
+
+FPLedit ist unter der GNU GPL v3-Lizenz lizenziert: <https://www.gnu.org/licenses/gpl-3.0.en.html>
+Eine Kopie der Lizenz finden Sie im Programmordner.
+

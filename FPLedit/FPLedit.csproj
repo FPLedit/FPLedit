@@ -34,7 +34,6 @@
   <ItemGroup>
     <EmbeddedResource Include="**/*.js" />
     <EmbeddedResource Include="Resources\*" />
-    <EmbeddedResource Include="..\build_scripts\info\Info.txt" Link="Resources\Info.txt" />
     <EmbeddedResource Include="..\build_scripts\info\3rd-party.txt" Link="Resources\3rd-party.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -64,5 +63,9 @@
     <PackageReference Include="Mono.Options" Version="6.6.0.161" />
     <PackageReference Include="Portable.Xaml" Version="0.25.0" />
     <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Content Include="Resources\Info.txt" />
   </ItemGroup>
 </Project>

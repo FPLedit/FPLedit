@@ -233,7 +233,7 @@ namespace FPLedit
         private void LinearNewMenu_Click(object sender, EventArgs e) => Bootstrapper.FileHandler.New(TimetableType.Linear);
         private void NetworkNewMenu_Click(object sender, EventArgs e) => Bootstrapper.FileHandler.New(TimetableType.Network);
         private void ConvertMenu_Click(object sender, EventArgs e) => Bootstrapper.FileHandler.ConvertTimetable();
-        private void AboutMenu_Click(object sender, EventArgs e) => new InfoForm().ShowModal(this);
+        private void AboutMenu_Click(object sender, EventArgs e) => new InfoForm().ShowDialog(this);
         private void SettingsMenu_Click(object sender, EventArgs e) => new SettingsUi.SettingsForm(Bootstrapper).ShowModal(this);
         private void HelpMenu_Click(object sender, EventArgs e) => Bootstrapper.OpenUrl("https://fahrplan.manuelhu.de/");
         #endregion

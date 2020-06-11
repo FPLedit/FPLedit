@@ -95,7 +95,7 @@ namespace FPLedit
         private static void OnLocalizeString(object sender, LocalizeEventArgs e)
         {
             e.LocalizedText = e.Text;
-            if (sender is ButtonMenuItem.IHandler)
+            if (e.Source is MenuBar)
             {
                 e.LocalizedText = e.Text switch
                 {
@@ -104,6 +104,19 @@ namespace FPLedit
                     "&View" => "&Ansicht",
                     "&Edit" => "&Bearbeiten",
                     "Quit" => "Beenden",
+                    _ => e.Text
+                };
+            }
+            else if (e.Source is AboutDialog)
+            {
+                e.LocalizedText = e.Text switch
+                {
+                    "About" => "Info",
+                    "Credits" => "Mitwirkende",
+                    "License" => "Lizenz",
+                    "Developers:" => "Entwicklung:",
+                    "Designers:" => "Design:",
+                    "Documenters:" => "Dokumentation:",
                     _ => e.Text
                 };
             }
