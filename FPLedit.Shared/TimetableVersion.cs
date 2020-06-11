@@ -23,6 +23,10 @@ namespace FPLedit.Shared
         [TtVersionCompat(TtVersionCompatType.ReadWrite)]
         [JtgVersionCompat("3.11", TtVersionJtgCompat.OnlyLinear)]
         JTG3_1 = 010,
+        
+        [TtVersionCompat(TtVersionCompatType.ReadWrite)]
+        [JtgVersionCompat("3.2*", TtVersionJtgCompat.OnlyLinear)]
+        JTG3_2 = 011,
 
         [TtVersionCompat(TtVersionCompatType.ReadWrite)]
         Extended_FPL = 100,
