@@ -30,15 +30,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\build_scripts\ResourceHelper.cs" Link="Properties\ResourceHelper.cs" />
-    <Compile Update="Settings\ExtensionsForm.xeto.cs">
-      <DependentUpon>ExtensionsForm.xeto</DependentUpon>
-    </Compile>
-    <Compile Update="Settings\TemplatesForm.xeto.cs">
-      <DependentUpon>TemplatesForm.xeto</DependentUpon>
-    </Compile>
-    <Compile Update="SettingsUi\SettingsForm.xeto.cs">
-      <DependentUpon>SettingsForm.xeto</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="**/*.js" />
