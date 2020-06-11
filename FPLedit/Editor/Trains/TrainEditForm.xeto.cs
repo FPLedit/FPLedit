@@ -25,7 +25,7 @@ namespace FPLedit.Editor.Trains
 
         public Train Train { get; }
         
-        public ITrain NextTrain { get; private set;  }
+        public List<TransitionEntry> NextTrains { get; private set;  }
 
         private readonly Timetable tt;
         private readonly TrainEditHelper th;
@@ -71,7 +71,7 @@ namespace FPLedit.Editor.Trains
         }
 
         /// <summary>
-        /// Use <see cref="NextTrain"/> to wire up transitionms, if <see cref="NextTrain"/> is not null...
+        /// Use <see cref="NextTrains"/> to wire up transitions.
         /// This form will NOT wire up transitions itself!
         /// </summary>
         /// <param name="tt"></param>
@@ -95,7 +95,12 @@ namespace FPLedit.Editor.Trains
 
             transitionDropDown.ItemTextBinding = Binding.Property<Train, string>(t => t.TName);
             transitionDropDown.DataStore = tt.Trains.Where(t => t != Train).OrderBy(t => t.TName);
-            transitionDropDown.SelectedValue = tt.GetTransition(Train);
+            
+            var transitions = tt.GetEditableTransitions(Train);
+            if (transitions.Count == 1)
+                transitionDropDown.SelectedValue = transitions.Single().NextTrain;
+            else
+                transitionDropDown.Enabled = false;
 
             fillButton.Visible = tt.Type == TimetableType.Linear && th.FillCandidates(Train).Any();
 
@@ -133,10 +138,12 @@ namespace FPLedit.Editor.Trains
             if (!editor.ApplyChanges())
                 return;
 
-            if (Train.Id == -1)
-                NextTrain = (ITrain) transitionDropDown.SelectedValue;
-            else
-                tt.SetTransition(Train, (ITrain)transitionDropDown.SelectedValue);
+            NextTrains = new List<TransitionEntry>()
+            {
+                new TransitionEntry((ITrain) transitionDropDown.SelectedValue, Days.All, null),
+            };
+            if (Train.Id > 0)
+                tt.SetTransitions(Train, NextTrains);
 
             Close(DialogResult.Ok);
         }

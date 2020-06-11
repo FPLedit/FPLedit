@@ -18,17 +18,19 @@ namespace FPLedit.Bildfahrplan.Render
         private readonly TimetableStyle attrs;
         private readonly TimeEntry startTime;
         private readonly Dictionary<Station, StationRenderProps> stationOffsets;
+        private readonly Days renderDays;
         private ITrain[] trainCache;
 
         private readonly DashStyleHelper ds = new DashStyleHelper();
 
-        public TrainRenderer(IEnumerable<Station> stations, Timetable tt, Margins margin, TimeEntry startTime, Dictionary<Station, StationRenderProps> stationOffsets)
+        public TrainRenderer(IEnumerable<Station> stations, Timetable tt, Margins margin, TimeEntry startTime, Dictionary<Station, StationRenderProps> stationOffsets, Days renderDays)
         {
             this.stations = stations;
             this.tt = tt;
             this.margin = margin;
             this.startTime = startTime;
             this.stationOffsets = stationOffsets;
+            this.renderDays = renderDays;
             attrs = new TimetableStyle(tt);
         }
 
@@ -95,11 +97,11 @@ namespace FPLedit.Bildfahrplan.Render
             if (points.Count == 0)
                 return; // This train is not travelling on this route
 
-            // Verbindung zum Folgezug
-            var transition = tt.GetTransition(train);
-            if (transition != null && !hadLastDeparture && attrs.StationLines != StationLineStyle.None)
+            // Transition to the next train; filtered by days and station.
+            var lastStaOfFirst = GetSortedStations(train)?.LastOrDefault();
+            var transition = tt.GetTransition(train, renderDays, lastStaOfFirst);
+            if (transition != null && !hadLastDeparture && attrs.StationLines != StationLineStyle.None && transition.Days.IsIntersecting(renderDays))
             {
-                var lastStaOfFirst = GetSortedStations(train)?.LastOrDefault();
                 var firstStaOfNext = GetSortedStations(transition)?.FirstOrDefault();
 
                 if (lastStaOfFirst == firstStaOfNext)
@@ -126,7 +128,7 @@ namespace FPLedit.Bildfahrplan.Render
 
                     float bezierFactor = !isTransition ?
                         ((preX < postX) ? -1 : 1) : // preX < postX --> TrainDirection.ti
-                        Math.Sign(preX - x); // Bei Transitions
+                        Math.Sign(preX - x); // Transition
                     if (isTransition) bezierFactor *= 0.5f;
                     var bezierOffset = new SizeF(bezierFactor * 14, (points[i + 1].Y - points[i].Y) / -4.0f);
                     var bezierOffsetT = new SizeF(bezierOffset.Width, -bezierOffset.Height);
@@ -146,7 +148,7 @@ namespace FPLedit.Bildfahrplan.Render
                     }
                 }
                 else
-                    p.AddLine(points[i], points[i + 1]); // Normale Zuglinie
+                    p.AddLine(points[i], points[i + 1]); // Normal line between stations
 
                 if (points[i].X == points[i + 1].X || points[i].Y == points[i + 1].Y)
                     continue;

@@ -264,6 +264,7 @@ namespace FPLedit.Shared
                     throw new TimetableTypeNotSupportedException(TimetableType.Linear, "routes");
                 stations = GetLinearStationsOrderedByDirection(TrainDirection.ti); // Replace collection with an ordered one.
                 var idx = stations.IndexOf(sta); // Get temporary index.
+                var collectionIndex = idx;
 
                 // Get xml entity index of the previous/next station, to handle other xml entity types.
                 if (idx > 0)
@@ -274,11 +275,18 @@ namespace FPLedit.Shared
                 else if (idx == 0 && stations.Count > 1)
                 {
                     var staAfter = stations[1];
-                    idx = sElm.Children.IndexOf(staAfter.XMLEntity); // Davor einfügen
+                    idx = sElm.Children.IndexOf(staAfter.XMLEntity); // Insert before.
                 }
                 else
                     throw new Exception("Invalid negative index encountered!");
                 sElm.Children.Insert(idx, sta.XMLEntity);
+
+                // Increment index of all following stations that are referenced in transitions.
+                foreach (var transition in transitions)
+                {
+                    if (int.TryParse(transition.StationId, out var numericStationId) && numericStationId > collectionIndex)
+                        transition.StationId = (numericStationId + 1).ToString();
+                }
             }
             else
             {
@@ -303,6 +311,14 @@ namespace FPLedit.Shared
 
             var needsCleanup = stations.First() == sta || stations.Last() == sta;
             var routes = sta.Routes;
+
+            // Clean up all transitions which were only valid at this sttaion.
+            var id = Type == TimetableType.Linear ? GetRoute(Timetable.LINEAR_ROUTE_ID).IndexOf(sta) : sta.Id;
+            foreach (var transition in transitions)
+            {
+                if (int.TryParse(transition.StationId, out var numericStationId) && numericStationId == id)
+                    transition.StationId = Transition.LAST_STATION; // Reset to default.
+            }
             
             sta.ParentTimetable = null;
             stations.Remove(sta);
@@ -611,52 +627,56 @@ namespace FPLedit.Shared
 
         #region Hilfsmethoden für Umläufe
 
-        /// <summary>
-        /// Private helper function to create a new transition. Only exposed via <see cref="SetTransition"/>.
-        /// </summary>
-        private void AddTransition(ITrain first, ITrain next)
+        public IList<TransitionEntry> GetEditableTransitions(ITrain first)
         {
-            if (next == null) return;
-            var transition = new Transition(this)
-            {
-                First = first.QualifiedId,
-                Next = next.QualifiedId
-            };
-            trElm.Children.Add(transition.XMLEntity);
-            transitions.Add(transition);
+            if (first.IsLink)
+                return new List<TransitionEntry>();
+
+            return transitions
+                .Where(t => t.First == first.QualifiedId)
+                .Select(t => new { t, n = GetTrainByQualifiedId(t.Next) })
+                .Where(t => t.n != null)
+                .Select(t => new TransitionEntry(t.n!, t.t.Days, t.t.StationId != Transition.LAST_STATION && int.TryParse(t.t.StationId, out var sId) ? GetStationById(sId) : null))
+                .ToList();
         }
 
         /// <inheritdoc />
-        public void SetTransition(ITrain first, ITrain newNext)
+        public void SetTransitions(ITrain first, IEnumerable<TransitionEntry> trans)
         {
-            var trans = transitions.Where(t => t.First == first.QualifiedId).ToArray();
+            RemoveTransition(first, true); // Clean up.
 
-            if (!trans.Any() && newNext != null)
-                AddTransition(first, newNext);
-            else if (trans.Length > 1)
-                throw new Exception("Mehr als eine Transition mit angegebenem ersten Zug gefunden!");
-            else if (trans.Length == 1)
+            var shouldApplyFilter = Version.Compare(TimetableVersion.JTG3_2) < 0;
+
+            foreach (var tran in trans)
             {
-                if (newNext != null)
-                    trans.First().Next = newNext.QualifiedId;
-                else
-                    RemoveTransition(first);
+                if (shouldApplyFilter && (tran.StationId != null || tran.Days != Days.All))
+                    throw new TimetableTypeNotSupportedException("Transition filters");
+                
+                var t = new Transition(this)
+                {
+                    First = first.QualifiedId,
+                    Next = tran.NextTrain.QualifiedId,
+                    Days = tran.Days,
+                    StationId = tran.StationId != null ? "" : Transition.LAST_STATION,
+                };
+                trElm.Children.Add(t.XMLEntity);
+                transitions.Add(t);
             }
         }
 
         /// <inheritdoc />
-        public ITrain? GetTransition(ITrain first)
+        public ITrain? GetTransition(ITrain first, Days? daysFilter = null, Station? stationFilter = null)
         {
             if (first == null)
                 return null;
             if (!first.IsLink)
-                return GetTransition(first.QualifiedId);
+                return GetTransition(first.QualifiedId, daysFilter, stationFilter);
 
             var linkedTrain = (LinkedTrain) first;
             var link = linkedTrain.Link;
             if (!link.CopyTransitions)
                 return null;
-            var parentNext = GetTransition(link.ParentTrain);
+            var parentNext = GetTransition(link.ParentTrain, daysFilter, stationFilter);
             if (parentNext == null)
                 return null;
             if ((parentNext is IWritableTrain wt) && link.TrainLinkIndex < wt.TrainLinks.Length)
@@ -665,7 +685,7 @@ namespace FPLedit.Shared
                 if (nextLink == null || linkedTrain.LinkCountingIndex >= nextLink.TrainCount)
                     return null;
                 return nextLink.LinkedTrains[linkedTrain.LinkCountingIndex];
-            } 
+            }
             if (parentNext.IsLink && parentNext is LinkedTrain lt)
             {
                 if (linkedTrain.LinkCountingIndex + lt.LinkCountingIndex + 1 >= lt.Link.TrainCount)
@@ -676,28 +696,33 @@ namespace FPLedit.Shared
             return null;
         }
 
-        /// <inheritdoc />
-        public ITrain? GetTransition(string firstTrainId)
+        private ITrain? GetTransition(string firstQualifiedTrainId, Days? daysFilter = null, Station? stationFilter = null)
         {
-            if (firstTrainId == "-1" || string.IsNullOrWhiteSpace(firstTrainId))
+            if (firstQualifiedTrainId == "-1" || string.IsNullOrWhiteSpace(firstQualifiedTrainId))
                 return null;
+
+            var shouldApplyFilter = Version.Compare(TimetableVersion.JTG3_2) < 0;
+
+            bool Filter(Transition tra)
+            {
+                var result = tra.First == firstQualifiedTrainId;
+                if (shouldApplyFilter)
+                {
+                    result &= daysFilter == null || tra.Days.IsIntersecting(daysFilter.Value);
+                    result &= stationFilter == null || tra.IsTransitionValidAt(stationFilter);
+                }
+
+                return result;
+            }
             
-            var trans = transitions.Where(t => t.First == firstTrainId).ToArray();
+            var trans = transitions.Where(Filter).ToArray();
 
             if (!trans.Any())
                 return null;
             if (trans.Length > 1)
-                throw new Exception("Mehr als eine Transition mit angegebenem ersten Zug gefunden!");
+                throw new Exception("Mehr als eine Transition mit den angegebenen Kriterien gefunden!");
 
             return GetTrainByQualifiedId(trans.First().Next);
-        }
-
-        /// <inheritdoc />
-        public IEnumerable<ITrain> GetFollowingTransitions(ITrain first)
-        {
-            ITrain? tra = first;
-            while ((tra = GetTransition(tra)) != null && tra != first)
-                yield return tra;
         }
 
         /// <inheritdoc />

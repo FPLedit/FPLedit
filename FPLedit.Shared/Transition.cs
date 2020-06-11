@@ -48,5 +48,38 @@ namespace FPLedit.Shared
             get => GetAttribute("staId", "");
             set => SetAttribute("staId", value);
         }
+
+        public bool IsTransitionValidAt(Station sta)
+        {
+            if (ParentTimetable.Version.Compare(TimetableVersion.JTG3_2) < 2)
+                return true; // Before jTG 3.2 everything is valid.
+
+            if (StationId == LAST_STATION)
+                return true; // Thuis is a "wildcard match"
+
+            int id;
+            if (ParentTimetable.Type == TimetableType.Linear)
+                id = ParentTimetable.GetRoute(Timetable.LINEAR_ROUTE_ID).IndexOf(sta);
+            else
+                id = sta.Id;
+
+            return StationId == id.ToString();
+        }
+    }
+    
+    public sealed class TransitionEntry
+    {
+        public TransitionEntry(ITrain nextTrain, Days days, Station? stationId)
+        {
+            NextTrain = nextTrain;
+            Days = days;
+            StationId = stationId;
+        }
+
+        public ITrain NextTrain { get; set; }
+        
+        public Days Days { get; set; }
+
+        public Station? StationId { get; set; }
     }
 }

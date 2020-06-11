@@ -49,6 +49,11 @@ namespace FPLedit.Shared
         }
 
         /// <summary>
+        /// Gets the index of the given station in the current route's ordered station list, or -1 if it is not part of this route.
+        /// </summary>
+        public int IndexOf(Station sta) => Array.IndexOf(stations, sta);
+
+        /// <summary>
         /// Returns a display name of the route.
         /// </summary>
         public string GetRouteName()

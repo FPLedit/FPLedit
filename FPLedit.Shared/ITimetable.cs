@@ -135,28 +135,22 @@ namespace FPLedit.Shared
         bool WouldProduceAmbiguousRoute(Station toDelete);
 
         /// <summary>
-        /// Creates or sets the transaition between the two trains: From <paramref name="first"/> to <paramref name="newNext"/>.
+        /// Creates or sets the transaition between the two trains: From <paramref name="first"/> to each <paramref name="trans"/>.
         /// </summary>
-        void SetTransition(ITrain first, ITrain newNext);
+        void SetTransitions(ITrain first, IEnumerable<TransitionEntry> trans);
         /// <summary>
         /// Get the next train, following a single transition, if one exists.
         /// </summary>
+        /// <param name="first"></param>
+        /// <param name="daysFilter">Returns only transitions that are valid on the given days.</param>
+        /// <param name="stationFilter">Returns only transitions that are valid at the given station.</param>
         /// <returns>The next train or null, if none exists.</returns>
-        ITrain? GetTransition(ITrain first);
-        /// <summary>
-        /// Get the next train, following a single transition, if one exists.
-        /// </summary>
-        /// <returns>The next train or null, if none exists.</returns>
-        ITrain? GetTransition(string firstQualifiedTrainId);
-        /// <summary>
-        /// Get all next train, following all transitions as long as possible.
-        /// </summary>
-        /// <returns>An enumeration of all next trains.</returns>
         /// <remarks>
-        /// If the loop with transitions is closed, it will only return the trains that are encountered before
-        /// reaching the <paramref name="first"/> train again.
+        /// <para>On <see cref="Version"/>s lower than <see cref="TimetableVersion.JTG3_2"/>, all filters given with
+        /// <paramref name="daysFilter"/> and <paramref name="stationFilter"/> will be silently ignored!</para>
+        /// <para><paramref name="daysFilter"/> does not filter on the returned trains <see cref="ITrain.Days"/>!</para>
         /// </remarks>
-        IEnumerable<ITrain> GetFollowingTransitions(ITrain first);
+        ITrain? GetTransition(ITrain first, Days? daysFilter = null, Station? stationFilter = null);
         /// <summary>
         /// Removes the transition starting with this train.
         /// </summary>

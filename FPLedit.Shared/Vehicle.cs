@@ -23,10 +23,10 @@ namespace FPLedit.Shared
             set => SetAttribute("name", value);
         }
 
-        public IList<VehicleTrainStart> StartTrains 
+        public IList<VehicleTrainStart> StartTrains
             => new ObservableChildrenCollection<VehicleTrainStart>(this, VehicleTrainStart.DEFAULT_XNAME, ParentTimetable);
         
-        public IList<NextVehicle> NextVehicles 
+        public IList<NextVehicle> NextVehicles
             => new ObservableChildrenCollection<NextVehicle>(this, NextVehicle.DEFAULT_XNAME, ParentTimetable);
         
         public Vehicle(Timetable tt) : base(DEFAULT_XNAME, tt)
