@@ -104,7 +104,12 @@ namespace FPLedit.Shared
             {
                 var directions = Enum.GetNames(typeof(TrainDirection));
                 foreach (var c in tElm.Children.Where(x => directions.Contains(x.XName))) // Filtert andere Elemente
-                    trains.Add(new Train(c, this));
+                {
+                    var train = new Train(c, this);
+                    trains.Add(train);
+                    if (train.IsLink)
+                        throw new NotSupportedException("Mit jTrainGraph Pro erstellte verlinkte Züge werden noch nicht unterstützt!");
+                }
             }
             else
             {
@@ -117,13 +122,21 @@ namespace FPLedit.Shared
             if (trElm != null)
             {
                 foreach (var c in trElm.Children.Where(x => x.XName == "tra")) // Filtert andere Elemente
+                {
+                    if (c.GetAttribute("df", "1111111") != "1111111" || c.GetAttribute("staId", "LAST") != "LAST")
+                        throw new NotSupportedException("Von jTrainGraph erstellte 3.2 erstellte Dateien mit erweiterten Verknüpfungen werden noch nicht unterstützt!");
                     transitions.Add(new Transition(c, this));
+                }
             }
             else
             {
                 trElm = new XMLEntity("transitions");
                 Children.Add(trElm);
             }
+
+            var vElm = Children.FirstOrDefault(x => x.XName == "vehicles");
+            if (vElm != null && vElm.Children.Any())
+                throw new NotSupportedException("Von jTrainGraph 3.2 erstellte Dateien mit Fahrzeugen werden noch nicht unterstützt!");
 
             // Höchste IDs ermitteln
             if (trains.Count > 0)
