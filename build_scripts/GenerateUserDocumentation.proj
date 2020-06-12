@@ -12,26 +12,15 @@
   * IT WILL NOT BUILD IF ENV VARIABLE FPLEDIT_DOK IS NOT SET.
   -->
   
-  <!-- Prepare our conditions -->
-  <PropertyGroup>
-    <_OfflineDoc_HasDocumentationEnv Condition=" ( $(FPLEDIT_DOK) != '' ) And Exists( '$(FPLEDIT_DOK)' ) And ( $(Configuration) == 'Release' )">true</_OfflineDoc_HasDocumentationEnv>
-  </PropertyGroup>
-  
   <!-- Set parameters -->
-  <Choose>
-    <When Condition=" $(_OfflineDoc_HasDocumentationEnv) == 'true' ">
-      <PropertyGroup>
-        <OfflineDoc_BuildPdf>true</OfflineDoc_BuildPdf>
-        <OfflineDoc_PdfOutputFile>$(OutputPath)/Dokumentation.pdf</OfflineDoc_PdfOutputFile>
-        <OfflineDoc_SiteFolder>$(FPLEDIT_DOK)</OfflineDoc_SiteFolder>
-      </PropertyGroup>
-      
-      <PropertyGroup>
-        <!-- Include as pre-tool -->
-        <CoreCompileDependsOn>OfflineDoc_Build;$(CoreCompileDependsOn)</CoreCompileDependsOn>
-      </PropertyGroup>
-    </When>
-  </Choose>
+  <PropertyGroup>
+    <OfflineDoc_BuildPdf>true</OfflineDoc_BuildPdf>
+    <OfflineDoc_PdfOutputFile>$(OutputPath)/Dokumentation.pdf</OfflineDoc_PdfOutputFile>
+    <OfflineDoc_SiteFolder>$(FPLEDIT_DOK)</OfflineDoc_SiteFolder>
+  </PropertyGroup>
+
+  <!-- Default target for msbuild -->
+  <Target Name="Build" DependsOnTargets="OfflineDoc_Build" />
 
   <!-- Generation targets, generic -->
   <Target Name="OfflineDoc_Build" DependsOnTargets="_OfflineDoc_HugoTransform">

@@ -8,8 +8,10 @@ using System.Text.RegularExpressions;
 
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
+var platform = Argument("tfm", "net461");
 
 var docInPath = EnvironmentVariable("FPLEDIT_DOK");
+var hasDocInPath = !(docInPath == null || docInPath == "");
 var ignoreNoDoc = Argument<string>("ignore_no_doc", null) != null;
 var preBuildVersionSuffix = Argument("version_suffix", "");
 
@@ -26,7 +28,7 @@ if (Argument<string>("auto-beta", null) != null) {
 //////////////////////////////////////////////////////////////////////
 
 // Define directories.
-var buildDir = Directory("./bin") + Directory(configuration);
+var buildDir = Directory("./bin") + Directory(configuration) + Directory(platform);
 var buildDocDir = Directory("./bin") + Directory("api-doc");
 var buildLibDir = buildDir + Directory("lib");
 var sourceDir = Directory(".");
@@ -47,7 +49,8 @@ if (incrementVersion)
         var counter = files
             .Select(fn => regex.Match(fn))
             .Where(match => match.Success && match.Groups.Count == 2)
-            .Max(match => int.Parse(match.Groups[1].Value));
+            .DefaultIfEmpty()
+            .Max(match => int.Parse(match?.Groups[1]?.Value ?? "0"));
         
         preBuildVersionSuffix += (counter + 1);
     }  
@@ -83,9 +86,20 @@ Task("Build")
                 settings.Properties.Add("versionSuffix", new List<string> { preBuildVersionSuffix });
         });
     });
+    
+Task("BuildUserDocumentation")
+    .IsDependentOn("Build")
+    .Does(() =>
+    {
+        if (hasDocInPath) {
+            MSBuild("./build_scripts/GenerateUserDocumentation.proj", settings => {
+                settings.Properties.Add("OutputPath", new List<string> { System.IO.Path.GetFullPath(buildDir.Path.FullPath) });
+            });
+        }
+    });
 
 Task("PrepareArtifacts")
-    .IsDependentOn("Build")
+    .IsDependentOn("BuildUserDocumentation")
     .Does(() => {
         Console.WriteLine(buildDir);
     
@@ -121,7 +135,7 @@ Task("PackRelease")
     .IsDependentOn("BundleThirdParty")
     .Does(() => {
         var version = GetProductVersion(Context, buildDir + File("FPLedit.exe"));
-        var nodoc_suffix = ignoreNoDoc ? "" : ((docInPath == null || docInPath == "") ? "-nodoc" : "");       
+        var nodoc_suffix = ignoreNoDoc ? "" : (!hasDocInPath ? "-nodoc" : "");       
         var file = Directory("./bin") + File($"fpledit-{version}{nodoc_suffix}.zip");
         
         if (FileExists(file))
