@@ -19,7 +19,7 @@ namespace FPLedit.Shared.Tests
             Assert.AreEqual(0, x.XMLEntity.Attributes.Count);
             Assert.AreEqual(0, x.XMLEntity.Children.Count);
             Assert.AreEqual(null, x.XMLEntity.Value);
-            Assert.AreEqual(tt, x._parent);
+            Assert.AreEqual(tt, x.ParentTimetable);
             
             // externes setzen
             x.SetAttribute("test-attr1", "test-attr1-val");
@@ -92,7 +92,7 @@ namespace FPLedit.Shared.Tests
             Assert.AreEqual(null, en.Children[0].Value);
             Assert.AreEqual("b", en.Children[1].XName);
             Assert.AreEqual("d", en.Children[1].Value);
-            Assert.AreEqual(tt, en._parent);
+            Assert.AreEqual(tt, en.ParentTimetable);
         }
     }
 }

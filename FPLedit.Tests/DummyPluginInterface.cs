@@ -15,6 +15,8 @@ namespace FPLedit.Tests
             Registry = new RegisterStore();
         }
 
+        public ICacheFile Cache => throw new NotImplementedException();
+
         public string GetTemp(string filename)
         {
             throw new NotImplementedException();
@@ -89,6 +91,10 @@ namespace FPLedit.Tests
         public dynamic Menu => throw new NotImplementedException();
 
         public dynamic RootForm => throw new NotImplementedException();
+        public void OpenUrl(string address, bool isInternal = false)
+        {
+            throw new NotImplementedException();
+        }
 
         public dynamic HelpMenu => throw new NotImplementedException();
     }
