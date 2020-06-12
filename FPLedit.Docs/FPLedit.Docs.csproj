@@ -18,7 +18,7 @@
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="docfx.console" Version="2.55.0" />
+    <PackageReference Include="docfx.console" Version="2.51.0" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="apidoc" />
