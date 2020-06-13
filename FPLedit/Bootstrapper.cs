@@ -49,7 +49,7 @@ namespace FPLedit
         {
             timetableBackup = new Dictionary<object, Timetable>();
             
-            var configPath = Path.Combine(PathManager.Instance.AppDirectory, "fpledit.conf");
+            var configPath = Path.Combine(PathManager.Instance.SettingsDirectory, "fpledit.conf");
 
 #pragma warning disable CA2000
             settings = new Settings(GetConfigStream(configPath));

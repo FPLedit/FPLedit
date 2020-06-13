@@ -55,7 +55,10 @@ namespace FPLedit
             App = new Application();
             App.LocalizeString += OnLocalizeString;
 
+            // Set app & settings paths
             PathManager.Instance.AppDirectory = Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.EntryExecutable);
+            if (App.Platform.IsMac)
+                PathManager.Instance.SettingsDirectory = Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationSettings);
 
             var enableCrashReporting = OptionsParser.CrashReporterDebug;
 #if !DEBUG || ENABLE_CRASH_REPORTING_DEBUG

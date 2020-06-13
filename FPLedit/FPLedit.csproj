@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="$(SolutionDir)/build_scripts/GenerateSignatures.targets" />
   <PropertyGroup>
     <ProjectGuid>{386836E8-5885-4ED1-B350-CE2BBEC5367E}</ProjectGuid>
@@ -40,6 +40,13 @@
     <ProjectReference Include="..\FPLedit.Shared.UI\FPLedit.Shared.UI.csproj" />
     <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <!-- Mac files -->
+    <Content Include="Icon.icns" Link="Resources\Mac\Icons.icns" />
+    <None Remove="Icon.icns" />
+    <None Include="Info.plist" Link="Resources\Mac\Info.plist" />
+  </ItemGroup>
 
   <!-- Dependencies for bundling -->
   <ItemGroup>
@@ -57,14 +64,11 @@
     <PackageReference Include="Eto.Forms" Version="$(EtoVersion)" />
     <PackageReference Include="Eto.Platform.Gtk" Version="$(EtoVersion)" />
     <PackageReference Include="Eto.Platform.Wpf" Version="$(EtoVersion)" />
+    <PackageReference Include="Eto.Platform.Mac64" Version="$(EtoVersion)" />
     <PackageReference Include="Eto.Serialization.Xaml" Version="$(EtoVersion)" />
     <PackageReference Include="Jint" Version="3.0.0-beta-1828" />
     <PackageReference Include="Mono.Options" Version="6.6.0.161" />
     <PackageReference Include="Portable.Xaml" Version="0.25.0" />
     <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Content Include="Resources\Info.txt" />
   </ItemGroup>
 </Project>

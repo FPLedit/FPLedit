@@ -109,6 +109,10 @@ Task("PrepareArtifacts")
         CreateDirectory(buildLibDir);
         MoveFiles(buildDir + File("*.dll"), buildLibDir);
         MoveFiles(buildLibDir + File("FPLedit.*"), buildDir);
+        
+        // Remove unused platform assemblies (Mac64/MonoMac has only been used for bundling before).
+        DeleteFile(buildLibDir + File("Eto.Mac64.dll"));
+        DeleteFile(buildLibDir + File("MonoMac.dll"));
     });
     
 Task("BuildLicenseReadme")
@@ -131,8 +135,44 @@ Task("BundleThirdParty")
         CopyFiles(scriptsDir + Directory("info") + Directory("3rd-party") + File("*.txt"), licenseDir);
     });
     
-Task("PackRelease")
+Task("PackMacBundle")
     .IsDependentOn("BundleThirdParty")
+    .Does(() => {
+        Information("Bundling extension files for MacOS bundle");
+        var macBundle = buildDir + Directory("FPLedit.app");
+        var macTarget = macBundle + Directory("Contents") + Directory("MacOS");
+        var macLibTarget = macTarget + Directory("lib");
+        CopyDirectory(buildLibDir, macLibTarget);
+        CopyFiles(buildDir + File("*.dll"), macTarget);
+        
+        Information("Cleaning up unused files in mac bundle");
+        DeleteFiles(macLibTarget + File("Eto.*"));
+        DeleteFiles(macLibTarget + File("*Sharp.dll"));
+        DeleteFile(macLibTarget + File("Jint.dll"));
+        DeleteFile(macLibTarget + File("Esprima.dll"));
+        
+        Information("Zipping mac bundle");
+        var filesToZip = new List<string>();
+        filesToZip.AddRange(GetFiles(macBundle + File("**/*")).Select(f => f.FullPath));
+        filesToZip.Add(buildDir + File("README_LICENSE.txt"));
+        if (hasDocInPath)
+            filesToZip.Add(buildDir + File("Dokumentation.pdf"));
+        filesToZip.AddRange(GetFiles(buildLibDir + Directory("licenses") + File("*")).Select(f => f.FullPath));
+        
+        var version = GetProductVersion(Context, buildDir + File("FPLedit.exe"));
+        var nodoc_suffix = ignoreNoDoc ? "" : (!hasDocInPath ? "-nodoc" : "");      
+        var file = Directory("./bin") + File($"fpledit-{version}{nodoc_suffix}-mac.zip");
+        
+        if (FileExists(file))
+            throw new Exception("Zip file already exists! " + file);
+        Zip(buildDir, file, filesToZip);
+        
+        Information("Cleaning up; deleting macOS bundle");
+        DeleteDirectory(macBundle, true);
+    });
+    
+Task("PackRelease")
+    .IsDependentOn("PackMacBundle")
     .Does(() => {
         var version = GetProductVersion(Context, buildDir + File("FPLedit.exe"));
         var nodoc_suffix = ignoreNoDoc ? "" : (!hasDocInPath ? "-nodoc" : "");       
