@@ -85,14 +85,14 @@ namespace FPLedit
         }
         #endregion
 
-        protected override void OnMouseUp(MouseEventArgs e)
+        protected override void OnMouseDown(MouseEventArgs e)
         {
             if (e.Buttons == MouseButtons.Alternate)
             {
                 menu.Show(this);
                 e.Handled = true;
             }
-            base.OnMouseUp(e);
+            base.OnMouseDown(e);
         }
 
         protected override void Dispose(bool disposing)

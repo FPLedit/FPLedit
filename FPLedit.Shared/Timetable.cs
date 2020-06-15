@@ -695,7 +695,7 @@ namespace FPLedit.Shared
         /// <inheritdoc />
         public IEnumerable<ITrain> GetFollowingTransitions(ITrain first)
         {
-            var tra = first;
+            ITrain? tra = first;
             while ((tra = GetTransition(tra)) != null && tra != first)
                 yield return tra;
         }
