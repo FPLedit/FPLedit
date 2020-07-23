@@ -14,7 +14,7 @@ namespace FPLedit.Shared
     {
         public const int LINEAR_ROUTE_ID = 0;
         public const int UNASSIGNED_ROUTE_ID = -1;
-        public static TimetableVersion DefaultLinearVersion { get; set; } = TimetableVersion.JTG3_1;
+        public static TimetableVersion DefaultLinearVersion { get; set; } = TimetableVersion.JTG3_2;
 
         private readonly XMLEntity sElm, tElm, trElm;
 
