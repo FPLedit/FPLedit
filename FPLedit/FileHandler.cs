@@ -437,11 +437,14 @@ namespace FPLedit
 
         private void OpenWithVersionCheck(Timetable tt, string filename)
         {
-            //TODO: Implement user-chosen updates, if a newer version exists and both are supported.
             var compat = tt?.Version.GetCompat();
             if (tt == null || compat == TtVersionCompatType.ReadWrite)
             {
-                // this file is in a supported version (or non-existant)
+                // There is an optional timetable version update available.
+                if (tt != null && Timetable.DefaultLinearVersion.CompareTo(tt.Version) > 0 && PerformTimetableUpgrade(tt, true))
+                    return;
+                
+                // this file is in a supported version (or non-existant).
                 Timetable = tt;
                 
                 FileState.Opened = tt != null;
@@ -462,13 +465,21 @@ namespace FPLedit
                 return;
             }
 
+            PerformTimetableUpgrade(tt, false);
+        }
+
+        private bool PerformTimetableUpgrade(Timetable tt, bool optional)
+        {
             string newFn = null;
             var exp = new UpgradeExport();
 
             Application.Instance.Invoke(() =>
             {
-                var res = MessageBox.Show("Diese Fahrplandatei ist im Dateiformat von jTrainGraph 2.x bzw. 3.0x erstellt worden. Dieses Dateiformat kann von FPLedit nur noch auf neuere Versionen aktualisiert werden." +
-                                          " Soll die Datei jetzt aktualisiert werden? ACHTUNG: Die Datei kann danach nicht mehr mit jTrainGraph 2.x oder 3.0x berabeitet werden!", "FPLedit",
+                var text = optional ? 
+                    "In einer neueren Dateiformatversion stehen mehr Funktionen zur Verfügung, die Aktualisierung ist aber nicht zwingend." :
+                    "Dieses Dateiformat kann von FPLedit nur noch auf neuere Versionen aktualisiert werden.";
+                var res = MessageBox.Show("Diese Fahrplandatei ist in einem alten Dateinformat erstellt worden. " + text +
+                    " Soll die Datei jetzt aktualisiert werden? ACHTUNG: Die Datei kann danach nur noch mit der aktuellsten Version von jTrainGraph bearbeitet werden!", "FPLedit",
                     MessageBoxButtons.YesNo, MessageBoxType.Question);
                 if (res == DialogResult.Yes)
                 {
@@ -479,7 +490,7 @@ namespace FPLedit
                         newFn = sfd.FileName;
                 }
             });
-            
+
             if (!string.IsNullOrEmpty(newFn))
             {
                 pluginInterface.Logger.Info("Konvertiere Datei...");
@@ -488,15 +499,20 @@ namespace FPLedit
                 {
                     pluginInterface.Logger.Info("Konvertieren erfolgreich abgeschlossen!");
                     InternalOpen(newFn, false); // We are already in an async context, so we can execute synchronously.
-                    return; // Do not exit async operation.
+                    return true; // Do not exit async operation.
                 }
-                
+
                 pluginInterface.Logger.Error("Dateikonvertierung fehlgeschlagen!");
             }
             else
+            {
+                if (optional)
+                    return false; // We asked for an optional update, so we do not exit the async operation.
                 pluginInterface.Logger.Warning("Dateikonvertierung abgebrochen!");
+            }
 
             AsyncBlockingOperation = false;
+            return true;
         }
 
         #endregion
