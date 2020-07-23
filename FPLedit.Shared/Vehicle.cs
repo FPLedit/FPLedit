@@ -35,6 +35,12 @@ namespace FPLedit.Shared
 
         public Vehicle(XMLEntity en, Timetable tt) : base(en, tt)
         {
+            //TODO: (When implementiong anything concerning vehicles) Check only one start train or nextvehicle allowed per day!
+        }
+
+        internal void RemoveStartTrains(ITrain train)
+        {
+            StartTrains.RemoveAll(st => st.TrainId == train.Id);
         }
     }
 
@@ -74,7 +80,7 @@ namespace FPLedit.Shared
         internal const string DEFAULT_XNAME = "nextv";
         
         [XAttrName("vid")]
-        public int TrainId
+        public int NextVehicleId
         {
             get => GetAttribute("vid", -1);
             set => SetAttribute("vid", value.ToString());

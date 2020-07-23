@@ -16,9 +16,9 @@ namespace FPLedit.Shared
         public const int UNASSIGNED_ROUTE_ID = -1;
         public static TimetableVersion DefaultLinearVersion { get; set; } = TimetableVersion.JTG3_2;
 
-        private readonly XMLEntity sElm, tElm, trElm;
+        private readonly XMLEntity sElm, tElm, trElm, vElm;
 
-        private int nextStaId, nextRtId, nextTraId;
+        private int nextStaId, nextRtId, nextTraId, nextVehId;
 
         public bool Initialized { get; } = false;
         
@@ -49,6 +49,7 @@ namespace FPLedit.Shared
         private List<Station> stations;
         private readonly List<ITrain> trains;
         private readonly List<Transition> transitions;
+        private readonly List<Vehicle> vehicles;
 
         public IList<Station> Stations => stations.AsReadOnly();
 
@@ -75,7 +76,14 @@ namespace FPLedit.Shared
             trElm = new XMLEntity("transitions");
             Children.Add(sElm);
             Children.Add(tElm);
-            
+            Children.Add(trElm);
+
+            if (Version.CompareTo(TimetableVersion.JTG3_2) > 0)
+            {
+                vElm = new XMLEntity("vehicles");
+                Children.Add(vElm);
+            }
+
             tElm.ChildrenChangedDirect += OnTrainsChanged;
             
             routeCache = new Dictionary<int, Route>(); // Initialize empty route cache.
@@ -197,6 +205,24 @@ namespace FPLedit.Shared
             {
                 trElm = new XMLEntity("transitions");
                 Children.Add(trElm);
+            }
+
+            vehicles = new List<Vehicle>();
+            if (Version.CompareTo(TimetableVersion.JTG3_2) >= 0)
+            {
+                if (vElm != null)
+                {
+                    foreach (var c in trElm.Children.Where(x => x.XName == "veh")) // Filtert andere Elemente
+                        vehicles.Add(new Vehicle(c, this));
+                }
+                else
+                {
+                    vElm = new XMLEntity("vehicles");
+                    Children.Add(vElm);
+                }
+
+                if (vehicles.Any())
+                    nextVehId = vehicles.Max(v => v.Id);
             }
 
             // Höchste IDs ermitteln
@@ -379,6 +405,7 @@ namespace FPLedit.Shared
         public void RemoveTrain(ITrain tra)
         {
             RemoveTransition(tra, false); // Remove "orphaned" transitions
+            RemoveOrphanedVehicleStarts(tra);
 
             tra.ParentTimetable = null;
             trains.Remove(tra);
@@ -741,6 +768,16 @@ namespace FPLedit.Shared
         public bool HasTransition(ITrain tra, bool onlyAsFirst = true)
             => transitions.Any(t => t.First == tra.QualifiedId || (!onlyAsFirst && t.Next == tra.QualifiedId));
 
+        #endregion
+        
+        #region Fahrzeuge und Umläufe
+        
+        private void RemoveOrphanedVehicleStarts(ITrain tra)
+        {
+            foreach (var veh in vehicles)
+                veh.RemoveStartTrains(tra);
+        }
+        
         #endregion
         
         #region Uneindeutige Routen
