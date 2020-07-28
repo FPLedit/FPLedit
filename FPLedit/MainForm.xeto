@@ -7,31 +7,31 @@
   <c:MainForm.Menu>
     <MenuBar IncludeSystemItems="None">
       <MenuBar.ApplicationItems>
-        <ButtonMenuItem Text="&amp;Neu">
-          <ButtonMenuItem Text="&amp;Lineare Strecke" Click="LinearNewMenu_Click" />
-          <ButtonMenuItem Text="&amp;Netzwerk-Fahrplan" Click="NetworkNewMenu_Click" />
+        <ButtonMenuItem Text="{x:Static c:MainForm+L.MenuNew}">
+          <ButtonMenuItem Text="{x:Static c:MainForm+L.MenuNewLinear}" Click="LinearNewMenu_Click" />
+          <ButtonMenuItem Text="{x:Static c:MainForm+L.MenuNewNetwork}" Click="NetworkNewMenu_Click" />
         </ButtonMenuItem>
-        <ButtonMenuItem Text="Öffnen" Shortcut="Control,O" Click="OpenMenu_Click" />
-        <ButtonMenuItem Text="&amp;Speichern" Shortcut="Control,S" x:Name="saveMenu" Enabled="false" Click="SaveMenu_Click" />
-        <ButtonMenuItem Text="Speichern &amp;unter" Shortcut="Control,Shift,S" x:Name="saveAsMenu" Enabled="false" Click="SaveAsMenu_Click" />
-        <ButtonMenuItem Text="Letzte Dateien" x:Name="lastMenu" />
+        <ButtonMenuItem Text="{x:Static c:MainForm+L.MenuOpen}" Shortcut="Control,O" Click="OpenMenu_Click" />
+        <ButtonMenuItem Text="{x:Static c:MainForm+L.MenuSave}" Shortcut="Control,S" x:Name="saveMenu" Enabled="false" Click="SaveMenu_Click" />
+        <ButtonMenuItem Text="{x:Static c:MainForm+L.MenuSaveAs}" Shortcut="Control,Shift,S" x:Name="saveAsMenu" Enabled="false" Click="SaveAsMenu_Click" />
+        <ButtonMenuItem Text="{x:Static c:MainForm+L.MenuLastFiles}" x:Name="lastMenu" />
         <SeparatorMenuItem />
-        <ButtonMenuItem x:Name="importMenu" Text="&amp;Importieren" Click="ImportMenu_Click" />
-        <ButtonMenuItem Text="&amp;Exportieren" Shortcut="Control,E" x:Name="exportMenu" Enabled="false" Click="ExportMenu_Click" />
-        <ButtonMenuItem Text="&amp;Konvertieren" Shortcut="Control,K" x:Name="convertMenu" Enabled="false" Click="ConvertMenu_Click" />
+        <ButtonMenuItem x:Name="importMenu" Text="{x:Static c:MainForm+L.MenuImport}" Click="ImportMenu_Click" />
+        <ButtonMenuItem Text="{x:Static c:MainForm+L.MenuExport}" Shortcut="Control,E" x:Name="exportMenu" Enabled="false" Click="ExportMenu_Click" />
+        <ButtonMenuItem Text="{x:Static c:MainForm+L.MenuConvert}" Shortcut="Control,K" x:Name="convertMenu" Enabled="false" Click="ConvertMenu_Click" />
         <SeparatorMenuItem />
-        <ButtonMenuItem Text="Datei schließen" Click="CloseFileMenu_Click" />
+        <ButtonMenuItem Text="{x:Static c:MainForm+L.MenuClose}" Click="CloseFileMenu_Click" />
       </MenuBar.ApplicationItems>
       <MenuBar.QuitItem>
-        <ButtonMenuItem Text="&amp;Beenden" Click="QuitMenu_Click" />
+        <ButtonMenuItem Text="{x:Static c:MainForm+L.MenuQuit}" Click="QuitMenu_Click" />
       </MenuBar.QuitItem>
       <MenuBar.HelpItems>
-        <ButtonMenuItem Text="Einstellungen" Click="SettingsMenu_Click" />
+        <ButtonMenuItem Text="{x:Static c:MainForm+L.MenuSettings}" Click="SettingsMenu_Click" />
         <SeparatorMenuItem />
-        <ButtonMenuItem Text="Online Hilfe" Click="HelpMenu_Click" Shortcut="F1" />
+        <ButtonMenuItem Text="{x:Static c:MainForm+L.MenuOnlineHelp}" Click="HelpMenu_Click" Shortcut="F1" />
       </MenuBar.HelpItems>
       <MenuBar.AboutItem>
-        <ButtonMenuItem Text="Info" Click="AboutMenu_Click" />
+        <ButtonMenuItem Text="{x:Static c:MainForm+L.MenuAbout}" Click="AboutMenu_Click" />
       </MenuBar.AboutItem>
       <ButtonMenuItem Text="{x:Static c:MainForm.LocEditMenu}" />
       <ButtonMenuItem Text="{x:Static c:MainForm.LocPreviewMenu}" />
@@ -44,7 +44,7 @@
     <TableRow>
       <StackLayout x:Name="loadingStack" Orientation="Vertical" HorizontalContentAlignment="Center" Visible="false">
         <StackLayout Orientation="Horizontal" VerticalContentAlignment="Stretch" Spacing="10" Padding="30">
-          <Label>Lade Datei...</Label>
+          <Label>{x:Static c:MainForm+L.LoadingFile}</Label>
           <Spinner Enabled="true" />
         </StackLayout>
       </StackLayout>

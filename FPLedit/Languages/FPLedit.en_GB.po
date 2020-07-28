@@ -1,0 +1,381 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2020-07-28 20:15+0200\n"
+"PO-Revision-Date: 2020-07-28 20:15+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.3.1\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: .\n"
+
+#: Bootstrapper.cs:165
+msgid ""
+"Temp-Datei konnte nicht angelegt werden. Fallback-Dateipfad wird verwendet. "
+"Dies wird Probleme bereiten!"
+msgstr ""
+
+#: Bootstrapper.cs:180
+msgid "Temp-Verzeichnis konnte nicht geleert werden."
+msgstr "Temporary directory could not be cleared."
+
+#: Bootstrapper.cs:235
+#, csharp-format
+msgid "Anlegen der angeforderten Einstellungsdatei {0} ist fehlgeschlagen."
+msgstr ""
+
+#: Bootstrapper.cs:238
+#, csharp-format
+msgid ""
+"Der als config.path_redirect angegebene Ordnerpfad {0} existiert nicht! "
+"Verwende die Einstellungsdatei im Programmverzeichnis."
+msgstr ""
+
+#: Bootstrapper.cs:251
+msgid ""
+"Keine Einstellungsdatei zum Schreiben gefunden. Änderungen an "
+"Programmeinstellungen werden verworfen."
+msgstr ""
+"No writable config file found. All chnages to application settings will be "
+"lost."
+
+#: Editor/EditorPlugin.cs:29
+msgid "&Rückgängig"
+msgstr "&Undo"
+
+#: Editor/EditorPlugin.cs:33
+msgid "&Strecke bearbeiten (linear)"
+msgstr "Edit &stations (linear)"
+
+#: Editor/EditorPlugin.cs:36
+msgid "&Züge bearbeiten"
+msgstr "Edit t&rains"
+
+#: Editor/EditorPlugin.cs:44
+msgid "&Fahrplan bearbeiten"
+msgstr "Edit &timetable"
+
+#: Editor/EditorPlugin.cs:54
+msgid "Fahrplan&darstellung"
+msgstr "Timetable &appearance"
+
+#: Editor/EditorPlugin.cs:55
+msgid "Fi&lterregeln"
+msgstr "Fi&lter rules"
+
+#: FileHandler.cs:75
+msgid "Fahrplandatei speichern"
+msgstr "Save timetable file"
+
+#: FileHandler.cs:76
+msgid "Fahrplandatei öffnen"
+msgstr "Open timetable file"
+
+#: FileHandler.cs:77
+msgid "Fahrplandatei exportieren"
+msgstr "Export timetable file"
+
+#: FileHandler.cs:78
+msgid "Datei importieren"
+msgstr "Import file"
+
+#: FileHandler.cs:115
+msgid "Keine Importer gefunden, Import nicht möglich!"
+msgstr "Import is not possible as no importers have been found!"
+
+#: FileHandler.cs:127
+#, csharp-format
+msgid "Importiere Datei {0}"
+msgstr "Importing file {0}"
+
+#: FileHandler.cs:138
+msgid "Importieren fehlgeschlagen!"
+msgstr "Import failed!"
+
+#: FileHandler.cs:142
+msgid "Datei erfolgreich importiert!"
+msgstr "File imported successfully!"
+
+#: FileHandler.cs:170
+#, csharp-format
+msgid "Exportiere in Datei {0}"
+msgstr "Exporting to file {0}"
+
+#: FileHandler.cs:175
+msgid "Exportieren fehlgeschlagen!"
+msgstr "Export failed!"
+
+#: FileHandler.cs:177
+msgid "Exportieren erfolgreich abgeschlossen!"
+msgstr ""
+
+#: FileHandler.cs:219
+#, csharp-format
+msgid "Öffne Datei {0}"
+msgstr "Opening file {0}"
+
+#: FileHandler.cs:245
+msgid "Fehler beim Öffnen der Datei!"
+msgstr "Error while opening the file!"
+
+#: FileHandler.cs:249
+msgid "Datei erfolgeich geöffnet!"
+msgstr "File opened successfully!"
+
+#: FileHandler.cs:300
+#, csharp-format
+msgid "Speichere Datei {0}"
+msgstr "Saving file {0}"
+
+#: FileHandler.cs:311
+msgid "Speichern fehlgeschlagen!"
+msgstr "Save failed!"
+
+#: FileHandler.cs:315
+msgid "Speichern erfolgreich abgeschlossen!"
+msgstr "File saved succesfully!"
+
+#: FileHandler.cs:322
+msgid ""
+"Während dem Speichern wurde der Zustand verändert, daher ist Datei auf der "
+"Festplatte nicht mehr aktuell."
+msgstr ""
+
+#: FileHandler.cs:364
+msgid "Neue Datei erstellt"
+msgstr "New file created successfully"
+
+#: FileHandler.cs:416 FileHandler.cs:417
+msgid "Linear-Fahrplan"
+msgstr "Linear timetable"
+
+#: FileHandler.cs:416 FileHandler.cs:417
+msgid "Netzwerk-Fahrplan"
+msgstr "Network timetable"
+
+#: FileHandler.cs:424
+msgid "Zieldatei für Konvertierung wählen"
+msgstr ""
+
+#: FileHandler.cs:428 FileHandler.cs:496
+msgid "Konvertiere Datei..."
+msgstr "Converting file..."
+
+#: FileHandler.cs:432 FileHandler.cs:500
+msgid "Konvertieren erfolgreich abgeschlossen!"
+msgstr "Conversion successfully!"
+
+#: FileHandler.cs:505
+msgid "Dateikonvertierung fehlgeschlagen!"
+msgstr "Conversion failed!"
+
+#: FileHandler.cs:511
+msgid "Dateikonvertierung abgebrochen!"
+msgstr "Conversion aborted!"
+
+#: FileHandler.cs:524
+msgid ""
+"Während dem Ladevorgang wurden Daten geändert. Sollen diese noch einmal in "
+"die letzte Datei geschrieben werden?"
+msgstr ""
+
+#: FileHandler.cs:524
+msgid "Wollen Sie die noch nicht gespeicherten Änderungen speichern?"
+msgstr ""
+
+#: FileHandler.cs:539
+msgid "Eine andere Dateioperation ist bereits im Gange!"
+msgstr ""
+
+#: InfoForm.cs:17
+msgid "Erstellen von Fahrplanunterlagen für Modelleisenbahnen"
+msgstr ""
+
+#: InfoForm.cs:19
+msgid "Online-Dokumentation & Updates"
+msgstr ""
+
+#: InfoForm.cs:22
+msgid "alle FPLedit-Beta-Tester"
+msgstr "all FPLedit testers"
+
+#: LogControl.cs:21
+msgid "Alles löschen"
+msgstr "Clear"
+
+#: LogControl.cs:22
+msgid "Debug-Informationen anzeigen"
+msgstr "Show debug information"
+
+#: MainForm.xeto.cs:31 Program.cs:108
+msgid "&Bearbeiten"
+msgstr "&Edit"
+
+#: MainForm.xeto.cs:32
+msgid "&Vorschau"
+msgstr "&Preview"
+
+#: MainForm.xeto.cs:36
+msgid "Einstellungen"
+msgstr "Settings"
+
+#: MainForm.xeto.cs:37
+msgid "Datei schließen"
+msgstr "Close file"
+
+#: MainForm.xeto.cs:38
+msgid "Online Hilfe"
+msgstr "Online Help"
+
+#: MainForm.xeto.cs:39 Program.cs:117
+msgid "Info"
+msgstr "About"
+
+#: MainForm.xeto.cs:40
+msgid "&Beenden"
+msgstr "&Quit"
+
+#: MainForm.xeto.cs:41
+msgid "&Exportieren"
+msgstr "&Export"
+
+#: MainForm.xeto.cs:42
+msgid "&Konvertieren"
+msgstr "&Convert"
+
+#: MainForm.xeto.cs:43
+msgid "&Importieren"
+msgstr "&Import"
+
+#: MainForm.xeto.cs:44
+msgid "Letzte Dateien"
+msgstr "Last files"
+
+#: MainForm.xeto.cs:45
+msgid "Öffnen"
+msgstr "Open file"
+
+#: MainForm.xeto.cs:46
+msgid "&Speichern"
+msgstr "&Save file"
+
+#: MainForm.xeto.cs:47
+msgid "Speichern &unter"
+msgstr "Save file as"
+
+#: MainForm.xeto.cs:48
+msgid "&Neu"
+msgstr "New"
+
+#: MainForm.xeto.cs:49
+msgid "&Netzwerk-Fahrplan"
+msgstr "Network timetable"
+
+#: MainForm.xeto.cs:50
+msgid "&Lineare Strecke"
+msgstr "Linear timetable"
+
+#: MainForm.xeto.cs:52
+msgid "Lade Datei..."
+msgstr "Loading file..."
+
+#: MainForm.xeto.cs:118
+msgid "Exception auslösen"
+msgstr "Trigger exception"
+
+#: MainForm.xeto.cs:118
+msgid "Ausgelöste Exception"
+msgstr "Manually triggered exception"
+
+#: MainForm.xeto.cs:141
+#, csharp-format
+msgid "Fehlermeldung des letzten Absturzes konnte nicht angezeigt werden: {0}"
+msgstr "The error message of the last crash could not be displayed: {0}"
+
+#: MainForm.xeto.cs:170
+#, csharp-format
+msgid "Angegebene Startdatei {0} nicht gefunden!"
+msgstr "The supplied start file {0} could not be found!"
+
+#: Program.cs:105
+msgid "&Datei"
+msgstr "&File"
+
+#: Program.cs:106
+msgid "&Hilfe"
+msgstr "&Help"
+
+#: Program.cs:107
+msgid "&Ansicht"
+msgstr "&View"
+
+#: Program.cs:109
+msgid "Beenden"
+msgstr "&Quit"
+
+#: Program.cs:118
+msgid "Mitwirkende"
+msgstr "Contributors"
+
+#: Program.cs:119
+msgid "Lizenz"
+msgstr "License"
+
+#: Program.cs:120
+msgid "Entwicklung:"
+msgstr "Development:"
+
+#: Program.cs:121
+msgid "Design:"
+msgstr "Design:"
+
+#: Program.cs:122
+msgid "Dokumentation:"
+msgstr "Documentation:"
+
+#: Program.cs:171
+msgid "Gewählte Standardversion ist nicht R/W-kompatibel!"
+msgstr "The selected default file version is not R/W-compatible!"
+
+#: UndoManager.cs:46
+msgid ""
+"Fehler in einer Erweiterung: Vor jeder *möglichen* Änderung muss "
+"`StageUndoStep()` aufgerufen werden!"
+msgstr ""
+
+#: UpdateManager.cs:118
+msgid ""
+"FPLedit kann automatisch bei jedem Programmstart nach einer aktuelleren "
+"Version suchen.\n"
+"\n"
+"Dabei werden nur die IP-Adresse und der verwendete Betriebssystemtyp Ihres "
+"Computers an den Server übermittelt. Die IP-Adresse wird nur anonymisiert in "
+"Log-Dateien gespeichert; ein Rückschluss auf einzelne Benutzer ist daher "
+"nicht möglich."
+msgstr ""
+
+#: UpdateManager.cs:118
+msgid "Automatische Updateprüfung"
+msgstr "Check for available updates"
+
+#: UpdateManager.cs:128
+#, csharp-format
+msgid ""
+"Eine neue Programmversion ({0}) ist verfügbar! {1} Hier herunterladen: {2}"
+msgstr ""
+"A new version ({0}) of FPLedit is available! {1} Visit {2} to download!"
+
+#: UpdateManager.cs:130
+#, csharp-format
+msgid "Sie benutzen die aktuelleste Version von FPLedit ({0})!"
+msgstr "You are using the most recent version of FPLedit ({0})"
+
+#~ msgid "&File"
+#~ msgstr "&FIle"

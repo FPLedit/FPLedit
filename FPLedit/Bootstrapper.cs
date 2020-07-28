@@ -54,6 +54,10 @@ namespace FPLedit
 #pragma warning disable CA2000
             settings = new Settings(GetConfigStream(configPath));
 #pragma warning restore CA2000
+
+            var lang = settings.Get("lang", "en-GB");
+            LocalizationHelper.catalog = new NGettext.Catalog(new CustomMoLoader("FPLedit", "Languages"), new System.Globalization.CultureInfo(lang));
+            
             registry = new RegisterStore();
             Update = new UpdateManager(settings);
             undo = new UndoManager();
@@ -158,7 +162,7 @@ namespace FPLedit
             }
             catch
             {
-                Logger.Warning("Temp-Datei konnte nicht angelegt werden. Fallback-Dateipfad wird verwendet. Dies wird Probleme bereiten!");
+                Logger.Warning(LocalizationHelper._("Temp-Datei konnte nicht angelegt werden. Fallback-Dateipfad wird verwendet. Dies wird Probleme bereiten!"));
                 return Path.GetTempFileName();
             }
         }
@@ -173,7 +177,7 @@ namespace FPLedit
             }
             catch
             {
-                Logger.Warning("Temp-Verzeichnis konnte nicht geleert werden.");
+                Logger.Warning(LocalizationHelper._("Temp-Verzeichnis konnte nicht geleert werden."));
             }
         }
 
@@ -228,10 +232,10 @@ namespace FPLedit
                 createInUserDirectory = true;
                 
                 if (stream == null)
-                    PreBootstrapWarnings.Add($"Anlegen der angeforderten Einstellungsdatei {userPath} ist fehlgeschlagen.");
+                    PreBootstrapWarnings.Add(LocalizationHelper._("Anlegen der angeforderten Einstellungsdatei {0} ist fehlgeschlagen.", userPath));
             }
             else if (!string.IsNullOrEmpty(userPath))
-                PreBootstrapWarnings.Add($"Der als config.path_redirect angegebene Ordnerpfad {userDirectory} existiert nicht! Verwende die Einstellungsdatei im Programmverzeichnis.");
+                PreBootstrapWarnings.Add(LocalizationHelper._("Der als config.path_redirect angegebene Ordnerpfad {0} existiert nicht! Verwende die Einstellungsdatei im Programmverzeichnis.", userDirectory));
 
             // Extract default configuration file from application reosurces if no config file exists or it is empty.
             if (stream != null && stream.Length == 0 && stream.CanWrite)
@@ -244,7 +248,7 @@ namespace FPLedit
             }
             
             if (!stream?.CanWrite ?? true)
-                PreBootstrapWarnings.Add("Keine Einstellungsdatei zum Schreiben gefunden. Änderungen an Programmeinstellungen werden verworfen.");
+                PreBootstrapWarnings.Add(LocalizationHelper._("Keine Einstellungsdatei zum Schreiben gefunden. Änderungen an Programmeinstellungen werden verworfen."));
 
             return stream;
         }

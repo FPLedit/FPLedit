@@ -13,6 +13,7 @@ FPLedit currently uses the following dependencies from NuGet:
 * Eto.Forms - UI Framework
 * Jint - Javascript interpreter - used for templating
 * DeepCloner - used to generate checkpoints for undo operations
+* NGettext - used to localize the user interface
 * various .NET Core dependencies.
 * ... and some more dependencies that are only used to build / test the application.
 

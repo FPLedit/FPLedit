@@ -28,6 +28,10 @@ Die Volltexte der Lizenzen finden Sie als Textdatei im Ordner lib/licenses.
 * FPLedit verwendet Mono.Options
   MIT-License
   <https://github.com/xamarin/XamarinComponents/tree/master/XPlat/Mono.Options>
+  
+* FPLedit verwendet NGettext zu Lokalisierung
+  MIT-License
+  <https://github.com/VitaliiTsilnyk/NGettext>
 
 * FPLedit verwendet als Basis .NET Standard 2.0 und andere .NET-Pakete.
   MIT-License

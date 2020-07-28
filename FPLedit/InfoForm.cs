@@ -14,12 +14,12 @@ namespace FPLedit
 
             Logo = new Icon(ResourceHelper.GetResource("Resources.programm.ico"));
             ProgramName = "FPLedit";
-            ProgramDescription = "Erstellen von Fahrplanunterlagen für Modelleisenbahnen";
+            ProgramDescription = LocalizationHelper._("Erstellen von Fahrplanunterlagen für Modelleisenbahnen");
             
-            WebsiteLabel = "Online-Dokumentation & Updates";
+            WebsiteLabel = LocalizationHelper._("Online-Dokumentation & Updates");
             Website = new Uri("https://fahrplan.manuelhu.de/");
 
-            this.Developers = new[] { "Manuel Huber https://www.manuelhu.de", "alle FPLedit-Beta-Tester" };
+            this.Developers = new[] { "Manuel Huber https://www.manuelhu.de", LocalizationHelper._("alle FPLedit-Beta-Tester") };
         }
     }
 }

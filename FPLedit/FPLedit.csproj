@@ -34,6 +34,7 @@
     <EmbeddedResource Include="**/*.js" />
     <EmbeddedResource Include="Resources\*" />
     <EmbeddedResource Include="..\build_scripts\info\3rd-party.txt" Link="Resources\3rd-party.txt" />
+    <None Include="Languages/*.mo" CopyToOutputDirectory="Always" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FPLedit.Shared.Rendering\FPLedit.Shared.Rendering.csproj" />
@@ -68,6 +69,7 @@
     <PackageReference Include="Eto.Serialization.Xaml" Version="$(EtoVersion)" />
     <PackageReference Include="Jint" Version="3.0.0-beta-1828" />
     <PackageReference Include="Mono.Options" Version="6.6.0.161" />
+    <PackageReference Include="NGettext" Version="0.6.6" />
     <PackageReference Include="Portable.Xaml" Version="0.25.0" />
     <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
   </ItemGroup>
