@@ -115,7 +115,7 @@ namespace FPLedit
         {
             if (settings.Get("updater.auto", "") == "")
             {
-                var res = MessageBox.Show(LocalizationHelper._("FPLedit kann automatisch bei jedem Programmstart nach einer aktuelleren Version suchen.\n\nDabei werden nur die IP-Adresse und der verwendete Betriebssystemtyp Ihres Computers an den Server übermittelt. Die IP-Adresse wird nur anonymisiert in Log-Dateien gespeichert; ein Rückschluss auf einzelne Benutzer ist daher nicht möglich."), LocalizationHelper._("Automatische Updateprüfung"), MessageBoxButtons.YesNo, MessageBoxType.Question);
+                var res = MessageBox.Show(T._("FPLedit kann automatisch bei jedem Programmstart nach einer aktuelleren Version suchen.\n\nDabei werden nur die IP-Adresse und der verwendete Betriebssystemtyp Ihres Computers an den Server übermittelt. Die IP-Adresse wird nur anonymisiert in Log-Dateien gespeichert; ein Rückschluss auf einzelne Benutzer ist daher nicht möglich."), T._("Automatische Updateprüfung"), MessageBoxButtons.YesNo, MessageBoxType.Question);
                 settings.Set("updater.auto", res == DialogResult.Yes);
             }
 
@@ -125,9 +125,9 @@ namespace FPLedit
             CheckResult = (newAvailable, vi) =>
             {
                 if (newAvailable)
-                    log.Info(LocalizationHelper._("Eine neue Programmversion ({0}) ist verfügbar! {1} Hier herunterladen: {2}", vi.NewVersion, vi.Description ?? "", vi.DownloadUrl));
+                    log.Info(T._("Eine neue Programmversion ({0}) ist verfügbar! {1} Hier herunterladen: {2}", vi.NewVersion, vi.Description ?? "", vi.DownloadUrl));
                 else
-                    log.Info(LocalizationHelper._("Sie benutzen die aktuelleste Version von FPLedit ({0})!", CurrentVersionDisplay));
+                    log.Info(T._("Sie benutzen die aktuelleste Version von FPLedit ({0})!", CurrentVersionDisplay));
             };
 
             TextResult = log.Info;

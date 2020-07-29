@@ -92,7 +92,7 @@ namespace FPLedit.Extensibility
                 }
                 catch (FileLoadException)
                 {
-                    warnings.Add(LocalizationHelper._("Erweiterung {0} konnte nicht geladen werden, bitte überprüfen ob diese noch geblockt ist!", file.Name));
+                    warnings.Add(T._("Erweiterung {0} konnte nicht geladen werden, bitte überprüfen ob diese noch geblockt ist!", file.Name));
                 }
                 catch
                 {

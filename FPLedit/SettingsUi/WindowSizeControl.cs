@@ -7,12 +7,12 @@ namespace FPLedit.SettingsUi
 {
     public class WindowSizeControl : ISettingsControl
     {
-        public string DisplayName => LocalizationHelper._("Fenstergrößen");
+        public string DisplayName => T._("Fenstergrößen");
 
         public Control GetControl(IPluginInterface pluginInterface)
         {
 #pragma warning disable CA2000
-            var checkButton = new Button { Text = LocalizationHelper._("Gespeicherte Fenstergrößen löschen") };
+            var checkButton = new Button { Text = T._("Gespeicherte Fenstergrößen löschen") };
 #pragma warning restore CA2000
             var stack = new StackLayout(checkButton)
             {
@@ -24,7 +24,7 @@ namespace FPLedit.SettingsUi
             checkButton.Click += (s, e) =>
             {
                 SizeManager.Reset();
-                MessageBox.Show(LocalizationHelper._("Die Änderungen werden beim nächsten Programmstart angewendet!"), "FPLedit");
+                MessageBox.Show(T._("Die Änderungen werden beim nächsten Programmstart angewendet!"), "FPLedit");
             };
 
             return stack;

@@ -28,28 +28,28 @@ namespace FPLedit
         private TimetableChecks.TimetableCheckRunner checkRunner;
         private readonly LastFileHandler lfh;
         
-        public static readonly string LocEditMenu = LocalizationHelper._("&Bearbeiten");
-        public static readonly string LocPreviewMenu = LocalizationHelper._("&Vorschau");
+        public static readonly string LocEditMenu = T._("&Bearbeiten");
+        public static readonly string LocPreviewMenu = T._("&Vorschau");
         
         public static class L
         {
-            public static readonly string MenuSettings = LocalizationHelper._("Einstellungen");
-            public static readonly string MenuClose = LocalizationHelper._("Datei schließen");
-            public static readonly string MenuOnlineHelp = LocalizationHelper._("Online Hilfe");
-            public static readonly string MenuAbout = LocalizationHelper._("Info");
-            public static readonly string MenuQuit = LocalizationHelper._("&Beenden");
-            public static readonly string MenuExport = LocalizationHelper._("&Exportieren");
-            public static readonly string MenuConvert = LocalizationHelper._("&Konvertieren");
-            public static readonly string MenuImport = LocalizationHelper._("&Importieren");
-            public static readonly string MenuLastFiles = LocalizationHelper._("Letzte Dateien");
-            public static readonly string MenuOpen = LocalizationHelper._("Öffnen");
-            public static readonly string MenuSave = LocalizationHelper._("&Speichern");
-            public static readonly string MenuSaveAs = LocalizationHelper._("Speichern &unter");
-            public static readonly string MenuNew = LocalizationHelper._("&Neu");
-            public static readonly string MenuNewNetwork = LocalizationHelper._("&Netzwerk-Fahrplan");
-            public static readonly string MenuNewLinear = LocalizationHelper._("&Lineare Strecke");
+            public static readonly string MenuSettings = T._("Einstellungen");
+            public static readonly string MenuClose = T._("Datei schließen");
+            public static readonly string MenuOnlineHelp = T._("Online Hilfe");
+            public static readonly string MenuAbout = T._("Info");
+            public static readonly string MenuQuit = T._("&Beenden");
+            public static readonly string MenuExport = T._("&Exportieren");
+            public static readonly string MenuConvert = T._("&Konvertieren");
+            public static readonly string MenuImport = T._("&Importieren");
+            public static readonly string MenuLastFiles = T._("Letzte Dateien");
+            public static readonly string MenuOpen = T._("Öffnen");
+            public static readonly string MenuSave = T._("&Speichern");
+            public static readonly string MenuSaveAs = T._("Speichern &unter");
+            public static readonly string MenuNew = T._("&Neu");
+            public static readonly string MenuNewNetwork = T._("&Netzwerk-Fahrplan");
+            public static readonly string MenuNewLinear = T._("&Lineare Strecke");
             
-            public static readonly string LoadingFile = LocalizationHelper._("Lade Datei...");
+            public static readonly string LoadingFile = T._("Lade Datei...");
         }
 
         public MainForm(LastFileHandler lfh, CrashReporting.CrashReporter crashReporter, Bootstrapper bootstrapper)
@@ -115,7 +115,7 @@ namespace FPLedit
 #pragma warning disable CA2000
 #if DEBUG
             Menu.HelpMenu.Items.Add(new SeparatorMenuItem());
-            Menu.HelpMenu.CreateItem(LocalizationHelper._("Exception auslösen"), clickHandler: (s, ev) => throw new Exception(LocalizationHelper._("Ausgelöste Exception")));
+            Menu.HelpMenu.CreateItem(T._("Exception auslösen"), clickHandler: (s, ev) => throw new Exception(T._("Ausgelöste Exception")));
 #endif
 #pragma warning restore CA2000
             
@@ -138,7 +138,7 @@ namespace FPLedit
                 }
                 catch (Exception ex)
                 {
-                    Bootstrapper.Logger.Error(LocalizationHelper._("Fehlermeldung des letzten Absturzes konnte nicht angezeigt werden: {0}", ex.Message));
+                    Bootstrapper.Logger.Error(T._("Fehlermeldung des letzten Absturzes konnte nicht angezeigt werden: {0}", ex.Message));
                     CrashReporter.RemoveCrashFlag(); // Der Crash crasht sogar noch die Fehlerbehandlung...
                 }
             }
@@ -167,7 +167,7 @@ namespace FPLedit
                     lfh.AddLastFile(fn);
                 }
                 else
-                    Bootstrapper.Logger.Error(LocalizationHelper._("Angegebene Startdatei {0} nicht gefunden!", fn));
+                    Bootstrapper.Logger.Error(T._("Angegebene Startdatei {0} nicht gefunden!", fn));
             }
             Bootstrapper.FullSettings.Remove("restart.file");
         }

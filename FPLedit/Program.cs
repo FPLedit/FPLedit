@@ -102,11 +102,11 @@ namespace FPLedit
             {
                 e.LocalizedText = e.Text switch
                 {
-                    "&File" => LocalizationHelper._("&Datei"),
-                    "&Help" => LocalizationHelper._("&Hilfe"),
-                    "&View" => LocalizationHelper._("&Ansicht"),
-                    "&Edit" => LocalizationHelper._("&Bearbeiten"),
-                    "Quit" => LocalizationHelper._("Beenden"),
+                    "&File" => T._("&Datei"),
+                    "&Help" => T._("&Hilfe"),
+                    "&View" => T._("&Ansicht"),
+                    "&Edit" => T._("&Bearbeiten"),
+                    "Quit" => T._("Beenden"),
                     _ => e.Text
                 };
             }
@@ -114,12 +114,12 @@ namespace FPLedit
             {
                 e.LocalizedText = e.Text switch
                 {
-                    "About" => LocalizationHelper._("Info"),
-                    "Credits" => LocalizationHelper._("Mitwirkende"),
-                    "License" => LocalizationHelper._("Lizenz"),
-                    "Developers:" => LocalizationHelper._("Entwicklung:"),
-                    "Designers:" => LocalizationHelper._("Design:"),
-                    "Documenters:" => LocalizationHelper._("Dokumentation:"),
+                    "About" => T._("Info"),
+                    "Credits" => T._("Mitwirkende"),
+                    "License" => T._("Lizenz"),
+                    "Developers:" => T._("Entwicklung:"),
+                    "Designers:" => T._("Design:"),
+                    "Documenters:" => T._("Dokumentation:"),
                     _ => e.Text
                 };
             }
@@ -168,7 +168,7 @@ namespace FPLedit
             Timetable.DefaultLinearVersion = bootstrapper.FullSettings.GetEnum("core.default-file-format", Timetable.DefaultLinearVersion);
             if (Timetable.DefaultLinearVersion.GetCompat() != TtVersionCompatType.ReadWrite)
             {
-                bootstrapper.PreBootstrapWarnings.Add(LocalizationHelper._("Gewählte Standardversion ist nicht R/W-kompatibel!"));
+                bootstrapper.PreBootstrapWarnings.Add(T._("Gewählte Standardversion ist nicht R/W-kompatibel!"));
                 Timetable.DefaultLinearVersion = origDefaultVersion;
             }
             

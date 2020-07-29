@@ -79,7 +79,7 @@ namespace FPLedit.Editor.Rendering
                     r = sta.Routes[0];
                 if (!sta.Routes.Contains(r))
                 {
-                    MessageBox.Show(LocalizationHelper._("Die Station liegt auf mehreren Strecken. Bitte zuerst die Strecke auswählen, für die die Station bearbeitet werden soll!"),
+                    MessageBox.Show(T._("Die Station liegt auf mehreren Strecken. Bitte zuerst die Strecke auswählen, für die die Station bearbeitet werden soll!"),
                         "FPLedit", MessageBoxButtons.OK, MessageBoxType.Warning);
                     return;
                 }
@@ -99,13 +99,13 @@ namespace FPLedit.Editor.Rendering
                     var sta = (Station) s;
                     if (pluginInterface.Timetable.WouldProduceAmbiguousRoute(sta))
                     {
-                        MessageBox.Show(LocalizationHelper._("Sie versuchen eine Station zu löschen, ohne die danach zwei Routen zusammenfallen, das heißt zwei Stationen auf mehr als einer Route ohne Zwischenstation verbunden sind.\n\n" +
+                        MessageBox.Show(T._("Sie versuchen eine Station zu löschen, ohne die danach zwei Routen zusammenfallen, das heißt zwei Stationen auf mehr als einer Route ohne Zwischenstation verbunden sind.\n\n" +
                                                              "Der Konflikt kann nicht automatisch aufgehoben werden."), "FPLedit", MessageBoxType.Error);
                         return;
                     }
                     if (sta.IsJunction)
                     {
-                        MessageBox.Show(LocalizationHelper._("Sie versuchen eine Station zu löschen, die an einem Kreuzungspunkt zweier Strecken liegt. Dies ist leider nicht möglich."), "FPLedit", MessageBoxType.Error);
+                        MessageBox.Show(T._("Sie versuchen eine Station zu löschen, die an einem Kreuzungspunkt zweier Strecken liegt. Dies ist leider nicht möglich."), "FPLedit", MessageBoxType.Error);
                         return;
                     }
                     
@@ -187,9 +187,9 @@ namespace FPLedit.Editor.Rendering
 
         private static class L
         {
-            public static readonly string NewStation = LocalizationHelper._("&Neue Station");
-            public static readonly string NewLine = LocalizationHelper._("Neue &Strecke");
-            public static readonly string JoinLines = LocalizationHelper._("Strecken &zusammenführen");
+            public static readonly string NewStation = T._("&Neue Station");
+            public static readonly string NewLine = T._("Neue &Strecke");
+            public static readonly string JoinLines = T._("Strecken &zusammenführen");
         }
     }
 }

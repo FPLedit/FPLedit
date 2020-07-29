@@ -72,10 +72,10 @@ namespace FPLedit
             open = new XMLImport();
             save = new XMLExport();
 
-            saveFileDialog = new SaveFileDialog { Title = LocalizationHelper._("Fahrplandatei speichern") };
-            openFileDialog = new OpenFileDialog { Title = LocalizationHelper._("Fahrplandatei öffnen") };
-            exportFileDialog = new SaveFileDialog { Title = LocalizationHelper._("Fahrplandatei exportieren") };
-            importFileDialog = new OpenFileDialog { Title = LocalizationHelper._("Datei importieren") };
+            saveFileDialog = new SaveFileDialog { Title = T._("Fahrplandatei speichern") };
+            openFileDialog = new OpenFileDialog { Title = T._("Fahrplandatei öffnen") };
+            exportFileDialog = new SaveFileDialog { Title = T._("Fahrplandatei exportieren") };
+            importFileDialog = new OpenFileDialog { Title = T._("Datei importieren") };
 
             saveFileDialog.AddLegacyFilter(save.Filter);
             openFileDialog.AddLegacyFilter(open.Filter);
@@ -112,7 +112,7 @@ namespace FPLedit
 
             if (importers.Length == 0)
             {
-                pluginInterface.Logger.Error(LocalizationHelper._("Keine Importer gefunden, Import nicht möglich!"));
+                pluginInterface.Logger.Error(T._("Keine Importer gefunden, Import nicht möglich!"));
                 return;
             }
 
@@ -124,7 +124,7 @@ namespace FPLedit
             if (importFileDialog.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
             {
                 IImport import = importers[importFileDialog.CurrentFilterIndex];
-                pluginInterface.Logger.Info(LocalizationHelper._("Importiere Datei {0}", importFileDialog.FileName));
+                pluginInterface.Logger.Info(T._("Importiere Datei {0}", importFileDialog.FileName));
                 
                 InternalCloseFile();
 
@@ -135,11 +135,11 @@ namespace FPLedit
                     {
                         if (t.Result == null)
                         {
-                            pluginInterface.Logger.Error(LocalizationHelper._("Importieren fehlgeschlagen!"));
+                            pluginInterface.Logger.Error(T._("Importieren fehlgeschlagen!"));
                             return;
                         }
 
-                        pluginInterface.Logger.Info(LocalizationHelper._("Datei erfolgreich importiert!"));
+                        pluginInterface.Logger.Info(T._("Datei erfolgreich importiert!"));
 
                         if (FileState.RevisionCounter != rev || FileState.FileNameRevisionCounter != frev)
                             if (!NotifyIfUnsaved(true)) // Ask again
@@ -167,14 +167,14 @@ namespace FPLedit
                 var filename = exportFileDialog.FileName;
                 pluginInterface.Settings.Set("exporter.last", exportFileDialog.CurrentFilterIndex);
 
-                pluginInterface.Logger.Info(LocalizationHelper._("Exportiere in Datei {0}", filename));
+                pluginInterface.Logger.Info(T._("Exportiere in Datei {0}", filename));
                 var tsk = export.GetAsyncSafeExport(Timetable.Clone(), filename, pluginInterface);
                 tsk.ContinueWith((t, o) =>
                 {
                     if (t.Result == false)
-                        pluginInterface.Logger.Error(LocalizationHelper._("Exportieren fehlgeschlagen!"));
+                        pluginInterface.Logger.Error(T._("Exportieren fehlgeschlagen!"));
                     else
-                        pluginInterface.Logger.Info(LocalizationHelper._("Exportieren erfolgreich abgeschlossen!"));
+                        pluginInterface.Logger.Info(T._("Exportieren erfolgreich abgeschlossen!"));
                 }, null, TaskScheduler.Default);
                 tsk.Start(); // Non-blocking operation.
             }
@@ -216,7 +216,7 @@ namespace FPLedit
         {
             InternalCloseFile();
 
-            pluginInterface.Logger.Info(LocalizationHelper._("Öffne Datei {0}", filename));
+            pluginInterface.Logger.Info(T._("Öffne Datei {0}", filename));
             
             // Load sidecar cache file.
             cache.Clear();
@@ -242,11 +242,11 @@ namespace FPLedit
                 {
                     if (t.Result == null)
                     {
-                        pluginInterface.Logger.Error(LocalizationHelper._("Fehler beim Öffnen der Datei!"));
+                        pluginInterface.Logger.Error(T._("Fehler beim Öffnen der Datei!"));
                         return;
                     }
 
-                    pluginInterface.Logger.Info(LocalizationHelper._("Datei erfolgeich geöffnet!"));
+                    pluginInterface.Logger.Info(T._("Datei erfolgeich geöffnet!"));
 
                     if (FileState.RevisionCounter != rev || FileState.FileNameRevisionCounter != frev)
                         if (!NotifyIfUnsaved(true)) // Ask again
@@ -297,7 +297,7 @@ namespace FPLedit
 
             var (rev, frev) = (FileState.RevisionCounter, FileState.FileNameRevisionCounter);
 
-            pluginInterface.Logger.Info(LocalizationHelper._("Speichere Datei {0}", filename));
+            pluginInterface.Logger.Info(T._("Speichere Datei {0}", filename));
             
             var clone = Timetable.Clone();
             
@@ -308,18 +308,18 @@ namespace FPLedit
                 {
                     if (t.Result == false)
                     {
-                        pluginInterface.Logger.Error(LocalizationHelper._("Speichern fehlgeschlagen!"));
+                        pluginInterface.Logger.Error(T._("Speichern fehlgeschlagen!"));
                         return;
                     }
 
-                    pluginInterface.Logger.Info(LocalizationHelper._("Speichern erfolgreich abgeschlossen!"));
+                    pluginInterface.Logger.Info(T._("Speichern erfolgreich abgeschlossen!"));
 
                     if (FileState.RevisionCounter == rev)
                         FileState.Saved = true;
                     if (FileState.FileNameRevisionCounter == frev)
                         FileState.FileName = filename;
                     if (FileState.RevisionCounter != rev || FileState.FileNameRevisionCounter != frev)
-                        pluginInterface.Logger.Warning(LocalizationHelper._("Während dem Speichern wurde der Zustand verändert, daher ist Datei auf der Festplatte nicht mehr aktuell."));
+                        pluginInterface.Logger.Warning(T._("Während dem Speichern wurde der Zustand verändert, daher ist Datei auf der Festplatte nicht mehr aktuell."));
 
                     // Create or delete sidecar file.
                     var cacheFile = filename + "-cache";
@@ -361,7 +361,7 @@ namespace FPLedit
             undo.ClearHistory();
             cache.Clear();
             
-            pluginInterface.Logger.Info(LocalizationHelper._("Neue Datei erstellt"));
+            pluginInterface.Logger.Info(T._("Neue Datei erstellt"));
             FileOpened?.Invoke(this, null);
         }
         
@@ -413,23 +413,23 @@ namespace FPLedit
                 return;
             
             IExport exp = (Timetable.Type == TimetableType.Linear) ? (IExport) new NetworkExport() : new LinearExport();
-            string orig = (Timetable.Type == TimetableType.Linear) ? LocalizationHelper._("Linear-Fahrplan") : LocalizationHelper._("Netzwerk-Fahrplan");
-            string dest = (Timetable.Type == TimetableType.Linear) ? LocalizationHelper._("Netzwerk-Fahrplan") : LocalizationHelper._("Linear-Fahrplan");
+            string orig = (Timetable.Type == TimetableType.Linear) ? T._("Linear-Fahrplan") : T._("Netzwerk-Fahrplan");
+            string dest = (Timetable.Type == TimetableType.Linear) ? T._("Netzwerk-Fahrplan") : T._("Linear-Fahrplan");
 
             if (MessageBox.Show($"Die aktuelle Datei ist ein {orig}. Es wird zu einem {dest} konvertiert.", "FPLedit", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
                 return;
 
             using (var sfd = new SaveFileDialog())
             {
-                sfd.Title = LocalizationHelper._("Zieldatei für Konvertierung wählen");
+                sfd.Title = T._("Zieldatei für Konvertierung wählen");
                 sfd.AddLegacyFilter(exp.Filter);
                 if (sfd.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
                 {
-                    pluginInterface.Logger.Info(LocalizationHelper._("Konvertiere Datei..."));
+                    pluginInterface.Logger.Info(T._("Konvertiere Datei..."));
                     bool ret = exp.SafeExport(Timetable, sfd.FileName, pluginInterface);
                     if (ret == false)
                         return;
-                    pluginInterface.Logger.Info(LocalizationHelper._("Konvertieren erfolgreich abgeschlossen!"));
+                    pluginInterface.Logger.Info(T._("Konvertieren erfolgreich abgeschlossen!"));
                     InternalOpen(sfd.FileName, true);
                 }
             }
@@ -493,22 +493,22 @@ namespace FPLedit
 
             if (!string.IsNullOrEmpty(newFn))
             {
-                pluginInterface.Logger.Info(LocalizationHelper._("Konvertiere Datei..."));
+                pluginInterface.Logger.Info(T._("Konvertiere Datei..."));
                 var ret = exp.SafeExport(tt, newFn, pluginInterface);
                 if (ret)
                 {
-                    pluginInterface.Logger.Info(LocalizationHelper._("Konvertieren erfolgreich abgeschlossen!"));
+                    pluginInterface.Logger.Info(T._("Konvertieren erfolgreich abgeschlossen!"));
                     InternalOpen(newFn, false); // We are already in an async context, so we can execute synchronously.
                     return true; // Do not exit async operation.
                 }
 
-                pluginInterface.Logger.Error(LocalizationHelper._("Dateikonvertierung fehlgeschlagen!"));
+                pluginInterface.Logger.Error(T._("Dateikonvertierung fehlgeschlagen!"));
             }
             else
             {
                 if (optional)
                     return false; // We asked for an optional update, so we do not exit the async operation.
-                pluginInterface.Logger.Warning(LocalizationHelper._("Dateikonvertierung abgebrochen!"));
+                pluginInterface.Logger.Warning(T._("Dateikonvertierung abgebrochen!"));
             }
 
             AsyncBlockingOperation = false;
@@ -521,7 +521,7 @@ namespace FPLedit
         {
             if (!FileState.Saved && FileState.Opened)
             {
-                DialogResult res = MessageBox.Show(asyncChange ? LocalizationHelper._("Während dem Ladevorgang wurden Daten geändert. Sollen diese noch einmal in die letzte Datei geschrieben werden?") : LocalizationHelper._("Wollen Sie die noch nicht gespeicherten Änderungen speichern?"),
+                DialogResult res = MessageBox.Show(asyncChange ? T._("Während dem Ladevorgang wurden Daten geändert. Sollen diese noch einmal in die letzte Datei geschrieben werden?") : T._("Wollen Sie die noch nicht gespeicherten Änderungen speichern?"),
                     "FPLedit", MessageBoxButtons.YesNoCancel);
 
                 if (res == DialogResult.Yes)
@@ -536,7 +536,7 @@ namespace FPLedit
         {
             if (AsyncBlockingOperation)
             {
-                pluginInterface.Logger.Error(LocalizationHelper._("Eine andere Dateioperation ist bereits im Gange!"));
+                pluginInterface.Logger.Error(T._("Eine andere Dateioperation ist bereits im Gange!"));
                 return false;
             }
 

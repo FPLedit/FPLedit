@@ -82,7 +82,7 @@ namespace FPLedit.TimetableChecks
                 Spacing = new Eto.Drawing.Size(5, 5),
             };
             gridView = new GridView();
-            gridView.AddColumn<string>(s => s, LocalizationHelper._("Meldung"));
+            gridView.AddColumn<string>(s => s, T._("Meldung"));
             stack.Add(gridView, 0, 0);
 
             form = new FForm()
@@ -90,7 +90,7 @@ namespace FPLedit.TimetableChecks
                 Content = stack,
                 Resizable = true,
                 Size = new Eto.Drawing.Size(600, 400),
-                Title = LocalizationHelper._("Überprüfungen"),
+                Title = T._("Überprüfungen"),
             };
             form.Closing += (s, e) =>
             {

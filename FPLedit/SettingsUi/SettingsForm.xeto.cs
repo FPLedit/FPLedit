@@ -61,8 +61,8 @@ namespace FPLedit.SettingsUi
 
         private static class L
         {
-            public static readonly string Close = LocalizationHelper._("Schließen");
-            public static readonly string Title = LocalizationHelper._("Einstellungen");
+            public static readonly string Close = T._("Schließen");
+            public static readonly string Title = T._("Einstellungen");
         }
     }
 }

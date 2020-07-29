@@ -81,10 +81,10 @@ namespace FPLedit.Editor.Rendering
 
             // Richtungsangaben zeichnen
             if (prev != null)
-                e.Graphics.DrawText(font, textColor, 5, 5, LocalizationHelper._("von {0}", prev.SName));
+                e.Graphics.DrawText(font, textColor, 5, 5, T._("von {0}", prev.SName));
             if (next != null)
             {
-                var nextText = LocalizationHelper._("nach {0}", next.SName);
+                var nextText = T._("nach {0}", next.SName);
                 var nextSize = e.Graphics.MeasureString(font, nextText);
                 e.Graphics.DrawText(font, textColor, Width - 5 - nextSize.Width, 5, nextText);
             }
@@ -188,7 +188,7 @@ namespace FPLedit.Editor.Rendering
             }
 
             // Button für neue Gleise
-            var textWidth = (int)e.Graphics.MeasureString(font, LocalizationHelper._("Neues Gleis hinzufügen")).Width;
+            var textWidth = (int)e.Graphics.MeasureString(font, T._("Neues Gleis hinzufügen")).Width;
             var addBtn = new RenderBtn<Track>(null, new Point(midx - (textWidth / 2) - 5, y - 8), new Size(textWidth + 10, 16), Colors.LightGrey, "Neues Gleis hinzufügen");
             buttons.Add(addBtn);
             addBtn.Click += AddBtn_Click;
@@ -242,7 +242,7 @@ namespace FPLedit.Editor.Rendering
         {
             editingButton = (RenderBtn<Track>) sender;
             var oldName = editingButton.Tag.Name;
-            var newName = Shared.UI.InputBox.Query(ParentWindow, LocalizationHelper._("Gleisnamen bearbeiten"), oldName);
+            var newName = Shared.UI.InputBox.Query(ParentWindow, T._("Gleisnamen bearbeiten"), oldName);
             if (newName != null && newName != oldName)
                 CommitNameEdit(oldName, newName);
         }
@@ -252,7 +252,7 @@ namespace FPLedit.Editor.Rendering
             var duplicate = Tracks.Any(t => t != editingButton.Tag && t.Name == newName);
             if (duplicate)
             {
-                MessageBox.Show(LocalizationHelper._("Ein Gleis mit der Bezeichnung {0} ist bereits vorhanden. Bitte wählen Sie einen anderen Namen!", newName), MessageBoxType.Error);
+                MessageBox.Show(T._("Ein Gleis mit der Bezeichnung {0} ist bereits vorhanden. Bitte wählen Sie einen anderen Namen!", newName), MessageBoxType.Error);
                 return;
             }
 

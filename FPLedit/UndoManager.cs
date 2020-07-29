@@ -43,7 +43,7 @@ namespace FPLedit
         public void AddUndoStep()
         {
             if (stagedStep == null)
-                throw new Exception(LocalizationHelper._("Fehler in einer Erweiterung: Vor jeder *möglichen* Änderung muss `StageUndoStep()` aufgerufen werden!"));
+                throw new Exception(T._("Fehler in einer Erweiterung: Vor jeder *möglichen* Änderung muss `StageUndoStep()` aufgerufen werden!"));
 
             // Push
             steps[pointer] = stagedStep;

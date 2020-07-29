@@ -8,7 +8,7 @@ namespace FPLedit.NonDefaultFiletypes
 {
     internal sealed class NetworkExport : BaseConverterFileType, IExport
     {
-        public string Filter => LocalizationHelper._("Fahrplan Dateien (*.fpl)|*.fpl");
+        public string Filter => T._("Fahrplan Dateien (*.fpl)|*.fpl");
 
         public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[] flags = null)
         {

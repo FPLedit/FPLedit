@@ -15,6 +15,6 @@ namespace FPLedit.NonDefaultFiletypes
             return new XMLExport().ExportGenericNode(clone, stream, pluginInterface, flags);
         }
 
-        public string Filter => LocalizationHelper._("Fahrplan Dateien nur mit Stationen (Streckenexport) (*.fpl)|*.fpl");
+        public string Filter => T._("Fahrplan Dateien nur mit Stationen (Streckenexport) (*.fpl)|*.fpl");
     }
 }

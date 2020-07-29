@@ -32,7 +32,7 @@ namespace FPLedit.TimetableChecks
 
                 if (hadAttrsUpgrade.Any())
                 {
-                    return LocalizationHelper._("Aufgrund eines Fehlers in früheren Versionen von FPLedit mussten leider einige Höchstgeschwindigkeiten und Wellenlinienangaben zurückgesetzt werden. Die betroffenen Stationen sind: {0}",
+                    return T._("Aufgrund eines Fehlers in früheren Versionen von FPLedit mussten leider einige Höchstgeschwindigkeiten und Wellenlinienangaben zurückgesetzt werden. Die betroffenen Stationen sind: {0}",
                         string.Join(", ", hadAttrsUpgrade.Distinct().Select(s => s.SName)));
                 }
             }

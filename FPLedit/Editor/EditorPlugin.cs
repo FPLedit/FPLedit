@@ -26,14 +26,14 @@ namespace FPLedit.Editor
 
             editRoot = (ButtonMenuItem)((MenuBar)pluginInterface.Menu).GetItem(MainForm.LocEditMenu);
 
-            undoItem = editRoot.CreateItem(LocalizationHelper._("&Rückgängig"), enabled: false, shortcut: Keys.Control | Keys.Z, clickHandler: (s, e) => pluginInterface.Undo());
+            undoItem = editRoot.CreateItem(T._("&Rückgängig"), enabled: false, shortcut: Keys.Control | Keys.Z, clickHandler: (s, e) => pluginInterface.Undo());
 
             editRoot.Items.Add(new SeparatorMenuItem());
 
-            editLineItem = editRoot.CreateItem(LocalizationHelper._("&Strecke bearbeiten (linear)"), enabled: false, shortcut: Keys.Control | Keys.L,
+            editLineItem = editRoot.CreateItem(T._("&Strecke bearbeiten (linear)"), enabled: false, shortcut: Keys.Control | Keys.L,
                 clickHandler: (s, e) => ShowForm(new LineEditForm(pluginInterface, Timetable.LINEAR_ROUTE_ID)));
 
-            editTrainsItem = editRoot.CreateItem(LocalizationHelper._("&Züge bearbeiten"), enabled: false, shortcut: Keys.Control | Keys.R);
+            editTrainsItem = editRoot.CreateItem(T._("&Züge bearbeiten"), enabled: false, shortcut: Keys.Control | Keys.R);
             editTrainsItem.Click += (s, e) =>
             {
                 if (pluginInterface.Timetable.Type == TimetableType.Linear)
@@ -41,7 +41,7 @@ namespace FPLedit.Editor
                 else ShowForm(new Network.NetworkTrainsEditForm(pluginInterface));
             };
 
-            editTimetableItem = editRoot.CreateItem(LocalizationHelper._("&Fahrplan bearbeiten"), enabled: false , shortcut: Keys.Control | Keys.T);
+            editTimetableItem = editRoot.CreateItem(T._("&Fahrplan bearbeiten"), enabled: false , shortcut: Keys.Control | Keys.T);
             editTimetableItem.Click += (s, e) =>
             {
                 if (pluginInterface.Timetable.Type == TimetableType.Linear)
@@ -51,8 +51,8 @@ namespace FPLedit.Editor
 
             editRoot.Items.Add(new SeparatorMenuItem());
 
-            designItem = editRoot.CreateItem(LocalizationHelper._("Fahrplan&darstellung"), enabled: false, clickHandler: (s, e) => ShowForm(new RenderSettingsForm(pluginInterface)));
-            filterItem = editRoot.CreateItem(LocalizationHelper._("Fi&lterregeln"), enabled: false, clickHandler: (s, e) => ShowForm(new Filters.FilterForm(pluginInterface)));
+            designItem = editRoot.CreateItem(T._("Fahrplan&darstellung"), enabled: false, clickHandler: (s, e) => ShowForm(new RenderSettingsForm(pluginInterface)));
+            filterItem = editRoot.CreateItem(T._("Fi&lterregeln"), enabled: false, clickHandler: (s, e) => ShowForm(new Filters.FilterForm(pluginInterface)));
         }
 
         private void ShowForm(Dialog<DialogResult> form)

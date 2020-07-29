@@ -16,7 +16,7 @@ namespace FPLedit.SettingsUi
             this.mg = mg;
             this.restartable = restartable;
         }
-        public string DisplayName => LocalizationHelper._("Erweiterungen");
+        public string DisplayName => T._("Erweiterungen");
         public Control GetControl(IPluginInterface pluginInterface) => new ExtensionsForm(mg, restartable);
     }
     
@@ -63,7 +63,7 @@ namespace FPLedit.SettingsUi
 
         private void ResetButton_Click(object sender, EventArgs e)
         {
-            var res = MessageBox.Show(LocalizationHelper._("Möchten sie das Programm jetzt neu starten?"), "FPLedit", MessageBoxButtons.YesNo);
+            var res = MessageBox.Show(T._("Möchten sie das Programm jetzt neu starten?"), "FPLedit", MessageBoxButtons.YesNo);
             if (res == DialogResult.Yes)
                 restartable.RestartWithCurrentFile();
         }
@@ -74,7 +74,7 @@ namespace FPLedit.SettingsUi
                 return;
             var plg = ((ListItem)lb.Items[lb.SelectedIndex]).Tag as PluginInfo;
             if (plg.Author != null)
-                infoLabel.Text = LocalizationHelper._("Autor:") + " " + plg.Author + (plg.SecurityContext == SecurityContext.Official ? " " + LocalizationHelper._("[Offizielle Erweiterung]") : "");
+                infoLabel.Text = T._("Autor:") + " " + plg.Author + (plg.SecurityContext == SecurityContext.Official ? " " + T._("[Offizielle Erweiterung]") : "");
             else
                 infoLabel.Text = "";
         }
@@ -102,7 +102,7 @@ namespace FPLedit.SettingsUi
                 var pluginInfo = (PluginInfo)item.Tag;
                 if (pluginInfo.SecurityContext == SecurityContext.ThirdParty)
                 {
-                    var res = MessageBox.Show(LocalizationHelper._("Die Erweiterung {0} stammt nicht vom FPLedit-Entwickler. Sie sollten die Erweiterung nur aktivieren, wenn Sie " +
+                    var res = MessageBox.Show(T._("Die Erweiterung {0} stammt nicht vom FPLedit-Entwickler. Sie sollten die Erweiterung nur aktivieren, wenn Sie " +
                         "sich sicher sein, dass sie aus einer vertrauenswürdigen Quelle stammt. Bösartige Erweiterungen könnten möglicherweise Schadcode auf dem System ausführen.", pluginInfo.Name),
                         "Erweiterung aktivieren", MessageBoxButtons.YesNo, MessageBoxType.Warning);
                     if (res == DialogResult.No)
@@ -121,10 +121,10 @@ namespace FPLedit.SettingsUi
 
         private static class L
         {
-            public static readonly string Activated = LocalizationHelper._("Aktiviert");
-            public static readonly string Deactivated = LocalizationHelper._("Deaktiviert");
-            public static readonly string RestartInfo = LocalizationHelper._("Die Änderungen treten erst nach dem nächsten Programmstart in Kraft.");
-            public static readonly string RestartButton = LocalizationHelper._("Jetzt neu starten");
+            public static readonly string Activated = T._("Aktiviert");
+            public static readonly string Deactivated = T._("Deaktiviert");
+            public static readonly string RestartInfo = T._("Die Änderungen treten erst nach dem nächsten Programmstart in Kraft.");
+            public static readonly string RestartButton = T._("Jetzt neu starten");
         }
     }
 }

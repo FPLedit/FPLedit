@@ -18,8 +18,8 @@ namespace FPLedit
 
             menu = new ContextMenu();
 #pragma warning disable CA2000
-            menu.CreateItem(LocalizationHelper._("Alles löschen"), clickHandler: (s, e) => Text = "");
-            menu.CreateCheckItem(LocalizationHelper._("Debug-Informationen anzeigen"), changeHandler: (s, e) => showDebug = ((CheckMenuItem)s).Checked);
+            menu.CreateItem(T._("Alles löschen"), clickHandler: (s, e) => Text = "");
+            menu.CreateCheckItem(T._("Debug-Informationen anzeigen"), changeHandler: (s, e) => showDebug = ((CheckMenuItem)s).Checked);
 #pragma warning restore CA2000
 
             systemText = SystemColors.ControlText;

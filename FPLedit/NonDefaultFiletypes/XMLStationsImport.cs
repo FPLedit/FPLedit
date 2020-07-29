@@ -7,7 +7,7 @@ namespace FPLedit.NonDefaultFiletypes
 {
     internal sealed class XmlStationsImport : IImport
     {
-        public string Filter => LocalizationHelper._("Lineare Streckendateien (*.str)|*.str");
+        public string Filter => T._("Lineare Streckendateien (*.str)|*.str");
 
         public Timetable Import(Stream stream, IReducedPluginInterface pluginInterface, ILog replaceLog = null)
         {
