@@ -5,14 +5,17 @@ using NGettext;
 using NGettext.Loaders;
 using NGettext.Plural;
 
-namespace FPLedit
+namespace FPLedit.Shared
 {
+    /// <summary>
+    /// Helper class for localization / translation.
+    /// </summary>
     public static class T
     {
         private static string locale = "de-DE";
         private static Dictionary<string, ICatalog> catalogs = new Dictionary<string, ICatalog>();
 
-        internal static void SetLocale(string locale)
+        public static void SetLocale(string locale)
         {
             T.locale = locale;
             catalogs = new Dictionary<string, ICatalog>();
@@ -25,6 +28,7 @@ namespace FPLedit
             if (catalogs.TryGetValue(name, out var catalog))
                 return catalog.GetString(text);
             var newCatalog = new Catalog(new CustomMoLoader(name, "Languages"), new System.Globalization.CultureInfo(locale));
+            catalogs[name] = newCatalog;
             return newCatalog.GetString(text);
         }
         public static string _(string text, params object[] args)
@@ -34,6 +38,7 @@ namespace FPLedit
             if (catalogs.TryGetValue(name, out var catalog))
                 return catalog.GetString(text, args);
             var newCatalog = new Catalog(new CustomMoLoader(name, "Languages"), new System.Globalization.CultureInfo(locale));
+            catalogs[name] = newCatalog;
             return newCatalog.GetString(text, args);
         }
     }
