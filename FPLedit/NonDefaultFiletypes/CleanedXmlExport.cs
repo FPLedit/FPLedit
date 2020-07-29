@@ -11,7 +11,7 @@ namespace FPLedit.NonDefaultFiletypes
 {
     internal sealed class CleanedXmlExport : IExport
     {
-        public string Filter => "Bereinigte Fahrplan Dateien (*.fpl)|*.fpl";
+        public string Filter => LocalizationHelper._("Bereinigte Fahrplan Dateien (*.fpl)|*.fpl");
 
         private readonly Dictionary<string, List<string>> nodeNames;
         private readonly Dictionary<string, List<string>> attrsNames;
@@ -105,12 +105,12 @@ namespace FPLedit.NonDefaultFiletypes
             if (tt.Type == TimetableType.Network)
             {
                 Application.Instance.Invoke(() => 
-                    MessageBox.Show("Der aktuelle Fahrplan ist ein Netzwerk-Fahrplan. Aus diesem erweiterten Fahrplanformat können aus technischen Gründen keine von FPLedit angelegten Daten gelöscht werden."));
+                    MessageBox.Show(LocalizationHelper._("Der aktuelle Fahrplan ist ein Netzwerk-Fahrplan. Aus diesem erweiterten Fahrplanformat können aus technischen Gründen keine von FPLedit angelegten Daten gelöscht werden.")));
                 return false;
             }
 
             var res = Application.Instance.Invoke(() => 
-                MessageBox.Show("Hiermit werden alle in FPLedit zusätzlich eingebenen Werte (z.B. Lokomotiven, Lasten, Mindestbremshundertstel, Geschwindigkeiten, Wellenlinien, Trapeztafelhalte und Zuglaufmeldungen) und Buchfahrplaneinstellungen aus dem gespeicherten Fahrplan gelöscht! Fortfahren?",
+                MessageBox.Show(LocalizationHelper._("Hiermit werden alle in FPLedit zusätzlich eingebenen Werte (z.B. Lokomotiven, Lasten, Mindestbremshundertstel, Geschwindigkeiten, Wellenlinien, Trapeztafelhalte und Zuglaufmeldungen) und Buchfahrplaneinstellungen aus dem gespeicherten Fahrplan gelöscht! Fortfahren?"),
                 "FPLedit", MessageBoxButtons.YesNo, MessageBoxType.Warning));
 
             if (res == DialogResult.No)

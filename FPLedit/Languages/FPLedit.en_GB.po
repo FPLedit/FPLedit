@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2020-07-28 20:15+0200\n"
-"PO-Revision-Date: 2020-07-28 20:15+0200\n"
+"POT-Creation-Date: 2020-07-29 16:28+0200\n"
+"PO-Revision-Date: 2020-07-29 16:28+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -46,6 +46,11 @@ msgstr ""
 "No writable config file found. All chnages to application settings will be "
 "lost."
 
+#: Config/ConfigFile.cs:101
+#, csharp-format
+msgid "Konfiguration: Falsches Format in Zeile: {0}"
+msgstr ""
+
 #: Editor/EditorPlugin.cs:29
 msgid "&Rückgängig"
 msgstr "&Undo"
@@ -69,6 +74,111 @@ msgstr "Timetable &appearance"
 #: Editor/EditorPlugin.cs:55
 msgid "Fi&lterregeln"
 msgstr "Fi&lter rules"
+
+#: Editor/Network/EditRouteAction.cs:8
+msgid "Stationen dieser Strecke b&earbeiten"
+msgstr "&Edit stations of this line"
+
+#: Editor/Rendering/NetworkEditingControl.xeto.cs:82
+msgid ""
+"Die Station liegt auf mehreren Strecken. Bitte zuerst die Strecke auswählen, "
+"für die die Station bearbeitet werden soll!"
+msgstr ""
+
+#: Editor/Rendering/NetworkEditingControl.xeto.cs:102
+msgid ""
+"Sie versuchen eine Station zu löschen, ohne die danach zwei Routen "
+"zusammenfallen, das heißt zwei Stationen auf mehr als einer Route ohne "
+"Zwischenstation verbunden sind.\n"
+"\n"
+"Der Konflikt kann nicht automatisch aufgehoben werden."
+msgstr ""
+
+#: Editor/Rendering/NetworkEditingControl.xeto.cs:108
+msgid ""
+"Sie versuchen eine Station zu löschen, die an einem Kreuzungspunkt zweier "
+"Strecken liegt. Dies ist leider nicht möglich."
+msgstr ""
+"You tried to remove a station at the junction of two lines. Unfortunately, "
+"this is not possible."
+
+#: Editor/Rendering/NetworkEditingControl.xeto.cs:190
+msgid "&Neue Station"
+msgstr "Add &new station"
+
+#: Editor/Rendering/NetworkEditingControl.xeto.cs:191
+msgid "Neue &Strecke"
+msgstr "Add new &line"
+
+#: Editor/Rendering/NetworkEditingControl.xeto.cs:192
+msgid "Strecken &zusammenführen"
+msgstr "&Join lines"
+
+#: Editor/Rendering/NetworkRenderer.cs:252
+msgid "Ansicht verschoben, [R] für Reset"
+msgstr "Network view panned, press [R] to reset"
+
+#: Editor/Rendering/NetworkRenderer.cs:254
+msgid ", [S] zum Speichern"
+msgstr ", press [S] to save"
+
+#: Editor/Rendering/NetworkRenderer.cs:379
+msgid "Streckennetz bearbeiten"
+msgstr "Edit railway network"
+
+#: Editor/Rendering/NetworkRenderer.cs:380
+msgid ""
+"Klicken, um Station hinzuzufügen und diese mit einer bestehenden Station zu "
+"verbinden; ESC zum Abbrechen"
+msgstr ""
+"Click to add a new station and connect it to an existing station; press ESC "
+"to cancel"
+
+#: Editor/Rendering/NetworkRenderer.cs:381
+msgid ""
+"Klicken, um die Zielstation der Verbindung auzuwählen; ESC zum Abbrechen"
+msgstr "Click to select the station to connect to; press ESC to cancel"
+
+#: Editor/Rendering/StationRenderer.cs:84
+#, csharp-format
+msgid "von {0}"
+msgstr "from {0}"
+
+#: Editor/Rendering/StationRenderer.cs:87
+#, csharp-format
+msgid "nach {0}"
+msgstr "to {0}"
+
+#: Editor/Rendering/StationRenderer.cs:191
+msgid "Neues Gleis hinzufügen"
+msgstr "Add new track"
+
+#: Editor/Rendering/StationRenderer.cs:245
+msgid "Gleisnamen bearbeiten"
+msgstr "Edit track name"
+
+#: Editor/Rendering/StationRenderer.cs:255
+#, csharp-format
+msgid ""
+"Ein Gleis mit der Bezeichnung {0} ist bereits vorhanden. Bitte wählen Sie "
+"einen anderen Namen!"
+msgstr "The station has already a track named {0}. Please choose another name!"
+
+#: Extensibility/ExtensionManager.cs:95
+#, csharp-format
+msgid ""
+"Erweiterung {0} konnte nicht geladen werden, bitte überprüfen ob diese noch "
+"geblockt ist!"
+msgstr ""
+
+#: Extensibility/PluginInfo.cs:48
+msgid "<Fehler beim Laden>"
+msgstr "<Error while loading>"
+
+#: Extensibility/PluginInfo.cs:64
+#, csharp-format
+msgid "Fehler beim Initialisieren einer Erweiterung: {0}: + {1}"
+msgstr "Error while initializing extension {0}: {1}"
 
 #: FileHandler.cs:75
 msgid "Fahrplandatei speichern"
@@ -114,7 +224,7 @@ msgstr "Export failed!"
 
 #: FileHandler.cs:177
 msgid "Exportieren erfolgreich abgeschlossen!"
-msgstr ""
+msgstr "File exported successfully!"
 
 #: FileHandler.cs:219
 #, csharp-format
@@ -214,7 +324,7 @@ msgstr "Clear"
 msgid "Debug-Informationen anzeigen"
 msgstr "Show debug information"
 
-#: MainForm.xeto.cs:31 Program.cs:108
+#: MainForm.xeto.cs:31 Program.cs:108 SettingsUi/TemplatesForm.xeto.cs:180
 msgid "&Bearbeiten"
 msgstr "&Edit"
 
@@ -222,7 +332,7 @@ msgstr "&Edit"
 msgid "&Vorschau"
 msgstr "&Preview"
 
-#: MainForm.xeto.cs:36
+#: MainForm.xeto.cs:36 SettingsUi/SettingsForm.xeto.cs:65
 msgid "Einstellungen"
 msgstr "Settings"
 
@@ -304,6 +414,50 @@ msgstr "The error message of the last crash could not be displayed: {0}"
 msgid "Angegebene Startdatei {0} nicht gefunden!"
 msgstr "The supplied start file {0} could not be found!"
 
+#: NonDefaultFiletypes/CleanedXmlExport.cs:14
+msgid "Bereinigte Fahrplan Dateien (*.fpl)|*.fpl"
+msgstr ""
+
+#: NonDefaultFiletypes/CleanedXmlExport.cs:108
+msgid ""
+"Der aktuelle Fahrplan ist ein Netzwerk-Fahrplan. Aus diesem erweiterten "
+"Fahrplanformat können aus technischen Gründen keine von FPLedit angelegten "
+"Daten gelöscht werden."
+msgstr ""
+
+#: NonDefaultFiletypes/CleanedXmlExport.cs:113
+msgid ""
+"Hiermit werden alle in FPLedit zusätzlich eingebenen Werte (z.B. "
+"Lokomotiven, Lasten, Mindestbremshundertstel, Geschwindigkeiten, "
+"Wellenlinien, Trapeztafelhalte und Zuglaufmeldungen) und "
+"Buchfahrplaneinstellungen aus dem gespeicherten Fahrplan gelöscht! "
+"Fortfahren?"
+msgstr ""
+
+#: NonDefaultFiletypes/LinearExport.cs:13
+#: NonDefaultFiletypes/NetworkExport.cs:11
+#: NonDefaultFiletypes/UpgradeExport.cs:12
+msgid "Fahrplan Dateien (*.fpl)|*.fpl"
+msgstr ""
+
+#: NonDefaultFiletypes/LinearExport.cs:20
+msgid "Der Fahrplan hat mehr als eine oder keine Strecke"
+msgstr ""
+
+#: NonDefaultFiletypes/StationsOnlyExport.cs:18
+msgid "Fahrplan Dateien nur mit Stationen (Streckenexport) (*.fpl)|*.fpl"
+msgstr ""
+
+#: NonDefaultFiletypes/UpgradeExport.cs:17
+msgid ""
+"Nur mit jTrainGraph 2.x, 3.0x oder 3.1x erstellte Fahrpläne können "
+"aktualisiert werden."
+msgstr ""
+
+#: NonDefaultFiletypes/XMLStationsImport.cs:10
+msgid "Lineare Streckendateien (*.str)|*.str"
+msgstr ""
+
 #: Program.cs:105
 msgid "&Datei"
 msgstr "&File"
@@ -344,6 +498,292 @@ msgstr "Documentation:"
 msgid "Gewählte Standardversion ist nicht R/W-kompatibel!"
 msgstr "The selected default file version is not R/W-compatible!"
 
+#: SettingsUi/AutomaticUpdateControl.cs:11
+msgid "Überprüfung auf neue Versionen"
+msgstr "Check for updates"
+
+#: SettingsUi/AutomaticUpdateControl.cs:18
+msgid "Automatische Überprüfung auf Updates beim Programmstart aktivieren."
+msgstr "Activate automatic checks for available updates at startup."
+
+#: SettingsUi/AutomaticUpdateControl.cs:19
+msgid "Datenschutz:"
+msgstr "Privacy:"
+
+#: SettingsUi/AutomaticUpdateControl.cs:20
+msgid ""
+"Dabei wird Ihre IP-Adresse und der verwendete Betriebssystemtyp an den "
+"Server übermittelt; Die IP-Adresse wird nur anonymisiert in Log-Dateien "
+"gespeichert; ein Rückschluss auf einzelne Benutzer ist daher nicht möglich."
+msgstr ""
+"Your IP address and your used Operating System type will be transmitted to "
+"our servers. The IP address will be shortened and stored in log files. We "
+"cannot use the data to identify single users."
+
+#: SettingsUi/AutomaticUpdateControl.cs:21
+#: SettingsUi/AutomaticUpdateControl.cs:46
+#: SettingsUi/AutomaticUpdateControl.cs:52
+msgid "Auf neue Version prüfen"
+msgstr "Check for updates"
+
+#: SettingsUi/AutomaticUpdateControl.cs:37
+#, csharp-format
+msgid ""
+"Eine neue Programmversion ({0}) ist verfügbar!\n"
+"{1}\n"
+"Jetzt zur Download-Seite wechseln, um die neue Version herunterzuladen?"
+msgstr ""
+"A new version of FPLedit ({0}) is available.\n"
+"{1}\n"
+"Would you like to visit the download page to download the update package?"
+
+#: SettingsUi/AutomaticUpdateControl.cs:38
+msgid "Neue FPLedit-Version verfügbar"
+msgstr "Update available"
+
+#: SettingsUi/AutomaticUpdateControl.cs:45
+msgid "Sie benutzen bereits die aktuelle Version!"
+msgstr "You are using the most recent version of FPLedit!"
+
+#: SettingsUi/AutomaticUpdateControl.cs:51
+msgid "Verbindung mit dem Server fehlgeschlagen!"
+msgstr ""
+
+#: SettingsUi/ExtensionsForm.xeto.cs:19
+msgid "Erweiterungen"
+msgstr "Extensions"
+
+#: SettingsUi/ExtensionsForm.xeto.cs:66
+msgid "Möchten sie das Programm jetzt neu starten?"
+msgstr "Restart now?"
+
+#: SettingsUi/ExtensionsForm.xeto.cs:77
+msgid "Autor:"
+msgstr "Author:"
+
+#: SettingsUi/ExtensionsForm.xeto.cs:77
+msgid "[Offizielle Erweiterung]"
+msgstr "[Official Extension]"
+
+#: SettingsUi/ExtensionsForm.xeto.cs:105
+#, csharp-format
+msgid ""
+"Die Erweiterung {0} stammt nicht vom FPLedit-Entwickler. Sie sollten die "
+"Erweiterung nur aktivieren, wenn Sie sich sicher sein, dass sie aus einer "
+"vertrauenswürdigen Quelle stammt. Bösartige Erweiterungen könnten "
+"möglicherweise Schadcode auf dem System ausführen."
+msgstr ""
+"The extension {0} is not an extension officially distributed with FPLedit. "
+"You should enable this extension only if you trust the source. Malicious "
+"extensions could possibly contain malware."
+
+#: SettingsUi/ExtensionsForm.xeto.cs:124 SettingsUi/TemplatesForm.xeto.cs:39
+msgid "Aktiviert"
+msgstr "Activated"
+
+#: SettingsUi/ExtensionsForm.xeto.cs:125
+msgid "Deaktiviert"
+msgstr "Deactivated"
+
+#: SettingsUi/ExtensionsForm.xeto.cs:126
+msgid "Die Änderungen treten erst nach dem nächsten Programmstart in Kraft."
+msgstr "All changes will be applied at the next start of FPLedit."
+
+#: SettingsUi/ExtensionsForm.xeto.cs:127
+msgid "Jetzt neu starten"
+msgstr "Restart now"
+
+#: SettingsUi/SettingsForm.xeto.cs:64
+msgid "Schließen"
+msgstr "Close"
+
+#: SettingsUi/TemplatesForm.xeto.cs:15
+msgid "Vorlagen"
+msgstr "Templates"
+
+#: SettingsUi/TemplatesForm.xeto.cs:38
+msgid "(integriert)"
+msgstr "(built-in)"
+
+#: SettingsUi/TemplatesForm.xeto.cs:40
+msgid "Name"
+msgstr "Name"
+
+#: SettingsUi/TemplatesForm.xeto.cs:41
+msgid "Dateiname"
+msgstr "Filename"
+
+#: SettingsUi/TemplatesForm.xeto.cs:42
+msgid "Typ"
+msgstr "Type"
+
+#: SettingsUi/TemplatesForm.xeto.cs:91
+msgid "Die Vorlagendatei wird unwiderruflich gelöscht! Fortfahren?"
+msgstr "This template file will be deleted permanently. Continue?"
+
+#: SettingsUi/TemplatesForm.xeto.cs:109
+#, csharp-format
+msgid ""
+"Die Vorlage {0} stammt nicht vom FPLedit-Entwickler. Sie sollten die Vorlage "
+"nur aktivieren, wenn Sie sich sicher sein, dass sie aus einer "
+"vertrauenswürdigen Quelle stammt. Bösartige Vorlagen könnten möglicherweise "
+"Schadcode auf dem System ausführen."
+msgstr ""
+"The template {0} is not an template officially distributed with FPLedit. You "
+"should enable this template only if you trust the source. Malicious "
+"templates could possibly contain malware."
+
+#: SettingsUi/TemplatesForm.xeto.cs:173
+#, csharp-format
+msgid ""
+"Es konnte kein Editor gestartet werden! Bitte öffnen Sie die Datei \"{0}\" "
+"in einem Texteditor."
+msgstr ""
+"No text editor could be launched. Please open file \"{0}\" in a text editor."
+
+#: SettingsUi/TemplatesForm.xeto.cs:181
+msgid "Integrierte Vorlage &extrahieren"
+msgstr "&Extract internal template"
+
+#: SettingsUi/TemplatesForm.xeto.cs:182
+msgid "&Löschen"
+msgstr "De&lete template"
+
+#: SettingsUi/TemplatesForm.xeto.cs:183
+msgid "&Aktivieren"
+msgstr "&Activate"
+
+#: SettingsUi/TemplatesForm.xeto.cs:184
+msgid "&Deaktivieren"
+msgstr "&Deactivate"
+
+#: SettingsUi/WindowSizeControl.cs:10
+msgid "Fenstergrößen"
+msgstr "Window sizes"
+
+#: SettingsUi/WindowSizeControl.cs:15
+msgid "Gespeicherte Fenstergrößen löschen"
+msgstr "Clear all saved window sizes"
+
+#: SettingsUi/WindowSizeControl.cs:27
+msgid "Die Änderungen werden beim nächsten Programmstart angewendet!"
+msgstr "All changes will be applied at the next start of FPLedit!"
+
+#: Templating/TemplateHost.cs:38
+msgid ""
+"Keine valide Template-Deklaration gefunden! Das Template steht deshalb nicht "
+"zur Verfügung!"
+msgstr ""
+
+#: Templating/TemplateHost.cs:42
+#, csharp-format
+msgid "Init-Fehler im Template {0}: {1}"
+msgstr ""
+
+#: Templating/TemplateHost.cs:59 Templating/TemplateHost.cs:68
+#, csharp-format
+msgid "Fehler im {0} {1}: {2} in line {3}, column {4}"
+msgstr ""
+
+#: Templating/TemplateHost.cs:75
+#, csharp-format
+msgid "Fehler im Template {0}: {1}"
+msgstr ""
+
+#: TimetableChecks/BugFixInitAction.cs:27
+#, csharp-format
+msgid ""
+"Aufgrund eines Fehlers in früheren Versionen von FPLedit mussten leider "
+"einige Verknüpfungen zu Folgezügen aufgehoben werden. Die betroffenen Züge "
+"sind: {0}"
+msgstr ""
+
+#: TimetableChecks/BugFixInitAction.cs:57
+msgid ""
+"Die Datei enthält zusammengfefallene Strecken, das heißt zwei Stationen sind "
+"auf mehr als einer Route ohne Zwischenstation verbunden. FPLedit kann sich "
+"danach komisch verhalten und Züge zufällig über die eine oder andere Strecke "
+"leiten. Eine Korrektur ist leider nicht möglich."
+msgstr ""
+
+#: TimetableChecks/DayOverflowCheck.cs:10
+msgid "Zugverkehr über Mitternacht"
+msgstr ""
+
+#: TimetableChecks/DayOverflowCheck.cs:26
+#, csharp-format
+msgid "Der Zug {0} verkehrt über Mitternacht hinweg!"
+msgstr ""
+
+#: TimetableChecks/FixNetworkAttributesAction.cs:35
+#, csharp-format
+msgid ""
+"Aufgrund eines Fehlers in früheren Versionen von FPLedit mussten leider "
+"einige Höchstgeschwindigkeiten und Wellenlinienangaben zurückgesetzt werden. "
+"Die betroffenen Stationen sind: {0}"
+msgstr ""
+
+#: TimetableChecks/StationCodeCheck.cs:9
+msgid "Ungültige Stationsabkürzungen"
+msgstr ""
+
+#: TimetableChecks/StationCodeCheck.cs:20
+#, csharp-format
+msgid "Betriebsstellen-Abkürzungen {0} sind mehr als ein mal vorhanden!"
+msgstr ""
+
+#: TimetableChecks/TimetableCheckRunner.cs:85
+msgid "Meldung"
+msgstr ""
+
+#: TimetableChecks/TimetableCheckRunner.cs:93
+#, fuzzy
+#| msgid "Überprüfung auf neue Versionen"
+msgid "Überprüfungen"
+msgstr "Check for updates"
+
+#: TimetableChecks/TrainsTrackCheck.cs:11
+msgid "Ungültige Gleisangaben"
+msgstr ""
+
+#: TimetableChecks/TrainsTrackCheck.cs:25
+#, csharp-format
+msgid ""
+"Ungültiges Ankunftsgleis: Zug {0} / Station {1} / Gleis \"{2}\" nicht "
+"gefunden."
+msgstr ""
+
+#: TimetableChecks/TrainsTrackCheck.cs:27
+#, csharp-format
+msgid ""
+"Ungültiges Abfahrtsgleis: Zug {0} / Station {1} / Gleis \"{2}\" nicht "
+"gefunden."
+msgstr ""
+
+#: TimetableChecks/TrainsTrackCheck.cs:31
+msgid ""
+"Ungültiges Rangiergleis: Zug {tra.TName} / Station {ardep.Key.SName} / Gleis "
+"nicht gefunden."
+msgstr ""
+
+#: TimetableChecks/TransitionsCheck.cs:11
+msgid "Ungültige Folgezüge"
+msgstr ""
+
+#: TimetableChecks/TransitionsCheck.cs:31
+#, csharp-format
+msgid ""
+"Der Folgezug {0} beginnt an einer anderen Station, als die, an der vorherige "
+"Zug {1} endet."
+msgstr ""
+
+#: TimetableChecks/TransitionsCheck.cs:33
+#, csharp-format
+msgid ""
+"Der Abfahrtszeit des Folgezuges {0} ist früher als die Ankunftszeit des "
+"vorherigen Zuges {1}."
+msgstr ""
+
 #: UndoManager.cs:46
 msgid ""
 "Fehler in einer Erweiterung: Vor jeder *möglichen* Änderung muss "
@@ -360,6 +800,11 @@ msgid ""
 "Log-Dateien gespeichert; ein Rückschluss auf einzelne Benutzer ist daher "
 "nicht möglich."
 msgstr ""
+"FPLedit can check for available updates at startup.\n"
+"\n"
+"Your IP address and used operating system type will be transmitted to our "
+"servers, and stored in log files in such way that we cannot identify "
+"individual users."
 
 #: UpdateManager.cs:118
 msgid "Automatische Updateprüfung"

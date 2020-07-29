@@ -22,7 +22,7 @@ namespace FPLedit.Logger
             if (fi.Exists && fi.Length > 10240) // > 10KB
                 fi.Delete();
 
-            Info("FPLedit Programmstart");
+            Info("Started FPLedit");
         }
 
         public void Error(string message)

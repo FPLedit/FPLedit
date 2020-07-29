@@ -5,7 +5,7 @@ namespace FPLedit.Editor.Network
 {
     internal sealed class EditRouteAction : IRouteAction
     {
-        public string DisplayName => "Stationen dieser Strecke b&earbeiten";
+        public string DisplayName => LocalizationHelper._("Stationen dieser Strecke b&earbeiten");
 
         public bool IsEnabled(IPluginInterface pluginInterface)
             => pluginInterface.FileState.Opened;

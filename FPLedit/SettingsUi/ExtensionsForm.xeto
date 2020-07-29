@@ -7,12 +7,12 @@
       <TableLayout Spacing="5,5">
         <TableRow>
           <TableCell ScaleWidth="true">
-            <Label>Deaktiviert</Label>
+            <Label Text="{x:Static c:ExtensionsForm+L.Deactivated}" />
           </TableCell>
           <TableCell>
           </TableCell>
           <TableCell ScaleWidth="true">
-            <Label>Aktiviert</Label>
+            <Label Text="{x:Static c:ExtensionsForm+L.Activated}" />
           </TableCell>
         </TableRow>
         <TableRow>
@@ -38,8 +38,8 @@
         </TableRow>
         <TableRow>
           <StackLayout x:Name="restartStack" Orientation="Horizontal" Visible="false" Spacing="5">
-            <Label>Die Änderungen treten erst nach dem nächsten Programmstart in Kraft.</Label>
-            <Button Click="ResetButton_Click">Jetzt neu starten</Button>
+            <Label Text="{x:Static c:ExtensionsForm+L.RestartInfo}" />
+            <Button Click="ResetButton_Click" Text="{x:Static c:ExtensionsForm+L.RestartButton}" />
           </StackLayout>
         </TableRow>
       </TableLayout>

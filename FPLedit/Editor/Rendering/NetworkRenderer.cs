@@ -249,9 +249,9 @@ namespace FPLedit.Editor.Rendering
         {
             if (!_pan.IsZero)
             {
-                var statusL = "Ansicht verschoben, [R] für Reset";
+                var statusL = LocalizationHelper._("Ansicht verschoben, [R] für Reset");
                 if (SetPanCenterEnabled && IsNetwork)
-                    statusL += ", [S] zum Speichern";
+                    statusL += LocalizationHelper._(", [S] zum Speichern");
                 var sizeL = g.MeasureString(font, statusL);
                 var pointL = new PointF(0, ClientSize.Height - sizeL.Height);
                 g.FillRectangle(Brushes.Orange, new RectangleF(pointL, sizeL));
@@ -376,9 +376,9 @@ namespace FPLedit.Editor.Rendering
         {
             switch (mode)
             {
-                case Modes.Normal: return "Streckennetz bearbeiten";
-                case Modes.AddRoute: return "Klicken, um Station hinzuzufügen und diese mit einer bestehenden Station zu verbinden; ESC zum Abbrechen";
-                case Modes.JoinRoutes: return "Klicken, um die Zielstation der Verbindung auzuwählen; ESC zum Abbrechen";
+                case Modes.Normal: return LocalizationHelper._("Streckennetz bearbeiten");
+                case Modes.AddRoute: return LocalizationHelper._("Klicken, um Station hinzuzufügen und diese mit einer bestehenden Station zu verbinden; ESC zum Abbrechen");
+                case Modes.JoinRoutes: return LocalizationHelper._("Klicken, um die Zielstation der Verbindung auzuwählen; ESC zum Abbrechen");
                 default: return "";
             }
         }

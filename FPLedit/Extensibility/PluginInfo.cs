@@ -45,7 +45,7 @@ namespace FPLedit.Extensibility
         private void ExtractPluginInformation(Type t)
         {
             var a = t.GetCustomAttribute<PluginAttribute>(false);
-            Name = a?.Name ?? "<Fehler beim Laden>";
+            Name = a?.Name ?? LocalizationHelper._("<Fehler beim Laden>");
             if (a == null)
                 return;
             Author = a.Author;
@@ -61,7 +61,7 @@ namespace FPLedit.Extensibility
             }
             catch (Exception ex)
             {
-                pluginInterface.Logger.Error("Fehler beim Initialisieren einer Erweiterung: " + plugin.GetType().FullName + ": " + ex.Message);
+                pluginInterface.Logger.Error(LocalizationHelper._("Fehler beim Initialisieren einer Erweiterung: {0}: + {1}", plugin.GetType().FullName, ex.Message));
             }
         }
     }

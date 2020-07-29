@@ -8,15 +8,15 @@
     </TableRow>
     <TableRow>
       <StackLayout Spacing="5" Orientation="Horizontal">
-          <Button x:Name="editButton" Click="EditButton_Click">&amp;Bearbeiten</Button>
-          <Button x:Name="extractButton" Click="ExtractButton_Click">Integrierte Vorlage &amp;extrahieren</Button>
-          <Button x:Name="removeButton" Click="RemoveButton_Click">&amp;Löschen</Button>
+          <Button x:Name="editButton" Click="EditButton_Click" Text="{x:Static c:TemplatesForm+L.EditButton}" />
+          <Button x:Name="extractButton" Click="ExtractButton_Click" Text="{x:Static c:TemplatesForm+L.ExtractButton}" />
+          <Button x:Name="removeButton" Click="RemoveButton_Click" Text="{x:Static c:TemplatesForm+L.DeleteButton}" />
       </StackLayout>
     </TableRow>
     <TableRow>
       <StackLayout Spacing="5" Orientation="Horizontal">
-        <Button x:Name="enableButton" Click="EnableButton_Click">&amp;Aktivieren</Button>
-        <Button x:Name="disableButton" Click="DisableButton_Click">&amp;Deaktivieren</Button>
+        <Button x:Name="enableButton" Click="EnableButton_Click" Text="{x:Static c:TemplatesForm+L.ActivateButton}"/>
+        <Button x:Name="disableButton" Click="DisableButton_Click" Text="{x:Static c:TemplatesForm+L.DeactivateButton}"/>
       </StackLayout>
     </TableRow>
   </TableLayout>

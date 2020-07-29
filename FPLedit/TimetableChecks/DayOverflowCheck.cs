@@ -7,7 +7,7 @@ namespace FPLedit.TimetableChecks
 {
     internal sealed class DayOverflowCheck : ITimetableCheck
     {
-        public string Display => "Zugverkehr über Mitternacht";
+        public string Display => LocalizationHelper._("Zugverkehr über Mitternacht");
 
         public IEnumerable<string> Check(Timetable tt)
         {
@@ -23,7 +23,7 @@ namespace FPLedit.TimetableChecks
 
                     if (arrdep.ArrDep.HasMinOneTimeSet && arrdep.ArrDep.FirstSetTime < last)
                     {
-                        result.Add($"Der Zug {train.TName} verkehrt über Mitternacht hinweg!");
+                        result.Add(LocalizationHelper._("Der Zug {0} verkehrt über Mitternacht hinweg!", train.TName));
                         return;
                     }
 

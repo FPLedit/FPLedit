@@ -81,11 +81,12 @@ namespace FPLedit.Editor.Rendering
 
             // Richtungsangaben zeichnen
             if (prev != null)
-                e.Graphics.DrawText(font, textColor, 5, 5, "von " + prev.SName);
+                e.Graphics.DrawText(font, textColor, 5, 5, LocalizationHelper._("von {0}", prev.SName));
             if (next != null)
             {
-                var nextSize = e.Graphics.MeasureString(font, "nach " + next.SName);
-                e.Graphics.DrawText(font, textColor, Width - 5 - nextSize.Width, 5, "nach " + next.SName);
+                var nextText = LocalizationHelper._("nach {0}", next.SName);
+                var nextSize = e.Graphics.MeasureString(font, nextText);
+                e.Graphics.DrawText(font, textColor, Width - 5 - nextSize.Width, 5, nextText);
             }
 
             var leftdefaultTrack = Tracks.IndexOf(Tracks.FirstOrDefault(t => t.Name == DefaultTrackLeft.GetValue(routeIndex)));
@@ -187,7 +188,7 @@ namespace FPLedit.Editor.Rendering
             }
 
             // Button für neue Gleise
-            var textWidth = (int)e.Graphics.MeasureString(font, "Neues Gleis hinzufügen").Width;
+            var textWidth = (int)e.Graphics.MeasureString(font, LocalizationHelper._("Neues Gleis hinzufügen")).Width;
             var addBtn = new RenderBtn<Track>(null, new Point(midx - (textWidth / 2) - 5, y - 8), new Size(textWidth + 10, 16), Colors.LightGrey, "Neues Gleis hinzufügen");
             buttons.Add(addBtn);
             addBtn.Click += AddBtn_Click;
@@ -241,7 +242,7 @@ namespace FPLedit.Editor.Rendering
         {
             editingButton = (RenderBtn<Track>) sender;
             var oldName = editingButton.Tag.Name;
-            var newName = Shared.UI.InputBox.Query(ParentWindow, "Gleisnamen bearbeiten", oldName);
+            var newName = Shared.UI.InputBox.Query(ParentWindow, LocalizationHelper._("Gleisnamen bearbeiten"), oldName);
             if (newName != null && newName != oldName)
                 CommitNameEdit(oldName, newName);
         }
@@ -251,7 +252,7 @@ namespace FPLedit.Editor.Rendering
             var duplicate = Tracks.Any(t => t != editingButton.Tag && t.Name == newName);
             if (duplicate)
             {
-                MessageBox.Show($"Ein Gleis mit der Bezeichnung {newName} ist bereits vorhanden. Bitte wählen Sie einen anderen Namen!", MessageBoxType.Error);
+                MessageBox.Show(LocalizationHelper._("Ein Gleis mit der Bezeichnung {0} ist bereits vorhanden. Bitte wählen Sie einen anderen Namen!", newName), MessageBoxType.Error);
                 return;
             }
 

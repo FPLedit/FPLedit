@@ -98,7 +98,7 @@ namespace FPLedit.Config
             {
                 var parts = line.Trim().Split('=');
                 if (parts.Length != 2 || !parts[1].StartsWith("\"") || !parts[1].EndsWith("\""))
-                    throw new FormatException("Konfiguration: Falsches Format in Zeile: " + line);
+                    throw new FormatException(LocalizationHelper._("Konfiguration: Falsches Format in Zeile: {0}", line));
                 Key = parts[0];
                 Value = parts[1].Substring(1, parts[1].Length - 2);
             }

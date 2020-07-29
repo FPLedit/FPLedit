@@ -35,11 +35,11 @@ namespace FPLedit.Templating
                 
                 if (tmpl?.TemplateType == null)
                     logger.Warning(
-                        "Keine valide Template-Deklaration gefunden! Das Template steht deshalb nicht zur Verfügung!");
+                        LocalizationHelper._("Keine valide Template-Deklaration gefunden! Das Template steht deshalb nicht zur Verfügung!"));
             }
             catch (Exception ex)
             {
-                logger.Error("Init-Fehler im Template " + Identifier + ": " + ex.Message);
+                logger.Error(LocalizationHelper._("Init-Fehler im Template {0}: {1}", Identifier, ex.Message));
             }
         }
 
@@ -56,7 +56,8 @@ namespace FPLedit.Templating
             {
                 var source = ex.Location.Source ?? Identifier;
                 var isModule = source != Identifier;
-                logger.Error($"Fehler im {(isModule ? "Modul" : "Template")} {source}: {ex.Message} in line {ex.LineNumber}, column {ex.Column}");
+                logger.Error(LocalizationHelper._("Fehler im {0} {1}: {2} in line {3}, column {4}", 
+                    (isModule ? "Modul" : "Template"), source, ex.Message, ex.LineNumber, ex.Column));
                 if (!isModule)
                     TemplateDebugger.GetInstance().Navigate(ex.LineNumber, ex.Column);
             }
@@ -64,13 +65,14 @@ namespace FPLedit.Templating
             {
                 var source = ex.SourceText ?? Identifier;
                 var isModule = source != Identifier;
-                logger.Error($"Fehler im Template {(isModule ? "Modul" : "Template")} {source}: {ex.Message} in line {ex.LineNumber}, column {ex.Column}");
+                logger.Error(LocalizationHelper._("Fehler im {0} {1}: {2} in line {3}, column {4}", 
+                    (isModule ? "Modul" : "Template"), source, ex.Message, ex.LineNumber, ex.Column));
                 if (!isModule)
                     TemplateDebugger.GetInstance().Navigate(ex.LineNumber, ex.Column);
             }
             catch (Exception ex)
             {
-                logger.Error("Fehler im Template " + Identifier + ": " + ex.Message);
+                logger.Error(LocalizationHelper._("Fehler im Template {0}: {1}", Identifier, ex.Message));
                 TemplateDebugger.GetInstance().OpenDebugger();
             }
 

@@ -10,14 +10,14 @@ namespace FPLedit.NonDefaultFiletypes
 {
     internal sealed class LinearExport : BaseConverterFileType, IExport
     {
-        public string Filter => "Fahrplan Dateien (*.fpl)|*.fpl";
+        public string Filter => LocalizationHelper._("Fahrplan Dateien (*.fpl)|*.fpl");
 
         public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[] flags = null)
         {
             if (tt.Type == TimetableType.Linear)
                 throw new TimetableTypeNotSupportedException(TimetableType.Linear, "convert to linear");
             if (tt.GetRoutes().Length != 1)
-                throw new NotSupportedException("Der Fahrplan hat mehr als eine oder keine Strecke");
+                throw new NotSupportedException(LocalizationHelper._("Der Fahrplan hat mehr als eine oder keine Strecke"));
 
             var clone = tt.Clone();
 

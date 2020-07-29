@@ -24,8 +24,8 @@ namespace FPLedit.TimetableChecks
                         tt.RemoveTransition(dup[0], false); // Transitions mit dieser Id entfernen
 
                     if (duplicate_transitions.Any())
-                        upgradeMessages.Add("Aufgrund eines Fehlers in früheren Versionen von FPLedit mussten leider einige Verknüpfungen zu Folgezügen aufgehoben werden. Die betroffenen Züge sind: "
-                                            + string.Join(", ", duplicate_transitions.SelectMany(dup => dup.Select(t => t.TName))));
+                        upgradeMessages.Add(LocalizationHelper._("Aufgrund eines Fehlers in früheren Versionen von FPLedit mussten leider einige Verknüpfungen zu Folgezügen aufgehoben werden. Die betroffenen Züge sind: {0}", 
+                            string.Join(", ", duplicate_transitions.SelectMany(dup => dup.Select(t => t.TName)))));
                 }
 
                 // Korrektur ohne Side-Effects möglich, alle doppelten Zug-Ids werden neu vergeben
@@ -54,7 +54,7 @@ namespace FPLedit.TimetableChecks
                     }
 
                     if (hasAmbiguousRoutes)
-                        upgradeMessages.Add("Die Datei enthält zusammengfefallene Strecken, das heißt zwei Stationen sind auf mehr als einer Route ohne Zwischenstation verbunden. FPLedit kann sich danach komisch verhalten und Züge zufällig über die eine oder andere Strecke leiten. Eine Korrektur ist leider nicht möglich.");
+                        upgradeMessages.Add(LocalizationHelper._("Die Datei enthält zusammengfefallene Strecken, das heißt zwei Stationen sind auf mehr als einer Route ohne Zwischenstation verbunden. FPLedit kann sich danach komisch verhalten und Züge zufällig über die eine oder andere Strecke leiten. Eine Korrektur ist leider nicht möglich."));
                 }
                 pluginInterface.Cache.Set(KEY_AMBIGUOUS, "1");
             }

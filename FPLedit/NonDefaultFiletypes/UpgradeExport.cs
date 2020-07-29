@@ -9,12 +9,12 @@ namespace FPLedit.NonDefaultFiletypes
 {
     internal sealed class UpgradeExport : IExport
     {
-        public string Filter => "Fahrplan Dateien (*.fpl)|*.fpl";
+        public string Filter => LocalizationHelper._("Fahrplan Dateien (*.fpl)|*.fpl");
 
         public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[] flags = null)
         {
             if (tt.Version.Compare(TimetableVersion.JTG3_2) >= 0)
-                throw new Exception("Nur mit jTrainGraph 2.x, 3.0x oder 3.1x erstellte Fahrpläne können aktualisiert werden.");
+                throw new Exception(LocalizationHelper._("Nur mit jTrainGraph 2.x, 3.0x oder 3.1x erstellte Fahrpläne können aktualisiert werden."));
 
             var origVersion = tt.Version;
 

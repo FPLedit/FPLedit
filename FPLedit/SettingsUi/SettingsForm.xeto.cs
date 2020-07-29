@@ -58,5 +58,11 @@ namespace FPLedit.SettingsUi
 
         private void CancelButton_Click(object sender, EventArgs e)
             => Close(DialogResult.Cancel);
+
+        private static class L
+        {
+            public static readonly string Close = LocalizationHelper._("Schließen");
+            public static readonly string Title = LocalizationHelper._("Einstellungen");
+        }
     }
 }

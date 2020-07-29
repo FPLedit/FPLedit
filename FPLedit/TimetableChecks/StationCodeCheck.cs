@@ -6,7 +6,7 @@ namespace FPLedit.TimetableChecks
 {
     internal sealed class StationCodeCheck : ITimetableCheck
     {
-        public string Display => "Ungültige Gleisangaben";
+        public string Display => LocalizationHelper._("Ungültige Stationsabkürzungen");
 
         public IEnumerable<string> Check(Timetable tt)
         {
@@ -17,7 +17,7 @@ namespace FPLedit.TimetableChecks
                 .Where(c => c.Count() > 1)
                 .Select(g => g.Key);
             if (codes.Any())
-                yield return $"Betriebsstellen-Abkürzungen {string.Join(", ", codes)} sind mehr als ein mal vorhanden!";
+                yield return LocalizationHelper._("Betriebsstellen-Abkürzungen {0} sind mehr als ein mal vorhanden!", string.Join(", ", codes));
         }
     }
 }

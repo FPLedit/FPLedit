@@ -8,7 +8,7 @@ namespace FPLedit.TimetableChecks
 {
     internal sealed class TransitionsCheck : ITimetableCheck
     {
-        public string Display => "Ungültige Folgezüge";
+        public string Display => LocalizationHelper._("Ungültige Folgezüge");
 
         public IEnumerable<string> Check(Timetable tt)
         {
@@ -28,9 +28,9 @@ namespace FPLedit.TimetableChecks
                     return;
 
                 if (lastStaOfFirst != firstStaOfNext)
-                    result.Add($"Der Folgezug {next.TName} beginnt an einer anderen Station, als die, an der vorherige Zug {first.TName} endet.");
+                    result.Add(LocalizationHelper._("Der Folgezug {0} beginnt an einer anderen Station, als die, an der vorherige Zug {1} endet.", next.TName, first.TName));
                 if (first.GetArrDep(lastStaOfFirst).FirstSetTime > next.GetArrDep(firstStaOfNext).FirstSetTime)
-                    result.Add($"Der Abfahrtszeit des Folgezuges {next.TName} ist früher als die Ankunftszeit des vorherigen Zuges {first.TName}.");
+                    result.Add(LocalizationHelper._("Der Abfahrtszeit des Folgezuges {0} ist früher als die Ankunftszeit des vorherigen Zuges {1}.", next.TName, first.TName));
             });
             return result;
         }

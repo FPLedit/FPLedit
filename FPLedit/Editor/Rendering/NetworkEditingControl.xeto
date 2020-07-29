@@ -7,10 +7,10 @@
     <TableRow>
       <StackLayout x:Name="toolbar" Orientation="Horizontal" Spacing="5" Padding="5,5,5,5">
         <shared:RoutesDropDown x:Name="routesDropDown" Enabled="false" Visible="false" />
-        <Button x:Name="newButton" Enabled="false">&amp;Neue Station</Button>
+        <Button x:Name="newButton" Enabled="false" Text="{x:Static editor:NetworkEditingControl+L.NewStation}" />
         <editor:Divider x:Name="divider1"/>
-        <Button x:Name="newLineButton" Enabled="false">Neue &amp;Strecke</Button>
-        <Button x:Name="joinLineButton" Enabled="false">Strecken &amp;zusammenführen</Button>
+        <Button x:Name="newLineButton" Enabled="false" Text="{x:Static editor:NetworkEditingControl+L.NewLine}" />
+        <Button x:Name="joinLineButton" Enabled="false" Text="{x:Static editor:NetworkEditingControl+L.JoinLines}" />
       </StackLayout>
     </TableRow>
     <TableRow ScaleHeight="True">
