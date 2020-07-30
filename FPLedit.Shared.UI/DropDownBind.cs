@@ -37,7 +37,7 @@ namespace FPLedit.Shared.UI
             var p = GetProperty<T>(property);
             MFont GetFont(T a) => (MFont)p!.GetValue(a)!;
 
-            familyDropDown.DataStore = new [] { "<Lade>" };
+            familyDropDown.DataStore = new [] { FPLedit.Shared.T._("<Lade>") };
             familyDropDown.SelectedIndex = 0;
 
             // Asynchrones Laden der Font-Liste, um Performance-Problemen vorzubeugen

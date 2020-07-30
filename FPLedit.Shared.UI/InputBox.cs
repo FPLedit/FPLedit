@@ -15,11 +15,11 @@ namespace FPLedit.Shared.UI
         {
             var closeButton = DefaultButton = new Button(CloseButtonClick)
             {
-                Text = "Schließen",
+                Text = T._("Schließen"),
             };
             var abortButton = AbortButton = new Button(AbortButtonClick)
             {
-                Text = "Abbrechen",
+                Text = T._("Abbrechen"),
             };
             tb = new TextBox() { Text = defaultValue, };
             table = new TableLayout(new TableRow(new TableCell() { ScaleWidth = true }, abortButton, closeButton)) { Spacing = new Size(5, 5) };

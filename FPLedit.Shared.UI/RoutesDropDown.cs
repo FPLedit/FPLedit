@@ -74,7 +74,7 @@ namespace FPLedit.Shared.UI
                     yield return BuildItem(route.GetRouteName(), route.Index);
             }
             else
-                yield return BuildItem("<Standard>", Timetable.LINEAR_ROUTE_ID);
+                yield return BuildItem(T._("<Standard>"), Timetable.LINEAR_ROUTE_ID);
         }
 
         private void ReloadRouteNames(bool forceReload)

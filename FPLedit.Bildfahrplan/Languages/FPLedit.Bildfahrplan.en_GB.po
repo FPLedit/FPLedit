@@ -1,0 +1,316 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2020-07-30 10:38+0200\n"
+"PO-Revision-Date: 2020-07-30 10:38+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.3.1\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: BitmapExport.cs:23
+msgid "Bildfahrplan als PNG (*.png)|*.png"
+msgstr "Graphical timetable as PNG (*.png)|*.png"
+
+#: DynamicPlugin.cs:39
+msgid "B&ildfahrplan"
+msgstr "Graph&ical timetable"
+
+#: DynamicPlugin.cs:42
+msgid "&Anzeigen"
+msgstr "&Show"
+
+#: DynamicPlugin.cs:43
+msgid "Darste&llung ändern"
+msgstr "Change &plan display"
+
+#: DynamicPlugin.cs:44
+msgid "&Drucken"
+msgstr "&Print"
+
+#: DynamicPlugin.cs:45
+msgid "&Zugdarstellung ändern"
+msgstr "&Train display"
+
+#: DynamicPlugin.cs:46
+msgid "&Stationsdarstellung ändern"
+msgstr "&Station display"
+
+#: DynamicPlugin.cs:47
+msgid "Verwende nur &Plandarstellung"
+msgstr "Only &use plan display"
+
+#: DynamicPlugin.cs:57
+msgid "WARNUNG! Die folgende Funktion ist experimentell und ungetest. Fortfahren?"
+msgstr "WARNING! The following function is experimental and untested. Continue?"
+
+#: DynamicPlugin.cs:92
+msgid "Drucken (aktuelle Route)"
+msgstr "&Print (current route)"
+
+#: DynamicPlugin.cs:94 Forms/PrintRenderer.cs:48
+msgid "Drucken"
+msgstr "&Print"
+
+#: DynamicPreview.cs:12
+msgid "Dynamischer Bildfahrplan"
+msgstr "Dynamic graphical timetable"
+
+#: DynamicPreview.cs:14
+msgid "Dynamischer B&ildfahrplan"
+msgstr "Dynamic graphical t&imetable"
+
+#: Forms/ConfigForm.xeto.cs:40
+msgid "Bitte eine Zahl als Höhe pro Stunde angeben!"
+msgstr "Please enter a valid number as height per hour!"
+
+#: Forms/ConfigForm.xeto.cs:41 Forms/ConfigForm.xeto.cs:42
+msgid "Bitte eine gültige Uhrzeit im Format hh:mm angeben!"
+msgstr "Please enter a valid time in the format hh:mm!"
+
+#: Forms/ConfigForm.xeto.cs:61
+msgid "Keine"
+msgstr "None"
+
+#: Forms/ConfigForm.xeto.cs:62
+msgid "Gerade Linien"
+msgstr "Straight lines"
+
+#: Forms/ConfigForm.xeto.cs:63
+msgid "Kubische Linien"
+msgstr "Cubic lines"
+
+#: Forms/ConfigForm.xeto.cs:92
+#, csharp-format
+msgid ""
+"Bitte erst alle Fehler beheben:\n"
+"{0}"
+msgstr ""
+"Please correct all errors before continuing:\n"
+"{0}"
+
+#: Forms/ConfigForm.xeto.cs:98
+msgid "Die Startzeit muss vor der Endzeit liegen!"
+msgstr "The start time has to be lower than the end time!"
+
+#: Forms/ConfigForm.xeto.cs:138
+msgid "Hintergundfarbe"
+msgstr "Background colour"
+
+#: Forms/ConfigForm.xeto.cs:139
+msgid "Bahnhofslinienfarbe, -stärke"
+msgstr "Station stroke colour and width"
+
+#: Forms/ConfigForm.xeto.cs:140
+msgid "Zeitlinienfarbe"
+msgstr "Time stroke colour"
+
+#: Forms/ConfigForm.xeto.cs:141
+msgid "Zeitlinienstärke zur vollen Stunde"
+msgstr "Time stroke colour (full hour)"
+
+#: Forms/ConfigForm.xeto.cs:142
+msgid "Zeitlinienstärke"
+msgstr "Time stroke width"
+
+#: Forms/ConfigForm.xeto.cs:143
+msgid "Zuglinienfarbe, -stärke"
+msgstr "Train stroke width"
+
+#: Forms/ConfigForm.xeto.cs:144
+msgid "Bahnhofsschriftart, -größe"
+msgstr "Station name font"
+
+#: Forms/ConfigForm.xeto.cs:145
+msgid "Zeitenschriftart, -größe"
+msgstr "Time font"
+
+#: Forms/ConfigForm.xeto.cs:146
+msgid "Zugnummernschriftart, -größe"
+msgstr "Train name font"
+
+#: Forms/ConfigForm.xeto.cs:147
+msgid "Linien für stehende Züge in Bahnhöfen"
+msgstr "Show lines for trains at stations"
+
+#: Forms/ConfigForm.xeto.cs:148
+msgid "Streckenkilometer anzeigen"
+msgstr "Show kilometers"
+
+#: Forms/ConfigForm.xeto.cs:149
+msgid "Stationsnamen anzeigen"
+msgstr "Show station names"
+
+#: Forms/ConfigForm.xeto.cs:150
+msgid "Stationsnamen vertikal zeichnen"
+msgstr "Rotate station names"
+
+#: Forms/ConfigForm.xeto.cs:151
+msgid "Gleise zeichnen"
+msgstr "Display tracks"
+
+#: Forms/ConfigForm.xeto.cs:152
+msgid "An Knotenbahnhöfen Züge anderer Strecken zeichnen"
+msgstr "Show other trains at junction stations"
+
+#: Forms/ConfigForm.xeto.cs:153
+msgid "Höhe pro Stunde"
+msgstr "Height per hour"
+
+#: Forms/ConfigForm.xeto.cs:154
+msgid "Startzeit"
+msgstr "Start time"
+
+#: Forms/ConfigForm.xeto.cs:155
+msgid "Endzeit"
+msgstr "End time"
+
+#: Forms/ConfigForm.xeto.cs:156
+msgid "Zeiten berechnen"
+msgstr "Get times from timetable"
+
+#: Forms/ConfigForm.xeto.cs:157 Forms/StationStyleForm.xeto.cs:75
+#: Forms/TrainStyleForm.xeto.cs:76
+msgid "Abbrechen"
+msgstr "Cancel"
+
+#: Forms/ConfigForm.xeto.cs:158 Forms/StationStyleForm.xeto.cs:76
+#: Forms/TrainStyleForm.xeto.cs:77
+msgid "Schließen"
+msgstr "Ok"
+
+#: Forms/ConfigForm.xeto.cs:159
+msgid "Darstellung ändern"
+msgstr "Change plan display"
+
+#: Forms/PreviewForm.xeto.cs:130
+msgid "&Darstellung ändern"
+msgstr "Change &plan display"
+
+#: Forms/PreviewForm.xeto.cs:131
+msgid "Stationen nicht mitscrollen"
+msgstr "Do not scroll station names"
+
+#: Forms/PreviewForm.xeto.cs:132
+msgid "Verkehrstage"
+msgstr "Days"
+
+#: Forms/PreviewForm.xeto.cs:133
+msgid "Dynamische Bildfahrplan-Vorschau"
+msgstr "Dynamic graphical timetable preview"
+
+#: Forms/PrintRenderer.cs:47
+msgid "Querformat"
+msgstr "Landscape"
+
+#: Forms/PrintRenderer.cs:53
+msgid "Bildfahrplan drucken"
+msgstr "Print graphical timetable"
+
+#: Forms/PrintRenderer.cs:75
+msgid "Bildfahrplan generiert mit FPLedit"
+msgstr "Graphical timetable generated with FPLedit"
+
+#: Forms/PrintRenderer.cs:94
+msgid "Ungültige Druckereinstellungen!"
+msgstr "Invalid printer settings!"
+
+#: Forms/PrintRenderer.cs:103
+#, csharp-format
+msgid "Fehler beim Drucken! {0}"
+msgstr "Error while printing! {0}"
+
+#: Forms/StationStyleForm.xeto.cs:35
+msgid "Name"
+msgstr "Name"
+
+#: Forms/StationStyleForm.xeto.cs:36 Forms/TrainStyleForm.xeto.cs:36
+msgid "Farbe"
+msgstr "Colour"
+
+#: Forms/StationStyleForm.xeto.cs:37 Forms/TrainStyleForm.xeto.cs:37
+msgid "Linienstärke"
+msgstr "Stroke width"
+
+#: Forms/StationStyleForm.xeto.cs:38 Forms/TrainStyleForm.xeto.cs:38
+msgid "Linientyp"
+msgstr "Stroke type"
+
+#: Forms/StationStyleForm.xeto.cs:39
+msgid "Station zeichnen"
+msgstr "Show station"
+
+#: Forms/StationStyleForm.xeto.cs:53
+msgid "Zuerst muss eine Station ausgewählt werden!"
+msgstr "Please select a station first!"
+
+#: Forms/StationStyleForm.xeto.cs:53
+msgid "Stationsdarstellung zurücksetzen"
+msgstr "Reset station display"
+
+#: Forms/StationStyleForm.xeto.cs:77 Forms/TrainStyleForm.xeto.cs:78
+msgid "Eintrag &zurücksetzen"
+msgstr "Reset entry"
+
+#: Forms/StationStyleForm.xeto.cs:78
+msgid "Stationsdarstellung ändern"
+msgstr "Change station display"
+
+#: Forms/TrainStyleForm.xeto.cs:35
+msgid "Zugnummer"
+msgstr "Train name"
+
+#: Forms/TrainStyleForm.xeto.cs:39
+msgid "Zug zeichnen"
+msgstr "Show train"
+
+#: Forms/TrainStyleForm.xeto.cs:54
+msgid "Zuerst muss ein Zug ausgewählt werden!"
+msgstr "Please select a train first!"
+
+#: Forms/TrainStyleForm.xeto.cs:54
+msgid "Zugdarstellung zurücksetzen"
+msgstr "Reset train display"
+
+#: Forms/TrainStyleForm.xeto.cs:79
+msgid "Zugdarstellung ändern"
+msgstr "Change train display"
+
+#: Helpers/DashStyleHelper.cs:11
+msgid "Normal"
+msgstr "Normal"
+
+#: Helpers/DashStyleHelper.cs:12
+msgid "Gepunktet"
+msgstr "Dotted"
+
+#: Helpers/DashStyleHelper.cs:13
+msgid "Kurz gestrichelt"
+msgstr "Dashed (short)"
+
+#: Helpers/DashStyleHelper.cs:14
+msgid "Länger gestrichelt (63)"
+msgstr "Dashed (63)"
+
+#: Helpers/DashStyleHelper.cs:15
+msgid "Länger gestrichelt (93)"
+msgstr "Dashed (93)"
+
+#: Helpers/DashStyleHelper.cs:16
+msgid "Lang gestrichelt"
+msgstr "Dashed (long)"
+
+#: Render/AsyncDoubleBufferedGraph.cs:90
+msgid "Generiere Bildfahrplan..."
+msgstr "Generating graphical timetable..."
+
+#: Render/AsyncDoubleBufferedGraph.cs:102
+msgid "Fehler beim Rendern (siehe Log)..."
+msgstr "Exception occurred while rendering (see log)..."

@@ -124,5 +124,13 @@ namespace FPLedit.Bildfahrplan.Forms
             adbg?.Dispose();
             base.Dispose(disposing);
         }
+
+        private static class L
+        {
+            public static readonly string ChangePlanDisplay = T._("&Darstellung ändern");
+            public static readonly string Split = T._("Stationen nicht mitscrollen");
+            public static readonly string Days = T._("Verkehrstage");
+            public static readonly string Title = T._("Dynamische Bildfahrplan-Vorschau");
+        }
     }
 }

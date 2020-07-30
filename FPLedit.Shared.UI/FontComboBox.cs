@@ -15,7 +15,7 @@ namespace FPLedit.Shared.UI
             this.box = box;
             this.label = label;
 
-            box.DataStore = new [] { "<Lade>" };
+            box.DataStore = new [] { T._("<Lade>") };
             box.SelectedIndex = 0;
 
             // Asynchrones Laden der Font-Liste, um Performance-Problemen vorzubeugen

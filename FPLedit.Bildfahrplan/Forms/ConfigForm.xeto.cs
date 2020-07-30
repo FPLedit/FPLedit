@@ -37,9 +37,9 @@ namespace FPLedit.Bildfahrplan.Forms
             this.tt = tt;
             this.pluginInterface = pluginInterface;
 
-            var heightPerHourValidator = new NumberValidator(heightPerHourTextBox, false, false, errorMessage: "Bitte eine Zahl als Höhe pro Stunde angeben!");
-            var startTimeValidator = new TimeValidator(startTimeTextBox, false, errorMessage: "Bitte eine gültige Uhrzeit im Format hh:mm angeben!");
-            var endTimeValidator = new TimeValidator(endTimeTextBox, false, errorMessage: "Bitte eine gültige Uhrzeit im Format hh:mm angeben!", maximum: new TimeEntry(48,0));
+            var heightPerHourValidator = new NumberValidator(heightPerHourTextBox, false, false, errorMessage: T._("Bitte eine Zahl als Höhe pro Stunde angeben!"));
+            var startTimeValidator = new TimeValidator(startTimeTextBox, false, errorMessage: T._("Bitte eine gültige Uhrzeit im Format hh:mm angeben!"));
+            var endTimeValidator = new TimeValidator(endTimeTextBox, false, errorMessage: T._("Bitte eine gültige Uhrzeit im Format hh:mm angeben!"), maximum: new TimeEntry(48, 0));
             validators = new ValidatorCollection(heightPerHourValidator, startTimeValidator, endTimeValidator);
 
             DropDownBind.Color<TimetableStyle>(pluginInterface.Settings, bgColorComboBox, "BgColor");
@@ -58,9 +58,9 @@ namespace FPLedit.Bildfahrplan.Forms
 
             var styles = new Dictionary<StationLineStyle, string>()
             {
-                [StationLineStyle.None] = "Keine",
-                [StationLineStyle.Normal] = "Gerade Linien",
-                [StationLineStyle.Cubic] = "Kubische Linien",
+                [StationLineStyle.None] = T._("Keine"),
+                [StationLineStyle.Normal] = T._("Gerade Linien"),
+                [StationLineStyle.Cubic] = T._("Kubische Linien"),
             };
             if (tt.Version == TimetableVersion.JTG2_x)
                 styles.Remove(StationLineStyle.Cubic);
@@ -89,16 +89,16 @@ namespace FPLedit.Bildfahrplan.Forms
         {
             if (!validators.IsValid)
             {
-                MessageBox.Show("Bitte erst alle Fehler beheben: " + Environment.NewLine + validators.Message);
+                MessageBox.Show(T._("Bitte erst alle Fehler beheben:\n{0}", validators.Message));
                 return;
             }
 
             if (attrs.StartTime > attrs.EndTime)
             {
-                MessageBox.Show("Die Startzeit muss vor der Endzeit liegen!");
+                MessageBox.Show(T._("Die Startzeit muss vor der Endzeit liegen!"));
                 return;
             }
-            
+
             pluginInterface.ClearBackup(backupHandle);
 
             Result = DialogResult.Ok;
@@ -108,7 +108,7 @@ namespace FPLedit.Bildfahrplan.Forms
         private void CancelButton_Click(object sender, EventArgs e)
         {
             pluginInterface.RestoreTimetable(backupHandle);
-            
+
             Result = DialogResult.Cancel;
             this.NClose();
         }
@@ -131,6 +131,32 @@ namespace FPLedit.Bildfahrplan.Forms
 
             startTimeTextBox.UpdateBindings(BindingUpdateMode.Destination);
             endTimeTextBox.UpdateBindings(BindingUpdateMode.Destination);
+        }
+
+        private static class L
+        {
+            public static readonly string BackgroundColor = T._("Hintergundfarbe");
+            public static readonly string StationColor = T._("Bahnhofslinienfarbe, -stärke");
+            public static readonly string TimeColor = T._("Zeitlinienfarbe");
+            public static readonly string HourTimeWidth = T._("Zeitlinienstärke zur vollen Stunde");
+            public static readonly string TimeWidth = T._("Zeitlinienstärke");
+            public static readonly string TrainColorWidth = T._("Zuglinienfarbe, -stärke");
+            public static readonly string StationFont = T._("Bahnhofsschriftart, -größe");
+            public static readonly string TimeFont = T._("Zeitenschriftart, -größe");
+            public static readonly string TrainFont = T._("Zugnummernschriftart, -größe");
+            public static readonly string StationLines = T._("Linien für stehende Züge in Bahnhöfen");
+            public static readonly string ShowKilometers = T._("Streckenkilometer anzeigen");
+            public static readonly string ShowStationNames = T._("Stationsnamen anzeigen");
+            public static readonly string StationsVertical = T._("Stationsnamen vertikal zeichnen");
+            public static readonly string Multitrack = T._("Gleise zeichnen");
+            public static readonly string NetworkTrains = T._("An Knotenbahnhöfen Züge anderer Strecken zeichnen");
+            public static readonly string HeightPerHour = T._("Höhe pro Stunde");
+            public static readonly string StartTime = T._("Startzeit");
+            public static readonly string EndTime = T._("Endzeit");
+            public static readonly string CalcTimes = T._("Zeiten berechnen");
+            public static readonly string Cancel = T._("Abbrechen");
+            public static readonly string Close = T._("Schließen");
+            public static readonly string Title = T._("Darstellung ändern");
         }
     }
 }

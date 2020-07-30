@@ -87,7 +87,7 @@ namespace FPLedit.Bildfahrplan.Render
             else if (!hadCrash && buffer == null && generatingBuffer)
             {
                 g.Clear(Colors.White);
-                var text = "Generiere Bildfahrplan...";
+                var text = T._("Generiere Bildfahrplan...");
                 var t = g.MeasureString(font, text);
                 g.DrawText(font, Colors.Black, (panel.Width - t.Width) / 2, 30, text);
             }
@@ -99,7 +99,7 @@ namespace FPLedit.Bildfahrplan.Render
             else // We had a crash
             {
                 g.Clear(Colors.White);
-                var text = "Fehler beim Rendern (siehe Log)...";
+                var text = T._("Fehler beim Rendern (siehe Log)...");
                 var t = g.MeasureString(font, text);
                 g.DrawText(font, Colors.Red, (panel.Width - t.Width) / 2, 30, text);
             }

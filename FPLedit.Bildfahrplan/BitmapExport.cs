@@ -20,6 +20,6 @@ namespace FPLedit.Bildfahrplan
             return true;
         }
 
-        public string Filter => "Bildfahrplan als PNG (*.png)|*.png";
+        public string Filter => T._("Bildfahrplan als PNG (*.png)|*.png");
     }
 }

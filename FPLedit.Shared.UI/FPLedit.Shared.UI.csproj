@@ -24,4 +24,7 @@
     <PackageReference Include="Eto.Serialization.Xaml" Version="$(EtoVersion)" />
     <PackageReference Include="Nullable" Version="1.2.1" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Languages/*.mo" CopyToOutputDirectory="Always" />
+  </ItemGroup>
 </Project>

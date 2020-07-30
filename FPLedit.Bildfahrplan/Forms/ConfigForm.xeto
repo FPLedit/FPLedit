@@ -3,89 +3,89 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.Bildfahrplan.Forms;assembly=FPLedit.Bildfahrplan"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
-  Title="Darstellung ändern" Resizable="false">
+  Title="{x:Static e:ConfigForm+L.Title}" Resizable="false">
   <TableLayout Spacing="5,5" Padding="10,10,10,10">
     <TableRow>
       <TableLayout Spacing="5,5">
         <TableRow>
-          <Label>Hintergrundfarbe</Label>
+          <Label Text="{x:Static e:ConfigForm+L.BackgroundColor}" />
           <DropDown x:Name="bgColorComboBox" Width="150" />
         </TableRow>
         <TableRow>
-          <Label>Bahnhofslinienfarbe, -stärke</Label>
+          <Label Text="{x:Static e:ConfigForm+L.StationColor}" />
           <DropDown x:Name="stationColorComboBox" Width="150" />
           <DropDown x:Name="stationWidthComboBox" Width="60" />
         </TableRow>
         <TableRow>
-          <Label>Zeitlinienfarbe</Label>
+          <Label Text="{x:Static e:ConfigForm+L.TimeColor}" />
           <DropDown x:Name="timeColorComboBox" Width="150" />
         </TableRow>
         <TableRow>
-          <Label>Zeitlinienstärke zur vollen Stunde</Label>
+          <Label Text="{x:Static e:ConfigForm+L.HourTimeWidth}" />
           <TableCell />
           <DropDown x:Name="hourTimeWidthComboBox" Width="60" />
         </TableRow>
         <TableRow>
-          <Label>Zeitlinienstärke</Label>
+          <Label Text="{x:Static e:ConfigForm+L.TimeWidth}" />
           <TableCell />
           <DropDown x:Name="minuteTimeWidthComboBox" Width="60" />
         </TableRow>
         <TableRow>
-          <Label>Zuglinienfarbe, -stärke</Label>
+          <Label Text="{x:Static e:ConfigForm+L.TrainColorWidth}" />
           <DropDown x:Name="trainColorComboBox" Width="150" />
           <DropDown x:Name="trainWidthComboBox" Width="60" />
         </TableRow>
         <TableRow>
-          <Label>Bahnhofsschriftart, -größe</Label>
+          <Label Text="{x:Static e:ConfigForm+L.StationFont}" />
           <DropDown x:Name="stationFontComboBox" Width="150" />
           <DropDown x:Name="stationFontSizeComboBox" Width="60" />
         </TableRow>
         <TableRow>
-          <Label>Zeitenschriftart, -größe</Label>
+          <Label Text="{x:Static e:ConfigForm+L.TimeFont}" />
           <DropDown x:Name="timeFontComboBox" Width="150" />
           <DropDown x:Name="timeFontSizeComboBox" Width="60" />
         </TableRow>
         <TableRow>
-          <Label>Zugnummernschriftart, -größe</Label>
+          <Label Text="{x:Static e:ConfigForm+L.TrainFont}" />
           <DropDown x:Name="trainFontComboBox" Width="150" />
           <DropDown x:Name="trainFontSizeComboBox" Width="60" />
         </TableRow>
         <TableRow>
-          <Label>Linien für stehende Züge in Bahnhöfen</Label>
+          <Label Text="{x:Static e:ConfigForm+L.StationLines}" />
           <DropDown x:Name="stationLinesDropDown" Width="150" />
         </TableRow>
         <!-- CheckBoxes -->
         <TableRow>
-          <CheckBox x:Name="includeKilometreCheckBox">Streckenkilometer anzeigen</CheckBox>
+          <CheckBox x:Name="includeKilometreCheckBox" Text="{x:Static e:ConfigForm+L.ShowKilometers}" />
         </TableRow>
         <TableRow>
-          <CheckBox x:Name="drawStationNamesCheckBox">Stationsnamen anzeigen</CheckBox>
+          <CheckBox x:Name="drawStationNamesCheckBox" Text="{x:Static e:ConfigForm+L.ShowStationNames}" />
         </TableRow>
         <TableRow>
-          <CheckBox x:Name="stationVerticalCheckBox">Stationsnamen vertikal zeichnen</CheckBox>
+          <CheckBox x:Name="stationVerticalCheckBox" Text="{x:Static e:ConfigForm+L.StationsVertical}" />
         </TableRow>
         <TableRow>
-          <CheckBox x:Name="multitrackCheckBox">Gleise zeichnen</CheckBox>
+          <CheckBox x:Name="multitrackCheckBox" Text="{x:Static e:ConfigForm+L.Multitrack}" />
         </TableRow>
         <TableRow>
-          <CheckBox x:Name="networkTrainsCheckBox">An Knotenbahnhöfen Züge anderer Strecken zeichnen</CheckBox>
+          <CheckBox x:Name="networkTrainsCheckBox" Text="{x:Static e:ConfigForm+L.NetworkTrains}" />
         </TableRow>
         <!-- TextBoxes -->
         <TableRow>
-          <Label>Höhe pro Stunde</Label>
+          <Label Text="{x:Static e:ConfigForm+L.HeightPerHour}" />
           <TextBox x:Name="heightPerHourTextBox" Width="150" />
         </TableRow>
         <TableRow>
-          <Label>Startzeit</Label>
+          <Label Text="{x:Static e:ConfigForm+L.StartTime}" />
           <TextBox x:Name="startTimeTextBox" Width="150" />
         </TableRow>
         <TableRow>
-          <Label>Endzeit</Label>
+          <Label Text="{x:Static e:ConfigForm+L.EndTime}" />
           <TextBox x:Name="endTimeTextBox" Width="150" />
         </TableRow>
         <TableRow>
           <TableCell />
-          <Button Click="CalcTimesButton_Click">Zeiten berechnen</Button>
+          <Button Click="CalcTimesButton_Click" Text="{x:Static e:ConfigForm+L.CalcTimes}" />
         </TableRow>
       </TableLayout>
     </TableRow>
@@ -93,8 +93,8 @@
       <TableLayout Spacing="5,5">
         <TableRow>
           <TableCell ScaleWidth="true" />
-          <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click" />
-          <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click" />
+          <Button x:Name="cancelButton" Text="{x:Static e:ConfigForm+L.Cancel}" Click="CancelButton_Click" />
+          <Button x:Name="closeButton" Text="{x:Static e:ConfigForm+L.Close}" Click="CloseButton_Click" />
         </TableRow>
       </TableLayout>
     </TableRow>

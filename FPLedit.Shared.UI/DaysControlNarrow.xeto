@@ -6,30 +6,30 @@
     <TableRow>
       <TableLayout Spacing="5,5">
         <TableRow>
-          <CheckBox Checked="true" x:Name="mondayCheckBox" Text="Mo" />
-          <CheckBox Checked="true" x:Name="tuesdayCheckBox" Text="Di" />
-          <CheckBox Checked="true" x:Name="wednesdayCheckBox" Text="Mi" />
-          <CheckBox Checked="true" x:Name="thursdayCheckBox" Text="Do" />
+          <CheckBox Checked="true" x:Name="mondayCheckBox" Text="{x:Static e:DaysControl+L.MondayShort}" />
+          <CheckBox Checked="true" x:Name="tuesdayCheckBox" Text="{x:Static e:DaysControl+L.TuesdayShort}" />
+          <CheckBox Checked="true" x:Name="wednesdayCheckBox" Text="{x:Static e:DaysControl+L.WednesdayShort}" />
+          <CheckBox Checked="true" x:Name="thursdayCheckBox" Text="{x:Static e:DaysControl+L.ThursdayShort}" />
         </TableRow>
         <TableRow>
-          <CheckBox Checked="true" x:Name="fridayCheckBox" Text="Fr" />
-          <CheckBox Checked="true" x:Name="saturdayCheckBox" Text="Sa" />
-          <CheckBox Checked="true" x:Name="sundayCheckBox" Text="So" />
+          <CheckBox Checked="true" x:Name="fridayCheckBox" Text="{x:Static e:DaysControl+L.FridayShort}" />
+          <CheckBox Checked="true" x:Name="saturdayCheckBox" Text="{x:Static e:DaysControl+L.SaturdayShort}" />
+          <CheckBox Checked="true" x:Name="sundayCheckBox" Text="{x:Static e:DaysControl+L.SundayShort}" />
         </TableRow>
       </TableLayout>
     </TableRow>
     <TableRow>
       <TableLayout Spacing="5,5">
         <TableRow>
-          <ToggleButton x:Name="wShort" ToolTip="Werktags (Montag - Samstag)">W</ToggleButton>
-          <ToggleButton x:Name="wSaShort" ToolTip="Werktags (außer Samstag)">W (Sa)</ToggleButton>
+          <ToggleButton x:Name="wShort" ToolTip="{x:Static e:DaysControl+L.WLong}" Text="{x:Static e:DaysControl+L.W}" />
+          <ToggleButton x:Name="wSaShort" ToolTip="{x:Static e:DaysControl+L.WSaLong}" Text="{x:Static e:DaysControl+L.WSa}" />
         </TableRow>
         <TableRow>
-          <ToggleButton x:Name="sShort" ToolTip="Sonn- und Feiertags">S</ToggleButton>
-          <ToggleButton x:Name="aShort" ToolTip="Alle aktivieren">Alle</ToggleButton>
+          <ToggleButton x:Name="sShort" ToolTip="{x:Static e:DaysControl+L.SLong}" Text="{x:Static e:DaysControl+L.S}" />
+          <ToggleButton x:Name="aShort" ToolTip="{x:Static e:DaysControl+L.AllLong}" Text="{x:Static e:DaysControl+L.All}" />
         </TableRow>
         <TableRow>
-          <ToggleButton x:Name="zShort" ToolTip="Keine aktivieren">Keine</ToggleButton>
+          <ToggleButton x:Name="zShort" ToolTip="{x:Static e:DaysControl+L.NoneLong}" Text="{x:Static e:DaysControl+L.None}" />
         </TableRow>
       </TableLayout>
     </TableRow>

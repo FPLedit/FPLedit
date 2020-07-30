@@ -56,7 +56,7 @@ namespace FPLedit
 #pragma warning restore CA2000
 
             var lang = settings.Get("lang", "en-GB");
-            T.SetLocale(lang);
+            T.SetLocale(Path.Combine(PathManager.Instance.AppDirectory, "Languages"), lang);
             
             registry = new RegisterStore();
             Update = new UpdateManager(settings);

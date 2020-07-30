@@ -1,0 +1,128 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2020-07-30 10:26+0200\n"
+"PO-Revision-Date: 2020-07-30 10:30+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.3.1\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: DaysControl.cs:117
+msgid "Mo"
+msgstr "Mon"
+
+#: DaysControl.cs:118
+msgid "Di"
+msgstr "Tue"
+
+#: DaysControl.cs:119
+msgid "Mi"
+msgstr "Wed"
+
+#: DaysControl.cs:120
+msgid "Do"
+msgstr "Thu"
+
+#: DaysControl.cs:121
+msgid "Fr"
+msgstr "Fri"
+
+#: DaysControl.cs:122
+msgid "Sa"
+msgstr "Sat"
+
+#: DaysControl.cs:123
+msgid "So"
+msgstr "Sun"
+
+#: DaysControl.cs:125
+msgid "Montag"
+msgstr "Monday"
+
+#: DaysControl.cs:126
+msgid "Dienstag"
+msgstr "Tuesday"
+
+#: DaysControl.cs:127
+msgid "Mittwoch"
+msgstr "Wednesday"
+
+#: DaysControl.cs:128
+msgid "Donnerstag"
+msgstr "Thursday"
+
+#: DaysControl.cs:129
+msgid "Freitag"
+msgstr "Friday"
+
+#: DaysControl.cs:130
+msgid "Samstag"
+msgstr "SSaturday"
+
+#: DaysControl.cs:131
+msgid "Sonntag"
+msgstr "Sunday"
+
+#: DaysControl.cs:134
+msgid "W"
+msgstr "W"
+
+#: DaysControl.cs:135
+msgid "Werktags (Montag - Samstag)"
+msgstr "Weekdays (Monday - Saturday)"
+
+#: DaysControl.cs:136
+msgid "W (Sa)"
+msgstr "W (Sa)"
+
+#: DaysControl.cs:137
+msgid "Werktags (außer Samstag)"
+msgstr "Weekdays (except Saturday)"
+
+#: DaysControl.cs:138
+msgid "S"
+msgstr "S"
+
+#: DaysControl.cs:139
+msgid "Sonn- und Feiertags"
+msgstr "Sundays and holidays"
+
+#: DaysControl.cs:140
+msgid "Alle"
+msgstr "All"
+
+#: DaysControl.cs:141
+msgid "Alle aktivieren"
+msgstr "Activate all"
+
+#: DaysControl.cs:142
+msgid "Keine"
+msgstr "None"
+
+#: DaysControl.cs:143
+msgid "Keine aktivieren"
+msgstr "Activate none"
+
+#: DropDownBind.cs:40 FontComboBox.cs:18
+msgid "<Lade>"
+msgstr "<Loading>"
+
+#: InputBox.cs:18
+msgid "Schließen"
+msgstr "Ok"
+
+#: InputBox.cs:22
+msgid "Abbrechen"
+msgstr "Cancel"
+
+#: RoutesDropDown.cs:77
+msgid "<Standard>"
+msgstr "<Default>"

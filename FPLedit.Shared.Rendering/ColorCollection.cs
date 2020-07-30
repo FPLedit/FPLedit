@@ -9,18 +9,18 @@ namespace FPLedit.Shared.Rendering
     {
         private readonly Dictionary<string, MColor> colors = new Dictionary<string, MColor>()
         {
-            ["Schwarz"] = (MColor)Colors.Black,
-            ["Grau"] = (MColor)Colors.Gray,
-            ["Weiß"] = (MColor)Colors.White,
-            ["Rot"] = (MColor)Colors.Red,
-            ["Orange"] = (MColor)Colors.Orange,
-            ["Gelb"] = (MColor)Colors.Yellow,
-            ["Blau"] = (MColor)Colors.Blue,
-            ["Hellblau"] = (MColor)Colors.LightBlue,
-            ["Grün"] = (MColor)Colors.Green,
-            ["Dunkelgrün"] = (MColor)Colors.DarkGreen,
-            ["Braun"] = (MColor)Colors.Brown,
-            ["Magenta"] = (MColor)Colors.Magenta,
+            [T._("Schwarz")] = (MColor)Colors.Black,
+            [T._("Grau")] = (MColor)Colors.Gray,
+            [T._("Weiß")] = (MColor)Colors.White,
+            [T._("Rot")] = (MColor)Colors.Red,
+            [T._("Orange")] = (MColor)Colors.Orange,
+            [T._("Gelb")] = (MColor)Colors.Yellow,
+            [T._("Blau")] = (MColor)Colors.Blue,
+            [T._("Hellblau")] = (MColor)Colors.LightBlue,
+            [T._("Grün")] = (MColor)Colors.Green,
+            [T._("Dunkelgrün")] = (MColor)Colors.DarkGreen,
+            [T._("Braun")] = (MColor)Colors.Brown,
+            [T._("Magenta")] = (MColor)Colors.Magenta,
         };
 
         public string[] ColorHexStrings

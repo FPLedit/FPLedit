@@ -32,11 +32,11 @@ namespace FPLedit.Bildfahrplan.Forms
 
             var lineWidths = Enumerable.Range(1, 5).Cast<object>().ToArray();
 
-            gridView.AddColumn<StationStyle>(t => t.Station.SName, "Name");
-            gridView.AddDropDownColumn<StationStyle>(t => t.HexColor, cc.ColorHexStrings, EtoBindingExtensions.ColorBinding(cc), "Farbe", true);
-            gridView.AddDropDownColumn<StationStyle>(t => t.StationWidthInt, lineWidths, Binding.Delegate<int, string>(i => i.ToString()), "Linienstärke", true);
-            gridView.AddDropDownColumn<StationStyle>(t => t.LineStyle, ds.Indices.Cast<object>(), Binding.Delegate<int, string>(i => ds.GetDescription(i)), "Linientyp", true);
-            gridView.AddCheckColumn<StationStyle>(t => t.Show, "Station zeichnen", true);
+            gridView.AddColumn<StationStyle>(t => t.Station.SName, T._("Name"));
+            gridView.AddDropDownColumn<StationStyle>(t => t.HexColor, cc.ColorHexStrings, EtoBindingExtensions.ColorBinding(cc), T._("Farbe"), true);
+            gridView.AddDropDownColumn<StationStyle>(t => t.StationWidthInt, lineWidths, Binding.Delegate<int, string>(i => i.ToString()), T._("Linienstärke"), true);
+            gridView.AddDropDownColumn<StationStyle>(t => t.LineStyle, ds.Indices.Cast<object>(), Binding.Delegate<int, string>(i => ds.GetDescription(i)), T._("Linientyp"), true);
+            gridView.AddCheckColumn<StationStyle>(t => t.Show, T._("Station zeichnen"), true);
 
             gridView.DataStore = tt.Stations.Select(s => new StationStyle(s, attrs));
 
@@ -50,7 +50,7 @@ namespace FPLedit.Bildfahrplan.Forms
                 gridView.ReloadData(gridView.SelectedRow);
             }
             else if (message)
-                MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Stationsdarstellung zurücksetzen");
+                MessageBox.Show(T._("Zuerst muss eine Station ausgewählt werden!"), T._("Stationsdarstellung zurücksetzen"));
         }
 
         private void CancelButton_Click(object sender, EventArgs e)
@@ -69,5 +69,13 @@ namespace FPLedit.Bildfahrplan.Forms
 
         private void ResetButton_Click(object sender, EventArgs e)
             => ResetStationStyle();
+
+        private static class L
+        {
+            public static readonly string Cancel = T._("Abbrechen");
+            public static readonly string Close = T._("Schließen");
+            public static readonly string Reset = T._("Eintrag &zurücksetzen");
+            public static readonly string Title = T._("Stationsdarstellung ändern");
+        }
     }
 }

@@ -9,9 +9,9 @@ namespace FPLedit.Bildfahrplan
         private bool opened = false;
         private PreviewForm dpf;
 
-        public string DisplayName => "Dynamischer Bildfahrplan";
+        public string DisplayName => T._("Dynamischer Bildfahrplan");
         
-        public string MenuName => "Dynamischer B&ildfahrplan";
+        public string MenuName => T._("Dynamischer B&ildfahrplan");
 
         public void Show(IPluginInterface pluginInterface)
         {

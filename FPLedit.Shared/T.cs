@@ -13,11 +13,13 @@ namespace FPLedit.Shared
     public static class T
     {
         private static string locale = "de-DE";
+        private static string localeDir = ".";
         private static Dictionary<string, ICatalog> catalogs = new Dictionary<string, ICatalog>();
 
-        public static void SetLocale(string locale)
+        public static void SetLocale(string localeDir, string locale)
         {
             T.locale = locale;
+            T.localeDir = localeDir;
             catalogs = new Dictionary<string, ICatalog>();
         }
 
@@ -27,7 +29,7 @@ namespace FPLedit.Shared
             var name = assembly.GetName().Name;
             if (catalogs.TryGetValue(name, out var catalog))
                 return catalog.GetString(text);
-            var newCatalog = new Catalog(new CustomMoLoader(name, "Languages"), new System.Globalization.CultureInfo(locale));
+            var newCatalog = new Catalog(new CustomMoLoader(name, localeDir), new System.Globalization.CultureInfo(locale));
             catalogs[name] = newCatalog;
             return newCatalog.GetString(text);
         }
@@ -37,7 +39,7 @@ namespace FPLedit.Shared
             var name = assembly.GetName().Name;
             if (catalogs.TryGetValue(name, out var catalog))
                 return catalog.GetString(text, args);
-            var newCatalog = new Catalog(new CustomMoLoader(name, "Languages"), new System.Globalization.CultureInfo(locale));
+            var newCatalog = new Catalog(new CustomMoLoader(name, localeDir), new System.Globalization.CultureInfo(locale));
             catalogs[name] = newCatalog;
             return newCatalog.GetString(text, args);
         }

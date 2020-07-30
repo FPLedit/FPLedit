@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using FPLedit.Shared;
 
 namespace FPLedit.Bildfahrplan.Helpers
 {
@@ -7,12 +8,12 @@ namespace FPLedit.Bildfahrplan.Helpers
     {
         private readonly List<DashStyle> types = new List<DashStyle>
         {
-            new DashStyle("Normal", new[] { 10000.0f, 0.01f }),
-            new DashStyle("Gepunktet", new[] { 3.0f, 3.0f }),
-            new DashStyle("Kurz gestrichelt", new[] { 6.0f, 3.0f }),
-            new DashStyle("Länger gestrichelt (63)", new[] { 9.0f, 3.0f }),
-            new DashStyle("Länger gestrichelt (93)", new[] { 12.0f, 3.0f }),
-            new DashStyle("Lang gestrichelt", new[] { 15.0f, 3.0f })
+            new DashStyle(T._("Normal"), new[] { 10000.0f, 0.01f }),
+            new DashStyle(T._("Gepunktet"), new[] { 3.0f, 3.0f }),
+            new DashStyle(T._("Kurz gestrichelt"), new[] { 6.0f, 3.0f }),
+            new DashStyle(T._("Länger gestrichelt (63)"), new[] { 9.0f, 3.0f }),
+            new DashStyle(T._("Länger gestrichelt (93)"), new[] { 12.0f, 3.0f }),
+            new DashStyle(T._("Lang gestrichelt"), new[] { 15.0f, 3.0f })
         };
 
         public int[] Indices => Enumerable.Range(0, types.Count - 1).ToArray();

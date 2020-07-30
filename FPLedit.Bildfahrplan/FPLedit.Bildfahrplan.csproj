@@ -27,4 +27,7 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Languages/*.mo" CopyToOutputDirectory="Always" />
+  </ItemGroup>
 </Project>

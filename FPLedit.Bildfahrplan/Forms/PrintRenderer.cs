@@ -44,13 +44,13 @@ namespace FPLedit.Bildfahrplan.Forms
             using (var form = new FDialog<string>())
             using (var printerDropDown = new DropDown { DataStore = printers })
             using (var paperDropDown = new DropDown())
-            using (var landscapeChk = new CheckBox { Text = "Querformat" })
-            using (var printButton = new Button { Text = "Drucken" })
+            using (var landscapeChk = new CheckBox { Text = T._("Querformat") })
+            using (var printButton = new Button { Text = T._("Drucken") })
             using (var stack = new StackLayout(printerDropDown, paperDropDown, landscapeChk, printButton) { Orientation = Orientation.Horizontal, Padding = new Eto.Drawing.Padding(10), Spacing = 5 })
             {
                 form.Content = stack;
                 form.DefaultButton = printButton;
-                form.Title = "Bildfahrplan drucken";
+                form.Title = T._("Bildfahrplan drucken");
 
                 printButton.Click += (s, e) =>
                 {
@@ -72,7 +72,7 @@ namespace FPLedit.Bildfahrplan.Forms
                 if (form.ShowModal() != null)
                 {
                     doc.PrintPage += Doc_PrintPage;
-                    doc.DocumentName = "Bildfahrplan generiert mit FPLedit";
+                    doc.DocumentName = T._("Bildfahrplan generiert mit FPLedit");
 
                     doc.PrinterSettings.PrinterName = form.Result;
 
@@ -91,7 +91,7 @@ namespace FPLedit.Bildfahrplan.Forms
                         doc.DefaultPageSettings.Landscape = landscapeChk.Checked.Value;
 
                     if (!doc.PrinterSettings.IsValid)
-                        MessageBox.Show("Ungültige Druckereinstellungen!", "FPLedit", MessageBoxType.Error);
+                        MessageBox.Show(T._("Ungültige Druckereinstellungen!"), "FPLedit", MessageBoxType.Error);
                     else
                     {
                         try
@@ -100,7 +100,7 @@ namespace FPLedit.Bildfahrplan.Forms
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show("Fehler beim Drucken! " + ex.Message, "FPLedit", MessageBoxType.Error);
+                            MessageBox.Show(T._("Fehler beim Drucken! {0}", ex.Message), "FPLedit", MessageBoxType.Error);
                         }
                     }
                 }
