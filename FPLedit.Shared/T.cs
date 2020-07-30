@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using NGettext;
 using NGettext.Loaders;
@@ -12,37 +15,70 @@ namespace FPLedit.Shared
     /// </summary>
     public static class T
     {
-        private static string locale = "de-DE";
+        private const string DEFAULT_LOCALE = "de-DE";
+        private const string DEFAULT_LOCALE_NAME = "Deutsch";
+        
+        private static string currentLocale = DEFAULT_LOCALE;
         private static string localeDir = ".";
         private static Dictionary<string, ICatalog> catalogs = new Dictionary<string, ICatalog>();
 
-        public static void SetLocale(string localeDir, string locale)
+        public static void SetLocale(string localeRoot, string locale)
         {
-            T.locale = locale;
-            T.localeDir = localeDir;
+            currentLocale = locale;
+            localeDir = localeRoot;
             catalogs = new Dictionary<string, ICatalog>();
         }
 
         public static string _(string text)
         {
             var assembly = Assembly.GetCallingAssembly();
-            var name = assembly.GetName().Name;
-            if (catalogs.TryGetValue(name, out var catalog))
-                return catalog.GetString(text);
-            var newCatalog = new Catalog(new CustomMoLoader(name, localeDir), new System.Globalization.CultureInfo(locale));
-            catalogs[name] = newCatalog;
-            return newCatalog.GetString(text);
+            var catalog = GetCatalog(assembly);
+            return catalog.GetString(text);
         }
         public static string _(string text, params object[] args)
         {
             var assembly = Assembly.GetCallingAssembly();
-            var name = assembly.GetName().Name;
-            if (catalogs.TryGetValue(name, out var catalog))
-                return catalog.GetString(text, args);
-            var newCatalog = new Catalog(new CustomMoLoader(name, localeDir), new System.Globalization.CultureInfo(locale));
-            catalogs[name] = newCatalog;
-            return newCatalog.GetString(text, args);
+            var catalog = GetCatalog(assembly);
+            return catalog.GetString(text, args);
         }
+
+        private static ICatalog GetCatalog(Assembly assembly)
+        {
+            var name = assembly.GetName().Name;
+            if (!catalogs.TryGetValue(name, out var catalog))
+            {
+                catalog = new Catalog(new CustomMoLoader(name, localeDir), new CultureInfo(currentLocale));
+                catalogs[name] = catalog;
+            }
+            return catalog;
+        }
+
+        public static Dictionary<string, string> GetAvailableLocales()
+        {
+            var ret = new Dictionary<string, string>();
+            ret.Add(DEFAULT_LOCALE, DEFAULT_LOCALE_NAME);
+            
+            var allCultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
+
+            var dir = new DirectoryInfo(localeDir);
+            var files = dir.GetFiles("*.mo");
+            foreach (var file in files)
+            {
+                var parts = file.Name.Split('.');
+                if (parts.Length < 3)
+                    continue;
+                var locale = parts[parts.Length - 2].Replace('_','-');
+                var valid = allCultures.FirstOrDefault(culture => string.Equals(culture.Name, locale, StringComparison.CurrentCultureIgnoreCase));
+                if (valid == null)
+                    continue;
+                if (!ret.ContainsKey(locale))
+                    ret[locale] = valid.NativeName;
+            }
+
+            return ret;
+        }
+
+        public static string GetCurrentLocale() => currentLocale;
     }
 
     internal sealed class CustomMoLoader : MoLoader

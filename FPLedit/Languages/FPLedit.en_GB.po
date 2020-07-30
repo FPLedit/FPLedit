@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2020-07-29 16:28+0200\n"
-"PO-Revision-Date: 2020-07-29 16:28+0200\n"
+"POT-Creation-Date: 2020-07-30 11:22+0200\n"
+"PO-Revision-Date: 2020-07-30 11:22+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -46,10 +46,10 @@ msgstr ""
 "No writable config file found. All chnages to application settings will be "
 "lost."
 
-#: Config/ConfigFile.cs:101
+#: Config/ConfigFile.cs:102
 #, csharp-format
 msgid "Konfiguration: Falsches Format in Zeile: {0}"
-msgstr ""
+msgstr "Configuration: Wrong format in line: {0}"
 
 #: Editor/EditorPlugin.cs:29
 msgid "&Rückgängig"
@@ -170,6 +170,8 @@ msgid ""
 "Erweiterung {0} konnte nicht geladen werden, bitte überprüfen ob diese noch "
 "geblockt ist!"
 msgstr ""
+"Extension {0} could not be loaded, please check if it is still blocked by "
+"windows!"
 
 #: Extensibility/PluginInfo.cs:48
 msgid "<Fehler beim Laden>"
@@ -272,7 +274,7 @@ msgstr "Network timetable"
 
 #: FileHandler.cs:424
 msgid "Zieldatei für Konvertierung wählen"
-msgstr ""
+msgstr "Select file for conversion result"
 
 #: FileHandler.cs:428 FileHandler.cs:496
 msgid "Konvertiere Datei..."
@@ -302,17 +304,17 @@ msgstr ""
 
 #: FileHandler.cs:539
 msgid "Eine andere Dateioperation ist bereits im Gange!"
-msgstr ""
+msgstr "Another file operation is currently in progress!"
 
-#: InfoForm.cs:17
+#: InfoForm.cs:18
 msgid "Erstellen von Fahrplanunterlagen für Modelleisenbahnen"
-msgstr ""
+msgstr "Create timetables for model railways"
 
-#: InfoForm.cs:19
+#: InfoForm.cs:20
 msgid "Online-Dokumentation & Updates"
-msgstr ""
+msgstr "Documentation and updates online"
 
-#: InfoForm.cs:22
+#: InfoForm.cs:23
 msgid "alle FPLedit-Beta-Tester"
 msgstr "all FPLedit testers"
 
@@ -438,11 +440,11 @@ msgstr ""
 #: NonDefaultFiletypes/NetworkExport.cs:11
 #: NonDefaultFiletypes/UpgradeExport.cs:12
 msgid "Fahrplan Dateien (*.fpl)|*.fpl"
-msgstr ""
+msgstr "Timetable files (*.fpl)|*.fpl"
 
 #: NonDefaultFiletypes/LinearExport.cs:20
 msgid "Der Fahrplan hat mehr als eine oder keine Strecke"
-msgstr ""
+msgstr "The timetable has more than one line - or none"
 
 #: NonDefaultFiletypes/StationsOnlyExport.cs:18
 msgid "Fahrplan Dateien nur mit Stationen (Streckenexport) (*.fpl)|*.fpl"
@@ -456,7 +458,7 @@ msgstr ""
 
 #: NonDefaultFiletypes/XMLStationsImport.cs:10
 msgid "Lineare Streckendateien (*.str)|*.str"
-msgstr ""
+msgstr "Linear line files (*.str)|*.str"
 
 #: Program.cs:105
 msgid "&Datei"
@@ -547,7 +549,7 @@ msgstr "You are using the most recent version of FPLedit!"
 
 #: SettingsUi/AutomaticUpdateControl.cs:51
 msgid "Verbindung mit dem Server fehlgeschlagen!"
-msgstr ""
+msgstr "Failed to connect to the server!"
 
 #: SettingsUi/ExtensionsForm.xeto.cs:19
 msgid "Erweiterungen"
@@ -592,6 +594,18 @@ msgstr "All changes will be applied at the next start of FPLedit."
 #: SettingsUi/ExtensionsForm.xeto.cs:127
 msgid "Jetzt neu starten"
 msgstr "Restart now"
+
+#: SettingsUi/LocaleControl.cs:9
+msgid "Sprache"
+msgstr "Language"
+
+#: SettingsUi/LocaleControl.cs:24
+msgid "Sprache der Benutzeroberfläche:"
+msgstr "Language of the user interface:"
+
+#: SettingsUi/LocaleControl.cs:41 SettingsUi/WindowSizeControl.cs:27
+msgid "Die Änderungen werden beim nächsten Programmstart angewendet!"
+msgstr "All changes will be applied at the next start of FPLedit!"
 
 #: SettingsUi/SettingsForm.xeto.cs:64
 msgid "Schließen"
@@ -665,15 +679,11 @@ msgstr "Window sizes"
 msgid "Gespeicherte Fenstergrößen löschen"
 msgstr "Clear all saved window sizes"
 
-#: SettingsUi/WindowSizeControl.cs:27
-msgid "Die Änderungen werden beim nächsten Programmstart angewendet!"
-msgstr "All changes will be applied at the next start of FPLedit!"
-
 #: Templating/TemplateHost.cs:38
 msgid ""
 "Keine valide Template-Deklaration gefunden! Das Template steht deshalb nicht "
 "zur Verfügung!"
-msgstr ""
+msgstr "No valid template declaration found! The template cannot be used!"
 
 #: Templating/TemplateHost.cs:42
 #, csharp-format
@@ -734,17 +744,15 @@ msgstr ""
 
 #: TimetableChecks/TimetableCheckRunner.cs:85
 msgid "Meldung"
-msgstr ""
+msgstr "Message"
 
 #: TimetableChecks/TimetableCheckRunner.cs:93
-#, fuzzy
-#| msgid "Überprüfung auf neue Versionen"
 msgid "Überprüfungen"
-msgstr "Check for updates"
+msgstr "Timetable checks"
 
 #: TimetableChecks/TrainsTrackCheck.cs:11
 msgid "Ungültige Gleisangaben"
-msgstr ""
+msgstr "Invalid track names"
 
 #: TimetableChecks/TrainsTrackCheck.cs:25
 #, csharp-format

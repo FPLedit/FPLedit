@@ -30,6 +30,7 @@ namespace FPLedit.CorePlugins
             componentRegistry.Register<ISettingsControl>(new SettingsUi.TemplatesFormHandler());
             componentRegistry.Register<ISettingsControl>(new SettingsUi.AutomaticUpdateControl());
             componentRegistry.Register<ISettingsControl>(new SettingsUi.WindowSizeControl());
+            componentRegistry.Register<ISettingsControl>(new SettingsUi.LocaleControl());
         }
     }
 }
