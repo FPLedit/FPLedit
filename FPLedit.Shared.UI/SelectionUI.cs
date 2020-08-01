@@ -22,6 +22,7 @@ namespace FPLedit.Shared.UI
 
         public SelectionUI(Action<T> selectedEvent, StackLayout st)
         {
+            var assembly = Assembly.GetCallingAssembly();
             this.selectedEvent = selectedEvent;
 
             actions = GetActions(typeof(T)).ToArray();
@@ -36,7 +37,7 @@ namespace FPLedit.Shared.UI
                 var ac = actions[i];
                 var rb = new RadioButton(master)
                 {
-                    Text = ac.Name,
+                    Text = FPLedit.Shared.T._a(assembly, ac.Name),
                     Checked = i == 0
                 };
                 if (master == null)

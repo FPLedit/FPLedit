@@ -3,7 +3,7 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.Editor;assembly=FPLedit"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
-  Title="Strecke bearbeiten" ClientSize="900,380" Resizable="true">
+  Title="{x:Static e:LineEditForm+L.Title}" ClientSize="900,380" Resizable="true">
   <TableLayout>
     <TableRow ScaleHeight="true">
       <TableLayout Spacing="5,5" Padding="10,10,10,10">
@@ -15,9 +15,9 @@
             </Scrollable>
           </TableCell>
           <StackLayout Spacing="5" HorizontalContentAlignment="Stretch">
-            <Button Click="NewButton_Click">&amp;Neue Station</Button>
-            <Button Click="EditButton_Click">Station &amp;bearbeiten</Button>
-            <Button Click="DeleteButton_Click">Station &amp;löschen</Button>
+            <Button Click="NewButton_Click" Text="{x:Static e:LineEditForm+L.New}" />
+            <Button Click="EditButton_Click" Text="{x:Static e:LineEditForm+L.Edit}" />
+            <Button Click="DeleteButton_Click" Text="{x:Static e:LineEditForm+L.Delete}" />
           </StackLayout>
         </TableRow>
       </TableLayout>
@@ -26,8 +26,8 @@
       <TableLayout Spacing="5,5" Padding="10,10,10,10">
         <TableRow>
           <TableCell ScaleWidth="true" />
-          <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click" />
-          <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click" />
+          <Button x:Name="cancelButton" Text="{x:Static e:LineEditForm+L.Cancel}" Click="CancelButton_Click" />
+          <Button x:Name="closeButton" Text="{x:Static e:LineEditForm+L.Close}" Click="CloseButton_Click" />
         </TableRow>
       </TableLayout>
     </TableRow>

@@ -67,5 +67,13 @@ namespace FPLedit.Editor
 
         private void ExpertCheckBox_CheckedChanged(object sender, EventArgs e)
             => handlers.ForEach(eh => eh.SetExpertMode(expertCheckBox.Checked.Value));
+        
+        private static class L
+        {
+            public static readonly string Cancel = T._("Abbrechen");
+            public static readonly string Close = T._("Schließen");
+            public static readonly string Title = T._("Fahrplandarstellung");
+            public static readonly string Expert = T._("Expertenmodus (CSS-Bearbeitung) aktivieren");
+        }
     }
 }

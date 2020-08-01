@@ -2,6 +2,7 @@
 using FPLedit.Shared.UI;
 using FPLedit.Shared.UI.Validators;
 using System;
+using FPLedit.Shared;
 
 namespace FPLedit.Editor
 {
@@ -18,14 +19,14 @@ namespace FPLedit.Editor
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            positionValidator = new NumberValidator(positionTextBox, false, false, errorMessage: "Bitte eine Zahl als Position eingeben!");
+            positionValidator = new NumberValidator(positionTextBox, false, false, errorMessage: T._("Bitte eine Zahl als Position eingeben!"));
         }
 
         private void CloseButton_Click(object sender, EventArgs e)
         {
             if (!positionValidator.Valid)
             {
-                MessageBox.Show("Bitte erst alle Fehler beheben:" + Environment.NewLine + positionValidator.ErrorMessage);
+                MessageBox.Show(T._("Bitte erst alle Fehler beheben:\n{0}", positionValidator.ErrorMessage));
                 return;
             }
 
@@ -36,5 +37,13 @@ namespace FPLedit.Editor
 
         private void CancelButton_Click(object sender, EventArgs e)
             => Close(DialogResult.Cancel);
+
+        private static class L
+        {
+            public static readonly string Cancel = T._("Abbrechen");
+            public static readonly string Close = T._("Schließen");
+            public static readonly string Position = T._("Position (km)");
+            public static readonly string Title = T._("Neuen Positionseintrag bearbeiten");
+        }
     }
 }

@@ -65,7 +65,7 @@ namespace FPLedit.Editor.Network
             // Initialize edit states
             stateSetRoute = new RouteEditState()
             {
-                InitialStatusString = "Startstation auswählen",
+                InitialStatusString = T._("Startstation auswählen"),
                 StationClicked = SetRoute,
                 WaypointsTransitionAllowed = false, // Waypoints can be edited only after creating initial route
                 IsTerminating = false,
@@ -74,7 +74,7 @@ namespace FPLedit.Editor.Network
 
             stateChangeRoute = new RouteEditState()
             {
-                InitialStatusString = "Durch Klick Stationen am Anfang/Ende des Laufwegs entfernen",
+                InitialStatusString = T._("Durch Klick Stationen am Anfang/Ende des Laufwegs entfernen"),
                 StationClicked = ChangeRoute,
                 WaypointsTransitionAllowed = true, // Set with global values
                 IsTerminating = true,
@@ -82,7 +82,7 @@ namespace FPLedit.Editor.Network
 
             stateAddWaypoints = new RouteEditState()
             {
-                InitialStatusString = "Durch Klick Wegpunkte in der Reihenfolge des Durchfahrens hinzufügen",
+                InitialStatusString = T._("Durch Klick Wegpunkte in der Reihenfolge des Durchfahrens hinzufügen"),
                 StationClicked = AddWaypoint,
                 WaypointsTransitionAllowed = true,
                 IsTerminating = true,
@@ -105,12 +105,12 @@ namespace FPLedit.Editor.Network
         {
             var tpf = new TrainPathForm(pluginInterface, pluginInterface.Timetable.HasRouteCycles) // Set waypoints state according to timetable
             {
-                Title = "Fahrtstrecke für neuen Zug auswählen"
+                Title = T._("Fahrtstrecke für neuen Zug auswählen")
             };
 
             tpf.Transition(tpf.stateSetRoute);
 
-            tpf.closeButton.Text = "Weiter >>";
+            tpf.closeButton.Text = T._("Weiter >>");
             return tpf;
         }
 
@@ -216,7 +216,7 @@ namespace FPLedit.Editor.Network
         {
             if (Path.Distinct().Count() < Path.Count)
             {
-                MessageBox.Show("Der Laufweg enthält eine Station mehr als einmal. Dies ist aktuell nicht möglich. Ggf. fehlt ein weiterer Wegpunkt!",
+                MessageBox.Show(T._("Der Laufweg enthält eine Station mehr als einmal. Dies ist aktuell nicht möglich. Ggf. fehlt ein weiterer Wegpunkt!"),
                     "FPLedit");
                 return;
             }
@@ -277,5 +277,16 @@ namespace FPLedit.Editor.Network
             public Action StateInitialize;
         }
         #endregion
+        
+        private static class L
+        {
+            public static readonly string Cancel = T._("Abbrechen");
+            public static readonly string Close = T._("Schließen");
+            public static readonly string Title = T._("Fahrtstrecke bearbeiten: {train}");
+            public static readonly string Help = T._("Hilfe zu Wegpunkten");
+            public static readonly string Waypoints = T._("Wegpunkte setzen (für zirkuläre Netze)");
+            public static readonly string HelpUrl = T._("https://fahrplan.manuelhu.de/fahrplaene-bearbeiten/cycles/");
+            public static readonly string Reset = T._("Laufweg zurücksetzen/leeren");
+        }
     }
 }

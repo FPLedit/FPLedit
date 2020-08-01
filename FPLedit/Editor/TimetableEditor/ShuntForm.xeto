@@ -3,23 +3,23 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.Editor.TimetableEditor;assembly=FPLedit"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
-  Title="Rangierfahrten am Bahnhof {station}" ClientSize="410,370" Resizable="true">
+  Title="{x:Static e:ShuntForm+L.Title}" ClientSize="410,370" Resizable="true">
   <TableLayout Spacing="5,5" Padding="10,10,10,10">
     <TableRow>
-      <Label x:Name="arrivalLabel">Ankunft: {time} / Gleis {track}</Label>
+      <Label x:Name="arrivalLabel" Text="{x:Static e:ShuntForm+L.ArrivalLabel}" />
     </TableRow>
     <TableRow ScaleHeight="True">
       <GridView x:Name="gridView" />
     </TableRow>
     <TableRow>
-      <Label x:Name="departureLabel">Abfahrt: {time} / Gleis {track}</Label>
+      <Label x:Name="departureLabel" Text="{x:Static e:ShuntForm+L.DepartureLabel}" />
     </TableRow>
     <TableRow>
       <TableLayout Spacing="5,5">
         <TableRow>
-          <Button x:Name="addButton" Click="AddButton_Click">&amp;Hinzufügen</Button>
-          <Button x:Name="removeButton" Click="RemoveButton_Click">&amp;Löschen</Button>
-          <Button Click="SortButton_Click">S&amp;ortieren</Button>
+          <Button x:Name="addButton" Click="AddButton_Click" Text="{x:Static e:ShuntForm+L.New}" />
+          <Button x:Name="removeButton" Click="RemoveButton_Click" Text="{x:Static e:ShuntForm+L.Delete}" />
+          <Button Click="SortButton_Click" Text="{x:Static e:ShuntForm+L.Sort}" />
           <TableCell ScaleWidth="True" />
         </TableRow>
       </TableLayout>
@@ -28,8 +28,8 @@
       <TableLayout Spacing="5,5">
         <TableRow>
           <TableCell ScaleWidth="True" />
-          <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click" />
-          <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click" />
+          <Button x:Name="cancelButton" Text="{x:Static e:ShuntForm+L.Cancel}" Click="CancelButton_Click" />
+          <Button x:Name="closeButton" Text="{x:Static e:ShuntForm+L.Close}" Click="CloseButton_Click" />
         </TableRow>
       </TableLayout>
     </TableRow>

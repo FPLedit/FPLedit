@@ -44,7 +44,7 @@
     <TableRow>
       <StackLayout x:Name="loadingStack" Orientation="Vertical" HorizontalContentAlignment="Center" Visible="false">
         <StackLayout Orientation="Horizontal" VerticalContentAlignment="Stretch" Spacing="10" Padding="30">
-          <Label>{x:Static c:MainForm+L.LoadingFile}</Label>
+          <Label Text="{x:Static c:MainForm+L.LoadingFile}" />
           <Spinner Enabled="true" />
         </StackLayout>
       </StackLayout>

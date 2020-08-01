@@ -3,18 +3,18 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.Editor.Filters;assembly=FPLedit"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
-  Title="Filterregeln" ClientSize="850,300" Resizable="true">
+  Title="{x:Static e:FilterForm+L.Title}" ClientSize="850,300" Resizable="true">
   <TableLayout><!-- main table (contents/buttons)-->
     <TableRow ScaleHeight="true">
       <TableLayout Spacing="5,5" Padding="10,10,10,10"><!-- contents table 2x2 -->
         <TableRow ScaleHeight="True">
           <TableCell ScaleWidth="true">
-            <GroupBox Text="Filter für">
+            <GroupBox Text="{x:Static e:FilterForm+L.FilterFor}">
               <ListBox x:Name="typeListBox" />
             </GroupBox>
           </TableCell>
           <TableCell ScaleWidth="true">
-            <GroupBox Text="Züge ausblenden">
+            <GroupBox Text="{x:Static e:FilterForm+L.Trains}">
               <TableLayout Spacing="5,5">
                 <TableRow ScaleHeight="True">
                   <TableCell ScaleWidth="true">
@@ -23,16 +23,16 @@
                 </TableRow>
                 <TableRow>
                   <StackLayout Spacing="5" Orientation="Horizontal">
-                    <Button Click="AddTrainPattButton_Click">&amp;Hinzufügen</Button>
-                    <Button Click="EditTrainPattButton_Click">&amp;Bearbeiten</Button>
-                    <Button Click="DeleteTrainPattButton_Click">&amp;Löschen</Button>
+                    <Button Click="AddTrainPattButton_Click" Text="{x:Static e:FilterForm+L.New}" />
+                    <Button Click="EditTrainPattButton_Click" Text="{x:Static e:FilterForm+L.Edit}" />
+                    <Button Click="DeleteTrainPattButton_Click" Text="{x:Static e:FilterForm+L.Delete}" />
                   </StackLayout>
                 </TableRow>
               </TableLayout>
             </GroupBox>
           </TableCell>
           <TableCell ScaleWidth="true">
-            <GroupBox Text="Bahnhöfe ausblenden">
+            <GroupBox Text="{x:Static e:FilterForm+L.Stations}">
               <TableLayout Spacing="5,5">
                 <TableRow ScaleHeight="True">
                   <TableCell ScaleWidth="true">
@@ -41,9 +41,9 @@
                 </TableRow>
                 <TableRow>
                   <StackLayout Spacing="5" Orientation="Horizontal">
-                    <Button Click="AddStationPattButton_Click">H&amp;inzufügen</Button>
-                    <Button Click="EditStationPattButton_Click">B&amp;earbeiten</Button>
-                    <Button Click="DeleteStationPattButton_Click">Lö&amp;schen</Button>
+                    <Button Click="AddStationPattButton_Click" Text="{x:Static e:FilterForm+L.New2}" />
+                    <Button Click="EditStationPattButton_Click" Text="{x:Static e:FilterForm+L.Edit2}" />
+                    <Button Click="DeleteStationPattButton_Click" Text="{x:Static e:FilterForm+L.Delete2}" />
                   </StackLayout>
                 </TableRow>
               </TableLayout>
@@ -56,8 +56,8 @@
       <TableLayout Spacing="5,5" Padding="10,10,10,10"><!-- buttons table -->
         <TableRow>
           <TableCell ScaleWidth="true" />
-          <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click" />
-          <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click" />
+          <Button x:Name="cancelButton" Text="{x:Static e:FilterForm+L.Cancel}" Click="CancelButton_Click" />
+          <Button x:Name="closeButton" Text="{x:Static e:FilterForm+L.Close}" Click="CloseButton_Click" />
         </TableRow>
       </TableLayout>
     </TableRow><!-- /buttons table -->

@@ -19,8 +19,8 @@
         <TableRow>
           <ToggleButton x:Name="trapeztafelToggle" Text="&amp;T" Enabled="false" />
           <ToggleButton x:Name="requestToggle" Text="&amp;B" Enabled="false" />
-          <Button Text="&amp;Zuglaufmeldung durch" x:Name="zlmButton" Click="ZlmButton_Click" Enabled="false" />
-          <Button Text="&amp;Rangierfahrten" x:Name="shuntButton" Click="ShuntButton_Click" Enabled="false" />
+          <Button Text="{x:Static e:SingleTimetableEditControl+L.Zlm}" x:Name="zlmButton" Click="ZlmButton_Click" Enabled="false" />
+          <Button Text="{x:Static e:SingleTimetableEditControl+L.Shunts}" x:Name="shuntButton" Click="ShuntButton_Click" Enabled="false" />
           <TableCell ScaleWidth="true" />
         </TableRow>
       </TableLayout>

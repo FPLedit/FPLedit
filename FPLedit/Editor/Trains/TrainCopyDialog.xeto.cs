@@ -26,9 +26,9 @@ namespace FPLedit.Editor.Trains
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            offsetValidator = new NumberValidator(offsetTextBox, false, true, errorMessage: "Bitte die Verschiebung als Zahl in Minuten angeben!");
-            countValidator = new NumberValidator(countTextBox, false, true, allowNegative: false, errorMessage: "Bitte eine gültige Anzahl >0 neuer Züge eingeben!");
-            changeValidator = new NumberValidator(changeTextBox, false, true, errorMessage: "Bitte eine gültige Veränderung der Zugnummer eingeben!");
+            offsetValidator = new NumberValidator(offsetTextBox, false, true, errorMessage: T._("Bitte die Verschiebung als Zahl in Minuten angeben!"));
+            countValidator = new NumberValidator(countTextBox, false, true, allowNegative: false, errorMessage: T._("Bitte eine gültige Anzahl >0 neuer Züge eingeben!"));
+            changeValidator = new NumberValidator(changeTextBox, false, true, errorMessage: T._("Bitte eine gültige Veränderung der Zugnummer eingeben!"));
 
             train = t;
             this.tt = tt;
@@ -58,7 +58,7 @@ namespace FPLedit.Editor.Trains
                     msg += countValidator.Valid ? "" : countValidator.ErrorMessage + Environment.NewLine;
                     msg += changeValidator.Valid ? "" : changeValidator.ErrorMessage + Environment.NewLine;
                 }
-                MessageBox.Show("Bitte erst alle Felder korrekt ausfüllen:" + Environment.NewLine + msg);
+                MessageBox.Show(T._("Bitte erst alle Felder korrekt ausfüllen:\n{0}", msg));
                 Result = DialogResult.None;
                 return;
             }
@@ -77,8 +77,8 @@ namespace FPLedit.Editor.Trains
                 {
                     if (tt.Trains.Any(t => t.TName == newTrain.TName))
                     {
-                        if (MessageBox.Show($"Es ist bereits ein Zug mit der Zugnummer {newTrain.TName} in diesem Fahrplan vorhanden, soll diese Kopie trotzdem angelegt werden?",
-                            "Züge kopieren", MessageBoxButtons.YesNo) == DialogResult.No)
+                        if (MessageBox.Show(T._("Es ist bereits ein Zug mit der Zugnummer {0} in diesem Fahrplan vorhanden, soll diese Kopie trotzdem angelegt werden?", newTrain.TName),
+                            T._("Züge kopieren"), MessageBoxButtons.YesNo) == DialogResult.No)
                             continue;
                     }
 
@@ -115,6 +115,18 @@ namespace FPLedit.Editor.Trains
             Move,
             [SelectionName("Zug verlinken")]
             Link
+        }
+        
+        private static class L
+        {
+            public static readonly string Cancel = T._("Abbrechen");
+            public static readonly string Close = T._("Kopieren");
+            public static readonly string Offset = T._("Taktverschiebung in Minuten");
+            public static readonly string Count = T._("Anzahl der neuen Züge");
+            public static readonly string BaseName = T._("Basiszugnummer");
+            public static readonly string NameChange = T._("Änderung der Zugnummer");
+            public static readonly string Extended = T._("Erweiterte Attribute übernehmen");
+            public static readonly string Title = T._("Zug kopieren/verschieben");
         }
     }
 }

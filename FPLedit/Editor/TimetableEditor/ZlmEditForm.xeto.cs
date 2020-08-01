@@ -1,6 +1,7 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared.UI;
 using System;
+using FPLedit.Shared;
 
 namespace FPLedit.Editor.TimetableEditor
 {
@@ -28,5 +29,13 @@ namespace FPLedit.Editor.TimetableEditor
 
         private void CancelButton_Click(object sender, EventArgs e)
             => Close(DialogResult.Cancel);
+        
+        private static class L
+        {
+            public static readonly string Cancel = T._("Abbrechen");
+            public static readonly string Close = T._("Schließen");
+            public static readonly string Position = T._("Position (km)");
+            public static readonly string Title = T._("Zuglaufmeldung durch");
+        }
     }
 }

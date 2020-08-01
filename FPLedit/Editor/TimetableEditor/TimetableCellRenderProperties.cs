@@ -51,7 +51,7 @@ namespace FPLedit.Editor.TimetableEditor
             else if (arrival ^ first)
             {
                 if (first && ardp.TrapeztafelHalt)
-                    throw new Exception("Die erste Station darf keinen Trapeztafelhalt beinhalten!");
+                    throw new Exception(T._("Die erste Station darf keinen Trapeztafelhalt beinhalten!"));
 
                 Background = ardp.TrapeztafelHalt ? Colors.LightGrey : bgColor;
                 if (ardp.RequestStop)

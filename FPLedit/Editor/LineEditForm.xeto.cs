@@ -26,12 +26,12 @@ namespace FPLedit.Editor
             this.pluginInterface = pluginInterface;
             this.route = route;
 
-            gridView.AddColumn<Station>(s => s.SName, "Bahnhof");
-            gridView.AddColumn<Station>(s => s.Positions.GetPosition(route).ToString(), "abs. Kilometr.");
-            gridView.AddColumn<Station>(s => s.StationCode, "Abk.");
-            gridView.AddColumn<Station>(s => s.StationType, "Typ");
-            gridView.AddColumn<Station>(s => s.Tracks.Count.ToString(), "Anzahl Gleise");
-            gridView.AddCheckColumn<Station>(s => s.RequestStop, "Bedarfshalt");
+            gridView.AddColumn<Station>(s => s.SName, T._("Bahnhof"));
+            gridView.AddColumn<Station>(s => s.Positions.GetPosition(route).ToString(), T._("abs. Kilometr."));
+            gridView.AddColumn<Station>(s => s.StationCode, T._("Abk."));
+            gridView.AddColumn<Station>(s => s.StationType, T._("Typ"));
+            gridView.AddColumn<Station>(s => s.Tracks.Count.ToString(), T._("Anzahl Gleise"));
+            gridView.AddCheckColumn<Station>(s => s.RequestStop, T._("Bedarfshalt"));
 
             gridView.MouseDoubleClick += (s, e) => EditStation(false);
 
@@ -93,7 +93,7 @@ namespace FPLedit.Editor
                 UpdateStations();
             }
             else if (message)
-                MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Station bearbeiten");
+                MessageBox.Show(T._("Zuerst muss eine Station ausgewählt werden!"), T._("Station bearbeiten"));
         }
 
         private void DeleteStation(bool message = true)
@@ -103,13 +103,13 @@ namespace FPLedit.Editor
                 var sta = (Station)gridView.SelectedItem;
                 if (pluginInterface.Timetable.WouldProduceAmbiguousRoute(sta))
                 {
-                    MessageBox.Show("Sie versuchen eine Station zu löschen, ohne die danach zwei Routen zusammenfallen, das heißt zwei Stationen auf mehr als einer Route ohne Zwischenstation verbunden sind.\n\n" +
-                                    "Der Konflikt kann nicht automatisch aufgehoben werden.", "FPLedit", MessageBoxType.Error);
+                    MessageBox.Show(T._("Sie versuchen eine Station zu löschen, ohne die danach zwei Routen zusammenfallen, das heißt zwei Stationen auf mehr als einer Route ohne Zwischenstation verbunden sind.\n\n" +
+                        "Der Konflikt kann nicht automatisch aufgehoben werden."), "FPLedit", MessageBoxType.Error);
                     return;
                 }
                 if (sta.IsJunction)
                 {
-                    MessageBox.Show("Sie versuchen eine Station zu löschen, die an einem Kreuzungspunkt zweier Strecken liegt. Dies ist leider nicht möglich.", "FPLedit", MessageBoxType.Error);
+                    MessageBox.Show(T._("Sie versuchen eine Station zu löschen, die an einem Kreuzungspunkt zweier Strecken liegt. Dies ist leider nicht möglich."), "FPLedit", MessageBoxType.Error);
                     return;
                 }
 
@@ -117,7 +117,7 @@ namespace FPLedit.Editor
                 UpdateStations();
             }
             else if (message)
-                MessageBox.Show("Zuerst muss eine Station ausgewählt werden!", "Station löschen");
+                MessageBox.Show(T._("Zuerst muss eine Station ausgewählt werden!"), T._("Station löschen"));
         }
 
         private void NewStation()
@@ -163,5 +163,15 @@ namespace FPLedit.Editor
 
         private void NewButton_Click(object sender, EventArgs e)
             => NewStation();
+        
+        private static class L
+        {
+            public static readonly string Cancel = T._("Abbrechen");
+            public static readonly string Close = T._("Schließen");
+            public static readonly string Title = T._("Strecke bearbeiten");
+            public static readonly string New = T._("&Neue Station");
+            public static readonly string Edit = T._("Station &bearbeiten");
+            public static readonly string Delete = T._("Station &löschen");
+        }
     }
 }

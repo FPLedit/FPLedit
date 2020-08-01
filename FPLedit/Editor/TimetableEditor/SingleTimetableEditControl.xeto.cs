@@ -229,12 +229,12 @@ namespace FPLedit.Editor.TimetableEditor
         {
 #pragma warning disable CA2000
             view.Columns.Clear();
-            view.AddColumn<DataElement>(t => t.Station.SName, "Bahnhof");
-            view.AddColumn(GetCell(t => t.Arrival, true), "Ankunft");
-            view.AddColumn(GetCell(t => t.Departure, false), "Abfahrt");
-            view.AddColumn(GetTrackCell(t => t.ArrivalTrack, true), "Ankunftsgleis", editable: true);
-            view.AddColumn(GetTrackCell(t => t.DepartureTrack, false), "Abfahrtsgleis", editable: true);
-            view.AddColumn(GetCheckCell(t => t.ShuntMoves.Any()), "Rangiert", editable: false);
+            view.AddColumn<DataElement>(t => t.Station.SName, T._("Bahnhof"));
+            view.AddColumn(GetCell(t => t.Arrival, true), T._("Ankunft"));
+            view.AddColumn(GetCell(t => t.Departure, false), T._("Abfahrt"));
+            view.AddColumn(GetTrackCell(t => t.ArrivalTrack, true), T._("Ankunftsgleis"), editable: true);
+            view.AddColumn(GetTrackCell(t => t.DepartureTrack, false), T._("Abfahrtsgleis"), editable: true);
+            view.AddColumn(GetCheckCell(t => t.ShuntMoves.Any()), T._("Rangiert"), editable: false);
 #pragma warning restore CA2000
 
             view.KeyDown += (s, e) => HandleViewKeystroke(e, view);
@@ -281,7 +281,7 @@ namespace FPLedit.Editor.TimetableEditor
             {
                 if (row.HasAnyError)
                 {
-                    MessageBox.Show("Bitte erst alle Fehler beheben!\n\nDie Zeitangaben müssen im Format hh:mm, h:mm, h:m, hh:mm, h:, :m, hhmm, hmm oder mm vorliegen!");
+                    MessageBox.Show(T._("Bitte erst alle Fehler beheben!\n\nDie Zeitangaben müssen im Format hh:mm, h:mm, h:m, hh:mm, h:, :m, hhmm, hmm oder mm vorliegen!"));
                     return false;
                 }
             }
@@ -352,6 +352,12 @@ namespace FPLedit.Editor.TimetableEditor
                         col.Dispose();
             
             base.Dispose(disposing);
+        }
+
+        private static class L
+        {
+            public static readonly string Zlm = T._("&Zuglaufmeldung durch");
+            public static readonly string Shunts = T._("&Rangierfahrten");
         }
     }
 }

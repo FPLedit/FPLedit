@@ -3,11 +3,11 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.Editor.Linear;assembly=FPLedit"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
-  Title="Fahrplan bearbeiten" ClientSize="870,690" Resizable="true">
+  Title="{x:Static e:LinearTimetableEditForm+L.Title}" ClientSize="870,690" Resizable="true">
   <e:LinearTimetableEditControl x:Name="editor">
     <e:LinearTimetableEditControl.ActionButtons>
-      <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click" />
-      <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click" />
+      <Button x:Name="cancelButton" Text="{x:Static e:LinearTimetableEditForm+L.Cancel}" Click="CancelButton_Click" />
+      <Button x:Name="closeButton" Text="{x:Static e:LinearTimetableEditForm+L.Close}" Click="CloseButton_Click" />
     </e:LinearTimetableEditControl.ActionButtons>
   </e:LinearTimetableEditControl>
 </e:LinearTimetableEditForm>

@@ -40,7 +40,7 @@ namespace FPLedit.Editor.Trains
 
             th = new TrainEditHelper();
 
-            nameValidator = new NotEmptyValidator(nameTextBox, errorMessage: "Bitte einen Zugnamen eingeben!");
+            nameValidator = new NotEmptyValidator(nameTextBox, errorMessage: T._("Bitte einen Zugnamen eingeben!"));
 
             locomotiveComboBox.Items.AddRange(GetAllItems(tt, t => t.Locomotive));
             lastComboBox.Items.AddRange(GetAllItems(tt, t => t.Last));
@@ -50,9 +50,9 @@ namespace FPLedit.Editor.Trains
 
             resetTransitionButton.TextColor = Colors.Red;
 
-            linkGridView.AddColumn<TrainLink>(tl => tl.TrainCount.ToString(), "Anzahl");
-            linkGridView.AddColumn<TrainLink>(tl => new TimeEntry(0, tl.TimeOffset).ToShortTimeString(), "Erster Abstand");
-            linkGridView.AddColumn<TrainLink>(tl => new TimeEntry(0, tl.TimeDifference).ToShortTimeString(), "Zeitdifferenz");
+            linkGridView.AddColumn<TrainLink>(tl => tl.TrainCount.ToString(), T._("Anzahl"));
+            linkGridView.AddColumn<TrainLink>(tl => new TimeEntry(0, tl.TimeOffset).ToShortTimeString(), T._("Erster Abstand"));
+            linkGridView.AddColumn<TrainLink>(tl => new TimeEntry(0, tl.TimeDifference).ToShortTimeString(), T._("Zeitdifferenz"));
         }
 
         public TrainEditForm(Train train) : this(train.ParentTimetable)
@@ -65,7 +65,7 @@ namespace FPLedit.Editor.Trains
             commentTextBox.Text = train.Comment;
             daysControl.SelectedDays = train.Days;
 
-            Title = "Zug bearbeiten";
+            Title = T._("Zug bearbeiten");
 
             InitializeTrain();
         }
@@ -115,7 +115,7 @@ namespace FPLedit.Editor.Trains
         {
             if (!nameValidator.Valid)
             {
-                MessageBox.Show("Bitte erst alle Fehler beheben:" + Environment.NewLine + nameValidator.ErrorMessage);
+                MessageBox.Show(T._("Bitte erst alle Fehler beheben:\n{0}", nameValidator.ErrorMessage));
                 return;
             }
 
@@ -123,7 +123,7 @@ namespace FPLedit.Editor.Trains
 
             if (nameExists)
             {
-                if (MessageBox.Show("Ein Zug mit dem Namen \"" + nameTextBox.Text + "\" ist bereits vorhanden. Wirklich fortfahren?", "FPLedit",
+                if (MessageBox.Show(T._("Ein Zug mit dem Namen \"{0}\" ist bereits vorhanden. Wirklich fortfahren?", nameTextBox.Text), "FPLedit",
                     MessageBoxButtons.YesNo) == DialogResult.No)
                     return;
             }
@@ -181,10 +181,31 @@ namespace FPLedit.Editor.Trains
                 linkGridView.DataStore = Train.TrainLinks;
             }
             else
-                MessageBox.Show("Erst muss eine Verknüpfung zum Löschen ausgewählt werden!");
+                MessageBox.Show(T._("Erst muss eine Verknüpfung zum Löschen ausgewählt werden!"));
         }
 
         private IEnumerable<ListItem> GetAllItems(Timetable tt, Func<ITrain, string> func)
             => tt.Trains.Select(func).Distinct().Where(s => s != "").OrderBy(s => s).Select(s => new ListItem { Text = s });
+        
+        private static class L
+        {
+            public static readonly string Cancel = T._("Abbrechen");
+            public static readonly string Close = T._("Schließen");
+            public static readonly string Name = T._("Name");
+            public static readonly string Comment = T._("Kommentar");
+            public static readonly string Extended = T._("Erweiterte Eigenschaften (für Bfpl)");
+            public static readonly string Tfz = T._("Tfz");
+            public static readonly string TfzTooltip = T._("Die Zuglok oder der verwendete Triebwagen.");
+            public static readonly string Mbr = T._("Mbr");
+            public static readonly string MbrTooltip = T._("Mindesbremshundertstel");
+            public static readonly string Last = T._("Last");
+            public static readonly string Days = T._("Verkehrstage");
+            public static readonly string NextTrain = T._("Folgezug");
+            public static readonly string Links = T._("Verknüpfungen");
+            public static readonly string DeleteLink = T._("Verknüpfung löschen");
+            public static readonly string Timetable = T._("Fahrplan");
+            public static readonly string Fill = T._("Von anderem Zug...");
+            public static readonly string Title = T._("Neuen Zug erstellen");
+        }
     }
 }

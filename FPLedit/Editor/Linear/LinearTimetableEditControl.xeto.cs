@@ -57,8 +57,8 @@ namespace FPLedit.Editor.Linear
         {
             this.tt = tt;
 
-            topLineLabel.Text = "Züge " + this.tt.GetLinearLineName(TOP_DIRECTION);
-            bottomLineLabel.Text = "Züge " + this.tt.GetLinearLineName(BOTTOM_DIRECTION);
+            topLineLabel.Text = T._("Züge {0}", this.tt.GetLinearLineName(TOP_DIRECTION));
+            bottomLineLabel.Text = T._("Züge {0}", this.tt.GetLinearLineName(BOTTOM_DIRECTION));
 
             InitializeGridView(topDataGridView, TOP_DIRECTION);
             InitializeGridView(bottomDataGridView, BOTTOM_DIRECTION);
@@ -169,17 +169,17 @@ namespace FPLedit.Editor.Linear
         {
             var stations = tt.GetLinearStationsOrderedByDirection(dir);
 
-            view.AddColumn<DataElement>(t => t.Train.TName, "Zugnummer");
+            view.AddColumn<DataElement>(t => t.Train.TName, T._("Zugnummer"));
 #pragma warning disable CA2000
             foreach (var sta in stations)
             {
                 if (sta != stations.First())
-                    view.AddColumn(GetCell(t => t.Arrival, sta, true, view), sta.SName + " an");
+                    view.AddColumn(GetCell(t => t.Arrival, sta, true, view), T._("{0} an", sta.SName));
                 if (sta != stations.Last())
-                    view.AddColumn(GetCell(t => t.Departure, sta, false, view), sta.SName + " ab");
+                    view.AddColumn(GetCell(t => t.Departure, sta, false, view), T._("{0} ab", sta.SName));
             }
 #pragma warning restore CA2000
-            view.AddColumn<DataElement>(t => GetTransition(t.Train), "Folgezug");
+            view.AddColumn<DataElement>(t => GetTransition(t.Train), T._("Folgezug"));
 
             var l = tt.Trains.Where(t => t.Direction == dir).Select(tra => new DataElement()
             {
@@ -204,14 +204,14 @@ namespace FPLedit.Editor.Linear
 
                 if (row.HasAnyError)
                 {
-                    MessageBox.Show("Bitte erst alle Fehler beheben!\n\nDie Zeitangaben müssen im Format hh:mm, h:mm, h:m, hh:mm, h:, :m, hhmm, hmm oder mm vorliegen!");
+                    MessageBox.Show(T._("Bitte erst alle Fehler beheben!\n\nDie Zeitangaben müssen im Format hh:mm, h:mm, h:m, hh:mm, h:, :m, hhmm, hmm oder mm vorliegen!"));
                     return false;
                 }
 
                 return true;
             }
 
-            throw new Exception("Zug, der am Anfang noch da war, ist verschwunden!");
+            throw new Exception(T._("Zug, der am Anfang noch da war, ist verschwunden!"));
         }
 
         private void ViewDependantAction(Action<GridView> action)
@@ -259,6 +259,12 @@ namespace FPLedit.Editor.Linear
             }
 
             base.Dispose(disposing);
+        }
+
+        private static class L
+        {
+            public static readonly string Zlm = T._("&Zuglaufmeldung durch");
+            public static readonly string Shunts = T._("&Rangierfahrten");
         }
     }
 }

@@ -5,7 +5,7 @@
   xmlns:en="clr-namespace:FPLedit.Editor.Network;assembly=FPLedit"
   xmlns:fui="clr-namespace:FPLedit.Shared.UI;assembly=FPLedit.Shared.UI"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
-  Title="Fahrtstrecke bearbeiten: {train}" ClientSize="780,370" Resizable="true">
+  Title="{x:Static en:TrainPathForm+L.Title}" ClientSize="780,370" Resizable="true">
   <TableLayout Padding="10,10,10,10" Spacing="5,5">
     <TableRow ScaleHeight="true">
       <TableCell ScaleWidth="true">
@@ -15,18 +15,18 @@
     <TableRow>
       <TableLayout Spacing="5,5">
         <TableRow>
-          <CheckBox x:Name="waypointsCheckBox" CheckedChanged="WaypointsCheckBox_CheckedChanged">Wegpunkte setzen (für zirkuläre Netze)</CheckBox>
-          <fui:UrlButton x:Name="waypointsDocuLink" Url="https://fahrplan.manuelhu.de/fahrplaene-bearbeiten/cycles/">Hilfe zu Wegpunkten</fui:UrlButton>
+          <CheckBox x:Name="waypointsCheckBox" CheckedChanged="WaypointsCheckBox_CheckedChanged" Text="{x:Static en:TrainPathForm+L.Waypoints}" />
+          <fui:UrlButton x:Name="waypointsDocuLink" Url="{x:Static en:TrainPathForm+L.HelpUrl}" Text="{x:Static en:TrainPathForm+L.Help}" />
         </TableRow>
       </TableLayout>
     </TableRow>
     <TableRow>
       <TableLayout Spacing="5,5">
         <TableRow>
-          <Button Text="Laufweg zurücksetzen/leeren" Click="ResetRoute"/>
+          <Button Text="{x:Static en:TrainPathForm+L.Reset}" Click="ResetRoute" />
           <TableCell ScaleWidth="true"/>
-          <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click"/>
-          <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click"/>
+          <Button x:Name="cancelButton" Text="{x:Static en:TrainPathForm+L.Cancel}" Click="CancelButton_Click"/>
+          <Button x:Name="closeButton" Text="{x:Static en:TrainPathForm+L.Close}" Click="CloseButton_Click"/>
         </TableRow>
       </TableLayout>
     </TableRow>

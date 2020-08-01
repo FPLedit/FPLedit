@@ -22,7 +22,7 @@ namespace FPLedit.Editor.Trains
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            offsetValidator = new NumberValidator(offsetTextBox, false, true, errorMessage: "Bitte die Verschiebung als Zahl in Minuten angeben!");
+            offsetValidator = new NumberValidator(offsetTextBox, false, true, errorMessage: T._("Bitte die Verschiebung als Zahl in Minuten angeben!"));
 
             offsetTextBox.Text = "+20";
 
@@ -35,7 +35,7 @@ namespace FPLedit.Editor.Trains
         {
             if (!offsetValidator.Valid)
             {
-                MessageBox.Show("Bitte erst alle Felder korrekt ausfüllen:" + Environment.NewLine + offsetValidator.ErrorMessage);
+                MessageBox.Show(T._("Bitte erst alle Felder korrekt ausfüllen:\n{0}", offsetValidator.ErrorMessage));
                 Result = DialogResult.None;
                 return;
             }
@@ -48,5 +48,14 @@ namespace FPLedit.Editor.Trains
 
         private void CancelButton_Click(object sender, EventArgs e)
             => Close(DialogResult.Cancel);
+        
+        private static class L
+        {
+            public static readonly string Cancel = T._("Abbrechen");
+            public static readonly string Close = T._("Zeiten übernehmen");
+            public static readonly string Reference = T._("Referrenzzug:");
+            public static readonly string Offset = T._("Taktverschiebung in Minuten:");
+            public static readonly string Title = T._("Fahrtzeiten von anderem Zug übernehmen");
+        }
     }
 }

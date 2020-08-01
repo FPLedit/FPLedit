@@ -5,7 +5,7 @@
   xmlns:et="clr-namespace:FPLedit.Editor.TimetableEditor;assembly=FPLedit"
   xmlns:fui="clr-namespace:FPLedit.Shared.UI;assembly=FPLedit.Shared.UI"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
-  Title="Neuen Zug erstellen" Resizable="true" MinimumSize="1000,700" >
+  Title="{x:Static e:TrainEditForm+L.Title}" Resizable="true" MinimumSize="1000,700" >
   <TableLayout Padding="10,10,10,10" Spacing="5,5">
     <TableRow ScaleHeight="true">
       <TableCell><!-- left column -->
@@ -14,40 +14,40 @@
             <TableRow>
               <TableLayout Spacing="5,5">
                 <TableRow>
-                  <Label>Name</Label>
+                  <Label Text="{x:Static e:TrainEditForm+L.Name}" />
                   <TextBox x:Name="nameTextBox" />
                 </TableRow>
                 <TableRow>
-                  <Label>Kommentar</Label>
+                  <Label Text="{x:Static e:TrainEditForm+L.Comment}" />
                   <TextBox x:Name="commentTextBox" />
                 </TableRow>
               </TableLayout>
             </TableRow>
           </TableLayout>
-          <GroupBox Text="Erweiterte Eigenschaften (für Bfpl)">
+          <GroupBox Text="{x:Static e:TrainEditForm+L.Extended}">
             <TableLayout>
               <TableRow>
                 <TableLayout Spacing="5,5" Padding="10,10,10,10">
                   <TableRow>
-                    <Label ToolTip="Die Zuglok oder der verwendete Triebwagen.">Tfz</Label>
+                    <Label ToolTip="{x:Static e:TrainEditForm+L.TfzTooltip}" Text="{x:Static e:TrainEditForm+L.Tfz}" />
                     <ComboBox x:Name="locomotiveComboBox" />
                   </TableRow>
                   <TableRow>
-                    <Label ToolTip="Mindestbremshundertstel">Mbr</Label>
+                    <Label ToolTip="{x:Static e:TrainEditForm+L.MbrTooltip}" Text="{x:Static e:TrainEditForm+L.Mbr}" />
                     <ComboBox x:Name="mbrComboBox" />
                   </TableRow>
                   <TableRow>
-                    <Label>Last</Label>
+                    <Label Text="{x:Static e:TrainEditForm+L.Last}" />
                     <ComboBox x:Name="lastComboBox" />
                   </TableRow>
                 </TableLayout>
               </TableRow>
             </TableLayout>
           </GroupBox><!-- /group Erweiterte Eigenschaften (für Bfpl) -->
-          <GroupBox Text="Verkehrstage">
+          <GroupBox Text="{x:Static e:TrainEditForm+L.Days}">
             <fui:DaysControlNarrow x:Name="daysControl" />
           </GroupBox><!-- /group Verkehrstage -->
-          <GroupBox Text="Folgezug">
+          <GroupBox Text="{x:Static e:TrainEditForm+L.NextTrain}">
             <TableLayout Spacing="5,5" Padding="10,10,10,10">
               <TableRow>
                 <TableCell ScaleWidth="true">
@@ -57,19 +57,19 @@
               </TableRow>
             </TableLayout>
           </GroupBox><!-- /group Folgezug -->
-          <GroupBox Text="Verknüpfungen" x:Name="linkGroupBox">
+          <GroupBox Text="{x:Static e:TrainEditForm+L.Links}" x:Name="linkGroupBox">
             <StackLayout Padding="10,10,10,10" Spacing="5" Orientation="Vertical" HorizontalContentAlignment="Stretch">
               <GridView x:Name="linkGridView" />
-              <Button Click="DeleteLinkButton_Click">Verknüpfung löschen</Button>
+              <Button Click="DeleteLinkButton_Click" Text="{x:Static e:TrainEditForm+L.DeleteLink}" />
             </StackLayout>
           </GroupBox><!-- /group Verknüpfungen -->
         </StackLayout>
       </TableCell><!-- /left column -->
       <TableCell><!-- right column -->
-        <GroupBox Text="Fahrplan" Height="400">
+        <GroupBox Text="{x:Static e:TrainEditForm+L.Timetable}" Height="400">
           <et:SingleTimetableEditControl x:Name="editor">
             <et:SingleTimetableEditControl.ActionButtons>
-              <Button x:Name="fillButton" Text="Von anderem Zug..." Click="FillButton_Click" />
+              <Button x:Name="fillButton" Text="{x:Static e:TrainEditForm+L.Fill}" Click="FillButton_Click" />
             </et:SingleTimetableEditControl.ActionButtons>
           </et:SingleTimetableEditControl>
         </GroupBox>
@@ -80,8 +80,8 @@
       <TableLayout Spacing="5,5" Padding="10,10,10,10">
         <TableRow>
           <TableCell ScaleWidth="true" />
-          <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click" />
-          <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click" />
+          <Button x:Name="cancelButton" Text="{x:Static e:TrainEditForm+L.Cancel}" Click="CancelButton_Click" />
+          <Button x:Name="closeButton" Text="{x:Static e:TrainEditForm+L.Close}" Click="CloseButton_Click" />
         </TableRow>
       </TableLayout>
     </TableRow><!-- /bottom actions -->

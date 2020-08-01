@@ -3,7 +3,7 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.Editor.Network;assembly=FPLedit"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
-  Title="Züge bearbeiten" ClientSize="840,520" Resizable="true">
+  Title="{x:Static e:NetworkTrainsEditForm+L.Title}" ClientSize="840,520" Resizable="true">
   <TableLayout>
     <TableRow ScaleHeight="true">
       <TableLayout Spacing="5,5" Padding="10,10,10,10">
@@ -15,16 +15,16 @@
             </Scrollable>
           </TableCell>
           <StackLayout Spacing="5" HorizontalContentAlignment="Stretch">
-            <Button Click="NewButton_Click">Neuer Zug</Button>
-            <Button Click="EditButton_Click" x:Name="editButton" Enabled="false">Zug bearbeiten</Button>
-            <Button Click="DeleteButton_Click" x:Name="deleteButton" Enabled="false">Zug löschen</Button>
-            <Button Click="CopyButton_Click" x:Name="copyButton" Enabled="false">Zug kopieren/verschieben</Button>
+            <Button Click="NewButton_Click" Text="{x:Static e:NetworkTrainsEditForm+L.New}" />
+            <Button Click="EditButton_Click" x:Name="editButton" Enabled="false" Text="{x:Static e:NetworkTrainsEditForm+L.Edit}" />
+            <Button Click="DeleteButton_Click" x:Name="deleteButton" Enabled="false" Text="{x:Static e:NetworkTrainsEditForm+L.Delete}" />
+            <Button Click="CopyButton_Click" x:Name="copyButton" Enabled="false" Text="{x:Static e:NetworkTrainsEditForm+L.Copy}" />
             <!-- Spacer: -->
             <Label />
-            <Button Click="EditPathButton_Click" x:Name="editPathButton">Laufweg bearbeiten</Button>
+            <Button Click="EditPathButton_Click" x:Name="editPathButton" Text="{x:Static e:NetworkTrainsEditForm+L.EditPath}" />
             <!-- Spacer: -->
             <Label />
-            <Button Click="SortButton_Click">Züge sortieren</Button>
+            <Button Click="SortButton_Click" Text="{x:Static e:NetworkTrainsEditForm+L.Sort}" />
           </StackLayout>
         </TableRow>
       </TableLayout>
@@ -33,8 +33,8 @@
       <TableLayout Spacing="5,5" Padding="10,10,10,10">
         <TableRow>
           <TableCell ScaleWidth="true" />
-          <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click" />
-          <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click" />
+          <Button x:Name="cancelButton" Text="{x:Static e:NetworkTrainsEditForm+L.Cancel}" Click="CancelButton_Click" />
+          <Button x:Name="closeButton" Text="{x:Static e:NetworkTrainsEditForm+L.Close}" Click="CloseButton_Click" />
         </TableRow>
       </TableLayout>
     </TableRow>

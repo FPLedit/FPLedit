@@ -47,10 +47,10 @@ namespace FPLedit.Editor.TimetableEditor
 
             var tracks = sta.Tracks.Select(t => t.Name).ToArray();
 
-            gridView.AddColumn<ShuntMove, TimeEntry>(s => s.Time, ts => ts.ToShortTimeString(), s => { TimeEntry.TryParse(s, out var res); return res; }, "Zeit", editable: true);
-            gridView.AddDropDownColumn<ShuntMove>(s => s.SourceTrack, tracks, "Startgleis", editable: true);
-            gridView.AddDropDownColumn<ShuntMove>(s => s.TargetTrack, tracks, "Zielgleis", editable: true);
-            gridView.AddCheckColumn<ShuntMove>(s => s.EmptyAfterwards, "Alle Wagen?", editable: true);
+            gridView.AddColumn<ShuntMove, TimeEntry>(s => s.Time, ts => ts.ToShortTimeString(), s => { TimeEntry.TryParse(s, out var res); return res; }, T._("Zeit"), editable: true);
+            gridView.AddDropDownColumn<ShuntMove>(s => s.SourceTrack, tracks, T._("Startgleis"), editable: true);
+            gridView.AddDropDownColumn<ShuntMove>(s => s.TargetTrack, tracks, T._("Zielgleis"), editable: true);
+            gridView.AddCheckColumn<ShuntMove>(s => s.EmptyAfterwards, T._("Alle Wagen?"), editable: true);
 
             gridView.SelectedItemsChanged += (s, e) => removeButton.Enabled = gridView.SelectedItem != null;
 
@@ -114,21 +114,21 @@ namespace FPLedit.Editor.TimetableEditor
                 shunt => (shunt.Time < arrDep.Arrival && arrDep.Arrival != default) || (shunt.Time > arrDep.Departure && arrDep.Departure != default));
             if (outOfRange)
             {
-                MessageBox.Show("Einige Rangierfahrten befinden sich außerhalb des Zeitfensters des Aufenthalts an der Station!", "FPLedit", MessageBoxType.Error);
+                MessageBox.Show(T._("Einige Rangierfahrten befinden sich außerhalb des Zeitfensters des Aufenthalts an der Station!"), "FPLedit", MessageBoxType.Error);
                 return;
             }
 
             var lastShuntTarget = arrDep.ShuntMoves.LastOrDefault()?.TargetTrack;
             if (!string.IsNullOrEmpty(arrDep.DepartureTrack) && lastShuntTarget != null && lastShuntTarget != arrDep.DepartureTrack)
             {
-                var res = MessageBox.Show("Die letzte Rangierfahrt endet nicht am Abfahrtsgleis! Trotzdem fortfahren?", "FPLedit", MessageBoxButtons.YesNo, MessageBoxType.Warning);
+                var res = MessageBox.Show(T._("Die letzte Rangierfahrt endet nicht am Abfahrtsgleis! Trotzdem fortfahren?"), "FPLedit", MessageBoxButtons.YesNo, MessageBoxType.Warning);
                 if (res == DialogResult.No) return;
             }
 
             var firstShuntSource = arrDep.ShuntMoves.FirstOrDefault()?.SourceTrack;
             if (!string.IsNullOrEmpty(arrDep.ArrivalTrack) && firstShuntSource != null && firstShuntSource != arrDep.ArrivalTrack)
             {
-                var res = MessageBox.Show("Die erste Rangierfahrt beginnt nicht am Ankunftsgleis! Trotzdem fortfahren?", "FPLedit", MessageBoxButtons.YesNo, MessageBoxType.Warning);
+                var res = MessageBox.Show(T._("Die erste Rangierfahrt beginnt nicht am Ankunftsgleis! Trotzdem fortfahren?"), "FPLedit", MessageBoxButtons.YesNo, MessageBoxType.Warning);
                 if (res == DialogResult.No) return;
             }
             
@@ -149,5 +149,17 @@ namespace FPLedit.Editor.TimetableEditor
         private void AddButton_Click(object sender, EventArgs e) => NewShunt();
         private void RemoveButton_Click(object sender, EventArgs e) => RemoveShunt();
         private void SortButton_Click(object sender, EventArgs e) => SortShunts();
+        
+        private static class L
+        {
+            public static readonly string Cancel = T._("Abbrechen");
+            public static readonly string Close = T._("Schließen");
+            public static readonly string Title = T._("Rangierfahrten am Bahnhof {station}");
+            public static readonly string New = T._("&Hinzufügen");
+            public static readonly string Delete = T._("&Löschen");
+            public static readonly string Sort = T._("S&ortieren");
+            public static readonly string ArrivalLabel = T._("Ankunft: {time} / Gleis {track}");
+            public static readonly string DepartureLabel = T._("Abfahrt: {time} / Gleis {track}");
+        }
     }
 }

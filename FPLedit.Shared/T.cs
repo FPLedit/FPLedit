@@ -41,6 +41,17 @@ namespace FPLedit.Shared
             var catalog = GetCatalog(assembly);
             return catalog.GetString(text, args);
         }
+        
+        public static string _a(Assembly assembly, string text)
+        {
+            var catalog = GetCatalog(assembly);
+            return catalog.GetString(text);
+        }
+        public static string _a(Assembly assembly, string text, params object[] args)
+        {
+            var catalog = GetCatalog(assembly);
+            return catalog.GetString(text, args);
+        }
 
         private static ICatalog GetCatalog(Assembly assembly)
         {

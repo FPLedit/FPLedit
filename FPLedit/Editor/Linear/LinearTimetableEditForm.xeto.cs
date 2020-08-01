@@ -54,5 +54,12 @@ namespace FPLedit.Editor.Linear
             this.NClose();
         }
         #endregion
+        
+        private static class L
+        {
+            public static readonly string Cancel = T._("Abbrechen");
+            public static readonly string Close = T._("Schließen");
+            public static readonly string Title = T._("Fahrplan bearbeiten");
+        }
     }
 }

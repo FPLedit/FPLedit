@@ -3,7 +3,7 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.Editor.Linear;assembly=FPLedit"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
-  Title="Züge bearbeiten" ClientSize="850,600" Resizable="true">
+  Title="{x:Static e:LinearTrainsEditForm+L.Title}" ClientSize="850,600" Resizable="true">
   <TableLayout><!-- main table (contents/buttons)-->
     <TableRow ScaleHeight="true">
       <TableLayout Spacing="5,5" Padding="10,10,10,10"><!-- contents table 2x2 -->
@@ -22,13 +22,13 @@
             </TableLayout>
           </TableCell>
           <StackLayout Spacing="5" HorizontalContentAlignment="Stretch">
-            <Button Click="TopNewButton_Click">Neuer Zug</Button>
-            <Button Click="TopEditButton_Click" x:Name="topEditButton" Enabled="false">Zug bearbeiten</Button>
-            <Button Click="TopDeleteButton_Click" x:Name="topDeleteButton" Enabled="false">Zug löschen</Button>
-            <Button Click="TopCopyButton_Click" x:Name="topCopyButton" Enabled="false">Zug kopieren/verschieben</Button>
+            <Button Click="TopNewButton_Click" Text="{x:Static e:LinearTrainsEditForm+L.New}"/>
+            <Button Click="TopEditButton_Click" x:Name="topEditButton" Enabled="false" Text="{x:Static e:LinearTrainsEditForm+L.Edit}" />
+            <Button Click="TopDeleteButton_Click" x:Name="topDeleteButton" Enabled="false" Text="{x:Static e:LinearTrainsEditForm+L.Delete}" />
+            <Button Click="TopCopyButton_Click" x:Name="topCopyButton" Enabled="false" Text="{x:Static e:LinearTrainsEditForm+L.Copy}" />
             <!-- Spacer: -->
             <Label />
-            <Button Click="TopSortButton_Click">Züge sortieren</Button>
+            <Button Click="TopSortButton_Click" Text="{x:Static e:LinearTrainsEditForm+L.Sort}" />
           </StackLayout>
         </TableRow>
         <TableRow ScaleHeight="True">
@@ -46,13 +46,13 @@
             </TableLayout>
           </TableCell>
           <StackLayout Spacing="5" HorizontalContentAlignment="Stretch">
-            <Button Click="BottomNewButton_Click">Neuer Zug</Button>
-            <Button Click="BottomEditButton_Click" x:Name="bottomEditButton" Enabled="false">Zug bearbeiten</Button>
-            <Button Click="BottomDeleteButton_Click" x:Name="bottomDeleteButton" Enabled="false">Zug löschen</Button>
-            <Button Click="BottomCopyButton_Click" x:Name="bottomCopyButton" Enabled="false">Zug kopieren/verschieben</Button>
+            <Button Click="BottomNewButton_Click" Text="{x:Static e:LinearTrainsEditForm+L.New}" />
+            <Button Click="BottomEditButton_Click" x:Name="bottomEditButton" Enabled="false" Text="{x:Static e:LinearTrainsEditForm+L.Edit}" />
+            <Button Click="BottomDeleteButton_Click" x:Name="bottomDeleteButton" Enabled="false" Text="{x:Static e:LinearTrainsEditForm+L.Delete}" />
+            <Button Click="BottomCopyButton_Click" x:Name="bottomCopyButton" Enabled="false" Text="{x:Static e:LinearTrainsEditForm+L.Copy}" />
             <!-- Spacer: -->
             <Label />
-            <Button Click="BottomSortButton_Click">Züge sortieren</Button>
+            <Button Click="BottomSortButton_Click" Text="{x:Static e:LinearTrainsEditForm+L.Sort}" />
           </StackLayout>
         </TableRow>
       </TableLayout><!-- /contents table -->
@@ -61,8 +61,8 @@
       <TableLayout Spacing="5,5" Padding="10,10,10,10"><!-- buttons table -->
         <TableRow>
           <TableCell ScaleWidth="true" />
-          <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click" />
-          <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click" />
+          <Button x:Name="cancelButton" Text="{x:Static e:LinearTrainsEditForm+L.Cancel}" Click="CancelButton_Click" />
+          <Button x:Name="closeButton" Text="{x:Static e:LinearTrainsEditForm+L.Close}" Click="CloseButton_Click" />
         </TableRow>
       </TableLayout>
     </TableRow><!-- /buttons table -->

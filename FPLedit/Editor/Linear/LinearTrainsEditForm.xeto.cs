@@ -33,8 +33,8 @@ namespace FPLedit.Editor.Linear
             InitListView(topGridView, new []{ topEditButton, topDeleteButton, topCopyButton });
             InitListView(bottomGridView, new []{ bottomEditButton, bottomDeleteButton, bottomCopyButton });
 
-            topLineLabel.Text = "Züge " + tt.GetLinearLineName(TOP_DIRECTION);
-            bottomLineLabel.Text = "Züge " + tt.GetLinearLineName(BOTTOM_DIRECTION);
+            topLineLabel.Text = T._("Züge {0}", tt.GetLinearLineName(TOP_DIRECTION));
+            bottomLineLabel.Text = T._("Züge {0}", tt.GetLinearLineName(BOTTOM_DIRECTION));
             UpdateListView(topGridView, TOP_DIRECTION);
             UpdateListView(bottomGridView, BOTTOM_DIRECTION);
 
@@ -71,13 +71,13 @@ namespace FPLedit.Editor.Linear
 
         private void InitListView(GridView view, Button[] buttons)
         {
-            view.AddColumn<ITrain>(t => t.IsLink ? "L" : "", "");
-            view.AddColumn<ITrain>(t => t.TName, "Zugnummer");
-            view.AddColumn<ITrain>(t => t.Locomotive, "Tfz");
-            view.AddColumn<ITrain>(t => t.Mbr, "Mbr");
-            view.AddColumn<ITrain>(t => t.Last, "Last");
-            view.AddColumn<ITrain>(t => t.Days.DaysToString(false), "Verkehrstage");
-            view.AddColumn<ITrain>(t => t.Comment, "Kommentar");
+            view.AddColumn<ITrain>(t => t.IsLink ? T._("L") : "", "");
+            view.AddColumn<ITrain>(t => t.TName, T._("Zugnummer"));
+            view.AddColumn<ITrain>(t => t.Locomotive, T._("Tfz"));
+            view.AddColumn<ITrain>(t => t.Mbr, T._("Mbr"));
+            view.AddColumn<ITrain>(t => t.Last, T._("Last"));
+            view.AddColumn<ITrain>(t => t.Days.DaysToString(false), T._("Verkehrstage"));
+            view.AddColumn<ITrain>(t => t.Comment, T._("Kommentar"));
 
             view.GotFocus += (s, e) => active = view;
 
@@ -136,5 +136,17 @@ namespace FPLedit.Editor.Linear
         private void BottomSortButton_Click(object sender, EventArgs e)
             => SortTrains(bottomGridView, BOTTOM_DIRECTION);
         #endregion
+        
+        private static class L
+        {
+            public static readonly string Cancel = T._("Abbrechen");
+            public static readonly string Close = T._("Schließen");
+            public static readonly string Title = T._("Züge bearbeiten");
+            public static readonly string Sort = T._("Züge sortieren");
+            public static readonly string Copy = T._("Zug kopieren/verschieben");
+            public static readonly string Delete = T._("Zug löschen");
+            public static readonly string Edit = T._("Zug bearbeiten");
+            public static readonly string New = T._("Neuer Zug");
+        }
     }
 }

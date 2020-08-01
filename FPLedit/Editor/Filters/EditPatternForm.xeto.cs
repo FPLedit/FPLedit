@@ -41,7 +41,7 @@ namespace FPLedit.Editor.Filters
         {
             if (searchTextBox.Text.Length == 0)
             {
-                MessageBox.Show("Bitte einen Suchwert eingeben!");
+                MessageBox.Show(T._("Bitte einen Suchwert eingeben!"));
                 Result = DialogResult.Cancel;
                 return;
             }
@@ -77,6 +77,14 @@ namespace FPLedit.Editor.Filters
             Equals = '=',
             [SelectionName("Betriebsst.-Typ ist")]
             StationType = '#',
+        }
+        
+        private static class L
+        {
+            public static readonly string Cancel = T._("Abbrechen");
+            public static readonly string Close = T._("Schließen");
+            public static readonly string Title = T._("Regel bearbeiten");
+            public static readonly string Negate = T._("Bedingung umkehren");
         }
     }
 }

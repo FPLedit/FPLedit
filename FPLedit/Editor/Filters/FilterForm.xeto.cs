@@ -50,8 +50,8 @@ namespace FPLedit.Editor.Filters
 
         private void InitView(GridView view)
         {
-            view.AddColumn<FilterRule>(r => TypeDescription(r.FilterType, r.Negate), "Typ");
-            view.AddColumn<FilterRule>(r => r.SearchString, "Suchwert");
+            view.AddColumn<FilterRule>(r => TypeDescription(r.FilterType, r.Negate), T._("Typ"));
+            view.AddColumn<FilterRule>(r => r.SearchString, T._("Suchwert"));
         }
 
         private void SwitchType(int idx)
@@ -59,8 +59,8 @@ namespace FPLedit.Editor.Filters
             var f = fcontainers[idx];
             curTrainRules = f.TrainRules;
             curStationRules = f.StationRules;
-            Title = "Filterregeln für " + f.Filterable.DisplayName;
-
+            Title = T._("Filterregeln für {0}", f.Filterable.DisplayName);
+            
             UpdateListView(stationPattListView, curStationRules);
             UpdateListView(trainPattListView, curTrainRules);
         }
@@ -79,7 +79,7 @@ namespace FPLedit.Editor.Filters
                 UpdateListView(view, patterns);
             }
             else if (message)
-                MessageBox.Show("Zuerst muss eine Regel ausgewählt werden!", "Regel löschen");
+                MessageBox.Show(T._("Zuerst muss eine Regel ausgewählt werden!"), T._("Regel löschen"));
         }
 
         private void EditEntry(GridView view, List<FilterRule> patterns, string property, FilterTarget target, bool message=true)
@@ -98,7 +98,7 @@ namespace FPLedit.Editor.Filters
                 }
             }
             else if (message)
-                MessageBox.Show("Zuerst muss eine Regel ausgewählt werden!", "Regel bearbeiten");
+                MessageBox.Show(T._("Zuerst muss eine Regel ausgewählt werden!"), T._("Regel bearbeiten"));
         }
 
         private void AddEntry(GridView view, List<FilterRule> patterns, string property, FilterTarget target)
@@ -117,11 +117,11 @@ namespace FPLedit.Editor.Filters
         {
             switch (type)
             {
-                case FilterType.StartsWith: return negate ? "beginnt nicht mit" : "beginnt mit";
-                case FilterType.EndsWidth: return negate ? "endet nicht mit" : "endet mit";
-                case FilterType.Contains: return negate ? "enthält nicht" : "enthält";
-                case FilterType.Equals: return negate ? "ist nicht" : "ist";
-                case FilterType.StationType: return negate ? "Betriebsst.-Typ ist nicht" : "Betriebsst.-Typ ist";
+                case FilterType.StartsWith: return negate ? T._("beginnt nicht mit") : T._("beginnt mit");
+                case FilterType.EndsWidth: return negate ? T._("endet nicht mit") : T._("endet mit");
+                case FilterType.Contains: return negate ? T._("enthält nicht") : T._("enthält");
+                case FilterType.Equals: return negate ? T._("ist nicht") : T._("ist");
+                case FilterType.StationType: return negate ? T._("Betriebsst.-Typ ist nicht") : T._("Betriebsst.-Typ ist");
                 default: return "";
             }
         }
@@ -166,6 +166,22 @@ namespace FPLedit.Editor.Filters
         {
             public IFilterRuleContainer Filterable;
             public List<FilterRule> TrainRules, StationRules;
+        }
+        
+        private static class L
+        {
+            public static readonly string Cancel = T._("Abbrechen");
+            public static readonly string Close = T._("Schließen");
+            public static readonly string Title = T._("Filterregeln");
+            public static readonly string New = T._("&Hinzufügen");
+            public static readonly string Edit = T._("&Bearbeiten");
+            public static readonly string Delete = T._("&Löschen");
+            public static readonly string New2 = T._("H&inzufügen");
+            public static readonly string Edit2 = T._("B&earbeiten");
+            public static readonly string Delete2 = T._("Lö&schen");
+            public static readonly string FilterFor = T._("Filter für");
+            public static readonly string Trains = T._("Züge ausblenden");
+            public static readonly string Stations = T._("Bahnhöfe ausblenden");
         }
     }
 }

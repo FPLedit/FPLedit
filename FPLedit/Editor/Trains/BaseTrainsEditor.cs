@@ -30,10 +30,10 @@ namespace FPLedit.Editor.Trains
                     UpdateListView(view, dir);
                 }
                 else if (message)
-                    MessageBox.Show("Verlinke Züge können nicht gelöscht werden.", "Zug bearbeiten");
+                    MessageBox.Show(T._("Verlinke Züge können nicht gelöscht werden."), T._("Zug löschen"));
             }
             else if (message)
-                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug löschen");
+                MessageBox.Show(T._("Zuerst muss ein Zug ausgewählt werden!"), T._("Zug löschen"));
         }
 
         protected void EditTrain(GridView view, TrainDirection dir, bool message = true)
@@ -47,10 +47,10 @@ namespace FPLedit.Editor.Trains
                             UpdateListView(view, dir);
                 }
                 else if (message)
-                    MessageBox.Show("Verlinke Züge können nicht bearbeitet werden.", "Zug bearbeiten");
+                    MessageBox.Show(T._("Verlinke Züge können nicht bearbeitet werden."), T._("Zug bearbeiten"));
             }
             else if (message)
-                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug bearbeiten");
+                MessageBox.Show(T._("Zuerst muss ein Zug ausgewählt werden!"), T._("Zug bearbeiten"));
         }
 
         protected void NewTrain(GridView view, TrainDirection direction)
@@ -80,10 +80,10 @@ namespace FPLedit.Editor.Trains
                     UpdateListView(view, dir);
                 }
                 else if (message)
-                    MessageBox.Show("Verlinke Züge können nicht kopiert werden.", "Zug bearbeiten");
+                    MessageBox.Show(T._("Verlinke Züge können nicht kopiert werden."), T._("Zug kopieren"));
             }
             else if (message)
-                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug kopieren");
+                MessageBox.Show(T._("Zuerst muss ein Zug ausgewählt werden!"), T._("Zug kopieren"));
         }
 
         protected void SortTrains(GridView view, TrainDirection dir)

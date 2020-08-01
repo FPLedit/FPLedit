@@ -39,7 +39,7 @@ namespace FPLedit.Editor.Trains
         private void SelectMode(SortSelectionType option)
         {
             if (direction == TrainDirection.tr && WindowShown && !sortSelection.EnabledOptionSelected)
-                MessageBox.Show("Die gewählte Option ist im Netzwerk-Fahrplan nicht verfügbar.", "FPLedit");
+                MessageBox.Show(T._("Die gewählte Option ist im Netzwerk-Fahrplan nicht verfügbar."), "FPLedit");
 
             stationsComboBox.Enabled = option == SortSelectionType.TimeStation;
         }
@@ -48,7 +48,7 @@ namespace FPLedit.Editor.Trains
         {
             if (direction == TrainDirection.tr && !sortSelection.EnabledOptionSelected)
             {
-                MessageBox.Show("Die gewählte Option ist im Netzwerk-Fahrplan nicht verfügbar.", "FPLedit");
+                MessageBox.Show(T._("Die gewählte Option ist im Netzwerk-Fahrplan nicht verfügbar."), "FPLedit");
                 return;
             }
 
@@ -87,6 +87,14 @@ namespace FPLedit.Editor.Trains
             TimeDown,
             [SelectionName("An allen Stationen, entgegen Fahrtrichtung")]
             TimeUp,
+        }
+        
+        private static class L
+        {
+            public static readonly string Cancel = T._("Abbrechen");
+            public static readonly string Close = T._("Sortieren");
+            public static readonly string Station = T._("Station:");
+            public static readonly string Title = T._("Züge sortieren");
         }
     }
 }

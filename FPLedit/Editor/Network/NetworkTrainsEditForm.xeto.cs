@@ -26,14 +26,14 @@ namespace FPLedit.Editor.Network
             tt = pluginInterface.Timetable;
             backupHandle = pluginInterface.BackupTimetable();
 
-            gridView.AddColumn<ITrain>(t => t.IsLink ? "L" : "", "");
-            gridView.AddColumn<ITrain>(t => t.TName, "Zugnummer");
-            gridView.AddColumn<ITrain>(t => t.Locomotive, "Tfz");
-            gridView.AddColumn<ITrain>(t => t.Mbr, "Mbr");
-            gridView.AddColumn<ITrain>(t => t.Last, "Last");
-            gridView.AddColumn<ITrain>(t => t.Days.DaysToString(false), "Verkehrstage");
-            gridView.AddColumn<ITrain>(t => BuildPath(t), "Laufweg");
-            gridView.AddColumn<ITrain>(t => t.Comment, "Kommentar");
+            gridView.AddColumn<ITrain>(t => t.IsLink ? T._("L") : "", "");
+            gridView.AddColumn<ITrain>(t => t.TName, T._("Zugnummer"));
+            gridView.AddColumn<ITrain>(t => t.Locomotive, T._("Tfz"));
+            gridView.AddColumn<ITrain>(t => t.Mbr, T._("Mbr"));
+            gridView.AddColumn<ITrain>(t => t.Last, T._("Last"));
+            gridView.AddColumn<ITrain>(t => t.Days.DaysToString(false), T._("Verkehrstage"));
+            gridView.AddColumn<ITrain>(t => BuildPath(t), T._("Laufweg"));
+            gridView.AddColumn<ITrain>(t => t.Comment, T._("Kommentar"));
 
             gridView.MouseDoubleClick += (s, e) => EditTrain(gridView, TrainDirection.tr, false);
 
@@ -87,10 +87,10 @@ namespace FPLedit.Editor.Network
                             UpdateListView(view, TrainDirection.tr);
                 }
                 else if (message)
-                        MessageBox.Show("Verlinke Züge können nicht bearbeitet werden.", "Zug bearbeiten");
+                        MessageBox.Show(T._("Verlinke Züge können nicht bearbeitet werden."), T._("Laufweg bearbeiten"));
             }
             else if (message)
-                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Laufweg bearbeiten");
+                MessageBox.Show(T._("Zuerst muss ein Zug ausgewählt werden!"), T._("Laufweg bearbeiten"));
         }
 
         private void CopyTrain(GridView view, bool message = true)
@@ -105,10 +105,10 @@ namespace FPLedit.Editor.Network
                     UpdateListView(view, TrainDirection.tr);
                 }
                 else if (message)
-                    MessageBox.Show("Verlinke Züge können nicht kopiert werden.", "Zug bearbeiten");
+                    MessageBox.Show(T._("Verlinke Züge können nicht kopiert werden."), T._("Zug kopieren"));
             }
             else if (message)
-                MessageBox.Show("Zuerst muss ein Zug ausgewählt werden!", "Zug kopieren");
+                MessageBox.Show(T._("Zuerst muss ein Zug ausgewählt werden!"), T._("Zug kopieren"));
         }
 
         private void NewTrain(GridView view)
@@ -163,5 +163,18 @@ namespace FPLedit.Editor.Network
 
         private void SortButton_Click(object sender, EventArgs e)
             => SortTrains(gridView, TrainDirection.tr);
+        
+        private static class L
+        {
+            public static readonly string Cancel = T._("Abbrechen");
+            public static readonly string Close = T._("Schließen");
+            public static readonly string Title = T._("Züge bearbeiten");
+            public static readonly string Sort = T._("Züge sortieren");
+            public static readonly string Copy = T._("Zug kopieren/verschieben");
+            public static readonly string Delete = T._("Zug löschen");
+            public static readonly string Edit = T._("Zug bearbeiten");
+            public static readonly string New = T._("Neuer Zug");
+            public static readonly string EditPath = T._("Laufweg bearbeiten");
+        }
     }
 }
