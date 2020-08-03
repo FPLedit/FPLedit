@@ -78,6 +78,23 @@ Task("Build")
     .IsDependentOn("Restore-NuGet-Packages")
     .Does(() =>
     {
+        /*
+         * HACK: Fix for annoying GenerateDepsFile failure.
+         * Remove 
+         */
+        for (int i = 1; i < 6; i++) {        
+            try {
+                MSBuild("./FPLedit.sln", settings => {
+                    settings.SetConfiguration(configuration);
+                    settings.Restore = true;
+                    settings.Properties.Add("ForceConfigurationDir", new List<string> { configuration });
+                    if (!string.IsNullOrEmpty(preBuildVersionSuffix))
+                        settings.Properties.Add("versionSuffix", new List<string> { preBuildVersionSuffix });
+                });
+            } catch {}
+        }
+        // END HACK
+        
         MSBuild("./FPLedit.sln", settings => {
             settings.SetConfiguration(configuration);
             settings.Restore = true;
