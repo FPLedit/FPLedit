@@ -5,7 +5,7 @@ namespace FPLedit.Shared.Filetypes
 {
     public sealed class XMLImport : IImport
     {
-        public string Filter => "Fahrplan Dateien (*.fpl)|*.fpl";
+        public string Filter => T._("Fahrplan Dateien (*.fpl)|*.fpl");
 
         public Timetable? Import(Stream stream, IReducedPluginInterface pluginInterface, ILog? replaceLog = null)
         {

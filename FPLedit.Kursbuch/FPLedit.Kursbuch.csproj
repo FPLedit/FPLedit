@@ -23,9 +23,9 @@
     <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <!--<EmbeddedResource Include="**/*.xeto" />-->
     <EmbeddedResource Include="Resources\*" />
     <EmbeddedResource Include="**\*.fpltmpl" />
+    <None Include="Languages/*.mo" CopyToOutputDirectory="Always" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Eto.Forms" Version="$(EtoVersion)" />

@@ -1,0 +1,32 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2020-08-07 18:01+0200\n"
+"PO-Revision-Date: 2020-08-07 18:01+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.3.1\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: _;SelectionName\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: Plugin.cs:14
+msgid "Aushangfahrplan HTML Datei (*.html)|*.html"
+msgstr ""
+
+#: Plugin.cs:15 Plugin.cs:19 Plugin.cs:29
+msgid "Aushangfahrplan"
+msgstr ""
+
+#: Templates/TemplateProxy.cs:11
+msgid "Standard (DRG aus Malsch)"
+msgstr ""
+
+#: Templates/TemplateProxy.cs:20
+msgid "Wie Standard, mit Schriftzug \\\"Abfahrt\\\" in Originalschrift"
+msgstr ""

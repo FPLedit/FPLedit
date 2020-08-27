@@ -16,6 +16,9 @@
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="Languages/*.mo" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\FPLedit.Shared.UI\FPLedit.Shared.UI.csproj" />
     <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj" />
   </ItemGroup>

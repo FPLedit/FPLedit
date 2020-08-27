@@ -11,12 +11,12 @@ namespace FPLedit.Aushangfahrplan
     {
         public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
         {
-            var export = new DefaultTemplateExport("Aushangfahrplan HTML Datei (*.html)|*.html", GetTemplateChooser);
-            var preview = new DefaultPreview("afpl", "Aushangfahrplan", export);
+            var export = new DefaultTemplateExport(T._("Aushangfahrplan HTML Datei (*.html)|*.html"), GetTemplateChooser);
+            var preview = new DefaultPreview("afpl", T._("Aushangfahrplan"), export);
             componentRegistry.Register<IExport>(export);
             componentRegistry.Register<IPreviewAction>(preview);
             
-            componentRegistry.Register<IAppearanceControl>(new DefaultAppearanceControl(pi => new SettingsControl(pi), "Aushangfahrplan"));
+            componentRegistry.Register<IAppearanceControl>(new DefaultAppearanceControl(pi => new SettingsControl(pi), T._("Aushangfahrplan")));
             componentRegistry.Register<IFilterRuleContainer>(FilterRuleContainer);
 
             componentRegistry.Register<ITemplateProvider>(new Templates.StdTemplateProvider());
@@ -26,7 +26,7 @@ namespace FPLedit.Aushangfahrplan
             componentRegistry.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<AfplAttrs>("afpl"));
         }
         
-        internal static IFilterRuleContainer FilterRuleContainer => new DefaultFilterRuleContainer("Aushangfahrplan", AfplAttrs.GetAttrs, AfplAttrs.CreateAttrs);
+        internal static IFilterRuleContainer FilterRuleContainer => new DefaultFilterRuleContainer(T._("Aushangfahrplan"), AfplAttrs.GetAttrs, AfplAttrs.CreateAttrs);
         
         internal static ITemplateChooser GetTemplateChooser(IReducedPluginInterface pi) 
             => new DefaultTemplateChooser(pi, "afpl", "afpl_attrs", "tmpl", "builtin:FPLedit.Aushangfahrplan/Templates/AfplTemplate.fpltmpl");

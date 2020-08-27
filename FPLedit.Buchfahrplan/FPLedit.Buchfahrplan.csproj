@@ -19,6 +19,7 @@
     <Compile Include="..\build_scripts\ResourceHelper.cs" Link="Properties\ResourceHelper.cs" />
     <EmbeddedResource Include="Resources/*" />
     <EmbeddedResource Include="**/*.fpltmpl" />
+    <None Include="Languages/*.mo" CopyToOutputDirectory="Always" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FPLedit.Shared.UI\FPLedit.Shared.UI.csproj" />

@@ -16,7 +16,7 @@
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <!--<EmbeddedResource Include="**/*.xeto" />-->
+    <None Include="Languages/*.mo" CopyToOutputDirectory="Always" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FPLedit.Shared.Rendering\FPLedit.Shared.Rendering.csproj" />

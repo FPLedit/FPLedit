@@ -1,0 +1,33 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2020-08-07 18:04+0200\n"
+"PO-Revision-Date: 2020-08-07 18:04+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.3.1\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: _;SelectionName\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: DebugListener.cs:24
+#, csharp-format
+msgid ""
+"Debug Dump ist aktiviert! Dies kann dazu führen, dass große Datenmengen "
+"aufgezeichnet werden.\n"
+"Session file: {0}\n"
+"----------"
+msgstr ""
+
+#: Forms/SettingsForm.xeto.cs:54
+msgid "Dump auswählen"
+msgstr ""
+
+#: Forms/SettingsForm.xeto.cs:67
+msgid "Fehler beim Öffnen der Datei."
+msgstr ""

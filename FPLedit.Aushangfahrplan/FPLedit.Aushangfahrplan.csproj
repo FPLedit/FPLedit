@@ -25,6 +25,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\abfahrt-text.svg" />
     <EmbeddedResource Include="**/*.fpltmpl" />
+    <None Include="Languages/*.mo" CopyToOutputDirectory="Always" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Eto.Forms" Version="$(EtoVersion)" />

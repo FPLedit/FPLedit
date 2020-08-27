@@ -10,7 +10,7 @@ namespace FPLedit.Shared.Filetypes
     {
         public const string FLAG_INDENT_XML = "indent_xml";
         
-        public string Filter => "Fahrplan Dateien (*.fpl)|*.fpl";
+        public string Filter => T._("Fahrplan Dateien (*.fpl)|*.fpl");
         
         private XElement BuildNode(XMLEntity node)
         {

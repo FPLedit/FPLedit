@@ -25,10 +25,10 @@ namespace FPLedit.Buchfahrplan.Forms
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            gridView.AddColumn<IStation>(s => s.Positions.GetPosition(route.Index).ToString(), "km");
-            gridView.AddColumn<IStation>(s => s.SName, "Name");
-            gridView.AddColumn<IStation>(s => s.Vmax.GetValue(route.Index), "Vmax");
-            gridView.AddColumn<IStation>(s => s.Wellenlinien.GetValue(route.Index).ToString(), "Wellenlinien");
+            gridView.AddColumn<IStation>(s => s.Positions.GetPosition(route.Index).ToString(), T._("km"));
+            gridView.AddColumn<IStation>(s => s.SName, T._("Name"));
+            gridView.AddColumn<IStation>(s => s.Vmax.GetValue(route.Index), T._("Vmax"));
+            gridView.AddColumn<IStation>(s => s.Wellenlinien.GetValue(route.Index).ToString(), T._("Wellenlinien"));
 
             gridView.MouseDoubleClick += (s, e) => EditPoint(false);
 
@@ -73,7 +73,7 @@ namespace FPLedit.Buchfahrplan.Forms
                     var pos = p.Positions.GetPosition(route.Index);
                     if (pos < route.MinPosition || pos > route.MaxPosition)
                     {
-                        MessageBox.Show($"Die Position muss im Streckenbereich liegen, also zwischen {route.MinPosition} und {route.MaxPosition}!", "FPLedit");
+                        MessageBox.Show(T._("Die Position muss im Streckenbereich liegen, also zwischen {0} und {1}!", route.MinPosition, route.MaxPosition), "FPLedit");
                         return;
                     }
 
@@ -94,7 +94,7 @@ namespace FPLedit.Buchfahrplan.Forms
                         UpdateListView();
             }
             else if (message)
-                MessageBox.Show("Zuerst muss eine Zeile ausgewählt werden!", "Höchstgeschwindigkeit ändern");
+                MessageBox.Show(T._("Zuerst muss eine Zeile ausgewählt werden!"), T._("Höchstgeschwindigkeit ändern"));
         }
 
         private void RemovePoint(bool message = true)
@@ -112,7 +112,7 @@ namespace FPLedit.Buchfahrplan.Forms
                 }
             }
             else if (message)
-                MessageBox.Show("Zuerst muss eine Zeile ausgewählt werden!", "Löschen");
+                MessageBox.Show(T._("Zuerst muss eine Zeile ausgewählt werden!"), T._("Löschen"));
         }
 
         private void SelectPoint()

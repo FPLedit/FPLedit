@@ -1,0 +1,82 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2020-08-07 18:02+0200\n"
+"PO-Revision-Date: 2020-08-07 18:02+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.3.1\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: _;SelectionName\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: Forms/VelocityEditForm.xeto.cs:27
+msgid "Bitte eine Zahl als Geschwindikgeit eingeben!"
+msgstr ""
+
+#: Forms/VelocityEditForm.xeto.cs:28
+msgid "Bitte eine Zahl als Position eingeben!"
+msgstr ""
+
+#: Forms/VelocityEditForm.xeto.cs:70
+#, csharp-format
+msgid ""
+"Bitte erst alle Fehler beheben:\n"
+"{0}"
+msgstr ""
+
+#: Forms/VelocityForm.xeto.cs:28
+msgid "km"
+msgstr ""
+
+#: Forms/VelocityForm.xeto.cs:29
+msgid "Name"
+msgstr "Name"
+
+#: Forms/VelocityForm.xeto.cs:30
+msgid "Vmax"
+msgstr "Vmax"
+
+#: Forms/VelocityForm.xeto.cs:31
+msgid "Wellenlinien"
+msgstr ""
+
+#: Forms/VelocityForm.xeto.cs:76
+#, csharp-format
+msgid "Die Position muss im Streckenbereich liegen, also zwischen {0} und {1}!"
+msgstr ""
+
+#: Forms/VelocityForm.xeto.cs:97 Forms/VelocityForm.xeto.cs:115
+msgid "Zuerst muss eine Zeile ausgewählt werden!"
+msgstr ""
+
+#: Forms/VelocityForm.xeto.cs:97
+msgid "Höchstgeschwindigkeit ändern"
+msgstr ""
+
+#: Forms/VelocityForm.xeto.cs:115
+msgid "Löschen"
+msgstr "Delete"
+
+#: Forms/VelocityRouteAction.cs:8
+msgid "Höchst&geschwindigkeiten ändern"
+msgstr ""
+
+#: Plugin.cs:13
+msgid "Buchfahrplan als HTML Datei (*.html)|*.html"
+msgstr ""
+
+#: Plugin.cs:14 Plugin.cs:18 Plugin.cs:30
+msgid "Buchfahrplan"
+msgstr ""
+
+#: Templates/TemplateHelper.cs:65
+msgid ""
+"Zwei benachbarte Stationen sollten nicht mehr als eine/keine Route gemeinsam "
+"haben! Zusammengefallene Routen sind vorhanden und werden nicht unterstützt."
+msgstr ""

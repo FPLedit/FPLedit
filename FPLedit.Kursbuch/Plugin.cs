@@ -13,13 +13,13 @@ namespace FPLedit.Kursbuch
     {
         public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
         {
-            var export = new DefaultTemplateExport("Tabellenfahrplan/Kursbuch als HTML Datei (*.html)|*.html", GetTemplateChooser);
-            var preview = new DefaultPreview("kfpl", "Kursbuch", export);
+            var export = new DefaultTemplateExport(T._("Tabellenfahrplan/Kursbuch als HTML Datei (*.html)|*.html"), GetTemplateChooser);
+            var preview = new DefaultPreview("kfpl", T._("Kursbuch"), export);
             componentRegistry.Register<IExport>(export);
             componentRegistry.Register<IPreviewAction>(preview);
             
             componentRegistry.Register<IFilterRuleContainer>(FilterRuleContainer);
-            componentRegistry.Register<IAppearanceControl>(new DefaultAppearanceControl(pi => new SettingsControl(pi), "Kursbuch"));
+            componentRegistry.Register<IAppearanceControl>(new DefaultAppearanceControl(pi => new SettingsControl(pi), T._("Kursbuch")));
 
             componentRegistry.Register<ITemplateProvider>(new Templates.TemplateProvider());
             
@@ -29,7 +29,7 @@ namespace FPLedit.Kursbuch
             componentRegistry.Register<ITimetableTypeChangeAction>(new FixAttrsAction());
         }
 
-        internal static IFilterRuleContainer FilterRuleContainer => new DefaultFilterRuleContainer("Kursbuch", KfplAttrs.GetAttrs, KfplAttrs.CreateAttrs);
+        internal static IFilterRuleContainer FilterRuleContainer => new DefaultFilterRuleContainer(T._("Kursbuch"), KfplAttrs.GetAttrs, KfplAttrs.CreateAttrs);
         
         internal static ITemplateChooser GetTemplateChooser(IReducedPluginInterface pi) 
             => new DefaultTemplateChooser(pi, "kfpl", "kfpl_attrs", "tmpl", "builtin:FPLedit.Kursbuch/Templates/KfplTemplate.fpltmpl");

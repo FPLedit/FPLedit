@@ -56,12 +56,12 @@ namespace FPLedit.Templating
         private string TemplateDefinition(Match m)
         {
             if (TemplateType != null)
-                throw new Exception("Nur eine fpledit_template-Direktive ist pro Vorlage erlaubt!");
+                throw new Exception(T._("Nur eine fpledit_template-Direktive ist pro Vorlage erlaubt!"));
             var tparams = new ArgsParser(m.Groups[1].ToString().Trim());
             if (tparams.Require("name", "type", "version"))
-                throw new Exception("Fehlende Angabe type, version oder name in der fpledit_template-Direktive!");
+                throw new Exception(T._("Fehlende Angabe type, version oder name in der fpledit_template-Direktive!"));
             if (tparams["version"] != CURRENT_VERSION.ToString())
-                throw new Exception($"Template-version mismatch! (Current: {CURRENT_VERSION} vs {tparams["version"]})");
+                throw new Exception(T._("Template-version mismatch! (Current: {0} vs {1})", CURRENT_VERSION, tparams["version"]));
             TemplateType = tparams["type"];
             TemplateName = tparams["name"];
             return ""; // remove this match.

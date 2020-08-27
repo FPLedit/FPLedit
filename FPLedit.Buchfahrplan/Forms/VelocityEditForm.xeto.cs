@@ -24,8 +24,8 @@ namespace FPLedit.Buchfahrplan.Forms
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            var velocityValidator = new NumberValidator(velocityTextBox, true, true, errorMessage: "Bitte eine Zahl als Geschwindikgeit eingeben!");
-            var positionValidator = new NumberValidator(positionTextBox, false, false, errorMessage: "Bitte eine Zahl als Position eingeben!");
+            var velocityValidator = new NumberValidator(velocityTextBox, true, true, errorMessage: T._("Bitte eine Zahl als Geschwindikgeit eingeben!"));
+            var positionValidator = new NumberValidator(positionTextBox, false, false, errorMessage: T._("Bitte eine Zahl als Position eingeben!"));
             validators = new ValidatorCollection(velocityValidator, positionValidator);
 
             for (int i = 0; i < 4; i++)
@@ -67,7 +67,7 @@ namespace FPLedit.Buchfahrplan.Forms
         {
             if (!validators.IsValid)
             {
-                MessageBox.Show("Bitte erst alle Fehler beheben:" + Environment.NewLine + validators.Message);
+                MessageBox.Show(T._("Bitte erst alle Fehler beheben:\n{0}", validators.Message));
                 return;
             }
 

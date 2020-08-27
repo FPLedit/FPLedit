@@ -62,7 +62,7 @@ namespace FPLedit.Buchfahrplan.Templates
                 {
                     var routes = sta0.Routes.Where(r => sta1.Routes.Contains(r)).ToArray();
                     if (routes.Length > 1 || routes.Length == 0)
-                        throw new Exception("Zwei benachbarte Stationen sollten nicht mehr als eine/keine Route gemeinsam haben! Zusammengefallene Routen sind vorhanden und werden nicht unterstützt.");
+                        throw new Exception(T._("Zwei benachbarte Stationen sollten nicht mehr als eine/keine Route gemeinsam haben! Zusammengefallene Routen sind vorhanden und werden nicht unterstützt."));
                     route = routes[0];
                 }
 

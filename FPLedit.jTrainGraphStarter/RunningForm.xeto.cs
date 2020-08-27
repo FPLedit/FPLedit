@@ -43,10 +43,10 @@ namespace FPLedit.jTrainGraphStarter
 
         private void CloseButton_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("jTrainGraph wirklich beenden? Alle in jTrainGraph geänderten Daten werden verworfen! (Das beenden kann bis zu eine Sekunde dauern)", MessageBoxButtons.YesNo, MessageBoxType.Warning) == DialogResult.Yes)
+            if (MessageBox.Show(T._("jTrainGraph wirklich beenden? Alle in jTrainGraph geänderten Daten werden verworfen! (Das Beenden kann bis zu eine Sekunde dauern)"), MessageBoxButtons.YesNo, MessageBoxType.Warning) == DialogResult.Yes)
             {
                 forceKill = true;
-                Title = "jTrainGraph beenden...";
+                Title = T._("jTrainGraph beenden...");
             }
         }
 
@@ -67,7 +67,7 @@ namespace FPLedit.jTrainGraphStarter
                         if (!p.Start())
                             throw new Exception("Process could not be started!");
 
-                        pluginInterface.Logger.Info("Wartet darauf, dass jTrainGraph beendet wird...");
+                        pluginInterface.Logger.Info(T._("Wartet darauf, dass jTrainGraph beendet wird..."));
 
                         while (!p.HasExited)
                         {
@@ -80,14 +80,14 @@ namespace FPLedit.jTrainGraphStarter
                             }
                         }
 
-                        pluginInterface.Logger.Info("jTrainGraph beendet! Lade Datei neu...");
+                        pluginInterface.Logger.Info(T._("jTrainGraph beendet! Lade Datei neu..."));
 
                         if (p.ExitCode != 0)
                             throw new Exception("Process exited with error code " + p.ExitCode);
                     }
                     catch (Exception e)
                     {
-                        pluginInterface.Logger.Error("Fehler beim Starten von jTrainGraph: Möglicherweise ist das jTrainGraphStarter Plugin falsch konfiguriert! Zur Konfiguration siehe jTrainGraph > Einstellungen");
+                        pluginInterface.Logger.Error(T._("Fehler beim Starten von jTrainGraph: Möglicherweise ist das jTrainGraphStarter Plugin falsch konfiguriert! Zur Konfiguration siehe jTrainGraph > Einstellungen"));
                         pluginInterface.Logger.LogException(e);
                         return false;
                     }

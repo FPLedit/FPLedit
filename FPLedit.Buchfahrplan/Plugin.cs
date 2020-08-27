@@ -10,12 +10,12 @@ namespace FPLedit.Buchfahrplan
     {
         public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
         {
-            var export = new DefaultTemplateExport("Buchfahrplan als HTML Datei (*.html)|*.html", GetTemplateChooser);
-            var preview = new DefaultPreview("bfpl", "Buchfahrplan", export);
+            var export = new DefaultTemplateExport(T._("Buchfahrplan als HTML Datei (*.html)|*.html"), GetTemplateChooser);
+            var preview = new DefaultPreview("bfpl", T._("Buchfahrplan"), export);
             componentRegistry.Register<IExport>(export);
             componentRegistry.Register<IPreviewAction>(preview);
             
-            componentRegistry.Register<IAppearanceControl>(new DefaultAppearanceControl(pi => new Forms.SettingsControl(pi), "Buchfahrplan"));
+            componentRegistry.Register<IAppearanceControl>(new DefaultAppearanceControl(pi => new Forms.SettingsControl(pi), T._("Buchfahrplan")));
             componentRegistry.Register<IFilterRuleContainer>(FilterRuleContainer);
             componentRegistry.Register<IRouteAction>(new Forms.VelocityRouteAction());
 
@@ -27,7 +27,7 @@ namespace FPLedit.Buchfahrplan
             componentRegistry.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<Model.BfplPoint>("bfpl"));
         }
         
-        internal static IFilterRuleContainer FilterRuleContainer => new DefaultFilterRuleContainer("Buchfahrplan", BfplAttrs.GetAttrs, BfplAttrs.CreateAttrs);
+        internal static IFilterRuleContainer FilterRuleContainer => new DefaultFilterRuleContainer(T._("Buchfahrplan"), BfplAttrs.GetAttrs, BfplAttrs.CreateAttrs);
         
         internal static ITemplateChooser GetTemplateChooser(IReducedPluginInterface pi) 
             => new DefaultTemplateChooser(pi, "bfpl", "bfpl_attrs", "tmpl", "builtin:FPLedit.Buchfahrplan/Templates/StdTemplate.fpltmpl");

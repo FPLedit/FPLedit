@@ -21,7 +21,7 @@ namespace FPLedit.DebugDump
             writer = new DumpWriter(fn);
 
             // Output some messages before starting so that user is informed better (and does not forget to turn it off!)
-            pluginInterface.Logger.Warning("Debug Dump ist aktiviert! Dies kann dazu führen, dass große Datenmengen aufgezeichnet werden.\nSession file: " + fn + "\n----------");
+            pluginInterface.Logger.Warning(T._("Debug Dump ist aktiviert! Dies kann dazu führen, dass große Datenmengen aufgezeichnet werden.\nSession file: {0}\n----------", fn));
 
             var l = pluginInterface.Logger;
             if (l.CanAttach)

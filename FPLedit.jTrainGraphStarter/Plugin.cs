@@ -17,10 +17,10 @@ namespace FPLedit.jTrainGraphStarter
             pluginInterface.FileStateChanged += PluginInterface_FileStateChanged;
             
 #pragma warning disable CA2000
-            var item = ((MenuBar)pluginInterface.Menu).CreateItem("&jTrainGraph");
+            var item = ((MenuBar)pluginInterface.Menu).CreateItem(T._("&jTrainGraph"));
 #pragma warning restore CA2000
 
-            startItem = item.CreateItem("jTrain&Graph starten", enabled: false);
+            startItem = item.CreateItem(T._("jTrain&Graph starten"), enabled: false);
             startItem.Click += (s, e) =>
             {
                 if (pluginInterface.Timetable.Type == TimetableType.Linear)
@@ -30,7 +30,7 @@ namespace FPLedit.jTrainGraphStarter
             };
 
 #pragma warning disable CA2000
-            item.CreateItem("Einstell&ungen", clickHandler: (s, e) => (new SettingsForm(pluginInterface.Settings)).ShowModal(pluginInterface.RootForm));
+            item.CreateItem(T._("Einstell&ungen"), clickHandler: (s, e) => (new SettingsForm(pluginInterface.Settings)).ShowModal(pluginInterface.RootForm));
 #pragma warning restore CA2000
         }
 
@@ -39,7 +39,7 @@ namespace FPLedit.jTrainGraphStarter
             startItem.Enabled = e.FileState.Opened;
 
             startItem.Text = (e.FileState.Opened && pluginInterface.Timetable.Type == TimetableType.Network) ?
-                "jTrain&Graph starten (aktuelle Route)" : "jTrain&Graph starten";
+                T._("jTrain&Graph starten (aktuelle Route)") : T._("jTrain&Graph starten");
         }
 
         private void StartLinear()
@@ -51,8 +51,8 @@ namespace FPLedit.jTrainGraphStarter
 
                 if (showMessage)
                 {
-                    DialogResult res = MessageBox.Show("Dies speichert die Fahrplandatei am letzten Speicherort und öffnet dann jTrainGraph. Nachdem Sie die Arbeit in jTrainGraph beendet haben, speichern Sie damit die Datei und schließen das jTrainGraph-Hauptfenster, damit werden die Änderungen übernommen. Aktion fortsetzen?" + Environment.NewLine + Environment.NewLine + "Diese Meldung kann unter jTrainGraph > Einstellungen deaktiviert werden.",
-                        "jTrainGraph starten", MessageBoxButtons.YesNo, MessageBoxType.Warning);
+                    DialogResult res = MessageBox.Show(T._("Dies speichert die Fahrplandatei am letzten Speicherort und öffnet dann jTrainGraph. Nachdem Sie die Arbeit in jTrainGraph beendet haben, speichern Sie damit die Datei und schließen das jTrainGraph-Hauptfenster, damit werden die Änderungen übernommen. Aktion fortsetzen?\n\nDiese Meldung kann unter jTrainGraph > Einstellungen deaktiviert werden."),
+                        T._("jTrainGraph starten"), MessageBoxButtons.YesNo, MessageBoxType.Warning);
 
                     if (res != DialogResult.Yes)
                         return;
@@ -65,7 +65,7 @@ namespace FPLedit.jTrainGraphStarter
             }
             catch (Exception e)
             {
-                pluginInterface.Logger.Error("Beim Verwenden von jTrainGraph ist ein unerwarteter Fehler aufgetreten! " + e);
+                pluginInterface.Logger.Error(T._("Beim Verwenden von jTrainGraph ist ein unerwarteter Fehler aufgetreten! {0}", e));
                 pluginInterface.Logger.LogException(e);
                 pluginInterface.RestoreTimetable(backupHandle);
             }
@@ -80,10 +80,10 @@ namespace FPLedit.jTrainGraphStarter
 
                 if (showMessage)
                 {
-                    DialogResult res = MessageBox.Show("Dies speichert die aktuell ausgewählte Route in eine temporäre Datei und öffnet dann jTrainGraph. Nachdem Sie die Arbeit in jTrainGraph beendet haben, speichern Sie damit die Datei und schließen das jTrainGraph-Hauptfenster, damit werden alle Änderungen an den Bildfahrplaneinstellungen übernommen."
-                        + Environment.NewLine + "ACHTUNG: Es werden nur Änderungen an der Bildfahrplandarstellung übernommen, alle anderen Änderungen (z.B. Bahnhöfe oder Züge einfügen) werden verworfen! Aktion fortsetzen?"
-                        + Environment.NewLine + Environment.NewLine + "Diese Meldung kann unter jTrainGraph > Einstellungen deaktiviert werden.",
-                        "jTrainGraph starten (aktuelle Route)", MessageBoxButtons.YesNo, MessageBoxType.Warning);
+                    DialogResult res = MessageBox.Show(T._("Dies speichert die aktuell ausgewählte Route in eine temporäre Datei und öffnet dann jTrainGraph. Nachdem Sie die Arbeit in jTrainGraph beendet haben, speichern Sie damit die Datei und schließen das jTrainGraph-Hauptfenster, damit werden alle Änderungen an den Bildfahrplaneinstellungen übernommen."
+                        + "\nACHTUNG: Es werden nur Änderungen an der Bildfahrplandarstellung übernommen, alle anderen Änderungen (z.B. Bahnhöfe oder Züge einfügen) werden verworfen! Aktion fortsetzen?"
+                        + "\n\nDiese Meldung kann unter jTrainGraph > Einstellungen deaktiviert werden."),
+                        T._("jTrainGraph starten (aktuelle Route)"), MessageBoxButtons.YesNo, MessageBoxType.Warning);
 
                     if (res != DialogResult.Yes)
                         return;
@@ -92,7 +92,7 @@ namespace FPLedit.jTrainGraphStarter
                 var targetVersion = pluginInterface.Settings.GetEnum("jTGStarter.target-version", JtgShared.DEFAULT_TT_VERSION);
                 
                 if (targetVersion.GetCompat() != TtVersionCompatType.ReadWrite)
-                    throw new Exception("Zielversion ist nicht R/W-Kompatibel. Bitte die Einstellungen überprüfen.");
+                    throw new Exception(T._("Zielversion ist nicht R/W-Kompatibel. Bitte die Einstellungen überprüfen."));
 
                 var exporter = new Shared.Filetypes.XMLExport();
                 var importer = new Shared.Filetypes.XMLImport();
@@ -112,7 +112,7 @@ namespace FPLedit.jTrainGraphStarter
             }
             catch (Exception e)
             {
-                pluginInterface.Logger.Error("Beim Verwenden von jTrainGraph ist ein unerwarteter Fehler aufgetreten! " + e);
+                pluginInterface.Logger.Error(T._("Beim Verwenden von jTrainGraph ist ein unerwarteter Fehler aufgetreten! {0}", e));
                 pluginInterface.Logger.LogException(e);
                 pluginInterface.RestoreTimetable(backupHandle);
             }
@@ -126,14 +126,14 @@ namespace FPLedit.jTrainGraphStarter
             var compat = JtgShared.JtgCompatCheck(jtgPath);
             if (!compat.Compatible)
             {
-                MessageBox.Show("Die gewählte Version von jTrainGraph ist wahrscheinlich nicht mit FPledit kompatibel. Bitte verwenden Sie jTrainGraph in einer kompatiblen Version!",
-                    "jTrainGraphStarter: Fehler", MessageBoxType.Error);
+                MessageBox.Show(T._("Die gewählte Version von jTrainGraph ist wahrscheinlich nicht mit FPledit kompatibel. Bitte verwenden Sie jTrainGraph in einer kompatiblen Version!"),
+                    T._("jTrainGraphStarter: Fehler"), MessageBoxType.Error);
                 return;
             }
             if (pluginInterface.Timetable.Version != compat.Version && pluginInterface.Timetable.Type != TimetableType.Network)
             {
-                MessageBox.Show("Die gewählte Version von jTrainGraph ist wahrscheinlich nicht mit der aktuellen Fahrplandatei kompatibel.",
-                    "jTrainGraphStarter: Fehler", MessageBoxType.Error);
+                MessageBox.Show(T._("Die gewählte Version von jTrainGraph ist wahrscheinlich nicht mit der aktuellen Fahrplandatei kompatibel."),
+                    T._("jTrainGraphStarter: Fehler"), MessageBoxType.Error);
                 return;
             }
 

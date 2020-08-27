@@ -1,0 +1,142 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2020-08-07 18:05+0200\n"
+"PO-Revision-Date: 2020-08-07 18:05+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.3.1\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: _;SelectionName\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: Plugin.cs:20
+msgid "&jTrainGraph"
+msgstr ""
+
+#: Plugin.cs:23 Plugin.cs:42
+msgid "jTrain&Graph starten"
+msgstr ""
+
+#: Plugin.cs:33
+msgid "Einstell&ungen"
+msgstr ""
+
+#: Plugin.cs:42
+msgid "jTrain&Graph starten (aktuelle Route)"
+msgstr ""
+
+#: Plugin.cs:54
+msgid ""
+"Dies speichert die Fahrplandatei am letzten Speicherort und öffnet dann "
+"jTrainGraph. Nachdem Sie die Arbeit in jTrainGraph beendet haben, speichern "
+"Sie damit die Datei und schließen das jTrainGraph-Hauptfenster, damit werden "
+"die Änderungen übernommen. Aktion fortsetzen?\n"
+"\n"
+"Diese Meldung kann unter jTrainGraph > Einstellungen deaktiviert werden."
+msgstr ""
+
+#: Plugin.cs:55
+msgid "jTrainGraph starten"
+msgstr ""
+
+#: Plugin.cs:68 Plugin.cs:115
+#, csharp-format
+msgid ""
+"Beim Verwenden von jTrainGraph ist ein unerwarteter Fehler aufgetreten! {0}"
+msgstr ""
+
+#: Plugin.cs:83
+msgid ""
+"Dies speichert die aktuell ausgewählte Route in eine temporäre Datei und "
+"öffnet dann jTrainGraph. Nachdem Sie die Arbeit in jTrainGraph beendet "
+"haben, speichern Sie damit die Datei und schließen das jTrainGraph-"
+"Hauptfenster, damit werden alle Änderungen an den Bildfahrplaneinstellungen "
+"übernommen.\n"
+"ACHTUNG: Es werden nur Änderungen an der Bildfahrplandarstellung übernommen, "
+"alle anderen Änderungen (z.B. Bahnhöfe oder Züge einfügen) werden verworfen! "
+"Aktion fortsetzen?\n"
+"\n"
+"Diese Meldung kann unter jTrainGraph > Einstellungen deaktiviert werden."
+msgstr ""
+
+#: Plugin.cs:86
+msgid "jTrainGraph starten (aktuelle Route)"
+msgstr ""
+
+#: Plugin.cs:95
+msgid ""
+"Zielversion ist nicht R/W-Kompatibel. Bitte die Einstellungen überprüfen."
+msgstr ""
+
+#: Plugin.cs:129
+msgid ""
+"Die gewählte Version von jTrainGraph ist wahrscheinlich nicht mit FPledit "
+"kompatibel. Bitte verwenden Sie jTrainGraph in einer kompatiblen Version!"
+msgstr ""
+
+#: Plugin.cs:130 Plugin.cs:136 SettingsForm.xeto.cs:60
+msgid "jTrainGraphStarter: Fehler"
+msgstr ""
+
+#: Plugin.cs:135
+msgid ""
+"Die gewählte Version von jTrainGraph ist wahrscheinlich nicht mit der "
+"aktuellen Fahrplandatei kompatibel."
+msgstr ""
+
+#: RunningForm.xeto.cs:46
+msgid ""
+"jTrainGraph wirklich beenden? Alle in jTrainGraph geänderten Daten werden "
+"verworfen! (Das Beenden kann bis zu eine Sekunde dauern)"
+msgstr ""
+
+#: RunningForm.xeto.cs:49
+msgid "jTrainGraph beenden..."
+msgstr ""
+
+#: RunningForm.xeto.cs:70
+msgid "Wartet darauf, dass jTrainGraph beendet wird..."
+msgstr ""
+
+#: RunningForm.xeto.cs:83
+msgid "jTrainGraph beendet! Lade Datei neu..."
+msgstr ""
+
+#: RunningForm.xeto.cs:90
+msgid ""
+"Fehler beim Starten von jTrainGraph: Möglicherweise ist das "
+"jTrainGraphStarter Plugin falsch konfiguriert! Zur Konfiguration siehe "
+"jTrainGraph > Einstellungen"
+msgstr ""
+
+#: SettingsForm.xeto.cs:54
+msgid "Die angegebene Datei für jTrainGraph wurde nicht gefunden. "
+msgstr ""
+
+#: SettingsForm.xeto.cs:56
+msgid ""
+"Die gewählte Version von jTrainGraph ist wahrscheinlich nicht mit FPledit "
+"kompatibel. Bitte verwenden Sie jTrainGraph in einer kompatiblen Version! "
+msgstr ""
+
+#: SettingsForm.xeto.cs:58
+msgid "Java wurde unter dem angegebenen Pfad nicht gefunden. "
+msgstr ""
+
+#: SettingsForm.xeto.cs:59
+msgid "Wollen Sie trotzdem fortfahren?"
+msgstr ""
+
+#: SettingsForm.xeto.cs:77
+msgid "jTrainGraph-Programmdatei wählen"
+msgstr ""
+
+#: SettingsForm.xeto.cs:78
+msgid "JAR-Dateien (*.jar)|*.jar"
+msgstr ""

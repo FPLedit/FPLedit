@@ -51,13 +51,13 @@ namespace FPLedit.jTrainGraphStarter
             {
                 var text = "";
                 if (!jtgexists)
-                    text += "Die angegebene Datei für jTrainGraph wurde nicht gefunden. ";
+                    text += T._("Die angegebene Datei für jTrainGraph wurde nicht gefunden. ");
                 if (!compat.Compatible)
-                    text += "Die gewählte Version von jTrainGraph ist wahrscheinlich nicht mit FPledit kompatibel. Bitte verwenden Sie jTrainGraph in einer kompatiblen Version! ";
+                    text += T._("Die gewählte Version von jTrainGraph ist wahrscheinlich nicht mit FPledit kompatibel. Bitte verwenden Sie jTrainGraph in einer kompatiblen Version! ");
                 if (!javaexists)
-                    text += "Java wurde unter dem angegebenen Pfad nicht gefunden. ";
-                text += "Wollen Sie trotzdem fortfahren?";
-                if (MessageBox.Show(text, "jTrainGraphStarter: Fehler", MessageBoxButtons.YesNo) == DialogResult.No)
+                    text += T._("Java wurde unter dem angegebenen Pfad nicht gefunden. ");
+                text += T._("Wollen Sie trotzdem fortfahren?");
+                if (MessageBox.Show(text, T._("jTrainGraphStarter: Fehler"), MessageBoxButtons.YesNo) == DialogResult.No)
                     return;
             }
 
@@ -74,8 +74,8 @@ namespace FPLedit.jTrainGraphStarter
         {
             using (var ofd = new OpenFileDialog())
             {
-                ofd.Title = "jTrainGraph-Programmdatei wählen";
-                ofd.AddLegacyFilter("JAR-Dateien (*.jar)|*.jar");
+                ofd.Title = T._("jTrainGraph-Programmdatei wählen");
+                ofd.AddLegacyFilter(T._("JAR-Dateien (*.jar)|*.jar"));
                 
                 if (!string.IsNullOrWhiteSpace(jtgPathTextBox.Text))
                 {
