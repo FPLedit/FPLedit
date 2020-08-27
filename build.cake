@@ -82,7 +82,7 @@ Task("Build")
          * HACK: Fix for annoying GenerateDepsFile failure.
          * Remove 
          */
-        for (int i = 1; i < 6; i++) {        
+        /*for (int i = 1; i < 6; i++) {        
             try {
                 MSBuild("./FPLedit.sln", settings => {
                     settings.SetConfiguration(configuration);
@@ -92,7 +92,7 @@ Task("Build")
                         settings.Properties.Add("versionSuffix", new List<string> { preBuildVersionSuffix });
                 });
             } catch {}
-        }
+        }*/
         // END HACK
         
         MSBuild("./FPLedit.sln", settings => {
