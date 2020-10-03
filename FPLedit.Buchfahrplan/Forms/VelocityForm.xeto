@@ -3,7 +3,7 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.Buchfahrplan.Forms;assembly=FPLedit.Buchfahrplan"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
-  Title="Höchstgeschwindigkeiten ändern" Size="520,530" Resizable="true">
+  Title="{x:Static e:VelocityForm+L.Title}" Size="520,530" Resizable="true">
   <TableLayout Spacing="5,5" Padding="10,10,10,10">
     <TableRow ScaleHeight="true">
       <TableLayout Spacing="5,5">
@@ -15,9 +15,9 @@
             </Scrollable>
           </TableCell>
           <StackLayout Spacing="5" HorizontalContentAlignment="Stretch">
-            <Button Click="AddButton_Click">Wechsel &amp;hizufügen</Button>
-            <Button Click="EditButton_Click">Eintrag &amp;bearbeiten</Button>
-            <Button x:Name="deleteButton" Click="DeleteButton_Click">Wechsel &amp;löschen</Button>
+            <Button Click="AddButton_Click" Text="{x:Static e:VelocityForm+L.Add}" />
+            <Button Click="EditButton_Click" Text="{x:Static e:VelocityForm+L.Edit}" />
+            <Button x:Name="deleteButton" Click="DeleteButton_Click" Text="{x:Static e:VelocityForm+L.Delete}" />
           </StackLayout>
         </TableRow>
       </TableLayout>
@@ -26,8 +26,8 @@
       <TableLayout Spacing="5,5">
         <TableRow>
           <TableCell ScaleWidth="true" />
-          <Button x:Name="cancelButton" Text="Abbrechen" Click="CancelButton_Click" />
-          <Button x:Name="closeButton" Text="Schließen" Click="CloseButton_Click" />
+          <Button x:Name="cancelButton" Text="{x:Static e:VelocityForm+L.Cancel}" Click="CancelButton_Click" />
+          <Button x:Name="closeButton" Text="{x:Static e:VelocityForm+L.Close}" Click="CloseButton_Click" />
         </TableRow>
       </TableLayout>
     </TableRow>

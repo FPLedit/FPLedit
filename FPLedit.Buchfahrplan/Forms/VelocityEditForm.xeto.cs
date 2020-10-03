@@ -84,5 +84,16 @@ namespace FPLedit.Buchfahrplan.Forms
 
         private void CancelButton_Click(object sender, EventArgs e)
             => Close(DialogResult.Cancel);
+        
+        public static class L
+        {
+            public static readonly string Title = T._("Höchstgeschwindigkeit ändern");
+            public static readonly string Position = T._("Position");
+            public static readonly string Name = T._("Name");
+            public static readonly string Vmax = T._("Höchstgeschwindigkeit");
+            public static readonly string Wavelines = T._("Wellenlinien");
+            public static readonly string Cancel = T._("Abbrechen");
+            public static readonly string Close = T._("Schließen");
+        }
     }
 }

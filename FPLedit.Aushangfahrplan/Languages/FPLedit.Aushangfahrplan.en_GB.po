@@ -1,32 +1,76 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2020-08-07 18:01+0200\n"
-"PO-Revision-Date: 2020-08-07 18:01+0200\n"
+"POT-Creation-Date: 2020-09-20 13:09+0200\n"
+"PO-Revision-Date: 2020-09-20 13:16+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.4.1\n"
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-KeywordsList: _;SelectionName\n"
 "X-Poedit-SearchPath-0: .\n"
 
+#: Forms/SettingsControl.xeto.cs:72
+msgid "Beispiel"
+msgstr "Example"
+
+#: Forms/SettingsControl.xeto.cs:73
+msgid "Aushangfahrplan-Vorlage"
+msgstr "Template"
+
+#: Forms/SettingsControl.xeto.cs:74
+msgid "Schriftart im Aushangfpl."
+msgstr "Font"
+
+#: Forms/SettingsControl.xeto.cs:75
+msgid "Schriftart in Tabelle"
+msgstr "Font in table"
+
+#: Forms/SettingsControl.xeto.cs:76
+msgid "Eigene CSS-Styles"
+msgstr "Custom CSS styles"
+
+#: Forms/SettingsControl.xeto.cs:77
+msgid "Hilfe zu CSS"
+msgstr "Help for custom CSS"
+
+#: Forms/SettingsControl.xeto.cs:78
+msgid "https://fahrplan.manuelhu.de/dev/css/"
+msgstr ""
+
+#: Forms/SettingsControl.xeto.cs:79
+msgid "Gleisangaben anzeigen"
+msgstr "Show tracks"
+
+#: Forms/SettingsControl.xeto.cs:80
+msgid ""
+"Zeige Gleisangaben nicht, falls Bahnhof nur ein Gleis hat und kein Gleis am "
+"Zug definiert ist"
+msgstr ""
+"Do not show track names if the station has only one track and no special "
+"track is set for the train"
+
+#: Forms/SettingsControl.xeto.cs:81
+msgid "CSS-Test-Konsole bei Vorschau aktivieren (Gilt für alle Fahrpläne)"
+msgstr "Enable CSS debugging console (setting for all timetable files)"
+
 #: Plugin.cs:14
 msgid "Aushangfahrplan HTML Datei (*.html)|*.html"
-msgstr ""
+msgstr "Stop-specific timetable as HTML file (*.html)|*.html"
 
 #: Plugin.cs:15 Plugin.cs:19 Plugin.cs:29
 msgid "Aushangfahrplan"
-msgstr ""
+msgstr "Stop-specific timetable"
 
 #: Templates/TemplateProxy.cs:11
 msgid "Standard (DRG aus Malsch)"
-msgstr ""
+msgstr "Default (DRG from Malsch)"
 
 #: Templates/TemplateProxy.cs:20
 msgid "Wie Standard, mit Schriftzug \\\"Abfahrt\\\" in Originalschrift"
-msgstr ""
+msgstr "Like default, but with \\\"Abfahrt\\\" set in the original font"

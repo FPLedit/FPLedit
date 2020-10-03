@@ -107,5 +107,19 @@ namespace FPLedit.Kursbuch.Forms
             
             base.Dispose(disposing);
         }
+        
+        public static class L
+        {
+            public static readonly string Example = T._("Beispiel");
+            public static readonly string Template = T._("Tabellenfahrplan-Vorlage");
+            public static readonly string Font = T._("Schriftart im Tabellenfahrpl.");
+            public static readonly string StrFont = T._("Schriftart für Kursbuchstr.");
+            public static readonly string Css = T._("Eigene CSS-Styles");
+            public static readonly string CssHelp = T._("Hilfe zu CSS");
+            public static readonly string CssHelpLink = T._("https://fahrplan.manuelhu.de/dev/css/");
+            public static readonly string Numbers = T._("Kursbuchstreckennummern");
+            public static readonly string NumbersDescription = T._("Zum Bearbeiten zwei Mal mit Kurzem Abstand auf den Eintrag klicken");
+            public static readonly string Console = T._("CSS-Test-Konsole bei Vorschau aktivieren (Gilt für alle Fahrpläne)");
+        }
     }
 }

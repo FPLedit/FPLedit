@@ -62,5 +62,18 @@ namespace FPLedit.Buchfahrplan.Forms
         {
             cssTextBox.Visible = cssLabel.Visible = cssHelpLinkLabel.Visible = consoleCheckBox.Visible = enabled;
         }
+        
+        public static class L
+        {
+            public static readonly string Example = T._("Beispiel");
+            public static readonly string Template = T._("Buchfahrplan-Vorlage");
+            public static readonly string Font = T._("Schriftart im Buchfahrplan");
+            public static readonly string Css = T._("Eigene CSS-Styles");
+            public static readonly string CssHelp = T._("Hilfe zu CSS");
+            public static readonly string CssHelpLink = T._("https://fahrplan.manuelhu.de/dev/css/");
+            public static readonly string ShowComments = T._("Kommentare im Buchfahrplan anzeigen");
+            public static readonly string ShowDays = T._("Verkehrstage im Buchfahrplan anzeigen");
+            public static readonly string Console = T._("CSS-Test-Konsole bei Vorschau aktivieren (Gilt für alle Fahrpläne)");
+        }
     }
 }

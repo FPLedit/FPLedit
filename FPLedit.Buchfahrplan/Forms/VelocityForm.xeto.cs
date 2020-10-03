@@ -147,5 +147,15 @@ namespace FPLedit.Buchfahrplan.Forms
             => RemovePoint();
 
         #endregion
+        
+        public static class L
+        {
+            public static readonly string Title = T._("Höchstgeschwindigkeiten ändern");
+            public static readonly string Add = T._("Wechsel &hizufügen");
+            public static readonly string Edit = T._("Eintrag &bearbeiten");
+            public static readonly string Delete = T._("Wechsel &löschen");
+            public static readonly string Cancel = T._("Abbrechen");
+            public static readonly string Close = T._("Schließen");
+        }
     }
 }

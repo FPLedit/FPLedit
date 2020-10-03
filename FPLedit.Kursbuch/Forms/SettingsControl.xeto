@@ -5,29 +5,29 @@
   xmlns:fui="clr-namespace:FPLedit.Shared.UI;assembly=FPLedit.Shared.UI">
   <TableLayout Spacing="5,5" Padding="10">
     <TableRow>
-      <Label>Tabellenfahrplan-Vorlage</Label>
+      <Label Text="{x:Static e:SettingsControl+L.Template}" />
       <TableCell ScaleWidth="true">
         <DropDown x:Name="templateComboBox" />
       </TableCell>
     </TableRow>
     <TableRow>
-      <Label>Schriftart im Tabellenfpl.</Label>
+      <Label Text="{x:Static e:SettingsControl+L.Font}" />
       <TableCell ScaleWidth="true">
         <ComboBox x:Name="fontComboBox" />
       </TableCell>
-      <Label x:Name="exampleLabel">Beispiel</Label>
+      <Label x:Name="exampleLabel" Text="{x:Static e:SettingsControl+L.Example}" />
     </TableRow>
     <TableRow>
-      <Label>Schriftart für Kursbuchstr.</Label>
+      <Label Text="{x:Static e:SettingsControl+L.StrFont}" />
       <TableCell ScaleWidth="true">
         <ComboBox x:Name="hefontComboBox" />
       </TableCell>
-      <Label x:Name="heexampleLabel">Beispiel</Label>
+      <Label x:Name="heexampleLabel" Text="{x:Static e:SettingsControl+L.Example}" />
     </TableRow>
     <TableRow ScaleHeight="true">
       <StackLayout Spacing="5">
-        <Label>Kursbuchstreckennummern</Label>
-        <Label Width="100" x:Name="kbsnLabel">Zum Bearbeiten zwei Mal mit Kurzem Abstand auf den Eintrag klicken</Label>
+        <Label Text="{x:Static e:SettingsControl+L.Numbers}" />
+        <Label Width="100" x:Name="kbsnLabel" Text="{x:Static e:SettingsControl+L.NumbersDescription}" />
       </StackLayout>
       <TableCell ScaleWidth="true">
         <GridView x:Name="kbsnListView" />
@@ -35,8 +35,8 @@
     </TableRow>
     <TableRow ScaleHeight="true">
       <StackLayout Spacing="5">
-        <Label x:Name="cssLabel">Eigene CSS-Styles</Label>
-        <fui:UrlButton Url="https://fahrplan.manuelhu.de/dev/css/" x:Name="cssHelpLinkLabel">Hilfe zu CSS</fui:UrlButton>
+        <Label x:Name="cssLabel" Text="{x:Static e:SettingsControl+L.Css}" />
+        <fui:UrlButton Url="{x:Static e:SettingsControl+L.CssHelpLink}" x:Name="cssHelpLinkLabel" Text="{x:Static e:SettingsControl+L.CssHelp}" />
       </StackLayout>
       <TableCell ScaleWidth="true">
         <TextArea x:Name="cssTextBox" />
@@ -45,7 +45,7 @@
     <TableRow>
       <TableCell />
       <TableCell ScaleWidth="true">
-        <CheckBox x:Name="consoleCheckBox">CSS-Test-Konsole bei Vorschau aktivieren (Gilt für alle Fahrpläne)</CheckBox>
+        <CheckBox x:Name="consoleCheckBox" Text="{x:Static e:SettingsControl+L.Console}" />
       </TableCell>
     </TableRow>
   </TableLayout>
