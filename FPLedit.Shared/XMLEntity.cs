@@ -55,10 +55,10 @@ namespace FPLedit.Shared
         public XMLEntity(XElement el)
         {
             if (el.Name.Namespace != XNamespace.None)
-                throw new NotSupportedException("Dateien mit XML-Namensräumen werden nicht unterstützt!");
+                throw new NotSupportedException("Files witth XML namespaces are not supported!");
             XName = el.Name.LocalName;
             if (el.Attributes().Any(a => a.Name.Namespace != XNamespace.None))
-                throw new NotSupportedException("Dateien mit XML-Namensräumen werden nicht unterstützt!");
+                throw new NotSupportedException("Files witth XML namespaces are not supported!");
             Attributes = el.Attributes().ToDictionary(a => a.Name.LocalName, a => (string)a);
             Value = el.Nodes().OfType<XText>().FirstOrDefault()?.Value;
             

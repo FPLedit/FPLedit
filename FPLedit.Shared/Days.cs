@@ -23,7 +23,7 @@ namespace FPLedit.Shared
             get
             {
                 if (index < 0 || index > 6)
-                    throw new IndexOutOfRangeException("Tage werden von Montag (0) bis Sonntag (7) adressiert!");
+                    throw new IndexOutOfRangeException("Days are addressed from Monday (0) to Sunday (7)!");
                 return internalDays[index];
             }
         }
@@ -36,7 +36,7 @@ namespace FPLedit.Shared
         public Days(bool[] data)
         {
             if (data.Length != 7)
-                throw new ArgumentException("Es müssen 7 Tage als bool-Array übergeben werden!");
+                throw new ArgumentException("Requires 7 days as bool array!");
             internalDays = data;
         }
 
@@ -49,7 +49,7 @@ namespace FPLedit.Shared
         public static Days Parse(string binary)
         {
             if (binary.Length != 7)
-                throw new ArgumentException("Es müssen 7 Tage als Bitstring übergeben werden!");
+                throw new ArgumentException("Requires 7 days as bitstring!");
             bool[] days = binary.Select(c => c == '1').ToArray();
             return new Days(days);
         }

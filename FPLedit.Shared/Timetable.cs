@@ -101,7 +101,7 @@ namespace FPLedit.Shared
         public Timetable(XMLEntity en) : base(en, null)
         {
             if (!Enum.IsDefined(typeof(TimetableVersion), Version))
-                throw new NotSupportedException("Unbekannte Dateiversion. Nur mit jTrainGraph 2 oder 3.0 erstellte Dateien können geöffnet werden!");
+                throw new NotSupportedException(T._("Unbekannte Dateiversion."));
 
             if (Version.GetCompat() != TtVersionCompatType.ReadWrite)
                 return; // Do not create any properties as we cannot read this format.
@@ -124,7 +124,7 @@ namespace FPLedit.Shared
             trains = new List<ITrain>();
             tElm = Children.FirstOrDefault(x => x.XName == "trains");
             if (sElm == null && tElm != null)
-                throw new NotSupportedException("Kein <stations>-Element vorhanden, dafür aber <trains>!");
+                throw new NotSupportedException("No <stations> element exists, but <trains>!");
 
             if (tElm != null)
             {
@@ -747,7 +747,7 @@ namespace FPLedit.Shared
             if (!trans.Any())
                 return null;
             if (trans.Length > 1)
-                throw new Exception("Mehr als eine Transition mit den angegebenen Kriterien gefunden!");
+                throw new Exception("Found more than one transition matching the given criteria!");
 
             return GetTrainByQualifiedId(trans.First().Next);
         }

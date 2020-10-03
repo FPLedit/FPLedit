@@ -31,7 +31,7 @@ namespace FPLedit.Shared.Helpers
             points.Add(dest);
             
             if (points.Any(p => !tt.Stations.Contains(p)))
-                throw new ArgumentException("Start-, Ziel- oder Wegbpunktstation noch nicht im Fahrplan enthalten");
+                throw new ArgumentException(nameof(start) + " " + nameof(dest) + " or one of the " + nameof(waypoints) + "not part of the timetable!");
 
             var ret = new List<Station>();
             for (int i = 0; i < points.Count - 1; i++)
