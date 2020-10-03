@@ -41,12 +41,12 @@ namespace FPLedit.CrashReporting
                 var fnCrashFlag = pluginInterface.GetTemp(CRASH_DIR + "crash.flag");
                 File.WriteAllText(fnCrashFlag, "1");
 
-                MessageBox.Show("Es ist ein unerwarteter Fehler in FPLedit aufgetreten." + Environment.NewLine + Environment.NewLine +
-                                "FPLedit wird neu gestartet. Möglicherweise ist eine Wiederherstellung möglich.", "FPLedit", MessageBoxType.Error);
+                MessageBox.Show(T._("Es ist ein unerwarteter Fehler in FPLedit aufgetreten.\n\n" +
+                                "FPLedit wird neu gestartet. Möglicherweise ist eine Wiederherstellung möglich."), "FPLedit", MessageBoxType.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Es ist ein unerwarteter Fehler in FPLedit aufgetreten. Es konnten keine weiteren Informationen gespeichert werden. FPLedit wird neu gestartet.\n\n\n" + ex.Message, "FPLedit");
+                MessageBox.Show(T._("Es ist ein unerwarteter Fehler in FPLedit aufgetreten. Es konnten keine weiteren Informationen gespeichert werden. FPLedit wird neu gestartet.\n\n\n{0}", ex.Message), "FPLedit");
             }
         }
 
@@ -74,5 +74,10 @@ namespace FPLedit.CrashReporting
 
         // Repor file
         public string ReportFn => HasCurrentReport ? pluginInterface.GetTemp(REPORT_DIR + "crash_report.xml") : throw new NotSupportedException();
+
+        private string SL(string x)
+        {
+            return x;
+        }
     }
 }

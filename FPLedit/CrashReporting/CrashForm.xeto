@@ -3,26 +3,26 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.CrashReporting;assembly=FPLedit"
   DefaultButton="{x:Reference restoreButton}" AbortButton="{x:Reference cancelButton}"
-  Title="Fehler in FPLedit" Resizable="false">
+  Title="{x:Static e:CrashForm+L.Title}" Resizable="false">
   <StackLayout Spacing="5" HorizontalContentAlignment="Stretch" Padding="10,10,10,10">
-    <Label>In FPLedit ist ein interner Fehler aufgetreten. Weiterführende Informationen wurden gesammelt:</Label>
+    <Label Text="{x:Static e:CrashForm+L.Description}" />
     <TextArea ReadOnly="true" x:Name="infoTextBox" Size="200, 400" />
-    <GroupBox Text="Fehler melden">
+    <GroupBox Text="{x:Static e:CrashForm+L.ReportGroup}">
       <StackLayout Spacing="5" HorizontalContentAlignment="Stretch" Padding="5,5,5,5">
-        <Label>Diese können an den Autor von FPLedit weitergegeben werden, um zur Fehlerbehebung beizutragen.</Label>
-        <Button Click="MailButton_Click">(1) Email senden und Fehlerhergang beschreiben</Button>
-        <Button Click="FolderButton_Click">(2) Dateien dieses Ordners anhängen</Button>
-        <Label>Vielen Dank, Ihr Programmautor</Label>
+        <Label Text="{x:Static e:CrashForm+L.ReportDescription}" />
+        <Button Text="{x:Static e:CrashForm+L.Mail}" Click="MailButton_Click" />
+        <Button Text="{x:Static e:CrashForm+L.Folder}" Click="FolderButton_Click" />
+        <Label Text="{x:Static e:CrashForm+L.Thanks}" />
       </StackLayout>
     </GroupBox>
-    <GroupBox Text="Wiederherstellung" x:Name="restoreGroupBox">
+    <GroupBox Text="{x:Static e:CrashForm+L.RestoreGroup}" x:Name="restoreGroupBox">
       <StackLayout Spacing="5" HorizontalContentAlignment="Stretch" Padding="5,5,5,5">
-        <Label>Der Zustand des bearbeiteten Fahrplans wurde beim Absturz gespeichert. Möglicherweise können die Daten wiederhergestellt werden:</Label>
+        <Label Text="{x:Static e:CrashForm+L.RestoreDescription}" />
         <Label x:Name="fnLabel" />
-        <Button Click="RestoreButton_Click" x:Name="restoreButton">Datei wiederherstellen</Button>
-        <Button Click="NorestoreButton_Click" x:Name="cancelButton">Nicht wiederherstellen</Button>
+        <Button Click="RestoreButton_Click" x:Name="restoreButton"  Text="{x:Static e:CrashForm+L.Restore}" />
+        <Button Click="NorestoreButton_Click" x:Name="cancelButton" Text="{x:Static e:CrashForm+L.Cancel}" />
       </StackLayout>
     </GroupBox>
-    <Button Click="NorestoreButton_Click" x:Name="norestoreButton">Schließen</Button>
+    <Button Click="NorestoreButton_Click" x:Name="norestoreButton" Text="{x:Static e:CrashForm+L.Close}" />
   </StackLayout>
 </e:CrashForm>
