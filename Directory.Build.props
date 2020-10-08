@@ -18,7 +18,7 @@
     <WarningsAsErrors>CS8600;CS8602;CS8603</WarningsAsErrors>
     <MSBuildWarningsAsMessages>MSB3277</MSBuildWarningsAsMessages>
     
-    <EtoVersion>2.5.7-ci-20200917.259817948</EtoVersion>
+    <EtoVersion>2.5.7-ci-20201007.292499425</EtoVersion>
     
 	  <!-- Assembly info -->
 	  <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
