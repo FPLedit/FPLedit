@@ -119,7 +119,7 @@ namespace FPLedit.Editor.Trains
                 return;
             }
 
-            var nameExists = Train.ParentTimetable.Trains.Select(t => t.TName).Contains(nameTextBox.Text);
+            var nameExists = Train.ParentTimetable.Trains.Where(t => t != Train).Select(t => t.TName).Contains(nameTextBox.Text);
 
             if (nameExists)
             {
