@@ -25,9 +25,16 @@ namespace FPLedit.Editor.Trains
             {
                 if (view.SelectedItem is Train train)
                 {
-                    tt.RemoveTrain(train);
-
-                    UpdateListView(view, dir);
+                    if (train.TrainLinks.Any(l => l.TrainCount > 0))
+                    {
+                        if (message)
+                            MessageBox.Show(T._("Der Zug kann nicht gelöscht werden, da er mindestens von einem verlinkten Zug referenziert wird!"), T._("Zug löschen"));
+                    }
+                    else
+                    {
+                        tt.RemoveTrain(train);
+                        UpdateListView(view, dir);
+                    }
                 }
                 else if (message)
                     MessageBox.Show(T._("Verlinke Züge können nicht gelöscht werden."), T._("Zug löschen"));

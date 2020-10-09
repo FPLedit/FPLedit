@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2020-10-03 12:20+0200\n"
-"PO-Revision-Date: 2020-10-03 12:53+0200\n"
+"POT-Creation-Date: 2020-10-09 21:31+0200\n"
+"PO-Revision-Date: 2020-10-09 21:32+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -586,13 +586,14 @@ msgstr "Copy or move trains"
 
 #: Editor/Linear/LinearTrainsEditForm.xeto.cs:147
 #: Editor/Network/NetworkTrainsEditForm.xeto.cs:174
-#: Editor/Trains/BaseTrainsEditor.cs:33 Editor/Trains/BaseTrainsEditor.cs:36
+#: Editor/Trains/BaseTrainsEditor.cs:31 Editor/Trains/BaseTrainsEditor.cs:40
+#: Editor/Trains/BaseTrainsEditor.cs:43
 msgid "Zug löschen"
 msgstr "Delete train"
 
 #: Editor/Linear/LinearTrainsEditForm.xeto.cs:148
 #: Editor/Network/NetworkTrainsEditForm.xeto.cs:175
-#: Editor/Trains/BaseTrainsEditor.cs:50 Editor/Trains/BaseTrainsEditor.cs:53
+#: Editor/Trains/BaseTrainsEditor.cs:57 Editor/Trains/BaseTrainsEditor.cs:60
 #: Editor/Trains/TrainEditForm.xeto.cs:68
 msgid "Zug bearbeiten"
 msgstr "Edit train"
@@ -619,7 +620,7 @@ msgid "Laufweg"
 msgstr "Train route"
 
 #: Editor/Network/NetworkTrainsEditForm.xeto.cs:90
-#: Editor/Trains/BaseTrainsEditor.cs:50
+#: Editor/Trains/BaseTrainsEditor.cs:57
 msgid "Verlinke Züge können nicht bearbeitet werden."
 msgstr "Linked trains cannot be edited."
 
@@ -631,19 +632,19 @@ msgstr "Edit route"
 
 #: Editor/Network/NetworkTrainsEditForm.xeto.cs:93
 #: Editor/Network/NetworkTrainsEditForm.xeto.cs:111
-#: Editor/Trains/BaseTrainsEditor.cs:36 Editor/Trains/BaseTrainsEditor.cs:53
-#: Editor/Trains/BaseTrainsEditor.cs:86
+#: Editor/Trains/BaseTrainsEditor.cs:43 Editor/Trains/BaseTrainsEditor.cs:60
+#: Editor/Trains/BaseTrainsEditor.cs:93
 msgid "Zuerst muss ein Zug ausgewählt werden!"
 msgstr "Please selct a train first!"
 
 #: Editor/Network/NetworkTrainsEditForm.xeto.cs:108
-#: Editor/Trains/BaseTrainsEditor.cs:83
+#: Editor/Trains/BaseTrainsEditor.cs:90
 msgid "Verlinke Züge können nicht kopiert werden."
 msgstr "Linked trains cannot be copied."
 
 #: Editor/Network/NetworkTrainsEditForm.xeto.cs:108
 #: Editor/Network/NetworkTrainsEditForm.xeto.cs:111
-#: Editor/Trains/BaseTrainsEditor.cs:83 Editor/Trains/BaseTrainsEditor.cs:86
+#: Editor/Trains/BaseTrainsEditor.cs:90 Editor/Trains/BaseTrainsEditor.cs:93
 #: Editor/Trains/TrainCopyDialog.xeto.cs:112
 msgid "Zug kopieren"
 msgstr "Copy train"
@@ -854,7 +855,15 @@ msgstr ""
 msgid "Zuglaufmeldung durch"
 msgstr "Message on train progress by"
 
-#: Editor/Trains/BaseTrainsEditor.cs:33
+#: Editor/Trains/BaseTrainsEditor.cs:31
+msgid ""
+"Der Zug kann nicht gelöscht werden, da er mindestens von einem verlinkten "
+"Zug referenziert wird!"
+msgstr ""
+"This train cannot be removed as at least one linked train is still "
+"referencing it!"
+
+#: Editor/Trains/BaseTrainsEditor.cs:40
 msgid "Verlinke Züge können nicht gelöscht werden."
 msgstr "Linked trains cannot be deleted."
 
