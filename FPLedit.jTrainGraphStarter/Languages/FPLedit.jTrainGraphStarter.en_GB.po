@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2020-08-07 18:05+0200\n"
-"PO-Revision-Date: 2020-08-07 18:05+0200\n"
+"POT-Creation-Date: 2020-10-11 13:32+0200\n"
+"PO-Revision-Date: 2020-10-11 22:41+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.4.1\n"
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-KeywordsList: _;SelectionName\n"
@@ -17,19 +17,19 @@ msgstr ""
 
 #: Plugin.cs:20
 msgid "&jTrainGraph"
-msgstr ""
+msgstr "&jTrainGraph"
 
 #: Plugin.cs:23 Plugin.cs:42
 msgid "jTrain&Graph starten"
-msgstr ""
+msgstr "Start jTrain&Graph"
 
 #: Plugin.cs:33
 msgid "Einstell&ungen"
-msgstr ""
+msgstr "Se&ttings"
 
 #: Plugin.cs:42
 msgid "jTrain&Graph starten (aktuelle Route)"
-msgstr ""
+msgstr "Start jTrain&Graph (current route)"
 
 #: Plugin.cs:54
 msgid ""
@@ -40,16 +40,22 @@ msgid ""
 "\n"
 "Diese Meldung kann unter jTrainGraph > Einstellungen deaktiviert werden."
 msgstr ""
+"This saves the currently opened file (at it's current location) and launches "
+"jTrainGraph. After finishing your work in jTrainGraph, save the file and "
+"close the main window of jTrainGraph; all changes will be applied to the "
+"file opened in FPLedit. Continue?\n"
+"\n"
+"This message can be disabled in jTrainGraph > Settings."
 
 #: Plugin.cs:55
 msgid "jTrainGraph starten"
-msgstr ""
+msgstr "Start jTrainGraph"
 
 #: Plugin.cs:68 Plugin.cs:115
 #, csharp-format
 msgid ""
 "Beim Verwenden von jTrainGraph ist ein unerwarteter Fehler aufgetreten! {0}"
-msgstr ""
+msgstr "Unexpected error while executing jTrainGraph: {0}"
 
 #: Plugin.cs:83
 msgid ""
@@ -64,49 +70,63 @@ msgid ""
 "\n"
 "Diese Meldung kann unter jTrainGraph > Einstellungen deaktiviert werden."
 msgstr ""
+"This saves the currently selected route to a temporary file and launches "
+"jTrainGraph. After finishing your work in jTrainGraph, save the file and "
+"close the main window of jTrainGraph; changes to the graphic timetable "
+"settings will be applied to the file opened in FPLedit.\n"
+"WARNING: Only changes to bifpl settings are applied, all other changes (e.g. "
+"added stations ore edited trains) will be discarded! Continue?\n"
+"\n"
+"This message can be disabled in jTrainGraph > Settings."
 
 #: Plugin.cs:86
 msgid "jTrainGraph starten (aktuelle Route)"
-msgstr ""
+msgstr "Start jTrainGraph (current route)"
 
 #: Plugin.cs:95
 msgid ""
 "Zielversion ist nicht R/W-Kompatibel. Bitte die Einstellungen überprüfen."
-msgstr ""
+msgstr "The target version is not R/W-compatible. Please check your settings."
 
 #: Plugin.cs:129
 msgid ""
 "Die gewählte Version von jTrainGraph ist wahrscheinlich nicht mit FPledit "
 "kompatibel. Bitte verwenden Sie jTrainGraph in einer kompatiblen Version!"
 msgstr ""
+"The selected version of jTrainGraph is possibly incompatible with FPLedit. "
+"Please use jTrainGraph in a compatible version!"
 
 #: Plugin.cs:130 Plugin.cs:136 SettingsForm.xeto.cs:60
 msgid "jTrainGraphStarter: Fehler"
-msgstr ""
+msgstr "jTrainGraphStarter: Error"
 
 #: Plugin.cs:135
 msgid ""
 "Die gewählte Version von jTrainGraph ist wahrscheinlich nicht mit der "
 "aktuellen Fahrplandatei kompatibel."
 msgstr ""
+"The selected version of jTrainGraph is possibly incompatible with the "
+"current timetable version."
 
 #: RunningForm.xeto.cs:46
 msgid ""
 "jTrainGraph wirklich beenden? Alle in jTrainGraph geänderten Daten werden "
 "verworfen! (Das Beenden kann bis zu eine Sekunde dauern)"
 msgstr ""
+"Exit jTrainGraph? All changed data will be lost! (Exiting may take some "
+"seconds)"
 
 #: RunningForm.xeto.cs:49
 msgid "jTrainGraph beenden..."
-msgstr ""
+msgstr "Exit jTrainGraph..."
 
 #: RunningForm.xeto.cs:70
 msgid "Wartet darauf, dass jTrainGraph beendet wird..."
-msgstr ""
+msgstr "Waiting for jTrainGraph to exit..."
 
 #: RunningForm.xeto.cs:83
 msgid "jTrainGraph beendet! Lade Datei neu..."
-msgstr ""
+msgstr "jTrainGraph exited. Reloading file..."
 
 #: RunningForm.xeto.cs:90
 msgid ""
@@ -114,29 +134,113 @@ msgid ""
 "jTrainGraphStarter Plugin falsch konfiguriert! Zur Konfiguration siehe "
 "jTrainGraph > Einstellungen"
 msgstr ""
+"Error while launching FPLedit: Maybe the configuration is invalid. See "
+"jTrainGraph > Settings"
 
 #: SettingsForm.xeto.cs:54
 msgid "Die angegebene Datei für jTrainGraph wurde nicht gefunden. "
-msgstr ""
+msgstr "The specified jTrainGraph application file could not be found. "
 
 #: SettingsForm.xeto.cs:56
 msgid ""
 "Die gewählte Version von jTrainGraph ist wahrscheinlich nicht mit FPledit "
 "kompatibel. Bitte verwenden Sie jTrainGraph in einer kompatiblen Version! "
 msgstr ""
+"The selected version of jTrainGraph is possibly incompatible with FPLedit. "
+"Please use jTrainGraph in a compatible version! "
 
 #: SettingsForm.xeto.cs:58
 msgid "Java wurde unter dem angegebenen Pfad nicht gefunden. "
-msgstr ""
+msgstr "Java could not be found at the spcified path. "
 
 #: SettingsForm.xeto.cs:59
 msgid "Wollen Sie trotzdem fortfahren?"
-msgstr ""
+msgstr "Continue?"
 
 #: SettingsForm.xeto.cs:77
 msgid "jTrainGraph-Programmdatei wählen"
-msgstr ""
+msgstr "Choose jTrainGraph application file"
 
 #: SettingsForm.xeto.cs:78
 msgid "JAR-Dateien (*.jar)|*.jar"
+msgstr "JAR files (*.jar)|*.jar"
+
+#: SettingsForm.xeto.cs:133
+msgid "jTrainGraphStarter Einstellungen"
+msgstr "Settings for jTrainGraphStarter"
+
+#: SettingsForm.xeto.cs:134
+msgid "Schließen"
+msgstr "Close"
+
+#: SettingsForm.xeto.cs:136
+msgid "Java-Pfad"
+msgstr "Path to java"
+
+#: SettingsForm.xeto.cs:137
+msgid "Erkennen"
+msgstr "Detect"
+
+#: SettingsForm.xeto.cs:138
+msgid "i.d.R: Windows: javaw.exe, Linux: java"
+msgstr "normally on windows javaw.exe, on Linux: java"
+
+#: SettingsForm.xeto.cs:140
+msgid "Pfad zur jTrainGraph-Datei"
+msgstr "Path to the jTrainGraph application file"
+
+#: SettingsForm.xeto.cs:141
+msgid ""
+"Anwendungsdatei von jTrainGraph (normalerweise jTrainGraph_xxx.jar/exe, "
+"wobei xxx eine kompatible Version von jTrainGraph ist)"
 msgstr ""
+"Application file of jTrainGraph (normally jTrainGraph_xxx.jar/exe, where xxx "
+"is a compatible version of jTrainGraph)"
+
+#: SettingsForm.xeto.cs:142
+msgid "Version von jTrainGraph"
+msgstr "Version of jTrainGraph"
+
+#: SettingsForm.xeto.cs:144
+msgid "Weitere Hinweise und kompatible Versionen:"
+msgstr "Further notes and compatible versions:"
+
+#: SettingsForm.xeto.cs:145
+msgid "https://fahrplan.manuelhu.de/bildfahrplaene/"
+msgstr ""
+
+#: SettingsForm.xeto.cs:146
+msgid "Dokumentation zu diesem Plugin"
+msgstr "Documentation of this plugin"
+
+#: SettingsForm.xeto.cs:148
+msgid "Wenn Sie jTrainGraph noch gar nicht installiert haben:"
+msgstr "To install jTraingraph"
+
+#: SettingsForm.xeto.cs:149
+msgid "https://jtraingraph.de"
+msgstr "https://jtraingraph.de/index.php?language=en"
+
+#: SettingsForm.xeto.cs:150
+msgid "jTrainGraph herunterladen"
+msgstr "Download jTrainGraph"
+
+#: SettingsForm.xeto.cs:151
+msgid ""
+"Auch wenn jTrainGraph in der *.exe-Variante verwendet wird bitte den Java-"
+"Pfad ausfüllen!"
+msgstr ""
+"Please enter the java path, despite using the exe-Version of jTrainGraph!"
+
+#: SettingsForm.xeto.cs:152
+msgid ""
+"Bitte verwenden Sie, wenn möglich, immer die aktuelleste jTrainGraph-Version!"
+msgstr "Please use always the latest version of jTrainGraph!"
+
+#: SettingsForm.xeto.cs:153
+msgid "Kompatible Versionen sind 2.02, 2.03, 3.03, 3.11"
+msgstr "Compatible versions are 2.02, 2.03, 3.03 and 3.11"
+
+#: SettingsForm.xeto.cs:155
+msgid "Warnhinweis nicht bei jedem jTrainGraph-Start anzeigen"
+msgstr "Do not show warning on each start of jTrainGraph"

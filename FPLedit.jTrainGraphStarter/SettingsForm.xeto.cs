@@ -127,5 +127,34 @@ namespace FPLedit.jTrainGraphStarter
             public override string ToString()
                 => Name;
         }
+
+        private static class L
+        {
+            public static readonly string Title = T._("jTrainGraphStarter Einstellungen");
+            public static readonly string Close = T._("Schließen");
+            
+            public static readonly string JavaPathLabel = T._("Java-Pfad");
+            public static readonly string FindJava = T._("Erkennen");
+            public static readonly string JavaPathDescription = T._("i.d.R: Windows: javaw.exe, Linux: java");
+            
+            public static readonly string JtgPathLabel = T._("Pfad zur jTrainGraph-Datei");
+            public static readonly string JtgPathDescription = T._("Anwendungsdatei von jTrainGraph (normalerweise jTrainGraph_xxx.jar/exe, wobei xxx eine kompatible Version von jTrainGraph ist)");
+            public static readonly string JtgVersionLabel = T._("Version von jTrainGraph");
+            
+            public static readonly string DocsLabel = T._("Weitere Hinweise und kompatible Versionen:");
+            public static readonly string DocsLink = T._("https://fahrplan.manuelhu.de/bildfahrplaene/");
+            public static readonly string DocsLinkText = T._("Dokumentation zu diesem Plugin");
+            
+            public static readonly string DownloadLabel = T._("Wenn Sie jTrainGraph noch gar nicht installiert haben:");
+            public static readonly string DownloadLink = T._("https://jtraingraph.de");
+            public static readonly string DownloadLinkText = T._("jTrainGraph herunterladen");
+            public static readonly string FilenameNote = T._("Auch wenn jTrainGraph in der *.exe-Variante verwendet wird bitte den Java-Pfad ausfüllen!");
+            public static readonly string CurrentNote = T._("Bitte verwenden Sie, wenn möglich, immer die aktuelleste jTrainGraph-Version!");
+            public static readonly string CurrentList = T._("Kompatible Versionen sind 2.02, 2.03, 3.03, 3.11");
+            
+            public static readonly string MessageLabel = T._("Warnhinweis nicht bei jedem jTrainGraph-Start anzeigen");
+            
+            
+        }
     }
 }
