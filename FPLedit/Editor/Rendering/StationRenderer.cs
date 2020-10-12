@@ -188,8 +188,9 @@ namespace FPLedit.Editor.Rendering
             }
 
             // Button für neue Gleise
-            var textWidth = (int)e.Graphics.MeasureString(font, T._("Neues Gleis hinzufügen")).Width;
-            var addBtn = new RenderBtn<Track>(null, new Point(midx - (textWidth / 2) - 5, y - 8), new Size(textWidth + 10, 16), Colors.LightGrey, "Neues Gleis hinzufügen");
+            var addTrackText = T._("Neues Gleis hinzufügen");
+            var textWidth = (int)e.Graphics.MeasureString(font, addTrackText).Width;
+            var addBtn = new RenderBtn<Track>(null, new Point(midx - (textWidth / 2) - 5, y - 8), new Size(textWidth + 10, 16), Colors.LightGrey, addTrackText);
             buttons.Add(addBtn);
             addBtn.Click += AddBtn_Click;
 

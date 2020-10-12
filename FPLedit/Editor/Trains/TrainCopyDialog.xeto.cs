@@ -124,7 +124,7 @@ namespace FPLedit.Editor.Trains
             public static readonly string Offset = T._("Taktverschiebung in Minuten");
             public static readonly string Count = T._("Anzahl der neuen Züge");
             public static readonly string BaseName = T._("Basiszugnummer");
-            public static readonly string NameChange = T._("Änderung der Zugnummer");
+            public static readonly string NumberChange = T._("Änderung der Zugnummer");
             public static readonly string Extended = T._("Erweiterte Attribute übernehmen");
             public static readonly string Title = T._("Zug kopieren/verschieben");
         }

@@ -461,7 +461,7 @@ namespace FPLedit
             if (compat == TtVersionCompatType.None)
             {
                 AsyncBlockingOperation = false;
-                pluginInterface.Logger.Error($"Diese Dateiformatsversion ({tt.Version.ToNumberString()}) wird nicht unterstützt.");
+                pluginInterface.Logger.Error(T._("Diese Dateiformatsversion ({0}) wird nicht unterstützt.",tt.Version.ToNumberString()));
                 return;
             }
 
@@ -476,10 +476,10 @@ namespace FPLedit
             Application.Instance.Invoke(() =>
             {
                 var text = optional ? 
-                    "In einer neueren Dateiformatversion stehen mehr Funktionen zur Verfügung, die Aktualisierung ist aber nicht zwingend." :
-                    "Dieses Dateiformat kann von FPLedit nur noch auf neuere Versionen aktualisiert werden.";
-                var res = MessageBox.Show("Diese Fahrplandatei ist in einem alten Dateinformat erstellt worden. " + text +
-                    " Soll die Datei jetzt aktualisiert werden? ACHTUNG: Die Datei kann danach nur noch mit der aktuellsten Version von jTrainGraph bearbeitet werden!", "FPLedit",
+                    T._("In einer neueren Dateiformatversion stehen mehr Funktionen zur Verfügung, die Aktualisierung ist aber nicht zwingend.") :
+                    T._("Dieses Dateiformat kann von FPLedit nur noch auf neuere Versionen aktualisiert werden.");
+                var res = MessageBox.Show(T._("Diese Fahrplandatei ist in einem alten Dateinformat erstellt worden. {0}" +
+                    " Soll die Datei jetzt aktualisiert werden? ACHTUNG: Die Datei kann danach nur noch mit der aktuellsten Version von jTrainGraph bearbeitet werden!", text), "FPLedit",
                     MessageBoxButtons.YesNo, MessageBoxType.Question);
                 if (res == DialogResult.Yes)
                 {
