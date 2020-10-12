@@ -88,15 +88,15 @@ namespace FPLedit.Editor.Trains
             return ret;
         }
         
-        public void LinkTrainMultiple(Train orig, int offsetMin, string name, int count, int numberAdd)
+        public void LinkTrainMultiple(Train orig, int offsetMin, int diffMin, string name, int count, int numberAdd)
         {
             if (count < 0)
                 throw new ArgumentException("Value must be greater than or equal to zero", nameof(count));
 
             var link = new TrainLink(orig, count)
             {
-                TimeDifference = offsetMin, 
-                TimeOffset = 0, 
+                TimeDifference = diffMin, 
+                TimeOffset = offsetMin, 
                 TrainNamingScheme = new AutoTrainNameCalculator(name, numberAdd)
             };
             orig.AddLink(link);
@@ -104,7 +104,7 @@ namespace FPLedit.Editor.Trains
             for (int i = 0; i < count; i++)
             {
                 var linkedTrain = new LinkedTrain(link, i);
-                orig.ParentTimetable.AddTrain(linkedTrain);
+                orig.ParentTimetable!.AddTrain(linkedTrain);
             }
         }
 

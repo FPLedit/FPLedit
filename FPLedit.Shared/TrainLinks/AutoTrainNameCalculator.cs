@@ -13,8 +13,16 @@ namespace FPLedit.Shared
     {
         internal const string PREFIX = "Auto";
         
-        private int increment;
-        private TrainNameParts trainName;
+        /// <summary>
+        /// Increment of the train number for each created linked train.
+        /// </summary>
+        public int Increment { get; private set; }
+        
+        /// <summary>
+        /// Base Name that is used to calculate the names of the linked trains.
+        /// </summary>
+        /// <remarks>This is not neccessarily the same as the name of the parent train!</remarks>
+        public TrainNameParts BaseTrainName { get; private set; }
 
         /// <inheritdoc />
         public void Deserialize(IEnumerable<string> parts)
@@ -23,16 +31,16 @@ namespace FPLedit.Shared
             if (partsArr.Length != 3)
                 throw new ArgumentException("AutoTrainNameCalculator: Length condition was not met (parts.Length != 3)", nameof(parts));
             
-            trainName = new TrainNameParts(partsArr[1]);
-            increment = int.Parse(partsArr[2]);
+            BaseTrainName = new TrainNameParts(partsArr[1]);
+            Increment = int.Parse(partsArr[2]);
         }
 
         /// <inheritdoc />
-        public IEnumerable<string> Serialize() => new []{ PREFIX, trainName.FullName, increment.ToString() };
+        public IEnumerable<string> Serialize() => new []{ PREFIX, BaseTrainName.FullName, Increment.ToString() };
 
         /// <inheritdoc />
         public string GetTrainName(int countingIndex) => 
-            trainName.BaseName + (trainName.Number + (countingIndex + 1) * increment).ToString(new string('0', trainName.NumberLength));
+            BaseTrainName.BaseName + (BaseTrainName.Number + (countingIndex + 1) * Increment).ToString(new string('0', BaseTrainName.NumberLength));
         
         /// <summary>
         /// Initialize a new empty instance.
@@ -47,8 +55,8 @@ namespace FPLedit.Shared
         /// <remarks>Train number will be extracted with <see cref="TrainNameParts"/>.</remarks>
         public AutoTrainNameCalculator(string originalName, int increment)
         {
-            trainName = new TrainNameParts(originalName);
-            this.increment = increment;
+            BaseTrainName = new TrainNameParts(originalName);
+            this.Increment = increment;
         }
     }
 }

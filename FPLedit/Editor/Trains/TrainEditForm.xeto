@@ -61,6 +61,7 @@
             <StackLayout Padding="10,10,10,10" Spacing="5" Orientation="Vertical" HorizontalContentAlignment="Stretch">
               <GridView x:Name="linkGridView" />
               <Button Click="DeleteLinkButton_Click" Text="{x:Static e:TrainEditForm+L.DeleteLink}" />
+              <Button Click="EditLinkButton_Click" Text="{x:Static e:TrainEditForm+L.EditLink}" />
             </StackLayout>
           </GroupBox><!-- /group Verknüpfungen -->
         </StackLayout>

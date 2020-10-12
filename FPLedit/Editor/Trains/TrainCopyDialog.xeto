@@ -8,8 +8,8 @@
     <StackLayout Orientation="Horizontal" x:Name="selectStack" Padding="10,10,10,10" Spacing="5" />
     <TableLayout Spacing="5,5" Padding="10,10,10,5">
       <TableRow>
-        <Label Text="{x:Static e:TrainCopyDialog+L.Offset}" />
-        <TextBox x:Name="offsetTextBox" />
+        <Label Text="{x:Static e:TrainCopyDialog+L.Difference}" />
+        <TextBox x:Name="diffTextBox" />
       </TableRow>
     </TableLayout>
     <TableLayout Spacing="5,5" Padding="10,0,10,10" x:Name="copyOptionsTable">

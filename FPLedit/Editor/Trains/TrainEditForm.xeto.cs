@@ -178,14 +178,32 @@ namespace FPLedit.Editor.Trains
             if (linkGridView.SelectedItem != null)
             {
                 tt.RemoveLink((TrainLink) linkGridView.SelectedItem);
-                linkGridView.DataStore = Train.TrainLinks;
+                linkGridView.DataStore = Train.TrainLinks; // Reload data rows.
             }
             else
                 MessageBox.Show(T._("Erst muss eine Verknüpfung zum Löschen ausgewählt werden!"));
         }
+        
+        private void EditLinkButton_Click(object sender, EventArgs e)
+        {
+            if (linkGridView.SelectedItem != null)
+            {
+                var link = (TrainLink) linkGridView.SelectedItem;
+                if (link.TrainNamingScheme is AutoTrainNameCalculator)
+                {
+                    using (var tled = new TrainLinkEditDialog(link, tt))
+                        if (tled.ShowModal() == DialogResult.Ok)
+                            linkGridView.DataStore = Train.TrainLinks; // Reload data rows.
+                }
+                else
+                    MessageBox.Show("Not Implemented: Name calculator not supported!"); //TODO: More generic check.
+            }
+            else
+                MessageBox.Show(T._("Erst muss eine Verknüpfung zum Bearbeiten ausgewählt werden!"));
+        }
 
-        private IEnumerable<ListItem> GetAllItems(Timetable tt, Func<ITrain, string> func)
-            => tt.Trains.Select(func).Distinct().Where(s => s != "").OrderBy(s => s).Select(s => new ListItem { Text = s });
+        private IEnumerable<ListItem> GetAllItems(ITimetable timetable, Func<ITrain, string> func)
+            => timetable.Trains.Select(func).Distinct().Where(s => s != "").OrderBy(s => s).Select(s => new ListItem { Text = s });
         
         private static class L
         {
@@ -203,6 +221,7 @@ namespace FPLedit.Editor.Trains
             public static readonly string NextTrain = T._("Folgezug");
             public static readonly string Links = T._("Verknüpfungen");
             public static readonly string DeleteLink = T._("Verknüpfung löschen");
+            public static readonly string EditLink = T._("Verknüpfung bearbeiten");
             public static readonly string Timetable = T._("Fahrplan");
             public static readonly string Fill = T._("Von anderem Zug...");
             public static readonly string Title = T._("Neuen Zug erstellen");

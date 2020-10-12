@@ -11,12 +11,12 @@ namespace FPLedit.Editor.Trains
     internal sealed class TrainCopyDialog : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
-        private readonly TextBox offsetTextBox, nameTextBox, changeTextBox, countTextBox;
+        private readonly TextBox diffTextBox, nameTextBox, changeTextBox, countTextBox;
         private readonly CheckBox copyAllCheckBox;
         private readonly StackLayout selectStack;
         private readonly TableLayout extendedOptionsTable, copyOptionsTable;
 #pragma warning restore CS0649
-        private readonly NumberValidator offsetValidator, countValidator, changeValidator;
+        private readonly NumberValidator diffValidator, countValidator, changeValidator;
         private readonly SelectionUI<CopySelectionMode> modeSelect;
 
         private readonly Train train;
@@ -26,14 +26,14 @@ namespace FPLedit.Editor.Trains
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            offsetValidator = new NumberValidator(offsetTextBox, false, true, errorMessage: T._("Bitte die Verschiebung als Zahl in Minuten angeben!"));
+            diffValidator = new NumberValidator(diffTextBox, false, true, errorMessage: T._("Bitte die Verschiebung als Zahl in Minuten angeben!"));
             countValidator = new NumberValidator(countTextBox, false, true, allowNegative: false, errorMessage: T._("Bitte eine gültige Anzahl >0 neuer Züge eingeben!"));
             changeValidator = new NumberValidator(changeTextBox, false, true, errorMessage: T._("Bitte eine gültige Veränderung der Zugnummer eingeben!"));
 
             train = t;
             this.tt = tt;
             nameTextBox.Text = t.TName;
-            offsetTextBox.Text = "+20";
+            diffTextBox.Text = "+20";
             countTextBox.Text = "1";
             changeTextBox.Text = "2";
 
@@ -50,9 +50,9 @@ namespace FPLedit.Editor.Trains
         {
             var copy = modeSelect.SelectedState == CopySelectionMode.Copy || modeSelect.SelectedState == CopySelectionMode.Link;
 
-            if (!offsetValidator.Valid || (copy && (!countValidator.Valid || !changeValidator.Valid)))
+            if (!diffValidator.Valid || (copy && (!countValidator.Valid || !changeValidator.Valid)))
             {
-                var msg = offsetValidator.Valid ? "" : offsetValidator.ErrorMessage + Environment.NewLine;
+                var msg = diffValidator.Valid ? "" : diffValidator.ErrorMessage + Environment.NewLine;
                 if (copy)
                 {
                     msg += countValidator.Valid ? "" : countValidator.ErrorMessage + Environment.NewLine;
@@ -64,14 +64,14 @@ namespace FPLedit.Editor.Trains
             }
 
             var th = new TrainEditHelper();
-            var offset = int.Parse(offsetTextBox.Text);
+            var diff = int.Parse(diffTextBox.Text);
 
             if (modeSelect.SelectedState == CopySelectionMode.Copy)
             {
                 var count = int.Parse(countTextBox.Text);
                 var add = int.Parse(changeTextBox.Text);
 
-                var trains = th.CopyTrainMultiple(train, offset, nameTextBox.Text, copyAllCheckBox.Checked.Value, count, add);
+                var trains = th.CopyTrainMultiple(train, diff, nameTextBox.Text, copyAllCheckBox.Checked.Value, count, add);
 
                 foreach (var newTrain in trains)
                 {
@@ -90,10 +90,10 @@ namespace FPLedit.Editor.Trains
                 var count = int.Parse(countTextBox.Text);
                 var add = int.Parse(changeTextBox.Text);
 
-                th.LinkTrainMultiple(train, offset, nameTextBox.Text, count, add);
+                th.LinkTrainMultiple(train, 0, diff, nameTextBox.Text, count, add);
             }
             else
-                th.MoveTrain(train, offset);
+                th.MoveTrain(train, diff);
 
             Close(DialogResult.Ok);
         }
@@ -121,7 +121,7 @@ namespace FPLedit.Editor.Trains
         {
             public static readonly string Cancel = T._("Abbrechen");
             public static readonly string Close = T._("Kopieren");
-            public static readonly string Offset = T._("Taktverschiebung in Minuten");
+            public static readonly string Difference = T._("Taktverschiebung in Minuten");
             public static readonly string Count = T._("Anzahl der neuen Züge");
             public static readonly string BaseName = T._("Basiszugnummer");
             public static readonly string NumberChange = T._("Änderung der Zugnummer");
