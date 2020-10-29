@@ -18,7 +18,7 @@
     <WarningsAsErrors>CS8600;CS8602;CS8603</WarningsAsErrors>
     <MSBuildWarningsAsMessages>MSB3277</MSBuildWarningsAsMessages>
     
-    <EtoVersion>2.5.7-ci-20201007.292499425</EtoVersion>
+    <EtoVersion>2.5.7-ci-20201021.320816878</EtoVersion>
     
 	  <!-- Assembly info -->
 	  <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
@@ -38,11 +38,11 @@
 
   <!-- Include Analyzers -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.VersionCheckAnalyzer" Version="3.3.0" />
-    <PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="3.3.0" />
-    <PackageReference Include="Microsoft.NetCore.Analyzers" Version="3.3.0" />
-    <PackageReference Include="Microsoft.NetFramework.Analyzers" Version="3.3.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VersionCheckAnalyzer" Version="3.3.1" />
+    <PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="3.3.1" />
+    <PackageReference Include="Microsoft.NetCore.Analyzers" Version="3.3.1" />
+    <PackageReference Include="Microsoft.NetFramework.Analyzers" Version="3.3.1" />
   </ItemGroup>
 
 </Project>
