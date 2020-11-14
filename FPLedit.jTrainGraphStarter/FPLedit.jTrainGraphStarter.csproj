@@ -28,6 +28,6 @@
     <PackageReference Include="Eto.Forms" Version="$(EtoVersion)" />
     <PackageReference Include="Eto.Serialization.Xaml" Version="$(EtoVersion)" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Microsoft.Win32.Registry" Version="4.7.0" />
+    <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
   </ItemGroup>
 </Project>
