@@ -303,7 +303,7 @@ namespace FPLedit.Shared
                     var staAfter = stations[1];
                     idx = sElm.Children.IndexOf(staAfter.XMLEntity); // Insert before.
                 }
-                else
+                else if (stations.Count > 1)
                     throw new Exception("Invalid negative index encountered!");
                 sElm.Children.Insert(idx, sta.XMLEntity);
 
