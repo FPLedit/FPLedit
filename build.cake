@@ -130,6 +130,14 @@ Task("PrepareArtifacts")
         // Remove unused platform assemblies (Mac64/MonoMac has only been used for bundling before).
         DeleteFile(buildLibDir + File("Eto.Mac64.dll"));
         DeleteFile(buildLibDir + File("MonoMac.dll"));
+        
+        Information("Moving satellite assemblies of dependencies...");
+        var directories = GetSubDirectories(buildDir);
+        foreach (var dir in directories) {
+            if (Regex.IsMatch(dir.GetDirectoryName(), "^[a-z]{2}(-([A-Z]{2}|Hant|Hans))?$")) {
+                MoveDirectory(dir, buildLibDir + Directory(dir.GetDirectoryName()));
+            }
+        }
     });
     
 Task("BuildLicenseReadme")
@@ -166,7 +174,10 @@ Task("PackMacBundle")
         DeleteFiles(macLibTarget + File("Eto.*"));
         DeleteFiles(macLibTarget + File("*Sharp.dll"));
         DeleteFile(macLibTarget + File("Jint.dll"));
+        DeleteFile(macLibTarget + File("Mono.Options.dll"));
+        DeleteFile(macLibTarget + File("Portable.Xaml.dll"));
         DeleteFile(macLibTarget + File("Esprima.dll"));
+        DeleteFiles(macLibTarget + File("Xceed.Wpf.*.dll"));
         
         Information("Zipping mac bundle");
         var filesToZip = new List<string>();
