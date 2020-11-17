@@ -14,14 +14,14 @@ namespace FPLedit.NonDefaultFiletypes
         public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[] flags = null)
         {
             if (tt.Version.Compare(TimetableVersion.JTG3_3) >= 0)
-                throw new Exception(T._("Nur mit jTrainGraph 2.x, 3.0x, 3.1x oder 3.2 erstellte Fahrpläne können aktualisiert werden."));
+                throw new Exception(T._("Nur Fahrpläne mit einer älteren Dateiversion können aktualisiert werden."));
 
             var origVersion = tt.Version;
 
             var xclone = tt.XMLEntity.XClone();
             xclone.SetAttribute("version", TimetableVersion.JTG3_3.ToNumberString());
 
-            // UPGRADE 008 -> CURRENT
+            // UPGRADE 008 -> 009
             if (origVersion == TimetableVersion.JTG2_x)
             {
                 var shv = xclone.GetAttribute<bool>("shV");
@@ -48,11 +48,23 @@ namespace FPLedit.NonDefaultFiletypes
                 }
             }
             
-            // UPGRADE 009 -> CURRENT is empty
-            // UPGRADE 010 -> CURRENT is empty
+            // UPGRADE 009 -> 010 is empty
+            // UPGRADE 010 -> 011 is empty
             
-            // UPGRADE --> 012
-            //TODO: Implement update
+            // UPGRADE 011 --> 012 (CURRENT)
+            if (origVersion.CompareTo(TimetableVersion.JTG3_3) < 0)
+            {
+                // Update some properties to time entry format.
+                var properties = new[] { "dTt", "odBT", "hlI", "mpP", "sLine" };
+                foreach (var prop in properties)
+                {
+                    if (xclone.Attributes.TryGetValue(prop, out var v) && int.TryParse(v, out var vi))
+                    {
+                        var te = new TimeEntry(0, vi);
+                        xclone.SetAttribute(prop, te.ToString());
+                    }
+                }
+            }
 
             // UPGRADE GENERAL
             var ttclone = new Timetable(xclone);
