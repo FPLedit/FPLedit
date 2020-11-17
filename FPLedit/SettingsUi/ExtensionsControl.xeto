@@ -1,4 +1,4 @@
-﻿<c:ExtensionsForm
+﻿<c:ExtensionsControl
   xmlns="clr-namespace:Eto.Forms;assembly=Eto"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:c="clr-namespace:FPLedit.SettingsUi;assembly=FPLedit">
@@ -7,12 +7,12 @@
       <TableLayout Spacing="5,5">
         <TableRow>
           <TableCell ScaleWidth="true">
-            <Label Text="{x:Static c:ExtensionsForm+L.Deactivated}" />
+            <Label Text="{x:Static c:ExtensionsControl+L.Deactivated}" />
           </TableCell>
           <TableCell>
           </TableCell>
           <TableCell ScaleWidth="true">
-            <Label Text="{x:Static c:ExtensionsForm+L.Activated}" />
+            <Label Text="{x:Static c:ExtensionsControl+L.Activated}" />
           </TableCell>
         </TableRow>
         <TableRow>
@@ -38,11 +38,11 @@
         </TableRow>
         <TableRow>
           <StackLayout x:Name="restartStack" Orientation="Horizontal" Visible="false" Spacing="5">
-            <Label Text="{x:Static c:ExtensionsForm+L.RestartInfo}" />
-            <Button Click="ResetButton_Click" Text="{x:Static c:ExtensionsForm+L.RestartButton}" />
+            <Label Text="{x:Static c:ExtensionsControl+L.RestartInfo}" />
+            <Button Click="ResetButton_Click" Text="{x:Static c:ExtensionsControl+L.RestartButton}" />
           </StackLayout>
         </TableRow>
       </TableLayout>
     </TableRow>
   </TableLayout>
-</c:ExtensionsForm>
+</c:ExtensionsControl>

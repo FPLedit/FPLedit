@@ -6,21 +6,21 @@ using FPLedit.Shared;
 
 namespace FPLedit.SettingsUi
 {
-    internal sealed class ExtensionsFormHandler : ISettingsControl
+    internal sealed class ExtensionsControlHandler : ISettingsControl
     {
         private readonly ExtensionManager mg;
         private readonly IRestartable restartable;
 
-        public ExtensionsFormHandler(ExtensionManager mg, IRestartable restartable)
+        public ExtensionsControlHandler(ExtensionManager mg, IRestartable restartable)
         {
             this.mg = mg;
             this.restartable = restartable;
         }
         public string DisplayName => T._("Erweiterungen");
-        public Control GetControl(IPluginInterface pluginInterface) => new ExtensionsForm(mg, restartable);
+        public Control GetControl(IPluginInterface pluginInterface) => new ExtensionsControl(mg, restartable);
     }
     
-    internal sealed class ExtensionsForm : Panel
+    internal sealed class ExtensionsControl : Panel
     {
         private readonly ExtensionManager manager;
         private readonly IRestartable restartable;
@@ -32,7 +32,7 @@ namespace FPLedit.SettingsUi
         private readonly StackLayout restartStack;
 #pragma warning restore CS0649
 
-        public ExtensionsForm(ExtensionManager mg, IRestartable restartable)
+        public ExtensionsControl(ExtensionManager mg, IRestartable restartable)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 

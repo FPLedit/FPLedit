@@ -26,11 +26,12 @@ namespace FPLedit.CorePlugins
             componentRegistry.Register<IImport>(new NonDefaultFiletypes.XmlStationsImport());
             componentRegistry.Register<IExport>(new NonDefaultFiletypes.StationsOnlyExport());
             
-            componentRegistry.Register<ISettingsControl>(new SettingsUi.ExtensionsFormHandler(bootstrapper.ExtensionManager, restartable));
-            componentRegistry.Register<ISettingsControl>(new SettingsUi.TemplatesFormHandler());
+            componentRegistry.Register<ISettingsControl>(new SettingsUi.ExtensionsControlHandler(bootstrapper.ExtensionManager, restartable));
+            componentRegistry.Register<ISettingsControl>(new SettingsUi.TemplatesControlHandler());
             componentRegistry.Register<ISettingsControl>(new SettingsUi.AutomaticUpdateControl());
             componentRegistry.Register<ISettingsControl>(new SettingsUi.WindowSizeControl());
             componentRegistry.Register<ISettingsControl>(new SettingsUi.LocaleControl());
+            componentRegistry.Register<ISettingsControl>(new SettingsUi.DefaultVersionControl());
         }
     }
 }

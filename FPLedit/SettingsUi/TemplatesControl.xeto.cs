@@ -10,13 +10,13 @@ using FPLedit.Shared;
 
 namespace FPLedit.SettingsUi
 {
-    internal sealed class TemplatesFormHandler : ISettingsControl
+    internal sealed class TemplatesControlHandler : ISettingsControl
     {
         public string DisplayName => T._("Vorlagen");
-        public Control GetControl(IPluginInterface pluginInterface) => new TemplatesForm(pluginInterface.TemplateManager as TemplateManager);
+        public Control GetControl(IPluginInterface pluginInterface) => new TemplatesControl(pluginInterface.TemplateManager as TemplateManager);
     }
     
-    internal sealed class TemplatesForm : Panel
+    internal sealed class TemplatesControl : Panel
     {
 #pragma warning disable CS0649
         private readonly GridView gridView;
@@ -28,7 +28,7 @@ namespace FPLedit.SettingsUi
 
         private readonly DirectoryInfo templatesDir;
 
-        public TemplatesForm(TemplateManager manager)
+        public TemplatesControl(TemplateManager manager)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
