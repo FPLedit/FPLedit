@@ -8,8 +8,8 @@ namespace FPLedit.jTrainGraphStarter
     [Plugin("Starter für jTrainGraph", Vi.PFrom, Vi.PUpTo, Author = "Manuel Huber")]
     public sealed class Plugin : IPlugin
     {
-        IPluginInterface pluginInterface;
-        ButtonMenuItem startItem;
+        private IPluginInterface pluginInterface;
+        private ButtonMenuItem startItem;
 
         public void Init(IPluginInterface pi, IComponentRegistry componentRegistry)
         {
@@ -47,11 +47,11 @@ namespace FPLedit.jTrainGraphStarter
             var backupHandle = pluginInterface.BackupTimetable();
             try
             {
-                bool showMessage = pluginInterface.Settings.Get("jTGStarter.show-message", true);
+                var showMessage = pluginInterface.Settings.Get("jTGStarter.show-message", true);
 
                 if (showMessage)
                 {
-                    DialogResult res = MessageBox.Show(T._("Dies speichert die Fahrplandatei am letzten Speicherort und öffnet dann jTrainGraph. Nachdem Sie die Arbeit in jTrainGraph beendet haben, speichern Sie damit die Datei und schließen das jTrainGraph-Hauptfenster, damit werden die Änderungen übernommen. Aktion fortsetzen?\n\nDiese Meldung kann unter jTrainGraph > Einstellungen deaktiviert werden."),
+                    var res = MessageBox.Show(T._("Dies speichert die Fahrplandatei am letzten Speicherort und öffnet dann jTrainGraph. Nachdem Sie die Arbeit in jTrainGraph beendet haben, speichern Sie damit die Datei und schließen das jTrainGraph-Hauptfenster, damit werden die Änderungen übernommen. Aktion fortsetzen?\n\nDiese Meldung kann unter jTrainGraph > Einstellungen deaktiviert werden."),
                         T._("jTrainGraph starten"), MessageBoxButtons.YesNo, MessageBoxType.Warning);
 
                     if (res != DialogResult.Yes)
@@ -76,7 +76,7 @@ namespace FPLedit.jTrainGraphStarter
             var backupHandle = pluginInterface.BackupTimetable();
             try
             {
-                bool showMessage = pluginInterface.Settings.Get("jTGStarter.show-message", true);
+                var showMessage = pluginInterface.Settings.Get("jTGStarter.show-message", true);
 
                 if (showMessage)
                 {
@@ -91,7 +91,7 @@ namespace FPLedit.jTrainGraphStarter
 
                 var targetVersion = pluginInterface.Settings.GetEnum("jTGStarter.target-version", JtgShared.DEFAULT_TT_VERSION);
                 
-                if (targetVersion.GetCompat() != TtVersionCompatType.ReadWrite)
+                if (targetVersion.GetVersionCompat().Compatibility != TtVersionCompatType.ReadWrite)
                     throw new Exception(T._("Zielversion ist nicht R/W-Kompatibel. Bitte die Einstellungen überprüfen."));
 
                 var exporter = new Shared.Filetypes.XMLExport();
@@ -120,8 +120,8 @@ namespace FPLedit.jTrainGraphStarter
 
         private void StartJtg(string fnArg, Action finished)
         {
-            string javapath = pluginInterface.Settings.Get("jTGStarter.javapath", "java");
-            string jtgPath = pluginInterface.Settings.Get("jTGStarter.jtgpath", JtgShared.DEFAULT_FILENAME);
+            var javapath = pluginInterface.Settings.Get("jTGStarter.javapath", "java");
+            var jtgPath = pluginInterface.Settings.Get("jTGStarter.jtgpath", JtgShared.DEFAULT_FILENAME);
 
             var compat = JtgShared.JtgCompatCheck(jtgPath);
             if (!compat.Compatible)

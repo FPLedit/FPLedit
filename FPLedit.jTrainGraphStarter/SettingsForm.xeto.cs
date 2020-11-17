@@ -20,15 +20,20 @@ namespace FPLedit.jTrainGraphStarter
 
         public SettingsForm(ISettings settings)
         {
+            // Load versions before loading UI xaml.
+            var versions = TimetableVersionExt.GetAllVersionInfos()
+                .Where(c => c.Compatibility == TtVersionCompatType.ReadWrite)
+                .Where(c => c.JtgVersionCompatibility.Any())
+                .SelectMany(c => 
+                    c.JtgVersionCompatibility.Select(j => new VersionItem(c.Version, j.version.Replace("*", "x"))))
+                .ToArray();
+
+            L.CompatibleVersions = string.Join(", ", versions.Select(vi => vi.Name));
+            
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
             this.settings = settings;
 
-            var versions = new[]
-            {
-                new VersionItem(TimetableVersion.JTG3_1, "3.1x"),
-                new VersionItem(TimetableVersion.JTG3_2, "3.2x"),
-            };
             versionComboBox.DataStore = versions;
             versionComboBox.ItemTextBinding = Binding.Property<VersionItem, string>(vi => vi.Name);
 
@@ -64,7 +69,7 @@ namespace FPLedit.jTrainGraphStarter
             var targetVersion = ((VersionItem)versionComboBox.SelectedValue).Version;
 
             settings.SetEnum("jTGStarter.target-version", targetVersion);
-            settings.Set("jTGStarter.show-message", !messageCheckBox.Checked.Value);
+            settings.Set("jTGStarter.show-message", !messageCheckBox.Checked!.Value);
             settings.Set("jTGStarter.javapath", javaPathTextBox.Text);
             settings.Set("jTGStarter.jtgpath", jtgPathTextBox.Text);
             Close();
@@ -112,11 +117,11 @@ namespace FPLedit.jTrainGraphStarter
             return exists;
         }
 
-        private class VersionItem
+        private class VersionItem //TODO: Move to records
         {
-            public TimetableVersion Version { get; set; }
+            public TimetableVersion Version { get; }
 
-            public string Name { get; set; }
+            public string Name { get; }
 
             public VersionItem(TimetableVersion version, string name)
             {
@@ -130,6 +135,8 @@ namespace FPLedit.jTrainGraphStarter
 
         private static class L
         {
+            public static string CompatibleVersions { get; set; }
+            
             public static readonly string Title = T._("jTrainGraphStarter Einstellungen");
             public static readonly string Close = T._("Schließen");
             
@@ -150,11 +157,9 @@ namespace FPLedit.jTrainGraphStarter
             public static readonly string DownloadLinkText = T._("jTrainGraph herunterladen");
             public static readonly string FilenameNote = T._("Auch wenn jTrainGraph in der *.exe-Variante verwendet wird bitte den Java-Pfad ausfüllen!");
             public static readonly string CurrentNote = T._("Bitte verwenden Sie, wenn möglich, immer die aktuelleste jTrainGraph-Version!");
-            public static readonly string CurrentList = T._("Kompatible Versionen sind 2.02, 2.03, 3.03, 3.11");
+            public static string CurrentList => T._("Kompatible Versionen sind {0}", CompatibleVersions);
             
             public static readonly string MessageLabel = T._("Warnhinweis nicht bei jedem jTrainGraph-Start anzeigen");
-            
-            
         }
     }
 }

@@ -29,9 +29,7 @@ namespace FPLedit.Shared
 
         [XAttrName("version")]
         public TimetableVersion Version => (TimetableVersion) GetAttribute("version", 0);
-
-        private static readonly TimetableVersion[] networkVersions = { TimetableVersion.Extended_FPL, TimetableVersion.Extended_FPL2 }; //TODO: Move to some sort of helper class.
-        public TimetableType Type => networkVersions.Contains(Version)  ? TimetableType.Network : TimetableType.Linear;
+        public TimetableType Type => Version.GetVersionCompat().Type;
 
         private bool TimePrecisionSeconds => (Type == TimetableType.Linear && Version.Compare(TimetableVersion.JTG3_3) < 0) ||
                                             (Type == TimetableType.Network && Version.Compare(TimetableVersion.Extended_FPL) < 0);
@@ -91,7 +89,7 @@ namespace FPLedit.Shared
             transitions = new List<Transition>();
             Initialized = true;
 
-            SetAttribute("version", type == TimetableType.Network ? DefaultNetworkVersion.ToNumberString() : DefaultLinearVersion.ToNumberString()); // version="100" nicht kompatibel mit jTrainGraph
+            SetAttribute("version", type == TimetableType.Network ? DefaultNetworkVersion.ToNumberString() : DefaultLinearVersion.ToNumberString());
             sElm = new XMLEntity("stations");
             tElm = new XMLEntity("trains");
             trElm = new XMLEntity("transitions");
@@ -124,7 +122,7 @@ namespace FPLedit.Shared
             if (!Enum.IsDefined(typeof(TimetableVersion), Version))
                 throw new NotSupportedException(T._("Unbekannte Dateiversion."));
 
-            if (Version.GetCompat() != TtVersionCompatType.ReadWrite)
+            if (Version.GetVersionCompat().Compatibility != TtVersionCompatType.ReadWrite)
                 return; // Do not create any properties as we cannot read this format.
 
             Initialized = true;

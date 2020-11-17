@@ -437,7 +437,7 @@ namespace FPLedit
 
         private void OpenWithVersionCheck(Timetable tt, string filename)
         {
-            var compat = tt?.Version.GetCompat();
+            var compat = tt?.Version.GetVersionCompat().Compatibility;
             if (tt == null || compat == TtVersionCompatType.ReadWrite)
             {
                 // There is an optional timetable version update available.
