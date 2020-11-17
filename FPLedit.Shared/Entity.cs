@@ -86,7 +86,7 @@ namespace FPLedit.Shared
         protected TimeEntry GetTimeAttributeValue(string key)
         {
             string val = GetAttribute(key, "")!;
-            TimeEntry.TryParse(val, out var ts);
+            ParentTimetable.TimeFactory.TryParse(val, out var ts);
             return ts;
         }
 

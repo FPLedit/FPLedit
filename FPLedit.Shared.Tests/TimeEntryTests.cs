@@ -186,58 +186,60 @@ namespace FPLedit.Shared.Tests
         [Test]
         public void ParseTests()
         {
-            Assert.AreEqual(TimeEntry.Zero, TimeEntry.Parse("0:0"));
-            Assert.AreEqual(TimeEntry.Zero, TimeEntry.Parse(":"));
-            Assert.AreEqual(TimeEntry.Zero, TimeEntry.Parse("0"));
-            Assert.AreEqual(TimeEntry.Zero, TimeEntry.Parse("00:0"));
-            Assert.AreEqual(TimeEntry.Zero, TimeEntry.Parse("0:00"));
-            Assert.AreEqual(TimeEntry.Zero, TimeEntry.Parse("00:00"));
-            Assert.AreEqual(new TimeEntry(24, 0), TimeEntry.Parse("24:00"));
-            Assert.AreEqual(new TimeEntry(24, 0), TimeEntry.Parse("24:0"));
-            Assert.AreEqual(new TimeEntry(24, 1), TimeEntry.Parse("24:01"));
-            Assert.AreEqual(new TimeEntry(26, 1), TimeEntry.Parse("26:01"));
+            var timeFactory = new TimeEntryFactory(true);
+            
+            Assert.AreEqual(TimeEntry.Zero, timeFactory.Parse("0:0"));
+            Assert.AreEqual(TimeEntry.Zero, timeFactory.Parse(":"));
+            Assert.AreEqual(TimeEntry.Zero, timeFactory.Parse("0"));
+            Assert.AreEqual(TimeEntry.Zero, timeFactory.Parse("00:0"));
+            Assert.AreEqual(TimeEntry.Zero, timeFactory.Parse("0:00"));
+            Assert.AreEqual(TimeEntry.Zero, timeFactory.Parse("00:00"));
+            Assert.AreEqual(new TimeEntry(24, 0), timeFactory.Parse("24:00"));
+            Assert.AreEqual(new TimeEntry(24, 0), timeFactory.Parse("24:0"));
+            Assert.AreEqual(new TimeEntry(24, 1), timeFactory.Parse("24:01"));
+            Assert.AreEqual(new TimeEntry(26, 1), timeFactory.Parse("26:01"));
 
             //Assert.Throws<FormatException>(() => TimeEntry.Parse(":"));
-            Assert.Throws<FormatException>(() => TimeEntry.Parse(""));
-            Assert.Throws<FormatException>(() => TimeEntry.Parse("."));
-            Assert.Throws<FormatException>(() => TimeEntry.Parse("a"));
-            Assert.Throws<FormatException>(() => TimeEntry.Parse("abc"));
+            Assert.Throws<FormatException>(() => timeFactory.Parse(""));
+            Assert.Throws<FormatException>(() => timeFactory.Parse("."));
+            Assert.Throws<FormatException>(() => timeFactory.Parse("a"));
+            Assert.Throws<FormatException>(() => timeFactory.Parse("abc"));
             
             // Dont accept TimeSpan formats (seconds/days)
-            Assert.Throws<FormatException>(() => TimeEntry.Parse("0:0:0"));
-            Assert.Throws<FormatException>(() => TimeEntry.Parse("1.0:0"));
+            Assert.Throws<FormatException>(() => timeFactory.Parse("0:0:0"));
+            Assert.Throws<FormatException>(() => timeFactory.Parse("1.0:0"));
             
             // Try parse
             TimeEntry o;
-            Assert.AreEqual(true, TimeEntry.TryParse("0:0", out o));
+            Assert.AreEqual(true, timeFactory.TryParse("0:0", out o));
             Assert.AreEqual(TimeEntry.Zero, o);
-            Assert.AreEqual(true, TimeEntry.TryParse("0", out o));
+            Assert.AreEqual(true, timeFactory.TryParse("0", out o));
             Assert.AreEqual(TimeEntry.Zero, o);
-            Assert.AreEqual(true, TimeEntry.TryParse("00:0", out o));
+            Assert.AreEqual(true, timeFactory.TryParse("00:0", out o));
             Assert.AreEqual(TimeEntry.Zero, o);
-            Assert.AreEqual(true, TimeEntry.TryParse("0:00", out o));
+            Assert.AreEqual(true, timeFactory.TryParse("0:00", out o));
             Assert.AreEqual(TimeEntry.Zero, o);
-            Assert.AreEqual(true, TimeEntry.TryParse("00:00", out o));
+            Assert.AreEqual(true, timeFactory.TryParse("00:00", out o));
             Assert.AreEqual(TimeEntry.Zero, o);
-            Assert.AreEqual(true, TimeEntry.TryParse(":", out o));
+            Assert.AreEqual(true, timeFactory.TryParse(":", out o));
             Assert.AreEqual(TimeEntry.Zero, o);
-            Assert.AreEqual(true, TimeEntry.TryParse("24:00", out o));
+            Assert.AreEqual(true, timeFactory.TryParse("24:00", out o));
             Assert.AreEqual(new TimeEntry(24, 0), o);
-            Assert.AreEqual(true, TimeEntry.TryParse("24:0", out o));
+            Assert.AreEqual(true, timeFactory.TryParse("24:0", out o));
             Assert.AreEqual(new TimeEntry(24, 0), o);
-            Assert.AreEqual(true, TimeEntry.TryParse("24:01", out o));
+            Assert.AreEqual(true, timeFactory.TryParse("24:01", out o));
             Assert.AreEqual(new TimeEntry(24, 1), o);
-            Assert.AreEqual(true, TimeEntry.TryParse("26:01", out o));
+            Assert.AreEqual(true, timeFactory.TryParse("26:01", out o));
             Assert.AreEqual(new TimeEntry(26, 1), o);
             
-            Assert.AreEqual(false, TimeEntry.TryParse("", out o));
-            Assert.AreEqual(false, TimeEntry.TryParse(".", out o));
-            Assert.AreEqual(false, TimeEntry.TryParse("a", out o));
-            Assert.AreEqual(false, TimeEntry.TryParse("abc", out o));
+            Assert.AreEqual(false, timeFactory.TryParse("", out o));
+            Assert.AreEqual(false, timeFactory.TryParse(".", out o));
+            Assert.AreEqual(false, timeFactory.TryParse("a", out o));
+            Assert.AreEqual(false, timeFactory.TryParse("abc", out o));
             
             // Dont accept TimeSpan formats (seconds/days)
-            Assert.AreEqual(false, TimeEntry.TryParse("0:0:0", out o));
-            Assert.AreEqual(false, TimeEntry.TryParse("1.0:0", out o));
+            Assert.AreEqual(false, timeFactory.TryParse("0:0:0", out o));
+            Assert.AreEqual(false, timeFactory.TryParse("1.0:0", out o));
         }
     }
 }

@@ -11,8 +11,6 @@ namespace FPLedit.Editor.TimetableEditor
 {
     internal abstract class BaseTimetableEditControl : Panel
     {
-        private readonly TimeNormalizer normalizer = new TimeNormalizer();
-
         private ToggleButton trapeztafelToggle;
 
         protected bool mpmode = false;
@@ -57,7 +55,7 @@ namespace FPLedit.Editor.TimetableEditor
                 return;
             }
 
-            val = normalizer.Normalize(val);
+            val = data.Train.ParentTimetable!.TimeFactory.Normalizer.Normalize(val);
             bool error = true;
             if (val != null)
             {

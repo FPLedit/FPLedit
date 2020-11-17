@@ -10,6 +10,12 @@ namespace FPLedit.Shared
     public interface ITimetable
     {
         /// <summary>
+        /// Helper to create or parse time entries that will be used within this timetable instance.
+        /// </summary>
+        /// <remarks>Always use this intsnace, as it will have all properties set-up properly.</remarks>
+        TimeEntryFactory TimeFactory { get; }
+        
+        /// <summary>
         /// This event will be fired when the trains of this timetable instance are changed.
         /// </summary>
         event EventHandler? TrainsXmlCollectionChanged;
@@ -41,7 +47,7 @@ namespace FPLedit.Shared
         /// <summary>
         /// This is the default time in minutes which a train stays on a track before departing or after arriving at it's first or last station.
         /// </summary>
-        int DefaultPrePostTrackTime { get; set; }
+        TimeEntry DefaultPrePostTrackTime { get; set; }
         
         /// <summary>
         /// This method adds a non-existent <see cref="Station"/> to an existing route in this timetable.

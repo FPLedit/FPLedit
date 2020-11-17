@@ -33,6 +33,20 @@ namespace FPLedit.Shared
         private static readonly TimetableVersion[] networkVersions = { TimetableVersion.Extended_FPL, TimetableVersion.Extended_FPL2 }; //TODO: Move to some sort of helper class.
         public TimetableType Type => networkVersions.Contains(Version)  ? TimetableType.Network : TimetableType.Linear;
 
+        private bool TimePrecisionSeconds => (Type == TimetableType.Linear && Version.Compare(TimetableVersion.JTG3_3) < 0) ||
+                                            (Type == TimetableType.Network && Version.Compare(TimetableVersion.Extended_FPL) < 0);
+
+        private readonly TimeEntryFactory timeFactoryCache = new TimeEntryFactory(false);
+        /// <inheritdoc />
+        public TimeEntryFactory TimeFactory
+        {
+            get
+            {
+                timeFactoryCache.Normalizer.AllowSeconds = TimePrecisionSeconds;
+                return timeFactoryCache;
+            }
+        }
+
         /// <inheritdoc />
         [XAttrName("name")]
         public string TTName
@@ -41,11 +55,14 @@ namespace FPLedit.Shared
             set => SetAttribute("name", value);
         }
 
+        /// <inheritdoc />
         [XAttrName("dTt")]
-        public int DefaultPrePostTrackTime
+        public TimeEntry DefaultPrePostTrackTime
         {
-            get => GetAttribute("dTt", 10);
-            set => SetAttribute("dTt", value.ToString());
+            get => TimePrecisionSeconds 
+                ? TimeFactory.Parse(GetAttribute("dTt", "00:10")) 
+                : new TimeEntry(0, GetAttribute("dTt", 10));
+            set => SetAttribute("dTt", TimePrecisionSeconds ? value.ToString() : value.Minutes.ToString());
         }
 
         #endregion
