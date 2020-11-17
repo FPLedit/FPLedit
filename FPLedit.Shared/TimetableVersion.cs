@@ -27,9 +27,16 @@ namespace FPLedit.Shared
         [TtVersionCompat(TtVersionCompatType.ReadWrite)]
         [JtgVersionCompat("3.2*", TtVersionJtgCompat.OnlyLinear)]
         JTG3_2 = 011,
+        
+        [TtVersionCompat(TtVersionCompatType.ReadWrite)]
+        [JtgVersionCompat("3.3*", TtVersionJtgCompat.OnlyLinear)]
+        JTG3_3 = 012,
 
         [TtVersionCompat(TtVersionCompatType.ReadWrite)]
         Extended_FPL = 100,
+        
+        [TtVersionCompat(TtVersionCompatType.ReadWrite)]
+        Extended_FPL2 = 101,
         // ReSharper restore InconsistentNaming
     }
 
@@ -106,7 +113,13 @@ namespace FPLedit.Shared
 
     public enum TtVersionJtgCompat
     {
+        /// <summary>
+        /// jTrainGraph only supports opening linear files of this version.
+        /// </summary>
         OnlyLinear,
-        FullWithNetwork, // Currently unused (for future versions of jTrainGraph that support network timetables)
+        /// <summary>
+        /// Currently unused (for future versions of jTrainGraph that support network timetables)
+        /// </summary>
+        FullWithNetwork,
     }
 }

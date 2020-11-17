@@ -13,13 +13,13 @@ namespace FPLedit.NonDefaultFiletypes
 
         public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[] flags = null)
         {
-            if (tt.Version.Compare(TimetableVersion.JTG3_2) >= 0)
-                throw new Exception(T._("Nur mit jTrainGraph 2.x, 3.0x oder 3.1x erstellte Fahrpläne können aktualisiert werden."));
+            if (tt.Version.Compare(TimetableVersion.JTG3_3) >= 0)
+                throw new Exception(T._("Nur mit jTrainGraph 2.x, 3.0x, 3.1x oder 3.2 erstellte Fahrpläne können aktualisiert werden."));
 
             var origVersion = tt.Version;
 
             var xclone = tt.XMLEntity.XClone();
-            xclone.SetAttribute("version", TimetableVersion.JTG3_2.ToNumberString());
+            xclone.SetAttribute("version", TimetableVersion.JTG3_3.ToNumberString());
 
             // UPGRADE 008 -> CURRENT
             if (origVersion == TimetableVersion.JTG2_x)
@@ -50,6 +50,9 @@ namespace FPLedit.NonDefaultFiletypes
             
             // UPGRADE 009 -> CURRENT is empty
             // UPGRADE 010 -> CURRENT is empty
+            
+            // UPGRADE --> 012
+            //TODO: Implement update
 
             // UPGRADE GENERAL
             var ttclone = new Timetable(xclone);
