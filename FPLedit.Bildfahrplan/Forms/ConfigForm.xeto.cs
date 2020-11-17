@@ -62,8 +62,6 @@ namespace FPLedit.Bildfahrplan.Forms
                 [StationLineStyle.Normal] = T._("Gerade Linien"),
                 [StationLineStyle.Cubic] = T._("Kubische Linien"),
             };
-            if (tt.Version == TimetableVersion.JTG2_x)
-                styles.Remove(StationLineStyle.Cubic);
             DropDownBind.Enum<TimetableStyle, StationLineStyle>(stationLinesDropDown, "StationLines", styles);
 
             heightPerHourTextBox.TextBinding.AddFloatConvBinding<TimetableStyle, TextControl>(s => s.HeightPerHour);

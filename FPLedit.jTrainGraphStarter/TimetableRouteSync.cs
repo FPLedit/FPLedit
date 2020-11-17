@@ -102,7 +102,6 @@ namespace FPLedit.jTrainGraphStarter
                 ConvertStationNetToLin(sta, routeIndex);
 
             copy.SetAttribute("version", targetVersion.ToNumberString()); // Wir gehen aus dem Extended-Modus raus
-            ColorTimetableConverter.ConvertAll(copy); // Zum Ziel-Farbformat konvertieren
 
             return copy;
         }
@@ -113,8 +112,6 @@ namespace FPLedit.jTrainGraphStarter
 
         public void SyncBack(Timetable singleRoute)
         {
-            ColorTimetableConverter.ConvertAll(singleRoute, TimetableVersion.Extended_FPL); // Zu Hex-Farben zurück
-
             orig.Attributes = AttrDiff(orig, singleRoute);
             orig.SetAttribute("version", TimetableVersion.Extended_FPL.ToNumberString()); // Wieder in Netzwerk-Modus wechseln
 

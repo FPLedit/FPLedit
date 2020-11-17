@@ -1,13 +1,12 @@
 ﻿using FPLedit.Shared;
 using FPLedit.Shared.Filetypes;
-using FPLedit.Shared.Rendering;
 using System;
 using System.IO;
 using System.Linq;
 
-namespace FPLedit.NonDefaultFiletypes
+namespace FPLedit.BackwardCompat
 {
-    internal sealed class UpgradeExport : IExport
+    internal sealed class LinearUpgradeExport : IExport
     {
         public string Filter => T._("Fahrplan Dateien (*.fpl)|*.fpl");
 
@@ -15,6 +14,10 @@ namespace FPLedit.NonDefaultFiletypes
         {
             if (tt.Version.Compare(TimetableVersion.JTG3_3) >= 0)
                 throw new Exception(T._("Nur Fahrpläne mit einer älteren Dateiversion können aktualisiert werden."));
+            if (tt.Version.CompareTo(TimetableVersion.JTG2_x) < 0)
+                throw new Exception(T._("Dateiversion ist zu alt, um aktualisiert zu werden!"));
+            if (tt.Version.GetVersionCompat().Type != TimetableType.Linear)
+                throw new Exception(T._("Nur lineare Fahrplandateien können mit {0} aktualisiert werden!", nameof(LinearUpgradeExport)));
 
             var origVersion = tt.Version;
 
@@ -68,7 +71,7 @@ namespace FPLedit.NonDefaultFiletypes
 
             // UPGRADE GENERAL
             var ttclone = new Timetable(xclone);
-            ColorTimetableConverter.ConvertAll(ttclone);
+            LegacyColorTimetableConverter.ConvertAll(ttclone);
 
             return new XMLExport().Export(ttclone, stream, pluginInterface);
         }

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
+using FPLedit.Shared;
+using FPLedit.Shared.Rendering;
 
-namespace FPLedit.Shared.Rendering
+namespace FPLedit.BackwardCompat
 {
-    public static class ColorTimetableConverter
+    internal static class LegacyColorTimetableConverter
     {
         public static void ConvertAll(Timetable tt, TimetableVersion? forceVersion = null)
         {

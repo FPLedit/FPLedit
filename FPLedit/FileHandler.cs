@@ -461,7 +461,7 @@ namespace FPLedit
             if (compat == TtVersionCompatType.None)
             {
                 AsyncBlockingOperation = false;
-                pluginInterface.Logger.Error(T._("Diese Dateiformatsversion ({0}) wird nicht unterstützt.",tt.Version.ToNumberString()));
+                pluginInterface.Logger.Error(T._("Diese Dateiformatsversion ({0}) wird nicht unterstützt.", tt.Version.ToNumberString()));
                 return;
             }
 
@@ -471,7 +471,7 @@ namespace FPLedit
         private bool PerformTimetableUpgrade(Timetable tt, bool optional)
         {
             string newFn = null;
-            var exp = new UpgradeExport();
+            var exp = new BackwardCompat.LinearUpgradeExport();
 
             Application.Instance.Invoke(() =>
             {
