@@ -15,6 +15,7 @@ namespace FPLedit.Shared
         public const int LINEAR_ROUTE_ID = 0;
         public const int UNASSIGNED_ROUTE_ID = -1;
         public static TimetableVersion DefaultLinearVersion { get; set; } = TimetableVersion.JTG3_2;
+        public static TimetableVersion DefaultNetworkVersion { get; set; } = TimetableVersion.Extended_FPL;
 
         private readonly XMLEntity sElm, tElm, trElm, vElm;
 
@@ -28,8 +29,11 @@ namespace FPLedit.Shared
 
         [XAttrName("version")]
         public TimetableVersion Version => (TimetableVersion) GetAttribute("version", 0);
-        public TimetableType Type => Version == TimetableVersion.Extended_FPL ? TimetableType.Network : TimetableType.Linear;
 
+        private static readonly TimetableVersion[] networkVersions = { TimetableVersion.Extended_FPL, TimetableVersion.Extended_FPL2 }; //TODO: Move to some sort of helper class.
+        public TimetableType Type => networkVersions.Contains(Version)  ? TimetableType.Network : TimetableType.Linear;
+
+        /// <inheritdoc />
         [XAttrName("name")]
         public string TTName
         {
@@ -70,7 +74,7 @@ namespace FPLedit.Shared
             transitions = new List<Transition>();
             Initialized = true;
 
-            SetAttribute("version", type == TimetableType.Network ? TimetableVersion.Extended_FPL.ToNumberString() : DefaultLinearVersion.ToNumberString()); // version="100" nicht kompatibel mit jTrainGraph
+            SetAttribute("version", type == TimetableType.Network ? DefaultNetworkVersion.ToNumberString() : DefaultLinearVersion.ToNumberString()); // version="100" nicht kompatibel mit jTrainGraph
             sElm = new XMLEntity("stations");
             tElm = new XMLEntity("trains");
             trElm = new XMLEntity("transitions");

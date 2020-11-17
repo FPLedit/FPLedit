@@ -164,12 +164,21 @@ namespace FPLedit
             TemplateDebugger.GetInstance().AttachDebugger(new GuiTemplateDebugger()); // Attach javascript debugger form
 #pragma warning restore CA2000
 
-            var origDefaultVersion = Timetable.DefaultLinearVersion;
+            // Load default versions for new timetable files from config.
+            var origLinearDefaultVersion = Timetable.DefaultLinearVersion;
             Timetable.DefaultLinearVersion = bootstrapper.FullSettings.GetEnum("core.default-file-format", Timetable.DefaultLinearVersion);
-            if (Timetable.DefaultLinearVersion.GetCompat() != TtVersionCompatType.ReadWrite)
+            if (Timetable.DefaultLinearVersion.GetCompat() != TtVersionCompatType.ReadWrite || Timetable.DefaultLinearVersion.GetFileType() != TtVersionFileType.Linear)
             {
-                bootstrapper.PreBootstrapWarnings.Add(T._("Gewählte Standardversion ist nicht R/W-kompatibel!"));
-                Timetable.DefaultLinearVersion = origDefaultVersion;
+                bootstrapper.PreBootstrapWarnings.Add(T._("Gewählte lineare Standardversion ist nicht R/W-kompatibel!"));
+                Timetable.DefaultLinearVersion = origLinearDefaultVersion;
+            }
+            
+            var origNetworkDefaultVersion = Timetable.DefaultLinearVersion;
+            Timetable.DefaultNetworkVersion = bootstrapper.FullSettings.GetEnum("core.default-network-file-format", Timetable.DefaultNetworkVersion);
+            if (Timetable.DefaultNetworkVersion.GetCompat() != TtVersionCompatType.ReadWrite || Timetable.DefaultNetworkVersion.GetFileType() != TtVersionFileType.Network)
+            {
+                bootstrapper.PreBootstrapWarnings.Add(T._("Gewählte Netzwerk-Standardversion ist nicht R/W-kompatibel!"));
+                Timetable.DefaultNetworkVersion = origNetworkDefaultVersion;
             }
             
             // Load logger before extensions

@@ -11,31 +11,31 @@ namespace FPLedit.Shared
     public enum TimetableVersion
     {
         // ReSharper disable InconsistentNaming
-        [TtVersionCompat(TtVersionCompatType.UpgradeOnly)]
+        [TtVersionCompat(TtVersionCompatType.UpgradeOnly, TtVersionFileType.Linear)]
         [JtgVersionCompat("2.02", TtVersionJtgCompat.OnlyLinear)]
         [JtgVersionCompat("2.03", TtVersionJtgCompat.OnlyLinear)]
         JTG2_x = 008,
 
-        [TtVersionCompat(TtVersionCompatType.UpgradeOnly)]
+        [TtVersionCompat(TtVersionCompatType.UpgradeOnly, TtVersionFileType.Linear)]
         [JtgVersionCompat("3.03", TtVersionJtgCompat.OnlyLinear)]
         JTG3_0 = 009,
 
-        [TtVersionCompat(TtVersionCompatType.ReadWrite)]
+        [TtVersionCompat(TtVersionCompatType.ReadWrite, TtVersionFileType.Linear)]
         [JtgVersionCompat("3.11", TtVersionJtgCompat.OnlyLinear)]
         JTG3_1 = 010,
         
-        [TtVersionCompat(TtVersionCompatType.ReadWrite)]
+        [TtVersionCompat(TtVersionCompatType.ReadWrite, TtVersionFileType.Linear)]
         [JtgVersionCompat("3.2*", TtVersionJtgCompat.OnlyLinear)]
         JTG3_2 = 011,
         
-        [TtVersionCompat(TtVersionCompatType.ReadWrite)]
+        [TtVersionCompat(TtVersionCompatType.ReadWrite, TtVersionFileType.Linear)]
         [JtgVersionCompat("3.3*", TtVersionJtgCompat.OnlyLinear)]
         JTG3_3 = 012,
 
-        [TtVersionCompat(TtVersionCompatType.ReadWrite)]
+        [TtVersionCompat(TtVersionCompatType.ReadWrite, TtVersionFileType.Network)]
         Extended_FPL = 100,
         
-        [TtVersionCompat(TtVersionCompatType.ReadWrite)]
+        [TtVersionCompat(TtVersionCompatType.ReadWrite, TtVersionFileType.Network)]
         Extended_FPL2 = 101,
         // ReSharper restore InconsistentNaming
     }
@@ -64,6 +64,8 @@ namespace FPLedit.Shared
 
         public static TtVersionCompatType GetCompat(this TimetableVersion version) => GetAttribute(version)?.CompatType ?? TtVersionCompatType.None;
         
+        public static TtVersionFileType GetFileType(this TimetableVersion version) => GetAttribute(version)?.FileType ?? TtVersionFileType.Linear;
+        
         //public static TtVersionJtgCompat? GetJtgCompat(this TimetableVersion version) => GetAttribute(version)?.JtgCompat;
 
         private static TtVersionCompatAttribute? GetAttribute(TimetableVersion version)
@@ -80,10 +82,12 @@ namespace FPLedit.Shared
     public class TtVersionCompatAttribute : Attribute
     {
         public TtVersionCompatType CompatType { get; }
+        public TtVersionFileType FileType { get; }
 
-        public TtVersionCompatAttribute(TtVersionCompatType compatType)
+        public TtVersionCompatAttribute(TtVersionCompatType compatType, TtVersionFileType fileType)
         {
             CompatType = compatType;
+            FileType = fileType;
         }
     }
     
@@ -109,6 +113,12 @@ namespace FPLedit.Shared
         None,
         UpgradeOnly,
         ReadWrite,
+    }
+    
+    public enum TtVersionFileType
+    {
+        Linear,
+        Network,
     }
 
     public enum TtVersionJtgCompat
