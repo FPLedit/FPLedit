@@ -50,14 +50,14 @@ namespace FPLedit.jTrainGraphStarter
         {
             bool jtgexists = File.Exists(jtgPathTextBox.Text) || ExecutableExists(jtgPathTextBox.Text);
             bool javaexists = ExecutableExists(javaPathTextBox.Text);
-            var compat = JtgShared.JtgCompatCheck(jtgPathTextBox.Text);
+            var compat = JtgShared.JtgCompatCheck(jtgPathTextBox.Text, out _);
 
-            if (!javaexists || !jtgexists || !compat.Compatible)
+            if (!javaexists || !jtgexists || !compat)
             {
                 var text = "";
                 if (!jtgexists)
                     text += T._("Die angegebene Datei für jTrainGraph wurde nicht gefunden. ");
-                if (!compat.Compatible)
+                if (!compat)
                     text += T._("Die gewählte Version von jTrainGraph ist wahrscheinlich nicht mit FPledit kompatibel. Bitte verwenden Sie jTrainGraph in einer kompatiblen Version! ");
                 if (!javaexists)
                     text += T._("Java wurde unter dem angegebenen Pfad nicht gefunden. ");
@@ -93,10 +93,10 @@ namespace FPLedit.jTrainGraphStarter
                 {
                     jtgPathTextBox.Text = ofd.FileName;
 
-                    var compat = JtgShared.JtgCompatCheck(jtgPathTextBox.Text);
-                    if (compat.Version.HasValue)
+                    JtgShared.JtgCompatCheck(jtgPathTextBox.Text, out var compatVersion);
+                    if (compatVersion.HasValue)
                         versionComboBox.SelectedValue = versionComboBox.DataStore.
-                            FirstOrDefault(i => ((VersionItem)i).Version == compat.Version);
+                            FirstOrDefault(i => ((VersionItem)i).Version == compatVersion);
                 }
             }
         }
@@ -110,7 +110,7 @@ namespace FPLedit.jTrainGraphStarter
             try
             {
                 var p = Process.Start(path);
-                p.Kill();
+                p!.Kill();
             }
             catch { exists = false; }
 

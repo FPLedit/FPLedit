@@ -123,14 +123,14 @@ namespace FPLedit.jTrainGraphStarter
             var javapath = pluginInterface.Settings.Get("jTGStarter.javapath", "java");
             var jtgPath = pluginInterface.Settings.Get("jTGStarter.jtgpath", JtgShared.DEFAULT_FILENAME);
 
-            var compat = JtgShared.JtgCompatCheck(jtgPath);
-            if (!compat.Compatible)
+            var compat = JtgShared.JtgCompatCheck(jtgPath, out var compatVersion);
+            if (!compat)
             {
                 MessageBox.Show(T._("Die gewählte Version von jTrainGraph ist wahrscheinlich nicht mit FPledit kompatibel. Bitte verwenden Sie jTrainGraph in einer kompatiblen Version!"),
                     T._("jTrainGraphStarter: Fehler"), MessageBoxType.Error);
                 return;
             }
-            if (pluginInterface.Timetable.Version != compat.Version && pluginInterface.Timetable.Type != TimetableType.Network)
+            if (pluginInterface.Timetable.Version != compatVersion && pluginInterface.Timetable.Type != TimetableType.Network)
             {
                 MessageBox.Show(T._("Die gewählte Version von jTrainGraph ist wahrscheinlich nicht mit der aktuellen Fahrplandatei kompatibel."),
                     T._("jTrainGraphStarter: Fehler"), MessageBoxType.Error);

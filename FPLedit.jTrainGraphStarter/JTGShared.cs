@@ -10,7 +10,7 @@ namespace FPLedit.jTrainGraphStarter
         public const string DEFAULT_FILENAME = "jTrainGraph_320.jar";
         public const TimetableVersion DEFAULT_TT_VERSION = TimetableVersion.JTG3_2;
         
-        public static JtgCompatibility JtgCompatCheck(string jTgPath)
+        public static bool JtgCompatCheck(string jTgPath, out TimetableVersion? fileVersion)
         {
             var versions = TimetableVersionExt.GetAllVersionInfos()
                 .Where(c => c.Compatibility == TtVersionCompatType.ReadWrite)
@@ -21,6 +21,8 @@ namespace FPLedit.jTrainGraphStarter
 
             var fn = Path.GetFileNameWithoutExtension(jTgPath);
 
+            fileVersion = null;
+
             var match = Regex.Match(fn, @"jTrainGraph_(\d)(\d{2})");
             if (match.Success && match.Groups.Count == 3)
             {
@@ -30,25 +32,16 @@ namespace FPLedit.jTrainGraphStarter
                 foreach (var (version, pattern) in versions)
                 {
                     var regex = new Regex(@$"^{pattern.Replace(".", "\\.").Replace("*", "\\d*")}$");
-                    if (regex.IsMatch($"{major}.{minor}")) 
-                        return new JtgCompatibility(true, version);
+                    if (regex.IsMatch($"{major}.{minor}"))
+                    {
+                        fileVersion = version;
+                        return true;
+                    }
                 }
                 
-                return new JtgCompatibility(false); // New major version, probably incompatible.
+                return false; // New major version, probably incompatible.
             }
-            return new JtgCompatibility(true); // No information available, so it is "compatibile".
-        }
-    }
-
-    internal readonly struct JtgCompatibility
-    {
-        public readonly bool Compatible;
-        public readonly TimetableVersion? Version;
-
-        public JtgCompatibility(bool compatible, TimetableVersion? version = null)
-        {
-            Compatible = compatible;
-            Version = compatible ? version : null;
+            return true; // No information available, so it is "compatibile".
         }
     }
 }
