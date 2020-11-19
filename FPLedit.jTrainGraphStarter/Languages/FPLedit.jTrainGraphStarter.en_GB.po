@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2020-10-11 13:32+0200\n"
-"PO-Revision-Date: 2020-10-11 22:41+0200\n"
+"POT-Creation-Date: 2020-11-19 13:38+0100\n"
+"PO-Revision-Date: 2020-11-19 13:39+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.2\n"
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-KeywordsList: _;SelectionName\n"
@@ -96,7 +96,7 @@ msgstr ""
 "The selected version of jTrainGraph is possibly incompatible with FPLedit. "
 "Please use jTrainGraph in a compatible version!"
 
-#: Plugin.cs:130 Plugin.cs:136 SettingsForm.xeto.cs:60
+#: Plugin.cs:130 Plugin.cs:136 SettingsForm.xeto.cs:65
 msgid "jTrainGraphStarter: Fehler"
 msgstr "jTrainGraphStarter: Error"
 
@@ -137,11 +137,11 @@ msgstr ""
 "Error while launching FPLedit: Maybe the configuration is invalid. See "
 "jTrainGraph > Settings"
 
-#: SettingsForm.xeto.cs:54
+#: SettingsForm.xeto.cs:59
 msgid "Die angegebene Datei für jTrainGraph wurde nicht gefunden. "
 msgstr "The specified jTrainGraph application file could not be found. "
 
-#: SettingsForm.xeto.cs:56
+#: SettingsForm.xeto.cs:61
 msgid ""
 "Die gewählte Version von jTrainGraph ist wahrscheinlich nicht mit FPledit "
 "kompatibel. Bitte verwenden Sie jTrainGraph in einer kompatiblen Version! "
@@ -149,47 +149,47 @@ msgstr ""
 "The selected version of jTrainGraph is possibly incompatible with FPLedit. "
 "Please use jTrainGraph in a compatible version! "
 
-#: SettingsForm.xeto.cs:58
+#: SettingsForm.xeto.cs:63
 msgid "Java wurde unter dem angegebenen Pfad nicht gefunden. "
 msgstr "Java could not be found at the spcified path. "
 
-#: SettingsForm.xeto.cs:59
+#: SettingsForm.xeto.cs:64
 msgid "Wollen Sie trotzdem fortfahren?"
 msgstr "Continue?"
 
-#: SettingsForm.xeto.cs:77
+#: SettingsForm.xeto.cs:82
 msgid "jTrainGraph-Programmdatei wählen"
 msgstr "Choose jTrainGraph application file"
 
-#: SettingsForm.xeto.cs:78
+#: SettingsForm.xeto.cs:83
 msgid "JAR-Dateien (*.jar)|*.jar"
 msgstr "JAR files (*.jar)|*.jar"
 
-#: SettingsForm.xeto.cs:133
+#: SettingsForm.xeto.cs:140
 msgid "jTrainGraphStarter Einstellungen"
 msgstr "Settings for jTrainGraphStarter"
 
-#: SettingsForm.xeto.cs:134
+#: SettingsForm.xeto.cs:141
 msgid "Schließen"
 msgstr "Close"
 
-#: SettingsForm.xeto.cs:136
+#: SettingsForm.xeto.cs:143
 msgid "Java-Pfad"
 msgstr "Path to java"
 
-#: SettingsForm.xeto.cs:137
+#: SettingsForm.xeto.cs:144
 msgid "Erkennen"
 msgstr "Detect"
 
-#: SettingsForm.xeto.cs:138
+#: SettingsForm.xeto.cs:145
 msgid "i.d.R: Windows: javaw.exe, Linux: java"
 msgstr "normally on windows javaw.exe, on Linux: java"
 
-#: SettingsForm.xeto.cs:140
+#: SettingsForm.xeto.cs:147
 msgid "Pfad zur jTrainGraph-Datei"
 msgstr "Path to the jTrainGraph application file"
 
-#: SettingsForm.xeto.cs:141
+#: SettingsForm.xeto.cs:148
 msgid ""
 "Anwendungsdatei von jTrainGraph (normalerweise jTrainGraph_xxx.jar/exe, "
 "wobei xxx eine kompatible Version von jTrainGraph ist)"
@@ -197,50 +197,51 @@ msgstr ""
 "Application file of jTrainGraph (normally jTrainGraph_xxx.jar/exe, where xxx "
 "is a compatible version of jTrainGraph)"
 
-#: SettingsForm.xeto.cs:142
+#: SettingsForm.xeto.cs:149
 msgid "Version von jTrainGraph"
 msgstr "Version of jTrainGraph"
 
-#: SettingsForm.xeto.cs:144
+#: SettingsForm.xeto.cs:151
 msgid "Weitere Hinweise und kompatible Versionen:"
 msgstr "Further notes and compatible versions:"
 
-#: SettingsForm.xeto.cs:145
+#: SettingsForm.xeto.cs:152
 msgid "https://fahrplan.manuelhu.de/bildfahrplaene/"
 msgstr ""
 
-#: SettingsForm.xeto.cs:146
+#: SettingsForm.xeto.cs:153
 msgid "Dokumentation zu diesem Plugin"
 msgstr "Documentation of this plugin"
 
-#: SettingsForm.xeto.cs:148
+#: SettingsForm.xeto.cs:155
 msgid "Wenn Sie jTrainGraph noch gar nicht installiert haben:"
 msgstr "To install jTraingraph"
 
-#: SettingsForm.xeto.cs:149
+#: SettingsForm.xeto.cs:156
 msgid "https://jtraingraph.de"
 msgstr "https://jtraingraph.de/index.php?language=en"
 
-#: SettingsForm.xeto.cs:150
+#: SettingsForm.xeto.cs:157
 msgid "jTrainGraph herunterladen"
 msgstr "Download jTrainGraph"
 
-#: SettingsForm.xeto.cs:151
+#: SettingsForm.xeto.cs:158
 msgid ""
 "Auch wenn jTrainGraph in der *.exe-Variante verwendet wird bitte den Java-"
 "Pfad ausfüllen!"
 msgstr ""
 "Please enter the java path, despite using the exe-Version of jTrainGraph!"
 
-#: SettingsForm.xeto.cs:152
+#: SettingsForm.xeto.cs:159
 msgid ""
 "Bitte verwenden Sie, wenn möglich, immer die aktuelleste jTrainGraph-Version!"
 msgstr "Please use always the latest version of jTrainGraph!"
 
-#: SettingsForm.xeto.cs:153
-msgid "Kompatible Versionen sind 2.02, 2.03, 3.03, 3.11"
-msgstr "Compatible versions are 2.02, 2.03, 3.03 and 3.11"
+#: SettingsForm.xeto.cs:160
+#, csharp-format
+msgid "Kompatible Versionen sind {0}"
+msgstr "Compatible versions are {0}"
 
-#: SettingsForm.xeto.cs:155
+#: SettingsForm.xeto.cs:162
 msgid "Warnhinweis nicht bei jedem jTrainGraph-Start anzeigen"
 msgstr "Do not show warning on each start of jTrainGraph"
