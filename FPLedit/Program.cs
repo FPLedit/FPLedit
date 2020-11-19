@@ -164,11 +164,21 @@ namespace FPLedit
             TemplateDebugger.GetInstance().AttachDebugger(new GuiTemplateDebugger()); // Attach javascript debugger form
 #pragma warning restore CA2000
 
+            // Reset default file format versions on first run.
+            var lastRunVersion = bootstrapper.FullSettings.Get<string>("updater.lastrun-version");
+            if (!string.IsNullOrEmpty(lastRunVersion) && lastRunVersion != VersionInformation.Current.DisplayVersion)
+            {
+                bootstrapper.FullSettings.SetEnum("core.default-network-file-format", Timetable.PRESET_NETWORK_VERSION);
+                bootstrapper.FullSettings.SetEnum("core.default-file-format", Timetable.PRESET_LINEAR_VERSION);
+                bootstrapper.PreBootstrapWarnings.Add(T._("Die Standard-Dateiformatversionen wurden zurückgesetzt, da Sie die Version von FPLedit aktualisiert haben. Diese Einstellung kann unter Einstellungen > Dateiversionen geändert werden."));
+            }
+            bootstrapper.FullSettings.Set("updater.lastrun-version", VersionInformation.Current.DisplayVersion);
+            
             // Load default versions for new timetable files from config.
-            var linearDeafultVersion = bootstrapper.FullSettings.GetEnum("core.default-file-format", Timetable.DefaultLinearVersion);
-            var linCompat = linearDeafultVersion.GetVersionCompat();
+            var linearDefaultVersion = bootstrapper.FullSettings.GetEnum("core.default-file-format", Timetable.DefaultLinearVersion);
+            var linCompat = linearDefaultVersion.GetVersionCompat();
             if (linCompat.Compatibility == TtVersionCompatType.ReadWrite && linCompat.Type == TimetableType.Linear)
-                Timetable.DefaultLinearVersion = linearDeafultVersion;
+                Timetable.DefaultLinearVersion = linearDefaultVersion;
             else
                 bootstrapper.PreBootstrapWarnings.Add(T._("Gewählte lineare Standardversion ist nicht R/W-kompatibel!"));
 
@@ -178,7 +188,7 @@ namespace FPLedit
                 Timetable.DefaultNetworkVersion = networkDefaultVersion;
             else 
                 bootstrapper.PreBootstrapWarnings.Add(T._("Gewählte Netzwerk-Standardversion ist nicht R/W-kompatibel!"));
-            
+
             // Load logger before extensions
             var logger = new MultipleLogger();
             if (bootstrapper.FullSettings.Get("log.enable-file", false))

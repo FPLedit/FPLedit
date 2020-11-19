@@ -14,8 +14,11 @@ namespace FPLedit.Shared
     {
         public const int LINEAR_ROUTE_ID = 0;
         public const int UNASSIGNED_ROUTE_ID = -1;
-        public static TimetableVersion DefaultLinearVersion { get; set; } = TimetableVersion.JTG3_2;
-        public static TimetableVersion DefaultNetworkVersion { get; set; } = TimetableVersion.Extended_FPL;
+        
+        public const TimetableVersion PRESET_LINEAR_VERSION = TimetableVersion.JTG3_2;
+        public const TimetableVersion PRESET_NETWORK_VERSION = TimetableVersion.Extended_FPL;
+        public static TimetableVersion DefaultLinearVersion { get; set; } = PRESET_LINEAR_VERSION;
+        public static TimetableVersion DefaultNetworkVersion { get; set; } = PRESET_NETWORK_VERSION;
 
         private readonly XMLEntity sElm, tElm, trElm, vElm;
 
@@ -89,7 +92,7 @@ namespace FPLedit.Shared
             transitions = new List<Transition>();
             Initialized = true;
 
-            SetAttribute("version", type == TimetableType.Network ? DefaultNetworkVersion.ToNumberString() : DefaultLinearVersion.ToNumberString());
+            SetAttribute("version", (type == TimetableType.Network ? DefaultNetworkVersion : DefaultLinearVersion).ToNumberString());
             sElm = new XMLEntity("stations");
             tElm = new XMLEntity("trains");
             trElm = new XMLEntity("transitions");
