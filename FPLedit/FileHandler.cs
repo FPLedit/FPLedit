@@ -26,7 +26,7 @@ namespace FPLedit
         private Timetable timetable;
 
         private readonly BinaryCacheFile cache;
-        
+
         private bool asyncBlockingOperation;
 
         public bool AsyncBlockingOperation
@@ -52,13 +52,14 @@ namespace FPLedit
                     FileStateChanged?.Invoke(this, new FileStateChangedEventArgs(FileState));
             }
         }
+
         public FileState FileState { get; }
 
         public ICacheFile Cache => cache;
 
         public event EventHandler FileOpened;
         public event EventHandler<FileStateChangedEventArgs> FileStateChanged;
-        public event EventHandler<bool> AsyncOperationStateChanged; 
+        public event EventHandler<bool> AsyncOperationStateChanged;
 
         public FileHandler(IPluginInterface pluginInterface, ILastFileHandler lfh, UndoManager undo)
         {
@@ -81,7 +82,7 @@ namespace FPLedit
             openFileDialog.AddLegacyFilter(open.Filter);
 
             SetLastPath(pluginInterface.Settings.Get("files.lastpath", ""));
-            
+
             cache = new BinaryCacheFile();
         }
 
@@ -107,7 +108,7 @@ namespace FPLedit
         {
             if (!NotifyIfAsyncOperationInProgress())
                 return;
-            
+
             var importers = pluginInterface.GetRegistered<IImport>();
 
             if (importers.Length == 0)
@@ -125,7 +126,7 @@ namespace FPLedit
             {
                 IImport import = importers[importFileDialog.CurrentFilterIndex];
                 pluginInterface.Logger.Info(T._("Importiere Datei {0}", importFileDialog.FileName));
-                
+
                 InternalCloseFile();
 
                 var tsk = import.GetAsyncSafeImport(importFileDialog.FileName, pluginInterface);
@@ -144,12 +145,12 @@ namespace FPLedit
                         if (FileState.RevisionCounter != rev || FileState.FileNameRevisionCounter != frev)
                             if (!NotifyIfUnsaved(true)) // Ask again
                                 return;
-                        
+
                         undo.ClearHistory();
                         OpenWithVersionCheck(t.Result, importFileDialog.FileName);
                     });
                 }, null, TaskScheduler.Default);
-                
+
                 // Start async operation, but we should not be able to start any other file operation in between.
                 AsyncBlockingOperation = true;
                 tsk.Start();
@@ -194,7 +195,7 @@ namespace FPLedit
         #endregion
 
         #region Open / Save / New
-        
+
         public void Open()
         {
             if (!NotifyIfAsyncOperationInProgress())
@@ -217,7 +218,7 @@ namespace FPLedit
             InternalCloseFile();
 
             pluginInterface.Logger.Info(T._("Öffne Datei {0}", filename));
-            
+
             // Load sidecar cache file.
             cache.Clear();
             var cacheFile = filename + "-cache";
@@ -232,9 +233,9 @@ namespace FPLedit
                         cache.Read(stream, hash);
                 }
             }
-            
+
             var (rev, frev) = (FileState.RevisionCounter, FileState.FileNameRevisionCounter);
-            
+
             var tsk = open.GetAsyncSafeImport(filename, pluginInterface);
             tsk.ContinueWith((Task<Timetable> t, object o) =>
             {
@@ -257,7 +258,7 @@ namespace FPLedit
                     OpenWithVersionCheck(t.Result, filename);
                 });
             }, null, TaskScheduler.Default);
-                
+
             // Start async operation, but we should not be able to start any other file operation in between.
             AsyncBlockingOperation = true;
             if (doAsync)
@@ -268,12 +269,12 @@ namespace FPLedit
 
         public void Save(bool forceSaveAs)
             => Save(forceSaveAs, true);
-        
+
         private void Save(bool forceSaveAs, bool doAsync)
         {
             if (!NotifyIfAsyncOperationInProgress())
                 return;
-            
+
             string filename = FileState.FileName;
 
             bool saveAs = forceSaveAs || filename == null || filename == "" || Path.GetExtension(filename) != ".fpl";
@@ -292,15 +293,15 @@ namespace FPLedit
 
         private void InternalSave(string filename, bool doAsync)
         {
-            if (!filename.EndsWith(".fpl"))
+            if (!filename.EndsWith(".fpl", StringComparison.InvariantCulture))
                 filename += ".fpl";
 
             var (rev, frev) = (FileState.RevisionCounter, FileState.FileNameRevisionCounter);
 
             pluginInterface.Logger.Info(T._("Speichere Datei {0}", filename));
-            
+
             var clone = Timetable.Clone();
-            
+
             var tsk = save.GetAsyncSafeExport(clone, filename, pluginInterface);
             tsk.ContinueWith((t, o) =>
             {
@@ -353,36 +354,36 @@ namespace FPLedit
                 return;
             if (!NotifyIfUnsaved())
                 return;
-            
+
             Timetable = new Timetable(type);
             FileState.Opened = true;
             FileState.Saved = false;
             FileState.FileName = null;
             undo.ClearHistory();
             cache.Clear();
-            
+
             pluginInterface.Logger.Info(T._("Neue Datei erstellt"));
             FileOpened?.Invoke(this, null);
         }
-        
+
         private void InternalCloseFile()
         {
             Timetable = null;
             FileState.Opened = false;
             FileState.Saved = false;
             FileState.FileName = null;
-            
+
             cache.Clear();
             undo.ClearHistory();
         }
-        
+
         public void CloseFile()
         {
             if (!NotifyIfAsyncOperationInProgress())
                 return;
             if (!NotifyIfUnsaved())
                 return;
-            
+
             InternalCloseFile();
         }
 
@@ -411,7 +412,7 @@ namespace FPLedit
         {
             if (!NotifyIfAsyncOperationInProgress())
                 return;
-            
+
             IExport exp = (Timetable.Type == TimetableType.Linear) ? (IExport) new NetworkExport() : new LinearExport();
             string orig = (Timetable.Type == TimetableType.Linear) ? T._("Linear-Fahrplan") : T._("Netzwerk-Fahrplan");
             string dest = (Timetable.Type == TimetableType.Linear) ? T._("Netzwerk-Fahrplan") : T._("Linear-Fahrplan");
@@ -440,13 +441,17 @@ namespace FPLedit
             var compat = tt?.Version.GetVersionCompat().Compatibility;
             if (tt == null || compat == TtVersionCompatType.ReadWrite)
             {
+                // Get default version based on timetable type.
+                var defaultVersion = Timetable.DefaultLinearVersion;
+                if (tt?.Type == TimetableType.Network)
+                    defaultVersion = Timetable.DefaultNetworkVersion;
                 // There is an optional timetable version update available.
-                if (tt != null && Timetable.DefaultLinearVersion.CompareTo(tt.Version) > 0 && PerformTimetableUpgrade(tt, true))
+                if (tt != null && defaultVersion.CompareTo(tt.Version) > 0 && PerformTimetableUpgrade(tt, true))
                     return;
-                
+
                 // this file is in a supported version (or non-existant).
                 Timetable = tt;
-                
+
                 FileState.Opened = tt != null;
                 FileState.Saved = tt != null;
                 FileState.FileName = tt != null ? filename : null;
@@ -471,16 +476,20 @@ namespace FPLedit
         private bool PerformTimetableUpgrade(Timetable tt, bool optional)
         {
             string newFn = null;
-            var exp = new BackwardCompat.LinearUpgradeExport();
+            // Exporter based on timetable type.
+            IExport exp;
+            if (tt.Type == TimetableType.Linear)
+                exp = new BackwardCompat.LinearUpgradeExport();
+            else
+                exp = new BackwardCompat.NetworkUpgradeExport();
 
             Application.Instance.Invoke(() =>
             {
-                var text = optional ? 
-                    T._("In einer neueren Dateiformatversion stehen mehr Funktionen zur Verfügung, die Aktualisierung ist aber nicht zwingend.") :
-                    T._("Dieses Dateiformat kann von FPLedit nur noch auf neuere Versionen aktualisiert werden.");
-                var res = MessageBox.Show(T._("Diese Fahrplandatei ist in einem alten Dateinformat erstellt worden. {0}" +
-                    " Soll die Datei jetzt aktualisiert werden? ACHTUNG: Die Datei kann danach nur noch mit der aktuellsten Version von jTrainGraph bearbeitet werden!", text), "FPLedit",
-                    MessageBoxButtons.YesNo, MessageBoxType.Question);
+                var text = optional ? T._("In einer neueren Dateiformatversion stehen mehr Funktionen zur Verfügung, die Aktualisierung ist aber nicht zwingend.") : T._("Dieses Dateiformat kann von FPLedit nur noch auf neuere Versionen aktualisiert werden.");
+                text = T._("Diese Fahrplandatei ist in einem alten Dateinformat erstellt worden. {0} Soll die Datei jetzt aktualisiert werden?", text);
+                if (tt.Type == TimetableType.Linear)
+                    text += T._("ACHTUNG: Die Datei kann danach nur noch mit der aktuellsten Version von jTrainGraph bearbeitet werden!");
+                var res = MessageBox.Show(text, "FPLedit", MessageBoxButtons.YesNo, MessageBoxType.Question);
                 if (res == DialogResult.Yes)
                 {
                     using var sfd = new SaveFileDialog();

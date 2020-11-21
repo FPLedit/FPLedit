@@ -12,12 +12,12 @@ namespace FPLedit.BackwardCompat
 
         public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[] flags = null)
         {
+            if (tt.Version.GetVersionCompat().Type != TimetableType.Linear)
+                throw new Exception(T._("Nur lineare Fahrplandateien können mit {0} aktualisiert werden!", nameof(LinearUpgradeExport)));
             if (tt.Version.Compare(TimetableVersion.JTG3_3) >= 0)
                 throw new Exception(T._("Nur Fahrpläne mit einer älteren Dateiversion können aktualisiert werden."));
             if (tt.Version.CompareTo(TimetableVersion.JTG2_x) < 0)
                 throw new Exception(T._("Dateiversion ist zu alt, um aktualisiert zu werden!"));
-            if (tt.Version.GetVersionCompat().Type != TimetableType.Linear)
-                throw new Exception(T._("Nur lineare Fahrplandateien können mit {0} aktualisiert werden!", nameof(LinearUpgradeExport)));
 
             var origVersion = tt.Version;
 
