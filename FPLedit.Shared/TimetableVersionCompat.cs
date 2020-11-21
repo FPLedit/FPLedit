@@ -3,6 +3,7 @@ namespace FPLedit.Shared
     /// <summary>
     /// Contains information about the compatibility of a given file version with FPLedit as well as jTrainGraph.
     /// </summary>
+    [Templating.TemplateSafe]
     public readonly struct TimetableVersionCompat
     {
         public TimetableVersion Version { get; }
@@ -23,6 +24,7 @@ namespace FPLedit.Shared
     /// <summary>
     /// Specifies, whether a given file version is compatible with FPLedit.
     /// </summary>
+    [Templating.TemplateSafe]
     public enum TtVersionCompatType
     {
         /// <summary>
@@ -43,6 +45,7 @@ namespace FPLedit.Shared
     /// Specifies, whether a given file version is compatible with jTrainGraph.
     /// </summary>
     /// <remarks>There is no value for encoding "No compatibility", as this can be achieved by just omitting the compatibility entry.</remarks>
+    [Templating.TemplateSafe]
     public enum TtVersionJtgCompat
     {
         /// <summary>

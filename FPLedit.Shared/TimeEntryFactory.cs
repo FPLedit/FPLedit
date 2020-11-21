@@ -3,6 +3,7 @@ using FPLedit.Shared.Helpers;
 
 namespace FPLedit.Shared
 {
+    [Templating.TemplateSafe]
     public sealed class TimeEntryFactory
     {
         public TimeNormalizer Normalizer { get; }
