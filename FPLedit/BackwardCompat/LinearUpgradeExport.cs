@@ -6,11 +6,9 @@ using System.Linq;
 
 namespace FPLedit.BackwardCompat
 {
-    internal sealed class LinearUpgradeExport : IExport
+    internal sealed class LinearUpgradeExport : BaseUpgradeExport
     {
-        public string Filter => T._("Fahrplan Dateien (*.fpl)|*.fpl");
-
-        public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[] flags = null)
+        public override bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null)
         {
             if (tt.Version.GetVersionCompat().Type != TimetableType.Linear)
                 throw new Exception(T._("Nur lineare Fahrplandateien können mit {0} aktualisiert werden!", nameof(LinearUpgradeExport)));
@@ -56,18 +54,7 @@ namespace FPLedit.BackwardCompat
             
             // UPGRADE 011 --> 012 (CURRENT)
             if (origVersion.CompareTo(TimetableVersion.JTG3_3) < 0)
-            {
-                // Update some properties to time entry format.
-                var properties = new[] { "dTt", "odBT", "hlI", "mpP", "sLine" };
-                foreach (var prop in properties)
-                {
-                    if (xclone.Attributes.TryGetValue(prop, out var v) && int.TryParse(v, out var vi))
-                    {
-                        var te = new TimeEntry(0, vi);
-                        xclone.SetAttribute(prop, te.ToString());
-                    }
-                }
-            }
+                UpgradeTimePrecision(xclone);
 
             // UPGRADE GENERAL
             var ttclone = new Timetable(xclone);

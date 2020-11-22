@@ -6,11 +6,9 @@ using System.Linq;
 
 namespace FPLedit.BackwardCompat
 {
-    internal sealed class NetworkUpgradeExport : IExport
+    internal sealed class NetworkUpgradeExport : BaseUpgradeExport
     {
-        public string Filter => T._("Fahrplan Dateien (*.fpl)|*.fpl");
-
-        public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[] flags = null)
+        public override bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null)
         {
             if (tt.Version.GetVersionCompat().Type != TimetableType.Network)
                 throw new Exception(T._("Nur Ntzwerk-Fahrplandateien können mit {0} aktualisiert werden!", nameof(NetworkUpgradeExport)));
@@ -26,18 +24,7 @@ namespace FPLedit.BackwardCompat
 
             // UPGRADE 100 --> 101 (CURRENT)
             if (origVersion.CompareTo(TimetableVersion.Extended_FPL2) < 0)
-            {
-                // Update some properties to time entry format.
-                var properties = new[] { "dTt", "odBT", "hlI", "mpP", "sLine" };
-                foreach (var prop in properties)
-                {
-                    if (xclone.Attributes.TryGetValue(prop, out var v) && int.TryParse(v, out var vi))
-                    {
-                        var te = new TimeEntry(0, vi);
-                        xclone.SetAttribute(prop, te.ToString());
-                    }
-                }
-            }
+                UpgradeTimePrecision(xclone);
 
             // UPGRADE GENERAL
             var ttclone = new Timetable(xclone);

@@ -90,9 +90,9 @@ namespace FPLedit.Shared.Rendering
         #endregion
 
         #region Conversion from/to string
-        public static MFont Parse(string def)
+        public static MFont Parse(string? def)
         {
-            if (def == null || !def.StartsWith("font(") || !def.EndsWith(")"))
+            if (def == null || !def.StartsWith("font(", StringComparison.InvariantCulture) || !def.EndsWith(")", StringComparison.InvariantCulture))
                 return Create(Eto.Drawing.FontFamilies.SansFamilyName, 9); // Keine valide Font-Definition gefunden
 
             var parts = def.Substring(5, def.Length - 6).Split(';');
