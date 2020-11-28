@@ -94,7 +94,7 @@ namespace FPLedit.Editor.Trains
             editor.Initialize(Train.ParentTimetable, Train);
 
             transitionDropDown.ItemTextBinding = Binding.Property<Train, string>(t => t.TName);
-            transitionDropDown.DataStore = tt.Trains.Where(t => t != Train).OrderBy(t => t.TName);
+            transitionDropDown.DataStore = tt.Trains.Where(t => t != Train).OrderBy(t => t.TName).ToArray();
             
             var transitions = tt.GetEditableTransitions(Train);
             if (transitions.Count == 1)
@@ -203,7 +203,7 @@ namespace FPLedit.Editor.Trains
         }
 
         private IEnumerable<ListItem> GetAllItems(ITimetable timetable, Func<ITrain, string> func)
-            => timetable.Trains.Select(func).Distinct().Where(s => s != "").OrderBy(s => s).Select(s => new ListItem { Text = s });
+            => timetable.Trains.Select(func).Distinct().Where(s => s != "").OrderBy(s => s).Select(s => new ListItem { Text = s }).ToArray();
         
         private static class L
         {

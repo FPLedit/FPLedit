@@ -76,7 +76,7 @@ namespace FPLedit.Editor.Rendering
             var prev = route.ElementAtOrDefault(staIdx - 1);
             var next = route.ElementAtOrDefault(staIdx + 1);
 
-            bool disableRight = tt.Type == TimetableType.Network && next == null; //TODO: Why only disable on network?
+            bool disableRight = tt.Type == TimetableType.Network && next == null;
             bool disableLeft = tt.Type == TimetableType.Network && prev == null;
 
             // Richtungsangaben zeichnen
