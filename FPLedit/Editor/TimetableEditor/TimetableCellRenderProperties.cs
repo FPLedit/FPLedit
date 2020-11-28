@@ -38,7 +38,7 @@ namespace FPLedit.Editor.TimetableEditor
             var ardp = data.ArrDeps[sta];
 
             if (!data.HasError(sta, arrival))
-                Text = time(ardp) != default ? time(ardp).ToShortTimeString() : "";
+                Text = time(ardp) != default ? time(ardp).ToTimeString(ardp.ParentTimetable!.TimePrecisionSeconds) : "";
             else
                 Text = data.GetErrorText(sta, arrival);
 

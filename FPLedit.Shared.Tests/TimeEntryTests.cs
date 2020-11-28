@@ -252,42 +252,42 @@ namespace FPLedit.Shared.Tests
             
             timeEntry = new TimeEntry(10, 60);
             Assert.AreEqual("11:00", timeEntry.ToString());
-            Assert.AreEqual("11:00", timeEntry.ToShortTimeString());
+            Assert.AreEqual("11:00", timeEntry.ToTimeString(false));
             
             timeEntry = new TimeEntry(10, 59);
             Assert.AreEqual("10:59", timeEntry.ToString());
-            Assert.AreEqual("10:59", timeEntry.ToShortTimeString());
+            Assert.AreEqual("10:59", timeEntry.ToTimeString(false));
             
             timeEntry = new TimeEntry(10, 61);
             Assert.AreEqual("11:01", timeEntry.ToString());
-            Assert.AreEqual("11:01", timeEntry.ToShortTimeString());
+            Assert.AreEqual("11:01", timeEntry.ToTimeString(false));
             
             timeEntry = new TimeEntry(24, 0);
             Assert.AreEqual("24:00", timeEntry.ToString());
-            Assert.AreEqual("24:00", timeEntry.ToShortTimeString());
+            Assert.AreEqual("24:00", timeEntry.ToTimeString(false));
             
             timeEntry = new TimeEntry(24, 61);
             Assert.AreEqual("25:01", timeEntry.ToString());
-            Assert.AreEqual("25:01", timeEntry.ToShortTimeString());
+            Assert.AreEqual("25:01", timeEntry.ToTimeString(false));
             
             timeEntry = new TimeEntry(0, 1440);
             Assert.AreEqual("24:00", timeEntry.ToString());
-            Assert.AreEqual("24:00", timeEntry.ToShortTimeString());
+            Assert.AreEqual("24:00", timeEntry.ToTimeString(false));
             
             Assert.AreEqual("00:00", TimeEntry.Zero.ToString());
-            Assert.AreEqual("00:00", TimeEntry.Zero.ToShortTimeString());
+            Assert.AreEqual("00:00", TimeEntry.Zero.ToTimeString(false));
             
             timeEntry = new TimeEntry(10, 59, 0, 10);
             Assert.AreEqual("10:59,10", timeEntry.ToString());
-            Assert.AreEqual("10:59", timeEntry.ToShortTimeString());
+            Assert.AreEqual("10:59", timeEntry.ToTimeString(false));
             
             timeEntry = new TimeEntry(10, 59, 10, 0);
             Assert.AreEqual("10:59:10", timeEntry.ToString());
-            Assert.AreEqual("10:59", timeEntry.ToShortTimeString());
+            Assert.AreEqual("10:59", timeEntry.ToTimeString(false));
             
             timeEntry = new TimeEntry(10, 59, 0, 10);
             Assert.AreEqual("10:59", timeEntry.ToTimeString(false));
-            Assert.AreEqual("10:59", timeEntry.ToShortTimeString());
+            Assert.AreEqual("10:59", timeEntry.ToTimeString(false));
         }
 
         [Test]

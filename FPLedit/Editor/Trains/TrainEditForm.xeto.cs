@@ -51,8 +51,8 @@ namespace FPLedit.Editor.Trains
             resetTransitionButton.TextColor = Colors.Red;
 
             linkGridView.AddColumn<TrainLink>(tl => tl.TrainCount.ToString(), T._("Anzahl"));
-            linkGridView.AddColumn<TrainLink>(tl => new TimeEntry(0, tl.TimeOffset).ToShortTimeString(), T._("Erster Abstand"));
-            linkGridView.AddColumn<TrainLink>(tl => new TimeEntry(0, tl.TimeDifference).ToShortTimeString(), T._("Zeitdifferenz"));
+            linkGridView.AddColumn<TrainLink>(tl => new TimeEntry(0, tl.TimeOffset).ToTimeString(Train.ParentTimetable.TimePrecisionSeconds), T._("Erster Abstand"));
+            linkGridView.AddColumn<TrainLink>(tl => new TimeEntry(0, tl.TimeDifference).ToTimeString(Train.ParentTimetable.TimePrecisionSeconds), T._("Zeitdifferenz"));
         }
 
         public TrainEditForm(Train train) : this(train.ParentTimetable)

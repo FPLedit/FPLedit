@@ -79,14 +79,14 @@ namespace FPLedit.Shared
 
         protected void SetNotEmptyTimeAttribute(string key, TimeEntry time)
         {
-            var t = time.ToShortTimeString();
+            var t = time.ToTimeString(ParentTimetable!.TimePrecisionSeconds);
             SetAttribute(key, t != "00:00" ? t : "");
         }
 
         protected TimeEntry GetTimeAttributeValue(string key)
         {
             string val = GetAttribute(key, "")!;
-            ParentTimetable.TimeFactory.TryParse(val, out var ts);
+            ParentTimetable!.TimeFactory.TryParse(val, out var ts);
             return ts;
         }
 
