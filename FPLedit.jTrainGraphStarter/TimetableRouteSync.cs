@@ -1,6 +1,5 @@
 ﻿using FPLedit.Shared;
 using FPLedit.Shared.Filetypes;
-using FPLedit.Shared.Rendering;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,6 +8,7 @@ namespace FPLedit.jTrainGraphStarter
     internal sealed class TimetableRouteSync : BaseConverterFileType
     {
         private readonly Timetable orig;
+        private readonly TimetableVersion origVersion;
         private readonly int routeIndex;
 
         private readonly List<ITrain> trainMap;
@@ -16,6 +16,7 @@ namespace FPLedit.jTrainGraphStarter
         public TimetableRouteSync(Timetable tt, int routeIndex)
         {
             orig = tt;
+            origVersion = tt.Version;
             this.routeIndex = routeIndex;
             trainMap = new List<ITrain>();
         }
@@ -113,7 +114,7 @@ namespace FPLedit.jTrainGraphStarter
         public void SyncBack(Timetable singleRoute)
         {
             orig.Attributes = AttrDiff(orig, singleRoute);
-            orig.SetVersion(TimetableVersion.Extended_FPL); // Wieder in Netzwerk-Modus wechseln //TODO: Respect default / original version.
+            orig.SetVersion(origVersion); // Wieder in Netzwerk-Modus wechseln
 
             foreach (var sta in orig.Stations)
             {

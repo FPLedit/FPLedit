@@ -15,6 +15,12 @@ namespace FPLedit.NonDefaultFiletypes
             if (tt.Type == TimetableType.Network)
                 throw new TimetableTypeNotSupportedException(TimetableType.Network, "convert to network");
 
+            if (tt.Version.CompareTo(TimetableVersion.JTG3_3) <= 0)
+            {
+                pluginInterface.Logger.Error(T._("Bitte zuerst die lineare Strecke auf die neueste Version aktualisieren!"));
+                return false;
+            }
+
             var clone = tt.Clone();
 
             var trainPaths = new Dictionary<ITrain, TrainPathData>();
@@ -37,7 +43,7 @@ namespace FPLedit.NonDefaultFiletypes
             foreach (var action in actions)
                 action.ToNetwork(clone);
 
-            clone.SetVersion(TimetableVersion.Extended_FPL); //TODO: Change default version
+            clone.SetVersion(TimetableVersion.Extended_FPL2);
 
             foreach (var train in clone.Trains)
             {
