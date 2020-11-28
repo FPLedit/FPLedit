@@ -34,8 +34,8 @@ namespace FPLedit.Shared
         public TimetableVersion Version => (TimetableVersion) GetAttribute("version", 0);
         public TimetableType Type => Version.GetVersionCompat().Type;
 
-        public bool TimePrecisionSeconds => (Type == TimetableType.Linear && Version.Compare(TimetableVersion.JTG3_3) < 0) ||
-                                            (Type == TimetableType.Network && Version.Compare(TimetableVersion.Extended_FPL) < 0);
+        public bool TimePrecisionSeconds => (Type == TimetableType.Linear && Version.Compare(TimetableVersion.JTG3_3) >= 0) ||
+                                            (Type == TimetableType.Network && Version.Compare(TimetableVersion.Extended_FPL2) >= 0);
 
         private readonly TimeEntryFactory timeFactoryCache = new TimeEntryFactory(false);
         /// <inheritdoc />
@@ -43,6 +43,7 @@ namespace FPLedit.Shared
         {
             get
             {
+                timeFactoryCache.AllowSeconds = TimePrecisionSeconds;
                 timeFactoryCache.Normalizer.AllowSeconds = TimePrecisionSeconds;
                 return timeFactoryCache;
             }

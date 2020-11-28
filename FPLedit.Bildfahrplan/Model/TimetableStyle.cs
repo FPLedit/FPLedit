@@ -26,7 +26,7 @@ namespace FPLedit.Bildfahrplan.Model
                 }
                 return tt.TimeFactory.Parse(tt.GetAttribute("tMin", "00:00")); //TODO: Other default?
             }
-            set => tt.SetAttribute("tMin", tt.TimePrecisionSeconds ? value.ToString() : value.GetTotalMinutes().ToString());
+            set => tt.SetAttribute("tMin", tt.TimePrecisionSeconds ? value.ToTimeString() : value.GetTotalMinutes().ToString());
         }
 
         public TimeEntry EndTime
@@ -42,7 +42,7 @@ namespace FPLedit.Bildfahrplan.Model
                 }
                 return tt.TimeFactory.Parse(tt.GetAttribute("tMax", "00:00")); //TODO: Other default?
             }
-            set => tt.SetAttribute("tMax", tt.TimePrecisionSeconds ? value.ToString() : value.GetTotalMinutes().ToString());
+            set => tt.SetAttribute("tMax", tt.TimePrecisionSeconds ? value.ToTimeString() : value.GetTotalMinutes().ToString());
         }
 
         public bool DisplayKilometre

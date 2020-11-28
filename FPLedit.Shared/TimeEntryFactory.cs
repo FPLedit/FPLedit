@@ -6,7 +6,7 @@ namespace FPLedit.Shared
     [Templating.TemplateSafe]
     public sealed class TimeEntryFactory
     {
-        public bool AllowSeconds { get; }
+        public bool AllowSeconds { get; set; }
         public TimeNormalizer Normalizer { get; }
 
         public TimeEntryFactory(bool allowSeconds)
