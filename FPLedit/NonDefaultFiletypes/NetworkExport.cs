@@ -37,7 +37,7 @@ namespace FPLedit.NonDefaultFiletypes
             foreach (var action in actions)
                 action.ToNetwork(clone);
 
-            clone.SetAttribute("version", TimetableVersion.Extended_FPL.ToNumberString());
+            clone.SetVersion(TimetableVersion.Extended_FPL); //TODO: Change default version
 
             foreach (var train in clone.Trains)
             {

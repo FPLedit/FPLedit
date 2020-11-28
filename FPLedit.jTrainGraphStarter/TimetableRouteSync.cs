@@ -101,7 +101,7 @@ namespace FPLedit.jTrainGraphStarter
             foreach (var sta in copy.Stations)
                 ConvertStationNetToLin(sta, routeIndex);
 
-            copy.SetAttribute("version", targetVersion.ToNumberString()); // Wir gehen aus dem Extended-Modus raus
+            copy.SetVersion(targetVersion); // Wir gehen aus dem Extended-Modus raus
 
             return copy;
         }
@@ -113,7 +113,7 @@ namespace FPLedit.jTrainGraphStarter
         public void SyncBack(Timetable singleRoute)
         {
             orig.Attributes = AttrDiff(orig, singleRoute);
-            orig.SetAttribute("version", TimetableVersion.Extended_FPL.ToNumberString()); // Wieder in Netzwerk-Modus wechseln
+            orig.SetVersion(TimetableVersion.Extended_FPL); // Wieder in Netzwerk-Modus wechseln //TODO: Respect default / original version.
 
             foreach (var sta in orig.Stations)
             {

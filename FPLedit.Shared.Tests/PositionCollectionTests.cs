@@ -66,7 +66,7 @@ namespace FPLedit.Shared.Tests
         public void LinearJtg2WriteTest()
         {
             var tt = new Timetable(TimetableType.Linear);
-            tt.SetAttribute("version", ((int)TimetableVersion.JTG2_x).ToString());
+            tt.SetVersion(TimetableVersion.JTG2_x);
             var s = new Station(tt);
             
             var pos = new PositionCollection(s, tt);
@@ -90,7 +90,7 @@ namespace FPLedit.Shared.Tests
         public void LinearJtg2ReadTest()
         {
             var tt = new Timetable(TimetableType.Linear);
-            tt.SetAttribute("version", ((int)TimetableVersion.JTG2_x).ToString());
+            tt.SetVersion(TimetableVersion.JTG2_x);
 
             // with trailing semicolon
             var s = new Station(tt) {Attributes = {["km"] = "123.4"}};
@@ -118,7 +118,7 @@ namespace FPLedit.Shared.Tests
             foreach (var version in versions)
             {
                 var tt = new Timetable(TimetableType.Linear);
-                tt.SetAttribute("version", ((int)version).ToString());
+                tt.SetVersion(version);
                 var s = new Station(tt);
                 
                 var pos = new PositionCollection(s, tt);
@@ -147,7 +147,7 @@ namespace FPLedit.Shared.Tests
             foreach (var version in versions)
             {
                 var tt = new Timetable(TimetableType.Linear);
-                tt.SetAttribute("version", ((int)version).ToString());
+                tt.SetVersion(version);
 
                 // with trailing semicolon
                 var s = new Station(tt) {Attributes = {["kml"] = "1.0", ["kmr"] = "1.0"}};

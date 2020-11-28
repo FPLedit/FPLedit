@@ -30,9 +30,26 @@ namespace FPLedit.Shared
 
         #region XmlAttributes
 
+        private TimetableType? typeCache;
+        
         [XAttrName("version")]
         public TimetableVersion Version => (TimetableVersion) GetAttribute("version", 0);
-        public TimetableType Type => Version.GetVersionCompat().Type;
+
+        public TimetableType Type
+        {
+            get
+            {
+                if (typeCache == null)
+                    typeCache = Version.GetVersionCompat().Type;
+                return typeCache.Value;
+            }
+        }
+
+        public void SetVersion(TimetableVersion version)
+        {
+            SetAttribute("version", version.ToNumberString());
+            typeCache = null;
+        }
 
         public bool TimePrecisionSeconds => (Type == TimetableType.Linear && Version.Compare(TimetableVersion.JTG3_3) >= 0) ||
                                             (Type == TimetableType.Network && Version.Compare(TimetableVersion.Extended_FPL2) >= 0);
@@ -566,8 +583,6 @@ namespace FPLedit.Shared
         /// <exception cref="TimetableTypeNotSupportedException">If called on a linear timetable.</exception>
         public Route GetRoute(int index)
         {
-            if (Type == TimetableType.Linear && index == LINEAR_ROUTE_ID)
-                return new Route(LINEAR_ROUTE_ID, Stations);
             if (Type == TimetableType.Linear && index != LINEAR_ROUTE_ID)
                 throw new TimetableTypeNotSupportedException(TimetableType.Linear, "routes");
             
