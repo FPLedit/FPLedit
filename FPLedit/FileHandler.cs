@@ -315,11 +315,14 @@ namespace FPLedit
 
                     pluginInterface.Logger.Info(T._("Speichern erfolgreich abgeschlossen!"));
 
-                    if (FileState.RevisionCounter == rev)
+                    var nrev = FileState.RevisionCounter;
+                    var nfrev = FileState.FileNameRevisionCounter;
+
+                    if (nrev == rev)
                         FileState.Saved = true;
-                    if (FileState.FileNameRevisionCounter == frev)
+                    if (nfrev == frev)
                         FileState.FileName = filename;
-                    if (FileState.RevisionCounter != rev || FileState.FileNameRevisionCounter != frev)
+                    if (nrev != rev || nfrev != frev)
                         pluginInterface.Logger.Warning(T._("Während dem Speichern wurde der Zustand verändert, daher ist Datei auf der Festplatte nicht mehr aktuell."));
 
                     // Create or delete sidecar file.
