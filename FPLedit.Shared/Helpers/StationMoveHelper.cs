@@ -27,7 +27,7 @@ namespace FPLedit.Shared.Helpers
             if (!existingStation)
                 return false;
 
-            var tt = sta.ParentTimetable;
+            var tt = sta.ParentTimetable!;
             var rt = tt.GetRoute(route).Stations;
             var idx = rt.IndexOf(sta);
 
@@ -96,7 +96,7 @@ namespace FPLedit.Shared.Helpers
             var ardeps = new Dictionary<IWritableTrain, ArrDep>();
             var emptyArray = Array.Empty<int>();
 
-            foreach (var tra in sta.ParentTimetable.Trains)
+            foreach (var tra in sta.ParentTimetable!.Trains)
             {
                 if (!(tra is IWritableTrain wt))
                     continue;
@@ -129,6 +129,9 @@ namespace FPLedit.Shared.Helpers
                     throw new InvalidOperationException("Invalid state: Unexpected data loss while re-writing train: " + ardp.Key.TName);
                 a.ApplyCopy(ardp.Value);
             }
+
+            foreach (var rtIdx in sta.Routes)
+                sta.ParentTimetable.RebuildRouteCache(rtIdx);
 
             return true;
         }

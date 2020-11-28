@@ -513,7 +513,7 @@ namespace FPLedit.Shared
 
         #region Hilfsmethoden für Routen
         
-        private void RebuildRouteCache(int route)
+        internal void RebuildRouteCache(int route)
         {
             if (routeCache == null)
                 throw new Exception("RouteCache is null!");
