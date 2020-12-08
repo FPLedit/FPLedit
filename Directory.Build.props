@@ -18,11 +18,11 @@
     <WarningsAsErrors>CS8600;CS8602;CS8603</WarningsAsErrors>
     <MSBuildWarningsAsMessages>MSB3277</MSBuildWarningsAsMessages>
     
-    <EtoVersion>2.5.8</EtoVersion>
+    <EtoVersion>2.5.9-ci-20201204.400145874</EtoVersion>
     
 	  <!-- Assembly info -->
 	  <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>      
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>$(VersionPrefix)</FileVersion>
     <Company>Manuel Huber</Company>
     <Product>FPLedit</Product>
@@ -38,11 +38,7 @@
 
   <!-- Include Analyzers -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.1" />
-    <PackageReference Include="Microsoft.CodeAnalysis.VersionCheckAnalyzer" Version="3.3.1" />
-    <PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="3.3.1" />
-    <PackageReference Include="Microsoft.NetCore.Analyzers" Version="3.3.1" />
-    <PackageReference Include="Microsoft.NetFramework.Analyzers" Version="3.3.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.1" />
   </ItemGroup>
 
 </Project>
