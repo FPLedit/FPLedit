@@ -24,7 +24,11 @@ namespace FPLedit.Bildfahrplan.Model
                         minutes = 0;
                     return new TimeEntry(0, minutes);
                 }
-                return tt.TimeFactory.Parse(tt.GetAttribute("tMin", "00:00")); //TODO: Other default?
+
+                var time = tt.GetAttribute("tMin", "00:00");
+                if (time == "")
+                    time = "00:00";
+                return tt.TimeFactory.Parse(time!);
             }
             set => tt.SetAttribute("tMin", tt.TimePrecisionSeconds ? value.ToTimeString() : value.GetTotalMinutes().ToString());
         }
@@ -40,7 +44,11 @@ namespace FPLedit.Bildfahrplan.Model
                         minutes = 1440;
                     return new TimeEntry(0, minutes);
                 }
-                return tt.TimeFactory.Parse(tt.GetAttribute("tMax", "00:00")); //TODO: Other default?
+
+                var time = tt.GetAttribute("tMax", "24:00");
+                if (time == "")
+                    time = "24:00";
+                return tt.TimeFactory.Parse(time!);
             }
             set => tt.SetAttribute("tMax", tt.TimePrecisionSeconds ? value.ToTimeString() : value.GetTotalMinutes().ToString());
         }
