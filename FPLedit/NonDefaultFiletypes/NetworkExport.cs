@@ -1,6 +1,5 @@
 ﻿using FPLedit.Shared;
 using FPLedit.Shared.Filetypes;
-using FPLedit.Shared.Rendering;
 using System.Collections.Generic;
 using System.IO;
 

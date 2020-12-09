@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ProjectGuid>{5A1A083A-1308-488A-8A6B-ED8C1936B7C4}</ProjectGuid>
     <!--<TargetFrameworks>netcoreapp3.1;netstandard2.0</TargetFrameworks>-->
-    <TargetFramework>net461</TargetFramework><!-- TODO: Switch back to netstandard -->
+    <TargetFramework>net461</TargetFramework>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
     <Nullable>enable</Nullable>

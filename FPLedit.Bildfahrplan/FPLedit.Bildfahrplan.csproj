@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ProjectGuid>{77EE9755-CE3E-4B7B-AEF1-474B228E7B50}</ProjectGuid>
     <!--<TargetFramework>netstandard2.0</TargetFramework>-->
-    <TargetFramework>net461</TargetFramework><!-- TODO: Switch back to netstandard -->
+    <TargetFramework>net461</TargetFramework>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
   </PropertyGroup>

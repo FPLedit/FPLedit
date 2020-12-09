@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <!--<TargetFramework>netstandard2.0</TargetFramework>-->
-        <TargetFramework>net461</TargetFramework><!-- TODO: Switch back to netstandard -->
+        <TargetFramework>net461</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
