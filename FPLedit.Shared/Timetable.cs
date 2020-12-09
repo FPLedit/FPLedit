@@ -15,8 +15,8 @@ namespace FPLedit.Shared
         public const int LINEAR_ROUTE_ID = 0;
         public const int UNASSIGNED_ROUTE_ID = -1;
         
-        public const TimetableVersion PRESET_LINEAR_VERSION = TimetableVersion.JTG3_2;
-        public const TimetableVersion PRESET_NETWORK_VERSION = TimetableVersion.Extended_FPL;
+        public const TimetableVersion PRESET_LINEAR_VERSION = TimetableVersion.JTG3_3;
+        public const TimetableVersion PRESET_NETWORK_VERSION = TimetableVersion.Extended_FPL2;
         public static TimetableVersion DefaultLinearVersion { get; set; } = PRESET_LINEAR_VERSION;
         public static TimetableVersion DefaultNetworkVersion { get; set; } = PRESET_NETWORK_VERSION;
 
