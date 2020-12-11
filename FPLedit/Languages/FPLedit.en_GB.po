@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2020-11-19 13:42+0100\n"
-"PO-Revision-Date: 2020-11-19 13:48+0100\n"
+"POT-Creation-Date: 2020-12-11 13:32+0100\n"
+"PO-Revision-Date: 2020-12-11 13:36+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -16,25 +16,32 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: .\n"
 
-#: BackwardCompat/LinearUpgradeExport.cs:11
+#: BackwardCompat/BaseUpgradeExport.cs:10
 #: NonDefaultFiletypes/LinearExport.cs:13
-#: NonDefaultFiletypes/NetworkExport.cs:11
+#: NonDefaultFiletypes/NetworkExport.cs:10
 msgid "Fahrplan Dateien (*.fpl)|*.fpl"
 msgstr "Timetable files (*.fpl)|*.fpl"
 
+#: BackwardCompat/LinearUpgradeExport.cs:14
+#, csharp-format
+msgid "Nur lineare Fahrplandateien können mit {0} aktualisiert werden!"
+msgstr "Only linear timetables can be updated with {0}!"
+
 #: BackwardCompat/LinearUpgradeExport.cs:16
+#: BackwardCompat/NetworkUpgradeExport.cs:16
 msgid ""
 "Nur Fahrpläne mit einer älteren Dateiversion können aktualisiert werden."
 msgstr "Only files created with an older file version can be updated."
 
 #: BackwardCompat/LinearUpgradeExport.cs:18
+#: BackwardCompat/NetworkUpgradeExport.cs:18
 msgid "Dateiversion ist zu alt, um aktualisiert zu werden!"
 msgstr "The file version is too old to be updated!"
 
-#: BackwardCompat/LinearUpgradeExport.cs:20
+#: BackwardCompat/NetworkUpgradeExport.cs:14
 #, csharp-format
-msgid "Nur lineare Fahrplandateien können mit {0} aktualisiert werden!"
-msgstr "Only linear timetables can be updated with {0}!"
+msgid "Nur Netzwerk-Fahrplandateien können mit {0} aktualisiert werden!"
+msgstr "Only network timetables can be updated with {0}!"
 
 #: Bootstrapper.cs:165
 msgid ""
@@ -200,10 +207,10 @@ msgstr ""
 #: Editor/RenderSettingsForm.xeto.cs:73
 #: Editor/TimetableEditor/ShuntForm.xeto.cs:155
 #: Editor/TimetableEditor/ZlmEditForm.xeto.cs:35
-#: Editor/Trains/TrainCopyDialog.xeto.cs:122
+#: Editor/Trains/TrainCopyDialog.xeto.cs:197
 #: Editor/Trains/TrainEditForm.xeto.cs:210
 #: Editor/Trains/TrainFillDialog.xeto.cs:54
-#: Editor/Trains/TrainLinkEditDialog.xeto.cs:74
+#: Editor/Trains/TrainLinkEditDialog.xeto.cs:137
 #: Editor/Trains/TrainSortDialog.xeto.cs:94
 msgid "Abbrechen"
 msgstr "Cancel"
@@ -601,7 +608,7 @@ msgstr "Sort trains"
 
 #: Editor/Linear/LinearTrainsEditForm.xeto.cs:146
 #: Editor/Network/NetworkTrainsEditForm.xeto.cs:173
-#: Editor/Trains/TrainCopyDialog.xeto.cs:129
+#: Editor/Trains/TrainCopyDialog.xeto.cs:204
 msgid "Zug kopieren/verschieben"
 msgstr "Copy or move trains"
 
@@ -666,7 +673,7 @@ msgstr "Linked trains cannot be copied."
 #: Editor/Network/NetworkTrainsEditForm.xeto.cs:108
 #: Editor/Network/NetworkTrainsEditForm.xeto.cs:111
 #: Editor/Trains/BaseTrainsEditor.cs:90 Editor/Trains/BaseTrainsEditor.cs:93
-#: Editor/Trains/TrainCopyDialog.xeto.cs:112
+#: Editor/Trains/TrainCopyDialog.xeto.cs:173
 msgid "Zug kopieren"
 msgstr "Copy train"
 
@@ -888,25 +895,44 @@ msgstr ""
 msgid "Verlinke Züge können nicht gelöscht werden."
 msgstr "Linked trains cannot be deleted."
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:29
+#: Editor/Trains/TrainCopyDialog.xeto.cs:32
 #: Editor/Trains/TrainFillDialog.xeto.cs:25
-#: Editor/Trains/TrainLinkEditDialog.xeto.cs:29
+#: Editor/Trains/TrainLinkEditDialog.xeto.cs:33
 msgid "Bitte die Verschiebung als Zahl in Minuten angeben!"
 msgstr "Please enter a valid shift per train (number in full minutes)!"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:30
-#: Editor/Trains/TrainLinkEditDialog.xeto.cs:30
+#: Editor/Trains/TrainCopyDialog.xeto.cs:33
+#: Editor/Trains/TrainLinkEditDialog.xeto.cs:34
 msgid "Bitte eine gültige Anzahl >0 neuer Züge eingeben!"
 msgstr "Please enter a valid count of new trains!"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:31
-#: Editor/Trains/TrainLinkEditDialog.xeto.cs:31
+#: Editor/Trains/TrainCopyDialog.xeto.cs:34
+#: Editor/Trains/TrainLinkEditDialog.xeto.cs:35
 msgid "Bitte eine gültige Veränderung der Zugnummer eingeben!"
 msgstr "Please a valid change of train number!"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:61
+#: Editor/Trains/TrainCopyDialog.xeto.cs:47
+#: Editor/Trains/TrainLinkEditDialog.xeto.cs:55
+msgid "Zugname"
+msgstr "Train name"
+
+#: Editor/Trains/TrainCopyDialog.xeto.cs:84
+#: Editor/Trains/TrainCopyDialog.xeto.cs:87
+#: Editor/Trains/TrainCopyDialog.xeto.cs:198
+msgid "Kopieren"
+msgstr "Copy"
+
+#: Editor/Trains/TrainCopyDialog.xeto.cs:85
+msgid "Verschieben"
+msgstr "Move"
+
+#: Editor/Trains/TrainCopyDialog.xeto.cs:86
+msgid "Verlinken"
+msgstr "Link"
+
+#: Editor/Trains/TrainCopyDialog.xeto.cs:103
 #: Editor/Trains/TrainFillDialog.xeto.cs:38
-#: Editor/Trains/TrainLinkEditDialog.xeto.cs:51
+#: Editor/Trains/TrainLinkEditDialog.xeto.cs:94
 #, csharp-format
 msgid ""
 "Bitte erst alle Felder korrekt ausfüllen:\n"
@@ -915,7 +941,7 @@ msgstr ""
 "Please fill out all fields correctly before continuing:\n"
 "{0}"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:80
+#: Editor/Trains/TrainCopyDialog.xeto.cs:122
 #, csharp-format
 msgid ""
 "Es ist bereits ein Zug mit der Zugnummer {0} in diesem Fahrplan vorhanden, "
@@ -924,43 +950,52 @@ msgstr ""
 "A train named {0} already exists in this timetable. Should the copy be "
 "created anyway?"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:81
+#: Editor/Trains/TrainCopyDialog.xeto.cs:123
 msgid "Züge kopieren"
 msgstr "Copy trains"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:114
+#: Editor/Trains/TrainCopyDialog.xeto.cs:145
+#: Editor/Trains/TrainLinkEditDialog.xeto.cs:117
+msgid "Es wurden keinen Namen für alle Züge angegeben!"
+msgstr "No name specified for some of the trains!"
+
+#: Editor/Trains/TrainCopyDialog.xeto.cs:175
 msgid "Zug verschieben"
 msgstr "Move train"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:116
+#: Editor/Trains/TrainCopyDialog.xeto.cs:177
 msgid "Zug verlinken"
 msgstr "Link train"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:123
-msgid "Kopieren"
-msgstr "Copy"
+#: Editor/Trains/TrainCopyDialog.xeto.cs:183
+msgid "Automatische Benennung"
+msgstr "Automatic naming"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:124
-#: Editor/Trains/TrainLinkEditDialog.xeto.cs:77
+#: Editor/Trains/TrainCopyDialog.xeto.cs:185
+msgid "Manuelle Benennung"
+msgstr "Manual naming"
+
+#: Editor/Trains/TrainCopyDialog.xeto.cs:199
+#: Editor/Trains/TrainLinkEditDialog.xeto.cs:140
 msgid "Taktverschiebung in Minuten"
 msgstr "Shift of each train"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:125
-#: Editor/Trains/TrainLinkEditDialog.xeto.cs:78
+#: Editor/Trains/TrainCopyDialog.xeto.cs:200
+#: Editor/Trains/TrainLinkEditDialog.xeto.cs:141
 msgid "Anzahl der neuen Züge"
 msgstr "Number of new trains"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:126
-#: Editor/Trains/TrainLinkEditDialog.xeto.cs:79
+#: Editor/Trains/TrainCopyDialog.xeto.cs:201
+#: Editor/Trains/TrainLinkEditDialog.xeto.cs:142
 msgid "Basiszugnummer"
 msgstr "Base train name"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:127
-#: Editor/Trains/TrainLinkEditDialog.xeto.cs:80
+#: Editor/Trains/TrainCopyDialog.xeto.cs:202
+#: Editor/Trains/TrainLinkEditDialog.xeto.cs:143
 msgid "Änderung der Zugnummer"
 msgstr "Increment"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:128
+#: Editor/Trains/TrainCopyDialog.xeto.cs:203
 msgid "Erweiterte Attribute übernehmen"
 msgstr "Copy extended attributes"
 
@@ -1046,15 +1081,15 @@ msgstr "Time offset:"
 msgid "Fahrtzeiten von anderem Zug übernehmen"
 msgstr "Copy times from other train"
 
-#: Editor/Trains/TrainLinkEditDialog.xeto.cs:75
+#: Editor/Trains/TrainLinkEditDialog.xeto.cs:138
 msgid "Übernehmen"
 msgstr "Commit"
 
-#: Editor/Trains/TrainLinkEditDialog.xeto.cs:76
+#: Editor/Trains/TrainLinkEditDialog.xeto.cs:139
 msgid "Verschiebung des ersten Zugs"
 msgstr "Offset of first train"
 
-#: Editor/Trains/TrainLinkEditDialog.xeto.cs:81
+#: Editor/Trains/TrainLinkEditDialog.xeto.cs:144
 msgid "Verlinkung bearbeiten"
 msgstr "Edit link"
 
@@ -1109,79 +1144,79 @@ msgstr "<Error while loading>"
 msgid "Fehler beim Initialisieren einer Erweiterung: {0}: + {1}"
 msgstr "Error while initializing extension {0}: {1}"
 
-#: FileHandler.cs:75
+#: FileHandler.cs:76
 msgid "Fahrplandatei speichern"
 msgstr "Save timetable file"
 
-#: FileHandler.cs:76
+#: FileHandler.cs:77
 msgid "Fahrplandatei öffnen"
 msgstr "Open timetable file"
 
-#: FileHandler.cs:77
+#: FileHandler.cs:78
 msgid "Fahrplandatei exportieren"
 msgstr "Export timetable file"
 
-#: FileHandler.cs:78
+#: FileHandler.cs:79
 msgid "Datei importieren"
 msgstr "Import file"
 
-#: FileHandler.cs:115
+#: FileHandler.cs:116
 msgid "Keine Importer gefunden, Import nicht möglich!"
 msgstr "Import is not possible as no importers have been found!"
 
-#: FileHandler.cs:127
+#: FileHandler.cs:128
 #, csharp-format
 msgid "Importiere Datei {0}"
 msgstr "Importing file {0}"
 
-#: FileHandler.cs:138
+#: FileHandler.cs:139
 msgid "Importieren fehlgeschlagen!"
 msgstr "Import failed!"
 
-#: FileHandler.cs:142
+#: FileHandler.cs:143
 msgid "Datei erfolgreich importiert!"
 msgstr "File imported successfully!"
 
-#: FileHandler.cs:170
+#: FileHandler.cs:171
 #, csharp-format
 msgid "Exportiere in Datei {0}"
 msgstr "Exporting to file {0}"
 
-#: FileHandler.cs:175
+#: FileHandler.cs:176
 msgid "Exportieren fehlgeschlagen!"
 msgstr "Export failed!"
 
-#: FileHandler.cs:177
+#: FileHandler.cs:178
 msgid "Exportieren erfolgreich abgeschlossen!"
 msgstr "File exported successfully!"
 
-#: FileHandler.cs:219
+#: FileHandler.cs:220
 #, csharp-format
 msgid "Öffne Datei {0}"
 msgstr "Opening file {0}"
 
-#: FileHandler.cs:245
+#: FileHandler.cs:246
 msgid "Fehler beim Öffnen der Datei!"
 msgstr "Error while opening the file!"
 
-#: FileHandler.cs:249
+#: FileHandler.cs:250
 msgid "Datei erfolgeich geöffnet!"
 msgstr "File opened successfully!"
 
-#: FileHandler.cs:300
+#: FileHandler.cs:301
 #, csharp-format
 msgid "Speichere Datei {0}"
 msgstr "Saving file {0}"
 
-#: FileHandler.cs:311
+#: FileHandler.cs:312
 msgid "Speichern fehlgeschlagen!"
 msgstr "Save failed!"
 
-#: FileHandler.cs:315
+#: FileHandler.cs:316
 msgid "Speichern erfolgreich abgeschlossen!"
 msgstr "File saved succesfully!"
 
-#: FileHandler.cs:322
+#: FileHandler.cs:326
 msgid ""
 "Während dem Speichern wurde der Zustand verändert, daher ist Datei auf der "
 "Festplatte nicht mehr aktuell."
@@ -1189,36 +1224,36 @@ msgstr ""
 "The timetable has been changed while saving. The file saved on disk is "
 "potentially out-of-date."
 
-#: FileHandler.cs:364
+#: FileHandler.cs:368
 msgid "Neue Datei erstellt"
 msgstr "New file created successfully"
 
-#: FileHandler.cs:416 FileHandler.cs:417
+#: FileHandler.cs:420 FileHandler.cs:421
 msgid "Linear-Fahrplan"
 msgstr "Linear timetable"
 
-#: FileHandler.cs:416 FileHandler.cs:417
+#: FileHandler.cs:420 FileHandler.cs:421
 msgid "Netzwerk-Fahrplan"
 msgstr "Network timetable"
 
-#: FileHandler.cs:424
+#: FileHandler.cs:428
 msgid "Zieldatei für Konvertierung wählen"
 msgstr "Select file for conversion result"
 
-#: FileHandler.cs:428 FileHandler.cs:496
+#: FileHandler.cs:432 FileHandler.cs:508
 msgid "Konvertiere Datei..."
 msgstr "Converting file..."
 
-#: FileHandler.cs:432 FileHandler.cs:500
+#: FileHandler.cs:436 FileHandler.cs:512
 msgid "Konvertieren erfolgreich abgeschlossen!"
 msgstr "Conversion successfully!"
 
-#: FileHandler.cs:464
+#: FileHandler.cs:472
 #, csharp-format
 msgid "Diese Dateiformatsversion ({0}) wird nicht unterstützt."
 msgstr "The file version {0} is not supported."
 
-#: FileHandler.cs:479
+#: FileHandler.cs:491
 msgid ""
 "In einer neueren Dateiformatversion stehen mehr Funktionen zur Verfügung, "
 "die Aktualisierung ist aber nicht zwingend."
@@ -1226,32 +1261,38 @@ msgstr ""
 "In a new version of the file format, new features are available; but "
 "updating is currently not mandatory."
 
-#: FileHandler.cs:480
+#: FileHandler.cs:491
 msgid ""
 "Dieses Dateiformat kann von FPLedit nur noch auf neuere Versionen "
 "aktualisiert werden."
 msgstr "This file format can only be updated to newer versions."
 
-#: FileHandler.cs:481
+#: FileHandler.cs:492
 #, csharp-format
 msgid ""
 "Diese Fahrplandatei ist in einem alten Dateinformat erstellt worden. {0} "
-"Soll die Datei jetzt aktualisiert werden? ACHTUNG: Die Datei kann danach nur "
-"noch mit der aktuellsten Version von jTrainGraph bearbeitet werden!"
+"Soll die Datei jetzt aktualisiert werden?"
 msgstr ""
 "This file has been created in an older version of the fileformat! {0}. "
-"Should FPLedit update the file version? WARNING: After this, the file can "
-"only be opened by the latest version of FPLedit!"
+"Should FPLedit update the file version?"
 
-#: FileHandler.cs:505
+#: FileHandler.cs:494
+msgid ""
+"ACHTUNG: Die Datei kann danach nur noch mit der aktuellsten Version von "
+"jTrainGraph bearbeitet werden!"
+msgstr ""
+"WARNING: After this, the file can only be opened by the latest version of "
+"jTrainGraph!"
+
+#: FileHandler.cs:517
 msgid "Dateikonvertierung fehlgeschlagen!"
 msgstr "Conversion failed!"
 
-#: FileHandler.cs:511
+#: FileHandler.cs:523
 msgid "Dateikonvertierung abgebrochen!"
 msgstr "Conversion aborted!"
 
-#: FileHandler.cs:524
+#: FileHandler.cs:536
 msgid ""
 "Während dem Ladevorgang wurden Daten geändert. Sollen diese noch einmal in "
 "die letzte Datei geschrieben werden?"
@@ -1259,11 +1300,11 @@ msgstr ""
 "While loading the previous file changed in FPLedit. Would you like to save "
 "again before closing?"
 
-#: FileHandler.cs:524
+#: FileHandler.cs:536
 msgid "Wollen Sie die noch nicht gespeicherten Änderungen speichern?"
 msgstr "Do you want to save your unsaved changes?"
 
-#: FileHandler.cs:539
+#: FileHandler.cs:551
 msgid "Eine andere Dateioperation ist bereits im Gange!"
 msgstr "Another file operation is currently in progress!"
 
@@ -1398,6 +1439,18 @@ msgstr ""
 #: NonDefaultFiletypes/LinearExport.cs:20
 msgid "Der Fahrplan hat mehr als eine oder keine Strecke"
 msgstr "The timetable has more than one line - or none"
+
+#: NonDefaultFiletypes/LinearExport.cs:23
+msgid ""
+"Eine Fahrplandatei der Version >= 101 kann nicht als lineare Datei <= 012 "
+"exportiert werden!"
+msgstr ""
+"A timetable file of version >= 101 cannot be exported as linear timetable <= "
+"012!"
+
+#: NonDefaultFiletypes/NetworkExport.cs:19
+msgid "Bitte zuerst die lineare Strecke auf die neueste Version aktualisieren!"
+msgstr "Update the linear file to the latest version first!"
 
 #: NonDefaultFiletypes/StationsOnlyExport.cs:18
 msgid "Fahrplan Dateien nur mit Stationen (Streckenexport) (*.fpl)|*.fpl"

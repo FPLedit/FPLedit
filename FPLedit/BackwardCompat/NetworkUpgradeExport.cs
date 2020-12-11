@@ -11,7 +11,7 @@ namespace FPLedit.BackwardCompat
         public override bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null)
         {
             if (tt.Version.GetVersionCompat().Type != TimetableType.Network)
-                throw new Exception(T._("Nur Ntzwerk-Fahrplandateien können mit {0} aktualisiert werden!", nameof(NetworkUpgradeExport)));
+                throw new Exception(T._("Nur Netzwerk-Fahrplandateien können mit {0} aktualisiert werden!", nameof(NetworkUpgradeExport)));
             if (tt.Version.Compare(TimetableVersion.Extended_FPL2) >= 0)
                 throw new Exception(T._("Nur Fahrpläne mit einer älteren Dateiversion können aktualisiert werden."));
             if (tt.Version.CompareTo(TimetableVersion.Extended_FPL) < 0)

@@ -35,7 +35,7 @@ namespace FPLedit.Shared
 
         public Vehicle(XMLEntity en, Timetable tt) : base(en, tt)
         {
-            //TODO: (When implementiong anything concerning vehicles) Check only one start train or nextvehicle allowed per day!
+            //TODO: (When implementing anything concerning vehicles) Check only one start train or nextvehicle allowed per day!
         }
 
         internal void RemoveStartTrains(ITrain train)
