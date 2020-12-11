@@ -13,11 +13,14 @@ namespace FPLedit.Editor.Trains
 #pragma warning disable CS0649
         private readonly TextBox diffTextBox, nameTextBox, changeTextBox, countTextBox;
         private readonly CheckBox copyAllCheckBox;
-        private readonly StackLayout selectStack;
-        private readonly TableLayout extendedOptionsTable, copyOptionsTable;
+        private readonly StackLayout selectStack, linkTypeStack;
+        private readonly TableLayout extendedOptionsTable, copyOptionsTable, autoNameOptionsTable, specialNameOptionsTable;
+        private readonly Button closeButton;
+        private readonly GridView specialNameGridView;
 #pragma warning restore CS0649
         private readonly NumberValidator diffValidator, countValidator, changeValidator;
         private readonly SelectionUI<CopySelectionMode> modeSelect;
+        private readonly SelectionUI<LinkTypeMode> linkSelect;
 
         private readonly Train train;
         private readonly Timetable tt;
@@ -37,13 +40,52 @@ namespace FPLedit.Editor.Trains
             countTextBox.Text = "1";
             changeTextBox.Text = "2";
 
-            modeSelect = new SelectionUI<CopySelectionMode>(SelectMode, selectStack);
+            modeSelect = new SelectionUI<CopySelectionMode>(mode => UpdateVisibility(), selectStack);
+            linkSelect = new SelectionUI<LinkTypeMode>(linkType => UpdateVisibility(), linkTypeStack);
+
+            specialNameGridView.AddColumn((SpecialNameEntry spn) => spn.RowNumber.ToString(), "");
+            specialNameGridView.AddColumn((SpecialNameEntry spn) => spn.Name, T._("Zugname"), true);
+            specialNameGridView.DataStore = new[] { new SpecialNameEntry { RowNumber = 1, Name = "" } };
         }
 
-        private void SelectMode(CopySelectionMode mode)
+        private void CountTextBox_TextChanged(object sender, EventArgs e)
         {
-            extendedOptionsTable.Visible = copyOptionsTable.Visible = (mode == CopySelectionMode.Copy || modeSelect.SelectedState == CopySelectionMode.Link);
+            if (!countValidator.Valid || specialNameGridView.DataStore == null)
+                return;
+            var count = int.Parse(countTextBox.Text);
+            var oldStore = (SpecialNameEntry[])specialNameGridView.DataStore;
+            IEnumerable<SpecialNameEntry> newStore;
+            if (count <= oldStore.Length)
+                newStore = oldStore.Take(count);
+            else
+            {
+                var newList = new List<SpecialNameEntry>(oldStore);
+                for (int i = oldStore.Length; i < count; i++)
+                    newList.Add(new SpecialNameEntry { RowNumber = i + 1, Name = "" });
+                newStore = newList;
+            }
+
+            specialNameGridView.DataStore = newStore.ToArray();
+        }
+
+        private void UpdateVisibility()
+        {
+            var mode = modeSelect?.SelectedState ?? CopySelectionMode.Copy;
+            var linkType = linkSelect?.SelectedState ?? LinkTypeMode.Auto;
+            
+            extendedOptionsTable.Visible = copyOptionsTable.Visible = (mode == CopySelectionMode.Copy || mode == CopySelectionMode.Link);
+            autoNameOptionsTable.Visible = (mode == CopySelectionMode.Copy || (mode == CopySelectionMode.Link && linkType == LinkTypeMode.Auto));
+            specialNameOptionsTable.Visible = (mode == CopySelectionMode.Link && linkType == LinkTypeMode.Special);
+            linkTypeStack.Visible = mode == CopySelectionMode.Link;
             copyAllCheckBox.Visible = mode == CopySelectionMode.Copy;
+
+            closeButton.Text = mode switch
+            {
+                CopySelectionMode.Copy => T._("Kopieren"),
+                CopySelectionMode.Move => T._("Verschieben"),
+                CopySelectionMode.Link => T._("Verlinken"),
+                _ => T._("Kopieren"),
+            };
         }
 
         private void CloseButton_Click(object sender, EventArgs e)
@@ -88,9 +130,28 @@ namespace FPLedit.Editor.Trains
             else if (modeSelect.SelectedState == CopySelectionMode.Link)
             {
                 var count = int.Parse(countTextBox.Text);
-                var add = int.Parse(changeTextBox.Text);
+                ITrainLinkNameCalculator tnc;
 
-                th.LinkTrainMultiple(train, 0, diff, nameTextBox.Text, count, add);
+                switch (linkSelect.SelectedState)
+                {
+                    case LinkTypeMode.Auto:
+                        var add = int.Parse(changeTextBox.Text);
+                        tnc = new AutoTrainNameCalculator(nameTextBox.Text, add);
+                        break;
+                    case LinkTypeMode.Special:
+                        var entries = ((SpecialNameEntry[]) specialNameGridView.DataStore).Select(en => en.Name).ToArray();
+                        if (entries.Any(string.IsNullOrEmpty))
+                        {
+                            MessageBox.Show(T._("Es wurden keinen Namen für alle Züge angegeben!"));
+                            return;
+                        }
+                        tnc = new SpecialTrainNameCalculator(entries);
+                        break;
+                    default:
+                        throw new NotSupportedException("The selected LinkTypeMode is not defined!");
+                }
+
+                th.LinkTrainMultiple(train, 0, diff, count, tnc);
             }
             else
                 th.MoveTrain(train, diff);
@@ -115,6 +176,20 @@ namespace FPLedit.Editor.Trains
             Move,
             [SelectionName("Zug verlinken")]
             Link
+        }
+
+        private enum LinkTypeMode
+        {
+            [SelectionName("Automatische Benennung")]
+            Auto,
+            [SelectionName("Manuelle Benennung")]
+            Special
+        }
+        
+        private class SpecialNameEntry
+        {
+            public int RowNumber { get; set; }
+            public string Name { get; set; }
         }
         
         private static class L

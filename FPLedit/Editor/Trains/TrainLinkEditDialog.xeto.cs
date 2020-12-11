@@ -3,6 +3,8 @@ using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using FPLedit.Shared.UI.Validators;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace FPLedit.Editor.Trains
 {
@@ -10,6 +12,8 @@ namespace FPLedit.Editor.Trains
     {
 #pragma warning disable CS0649
         private readonly TextBox startOffsetTextBox, differenceTextBox, nameTextBox, changeTextBox, countTextBox;
+        private readonly TableLayout autoTrainNameTableLayout, specialTrainNameTableLayout;
+        private readonly GridView specialNameGridView;
 #pragma warning restore CS0649
         private readonly NumberValidator differenceValidator, countValidator, changeValidator;
 
@@ -33,12 +37,51 @@ namespace FPLedit.Editor.Trains
             origLink = link;
             train = link.ParentTrain;
             this.tt = tt;
-            //TODO: Support more generic name calculators.
-            nameTextBox.Text = (link.TrainNamingScheme as AutoTrainNameCalculator).BaseTrainName.FullName;
+            
             startOffsetTextBox.Text = link.TimeOffset.ToString("+#;-#;0");
             differenceTextBox.Text = link.TimeDifference.ToString("+#;-#;0");
             countTextBox.Text = link.TrainCount.ToString();
-            changeTextBox.Text = (link.TrainNamingScheme as AutoTrainNameCalculator).Increment.ToString();
+            
+            switch (link.TrainNamingScheme)
+            {
+                case AutoTrainNameCalculator atnc:
+                    autoTrainNameTableLayout.Visible = true;
+                    changeTextBox.Text = atnc.Increment.ToString();
+                    nameTextBox.Text = atnc.BaseTrainName.FullName;
+                    break;
+                case SpecialTrainNameCalculator stnc:
+                    specialTrainNameTableLayout.Visible = true;
+                    specialNameGridView.AddColumn((SpecialNameEntry spn) => spn.RowNumber.ToString(), "");
+                    specialNameGridView.AddColumn((SpecialNameEntry spn) => spn.Name, T._("Zugname"), true);
+                   
+                    var ds = new SpecialNameEntry[stnc.Names.Length];
+                    for (int i = 0; i < stnc.Names.Length; i++)
+                        ds[i] = new SpecialNameEntry() { RowNumber = i + 1, Name = stnc.Names[i] };
+                    specialNameGridView.DataStore = ds;
+                    break;
+                default:
+                    throw new NotSupportedException("Not Implemented: Name calculator not supported!");
+            }
+        }
+        
+        private void CountTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (!countValidator.Valid || specialNameGridView.DataStore == null)
+                return;
+            var count = int.Parse(countTextBox.Text);
+            var oldStore = (SpecialNameEntry[])specialNameGridView.DataStore;
+            IEnumerable<SpecialNameEntry> newStore;
+            if (count <= oldStore.Length)
+                newStore = oldStore.Take(count);
+            else
+            {
+                var newList = new List<SpecialNameEntry>(oldStore);
+                for (int i = oldStore.Length; i < count; i++)
+                    newList.Add(new SpecialNameEntry { RowNumber = i + 1, Name = "" });
+                newStore = newList;
+            }
+
+            specialNameGridView.DataStore = newStore.ToArray();
         }
 
         private void CloseButton_Click(object sender, EventArgs e)
@@ -58,11 +101,31 @@ namespace FPLedit.Editor.Trains
             var diff = int.Parse(differenceTextBox.Text);
 
             var count = int.Parse(countTextBox.Text);
-            var add = int.Parse(changeTextBox.Text);
 
+            ITrainLinkNameCalculator tnc;
+            switch (origLink.TrainNamingScheme)
+            {
+                // Create new link.
+                case AutoTrainNameCalculator _:
+                    var add = int.Parse(changeTextBox.Text);
+                    tnc = new AutoTrainNameCalculator(nameTextBox.Text, add);
+                    break;
+                case SpecialTrainNameCalculator _:
+                    var entries = ((SpecialNameEntry[]) specialNameGridView.DataStore).Select(en => en.Name).ToArray();
+                    if (entries.Any(string.IsNullOrEmpty))
+                    {
+                        MessageBox.Show(T._("Es wurden keinen Namen für alle Züge angegeben!"));
+                        return;
+                    }
+                    tnc = new SpecialTrainNameCalculator(entries);
+                    break;
+                default:
+                    throw new NotSupportedException("Not Implemented: Name calculator not supported!");
+            }
+            
             tt.RemoveLink(origLink); // Remove old link.
-            th.LinkTrainMultiple(train, offset, diff, nameTextBox.Text, count, add); // Create new link.
-
+            th.LinkTrainMultiple(train, offset, diff, count, tnc); // Create new link.
+            
             Close(DialogResult.Ok);
         }
 
@@ -79,6 +142,12 @@ namespace FPLedit.Editor.Trains
             public static readonly string BaseName = T._("Basiszugnummer");
             public static readonly string NumberChange = T._("Änderung der Zugnummer");
             public static readonly string Title = T._("Verlinkung bearbeiten");
+        }
+        
+        private class SpecialNameEntry
+        {
+            public int RowNumber { get; set; }
+            public string Name { get; set; }
         }
     }
 }

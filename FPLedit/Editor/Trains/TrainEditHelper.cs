@@ -88,7 +88,7 @@ namespace FPLedit.Editor.Trains
             return ret;
         }
         
-        public void LinkTrainMultiple(Train orig, int offsetMin, int diffMin, string name, int count, int numberAdd)
+        public void LinkTrainMultiple(Train orig, int offsetMin, int diffMin, int count, ITrainLinkNameCalculator tnc)
         {
             if (count < 0)
                 throw new ArgumentException("Value must be greater than or equal to zero", nameof(count));
@@ -97,7 +97,7 @@ namespace FPLedit.Editor.Trains
             {
                 TimeDifference = diffMin, 
                 TimeOffset = offsetMin, 
-                TrainNamingScheme = new AutoTrainNameCalculator(name, numberAdd)
+                TrainNamingScheme = tnc,
             };
             orig.AddLink(link);
 

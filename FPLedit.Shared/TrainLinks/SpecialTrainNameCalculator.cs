@@ -11,32 +11,29 @@ namespace FPLedit.Shared
     public class SpecialTrainNameCalculator : ITrainLinkNameCalculator
     {
         internal const string PREFIX = "Special";
-        
-        private string[] names;
-        
+
+        public string[] Names { get; private set; }
+
         /// <inheritdoc />
         public void Deserialize(IEnumerable<string> parts)
         {
             if (parts.Count() < 2)
                 throw new ArgumentException("parts is not long enough!");
-            names = parts.Skip(1).ToArray();
+            Names = parts.Skip(1).ToArray();
         }
 
         /// <inheritdoc />
-        public IEnumerable<string> Serialize() => new[] { PREFIX }.Concat(names);
+        public IEnumerable<string> Serialize() => new[] { PREFIX }.Concat(Names);
 
         /// <inheritdoc />
-        public string GetTrainName(int countingIndex)
-        {
-            return names[countingIndex];
-        }
+        public string GetTrainName(int countingIndex) => Names[countingIndex];
 
         /// <summary>
         /// Initialize a new empty instance.
         /// </summary>
         public SpecialTrainNameCalculator()
         {
-            this.names = Array.Empty<string>();
+            Names = Array.Empty<string>();
         }
 
         /// <summary>
@@ -44,7 +41,7 @@ namespace FPLedit.Shared
         /// </summary>
         public SpecialTrainNameCalculator(string[] names)
         {
-            this.names = names;
+            Names = names;
         }
     }
 }

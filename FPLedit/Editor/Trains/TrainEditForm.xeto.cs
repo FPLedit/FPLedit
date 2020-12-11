@@ -119,7 +119,7 @@ namespace FPLedit.Editor.Trains
                 return;
             }
 
-            var nameExists = Train.ParentTimetable.Trains.Where(t => t != Train).Select(t => t.TName).Contains(nameTextBox.Text);
+            var nameExists = Train.ParentTimetable!.Trains.Where(t => t != Train).Select(t => t.TName).Contains(nameTextBox.Text);
 
             if (nameExists)
             {
@@ -189,14 +189,14 @@ namespace FPLedit.Editor.Trains
             if (linkGridView.SelectedItem != null)
             {
                 var link = (TrainLink) linkGridView.SelectedItem;
-                if (link.TrainNamingScheme is AutoTrainNameCalculator)
+                if (link.TrainNamingScheme is AutoTrainNameCalculator || link.TrainNamingScheme is SpecialTrainNameCalculator)
                 {
                     using (var tled = new TrainLinkEditDialog(link, tt))
                         if (tled.ShowModal() == DialogResult.Ok)
                             linkGridView.DataStore = Train.TrainLinks; // Reload data rows.
                 }
                 else
-                    MessageBox.Show("Not Implemented: Name calculator not supported!"); //TODO: More generic check.
+                    MessageBox.Show("Not Implemented: Name calculator not supported!", type: MessageBoxType.Error);
             }
             else
                 MessageBox.Show(T._("Erst muss eine Verknüpfung zum Bearbeiten ausgewählt werden!"));
