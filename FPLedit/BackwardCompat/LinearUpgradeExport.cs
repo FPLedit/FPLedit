@@ -54,7 +54,7 @@ namespace FPLedit.BackwardCompat
             
             // UPGRADE 011 --> 012 (CURRENT)
             if (origVersion.CompareTo(TimetableVersion.JTG3_3) < 0)
-                UpgradeTimePrecision(xclone);
+                UpgradeTimePrecision(xclone, true);
 
             // UPGRADE GENERAL
             var ttclone = new Timetable(xclone);

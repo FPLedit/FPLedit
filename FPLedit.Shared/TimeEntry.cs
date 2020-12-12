@@ -159,6 +159,8 @@ namespace FPLedit.Shared
         public static TimeEntry operator -(TimeEntry t1, TimeEntry t2) => t1.Substract(t2);
         public static TimeEntry operator -(TimeEntry t1) => Zero.Substract(t1);
         public static TimeEntry operator +(TimeEntry t1) => Zero.Add(t1);
+        public static TimeEntry operator *(int n, TimeEntry t) => new TimeEntry(n * t.Hours, n * t.Minutes, n * t.Seconds, n * t.Decimals);
+        public static TimeEntry operator *(TimeEntry t, int n) => n * t;
         public static explicit operator TimeEntry(TimeSpan ts) => new TimeEntry(ts.Days * 24 + ts.Hours, ts.Minutes, ts.Seconds, 0);
     }
 }

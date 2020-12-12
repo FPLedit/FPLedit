@@ -35,8 +35,8 @@ namespace FPLedit.Shared.Tests
 
             var link = new TrainLink(normalTrain, 10)
             {
-                TimeDifference = 30, 
-                TimeOffset = 0, 
+                TimeDifference = new TimeEntry(0, 30), 
+                TimeOffset = new TimeEntry(0, 0), 
                 TrainNamingScheme = new AutoTrainNameCalculator(normalTrain.TName, 2)
             };
             normalTrain.AddLink(link);

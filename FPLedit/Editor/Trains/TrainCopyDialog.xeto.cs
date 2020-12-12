@@ -151,7 +151,7 @@ namespace FPLedit.Editor.Trains
                         throw new NotSupportedException("The selected LinkTypeMode is not defined!");
                 }
 
-                th.LinkTrainMultiple(train, 0, diff, count, tnc);
+                th.LinkTrainMultiple(train, TimeEntry.Zero, new TimeEntry(0, diff), count, tnc);
             }
             else
                 th.MoveTrain(train, diff);

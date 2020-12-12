@@ -47,21 +47,40 @@ namespace FPLedit.Shared
         /// Time difference (in minutes) between the linked trains.
         /// </summary>
         [XAttrName("tld")]
-        public int TimeDifference
+        public TimeEntry TimeDifference
         {
-            get => GetAttribute<int>("tld");
-            set => SetAttribute("tld", value.ToString());
+            get
+            {
+                if (!ParentTimetable.TimePrecisionSeconds)
+                    return new TimeEntry(0, GetAttribute<int>("tld"));
+
+                var time = GetAttribute("tld", "00:00");
+                if (time == "")
+                    time = "00:00";
+                return ParentTimetable.TimeFactory.Parse(time!);
+            }
+            set => SetAttribute("tld", ParentTimetable.TimePrecisionSeconds ? value.ToTimeString() : value.GetTotalMinutes().ToString());
         }
         
         /// <summary>
         /// Initial time offset before the first linked train.
         /// </summary>
         [XAttrName("tlo")]
-        public int TimeOffset
+        public TimeEntry TimeOffset
         {
-            get => GetAttribute<int>("tlo");
-            set => SetAttribute("tlo", value.ToString());
+            get
+            {
+                if (!ParentTimetable.TimePrecisionSeconds)
+                    return new TimeEntry(0, GetAttribute<int>("tlo"));
+
+                var time = GetAttribute("tlo", "00:00");
+                if (time == "")
+                    time = "00:00";
+                return ParentTimetable.TimeFactory.Parse(time!);
+            }
+            set => SetAttribute("tlo", ParentTimetable.TimePrecisionSeconds ? value.ToTimeString() : value.GetTotalMinutes().ToString());
         }
+
         
         /// <summary>
         /// Count of the linked trains, associated with this link element.
@@ -134,7 +153,7 @@ namespace FPLedit.Shared
             var clone = new ArrDep(ParentTimetable);
             clone.ApplyCopy(tempArrDep);
 
-            var offset = new TimeEntry(0,TimeOffset + (countingIndex + 1) * TimeDifference);
+            var offset = TimeOffset + (countingIndex + 1) * TimeDifference;
             if (clone.Arrival != TimeEntry.Zero)
             {
                 clone.Arrival += offset;

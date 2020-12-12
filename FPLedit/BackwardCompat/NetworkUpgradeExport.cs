@@ -2,7 +2,6 @@
 using FPLedit.Shared.Filetypes;
 using System;
 using System.IO;
-using System.Linq;
 
 namespace FPLedit.BackwardCompat
 {
@@ -24,7 +23,7 @@ namespace FPLedit.BackwardCompat
 
             // UPGRADE 100 --> 101 (CURRENT)
             if (origVersion.CompareTo(TimetableVersion.Extended_FPL2) < 0)
-                UpgradeTimePrecision(xclone);
+                UpgradeTimePrecision(xclone, false); // We had no train link support in network timetable version=100.
 
             // UPGRADE GENERAL
             var ttclone = new Timetable(xclone);

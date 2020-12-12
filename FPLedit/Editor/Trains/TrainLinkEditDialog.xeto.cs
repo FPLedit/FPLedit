@@ -15,7 +15,8 @@ namespace FPLedit.Editor.Trains
         private readonly TableLayout autoTrainNameTableLayout, specialTrainNameTableLayout;
         private readonly GridView specialNameGridView;
 #pragma warning restore CS0649
-        private readonly NumberValidator differenceValidator, countValidator, changeValidator;
+        private readonly NumberValidator countValidator, changeValidator;
+        private readonly TimeValidator differenceValidator, offsetValidator;
 
         private readonly Train train;
         private readonly Timetable tt;
@@ -30,7 +31,8 @@ namespace FPLedit.Editor.Trains
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            differenceValidator = new NumberValidator(differenceTextBox, false, true, errorMessage: T._("Bitte die Verschiebung als Zahl in Minuten angeben!"));
+            differenceValidator = new TimeValidator(differenceTextBox, false, tt.TimeFactory, errorMessage: T._("Bitte die Verschiebung als Zeitangabe angeben!"));
+            offsetValidator = new TimeValidator(startOffsetTextBox, false, tt.TimeFactory, errorMessage: T._("Bitte die Startverschiebung als Zeitangabe angeben!"));
             countValidator = new NumberValidator(countTextBox, false, true, allowNegative: false, errorMessage: T._("Bitte eine gültige Anzahl >0 neuer Züge eingeben!"));
             changeValidator = new NumberValidator(changeTextBox, false, true, errorMessage: T._("Bitte eine gültige Veränderung der Zugnummer eingeben!"));
 
@@ -38,8 +40,8 @@ namespace FPLedit.Editor.Trains
             train = link.ParentTrain;
             this.tt = tt;
             
-            startOffsetTextBox.Text = link.TimeOffset.ToString("+#;-#;0");
-            differenceTextBox.Text = link.TimeDifference.ToString("+#;-#;0");
+            startOffsetTextBox.Text = link.TimeOffset.ToTimeString(tt.TimeFactory.AllowSeconds);
+            differenceTextBox.Text = link.TimeDifference.ToTimeString(tt.TimeFactory.AllowSeconds);
             countTextBox.Text = link.TrainCount.ToString();
             
             switch (link.TrainNamingScheme)
@@ -91,14 +93,15 @@ namespace FPLedit.Editor.Trains
                 var msg = differenceValidator.Valid ? "" : differenceValidator.ErrorMessage + Environment.NewLine;
                 msg += countValidator.Valid ? "" : countValidator.ErrorMessage + Environment.NewLine;
                 msg += changeValidator.Valid ? "" : changeValidator.ErrorMessage + Environment.NewLine;
+                msg += offsetValidator.Valid ? "" : offsetValidator.ErrorMessage + Environment.NewLine;
                 MessageBox.Show(T._("Bitte erst alle Felder korrekt ausfüllen:\n{0}", msg));
                 Result = DialogResult.None;
                 return;
             }
 
             var th = new TrainEditHelper();
-            var offset = int.Parse(startOffsetTextBox.Text);
-            var diff = int.Parse(differenceTextBox.Text);
+            var offset = tt.TimeFactory.Parse(startOffsetTextBox.Text);
+            var diff = tt.TimeFactory.Parse(differenceTextBox.Text);
 
             var count = int.Parse(countTextBox.Text);
 
