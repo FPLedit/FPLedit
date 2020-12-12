@@ -88,13 +88,11 @@ namespace FPLedit.Editor.Trains
 
         private void CloseButton_Click(object sender, EventArgs e)
         {
-            if (!differenceValidator.Valid || !countValidator.Valid || !changeValidator.Valid)
+            changeValidator.Enabled = origLink.TrainNamingScheme is AutoTrainNameCalculator;
+            var validators = new ValidatorCollection(differenceValidator, differenceValidator, changeValidator, offsetValidator);
+            if (!validators.IsValid)
             {
-                var msg = differenceValidator.Valid ? "" : differenceValidator.ErrorMessage + Environment.NewLine;
-                msg += countValidator.Valid ? "" : countValidator.ErrorMessage + Environment.NewLine;
-                msg += changeValidator.Valid ? "" : changeValidator.ErrorMessage + Environment.NewLine;
-                msg += offsetValidator.Valid ? "" : offsetValidator.ErrorMessage + Environment.NewLine;
-                MessageBox.Show(T._("Bitte erst alle Felder korrekt ausfüllen:\n{0}", msg));
+                MessageBox.Show(T._("Bitte erst alle Felder korrekt ausfüllen:\n{0}", validators.Message));
                 Result = DialogResult.None;
                 return;
             }

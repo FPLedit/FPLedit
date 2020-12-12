@@ -137,11 +137,11 @@ namespace FPLedit.Editor.Trains
 
             if (!editor.ApplyChanges())
                 return;
+            
+            NextTrains = new List<TransitionEntry>();
+            if (transitionDropDown.SelectedValue != null)
+                NextTrains.Add(new TransitionEntry((ITrain) transitionDropDown.SelectedValue, Days.All, null));
 
-            NextTrains = new List<TransitionEntry>()
-            {
-                new TransitionEntry((ITrain) transitionDropDown.SelectedValue, Days.All, null),
-            };
             if (Train.Id > 0)
                 tt.SetTransitions(Train, NextTrains);
 
