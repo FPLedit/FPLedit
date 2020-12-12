@@ -162,7 +162,7 @@ namespace FPLedit.Shared
             }
 
             trains = new List<ITrain>();
-            tElm = Children.FirstOrDefault(x => x.XName == "trains");
+            tElm = Children.FirstOrDefault(x => x.XName == "trains")!;
             if (sElm == null && tElm != null)
                 throw new NotSupportedException("No <stations> element exists, but <trains>!");
 
@@ -194,6 +194,10 @@ namespace FPLedit.Shared
 
                     counters[c.XName]++;
                 }
+                
+                // Old network timetables do not support linked trains.
+                if ((linkedTrainsMap.Any() || trainLinkElements.Any()) && Type == TimetableType.Network && Version.CompareTo(TimetableVersion.Extended_FPL2) < 0)
+                    throw new TimetableTypeNotSupportedException("Linked trains");
                 
                 // Correction to compensate deleted orphaned trains.
                 var indexCorrection = new Dictionary<string, int>(3)
@@ -248,6 +252,7 @@ namespace FPLedit.Shared
             }
 
             vehicles = new List<Vehicle>();
+            //TODO: Add vElm!!!
             if (Version.CompareTo(TimetableVersion.JTG3_2) >= 0)
             {
                 if (vElm != null)
@@ -851,6 +856,9 @@ namespace FPLedit.Shared
         /// <inheritdoc />
         public void RemoveLink(TrainLink link)
         {
+            if (Type == TimetableType.Network && Version.CompareTo(TimetableVersion.Extended_FPL2) < 0)
+                throw new TimetableTypeNotSupportedException("Linked trains");
+            
             foreach (var train in link.LinkedTrains)
                 RemoveTrain(train);
 

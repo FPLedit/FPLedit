@@ -20,6 +20,7 @@ namespace FPLedit.Editor.Trains
         private readonly DropDown transitionDropDown;
         private readonly DaysControlNarrow daysControl;
         private readonly GridView linkGridView;
+        private readonly GroupBox linkGroupBox;
 #pragma warning restore CS0649
         private readonly NotEmptyValidator nameValidator;
 
@@ -50,9 +51,14 @@ namespace FPLedit.Editor.Trains
 
             resetTransitionButton.TextColor = Colors.Red;
 
-            linkGridView.AddColumn<TrainLink>(tl => tl.TrainCount.ToString(), T._("Anzahl"));
-            linkGridView.AddColumn<TrainLink>(tl => tl.TimeOffset.ToTimeString(Train.ParentTimetable.TimePrecisionSeconds), T._("Erster Abstand"));
-            linkGridView.AddColumn<TrainLink>(tl => tl.TimeDifference.ToTimeString(Train.ParentTimetable.TimePrecisionSeconds), T._("Zeitdifferenz"));
+            if (tt.Type == TimetableType.Network && tt.Version.CompareTo(TimetableVersion.Extended_FPL2) < 0)
+                linkGroupBox.Visible = false;
+            else
+            {
+                linkGridView.AddColumn<TrainLink>(tl => tl.TrainCount.ToString(), T._("Anzahl"));
+                linkGridView.AddColumn<TrainLink>(tl => tl.TimeOffset.ToTimeString(Train.ParentTimetable.TimePrecisionSeconds), T._("Erster Abstand"));
+                linkGridView.AddColumn<TrainLink>(tl => tl.TimeDifference.ToTimeString(Train.ParentTimetable.TimePrecisionSeconds), T._("Zeitdifferenz"));
+            }
         }
 
         public TrainEditForm(Train train) : this(train.ParentTimetable)
@@ -108,7 +114,8 @@ namespace FPLedit.Editor.Trains
                 .Select(kvp => new KeyValuePair<Station, ArrDep>(kvp.Key, kvp.Value.Copy()))
                 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
-            linkGridView.DataStore = Train.TrainLinks;
+            if (tt.Type != TimetableType.Network || tt.Version.CompareTo(TimetableVersion.Extended_FPL2) >= 0)
+                linkGridView.DataStore = Train.TrainLinks;
         }
 
         private void CloseButton_Click(object sender, EventArgs e)
@@ -175,6 +182,9 @@ namespace FPLedit.Editor.Trains
 
         private void DeleteLinkButton_Click(object sender, EventArgs e)
         {
+            if (tt.Type == TimetableType.Network && tt.Version.CompareTo(TimetableVersion.Extended_FPL2) < 0)
+                throw new TimetableTypeNotSupportedException("train links");
+            
             if (linkGridView.SelectedItem != null)
             {
                 tt.RemoveLink((TrainLink) linkGridView.SelectedItem);
@@ -186,6 +196,9 @@ namespace FPLedit.Editor.Trains
         
         private void EditLinkButton_Click(object sender, EventArgs e)
         {
+            if (tt.Type == TimetableType.Network && tt.Version.CompareTo(TimetableVersion.Extended_FPL2) < 0)
+                throw new TimetableTypeNotSupportedException("train links");
+            
             if (linkGridView.SelectedItem != null)
             {
                 var link = (TrainLink) linkGridView.SelectedItem;

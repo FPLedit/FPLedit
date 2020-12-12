@@ -42,6 +42,9 @@ namespace FPLedit.Editor.Trains
 
             modeSelect = new SelectionUI<CopySelectionMode>(mode => UpdateVisibility(), selectStack);
             linkSelect = new SelectionUI<LinkTypeMode>(linkType => UpdateVisibility(), linkTypeStack);
+            
+            if (tt.Type == TimetableType.Network && tt.Version.CompareTo(TimetableVersion.Extended_FPL2) < 0)
+                modeSelect.DisableOption(CopySelectionMode.Link);
 
             specialNameGridView.AddColumn((SpecialNameEntry spn) => spn.RowNumber.ToString(), "");
             specialNameGridView.AddColumn((SpecialNameEntry spn) => spn.Name, T._("Zugname"), true);
