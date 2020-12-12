@@ -135,7 +135,8 @@ namespace FPLedit.Bildfahrplan.Forms
             else
                 renderer.Draw(e.Graphics, start, last.Value, true, width);
 
-            if (last.Value < attrs.EndTime)
+            var endTime = GetEndTime(start, attrs.EndTime);
+            if (last.Value < endTime)
                 e.HasMorePages = true;
             else
                 last = null;
@@ -143,18 +144,19 @@ namespace FPLedit.Bildfahrplan.Forms
 
         private TimeEntry GetTimeByHeight(Graphics g, Renderer renderer, TimeEntry start, int height)
         {
+            var endTime = GetEndTime(start, attrs.EndTime);
             var fillUpMinutes = (byte) (60 - start.Minutes);
-            var restMinutes = attrs.EndTime.Minutes;
+            var restMinutes = endTime.Minutes;
             
             var headerHeight = renderer.GetHeight(g, default, default, true);
 
-            var spanMinutes = attrs.EndTime.GetTotalMinutes() - start.GetTotalMinutes();
+            var spanMinutes = endTime.GetTotalMinutes() - start.GetTotalMinutes();
 
             if (fillUpMinutes * (attrs.HeightPerHour / 60f) + headerHeight > height) // Not even the next hour does fit on the page.
             {
                 var end =  start + new TimeEntry(0, (int) ((height - headerHeight) / (attrs.HeightPerHour / 60f)));
-                if (end >= attrs.EndTime)
-                    return attrs.EndTime;
+                if (end >= endTime)
+                    return endTime;
                 return end;
             }
 
@@ -164,8 +166,8 @@ namespace FPLedit.Bildfahrplan.Forms
             {
                 int minutes = (int) (fullTimeHeight / (attrs.HeightPerHour / 60f));
                 var end = start + new TimeEntry(0, minutes);
-                if (end >= attrs.EndTime)
-                    return attrs.EndTime;
+                if (end >= endTime)
+                    return endTime;
                 return end;
             }
             
@@ -176,11 +178,14 @@ namespace FPLedit.Bildfahrplan.Forms
             if (fullHourHeight - fullHours * attrs.HeightPerHour > (attrs.HeightPerHour / 60f) * restMinutes && fullHours * 60 + fillUpMinutes + restMinutes >= spanMinutes)
             {
                 var end = start + new TimeEntry(fullHours, restMinutes + fillUpMinutes);
-                if (end > attrs.EndTime)
-                    return attrs.EndTime;
+                if (end > endTime)
+                    return endTime;
                 return end;
             }
             return  start + new TimeEntry(fullHours, fillUpMinutes);
         }
+        
+        private TimeEntry GetEndTime(TimeEntry startTime, TimeEntry endTime)
+            => endTime < startTime ? endTime + new TimeEntry(24, 0) : endTime;
     }
 }

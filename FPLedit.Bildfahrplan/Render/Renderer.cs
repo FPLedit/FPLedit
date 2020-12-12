@@ -30,7 +30,7 @@ namespace FPLedit.Bildfahrplan.Render
         }
 
         public void Draw(Graphics g, bool drawHeader, float? forceWidth = null)
-            => Draw(g, attrs.StartTime, attrs.EndTime, drawHeader, forceWidth);
+            => Draw(g, attrs.StartTime, GetEndTime(attrs.StartTime, attrs.EndTime), drawHeader, forceWidth);
 
         public void Draw(Graphics g, TimeEntry startTime, TimeEntry endTime, bool drawHeader, float? forceWidth = null)
         {
@@ -67,7 +67,7 @@ namespace FPLedit.Bildfahrplan.Render
 
             var stations = tt.GetRoute(route).Stations;
 
-            var margin = CalcMargins(g, deafultHeaderMargin, stations, attrs.StartTime, attrs.EndTime, true);
+            var margin = CalcMargins(g, deafultHeaderMargin, stations, attrs.StartTime, GetEndTime(attrs.StartTime, attrs.EndTime), true);
 
             var height = GetHeight(g, TimeEntry.Zero, TimeEntry.Zero, true); // Draw empty timespan.
 
@@ -111,6 +111,9 @@ namespace FPLedit.Bildfahrplan.Render
         }
 
         public int GetHeightExternal(bool drawHeader)
-            => GetHeightExternal(attrs.StartTime, attrs.EndTime, drawHeader);
+            => GetHeightExternal(attrs.StartTime, GetEndTime(attrs.StartTime, attrs.EndTime), drawHeader);
+
+        private TimeEntry GetEndTime(TimeEntry startTime, TimeEntry endTime)
+            => endTime < startTime ? endTime + new TimeEntry(24, 0) : endTime;
     }
 }
