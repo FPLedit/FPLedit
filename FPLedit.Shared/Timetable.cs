@@ -20,7 +20,8 @@ namespace FPLedit.Shared
         public static TimetableVersion DefaultLinearVersion { get; set; } = PRESET_LINEAR_VERSION;
         public static TimetableVersion DefaultNetworkVersion { get; set; } = PRESET_NETWORK_VERSION;
 
-        private readonly XMLEntity sElm, tElm, trElm, vElm;
+        private readonly XMLEntity sElm, tElm, trElm;
+        private readonly XMLEntity? vElm;
 
         private int nextStaId, nextRtId, nextTraId, nextVehId;
 
@@ -108,6 +109,7 @@ namespace FPLedit.Shared
             stations = new List<Station>();
             trains = new List<ITrain>();
             transitions = new List<Transition>();
+            vehicles = new List<Vehicle>();
             Initialized = true;
 
             SetAttribute("version", (type == TimetableType.Network ? DefaultNetworkVersion : DefaultLinearVersion).ToNumberString());
@@ -149,9 +151,10 @@ namespace FPLedit.Shared
             Initialized = true;
 
             stations = new List<Station>();
-            sElm = Children.FirstOrDefault(x => x.XName == "stations");
-            if (sElm != null)
+            var tmpSElm = Children.SingleOrDefault(x => x.XName == "stations");
+            if (tmpSElm != null)
             {
+                sElm = tmpSElm;
                 foreach (var c in sElm.Children.Where(x => x.XName == "sta")) // Filtert andere Elemente
                     stations.Add(new Station(c, this));
             }
@@ -162,12 +165,14 @@ namespace FPLedit.Shared
             }
 
             trains = new List<ITrain>();
-            tElm = Children.FirstOrDefault(x => x.XName == "trains")!;
-            if (sElm == null && tElm != null)
+            var tmpTElm = Children.SingleOrDefault(x => x.XName == "trains");
+            if (tmpSElm == null && tmpTElm != null)
                 throw new NotSupportedException("No <stations> element exists, but <trains>!");
 
-            if (tElm != null)
+            if (tmpTElm != null)
             {
+                tElm = tmpTElm;
+                
                 var directions = Enum.GetNames(typeof(TrainDirection));
                 var trainElements = tElm.Children.Where(x => directions.Contains(x.XName)).ToArray();
                 var trainLinkElements = new Dictionary<(TrainDirection, int), TrainLink>();
@@ -239,10 +244,11 @@ namespace FPLedit.Shared
             tElm.ChildrenChangedDirect += OnTrainsChanged;
 
             transitions = new List<Transition>();
-            trElm = Children.FirstOrDefault(x => x.XName == "transitions");
-            if (trElm != null)
+            var tmpTrElm = Children.SingleOrDefault(x => x.XName == "transitions");
+            if (tmpTrElm != null)
             {
-                foreach (var c in trElm.Children.Where(x => x.XName == "tra")) // Filtert andere Elemente
+                trElm = tmpTrElm;
+                foreach (var c in tmpTrElm.Children.Where(x => x.XName == "tra")) // Filtert andere Elemente
                     transitions.Add(new Transition(c, this));
             }
             else
@@ -252,11 +258,12 @@ namespace FPLedit.Shared
             }
 
             vehicles = new List<Vehicle>();
-            //TODO: Add vElm!!!
+            var tmpVElm = Children.SingleOrDefault(x => x.XName == "vehicles");
             if (Version.CompareTo(TimetableVersion.JTG3_2) >= 0)
             {
-                if (vElm != null)
+                if (tmpVElm != null)
                 {
+                    vElm = tmpVElm;
                     foreach (var c in trElm.Children.Where(x => x.XName == "veh")) // Filtert andere Elemente
                         vehicles.Add(new Vehicle(c, this));
                 }
