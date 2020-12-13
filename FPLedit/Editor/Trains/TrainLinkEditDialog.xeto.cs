@@ -5,6 +5,7 @@ using FPLedit.Shared.UI.Validators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FPLedit.Shared.TrainLinks;
 
 namespace FPLedit.Editor.Trains
 {
@@ -49,12 +50,12 @@ namespace FPLedit.Editor.Trains
             
             switch (link.TrainNamingScheme)
             {
-                case AutoTrainNameCalculator atnc:
+                case AutoTrainNameGen atnc:
                     autoTrainNameTableLayout.Visible = true;
                     changeTextBox.Text = atnc.Increment.ToString();
                     nameTextBox.Text = atnc.BaseTrainName.FullName;
                     break;
-                case SpecialTrainNameCalculator stnc:
+                case SpecialTrainNameGen stnc:
                     specialTrainNameTableLayout.Visible = true;
                     specialNameGridView.AddColumn((SpecialNameEntry spn) => spn.RowNumber.ToString(), "");
                     specialNameGridView.AddColumn((SpecialNameEntry spn) => spn.Name, T._("Zugname"), true);
@@ -91,7 +92,7 @@ namespace FPLedit.Editor.Trains
 
         private void CloseButton_Click(object sender, EventArgs e)
         {
-            changeValidator.Enabled = origLink.TrainNamingScheme is AutoTrainNameCalculator;
+            changeValidator.Enabled = origLink.TrainNamingScheme is AutoTrainNameGen;
             var validators = new ValidatorCollection(differenceValidator, differenceValidator, changeValidator, offsetValidator);
             if (!validators.IsValid)
             {
@@ -106,22 +107,22 @@ namespace FPLedit.Editor.Trains
 
             var count = int.Parse(countTextBox.Text);
 
-            ITrainLinkNameCalculator tnc;
+            ITrainNameGen tnc;
             switch (origLink.TrainNamingScheme)
             {
                 // Create new link.
-                case AutoTrainNameCalculator _:
+                case AutoTrainNameGen _:
                     var add = int.Parse(changeTextBox.Text);
-                    tnc = new AutoTrainNameCalculator(nameTextBox.Text, add);
+                    tnc = new AutoTrainNameGen(nameTextBox.Text, add);
                     break;
-                case SpecialTrainNameCalculator _:
+                case SpecialTrainNameGen _:
                     var entries = ((SpecialNameEntry[]) specialNameGridView.DataStore).Select(en => en.Name).ToArray();
                     if (entries.Any(string.IsNullOrEmpty))
                     {
                         MessageBox.Show(T._("Es wurden keinen Namen für alle Züge angegeben!"));
                         return;
                     }
-                    tnc = new SpecialTrainNameCalculator(entries);
+                    tnc = new SpecialTrainNameGen(entries);
                     break;
                 default:
                     throw new NotSupportedException("Not Implemented: Name calculator not supported!");

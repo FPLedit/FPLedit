@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 
-namespace FPLedit.Shared
+namespace FPLedit.Shared.TrainLinks
 {
     /// <summary>
     /// Interface for different train naming schemes for linked trains.
     /// </summary>
     [Templating.TemplateSafe]
-    public interface ITrainLinkNameCalculator
+    public interface ITrainNameGen
     {
         /// <summary>
         /// Initialize an empty instance from a serialized string as it will be stored in the XML structure.

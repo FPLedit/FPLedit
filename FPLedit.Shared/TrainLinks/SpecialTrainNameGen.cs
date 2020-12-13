@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FPLedit.Shared
+namespace FPLedit.Shared.TrainLinks
 {
     /// <summary>
     /// Train name calculator with a specified name for each train.
     /// </summary>
     [Templating.TemplateSafe]
-    public class SpecialTrainNameCalculator : ITrainLinkNameCalculator
+    public class SpecialTrainNameGen : ITrainNameGen
     {
         internal const string PREFIX = "Special";
 
@@ -31,7 +31,7 @@ namespace FPLedit.Shared
         /// <summary>
         /// Initialize a new empty instance.
         /// </summary>
-        public SpecialTrainNameCalculator()
+        public SpecialTrainNameGen()
         {
             Names = Array.Empty<string>();
         }
@@ -39,7 +39,7 @@ namespace FPLedit.Shared
         /// <summary>
         /// Create a new instance, providing data.
         /// </summary>
-        public SpecialTrainNameCalculator(string[] names)
+        public SpecialTrainNameGen(string[] names)
         {
             Names = names;
         }

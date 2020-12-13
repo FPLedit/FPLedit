@@ -5,6 +5,7 @@ using FPLedit.Shared.UI.Validators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FPLedit.Shared.TrainLinks;
 
 namespace FPLedit.Editor.Trains
 {
@@ -133,13 +134,13 @@ namespace FPLedit.Editor.Trains
             else if (modeSelect.SelectedState == CopySelectionMode.Link)
             {
                 var count = int.Parse(countTextBox.Text);
-                ITrainLinkNameCalculator tnc;
+                ITrainNameGen tnc;
 
                 switch (linkSelect.SelectedState)
                 {
                     case LinkTypeMode.Auto:
                         var add = int.Parse(changeTextBox.Text);
-                        tnc = new AutoTrainNameCalculator(nameTextBox.Text, add);
+                        tnc = new AutoTrainNameGen(nameTextBox.Text, add);
                         break;
                     case LinkTypeMode.Special:
                         var entries = ((SpecialNameEntry[]) specialNameGridView.DataStore).Select(en => en.Name).ToArray();
@@ -148,7 +149,7 @@ namespace FPLedit.Editor.Trains
                             MessageBox.Show(T._("Es wurden keinen Namen für alle Züge angegeben!"));
                             return;
                         }
-                        tnc = new SpecialTrainNameCalculator(entries);
+                        tnc = new SpecialTrainNameGen(entries);
                         break;
                     default:
                         throw new NotSupportedException("The selected LinkTypeMode is not defined!");
@@ -168,6 +169,7 @@ namespace FPLedit.Editor.Trains
         protected override void Dispose(bool disposing)
         {
             modeSelect?.Dispose();
+            linkSelect?.Dispose();
             base.Dispose(disposing);
         }
 

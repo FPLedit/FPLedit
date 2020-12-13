@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using FPLedit.Shared.TrainLinks;
 using NUnit.Framework;
 
 namespace FPLedit.Shared.Tests
@@ -37,7 +38,7 @@ namespace FPLedit.Shared.Tests
             {
                 TimeDifference = new TimeEntry(0, 30), 
                 TimeOffset = new TimeEntry(0, 0), 
-                TrainNamingScheme = new AutoTrainNameCalculator(normalTrain.TName, 2)
+                TrainNamingScheme = new AutoTrainNameGen(normalTrain.TName, 2)
             };
             normalTrain.AddLink(link);
             LinkedTrain linkedTrain = null;

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Eto.Drawing;
+using FPLedit.Shared.TrainLinks;
 
 namespace FPLedit.Editor.Trains
 {
@@ -202,7 +203,7 @@ namespace FPLedit.Editor.Trains
             if (linkGridView.SelectedItem != null)
             {
                 var link = (TrainLink) linkGridView.SelectedItem;
-                if (link.TrainNamingScheme is AutoTrainNameCalculator || link.TrainNamingScheme is SpecialTrainNameCalculator)
+                if (link.TrainNamingScheme is AutoTrainNameGen || link.TrainNamingScheme is SpecialTrainNameGen)
                 {
                     using (var tled = new TrainLinkEditDialog(link, tt))
                         if (tled.ShowModal() == DialogResult.Ok)

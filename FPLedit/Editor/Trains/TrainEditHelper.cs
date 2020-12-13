@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FPLedit.Shared.Helpers;
+using FPLedit.Shared.TrainLinks;
 
 namespace FPLedit.Editor.Trains
 {
@@ -88,7 +89,7 @@ namespace FPLedit.Editor.Trains
             return ret;
         }
         
-        public void LinkTrainMultiple(Train orig, TimeEntry offset, TimeEntry diff, int count, ITrainLinkNameCalculator tnc)
+        public void LinkTrainMultiple(Train orig, TimeEntry offset, TimeEntry diff, int count, ITrainNameGen tnc)
         {
             if (orig.ParentTimetable!.Type == TimetableType.Network && orig.ParentTimetable!.Version.CompareTo(TimetableVersion.Extended_FPL2) < 0)
                 throw new TimetableTypeNotSupportedException("train links");

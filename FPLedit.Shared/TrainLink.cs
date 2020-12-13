@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FPLedit.Shared.TrainLinks;
 
 namespace FPLedit.Shared
 {
@@ -27,10 +28,10 @@ namespace FPLedit.Shared
         /// The naming scheme used for this train links children.
         /// </summary>
         [XAttrName("tln")]
-        public ITrainLinkNameCalculator TrainNamingScheme
+        public ITrainNameGen TrainNamingScheme
         {
-            get => TrainLinkNameCalculatorManager.Deserialize(GetAttribute("tln", ""));
-            set => SetAttribute("tln", TrainLinkNameCalculatorManager.Serialize(value));
+            get => TrainNameGenManager.Deserialize(GetAttribute("tln", ""));
+            set => SetAttribute("tln", TrainNameGenManager.Serialize(value));
         }
         
         /// <summary>

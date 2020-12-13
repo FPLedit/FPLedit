@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using FPLedit.Shared.Helpers;
 
-namespace FPLedit.Shared
+namespace FPLedit.Shared.TrainLinks
 {
     /// <summary>
     /// Train name calculator, generating names based on a base train name and increment.
     /// </summary>
     [Templating.TemplateSafe]
-    public class AutoTrainNameCalculator : ITrainLinkNameCalculator
+    public class AutoTrainNameGen : ITrainNameGen
     {
         internal const string PREFIX = "Auto";
         
@@ -45,7 +45,7 @@ namespace FPLedit.Shared
         /// <summary>
         /// Initialize a new empty instance.
         /// </summary>
-        public AutoTrainNameCalculator() {}
+        public AutoTrainNameGen() {}
 
         /// <summary>
         /// Create a new instance, providing data.
@@ -53,7 +53,7 @@ namespace FPLedit.Shared
         /// <param name="originalName">Name of the original train.</param>
         /// <param name="increment">Increment of the train number.</param>
         /// <remarks>Train number will be extracted with <see cref="TrainNameParts"/>.</remarks>
-        public AutoTrainNameCalculator(string originalName, int increment)
+        public AutoTrainNameGen(string originalName, int increment)
         {
             BaseTrainName = new TrainNameParts(originalName);
             this.Increment = increment;
