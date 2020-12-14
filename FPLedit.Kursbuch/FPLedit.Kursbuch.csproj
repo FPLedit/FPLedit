@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>{678843A1-1DFA-46EC-A15B-9C0AF7FCBBF0}</ProjectGuid>
-    <TargetFrameworks>netcoreapp3.1;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net5.0</TargetFrameworks>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
   </PropertyGroup>

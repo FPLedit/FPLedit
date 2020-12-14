@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>{CE38D005-22B2-4B15-80BA-614F038240FD}</ProjectGuid>
-    <!--<TargetFrameworks>netcoreapp3.1;netstandard2.0</TargetFrameworks>-->
-    <TargetFramework>net461</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
     <Nullable>enable</Nullable>

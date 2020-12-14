@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
-var platform = Argument("tfm", "net461");
+var platform = Argument("tfm", "net5.0");
 
 var docInPath = EnvironmentVariable("FPLEDIT_DOK");
 var hasDocInPath = !(docInPath == null || docInPath == "");

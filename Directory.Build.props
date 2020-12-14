@@ -15,7 +15,7 @@
     <LangVersion>8.0</LangVersion>
     <CodeAnalysisRuleSet>..\build_scripts\FPLedit.ruleset</CodeAnalysisRuleSet>
 
-    <WarningsAsErrors>CS8600;CS8602;CS8603</WarningsAsErrors>
+    <!--<WarningsAsErrors>CS8600;CS8602;CS8603</WarningsAsErrors>-->
     <MSBuildWarningsAsMessages>MSB3277</MSBuildWarningsAsMessages>
     
     <EtoVersion>2.5.9-ci-20201208.409201201</EtoVersion>
