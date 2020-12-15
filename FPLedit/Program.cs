@@ -20,6 +20,7 @@ namespace FPLedit
 
         private static MainForm mainForm;
         private static CrashReporter crashReporter;
+        private static bool crashReporterStarted;
 
         /// <summary>
         /// Der Haupteinstiegspunkt für die Anwendung.
@@ -134,8 +135,11 @@ namespace FPLedit
         private static void UnhandledException(object sender, Eto.UnhandledExceptionEventArgs e)
         {
             var report = new CrashReport(mainForm.Bootstrapper.ExtensionManager, e.ExceptionObject as Exception);
-            if (crashReporter != null)
+            if (crashReporter != null && !crashReporterStarted)
+            {
+                crashReporterStarted = true;
                 crashReporter.Report(report);
+            }
             else
                 Console.Error.WriteLine(report.Serialize());
 
