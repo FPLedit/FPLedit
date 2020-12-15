@@ -14,7 +14,7 @@ namespace FPLedit.Shared
     {
         public const int LINEAR_ROUTE_ID = 0;
         public const int UNASSIGNED_ROUTE_ID = -1;
-        
+
         public const TimetableVersion PRESET_LINEAR_VERSION = TimetableVersion.JTG3_3;
         public const TimetableVersion PRESET_NETWORK_VERSION = TimetableVersion.Extended_FPL2;
         public static TimetableVersion DefaultLinearVersion { get; set; } = PRESET_LINEAR_VERSION;
@@ -26,13 +26,14 @@ namespace FPLedit.Shared
         private int nextStaId, nextRtId, nextTraId, nextVehId;
 
         public bool Initialized { get; } = false;
-        
+
         private readonly Dictionary<int, Route> routeCache;
 
         #region XmlAttributes
 
         private TimetableType? typeCache;
-        
+        private bool? timePrecisionCache;
+
         [XAttrName("version")]
         public TimetableVersion Version => (TimetableVersion) GetAttribute("version", 0);
 
@@ -50,19 +51,37 @@ namespace FPLedit.Shared
         {
             SetAttribute("version", version.ToNumberString());
             typeCache = null;
+            timePrecisionCache = null;
+            timeFactoryCacheValid = false;
         }
 
-        public bool TimePrecisionSeconds => (Type == TimetableType.Linear && Version.Compare(TimetableVersion.JTG3_3) >= 0) ||
-                                            (Type == TimetableType.Network && Version.Compare(TimetableVersion.Extended_FPL2) >= 0);
+        public bool TimePrecisionSeconds {
+            get
+            {
+                if (!timePrecisionCache.HasValue)
+                {
+                    timePrecisionCache = (Type == TimetableType.Linear && Version.Compare(TimetableVersion.JTG3_3) >= 0) ||
+                                         (Type == TimetableType.Network && Version.Compare(TimetableVersion.Extended_FPL2) >= 0);
+                }
 
+                return timePrecisionCache.Value;
+            }
+        }
+
+        private bool timeFactoryCacheValid = false;
         private readonly TimeEntryFactory timeFactoryCache = new TimeEntryFactory(false);
         /// <inheritdoc />
         public TimeEntryFactory TimeFactory
         {
             get
             {
-                timeFactoryCache.AllowSeconds = TimePrecisionSeconds;
-                timeFactoryCache.Normalizer.AllowSeconds = TimePrecisionSeconds;
+                if (!timeFactoryCacheValid)
+                {
+                    timeFactoryCache.AllowSeconds = TimePrecisionSeconds;
+                    timeFactoryCache.Normalizer.AllowSeconds = TimePrecisionSeconds;
+                    timeFactoryCacheValid = true;
+                }
+
                 return timeFactoryCache;
             }
         }
