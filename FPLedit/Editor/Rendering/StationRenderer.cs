@@ -56,7 +56,7 @@ namespace FPLedit.Editor.Rendering
             tt = value.ParentTimetable;
 
             DefaultTrackLeft = value.DefaultTrackLeft.ToStandalone();
-            DefaultTrackRight = value.DefaultTrackLeft.ToStandalone();
+            DefaultTrackRight = value.DefaultTrackRight.ToStandalone();
             Tracks = new ObservableCollection<Track>(value.Tracks.Select(t => t.Copy()));
 
             Invalidate();

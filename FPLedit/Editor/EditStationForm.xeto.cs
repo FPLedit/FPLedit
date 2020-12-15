@@ -110,6 +110,7 @@ namespace FPLedit.Editor
             
             codeTextBox.Text = station.StationCode;
             typeComboBox.Text = station.StationType;
+            requestCheckBox.Checked = Station.RequestStop;
         }
 
         private void CloseButton_Click(object sender, EventArgs e)
