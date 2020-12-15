@@ -180,7 +180,7 @@ namespace FPLedit.Shared
         public void RemoveOrphanedTimes()
         {
             var stas = ParentTimetable.Type == TimetableType.Linear
-                ? ParentTimetable.GetLinearStationsOrderedByDirection(TrainDirection.ti) // All arrdeps are sorted in line direction if linear...
+                ? ParentTimetable.GetLinearStationsOrderedByDirection(Direction) // All arrdeps are sorted in line direction if linear...
                 : GetPath(); // ...else, use full path.
 
             if (stas.Count == 0) // There is no remaining path, so nothing to clean up.
