@@ -62,7 +62,16 @@ namespace FPLedit.CrashReporting
         // Crash flag
         public bool HasCurrentReport => File.Exists(pluginInterface.GetTemp(CRASH_DIR + "crash.flag"));
 
-        public void RemoveCrashFlag() => File.Delete(pluginInterface.GetTemp(CRASH_DIR + "crash.flag"));
+        public void RemoveCrashFlag()
+        {
+            try
+            {
+                File.Delete(pluginInterface.GetTemp(CRASH_DIR + "crash.flag"));
+            }
+            catch
+            {
+            }
+        }
 
 
         // Timetable backup after Crash

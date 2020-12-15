@@ -59,7 +59,7 @@ namespace FPLedit.Shared.UI
         {
             var p = GetProperty<T>(property);
             dropDown.ItemTextBinding = Binding.Property<TEnum, string>(s => display[s]);
-            dropDown.DataStore = display.Keys.Cast<object>();
+            dropDown.DataStore = display.Keys.Cast<object>().ToArray();
             dropDown.SelectedValueBinding.BindDataContext<T>(s => (TEnum)p.GetValue(s)!, (s, v) => p.SetValue(s, v));
         }
 

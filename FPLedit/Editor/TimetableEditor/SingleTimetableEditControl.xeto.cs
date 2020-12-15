@@ -88,6 +88,8 @@ namespace FPLedit.Editor.TimetableEditor
                 ConfigureCell = (args, control) =>
                 {
                     var tb = (TextBox) control;
+                    if (tb == null || args?.Item == null)
+                        return;
                     var data = (DataElement) args.Item;
                     new TimetableCellRenderProperties(time, data.Station, arrival, data).Apply(tb);
 
@@ -135,12 +137,14 @@ namespace FPLedit.Editor.TimetableEditor
                 ConfigureCell = (args, control) =>
                 {
                     var dd = (DropDown) control;
+                    if (dd == null || args?.Item == null)
+                        return;
                     var data = (DataElement) args.Item;
 
                     var ds = data.GetTrackDataStore().ToArray();
 
                     dd.DataStore = ds;
-                    dd.Enabled = data.GetTrackDataStore().Count() > 1;
+                    dd.Enabled = ds.Length > 1;
                     if (data.IsFirst(data.Station) && arrival || data.IsLast(data.Station) && !arrival)
                         dd.Enabled = false;
 

@@ -3,6 +3,7 @@ using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using FPLedit.Shared.UI.Validators;
 using System;
+using System.Linq;
 
 namespace FPLedit.Editor.Trains
 {
@@ -27,7 +28,7 @@ namespace FPLedit.Editor.Trains
             offsetTextBox.Text = "+20";
 
             trainsComboBox.ItemTextBinding = Binding.Property<Train, string>(t => t.TName);
-            trainsComboBox.DataStore = new TrainEditHelper().FillCandidates(train);
+            trainsComboBox.DataStore = new TrainEditHelper().FillCandidates(train).ToArray();
             trainsComboBox.SelectedIndex = 0;
         }
 

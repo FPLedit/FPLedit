@@ -45,7 +45,7 @@ namespace FPLedit.DebugDump.Forms
             if (currentEvent == null)
                 return;
             propertyTextArea.Text = "Time: " + currentEvent.Time.ToString("g") + "\nType: " + currentEvent.Type + "\nData count: " + currentEvent.Data.Length;
-            dataDropDown.DataStore = Enumerable.Range(-1, currentEvent.Data.Length + 1).Cast<object>();
+            dataDropDown.DataStore = Enumerable.Range(-1, currentEvent.Data.Length + 1).Cast<object>().ToArray();
             if (currentEvent.Data.Any())
                 dataDropDown.SelectedIndex = 0;
         }

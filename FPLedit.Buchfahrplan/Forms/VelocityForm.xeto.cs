@@ -59,7 +59,7 @@ namespace FPLedit.Buchfahrplan.Forms
             if (attrs != null)
                 points.AddRange(attrs.GetRoutePoints(route.Index));
 
-            gridView.DataStore = points.OrderBy(o => o.Positions.GetPosition(route.Index));
+            gridView.DataStore = points.OrderBy(o => o.Positions.GetPosition(route.Index)).ToArray();
         }
 
         private void AddPoint()

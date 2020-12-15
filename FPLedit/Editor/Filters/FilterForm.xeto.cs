@@ -67,7 +67,7 @@ namespace FPLedit.Editor.Filters
 
         private void UpdateListView(GridView view, List<FilterRule> rules)
         {
-            view.DataStore = rules;
+            view.DataStore = rules.ToArray();
         }
 
         private void DeleteEntry(GridView view, List<FilterRule> patterns, bool message = true)

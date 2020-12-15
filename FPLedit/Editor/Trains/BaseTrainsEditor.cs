@@ -16,7 +16,7 @@ namespace FPLedit.Editor.Trains
 
         protected void UpdateListView(GridView view, TrainDirection direction)
         {
-            view.DataStore = tt.Trains.Where(t => t.Direction == direction);
+            view.DataStore = tt.Trains.Where(t => t.Direction == direction).ToArray();
         }
 
         protected void DeleteTrain(GridView view, TrainDirection dir, bool message = true)
