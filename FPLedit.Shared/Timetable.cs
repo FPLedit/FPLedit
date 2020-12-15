@@ -336,6 +336,8 @@ namespace FPLedit.Shared
             }
 
             stations.Add(sta);
+            RebuildRouteCache(route);
+            
             if (Type == TimetableType.Linear)
             {
                 if (route != LINEAR_ROUTE_ID)

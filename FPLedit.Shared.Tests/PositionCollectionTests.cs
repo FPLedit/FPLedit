@@ -62,7 +62,7 @@ namespace FPLedit.Shared.Tests
             Assert.AreEqual(false, s.Attributes.ContainsKey("kmr"));
         }
 
-        [Test]
+        /*[Test]
         public void LinearJtg2WriteTest()
         {
             var tt = new Timetable(TimetableType.Linear);
@@ -109,7 +109,7 @@ namespace FPLedit.Shared.Tests
             Assert.Throws<FormatException>(() => new PositionCollection(s, tt));
             s = new Station(tt) {Attributes = {["km"] = "123a"}};
             Assert.Throws<FormatException>(() => new PositionCollection(s, tt));
-        }
+        }*/
 
         [Test]
         public void LinearJtg3WriteTest()
