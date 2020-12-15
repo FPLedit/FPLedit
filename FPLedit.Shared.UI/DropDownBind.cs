@@ -58,7 +58,7 @@ namespace FPLedit.Shared.UI
         public static void Enum<T, TEnum>(DropDown dropDown, string property, Dictionary<TEnum, string> display) where TEnum : Enum
         {
             var p = GetProperty<T>(property);
-            dropDown.ItemTextBinding = Binding.Property<TEnum, string>(s => display[s]);
+            dropDown.ItemTextBinding = Binding.Delegate<TEnum, string>(s => display[s]);
             dropDown.DataStore = display.Keys.Cast<object>().ToArray();
             dropDown.SelectedValueBinding.BindDataContext<T>(s => (TEnum)p.GetValue(s)!, (s, v) => p.SetValue(s, v));
         }

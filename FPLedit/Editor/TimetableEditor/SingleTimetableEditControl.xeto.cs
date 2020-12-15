@@ -127,9 +127,9 @@ namespace FPLedit.Editor.TimetableEditor
             return cc;
         }
 
-        private CustomCell GetTrackCell(Expression<Func<ArrDep, string>> track, bool arrival)
+        private CustomCell GetTrackCell(Func<ArrDep, string> track, bool arrival)
         {
-            var shadowBinding = Binding.Property(track);
+            var shadowBinding = Binding.Delegate(track);
 
             var cc = new CustomCell
             {
@@ -181,9 +181,9 @@ namespace FPLedit.Editor.TimetableEditor
             return cc;
         }
 
-        private CheckBoxCell GetCheckCell(Expression<Func<ArrDep, bool>> check)
+        private CheckBoxCell GetCheckCell(Func<ArrDep, bool> check)
         {
-            var shadowBinding = Binding.Property(check);
+            var shadowBinding = Binding.Delegate(check);
             return new CheckBoxCell
             {
                 Binding = Binding.Delegate<DataElement, bool>(d => shadowBinding.GetValue(d.ArrDeps[d.Station])).Cast<bool?>()

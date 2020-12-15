@@ -74,7 +74,7 @@ namespace FPLedit.Editor.Trains
 
             Title = T._("Zug bearbeiten");
 
-            InitializeTrain();
+            Shown += (s, e) => InitializeTrain();
         }
 
         /// <summary>
@@ -93,14 +93,14 @@ namespace FPLedit.Editor.Trains
             if (tt.Type == TimetableType.Linear)
                 Train.AddLinearArrDeps();
 
-            InitializeTrain();
+            Shown += (s, e) => InitializeTrain();
         }
 
         private void InitializeTrain()
         {
             editor.Initialize(Train.ParentTimetable, Train);
 
-            transitionDropDown.ItemTextBinding = Binding.Property<Train, string>(t => t.TName);
+            transitionDropDown.ItemTextBinding = Binding.Delegate<Train, string>(t => t.TName);
             transitionDropDown.DataStore = tt.Trains.Where(t => t != Train).OrderBy(t => t.TName).ToArray();
             
             var transitions = tt.GetEditableTransitions(Train);

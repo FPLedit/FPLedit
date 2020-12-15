@@ -15,10 +15,10 @@ namespace FPLedit.Shared.UI
                 return cc.ToName(c);
             });
 
-        public static void AddIntConvBinding<TValue, T1>(this BindableBinding<T1, string> binding, Expression<Func<TValue, int>> property)
+        public static void AddIntConvBinding<TValue, T1>(this BindableBinding<T1, string> binding, Func<TValue, int> property)
             where T1 : IBindable
         {
-            var shadowBinding = Binding.Property(property);
+            var shadowBinding = Binding.Delegate(property);
 
             binding.BindDataContext<TValue>(s => shadowBinding.GetValue(s).ToString(), (s, str) =>
             {
@@ -27,10 +27,10 @@ namespace FPLedit.Shared.UI
             });
         }
 
-        public static void AddFloatConvBinding<TValue, T1>(this BindableBinding<T1, string> binding, Expression<Func<TValue, float>> property)
+        public static void AddFloatConvBinding<TValue, T1>(this BindableBinding<T1, string> binding, Func<TValue, float> property)
             where T1 : IBindable
         {
-            var shadowBinding = Binding.Property(property);
+            var shadowBinding = Binding.Delegate(property);
 
             binding.BindDataContext<TValue>(s => shadowBinding.GetValue(s).ToString(CultureInfo.CurrentCulture), (s, str) =>
             {

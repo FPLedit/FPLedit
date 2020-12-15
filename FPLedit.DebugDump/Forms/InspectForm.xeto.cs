@@ -20,7 +20,7 @@ namespace FPLedit.DebugDump.Forms
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            eventListBox.ItemTextBinding = Binding.Property<DumpEvent, string>(evt => evt.Time.ToString("g") + " " + evt.Type);
+            eventListBox.ItemTextBinding = Binding.Delegate<DumpEvent, string>(evt => evt.Time.ToString("g") + " " + evt.Type);
             eventListBox.SelectedIndexChanged += EventListBoxOnSelectedIndexChanged;
             eventListBox.DataStore = events;
             dataDropDown.ItemTextBinding = Binding.Delegate<int, string>(i => i > -1 ? "Data [" + i + "]" : "All Data");

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using Eto;
 using Eto.Forms;
 
@@ -9,21 +8,21 @@ namespace FPLedit.Shared.UI
 {
     public static class GridExtensions
     {
-        public static GridColumn AddColumn<T>(this GridView view, Expression<Func<T, string>> value, string header, bool editable = false)
-            => view.AddColumn(new TextBoxCell { Binding = Binding.Property(value) }, header, editable);
+        public static GridColumn AddColumn<T>(this GridView view, Func<T, string> value, string header, bool editable = false)
+            => view.AddColumn(new TextBoxCell { Binding = Binding.Delegate(value) }, header, editable);
 
-        public static GridColumn AddColumn<T, TVal>(this GridView view, Expression<Func<T, TVal>> value, Func<TVal, string> to, Func<string, TVal> from, string header, bool editable = false)
-            => view.AddColumn(new TextBoxCell { Binding = Binding.Property(value).Convert(to, from) }, header, editable);
+        public static GridColumn AddColumn<T, TVal>(this GridView view, Func<T, TVal> value, Func<TVal, string> to, Func<string, TVal> from, string header, bool editable = false)
+            => view.AddColumn(new TextBoxCell { Binding = Binding.Delegate(value).Convert(to, from) }, header, editable);
 
-        public static GridColumn AddCheckColumn<T>(this GridView view, Expression<Func<T, bool>> value, string header, bool editable = false)
-            => view.AddColumn(new CheckBoxCell { Binding = Binding.Property(value).Convert<bool?>(b => b, b => b.HasValue && b.Value), }, header, editable);
+        public static GridColumn AddCheckColumn<T>(this GridView view, Func<T, bool> value, string header, bool editable = false)
+            => view.AddColumn(new CheckBoxCell { Binding = Binding.Delegate(value).Convert<bool?>(b => b, b => b.HasValue && b.Value), }, header, editable);
 
-        public static GridColumn AddDropDownColumn<T>(this GridView view, Expression<Func<T, object>> value, IEnumerable<object> dataStore, string header, bool editable = false)
-            => view.AddColumn(new ComboBoxCell { Binding = Binding.Property(value), DataStore = dataStore }, header, editable);
+        public static GridColumn AddDropDownColumn<T>(this GridView view, Func<T, object> value, IEnumerable<object> dataStore, string header, bool editable = false)
+            => view.AddColumn(new ComboBoxCell { Binding = Binding.Delegate(value), DataStore = dataStore }, header, editable);
 
-        public static GridColumn AddDropDownColumn<T>(this GridView view, Expression<Func<T, object>> value, IEnumerable<object> dataStore, IIndirectBinding<string> textBinding, string header, bool editable = false)
+        public static GridColumn AddDropDownColumn<T>(this GridView view, Func<T, object> value, IEnumerable<object> dataStore, IIndirectBinding<string> textBinding, string header, bool editable = false)
         {
-            var internalBinding = Binding.Property(value);
+            var internalBinding = Binding.Delegate(value);
             Cell cell;
 
             // hack for eto/gtk not supporting ItemTextBinding on ComboBoxCells

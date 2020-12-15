@@ -25,7 +25,7 @@ namespace FPLedit.Editor.Trains
 
             sortSelection = new SelectionUI<SortSelectionType>(SelectMode, sortSelectionStack);
 
-            stationsComboBox.ItemTextBinding = Binding.Property<Station, string>(s => s.SName);
+            stationsComboBox.ItemTextBinding = Binding.Delegate<Station, string>(s => s.SName);
             stationsComboBox.DataStore = tt.Stations;
 
             if (dir == TrainDirection.tr) // Netzwerk-Fahrplan
