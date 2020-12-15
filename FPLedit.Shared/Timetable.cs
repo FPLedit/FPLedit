@@ -615,16 +615,53 @@ namespace FPLedit.Shared
         /// <inheritdoc />
         /// <exception cref="TimetableTypeNotSupportedException">If called on a linear timetable.</exception>
         /// <exception cref="ArgumentException"><paramref name="station"/> already serves the Route <paramref name="route"/></exception>
-        public void JoinRoutes(int route, Station station, float newKm)
+        public bool JoinRoutes(int route, Station station, float newKm)
         {
             if (Type == TimetableType.Linear)
                 throw new TimetableTypeNotSupportedException(TimetableType.Linear, "routes");
             if (station.Routes.Contains(route))
                 throw new ArgumentException(nameof(station) + " is already on route " + route);
             
+
             StationAddRoute(station, route);
             station.Positions.SetPosition(route, newKm);
             RebuildRouteCache(route);
+            
+            // All stations that are junction points.
+            var maybeAffectedRoutes = station.Routes.Concat(new[] { route }).ToArray();
+            var junctions = Stations.Where(s => s.IsJunction && s.Routes.Intersect(maybeAffectedRoutes).Any()).Concat(new []{station}).Distinct().ToArray();
+            var hasAmbiguousRoutes = CheckAmbiguousRoutesInternal(junctions);
+
+            if (hasAmbiguousRoutes)
+            {
+                station.Positions.RemovePosition(route);
+                StationRemoveRoute(station, route);
+                RebuildRouteCache(route);
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Internal function to check for ambiguous rouztes at the given junctions.
+        /// </summary>
+        /// <param name="junctions">Collection of junction points.</param>
+        /// <returns>Whether ambiguous routes exist.</returns>
+        public bool CheckAmbiguousRoutesInternal(Station[] junctions)
+        {
+            var hasAmbiguousRoutes = false;
+            
+            for (int i = 0; i < junctions.Length - 1; i++)
+            {
+                for (int j = i + 1; j < junctions.Length; j++)
+                {
+                    hasAmbiguousRoutes |= (junctions[i].Routes.Intersect(junctions[j].Routes).DefaultIfEmpty(-1)
+                        .Count(r => RouteConnectsDirectly(r, junctions[i], junctions[j])) > 1);
+                }
+            }
+
+            return hasAmbiguousRoutes;
         }
 
         /// <inheritdoc />

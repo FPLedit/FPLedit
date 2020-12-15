@@ -65,6 +65,20 @@ namespace FPLedit.Shared
             positions[route] = km;
             Write();
         }
+        
+        /// <summary>
+        /// Removes the given route position entry from this station.
+        /// </summary>
+        /// <remarks>USE WITH CARE!</remarks>
+        /// <param name="route"></param>
+        public void RemovePosition(int route)
+        {
+            if (tt.Type == TimetableType.Linear && route == Timetable.LINEAR_ROUTE_ID)
+                throw new Exception("Removing linear route is not possible!");
+            positions.Remove(route);
+            Write();
+        }
+
 
         /// <summary>
         /// Parse the position data data from a multi-route context (e.g. Network timetable).

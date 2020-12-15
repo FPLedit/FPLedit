@@ -340,7 +340,9 @@ namespace FPLedit.Editor.Rendering
 
         private void ConnectJoinLines(Station sta)
         {
-            tt.JoinRoutes(SelectedRoute, sta, tmp_km);
+            if (!tt.JoinRoutes(SelectedRoute, sta, tmp_km))
+                MessageBox.Show(T._("Die Verbindung konnte nicht erstellt werden, da sonst Routen zusammenfallen würden!"));
+            
             tmp_sta = null;
             mode = Modes.Normal;
 

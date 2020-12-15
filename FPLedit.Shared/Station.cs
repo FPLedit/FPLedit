@@ -173,13 +173,14 @@ namespace FPLedit.Shared
             return true;
         }
         
-        internal bool _InternalRemoveRoute(int route)
+        internal bool _InternalRemoveRoute(int route) //TODO: Remove RVC values.
         {
             if (!Routes.Contains(route)) 
                 return false;
             var list = Routes.ToList();
             list.Remove(route);
             Routes = list.ToArray();
+            Positions.RemovePosition(route);
             return true;
         }
     }

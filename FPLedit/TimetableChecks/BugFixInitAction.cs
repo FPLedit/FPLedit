@@ -40,18 +40,10 @@ namespace FPLedit.TimetableChecks
             {
                 if (tt.Type == TimetableType.Network && tt.HasRouteCycles)
                 {
-                    var hasAmbiguousRoutes = false;
                     // All stations that are junction points.
                     var maybeAffectedRoutes = tt.GetCyclicRoutes();
                     var junctions = tt.Stations.Where(s => s.IsJunction && s.Routes.Intersect(maybeAffectedRoutes).Any()).ToArray();
-                    for (int i = 0; i < junctions.Length - 1; i++)
-                    {
-                        for (int j = i + 1; j < junctions.Length; j++)
-                        {
-                            hasAmbiguousRoutes |= (junctions[i].Routes.Intersect(junctions[j].Routes).DefaultIfEmpty(-1)
-                                .Count(r => tt.RouteConnectsDirectly(r, junctions[i], junctions[j])) > 1);
-                        }
-                    }
+                    var hasAmbiguousRoutes = tt.CheckAmbiguousRoutesInternal(junctions);
 
                     if (hasAmbiguousRoutes)
                         upgradeMessages.Add(T._("Die Datei enthält zusammengfefallene Strecken, das heißt zwei Stationen sind auf mehr als einer Route ohne Zwischenstation verbunden. FPLedit kann sich danach komisch verhalten und Züge zufällig über die eine oder andere Strecke leiten. Eine Korrektur ist leider nicht möglich."));

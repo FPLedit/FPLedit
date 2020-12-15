@@ -111,7 +111,8 @@ namespace FPLedit.Shared
         /// <param name="route">The pre-existing route to be added to the stations.</param>
         /// <param name="station"></param>
         /// <param name="newKm">The new position of <paramref name="station"/> on <paramref name="route"/>.</param>
-        void JoinRoutes(int route, Station station, float newKm);
+        /// <returns>Specifies whether the operation has been successful.</returns>
+        bool JoinRoutes(int route, Station station, float newKm);
         /// <summary>
         /// Gets the route with the specifiec route index.
         /// </summary>
