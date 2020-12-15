@@ -192,7 +192,7 @@ namespace FPLedit.Editor.Linear
             if (mpmode)
                 l.Add(null);
 
-            view.DataStore = l;
+            view.DataStore = l.ToArray();
         }
 
         private bool UpdateTrainDataFromGrid(ITrain train, GridView view)

@@ -33,7 +33,7 @@ namespace FPLedit.Kursbuch.Forms
             var tt = pluginInterface.Timetable;
             settings = pluginInterface.Settings;
             var chooser = Plugin.GetTemplateChooser(pluginInterface);
-            templateComboBox.ItemTextBinding = Binding.Property<ITemplate, string>(t => t.TemplateName);
+            templateComboBox.ItemTextBinding = Binding.Delegate<ITemplate, string>(t => t.TemplateName);
             templateComboBox.DataStore = chooser.AvailableTemplates;
 
             var fntComboBox = new FontComboBox(fontComboBox, exampleLabel);

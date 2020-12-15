@@ -39,7 +39,7 @@ namespace FPLedit.Editor.Network
             //editor.Initialize(info.Timetable, t);
             //Title = Title.Replace("{train}", t.TName);
 
-            trainDropDown.ItemTextBinding = Binding.Property<ITrain, string>(tr => tr.TName);
+            trainDropDown.ItemTextBinding = Binding.Delegate<ITrain, string>(tr => tr.TName);
             trainDropDown.DataStore = pluginInterface.Timetable.Trains;
             trainDropDown.SelectedIndexChanged += TrainDropDown_SelectedIndexChanged;
             trainDropDown.SelectedIndex = 0;

@@ -35,7 +35,7 @@ namespace FPLedit.jTrainGraphStarter
             this.settings = settings;
 
             versionComboBox.DataStore = versions;
-            versionComboBox.ItemTextBinding = Binding.Property<VersionItem, string>(vi => vi.Name);
+            versionComboBox.ItemTextBinding = Binding.Delegate<VersionItem, string>(vi => vi.Name);
 
             javaPathTextBox.Text = settings.Get("jTGStarter.javapath", "");
             jtgPathTextBox.Text = settings.Get("jTGStarter.jtgpath", JtgShared.DEFAULT_FILENAME);

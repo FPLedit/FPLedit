@@ -134,6 +134,7 @@ namespace FPLedit
 
         private static void UnhandledException(object sender, Eto.UnhandledExceptionEventArgs e)
         {
+            var crashReporterStartedBefore = crashReporterStarted;
             var report = new CrashReport(mainForm.Bootstrapper.ExtensionManager, e.ExceptionObject as Exception);
             if (crashReporter != null && !crashReporterStarted)
             {
@@ -143,9 +144,12 @@ namespace FPLedit
             else
                 Console.Error.WriteLine(report.Serialize());
 
-            ExceptionQuit = true;
-            App.Restart();
-            Environment.Exit(-1);
+            if (!crashReporterStartedBefore)
+            {
+                ExceptionQuit = true;
+                App.Restart();
+                Environment.Exit(-1);
+            }
         }
 
         private static (LastFileHandler, Bootstrapper) InitializeMainComponents()
