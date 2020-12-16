@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
 var platform = Argument("tfm", "net5.0");
+var runtime = Argument("rid", "linux-x64");
 
 var docInPath = EnvironmentVariable("FPLEDIT_DOK");
 var hasDocInPath = !(docInPath == null || docInPath == "");
@@ -29,8 +30,8 @@ if (Argument<string>("auto-beta", null) != null) {
 
 // Define directories.
 var buildDir = Directory("./bin") + Directory(configuration) + Directory(platform);
+var distDir = Directory("./bin") + Directory("dist") + Directory(runtime);
 var buildDocDir = Directory("./bin") + Directory("api-doc");
-var buildLibDir = buildDir + Directory("lib");
 var sourceDir = Directory(".");
 var scriptsDir = Directory("./build_scripts");
 
@@ -71,46 +72,49 @@ Task("Restore-NuGet-Packages")
     .IsDependentOn("Clean")
     .Does(() =>
     {
-        NuGetRestore("./FPLedit.sln");
+        DotNetCoreRestore("./FPLedit.sln");
     });
 
 Task("Build")
     .IsDependentOn("Restore-NuGet-Packages")
     .Does(() =>
     {
-        /*
-         * HACK: Fix for annoying GenerateDepsFile failure.
-         * Remove 
-         */
-        /*for (int i = 1; i < 6; i++) {        
-            try {
-                MSBuild("./FPLedit.sln", settings => {
-                    settings.SetConfiguration(configuration);
-                    settings.Restore = true;
-                    settings.Properties.Add("ForceConfigurationDir", new List<string> { configuration });
-                    if (!string.IsNullOrEmpty(preBuildVersionSuffix))
-                        settings.Properties.Add("versionSuffix", new List<string> { preBuildVersionSuffix });
-                });
-            } catch {}
-        }*/
-        // END HACK
-        
-        MSBuild("./FPLedit.sln", settings => {
-            settings.SetConfiguration(configuration);
-            settings.Restore = true;
-            settings.Properties.Add("ForceConfigurationDir", new List<string> { configuration });
-            if (!string.IsNullOrEmpty(preBuildVersionSuffix))
-                settings.Properties.Add("versionSuffix", new List<string> { preBuildVersionSuffix });
+        var msbuildSettings = new DotNetCoreMSBuildSettings();
+        if (!string.IsNullOrEmpty(preBuildVersionSuffix))
+            msbuildSettings.Properties.Add("versionSuffix", new List<string> { preBuildVersionSuffix });
+        DotNetCoreBuild("./FPLedit.sln", new DotNetCoreBuildSettings
+        {
+            Configuration = configuration,
+            NoRestore = false,
+            MSBuildSettings = msbuildSettings,
+        });
+    });
+    
+Task("PackNet5")
+    .IsDependentOn("Build")
+    .Does(() =>
+    {
+        CleanDirectory(distDir);
+        var msbuildSettings = new DotNetCoreMSBuildSettings();
+        if (!string.IsNullOrEmpty(preBuildVersionSuffix))
+            msbuildSettings.Properties.Add("versionSuffix", new List<string> { preBuildVersionSuffix });
+        msbuildSettings.Properties.Add("BaseOutputAppPath", new List<string> { System.IO.Path.GetFullPath(distDir.Path.FullPath + "/") });
+        DotNetCorePublish("./FPLedit.sln", new DotNetCorePublishSettings {
+            Configuration = configuration,
+            Runtime = runtime,
+            SelfContained = false,
+            OutputDirectory = distDir,
+            MSBuildSettings = msbuildSettings,
         });
     });
     
 Task("BuildUserDocumentation")
-    .IsDependentOn("Build")
+    .IsDependentOn("PackNet5")
     .Does(() =>
     {
         if (hasDocInPath) {
             MSBuild("./build_scripts/GenerateUserDocumentation.proj", settings => {
-                settings.Properties.Add("OutputPath", new List<string> { System.IO.Path.GetFullPath(buildDir.Path.FullPath) });
+                settings.Properties.Add("OutputPath", new List<string> { System.IO.Path.GetFullPath(distDir.Path.FullPath) });
             });
         }
     });
@@ -118,97 +122,53 @@ Task("BuildUserDocumentation")
 Task("PrepareArtifacts")
     .IsDependentOn("BuildUserDocumentation")
     .Does(() => {
-        Console.WriteLine(buildDir);
-    
-        DeleteFiles(buildDir + File("*.pdb"));
-        DeleteFiles(buildDir + File("*.deps.json"));
-        
-        CreateDirectory(buildLibDir);
-        MoveFiles(buildDir + File("*.dll"), buildLibDir);
-        MoveFiles(buildLibDir + File("FPLedit.*"), buildDir);
-        
-        // Remove unused platform assemblies (Mac64/MonoMac has only been used for bundling before).
-        DeleteFile(buildLibDir + File("Eto.Mac64.dll"));
-        DeleteFile(buildLibDir + File("MonoMac.dll"));
-        
-        Information("Moving satellite assemblies of dependencies...");
-        var directories = GetSubDirectories(buildDir);
-        foreach (var dir in directories) {
-            if (Regex.IsMatch(dir.GetDirectoryName(), "^[a-z]{2}(-([A-Z]{2}|Hant|Hans))?$")) {
-                MoveDirectory(dir, buildLibDir + Directory(dir.GetDirectoryName()));
-            }
-        }
     });
     
 Task("BuildLicenseReadme")
     .IsDependentOn("PrepareArtifacts")
     .Does(() => {
-        var version = GetProductVersion(Context, buildDir + File("FPLedit.exe"));
+        var version = GetProductVersion(Context, distDir + File("FPLedit.dll"));
         var text = GetLicenseText(Context, 
             scriptsDir + Directory("info") + File("Info.txt"), 
             scriptsDir + Directory("info") + File("3rd-party.txt"), 
             version);
-        FileWriteText(buildDir + File("README_LICENSE.txt"), text);
+        FileWriteText(distDir + File("README_LICENSE.txt"), text);
     });
     
 Task("BundleThirdParty")
     .IsDependentOn("BuildLicenseReadme")
     .Does(() => {
-        var licenseDir = buildLibDir + Directory("licenses");
+        var licenseDir = distDir + Directory("licenses");
         CleanDirectory(licenseDir);
         CopyFiles(scriptsDir + Directory("info") + File("3rd-party.txt"), licenseDir);
         CopyFiles(scriptsDir + Directory("info") + Directory("3rd-party") + File("*.txt"), licenseDir);
     });
     
-Task("PackMacBundle")
+Task("PackRelease")
     .IsDependentOn("BundleThirdParty")
     .Does(() => {
-        Information("Bundling extension files for MacOS bundle");
-        var macBundle = buildDir + Directory("FPLedit.app");
-        var macTarget = macBundle + Directory("Contents") + Directory("MacOS");
-        var macLibTarget = macTarget + Directory("lib");
-        CopyDirectory(buildLibDir, macLibTarget);
-        CopyFiles(buildDir + File("*.dll"), macTarget);
-        
-        Information("Cleaning up unused files in mac bundle");
-        DeleteFiles(macLibTarget + File("Eto.*"));
-        DeleteFiles(macLibTarget + File("*Sharp.dll"));
-        DeleteFile(macLibTarget + File("Jint.dll"));
-        DeleteFile(macLibTarget + File("Mono.Options.dll"));
-        DeleteFile(macLibTarget + File("Portable.Xaml.dll"));
-        DeleteFile(macLibTarget + File("Esprima.dll"));
-        DeleteFiles(macLibTarget + File("Xceed.Wpf.*.dll"));
-        
-        Information("Zipping mac bundle");
-        var filesToZip = new List<string>();
-        filesToZip.AddRange(GetFiles(macBundle + File("**/*")).Select(f => f.FullPath));
-        filesToZip.Add(buildDir + File("README_LICENSE.txt"));
-        if (hasDocInPath)
-            filesToZip.Add(buildDir + File("Dokumentation.pdf"));
-        filesToZip.AddRange(GetFiles(buildLibDir + Directory("licenses") + File("*")).Select(f => f.FullPath));
-        
-        var version = GetProductVersion(Context, buildDir + File("FPLedit.exe"));
-        var nodoc_suffix = ignoreNoDoc ? "" : (!hasDocInPath ? "-nodoc" : "");      
-        var file = Directory("./bin") + File($"fpledit-{version}{nodoc_suffix}-mac.zip");
-        
-        if (FileExists(file))
-            throw new Exception("Zip file already exists! " + file);
-        Zip(buildDir, file, filesToZip);
-        
-        Information("Cleaning up; deleting macOS bundle");
-        DeleteDirectory(macBundle, true);
-    });
-    
-Task("PackRelease")
-    .IsDependentOn("PackMacBundle")
-    .Does(() => {
-        var version = GetProductVersion(Context, buildDir + File("FPLedit.exe"));
+        var version = GetProductVersion(Context, distDir + File("FPLedit.dll"));
         var nodoc_suffix = ignoreNoDoc ? "" : (!hasDocInPath ? "-nodoc" : "");       
-        var file = Directory("./bin") + File($"fpledit-{version}{nodoc_suffix}.zip");
+        var file = Directory("./bin") + File($"fpledit-{version}-{runtime}{nodoc_suffix}.zip");
         
         if (FileExists(file))
             throw new Exception("Zip file already exists! " + file);
-        Zip(buildDir, file);
+            
+        if (!runtime.StartsWith("osx")) {
+            Zip(distDir, file);
+        } else {
+            var macBundle = distDir + Directory("FPLedit.app");
+            var macTarget = macBundle + Directory("Contents") + Directory("MacOS");
+            
+            var filesToZip = new List<string>();
+            filesToZip.AddRange(GetFiles(macBundle + File("**/*")).Select(f => f.FullPath));
+            filesToZip.Add(distDir + File("README_LICENSE.txt"));
+            if (hasDocInPath)
+                filesToZip.Add(distDir + File("Dokumentation.pdf"));
+            filesToZip.AddRange(GetFiles(distDir + Directory("licenses") + File("*")).Select(f => f.FullPath));
+            
+            Zip(distDir, file, filesToZip);
+        }
     });
 
 //////////////////////////////////////////////////////////////////////

@@ -6,8 +6,7 @@
 
 <Project>
 
-
-  <UsingTask TaskName="GenerateExtensionSignatures" AssemblyFile="$(SolutionDir)/build_scripts/GenerateSignatures.task.dll" />
+  <UsingTask TaskName="GenerateExtensionSignatures" AssemblyFile="$(SolutionDir)/build_scripts/FPLedit.Build.task.dll" />
 
   <PropertyGroup>
     <!-- Include own build tool -->
