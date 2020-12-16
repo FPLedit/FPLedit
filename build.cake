@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
 var platform = Argument("tfm", "net5.0");
-var runtime = Argument("rid", "linux-x64");
+var runtimes = Argument("rid", "linux-x64");
 
 var docInPath = EnvironmentVariable("FPLEDIT_DOK");
 var hasDocInPath = !(docInPath == null || docInPath == "");
@@ -30,7 +30,6 @@ if (Argument<string>("auto-beta", null) != null) {
 
 // Define directories.
 var buildDir = Directory("./bin") + Directory(configuration) + Directory(platform);
-var distDir = Directory("./bin") + Directory("dist") + Directory(runtime);
 var buildDocDir = Directory("./bin") + Directory("api-doc");
 var sourceDir = Directory(".");
 var scriptsDir = Directory("./build_scripts");
@@ -66,6 +65,7 @@ Task("Clean")
     {
         CleanDirectory(buildDir);
         CleanDirectory(buildDocDir);
+        ForAllRuntimes((rt, dd) => CleanDirectory(dd));
     });
 
 Task("Restore-NuGet-Packages")
@@ -94,17 +94,18 @@ Task("PackNet5")
     .IsDependentOn("Build")
     .Does(() =>
     {
-        CleanDirectory(distDir);
-        var msbuildSettings = new DotNetCoreMSBuildSettings();
-        if (!string.IsNullOrEmpty(preBuildVersionSuffix))
-            msbuildSettings.Properties.Add("versionSuffix", new List<string> { preBuildVersionSuffix });
-        msbuildSettings.Properties.Add("BaseOutputAppPath", new List<string> { System.IO.Path.GetFullPath(distDir.Path.FullPath + "/") });
-        DotNetCorePublish("./FPLedit.sln", new DotNetCorePublishSettings {
-            Configuration = configuration,
-            Runtime = runtime,
-            SelfContained = false,
-            OutputDirectory = distDir,
-            MSBuildSettings = msbuildSettings,
+        ForAllRuntimes( (runtime, distDir) => {
+            var msbuildSettings = new DotNetCoreMSBuildSettings();
+            if (!string.IsNullOrEmpty(preBuildVersionSuffix))
+                msbuildSettings.Properties.Add("versionSuffix", new List<string> { preBuildVersionSuffix });
+            msbuildSettings.Properties.Add("BaseOutputAppPath", new List<string> { System.IO.Path.GetFullPath(distDir.Path.FullPath + "/") });
+            DotNetCorePublish("./FPLedit.sln", new DotNetCorePublishSettings {
+                Configuration = configuration,
+                Runtime = runtime,
+                SelfContained = false,
+                OutputDirectory = distDir,
+                MSBuildSettings = msbuildSettings,
+            });
         });
     });
     
@@ -114,8 +115,12 @@ Task("BuildUserDocumentation")
     {
         if (hasDocInPath) {
             MSBuild("./build_scripts/GenerateUserDocumentation.proj", settings => {
-                settings.Properties.Add("OutputPath", new List<string> { System.IO.Path.GetFullPath(distDir.Path.FullPath) });
+                settings.Properties.Add("OutputPath", new List<string> { System.IO.Path.GetFullPath(buildDir.Path.FullPath) });
             });
+            ForAllRuntimes( (runtime, distDir) => {
+                CopyFiles(buildDir + File("*.pdf"), distDir);
+            });
+            //TODO: Generate in temp file and copy to all.
         }
     });
 
@@ -127,48 +132,54 @@ Task("PrepareArtifacts")
 Task("BuildLicenseReadme")
     .IsDependentOn("PrepareArtifacts")
     .Does(() => {
-        var version = GetProductVersion(Context, distDir + File("FPLedit.dll"));
-        var text = GetLicenseText(Context, 
-            scriptsDir + Directory("info") + File("Info.txt"), 
-            scriptsDir + Directory("info") + File("3rd-party.txt"), 
-            version);
-        FileWriteText(distDir + File("README_LICENSE.txt"), text);
+        ForAllRuntimes( (runtime, distDir) => {
+            var version = GetProductVersion(Context, distDir + File("FPLedit.dll"));
+            var text = GetLicenseText(Context, 
+                scriptsDir + Directory("info") + File("Info.txt"), 
+                scriptsDir + Directory("info") + File("3rd-party.txt"), 
+                version);
+            FileWriteText(distDir + File("README_LICENSE.txt"), text);
+        });
     });
     
 Task("BundleThirdParty")
     .IsDependentOn("BuildLicenseReadme")
     .Does(() => {
-        var licenseDir = distDir + Directory("licenses");
-        CleanDirectory(licenseDir);
-        CopyFiles(scriptsDir + Directory("info") + File("3rd-party.txt"), licenseDir);
-        CopyFiles(scriptsDir + Directory("info") + Directory("3rd-party") + File("*.txt"), licenseDir);
+        ForAllRuntimes( (runtime, distDir) => {
+            var licenseDir = distDir + Directory("licenses");
+            CleanDirectory(licenseDir);
+            CopyFiles(scriptsDir + Directory("info") + File("3rd-party.txt"), licenseDir);
+            CopyFiles(scriptsDir + Directory("info") + Directory("3rd-party") + File("*.txt"), licenseDir);
+        });
     });
     
 Task("PackRelease")
     .IsDependentOn("BundleThirdParty")
     .Does(() => {
-        var version = GetProductVersion(Context, distDir + File("FPLedit.dll"));
-        var nodoc_suffix = ignoreNoDoc ? "" : (!hasDocInPath ? "-nodoc" : "");       
-        var file = Directory("./bin") + File($"fpledit-{version}-{runtime}{nodoc_suffix}.zip");
-        
-        if (FileExists(file))
-            throw new Exception("Zip file already exists! " + file);
+        ForAllRuntimes( (runtime, distDir) => {
+            var version = GetProductVersion(Context, distDir + File("FPLedit.dll"));
+            var nodoc_suffix = ignoreNoDoc ? "" : (!hasDocInPath ? "-nodoc" : "");       
+            var file = Directory("./bin") + File($"fpledit-{version}-{runtime}{nodoc_suffix}.zip");
             
-        if (!runtime.StartsWith("osx")) {
-            Zip(distDir, file);
-        } else {
-            var macBundle = distDir + Directory("FPLedit.app");
-            var macTarget = macBundle + Directory("Contents") + Directory("MacOS");
-            
-            var filesToZip = new List<string>();
-            filesToZip.AddRange(GetFiles(macBundle + File("**/*")).Select(f => f.FullPath));
-            filesToZip.Add(distDir + File("README_LICENSE.txt"));
-            if (hasDocInPath)
-                filesToZip.Add(distDir + File("Dokumentation.pdf"));
-            filesToZip.AddRange(GetFiles(distDir + Directory("licenses") + File("*")).Select(f => f.FullPath));
-            
-            Zip(distDir, file, filesToZip);
-        }
+            if (FileExists(file))
+                throw new Exception("Zip file already exists! " + file);
+                
+            if (!runtime.StartsWith("osx")) {
+                Zip(distDir, file);
+            } else {
+                var macBundle = distDir + Directory("FPLedit.app");
+                var macTarget = macBundle + Directory("Contents") + Directory("MacOS");
+                
+                var filesToZip = new List<string>();
+                filesToZip.AddRange(GetFiles(macBundle + File("**/*")).Select(f => f.FullPath));
+                filesToZip.Add(distDir + File("README_LICENSE.txt"));
+                if (hasDocInPath)
+                    filesToZip.Add(distDir + File("Dokumentation.pdf"));
+                filesToZip.AddRange(GetFiles(distDir + Directory("licenses") + File("*")).Select(f => f.FullPath));
+                
+                Zip(distDir, file, filesToZip);
+            }
+        });
     });
 
 //////////////////////////////////////////////////////////////////////
@@ -196,8 +207,10 @@ RunTarget(target);
 // FUNCTIONS
 //////////////////////////////////////////////////////////////////////
 
-public void RequireFile(string filename)
-{
-    if (!FileExists(filename))
-        throw new Exception("File " + filename + " is required");
+public void ForAllRuntimes(Action<string, ConvertableDirectoryPath> func) {
+    var rts = runtimes.Split(',');
+    foreach (var rt in rts) {
+        var distDir = Directory("./bin") + Directory("dist") + Directory(rt);
+        func(rt, distDir);
+    }
 }
