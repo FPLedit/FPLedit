@@ -14,6 +14,8 @@
     <PathMap>$(MSBuildProjectDirectory)=fpledit-src\$(MSBuildProjectName)</PathMap>
     <LangVersion>8.0</LangVersion>
     <CodeAnalysisRuleSet>..\build_scripts\FPLedit.ruleset</CodeAnalysisRuleSet>
+    
+    <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
 
     <!--<WarningsAsErrors>CS8600;CS8602;CS8603</WarningsAsErrors>-->
     <MSBuildWarningsAsMessages>MSB3277</MSBuildWarningsAsMessages>

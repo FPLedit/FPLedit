@@ -11,10 +11,10 @@
     <AssemblyTitle>FPLedit - Shared Rendering components</AssemblyTitle>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj" />

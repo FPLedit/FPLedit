@@ -10,10 +10,10 @@
     <AssemblyTitle>FPLedit - Shared UI components</AssemblyTitle>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\FPLedit.Shared.Rendering\FPLedit.Shared.Rendering.csproj" />
@@ -22,10 +22,6 @@
   <ItemGroup>
     <PackageReference Include="Eto.Forms" Version="$(EtoVersion)" />
     <PackageReference Include="Eto.Serialization.Xaml" Version="$(EtoVersion)" />
-    <PackageReference Include="Nullable" Version="1.3.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Languages/*.mo" CopyToOutputDirectory="Always" />
