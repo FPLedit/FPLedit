@@ -1,0 +1,50 @@
+<!--
+  FPLedit Build Process
+  Common build properties for all projects.
+  (c) Manuel Huber 2020
+-->
+
+<Project>
+
+  <PropertyGroup>
+    <AppHostPatch_ContainerTool Condition=" '$(AppHostPatch_ContainerTool)' == '' ">podman</AppHostPatch_ContainerTool>
+    <AppHostPatch_ContainerFile Condition=" '$(AppHostPatch_ContainerFile)' == '' ">Containerfile</AppHostPatch_ContainerFile>
+  </PropertyGroup>
+
+  <Target Name="AppHostPatch_PatchWindowsAppHostLinuxTarget" AfterTargets="Publish" Condition=" '$(RuntimeIdentifier)' == 'win-x64' and '$(OS)' != 'Windows_NT' ">
+    <PropertyGroup>
+      <AppHostPatch_AppHostPath>$([System.String]::Copy('$(TargetFileName)').Replace('dll','exe'))</AppHostPatch_AppHostPath>
+      <AppHostPatch_AppHostPath>$([System.IO.Path]::Combine( '$(PublishDir)', '$(AppHostPatch_AppHostPath)' ) )</AppHostPatch_AppHostPath>
+      <AppHostPatch_AssemblyPath>$([System.IO.Path]::Combine( '$(PublishDir)', '$(TargetFileName)' ) )</AppHostPatch_AssemblyPath>
+    </PropertyGroup>
+    
+    <Message Importance="High" Text="Pathing app host PE Executable with resources &amp; WinGUI bit." />
+
+    <Error Condition="!Exists( '$(AppHostPatch_ContainerFile)' )" Text="Containerfile not found!" />
+
+    <!-- Create & start container -->
+    <Exec Command="$(AppHostPatch_ContainerTool) build -t app-host-patcher -f &quot;$(AppHostPatch_ContainerFile)&quot;" />
+    <Exec Command="$(AppHostPatch_ContainerTool) run -dit app-host-patcher" ConsoleToMSBuild="true">
+      <Output TaskParameter="ConsoleOutput" PropertyName="AppHostPatcher_ContainerId" />
+    </Exec>
+    <Message Importance="High" Text="Container ID: $(AppHostPatcher_ContainerId)" />
+    
+    <!-- Copy files -->
+    <Exec Command="$(AppHostPatch_ContainerTool) cp &quot;$(AppHostPatch_AppHostPath)&quot; $(AppHostPatcher_ContainerId):w.exe" />
+    <Exec Command="$(AppHostPatch_ContainerTool) cp &quot;$(AppHostPatch_AssemblyPath)&quot; $(AppHostPatcher_ContainerId):w.dll" />
+    
+    <!-- Execute build step in container -->
+    <Exec Command="$(AppHostPatch_ContainerTool) exec -it $(AppHostPatcher_ContainerId) wine64 AppHostPatcher.exe w.exe w.dll" />
+    
+    <!-- Copy back -->
+    <Exec Command="$(AppHostPatch_ContainerTool) cp $(AppHostPatcher_ContainerId):w.exe &quot;$(AppHostPatch_AppHostPath)&quot;" />
+
+    <!-- Cleanup -->
+    <Exec Command="$(AppHostPatch_ContainerTool) kill $(AppHostPatcher_ContainerId)" />
+    <Exec Command="$(AppHostPatch_ContainerTool) rm $(AppHostPatcher_ContainerId)" />
+    <Exec Command="$(AppHostPatch_ContainerTool) image rm app-host-patcher" />
+    
+    <Message Importance="high" Text="Patched app host file $(AppHostPatch_AppHostPath)!" />
+  </Target>
+
+</Project>

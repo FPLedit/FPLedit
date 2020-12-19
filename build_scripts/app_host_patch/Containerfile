@@ -1,0 +1,4 @@
+FROM alpine
+RUN mkdir /data && apk update && apk add wine xvfb
+ADD AppHostPatcher.exe /data/
+WORKDIR /data/
