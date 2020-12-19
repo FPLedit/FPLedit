@@ -16,7 +16,7 @@
   </Target>
 
   <!-- h a c k for msbuild, as it changes \ (escape character) to / before writing to file -->
-  <UsingTask TaskName="GenerateGlobalMetadataFileTask" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" >
+  <UsingTask TaskName="GenerateGlobalMetadataFileTask" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll" >
     <ParameterGroup>
       <OutputPath ParameterType="System.String" Required="true" />
       <InputPath ParameterType="System.String" Required="true" />

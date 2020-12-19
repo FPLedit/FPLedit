@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>{C9D85138-EABB-47C1-8765-0F204E81FA5C}</ProjectGuid>
-    <!--<TargetFramework>netstandard2.0</TargetFramework>-->
-    <TargetFramework>net461</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
@@ -11,10 +10,10 @@
     <Description>Optionale Erweiterung</Description>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\build_scripts\ResourceHelper.cs" Link="Properties\ResourceHelper.cs" />
@@ -32,4 +31,5 @@
     <PackageReference Include="Eto.Forms" Version="$(EtoVersion)" />
     <PackageReference Include="Eto.Serialization.Xaml" Version="$(EtoVersion)" />
   </ItemGroup>
+  <Target Name="GetCopyToPublishDirectoryItems" />
 </Project>

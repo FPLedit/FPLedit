@@ -11,7 +11,7 @@
     <CoreCompileDependsOn>GenerateVersionInfoTarget;$(CoreCompileDependsOn)</CoreCompileDependsOn>
   </PropertyGroup>
 
-  <UsingTask TaskName="GenerateVersionInfo" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" >
+  <UsingTask TaskName="GenerateVersionInfo" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll" >
     <ParameterGroup>
       <PVersionUpTo ParameterType="System.String" Required="true" />
       <PVersionFrom ParameterType="System.String" Required="true" />
