@@ -1,7 +1,9 @@
 <!--
-  FPLedit Build Process
-  Common build properties for all projects.
-  (c) Manuel Huber 2020
+  AppHostPatcher
+
+  Copyright © 2020 Manuel Huber
+See LICENSE for details <https://github.com/FPLedit/AppHostPatch-Linux/blob/main/LICENSE>.
+
 -->
 
 <Project>
@@ -16,8 +18,10 @@
       <AppHostPatch_AppHostPath>$([System.String]::Copy('$(TargetFileName)').Replace('dll','exe'))</AppHostPatch_AppHostPath>
       <AppHostPatch_AppHostPath>$([System.IO.Path]::Combine( '$(PublishDir)', '$(AppHostPatch_AppHostPath)' ) )</AppHostPatch_AppHostPath>
       <AppHostPatch_AssemblyPath>$([System.IO.Path]::Combine( '$(PublishDir)', '$(TargetFileName)' ) )</AppHostPatch_AssemblyPath>
+      <AppHostPatcher_IsWinExe>0</AppHostPatcher_IsWinExe>
+      <AppHostPatcher_IsWinExe Condition=" '$(OutputType)' == 'WinExe' ">1</AppHostPatcher_IsWinExe>
     </PropertyGroup>
-    
+
     <Message Importance="High" Text="Pathing app host PE Executable with resources &amp; WinGUI bit." />
 
     <Error Condition="!Exists( '$(AppHostPatch_ContainerFile)' )" Text="Containerfile not found!" />
@@ -28,14 +32,14 @@
       <Output TaskParameter="ConsoleOutput" PropertyName="AppHostPatcher_ContainerId" />
     </Exec>
     <Message Importance="High" Text="Container ID: $(AppHostPatcher_ContainerId)" />
-    
+
     <!-- Copy files -->
     <Exec Command="$(AppHostPatch_ContainerTool) cp &quot;$(AppHostPatch_AppHostPath)&quot; $(AppHostPatcher_ContainerId):w.exe" />
     <Exec Command="$(AppHostPatch_ContainerTool) cp &quot;$(AppHostPatch_AssemblyPath)&quot; $(AppHostPatcher_ContainerId):w.dll" />
-    
+
     <!-- Execute build step in container -->
-    <Exec Command="$(AppHostPatch_ContainerTool) exec -it $(AppHostPatcher_ContainerId) wine64 AppHostPatcher.exe w.exe w.dll" />
-    
+    <Exec Command="$(AppHostPatch_ContainerTool) exec -it $(AppHostPatcher_ContainerId) wine64 AppHostPatcher.exe w.exe w.dll $(AppHostPatcher_IsWinExe)" />
+
     <!-- Copy back -->
     <Exec Command="$(AppHostPatch_ContainerTool) cp $(AppHostPatcher_ContainerId):w.exe &quot;$(AppHostPatch_AppHostPath)&quot;" />
 
@@ -43,7 +47,7 @@
     <Exec Command="$(AppHostPatch_ContainerTool) kill $(AppHostPatcher_ContainerId)" />
     <Exec Command="$(AppHostPatch_ContainerTool) rm $(AppHostPatcher_ContainerId)" />
     <Exec Command="$(AppHostPatch_ContainerTool) image rm app-host-patcher" />
-    
+
     <Message Importance="high" Text="Patched app host file $(AppHostPatch_AppHostPath)!" />
   </Target>
 
