@@ -4,37 +4,33 @@ using System.Linq;
 
 namespace FPLedit.Templating
 {
-    internal sealed class ArgsParser
+    internal readonly ref struct ArgsParser
     {
-        private readonly string args;
-        private readonly char[] chars;
         private readonly Dictionary<string, string> parsedArgs;
 
-        public ArgsParser(string args)
+        public ArgsParser(ReadOnlySpan<char> args)
         {
-            this.args = args;
-            chars = args.ToCharArray();
-
-            parsedArgs = new Dictionary<string, string>();
-            ParseArgs();
+            parsedArgs = new Dictionary<string, string>(); //TODO: Somehow do not allocate dictionary?
+            ParseArgs(args);
         }
 
         // Format name="value" name="value"
-        private void ParseArgs()
+        private void ParseArgs(ReadOnlySpan<char> args)
         {
             bool isInString = false;
             bool hadEscapeCharacter = false;
             bool hadEquals = false;
-            string currentName = "", currentValue = "";
+            string currentName = "", currentValue = ""; //TODO: Do not allocate strings.
 
-            foreach (var ch in chars)
+            for (int i = 0; i < args.Length; i++)
             {
+                char ch = args[i];
                 if (!isInString)
                 {
                     if (char.IsWhiteSpace(ch))
                     {
                         if (currentName != "")
-                            throw new FormatException("Keine Leerzeichen in Namen erlaubt: " + args);
+                            throw new FormatException("Keine Leerzeichen in Namen erlaubt: " + args.ToString());
                         continue;
                     }
                     if (ch == '=')
@@ -45,7 +41,7 @@ namespace FPLedit.Templating
                     if (ch == '"')
                     {
                         if (!hadEquals)
-                            throw new FormatException("Kein = vor dem Wert vorhanden: " + args);
+                            throw new FormatException("Kein = vor dem Wert vorhanden: " + args.ToString());
                         isInString = true;
                         hadEquals = false;
                         continue;
@@ -70,18 +66,18 @@ namespace FPLedit.Templating
                     if ((ch == '"' || ch == '\\') && hadEscapeCharacter)
                         hadEscapeCharacter = false;
                     if (hadEscapeCharacter)
-                        throw new FormatException("Unbekannte Escape-Sequenz: " + args);
+                        throw new FormatException("Unbekannte Escape-Sequenz: " + args.ToString());
                     currentValue += ch;
                 }
             }
 
             if (currentValue != "")
-                throw new FormatException("Nicht beendete Zeichenkette: " + args);
+                throw new FormatException("Nicht beendete Zeichenkette: " + args.ToString());
             if (currentName != "")
-                throw new FormatException("Unvollständige Deklaration: " + args);
+                throw new FormatException("Unvollständige Deklaration: " + args.ToString());
         }
 
-        public bool Require(params string[] keys) => keys.Any(k => !parsedArgs.ContainsKey(k));
+        public bool Require(params string[] keys) => keys.Except(parsedArgs.Keys).Any();
 
         public string this[string idx] => parsedArgs[idx];
     }

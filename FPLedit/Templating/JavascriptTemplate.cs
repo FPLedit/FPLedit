@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Esprima;
 using FPLedit.Shared.Templating;
 using FPLedit.Shared;
@@ -30,99 +29,161 @@ namespace FPLedit.Templating
             Identifier = identifier;
             this.pluginInterface = pluginInterface;
 
-            CompiledCode = ParseTemplate();
+            CompiledCode = ParseTemplate(TemplateSource.AsSpan());
         }
 
         #region Parser
 
-        private string ParseTemplate()
+        private string ParseTemplate(ReadOnlySpan<char> code)
         {
-            var code = TemplateSource;
-            const RegexOptions ro = RegexOptions.Singleline | RegexOptions.IgnoreCase;
-            const RegexOptions rom = RegexOptions.Multiline | RegexOptions.IgnoreCase;
+            if (code.IsWhiteSpace())
+                return string.Empty;
+ 
+            const string startTag = "<#";
+            const string endTag = "#>";
 
-            // Template definition tag
-            code = Regex.Replace(code, @"<#@\s*fpledit_template(.*?)#>", TemplateDefinition, rom);
-            code = code.Trim('\r', '\n', ' ', '\t');
+            var scriptBuilder = new StringBuilder(code.Length + 1024);
 
-            code = ProcessTextBlocks(code);
-            code = Regex.Replace(code, @"<#=(.*?)#>", TransformCalls, ro);
-            code = Regex.Replace(code, @"<##>", "", ro);
-            code = Regex.Replace(code, @"<#[^=|@](.*?)#>", TransformCodeTag, ro);
+            var nextBlockSearchIdx = 0;
+            var blockStartIdx = IndexOfWithStart(code, startTag, nextBlockSearchIdx);
 
-            return code;
+            while (blockStartIdx >= 0)
+            {
+                // Output plaintext until the start of this code block.
+                BuildMultilineAppend(scriptBuilder, code.Slice(nextBlockSearchIdx, blockStartIdx - nextBlockSearchIdx));
+
+                // Find corresponding (=next) end tag
+                var blockEndIdx = IndexOfWithStart(code, endTag, blockStartIdx);
+                if (blockEndIdx < 0) // This code block does not end. Throw.
+                    throw new FormatException("Error parsing template script: No closing code block tag found.");
+
+                AppendCodeTag(scriptBuilder, code.Slice(blockStartIdx + startTag.Length, blockEndIdx - blockStartIdx - endTag.Length)); // Add this code block to output.
+
+                nextBlockSearchIdx = blockEndIdx + endTag.Length; // The next block can only start after the current one.
+                blockStartIdx = IndexOfWithStart(code, startTag, nextBlockSearchIdx); // Find next code block
+            }
+
+            // Write out the final block of non-code text (No more code blocks found).
+            BuildMultilineAppend(scriptBuilder, code.Slice(nextBlockSearchIdx, code.Length - nextBlockSearchIdx));
+
+            return scriptBuilder.ToString();
         }
 
-        private string TemplateDefinition(Match m)
+        private void AppendCodeTag(StringBuilder sb, ReadOnlySpan<char> text)
+        {
+            if (text.IsEmpty)
+                return;
+            if (text[0] == '=' && text.Length > 1)
+            {
+                sb.Append("__builder += ");
+                sb.Append(text.Slice(1));
+                sb.Append(';');
+                sb.Append(nl);
+            }
+            else if (text[0] == '@' && text.Length > 1)
+            {
+                var atRule = text.Slice(1).Trim();
+                const string tmplDef = "fpledit_template";
+                if (atRule.IndexOf(tmplDef) != -1 && atRule.Length > tmplDef.Length)
+                    TemplateDefinition(atRule.Slice(tmplDef.Length).TrimStart());
+                else
+                    throw new FormatException("Invalid @ rule found in template!");
+            }
+            else
+            {
+                sb.Append(text);
+                sb.Append(nl);
+            }
+        }
+        
+        private void TemplateDefinition(ReadOnlySpan<char> argsString)
         {
             if (TemplateType != null)
                 throw new Exception(T._("Nur eine fpledit_template-Direktive ist pro Vorlage erlaubt!"));
-            var tparams = new ArgsParser(m.Groups[1].ToString().Trim());
+            var tparams = new ArgsParser(argsString.ToString());
             if (tparams.Require("name", "type", "version"))
                 throw new Exception(T._("Fehlende Angabe type, version oder name in der fpledit_template-Direktive!"));
             if (tparams["version"] != CURRENT_VERSION.ToString())
                 throw new Exception(T._("Template-version mismatch! (Current: {0} vs {1})", CURRENT_VERSION, tparams["version"]));
             TemplateType = tparams["type"];
             TemplateName = tparams["name"];
-            return ""; // remove this match.
         }
 
-        private string TransformCalls(Match m) => "__builder += " + m.Groups[1].ToString().Trim() + ";" + nl;
-        private string TransformCodeTag(Match m) => m.Groups[1].ToString().Trim() + nl;
-
-        private string ProcessTextBlocks(string code) // leaves code blocks untouched
+        private int IndexOfWithStart(ReadOnlySpan<char> span, ReadOnlySpan<char> search, int startIndex)
         {
-            if (string.IsNullOrEmpty(code))
-                return string.Empty;
+            var idx = span.Slice(startIndex).IndexOf(search, StringComparison.Ordinal);
+            return idx != -1 ? idx + startIndex : -1;
+        }
 
-            const string startTag = "<#";
-            const string endTag = "#>";
-
-            var scriptBuilder = new StringBuilder();
-
-            var nextBlockSearchIdx = 0;
-            var blockStartIdx = code.IndexOf(startTag, nextBlockSearchIdx, StringComparison.Ordinal);
-
-            while (blockStartIdx >= 0)
+        private void BuildMultilineAppend(StringBuilder sb, ReadOnlySpan<char> text)
+        {
+            if (text.IsEmpty)
+                return;
+            var splitter = new SpanSplitEnumerator<char>(text, "\r\n".AsSpan());
+            var hadLast = false;
+            foreach (var range in splitter)
             {
-                // Output plaintext until the start of this code block.
-                scriptBuilder.Append(BuildMultilineAppend(code.Substring(nextBlockSearchIdx, blockStartIdx - nextBlockSearchIdx)));
+                if (range.End.Value - range.Start.Value < 0)
+                    continue;
 
-                // Find corresponding (=next) end tag
-                var blockEndIdx = code.IndexOf(endTag, blockStartIdx, StringComparison.Ordinal);
-                if (blockEndIdx < 0) // This code block does not end. Throw.
-                    throw new FormatException("Error parsing template script: No closing code block tag found.");
+                var line = text[range];
+                if (line.IsEmpty)
+                    continue;
 
-                scriptBuilder.Append(code.Substring(blockStartIdx, blockEndIdx - blockStartIdx + startTag.Length)); // Add this code block to output.
-
-                nextBlockSearchIdx = blockEndIdx + endTag.Length; // The next block can only start after the current one.
-                blockStartIdx = code.IndexOf(startTag, nextBlockSearchIdx, StringComparison.Ordinal); // Find next code block
+                if (hadLast)
+                {
+                    sb.Append("\";");
+                    sb.Append(nl);
+                }
+                
+                sb.Append("__builder += \"");
+                EscapeBackslashAndQuotes(sb, line);
+                hadLast = true;
             }
 
-            // Write out the final block of non-code text (No more code blocks found).
-            scriptBuilder.Append(BuildMultilineAppend(code.Substring(nextBlockSearchIdx, code.Length - nextBlockSearchIdx)));
-
-            return scriptBuilder.ToString();
+            if (hadLast)
+            {
+                sb.Append("\\n\";");
+                sb.Append(nl);
+            }
         }
 
-        private string BuildMultilineAppend(string text)
+        private void EscapeBackslashAndQuotes(StringBuilder sb, ReadOnlySpan<char> line)
         {
-            var lines = text
-                .Replace("\\", "\\\\") // escape backslash
-                .Replace("\"", "\\\"") // escape quotes
-                .Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries);
-            return string.Join(nl, lines
-                       .Take(lines.Length - 1)
-                       .Select(l => "__builder += \"" + l + "\\n\";"))
-                   + (lines.Length > 0 ? "__builder += \"" + lines[lines.Length - 1] + "\";" : "")
-                   + nl;
+            var bsSplitter = new SpanSplitEnumerator<char>(line, "\\".AsSpan());
+            bool hadBs = false;
+            foreach (var bsPart in bsSplitter)
+            {
+                if (bsPart.End.Value - bsPart.Start.Value < 0)
+                    continue;
+                
+                if (hadBs)
+                    sb.Append("\\\\");
+
+                var bsLine = line[bsPart];
+                if (bsLine.IsEmpty)
+                    continue;
+                var quotSplitter = new SpanSplitEnumerator<char>(bsLine, "\"".AsSpan());
+                bool hadQuot = false;
+                foreach (var quotPart in quotSplitter)
+                {
+                    if (quotPart.End.Value - quotPart.Start.Value < 0)
+                        continue;
+                    if (hadQuot)
+                        sb.Append("\\\"");
+                    sb.Append(bsLine[quotPart]);
+                    hadQuot = true;
+                }
+
+                hadBs = true;
+            }
         }
 
         #endregion
 
         public string GenerateResult(Timetable tt)
         {
-            // Allowed types whitlisted by extensions (for this specific template type or generic (e-.g. type == null)).
+            // Allowed types whitlisted by extensions (for this specific template type or generic (e.g. type == null)).
             var extensionAllowedTypes = pluginInterface.GetRegistered<ITemplateWhitelistEntry>()
                 .Where(w => w.TemplateType == TemplateType || w.TemplateType == null)
                 .Select(w => w.GetWhitelistType());
@@ -130,7 +191,7 @@ namespace FPLedit.Templating
             var allowedTypes = typeof(Timetable).Assembly.GetTypes()
                 .Where(type => type.GetCustomAttributes(typeof(TemplateSafeAttribute), true).Length > 0)
                 .Concat(extensionAllowedTypes)
-                .Concat(new[] { typeof(Enumerable), }); // Also whitelist type used for LINQ
+                .Concat(new[] { typeof(Enumerable) }); // Also whitelist type used for LINQ.
 
             var engine = new Engine();
             foreach (var type in allowedTypes) // Register all allowed types
