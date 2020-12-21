@@ -117,20 +117,9 @@ namespace FPLedit.jTrainGraphStarter
             return exists;
         }
 
-        private class VersionItem //TODO: Move to records
+        private record VersionItem(TimetableVersion Version, string Name)
         {
-            public TimetableVersion Version { get; }
-
-            public string Name { get; }
-
-            public VersionItem(TimetableVersion version, string name)
-            {
-                Version = version;
-                Name = name;
-            }
-
-            public override string ToString()
-                => Name;
+            public override string ToString() => Name;
         }
 
         private static class L

@@ -49,7 +49,7 @@ namespace FPLedit.Editor.Trains
 
             specialNameGridView.AddColumn((SpecialNameEntry spn) => spn.RowNumber.ToString(), "");
             specialNameGridView.AddColumn((SpecialNameEntry spn) => spn.Name, T._("Zugname"), true);
-            specialNameGridView.DataStore = new[] { new SpecialNameEntry { RowNumber = 1, Name = "" } };
+            specialNameGridView.DataStore = new[] { new SpecialNameEntry(1, "") };
         }
 
         private void CountTextBox_TextChanged(object sender, EventArgs e)
@@ -65,7 +65,7 @@ namespace FPLedit.Editor.Trains
             {
                 var newList = new List<SpecialNameEntry>(oldStore);
                 for (int i = oldStore.Length; i < count; i++)
-                    newList.Add(new SpecialNameEntry { RowNumber = i + 1, Name = "" });
+                    newList.Add(new SpecialNameEntry(i + 1, ""));
                 newStore = newList;
             }
 
@@ -189,12 +189,6 @@ namespace FPLedit.Editor.Trains
             Auto,
             [SelectionName("Manuelle Benennung")]
             Special
-        }
-        
-        private class SpecialNameEntry
-        {
-            public int RowNumber { get; set; }
-            public string Name { get; set; }
         }
         
         private static class L

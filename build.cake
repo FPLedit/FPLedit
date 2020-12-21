@@ -120,7 +120,6 @@ Task("BuildUserDocumentation")
             ForAllRuntimes( (runtime, distDir) => {
                 CopyFiles(buildDir + File("*.pdf"), distDir);
             });
-            //TODO: Generate in temp file and copy to all.
         }
     });
 

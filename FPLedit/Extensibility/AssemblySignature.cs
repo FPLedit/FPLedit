@@ -45,7 +45,7 @@ namespace FPLedit.Extensibility
             }
         }
 
-        private struct AssemblySignature
+        private readonly struct AssemblySignature
         {
             public readonly string FileName;
             public readonly byte[] Signature;

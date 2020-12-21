@@ -62,7 +62,7 @@ namespace FPLedit.Editor.Trains
                    
                     var ds = new SpecialNameEntry[stnc.Names.Length];
                     for (int i = 0; i < stnc.Names.Length; i++)
-                        ds[i] = new SpecialNameEntry() { RowNumber = i + 1, Name = stnc.Names[i] };
+                        ds[i] = new SpecialNameEntry(i + 1, stnc.Names[i]);
                     specialNameGridView.DataStore = ds;
                     break;
                 default:
@@ -83,7 +83,7 @@ namespace FPLedit.Editor.Trains
             {
                 var newList = new List<SpecialNameEntry>(oldStore);
                 for (int i = oldStore.Length; i < count; i++)
-                    newList.Add(new SpecialNameEntry { RowNumber = i + 1, Name = "" });
+                    newList.Add(new SpecialNameEntry(i + 1, ""));
                 newStore = newList;
             }
 
@@ -148,11 +148,7 @@ namespace FPLedit.Editor.Trains
             public static readonly string NumberChange = T._("Änderung der Zugnummer");
             public static readonly string Title = T._("Verlinkung bearbeiten");
         }
-        
-        private class SpecialNameEntry
-        {
-            public int RowNumber { get; set; }
-            public string Name { get; set; }
-        }
     }
+    
+    internal record SpecialNameEntry(int RowNumber, string Name);
 }

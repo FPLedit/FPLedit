@@ -27,17 +27,6 @@ namespace FPLedit.Bildfahrplan.Helpers
         public string GetDescription(int index)
             => types[index].Description;
 
-        private class DashStyle
-        {
-            public string Description { get; set; }
-
-            public float[] DashPattern { get; set; }
-
-            public DashStyle(string description, float[] pattern)
-            {
-                Description = description;
-                DashPattern = pattern;
-            }
-        }
+        private record DashStyle(string Description, float[] DashPattern);
     }
 }

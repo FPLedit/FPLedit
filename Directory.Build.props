@@ -12,7 +12,7 @@
   <PropertyGroup>
     <!-- Common props -->
     <PathMap>$(MSBuildProjectDirectory)=fpledit-src\$(MSBuildProjectName)</PathMap>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>9.0</LangVersion>
     <CodeAnalysisRuleSet>..\build_scripts\FPLedit.ruleset</CodeAnalysisRuleSet>
     
     <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
