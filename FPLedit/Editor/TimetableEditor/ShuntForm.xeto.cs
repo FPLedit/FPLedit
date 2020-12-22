@@ -47,7 +47,7 @@ namespace FPLedit.Editor.TimetableEditor
 
             var tracks = sta.Tracks.Select(t => t.Name).ToArray();
 
-            gridView.AddColumn<ShuntMove, TimeEntry>(s => s.Time, ts => ts.ToTimeString(), s => { train.ParentTimetable.TimeFactory.TryParse(s, out var res); return res; }, T._("Zeit"), editable: true);
+            gridView.AddColumn<ShuntMove, TimeEntry>(s => s.Time, ts => ts.ToTimeString(), s => { TimeEntry.TryParse(s, out var res); return res; }, T._("Zeit"), editable: true);
             gridView.AddDropDownColumn<ShuntMove>(s => s.SourceTrack, tracks, T._("Startgleis"), editable: true);
             gridView.AddDropDownColumn<ShuntMove>(s => s.TargetTrack, tracks, T._("Zielgleis"), editable: true);
             gridView.AddCheckColumn<ShuntMove>(s => s.EmptyAfterwards, T._("Alle Wagen?"), editable: true);

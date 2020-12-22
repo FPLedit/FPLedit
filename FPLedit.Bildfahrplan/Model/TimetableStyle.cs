@@ -20,7 +20,7 @@ namespace FPLedit.Bildfahrplan.Model
                 var time = tt.GetAttribute("tMin", "00:00");
                 if (time == "")
                     time = "00:00";
-                return tt.TimeFactory.Parse(time!);
+                return TimeEntry.Parse(time!);
             }
             set => tt.SetAttribute("tMin", value.ToTimeString());
         }
@@ -32,7 +32,7 @@ namespace FPLedit.Bildfahrplan.Model
                 var time = tt.GetAttribute("tMax", "24:00");
                 if (time == "")
                     time = "24:00";
-                return tt.TimeFactory.Parse(time!);
+                return TimeEntry.Parse(time!);
             }
             set => tt.SetAttribute("tMax", value.ToTimeString());
         }

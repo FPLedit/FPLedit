@@ -21,9 +21,9 @@ namespace FPLedit.Editor.TimetableEditor
         {
             var a = ArrDeps[sta];
             if (arrival)
-                a.Arrival = Train.ParentTimetable!.TimeFactory.Parse(time);
+                a.Arrival = TimeEntry.Parse(time);
             else
-                a.Departure = Train.ParentTimetable!.TimeFactory.Parse(time);
+                a.Departure = TimeEntry.Parse(time);
             ArrDeps[sta] = a;
         }
 
@@ -82,7 +82,7 @@ namespace FPLedit.Editor.TimetableEditor
 
         private class ErrorEntry
         {
-            public Station Station;
+            public readonly Station Station;
             public bool Arrival;
             public string Text;
 

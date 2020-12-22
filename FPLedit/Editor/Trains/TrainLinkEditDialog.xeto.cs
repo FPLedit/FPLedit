@@ -35,8 +35,8 @@ namespace FPLedit.Editor.Trains
             
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            differenceValidator = new TimeValidator(differenceTextBox, false, tt.TimeFactory, errorMessage: T._("Bitte die Verschiebung als Zeitangabe angeben!"));
-            offsetValidator = new TimeValidator(startOffsetTextBox, false, tt.TimeFactory, errorMessage: T._("Bitte die Startverschiebung als Zeitangabe angeben!"));
+            differenceValidator = new TimeValidator(differenceTextBox, false, errorMessage: T._("Bitte die Verschiebung als Zeitangabe angeben!"));
+            offsetValidator = new TimeValidator(startOffsetTextBox, false, errorMessage: T._("Bitte die Startverschiebung als Zeitangabe angeben!"));
             countValidator = new NumberValidator(countTextBox, false, true, allowNegative: false, errorMessage: T._("Bitte eine gültige Anzahl >0 neuer Züge eingeben!"));
             changeValidator = new NumberValidator(changeTextBox, false, true, errorMessage: T._("Bitte eine gültige Veränderung der Zugnummer eingeben!"));
 
@@ -102,8 +102,8 @@ namespace FPLedit.Editor.Trains
             }
 
             var th = new TrainEditHelper();
-            var offset = tt.TimeFactory.Parse(startOffsetTextBox.Text);
-            var diff = tt.TimeFactory.Parse(differenceTextBox.Text);
+            var offset = TimeEntry.Parse(startOffsetTextBox.Text);
+            var diff = TimeEntry.Parse(differenceTextBox.Text);
 
             var count = int.Parse(countTextBox.Text);
 

@@ -54,9 +54,6 @@ namespace FPLedit.Shared
         }
 
         /// <inheritdoc />
-        public TimeEntryFactory TimeFactory { get; } = new TimeEntryFactory();
-
-        /// <inheritdoc />
         [XAttrName("name")]
         public string TTName
         {
@@ -68,7 +65,7 @@ namespace FPLedit.Shared
         [XAttrName("dTt")]
         public TimeEntry DefaultPrePostTrackTime
         {
-            get => TimeFactory.Parse(GetAttribute("dTt", "00:10"));
+            get => TimeEntry.Parse(GetAttribute("dTt", "00:10"));
             set => SetAttribute("dTt", value.ToString());
         }
 
