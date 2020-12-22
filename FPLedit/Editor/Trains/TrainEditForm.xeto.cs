@@ -74,7 +74,7 @@ namespace FPLedit.Editor.Trains
 
             Title = T._("Zug bearbeiten");
 
-            Shown += (s, e) => InitializeTrain();
+            InitializeTrain();
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace FPLedit.Editor.Trains
             if (tt.Type == TimetableType.Linear)
                 Train.AddLinearArrDeps();
 
-            Shown += (s, e) => InitializeTrain();
+            InitializeTrain();
         }
 
         private void InitializeTrain()
@@ -123,7 +123,7 @@ namespace FPLedit.Editor.Trains
         {
             if (!nameValidator.Valid)
             {
-                MessageBox.Show(T._("Bitte erst alle Fehler beheben:\n{0}", nameValidator.ErrorMessage));
+                MessageBox.Show(T._("Bitte erst alle Fehler beheben:\n{0}", nameValidator.ErrorMessage ?? ""));
                 return;
             }
 
@@ -158,8 +158,8 @@ namespace FPLedit.Editor.Trains
 
         private void CancelButton_Click(object sender, EventArgs e)
         {
-            foreach (var kvp in arrDepBackup)
-                Train.GetArrDep(kvp.Key).ApplyCopy(kvp.Value);
+            foreach (var (sta, ardpBak) in arrDepBackup)
+                Train.GetArrDep(sta).ApplyCopy(ardpBak);
             Close(DialogResult.Cancel);
         }
 
