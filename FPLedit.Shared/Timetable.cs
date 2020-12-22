@@ -51,40 +51,10 @@ namespace FPLedit.Shared
         {
             SetAttribute("version", version.ToNumberString());
             typeCache = null;
-            timePrecisionCache = null;
-            timeFactoryCacheValid = false;
         }
 
-        public bool TimePrecisionSeconds {
-            get
-            {
-                if (!timePrecisionCache.HasValue)
-                {
-                    timePrecisionCache = (Type == TimetableType.Linear && Version.Compare(TimetableVersion.JTG3_3) >= 0) ||
-                                         (Type == TimetableType.Network && Version.Compare(TimetableVersion.Extended_FPL2) >= 0);
-                }
-
-                return timePrecisionCache.Value;
-            }
-        }
-
-        private bool timeFactoryCacheValid = false;
-        private readonly TimeEntryFactory timeFactoryCache = new TimeEntryFactory(false);
         /// <inheritdoc />
-        public TimeEntryFactory TimeFactory
-        {
-            get
-            {
-                if (!timeFactoryCacheValid)
-                {
-                    timeFactoryCache.AllowSeconds = TimePrecisionSeconds;
-                    timeFactoryCache.Normalizer.AllowSeconds = TimePrecisionSeconds;
-                    timeFactoryCacheValid = true;
-                }
-
-                return timeFactoryCache;
-            }
-        }
+        public TimeEntryFactory TimeFactory { get; } = new TimeEntryFactory();
 
         /// <inheritdoc />
         [XAttrName("name")]
@@ -98,10 +68,8 @@ namespace FPLedit.Shared
         [XAttrName("dTt")]
         public TimeEntry DefaultPrePostTrackTime
         {
-            get => TimePrecisionSeconds 
-                ? TimeFactory.Parse(GetAttribute("dTt", "00:10")) 
-                : new TimeEntry(0, GetAttribute("dTt", 10));
-            set => SetAttribute("dTt", TimePrecisionSeconds ? value.ToString() : value.GetTotalMinutes().ToString());
+            get => TimeFactory.Parse(GetAttribute("dTt", "00:10"));
+            set => SetAttribute("dTt", value.ToString());
         }
 
         #endregion

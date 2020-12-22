@@ -42,7 +42,7 @@ namespace FPLedit.Shared.UI
         public static void AddTimeEntryConvBinding<TValue, T1>(this BindableBinding<T1, string> binding, Expression<Func<TValue, TimeEntry>> property, TimeEntryFactory timeFactory)
             where T1 : IBindable
         {
-            string convFromTs(TimeEntry ts) => ts.ToTimeString(timeFactory.AllowSeconds);
+            string convFromTs(TimeEntry ts) => ts.ToTimeString();
             TimeEntry convToTs(string s)
             {
                 timeFactory.TryParse(s.Replace("24:", "1.00:"), out var ts);

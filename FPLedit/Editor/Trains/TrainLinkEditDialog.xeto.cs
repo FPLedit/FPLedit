@@ -44,8 +44,8 @@ namespace FPLedit.Editor.Trains
             train = link.ParentTrain;
             this.tt = tt;
             
-            startOffsetTextBox.Text = link.TimeOffset.ToTimeString(tt.TimeFactory.AllowSeconds);
-            differenceTextBox.Text = link.TimeDifference.ToTimeString(tt.TimeFactory.AllowSeconds);
+            startOffsetTextBox.Text = link.TimeOffset.ToTimeString();
+            differenceTextBox.Text = link.TimeDifference.ToTimeString();
             countTextBox.Text = link.TrainCount.ToString();
             
             switch (link.TrainNamingScheme)

@@ -52,15 +52,12 @@ namespace FPLedit.Shared
         {
             get
             {
-                if (!ParentTimetable.TimePrecisionSeconds)
-                    return new TimeEntry(0, GetAttribute<int>("tld"));
-
                 var time = GetAttribute("tld", "00:00");
                 if (time == "")
                     time = "00:00";
                 return ParentTimetable.TimeFactory.Parse(time!);
             }
-            set => SetAttribute("tld", ParentTimetable.TimePrecisionSeconds ? value.ToTimeString() : value.GetTotalMinutes().ToString());
+            set => SetAttribute("tld", value.ToTimeString());
         }
         
         /// <summary>
@@ -71,15 +68,12 @@ namespace FPLedit.Shared
         {
             get
             {
-                if (!ParentTimetable.TimePrecisionSeconds)
-                    return new TimeEntry(0, GetAttribute<int>("tlo"));
-
                 var time = GetAttribute("tlo", "00:00");
                 if (time == "")
                     time = "00:00";
                 return ParentTimetable.TimeFactory.Parse(time!);
             }
-            set => SetAttribute("tlo", ParentTimetable.TimePrecisionSeconds ? value.ToTimeString() : value.GetTotalMinutes().ToString());
+            set => SetAttribute("tlo", value.ToTimeString());
         }
 
         

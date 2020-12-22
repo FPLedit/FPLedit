@@ -79,7 +79,7 @@ namespace FPLedit.Shared
 
         protected void SetNotEmptyTimeAttribute(string key, TimeEntry time)
         {
-            var t = time.ToTimeString(ParentTimetable!.TimePrecisionSeconds);
+            var t = time.ToTimeString();
             SetAttribute(key, t != "00:00" ? t : "");
         }
 

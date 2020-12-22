@@ -21,11 +21,11 @@ namespace FPLedit.Shared
         [JtgVersionCompat("3.03", TtVersionJtgCompat.OnlyLinear)]
         JTG3_0 = 009,
 
-        [TtVersionCompat(TtVersionCompatType.ReadWrite, TimetableType.Linear)]
+        [TtVersionCompat(TtVersionCompatType.UpgradeOnly, TimetableType.Linear)]
         [JtgVersionCompat("3.11", TtVersionJtgCompat.OnlyLinear)]
         JTG3_1 = 010,
         
-        [TtVersionCompat(TtVersionCompatType.ReadWrite, TimetableType.Linear)]
+        [TtVersionCompat(TtVersionCompatType.UpgradeOnly, TimetableType.Linear)]
         [JtgVersionCompat("3.2*", TtVersionJtgCompat.OnlyLinear)]
         JTG3_2 = 011,
         
@@ -33,7 +33,7 @@ namespace FPLedit.Shared
         [JtgVersionCompat("3.3*", TtVersionJtgCompat.OnlyLinear)]
         JTG3_3 = 012,
 
-        [TtVersionCompat(TtVersionCompatType.ReadWrite, TimetableType.Network)]
+        [TtVersionCompat(TtVersionCompatType.UpgradeOnly, TimetableType.Network)]
         Extended_FPL = 100,
         
         [TtVersionCompat(TtVersionCompatType.ReadWrite, TimetableType.Network)]

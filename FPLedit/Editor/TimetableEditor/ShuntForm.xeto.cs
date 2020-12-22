@@ -36,18 +36,18 @@ namespace FPLedit.Editor.TimetableEditor
             departureLabel.Font = new Font(departureLabel.Font.FamilyName, departureLabel.Font.Size, FontStyle.Bold);
             
             var arrivalTrack = dir.HasValue ? th.GetTrack(train, sta, dir.Value, arrDep, TrackQuery.Departure) : "-";
-            arrivalLabel.Text = arrivalLabel.Text.Replace("{time}", arrDep.Arrival != default ? arrDep.Arrival.ToTimeString(sta.ParentTimetable!.TimePrecisionSeconds) : "-");
+            arrivalLabel.Text = arrivalLabel.Text.Replace("{time}", arrDep.Arrival != default ? arrDep.Arrival.ToTimeString() : "-");
             arrivalLabel.Text = arrivalLabel.Text.Replace("{track}", arrivalTrack);
             
             var departureTrack = dir.HasValue ? th.GetTrack(train, sta, dir.Value, arrDep, TrackQuery.Departure) : "-";
-            departureLabel.Text = departureLabel.Text.Replace("{time}", arrDep.Departure != default ? arrDep.Departure.ToTimeString(sta.ParentTimetable!.TimePrecisionSeconds) : "-");
+            departureLabel.Text = departureLabel.Text.Replace("{time}", arrDep.Departure != default ? arrDep.Departure.ToTimeString() : "-");
             departureLabel.Text = departureLabel.Text.Replace("{track}", departureTrack);
 
             Title = Title.Replace("{station}", station.SName);
 
             var tracks = sta.Tracks.Select(t => t.Name).ToArray();
 
-            gridView.AddColumn<ShuntMove, TimeEntry>(s => s.Time, ts => ts.ToTimeString(sta.ParentTimetable!.TimePrecisionSeconds), s => { train.ParentTimetable.TimeFactory.TryParse(s, out var res); return res; }, T._("Zeit"), editable: true);
+            gridView.AddColumn<ShuntMove, TimeEntry>(s => s.Time, ts => ts.ToTimeString(), s => { train.ParentTimetable.TimeFactory.TryParse(s, out var res); return res; }, T._("Zeit"), editable: true);
             gridView.AddDropDownColumn<ShuntMove>(s => s.SourceTrack, tracks, T._("Startgleis"), editable: true);
             gridView.AddDropDownColumn<ShuntMove>(s => s.TargetTrack, tracks, T._("Zielgleis"), editable: true);
             gridView.AddCheckColumn<ShuntMove>(s => s.EmptyAfterwards, T._("Alle Wagen?"), editable: true);
