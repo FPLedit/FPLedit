@@ -8,12 +8,9 @@ namespace FPLedit.Shared.Helpers
     public sealed class TimeNormalizer
     {
         private readonly Regex verifyRegex;
-        public bool AllowSeconds { get; set; }
 
-        public TimeNormalizer(bool allowSeconds)
+        public TimeNormalizer()
         {
-            AllowSeconds = allowSeconds;
-            
             //                        hh:mm, h:mm, h:m, hh:m, h:, :m, :mm, hh:                                                                  hhmm, hmm, mm                         m
             verifyRegex = new Regex(@"^ (?<hr>\d{1,2})? : (?<min>\d{1,2})? (?: (?: : (?<sec>\d{1,2})) | (?: , (?<dec>\d{1,2}) ) )? $ | ^ (?<hr>\d{1,2})? (?<min>\d{2}) $ | ^ (?<min>\d{1}) $",
                 RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
@@ -60,8 +57,6 @@ namespace FPLedit.Shared.Helpers
                 int sc = int.Parse(seconds);
                 int dc = int.Parse(decimals);
                 if ((!allowOverflow && (hr > 24 || mi > 59)) || sc < 0 || sc > 59 || dc > 99)
-                    return null;
-                if (!AllowSeconds && (sc != 0 || dc != 0))
                     return null;
 
                 if (sc > 0)
@@ -114,8 +109,6 @@ namespace FPLedit.Shared.Helpers
                 int sc = int.Parse(seconds);
                 int dc = int.Parse(decimals);
                 if ((!allowOverflow && (hr > 24 || mi > 59)) || sc < 0 || sc > 59 || dc > 99)
-                    return null;
-                if (!AllowSeconds && (sc != 0 || dc != 0))
                     return null;
 
                 return (hr, mi, sc, dc);

@@ -22,26 +22,28 @@ namespace FPLedit.BackwardCompat
                     xclone.SetAttribute(prop, te.ToString());
                 }
             }
-            
+
+            if (!updateTrainLinks) 
+                return;
             // Update tlo/tld
             var tlProperties = new[] { "tlo", "tld" };
             var trainsElem = xclone.Children.SingleOrDefault(x => x.XName == "trains");
-            if (trainsElem != null)
+            if (trainsElem == null) 
+                return;
+            
+            foreach (var t in trainsElem.Children)
             {
-                foreach (var t in trainsElem.Children)
+                var tlElem = t.Children.SingleOrDefault(x => x.XName == "tl");
+                if (tlElem == null) 
+                    continue;
+                
+                foreach (var prop in tlProperties)
                 {
-                    var tlElem = t.Children.SingleOrDefault(x => x.XName == "tl");
-                    if (tlElem != null)
-                    {
-                        foreach (var prop in tlProperties)
-                        {
-                            if (tlElem.Attributes.TryGetValue(prop, out var v) && int.TryParse(v, out var vi))
-                            {
-                                var te = new TimeEntry(0, vi);
-                                tlElem.SetAttribute(prop, te.ToString());
-                            }
-                        }
-                    }
+                    if (!tlElem.Attributes.TryGetValue(prop, out var v) || !int.TryParse(v, out var vi)) 
+                        continue;
+                    
+                    var te = new TimeEntry(0, vi);
+                    tlElem.SetAttribute(prop, te.ToString());
                 }
             }
         }

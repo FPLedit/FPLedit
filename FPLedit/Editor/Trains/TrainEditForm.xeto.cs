@@ -57,8 +57,8 @@ namespace FPLedit.Editor.Trains
             else
             {
                 linkGridView.AddColumn<TrainLink>(tl => tl.TrainCount.ToString(), T._("Anzahl"));
-                linkGridView.AddColumn<TrainLink>(tl => tl.TimeOffset.ToTimeString(Train.ParentTimetable.TimePrecisionSeconds), T._("Erster Abstand"));
-                linkGridView.AddColumn<TrainLink>(tl => tl.TimeDifference.ToTimeString(Train.ParentTimetable.TimePrecisionSeconds), T._("Zeitdifferenz"));
+                linkGridView.AddColumn<TrainLink>(tl => tl.TimeOffset.ToTimeString(), T._("Erster Abstand"));
+                linkGridView.AddColumn<TrainLink>(tl => tl.TimeDifference.ToTimeString(), T._("Zeitdifferenz"));
             }
         }
 

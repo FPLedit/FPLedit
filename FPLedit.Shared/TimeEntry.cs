@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using FPLedit.Shared.Helpers;
 
 namespace FPLedit.Shared
 {
@@ -10,6 +11,7 @@ namespace FPLedit.Shared
     public readonly struct TimeEntry : IComparable, IComparable<TimeEntry>, IEquatable<TimeEntry>
     {
         public static readonly TimeEntry Zero = new TimeEntry(0,0, 0, 0);
+        private static readonly TimeNormalizer normalizer = new TimeNormalizer();
 
         public short Minutes { get; }
         public short Hours { get; }
@@ -162,5 +164,22 @@ namespace FPLedit.Shared
         public static TimeEntry operator *(int n, TimeEntry t) => new TimeEntry(n * t.Hours, n * t.Minutes, n * t.Seconds, n * t.Decimals);
         public static TimeEntry operator *(TimeEntry t, int n) => n * t;
         public static explicit operator TimeEntry(TimeSpan ts) => new TimeEntry(ts.Days * 24 + ts.Hours, ts.Minutes, ts.Seconds, 0);
+        
+        public static bool TryParse(string s, out TimeEntry entry)
+        {
+            entry = new TimeEntry();
+            var time = normalizer.ParseTime(s, true);
+            if (!time.HasValue)
+                return false;
+            entry = new TimeEntry(time.Value.hours, time.Value.minutes, time.Value.seconds, time.Value.decimals);
+            return true;
+        }
+        
+        public static TimeEntry Parse(string s)
+        {
+            if (!TryParse(s, out var entry))
+                throw new FormatException("TimeEntry Format not recognized");
+            return entry;
+        }
     }
 }

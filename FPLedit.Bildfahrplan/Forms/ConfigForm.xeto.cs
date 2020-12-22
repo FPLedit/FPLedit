@@ -38,8 +38,8 @@ namespace FPLedit.Bildfahrplan.Forms
             this.pluginInterface = pluginInterface;
 
             var heightPerHourValidator = new NumberValidator(heightPerHourTextBox, false, false, errorMessage: T._("Bitte eine Zahl als Höhe pro Stunde angeben!"));
-            var startTimeValidator = new TimeValidator(startTimeTextBox, false, errorMessage: T._("Bitte eine gültige Uhrzeit im Format hh:mm angeben!"), timeFactory: tt.TimeFactory);
-            var endTimeValidator = new TimeValidator(endTimeTextBox, false, errorMessage: T._("Bitte eine gültige Uhrzeit im Format hh:mm angeben!"), timeFactory: tt.TimeFactory, maximum: new TimeEntry(48, 0));
+            var startTimeValidator = new TimeValidator(startTimeTextBox, false, errorMessage: T._("Bitte eine gültige Uhrzeit im Format hh:mm angeben!"));
+            var endTimeValidator = new TimeValidator(endTimeTextBox, false, errorMessage: T._("Bitte eine gültige Uhrzeit im Format hh:mm angeben!"), maximum: new TimeEntry(48, 0));
             validators = new ValidatorCollection(heightPerHourValidator, startTimeValidator, endTimeValidator);
 
             DropDownBind.Color<TimetableStyle>(pluginInterface.Settings, bgColorComboBox, "BgColor");
@@ -66,8 +66,8 @@ namespace FPLedit.Bildfahrplan.Forms
 
             heightPerHourTextBox.TextBinding.AddFloatConvBinding<TimetableStyle, TextControl>(s => s.HeightPerHour);
 
-            startTimeTextBox.TextBinding.AddTimeEntryConvBinding<TimetableStyle, TextControl>(s => s.StartTime, tt.TimeFactory);
-            endTimeTextBox.TextBinding.AddTimeEntryConvBinding<TimetableStyle, TextControl>(s => s.EndTime, tt.TimeFactory);
+            startTimeTextBox.TextBinding.AddTimeEntryConvBinding<TimetableStyle, TextControl>(s => s.StartTime);
+            endTimeTextBox.TextBinding.AddTimeEntryConvBinding<TimetableStyle, TextControl>(s => s.EndTime);
 
             includeKilometreCheckBox.CheckedBinding.BindDataContext<TimetableStyle>(s => s.DisplayKilometre);
             drawStationNamesCheckBox.CheckedBinding.BindDataContext<TimetableStyle>(s => s.DrawHeader);

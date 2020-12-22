@@ -21,6 +21,8 @@ namespace FPLedit.Editor.TimetableEditor
         private TableLayout internalActionsLayout;
 
         protected readonly ObservableCollection<Control> actionButtons;
+        private readonly TimeNormalizer timeNormalizer = new TimeNormalizer();
+        
         public IList<Control> ActionButtons => actionButtons;
 
         protected BaseTimetableEditControl()
@@ -55,7 +57,7 @@ namespace FPLedit.Editor.TimetableEditor
                 return;
             }
 
-            val = data.Train.ParentTimetable!.TimeFactory.Normalizer.Normalize(val);
+            val = timeNormalizer.Normalize(val);
             bool error = true;
             if (val != null)
             {

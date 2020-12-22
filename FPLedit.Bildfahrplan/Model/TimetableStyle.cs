@@ -17,40 +17,24 @@ namespace FPLedit.Bildfahrplan.Model
         {
             get
             {
-                if (!tt.TimePrecisionSeconds)
-                {
-                    int minutes = tt.GetAttribute<int>("tMin", -1);
-                    if (minutes == -1)
-                        minutes = 0;
-                    return new TimeEntry(0, minutes);
-                }
-
                 var time = tt.GetAttribute("tMin", "00:00");
                 if (time == "")
                     time = "00:00";
-                return tt.TimeFactory.Parse(time!);
+                return TimeEntry.Parse(time!);
             }
-            set => tt.SetAttribute("tMin", tt.TimePrecisionSeconds ? value.ToTimeString() : value.GetTotalMinutes().ToString());
+            set => tt.SetAttribute("tMin", value.ToTimeString());
         }
 
         public TimeEntry EndTime
         {
             get
             {
-                if (!tt.TimePrecisionSeconds)
-                {
-                    int minutes = tt.GetAttribute<int>("tMax", -1);
-                    if (minutes == -1)
-                        minutes = 1440;
-                    return new TimeEntry(0, minutes);
-                }
-
                 var time = tt.GetAttribute("tMax", "24:00");
                 if (time == "")
                     time = "24:00";
-                return tt.TimeFactory.Parse(time!);
+                return TimeEntry.Parse(time!);
             }
-            set => tt.SetAttribute("tMax", tt.TimePrecisionSeconds ? value.ToTimeString() : value.GetTotalMinutes().ToString());
+            set => tt.SetAttribute("tMax", value.ToTimeString());
         }
 
         public bool DisplayKilometre
