@@ -1,28 +1,48 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace FPLedit.Templating
 {
-    internal readonly ref struct ArgsParser
+    /// <summary>
+    /// Parses argument strings like <c>name1="value1" name2="value2"</c>
+    /// </summary>
+    internal ref struct ArgsParser
     {
-        private readonly Dictionary<string, string> parsedArgs;
+        private readonly ReadOnlySpan<char> args;
+        private readonly string[] required;
 
-        public ArgsParser(ReadOnlySpan<char> args)
+        private int startIndex;
+        private readonly Span<bool> found;
+
+        public (string name, string value) Current { get; private set; }
+        
+        public ArgsParser GetEnumerator() => this;
+
+        public ArgsParser(ReadOnlySpan<char> args, params string[] required)
         {
-            parsedArgs = new Dictionary<string, string>(); //TODO: Somehow do not allocate dictionary?
-            ParseArgs(args);
+            this.args = args;
+            this.required = required;
+            startIndex = 0;
+            
+            found = new bool[required.Length];
+            Current = ("", "");
         }
 
-        // Format name="value" name="value"
-        private void ParseArgs(ReadOnlySpan<char> args)
+        public bool FoundAll()
+        {
+            bool ret = true;
+            for (int bi = 0; bi < found.Length; bi++)
+                ret &= found[bi];
+            return ret;
+        }
+
+        public bool MoveNext()
         {
             bool isInString = false;
             bool hadEscapeCharacter = false;
             bool hadEquals = false;
             string currentName = "", currentValue = ""; //TODO: Do not allocate strings.
 
-            for (int i = 0; i < args.Length; i++)
+            for (int i = startIndex; i < args.Length; i++)
             {
                 char ch = args[i];
                 if (!isInString)
@@ -52,11 +72,10 @@ namespace FPLedit.Templating
                 {
                     if (ch == '"' && !hadEscapeCharacter) // String-Ende
                     {
-                        isInString = false;
-                        parsedArgs.Add(currentName, currentValue);
-                        currentName = "";
-                        currentValue = "";
-                        continue;
+                        Current = (currentName, currentValue);
+                        found[Array.IndexOf(required, currentName)] = true;
+                        startIndex = i + 1;
+                        return true;
                     }
                     if (ch == '\\' && !hadEscapeCharacter)
                     {
@@ -75,10 +94,7 @@ namespace FPLedit.Templating
                 throw new FormatException("Nicht beendete Zeichenkette: " + args.ToString());
             if (currentName != "")
                 throw new FormatException("Unvollständige Deklaration: " + args.ToString());
+            return false;
         }
-
-        public bool Require(params string[] keys) => keys.Except(parsedArgs.Keys).Any();
-
-        public string this[string idx] => parsedArgs[idx];
     }
 }

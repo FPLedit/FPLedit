@@ -100,13 +100,25 @@ namespace FPLedit.Templating
         {
             if (TemplateType != null)
                 throw new Exception(T._("Nur eine fpledit_template-Direktive ist pro Vorlage erlaubt!"));
-            var tparams = new ArgsParser(argsString.ToString());
-            if (tparams.Require("name", "type", "version"))
+            var tparams = new ArgsParser(argsString.ToString(), "name", "type", "version");
+            foreach (var (name, val) in tparams)
+            {
+                switch (name)
+                {
+                    case "version":
+                        if (val != CURRENT_VERSION.ToString())
+                            throw new Exception(T._("Template-version mismatch! (Current: {0} vs {1})", CURRENT_VERSION, val));
+                        break;
+                    case "type":
+                        TemplateType = val;
+                        break;
+                    case "name":
+                        TemplateName = val;
+                        break;
+                }
+            }
+            if (!tparams.FoundAll())
                 throw new Exception(T._("Fehlende Angabe type, version oder name in der fpledit_template-Direktive!"));
-            if (tparams["version"] != CURRENT_VERSION.ToString())
-                throw new Exception(T._("Template-version mismatch! (Current: {0} vs {1})", CURRENT_VERSION, tparams["version"]));
-            TemplateType = tparams["type"];
-            TemplateName = tparams["name"];
         }
 
         private int IndexOfWithStart(ReadOnlySpan<char> span, ReadOnlySpan<char> search, int startIndex)
