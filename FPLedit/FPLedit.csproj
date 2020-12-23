@@ -20,6 +20,7 @@
     <OutputType>WinExe</OutputType>
     <DisableWinExeOutputInference>true</DisableWinExeOutputInference>
     <UseWPF>true</UseWPF>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
