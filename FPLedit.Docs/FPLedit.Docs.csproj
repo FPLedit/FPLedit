@@ -6,7 +6,8 @@
     <Platforms>AnyCPU</Platforms>
 
     <!-- Stops FPledit.Docs.dll from appearing -->
-    <OutputPath>$(IntermediateOutputPath)\binary-unused</OutputPath>
+    <OutputPath>$(IntermediateOutputPath)\binary-unused</OutputPath>    
+    <IsPublishable>false</IsPublishable>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyTitle>FPLedit - API für Erweiterungen</AssemblyTitle>
