@@ -16,6 +16,7 @@
       <PVersionUpTo ParameterType="System.String" Required="true" />
       <PVersionFrom ParameterType="System.String" Required="true" />
       <DisplayVersion ParameterType="System.String" Required="true" />
+      <VersionSuffix ParameterType="System.String" Required="false" />
       <Output ParameterType="System.String" Required="true" />
     </ParameterGroup>
     <Task>
@@ -29,6 +30,7 @@
     public const string PFrom = """ + PVersionFrom + @"""; // Compatible from - normally equals assembly version
     
     public const string DisplayVersion = """ + DisplayVersion + @""";
+    public const string VersionSuffix = """ + VersionSuffix + @""";
 }";
         File.WriteAllText(Output, code);
 ]]>
@@ -44,7 +46,8 @@
     <GenerateVersionInfo 
       PVersionUpTo="$([System.Version]::Parse($(VersionPrefix)).ToString(2))" 
       PVersionFrom="$([System.Version]::Parse($(VersionPrefix)).ToString(3))" 
-      DisplayVersion="$(Version)" 
+      DisplayVersion="$(Version)"
+      VersionSuffix="$(VersionSuffix)"
       Output="$(IntermediateOutputPath)VersionInfo.g.cs" />
   </Target>
 

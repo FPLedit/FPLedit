@@ -65,7 +65,7 @@ namespace FPLedit
             };
         }
 
-        private bool IsNewVersion(Version check) => CurrentVersion.CompareTo(check) < 0;
+        private bool IsNewVersion(Version check) => CurrentVersion.CompareTo(check) < 0 || (CurrentVersion.CompareTo(check) == 0 && !string.IsNullOrEmpty(VersionInformation.Current.VersionSuffix));
 
         public void CheckAsync()
         {

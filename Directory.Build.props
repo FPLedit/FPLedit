@@ -15,7 +15,7 @@
     <LangVersion>9.0</LangVersion>
     <CodeAnalysisRuleSet>..\build_scripts\FPLedit.ruleset</CodeAnalysisRuleSet>
     
-    <RuntimeIdentifiers>win-x64;win-x86;linux-x64;linux-x86;osx-x64</RuntimeIdentifiers>
+    <RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64</RuntimeIdentifiers>
 
     <!--<WarningsAsErrors>CS8600;CS8602;CS8603</WarningsAsErrors>-->
     <MSBuildWarningsAsMessages>MSB3277</MSBuildWarningsAsMessages>
