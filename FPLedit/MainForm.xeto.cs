@@ -62,6 +62,7 @@ namespace FPLedit
             CrashReporter = crashReporter;
 
             lfh.LastFilesUpdates += UpdateLastFilesMenu;
+            UpdateLastFilesMenu(null, null);
 
             Bootstrapper.Logger.AttachLogger(logTextBox);
             Bootstrapper.InitializeUi(this);

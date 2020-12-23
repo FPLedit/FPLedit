@@ -61,9 +61,11 @@ namespace FPLedit
             if (App.Platform.IsMac)
                 PathManager.Instance.SettingsDirectory = Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationSettings);
 
-            var enableCrashReporting = OptionsParser.CrashReporterDebug;
+            bool enableCrashReporting;
 #if !DEBUG || ENABLE_CRASH_REPORTING_DEBUG
             enableCrashReporting = true; // Aways enable on Release builds.
+#else
+            enableCrashReporting = OptionsParser.CrashReporterDebug || !System.Diagnostics.Debugger.IsAttached;
 #endif
             if (enableCrashReporting)
                 App.UnhandledException += UnhandledException;
