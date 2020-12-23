@@ -6,7 +6,7 @@ using FPLedit.Shared.UI;
 
 namespace FPLedit.Templating
 {
-    internal sealed class TemplateDebugger : ITemplateDebugger, IDisposable
+    internal sealed class TemplateDebugger : ITemplateDebugger
     {
         private ITemplateDebugger child;
 
@@ -34,15 +34,9 @@ namespace FPLedit.Templating
                 instance = new TemplateDebugger();
             return instance;
         }
-
-        public void Dispose()
-        {
-            if (child is IDisposable d)
-                d.Dispose();
-        }
     }
 
-    internal sealed class GuiTemplateDebugger : ITemplateDebugger, IDisposable
+    internal sealed class GuiTemplateDebugger : ITemplateDebugger
     {
         private FForm form;
         private TextArea generatedCode;
@@ -98,12 +92,6 @@ namespace FPLedit.Templating
                 form.Closed += (s, e) => opened = false;
                 opened = true;
             }
-        }
-
-        public void Dispose()
-        {
-            if (form != null && !form.IsDisposed)
-                form.Dispose();
         }
     }
 

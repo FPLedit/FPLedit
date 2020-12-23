@@ -261,7 +261,6 @@ namespace FPLedit
 
         protected override void Dispose(bool disposing)
         {
-            checkRunner?.Dispose();
             foreach (var topLevelItem in Menu.Items)
                 topLevelItem.DisposeMenu();
             base.Dispose(disposing);

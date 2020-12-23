@@ -88,11 +88,6 @@ namespace FPLedit
                 }
             };
 
-            App.Terminating += (s, e) =>
-            {
-                TemplateDebugger.GetInstance().Dispose();
-            };
-            
             App.Run(mainForm);
         }
 

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FPLedit.TimetableChecks
 {
-    internal sealed class TimetableCheckRunner : IDisposable
+    internal sealed class TimetableCheckRunner
     {
         private FForm form;
         private GridView gridView;
@@ -64,14 +64,6 @@ namespace FPLedit.TimetableChecks
                 lastTask.Start();
             };
             pluginInterface.AppClosing += (s, e) => form?.Close();
-        }
-
-        public void Dispose()
-        {
-            if (form != null && !form.IsDisposed)
-                form.Dispose();
-            if (gridView != null && !gridView.IsDisposed)
-                gridView.Dispose();
         }
 
         private FForm GetForm()
