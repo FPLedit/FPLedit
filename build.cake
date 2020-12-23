@@ -102,7 +102,7 @@ Task("PackNet5")
             DotNetCorePublish("./FPLedit.sln", new DotNetCorePublishSettings {
                 Configuration = configuration,
                 Runtime = runtime,
-                SelfContained = false,
+                SelfContained = runtime == "osx-x64",
                 OutputDirectory = distDir,
                 MSBuildSettings = msbuildSettings,
             });
