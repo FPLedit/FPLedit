@@ -73,20 +73,20 @@ namespace FPLedit.Bildfahrplan.Model
 
         public bool StationVertical
         {
-            get => tt.GetAttribute<bool>("sHor", true);
-            set => tt.SetAttribute("sHor", value.ToString());
+            get => !tt.GetAttribute<bool>("sHor", true);
+            set => tt.SetAttribute("sHor", (!value).ToString().ToLower());
         }
 
         public bool MultiTrack
         {
             get => tt.GetAttribute<bool>("shMu", true);
-            set => tt.SetAttribute("shMu", value.ToString());
+            set => tt.SetAttribute("shMu", value.ToString().ToLower());
         }
 
         public bool DrawNetworkTrains
         {
             get => tt.GetAttribute<bool>("fpl-dnt", true);
-            set => tt.SetAttribute("fpl-dnt", value.ToString());
+            set => tt.SetAttribute("fpl-dnt", value.ToString().ToLower());
         }
 
         #region Fonts
