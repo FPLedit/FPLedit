@@ -144,7 +144,7 @@ namespace FPLedit.Templating
 
                 if (hadLast)
                 {
-                    sb.Append("\";");
+                    sb.Append("\\n\";");
                     sb.Append(nl);
                 }
                 
@@ -155,7 +155,7 @@ namespace FPLedit.Templating
 
             if (hadLast)
             {
-                sb.Append("\\n\";");
+                sb.Append("\";");
                 sb.Append(nl);
             }
         }
