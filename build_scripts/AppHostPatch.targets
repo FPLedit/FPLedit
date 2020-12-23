@@ -13,7 +13,7 @@ See LICENSE for details <https://github.com/FPLedit/AppHostPatch-Linux/blob/main
     <AppHostPatch_ContainerFile Condition=" '$(AppHostPatch_ContainerFile)' == '' ">Containerfile</AppHostPatch_ContainerFile>
   </PropertyGroup>
 
-  <Target Name="AppHostPatch_PatchWindowsAppHostLinuxTarget" AfterTargets="Publish" Condition=" '$(RuntimeIdentifier)' == 'win-x64' and '$(OS)' != 'Windows_NT' ">
+  <Target Name="AppHostPatch_PatchWindowsAppHostLinuxTarget" AfterTargets="Publish" Condition=" $( RuntimeIdentifier.StartsWith('win') ) and '$(OS)' != 'Windows_NT' ">
     <PropertyGroup>
       <AppHostPatch_AppHostPath>$([System.String]::Copy('$(TargetFileName)').Replace('dll','exe'))</AppHostPatch_AppHostPath>
       <AppHostPatch_AppHostPath>$([System.IO.Path]::Combine( '$(PublishDir)', '$(AppHostPatch_AppHostPath)' ) )</AppHostPatch_AppHostPath>

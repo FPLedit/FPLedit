@@ -15,7 +15,7 @@
   </PropertyGroup>
   
   <!-- Windows specific properties -->
-  <PropertyGroup Condition=" '$(RuntimeIdentifier)' == 'win-x64' ">
+  <PropertyGroup Condition=" $( RuntimeIdentifier.StartsWith('win') ) ">
     <TargetFramework>net5.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
     <DisableWinExeOutputInference>true</DisableWinExeOutputInference>
@@ -82,7 +82,7 @@
   </ItemGroup>
   
   <!-- Platform specific packages and framework definitions -->
-  <ItemGroup Condition=" '$(RuntimeIdentifier)' == 'win-x64' ">
+  <ItemGroup Condition=" $( RuntimeIdentifier.StartsWith('win') ) ">
     <PackageReference Include="Eto.Platform.Wpf" Version="$(EtoVersion)" />
     <FrameworkReference Include="Microsoft.WindowsDesktop.App" />
     <KnownFrameworkReference Update="Microsoft.WindowsDesktop.App" IsWindowsOnly="false" />
@@ -91,7 +91,7 @@
   <ItemGroup Condition=" '$(RuntimeIdentifier)' == 'osx-x64' ">
     <PackageReference Include="Eto.Platform.Mac64" Version="$(EtoVersion)" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(RuntimeIdentifier)' != 'win-x64' And '$(RuntimeIdentifier)' != 'osx-x64' ">
+  <ItemGroup Condition=" ! $( RuntimeIdentifier.StartsWith('win') ) And '$(RuntimeIdentifier)' != 'osx-x64' ">
     <PackageReference Include="Eto.Platform.Gtk" Version="$(EtoVersion)" />
   </ItemGroup>
 </Project>
