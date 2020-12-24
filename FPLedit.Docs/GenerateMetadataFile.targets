@@ -5,12 +5,12 @@
     <CoreCompileDependsOn>GenerateGlobalMetadataFile;$(CoreCompileDependsOn)</CoreCompileDependsOn>
   </PropertyGroup>
   
-  <Target Name="GenerateGlobalMetadataFile" Outputs="$(IntermediateOutputPath)../globalMetadata.g.json">
+  <Target Name="GenerateGlobalMetadataFile" Outputs="$(IntermediateOutputPath)../../globalMetadata.g.json">
     <PropertyGroup>
       <Suffix Condition=" $(VersionSuffix) != '' ">-$(VersionSuffix)</Suffix>
     </PropertyGroup>
     <GenerateGlobalMetadataFileTask 
-      OutputPath="$(IntermediateOutputPath)../globalMetadata.g.json"
+      OutputPath="$(IntermediateOutputPath)../../globalMetadata.g.json"
       Version="$(VersionPrefix)$(Suffix)"
       InputPath="$(MSBuildProjectDirectory)/globalMetadataTemplate.json" />
   </Target>
