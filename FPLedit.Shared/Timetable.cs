@@ -732,24 +732,34 @@ namespace FPLedit.Shared
             if (first.IsLink)
                 return new List<TransitionEntry>();
 
-            return transitions
-                .Where(t => t.First == first.QualifiedId)
+            return GetEditableTransitionsInternal(first)
                 .Select(t => new { t, n = GetTrainByQualifiedId(t.Next) })
                 .Where(t => t.n != null)
                 .Select(t => new TransitionEntry(t.n!, t.t.Days, t.t.StationId != Transition.LAST_STATION && int.TryParse(t.t.StationId, out var sId) ? GetStationById(sId) : null))
                 .ToList();
         }
+        
+        private IEnumerable<Transition> GetEditableTransitionsInternal(ITrain first)
+        {
+            if (first.IsLink)
+                return Array.Empty<Transition>();
+
+            return transitions
+                .Where(t => t.First == first.QualifiedId)
+                .Where(t => t.GetAttribute<string>("vc") == null);
+        }
 
         /// <inheritdoc />
         public void SetTransitions(ITrain first, IEnumerable<TransitionEntry> trans)
         {
-            RemoveTransition(first, true); // Clean up.
+            var editable = GetEditableTransitionsInternal(first).ToArray();
+            RemoveTransitionsInternal(editable); // Clean up.
 
-            var shouldApplyFilter = Version.Compare(TimetableVersion.JTG3_2) < 0;
+            var shouldApplyFilter = Version.Compare(TimetableVersion.JTG3_2) >= 0;
 
             foreach (var tran in trans)
             {
-                if (shouldApplyFilter && (tran.StationId != null || tran.Days != Days.All))
+                if (!shouldApplyFilter && (tran.StationId != null || tran.Days != Days.All))
                     throw new TimetableTypeNotSupportedException("Transition filters");
                 
                 var t = new Transition(this)
@@ -801,7 +811,7 @@ namespace FPLedit.Shared
             if (firstQualifiedTrainId == "-1" || string.IsNullOrWhiteSpace(firstQualifiedTrainId))
                 return null;
 
-            var shouldApplyFilter = Version.Compare(TimetableVersion.JTG3_2) < 0;
+            var shouldApplyFilter = Version.Compare(TimetableVersion.JTG3_2) >= 0;
 
             bool Filter(Transition tra)
             {
@@ -810,6 +820,7 @@ namespace FPLedit.Shared
                 {
                     result &= daysFilter == null || tra.Days.IsIntersecting(daysFilter.Value);
                     result &= stationFilter == null || tra.IsTransitionValidAt(stationFilter);
+                    result &= tra.GetAttribute<string>("vc") == null;
                 }
 
                 return result;
@@ -832,9 +843,14 @@ namespace FPLedit.Shared
         public void RemoveTransition(string firstTrainId, bool onlyAsFirst = true)
         {
             var trans = transitions.Where(t => t.First == firstTrainId || (!onlyAsFirst && t.Next == firstTrainId)).ToArray();
+            RemoveTransitionsInternal(trans);
+        }
+        
+        private void RemoveTransitionsInternal(Transition[] trans)
+        {
             foreach (var transition in trans)
                 trElm.Children.Remove(transition.XMLEntity);
-            transitions.RemoveAll(t => trans.Contains(t));
+            transitions.RemoveAll(trans.Contains);
         }
 
         /// <inheritdoc />
