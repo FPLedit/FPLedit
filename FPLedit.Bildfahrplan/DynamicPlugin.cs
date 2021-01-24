@@ -3,6 +3,7 @@ using FPLedit.Bildfahrplan.Model;
 using FPLedit.Shared;
 using System;
 using Eto.Forms;
+using FPLedit.Bildfahrplan.Render;
 using FPLedit.Shared.UI;
 
 namespace FPLedit.Bildfahrplan
@@ -22,6 +23,12 @@ namespace FPLedit.Bildfahrplan
         {
             this.pluginInterface = pluginInterface;
             Style.PluginInterface = pluginInterface;
+
+            if (!GdiAvailabilityTest.Test())
+            {
+                pluginInterface.Logger.Error(T._("Die Bibliothek libgdiplus wurde nicht gefunden! Die Bildfahrplanfunktionen stehen nicht zur Verfügung. Zur Installation siehe Installatiosnhinweise unter https://fahrplan.manuelhu.de/download/."));
+                return;
+            }
 
             dpf = new DynamicPreview();
             componentRegistry.Register<IPreviewAction>(dpf);
