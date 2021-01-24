@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FPLedit.Shared.UI;
-using System.Linq.Expressions;
 
 namespace FPLedit.Editor.TimetableEditor
 {
@@ -71,7 +70,7 @@ namespace FPLedit.Editor.TimetableEditor
 
         public void Initialize(Timetable timetable, IWritableTrain t)
         {
-            this.tt = timetable;
+            tt = timetable;
 
             train = t;
             path = t.GetPath();
@@ -84,19 +83,55 @@ namespace FPLedit.Editor.TimetableEditor
         {
             var cc = new CustomCell
             {
-                CreateCell = args => new TextBox(),
+                CreateCell = args =>
+                {
+                    var tb = new TextBox { Tag = new CCCO() };
+
+                    if (mpmode)
+                        tb.KeyDown += (s, e) => HandleKeystroke(e, dataGridView);
+                    
+                    tb.GotFocus += (s, e) =>
+                    {
+                        var dd2 = (TextBox)s;
+                        var ccco = (CCCO)dd2!.Tag;
+                        if (ccco.InhibitEvents)
+                            return;
+                        CellSelected(ccco.Data, ccco.Data.GetStation(), arrival);
+                        ccco.Data.IsSelectedArrival = arrival;
+                        ccco.Data.SelectedTextBox = tb;
+                    };
+                    
+                    tb.LostFocus += (s, e) =>
+                    {
+                        var dd2 = (TextBox)s;
+                        var ccco = (CCCO)dd2!.Tag;
+                        if (ccco.InhibitEvents)
+                            return;
+                        FormatCell(ccco.Data, ccco.Data.GetStation(), arrival, tb);
+                        new TimetableCellRenderProperties(time, ccco.Data.GetStation(), arrival, ccco.Data).Apply(tb);
+                    };
+                    
+                    return tb;
+                },
                 ConfigureCell = (args, control) =>
                 {
                     var tb = (TextBox) control;
-                    if (tb == null || args?.Item == null)
+                    if (tb == null)
                         return;
+                    var ccco = (CCCO) tb.Tag;
+                    ccco.InhibitEvents = true;
+
+                    if (args?.Item == null)
+                        return;
+                    
                     var data = (DataElement) args.Item;
+                    ccco.Data = data;
                     new TimetableCellRenderProperties(time, data.Station, arrival, data).Apply(tb);
+
+                    ccco.InhibitEvents = false;
 
                     if (mpmode)
                     {
-                        tb.KeyDown += (s, e) => HandleKeystroke(e, dataGridView);
-
                         // Wir gehen hier gleich in den vollen EditMode rein
                         tb.CaretIndex = 0;
                         tb.SelectAll();
@@ -105,17 +140,20 @@ namespace FPLedit.Editor.TimetableEditor
                         data.SelectedTextBox = tb;
                     }
 
-                    tb.GotFocus += (s, e) =>
+                    /*tb.GotFocus += (s, e) =>
                     {
                         CellSelected(data, data.Station, arrival);
                         data.IsSelectedArrival = arrival;
                         data.SelectedTextBox = tb;
-                    };
-                    tb.LostFocus += (s, e) =>
+                    };*/
+                    
+                    //if (Platform.IsMac)
+                    //    tb.KeyUp += (s, e) => data.SetTmpTag(data.Station, arrival, tb.Text);
+                    /*tb.LostFocus += (s, e) =>
                     {
                         FormatCell(data, data.Station, arrival, tb);
                         new TimetableCellRenderProperties(time, data.Station, arrival, data).Apply(tb);
-                    };
+                    };;*/
                 }
             };
             cc.Paint += (s, e) =>
@@ -127,19 +165,59 @@ namespace FPLedit.Editor.TimetableEditor
             return cc;
         }
 
-        private CustomCell GetTrackCell(Func<ArrDep, string> track, bool arrival)
+        private CustomCell GetTrackCell(Func<ArrDep, string> track, Action<ArrDep, string> setTrack, bool arrival)
         {
-            var shadowBinding = Binding.Delegate(track);
-
             var cc = new CustomCell
             {
-                CreateCell = args => new DropDown(),
+                CreateCell = args =>
+                {
+                    var dd = new DropDown { Tag = new CCCO() };
+
+                    dd.SelectedIndexChanged += (s, e) =>
+                    {
+                        var dd2 = (DropDown)s;
+                        var ccco = (CCCO)dd2!.Tag;
+                        if (ccco.InhibitEvents)
+                            return;
+                        var t = (string) dd.SelectedValue;
+                        var ds = ((DataElement)ccco.Data).GetTrackDataStore().ToArray();
+                        if (dd.SelectedIndex > -1)
+                            Console.WriteLine("SelectedValue: " + t + "/" + ds[dd.SelectedIndex]);
+                        else
+                            Console.WriteLine("Selected index: " + dd.SelectedIndex);
+                        
+                        
+                        setTrack(ccco.Data.ArrDeps[ccco.Data.GetStation()], t == (string) dd.DataStore.FirstOrDefault() ? "" : t);
+                    };
+                    
+                    dd.GotFocus += (s, e) =>
+                    {
+                        var dd2 = (DropDown)s;
+                        var ccco = (CCCO)dd2!.Tag;
+                        if (ccco.InhibitEvents)
+                            return;
+                        ccco.Data.IsSelectedArrival = arrival;
+                        ccco.Data.SelectedTextBox = null;
+                        ccco.Data.SelectedDropDown = dd;
+                    };
+                    
+                    dd.KeyDown += (s, e) => HandleKeystroke(e, dataGridView);
+                    
+                    return dd;
+                },
                 ConfigureCell = (args, control) =>
                 {
                     var dd = (DropDown) control;
-                    if (dd == null || args?.Item == null)
+                    if (dd == null)
                         return;
+                    var ccco = (CCCO) dd.Tag;
+                    ccco.InhibitEvents = true; // Inihibit event handling while new state is set.
+
+                    if (args?.Item == null)
+                        return;
+                    
                     var data = (DataElement) args.Item;
+                    ccco.Data = data;
 
                     var ds = data.GetTrackDataStore().ToArray();
 
@@ -147,21 +225,10 @@ namespace FPLedit.Editor.TimetableEditor
                     dd.Enabled = ds.Length > 1;
                     if (data.IsFirst(data.Station) && arrival || data.IsLast(data.Station) && !arrival)
                         dd.Enabled = false;
-
-                    dd.SelectedIndexChanged += (s, e) =>
-                    {
-                        var t = (string) dd.SelectedValue;
-                        shadowBinding.SetValue(data.ArrDeps[data.Station], t == (string) ds.FirstOrDefault() ? "" : t);
-                    };
-                    dd.SelectedValue = shadowBinding.GetValue(data.ArrDeps[data.Station]);
-
-                    dd.KeyDown += (s, e) => HandleKeystroke(e, dataGridView);
-                    dd.GotFocus += (s, e) =>
-                    {
-                        data.IsSelectedArrival = arrival;
-                        data.SelectedTextBox = null;
-                        data.SelectedDropDown = dd;
-                    };
+                    
+                    dd.SelectedValue = track(data.ArrDeps[data.Station]);
+                    
+                    ccco.InhibitEvents = false; // Resume event handling of cutom control.
 
                     if (mpmode)
                     {
@@ -170,23 +237,22 @@ namespace FPLedit.Editor.TimetableEditor
                         data.SelectedDropDown = dd;
                         dd.Focus();
                     }
-                }
+                },
             };
             cc.Paint += (s, e) =>
             {
                 if (!mpmode) return;
                 var data = (DataElement) e.Item;
-                new TimetableCellRenderProperties2(shadowBinding.GetValue(data.ArrDeps[data.Station])).Render(e.Graphics, e.ClipRectangle);
+                new TimetableCellRenderProperties2(track(data.ArrDeps[data.Station])).Render(e.Graphics, e.ClipRectangle);
             };
             return cc;
         }
 
         private CheckBoxCell GetCheckCell(Func<ArrDep, bool> check)
         {
-            var shadowBinding = Binding.Delegate(check);
             return new CheckBoxCell
             {
-                Binding = Binding.Delegate<DataElement, bool>(d => shadowBinding.GetValue(d.ArrDeps[d.Station])).Cast<bool?>()
+                Binding = Binding.Delegate<DataElement, bool>(d => check(d.ArrDeps[d.Station])).Cast<bool?>()
             };
         }
 
@@ -236,8 +302,8 @@ namespace FPLedit.Editor.TimetableEditor
             view.AddColumn<DataElement>(t => t.Station.SName, T._("Bahnhof"));
             view.AddColumn(GetCell(t => t.Arrival, true), T._("Ankunft"));
             view.AddColumn(GetCell(t => t.Departure, false), T._("Abfahrt"));
-            view.AddColumn(GetTrackCell(t => t.ArrivalTrack, true), T._("Ankunftsgleis"), editable: true);
-            view.AddColumn(GetTrackCell(t => t.DepartureTrack, false), T._("Abfahrtsgleis"), editable: true);
+            view.AddColumn(GetTrackCell(t => t.ArrivalTrack, (t,s) => t.ArrivalTrack = s, true), T._("Ankunftsgleis"), editable: true);
+            view.AddColumn(GetTrackCell(t => t.DepartureTrack, (t,s) => t.ArrivalTrack = s, false), T._("Abfahrtsgleis"), editable: true);
             view.AddColumn(GetCheckCell(t => t.ShuntMoves.Any()), T._("Rangiert"), editable: false);
 #pragma warning restore CA2000
 

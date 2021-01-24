@@ -11,6 +11,8 @@ namespace FPLedit.Editor.TimetableEditor
 
         public Dictionary<Station, ArrDep> ArrDeps { get; set; }
 
+        //private Dictionary<Station, TagEntry> TmpTags { get; } = new();
+
         public bool IsSelectedArrival { get; set; }
 
         public TextBox SelectedTextBox { get; set; }
@@ -26,6 +28,24 @@ namespace FPLedit.Editor.TimetableEditor
                 a.Departure = TimeEntry.Parse(time);
             ArrDeps[sta] = a;
         }
+        
+        /*public void SetTmpTag(Station sta, bool arrival, string time)
+        {
+            var a = TmpTags.ContainsKey(sta) ? TmpTags[sta] : new TagEntry { Station = sta };
+            if (arrival)
+                a.ArrivalText = time;
+            else
+                a.DepartureText = time;
+            TmpTags[sta] = a;
+        }
+        
+        public string GetTmpTag(Station sta, bool arrival)
+        {
+            if (!TmpTags.ContainsKey(sta))
+                return null;
+            var a = TmpTags[sta];
+            return arrival ? a.ArrivalText : a.DepartureText;
+        }*/
 
         public void SetZlm(Station sta, string zlm)
         {
@@ -93,5 +113,18 @@ namespace FPLedit.Editor.TimetableEditor
                 Text = text;
             }
         }
+
+        /*private class TagEntry
+        {
+            public Station Station { get; init; }
+            public string ArrivalText = null;
+            public string DepartureText = null;
+        }*/
+    }
+    
+    internal class CCCO // CustomCellControlObject
+    {
+        public bool InhibitEvents { get; set; } = true;
+        public BaseTimetableDataElement Data { get; set; }
     }
 }
