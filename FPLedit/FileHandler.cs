@@ -202,7 +202,7 @@ namespace FPLedit
                 return;
             if (!NotifyIfUnsaved())
                 return;
-            if (openFileDialog.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
+            if (openFileDialog.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok && openFileDialog.FileName != null)
             {
                 InternalOpen(openFileDialog.FileName, true);
                 UpdateLastPath(openFileDialog);
