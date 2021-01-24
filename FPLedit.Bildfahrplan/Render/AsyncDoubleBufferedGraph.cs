@@ -10,7 +10,7 @@ namespace FPLedit.Bildfahrplan.Render
     internal class AsyncDoubleBufferedGraph : IDisposable
     {
         private Bitmap buffer;
-        private bool generatingBuffer, hadCrash;
+        private bool generatingBuffer, hadCrash, hadAmbiguousTransitions;
         private float lastBufferWidth;
         
         private readonly IPluginInterface pluginInterface;
@@ -62,7 +62,8 @@ namespace FPLedit.Bildfahrplan.Render
                     }
                     catch (Exception ex)
                     {
-                        pluginInterface.Logger.LogException(ex);
+                        if (ex is not AmbiguousTransitionException)
+                            pluginInterface.Logger.LogException(ex);
                         lock (bufferLock)
                         {
                             if (buffer != null && !buffer.IsDisposed)
@@ -74,6 +75,7 @@ namespace FPLedit.Bildfahrplan.Render
 
                         generatingBuffer = false;
                         hadCrash = true;
+                        hadAmbiguousTransitions = (ex is AmbiguousTransitionException);
                     }
 
                     Application.Instance.Invoke(() =>
@@ -100,6 +102,8 @@ namespace FPLedit.Bildfahrplan.Render
             {
                 g.Clear(Colors.White);
                 var text = T._("Fehler beim Rendern (siehe Log)...");
+                if (hadAmbiguousTransitions)
+                    text = T._("Mehrere Folgezüge gefunden!\nBitte oben angezeigte Tage einschränken\nund Bildfahrplanvorschau erneut öffnen.");
                 var t = g.MeasureString(font, text);
                 g.DrawText(font, Colors.Red, (panel.Width - t.Width) / 2, 30, text);
             }

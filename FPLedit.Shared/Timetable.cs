@@ -831,7 +831,7 @@ namespace FPLedit.Shared
             if (!trans.Any())
                 return null;
             if (trans.Length > 1)
-                throw new Exception("Found more than one transition matching the given criteria!");
+                throw new AmbiguousTransitionException("Found more than one transition matching the given criteria!");
 
             return GetTrainByQualifiedId(trans.First().Next);
         }
@@ -976,5 +976,10 @@ namespace FPLedit.Shared
         }
         
         #endregion
+    }
+
+    public class AmbiguousTransitionException : Exception
+    {
+        public AmbiguousTransitionException(string? message) : base(message) { }
     }
 }
