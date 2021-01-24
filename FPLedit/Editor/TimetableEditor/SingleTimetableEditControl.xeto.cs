@@ -139,21 +139,6 @@ namespace FPLedit.Editor.TimetableEditor
                         data.IsSelectedArrival = arrival;
                         data.SelectedTextBox = tb;
                     }
-
-                    /*tb.GotFocus += (s, e) =>
-                    {
-                        CellSelected(data, data.Station, arrival);
-                        data.IsSelectedArrival = arrival;
-                        data.SelectedTextBox = tb;
-                    };*/
-                    
-                    //if (Platform.IsMac)
-                    //    tb.KeyUp += (s, e) => data.SetTmpTag(data.Station, arrival, tb.Text);
-                    /*tb.LostFocus += (s, e) =>
-                    {
-                        FormatCell(data, data.Station, arrival, tb);
-                        new TimetableCellRenderProperties(time, data.Station, arrival, data).Apply(tb);
-                    };;*/
                 }
             };
             cc.Paint += (s, e) =>

@@ -28,24 +28,6 @@ namespace FPLedit.Editor.TimetableEditor
                 a.Departure = TimeEntry.Parse(time);
             ArrDeps[sta] = a;
         }
-        
-        /*public void SetTmpTag(Station sta, bool arrival, string time)
-        {
-            var a = TmpTags.ContainsKey(sta) ? TmpTags[sta] : new TagEntry { Station = sta };
-            if (arrival)
-                a.ArrivalText = time;
-            else
-                a.DepartureText = time;
-            TmpTags[sta] = a;
-        }
-        
-        public string GetTmpTag(Station sta, bool arrival)
-        {
-            if (!TmpTags.ContainsKey(sta))
-                return null;
-            var a = TmpTags[sta];
-            return arrival ? a.ArrivalText : a.DepartureText;
-        }*/
 
         public void SetZlm(Station sta, string zlm)
         {

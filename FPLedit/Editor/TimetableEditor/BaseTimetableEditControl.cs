@@ -49,7 +49,6 @@ namespace FPLedit.Editor.TimetableEditor
 
         protected void FormatCell(BaseTimetableDataElement data, Station sta, bool arrival, TextBox tb)
         {
-            //string val = data.GetTmpTag(sta, arrival) ?? tb.Text;
             string val = tb.Text;
             if (string.IsNullOrEmpty(val))
             {
@@ -63,12 +62,9 @@ namespace FPLedit.Editor.TimetableEditor
             if (val != null)
             {
                 tb.Text = val;
-                //if (Platform.IsMac)
-                //    data.SetTmpTag(sta, arrival, val);
                 data.SetTime(sta, arrival, val);
                 error = false;
             }
-            //data.SetError(sta, arrival, error ? (data.GetTmpTag(sta, arrival) ?? tb.Text) : null);
             data.SetError(sta, arrival, error ? tb.Text : null);
         }
 
@@ -209,8 +205,6 @@ namespace FPLedit.Editor.TimetableEditor
                 if (char.IsLetterOrDigit(e.KeyChar) || char.IsPunctuation(e.KeyChar))
                 {
                     tb.Text += e.KeyChar;
-                    //if (Platform.IsMac)
-                    //    data.SetTmpTag(data.GetStation(), data.IsSelectedArrival, data.GetTmpTag(data.GetStation(), data.IsSelectedArrival));
                     e.Handled = true;
                 }
                 if (e.Key == Keys.Backspace && tb.Text.Length > 0)
