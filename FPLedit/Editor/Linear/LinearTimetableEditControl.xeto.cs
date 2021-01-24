@@ -68,9 +68,45 @@ namespace FPLedit.Editor.Linear
 
         private CustomCell GetCell(Func<ArrDep, TimeEntry> time, Station sta, bool arrival, GridView view)
         {
+            void TbEnterEditMode(DataElement data, TextBox tb)
+            {
+                CellSelected(data, sta, arrival);
+                data.IsSelectedArrival = arrival;
+                data.SelectedStation = sta;
+                data.SelectedTextBox = tb;
+                focused = view;
+            }
+
             var cc = new CustomCell
             {
-                CreateCell = args => new TextBox(),
+                CreateCell = args =>
+                {
+                    var tb = new TextBox { Tag = new CCCO() };
+                    
+                    if (mpmode)
+                        tb.KeyDown += (s, e) => HandleKeystroke(e, view);
+                    
+                    tb.GotFocus += (s, e) =>
+                    {
+                        var dd2 = (TextBox)s;
+                        var ccco = (CCCO)dd2!.Tag;
+                        if (ccco.InhibitEvents)
+                            return;
+                        TbEnterEditMode((DataElement)ccco.Data, dd2);
+                    };
+                    
+                    tb.LostFocus += (s, e) =>
+                    {
+                        var dd2 = (TextBox)s;
+                        var ccco = (CCCO)dd2!.Tag;
+                        if (ccco.InhibitEvents)
+                            return;
+                        FormatCell(ccco.Data, sta, arrival, tb); 
+                        new TimetableCellRenderProperties(time, sta, arrival, ccco.Data).Apply(tb);
+                    };
+                    
+                    return tb;
+                },
                 ConfigureCell = (args, control) =>
                 {
                     var tb = (TextBox)control;
@@ -84,27 +120,13 @@ namespace FPLedit.Editor.Linear
 
                     new TimetableCellRenderProperties(time, sta, arrival, data).Apply(tb);
 
-                    Action tbEnterEditMode = new Action(() =>
-                    {
-                        CellSelected(data, sta, arrival);
-                        data.IsSelectedArrival = arrival;
-                        data.SelectedStation = sta;
-                        data.SelectedTextBox = tb;
-                        focused = view;
-                    });
-
                     if (mpmode)
                     {
-                        tb.KeyDown += (s, e) => HandleKeystroke(e, focused);
-
                         // Wir gehen hier gleich in den vollen EditMode rein
                         tb.CaretIndex = 0;
                         tb.SelectAll();
-                        tbEnterEditMode();
+                        TbEnterEditMode(data, tb);
                     }
-
-                    tb.GotFocus += (s, e) => tbEnterEditMode();
-                    tb.LostFocus += (s, e) => { FormatCell(data, sta, arrival, tb); new TimetableCellRenderProperties(time, sta, arrival, data).Apply(tb); };
                 }
             };
             cc.Paint += (s, e) =>

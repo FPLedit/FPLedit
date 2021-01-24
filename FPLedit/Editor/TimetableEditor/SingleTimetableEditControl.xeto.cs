@@ -288,7 +288,7 @@ namespace FPLedit.Editor.TimetableEditor
             view.AddColumn(GetCell(t => t.Arrival, true), T._("Ankunft"));
             view.AddColumn(GetCell(t => t.Departure, false), T._("Abfahrt"));
             view.AddColumn(GetTrackCell(t => t.ArrivalTrack, (t,s) => t.ArrivalTrack = s, true), T._("Ankunftsgleis"), editable: true);
-            view.AddColumn(GetTrackCell(t => t.DepartureTrack, (t,s) => t.ArrivalTrack = s, false), T._("Abfahrtsgleis"), editable: true);
+            view.AddColumn(GetTrackCell(t => t.DepartureTrack, (t,s) => t.DepartureTrack = s, false), T._("Abfahrtsgleis"), editable: true);
             view.AddColumn(GetCheckCell(t => t.ShuntMoves.Any()), T._("Rangiert"), editable: false);
 #pragma warning restore CA2000
 
