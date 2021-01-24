@@ -110,15 +110,22 @@ namespace FPLedit.Editor.Linear
                 ConfigureCell = (args, control) =>
                 {
                     var tb = (TextBox)control;
+                    if (tb == null)
+                        return;
+                    var ccco = (CCCO) tb.Tag;
+                    ccco.InhibitEvents = true; // Inihibit event handling while new state is set.
+                    
                     var data = (DataElement)args.Item;
-
                     if (data == null)
                     {
                         tb.Visible = false;
                         return;
                     }
+                    ccco.Data = data;
 
                     new TimetableCellRenderProperties(time, sta, arrival, data).Apply(tb);
+
+                    ccco.InhibitEvents = false;
 
                     if (mpmode)
                     {
