@@ -166,12 +166,7 @@ namespace FPLedit.Editor.TimetableEditor
                             return;
                         var t = (string) dd.SelectedValue;
                         var ds = ((DataElement)ccco.Data).GetTrackDataStore().ToArray();
-                        if (dd.SelectedIndex > -1)
-                            Console.WriteLine("SelectedValue: " + t + "/" + ds[dd.SelectedIndex]);
-                        else
-                            Console.WriteLine("Selected index: " + dd.SelectedIndex);
-                        
-                        
+
                         setTrack(ccco.Data.ArrDeps[ccco.Data.GetStation()], t == (string) dd.DataStore.FirstOrDefault() ? "" : t);
                     };
                     
