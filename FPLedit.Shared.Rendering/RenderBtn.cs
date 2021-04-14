@@ -37,21 +37,21 @@ namespace FPLedit.Shared.Rendering
             Text = text;
         }
 
-        public void HandleClick(Point clickPosition, Point pan)
+        public void HandleClick(Point clickPosition, Point pan, float scale = 1)
         {
-            if (Rect.Contains(clickPosition - pan))
+            if (Rect.Contains(new Point((clickPosition - pan) * (1/scale))))
                 Click?.Invoke(this, new EventArgs());
         }
 
-        public void HandleRightClick(Point clickPosition, Point pan)
+        public void HandleRightClick(Point clickPosition, Point pan, float scale = 1)
         {
-            if (Rect.Contains(clickPosition - pan))
+            if (Rect.Contains(new Point((clickPosition - pan) * (1/scale))))
                 RightClick?.Invoke(this, new EventArgs());
         }
 
-        public void HandleDoubleClick(Point clickPosition, Point pan)
+        public void HandleDoubleClick(Point clickPosition, Point pan, float scale = 1)
         {
-            if (Rect.Contains(clickPosition - pan))
+            if (Rect.Contains(new Point((clickPosition - pan) * (1/scale))))
                 DoubleClick?.Invoke(this, new EventArgs());
         }
 

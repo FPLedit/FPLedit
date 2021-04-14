@@ -18,7 +18,7 @@ namespace FPLedit.Editor.Rendering
         private readonly Pen linePen, highlightPen;
         private readonly Color systemBgColor, systemTextColor;
 
-        public static readonly Keys[] DispatchableKeys = { Keys.R, Keys.S, Keys.Escape };
+        public static readonly Keys[] DispatchableKeys = { Keys.R, Keys.S, Keys.Escape, Keys.Equal /* Plus */, Keys.Minus, Keys.Add, Keys.Subtract };
 
         protected override void Dispose(bool disposing)
         {
@@ -84,6 +84,16 @@ namespace FPLedit.Editor.Rendering
             set { _pan = value; Invalidate(); }
         }
 
+        private float _zoom = 1;
+        public float Zoom
+        {
+            get => _zoom;
+            set
+            {
+                _zoom = Math.Max(Math.Min(value, 2f), 0.5f);
+                Invalidate();
+            }
+        }
 
         private readonly StationCanvasPositionHandler handler;
         private Dictionary<Station, Point> stapos;
@@ -148,10 +158,12 @@ namespace FPLedit.Editor.Rendering
             e.Graphics.Clear(systemBgColor);
             panels.Clear();
 
+            e.Graphics.SaveTransform();
             e.Graphics.TranslateTransform(_pan);
-            DrawNetwork(e.Graphics, - _pan, - _pan + Bounds.Size);
-            e.Graphics.TranslateTransform(-_pan);
-
+            e.Graphics.ScaleTransform(_zoom);
+            DrawNetwork(e.Graphics, - _pan * 1/_zoom, (- _pan + Bounds.Size ) * 1/_zoom);
+            e.Graphics.RestoreTransform();
+            
             // Draw Status strings & border on top of network
             DrawStatus(e.Graphics);
             DrawBorder(e.Graphics);
@@ -247,10 +259,10 @@ namespace FPLedit.Editor.Rendering
 
         private void DrawStatus(Graphics g)
         {
-            if (!_pan.IsZero)
+            if (!_pan.IsZero || Math.Abs(_zoom - 1) > 0.01f)
             {
                 var statusL = T._("Ansicht verschoben, [R] für Reset");
-                if (SetPanCenterEnabled && IsNetwork)
+                if (SetPanCenterEnabled && IsNetwork && !_pan.IsZero)
                     statusL += T._(", [S] zum Speichern");
                 var sizeL = g.MeasureString(font, statusL);
                 var pointL = new PointF(0, ClientSize.Height - sizeL.Height);
@@ -387,15 +399,15 @@ namespace FPLedit.Editor.Rendering
 
         public void DispatchKeystroke(KeyEventArgs e)
         {
-            switch (e.Key)
+            switch (e.Key) // See Dispatchable_Keys
             {
-                // See DISPATCHABLE_KEYS
                 case Keys.Escape:
                     AbortAddStation();
                     e.Handled = true;
                     break;
                 case Keys.R:
                     Pan = PointF.Empty;
+                    Zoom = 1f;
                     e.Handled = true;
                     break;
                 case Keys.S:
@@ -404,10 +416,18 @@ namespace FPLedit.Editor.Rendering
                         e.Handled = true;
                         var keys = stapos.Keys.ToArray();
                         foreach (var sta in keys)
-                            stapos[sta] += (Point)Pan;
+                            stapos[sta] += (Point)(Pan * 1/_zoom);
                         handler.WriteStapos(tt, stapos);
                         Pan = PointF.Empty;
                     }
+                    break;
+                //TODO: case Keys.Equal: // Plus key
+                case Keys.Add:
+                    Zoom += 0.1f;
+                    break;
+                case Keys.Minus:
+                case Keys.Subtract:
+                    Zoom -= 0.1f;
                     break;
             }
         }
@@ -430,7 +450,7 @@ namespace FPLedit.Editor.Rendering
             hasPanned = false;
 
             foreach (var args in panels.ToArray())
-                args.HandleDoubleClick(new Point(e.Location), new Point(_pan));
+                args.HandleDoubleClick(new Point(e.Location), new Point(_pan), _zoom);
 
             lastDoubleClick = true;
             base.OnMouseDoubleClick(e);
@@ -444,12 +464,12 @@ namespace FPLedit.Editor.Rendering
             {
                 if (e.Buttons == MouseButtons.Alternate)
                     foreach (var args in panels.ToArray())
-                        args.HandleRightClick(new Point(e.Location), new Point(_pan));
+                        args.HandleRightClick(new Point(e.Location), new Point(_pan), _zoom);
                 else if (e.Buttons == MouseButtons.Primary && StationMovingEnabled && IsNetwork)
                 {
                     foreach (var args in panels.ToArray())
                     {
-                        if (args.Rect.Contains(new Point(e.Location) - new Point(_pan)))
+                        if (args.Rect.Contains(new Point((new Point(e.Location) - new Point(_pan)) * (1/_zoom))))
                         {
                             draggedControl = args;
                             Cursor = Cursors.Move;
@@ -507,7 +527,7 @@ namespace FPLedit.Editor.Rendering
             if (e.Buttons == MouseButtons.Primary && DateTime.Now.Ticks >= lastClick + CLICK_TIME)
             {
                 foreach (var args in panels.ToArray())
-                    args.HandleClick(new Point(e.Location), new Point(_pan));
+                    args.HandleClick(new Point(e.Location), new Point(_pan), _zoom);
             }
 
             if (StationMovingEnabled && IsNetwork && draggedControl != null)
@@ -532,6 +552,13 @@ namespace FPLedit.Editor.Rendering
             lastClick = 0;
             base.OnMouseUp(e);
         }
+
+        protected override void OnMouseWheel(MouseEventArgs e)
+        {
+            Zoom += e.Delta.Height * 0.1f;
+            base.OnMouseWheel(e);
+        }
+
         #endregion
 
         private enum Modes
