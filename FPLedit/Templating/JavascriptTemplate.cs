@@ -212,8 +212,8 @@ namespace FPLedit.Templating
             TemplateDebugger.GetInstance().SetContext(this); // Move "Debugger" context to current template.
 
             const string polyFillsPath = "Templating.TemplatePolyfills.js";
-            var polyfillsParserOptions = new ParserOptions(polyFillsPath) { Tolerant = false, Loc = true };
-            var templateCodeParserOptions = new ParserOptions(Identifier) { Loc = true };
+            var polyfillsParserOptions = new ParserOptions(polyFillsPath) { Tolerant = false };
+            var templateCodeParserOptions = new ParserOptions(Identifier);
             
             return engine
                 .SetValue("tt", tt)

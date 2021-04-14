@@ -75,7 +75,7 @@
   <ItemGroup>
     <PackageReference Include="Eto.Forms" Version="$(EtoVersion)" />
     <PackageReference Include="Eto.Serialization.Xaml" Version="$(EtoVersion)" />
-    <PackageReference Include="Jint" Version="3.0.0-beta-1914" />
+    <PackageReference Include="Jint" Version="3.0.0-beta-2031" />
     <PackageReference Include="Mono.Options" Version="6.6.0.161" />
     <PackageReference Include="Portable.Xaml" Version="0.26.0" />
     <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
@@ -93,5 +93,14 @@
   </ItemGroup>
   <ItemGroup Condition=" ! $( RuntimeIdentifier.StartsWith('win') ) And '$(RuntimeIdentifier)' != 'osx-x64' ">
     <PackageReference Include="Eto.Platform.Gtk" Version="$(EtoVersion)" />
+    
+    <!-- Temporary fix for issue with new glib2 -->
+    <PackageReference Include="AtkSharp" Version="3.24.24.34" />
+    <PackageReference Include="CairoSharp" Version="3.24.24.34" />
+    <PackageReference Include="PangoSharp" Version="3.24.24.34" />
+    <PackageReference Include="GdkSharp" Version="3.24.24.34" />
+    <PackageReference Include="GioSharp" Version="3.24.24.34" />
+    <PackageReference Include="GLibSharp" Version="3.24.24.34" />
+    <PackageReference Include="GtkSharp" Version="3.24.24.34" />
   </ItemGroup>
 </Project>
