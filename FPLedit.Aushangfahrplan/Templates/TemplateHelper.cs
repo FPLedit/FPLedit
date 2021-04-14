@@ -43,7 +43,7 @@ namespace FPLedit.Aushangfahrplan.Templates
 
         public Station[] GetLastStations(TrainDirection dir, Station sta, IEnumerable<object> trainsInThisDirObj)
         {
-            var trainsInThisDir = trainsInThisDirObj.Cast<Train>(); // From JS.
+            var trainsInThisDir = trainsInThisDirObj.Cast<Train>().ToArray(); // From JS.
             if (tt.Type == TimetableType.Linear)
             {
                 var lSta = tt.GetLinearStationsOrderedByDirection(dir).LastOrDefault();
@@ -53,9 +53,14 @@ namespace FPLedit.Aushangfahrplan.Templates
             }
 
             // Alle Stationen in Zügen dieser Richtung, die nach dieser Station folgen
-            var stasInTrains = trainsInThisDir.SelectMany(t => t.GetArrDepsUnsorted().Where(a => a.Value.HasMinOneTimeSet).Select(kvp => kvp.Key).SkipWhile(s => s != sta)).ToArray();
+            var stasInTrains = trainsInThisDir
+                .SelectMany(t => t.GetArrDepsUnsorted()
+                    .Where(a => a.Value.HasMinOneTimeSet)
+                    .Select(kvp => kvp.Key)
+                    .SkipWhile(s => s != sta))
+                .ToArray();
 
-            var connectionNodes = sta.ParentTimetable.Stations.Where(s => s.Routes.Length > 1);
+            var connectionNodes = sta.ParentTimetable!.Stations.Where(s => s.Routes.Length > 1);
             var visitedConnectionNodes = connectionNodes.Intersect(stasInTrains); // Eine Hälfte der "Richtungsangaben": Verbindungsknoten im Netz
 
             var visitedRoutes = stasInTrains.SelectMany(s => s.Routes).Distinct();
@@ -65,12 +70,19 @@ namespace FPLedit.Aushangfahrplan.Templates
 
             foreach (var rt in visitedRoutes)
             {
-                var route = sta.ParentTimetable.GetRoute(rt).Stations;
-                stasAfter.Add(route.First());
-                stasAfter.Add(route.Last());
+                var route = sta.ParentTimetable.GetRoute(rt).ToPathData(tt);
+                if (stasInTrains.Contains(route.NextStation(sta)))
+                    stasAfter.Add(route.PathEntries.Last().Station);
+                if (stasInTrains.Contains(route.PreviousStation(sta)))
+                    stasAfter.Add(route.PathEntries.First().Station);
             }
 
-            return stasAfter.Distinct().OrderBy(s => s.SName).ToArray();
+            return stasAfter
+                .Except(new[] { sta })
+                .Distinct()
+                .Where(s => srules.All(r => !r.Matches(s)))
+                .OrderBy(s => s.SName)
+                .ToArray();
         }
         #endregion
 
