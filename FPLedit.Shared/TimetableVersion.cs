@@ -31,6 +31,7 @@ namespace FPLedit.Shared
         
         [TtVersionCompat(TtVersionCompatType.ReadWrite, TimetableType.Linear)]
         [JtgVersionCompat("3.3*", TtVersionJtgCompat.OnlyLinear)]
+        [JtgVersionCompat("3.4*", TtVersionJtgCompat.OnlyLinear)]
         JTG3_3 = 012,
 
         [TtVersionCompat(TtVersionCompatType.UpgradeOnly, TimetableType.Network)]
