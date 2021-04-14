@@ -32,7 +32,7 @@ namespace FPLedit.Shared
         /// Returns the maximum kilometer position on this line (maximum chainage).
         /// </summary>
         public float MaxPosition
-            => Exists ? stations[stations.Length - 1].Positions.GetPosition(Index) ?? 0f : 0f;
+            => Exists ? stations[^1].Positions.GetPosition(Index) ?? 0f : 0f;
 
         /// <summary>
         /// Returns whether this route is not empty.
@@ -60,8 +60,10 @@ namespace FPLedit.Shared
         {
             if (!Exists)
                 return "<leer>";
-            return stations[0].SName + " - " + stations[stations.Length - 1].SName; // this will always work, as stations.Length >= 1
+            return stations[0].SName + " - " + stations[^1].SName; // this will always work, as stations.Length >= 1
         }
+
+        public PathData ToPathData(Timetable tt) => new PathData(this, tt);
 
         /// <summary>
         /// Returns +/-<paramref name="radius"/> stations around the given <paramref name="center"/> station, following
@@ -85,5 +87,10 @@ namespace FPLedit.Shared
             Array.Copy(stations, array, length);
             return array;
         }
+
+        /// <summary>
+        /// Returns only the raw stations used in this path, without any additional information.
+        /// </summary>
+        public IEnumerable<Station> GetRawPath() => Stations;
     }
 }

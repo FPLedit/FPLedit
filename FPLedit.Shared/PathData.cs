@@ -29,6 +29,12 @@ namespace FPLedit.Shared
             Entries = Array.Empty<PathEntry>();
         }
 
+        internal PathData(Route route, Timetable tt)
+        {
+            this.tt = tt;
+            Entries = route.Stations.Select(s => new PathEntry(s, route.Index)).ToArray();
+        }
+
         /// <summary>
         /// Initialization method. Can be used to implement custom flavoured PathData types.
         /// </summary>

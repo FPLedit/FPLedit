@@ -11,57 +11,66 @@ namespace FPLedit.Bildfahrplan.Render
 {
     internal sealed class HeaderRenderer
     {
-        private readonly IEnumerable<Station> stations;
-        private readonly int route;
+        private readonly PathData path;
         private readonly TimetableStyle attrs;
 
         private readonly DashStyleHelper ds = new DashStyleHelper();
 
         private const int TOP_GAP = 5;
         
-        public HeaderRenderer(IEnumerable<Station> stations, TimetableStyle attrs, int route)
+        public HeaderRenderer(TimetableStyle attrs, PathData path)
         {
-            this.stations = stations;
-            this.route = route;
+            this.path = path;
             this.attrs = attrs;
         }
 
         public Dictionary<Station, StationRenderProps> Render(Graphics g, Margins margin, float width, float height, bool drawHeader)
         {
             var stationFont = (Font)attrs.StationFont; // Reminder: Do not dispose, will be disposed with MFont instance!
-            var firstStation = stations.First();
-            var lastStation = stations.Last();
             var stationOffsets = new Dictionary<Station, StationRenderProps>();
 
-            var allTrackCount = stations.Select(s => s.Tracks.Count).Sum();
-            var stasWithTracks = stations.Count(s => s.Tracks.Any());
+            var raw = path.GetRawPath().ToList();
+            var allTrackCount = raw.Select(s => s.Tracks.Count).Sum();
+            var stasWithTracks = raw.Count(s => s.Tracks.Any());
             var allTrackWidth = (stasWithTracks + allTrackCount) * StationRenderProps.IndividualTrackOffset;
             var verticalTrackOffset = GetTrackOffset(g, stationFont) + TOP_GAP;
 
-            StationRenderProps lastPos = null;
-            foreach (var sta in stations)
+            float length = 0f;
+
+            PathEntry lastpe = null;
+            foreach (var sta in path.PathEntries)
             {
-                var style = new StationStyle(sta, attrs);
+                var er = path.GetEntryRoute(sta.Station);
+                if (er != Timetable.UNASSIGNED_ROUTE_ID)
+                    length += (sta!.Station.Positions.GetPosition(er) - lastpe!.Station.Positions.GetPosition(er))!.Value;
+                lastpe = sta;
+            }
 
-                var kil = sta.Positions.GetPosition(route) - firstStation.Positions.GetPosition(route);
-                var length = lastStation.Positions.GetPosition(route) - firstStation.Positions.GetPosition(route);
-
-                if (!kil.HasValue || !length.HasValue)
-                    throw new Exception("Unerwarteter Fehler beim Rendern der Route!");
-
+            StationRenderProps lastPos = null;
+            lastpe = null;
+            float kil = 0f;
+            foreach (var sta in path.PathEntries)
+            {
+                var style = new StationStyle(sta.Station, attrs);
+                
+                var er = path.GetEntryRoute(sta.Station);
+                if (er != Timetable.UNASSIGNED_ROUTE_ID)
+                    kil += (sta!.Station.Positions.GetPosition(er) - lastpe!.Station.Positions.GetPosition(er))!.Value;
+                lastpe = sta;
+                
                 StationRenderProps posX;
                 if (!attrs.MultiTrack)
-                    posX = new StationRenderProps(sta, kil.Value, ((kil / length) * (width - margin.Right - margin.Left)).Value);
+                    posX = new StationRenderProps(sta.Station, kil, ((kil / length) * (width - margin.Right - margin.Left)));
                 else
                 {
                     var availWidth = width - margin.Right - margin.Left - allTrackWidth;
                     var lastKil = lastPos?.CurKilometer ?? 0f;
                     var lastRight = lastPos?.Right ?? 0f;
-                    var leftOffset = (((kil / length) - (lastKil / length)) * availWidth).Value;
-                    posX = new StationRenderProps(sta, kil.Value, lastRight + leftOffset, true);
+                    var leftOffset = (((kil / length) - (lastKil / length)) * availWidth);
+                    posX = new StationRenderProps(sta.Station, kil, lastRight + leftOffset, true);
                 }
                 lastPos = posX;
-                stationOffsets.Add(sta, posX);
+                stationOffsets.Add(sta.Station, posX);
 
                 if (!style.CalcedShow)
                     continue;
@@ -132,7 +141,8 @@ namespace FPLedit.Bildfahrplan.Render
             return stationOffsets;
         }
 
-        private string StationDisplay(Station sta) => sta.ToString(attrs.DisplayKilometre, route) + (!string.IsNullOrWhiteSpace(sta.StationCode) ? $" ({sta.StationCode})" : "");
+        private string StationDisplay(PathEntry sta) => sta.Station.ToString(attrs.DisplayKilometre, sta.RouteIndex) + 
+                                                        (!string.IsNullOrWhiteSpace(sta.Station.StationCode) ? $" ({sta.Station.StationCode})" : "");
 
         public float GetMarginTop(Graphics g)
         {
@@ -140,8 +150,8 @@ namespace FPLedit.Bildfahrplan.Render
             var emSize = g.MeasureString(stationFont, "M").Height;
             
             var sMax = attrs.StationVertical ? 
-                (stations.Any() ?
-                    stations.Max(sta => g.MeasureString(StationDisplay(sta), stationFont).Width) 
+                (path.PathEntries.Any() ?
+                    path.PathEntries.Max(sta => g.MeasureString(StationDisplay(sta), stationFont).Width) 
                     : 0)
                 : emSize;
 
@@ -152,10 +162,11 @@ namespace FPLedit.Bildfahrplan.Render
 
         private float GetTrackOffset(Graphics g, Font stationFont)
         {
+            var raw = path.GetRawPath().ToList();
             var emSize = g.MeasureString(stationFont, "M").Height;
             if (attrs.MultiTrack)
             {
-                var tracks = stations.SelectMany(s => s.Tracks);
+                var tracks = raw.SelectMany(s => s.Tracks);
                 if (!tracks.Any())
                     return 0;
                 
