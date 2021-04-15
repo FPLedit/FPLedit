@@ -35,7 +35,7 @@ namespace FPLedit.Bildfahrplan
             using (var bmp = new Bitmap(width, renderer.GetHeightExternal(true), PixelFormat.Format32bppArgb))
             using (var g = Graphics.FromImage(bmp))
             {
-                renderer.Draw(g, true, width);
+                renderer.Draw(g, true, width, true);
                 bmp.Save(stream, format);
             }
             return true;

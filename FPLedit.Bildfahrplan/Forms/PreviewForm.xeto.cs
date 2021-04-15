@@ -85,7 +85,7 @@ namespace FPLedit.Bildfahrplan.Forms
                 {
                     using (var ib = new ImageBridge(hpanel.Width, hpanel.Height))
                     {
-                        renderer.DrawHeader(ib.Graphics, (scrollable.ClientSize.Width + panel.Width) / 2);
+                        renderer.DrawHeader(ib.Graphics, (scrollable.ClientSize.Width + panel.Width) / 2, exportColor: false);
                         ib.CoptyToEto(e.Graphics);
                     }
                 }

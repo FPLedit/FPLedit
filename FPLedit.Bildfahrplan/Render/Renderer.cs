@@ -30,14 +30,14 @@ namespace FPLedit.Bildfahrplan.Render
             defaultMargin = margins;
         }
 
-        public void Draw(Graphics g, bool drawHeader, float? forceWidth = null)
-            => Draw(g, attrs.StartTime, GetEndTime(attrs.StartTime, attrs.EndTime), drawHeader, forceWidth);
+        public void Draw(Graphics g, bool drawHeader, float? forceWidth = null, bool exportColor = false)
+            => Draw(g, attrs.StartTime, GetEndTime(attrs.StartTime, attrs.EndTime), drawHeader, forceWidth, exportColor);
 
         public static Func<PathData> DefaultPathData(int route, Timetable tt) => () => tt.GetRoute(route).ToPathData(tt);
 
-        public void Draw(Graphics g, TimeEntry startTime, TimeEntry endTime, bool drawHeader, float? forceWidth = null)
+        public void Draw(Graphics g, TimeEntry startTime, TimeEntry endTime, bool drawHeader, float? forceWidth = null, bool exportColor = false)
         {
-            g.Clear((Color)attrs.BgColor);
+            g.Clear(attrs.BgColor.ToSD(exportColor));
 
             var path = getPathData();
             var stations = path.GetRawPath().ToList();
@@ -48,11 +48,11 @@ namespace FPLedit.Bildfahrplan.Render
 
             // Zeitaufteilung
             var timeRenderer = new TimeRenderer(attrs);
-            timeRenderer.Render(g, margin, startTime, endTime, width);
+            timeRenderer.Render(g, margin, startTime, endTime, width, exportColor);
 
             // Stationenaufteilung
             var headerRenderer = new HeaderRenderer(attrs, path);
-            var stationOffsets = headerRenderer.Render(g, margin, width, height, drawHeader);
+            var stationOffsets = headerRenderer.Render(g, margin, width, height, drawHeader, exportColor);
 
             // Züge
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
@@ -61,13 +61,13 @@ namespace FPLedit.Bildfahrplan.Render
             var trains = tt.Trains.Where(t => t.Days.IsIntersecting(attrs.RenderDays));
             var trainRenderer = new TrainRenderer(stations, tt, margin, startTime, stationOffsets, attrs.RenderDays);
             foreach (var train in trains)
-                trainRenderer.Render(g, train);
+                trainRenderer.Render(g, train, exportColor);
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
         }
 
-        public void DrawHeader(Graphics g, int width)
+        public void DrawHeader(Graphics g, int width, bool exportColor)
         {
-            g.Clear((Color)attrs.BgColor);
+            g.Clear(attrs.BgColor.ToSD(exportColor));
 
             var path = getPathData();
             var stations = path.GetRawPath().ToList();
@@ -78,7 +78,7 @@ namespace FPLedit.Bildfahrplan.Render
 
             // Stationenaufteilung
             var headerRenderer = new HeaderRenderer(attrs, path);
-            headerRenderer.Render(g, margin, width, height, true);
+            headerRenderer.Render(g, margin, width, height, true, exportColor);
         }
 
         private Margins CalcMargins(Graphics g, Margins orig, IEnumerable<Station> stations, TimeEntry startTime, TimeEntry endTime, bool drawHeader)

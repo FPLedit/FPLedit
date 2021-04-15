@@ -142,15 +142,15 @@ namespace FPLedit.Bildfahrplan.Forms
                 using (var gr = Graphics.FromImage(bitmap))
                 {
                     gr.PageUnit = GraphicsUnit.Display;
-                    renderer.Draw(gr, start, last.Value, true, width);
+                    renderer.Draw(gr, start, last.Value, true, width, true);
                     e.Graphics.DrawImage(bitmap, 0, 0, width, height);
                 }
             }
             else
-                renderer.Draw(e.Graphics, start, last.Value, true, width);
+                renderer.Draw(e.Graphics, start, last.Value, true, width, true);
 
             var endTime = GetEndTime(start, attrs.EndTime);
-            if (last.Value < endTime)
+            if (last!.Value < endTime)
                 e.HasMorePages = true;
             else
                 last = null;

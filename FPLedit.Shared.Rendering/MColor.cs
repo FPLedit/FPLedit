@@ -35,11 +35,11 @@ namespace FPLedit.Shared.Rendering
         public static explicit operator Eto.Drawing.Color(MColor m)
             => Eto.Drawing.Color.FromArgb(m.R, m.G, m.B);
 
-        public static explicit operator System.Drawing.Color(MColor m)
+        public System.Drawing.Color ToSD(bool forceNormalColor)
         {
-            if (ShouldSwitchColors)
-                return System.Drawing.Color.FromArgb(255, m.B, m.G, m.R);
-            return System.Drawing.Color.FromArgb(255, m.R, m.G, m.B);
+            if (ShouldSwitchColors && !forceNormalColor)
+                return System.Drawing.Color.FromArgb(255, B, G, R);
+            return System.Drawing.Color.FromArgb(255, R, G, B);
         }
 
         public static MColor White => new MColor(255, 255, 255);

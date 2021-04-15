@@ -16,12 +16,12 @@ namespace FPLedit.Bildfahrplan.Render
             this.attrs = attrs;
         }
 
-        public void Render(Graphics g, Margins margin, TimeEntry startTime, TimeEntry endTime, float width)
+        public void Render(Graphics g, Margins margin, TimeEntry startTime, TimeEntry endTime, float width, bool exportColor)
         {
             var timeFont = (Font)attrs.TimeFont; // Reminder: Do not dispose, will be disposed with MFont instance!
-            using var timeBrush = new SolidBrush((Color)attrs.TimeColor);
-            using var minutePen = new Pen((Color)attrs.TimeColor, attrs.MinuteTimeWidth);
-            using var hourPen = new Pen((Color)attrs.TimeColor, attrs.HourTimeWidth);
+            using var timeBrush = new SolidBrush(attrs.TimeColor.ToSD(exportColor));
+            using var minutePen = new Pen(attrs.TimeColor.ToSD(exportColor), attrs.MinuteTimeWidth);
+            using var hourPen = new Pen(attrs.TimeColor.ToSD(exportColor), attrs.HourTimeWidth);
             
             foreach (var l in GetTimeLines(out bool hour, startTime, endTime))
             {

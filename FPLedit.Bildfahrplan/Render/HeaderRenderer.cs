@@ -24,7 +24,7 @@ namespace FPLedit.Bildfahrplan.Render
             this.attrs = attrs;
         }
 
-        public Dictionary<Station, StationRenderProps> Render(Graphics g, Margins margin, float width, float height, bool drawHeader)
+        public Dictionary<Station, StationRenderProps> Render(Graphics g, Margins margin, float width, float height, bool drawHeader, bool exportColor)
         {
             var stationFont = (Font)attrs.StationFont; // Reminder: Do not dispose, will be disposed with MFont instance!
             var stationOffsets = new Dictionary<Station, StationRenderProps>();
@@ -75,11 +75,11 @@ namespace FPLedit.Bildfahrplan.Render
                 if (!style.CalcedShow)
                     continue;
 
-                using var pen = new Pen((Color)style.CalcedColor, style.CalcedWidth)
+                using var pen = new Pen(style.CalcedColor.ToSD(exportColor), style.CalcedWidth)
                 {
                     DashPattern = ds.ParseDashstyle(style.CalcedLineStyle)
                 };
-                using var brush = new SolidBrush((Color)style.CalcedColor);
+                using var brush = new SolidBrush(style.CalcedColor.ToSD(exportColor));
                 
                 if (!attrs.MultiTrack)
                 {

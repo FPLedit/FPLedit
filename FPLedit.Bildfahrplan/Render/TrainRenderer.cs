@@ -34,7 +34,7 @@ namespace FPLedit.Bildfahrplan.Render
             attrs = new TimetableStyle(tt);
         }
 
-        public void Render(Graphics g, ITrain train)
+        public void Render(Graphics g, ITrain train, bool exportColor)
         {
             var style = new TrainStyle(train, attrs);
             if (!style.CalcedShow)
@@ -43,11 +43,11 @@ namespace FPLedit.Bildfahrplan.Render
             var ardps = train.GetArrDepsUnsorted();
             var dir = GetTrainDirection(train);
 
-            using var pen = new Pen((Color)style.CalcedColor, style.CalcedWidth)
+            using var pen = new Pen(style.CalcedColor.ToSD(exportColor), style.CalcedWidth)
             {
                 DashPattern = ds.ParseDashstyle(style.CalcedLineStyle)
             };
-            using var brush = new SolidBrush((Color)style.CalcedColor);
+            using var brush = new SolidBrush(style.CalcedColor.ToSD(exportColor));
             
             List<PointF> points = new List<PointF>();
             bool hadFirstArrival = false, hadLastDeparture = false, isFirst = true;
