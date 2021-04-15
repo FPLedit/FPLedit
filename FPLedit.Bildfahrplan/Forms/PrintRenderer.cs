@@ -109,9 +109,9 @@ namespace FPLedit.Bildfahrplan.Forms
         private void Doc_PrintPage(object sender, Print.PrintPageEventArgs e)
         {
             // Exclude page margins to begin with
-            e.Graphics.SetClip(new RectangleF(e.PageSettings.Margins.Left, e.PageSettings.Margins.Top, e.MarginBounds.Width, e.MarginBounds.Height));
+            e.Graphics!.SetClip(new RectangleF(e.PageSettings.Margins.Left, e.PageSettings.Margins.Top, e.MarginBounds.Width, e.MarginBounds.Height));
             
-            var renderer = new Renderer(tt, route);
+            var renderer = new Renderer(tt, Renderer.DefaultPathData(route, tt));
             int height = e.MarginBounds.Height + e.PageSettings.Margins.Bottom + e.PageSettings.Margins.Top;
             int width = e.MarginBounds.Width + e.PageSettings.Margins.Left + e.PageSettings.Margins.Right;
             

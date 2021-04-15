@@ -10,6 +10,7 @@ namespace FPLedit.Shared.UI
         private IPluginInterface? pluginInterface;
         private string? lastFn;
         private int selectedRoute;
+        private bool enableVirtualRoutes;
 
         public void Initialize(IPluginInterface pi)
         {
@@ -53,6 +54,16 @@ namespace FPLedit.Shared.UI
             }
         }
 
+        public bool EnableVirtualRoutes
+        {
+            get => enableVirtualRoutes;
+            set
+            {
+                enableVirtualRoutes = value;
+                ReloadRouteNames(true);
+            }
+        }
+
         public event EventHandler? SelectedRouteChanged;
 
         private IEnumerable<ListItem> GetRouteNames(Timetable tt)
@@ -72,6 +83,9 @@ namespace FPLedit.Shared.UI
                 var rt = tt.GetRoutes();
                 foreach (var route in rt)
                     yield return BuildItem(route.GetRouteName(), route.Index);
+                var vrt = VirtualRoute.GetVRoutes(tt);
+                foreach (var v in vrt)
+                    yield return BuildItem(v.GetRouteName(), v.Index);
             }
             else
                 yield return BuildItem(T._("<Standard>"), Timetable.LINEAR_ROUTE_ID);

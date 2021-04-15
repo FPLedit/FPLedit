@@ -65,6 +65,7 @@ namespace FPLedit.Bildfahrplan.Forms
             // Initialisierung der Daten
             dtc.SelectedDays = new TimetableStyle(pluginInterface.Timetable).RenderDays;
             routesDropDown.Initialize(pluginInterface);
+            routesDropDown.EnableVirtualRoutes = true;
         }
 
         private void PreferencesButton_Click(object sender, EventArgs e)
@@ -80,7 +81,7 @@ namespace FPLedit.Bildfahrplan.Forms
         {
             try
             {
-                if (splitCheckBox.Checked.Value)
+                if (splitCheckBox.Checked!.Value)
                 {
                     using (var ib = new ImageBridge(hpanel.Width, hpanel.Height))
                     {
@@ -95,10 +96,19 @@ namespace FPLedit.Bildfahrplan.Forms
 
         private void ResetRenderer()
         {
-            renderer = new Renderer(pluginInterface.Timetable, routesDropDown.SelectedRoute);
+            Func<PathData> pd;
+            if (routesDropDown.SelectedRoute > Timetable.UNASSIGNED_ROUTE_ID)
+                pd = Renderer.DefaultPathData(routesDropDown.SelectedRoute, pluginInterface.Timetable);
+            else
+            {
+                var virt = VirtualRoute.GetVRoute(pluginInterface.Timetable, routesDropDown.SelectedRoute);
+                pd = virt!.GetPathData;
+            }
+
+            renderer = new Renderer(pluginInterface.Timetable, pd);
             if (!scrollPosition.HasValue)
                 scrollPosition = new Point(0, 0);
-            panel.Height = renderer.GetHeightExternal(!splitCheckBox.Checked.Value);
+            panel.Height = renderer.GetHeightExternal(!splitCheckBox.Checked!.Value);
             hpanel.Height = splitCheckBox.Checked.Value ? renderer.GetHeightExternal(default, default, true) : 0;
 
             adbg.Invalidate();
@@ -117,7 +127,7 @@ namespace FPLedit.Bildfahrplan.Forms
         }
 
         private void Panel_Paint(object sender, PaintEventArgs e)
-            => adbg.Render(renderer, e.Graphics, !splitCheckBox.Checked.Value);
+            => adbg.Render(renderer, e.Graphics, !splitCheckBox.Checked!.Value);
 
         protected override void Dispose(bool disposing)
         {
