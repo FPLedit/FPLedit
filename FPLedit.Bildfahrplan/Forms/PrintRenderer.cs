@@ -15,17 +15,16 @@ namespace FPLedit.Bildfahrplan.Forms
     {
         private readonly IPluginInterface pluginInterface;
         private readonly Timetable tt;
-        private readonly int route;
         private readonly TimetableStyle attrs;
 
         private Print.PrintDocument doc;
         private TimeEntry? last;
+        private Func<PathData> pd;
 
-        public PrintRenderer(IPluginInterface pluginInterface, int route)
+        public PrintRenderer(IPluginInterface pluginInterface)
         {
             this.pluginInterface = pluginInterface;
             this.tt = pluginInterface.Timetable;
-            this.route = route;
             attrs = new TimetableStyle(tt);
         }
 
@@ -40,68 +39,83 @@ namespace FPLedit.Bildfahrplan.Forms
         {
             var printers = Print.PrinterSettings.InstalledPrinters.Cast<string>().ToArray();
 
-            using (doc = new Print.PrintDocument())
-            using (var form = new FDialog<string>())
-            using (var printerDropDown = new DropDown { DataStore = printers })
-            using (var paperDropDown = new DropDown())
-            using (var landscapeChk = new CheckBox { Text = T._("Querformat") })
-            using (var printButton = new Button { Text = T._("Drucken") })
-            using (var stack = new StackLayout(printerDropDown, paperDropDown, landscapeChk, printButton) { Orientation = Orientation.Horizontal, Padding = new Eto.Drawing.Padding(10), Spacing = 5 })
+            doc = new Print.PrintDocument();
+            var form = new FDialog<string>();
+            var routesDropDown = new RoutesDropDown();
+            var routeStack = new StackLayout(routesDropDown) { Orientation = Orientation.Horizontal, Padding = new Eto.Drawing.Padding(10), Spacing = 5 };
+            var routeGroup = new GroupBox { Content = routeStack, Text = T._("Strecke auswählen") };
+            var printerDropDown = new DropDown { DataStore = printers };
+            var paperDropDown = new DropDown();
+            var landscapeChk = new CheckBox { Text = T._("Querformat") };
+            var printButton = new Button { Text = T._("Drucken") };
+            var printerStack = new StackLayout(printerDropDown, paperDropDown, landscapeChk, printButton) { Orientation = Orientation.Horizontal, Padding = new Eto.Drawing.Padding(10), Spacing = 5 };
+            var printerGroup = new GroupBox { Content = printerStack, Text = T._("Druckeinstellungen") };
+            var stack = new StackLayout(routeGroup, printerGroup) { Orientation = Orientation.Vertical, Padding = new Eto.Drawing.Padding(10), Spacing = 5 };
+            
+            routesDropDown.Initialize(pluginInterface);
+            routesDropDown.EnableVirtualRoutes = true;
+            
+            form.Content = stack;
+            form.DefaultButton = printButton;
+            form.Title = T._("Bildfahrplan drucken");
+
+            printButton.Click += (s, e) =>
             {
-                form.Content = stack;
-                form.DefaultButton = printButton;
-                form.Title = T._("Bildfahrplan drucken");
+                form.Result = (string)printerDropDown.SelectedValue;
+                form.Close();
+            };
 
-                printButton.Click += (s, e) =>
+            printerDropDown.SelectedIndexChanged += (s, e) =>
+            {
+                doc.PrinterSettings.PrinterName = (string)printerDropDown.SelectedValue;
+                var paper =  doc.PrinterSettings.PaperSizes.Cast<Print.PaperSize>().Select(p => p.PaperName).ToArray();
+                var a4Index = Array.IndexOf(paper, "A4");
+                paperDropDown.DataStore = paper;
+                paperDropDown.SelectedIndex = (a4Index != -1) ? a4Index : 0;
+            };
+
+            printerDropDown.SelectedIndex = 0;
+
+            if (form.ShowModal() != null)
+            {
+                if (routesDropDown.SelectedRoute > Timetable.UNASSIGNED_ROUTE_ID)
+                    pd = Renderer.DefaultPathData(routesDropDown.SelectedRoute, pluginInterface.Timetable);
+                else
                 {
-                    form.Result = (string)printerDropDown.SelectedValue;
-                    form.Close();
-                };
+                    var virt = VirtualRoute.GetVRoute(pluginInterface.Timetable, routesDropDown.SelectedRoute);
+                    pd = virt!.GetPathData;
+                }
+                
+                doc.PrintPage += Doc_PrintPage;
+                doc.DocumentName = T._("Bildfahrplan generiert mit FPLedit");
 
-                printerDropDown.SelectedIndexChanged += (s, e) =>
+                doc.PrinterSettings.PrinterName = form.Result;
+
+                doc.DefaultPageSettings.Margins = new Print.Margins(50, 50, 50, 50); // not working (turning page????)
+
+                if (Eto.Platform.Instance.IsGtk)
                 {
-                    doc.PrinterSettings.PrinterName = (string)printerDropDown.SelectedValue;
-                    var paper =  doc.PrinterSettings.PaperSizes.Cast<Print.PaperSize>().Select(p => p.PaperName).ToArray();
-                    var a4Index = Array.IndexOf(paper, "A4");
-                    paperDropDown.DataStore = paper;
-                    paperDropDown.SelectedIndex = (a4Index != -1) ? a4Index : 0;
-                };
+                    var paperSize = doc.PrinterSettings.PaperSizes[paperDropDown.SelectedIndex];
+                    //HACK: Do not use doc.DefaultPageSettings.Landscape on Linux, as it will lead to awkwardly turned rendering areas, ???)
+                    if (landscapeChk.Checked!.Value)
+                        doc.DefaultPageSettings.PaperSize = new Print.PaperSize(paperSize.PaperName, paperSize.Height, paperSize.Width);
+                    else
+                        doc.DefaultPageSettings.PaperSize = paperSize;
+                }
+                else
+                    doc.DefaultPageSettings.Landscape = landscapeChk.Checked!.Value;
 
-                printerDropDown.SelectedIndex = 0;
-
-                if (form.ShowModal() != null)
+                if (!doc.PrinterSettings.IsValid)
+                    MessageBox.Show(T._("Ungültige Druckereinstellungen!"), "FPLedit", MessageBoxType.Error);
+                else
                 {
-                    doc.PrintPage += Doc_PrintPage;
-                    doc.DocumentName = T._("Bildfahrplan generiert mit FPLedit");
-
-                    doc.PrinterSettings.PrinterName = form.Result;
-
-                    doc.DefaultPageSettings.Margins = new Print.Margins(50, 50, 50, 50); // not working (turning page????)
-
-                    if (Eto.Platform.Instance.IsGtk)
+                    try
                     {
-                        var paperSize = doc.PrinterSettings.PaperSizes[paperDropDown.SelectedIndex];
-                        //HACK: Do not use doc.DefaultPageSettings.Landscape on Linux, as it will lead to awkwardly turned rendering areas, ???)
-                        if (landscapeChk.Checked.Value)
-                            doc.DefaultPageSettings.PaperSize = new Print.PaperSize(paperSize.PaperName, paperSize.Height, paperSize.Width);
-                        else
-                            doc.DefaultPageSettings.PaperSize = paperSize;
+                        doc.Print();
                     }
-                    else
-                        doc.DefaultPageSettings.Landscape = landscapeChk.Checked.Value;
-
-                    if (!doc.PrinterSettings.IsValid)
-                        MessageBox.Show(T._("Ungültige Druckereinstellungen!"), "FPLedit", MessageBoxType.Error);
-                    else
+                    catch (Exception ex)
                     {
-                        try
-                        {
-                            doc.Print();
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(T._("Fehler beim Drucken! {0}", ex.Message), "FPLedit", MessageBoxType.Error);
-                        }
+                        MessageBox.Show(T._("Fehler beim Drucken! {0}", ex.Message), "FPLedit", MessageBoxType.Error);
                     }
                 }
             }
@@ -111,7 +125,7 @@ namespace FPLedit.Bildfahrplan.Forms
             // Exclude page margins to begin with
             e.Graphics!.SetClip(new RectangleF(e.PageSettings.Margins.Left, e.PageSettings.Margins.Top, e.MarginBounds.Width, e.MarginBounds.Height));
             
-            var renderer = new Renderer(tt, Renderer.DefaultPathData(route, tt));
+            var renderer = new Renderer(tt, pd);
             int height = e.MarginBounds.Height + e.PageSettings.Margins.Bottom + e.PageSettings.Margins.Top;
             int width = e.MarginBounds.Width + e.PageSettings.Margins.Left + e.PageSettings.Margins.Right;
             
