@@ -46,7 +46,7 @@ namespace FPLedit.jTrainGraphStarter
 
             var stasElm = copy.Children.First(x => x.XName == "stations");
             stasElm.Children.Clear();
-            stasElm.Children.InsertRange(0, stasElm.Children.OrderBy(c =>
+            stasElm.Children.InsertRange(0, sortedStations.Select(s => s.XMLEntity).OrderBy(c =>
             {
                 if (c.XName == "sta")
                     return copy.Stations.FirstOrDefault(s => s.XMLEntity == c)?.Positions.GetPosition(routeIndex);
@@ -136,6 +136,8 @@ namespace FPLedit.jTrainGraphStarter
                     continue;
 
                 var srTra = singleRoute.Trains.FirstOrDefault(t => t.GetAttribute<int>("fpl-sync-tra-id") == syncId);
+                if (srTra == null)
+                    continue; // Unexpected, but we do not want to crash with jTG interop.
 
                 srTra.RemoveAttribute("fpl-sync-id");
                 tra.Attributes = AttrDiff(tra, srTra);
