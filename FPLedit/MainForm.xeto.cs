@@ -6,6 +6,7 @@ using System.IO;
 using System.ComponentModel;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
+using FPLedit.Shared.UI.Network;
 using FPLedit.Editor.Rendering;
 using FPLedit.Config;
 

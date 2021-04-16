@@ -1,16 +1,13 @@
 ﻿using Eto.Forms;
-using FPLedit.Editor.Rendering;
-using FPLedit.Shared;
 using FPLedit.Shared.Helpers;
-using FPLedit.Shared.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FPLedit.Editor.Network
+namespace FPLedit.Shared.UI.Network
 {
     //TODO: Refactor out logic code
-    internal sealed class TrainPathForm : FDialog<DialogResult>
+    public sealed class TrainPathForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
         private readonly NetworkRenderer networkRenderer;
@@ -35,6 +32,8 @@ namespace FPLedit.Editor.Network
             }
         }
 
+        public IReadOnlyList<Station> Waypoints => wayPoints.AsReadOnly();
+        
         private readonly Train train;
 
         private readonly RouteEditState stateSetRoute, stateChangeRoute, stateAddWaypoints;

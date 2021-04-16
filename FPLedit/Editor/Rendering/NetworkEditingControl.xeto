@@ -2,7 +2,8 @@
   xmlns="clr-namespace:Eto.Forms;assembly=Eto"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:editor="clr-namespace:FPLedit.Editor.Rendering;assembly=FPLedit"
-  xmlns:shared="clr-namespace:FPLedit.Shared.UI;assembly=FPLedit.Shared.UI">
+  xmlns:shared="clr-namespace:FPLedit.Shared.UI;assembly=FPLedit.Shared.UI"
+  xmlns:sharedn="clr-namespace:FPLedit.Shared.UI.Network;assembly=FPLedit.Shared.UI">
   <TableLayout>
     <TableRow>
       <StackLayout x:Name="toolbar" Orientation="Horizontal" Spacing="5" Padding="5,5,5,5">
@@ -14,7 +15,7 @@
       </StackLayout>
     </TableRow>
     <TableRow ScaleHeight="True">
-      <editor:NetworkRenderer x:Name="networkRenderer" />
+      <sharedn:NetworkRenderer x:Name="networkRenderer" />
     </TableRow>
   </TableLayout>
 </editor:NetworkEditingControl>

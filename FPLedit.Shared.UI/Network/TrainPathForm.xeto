@@ -1,15 +1,14 @@
 ﻿<en:TrainPathForm
   xmlns="clr-namespace:Eto.Forms;assembly=Eto"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:er="clr-namespace:FPLedit.Editor.Rendering;assembly=FPLedit"
-  xmlns:en="clr-namespace:FPLedit.Editor.Network;assembly=FPLedit"
+  xmlns:en="clr-namespace:FPLedit.Shared.UI.Network;assembly=FPLedit.Shared.UI"
   xmlns:fui="clr-namespace:FPLedit.Shared.UI;assembly=FPLedit.Shared.UI"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
   Title="{x:Static en:TrainPathForm+L.Title}" ClientSize="780,370" Resizable="true">
   <TableLayout Padding="10,10,10,10" Spacing="5,5">
     <TableRow ScaleHeight="true">
       <TableCell ScaleWidth="true">
-        <er:NetworkRenderer x:Name="networkRenderer"/>
+        <en:NetworkRenderer x:Name="networkRenderer"/>
       </TableCell>
     </TableRow>
     <TableRow>

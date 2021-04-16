@@ -1,14 +1,13 @@
 ﻿using Eto.Drawing;
 using Eto.Forms;
-using FPLedit.Shared;
 using FPLedit.Shared.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FPLedit.Editor.Rendering
+namespace FPLedit.Shared.UI.Network
 {
-    internal sealed class NetworkRenderer : Drawable
+    public sealed class NetworkRenderer : Drawable
     {
         private PointF mousePosition = PointF.Empty;
 
