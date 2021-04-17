@@ -17,6 +17,7 @@ namespace FPLedit.Bildfahrplan.Forms
         private readonly DaysControlWide dtc;
         private readonly RoutesDropDown routesDropDown;
         private readonly CheckBox splitCheckBox;
+        private readonly Button virtualRoutesButton;
 #pragma warning restore CS0649
 
         private readonly IPluginInterface pluginInterface;
@@ -66,6 +67,7 @@ namespace FPLedit.Bildfahrplan.Forms
             dtc.SelectedDays = new TimetableStyle(pluginInterface.Timetable).RenderDays;
             routesDropDown.Initialize(pluginInterface);
             routesDropDown.EnableVirtualRoutes = true;
+            virtualRoutesButton.Visible = pluginInterface.Timetable is { Type: TimetableType.Network };
         }
 
         private void PreferencesButton_Click(object sender, EventArgs e)
@@ -73,6 +75,15 @@ namespace FPLedit.Bildfahrplan.Forms
             pluginInterface.StageUndoStep();
             using (var cnf = new ConfigForm(pluginInterface.Timetable, pluginInterface))
                 cnf.ShowModal(this);
+            ResetRenderer();
+            pluginInterface.SetUnsaved();
+        }
+
+        private void VirtualRoutesButton_Click(object sender, EventArgs e)
+        {
+            pluginInterface.StageUndoStep();
+            using (var vrf = new VirtualRouteForm(pluginInterface))
+                vrf.ShowModal(this);
             ResetRenderer();
             pluginInterface.SetUnsaved();
         }
@@ -122,6 +133,9 @@ namespace FPLedit.Bildfahrplan.Forms
             
             scrollPosition = scrollable.ScrollPosition;
 
+            virtualRoutesButton.Visible = pluginInterface.Timetable is { Type: TimetableType.Network };
+            //TODO: Does not invalidate/disable all controls when the file is closed.
+
             adbg.Invalidate();
             hpanel.Invalidate();
         }
@@ -138,6 +152,7 @@ namespace FPLedit.Bildfahrplan.Forms
         private static class L
         {
             public static readonly string ChangePlanDisplay = T._("&Darstellung ändern");
+            public static readonly string VirtualRoutes = T._("Virtuelle Strecken");
             public static readonly string Split = T._("Stationen nicht mitscrollen");
             public static readonly string Days = T._("Verkehrstage");
             public static readonly string Title = T._("Dynamische Bildfahrplan-Vorschau");

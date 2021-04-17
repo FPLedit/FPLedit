@@ -17,6 +17,9 @@ namespace FPLedit.Shared
 
         public static IEnumerable<VirtualRoute> GetVRoutes(Timetable tt)
         {
+            if (tt.Type == TimetableType.Linear)
+                yield break; // We have no virtual routes on linear timetables.
+            
             var vroutesdef = tt.GetAttribute("fpl-vroutes","");
             var vroutes = vroutesdef!
                 .Split(';', StringSplitOptions.RemoveEmptyEntries)
@@ -44,13 +47,44 @@ namespace FPLedit.Shared
 
         public static VirtualRoute? GetVRoute(Timetable tt, int vRouteIdx)
         {
+            if (tt.Type == TimetableType.Linear)
+                throw new TimetableTypeNotSupportedException(TimetableType.Linear, "virtual routes");
+            
             var idx = -vRouteIdx + Timetable.UNASSIGNED_ROUTE_ID - 1;
             var vroutes = GetVRoutes(tt).ToArray();
             return vroutes.Length > idx ? vroutes[idx] : null;
         }
 
+        public static void DeleteVRoute(VirtualRoute route)
+        {
+            var tt = route.tt;
+            
+            var olddef = string.Join(",", new[] { route.start }.Concat(route.waypoints).Concat(new[] { route.end }).Select(s => s.Id));
+            
+            var vroutesdef = tt.GetAttribute("fpl-vroutes","");
+            var vroutes = vroutesdef!.Split(';', StringSplitOptions.RemoveEmptyEntries).ToList();
+            vroutes.RemoveAll(s => s == olddef);
+            tt.SetAttribute("fpl-vroutes", string.Join(";", vroutes));
+        }
+        
+        public static void CreateVRoute(Timetable tt, Station start, Station end, Station[] waypoints)
+        {
+            if (tt.Type == TimetableType.Linear)
+                throw new TimetableTypeNotSupportedException(TimetableType.Linear, "virtual routes");
+            
+            var newdef = string.Join(",", new[] { start }.Concat(waypoints).Concat(new[] { end }).Select(s => s.Id));
+            
+            var vroutesdef = tt.GetAttribute("fpl-vroutes","");
+            var vroutes = vroutesdef!.Split(';', StringSplitOptions.RemoveEmptyEntries).ToList();
+            vroutes.Add(newdef);
+            tt.SetAttribute("fpl-vroutes", string.Join(";", vroutes));
+        }
+
         private VirtualRoute(Timetable tt, Station start, Station end, Station[] waypoints, int index)
         {
+            if (tt.Type == TimetableType.Linear)
+                throw new TimetableTypeNotSupportedException(TimetableType.Linear, "virtual routes");
+            
             this.tt = tt;
             this.start = start;
             this.end = end;
