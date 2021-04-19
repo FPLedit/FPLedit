@@ -4,6 +4,7 @@ using FPLedit.Shared.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+// ReSharper disable InconsistentNaming
 
 namespace FPLedit.Shared.UI.Network
 {
@@ -11,9 +12,9 @@ namespace FPLedit.Shared.UI.Network
     {
         private PointF mousePosition = PointF.Empty;
 
-        private Timetable tt;
+        private Timetable? tt;
         private readonly List<RenderBtn<Station>> panels = new List<RenderBtn<Station>>();
-        private readonly Font font;
+        private readonly Font? font;
         private readonly Pen linePen, highlightPen;
         private readonly Color systemBgColor, systemTextColor;
 
@@ -21,7 +22,7 @@ namespace FPLedit.Shared.UI.Network
 
         protected override void Dispose(bool disposing)
         {
-            if (font != null && !font.IsDisposed)
+            if (font is { IsDisposed: false })
                 font.Dispose();
             linePen?.Dispose();
             highlightPen?.Dispose();
@@ -42,8 +43,8 @@ namespace FPLedit.Shared.UI.Network
             get => _stationMovingEnabled;
             set { _stationMovingEnabled = value; Invalidate(); }
         }
-        private string _fixedStatusString = null;
-        public string FixedStatusString
+        private string? _fixedStatusString = null;
+        public string? FixedStatusString
         {
             get => _fixedStatusString;
             set { _fixedStatusString = value; Invalidate(); }
@@ -67,12 +68,12 @@ namespace FPLedit.Shared.UI.Network
             set { _highlightBetween = value; Invalidate(); }
         }
 
-        private PathData _highlightedPath;
+        private PathData? _highlightedPath;
 
-        public void SetHighlightedPath(IEnumerable<Station> stations)
+        public void SetHighlightedPath(IEnumerable<Station>? stations)
         {
             var stas = stations ?? Array.Empty<Station>();
-            _highlightedPath = new PathData(tt, stas);
+            _highlightedPath = new PathData(tt!, stas);
             Invalidate();
         }
 
@@ -95,20 +96,20 @@ namespace FPLedit.Shared.UI.Network
         }
 
         private readonly StationCanvasPositionHandler handler;
-        private Dictionary<Station, Point> stapos;
-        private Route[] routes;
+        private Dictionary<Station, Point>? stapos;
+        private Route[]? routes;
 
-        public event EventHandler StationClicked;
-        public event EventHandler StationRightClicked;
-        public event EventHandler StationDoubleClicked;
-        public event EventHandler<EventArgs<int>> NewRouteAdded;
-        public event EventHandler StationMoveEnd;
+        public event EventHandler? StationClicked;
+        public event EventHandler? StationRightClicked;
+        public event EventHandler? StationDoubleClicked;
+        public event EventHandler<EventArgs<int>>? NewRouteAdded;
+        public event EventHandler? StationMoveEnd;
 
         private const int OFFSET_X = 20;
         private const int OFFSET_Y = 50;
         private readonly Point OFFSET = new Point(OFFSET_X, OFFSET_Y);
 
-        private Station tmp_sta;
+        private Station? tmp_sta;
         private float tmp_km;
         private Modes mode;
 
@@ -126,9 +127,9 @@ namespace FPLedit.Shared.UI.Network
             KeyDown += (s, e) => DispatchKeystroke(e);
         }
 
-        public void SetTimetable(Timetable tt)
+        public void SetTimetable(Timetable? newTt)
         {
-            this.tt = tt;
+            tt = newTt;
             routes = tt?.GetRoutes();
             if (tt != null)
             {
@@ -138,7 +139,7 @@ namespace FPLedit.Shared.UI.Network
                     stapos = handler.LoadNetworkPoints(tt);
             }
 
-            _highlightedPath = PathData.Empty(tt);
+            _highlightedPath = PathData.Empty(tt!);
 
             this.Invalidate();
         }
@@ -178,13 +179,13 @@ namespace FPLedit.Shared.UI.Network
             
             Rectangle rec = new Rectangle((Point)leftTop, (Point)bottomRight);
 
-            Station lastSta = null;
+            Station? lastSta = null;
             foreach (var r in routes)
             {
                 Point? lastP = null;
                 foreach (var sta in r.Stations)
                 {
-                    var pos = stapos[sta];
+                    var pos = stapos![sta];
                     var p = OFFSET + pos;
                     var x = OFFSET_X + pos.X;
                     var y = OFFSET_Y + pos.Y;
@@ -196,7 +197,7 @@ namespace FPLedit.Shared.UI.Network
                         var text = sta.SName + " (";
                         foreach (var ri in sta.Routes)
                         {
-                            var km = sta.Positions.GetPosition(ri).Value.ToString("0.0");
+                            var km = sta.Positions.GetPosition(ri)!.Value.ToString("0.0");
                             if (ri == SelectedRoute && sta.Routes.Length > 1)
                                 km = "▶" + km;
                             text += km + "|";
@@ -211,7 +212,7 @@ namespace FPLedit.Shared.UI.Network
                         g.RestoreTransform();
                     }
 
-                    if (lastP.HasValue && (rec.Intersects(new Rectangle(OFFSET + lastP.Value, p)) || rec.Intersects(new Rectangle(p, OFFSET + lastP.Value))))
+                    if (lastP.HasValue && lastSta != null && (rec.Intersects(new Rectangle(OFFSET + lastP.Value, p)) || rec.Intersects(new Rectangle(p, OFFSET + lastP.Value))))
                     {
                         var tPen = GetLinePen(r.Index, sta, lastSta);
                         g.DrawLine(tPen, p, OFFSET + lastP.Value);
@@ -222,8 +223,8 @@ namespace FPLedit.Shared.UI.Network
 
                     if (doRender)
                     {
-                        var panelColor = _highlightedPath.ContainsStation(sta) ? Colors.Red : Colors.Gray;
-                        RenderBtn<Station> args = panels.FirstOrDefault(pa => pa.Tag == sta);
+                        var panelColor = _highlightedPath!.ContainsStation(sta) ? Colors.Red : Colors.Gray;
+                        RenderBtn<Station>? args = panels.FirstOrDefault(pa => pa.Tag == sta);
                         if (args == null)
                         {
                             args = new RenderBtn<Station>(sta, new Point(x - 5, y - 5), new Size(10, 10), panelColor);
@@ -241,7 +242,7 @@ namespace FPLedit.Shared.UI.Network
                 }
             }
 
-            if (tmp_sta != null && stapos.TryGetValue(tmp_sta, out Point point))
+            if (tmp_sta != null && stapos!.TryGetValue(tmp_sta, out Point point))
             {
                 var x = OFFSET_X + point.X;
                 var y = OFFSET_Y + point.Y;
@@ -287,7 +288,7 @@ namespace FPLedit.Shared.UI.Network
 
         private Pen GetLinePen(int route, Station sta, Station lastSta)
         {
-            if (route == SelectedRoute || (_highlightBetween && _highlightedPath.IsDirectlyConnected(sta, lastSta)))
+            if (route == SelectedRoute || (_highlightBetween && _highlightedPath!.IsDirectlyConnected(sta, lastSta)))
                 return highlightPen;
             return linePen;
         }
@@ -351,7 +352,7 @@ namespace FPLedit.Shared.UI.Network
 
         private void ConnectJoinLines(Station sta)
         {
-            if (!tt.JoinRoutes(SelectedRoute, sta, tmp_km))
+            if (!tt!.JoinRoutes(SelectedRoute, sta, tmp_km))
                 MessageBox.Show(T._("Die Verbindung konnte nicht erstellt werden, da sonst Routen zusammenfallen würden!"));
             
             tmp_sta = null;
@@ -385,9 +386,9 @@ namespace FPLedit.Shared.UI.Network
         }
         #endregion
 
-        private string GetStatusString(Modes mode)
+        private string GetStatusString(Modes m)
         {
-            switch (mode)
+            switch (m)
             {
                 case Modes.Normal: return T._("Streckennetz bearbeiten");
                 case Modes.AddRoute: return T._("Klicken, um Station hinzuzufügen und diese mit einer bestehenden Station zu verbinden; ESC zum Abbrechen");
@@ -420,7 +421,7 @@ namespace FPLedit.Shared.UI.Network
                         Pan = PointF.Empty;
                     }
                     break;
-                //TODO: case Keys.Equal: // Plus key
+                case Keys.Equal: // Plus key
                 case Keys.Add:
                     Zoom += 0.1f;
                     break;
@@ -432,7 +433,7 @@ namespace FPLedit.Shared.UI.Network
         }
 
         #region Drag'n'Drop
-        private RenderBtn<Station> draggedControl;
+        private RenderBtn<Station>? draggedControl;
         private bool hasDragged = false;
         private const int CLICK_TIME = 10^6; // 0.1*10^7s, 1 tick = 10^-7 seconds
         private long lastClick = 0;
@@ -507,7 +508,7 @@ namespace FPLedit.Shared.UI.Network
                     p.Y = ClientSize.Height;
 
                 draggedControl.Location = p;
-                stapos[draggedControl.Tag] = p - OFFSET - new Point(_pan);
+                stapos![draggedControl.Tag] = p - OFFSET - new Point(_pan);
                 hasDragged = true;
                 Invalidate();
             }
@@ -533,7 +534,7 @@ namespace FPLedit.Shared.UI.Network
             {
                 draggedControl = null;
                 Cursor = Cursors.Default;
-                handler.WriteStapos(tt, stapos);
+                handler.WriteStapos(tt!, stapos!);
                 if (hasDragged)
                 {
                     Invalidate();

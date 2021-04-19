@@ -17,7 +17,7 @@ namespace FPLedit.Bildfahrplan.Forms
         private readonly DaysControlWide dtc;
         private readonly RoutesDropDown routesDropDown;
         private readonly CheckBox splitCheckBox;
-        private readonly Button virtualRoutesButton;
+        private readonly Button virtualRoutesButton, preferencesButton;
 #pragma warning restore CS0649
 
         private readonly IPluginInterface pluginInterface;
@@ -31,6 +31,7 @@ namespace FPLedit.Bildfahrplan.Forms
 
             this.pluginInterface = pluginInterface;
             pluginInterface.FileStateChanged += PluginInterface_FileStateChanged;
+            pluginInterface.FileOpened += PluginInterfaceOnFileOpened;
 
             var mainForm = (FForm)pluginInterface.RootForm;
             if (Screen != null && mainForm.Bounds.TopRight.X + 500 < Screen.Bounds.Width)
@@ -92,6 +93,12 @@ namespace FPLedit.Bildfahrplan.Forms
         {
             try
             {
+                if (renderer == null)
+                {
+                    e.Graphics.Clear(Colors.White);
+                    return;
+                }
+                
                 if (splitCheckBox.Checked!.Value)
                 {
                     using (var ib = new ImageBridge(hpanel.Width, hpanel.Height))
@@ -107,20 +114,25 @@ namespace FPLedit.Bildfahrplan.Forms
 
         private void ResetRenderer()
         {
-            Func<PathData> pd;
-            if (routesDropDown.SelectedRoute > Timetable.UNASSIGNED_ROUTE_ID)
-                pd = Renderer.DefaultPathData(routesDropDown.SelectedRoute, pluginInterface.Timetable);
-            else
+            if (pluginInterface.FileState.Opened)
             {
-                var virt = VirtualRoute.GetVRoute(pluginInterface.Timetable, routesDropDown.SelectedRoute);
-                pd = virt!.GetPathData;
-            }
+                Func<PathData> pd;
+                if (routesDropDown.SelectedRoute > Timetable.UNASSIGNED_ROUTE_ID)
+                    pd = Renderer.DefaultPathData(routesDropDown.SelectedRoute, pluginInterface.Timetable);
+                else
+                {
+                    var virt = VirtualRoute.GetVRoute(pluginInterface.Timetable, routesDropDown.SelectedRoute);
+                    pd = virt!.GetPathData;
+                }
 
-            renderer = new Renderer(pluginInterface.Timetable, pd);
-            if (!scrollPosition.HasValue)
-                scrollPosition = new Point(0, 0);
-            panel.Height = renderer.GetHeightExternal(!splitCheckBox.Checked!.Value);
-            hpanel.Height = splitCheckBox.Checked.Value ? renderer.GetHeightExternal(default, default, true) : 0;
+                renderer = new Renderer(pluginInterface.Timetable, pd);
+                if (!scrollPosition.HasValue)
+                    scrollPosition = new Point(0, 0);
+                panel.Height = renderer.GetHeightExternal(!splitCheckBox.Checked!.Value);
+                hpanel.Height = splitCheckBox.Checked.Value ? renderer.GetHeightExternal(default, default, true) : 0;
+            }
+            else
+                renderer = null;
 
             adbg.Invalidate();
             hpanel.Invalidate();
@@ -134,14 +146,24 @@ namespace FPLedit.Bildfahrplan.Forms
             scrollPosition = scrollable.ScrollPosition;
 
             virtualRoutesButton.Visible = pluginInterface.Timetable is { Type: TimetableType.Network };
-            //TODO: Does not invalidate/disable all controls when the file is closed.
+            dtc.Enabled = routesDropDown.Enabled = splitCheckBox.Enabled = preferencesButton.Enabled = virtualRoutesButton.Enabled = pluginInterface.FileState.Opened;
+
+            if (!pluginInterface.FileState.Opened)
+                ResetRenderer();
 
             adbg.Invalidate();
             hpanel.Invalidate();
         }
+        
+        private void PluginInterfaceOnFileOpened(object sender, EventArgs e) => ResetRenderer();
 
         private void Panel_Paint(object sender, PaintEventArgs e)
-            => adbg.Render(renderer, e.Graphics, !splitCheckBox.Checked!.Value);
+        {
+            if (renderer != null)
+                adbg.Render(renderer, e.Graphics, !splitCheckBox.Checked!.Value);
+            else
+                e.Graphics.Clear(Colors.White);
+        }
 
         protected override void Dispose(bool disposing)
         {
