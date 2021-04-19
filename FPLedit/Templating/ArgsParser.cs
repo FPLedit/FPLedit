@@ -40,7 +40,7 @@ namespace FPLedit.Templating
             bool isInString = false;
             bool hadEscapeCharacter = false;
             bool hadEquals = false;
-            string currentName = "", currentValue = ""; //TODO: Do not allocate strings.
+            string currentName = "", currentValue = "";
 
             for (int i = startIndex; i < args.Length; i++)
             {
@@ -73,7 +73,9 @@ namespace FPLedit.Templating
                     if (ch == '"' && !hadEscapeCharacter) // String-Ende
                     {
                         Current = (currentName, currentValue);
-                        found[Array.IndexOf(required, currentName)] = true;
+                        var foundIndex = Array.IndexOf(required, currentName);
+                        if (foundIndex >= 0)
+                            found[foundIndex] = true;
                         startIndex = i + 1;
                         return true;
                     }
