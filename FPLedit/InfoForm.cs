@@ -10,7 +10,7 @@ namespace FPLedit
         public InfoForm()
         {
             License = ResourceHelper.GetStringResource("Resources.Info.txt") 
-                      + ResourceHelper.GetStringResource("Resources.3rd-party.txt");
+                      + ResourceHelper.GetStringResource("Resources.3rd-party.txt").Replace("{eto_version}", Vi.EtoVersion);
             Version = Vi.DisplayVersion;
 
             Logo = new Icon(ResourceHelper.GetResource("Resources.programm.ico"));
