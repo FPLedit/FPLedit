@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2021-01-24 11:58+0100\n"
-"PO-Revision-Date: 2021-01-24 11:59+0100\n"
+"POT-Creation-Date: 2021-04-20 16:42+0200\n"
+"PO-Revision-Date: 2021-04-20 16:45+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: BitmapExport.cs:23
+#: BitmapExport.cs:44
 msgid "Bildfahrplan als PNG (*.png)|*.png"
 msgstr "Graphical timetable as PNG (*.png)|*.png"
 
@@ -29,21 +29,29 @@ msgstr ""
 "functionality will not be available. To install the missing library see "
 "installation instructions on https://fahrplan.manuelhu.de/download/."
 
-#: DynamicPlugin.cs:46
+#: DynamicPlugin.cs:43
 msgid "B&ildfahrplan"
 msgstr "Graph&ical timetable"
 
-#: DynamicPlugin.cs:49
+#: DynamicPlugin.cs:45
 msgid "&Anzeigen"
 msgstr "&Show"
+
+#: DynamicPlugin.cs:47
+msgid "&Drucken"
+msgstr "&Print"
+
+#: DynamicPlugin.cs:48
+msgid "&Exportieren"
+msgstr "&Export"
 
 #: DynamicPlugin.cs:50
 msgid "Darste&llung ändern"
 msgstr "Change &plan display"
 
 #: DynamicPlugin.cs:51
-msgid "&Drucken"
-msgstr "&Print"
+msgid "&Virtuelle Strecken"
+msgstr "&Virtual lines"
 
 #: DynamicPlugin.cs:52
 msgid "&Zugdarstellung ändern"
@@ -56,20 +64,6 @@ msgstr "&Station display"
 #: DynamicPlugin.cs:54
 msgid "Verwende nur &Plandarstellung"
 msgstr "Only &use plan display"
-
-#: DynamicPlugin.cs:64
-msgid ""
-"WARNUNG! Die folgende Funktion ist experimentell und ungetest. Fortfahren?"
-msgstr ""
-"WARNING! The following function is experimental and untested. Continue?"
-
-#: DynamicPlugin.cs:99
-msgid "Drucken (aktuelle Route)"
-msgstr "&Print (current route)"
-
-#: DynamicPlugin.cs:101 Forms/PrintRenderer.cs:48
-msgid "Drucken"
-msgstr "&Print"
 
 #: DynamicPreview.cs:12
 msgid "Dynamischer Bildfahrplan"
@@ -194,7 +188,7 @@ msgid "Abbrechen"
 msgstr "Cancel"
 
 #: Forms/ConfigForm.xeto.cs:156 Forms/StationStyleForm.xeto.cs:76
-#: Forms/TrainStyleForm.xeto.cs:77
+#: Forms/TrainStyleForm.xeto.cs:77 Forms/VirtualRouteForm.xeto.cs:70
 msgid "Schließen"
 msgstr "Ok"
 
@@ -202,39 +196,84 @@ msgstr "Ok"
 msgid "Darstellung ändern"
 msgstr "Change plan display"
 
-#: Forms/PreviewForm.xeto.cs:130
-msgid "&Darstellung ändern"
-msgstr "Change &plan display"
+#: Forms/ExportRenderer.cs:28 Forms/PrintRenderer.cs:46
+msgid "Strecke auswählen"
+msgstr "Select line"
 
-#: Forms/PreviewForm.xeto.cs:131
-msgid "Stationen nicht mitscrollen"
-msgstr "Do not scroll station names"
+#: Forms/ExportRenderer.cs:30
+msgid "Breite des Bildes (px)"
+msgstr "Image width (px)"
 
-#: Forms/PreviewForm.xeto.cs:132
-msgid "Verkehrstage"
-msgstr "Days"
+#: Forms/ExportRenderer.cs:32
+msgid "Exportieren"
+msgstr "Export"
 
-#: Forms/PreviewForm.xeto.cs:133
-msgid "Dynamische Bildfahrplan-Vorschau"
-msgstr "Dynamic graphical timetable preview"
+#: Forms/ExportRenderer.cs:34
+msgid "Exporteinstellungen"
+msgstr "Export settings"
 
-#: Forms/PrintRenderer.cs:47
-msgid "Querformat"
-msgstr "Landscape"
-
-#: Forms/PrintRenderer.cs:53
+#: Forms/ExportRenderer.cs:43 Forms/PrintRenderer.cs:60
 msgid "Bildfahrplan drucken"
 msgstr "Print graphical timetable"
 
-#: Forms/PrintRenderer.cs:75
+#: Forms/ExportRenderer.cs:61
+msgid "Bildfahrplan exportieren"
+msgstr "Export graphical timetable"
+
+#: Forms/ExportRenderer.cs:68
+#, csharp-format
+msgid "Exportiere Bildfahrplan in Datei {0}"
+msgstr "Exporting graphical timetable to file {0}"
+
+#: Forms/ExportRenderer.cs:73
+msgid "Exportieren des Bildfahrplans fehlgeschlagen!"
+msgstr "Error while exporting graphical timetable!"
+
+#: Forms/ExportRenderer.cs:75
+msgid "Exportieren des Bildfahrplans erfolgreich abgeschlossen!"
+msgstr "Successfully exported graphical timetable!"
+
+#: Forms/PreviewForm.xeto.cs:176
+msgid "&Darstellung ändern"
+msgstr "Change &plan display"
+
+#: Forms/PreviewForm.xeto.cs:177
+msgid "Virtuelle Strecken"
+msgstr "Virtual lines"
+
+#: Forms/PreviewForm.xeto.cs:178
+msgid "Stationen nicht mitscrollen"
+msgstr "Do not scroll station names"
+
+#: Forms/PreviewForm.xeto.cs:179
+msgid "Verkehrstage"
+msgstr "Days"
+
+#: Forms/PreviewForm.xeto.cs:180
+msgid "Dynamische Bildfahrplan-Vorschau"
+msgstr "Dynamic graphical timetable preview"
+
+#: Forms/PrintRenderer.cs:49
+msgid "Querformat"
+msgstr "Landscape"
+
+#: Forms/PrintRenderer.cs:50
+msgid "Drucken"
+msgstr "&Print"
+
+#: Forms/PrintRenderer.cs:52
+msgid "Druckeinstellungen"
+msgstr "Printer settings"
+
+#: Forms/PrintRenderer.cs:90
 msgid "Bildfahrplan generiert mit FPLedit"
 msgstr "Graphical timetable generated with FPLedit"
 
-#: Forms/PrintRenderer.cs:94
+#: Forms/PrintRenderer.cs:109
 msgid "Ungültige Druckereinstellungen!"
 msgstr "Invalid printer settings!"
 
-#: Forms/PrintRenderer.cs:103
+#: Forms/PrintRenderer.cs:118
 #, csharp-format
 msgid "Fehler beim Drucken! {0}"
 msgstr "Error while printing! {0}"
@@ -295,6 +334,30 @@ msgstr "Reset train display"
 msgid "Zugdarstellung ändern"
 msgstr "Change train display"
 
+#: Forms/VirtualRouteForm.xeto.cs:29
+msgid "Streckenverlauf"
+msgstr "Route"
+
+#: Forms/VirtualRouteForm.xeto.cs:38
+msgid "Verlauf der neuen virtuellen Strecke auswählen"
+msgstr "Select route of the new virtual line"
+
+#: Forms/VirtualRouteForm.xeto.cs:54
+msgid "Zuerst muss eine virtuelle Strecke ausgewählt werden!"
+msgstr "Please select a virtual line first!"
+
+#: Forms/VirtualRouteForm.xeto.cs:54 Forms/VirtualRouteForm.xeto.cs:68
+msgid "Virtuelle Strecke löschen"
+msgstr "Delete virtual line"
+
+#: Forms/VirtualRouteForm.xeto.cs:69
+msgid "Neue virtuelle Strecke"
+msgstr "New virtual line"
+
+#: Forms/VirtualRouteForm.xeto.cs:71
+msgid "Virtuelle Strecken bearbeiten"
+msgstr "Edit virtual line"
+
 #: Helpers/DashStyleHelper.cs:11
 msgid "Normal"
 msgstr "Normal"
@@ -336,3 +399,8 @@ msgstr ""
 "Multiple transitions found!\n"
 "Please limit the displayed weekdays (see above)\n"
 "and re-open the dynamic preview window."
+
+#~ msgid ""
+#~ "WARNUNG! Die folgende Funktion ist experimentell und ungetest. Fortfahren?"
+#~ msgstr ""
+#~ "WARNING! The following function is experimental and untested. Continue?"

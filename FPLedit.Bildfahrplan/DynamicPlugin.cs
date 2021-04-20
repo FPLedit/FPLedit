@@ -48,7 +48,7 @@ namespace FPLedit.Bildfahrplan
                 exportItem = graphItem.CreateItem(T._("&Exportieren"), enabled: false, clickHandler: ExportItem_Click);
                 graphItem.Items.Add(new SeparatorMenuItem());
                 configItem = graphItem.CreateItem(T._("Darste&llung ändern"), enabled: false, clickHandler: (s, ev) => ShowForm(new ConfigForm(pluginInterface.Timetable, pluginInterface)));
-                virtualRoutesItem = graphItem.CreateItem(T._("&Virtuelle Routen"), enabled: false, clickHandler: (s, ev) => ShowForm(new VirtualRouteForm(pluginInterface)));
+                virtualRoutesItem = graphItem.CreateItem(T._("&Virtuelle Strecken"), enabled: false, clickHandler: (s, ev) => ShowForm(new VirtualRouteForm(pluginInterface)));
                 trainColorItem = graphItem.CreateItem(T._("&Zugdarstellung ändern"), enabled: false, clickHandler: (s, ev) => ShowForm(new TrainStyleForm(pluginInterface)));
                 stationStyleItem = graphItem.CreateItem(T._("&Stationsdarstellung ändern"), enabled: false, clickHandler: (s, ev) => ShowForm(new StationStyleForm(pluginInterface)));
                 overrideItem = graphItem.CreateCheckItem(T._("Verwende nur &Plandarstellung"), isChecked: pluginInterface.Settings.Get<bool>("bifpl.override-entity-styles"),

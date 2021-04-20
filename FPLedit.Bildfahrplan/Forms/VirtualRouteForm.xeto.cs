@@ -65,7 +65,7 @@ namespace FPLedit.Bildfahrplan.Forms
         
         private static class L
         {
-            public static readonly string Delete = T._("Virtuelle Strecke Löschen");
+            public static readonly string Delete = T._("Virtuelle Strecke löschen");
             public static readonly string New = T._("Neue virtuelle Strecke");
             public static readonly string Close = T._("Schließen");
             public static readonly string Title = T._("Virtuelle Strecken bearbeiten");

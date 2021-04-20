@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2020-07-30 10:26+0200\n"
-"PO-Revision-Date: 2020-07-30 10:30+0200\n"
+"POT-Creation-Date: 2021-04-20 16:54+0200\n"
+"PO-Revision-Date: 2021-04-20 16:55+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.4.2\n"
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-KeywordsList: _\n"
@@ -115,14 +115,96 @@ msgstr "Activate none"
 msgid "<Lade>"
 msgstr "<Loading>"
 
-#: InputBox.cs:18
+#: InputBox.cs:18 Network/TrainPathForm.xeto.cs:283
 msgid "Schließen"
 msgstr "Ok"
 
-#: InputBox.cs:22
+#: InputBox.cs:22 Network/TrainPathForm.xeto.cs:282
 msgid "Abbrechen"
 msgstr "Cancel"
 
-#: RoutesDropDown.cs:77
+#: Network/NetworkRenderer.cs:264
+msgid "Ansicht verschoben, [R] für Reset"
+msgstr "Network view panned, press [R] to reset"
+
+#: Network/NetworkRenderer.cs:266
+msgid ", [S] zum Speichern"
+msgstr ", press [S] to save"
+
+#: Network/NetworkRenderer.cs:356
+msgid ""
+"Die Verbindung konnte nicht erstellt werden, da sonst Routen zusammenfallen "
+"würden!"
+msgstr "The lines could not be joined, as this would create collapsed lines."
+
+#: Network/NetworkRenderer.cs:393
+msgid "Streckennetz bearbeiten"
+msgstr "Edit railway network"
+
+#: Network/NetworkRenderer.cs:394
+msgid ""
+"Klicken, um Station hinzuzufügen und diese mit einer bestehenden Station zu "
+"verbinden; ESC zum Abbrechen"
+msgstr ""
+"Click to add a new station and connect it to an existing station; press ESC "
+"to cancel"
+
+#: Network/NetworkRenderer.cs:395
+msgid ""
+"Klicken, um die Zielstation der Verbindung auzuwählen; ESC zum Abbrechen"
+msgstr "Click to select the station to connect to; press ESC to cancel"
+
+#: Network/TrainPathForm.xeto.cs:67
+msgid "Startstation auswählen"
+msgstr "Select first station"
+
+#: Network/TrainPathForm.xeto.cs:76
+msgid "Durch Klick Stationen am Anfang/Ende des Laufwegs entfernen"
+msgstr ""
+"Remove stations from the beginning/end of the route by clicking on them"
+
+#: Network/TrainPathForm.xeto.cs:84
+msgid "Durch Klick Wegpunkte in der Reihenfolge des Durchfahrens hinzufügen"
+msgstr ""
+"Add waypoints by clicking on stations in the order they are passed by the "
+"train"
+
+#: Network/TrainPathForm.xeto.cs:107
+msgid "Fahrtstrecke für neuen Zug auswählen"
+msgstr "Select route for new train"
+
+#: Network/TrainPathForm.xeto.cs:112
+msgid "Weiter >>"
+msgstr "Continue >>"
+
+#: Network/TrainPathForm.xeto.cs:218
+msgid ""
+"Der Laufweg enthält eine Station mehr als einmal. Dies ist aktuell nicht "
+"möglich. Ggf. fehlt ein weiterer Wegpunkt!"
+msgstr ""
+"The lines contains a station more than one time. This is currently not "
+"possible. Maybe you are missing a waypoint?"
+
+#: Network/TrainPathForm.xeto.cs:284
+msgid "Fahrtstrecke bearbeiten: {train}"
+msgstr "Edit route for train {train}"
+
+#: Network/TrainPathForm.xeto.cs:285
+msgid "Hilfe zu Wegpunkten"
+msgstr "Help for waypoints"
+
+#: Network/TrainPathForm.xeto.cs:286
+msgid "Wegpunkte setzen (für zirkuläre Netze)"
+msgstr "Set waypoints (circular networks)"
+
+#: Network/TrainPathForm.xeto.cs:287
+msgid "https://fahrplan.manuelhu.de/fahrplaene-bearbeiten/cycles/"
+msgstr ""
+
+#: Network/TrainPathForm.xeto.cs:288
+msgid "Laufweg zurücksetzen/leeren"
+msgstr "Clear/reset route"
+
+#: RoutesDropDown.cs:91
 msgid "<Standard>"
 msgstr "<Default>"
