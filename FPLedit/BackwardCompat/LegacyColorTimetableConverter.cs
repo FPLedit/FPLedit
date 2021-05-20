@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Linq;
 using FPLedit.Shared;
 using FPLedit.Shared.Rendering;

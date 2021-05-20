@@ -1,4 +1,5 @@
-﻿using FPLedit.Shared;
+﻿#nullable enable
+using FPLedit.Shared;
 using FPLedit.Shared.Filetypes;
 using System;
 using System.IO;
@@ -41,7 +42,7 @@ namespace FPLedit.BackwardCompat
                 // Allocate train ids
                 var tElm = xclone.Children.Single(c => c.XName == "trains");
                 var tElms = tElm.Children.Where(t => t.XName == "ti" || t.XName == "ta").ToArray();
-                var nextId = tElms.DefaultIfEmpty().Max(t => t.GetAttribute("id", -1));
+                var nextId = tElms.DefaultIfEmpty().Max(t => t?.GetAttribute("id", -1) ?? -1);
                 foreach (var orig in tElms)
                 {
                     if (orig.GetAttribute("id", -1) == -1)

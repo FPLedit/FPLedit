@@ -32,7 +32,6 @@ namespace FPLedit.Shared
         #region XmlAttributes
 
         private TimetableType? typeCache;
-        private bool? timePrecisionCache;
 
         [XAttrName("version")]
         public TimetableVersion Version => (TimetableVersion) GetAttribute("version", 0);

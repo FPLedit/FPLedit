@@ -73,7 +73,7 @@ namespace FPLedit.Shared
             children.CollectionChanged += ChildrenOnCollectionChanged;
         }
 
-        private void ChildrenOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void ChildrenOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
                 foreach (XMLEntity? item in e.NewItems)

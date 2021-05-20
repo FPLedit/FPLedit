@@ -9,6 +9,8 @@ namespace FPLedit.jTrainGraphStarter
         {
             if (Environment.OSVersion.Platform != PlatformID.Win32NT)
                 return "java"; // Not supported
+            // Disable warnings "Registry.GetValue" is only supported on 'windows'".
+#pragma warning disable CA1416
 
             string[] keys = 
             {
@@ -17,7 +19,7 @@ namespace FPLedit.jTrainGraphStarter
                 @"HKEY_LOCAL_MACHINE\Software\JavaSoft\Java Development Kit",
                 @"HKEY_LOCAL_MACHINE\Software\Wow6432Node\JavaSoft\Java",
             };
-
+            
             foreach (var key in keys)
             {
                 var x = (string)Registry.GetValue(key, "CurrentVersion", null);
@@ -33,6 +35,7 @@ namespace FPLedit.jTrainGraphStarter
             }
 
             return null;
+#pragma warning restore CA1416
         }
     }
 }
