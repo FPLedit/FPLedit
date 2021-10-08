@@ -604,7 +604,6 @@ namespace FPLedit.Shared
                 throw new TimetableTypeNotSupportedException(TimetableType.Linear, "routes");
             if (station.Routes.Contains(route))
                 throw new ArgumentException(nameof(station) + " is already on route " + route);
-            
 
             StationAddRoute(station, route);
             station.Positions.SetPosition(route, newKm);

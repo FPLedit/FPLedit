@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2021-04-20 16:54+0200\n"
-"PO-Revision-Date: 2021-04-20 16:55+0200\n"
+"POT-Creation-Date: 2021-10-08 12:34+0200\n"
+"PO-Revision-Date: 2021-10-08 12:34+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.0\n"
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-KeywordsList: _\n"
@@ -133,15 +133,23 @@ msgstr ", press [S] to save"
 
 #: Network/NetworkRenderer.cs:356
 msgid ""
+"Die Verbindung konnte nicht erstellt werden, da die gewählte Zielstation "
+"sich bereits auf der Gleichen Strecke befindet!"
+msgstr ""
+"The lines could not be joined, as the selected target station is already "
+"part of this route!"
+
+#: Network/NetworkRenderer.cs:358
+msgid ""
 "Die Verbindung konnte nicht erstellt werden, da sonst Routen zusammenfallen "
 "würden!"
 msgstr "The lines could not be joined, as this would create collapsed lines."
 
-#: Network/NetworkRenderer.cs:393
+#: Network/NetworkRenderer.cs:395
 msgid "Streckennetz bearbeiten"
 msgstr "Edit railway network"
 
-#: Network/NetworkRenderer.cs:394
+#: Network/NetworkRenderer.cs:396
 msgid ""
 "Klicken, um Station hinzuzufügen und diese mit einer bestehenden Station zu "
 "verbinden; ESC zum Abbrechen"
@@ -149,7 +157,7 @@ msgstr ""
 "Click to add a new station and connect it to an existing station; press ESC "
 "to cancel"
 
-#: Network/NetworkRenderer.cs:395
+#: Network/NetworkRenderer.cs:397
 msgid ""
 "Klicken, um die Zielstation der Verbindung auzuwählen; ESC zum Abbrechen"
 msgstr "Click to select the station to connect to; press ESC to cancel"

@@ -352,7 +352,9 @@ namespace FPLedit.Shared.UI.Network
 
         private void ConnectJoinLines(Station sta)
         {
-            if (!tt!.JoinRoutes(SelectedRoute, sta, tmp_km))
+            if (sta.Routes.Contains(SelectedRoute))
+                MessageBox.Show(T._("Die Verbindung konnte nicht erstellt werden, da die gewählte Zielstation sich bereits auf der Gleichen Strecke befindet!"));
+            else if (!tt!.JoinRoutes(SelectedRoute, sta, tmp_km))
                 MessageBox.Show(T._("Die Verbindung konnte nicht erstellt werden, da sonst Routen zusammenfallen würden!"));
             
             tmp_sta = null;
