@@ -24,8 +24,10 @@ namespace FPLedit.Shared.UI.Network
         {
             if (font is { IsDisposed: false })
                 font.Dispose();
+            // ReSharper disable ConstantConditionalAccessQualifier
             linePen?.Dispose();
             highlightPen?.Dispose();
+            // ReSharper restore ConstantConditionalAccessQualifier
         }
 
         private bool IsNetwork => tt?.Type == TimetableType.Network;
@@ -123,8 +125,8 @@ namespace FPLedit.Shared.UI.Network
             highlightPen = new Pen(Colors.Red, 2f);
             handler = new StationCanvasPositionHandler();
 
-            MouseDown += (s, e) => PlaceStation();
-            KeyDown += (s, e) => DispatchKeystroke(e);
+            MouseDown += (_, _) => PlaceStation();
+            KeyDown += (_, e) => DispatchKeystroke(e);
         }
 
         public void SetTimetable(Timetable? newTt)
@@ -146,8 +148,8 @@ namespace FPLedit.Shared.UI.Network
 
         public void ReloadTimetable()
         {
-            this.SetTimetable(tt);
-            this.Invalidate();
+            SetTimetable(tt);
+            Invalidate();
         }
 
         #region Drawing
@@ -168,7 +170,7 @@ namespace FPLedit.Shared.UI.Network
             DrawStatus(e.Graphics);
             DrawBorder(e.Graphics);
 
-            this.ResumeLayout();
+            ResumeLayout();
             base.OnPaint(e);
         }
 
@@ -221,24 +223,23 @@ namespace FPLedit.Shared.UI.Network
                     lastP = pos;
                     lastSta = sta;
 
-                    if (doRender)
+                    if (!doRender) continue;
+                    
+                    var panelColor = _highlightedPath!.ContainsStation(sta) ? Colors.Red : Colors.Gray;
+                    RenderBtn<Station>? args = panels.FirstOrDefault(pa => pa.Tag == sta);
+                    if (args == null)
                     {
-                        var panelColor = _highlightedPath!.ContainsStation(sta) ? Colors.Red : Colors.Gray;
-                        RenderBtn<Station>? args = panels.FirstOrDefault(pa => pa.Tag == sta);
-                        if (args == null)
+                        args = new RenderBtn<Station>(sta, new Point(x - 5, y - 5), new Size(10, 10), panelColor);
+                        panels.Add(args);
+                        // Wire events
+                        switch (mode)
                         {
-                            args = new RenderBtn<Station>(sta, new Point(x - 5, y - 5), new Size(10, 10), panelColor);
-                            panels.Add(args);
-                            // Wire events
-                            switch (mode)
-                            {
-                                case Modes.Normal: ApplyNormalMode(args, sta); break;
-                                case Modes.AddRoute: ApplyAddMode(args, sta); break;
-                                case Modes.JoinRoutes: ApplyJoinMode(args, sta); break;
-                            }
+                            case Modes.Normal: ApplyNormalMode(args, sta); break;
+                            case Modes.AddRoute: ApplyAddMode(args, sta); break;
+                            case Modes.JoinRoutes: ApplyJoinMode(args, sta); break;
                         }
-                        args.BackgroundColor = panelColor;
                     }
+                    args.BackgroundColor = panelColor;
                 }
             }
 
@@ -282,8 +283,8 @@ namespace FPLedit.Shared.UI.Network
         {
             if (DisableTopBorder)
                 return;
-            using (var pen = new Pen(Brushes.Black) { DashStyle = DashStyle.Parse("2,2,2,2") })
-                g.DrawLine(pen, Point.Empty, new Point(ClientSize.Width, 0));
+            using var pen = new Pen(Brushes.Black) { DashStyle = DashStyle.Parse("2,2,2,2") };
+            g.DrawLine(pen, Point.Empty, new Point(ClientSize.Width, 0));
         }
 
         private Pen GetLinePen(int route, Station sta, Station lastSta)
@@ -303,23 +304,23 @@ namespace FPLedit.Shared.UI.Network
         #region Normal Mode
         private void ApplyNormalMode(RenderBtn<Station> p, Station sta)
         {
-            p.DoubleClick += (s, e) => StationDoubleClicked?.Invoke(sta, new EventArgs());
-            p.Click += (s, e) => StationClicked?.Invoke(sta, new EventArgs());
-            p.RightClick += (s, e) => StationRightClicked?.Invoke(sta, new EventArgs());
+            p.DoubleClick += (_, _) => StationDoubleClicked?.Invoke(sta, EventArgs.Empty);
+            p.Click += (_, _) => StationClicked?.Invoke(sta, EventArgs.Empty);
+            p.RightClick += (_, _) => StationRightClicked?.Invoke(sta, EventArgs.Empty);
         }
         #endregion
 
         #region AddMode
         private void ApplyAddMode(RenderBtn<Station> p, Station sta)
         {
-            p.Click += (s, e) => ConnectAddStation(sta);
+            p.Click += (_, _) => ConnectAddStation(sta);
         }
 
         private void ConnectAddStation(Station sta)
         {
             mode = Modes.Normal;
-            var rtIdx = tt.AddRoute(sta, tmp_sta, 0, tmp_km);
-            handler.WriteStapos(tt, stapos);
+            var rtIdx = tt!.AddRoute(sta, tmp_sta!, 0, tmp_km);
+            handler.WriteStapos(tt, stapos!);
             tmp_sta = null;
 
             NewRouteAdded?.Invoke(this, new EventArgs<int>(rtIdx));
@@ -338,7 +339,7 @@ namespace FPLedit.Shared.UI.Network
 
         private void ApplyJoinMode(RenderBtn<Station> p, Station sta)
         {
-            p.Click += (s, e) => ConnectJoinLines(sta);
+            p.Click += (_, _) => ConnectJoinLines(sta);
         }
 
         public void StartJoinLines(float km)
@@ -377,7 +378,7 @@ namespace FPLedit.Shared.UI.Network
 
         private void PlaceStation()
         {
-            if (tmp_sta == null || stapos.TryGetValue(tmp_sta, out var _))
+            if (tmp_sta == null || stapos!.TryGetValue(tmp_sta, out var _))
                 return;
 
             Cursor = Cursors.Default;
@@ -510,13 +511,13 @@ namespace FPLedit.Shared.UI.Network
                     p.Y = ClientSize.Height;
 
                 draggedControl.Location = p;
-                stapos![draggedControl.Tag] = p - OFFSET - new Point(_pan);
+                stapos![draggedControl.Tag] = new Point(p * (1 / _zoom)) - OFFSET - new Point(_pan);
                 hasDragged = true;
                 Invalidate();
             }
             if (hasPanned)
             {
-                _pan = originalPan + (e.Location - originalLocation);
+                _pan = originalPan + (e.Location - originalLocation) * (1 / _zoom);
                 Invalidate();
             }
             if (tmp_sta != null)
@@ -540,7 +541,7 @@ namespace FPLedit.Shared.UI.Network
                 if (hasDragged)
                 {
                     Invalidate();
-                    StationMoveEnd?.Invoke(this, new EventArgs());
+                    StationMoveEnd?.Invoke(this, EventArgs.Empty);
                 }
                 hasDragged = false;
             }
