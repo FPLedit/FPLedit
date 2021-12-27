@@ -25,7 +25,7 @@
     <PackageReference Include="Eto.Forms" Version="$(EtoVersion)" />
     <PackageReference Include="Eto.Serialization.Xaml" Version="$(EtoVersion)" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.3" />
   </ItemGroup>
   <ItemGroup Condition=" '$(RuntimeIdentifier)' == 'osx-x64' ">
     <PackageReference Include="runtime.osx.10.10-x64.CoreCompat.System.Drawing" />
