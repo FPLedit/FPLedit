@@ -248,7 +248,7 @@ namespace FPLedit.Shared.UI.Network
                 var x = OFFSET_X + point.X;
                 var y = OFFSET_Y + point.Y;
 
-                g.DrawLine(linePen, new Point(x, y), mousePosition - _pan);
+                g.DrawLine(linePen, new Point(x, y), (mousePosition - _pan) * (1 / _zoom));
 
                 var args = new RenderBtn<Station>(tmp_sta, new Point(x - 5, y - 5), new Size(10, 10), Colors.DarkCyan);
                 panels.Add(args);
@@ -378,11 +378,11 @@ namespace FPLedit.Shared.UI.Network
 
         private void PlaceStation()
         {
-            if (tmp_sta == null || stapos!.TryGetValue(tmp_sta, out var _))
+            if (tmp_sta == null || stapos!.TryGetValue(tmp_sta, out _))
                 return;
 
             Cursor = Cursors.Default;
-            var point = mousePosition - OFFSET - _pan;
+            var point = new Point((mousePosition - _pan) * (1 / _zoom)) - OFFSET;
             stapos[tmp_sta] = new Point(point);
 
             Invalidate();
@@ -391,13 +391,13 @@ namespace FPLedit.Shared.UI.Network
 
         private string GetStatusString(Modes m)
         {
-            switch (m)
+            return m switch
             {
-                case Modes.Normal: return T._("Streckennetz bearbeiten");
-                case Modes.AddRoute: return T._("Klicken, um Station hinzuzufügen und diese mit einer bestehenden Station zu verbinden; ESC zum Abbrechen");
-                case Modes.JoinRoutes: return T._("Klicken, um die Zielstation der Verbindung auzuwählen; ESC zum Abbrechen");
-                default: return "";
-            }
+                Modes.Normal => T._("Streckennetz bearbeiten"),
+                Modes.AddRoute => T._("Klicken, um Station hinzuzufügen und diese mit einer bestehenden Station zu verbinden; ESC zum Abbrechen"),
+                Modes.JoinRoutes => T._("Klicken, um die Zielstation der Verbindung auzuwählen; ESC zum Abbrechen"),
+                _ => ""
+            };
         }
 
         public void DispatchKeystroke(KeyEventArgs e)
@@ -511,7 +511,7 @@ namespace FPLedit.Shared.UI.Network
                     p.Y = ClientSize.Height;
 
                 draggedControl.Location = p;
-                stapos![draggedControl.Tag] = new Point(p * (1 / _zoom)) - OFFSET - new Point(_pan);
+                stapos![draggedControl.Tag] = new Point((p - _pan) * (1 / _zoom)) - OFFSET;
                 hasDragged = true;
                 Invalidate();
             }
