@@ -59,7 +59,7 @@ namespace FPLedit.Shared
         public string GetRouteName()
         {
             if (!Exists)
-                return "<leer>";
+                return T._("<leer>");
             return stations[0].SName + " - " + stations[^1].SName; // this will always work, as stations.Length >= 1
         }
 

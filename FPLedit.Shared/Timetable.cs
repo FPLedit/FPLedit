@@ -515,7 +515,10 @@ namespace FPLedit.Shared
             if (routeCache == null)
                 throw new Exception("RouteCache is null!");
             var stas = Stations.Where(s => s.Routes.Contains(route));
-            routeCache[route] = new Route(route, stas);
+            if (!stas.Any())
+                routeCache.Remove(route); // Remove non-existing routes from cache.
+            else
+                routeCache[route] = new Route(route, stas);
         }
         
         private Route[] _InternalGetRoutesUncached()
@@ -573,7 +576,7 @@ namespace FPLedit.Shared
         {
             if (routeCache == null)
                 throw new Exception("RouteCache is null!");
-            return routeCache.Select(kvp => kvp.Value).ToArray();
+            return routeCache.Values.ToArray();
         }
 
         /// <inheritdoc />

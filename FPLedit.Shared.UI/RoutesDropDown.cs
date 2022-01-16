@@ -83,9 +83,12 @@ namespace FPLedit.Shared.UI
                 var rt = tt.GetRoutes();
                 foreach (var route in rt)
                     yield return BuildItem(route.GetRouteName(), route.Index);
-                var vrt = VirtualRoute.GetVRoutes(tt);
-                foreach (var v in vrt)
-                    yield return BuildItem(v.GetRouteName(), v.Index);
+                if (EnableVirtualRoutes)
+                {
+                    var vrt = VirtualRoute.GetVRoutes(tt);
+                    foreach (var v in vrt)
+                        yield return BuildItem(v.GetRouteName(), v.Index);
+                }
             }
             else
                 yield return BuildItem(T._("<Standard>"), Timetable.LINEAR_ROUTE_ID);
