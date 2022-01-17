@@ -9,6 +9,10 @@ namespace FPLedit.CrashReporting
     {
         private const string CRASH_DIR = "crash/";
         private const string REPORT_DIR = CRASH_DIR + "report/";
+        private const string CRASH_TT_FN = REPORT_DIR + "crash_tt.fpl";
+        private const string CRASH_REPORT_FN = REPORT_DIR + "crash_report.xml";
+        private const string CRASH_FN_FN = CRASH_DIR + "crash.file";
+        private const string CRASH_FLAG_FILE = CRASH_DIR + "crash.flag";
 
         private readonly IPluginInterface pluginInterface;
 
@@ -26,19 +30,19 @@ namespace FPLedit.CrashReporting
                 if (!Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
 
-                var fnTimetable = pluginInterface.GetTemp(REPORT_DIR + "crash_tt.fpl");
+                var fnTimetable = pluginInterface.GetTemp(CRASH_TT_FN);
                 if (pluginInterface.Timetable != null)
                     new Shared.Filetypes.XMLExport().SafeExport(pluginInterface.Timetable, fnTimetable, pluginInterface);
                 else if (File.Exists(fnTimetable))
                     File.Delete(fnTimetable);
 
-                var fnReport = pluginInterface.GetTemp(REPORT_DIR + "crash_report.xml");
+                var fnReport = pluginInterface.GetTemp(CRASH_REPORT_FN);
                 File.WriteAllText(fnReport, reportText);
 
-                var fnCrashFileNameFile = pluginInterface.GetTemp(CRASH_DIR + "crash.file");
+                var fnCrashFileNameFile = pluginInterface.GetTemp(CRASH_FN_FN);
                 File.WriteAllText(fnCrashFileNameFile, pluginInterface.FileState.FileName);
 
-                var fnCrashFlag = pluginInterface.GetTemp(CRASH_DIR + "crash.flag");
+                var fnCrashFlag = pluginInterface.GetTemp(CRASH_FLAG_FILE);
                 File.WriteAllText(fnCrashFlag, "1");
 
                 MessageBox.Show(T._("Es ist ein unerwarteter Fehler in FPLedit aufgetreten.\n\n" +
@@ -54,39 +58,42 @@ namespace FPLedit.CrashReporting
         {
             if (!HasCurrentTtBackup)
                 return;
+
+            var fileStateRestored = false;
+            void RestoreFileState(object sender, EventArgs e)
+            {
+                if (fileStateRestored) return;
+                fileStateRestored = true;
+                fh.FileOpened -= RestoreFileState;
+                
+                if (!HasCurrentTtBackup) return;
+                fh.FileState.Saved = false;
+                fh.FileState.FileName = OrigTtFileName != "" ? OrigTtFileName : null;
+                RemoveCrashFlag();
+            }
+            fh.FileOpened += RestoreFileState;
+            
             fh.InternalOpen(CrashTtFileName, false);
-            fh.FileState.Saved = false;
-            fh.FileState.FileName = OrigTtFileName != "" ? OrigTtFileName : null;
         }
 
         // Crash flag
-        public bool HasCurrentReport => File.Exists(pluginInterface.GetTemp(CRASH_DIR + "crash.flag"));
+        public bool HasCurrentReport => File.Exists(pluginInterface.GetTemp(CRASH_FLAG_FILE));
 
         public void RemoveCrashFlag()
         {
-            try
-            {
-                File.Delete(pluginInterface.GetTemp(CRASH_DIR + "crash.flag"));
-            }
-            catch
-            {
-            }
+            try { File.Delete(pluginInterface.GetTemp(CRASH_FLAG_FILE)); }
+            catch { }
         }
 
 
         // Timetable backup after Crash
-        public bool HasCurrentTtBackup => HasCurrentReport && File.Exists(pluginInterface.GetTemp(REPORT_DIR + "crash_tt.fpl"));
+        public bool HasCurrentTtBackup => HasCurrentReport && File.Exists(pluginInterface.GetTemp(CRASH_TT_FN));
 
-        public string CrashTtFileName => HasCurrentTtBackup ? pluginInterface.GetTemp(REPORT_DIR + "crash_tt.fpl") : throw new NotSupportedException();
+        public string CrashTtFileName => HasCurrentTtBackup ? pluginInterface.GetTemp(CRASH_TT_FN) : throw new NotSupportedException("No active timetable backup!");
 
-        public string OrigTtFileName => HasCurrentTtBackup ? File.ReadAllText(pluginInterface.GetTemp(CRASH_DIR + "crash.file")) : throw new NotSupportedException();
+        public string OrigTtFileName => HasCurrentTtBackup ? File.ReadAllText(pluginInterface.GetTemp(CRASH_FN_FN)) : throw new NotSupportedException("No active timetable backup!");
 
-        // Repor file
-        public string ReportFn => HasCurrentReport ? pluginInterface.GetTemp(REPORT_DIR + "crash_report.xml") : throw new NotSupportedException();
-
-        private string SL(string x)
-        {
-            return x;
-        }
+        // Report file
+        public string ReportFn => HasCurrentReport ? pluginInterface.GetTemp(CRASH_REPORT_FN) : throw new NotSupportedException("No active crash report!");
     }
 }

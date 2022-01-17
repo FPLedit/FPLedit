@@ -131,12 +131,11 @@ namespace FPLedit
             {
                 try
                 {
-                    using (var cf = new CrashReporting.CrashForm(CrashReporter))
-                    {
-                        if (cf.ShowModal(this) == DialogResult.Ok)
-                            CrashReporter.Restore(Bootstrapper.FileHandler);
+                    using var cf = new CrashReporting.CrashForm(CrashReporter);
+                    if (cf.ShowModal(this) == DialogResult.Ok)
+                        CrashReporter.Restore(Bootstrapper.FileHandler);
+                    else
                         CrashReporter.RemoveCrashFlag();
-                    }
                 }
                 catch (Exception ex)
                 {
