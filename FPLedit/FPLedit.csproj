@@ -7,7 +7,7 @@
   
   <PropertyGroup>
     <ProjectGuid>{386836E8-5885-4ED1-B350-CE2BBEC5367E}</ProjectGuid>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RollForward>Major</RollForward>
     <OutputType>Exe</OutputType>
     <ApplicationIcon>Resources\programm.ico</ApplicationIcon>
@@ -17,7 +17,7 @@
   
   <!-- Windows specific properties -->
   <PropertyGroup Condition=" $( RuntimeIdentifier.StartsWith('win') ) ">
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
     <DisableWinExeOutputInference>true</DisableWinExeOutputInference>
     <UseWPF>true</UseWPF>
@@ -76,7 +76,7 @@
   <ItemGroup>
     <PackageReference Include="Eto.Forms" Version="$(EtoVersion)" />
     <PackageReference Include="Eto.Serialization.Xaml" Version="$(EtoVersion)" />
-    <PackageReference Include="Jint" Version="3.0.0-beta-2035" />
+    <PackageReference Include="Jint" Version="3.0.0-beta-2037" />
     <PackageReference Include="Mono.Options" Version="6.12.0.148" />
     <PackageReference Include="Portable.Xaml" Version="0.26.0" />
     <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />

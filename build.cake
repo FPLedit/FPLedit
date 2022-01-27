@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
-var platform = Argument("tfm", "net5.0");
+var platform = Argument("tfm", "net6.0");
 var runtimes = Argument("rid", "linux-x64");
 
 var docRepoPath = EnvironmentVariable("FPLEDIT_DOK_REPO");
