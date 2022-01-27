@@ -1,44 +1,44 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2021-04-20 16:36+0200\n"
-"PO-Revision-Date: 2021-04-20 16:46+0200\n"
+"POT-Creation-Date: 2022-01-27 19:52+0100\n"
+"PO-Revision-Date: 2022-01-27 19:52+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
-"X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.0.1\n"
+"X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: _;SelectionName\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: .\n"
 
-#: BackwardCompat/BaseUpgradeExport.cs:11
+#: BackwardCompat/BaseUpgradeExport.cs:12
 #: NonDefaultFiletypes/LinearExport.cs:13
 #: NonDefaultFiletypes/NetworkExport.cs:10
 msgid "Fahrplan Dateien (*.fpl)|*.fpl"
 msgstr "Timetable files (*.fpl)|*.fpl"
 
-#: BackwardCompat/LinearUpgradeExport.cs:14
+#: BackwardCompat/LinearUpgradeExport.cs:15
 #, csharp-format
 msgid "Nur lineare Fahrplandateien können mit {0} aktualisiert werden!"
 msgstr "Only linear timetables can be updated with {0}!"
 
-#: BackwardCompat/LinearUpgradeExport.cs:16
-#: BackwardCompat/NetworkUpgradeExport.cs:15
+#: BackwardCompat/LinearUpgradeExport.cs:17
+#: BackwardCompat/NetworkUpgradeExport.cs:16
 msgid ""
 "Nur Fahrpläne mit einer älteren Dateiversion können aktualisiert werden."
 msgstr "Only files created with an older file version can be updated."
 
-#: BackwardCompat/LinearUpgradeExport.cs:18
-#: BackwardCompat/NetworkUpgradeExport.cs:17
+#: BackwardCompat/LinearUpgradeExport.cs:19
+#: BackwardCompat/NetworkUpgradeExport.cs:18
 msgid "Dateiversion ist zu alt, um aktualisiert zu werden!"
 msgstr "The file version is too old to be updated!"
 
-#: BackwardCompat/NetworkUpgradeExport.cs:13
+#: BackwardCompat/NetworkUpgradeExport.cs:14
 #, csharp-format
 msgid "Nur Netzwerk-Fahrplandateien können mit {0} aktualisiert werden!"
 msgstr "Only network timetables can be updated with {0}!"
@@ -155,7 +155,7 @@ msgstr "Do not restore"
 msgid "Schließen"
 msgstr "Close"
 
-#: CrashReporting/CrashReporter.cs:44
+#: CrashReporting/CrashReporter.cs:48
 msgid ""
 "Es ist ein unerwarteter Fehler in FPLedit aufgetreten.\n"
 "\n"
@@ -166,7 +166,7 @@ msgstr ""
 "\n"
 "FPLedit will be restarted. Possibly, the current timetable can be recovered."
 
-#: CrashReporting/CrashReporter.cs:49
+#: CrashReporting/CrashReporter.cs:53
 #, csharp-format
 msgid ""
 "Es ist ein unerwarteter Fehler in FPLedit aufgetreten. Es konnten keine "
@@ -399,7 +399,7 @@ msgstr "Filter rules"
 msgid "&Hinzufügen"
 msgstr "&Add"
 
-#: Editor/Filters/FilterForm.xeto.cs:177 MainForm.xeto.cs:32 Program.cs:106
+#: Editor/Filters/FilterForm.xeto.cs:177 MainForm.xeto.cs:32 Program.cs:105
 #: SettingsUi/TemplatesControl.xeto.cs:180
 msgid "&Bearbeiten"
 msgstr "&Edit"
@@ -1273,7 +1273,7 @@ msgstr "Close file"
 msgid "Online Hilfe"
 msgstr "Online Help"
 
-#: MainForm.xeto.cs:40 Program.cs:115
+#: MainForm.xeto.cs:40 Program.cs:114
 msgid "Info"
 msgstr "About"
 
@@ -1333,12 +1333,12 @@ msgstr "Trigger exception"
 msgid "Ausgelöste Exception"
 msgstr "Manually triggered exception"
 
-#: MainForm.xeto.cs:143
+#: MainForm.xeto.cs:142
 #, csharp-format
 msgid "Fehlermeldung des letzten Absturzes konnte nicht angezeigt werden: {0}"
 msgstr "The error message of the last crash could not be displayed: {0}"
 
-#: MainForm.xeto.cs:172
+#: MainForm.xeto.cs:171
 #, csharp-format
 msgid "Angegebene Startdatei {0} nicht gefunden!"
 msgstr "The supplied start file {0} could not be found!"
@@ -1389,43 +1389,43 @@ msgstr "Timetable files only with stations (line export) (*.fpl)|*.fpl"
 msgid "Lineare Streckendateien (*.str)|*.str"
 msgstr "Linear line files (*.str)|*.str"
 
-#: Program.cs:103
+#: Program.cs:102
 msgid "&Datei"
 msgstr "&File"
 
-#: Program.cs:104
+#: Program.cs:103
 msgid "&Hilfe"
 msgstr "&Help"
 
-#: Program.cs:105
+#: Program.cs:104
 msgid "&Ansicht"
 msgstr "&View"
 
-#: Program.cs:107
+#: Program.cs:106
 msgid "Beenden"
 msgstr "&Quit"
 
-#: Program.cs:116
+#: Program.cs:115
 msgid "Mitwirkende"
 msgstr "Contributors"
 
-#: Program.cs:117
+#: Program.cs:116
 msgid "Lizenz"
 msgstr "License"
 
-#: Program.cs:118
+#: Program.cs:117
 msgid "Entwicklung:"
 msgstr "Development:"
 
-#: Program.cs:119
+#: Program.cs:118
 msgid "Design:"
 msgstr "Design:"
 
-#: Program.cs:120
+#: Program.cs:119
 msgid "Dokumentation:"
 msgstr "Documentation:"
 
-#: Program.cs:178
+#: Program.cs:182
 msgid ""
 "Die Standard-Dateiformatversionen wurden zurückgesetzt, da Sie die Version "
 "von FPLedit aktualisiert haben. Diese Einstellung kann unter Einstellungen > "
@@ -1434,11 +1434,11 @@ msgstr ""
 "The default file versions have been reset as you have updated FPLedit. You "
 "can change this setting at Settings > File format versions."
 
-#: Program.cs:188
+#: Program.cs:192
 msgid "Gewählte lineare Standardversion ist nicht R/W-kompatibel!"
 msgstr "The selected linear default file version is not R/W-compatible!"
 
-#: Program.cs:195
+#: Program.cs:199
 msgid "Gewählte Netzwerk-Standardversion ist nicht R/W-kompatibel!"
 msgstr "The selected network default file version is not R/W-compatible!"
 
