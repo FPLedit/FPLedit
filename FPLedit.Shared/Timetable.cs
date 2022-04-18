@@ -777,13 +777,14 @@ namespace FPLedit.Shared
         }
 
         /// <inheritdoc />
-        public ITrain? GetTransition(ITrain first, Days? daysFilter = null, Station? stationFilter = null)
+        public ITrain? GetTransition(ITrain? first, Days? daysFilter = null, Station? stationFilter = null)
         {
             if (first == null)
                 return null;
             if (!first.IsLink)
-                return GetTransition(first.QualifiedId, daysFilter, stationFilter);
+                return GetTransitionUnLinked(first.QualifiedId, daysFilter, stationFilter);
 
+            // Unroll linked trains.
             var linkedTrain = (LinkedTrain) first;
             var link = linkedTrain.Link;
             if (!link.CopyTransitions)
@@ -808,7 +809,7 @@ namespace FPLedit.Shared
             return null;
         }
 
-        private ITrain? GetTransition(string firstQualifiedTrainId, Days? daysFilter = null, Station? stationFilter = null)
+        internal ITrain? GetTransitionUnLinked(string firstQualifiedTrainId, Days? daysFilter = null, Station? stationFilter = null)
         {
             if (firstQualifiedTrainId == "-1" || string.IsNullOrWhiteSpace(firstQualifiedTrainId))
                 return null;

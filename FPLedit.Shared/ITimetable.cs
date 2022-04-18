@@ -151,7 +151,7 @@ namespace FPLedit.Shared
         /// <paramref name="daysFilter"/> and <paramref name="stationFilter"/> will be silently ignored!</para>
         /// <para><paramref name="daysFilter"/> does not filter on the returned trains <see cref="ITrain.Days"/>!</para>
         /// </remarks>
-        ITrain? GetTransition(ITrain first, Days? daysFilter = null, Station? stationFilter = null);
+        ITrain? GetTransition(ITrain? first, Days? daysFilter = null, Station? stationFilter = null);
         /// <summary>
         /// Removes the transition starting with this train.
         /// </summary>

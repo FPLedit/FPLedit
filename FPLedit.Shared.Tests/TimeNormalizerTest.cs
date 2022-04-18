@@ -8,7 +8,7 @@ namespace FPLedit.Shared.Tests
         [Test]
         public void NormalizeTest()
         {
-            var normalizer = new TimeNormalizer(true);
+            var normalizer = new TimeNormalizer();
             
             Assert.AreEqual("00:00", normalizer.Normalize("0:0"));
             Assert.AreEqual("00:00", normalizer.Normalize("0"));

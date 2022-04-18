@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FPLedit.Shared;
 using FPLedit.Shared.Templating;
+#pragma warning disable CS0067
 
 namespace FPLedit.Tests
 {
