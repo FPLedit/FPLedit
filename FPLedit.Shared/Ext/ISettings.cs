@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FPLedit.Shared
 {
@@ -19,8 +20,10 @@ namespace FPLedit.Shared
     {
         bool IsReadonly { get; }
         
+        [return: NotNullIfNotNull("defaultValue")]
         T? Get<T>(string key, T? defaultValue = default);
 
+        [return: NotNullIfNotNull("defaultValue")]
         T? GetEnum<T>(string key, T? defaultValue = default) where T : Enum;
 
         bool KeyExists(string key);

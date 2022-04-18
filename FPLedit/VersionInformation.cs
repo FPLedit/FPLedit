@@ -24,8 +24,7 @@ namespace FPLedit
         {
             get
             {
-                if (current == null)
-                    current = new VersionInformation();
+                current ??= new VersionInformation();
                 return current;
             }
         }

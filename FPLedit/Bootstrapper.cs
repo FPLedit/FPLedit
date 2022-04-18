@@ -45,7 +45,7 @@ namespace FPLedit
         
         public List<string> PreBootstrapWarnings { get; } = new List<string>();
 
-        public Bootstrapper(LastFileHandler lfh)
+        public Bootstrapper(ILastFileHandler lfh)
         {
             timetableBackup = new Dictionary<object, Timetable>();
             
@@ -100,7 +100,7 @@ namespace FPLedit
 
             ExtensionsLoaded?.Invoke(this, EventArgs.Empty);
             
-            (RootForm as Window)!.Closing += (s, e) => AppClosing?.Invoke(this, null);
+            (RootForm as Window)!.Closing += (_, _) => AppClosing?.Invoke(this, EventArgs.Empty);
         }
 
         public void PreBootstrapExtensions()
@@ -137,7 +137,7 @@ namespace FPLedit
 
         public void RestoreTimetable(object backupHandle)
         {
-            if (!timetableBackup.TryGetValue(backupHandle, out Timetable backupTt))
+            if (!timetableBackup.TryGetValue(backupHandle, out var backupTt))
                 throw new ArgumentException(nameof(backupHandle) + " is invalid!");
             FileHandler.Timetable = backupTt;
             ClearBackup(backupHandle);

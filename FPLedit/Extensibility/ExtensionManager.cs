@@ -37,10 +37,11 @@ namespace FPLedit.Extensibility
 
             var signatureVerifier = new AssemblySignatureVerifier();
 
-            var enabledPlugins = pluginInterface.Settings.Get("extmgr.enabled", "").Split(';');
+            var enabledPlugins = pluginInterface.Settings.Get("extmgr.enabled", "")
+                .Split(';', StringSplitOptions.RemoveEmptyEntries);
             var currentVersion = VersionInformation.Current.AppBaseVersion;
 
-            DirectoryInfo dir = new DirectoryInfo(pluginInterface.ExecutableDir);
+            var dir = new DirectoryInfo(pluginInterface.ExecutableDir);
 
             // Filter some unwanted files, for performance reasons as we don't have to check them
             var files = dir.GetFiles("*.dll")
