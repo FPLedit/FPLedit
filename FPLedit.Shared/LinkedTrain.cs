@@ -89,6 +89,9 @@ namespace FPLedit.Shared
                     kvp => link.ProcessArrDep(kvp.Value, countingIndex));
         }
 
+        /// <inheritdoc />
+        public string GetLineName() => baseTrain.GetLineName();
+
         /// <summary>
         /// Create a new linked train instance, based on an existing xml structure.
         /// </summary>

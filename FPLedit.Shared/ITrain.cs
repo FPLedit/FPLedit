@@ -75,6 +75,11 @@ namespace FPLedit.Shared
         /// </summary>
         /// <returns></returns>
         Dictionary<Station, ArrDep> GetArrDepsUnsorted();
+        
+        /// <summary>
+        /// Get a display name for the path of the train.
+        /// </summary>
+        string GetLineName();
     }
 
     /// <summary>
@@ -120,11 +125,6 @@ namespace FPLedit.Shared
         /// Cleans up orphaned time entries after deleting stations (e.g. arrival time at the first station)
         /// </summary>
         void RemoveOrphanedTimes();
-
-        /// <summary>
-        /// Get a display name for the path of the train.
-        /// </summary>
-        string GetLineName();
 
         /// <summary>
         /// All linked trains that are linked to this writable parent train.
