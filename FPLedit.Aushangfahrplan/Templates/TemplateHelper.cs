@@ -43,7 +43,7 @@ namespace FPLedit.Aushangfahrplan.Templates
 
         public Station[] GetLastStations(TrainDirection dir, Station sta, IEnumerable<object> trainsInThisDirObj)
         {
-            var trainsInThisDir = trainsInThisDirObj.Cast<Train>().ToArray(); // From JS.
+            var trainsInThisDir = trainsInThisDirObj.Cast<ITrain>().ToArray(); // From JS.
             if (tt.Type == TimetableType.Linear)
             {
                 var lSta = tt.GetLinearStationsOrderedByDirection(dir).LastOrDefault();
