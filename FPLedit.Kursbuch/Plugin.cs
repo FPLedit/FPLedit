@@ -9,7 +9,7 @@ using FPLedit.Shared.Templating;
 namespace FPLedit.Kursbuch
 {
     [Plugin("Modul für Tabellenfahrpläne", Vi.PFrom, Vi.PUpTo, Author = "Manuel Huber")]
-    public sealed class Plugin : IPlugin
+    public sealed class Plugin : IPlugin, ITemplatePlugin
     {
         public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
         {
@@ -20,13 +20,18 @@ namespace FPLedit.Kursbuch
             
             componentRegistry.Register<IFilterRuleContainer>(FilterRuleContainer);
             componentRegistry.Register<IAppearanceControl>(new DefaultAppearanceControl(pi => new SettingsControl(pi), T._("Kursbuch")));
-
+            
+            componentRegistry.Register<ITimetableTypeChangeAction>(new FixAttrsAction());
+            
+            InitTemplates(pluginInterface, componentRegistry);
+        }
+        
+        public void InitTemplates(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
+        {
             componentRegistry.Register<ITemplateProvider>(new Templates.TemplateProvider());
             
             componentRegistry.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<Templates.TemplateHelper>("kfpl"));
             componentRegistry.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<KfplAttrs>("kfpl"));
-
-            componentRegistry.Register<ITimetableTypeChangeAction>(new FixAttrsAction());
         }
 
         internal static IFilterRuleContainer FilterRuleContainer => new DefaultFilterRuleContainer(T._("Kursbuch"), KfplAttrs.GetAttrs, KfplAttrs.CreateAttrs);

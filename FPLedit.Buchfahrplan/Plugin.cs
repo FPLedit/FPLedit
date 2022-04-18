@@ -6,7 +6,7 @@ using FPLedit.Shared.DefaultImplementations;
 namespace FPLedit.Buchfahrplan
 {
     [Plugin("Modul für Buchfahrpläne", Vi.PFrom, Vi.PUpTo, Author = "Manuel Huber")]
-    public sealed class Plugin : IPlugin
+    public sealed class Plugin : IPlugin, ITemplatePlugin
     {
         public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
         {
@@ -18,7 +18,12 @@ namespace FPLedit.Buchfahrplan
             componentRegistry.Register<IAppearanceControl>(new DefaultAppearanceControl(pi => new Forms.SettingsControl(pi), T._("Buchfahrplan")));
             componentRegistry.Register<IFilterRuleContainer>(FilterRuleContainer);
             componentRegistry.Register<IRouteAction>(new Forms.VelocityRouteAction());
-
+            
+            InitTemplates(pluginInterface, componentRegistry);
+        }
+        
+        public void InitTemplates(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
+        {
             componentRegistry.Register<ITemplateProvider>(new Templates.StdTemplate());
             componentRegistry.Register<ITemplateProvider>(new Templates.ZlbTemplate());
             

@@ -9,10 +9,11 @@ namespace FPLedit.Tests
 {
     internal class DummyPluginInterface : IPluginInterface
     {
+        public ISettings settings;
         public DummyPluginInterface()
         {
             Logger = new TestLogger();
-            Settings = new TestSettings(new Dictionary<string, string>());
+            settings = new TestSettings(new Dictionary<string, string>());
             Registry = new RegisterStore();
         }
 
@@ -24,7 +25,7 @@ namespace FPLedit.Tests
         }
 
         public string ExecutablePath => throw new NotImplementedException();
-        public string ExecutableDir => throw new NotImplementedException();
+        public string ExecutableDir { get; set; }
 
         public T[] GetRegistered<T>() => Registry.GetRegistered<T>();
 
@@ -76,13 +77,13 @@ namespace FPLedit.Tests
             throw new NotImplementedException();
         }
 
-        ISettings IPluginInterface.Settings => throw new NotImplementedException();
+        ISettings IPluginInterface.Settings => settings;
 
         public event EventHandler<FileStateChangedEventArgs> FileStateChanged;
         public event EventHandler ExtensionsLoaded;
         public event EventHandler FileOpened;
         public event EventHandler AppClosing;
-        public IReadOnlySettings Settings { get; }
+        public IReadOnlySettings Settings => settings;
         public ITemplateManager TemplateManager => throw new NotImplementedException();
 
         public int HadWarning(string search) => ((TestLogger) Logger).HadWarning(search);

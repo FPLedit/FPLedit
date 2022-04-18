@@ -6,7 +6,7 @@ namespace FPLedit.Extensibility
 {
     internal sealed class PluginInfo
     {
-        private readonly IPlugin plugin;
+        internal readonly IPlugin Plugin;
         
         public bool IsBuiltin { get; }
 
@@ -28,8 +28,8 @@ namespace FPLedit.Extensibility
         {
             FullName = plugin.GetType().FullName;
             ExtractPluginInformation(plugin.GetType());
-            this.plugin = plugin;
-            this.IsBuiltin = isBuiltin;
+            Plugin = plugin;
+            IsBuiltin = isBuiltin;
             Enabled = true;
             SecurityContext = securityContext;
         }
@@ -57,11 +57,11 @@ namespace FPLedit.Extensibility
         {
             try
             {
-                plugin.Init(pluginInterface, componentRegistry);
+                Plugin.Init(pluginInterface, componentRegistry);
             }
             catch (Exception ex)
             {
-                pluginInterface.Logger.Error(T._("Fehler beim Initialisieren einer Erweiterung: {0}: + {1}", plugin.GetType().FullName, ex.Message));
+                pluginInterface.Logger.Error(T._("Fehler beim Initialisieren einer Erweiterung: {0}: + {1}", Plugin.GetType().FullName, ex.Message));
             }
         }
     }

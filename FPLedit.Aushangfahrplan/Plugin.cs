@@ -7,7 +7,7 @@ using FPLedit.Shared.Templating;
 namespace FPLedit.Aushangfahrplan
 {
     [Plugin("Modul für Aushangfahrpläne", Vi.PFrom, Vi.PUpTo, Author = "Manuel Huber")]
-    public sealed class Plugin : IPlugin
+    public sealed class Plugin : IPlugin, ITemplatePlugin
     {
         public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
         {
@@ -18,7 +18,12 @@ namespace FPLedit.Aushangfahrplan
             
             componentRegistry.Register<IAppearanceControl>(new DefaultAppearanceControl(pi => new SettingsControl(pi), T._("Aushangfahrplan")));
             componentRegistry.Register<IFilterRuleContainer>(FilterRuleContainer);
+            
+            InitTemplates(pluginInterface, componentRegistry);
+        }
 
+        public void InitTemplates(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
+        {
             componentRegistry.Register<ITemplateProvider>(new Templates.StdTemplateProvider());
             componentRegistry.Register<ITemplateProvider>(new Templates.SvgTemplateProvider());
             

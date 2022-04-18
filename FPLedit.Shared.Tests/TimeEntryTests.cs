@@ -218,6 +218,8 @@ namespace FPLedit.Shared.Tests
             var dte = new TimeEntry(21, 20);
             var te2 = new TimeEntry(3, 33);
             
+            // Discable CS warning "comparison with the same variable"
+            #pragma warning disable CS1718
             Assert.AreEqual(true, dte == te + te);
             Assert.AreEqual(true, te == te);
             Assert.AreEqual(true, te >= te);
@@ -241,6 +243,7 @@ namespace FPLedit.Shared.Tests
             Assert.AreEqual(true, dte.CompareTo(te) > 0);
             Assert.AreEqual(1, dte.CompareTo(null));
             Assert.Throws<ArgumentException>(() => te.CompareTo(new object()));
+            #pragma warning restore CS1718
         }
 
         [Test]

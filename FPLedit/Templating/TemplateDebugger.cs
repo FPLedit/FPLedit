@@ -10,14 +10,20 @@ namespace FPLedit.Templating
     {
         private ITemplateDebugger child;
 
+        private void Invoke(Action action)
+        {
+            if (Application.Instance != null) Application.Instance.Invoke(action);
+            else action();
+        }
+
         public void SetContext(JavascriptTemplate template)
-            => Application.Instance.Invoke(() => child?.SetContext(template));
+            => Invoke(() => child?.SetContext(template));
 
         public void Navigate(int line, int column) // We have an error.
-            => Application.Instance.Invoke(() => child?.Navigate(line, column));
+            => Invoke(() => child?.Navigate(line, column));
         
         public void OpenDebugger() // We have an error, so show this form.
-            => Application.Instance.Invoke(() => child?.OpenDebugger());
+            => Invoke(() => child?.OpenDebugger());
 
         public void AttachDebugger(ITemplateDebugger debugger)
             => child = debugger;
@@ -30,8 +36,7 @@ namespace FPLedit.Templating
 
         public static TemplateDebugger GetInstance()
         {
-            if (instance == null)
-                instance = new TemplateDebugger();
+            instance ??= new TemplateDebugger();
             return instance;
         }
     }
