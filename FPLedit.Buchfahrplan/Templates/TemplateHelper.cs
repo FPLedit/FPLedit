@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using FPLedit.Shared.Analyzers;
+// ReSharper disable UnusedMember.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable ClassNeverInstantiated.Global
 
 namespace FPLedit.Buchfahrplan.Templates
 {
@@ -25,12 +28,14 @@ namespace FPLedit.Buchfahrplan.Templates
 
         public string HtmlName(string name, string prefix)
         {
-            return prefix + name.Replace("#", "")
+            return SafeHtml(prefix + name.Replace("#", "")
                 .Replace(" ", "-")
                 .Replace(".", "-")
                 .Replace(":", "-")
-                .ToLower();
+                .ToLower());
         }
+
+        public static string SafeHtml(string s) => Shared.Templating.TemplateOutput.SafeHtml(s);
 
         public string GetDaysHtml(ITrain tra, bool showDays)
         {
@@ -38,7 +43,7 @@ namespace FPLedit.Buchfahrplan.Templates
             if (!showDays || days == "")
                 return "";
 
-            days = Regex.Replace(days, @"\[(\w*)\]", (m) => " <span class=\"days\">" + m.Groups[1].Value + "</span>");
+            days = Regex.Replace(days, @"\[(\w*)\]", (m) => " <span class=\"days\">" + SafeHtml(m.Groups[1].Value) + "</span>");
 
             return "&nbsp;&nbsp;" + days;
         }
@@ -85,20 +90,20 @@ namespace FPLedit.Buchfahrplan.Templates
         public string OptAttr(string caption, string value)
         {
             if (!string.IsNullOrEmpty(value))
-                return caption + " " + value;
+                return SafeHtml(caption + " " + value);
             return "";
         }
 
         public string Kreuzt(ITrain ot, Station s)
         {
-            return string.Join(", ", analyzer.CrossingAtStation(ot, s)
-                .Select(tr => tr.TName + " " + IntersectDaysSt(ot, tr)));
+            return SafeHtml(string.Join(", ", analyzer.CrossingAtStation(ot, s)
+                .Select(tr => tr.TName + " " + IntersectDaysSt(ot, tr))));
         }
 
         public string Ueberholt(ITrain ot, Station s)
         {
-            return string.Join(", ", analyzer.OvertakeAtStation(ot, s)
-                .Select(tr => tr.TName + " " + IntersectDaysSt(ot, tr)));
+            return SafeHtml(string.Join(", ", analyzer.OvertakeAtStation(ot, s)
+                .Select(tr => tr.TName + " " + IntersectDaysSt(ot, tr))));
         }
 
         public string TrapezHalt(ITrain probeTrain, Station s)
@@ -106,17 +111,17 @@ namespace FPLedit.Buchfahrplan.Templates
             var trapez = analyzer.TrapezAtStation(probeTrain, s);
 
             if (trapez.IsStopping)
-                return "<span class=\"trapez-tt\">" + probeTrain.TName + "</span> " + DaysToStringNotEqual(probeTrain, trapez.StopDays);
+                return "<span class=\"trapez-tt\">" + SafeHtml(probeTrain.TName) + "</span> " + SafeHtml(DaysToStringNotEqual(probeTrain, trapez.StopDays));
             if (trapez.IntersectingTrainsStopping.Any())
-                return string.Join(", ", trapez.IntersectingTrainsStopping.Select(t => t.TName)) + " " + DaysToStringNotEqual(probeTrain, trapez.StopDays);
+                return SafeHtml(string.Join(", ", trapez.IntersectingTrainsStopping.Select(t => t.TName)) + " " + DaysToStringNotEqual(probeTrain, trapez.StopDays));
 
             return "";
         }
         
         private string IntersectDaysSt(ITrain ot, ITrain t) 
-            => DaysToStringNotEqual(ot, ot.Days.IntersectingDays(t.Days));
+            => SafeHtml(DaysToStringNotEqual(ot, ot.Days.IntersectingDays(t.Days)));
 
         private static string DaysToStringNotEqual(ITrain ot, Days days)
-            => days == ot.Days ? "" : days.DaysToString(true);
+            => SafeHtml(days == ot.Days ? "" : days.DaysToString(true));
     }
 }

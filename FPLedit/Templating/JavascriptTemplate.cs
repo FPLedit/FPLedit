@@ -222,6 +222,9 @@ namespace FPLedit.Templating
                 .SetValue("clr_typename", new Func<object,string>(o => o.GetType().Name))
                 .SetValue("clr_typefullname", new Func<object,string>(o => o.GetType().FullName))
                 .SetValue("clr_toArray", new Func<IEnumerable<object>,object[]>(o => o.ToArray()))
+                .SetValue("safe_html", (Func<string,string>)TemplateOutput.SafeHtml)
+                .SetValue("safe_css_str", (Func<string,string>)TemplateOutput.SafeCssStr)
+                .SetValue("safe_css_block", (Func<string,string>)TemplateOutput.SafeCssBlock)
                 .Execute(ResourceHelper.GetStringResource(polyFillsPath), polyfillsParserOptions) // Load polyfills
                 .Execute("var __builder = '';", polyfillsParserOptions) // Create output variable
                 .Execute(CompiledCode, templateCodeParserOptions)

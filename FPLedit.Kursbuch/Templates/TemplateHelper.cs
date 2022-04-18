@@ -22,6 +22,8 @@ namespace FPLedit.Kursbuch.Templates
             trules = filterable.LoadTrainRules(tt).ToArray();
             srules = filterable.LoadStationRules(tt).ToArray();
         }
+        
+        public static string SafeHtml(string s) => Shared.Templating.TemplateOutput.SafeHtml(s);
 
         public Station[] GetStations(Route route, TrainDirection dir)
         {
@@ -79,7 +81,7 @@ namespace FPLedit.Kursbuch.Templates
         public string GetRouteName(Route r, TrainDirection dir)
         {
             var stas = GetStations(r, dir);
-            return stas.FirstOrDefault()?.SName + " - " + stas.LastOrDefault()?.SName;
+            return SafeHtml(stas.FirstOrDefault()?.SName + " - " + stas.LastOrDefault()?.SName);
         }
     }
 }
