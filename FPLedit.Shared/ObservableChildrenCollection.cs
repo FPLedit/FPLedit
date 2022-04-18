@@ -82,6 +82,7 @@ namespace FPLedit.Shared
         private void InsertItem(NotifyCollectionChangedEventArgs e)
         {
             var idx = e.NewStartingIndex; // Get temporary index.
+            if (e.NewItems == null) return;
 
             // Es können ja noch andere Nodes in den Children sein.
             if (idx != 0)
@@ -93,6 +94,7 @@ namespace FPLedit.Shared
 
         private void RemoveItem(NotifyCollectionChangedEventArgs e)
         {
+            if (e.OldItems == null) return;
             var toRemove = e.OldItems.Cast<T>().Select(t => t.XMLEntity).ToList();
             parentEntity.Children.RemoveAll(t => toRemove.Contains(t));
         }

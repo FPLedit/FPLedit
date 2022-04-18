@@ -40,19 +40,19 @@ namespace FPLedit.Shared.Rendering
         public void HandleClick(Point clickPosition, Point pan, float scale = 1)
         {
             if (Rect.Contains(new Point((clickPosition - pan) * (1/scale))))
-                Click?.Invoke(this, new EventArgs());
+                Click?.Invoke(this, EventArgs.Empty);
         }
 
         public void HandleRightClick(Point clickPosition, Point pan, float scale = 1)
         {
             if (Rect.Contains(new Point((clickPosition - pan) * (1/scale))))
-                RightClick?.Invoke(this, new EventArgs());
+                RightClick?.Invoke(this, EventArgs.Empty);
         }
 
         public void HandleDoubleClick(Point clickPosition, Point pan, float scale = 1)
         {
             if (Rect.Contains(new Point((clickPosition - pan) * (1/scale))))
-                DoubleClick?.Invoke(this, new EventArgs());
+                DoubleClick?.Invoke(this, EventArgs.Empty);
         }
 
         public void Draw(Graphics g)

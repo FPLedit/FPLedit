@@ -31,7 +31,7 @@ namespace FPLedit.Shared.UI
                     return;
                 selectedRoute = (int)((ListItem)Items[SelectedIndex]).Tag;
 
-                SelectedRouteChanged?.Invoke(this, new EventArgs());
+                SelectedRouteChanged?.Invoke(this, EventArgs.Empty);
             };
 
             // Initialisieren der Daten

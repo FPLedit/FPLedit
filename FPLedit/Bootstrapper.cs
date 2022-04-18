@@ -98,7 +98,7 @@ namespace FPLedit
                 Task.Run(() => Application.Instance.Invoke(() => templateManager.DebugCompileAll()));
             TemplateManager = templateManager;
 
-            ExtensionsLoaded?.Invoke(this, new EventArgs());
+            ExtensionsLoaded?.Invoke(this, EventArgs.Empty);
             
             (RootForm as Window)!.Closing += (s, e) => AppClosing?.Invoke(this, null);
         }

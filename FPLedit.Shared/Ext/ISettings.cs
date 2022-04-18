@@ -19,9 +19,9 @@ namespace FPLedit.Shared
     {
         bool IsReadonly { get; }
         
-        T Get<T>(string key, T defaultValue = default);
+        T? Get<T>(string key, T? defaultValue = default);
 
-        T GetEnum<T>(string key, T defaultValue = default) where T : Enum;
+        T? GetEnum<T>(string key, T? defaultValue = default) where T : Enum;
 
         bool KeyExists(string key);
     }

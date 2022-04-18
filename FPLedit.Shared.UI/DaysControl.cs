@@ -109,7 +109,7 @@ namespace FPLedit.Shared.UI
             foreach (var item in shortcutsToggle!)
                 item.Checked = cur.Equals((Days)item.Tag);
             
-            SelectedDaysChanged?.Invoke(this, new EventArgs());
+            SelectedDaysChanged?.Invoke(this, EventArgs.Empty);
         }
 
         protected static class L

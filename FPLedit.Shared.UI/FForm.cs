@@ -7,7 +7,7 @@ namespace FPLedit.Shared.UI
     {
         public static event EventHandler? Init;
 
-        internal static void InvokeInit(Window w) => Init?.Invoke(w, new EventArgs());
+        internal static void InvokeInit(Window w) => Init?.Invoke(w, EventArgs.Empty);
     }
 
     public class FDialog<T> : Dialog<T>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Force.DeepCloner;
+#pragma warning disable CS8618
 
 namespace FPLedit.Shared
 {

@@ -75,7 +75,7 @@ namespace FPLedit.Shared
 
         private void ChildrenOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            if (e.Action == NotifyCollectionChangedAction.Add)
+            if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null)
                 foreach (XMLEntity? item in e.NewItems)
                     item!.ParentElement = this;
             
@@ -86,7 +86,7 @@ namespace FPLedit.Shared
 
         private void NotifyChildChanged()
         {
-            ChildrenChangedRecursive?.Invoke(this, new EventArgs());
+            ChildrenChangedRecursive?.Invoke(this, EventArgs.Empty);
             ParentElement?.NotifyChildChanged();
         }
         

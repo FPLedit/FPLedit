@@ -32,30 +32,21 @@ namespace FPLedit.Shared
         public static string _(string text)
         {
             var assembly = Assembly.GetCallingAssembly();
-            var catalog = GetCatalog(assembly);
-            return catalog.GetString(text);
+            return GetCatalog(assembly).GetString(text);
         }
         public static string _(string text, params object[] args)
         {
             var assembly = Assembly.GetCallingAssembly();
-            var catalog = GetCatalog(assembly);
-            return catalog.GetString(text, args);
+            return GetCatalog(assembly).GetString(text, args);
         }
         
-        public static string _a(Assembly assembly, string text)
-        {
-            var catalog = GetCatalog(assembly);
-            return catalog.GetString(text);
-        }
-        public static string _a(Assembly assembly, string text, params object[] args)
-        {
-            var catalog = GetCatalog(assembly);
-            return catalog.GetString(text, args);
-        }
+        public static string _a(Assembly assembly, string text) => GetCatalog(assembly).GetString(text);
+
+        public static string _a(Assembly assembly, string text, params object[] args) => GetCatalog(assembly).GetString(text, args);
 
         private static ICatalog GetCatalog(Assembly assembly)
         {
-            var name = assembly.GetName().Name;
+            var name = assembly.GetName().Name!;
             if (!catalogs.TryGetValue(name, out var catalog))
             {
                 catalog = new Catalog(new CustomMoLoader(name, localeDir), new CultureInfo(currentLocale));
@@ -78,7 +69,7 @@ namespace FPLedit.Shared
                 var parts = file.Name.Split('.');
                 if (parts.Length < 3)
                     continue;
-                var locale = parts[parts.Length - 2].Replace('_','-');
+                var locale = parts[^2].Replace('_','-');
                 var valid = allCultures.FirstOrDefault(culture => string.Equals(culture.Name, locale, StringComparison.CurrentCultureIgnoreCase));
                 if (valid == null)
                     continue;

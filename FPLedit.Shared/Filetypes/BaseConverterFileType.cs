@@ -30,7 +30,7 @@ namespace FPLedit.Shared.Filetypes
 
         protected void ConvertAttrNetToLin<T>(RouteValueCollection<T> rvc, int route)
         {
-            T val = rvc.GetValue(route);
+            var val = rvc.GetValue(route);
             rvc.SetValue(Timetable.LINEAR_ROUTE_ID, val);
             rvc.Write(TimetableType.Linear);
         }

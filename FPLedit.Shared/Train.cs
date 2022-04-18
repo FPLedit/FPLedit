@@ -160,7 +160,7 @@ namespace FPLedit.Shared
         public void RemoveArrDep(Station sta)
         {
             var tElems = InternalGetArrDeps();
-            ArrDep tElm;
+            ArrDep? tElm;
             if (ParentTimetable.Type == TimetableType.Linear)
             {
                 var stas = ParentTimetable.GetLinearStationsOrderedByDirection(TrainDirection.ti); // All arrdeps are sorted in line direction.

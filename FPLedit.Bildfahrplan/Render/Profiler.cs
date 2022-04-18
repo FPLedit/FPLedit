@@ -6,8 +6,10 @@ namespace FPLedit.Bildfahrplan.Render
 {
     internal sealed class Profiler
     {
+#if DEBUG
         private readonly Stopwatch stopWatch;
         private readonly string prefix;
+#endif
 
         public Profiler(string prefix)
         {
