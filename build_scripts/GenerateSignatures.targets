@@ -1,12 +1,98 @@
 <!--
   FPLedit Build Process
   Common build properties for all projects.
-  (c) Manuel Huber 2020
+  (c) Manuel Huber 2020-2022
 -->
 
 <Project>
 
-  <UsingTask TaskName="GenerateExtensionSignatures" AssemblyFile="$(SolutionDir)/build_scripts/FPLedit.Build.task.dll" />
+  <UsingTask TaskName="GenerateExtensionSignatures" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll" >
+    <ParameterGroup>
+      <BinaryPath ParameterType="System.String" Required="true" />
+      <Namespace ParameterType="System.String" Required="true" />
+      <TypeName ParameterType="System.String" Required="true" />
+      <PrivateKeyFile ParameterType="System.String" Required="true" />
+      <PublicKeyFile ParameterType="System.String" Required="true" />
+      <OutputPath ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Xml" />
+      <Using Namespace="System.Xml.Serialization" />
+      <Using Namespace="System.Security.Cryptography" />
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+        string HashAlgorithm = "SHA256";
+        
+        string BytesToString(IEnumerable<byte> bytes) => string.Join(", ", System.Linq.Enumerable.Select(bytes, b => "0x" + b.ToString("X2")));
+        
+        IEnumerable<string> GetHashLines(DirectoryInfo info, string keypath)
+        {
+            yield return "// File created at " + DateTime.Now.ToString("G");
+            yield return "// Do not edit, changes will be overwritten!";
+
+            yield return "namespace " + Namespace;
+            yield return "{";
+            yield return "    internal sealed partial class " + TypeName;
+            yield return "    {";
+            yield return "        private readonly AssemblySignature[] generatedSignatures = {";
+
+            var files = info.GetFiles("FPLedit.*.dll");
+            foreach (var f in files)
+                yield return CreateSignature(f.FullName, keypath);
+
+            yield return "        };";
+
+            var serializer = new XmlSerializer(typeof(RSAParameters));
+            using (var stream = File.OpenRead(PublicKeyFile))
+            using (var reader = new XmlTextReader(stream) { DtdProcessing = DtdProcessing.Prohibit, XmlResolver = null })
+            {
+                var pubkey = (RSAParameters) serializer.Deserialize(reader);
+
+                yield return @"        private static readonly byte[] pubKeyExponent = { " + BytesToString(pubkey.Exponent) + " };";
+                yield return @"        private static readonly byte[] pubKeyModulus = { " + BytesToString(pubkey.Modulus) + " };";
+            }
+
+            yield return "        private const string hashAlgorithm = \"" + HashAlgorithm + "\";";
+
+            yield return "    }";
+            yield return "}";
+        }
+        
+        string CreateSignature(string fn, string keyfile)
+        {
+            var bytes = File.ReadAllBytes(fn);
+            var sha512 = SHA256.Create();
+            var hash = sha512.ComputeHash(bytes);
+
+            var privkey = LoadParameters(keyfile);
+
+            var rsa = new RSACryptoServiceProvider();
+            rsa.ImportParameters(privkey);
+
+            var sigFormatter = new RSAPKCS1SignatureFormatter(rsa);
+            sigFormatter.SetHashAlgorithm(HashAlgorithm);
+
+            var signedHashValue = sigFormatter.CreateSignature(hash);
+
+            return "           new AssemblySignature(\"" + Path.GetFileName(fn) + "\", new byte[] { " + BytesToString(signedHashValue) + " }),";
+        }
+        
+        RSAParameters LoadParameters(string fn)
+        {
+            var x = new XmlSerializer(typeof(RSAParameters));
+            using (var stream = File.OpenRead(fn))
+                return (RSAParameters) x.Deserialize(stream);
+        }
+        
+        Log.LogMessage(MessageImportance.High, "Creating extension signatures!\nUsing private key " + PrivateKeyFile + "!");
+        DirectoryInfo info = new DirectoryInfo(BinaryPath);
+        File.WriteAllLines(OutputPath, GetHashLines(info, PrivateKeyFile));
+        Log.LogMessage(MessageImportance.High, "Done writing " + OutputPath + "!");
+        ]]>
+      </Code>
+    </Task>
+  </UsingTask>
 
   <PropertyGroup>
     <!-- Include own build tool -->
