@@ -1,9 +1,9 @@
 name: fpledit-ci
 on: [push]
 jobs:
-  build_beta:
+  build-beta:
     runs-on: [ubuntu-latest]
-      steps:
+    steps:
       - name: Checkout
         uses: actions/checkout@v3
       
@@ -13,11 +13,20 @@ jobs:
           dotnet-version:  |
             5.0.x
             6.0.x
+            
+      - name: Setup mono
+        shell: bash
+        run: |
+          sudo apt install gnupg ca-certificates
+          sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+          echo "deb https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
+          sudo apt update
+          sudo apt install mono-devel msbuild
               
       - name: Build
         run: ./build.sh
         env:
-        - FPLEDIT_GIT: ${{ github.sha }}
-        - FPLEDIT_GIT_BETA: 1
-        - FPLEDIT_DOK_PDF: ./Dokumentation.pdf
+          FPLEDIT_GIT: ${{ github.sha }}
+          FPLEDIT_GIT_BETA: 1
+          FPLEDIT_DOK_PDF: ./Dokumentation.pdf
           
