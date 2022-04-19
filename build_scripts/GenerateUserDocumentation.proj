@@ -9,14 +9,14 @@
   * THE FOLLOWING CODE IS SPECIFIC TO THE FPLEDIT USER DOCUMENTATION REPO STRUCTURE
   * DO NOT USE IT OTHERWISE
   *
-  * IT WILL NOT BUILD IF ENV VARIABLE FPLEDIT_DOK IS NOT SET.
+  * IT WILL NOT BUILD IF ENV VARIABLE FPLEDIT_DOK_REPO IS NOT SET.
   -->
   
   <!-- Set parameters -->
   <PropertyGroup>
     <OfflineDoc_BuildPdf>true</OfflineDoc_BuildPdf>
     <OfflineDoc_PdfOutputFile>$(OutputPath)/Dokumentation.pdf</OfflineDoc_PdfOutputFile>
-    <OfflineDoc_SiteFolder>$(FPLEDIT_DOK)</OfflineDoc_SiteFolder>
+    <OfflineDoc_SiteFolder>$(FPLEDIT_DOK_REPO)</OfflineDoc_SiteFolder>
   </PropertyGroup>
 
   <!-- Default target for msbuild -->
@@ -32,7 +32,7 @@
       UrlBase="https://fahrplan.manuelhu.de" />
     <Exec
       Condition=" $(OfflineDoc_BuildPdf) == 'true' "
-      Command="pandoc $([System.IO.Path]::GetFileName( '$(OfflineDoc_HtmlOutputFile)' ) ) -f html+tex_math_dollars -t latex --template=../template --pdf-engine=xelatex --toc --metadata-file=offline-latex.tex -N -o $([System.IO.Path]::GetFullPath( $(OfflineDoc_PdfOutputFile) ) )"
+      Command="pandoc $([System.IO.Path]::GetFileName( '$(OfflineDoc_HtmlOutputFile)' ) ) -f html+tex_math_dollars -t latex --template=../template --pdf-engine=xelatex --toc -V geometry=&quot;margin=3cm&quot; -V colorlinks=1 --metadata-file=offline-latex.tex -N -o $([System.IO.Path]::GetFullPath( $(OfflineDoc_PdfOutputFile) ) )"
       WorkingDirectory="$([System.IO.Path]::GetDirectoryName( '$(OfflineDoc_HtmlOutputFile)' ) )" />
   </Target>
 
@@ -60,9 +60,8 @@
     </ParameterGroup>
     <Task>
       <Using Namespace="System.IO" />
+      <Using Namespace="System.Text" />
       <Using Namespace="System.Text.RegularExpressions" />
-      <Using Namespace="System.Xml.Serialization" />
-      <Using Namespace="System.Security.Cryptography" />
       <Code Type="Fragment" Language="cs">
         <![CDATA[
         Dictionary<string, string> files = new Dictionary<string, string>();

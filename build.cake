@@ -11,17 +11,31 @@ var configuration = Argument("configuration", "Release");
 var platform = Argument("tfm", "net5.0");
 var runtimes = Argument("rid", "linux-x64");
 
-var docInPath = EnvironmentVariable("FPLEDIT_DOK");
-var hasDocInPath = !(docInPath == null || docInPath == "");
+var docRepoPath = EnvironmentVariable("FPLEDIT_DOK_REPO");
+var buildDocPdf = !(docRepoPath == null || docRepoPath == "");
+var copyDocPdf = EnvironmentVariable("FPLEDIT_DOK_PDF");
+
 var ignoreNoDoc = Argument<string>("ignore_no_doc", null) != null;
 var preBuildVersionSuffix = Argument("version_suffix", "");
 
 var incrementVersion = false;
+var isNonFinalVersion = false;
+string gitRevision = null;
 
+// Automatic beta mode (local build)
 if (Argument<string>("auto-beta", null) != null) {
     ignoreNoDoc = true;
     incrementVersion = true;
+    isNonFinalVersion = true;
     preBuildVersionSuffix = "beta";
+}
+
+// Git beta mode (CI build)
+if (EnvironmentVariable<string>("FPLEDIT_GIT", null) != null) {
+    ignoreNoDoc = true;
+    isNonFinalVersion = EnvironmentVariable<string>("FPLEDIT_GIT_BETA", null) != null;
+    gitRevision = EnvironmentVariable<string>("FPLEDIT_GIT", null);
+    preBuildVersionSuffix = isNonFinalVersion ? "git-" + EnvironmentVariable<string>("FPLEDIT_GIT", "") + $"-{DateTime.Now:yyyyMMdd}" : "";
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -90,12 +104,14 @@ Task("Build")
         });
     });
     
-Task("PackNet5")
+Task("PackNet")
     .IsDependentOn("Build")
     .Does(() =>
     {
         ForAllRuntimes( (runtime, distDir) => {
             var msbuildSettings = new DotNetCoreMSBuildSettings();
+            msbuildSettings.Properties.Add("IsNonFinalFPLeditBuild", new List<string> { isNonFinalVersion.ToString() });
+            msbuildSettings.Properties.Add("GitRevision", new List<string> { gitRevision });
             if (!string.IsNullOrEmpty(preBuildVersionSuffix))
                 msbuildSettings.Properties.Add("versionSuffix", new List<string> { preBuildVersionSuffix });
             msbuildSettings.Properties.Add("BaseOutputAppPath", new List<string> { System.IO.Path.GetFullPath(distDir.Path.FullPath + "/") });
@@ -108,18 +124,28 @@ Task("PackNet5")
             });
         });
     });
-    
+
+
+var hasDocInZip = false;
 Task("BuildUserDocumentation")
-    .IsDependentOn("PackNet5")
+    .IsDependentOn("PackNet")
     .Does(() =>
     {
-        if (hasDocInPath) {
-            MSBuild("./build_scripts/GenerateUserDocumentation.proj", settings => {
-                settings.Properties.Add("OutputPath", new List<string> { System.IO.Path.GetFullPath(buildDir.Path.FullPath) });
+        if (buildDocPdf) {
+            var docBuildSettings = new DotNetCoreMSBuildSettings();
+            docBuildSettings.Properties.Add("OutputPath", new List<string> { System.IO.Path.GetFullPath(buildDir.Path.FullPath) });
+            DotNetCoreBuild("./build_scripts/GenerateUserDocumentation.proj", new DotNetCoreBuildSettings {
+                MSBuildSettings = docBuildSettings,
             });
             ForAllRuntimes( (runtime, distDir) => {
                 CopyFiles(buildDir + File("*.pdf"), distDir);
             });
+            hasDocInZip = true;
+        } else if (!string.IsNullOrEmpty(copyDocPdf)) {
+            ForAllRuntimes( (runtime, distDir) => {
+                CopyFiles(File(copyDocPdf), distDir);
+            });
+            hasDocInZip = true;
         }
     });
 
@@ -157,7 +183,7 @@ Task("PackRelease")
     .Does(() => {
         ForAllRuntimes( (runtime, distDir) => {
             var version = GetProductVersion(Context, distDir + File("FPLedit.dll"));
-            var nodoc_suffix = ignoreNoDoc ? "" : (!hasDocInPath ? "-nodoc" : "");       
+            var nodoc_suffix = ignoreNoDoc ? "" : (!hasDocInZip ? "-nodoc" : "");       
             var file = Directory("./bin") + File($"fpledit-{version}-{runtime}{nodoc_suffix}.zip");
             
             if (FileExists(file))
@@ -172,7 +198,7 @@ Task("PackRelease")
                 var filesToZip = new List<string>();
                 filesToZip.AddRange(GetFiles(macBundle + File("**/*")).Select(f => f.FullPath));
                 filesToZip.Add(distDir + File("README_LICENSE.txt"));
-                if (hasDocInPath)
+                if (hasDocInZip)
                     filesToZip.Add(distDir + File("Dokumentation.pdf"));
                 filesToZip.AddRange(GetFiles(distDir + Directory("licenses") + File("*")).Select(f => f.FullPath));
                 
@@ -190,7 +216,7 @@ Task("Default")
 	.Does(() => {
 	    Warning("##############################################################");
 	    
-	    if (docInPath == null || docInPath == "")
+	    if (!hasDocInZip)
 	        Warning("No user documentation built!");
 
         Warning("##############################################################");
