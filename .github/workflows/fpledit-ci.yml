@@ -14,27 +14,41 @@ jobs:
             5.0.x
             6.0.x
 
-      - name: Setup mono
+      - name: Setup mono and podman
         shell: bash
         run: |
           sudo apt install gnupg ca-certificates
           sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
           echo "deb https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
           sudo apt update
-          sudo apt install mono-devel msbuild
+          sudo apt install mono-devel msbuild podman
 
       - name: Build
-        run: bash ./build.sh --rid=linux-x64,osx-x64
+        run: bash ./build.sh --rid=linux-x64,osx-x64,win-x64
         env:
           FPLEDIT_GIT: ${{ github.sha }}
           FPLEDIT_GIT_BETA: 1
           FPLEDIT_DOK_PDF: ./Dokumentation.pdf
           
-      - name: Upload dist
+      - name: Upload linux
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
         with:
-          name: fpledit-build
-          path: ./bin/fpledit-*.zip
+          name: fpledit-linux-x64
+          path: ./bin/fpledit-linux*.zip
+          if-no-files-found: error
+          
+      - name: Upload osx
+        uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
+        with:
+          name: fpledit-osx-x64
+          path: ./bin/fpledit-osx*.zip
+          if-no-files-found: error
+          
+      - name: Upload win
+        uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
+        with:
+          name: fpledit-win-x64
+          path: ./bin/fpledit-win*.zip
           if-no-files-found: error
           
       - name: Upload api-doc
@@ -42,4 +56,3 @@ jobs:
         with:
           name: fpledit-api-doc
           path: ./bin/api-doc/
-          
