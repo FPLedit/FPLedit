@@ -34,21 +34,21 @@ jobs:
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
         with:
           name: fpledit-linux-x64
-          path: ./bin/fpledit-linux*.zip
+          path: ./bin/fpledit-*-linux-*.zip
           if-no-files-found: error
           
       - name: Upload osx
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
         with:
           name: fpledit-osx-x64
-          path: ./bin/fpledit-osx*.zip
+          path: ./bin/fpledit-*-osx-*.zip
           if-no-files-found: error
           
       - name: Upload win
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
         with:
           name: fpledit-win-x64
-          path: ./bin/fpledit-win*.zip
+          path: ./bin/fpledit-*-win-*.zip
           if-no-files-found: error
           
       - name: Upload api-doc
