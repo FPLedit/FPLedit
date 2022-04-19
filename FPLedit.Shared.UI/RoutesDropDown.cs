@@ -49,7 +49,7 @@ namespace FPLedit.Shared.UI
                 if (routes.All(r => (int) r.Tag != value))
                     throw new ArgumentOutOfRangeException($"Route {value} does not exist");
 
-                SelectedIndex = routes.IndexOf(routes.FirstOrDefault(li => (int)li.Tag == value));
+                SelectedIndex = routes.IndexOf(routes.FirstOrDefault(li => (int)li.Tag == value)!);
                 selectedRoute = value;
             }
         }
@@ -112,7 +112,7 @@ namespace FPLedit.Shared.UI
             if (oldSelected != -1 && !forceReload && routes.Any(r => (int)r.Tag == oldSelected))
             {
                 var rl = routes.ToList();
-                SelectedIndex = rl.IndexOf(rl.FirstOrDefault(li => (int)li.Tag == oldSelected));
+                SelectedIndex = rl.IndexOf(rl.FirstOrDefault(li => (int)li.Tag == oldSelected)!);
                 selectedRoute = oldSelected;
             }
             else

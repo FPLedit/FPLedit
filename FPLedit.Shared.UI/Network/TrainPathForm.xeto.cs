@@ -2,6 +2,7 @@
 using FPLedit.Shared.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace FPLedit.Shared.UI.Network
@@ -10,10 +11,10 @@ namespace FPLedit.Shared.UI.Network
     public sealed class TrainPathForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
-        private readonly NetworkRenderer networkRenderer;
-        private readonly Button closeButton;
-        private readonly CheckBox waypointsCheckBox;
-        private readonly UrlButton waypointsDocuLink;
+        private readonly NetworkRenderer networkRenderer = default!;
+        private readonly Button closeButton = default!;
+        private readonly CheckBox waypointsCheckBox = default!;
+        private readonly UrlButton waypointsDocuLink = default!;
 #pragma warning restore CS0649
 
         private readonly Pathfinder pathfinder;
@@ -21,9 +22,9 @@ namespace FPLedit.Shared.UI.Network
 
         // Internal state: path & waypoints
         private readonly List<Station> wayPoints = new List<Station>();
-        private List<Station> path;
+        private List<Station>? path;
 
-        public List<Station> Path
+        public List<Station>? Path
         {
             get => path; private set
             {
@@ -34,11 +35,11 @@ namespace FPLedit.Shared.UI.Network
 
         public IReadOnlyList<Station> Waypoints => wayPoints.AsReadOnly();
         
-        private readonly Train train;
+        private readonly Train? train;
 
         private readonly RouteEditState stateSetRoute, stateChangeRoute, stateAddWaypoints;
 
-        private TrainPathForm(IPluginInterface pluginInterface, bool waypointsAllowed, Train train = null)
+        private TrainPathForm(IPluginInterface pluginInterface, bool waypointsAllowed, Train? train = null)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
@@ -164,7 +165,7 @@ namespace FPLedit.Shared.UI.Network
 
         private void SetRoute(Station sta)
         {
-            if (!Path.Any()) // There is no current path, so we set the first station
+            if (Path == null || !Path.Any()) // There is no current path, so we set the first station
             {
                 Path = new[] { sta }.ToList();
                 networkRenderer.FixedStatusString = "Zielstation auswählen";
@@ -189,6 +190,7 @@ namespace FPLedit.Shared.UI.Network
             wayPoints.Clear();
         }
 
+        [MemberNotNullWhen(false,"Path")]
         private bool PathSafeguard(string mode) // Helper, used in states
         {
             if (Path == null || !Path.Any()) // We have no path. How did we come so far?
@@ -205,7 +207,7 @@ namespace FPLedit.Shared.UI.Network
 
         private void WaypointsCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            if (globalWaypointsAllowed && waypointsCheckBox.Checked.Value)
+            if (globalWaypointsAllowed && waypointsCheckBox.Checked!.Value)
                 Transition(stateAddWaypoints);
             else
                 Transition(stateChangeRoute);
@@ -213,6 +215,9 @@ namespace FPLedit.Shared.UI.Network
 
         private void CloseButton_Click(object sender, EventArgs e)
         {
+            if (PathSafeguard("Close"))
+                return;
+            
             if (Path.Distinct().Count() < Path.Count)
             {
                 MessageBox.Show(T._("Der Laufweg enthält eine Station mehr als einmal. Dies ist aktuell nicht möglich. Ggf. fehlt ein weiterer Wegpunkt!"),
@@ -228,11 +233,11 @@ namespace FPLedit.Shared.UI.Network
                     train.RemoveArrDep(ardp.Key);
 
                 train.AddAllArrDeps(Path);
-                foreach (var ardp in ardps)
+                foreach (var (sta, ardp) in ardps)
                 {
-                    if (!Path.Contains(ardp.Key))
+                    if (!Path.Contains(sta))
                         continue;
-                    train.GetArrDep(ardp.Key).ApplyCopy(ardp.Value);
+                    train.GetArrDep(sta).ApplyCopy(ardp);
                 }
 
                 train.RemoveOrphanedTimes();
@@ -251,7 +256,7 @@ namespace FPLedit.Shared.UI.Network
         }
 
         #region State machine
-        private RouteEditState currentState;
+        private RouteEditState? currentState;
 
         private void Transition(RouteEditState targetState)
         {
@@ -262,18 +267,18 @@ namespace FPLedit.Shared.UI.Network
             currentState = targetState;
         }
 
-        private void HandleStationClick(object sender, EventArgs e)
+        private void HandleStationClick(object? sender, EventArgs e)
         {
-            currentState?.StationClicked?.Invoke((Station)sender);
+            currentState?.StationClicked?.Invoke((Station)sender!);
         }
 
         private class RouteEditState
         {
-            public string InitialStatusString;
-            public Action<Station> StationClicked;
-            public bool WaypointsTransitionAllowed;
-            public bool IsTerminating;
-            public Action StateInitialize;
+            public string InitialStatusString { get; init; } = "";
+            public Action<Station>? StationClicked { get; init; }
+            public bool WaypointsTransitionAllowed { get; init; }
+            public bool IsTerminating { get; init; }
+            public Action? StateInitialize { get; init; }
         }
         #endregion
         

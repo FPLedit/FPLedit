@@ -11,7 +11,7 @@ namespace FPLedit.Shared.UI
         public static GridColumn AddColumn<T>(this GridView view, Func<T, string> value, string header, bool editable = false)
             => view.AddColumn(new TextBoxCell { Binding = Binding.Delegate(value) }, header, editable);
 
-        public static GridColumn AddColumn<T, TVal>(this GridView view, Func<T, TVal> value, Func<TVal, string> to, Func<string, TVal> from, string header, bool editable = false)
+        public static GridColumn AddColumn<T, TVal>(this GridView view, Func<T, TVal> value, Func<TVal?, string> to, Func<string, TVal> from, string header, bool editable = false)
             => view.AddColumn(new TextBoxCell { Binding = Binding.Delegate(value).Convert(to, from) }, header, editable);
 
         public static GridColumn AddCheckColumn<T>(this GridView view, Func<T, bool> value, string header, bool editable = false)

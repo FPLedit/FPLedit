@@ -50,7 +50,7 @@ namespace FPLedit.Shared.UI
 
         public Days SelectedDays
         {
-            get => new Days(daysBoxes.Select(b => b.Checked!.Value).ToArray());
+            get => new Days(daysBoxes!.Select(b => b.Checked!.Value).ToArray());
             set => SetDays(value);
         } 
         
