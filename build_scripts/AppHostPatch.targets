@@ -27,7 +27,7 @@ See LICENSE for details <https://github.com/FPLedit/AppHostPatch-Linux/blob/main
     <Error Condition="!Exists( '$(AppHostPatch_ContainerFile)' )" Text="Containerfile not found!" />
 
     <!-- Create & start container -->
-    <Exec Command="$(AppHostPatch_ContainerTool) build -t app-host-patcher -f &quot;$(AppHostPatch_ContainerFile)&quot;" />
+    <Exec Command="$(AppHostPatch_ContainerTool) build --isolation=rootless --net=private -t app-host-patcher -f &quot;$(AppHostPatch_ContainerFile)&quot;" />
     <Exec Command="$(AppHostPatch_ContainerTool) run --log-driver=none --network=none -dt app-host-patcher" ConsoleToMSBuild="true">
       <Output TaskParameter="ConsoleOutput" PropertyName="AppHostPatcher_ContainerId" />
     </Exec>

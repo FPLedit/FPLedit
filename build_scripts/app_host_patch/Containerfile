@@ -1,4 +1,7 @@
 FROM alpine
-RUN mkdir /data && apk update && apk add wine xvfb
+RUN addgroup -S test -g 1000 && adduser -S test -u 1000 -G test && \
+	mkdir /data && chown test:test /data && apk update && apk add wine xvfb
 ADD AppHostPatcher.exe /data/
+RUN chmod 755 /data/AppHostPatcher.exe
 WORKDIR /data/
+
