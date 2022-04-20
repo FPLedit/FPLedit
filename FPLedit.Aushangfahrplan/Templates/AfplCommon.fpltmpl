@@ -1,11 +1,11 @@
 ﻿<#
 // CELLS: Time column
 function GetDays(/* Train */ t) {
-    return t.Days.DaysToString(true);
+    return safe_html(t.Days.DaysToString(true));
 }
 
 function GetTimeString(/* TimeEntry */ t) {
-    return t.Hours.toFixed(0) + "<sup>" + t.Minutes.toFixed(0).toString().padStart(2, '0') + "</sup>";
+    return safe_html(t.Hours.toFixed(0)) + "<sup>" + safe_html(t.Minutes.toFixed(0).toString().padStart(2, '0')) + "</sup>";
 }
 
 function TimeCell(/* Train[] */ trains, /* Station */ sta, /* int */ i) {
@@ -26,7 +26,7 @@ function NameCell(/* Train[] */ trains, /* int */ i) {
     var train = trains.length > i ? trains[i] : null;
     if (train == null)
         return "<td class=\"name\"></td>";
-    return "<td class=\"name\">" + train.TName + "</td>";
+    return "<td class=\"name\">" + safe_html(train.TName) + "</td>";
 }
 
 function NameHeader(/* bool */ showText) {
@@ -43,7 +43,7 @@ function DirCell( /* Train[] */ trains, /* int */ i) {
     if (train == null)
         return "<td class=\"direction\"></td>";
  
-    return "<td class=\"direction\">" + dict_last(train.GetArrDepsUnsorted(), (k, v) => v.HasMinOneTimeSet).key.SName + "</td>";
+    return "<td class=\"direction\">" + safe_html(dict_last(train.GetArrDepsUnsorted(), (k, v) => v.HasMinOneTimeSet).key.SName) + "</td>";
 }
 
 function DirHeader(/* bool */ showText) {
@@ -74,7 +74,7 @@ function TrackCell(/* Train[] */ trains, /* TrainDirection */ dir, /* int */ i, 
         track = trackHelper.GetTrack(train, sta, dir, ardp, TrackQuery.Departure);
     }
 
-    return "<td class=\"track\">" + track + "</td>";
+    return "<td class=\"track\">" + safe_html(track) + "</td>";
 }
 
 function TrackHeader(/* bool */ showText) {
@@ -130,7 +130,7 @@ var multipleStations = tt.Type == TimetableType.Network && clr_toArray(tt.Statio
 body {
 	color:black;
 	font-size:16px;
-	font-family: "<#= font #>", sans-serif;
+	font-family: "<#= safe_css_str(font) #>", sans-serif;
 }
 table {
 	margin-left: auto;
@@ -197,7 +197,7 @@ td {
 	border-bottom: 2px solid #000;
 }
 .time:not(.header), .name:not(.header), .direction:not(.header) {
-	font-family: "<#= hwFont #>", serif;
+	font-family: "<#= safe_css_str(hwFont) #>", serif;
 }
 .dir {
 	border-top: 3px solid #000;
@@ -226,7 +226,7 @@ if (!multipleStations) { #>
 }
 </style>
 <style id="add-css">
-	<#= additionalCss #>
+	<#= safe_css_block(additionalCss) #>
 </style>
 </head>
 <body>
@@ -245,13 +245,13 @@ if (!multipleStations) { #>
 		var lss = helper.GetLastStations(TrainDirection.ti, sta, trainsB);
 		var colspan = 2 + (multipleStations ? 1 : 0) + (showTracks ? 1 : 0);
 	#>
-	<p class="station">Bahnhof <#= sta.SName #></p>
+	<p class="station">Bahnhof <#= safe_html(sta.SName) #></p>
 	<p class="title"><#= abfahrtSVG #></p>
 	<p class="heading">der Züge in der Richtung nach</p>
 	<table>
         <tr>
-            <td colspan="<#= colspan #>" class="dir"><#= fss.map(s => s.SName).join("/") #></td>
-            <td colspan="<#= colspan #>" class="dir"><#= lss.map(s => s.SName).join("/") #></td>
+            <td colspan="<#= safe_html(colspan) #>" class="dir"><#= safe_html(fss.map(s => s.SName).join("/")) #></td>
+            <td colspan="<#= safe_html(colspan) #>" class="dir"><#= safe_html(lss.map(s => s.SName).join("/")) #></td>
         </tr>
         <tr>
             <#= HeaderRow(fss) #>

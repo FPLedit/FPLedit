@@ -3,6 +3,9 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using FPLedit.Shared.Helpers;
+// ReSharper disable UnusedMember.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable ClassNeverInstantiated.Global
 
 namespace FPLedit.Aushangfahrplan.Templates
 {

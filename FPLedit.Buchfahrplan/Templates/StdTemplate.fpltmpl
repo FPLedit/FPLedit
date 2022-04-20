@@ -14,7 +14,7 @@ function GetWelle(/* ref int */ counter, /* IStation */ sta, /* int */ route, /*
         var stas = helper.GetStations(tra);
         stas = stas.skip(stas.indexOf(sta));
         counter.val = stas.takeWhile(s => s.Wellenlinien.GetValue(route) == w).length; //TODO: Better data structure
-        return "<td class=\"zug welle welle" + w + "\" data-c=\"" + counter.val + "\" rowspan=\"" + counter.val-- + "\"></td>";
+        return "<td class=\"zug welle welle" + safe_html(w) + "\" data-c=\"" + safe_html(counter.val) + "\" rowspan=\"" + safe_html(counter.val--) + "\"></td>";
     }
 
     return "<td class=\"zug welle\"></td>";
@@ -66,7 +66,7 @@ if (attrs != null)
 		.tfz {
 			font-weight:400;
 			font-style:normal;
-			font-family: "<#= font #>", sans-serif;
+			font-family: "<#= safe_css_str(font) #>", sans-serif;
 			text-align:general;
 			vertical-align:bottom;
 		}
@@ -87,7 +87,7 @@ if (attrs != null)
 			font-size:15.0pt;
 			font-weight:400;
 			font-style:normal;
-			font-family:"<#= font #>", sans-serif;
+			font-family:"<#= safe_css_str(font) #>", sans-serif;
 			text-align:center;
 			vertical-align:middle;
 		}
@@ -95,14 +95,14 @@ if (attrs != null)
 			font-size:12.0pt;
 			font-weight:400;
 			font-style:normal;
-			font-family:"<#= font #>", sans-serif;
+			font-family:"<#= safe_css_str(font) #>", sans-serif;
 			text-align:center;
 			vertical-align:middle;
 		}
 		.spaltennummer {
 			font-weight:400;
 			font-style:normal;
-			font-family:"<#= font #>", sans-serif;
+			font-family:"<#= safe_css_str(font) #>", sans-serif;
 			text-align:center;
 			vertical-align:top;
 			border-top:1.5pt solid black;
@@ -114,7 +114,7 @@ if (attrs != null)
 			height: 130px;
 			font-weight:400;
 			font-style:normal;
-			font-family:"<#= font #>", sans-serif;
+			font-family:"<#= safe_css_str(font) #>", sans-serif;
 			text-align:center;
 			vertical-align:top;
 			border-top:.5pt solid black;
@@ -126,7 +126,7 @@ if (attrs != null)
 			height: 19px;
 			font-weight:400;
 			font-style:normal;
-			font-family:"<#= font #>", sans-serif;
+			font-family:"<#= safe_css_str(font) #>", sans-serif;
 			text-align:center;
 			vertical-align:top;
 			border-right:1.5pt solid black;
@@ -152,7 +152,7 @@ if (attrs != null)
 		{{##WELLEN_CSS##}}
 		</style>
 		<style id="add-css">
-			<#= additionalCss #>
+			<#= safe_css_block(additionalCss) #>
 		</style>
 	</head>
 	<body>
@@ -162,21 +162,21 @@ if (attrs != null)
 			var trains = helper.GetTrains();
 			for (var ti = 0; ti < trains.length; ti++) { 
 			    var tra = trains[ti]; #>
-			<table id="<#= helper.HtmlName(tra.TName, "train-") #>" class="<#= first ? "first" : "" #>">
+			<table id="<#= html_name(tra.TName, "train-") #>" class="<#= safe_html(first ? "first" : "") #>">
 				<# first = false; #>
-				<col style="width:80px;" span=2>
+				<col style="width:80px;" span="2">
 				<col style="width:265px;">
 				<col style="width:20px;"><!-- Welle -->
-				<col style="width:80px;" span=2>
+				<col style="width:80px;" span="2">
 				<tr>
-					<td colspan=6 class="trainname"><#= tra.TName #><#= helper.GetDaysHtml(tra, showDays) #></td>
+					<td colspan=6 class="trainname"><#= safe_html(tra.TName) #><#= helper.GetDaysHtml(tra, showDays) #></td>
 				</tr>
 				<tr>
-					<td colspan=6 class="linename"><#= tra.GetLineName() #></td>
+					<td colspan=6 class="linename"><#= safe_html(tra.GetLineName()) #></td>
 				</tr>
 				<# if (showComments && tra.Comment != null && tra.Comment != "") { #>
 				<tr>
-					<td colspan="10" class="comment"><#= tra.Comment #></td>
+					<td colspan="10" class="comment"><#= safe_html(tra.Comment) #></td>
 				</tr>
 				<# } #>
 				<tr>
@@ -209,7 +209,7 @@ if (attrs != null)
 				for (var si = 0; si < stations.length; si++) {
 				    var entity = stations[si];
 				#>
-				<tr class="<#= helper.HtmlName(entity.SName, "station-") #>">
+				<tr class="<#= html_name(entity.SName, "station-") #>">
 					<#
 						if (entity != stations.last() && tt.Type == TimetableType.Network) {
 							var sta1 = stations[stations.indexOf(entity) + 1];
@@ -218,10 +218,10 @@ if (attrs != null)
 						var pos = entity.Positions.GetPosition(route); // null or number
 						var cur_vmax = entity.Vmax.GetValue(route);
 					#>
-					<td class="zug"><#= pos != null ? pos.toFixed(1) : "" #></td>
-					<td class="zug"><#= cur_vmax == last_vmax ? "" : cur_vmax #></td>
+					<td class="zug"><#= safe_html(pos != null ? pos.toFixed(1) : "") #></td>
+					<td class="zug"><#= safe_html(cur_vmax == last_vmax ? "" : cur_vmax) #></td>
 					<# last_vmax = cur_vmax; #>
-					<td class="zug stat"><#= entity.SName #></td>
+					<td class="zug stat"><#= safe_html(entity.SName) #></td>
 					<#= GetWelle(rs_counter, entity, route, tra, helper) #>
 
 					<#
@@ -231,8 +231,8 @@ if (attrs != null)
 						var dp = ardp.Departure.ToShortTimeString();
                         var rq = ardp.RequestStop || entity.RequestStop;
 					#>
-					<td class="zug"><#= rq ? "x" : "" #><#= (ar != "00:00" && ar != dp) ? ar : "" #></td>
-					<td class="zug"><#= dp != "00:00" ? dp : "" #></td>
+					<td class="zug"><#= safe_html(rq ? "x" : "") #><#= safe_html((ar != "00:00" && ar != dp) ? ar : "") #></td>
+					<td class="zug"><#= safe_html(dp != "00:00" ? dp : "") #></td>
 					<# } else { #>
 					<td class="zug"></td>
 					<td class="zug"></td>

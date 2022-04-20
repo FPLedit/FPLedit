@@ -73,7 +73,8 @@ namespace FPLedit.Templating
             catch (Exception ex)
             {
                 logger.Error(T._("Fehler im Template {0}: {1}", Identifier, ex.Message));
-                TemplateDebugger.GetInstance().OpenDebugger();
+                if (ex is not TemplateOutputException) // Filter out validation errors.
+                    TemplateDebugger.GetInstance().OpenDebugger();
             }
 
             return null;

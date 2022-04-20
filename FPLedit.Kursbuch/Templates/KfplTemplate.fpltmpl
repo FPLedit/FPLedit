@@ -17,7 +17,7 @@ function Remarks( /* Station */ s, /* Station[] */ route) {
 
 var kbsn = null;
 var font = "Arial"; //TODO: KBZiffern
-var heFont = "\"Arial Black\"";
+var heFont = "Arial Black";
 var additionalCss = "";
 
 var TOP_DIRECTION = TrainDirection.ti;
@@ -46,7 +46,7 @@ if (attrs != null)
 		<title>Tabellenfahrplan generiert von FPLedit</title>
 		<style>
 		body {
-			font-family:<#= font #>,sans-serif;
+			font-family:"<#= safe_css_str(font) #>",sans-serif;
 		}
 		table {
 			border-collapse: collapse;
@@ -65,7 +65,7 @@ if (attrs != null)
 			font-size:11.0pt;
 		}
 		.heading .line {
-			font-family:<#= heFont #>,sans-serif;
+			font-family:"<#= safe_css_str(heFont) #>",sans-serif;
 			font-weight:900;
 			letter-spacing:-.5pt;
 		}
@@ -151,7 +151,7 @@ if (attrs != null)
 		}
 		</style>
 		<style id="add-css">
-			<#= additionalCss #>
+			<#= safe_css_block(additionalCss) #>
 		</style>
 	</head>
 
@@ -180,7 +180,7 @@ if (attrs != null)
                 var t = trains[ti];
                 var lastt = trains.last() == t ? " last-t" : "";
             #>
-                <td class="tn<#= lastt #>"><span><#= Sign(t) #><#= t.TName.replace(" ", "&nbsp;") #></span></td>
+                <td class="tn<#= safe_html(lastt) #>"><span><#= Sign(t) #><#= t.TName.replace(" ", "&nbsp;") #></span></td>
             <# } #>
         </tr>
         <!--<tr>
@@ -189,7 +189,7 @@ if (attrs != null)
                 var t = trains[ti];
                 var lastt = trains.last() == t ? " last-t" : "";
             #>
-            <td class="kl<#= lastt #>"><span>2. oG</span></td>
+            <td class="kl<#= safe_html(lastt) #>"><span>2. oG</span></td>
             <# } #>
         </tr>-->
         <#
@@ -198,9 +198,9 @@ if (attrs != null)
     		#>
             <tr>
                 <# var s_last = stations.last() == sta ? " last" : ""; #>
-                <td class="km<#= s_last #>"><span><#= (+sta.Positions.GetPosition(route.Index)).toFixed(1) #></span></td>
-                <td class="sta<#= s_last #>"><span><#= sta.SName.replace(" ", "&nbsp;") #></span></td>
-                <td class="remarks<#= s_last #>"><span><#= Remarks(sta, stations) #></span></td>
+                <td class="km<#= safe_html(s_last) #>"><span><#= safe_html((+sta.Positions.GetPosition(route.Index)).toFixed(1)) #></span></td>
+                <td class="sta<#= safe_html(s_last) #>"><span><#= safe_html(sta.SName).replace(" ", "&nbsp;") #></span></td>
+                <td class="remarks<#= safe_html(s_last) #>"><span><#= safe_html(Remarks(sta, stations)) #></span></td>
  
     			<# for (var ti2 = 0; ti2 < trains.length; ti2++) {
     			    var t = trains[ti2];
@@ -221,7 +221,7 @@ if (attrs != null)
                         }
                     }
                 #>
-                <td class="ti<#= s_last #>"><span><#= times #></span></td>
+                <td class="ti<#= safe_html(s_last) #>"><span><#= safe_html(times) #></span></td>
                 <# } #>
             </tr>
 		<# } #>
