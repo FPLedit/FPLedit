@@ -158,7 +158,7 @@ if (attrs != null)
 			var trains = helper.GetTrains();
 			for (var ti = 0; ti < trains.length; ti++) { 
 			    var tra = trains[ti]; #>
-			<table id="<#= helper.HtmlName(tra.TName, "train-") #>" class="<#= safe_html(first ? "first" : "") #>">
+			<table id="<#= html_name(tra.TName, "train-") #>" class="<#= safe_html(first ? "first" : "") #>">
 				<# first = false; #>
 				<col style="width:50px;">
 				<col style="width:50px;">
@@ -217,7 +217,7 @@ if (attrs != null)
 				for (var si = 0; si < stations.length; si++) {				
 				    var entity = stations[si];
 				#>
-				<tr class="<#= helper.HtmlName(entity.SName, "station-") #>">
+				<tr class="<#= html_name(entity.SName, "station-") #>">
 					<#
 						if (entity != stations.last() && tt.Type == TimetableType.Network) {
 							var sta1 = stations[stations.indexOf(entity) + 1];

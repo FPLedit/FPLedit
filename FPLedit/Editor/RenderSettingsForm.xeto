@@ -3,7 +3,7 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.Editor;assembly=FPLedit"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
-  Title="{x:Static e:RenderSettingsForm+L.Title}" ClientSize="900,600" Resizable="true">
+  Title="{x:Static e:RenderSettingsForm+L.Title}" ClientSize="950,600" Resizable="true">
   <TableLayout>
     <TableRow ScaleHeight="true">
       <TableCell ScaleWidth="true">

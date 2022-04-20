@@ -23,6 +23,8 @@ namespace FPLedit.Templating
 
         private const int CURRENT_VERSION = 2;
 
+        private static string polyfillsCache;
+
         public JavascriptTemplate(string code, string identifier, IReducedPluginInterface pluginInterface)
         {
             TemplateSource = code;
@@ -73,26 +75,28 @@ namespace FPLedit.Templating
         {
             if (text.IsEmpty)
                 return;
-            if (text[0] == '=' && text.Length > 1)
+            switch (text[0])
             {
-                sb.Append("__builder += ");
-                sb.Append(text.Slice(1));
-                sb.Append(';');
-                sb.Append(nl);
-            }
-            else if (text[0] == '@' && text.Length > 1)
-            {
-                var atRule = text.Slice(1).Trim();
-                const string tmplDef = "fpledit_template";
-                if (atRule.IndexOf(tmplDef) != -1 && atRule.Length > tmplDef.Length)
-                    TemplateDefinition(atRule.Slice(tmplDef.Length).TrimStart());
-                else
-                    throw new FormatException("Invalid @ rule found in template!");
-            }
-            else
-            {
-                sb.Append(text);
-                sb.Append(nl);
+                case '=' when text.Length > 1:
+                    sb.Append("__builder += ");
+                    sb.Append(text[1..]);
+                    sb.Append(';');
+                    sb.Append(nl);
+                    break;
+                case '@' when text.Length > 1:
+                {
+                    var atRule = text[1..].Trim();
+                    const string tmplDef = "fpledit_template";
+                    if (atRule.IndexOf(tmplDef) == 0 && atRule.Length > tmplDef.Length)
+                        TemplateDefinition(atRule[tmplDef.Length..].TrimStart());
+                    else
+                        throw new FormatException("Invalid @ rule found in template!");
+                    break;
+                }
+                default:
+                    sb.Append(text);
+                    sb.Append(nl);
+                    break;
             }
         }
         
@@ -100,7 +104,7 @@ namespace FPLedit.Templating
         {
             if (TemplateType != null)
                 throw new Exception(T._("Nur eine fpledit_template-Direktive ist pro Vorlage erlaubt!"));
-            var tparams = new ArgsParser(argsString.ToString(), "name", "type", "version");
+            var tparams = new ArgsParser(argsString, "name", "type", "version");
             foreach (var (name, val) in tparams)
             {
                 switch (name)
@@ -123,7 +127,7 @@ namespace FPLedit.Templating
 
         private int IndexOfWithStart(ReadOnlySpan<char> span, ReadOnlySpan<char> search, int startIndex)
         {
-            var idx = span.Slice(startIndex).IndexOf(search, StringComparison.Ordinal);
+            var idx = span[startIndex..].IndexOf(search, StringComparison.Ordinal);
             return idx != -1 ? idx + startIndex : -1;
         }
 
@@ -206,30 +210,41 @@ namespace FPLedit.Templating
                 .Concat(new[] { typeof(Enumerable) }); // Also whitelist type used for LINQ.
 
             var engine = new Engine();
-            foreach (var type in allowedTypes) // Register all allowed types
+            foreach (var type in allowedTypes) // Register all allowed types.
                 engine.SetValue(type.Name, type);
 
             TemplateDebugger.GetInstance().SetContext(this); // Move "Debugger" context to current template.
 
+            // Load polyfills from resources.
             const string polyFillsPath = "Templating.TemplatePolyfills.js";
+            polyfillsCache ??= ResourceHelper.GetStringResource(polyFillsPath);
+            
             var polyfillsParserOptions = new ParserOptions(polyFillsPath) { Tolerant = false };
             var templateCodeParserOptions = new ParserOptions(Identifier);
             
             return engine
                 .SetValue("tt", tt)
-                .SetValue("debug", new Action<object>((o) => pluginInterface.Logger.Info($"{o?.GetType()?.FullName ?? "null"}: {o ?? "null"}")))
-                .SetValue("debug_print", new Action<object>((o) => pluginInterface.Logger.Info($"{o}")))
-                .SetValue("clr_typename", new Func<object,string>(o => o.GetType().Name))
-                .SetValue("clr_typefullname", new Func<object,string>(o => o.GetType().FullName))
-                .SetValue("clr_toArray", new Func<IEnumerable<object>,object[]>(o => o.ToArray()))
-                .SetValue("safe_html", (Func<string,string>)TemplateOutput.SafeHtml)
-                .SetValue("safe_css_str", (Func<string,string>)TemplateOutput.SafeCssStr)
-                .SetValue("safe_css_block", (Func<string,string>)TemplateOutput.SafeCssBlock)
-                .Execute(ResourceHelper.GetStringResource(polyFillsPath), polyfillsParserOptions) // Load polyfills
+                .SetValue("debug", new Action<object>(o => pluginInterface.Logger.Info($"{o?.GetType()?.FullName ?? "null"}: {o ?? "null"}")))
+                .SetValue("debug_print", new Action<object>(o => pluginInterface.Logger.Info($"{o}")))
+                .SetValue("clr_typename",     (Func<object,string>)TemplateBuiltins.ClrTypeName)
+                .SetValue("clr_typefullname", (Func<object,string>)TemplateBuiltins.ClrTypeFullName)
+                .SetValue("clr_toArray",      (Func<IEnumerable<object>,object[]>)TemplateBuiltins.ClrToObject)
+                .SetValue("safe_html",        (Func<string,string>)TemplateOutput.SafeHtml)
+                .SetValue("safe_css_str",     (Func<string,string>)TemplateOutput.SafeCssStr)
+                .SetValue("safe_css_block",   (Func<string,string>)TemplateOutput.SafeCssBlock)
+                .SetValue("html_name",        (Func<string,string,string>)TemplateOutput.HtmlName)
+                .Execute(polyfillsCache, polyfillsParserOptions) // Load polyfills
                 .Execute("var __builder = '';", polyfillsParserOptions) // Create output variable
                 .Execute(CompiledCode, templateCodeParserOptions)
                 .GetValue("__builder")
                 .ToString();
+        }
+        
+        private static class TemplateBuiltins
+        {
+            public static object[] ClrToObject(IEnumerable<object> o) => o.ToArray();
+            public static string ClrTypeFullName(object o) => o.GetType().FullName;
+            public static string ClrTypeName(object o) => o.GetType().Name;
         }
     }
 }

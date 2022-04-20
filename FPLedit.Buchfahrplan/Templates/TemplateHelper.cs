@@ -26,16 +26,7 @@ namespace FPLedit.Buchfahrplan.Templates
             analyzer = new IntersectionAnalyzer(tt);
         }
 
-        public string HtmlName(string name, string prefix)
-        {
-            return SafeHtml(prefix + name.Replace("#", "")
-                .Replace(" ", "-")
-                .Replace(".", "-")
-                .Replace(":", "-")
-                .ToLower());
-        }
-
-        public static string SafeHtml(string s) => Shared.Templating.TemplateOutput.SafeHtml(s);
+        private static string SafeHtml(string s) => Shared.Templating.TemplateOutput.SafeHtml(s);
 
         public string GetDaysHtml(ITrain tra, bool showDays)
         {
