@@ -11,7 +11,12 @@ namespace FPLedit
         {
             License = ResourceHelper.GetStringResource("Resources.Info.txt") 
                       + ResourceHelper.GetStringResource("Resources.3rd-party.txt").Replace("{eto_version}", Vi.EtoVersion);
-            Version = Vi.DisplayVersion;
+            var v = Vi.DisplayVersion;
+            if (Vi.GitRevision != null)
+                v += Environment.NewLine + "git: " + Vi.GitRevision;
+            if (Vi.IsNonFinal)
+                v += Environment.NewLine + T._("Entwicklungsversion");
+            Version = v;
 
             Logo = new Icon(ResourceHelper.GetResource("Resources.programm.ico"));
             ProgramName = "FPLedit";

@@ -40,7 +40,7 @@ namespace FPLedit
 
         private VersionInfo GetUpdateInfoFromXml(string xml)
         {
-            var doc = new XmlDocument { XmlResolver = null };
+            var doc = new XmlDocument { XmlResolver = null! };
 
             var xmlReaderSettings = new XmlReaderSettings()
             {
@@ -65,50 +65,50 @@ namespace FPLedit
             };
         }
 
-        private bool IsNewVersion(Version check) => CurrentVersion.CompareTo(check) < 0 || (CurrentVersion.CompareTo(check) == 0 && !string.IsNullOrEmpty(VersionInformation.Current.VersionSuffix));
+        private bool IsNewVersion(Version check) 
+            => CurrentVersion.CompareTo(check) < 0 || 
+               (CurrentVersion.CompareTo(check) == 0 && (!string.IsNullOrEmpty(VersionInformation.Current.VersionSuffix) || VersionInformation.Current.IsDevelopmentVersion));
 
         public void CheckAsync()
         {
             var url = CheckUrl + "?pf=" + GetPlatform();
 
-            using (var wc = new WebClient())
+            using var wc = new WebClient();
+            wc.Encoding = Encoding.UTF8;
+            wc.DownloadStringAsync(new Uri(url));
+            wc.DownloadStringCompleted += (_, e) =>
             {
-                wc.Encoding = Encoding.UTF8;
-                wc.DownloadStringAsync(new Uri(url));
-                wc.DownloadStringCompleted += (s, e) =>
+                if (e.Error == null && e.Result != "")
                 {
-                    if (e.Error == null && e.Result != "")
+                    try
                     {
-                        try
-                        {
-                            VersionInfo vi = GetUpdateInfoFromXml(e.Result);
-                            bool new_avail = IsNewVersion(vi.NewVersion);
+                        var vi = GetUpdateInfoFromXml(e.Result);
+                        var hasNewVersion = IsNewVersion(vi.NewVersion);
 
-                            CheckResult?.Invoke(new_avail, vi);
+                        CheckResult?.Invoke(hasNewVersion, vi);
 
-                            if (vi.Text != null)
-                                TextResult?.Invoke(vi.Text);
-                        }
-                        catch (XmlException ex)
-                        {
-                            CheckError?.Invoke(ex); // Fehler im XML-Dokument
-                        }
+                        if (vi.Text != null)
+                            TextResult?.Invoke(vi.Text);
                     }
-                    else
-                        CheckError?.Invoke(e.Error);
-                };
-            }
+                    catch (Exception ex)
+                    {
+                        CheckError?.Invoke(ex); // Error in the XML document.
+                    }
+                }
+                else
+                    CheckError?.Invoke(e.Error);
+            };
         }
 
         private string GetPlatform()
         {
-            switch (Environment.OSVersion.Platform)
+            return Environment.OSVersion.Platform switch
             {
-                case PlatformID.Win32NT: return "win";
-                case PlatformID.MacOSX: return "macos";
-                case PlatformID.Unix: return "unix";
-                default: return "other";
-            }
+                PlatformID.Win32NT => "win",
+                PlatformID.MacOSX => "macos",
+                PlatformID.Unix => "unix",
+                _ => "other"
+            };
         }
 
         public void AutoUpdateCheck(ILog log)

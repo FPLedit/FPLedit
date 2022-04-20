@@ -8,6 +8,7 @@ namespace FPLedit
         public Version AppBaseVersion => new Version(BaseVersionString);
         public string DisplayVersion => Vi.DisplayVersion;
         public string VersionSuffix => Vi.VersionSuffix;
+        public bool IsDevelopmentVersion => Vi.IsNonFinal;
 
         public string OsVersion => Environment.OSVersion.ToString();
 
