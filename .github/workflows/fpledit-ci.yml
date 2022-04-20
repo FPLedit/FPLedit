@@ -3,7 +3,7 @@ on:
   push:
     branches: [master,develop]
   release:
-    types: [created]
+    types: [published]
 jobs:
   build:
     runs-on: [ubuntu-latest]
