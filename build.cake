@@ -212,7 +212,7 @@ Task("PackRelease")
             // Create hash line
             var fhc = new FileHashCalculator(new FileSystem());
             var hash = fhc.Calculate(file, HashAlgorithm.SHA256).ToHex();
-            var hash_line = $"{hash} {zip_file_name}";
+            var hash_line = $"{hash}  {zip_file_name}";
             zipFileHashes.Add(hash_line);
             FileAppendText(Directory("./bin") + File($"fpledit-{version}-{nodoc_suffix}.sha256sums"), hash_line + "\n");
         });
