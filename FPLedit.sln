@@ -13,9 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPLedit.jTrainGraphStarter"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build_scripts", "build_scripts", "{A63B9FD7-0C3A-4C99-905C-52C85CA8D2E0}"
 ProjectSection(SolutionItems) = preProject
-	build_scripts\extensions.pubkey = build_scripts\extensions.pubkey
 	build_scripts\FPLedit.ruleset = build_scripts\FPLedit.ruleset
-	build_scripts\generate-keypair.csx = build_scripts\generate-keypair.csx
 	build_scripts\license.cake = build_scripts\license.cake
 	build_scripts\ResourceHelper.cs = build_scripts\ResourceHelper.cs
 	build.cake = build.cake

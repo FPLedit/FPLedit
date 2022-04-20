@@ -41,6 +41,7 @@ namespace FPLedit.Templating
         }
     }
 
+#pragma warning disable CA1001 // Disposable fields are not disposed as this is a windows kept in the background.
     internal sealed class GuiTemplateDebugger : ITemplateDebugger
     {
         private FForm form;
@@ -99,6 +100,7 @@ namespace FPLedit.Templating
             }
         }
     }
+#pragma warning restore CA1001
 
     internal interface ITemplateDebugger
     {
