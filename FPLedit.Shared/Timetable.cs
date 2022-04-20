@@ -961,7 +961,7 @@ namespace FPLedit.Shared
         }
 
         /// <inheritdoc />
-        /// <exception cref="TimetableTypeNotSupportedException">Operation was applied to a network timetable.</exception>
+        /// <exception cref="TimetableTypeNotSupportedException">Operation was applied to a network timetable, or with a network type direction (tr).</exception>
         [Obsolete("Use route-based approach instead.")]
         public string GetLinearLineName(TrainDirection direction)
         {

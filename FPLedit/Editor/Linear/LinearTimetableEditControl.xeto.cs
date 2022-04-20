@@ -57,8 +57,9 @@ namespace FPLedit.Editor.Linear
         {
             this.tt = tt;
 
-            topLineLabel.Text = T._("Züge {0}", this.tt.GetLinearLineName(TOP_DIRECTION));
-            bottomLineLabel.Text = T._("Züge {0}", this.tt.GetLinearLineName(BOTTOM_DIRECTION));
+            var rt = tt.GetRoute(Timetable.LINEAR_ROUTE_ID);
+            topLineLabel.Text = T._("Züge {0}", rt.GetRouteName(TOP_DIRECTION.IsSortReverse()));
+            bottomLineLabel.Text = T._("Züge {0}", rt.GetRouteName(BOTTOM_DIRECTION.IsSortReverse()));
 
             InitializeGridView(topDataGridView, TOP_DIRECTION);
             InitializeGridView(bottomDataGridView, BOTTOM_DIRECTION);

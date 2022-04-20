@@ -1,4 +1,6 @@
-﻿namespace FPLedit.Shared
+﻿using System;
+
+namespace FPLedit.Shared
 {
     /// <summary>
     /// Specifies the direction of the train.
@@ -23,5 +25,15 @@
         /// </summary>
         tr,
         // ReSharper restore InconsistentNaming
+    }
+
+    public static class TrainDirectionExt
+    {
+        public static bool IsSortReverse(this TrainDirection dir)
+        {
+            if (dir == TrainDirection.tr)
+                throw new NotSupportedException("TrainDirection tr has no associated sorting behaviour!");
+            return dir == TrainDirection.ta;
+        }
     }
 }

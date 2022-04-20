@@ -9,13 +9,12 @@ namespace FPLedit.Editor.Linear
     internal sealed class LinearTrainsEditForm : BaseTrainsEditor
     {
         private readonly IPluginInterface pluginInterface;
-        private readonly Timetable tt;
         private readonly object backupHandle;
 
 #pragma warning disable CS0649
-        private readonly GridView topGridView, bottomGridView;
-        private readonly Label topLineLabel, bottomLineLabel;
-        private readonly Button topEditButton, topDeleteButton, topCopyButton, bottomEditButton, bottomDeleteButton, bottomCopyButton;
+        private readonly GridView topGridView = default!, bottomGridView = default!;
+        private readonly Label topLineLabel = default!, bottomLineLabel = default!;
+        private readonly Button topEditButton = default!, topDeleteButton = default!, topCopyButton = default!, bottomEditButton = default!, bottomDeleteButton = default!, bottomCopyButton = default!;
 #pragma warning restore CS0649
 
         private const TrainDirection TOP_DIRECTION = TrainDirection.ti;
@@ -27,19 +26,20 @@ namespace FPLedit.Editor.Linear
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
             this.pluginInterface = pluginInterface;
-            tt = pluginInterface.Timetable;
+            var tt = pluginInterface.Timetable;
             backupHandle = pluginInterface.BackupTimetable();
 
             InitListView(topGridView, new []{ topEditButton, topDeleteButton, topCopyButton });
             InitListView(bottomGridView, new []{ bottomEditButton, bottomDeleteButton, bottomCopyButton });
 
-            topLineLabel.Text = T._("Züge {0}", tt.GetLinearLineName(TOP_DIRECTION));
-            bottomLineLabel.Text = T._("Züge {0}", tt.GetLinearLineName(BOTTOM_DIRECTION));
+            var rt = tt.GetRoute(Timetable.LINEAR_ROUTE_ID);
+            topLineLabel.Text = T._("Züge {0}", rt.GetRouteName(TOP_DIRECTION.IsSortReverse()));
+            bottomLineLabel.Text = T._("Züge {0}", rt.GetRouteName(BOTTOM_DIRECTION.IsSortReverse()));
             UpdateListView(topGridView, TOP_DIRECTION);
             UpdateListView(bottomGridView, BOTTOM_DIRECTION);
 
-            bottomGridView.MouseDoubleClick += (s, e) => EditTrain(bottomGridView, BOTTOM_DIRECTION, false);
-            topGridView.MouseDoubleClick += (s, e) => EditTrain(topGridView, TOP_DIRECTION, false);
+            bottomGridView.MouseDoubleClick += (_, _) => EditTrain(bottomGridView, BOTTOM_DIRECTION, false);
+            topGridView.MouseDoubleClick += (_, _) => EditTrain(topGridView, TOP_DIRECTION, false);
 
             if (Eto.Platform.Instance.IsWpf)
                 KeyDown += HandleKeystroke;
@@ -50,14 +50,9 @@ namespace FPLedit.Editor.Linear
 
         private void HandleKeystroke(object sender, KeyEventArgs e)
         {
-            TrainDirection dir;
-            if (active == topGridView)
-                dir = TOP_DIRECTION;
-            else
-                dir = BOTTOM_DIRECTION;
-
             if (active == null)
                 return;
+            var dir = active == topGridView ? TOP_DIRECTION : BOTTOM_DIRECTION;
 
             if (e.Key == Keys.Delete)
                 DeleteTrain(active, dir, false);
@@ -76,15 +71,15 @@ namespace FPLedit.Editor.Linear
             view.AddColumn<ITrain>(t => t.Locomotive, T._("Tfz"));
             view.AddColumn<ITrain>(t => t.Mbr, T._("Mbr"));
             view.AddColumn<ITrain>(t => t.Last, T._("Last"));
-            view.AddColumn<ITrain>(t => t.Days.DaysToString(false), T._("Verkehrstage"));
+            view.AddColumn<ITrain>(t => t.Days.DaysToString(), T._("Verkehrstage"));
             view.AddColumn<ITrain>(t => t.Comment, T._("Kommentar"));
 
-            view.GotFocus += (s, e) => active = view;
+            view.GotFocus += (_, _) => active = view;
 
             if (!Eto.Platform.Instance.IsWpf)
                 view.KeyDown += HandleKeystroke;
 
-            view.SelectedItemsChanged += (s, e) =>
+            view.SelectedItemsChanged += (_, _) =>
             {
                 foreach (var button in buttons)
                     button.Enabled = view.SelectedItem != null && !((ITrain) view.SelectedItem).IsLink;

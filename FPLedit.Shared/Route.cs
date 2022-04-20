@@ -56,11 +56,13 @@ namespace FPLedit.Shared
         /// <summary>
         /// Returns a display name of the route.
         /// </summary>
-        public string GetRouteName()
+        public string GetRouteName(bool reverse = false)
         {
             if (!Exists)
                 return T._("<leer>");
-            return stations[0].SName + " - " + stations[^1].SName; // this will always work, as stations.Length >= 1
+            return reverse 
+                ? stations[^1].SName + " - " + stations[ 0].SName
+                : stations[ 0].SName + " - " + stations[^1].SName; // this will always work, as stations.Length >= 1
         }
 
         public PathData ToPathData(Timetable tt) => new PathData(this, tt);
