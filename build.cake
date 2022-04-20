@@ -34,8 +34,9 @@ if (Argument<string>("auto-beta", null) != null) {
 if (EnvironmentVariable<string>("FPLEDIT_GIT", null) != null) {
     ignoreNoDoc = true;
     isNonFinalVersion = EnvironmentVariable<string>("FPLEDIT_GIT_BETA", null) != null;
-    gitRevision = EnvironmentVariable<string>("FPLEDIT_GIT", null);
-    preBuildVersionSuffix = isNonFinalVersion ? "git-" + EnvironmentVariable<string>("FPLEDIT_GIT", "") + $"-{DateTime.Now:yyyyMMdd}" : "";
+    gitRevision = EnvironmentVariable<string>("FPLEDIT_GIT", "");
+    var shortRevision = gitRevision.Length > 7 ? gitRevision.Substring(0, 7) : gitRevision;
+    preBuildVersionSuffix = isNonFinalVersion ? $"git-{shortRevision}-{DateTime.Now:yyyyMMdd}" : "";
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -178,13 +179,16 @@ Task("BundleThirdParty")
         });
     });
     
+var zipFileHashes = new List<string>();
+    
 Task("PackRelease")
     .IsDependentOn("BundleThirdParty")
     .Does(() => {
         ForAllRuntimes( (runtime, distDir) => {
             var version = GetProductVersion(Context, distDir + File("FPLedit.dll"));
-            var nodoc_suffix = ignoreNoDoc ? "" : (!hasDocInZip ? "-nodoc" : "");       
-            var file = Directory("./bin") + File($"fpledit-{version}-{runtime}{nodoc_suffix}.zip");
+            var nodoc_suffix = ignoreNoDoc ? "" : (!hasDocInZip ? "-nodoc" : "");
+            var zip_file_name = $"fpledit-{version}-{runtime}{nodoc_suffix}.zip";
+            var file = Directory("./bin") + File(zip_file_name);
             
             if (FileExists(file))
                 throw new Exception("Zip file already exists! " + file);
@@ -204,6 +208,13 @@ Task("PackRelease")
                 
                 Zip(distDir, file, filesToZip);
             }
+
+            // Create hash line
+            var fhc = new FileHashCalculator(new FileSystem());
+            var hash = fhc.Calculate(file, HashAlgorithm.SHA256).ToHex();
+            var hash_line = $"{hash} {zip_file_name}";
+            zipFileHashes.Add(hash_line);
+            FileAppendText(Directory("./bin") + File($"fpledit-{version}-{nodoc_suffix}.sha256sums"), hash_line + "\n");
         });
     });
 
@@ -214,12 +225,16 @@ Task("PackRelease")
 Task("Default")
 	.IsDependentOn("PackRelease")
 	.Does(() => {
-	    Warning("##############################################################");
+	    Information("##############################################################");
 	    
 	    if (!hasDocInZip)
 	        Warning("No user documentation built!");
+	    
+	    foreach (var hash_line in zipFileHashes) {	    	
+	    	Information(hash_line);
+	    }
 
-        Warning("##############################################################");
+        Information("##############################################################");
 	});
 
 //////////////////////////////////////////////////////////////////////

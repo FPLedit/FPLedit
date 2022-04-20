@@ -1,7 +1,11 @@
 name: fpledit-ci
-on: [push]
+on:
+  push:
+    branches: [master,develop]
+  release:
+    types: [created]
 jobs:
-  build-beta:
+  build:
     runs-on: [ubuntu-latest]
     steps:
       - name: Checkout
@@ -23,34 +27,44 @@ jobs:
           sudo apt update
           sudo apt install mono-devel msbuild podman
 
+      - name: Determine build type
+      	if: github.event_name != 'release'
+      	run: |
+          echo "FPLEDIT_GIT_BETA=1" >> $GITHUB_ENV
+
       - name: Build
         run: bash ./build.sh --rid=linux-x64,osx-x64,win-x64
         env:
           FPLEDIT_GIT: ${{ github.sha }}
-          FPLEDIT_GIT_BETA: 1
           FPLEDIT_DOK_PDF: ./Dokumentation.pdf
-          
+
       - name: Upload linux
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
         with:
           name: fpledit-linux-x64
-          path: ./bin/fpledit-*-linux-*.zip
+          path: |
+            ./bin/fpledit-*-linux-*.zip
+            ./bin/fpledit-*.txt
           if-no-files-found: error
-          
+
       - name: Upload osx
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
         with:
           name: fpledit-osx-x64
-          path: ./bin/fpledit-*-osx-*.zip
+          path: | 
+            ./bin/fpledit-*-osx-*.zip
+            ./bin/fpledit-*.txt
           if-no-files-found: error
-          
+
       - name: Upload win
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
         with:
           name: fpledit-win-x64
-          path: ./bin/fpledit-*-win-*.zip
+          path: |
+            ./bin/fpledit-*-win-*.zip
+            ./bin/fpledit-*.txt
           if-no-files-found: error
-          
+
       - name: Upload api-doc
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
         with:
