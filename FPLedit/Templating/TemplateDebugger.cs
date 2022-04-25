@@ -39,6 +39,22 @@ namespace FPLedit.Templating
             instance ??= new TemplateDebugger();
             return instance;
         }
+        
+        internal static string GetGeneratedCode(JavascriptTemplate template)
+        {
+        	var line = 1;
+        	return string.Join(Environment.NewLine,template.CompiledCode
+                .Split(new[] { Environment.NewLine }, StringSplitOptions.None)
+                .Select(l => $"/* {line++,4} */  {l}"));
+        }
+        
+        internal static (int start, int end) GetNavigationOffsets(string generatedCode, int line, int column, int preContextLines = 0, int postContextLines = 0)
+        {
+        	var lines = generatedCode.Split(new[] {Environment.NewLine}, StringSplitOptions.None);
+            var start = string.Join(Environment.NewLine, lines.Take(line - 1 - preContextLines)).Length + Environment.NewLine.Length;
+            var end = string.Join(Environment.NewLine, lines.Take(line + postContextLines)).Length;
+            return (start, end);
+        }
     }
 
 #pragma warning disable CA1001 // Disposable fields are not disposed as this is a windows kept in the background.
@@ -52,22 +68,16 @@ namespace FPLedit.Templating
         {
             EnsureForm();
             form.Visible = false; // Hide until we have an error.
-            
             form.Title = "Generated code: " + template.Identifier;
-            
-            var line = 1;
-            generatedCode.Text = string.Join(Environment.NewLine,template.CompiledCode
-                .Split(new[] { Environment.NewLine }, StringSplitOptions.None)
-                .Select(l => $"/* {line++,4} */  {l}"));
+
+            generatedCode.Text = TemplateDebugger.GetGeneratedCode(template);
             generatedCode.Selection = new Range<int>(0, 0);
         }
 
         public void Navigate(int line, int column) // We have an error.
         {
             EnsureForm();
-            var lines = generatedCode.Text.Split(new[] {Environment.NewLine}, StringSplitOptions.None);
-            var start = string.Join(Environment.NewLine, lines.Take(line - 1)).Length + Environment.NewLine.Length;
-            var end = string.Join(Environment.NewLine, lines.Take(line)).Length;
+            var (start, end) = TemplateDebugger.GetNavigationOffsets(generatedCode.Text, line, column);
             generatedCode.Selection = new Range<int>(start, end);
 
             OpenDebugger();

@@ -44,6 +44,9 @@ namespace FPLedit.Tests
             // Load templates from files & extensions
             templateManager = new TemplateManager(pi.Registry, pi, DEFAULT_TEMPLATE_PATH);
             templateManager.LoadTemplates(DEFAULT_TEMPLATE_PATH);
+            
+            // Attach a testing "debugger"
+            TemplateDebugger.GetInstance().AttachDebugger(new TestDebugger());
         }
 
         [Test]
@@ -58,6 +61,29 @@ namespace FPLedit.Tests
         	var templates = type == null ? templateManager.GetAllTemplates() : templateManager.GetTemplates(type);
         	foreach (var t in templates)
         		t.GenerateResult(tt);
+        }
+    }
+
+    internal sealed class TestDebugger : ITemplateDebugger
+    {
+    	private string generatedCode;
+    	private string identifier;
+
+    	public void SetContext(JavascriptTemplate template)
+        {
+            identifier = template.Identifier;
+            generatedCode = TemplateDebugger.GetGeneratedCode(template);
+        }
+
+        public void Navigate(int line, int column) // We have an error.
+        {
+        	var (start, end) = TemplateDebugger.GetNavigationOffsets(generatedCode, line, column, 4, 4);
+        	var codePart = generatedCode.Substring(start, end - start).Replace($"{line,4}", "--->");
+        	TestContext.Error.WriteLine(codePart);
+        }
+
+        public void OpenDebugger() // We have an error, nop.
+        {
         }
     }
 }
