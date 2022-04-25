@@ -49,7 +49,15 @@ namespace FPLedit.Tests
         [Test]
         public void TemplateCompileTest()
         {
-            templateManager.DebugCompileAll();
+            TestTemplateType(null, new Timetable(TimetableType.Linear));
+            TestTemplateType(null, new Timetable(TimetableType.Network));
+        }
+        
+        private void TestTemplateType(string type, Timetable tt)
+        {
+        	var templates = type == null ? templateManager.GetAllTemplates() : templateManager.GetTemplates(type);
+        	foreach (var t in templates)
+        		t.GenerateResult(tt);
         }
     }
 }

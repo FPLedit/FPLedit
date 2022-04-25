@@ -6,8 +6,6 @@
 
         public static bool ConsoleLog { get; internal set; }
 
-        public static bool TemplateDebug { get; internal set; }
-        
         public static bool CrashReporterDebug { get; internal set; }
     }
 }

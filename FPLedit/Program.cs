@@ -32,7 +32,6 @@ namespace FPLedit
             var options = new OptionSet
             {
                 { "log-console|mp-log", v => OptionsParser.ConsoleLog = v != null },
-                { "tmpl-debug", v => OptionsParser.TemplateDebug = v != null },
                 { "crash-debug", v => OptionsParser.CrashReporterDebug = v != null },
                 { "<>", v =>
                     {

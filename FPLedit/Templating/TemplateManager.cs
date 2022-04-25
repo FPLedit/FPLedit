@@ -51,13 +51,6 @@ namespace FPLedit.Templating
         public ITemplate[] GetTemplates(string type)
             => templates.Where(t => t.Enabled && t.TemplateType == type).Cast<ITemplate>().ToArray();
 
-        internal void DebugCompileAll()
-        {
-            var tt = new Timetable(TimetableType.Linear);
-            foreach (var t in templates)
-                t.GenerateResult(tt);
-        }
-
         internal void EnableTemplate(ITemplate tmpl)
         {
             var fn = Path.GetFileName(tmpl.Identifier);

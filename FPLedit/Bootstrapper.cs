@@ -94,8 +94,6 @@ namespace FPLedit
             var templatePath = settings.Get("tmpl.root", DEFAULT_TEMPLATE_PATH);
             var templateManager = new TemplateManager(registry, this, templatePath);
             templateManager.LoadTemplates(templatePath);
-            if (OptionsParser.TemplateDebug)
-                Task.Run(() => Application.Instance.Invoke(() => templateManager.DebugCompileAll()));
             TemplateManager = templateManager;
 
             ExtensionsLoaded?.Invoke(this, EventArgs.Empty);
