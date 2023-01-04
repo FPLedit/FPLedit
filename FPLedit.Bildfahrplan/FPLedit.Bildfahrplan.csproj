@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
+    <NoWarn>CA1416</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyTitle>FPLedit - Exporter für Bildfahrpläne</AssemblyTitle>

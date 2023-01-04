@@ -13,6 +13,8 @@
     <ApplicationIcon>Resources\programm.ico</ApplicationIcon>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
+    
+    <NoWarn>CS0693</NoWarn>
   </PropertyGroup>
   
   <!-- Windows specific properties -->
