@@ -1,4 +1,5 @@
-﻿using FPLedit.Shared;
+﻿#nullable enable
+using FPLedit.Shared;
 using FPLedit.Shared.Templating;
 using System;
 using Jint.Runtime;
@@ -10,16 +11,16 @@ namespace FPLedit.Templating
     /// </summary>
     internal sealed class TemplateHost : ITemplate
     {
-        private readonly ITemplate tmpl;
+        private readonly ITemplate? tmpl;
         private readonly ILog logger;
 
-        public string TemplateType => tmpl?.TemplateType;
+        public string? TemplateType => tmpl?.TemplateType;
 
-        public string TemplateName => tmpl?.TemplateName;
+        public string TemplateName => tmpl?.TemplateName ?? "<kein Template-Name>";
 
         public string Identifier { get; }
 
-        public string TemplateSource => tmpl?.TemplateSource;
+        public string? TemplateSource => tmpl?.TemplateSource;
 
         public bool Enabled { get; private set; }
 
@@ -43,7 +44,7 @@ namespace FPLedit.Templating
             }
         }
 
-        public string GenerateResult(Timetable tt)
+        public string? GenerateResult(Timetable tt)
         {
             if (!Enabled || tmpl == null)
                 return null;

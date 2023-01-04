@@ -1,4 +1,5 @@
-﻿using FPLedit.Shared;
+﻿#nullable enable
+using FPLedit.Shared;
 using System;
 using System.Reflection;
 
@@ -6,19 +7,19 @@ namespace FPLedit.Extensibility
 {
     internal sealed class PluginInfo
     {
-        internal readonly IPlugin Plugin;
+        internal readonly IPlugin? Plugin;
         
         public bool IsBuiltin { get; }
 
         public bool Enabled { get; set; }
 
-        public string Name { get; private set; }
+        public string Name { get; private set; } = "<Fehler beim Laden>";
 
-        public string Author { get; private set; }
+        public string? Author { get; private set; }
 
-        public string Version { get; private set; }
+        public string? Version { get; private set; }
 
-        public string Url { get; private set; }
+        public string? Url { get; private set; }
 
         public string FullName { get; }
 
@@ -26,7 +27,7 @@ namespace FPLedit.Extensibility
 
         public PluginInfo(IPlugin plugin, SecurityContext securityContext, bool isBuiltin = false)
         {
-            FullName = plugin.GetType().FullName;
+            FullName = plugin.GetType().FullName!;
             ExtractPluginInformation(plugin.GetType());
             Plugin = plugin;
             IsBuiltin = isBuiltin;
@@ -36,7 +37,7 @@ namespace FPLedit.Extensibility
 
         public PluginInfo(Type type, SecurityContext securityContext)
         {
-            FullName = type.FullName;
+            FullName = type.FullName!;
             ExtractPluginInformation(type);
             Enabled = false;
             SecurityContext = securityContext;
@@ -55,13 +56,14 @@ namespace FPLedit.Extensibility
 
         public void TryInit(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
         {
+            if (Plugin == null) return;
             try
             {
                 Plugin.Init(pluginInterface, componentRegistry);
             }
             catch (Exception ex)
             {
-                pluginInterface.Logger.Error(T._("Fehler beim Initialisieren einer Erweiterung: {0}: + {1}", Plugin.GetType().FullName, ex.Message));
+                pluginInterface.Logger.Error(T._("Fehler beim Initialisieren einer Erweiterung: {0}: + {1}", Plugin.GetType().FullName!, ex.Message));
             }
         }
     }

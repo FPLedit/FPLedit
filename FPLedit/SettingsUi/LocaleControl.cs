@@ -1,3 +1,4 @@
+#nullable enable
 using Eto.Drawing;
 using Eto.Forms;
 using FPLedit.Shared;
@@ -19,7 +20,7 @@ namespace FPLedit.SettingsUi
                 Orientation = Orientation.Vertical,
                 Spacing = 5
             };
-            RadioButton master = null;
+            RadioButton? master = null;
             
             stack.Items.Add(new Label { Text = T._("Sprache der Benutzeroberfläche:") });
 
@@ -30,10 +31,9 @@ namespace FPLedit.SettingsUi
                     Text = locale.Value,
                     Checked = locale.Key == currentLocale,
                 };
-                if (master == null)
-                    master = rb;
+                master ??= rb;
 
-                rb.CheckedChanged += (s, e) =>
+                rb.CheckedChanged += (_, _) =>
                 {
                     if (rb.Checked)
                     {

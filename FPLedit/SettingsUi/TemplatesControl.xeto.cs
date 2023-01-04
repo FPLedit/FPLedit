@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿#nullable enable
+using Eto.Forms;
 using FPLedit.Shared.Templating;
 using FPLedit.Shared.UI;
 using FPLedit.Templating;
@@ -13,18 +14,18 @@ namespace FPLedit.SettingsUi
     internal sealed class TemplatesControlHandler : ISettingsControl
     {
         public string DisplayName => T._("Vorlagen");
-        public Control GetControl(IPluginInterface pluginInterface) => new TemplatesControl(pluginInterface.TemplateManager as TemplateManager);
+        public Control GetControl(IPluginInterface pluginInterface) => new TemplatesControl((TemplateManager)pluginInterface.TemplateManager);
     }
     
     internal sealed class TemplatesControl : Panel
     {
 #pragma warning disable CS0649
-        private readonly GridView gridView;
-        private readonly Button extractButton, editButton, removeButton, enableButton, disableButton;
+        private readonly GridView gridView = default!;
+        private readonly Button extractButton = default!, editButton = default!, removeButton = default!, enableButton = default!, disableButton = default!;
 #pragma warning restore CS0649
 
         private readonly TemplateManager manager;
-        private ITemplate[] templates;
+        private ITemplate[] templates = {};
 
         private readonly DirectoryInfo templatesDir;
 
@@ -39,11 +40,11 @@ namespace FPLedit.SettingsUi
             gridView.AddCheckColumn<ITemplate>(t => ((TemplateHost)t).Enabled, T._("Aktiviert"));
             gridView.AddColumn<ITemplate>(t => t.TemplateName, T._("Name"));
             gridView.AddColumn<ITemplate>(t => buildName(t.Identifier), T._("Dateiname"));
-            gridView.AddColumn<ITemplate>(t => t.TemplateType, T._("Typ"));
+            gridView.AddColumn<ITemplate>(t => t.TemplateType!, T._("Typ"));
 
-            gridView.SelectedItemsChanged += (s, e) =>
+            gridView.SelectedItemsChanged += (_, _) =>
             {
-                var tmpl = (TemplateHost)gridView.SelectedItem;
+                var tmpl = (TemplateHost?)gridView.SelectedItem;
                 if (tmpl == null)
                 {
                     extractButton.Enabled = editButton.Enabled = removeButton.Enabled = enableButton.Enabled = disableButton.Enabled = false;
@@ -75,6 +76,7 @@ namespace FPLedit.SettingsUi
         {
             var tmpl = templates[gridView.SelectedRow];
             var src = tmpl.TemplateSource;
+            if (src == null) return;
 
             templatesDir.Create();
 
@@ -137,7 +139,7 @@ namespace FPLedit.SettingsUi
         {
             if (!File.Exists(fullPath))
                 return fullPath;
-            var dir = Path.GetDirectoryName(fullPath);
+            var dir = Path.GetDirectoryName(fullPath)!;
             var ext = Path.GetExtension(fullPath);
             var basename = Path.GetFileNameWithoutExtension(fullPath);
             int i = 1;

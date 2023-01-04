@@ -1,4 +1,5 @@
-﻿using FPLedit.Shared;
+﻿#nullable enable
+using FPLedit.Shared;
 using FPLedit.Shared.Filetypes;
 using System.Collections.Generic;
 using System.IO;
@@ -9,7 +10,7 @@ namespace FPLedit.NonDefaultFiletypes
     {
         public string Filter => T._("Fahrplan Dateien (*.fpl)|*.fpl");
 
-        public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[] flags = null)
+        public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null)
         {
             if (tt.Type == TimetableType.Network)
                 throw new TimetableTypeNotSupportedException(TimetableType.Network, "convert to network");

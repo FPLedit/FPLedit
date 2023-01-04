@@ -1,4 +1,5 @@
-﻿using FPLedit.Shared;
+﻿#nullable enable
+using FPLedit.Shared;
 using System;
 
 namespace FPLedit
@@ -6,7 +7,7 @@ namespace FPLedit
     internal sealed class FileState : IFileState
     {
         private bool opened, saved;
-        private string fileName;
+        private string? fileName;
 
         public bool Opened { get => opened; set => TriggerEvent(opened = value); }
 
@@ -18,7 +19,7 @@ namespace FPLedit
 
         public bool CanGoBack { get; private set; }
 
-        public string FileName
+        public string? FileName
         {
             get => fileName;
             set
@@ -42,12 +43,12 @@ namespace FPLedit
             CanGoBack = undo.CanGoBack;
         }
 
-        private void TriggerEvent(object o)
+        private void TriggerEvent(object? o)
         {
             RevisionCounter++;
             FileStateInternalChanged?.Invoke(this, new FileStateChangedEventArgs(this));
         }
 
-        internal event EventHandler<FileStateChangedEventArgs> FileStateInternalChanged;
+        internal event EventHandler<FileStateChangedEventArgs>? FileStateInternalChanged;
     }
 }

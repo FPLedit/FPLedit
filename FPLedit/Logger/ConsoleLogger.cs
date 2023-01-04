@@ -1,4 +1,5 @@
-﻿using FPLedit.Shared;
+﻿#nullable enable
+using FPLedit.Shared;
 using System;
 
 namespace FPLedit.Logger

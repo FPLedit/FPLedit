@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿#nullable enable
+using Eto.Forms;
 using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
@@ -21,14 +22,14 @@ namespace FPLedit.NonDefaultFiletypes
         {
             nodeNames = new Dictionary<string, List<string>>
             {
-                [""] = new List<string>() // Initialize store for elememnts without parents
+                [""] = new() // Initialize store for elememnts without parents
             };
             attrsNames = new Dictionary<string, List<string>>();
         }
 
         private void LoadRemovableXmlNames()
         {
-            var types = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.Contains("FPLedit"));
+            var types = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName?.Contains("FPLedit") ?? false);
             foreach (var assembly in types)
             {
                 try
@@ -44,7 +45,7 @@ namespace FPLedit.NonDefaultFiletypes
                         
                         if (elm.IsFpleditElement)
                         {
-                            if (elm.ParentElements != null && elm.ParentElements.Any())
+                            if (elm.ParentElements.Any())
                             {
                                 foreach (var parent in elm.ParentElements)
                                 {
@@ -62,7 +63,7 @@ namespace FPLedit.NonDefaultFiletypes
                             .GetProperties()
                             .Select(p => p.GetCustomAttribute<XAttrNameAttribute>())
                             .Where(p => p != null && p.IsFpleditElement)
-                            .Select(p => p.Name).ToArray();
+                            .Select(p => p!.Name).ToArray();
 
                         if (attrsToRemove.Length == 0)
                             continue;
@@ -96,7 +97,7 @@ namespace FPLedit.NonDefaultFiletypes
                 ProcessEntity(ch);
         }
 
-        public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[] flags = null)
+        public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null)
         {
             if (!namesCreated)
                 LoadRemovableXmlNames();

@@ -58,7 +58,7 @@ namespace FPLedit.Editor
         private void ShowForm(Dialog<DialogResult> form)
         {
             pluginInterface.StageUndoStep();
-            if (form.ShowModal(Program.App.MainForm) == DialogResult.Ok)
+            if (form.ShowModal(Program.App!.MainForm) == DialogResult.Ok)
                 pluginInterface.SetUnsaved();
             if (!form.IsDisposed)
                 form.Dispose();

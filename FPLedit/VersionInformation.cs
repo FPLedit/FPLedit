@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 
 namespace FPLedit
@@ -16,18 +17,9 @@ namespace FPLedit
 
         // ReSharper disable once MemberCanBePrivate.Global
         // ReSharper disable once EmptyConstructor
-        public VersionInformation()
-        {
-        }
+        public VersionInformation() {}
 
-        private static VersionInformation current;
-        public static VersionInformation Current
-        {
-            get
-            {
-                current ??= new VersionInformation();
-                return current;
-            }
-        }
+        private static VersionInformation? current;
+        public static VersionInformation Current => current ??= new VersionInformation();
     }
 }

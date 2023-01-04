@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿#nullable enable
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 
@@ -8,7 +9,7 @@ namespace FPLedit.Extensibility
     {
         // hashAlgorithm, generatedSignatures are defined in compiler generated file!
 
-        internal SecurityContext Validate(string fn)
+        internal SecurityContext Validate(string? fn)
         {
             if (fn == null)
                 return SecurityContext.ThirdParty;
@@ -29,16 +30,6 @@ namespace FPLedit.Extensibility
 			return hash.SequenceEqual(signature.Hash) ? SecurityContext.Official : SecurityContext.ThirdParty;
         }
 
-        private readonly struct AssemblySignature
-        {
-            public readonly string FileName;
-            public readonly byte[] Hash;
-
-            public AssemblySignature(string fn, byte[] signature)
-            {
-                FileName = fn;
-                Hash = signature;
-            }
-        }
+        private record struct AssemblySignature(string FileName, byte[] Hash);
     }
 }

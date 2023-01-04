@@ -6,6 +6,7 @@
     <Platforms>AnyCPU</Platforms>
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>CA1416</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyTitle>FPLedit - Shared Rendering components</AssemblyTitle>

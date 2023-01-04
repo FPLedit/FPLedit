@@ -1,3 +1,4 @@
+#nullable enable
 using Eto.Drawing;
 using Eto.Forms;
 using FPLedit.Shared;
@@ -9,7 +10,7 @@ namespace FPLedit
     internal sealed class LogControl : RichTextArea, ILog
     {
         private readonly Color systemText;
-        private readonly ContextMenu menu;
+        private readonly ContextMenu? menu;
         private bool showDebug;
 
         public LogControl()
@@ -19,7 +20,7 @@ namespace FPLedit
             menu = new ContextMenu();
 #pragma warning disable CA2000
             menu.CreateItem(T._("Alles löschen"), clickHandler: (s, e) => Text = "");
-            menu.CreateCheckItem(T._("Debug-Informationen anzeigen"), changeHandler: (s, e) => showDebug = ((CheckMenuItem)s).Checked);
+            menu.CreateCheckItem(T._("Debug-Informationen anzeigen"), changeHandler: (s, e) => showDebug = ((CheckMenuItem)s!).Checked);
 #pragma warning restore CA2000
 
             systemText = SystemColors.ControlText;
@@ -89,7 +90,7 @@ namespace FPLedit
         {
             if (e.Buttons == MouseButtons.Alternate)
             {
-                menu.Show(this);
+                menu!.Show(this);
                 e.Handled = true;
             }
             base.OnMouseDown(e);

@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿#nullable enable
+using Eto.Forms;
 using FPLedit.Shared;
 using System;
 using System.IO;
@@ -31,7 +32,7 @@ namespace FPLedit.CrashReporting
                     Directory.CreateDirectory(dir);
 
                 var fnTimetable = pluginInterface.GetTemp(CRASH_TT_FN);
-                if (pluginInterface.Timetable != null)
+                if (pluginInterface.Timetable != null!)
                     new Shared.Filetypes.XMLExport().SafeExport(pluginInterface.Timetable, fnTimetable, pluginInterface);
                 else if (File.Exists(fnTimetable))
                     File.Delete(fnTimetable);
@@ -60,7 +61,7 @@ namespace FPLedit.CrashReporting
                 return;
 
             var fileStateRestored = false;
-            void RestoreFileState(object sender, EventArgs e)
+            void RestoreFileState(object? sender, EventArgs e)
             {
                 if (fileStateRestored) return;
                 fileStateRestored = true;

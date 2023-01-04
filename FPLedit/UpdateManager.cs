@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿#nullable enable
+using Eto.Forms;
 using FPLedit.Shared;
 using System;
 using System.Net;
@@ -11,11 +12,11 @@ namespace FPLedit
     {
         public string CheckUrl { get; }
 
-        public Action<bool, VersionInfo> CheckResult { get; set; }
+        public Action<bool, VersionInfo>? CheckResult { get; set; }
 
-        public Action<string> TextResult { get; set; }
+        public Action<string>? TextResult { get; set; }
 
-        public Action<Exception> CheckError { get; set; }
+        public Action<Exception?>? CheckError { get; set; }
 
         private Version CurrentVersion { get; }
         
@@ -38,7 +39,7 @@ namespace FPLedit
             CurrentVersionDisplay = VersionInformation.Current.DisplayVersion;
         }
 
-        private VersionInfo GetUpdateInfoFromXml(string xml)
+        private VersionInfo? GetUpdateInfoFromXml(string xml)
         {
             var doc = new XmlDocument { XmlResolver = null! };
 
@@ -50,19 +51,17 @@ namespace FPLedit
 
             using (var reader = XmlReader.Create(new System.IO.StringReader(xml), xmlReaderSettings))
                 doc.Load(reader);
+            
+            if (doc.DocumentElement == null) return null;
 
             var ver = doc.DocumentElement.SelectSingleNode("/info/version");
             var url = doc.DocumentElement.SelectSingleNode("/info/url");
             var dsc = doc.DocumentElement.SelectSingleNode("/info/description");
             var txt = doc.DocumentElement.SelectSingleNode("/info/text");
 
-            return new VersionInfo()
-            {
-                DownloadUrl = url.InnerText,
-                NewVersion = new Version(ver.InnerText),
-                Description = dsc?.InnerText,
-                Text = txt?.InnerText,
-            };
+            if (url == null || ver == null) return null;
+
+            return new VersionInfo(url.InnerText, new Version(ver.InnerText), dsc?.InnerText, txt?.InnerText);
         }
 
         private bool IsNewVersion(Version check) 
@@ -83,12 +82,16 @@ namespace FPLedit
                     try
                     {
                         var vi = GetUpdateInfoFromXml(e.Result);
-                        var hasNewVersion = IsNewVersion(vi.NewVersion);
+                        if (vi != null)
+                        {
+                            var hasNewVersion = IsNewVersion(vi.NewVersion);
+                            CheckResult?.Invoke(hasNewVersion, vi);
 
-                        CheckResult?.Invoke(hasNewVersion, vi);
-
-                        if (vi.Text != null)
-                            TextResult?.Invoke(vi.Text);
+                            if (vi.Text != null)
+                                TextResult?.Invoke(vi.Text);
+                        }
+                        else
+                            CheckError?.Invoke(null);
                     }
                     catch (Exception ex)
                     {
@@ -135,12 +138,6 @@ namespace FPLedit
             CheckAsync();
         }
 
-        public struct VersionInfo
-        {
-            public string DownloadUrl;
-            public Version NewVersion;
-            public string Description;
-            public string Text;
-        }
+        public record VersionInfo(string DownloadUrl, Version NewVersion, string? Description, string? Text);
     }
 }

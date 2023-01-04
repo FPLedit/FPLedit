@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FPLedit.Shared;
@@ -28,7 +29,7 @@ namespace FPLedit
 
         public T[] GetRegistered<T>()
         {
-            store.TryGetValue(typeof(T), out List<object> res);
+            store.TryGetValue(typeof(T), out List<object>? res);
 
             return res?.Select(o => (T)o).ToArray() ?? Array.Empty<T>();
         }

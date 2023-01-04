@@ -1,7 +1,7 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
 using Eto.Forms;
 using FPLedit.Config;
 using FPLedit.Extensibility;
@@ -30,18 +30,18 @@ namespace FPLedit
         IReadOnlySettings IReducedPluginInterface.Settings => settings;
         public ISettings FullSettings => settings;
         public ICacheFile Cache => FileHandler.Cache;
-        public ITemplateManager TemplateManager { get; private set; }
-        public ILog Logger { get; private set; }
-        public dynamic RootForm { get; private set; }
-        public dynamic Menu { get; private set; }
+        public ITemplateManager TemplateManager { get; private set; } = null!;
+        public ILog Logger { get; private set; } = null!;
+        public dynamic RootForm { get; private set; } = null!;
+        public dynamic Menu { get; private set; } = null!;
 
         public Timetable Timetable => FileHandler.Timetable;
         public IFileState FileState => FileHandler.FileState;
 
-        public event EventHandler<FileStateChangedEventArgs> FileStateChanged;
-        public event EventHandler ExtensionsLoaded;
-        public event EventHandler AppClosing;
-        public event EventHandler FileOpened;
+        public event EventHandler<FileStateChangedEventArgs>? FileStateChanged;
+        public event EventHandler? ExtensionsLoaded;
+        public event EventHandler? AppClosing;
+        public event EventHandler? FileOpened;
         
         public List<string> PreBootstrapWarnings { get; } = new List<string>();
 
@@ -193,7 +193,7 @@ namespace FPLedit
         
         #region Config stream initialization
         
-        private FileStream GetFileStreamWithMaxPermissions(string filename)
+        private FileStream? GetFileStreamWithMaxPermissions(string filename)
         {
             try
             {
@@ -213,19 +213,23 @@ namespace FPLedit
             return null;
         }
 
-        private Stream GetConfigStream(string path)
+        private Stream? GetConfigStream(string path)
         {
             var stream = GetFileStreamWithMaxPermissions(path); // try to open normal settings file
 
             var createInUserDirectory = false;
-            string userPath;
-            using (var config = new ConfigFile(stream, true)) // create a temporay ConfigFile
+            string? userPath = null;
+            if (stream != null)
+            {
+                using var config = new ConfigFile(stream, true); // create a temporary ConfigFile instance from the file in the app directory.
                 userPath = config.Get("config.path_redirect");
+            }
+
             var userDirectory = Path.GetDirectoryName(userPath);
             if (!string.IsNullOrEmpty(userPath) && Directory.Exists(userDirectory))
             {
-                stream.Close(); // We don't need the old stream any more.
-                stream.Dispose();
+                stream?.Close(); // We don't need the old stream any more.
+                stream?.Dispose();
                 stream = GetFileStreamWithMaxPermissions(userPath);
                 createInUserDirectory = true;
                 
@@ -233,7 +237,7 @@ namespace FPLedit
                     PreBootstrapWarnings.Add(T._("Anlegen der angeforderten Einstellungsdatei {0} ist fehlgeschlagen.", userPath));
             }
             else if (!string.IsNullOrEmpty(userPath))
-                PreBootstrapWarnings.Add(T._("Der als config.path_redirect angegebene Ordnerpfad {0} existiert nicht! Verwende die Einstellungsdatei im Programmverzeichnis.", userDirectory));
+                PreBootstrapWarnings.Add(T._("Der als config.path_redirect angegebene Ordnerpfad {0} existiert nicht! Verwende die Einstellungsdatei im Programmverzeichnis.", userDirectory!));
 
             // Extract default configuration file from application reosurces if no config file exists or it is empty.
             if (stream != null && stream.Length == 0 && stream.CanWrite)

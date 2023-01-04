@@ -1,8 +1,9 @@
-﻿namespace FPLedit.Config
+﻿#nullable enable
+namespace FPLedit.Config
 {
     internal static class OptionsParser
     {
-        public static string OpenFilename { get; internal set; }
+        public static string? OpenFilename { get; internal set; }
 
         public static bool ConsoleLog { get; internal set; }
 

@@ -1,3 +1,4 @@
+#nullable enable
 namespace FPLedit
 {
     internal sealed class RestartHandler : IRestartable
@@ -14,7 +15,7 @@ namespace FPLedit
             if (!bootstrapper.FileHandler.NotifyIfUnsaved())
                 return;
             if (bootstrapper.FileState.Opened)
-                bootstrapper.FullSettings.Set("restart.file", bootstrapper.FileState.FileName);
+                bootstrapper.FullSettings.Set("restart.file", bootstrapper.FileState.FileName!);
             
             Program.Restart();
         }

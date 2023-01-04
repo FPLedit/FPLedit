@@ -1,4 +1,5 @@
-﻿using FPLedit.Shared;
+﻿#nullable enable
+using FPLedit.Shared;
 using System;
 using System.IO;
 
@@ -42,8 +43,8 @@ namespace FPLedit.Logger
 
         private void Write(string message, string type)
         {
-            using (var r = new StreamWriter(filename, true))
-                r.WriteLine(DateTime.Now.ToString("s") + ": [" + type + "] " + message);
+            using var r = new StreamWriter(filename, true);
+            r.WriteLine(DateTime.Now.ToString("s") + ": [" + type + "] " + message);
         }
     }
 }

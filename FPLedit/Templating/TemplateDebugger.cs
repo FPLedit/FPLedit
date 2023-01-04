@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Linq;
 using Eto.Drawing;
@@ -8,7 +9,7 @@ namespace FPLedit.Templating
 {
     internal sealed class TemplateDebugger : ITemplateDebugger
     {
-        private ITemplateDebugger child;
+        private ITemplateDebugger? child;
 
         private void Invoke(Action action)
         {
@@ -32,14 +33,10 @@ namespace FPLedit.Templating
         {
         }
 
-        private static TemplateDebugger instance;
+        private static TemplateDebugger? instance;
 
-        public static TemplateDebugger GetInstance()
-        {
-            instance ??= new TemplateDebugger();
-            return instance;
-        }
-        
+        public static TemplateDebugger GetInstance() => instance ??= new TemplateDebugger();
+
         internal static string GetGeneratedCode(JavascriptTemplate template)
         {
         	var line = 1;
@@ -60,8 +57,8 @@ namespace FPLedit.Templating
 #pragma warning disable CA1001 // Disposable fields are not disposed as this is a windows kept in the background.
     internal sealed class GuiTemplateDebugger : ITemplateDebugger
     {
-        private FForm form;
-        private TextArea generatedCode;
+        private FForm form = null!;
+        private TextArea generatedCode = null!;
         private bool opened;
 
         public void SetContext(JavascriptTemplate template)

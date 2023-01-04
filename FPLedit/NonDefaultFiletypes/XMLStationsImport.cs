@@ -1,4 +1,5 @@
-﻿using FPLedit.Shared;
+﻿#nullable enable
+using FPLedit.Shared;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -9,7 +10,7 @@ namespace FPLedit.NonDefaultFiletypes
     {
         public string Filter => T._("Lineare Streckendateien (*.str)|*.str");
 
-        public Timetable Import(Stream stream, IReducedPluginInterface pluginInterface, ILog replaceLog = null)
+        public Timetable Import(Stream stream, IReducedPluginInterface pluginInterface, ILog? replaceLog = null)
         {
             var xElement = XElement.Load(stream);
 

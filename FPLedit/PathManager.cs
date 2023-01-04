@@ -1,25 +1,23 @@
+#nullable enable
 using System;
 
 namespace FPLedit
 {
     internal sealed class PathManager
     {
-        private static PathManager instance;
-        private string appDirectory, settingsDirectory;
+        private static PathManager? instance;
+        private string? appDirectory, settingsDirectory;
 
         public static PathManager Instance
         {
             get
             {
-                if (instance == null)
-                    instance = new PathManager();
+                instance ??= new PathManager();
                 return instance;
             }
         }
 
-        private PathManager()
-        {
-        }
+        private PathManager() {}
 
         public string AppDirectory
         {

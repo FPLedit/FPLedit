@@ -1,4 +1,5 @@
-﻿using FPLedit.Shared;
+﻿#nullable enable
+using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -58,7 +59,7 @@ namespace FPLedit.Extensibility
 
                     foreach (var type in assembly.GetTypes())
                     {
-                        if (!type.IsClass || !type.IsPublic || type.IsAbstract || type == typeof(IPlugin))
+                        if (!type.IsClass || !type.IsPublic || type.IsAbstract || type == typeof(IPlugin) || type.FullName == null)
                             continue;
 
                         if (!typeof(IPlugin).IsAssignableFrom(type))
@@ -68,16 +69,18 @@ namespace FPLedit.Extensibility
                         if (attr == null)
                             continue;
 
-                        if (Version.TryParse(attr.MinVer, out Version min) && VersionCompare(currentVersion, min) < 0)
-                            continue; // Inkompatible Erweiterung (Programm zu alt)
-                        if (Version.TryParse(attr.MaxVer, out Version max) && VersionCompare(currentVersion, max) > 0)
-                            continue; // Inkompatible Erweiterung (Programm zu neu)
+                        if (Version.TryParse(attr.MinVer, out var min) && VersionCompare(currentVersion, min) < 0)
+                            continue; // Incompatible extension (app too old)
+                        if (Version.TryParse(attr.MaxVer, out var max) && VersionCompare(currentVersion, max) > 0)
+                            continue; // Incompatible extension (app too new)
 
                         var securityContext = signatureVerifier.Validate(file.FullName);
 
                         if (enabledPlugins.Contains(type.FullName))
                         {
-                            IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
+                            var plugin = (IPlugin?)Activator.CreateInstance(type);
+                            if (plugin == null)
+                                continue; // Error calling the constructor. //TODO: better error?
 
                             var pluginInfo = new PluginInfo(plugin, securityContext);
                             plugins.Add(pluginInfo);
@@ -143,7 +146,7 @@ namespace FPLedit.Extensibility
                 disposablePlugins.Add(d); // Order does not matter here.
         }
 
-        private int VersionCompare(Version v1, Version v2)
+        private int VersionCompare(Version? v1, Version? v2)
         {
             if (v1 == null || v2 == null)
                 return 1;

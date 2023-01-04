@@ -1,5 +1,7 @@
-﻿using FPLedit.Shared;
+﻿#nullable enable
+using FPLedit.Shared;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace FPLedit.Config
@@ -9,8 +11,14 @@ namespace FPLedit.Config
         private ConfigFile config;
         public bool IsReadonly => config.IsReadonly;
 
-        public Settings(Stream stream)
+        public Settings(Stream? stream)
         {
+            if (stream == null)
+            {
+                config = new ConfigFile(); // Get in-memory config-backend as we cannot read the specified files (e.g. they do exist but are not readable).
+                return;
+            }
+
             try
             {
                 config = new ConfigFile(stream, false);
@@ -18,12 +26,13 @@ namespace FPLedit.Config
             catch
             {
                 config?.Dispose(false); // Dispose our last try to get a config file, but not the stream itself.
-                stream?.Dispose();
+                stream.Dispose();
                 config = new ConfigFile(); // Get in-memory config-backend as we cannot read the specified files (e.g. they do exist but are not readable).
             }
         }
 
-        public T Get<T>(string key, T defaultValue = default)
+        [return: NotNullIfNotNull("defaultValue")]
+        public T? Get<T>(string key, T? defaultValue = default)
         {
             var val = config.Get(key);
             if (val != null)
@@ -31,10 +40,11 @@ namespace FPLedit.Config
             return defaultValue;
         }
 
-        public T GetEnum<T>(string key, T defaultValue = default) where T : Enum
+        [return: NotNullIfNotNull("defaultValue")]
+        public T GetEnum<T>(string key, T? defaultValue = default) where T : Enum
         {
             var underlying = Enum.GetUnderlyingType(typeof(T));
-            var x = (int)Convert.ChangeType(defaultValue, underlying);
+            var x = (int)Convert.ChangeType(defaultValue, underlying)!;
             return (T)Enum.ToObject(typeof(T), Get(key, x));
         }
 
@@ -70,8 +80,8 @@ namespace FPLedit.Config
 
         public void Dispose()
         {
-            config?.Dispose();
-            config = null;
+            config.Dispose();
+            config = null!;
             GC.SuppressFinalize(this);
         }
 

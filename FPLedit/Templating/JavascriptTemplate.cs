@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,8 +13,8 @@ namespace FPLedit.Templating
     // Based on: https://www.codeproject.com/Articles/15728/Write-your-own-Code-Generator-or-Template-Engine-i
     internal sealed class JavascriptTemplate : ITemplate
     {
-        public string TemplateType { get; private set; }
-        public string TemplateName { get; private set; }
+        public string? TemplateType { get; private set; }
+        public string TemplateName { get; private set; } = null!;
         public string Identifier { get; }
         public string TemplateSource { get; }
         public string CompiledCode { get; }
@@ -23,7 +24,7 @@ namespace FPLedit.Templating
 
         private const int CURRENT_VERSION = 2;
 
-        private static string polyfillsCache;
+        private static string? polyfillsCache;
 
         public JavascriptTemplate(string code, string identifier, IReducedPluginInterface pluginInterface)
         {
@@ -201,7 +202,7 @@ namespace FPLedit.Templating
         {
             // Allowed types whitlisted by extensions (for this specific template type or generic (e.g. type == null)).
             var extensionAllowedTypes = pluginInterface.GetRegistered<ITemplateWhitelistEntry>()
-                .Where(w => w.TemplateType == TemplateType || w.TemplateType == null)
+                .Where(w => w.TemplateType == TemplateType || w.TemplateType == null!)
                 .Select(w => w.GetWhitelistType());
             // Globally whitelisted: From FPLedit.Shared, marked with TemplateSafeAttribute.
             var allowedTypes = typeof(Timetable).Assembly.GetTypes()
@@ -224,10 +225,10 @@ namespace FPLedit.Templating
             
             return engine
                 .SetValue("tt", tt)
-                .SetValue("debug", new Action<object>(o => pluginInterface.Logger.Info($"{o?.GetType()?.FullName ?? "null"}: {o ?? "null"}")))
+                .SetValue("debug", new Action<object?>(o => pluginInterface.Logger.Info($"{o?.GetType().FullName ?? "null"}: {o ?? "null"}")))
                 .SetValue("debug_print", new Action<object>(o => pluginInterface.Logger.Info($"{o}")))
                 .SetValue("clr_typename",     (Func<object,string>)TemplateBuiltins.ClrTypeName)
-                .SetValue("clr_typefullname", (Func<object,string>)TemplateBuiltins.ClrTypeFullName)
+                .SetValue("clr_typefullname", (Func<object,string?>)TemplateBuiltins.ClrTypeFullName)
                 .SetValue("clr_toArray",      (Func<IEnumerable<object>,object[]>)TemplateBuiltins.ClrToObject)
                 .SetValue("safe_html",        (Func<string,string>)TemplateOutput.SafeHtml)
                 .SetValue("safe_css_str",     (Func<string,string>)TemplateOutput.SafeCssStr)
@@ -243,7 +244,7 @@ namespace FPLedit.Templating
         private static class TemplateBuiltins
         {
             public static object[] ClrToObject(IEnumerable<object> o) => o.ToArray();
-            public static string ClrTypeFullName(object o) => o.GetType().FullName;
+            public static string? ClrTypeFullName(object o) => o.GetType().FullName;
             public static string ClrTypeName(object o) => o.GetType().Name;
         }
     }

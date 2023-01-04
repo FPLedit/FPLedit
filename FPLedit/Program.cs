@@ -1,3 +1,4 @@
+#nullable enable
 using Eto.Forms;
 using FPLedit.Config;
 using FPLedit.CrashReporting;
@@ -14,12 +15,12 @@ namespace FPLedit
 {
     internal static class Program
     {
-        public static Application App { get; private set; }
+        public static Application? App { get; private set; }
 
         public static bool ExceptionQuit { get; private set; }
 
-        private static MainForm mainForm;
-        private static CrashReporter crashReporter;
+        private static MainForm? mainForm;
+        private static CrashReporter? crashReporter;
         private static bool crashReporterStarted;
 
         /// <summary>
@@ -28,7 +29,7 @@ namespace FPLedit
         [STAThread]
         private static void Main(string[] args)
         {
-            string flagWarning = null;
+            string? flagWarning = null;
             var options = new OptionSet
             {
                 { "log-console|mp-log", v => OptionsParser.ConsoleLog = v != null },
@@ -78,7 +79,7 @@ namespace FPLedit
             crashReporter = mainForm.CrashReporter;
             
             // Close all other windows when attempting to close main form.
-            mainForm.Closing += (s, e) =>
+            mainForm.Closing += (_, _) =>
             {
                 var windows = App.Windows.ToArray();
                 foreach (var window in windows)
@@ -91,7 +92,7 @@ namespace FPLedit
             App.Run(mainForm);
         }
 
-        private static void OnLocalizeString(object sender, LocalizeEventArgs e)
+        private static void OnLocalizeString(object? sender, LocalizeEventArgs e)
         {
             e.LocalizedText = e.Text;
             if (e.Source is MenuBar)
@@ -127,10 +128,10 @@ namespace FPLedit
             App?.Restart();
         }
 
-        private static void UnhandledException(object sender, Eto.UnhandledExceptionEventArgs e)
+        private static void UnhandledException(object? sender, Eto.UnhandledExceptionEventArgs e)
         {
             var crashReporterStartedBefore = crashReporterStarted;
-            var report = new CrashReport(mainForm.Bootstrapper.ExtensionManager, e.ExceptionObject as Exception);
+            var report = new CrashReport(mainForm?.Bootstrapper.ExtensionManager, e.ExceptionObject as Exception);
             if (crashReporter != null && !crashReporterStarted)
             {
                 crashReporterStarted = true;
@@ -147,7 +148,7 @@ namespace FPLedit
             {
                 ExceptionQuit = true;
                 if (shouldRestart)
-                    App.Restart();
+                    App?.Restart();
                 Environment.Exit(-1);
             }
         }

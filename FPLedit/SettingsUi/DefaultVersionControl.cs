@@ -1,3 +1,4 @@
+#nullable enable
 using System.Linq;
 using Eto.Drawing;
 using Eto.Forms;
@@ -27,7 +28,7 @@ namespace FPLedit.SettingsUi
             };
 
             var linearDropDown = new DropDown { DataStore = linVersions.Cast<object>(), SelectedValue = Timetable.DefaultLinearVersion };
-            linearDropDown.SelectedValueChanged += (s, e) =>
+            linearDropDown.SelectedValueChanged += (_, _) =>
             {
                 var linVersion = (TimetableVersion) linearDropDown.SelectedValue;
                 Timetable.DefaultLinearVersion = linVersion;
@@ -35,7 +36,7 @@ namespace FPLedit.SettingsUi
             };
 
             var networkDropDown = new DropDown { DataStore = netVersions.Cast<object>(), SelectedValue = Timetable.DefaultNetworkVersion };
-            networkDropDown.SelectedValueChanged += (s, e) =>
+            networkDropDown.SelectedValueChanged += (_, _) =>
             {
                 var netVersion = (TimetableVersion) networkDropDown.SelectedValue;
                 Timetable.DefaultNetworkVersion = netVersion;

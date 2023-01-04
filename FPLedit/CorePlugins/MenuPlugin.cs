@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Linq;
 using Eto.Forms;
@@ -19,11 +20,11 @@ namespace FPLedit.CorePlugins
             pluginInterface.ExtensionsLoaded += PluginInterface_ExtensionsLoaded;
             pluginInterface.FileStateChanged += PluginInterface_FileStateChanged;
 
-            editRoot = (ButtonMenuItem) ((MenuBar) pluginInterface.Menu).GetItem(MainForm.LocEditMenu);
-            previewRoot = (ButtonMenuItem) ((MenuBar) pluginInterface.Menu).GetItem(MainForm.LocPreviewMenu);
+            editRoot = (ButtonMenuItem) ((MenuBar) pluginInterface.Menu).GetItem(MainForm.LocEditMenu)!;
+            previewRoot = (ButtonMenuItem) ((MenuBar) pluginInterface.Menu).GetItem(MainForm.LocPreviewMenu)!;
         }
         
-        private void PluginInterface_ExtensionsLoaded(object sender, EventArgs e)
+        private void PluginInterface_ExtensionsLoaded(object? sender, EventArgs e)
         {
             var previewables = pluginInterface.GetRegistered<IPreviewAction>();
             if (previewables.Length == 0)
@@ -45,7 +46,7 @@ namespace FPLedit.CorePlugins
 #pragma warning restore CA2000
         }
         
-        private void PluginInterface_FileStateChanged(object sender, FileStateChangedEventArgs e)
+        private void PluginInterface_FileStateChanged(object? sender, FileStateChangedEventArgs e)
         {
             foreach (var ddi in previewRoot.Items.OfType<ButtonMenuItem>())
                 ddi.Enabled = e.FileState.Opened && e.FileState.LineCreated;

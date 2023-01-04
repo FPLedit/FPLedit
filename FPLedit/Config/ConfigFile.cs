@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace FPLedit.Config
     {
         private readonly List<ILine> lines;
 
-        private Stream stream;
+        private Stream? stream;
         private readonly bool leaveOpen;
 
         public bool IsReadonly => stream == null || !stream.CanWrite;
@@ -38,22 +39,20 @@ namespace FPLedit.Config
             if (stream.Position != 0L && stream.CanSeek)
                 stream.Seek(0, SeekOrigin.Begin);
 
-            using (var sr = new StreamReader(stream, Encoding.UTF8, false, 1024, true))
+            using var sr = new StreamReader(stream, Encoding.UTF8, false, 1024, true);
+            string? line;
+            while ((line = sr.ReadLine()) != null)
             {
-                string line;
-                while ((line = sr.ReadLine()) != null)
-                {
-                    if (line.Trim() == "")
-                        lines.Add(new EmptyLine());
-                    else if (line.Trim().StartsWith("#"))
-                        lines.Add(new CommentLine() {Comment = line});
-                    else
-                        lines.Add(new ValueLine(line));
-                }
+                if (line.Trim() == "")
+                    lines.Add(new EmptyLine());
+                else if (line.Trim().StartsWith("#"))
+                    lines.Add(new CommentLine(line));
+                else
+                    lines.Add(ValueLine.Parse(line));
             }
         }
 
-        public string Get(string key)
+        public string? Get(string key)
             => lines.OfType<ValueLine>().FirstOrDefault(vl => vl.Key == key)?.Value;
 
         public void Set(string key, string value)
@@ -80,8 +79,8 @@ namespace FPLedit.Config
                 return; // We hav no backing file.
             var text = string.Join("\n", lines.Select(l => l.Output));
             stream.SetLength(0);
-            using (var sw = new StreamWriter(stream, new UTF8Encoding(false), 1024, true))
-                sw.Write(text);
+            using var sw = new StreamWriter(stream, new UTF8Encoding(false), 1024, true);
+            sw.Write(text);
         }
 
         private interface ILine
@@ -89,35 +88,26 @@ namespace FPLedit.Config
             string Output { get; }
         }
 
-        private class ValueLine : ILine
+        private record ValueLine(string Key, string Value) : ILine
         {
-            public string Key { get; }
-            public string Value { get; set; }
+            public string Value { get; set; } = Value;
             public string Output => $"{Key}=\"{Value}\"";
 
-            public ValueLine(string line)
+            public static ValueLine Parse(string line)
             {
                 var parts = line.Trim().Split('=');
                 if (parts.Length != 2 || !parts[1].StartsWith("\"") || !parts[1].EndsWith("\""))
                     throw new FormatException(T._("Konfiguration: Falsches Format in Zeile: {0}", line));
-                Key = parts[0];
-                Value = parts[1].Substring(1, parts[1].Length - 2);
-            }
-
-            public ValueLine(string key, string value)
-            {
-                Key = key;
-                Value = value;
+                return new ValueLine(parts[0], parts[1].Substring(1, parts[1].Length - 2));
             }
         }
 
-        private class CommentLine : ILine
+        private record CommentLine(string Comment) : ILine
         {
-            public string Comment { get; set; }
             public string Output => Comment;
         }
 
-        private class EmptyLine : ILine
+        private record EmptyLine() : ILine
         {
             public string Output => "";
         }

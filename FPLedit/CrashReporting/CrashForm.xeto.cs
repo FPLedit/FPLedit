@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿#nullable enable
+using Eto.Forms;
 using FPLedit.Shared.UI;
 using System;
 using System.IO;
@@ -9,20 +10,20 @@ namespace FPLedit.CrashReporting
     internal sealed class CrashForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
-        private readonly Label fnLabel;
-        private readonly TextArea infoTextBox;
-        private readonly GroupBox restoreGroupBox;
-        private readonly Button norestoreButton;
+        private readonly Label fnLabel = default!;
+        private readonly TextArea infoTextBox = default!;
+        private readonly GroupBox restoreGroupBox = default!;
+        private readonly Button norestoreButton = default!;
 #pragma warning restore CS0649
 
-        private readonly string crash_fn;
+        private readonly string crashFn;
 
         public CrashForm(CrashReporter reporter)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            crash_fn = reporter.ReportFn;
-            infoTextBox.Text = File.ReadAllText(crash_fn);
+            crashFn = reporter.ReportFn;
+            infoTextBox.Text = File.ReadAllText(crashFn);
             infoTextBox.Selection = new Range<int>(0, 0);
 
             if (reporter.HasCurrentTtBackup)
@@ -33,7 +34,7 @@ namespace FPLedit.CrashReporting
 
         private void MailButton_Click(object sender, EventArgs e) => OpenHelper.Open("mailto:info@manuelhu.de?subject=Bugreport%20FPLedit");
 
-        private void FolderButton_Click(object sender, EventArgs e) => OpenHelper.Open(Path.GetDirectoryName(crash_fn));
+        private void FolderButton_Click(object sender, EventArgs e) => OpenHelper.Open(Path.GetDirectoryName(crashFn)!);
 
         private void RestoreButton_Click(object sender, EventArgs e) => Close(DialogResult.Ok);
 

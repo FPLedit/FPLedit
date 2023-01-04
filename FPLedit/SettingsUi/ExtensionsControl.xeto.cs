@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿#nullable enable
+using Eto.Forms;
 using FPLedit.Extensibility;
 using System;
 using System.Linq;
@@ -26,10 +27,10 @@ namespace FPLedit.SettingsUi
         private readonly IRestartable restartable;
 
 #pragma warning disable CS0649
-        private readonly ListBox enabledListBox, disabledListBox;
-        private readonly Button deactivateButton, activateButton;
-        private readonly Label infoLabel;
-        private readonly StackLayout restartStack;
+        private readonly ListBox enabledListBox = default!, disabledListBox = default!;
+        private readonly Button deactivateButton = default!, activateButton = default!;
+        private readonly Label infoLabel = default!;
+        private readonly StackLayout restartStack = default!;
 #pragma warning restore CS0649
 
         public ExtensionsControl(ExtensionManager mg, IRestartable restartable)
@@ -73,7 +74,7 @@ namespace FPLedit.SettingsUi
             if (lb.SelectedIndex == -1)
                 return;
             var plg = ((ListItem)lb.Items[lb.SelectedIndex]).Tag as PluginInfo;
-            if (plg.Author != null)
+            if (plg?.Author != null)
                 infoLabel.Text = T._("Autor:") + " " + plg.Author + (plg.SecurityContext == SecurityContext.Official ? " " + T._("[Offizielle Erweiterung]") : "");
             else
                 infoLabel.Text = "";

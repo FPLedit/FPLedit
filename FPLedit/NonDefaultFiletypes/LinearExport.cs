@@ -1,6 +1,6 @@
-﻿using FPLedit.Shared;
+﻿#nullable enable
+using FPLedit.Shared;
 using FPLedit.Shared.Filetypes;
-using FPLedit.Shared.Rendering;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,7 +12,7 @@ namespace FPLedit.NonDefaultFiletypes
     {
         public string Filter => T._("Fahrplan Dateien (*.fpl)|*.fpl");
 
-        public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[] flags = null)
+        public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null)
         {
             if (tt.Type == TimetableType.Linear)
                 throw new TimetableTypeNotSupportedException(TimetableType.Linear, "convert to linear");
@@ -51,8 +51,8 @@ namespace FPLedit.NonDefaultFiletypes
             {
                 var data = trainPaths[t];
 
-                var sta1 = data.PathEntries.FirstOrDefault()?.Station;
-                var sta2 = data.PathEntries.LastOrDefault()?.Station;
+                var sta1 = data.PathEntries.FirstOrDefault()?.Station!;
+                var sta2 = data.PathEntries.LastOrDefault()?.Station!;
 
                 var dir = TrainDirection.ti;
                 if (sta1 != sta2)
@@ -65,7 +65,7 @@ namespace FPLedit.NonDefaultFiletypes
 
                 t.XMLEntity.XName = dir.ToString();
                 
-                if (!(t is IWritableTrain wt))
+                if (t is not IWritableTrain wt)
                     continue;
 
                 wt.Children.Clear(); // Clear all existing arrdeps...

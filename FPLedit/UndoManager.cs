@@ -1,4 +1,5 @@
-﻿using FPLedit.Shared;
+﻿#nullable enable
+using FPLedit.Shared;
 using System;
 using System.Linq;
 
@@ -8,10 +9,10 @@ namespace FPLedit
     {
         private const int MAX_STEPS = 2;
 
-        private Timetable[] steps;
+        private Timetable?[] steps;
         private int pointer;
 
-        private Timetable stagedStep = null;
+        private Timetable? stagedStep = null;
 
         public bool CanGoBack => steps.Any(s => s != null);
 
@@ -20,7 +21,7 @@ namespace FPLedit
             steps = new Timetable[MAX_STEPS];
         }
 
-        public Timetable Undo()
+        public Timetable? Undo()
         {
             if (steps.All(s => s == null))
                 return null;

@@ -4,23 +4,8 @@ namespace FPLedit.Shared
     /// Contains information about the compatibility of a given file version with FPLedit as well as jTrainGraph.
     /// </summary>
     [Templating.TemplateSafe]
-    public readonly struct TimetableVersionCompat
-    {
-        public TimetableVersion Version { get; }
-        public TimetableType Type { get; }
-        public TtVersionCompatType Compatibility { get; }
+    public record TimetableVersionCompat(TimetableVersion Version, TtVersionCompatType Compatibility, TimetableType Type, (string version, TtVersionJtgCompat cp)[] JtgVersionCompatibility);
 
-        public (string version, TtVersionJtgCompat cp)[] JtgVersionCompatibility { get; }
-        
-        public TimetableVersionCompat(TimetableVersion version, TtVersionCompatType compatibility, TimetableType type, (string, TtVersionJtgCompat)[] jtgCompat)
-        {
-            Version = version;
-            Compatibility = compatibility;
-            Type = type;
-            JtgVersionCompatibility = jtgCompat;
-        }
-    }
-    
     /// <summary>
     /// Specifies, whether a given file version is compatible with FPLedit.
     /// </summary>

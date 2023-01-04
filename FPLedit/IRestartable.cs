@@ -1,4 +1,5 @@
-﻿namespace FPLedit
+﻿#nullable enable
+namespace FPLedit
 {
     public interface IRestartable
     {

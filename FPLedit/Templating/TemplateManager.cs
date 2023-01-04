@@ -1,4 +1,5 @@
-﻿using FPLedit.Shared;
+﻿#nullable enable
+using FPLedit.Shared;
 using FPLedit.Shared.Templating;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace FPLedit.Templating
             this.TemplatePath = templatePath;
             this.store = store;
             this.pluginInterface = pluginInterface;
+            this.templates = new List<TemplateHost>();
 
             enabledTemplates = pluginInterface.Settings.Get("tmpl.enabled", "").Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
         }

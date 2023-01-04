@@ -1,4 +1,4 @@
-using System;
+#nullable enable
 using Eto.Drawing;
 using Eto.Forms;
 using FPLedit.Shared;
@@ -28,7 +28,7 @@ namespace FPLedit.SettingsUi
             };
             cb.CheckedBinding.Bind(() => mg.AutoUpdateEnabled, (b) => mg.AutoUpdateEnabled = b ?? false);
 
-            checkButton.Click += (s, e) =>
+            checkButton.Click += (_, _) =>
             {
                 mg.CheckResult = (newAvail, vi) =>
                 {
@@ -46,7 +46,7 @@ namespace FPLedit.SettingsUi
                             T._("Auf neue Version prüfen"));
                     }
                 };
-                mg.CheckError = ex =>
+                mg.CheckError = (_) =>
                 {
                     MessageBox.Show(T._("Verbindung mit dem Server fehlgeschlagen!"),
                         T._("Auf neue Version prüfen"));
