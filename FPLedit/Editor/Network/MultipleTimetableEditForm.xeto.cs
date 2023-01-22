@@ -1,6 +1,7 @@
 ﻿using Eto.Forms;
 using FPLedit.Shared;
 using System;
+using System.Linq;
 using FPLedit.Shared.UI;
 using FPLedit.Editor.TimetableEditor;
 
@@ -40,17 +41,17 @@ namespace FPLedit.Editor.Network
             //Title = Title.Replace("{train}", t.TName);
 
             trainDropDown.ItemTextBinding = Binding.Delegate<ITrain, string>(tr => tr.TName);
-            trainDropDown.DataStore = pluginInterface.Timetable.Trains;
+            trainDropDown.DataStore = pluginInterface.Timetable.Trains.Where(tr => tr is IWritableTrain);
             trainDropDown.SelectedIndexChanged += TrainDropDown_SelectedIndexChanged;
             trainDropDown.SelectedIndex = 0;
         }
 
         private void TrainDropDown_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var t = (Train)trainDropDown.SelectedValue;
             if (editor.Initialized)
-                editor.ApplyChanges();
+                editor.ApplyChanges(); // Save old train data.
 
+            var t = (IWritableTrain)trainDropDown.SelectedValue;
             editor.Initialize(pluginInterface.Timetable, t);
         }
 
