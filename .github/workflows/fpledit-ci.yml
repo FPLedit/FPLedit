@@ -31,7 +31,7 @@ jobs:
           echo "FPLEDIT_GIT_BETA=1" >> $GITHUB_ENV
 
       - name: Build
-        run: bash ./build.sh --rid=linux-x64,osx-x64,win-x64
+        run: bash ./build.sh --rid=linux-x64,osx-x64,win-x64,win-x86
         env:
           FPLEDIT_GIT: ${{ github.sha }}
           FPLEDIT_DOK_PDF: ./Dokumentation.pdf
