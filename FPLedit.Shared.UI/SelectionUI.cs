@@ -15,8 +15,7 @@ namespace FPLedit.Shared.UI
 
         private ActionInfo? selectedAction;
 
-        [MaybeNull]
-        public T SelectedState => selectedAction != null ? selectedAction.Value : default;
+        public T? SelectedState => selectedAction != null ? selectedAction.Value : default;
         
         public bool EnabledOptionSelected => selectedAction?.Enabled ?? false;
 

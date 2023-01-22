@@ -30,9 +30,8 @@ namespace FPLedit.Shared
         /// <param name="defaultValue"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        [return: MaybeNull]
         [return: NotNullIfNotNull("defaultValue")]
-        T GetAttribute<T>(string key, [AllowNull] T defaultValue = default);
+        T? GetAttribute<T>(string key, T? defaultValue = default);
 
         /// <summary>
         /// Set or add an attribute of the underlying XML node.

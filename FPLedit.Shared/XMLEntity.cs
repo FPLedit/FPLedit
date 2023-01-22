@@ -90,9 +90,8 @@ namespace FPLedit.Shared
             ParentElement?.NotifyChildChanged();
         }
         
-        [return: MaybeNull]
         [return: NotNullIfNotNull("defaultValue")]
-        public T GetAttribute<T>(string key, [AllowNull] T defaultValue = default)
+        public T? GetAttribute<T>(string key, T? defaultValue = default)
         {
             if (Attributes.TryGetValue(key, out string? val))
             {
