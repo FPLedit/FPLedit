@@ -12,12 +12,12 @@ namespace FPLedit.Buchfahrplan.Forms
         private readonly BfplAttrs attrs;
 
 #pragma warning disable CS0649
-        private readonly DropDown templateComboBox;
-        private readonly ComboBox fontComboBox;
-        private readonly Label exampleLabel, cssLabel;
-        private readonly UrlButton cssHelpLinkLabel;
-        private readonly CheckBox consoleCheckBox, commentCheckBox, daysCheckBox;
-        private readonly TextArea cssTextBox;
+        private readonly DropDown templateComboBox = null!;
+        private readonly ComboBox fontComboBox = null!;
+        private readonly Label exampleLabel = null!, cssLabel = null!;
+        private readonly UrlButton cssHelpLinkLabel = null!;
+        private readonly CheckBox consoleCheckBox = null!, commentCheckBox = null!, daysCheckBox = null!;
+        private readonly TextArea cssTextBox = null!;
 #pragma warning restore CS0649
 
         public SettingsControl(IPluginInterface pluginInterface)
@@ -51,7 +51,7 @@ namespace FPLedit.Buchfahrplan.Forms
             attrs.ShowComments = commentCheckBox.Checked ?? false;
             attrs.ShowDays = daysCheckBox.Checked ?? false;
 
-            var tmpl = (ITemplate)templateComboBox.SelectedValue;
+            var tmpl = (ITemplate?)templateComboBox.SelectedValue;
             if (tmpl != null)
                 attrs.Template = tmpl.Identifier;
 

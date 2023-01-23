@@ -10,17 +10,17 @@ namespace FPLedit.Buchfahrplan.Forms
     internal sealed class VelocityEditForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
-        private readonly TextBox nameTextBox, positionTextBox, velocityTextBox;
-        private readonly DropDown wellenComboBox;
+        private readonly TextBox nameTextBox = null!, positionTextBox = null!, velocityTextBox = null!;
+        private readonly DropDown wellenComboBox = null!;
 #pragma warning restore CS0649
         private readonly ValidatorCollection validators;
 
-        public IStation Station { get; set; }
+        public IStation Station { get; init; } = null!;
 
         private readonly bool isPoint = false;
         private readonly int route;
 
-        public VelocityEditForm()
+        private VelocityEditForm()
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 

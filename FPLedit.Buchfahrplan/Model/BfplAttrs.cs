@@ -88,7 +88,7 @@ namespace FPLedit.Buchfahrplan.Model
                 Points.Add(new BfplPoint(c, ParentTimetable));
         }
 
-        public static BfplAttrs GetAttrs(Timetable tt)
+        public static BfplAttrs? GetAttrs(Timetable tt)
         {
             var attrsEn = tt.Children.FirstOrDefault(x => x.XName == "bfpl_attrs");
             if (attrsEn != null)

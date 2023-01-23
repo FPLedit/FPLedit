@@ -11,28 +11,28 @@ namespace FPLedit.Buchfahrplan.Forms
     internal sealed class VelocityForm : FDialog<DialogResult>
     {
 #pragma warning disable CS0649
-        private readonly GridView gridView;
-        private readonly Button deleteButton;
+        private readonly GridView gridView = null!;
+        private readonly Button deleteButton = null!;
 #pragma warning restore CS0649
 
-        private readonly IPluginInterface pluginInterface;
-        private readonly Route route;
-        private readonly Timetable tt;
-        private readonly BfplAttrs attrs;
-        private readonly object backupHandle;
+        private readonly IPluginInterface pluginInterface = null!;
+        private readonly Route route = null!;
+        private readonly Timetable tt = null!;
+        private readonly BfplAttrs? attrs;
+        private readonly object backupHandle = null!;
 
         private VelocityForm()
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            gridView.AddColumn<IStation>(s => s.Positions.GetPosition(route.Index).ToString(), T._("km"));
+            gridView.AddColumn<IStation>(s => s.Positions.GetPosition(route!.Index).ToString()!, T._("km"));
             gridView.AddColumn<IStation>(s => s.SName, T._("Name"));
-            gridView.AddColumn<IStation>(s => s.Vmax.GetValue(route.Index), T._("Vmax"));
-            gridView.AddColumn<IStation>(s => s.Wellenlinien.GetValue(route.Index).ToString(), T._("Wellenlinien"));
+            gridView.AddColumn<IStation>(s => s.Vmax.GetValue(route!.Index)!, T._("Vmax"));
+            gridView.AddColumn<IStation>(s => s.Wellenlinien.GetValue(route!.Index).ToString(), T._("Wellenlinien"));
 
-            gridView.MouseDoubleClick += (s, e) => EditPoint(false);
+            gridView.MouseDoubleClick += (_, _) => EditPoint(false);
 
-            gridView.SelectedItemsChanged += (s, e) => SelectPoint();
+            gridView.SelectedItemsChanged += (_, _) => SelectPoint();
 
             this.AddCloseHandler();
             this.AddSizeStateHandler();
@@ -44,9 +44,7 @@ namespace FPLedit.Buchfahrplan.Forms
             tt = pluginInterface.Timetable;
             this.route = route;
 
-            attrs = BfplAttrs.GetAttrs(tt);
-            if (attrs == null)
-                attrs = BfplAttrs.CreateAttrs(tt);
+            attrs = BfplAttrs.GetAttrs(tt) ?? BfplAttrs.CreateAttrs(tt);
 
             backupHandle = pluginInterface.BackupTimetable();
             UpdateListView();
@@ -54,7 +52,7 @@ namespace FPLedit.Buchfahrplan.Forms
 
         private void UpdateListView()
         {
-            List<IStation> points = new List<IStation>();
+            var points = new List<IStation>();
             points.AddRange(route.Stations);
             if (attrs != null)
                 points.AddRange(attrs.GetRoutePoints(route.Index));
@@ -64,22 +62,20 @@ namespace FPLedit.Buchfahrplan.Forms
 
         private void AddPoint()
         {
-            using (var vef = new VelocityEditForm(tt, route.Index))
+            using var vef = new VelocityEditForm(tt, route.Index);
+            if (vef.ShowModal(this) == DialogResult.Ok)
             {
-                if (vef.ShowModal(this) == DialogResult.Ok)
+                var p = (BfplPoint) vef.Station;
+
+                var pos = p.Positions.GetPosition(route.Index);
+                if (pos < route.MinPosition || pos > route.MaxPosition)
                 {
-                    var p = (BfplPoint) vef.Station;
-
-                    var pos = p.Positions.GetPosition(route.Index);
-                    if (pos < route.MinPosition || pos > route.MaxPosition)
-                    {
-                        MessageBox.Show(T._("Die Position muss im Streckenbereich liegen, also zwischen {0} und {1}!", route.MinPosition, route.MaxPosition), "FPLedit");
-                        return;
-                    }
-
-                    attrs?.AddPoint(p);
-                    UpdateListView();
+                    MessageBox.Show(T._("Die Position muss im Streckenbereich liegen, also zwischen {0} und {1}!", route.MinPosition, route.MaxPosition), "FPLedit");
+                    return;
                 }
+
+                attrs?.AddPoint(p);
+                UpdateListView();
             }
         }
 
@@ -89,9 +85,9 @@ namespace FPLedit.Buchfahrplan.Forms
             {
                 var sta = (IStation) gridView.SelectedItem;
 
-                using (var vef = new VelocityEditForm(sta, route.Index))
-                    if (vef.ShowModal(this) == DialogResult.Ok)
-                        UpdateListView();
+                using var vef = new VelocityEditForm(sta, route.Index);
+                if (vef.ShowModal(this) == DialogResult.Ok)
+                    UpdateListView();
             }
             else if (message)
                 MessageBox.Show(T._("Zuerst muss eine Zeile ausgewählt werden!"), T._("Höchstgeschwindigkeit ändern"));

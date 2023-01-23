@@ -13,7 +13,7 @@ namespace FPLedit.Buchfahrplan.Templates
 {
     public sealed class TemplateHelper
     {
-        private readonly BfplAttrs attrs;
+        private readonly BfplAttrs? attrs;
         private readonly Timetable tt;
         private readonly IFilterRuleContainer filterable;
         private readonly IntersectionAnalyzer analyzer;

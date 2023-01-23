@@ -8,8 +8,8 @@ namespace FPLedit.Shared.DefaultImplementations
     public abstract class BaseFilterRuleContainer
     {
         private static readonly EscapeSplitHelper escape = new EscapeSplitHelper('|');
-        
-        protected abstract IPatternSource GetProvider(Timetable tt);
+
+        protected abstract IPatternSource? GetProvider(Timetable tt);
         protected abstract IPatternSource CreateProvider(Timetable tt);
 
         public IEnumerable<FilterRule> LoadStationRules(Timetable tt) => escape.SplitEscaped(GetProvider(tt)?.StationPatterns ?? "").Select(s => new FilterRule(s));
@@ -32,17 +32,18 @@ namespace FPLedit.Shared.DefaultImplementations
 
     public sealed class DefaultFilterRuleContainer : BaseFilterRuleContainer, IFilterRuleContainer
     {
-        private readonly Func<Timetable, IPatternSource> getProvider, createProvider;
+        private readonly Func<Timetable, IPatternSource?> getProvider;
+        private readonly Func<Timetable, IPatternSource> createProvider;
         public string DisplayName { get; }
         
-        public DefaultFilterRuleContainer(string displayName, Func<Timetable, IPatternSource> getProvider, Func<Timetable,IPatternSource> createProvider)
+        public DefaultFilterRuleContainer(string displayName, Func<Timetable, IPatternSource?> getProvider, Func<Timetable,IPatternSource> createProvider)
         {
             this.getProvider = getProvider;
             this.createProvider = createProvider;
             DisplayName = displayName;
         }
         
-        protected override IPatternSource GetProvider(Timetable tt) => getProvider(tt);
+        protected override IPatternSource? GetProvider(Timetable tt) => getProvider(tt);
 
         protected override IPatternSource CreateProvider(Timetable tt) => createProvider(tt);
     }
