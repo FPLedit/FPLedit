@@ -20,16 +20,19 @@ namespace FPLedit.Shared.Helpers
         /// <param name="existingStation">Is this station already registered at the Timetable instance?</param>
         /// <param name="newPos">New position to move the station to.</param>
         /// <param name="route">Route the move should be applied to.</param>
-        /// <remarks>This method is safe to move, as it does not modify state.</remarks>
+        /// <remarks>This method is safe to use, as it does not modify state.</remarks>
         /// <returns>true, when an unsafe update is required.</returns>
         public static bool RequiresUnsafeMove(Station sta, bool existingStation, float newPos, int route)
         {
             if (!existingStation)
                 return false;
 
-            var tt = sta.ParentTimetable!;
+            var tt = sta.ParentTimetable;
             var rt = tt.GetRoute(route).Stations;
             var idx = rt.IndexOf(sta);
+
+            if (!tt.Trains.Any())
+                return false; // We don't have to rewrite trains if no trains are existing...
 
             if (idx == -1)
                 return false; //HACK: Not on this route. Probably something weird happening, but at least try to exit gracefully.
@@ -60,7 +63,10 @@ namespace FPLedit.Shared.Helpers
             var needsUnsafeUpdate = RequiresUnsafeMove(sta, existingStation, newPos, route);
 
             if (!needsUnsafeUpdate)
+            {
                 sta.Positions.SetPosition(route, newPos);
+                sta.ParentTimetable.RebuildRouteCache(route);
+            }
 
             return !needsUnsafeUpdate;
         }
@@ -90,13 +96,14 @@ namespace FPLedit.Shared.Helpers
             if (!requiresUnsafeMove)
             {
                 sta.Positions.SetPosition(route, newPos);
+                sta.ParentTimetable.RebuildRouteCache(route);
                 return false;
             }
 
             var ardeps = new Dictionary<IWritableTrain, ArrDep>();
             var emptyArray = Array.Empty<int>();
 
-            foreach (var tra in sta.ParentTimetable!.Trains)
+            foreach (var tra in sta.ParentTimetable.Trains)
             {
                 if (!(tra is IWritableTrain wt))
                     continue;

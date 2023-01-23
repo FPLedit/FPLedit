@@ -73,15 +73,9 @@ namespace FPLedit.Editor
         }
 
         /// <summary>
-        /// Form to create a new station without a given route index.
-        /// </summary>
-        public EditStationForm(IPluginInterface pluginInterface, Timetable tt) : this(pluginInterface, tt, Timetable.UNASSIGNED_ROUTE_ID)
-        {
-        }
-
-        /// <summary>
         /// Form to create a new station with a given route index.
         /// </summary>
+        /// <remarks>Use <see cref="Timetable.UNASSIGNED_ROUTE_ID"/> as route to not specify a specific route id.</remarks>
         public EditStationForm(IPluginInterface pluginInterface, Timetable tt, int route) : this(tt, pluginInterface)
         {
             Title = T._("Neue Station erstellen");
@@ -99,7 +93,7 @@ namespace FPLedit.Editor
         {
             Title = T._("Station bearbeiten");
             nameTextBox.Text = station.SName;
-            positionTextBox.Text = station.Positions.GetPosition(route).Value.ToString("0.0");
+            positionTextBox.Text = station.Positions.GetPosition(route)!.Value.ToString("0.0");
             
             Station = station;
             this.route = route;

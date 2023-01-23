@@ -57,7 +57,10 @@ namespace FPLedit.Shared
         /// 
         /// <para>This is probably safe when you generate timetable files from scratch, or use it on custom non-<see cref="Station"/> <see cref="IStation"/>-Entity types, as long as they are not entangled with trains.</para>
         /// </summary>
-        /// <remarks>If applied on existing stations: <see cref="StationMoveHelper.PerformUnsafeMove"/> on why this is even worse than that method (and what could possibly go wrong).</remarks>
+        /// <remarks>
+        /// <para>If applied on existing stations: <see cref="StationMoveHelper.PerformUnsafeMove"/> on why this is even worse than that method (and what could possibly go wrong).</para>
+        /// <para>It might be neccessary to call <see cref="Timetable.RebuildRouteCache"/> after changing a position.</para>
+        /// </remarks>
         /// <param name="route"></param>
         /// <param name="km"></param>
         public void SetPosition(int route, float km)

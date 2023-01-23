@@ -143,7 +143,7 @@ namespace FPLedit.Editor.Rendering
             newLineButton.Click += (_, _) =>
             {
                 pluginInterface.StageUndoStep();
-                var nlf = new EditStationForm(pluginInterface, pluginInterface.Timetable);
+                var nlf = new EditStationForm(pluginInterface, pluginInterface.Timetable, Timetable.UNASSIGNED_ROUTE_ID);
                 if (nlf.ShowModal(this) == DialogResult.Ok)
                 {
                     networkRenderer.StartAddStation(nlf.Station, nlf.Position);
