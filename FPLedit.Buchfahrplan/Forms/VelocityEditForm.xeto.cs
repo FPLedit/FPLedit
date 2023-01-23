@@ -4,6 +4,7 @@ using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using FPLedit.Shared.UI.Validators;
 using System;
+using System.Collections.Generic;
 
 namespace FPLedit.Buchfahrplan.Forms
 {
@@ -11,13 +12,12 @@ namespace FPLedit.Buchfahrplan.Forms
     {
 #pragma warning disable CS0649
         private readonly TextBox nameTextBox = null!, positionTextBox = null!, velocityTextBox = null!;
-        private readonly DropDown wellenComboBox = null!;
+        private readonly DropDown wellenComboBox = null!, directionComboBox = null!;
 #pragma warning restore CS0649
         private readonly ValidatorCollection validators;
 
         public IStation Station { get; init; } = null!;
 
-        private readonly bool isPoint = false;
         private readonly int route;
 
         private VelocityEditForm()
@@ -31,6 +31,16 @@ namespace FPLedit.Buchfahrplan.Forms
             for (int i = 0; i < 4; i++)
                 wellenComboBox.Items.Add(i.ToString());
             wellenComboBox.SelectedIndex = 0;
+
+            Dictionary<string, string> directions = new()
+            {
+                [""] = T._("beide Richtungen"),
+                ["ti"] = T._("nur in Kilometrierungsrichtung"),
+                ["ta"] = T._("nur entgegen Kilometrierungsrichtung"),
+            };
+            directionComboBox.DataStore = directions.Keys;
+            directionComboBox.ItemTextBinding = Binding.Delegate<string, string>(s => directions[s]);
+            directionComboBox.SelectedIndex = 0;
         }
 
         public VelocityEditForm(Timetable tt, int route) : this()
@@ -40,7 +50,6 @@ namespace FPLedit.Buchfahrplan.Forms
             if (tt.Type == TimetableType.Network)
                 point._InternalAddRoute(route);
             Station = point;
-            isPoint = true;
             this.route = route;
         }
 
@@ -54,12 +63,16 @@ namespace FPLedit.Buchfahrplan.Forms
             nameTextBox.Text = sta.SName;
             wellenComboBox.SelectedIndex = sta.Wellenlinien.GetValue(route); // Achtung: Keine Datenbindung, Index!
 
-            isPoint = true;
-            if (sta is Station)
+            if (sta is BfplPoint p)
+                directionComboBox.SelectedValue = p.Direction.GetValue(route);
+
+            if (sta is not BfplPoint)
             {
                 positionTextBox.Enabled = false;
                 nameTextBox.Enabled = false;
-                isPoint = false;
+
+                directionComboBox.SelectedIndex = 0;
+                directionComboBox.Enabled = false;
             }
         }
 
@@ -74,10 +87,11 @@ namespace FPLedit.Buchfahrplan.Forms
             Station.Vmax.SetValue(route, velocityTextBox.Text);
             Station.Wellenlinien.SetValue(route, int.Parse(((IListItem)wellenComboBox.SelectedValue).Text));
 
-            if (isPoint)
+            if (Station is BfplPoint point)
             {
-                Station.Positions.SetPosition(route, float.Parse(positionTextBox.Text));
-                Station.SName = nameTextBox.Text;
+                point.Positions.SetPosition(route, float.Parse(positionTextBox.Text));
+                point.SName = nameTextBox.Text;
+                point.Direction.SetValue(route, (string)directionComboBox.SelectedValue);
             }
             Close(DialogResult.Ok);
         }
@@ -92,6 +106,7 @@ namespace FPLedit.Buchfahrplan.Forms
             public static readonly string Name = T._("Name");
             public static readonly string Vmax = T._("Höchstgeschwindigkeit");
             public static readonly string Wavelines = T._("Wellenlinien");
+            public static readonly string Direction = T._("Streckenrichtung");
             public static readonly string Cancel = T._("Abbrechen");
             public static readonly string Close = T._("Schließen");
         }

@@ -20,6 +20,10 @@
           <TextBox x:Name="velocityTextBox" Width="150" />
         </TableRow>
         <TableRow>
+          <Label Text="{x:Static e:VelocityEditForm+L.Direction}" />
+          <DropDown x:Name="directionComboBox" Width="150" />
+        </TableRow>
+        <TableRow>
           <Label Text="{x:Static e:VelocityEditForm+L.Wavelines}" />
           <DropDown x:Name="wellenComboBox" Width="150" />
         </TableRow>

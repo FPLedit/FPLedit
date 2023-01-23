@@ -26,11 +26,11 @@ namespace FPLedit.Buchfahrplan.Model
 
         [XAttrName("fpl-wl")]
         public RouteValueCollection<int> Wellenlinien
-            => new RouteValueCollection<int>(this, ParentTimetable, "fpl-wl", "0", s => int.Parse(s), i => i.ToString());
+            => new(this, ParentTimetable, "fpl-wl", "0", s => int.Parse(s), i => i.ToString());
 
         [XAttrName("fpl-vmax")]
         public RouteValueCollection<string> Vmax
-            => new RouteValueCollection<string>(this, ParentTimetable, "fpl-vmax", "", s => s, s => s);
+            => new(this, ParentTimetable, "fpl-vmax", "", s => s, s => s);
 
         [XAttrName("fpl-rt")]
         public int[] Routes
@@ -51,7 +51,10 @@ namespace FPLedit.Buchfahrplan.Model
             }
         }
 
-        public PositionCollection Positions => new PositionCollection(this, ParentTimetable);
+        public PositionCollection Positions => new(this, ParentTimetable);
+
+        public RouteValueCollection<string> Direction
+            => new(this, ParentTimetable, "fpl-dir", "", s => s, s => s);
 
         public int Id
         {

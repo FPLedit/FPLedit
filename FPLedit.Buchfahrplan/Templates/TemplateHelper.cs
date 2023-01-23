@@ -80,6 +80,11 @@ namespace FPLedit.Buchfahrplan.Templates
                     {
                         var px = po.Positions.GetPosition(route);
                         return px > minPos && px < maxPos;
+                    })
+                    .Where(po =>
+                    {
+                        var pdir = po.Direction.GetValue(route);
+                        return pdir == "" || pdir == dir.ToString();
                     });
                 // Sort the inserted points in the direction of the line segment.
                 var pointsSorted = pointsBetween.OrderBy(po => po.Positions.GetPosition(route)).ToArray();
