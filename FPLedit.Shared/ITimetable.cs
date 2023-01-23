@@ -181,19 +181,5 @@ namespace FPLedit.Shared
         /// Remove the specified link and all linked trains from this timetable. 
         /// </summary>
         void RemoveLink(TrainLink link);
-        
-        // Legacy linear APIs
-        /// <summary>
-        /// Returns all linear stations ordered by the given train direction. This does not work on network timetables obviosly.
-        /// </summary>
-        /// <remarks><see cref="TrainDirection.tr"/> is not a valid sort direction as it is not allowed on linear timetables.</remarks>
-        [Obsolete("Use route-based approach instead.")]
-        List<Station> GetLinearStationsOrderedByDirection(TrainDirection direction);
-        /// <summary>
-        /// Returns a display name based on the linear order of the stations. This does not work on network timetables obviosly.
-        /// </summary>
-        /// <remarks><see cref="TrainDirection.tr"/> is not a valid sort direction as it is not allowed on linear timetables.</remarks>
-        [Obsolete("Use route-based approach instead.")]
-        string GetLinearLineName(TrainDirection direction);
     }
 }

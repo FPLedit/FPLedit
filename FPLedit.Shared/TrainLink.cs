@@ -194,7 +194,7 @@ namespace FPLedit.Shared
                 if (applyTimes)
                 {
                     var path = ParentTimetable.Type == TimetableType.Linear
-                        ? ParentTimetable.GetLinearStationsOrderedByDirection(TrainDirection.ti) // All arrdeps are sorted in line direction if linear...
+                        ? ParentTimetable.GetRoute(Timetable.LINEAR_ROUTE_ID).Stations // All arrdeps are sorted in line direction if linear...
                         : lt.GetPath();
                     var arrdeps = lt.GetArrDepsUnsorted();
                     lt.Children.Clear();

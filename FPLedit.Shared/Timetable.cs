@@ -326,7 +326,7 @@ namespace FPLedit.Shared
             {
                 if (route != LINEAR_ROUTE_ID)
                     throw new TimetableTypeNotSupportedException(TimetableType.Linear, "routes");
-                stations = GetLinearStationsOrderedByDirection(TrainDirection.ti); // Replace collection with an ordered one.
+                stations = GetRoute(LINEAR_ROUTE_ID).Stations.ToList(); // Replace collection with an ordered one.
                 var idx = stations.IndexOf(sta); // Get temporary index.
                 var collectionIndex = idx;
 
@@ -940,45 +940,7 @@ namespace FPLedit.Shared
         public Timetable Clone() => this.DeepClone();
 
         [DebuggerStepThrough]
-        public override string ToString()
-            => string.Join(" | ", GetRoutes().Select(r => r.GetRouteName()));
-        
-        #region Legacy linear APIs
-        
-        /// <inheritdoc />
-        /// <exception cref="TimetableTypeNotSupportedException">Operation was applied to a network timetable, or with a network type direction (tr).</exception>
-        [Obsolete("Use route-based approach instead.")]
-        public List<Station> GetLinearStationsOrderedByDirection(TrainDirection direction)
-        {
-            if (Type == TimetableType.Network)
-                throw new TimetableTypeNotSupportedException(TimetableType.Network, "direction");
-            if (direction == TrainDirection.tr)
-                throw new TimetableTypeNotSupportedException(TimetableType.Network, "direction value tr");
-            
-            return (direction == TrainDirection.ta
-                ? GetRoute(LINEAR_ROUTE_ID).Stations.Reverse()
-                : GetRoute(LINEAR_ROUTE_ID).Stations).ToList();
-        }
-
-        /// <inheritdoc />
-        /// <exception cref="TimetableTypeNotSupportedException">Operation was applied to a network timetable, or with a network type direction (tr).</exception>
-        [Obsolete("Use route-based approach instead.")]
-        public string GetLinearLineName(TrainDirection direction)
-        {
-            if (Type == TimetableType.Network)
-                throw new TimetableTypeNotSupportedException(TimetableType.Network, "direction");
-            if (direction == TrainDirection.tr)
-                throw new TimetableTypeNotSupportedException(TimetableType.Network, "direction value tr");
-
-            var stas = GetLinearStationsOrderedByDirection(direction);
-
-            if (!stas.Any())
-                return "";
-            
-            return stas.First().SName + " - " + stas.Last().SName;
-        }
-        
-        #endregion
+        public override string ToString() => string.Join(" | ", GetRoutes().Select(r => r.GetRouteName()));
     }
 
     public class AmbiguousTransitionException : Exception

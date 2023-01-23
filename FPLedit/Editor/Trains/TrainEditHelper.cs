@@ -116,9 +116,9 @@ namespace FPLedit.Editor.Trains
         {
             if (tt.Type != TimetableType.Linear)
                 throw new TimetableTypeNotSupportedException(tt.Type, "Sorting at all stations");
-            
-            var stations = tt.GetLinearStationsOrderedByDirection(dir);
-            if (!topDown)
+
+            var stations = tt.GetRoute(Timetable.LINEAR_ROUTE_ID).Stations.ToList();
+            if (dir.IsSortReverse() ^ !topDown)
                 stations.Reverse();
 
             foreach (var sta in stations)

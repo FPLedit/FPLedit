@@ -49,7 +49,7 @@ namespace FPLedit.Aushangfahrplan.Templates
             var trainsInThisDir = trainsInThisDirObj.Cast<ITrain>().ToArray(); // From JS.
             if (tt.Type == TimetableType.Linear)
             {
-                var lSta = tt.GetLinearStationsOrderedByDirection(dir).LastOrDefault();
+                var lSta = tt.GetRoute(Timetable.LINEAR_ROUTE_ID).Stations.ToList().MaybeReverseDirection(dir).LastOrDefault();
                 if (lSta != sta)
                     return new[] { lSta };
                 return Array.Empty<Station>();

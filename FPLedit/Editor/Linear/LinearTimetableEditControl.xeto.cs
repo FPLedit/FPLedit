@@ -198,7 +198,7 @@ namespace FPLedit.Editor.Linear
 
         private void InitializeGridView(GridView view, TrainDirection dir)
         {
-            var stations = tt.GetLinearStationsOrderedByDirection(dir);
+            var stations = tt.GetRoute(Timetable.LINEAR_ROUTE_ID).Stations.ToList().MaybeReverseDirection(dir);
 
             view.AddColumn<DataElement>(t => t.Train.TName, T._("Zugnummer"));
 #pragma warning disable CA2000

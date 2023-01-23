@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace FPLedit.Shared
 {
@@ -34,6 +35,12 @@ namespace FPLedit.Shared
             if (dir == TrainDirection.tr)
                 throw new NotSupportedException("TrainDirection tr has no associated sorting behaviour!");
             return dir == TrainDirection.ta;
+        }
+
+        public static List<Station> MaybeReverseDirection(this List<Station> stations, TrainDirection dir)
+        {
+            if (IsSortReverse(dir)) stations.Reverse();
+            return stations;
         }
     }
 }

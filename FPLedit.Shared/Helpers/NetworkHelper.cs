@@ -28,7 +28,7 @@ namespace FPLedit.Shared.Helpers
             
             if (tt.Type == TimetableType.Linear)
             {
-                var stas = tt.GetLinearStationsOrderedByDirection(direction);
+                var stas = tt.GetRoute(Timetable.LINEAR_ROUTE_ID).Stations.ToList().MaybeReverseDirection(direction);
                 return stas.Skip(stas.IndexOf(sta) + 1).ToArray();
             }
             var stasAfter = new List<Station>();

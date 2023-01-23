@@ -48,6 +48,7 @@ namespace FPLedit.Shared
                 throw new TimetableTypeNotSupportedException(TimetableType.Linear, "AddAllArrDeps of path");
             if (InternalGetArrDeps().Any())
                 throw new InvalidOperationException("Train.AddAllArrDeps can only be used on empty trains.");
+
             foreach (var sta in path)
             {
                 var ardp = new ArrDep(ParentTimetable)
@@ -65,7 +66,8 @@ namespace FPLedit.Shared
                 throw new TimetableTypeNotSupportedException(TimetableType.Network, "Add linear ArrDeps");
             if (InternalGetArrDeps().Any())
                 throw new InvalidOperationException("Train.AddLinearArrDeps can only be used on empty trains.");
-            foreach (var sta in ParentTimetable.GetLinearStationsOrderedByDirection(TrainDirection.ti)) // All arrdeps are sorted in line direction if linear
+
+            foreach (var sta in ParentTimetable.GetRoute(Timetable.LINEAR_ROUTE_ID).Stations) // All arrdeps are sorted in line direction if linear
                 AddArrDep(sta, Timetable.LINEAR_ROUTE_ID);
         }
 
@@ -74,7 +76,9 @@ namespace FPLedit.Shared
         {
             if (ParentTimetable.Type == TimetableType.Network)
                 return InternalGetArrDeps().Select(ardp => ParentTimetable.GetStationById(ardp.StationId) ?? throw new Exception("Station not found!")).ToList();
-            return ParentTimetable.GetLinearStationsOrderedByDirection(Direction);
+
+            return ParentTimetable.GetRoute(Timetable.LINEAR_ROUTE_ID).Stations
+                .ToList().MaybeReverseDirection(Direction);
         }
 
         /// <inheritdoc />
@@ -87,7 +91,7 @@ namespace FPLedit.Shared
             {
                 if (route != Timetable.LINEAR_ROUTE_ID)
                     throw new TimetableTypeNotSupportedException(TimetableType.Linear, "routes");
-                var stas = ParentTimetable.GetLinearStationsOrderedByDirection(TrainDirection.ti);
+                var stas = ParentTimetable.GetRoute(Timetable.LINEAR_ROUTE_ID).Stations;
                 idx += stas.IndexOf(sta);
             }
             else
@@ -125,7 +129,7 @@ namespace FPLedit.Shared
             var tElems = InternalGetArrDeps();
             if (ParentTimetable.Type == TimetableType.Linear)
             {
-                var stas = ParentTimetable.GetLinearStationsOrderedByDirection(TrainDirection.ti); // All arrdeps are sorted in line direction if linear
+                var stas = ParentTimetable.GetRoute(Timetable.LINEAR_ROUTE_ID).Stations; // All arrdeps are sorted in line direction if linear
                 var idx = stas.IndexOf(sta);
                 arrDep = tElems[idx];
                 return true;
@@ -143,7 +147,7 @@ namespace FPLedit.Shared
             {
                 var sta = ParentTimetable.Type == TimetableType.Network
                     ? ParentTimetable.GetStationById(ardp.StationId)
-                    : ParentTimetable.GetLinearStationsOrderedByDirection(TrainDirection.ti)[Array.IndexOf(ardps, ardp)]; // All arrdeps are sorted in line direction if linear
+                    : ParentTimetable.GetRoute(Timetable.LINEAR_ROUTE_ID).Stations[Array.IndexOf(ardps, ardp)]; // All arrdeps are sorted in line direction if linear
                 
                 if (sta == null)
                     throw new Exception("Station not found!");
@@ -163,7 +167,7 @@ namespace FPLedit.Shared
             ArrDep? tElm;
             if (ParentTimetable.Type == TimetableType.Linear)
             {
-                var stas = ParentTimetable.GetLinearStationsOrderedByDirection(TrainDirection.ti); // All arrdeps are sorted in line direction.
+                var stas = ParentTimetable.GetRoute(Timetable.LINEAR_ROUTE_ID).Stations; // All arrdeps are sorted in line direction.
                 var idx = stas.IndexOf(sta);
                 tElm = tElems[idx];
             }
@@ -179,9 +183,7 @@ namespace FPLedit.Shared
         /// <inheritdoc />
         public void RemoveOrphanedTimes()
         {
-            var stas = ParentTimetable.Type == TimetableType.Linear
-                ? ParentTimetable.GetLinearStationsOrderedByDirection(Direction) // All arrdeps are sorted in line direction if linear...
-                : GetPath(); // ...else, use full path.
+            var stas = GetPath(); // use full path OR linear entries sorted in line direction.
 
             if (stas.Count == 0) // There is no remaining path, so nothing to clean up.
                 return;

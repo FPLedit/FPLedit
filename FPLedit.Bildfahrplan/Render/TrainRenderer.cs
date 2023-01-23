@@ -213,14 +213,12 @@ namespace FPLedit.Bildfahrplan.Render
 
         private Station[] GetStationsInDir(TrainDirection dir)
         {
-            if (tt.Type == TimetableType.Linear)
-                return tt.GetLinearStationsOrderedByDirection(dir).ToArray();
+            var route = (tt.Type == TimetableType.Linear ? tt.GetRoute(Timetable.LINEAR_ROUTE_ID).Stations : stations)
+                .ToArray(); // Kopie erzeugen
+            if (dir.IsSortReverse())
+                Array.Reverse(route);
 
-            var route = stations.ToList(); // Kopie erzeugen
-            if (dir == TrainDirection.ta)
-                route.Reverse();
-
-            return route.ToArray();
+            return route;
         }
 
         private ITrain[] GetTrains(TrainDirection dir)
