@@ -29,8 +29,10 @@ namespace FPLedit.Editor.TimetableEditor
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            trapeztafelToggle.Click += TrapeztafelToggle_Click;
-            requestToggle.Click += RequestToggleOnClick;
+            trapeztafelToggle.Click += (_, _) => Trapez(dataGridView);
+            requestToggle.Click += (_, _) => RequestStop(dataGridView);
+            zlmButton.Click += (_, _) => Zuglaufmeldung(dataGridView);
+            shuntButton.Click += (_, _) => Shunt(dataGridView);
             Init(trapeztafelToggle, actionsLayout);
 
             KeyDown += HandleControlKeystroke;
@@ -279,9 +281,9 @@ namespace FPLedit.Editor.TimetableEditor
         {
 #pragma warning disable CA2000
             view.Columns.Clear();
-            view.AddColumn<DataElement>(t => t.Station.SName, T._("Bahnhof"));
-            view.AddColumn(GetCell(t => t.Arrival, true), T._("Ankunft"));
-            view.AddColumn(GetCell(t => t.Departure, false), T._("Abfahrt"));
+            view.AddColumn<DataElement>(t => t.Station.SName, T._("Bahnhof"), editable: false);
+            view.AddColumn(GetCell(t => t.Arrival, true), T._("Ankunft"), editable: true);
+            view.AddColumn(GetCell(t => t.Departure, false), T._("Abfahrt"), editable: true);
             view.AddColumn(GetTrackCell(t => t.ArrivalTrack, (t,s) => t.ArrivalTrack = s, true), T._("Ankunftsgleis"), editable: true);
             view.AddColumn(GetTrackCell(t => t.DepartureTrack, (t,s) => t.DepartureTrack = s, false), T._("Abfahrtsgleis"), editable: true);
             view.AddColumn(GetCheckCell(t => t.ShuntMoves.Any()), T._("Rangiert"), editable: false);
@@ -327,16 +329,10 @@ namespace FPLedit.Editor.TimetableEditor
 
         private bool UpdateTrainDataFromGrid(GridView view)
         {
-            foreach (DataElement row in view.DataStore)
-            {
-                if (row.HasAnyError)
-                {
-                    MessageBox.Show(T._("Bitte erst alle Fehler beheben!\n\nDie Zeitangaben müssen im Format hh:mm, h:mm, h:m, hh:mm, h:, :m, hhmm, hmm oder mm vorliegen!"));
-                    return false;
-                }
-            }
-
-            return true;
+            var hasError = view.DataStore.Cast<DataElement>().Any(row => row.HasAnyError);
+            if (hasError)
+                MessageBox.Show(T._("Bitte erst alle Fehler beheben!\n\nDie Zeitangaben müssen im Format hh:mm, h:mm, h:m, hh:mm, h:, :m, hhmm, hmm oder mm vorliegen!"));
+            return !hasError;
         }
 
         private void Shunt(GridView view)
@@ -384,15 +380,7 @@ namespace FPLedit.Editor.TimetableEditor
             CellSelected(data, sta, data.IsSelectedArrival);
         }
 
-        #region Events
-
         public bool ApplyChanges() => UpdateTrainDataFromGrid(dataGridView);
-        private void TrapeztafelToggle_Click(object sender, EventArgs e) => Trapez(dataGridView);
-        private void RequestToggleOnClick(object sender, EventArgs e) => RequestStop(dataGridView);
-        private void ZlmButton_Click(object sender, EventArgs e) => Zuglaufmeldung(dataGridView);
-        private void ShuntButton_Click(object sender, EventArgs e) => Shunt(dataGridView);
-
-        #endregion
 
         protected override void Dispose(bool disposing)
         {

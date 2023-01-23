@@ -31,7 +31,8 @@ namespace FPLedit.Editor.Linear
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            trapeztafelToggle.Click += TrapeztafelToggle_Click;
+            trapeztafelToggle.Click += (_, _) => ViewDependantAction(Trapez);
+            zlmButton.Click += (_, _) => ViewDependantAction(Zuglaufmeldung);
             base.Init(trapeztafelToggle, actionsLayout);
 
             KeyDown += HandleControlKeystroke;
@@ -204,9 +205,9 @@ namespace FPLedit.Editor.Linear
             foreach (var sta in stations)
             {
                 if (sta != stations.First())
-                    view.AddColumn(GetCell(t => t.Arrival, sta, true, view), T._("{0} an", sta.SName));
+                    view.AddColumn(GetCell(t => t.Arrival, sta, true, view), T._("{0} an", sta.SName), editable: true);
                 if (sta != stations.Last())
-                    view.AddColumn(GetCell(t => t.Departure, sta, false, view), T._("{0} ab", sta.SName));
+                    view.AddColumn(GetCell(t => t.Departure, sta, false, view), T._("{0} ab", sta.SName), editable: true);
             }
 #pragma warning restore CA2000
             view.AddColumn<DataElement>(t => GetTransition(t.Train), T._("Folgezug"));
@@ -267,14 +268,6 @@ namespace FPLedit.Editor.Linear
             }
             return true;
         }
-
-        #region Events
-        private void TrapeztafelToggle_Click(object sender, EventArgs e)
-            => ViewDependantAction(Trapez);
-
-        private void ZlmButton_Click(object sender, EventArgs e)
-            => ViewDependantAction(Zuglaufmeldung);
-        #endregion
 
         protected override void Dispose(bool disposing)
         {
