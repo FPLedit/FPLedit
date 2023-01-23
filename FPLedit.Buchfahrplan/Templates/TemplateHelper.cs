@@ -41,7 +41,7 @@ namespace FPLedit.Buchfahrplan.Templates
 
         public IStation[] GetStations(ITrain train)
         {
-            List<IStation> points = new List<IStation>();
+            var points = new List<IStation>();
             var fstations = train.GetPath().Where(s => filterable.LoadStationRules(tt).All(r => !r.Matches(s))); // Filter
             points.AddRange(fstations);
 
@@ -49,10 +49,11 @@ namespace FPLedit.Buchfahrplan.Templates
             for (int i = 0; i < points.Count; i++)
             {
                 var sta0 = points[i];
-                if (sta0 == points.Last())
-                    break; // Hier ist die Strecke zuende
+                if (sta0 == points[^1])
+                    break; // This is the end of the route, do not calculate any further points.
                 var sta1 = points[i + 1];
 
+                // Get route id of this segment.
                 int route = Timetable.LINEAR_ROUTE_ID;
                 if (tt.Type == TimetableType.Network)
                 {
@@ -62,13 +63,32 @@ namespace FPLedit.Buchfahrplan.Templates
                     route = routes[0];
                 }
 
-                var maxPos = Math.Max(sta0.Positions.GetPosition(route).Value, sta1.Positions.GetPosition(route).Value);
-                var minPos = Math.Min(sta0.Positions.GetPosition(route).Value, sta1.Positions.GetPosition(route).Value);
+                var pos0 = sta0.Positions.GetPosition(route)!.Value;
+                var pos1 = sta1.Positions.GetPosition(route)!.Value;
+                var maxPos = Math.Max(pos0, pos1);
+                var minPos = Math.Min(pos0, pos1);
 
-                var p1 = tt.Type == TimetableType.Network ? p.Where(po => po.Routes.Contains(route)) : p;
-                var pointsBetween = p1.Where(po => po.Positions.GetPosition(route) > minPos && po.Positions.GetPosition(route) < maxPos).ToArray();
-                points.InsertRange(points.IndexOf(sta0) + 1, pointsBetween);
-                i += pointsBetween.Length;
+                var dir = train.Direction;
+                if (tt.Type == TimetableType.Network)
+                    dir = pos0 < pos1 ? TrainDirection.ti : TrainDirection.ta;
+
+                // Get all candidate points between the two stations "sta0" and "sta1", on the route "route".
+                // Also filter by the defined direction.
+                var pointsOnLine = tt.Type == TimetableType.Network ? p.Where(po => po.Routes.Contains(route)) : p;
+                var pointsBetween = pointsOnLine
+                    .Where(po =>
+                    {
+                        var px = po.Positions.GetPosition(route);
+                        return px > minPos && px < maxPos;
+                    });
+                // Sort the inserted points in the direction of the line segment.
+                var pointsSorted = pointsBetween.OrderBy(po => po.Positions.GetPosition(route)).ToArray();
+                if (dir == TrainDirection.ta)
+                    Array.Reverse(pointsSorted);
+
+                // Insert and skip inserted.
+                points.InsertRange(points.IndexOf(sta0) + 1, pointsSorted);
+                i += pointsSorted.Length;
             }
             return points.ToArray();
         }
