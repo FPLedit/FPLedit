@@ -24,7 +24,7 @@ namespace FPLedit.TimetableChecks
         {
             var checks = pluginInterface.GetRegistered<ITimetableCheck>();
 
-            pluginInterface.FileStateChanged += (s, e) =>
+            pluginInterface.FileStateChanged += (_, _) =>
             {
                 if (pluginInterface.Timetable == null)
                     return;
@@ -64,7 +64,7 @@ namespace FPLedit.TimetableChecks
 
                 lastTask.Start();
             };
-            pluginInterface.AppClosing += (s, e) => form?.Close();
+            pluginInterface.AppClosing += (_, _) => form?.Close();
         }
 
         private FForm GetForm()
@@ -85,7 +85,7 @@ namespace FPLedit.TimetableChecks
                 Size = new Eto.Drawing.Size(600, 400),
                 Title = T._("Überprüfungen"),
             };
-            form.Closing += (s, e) =>
+            form.Closing += (_, _) =>
             {
                 this.form = null;
                 this.gridView = null;

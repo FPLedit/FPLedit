@@ -33,7 +33,7 @@ namespace FPLedit.Editor
             gridView.AddColumn<Station>(s => s.Tracks.Count.ToString(), T._("Anzahl Gleise"));
             gridView.AddCheckColumn<Station>(s => s.RequestStop, T._("Bedarfshalt"));
 
-            gridView.MouseDoubleClick += (s, e) => EditStation(false);
+            gridView.MouseDoubleClick += (_, _) => EditStation(false);
 
             if (Eto.Platform.Instance.IsWpf)
                 KeyDown += HandleKeystroke;
@@ -41,7 +41,7 @@ namespace FPLedit.Editor
                 gridView.KeyDown += HandleKeystroke;
 
             pluginInterface.FileStateChanged += OnFileStateChanged;
-            Closing += (s, e) => pluginInterface.FileStateChanged -= OnFileStateChanged;
+            Closing += (_, _) => pluginInterface.FileStateChanged -= OnFileStateChanged;
 
             InitializeGrid();
 

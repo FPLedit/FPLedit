@@ -68,7 +68,7 @@ namespace FPLedit
             this.undo = undo;
 
             FileState = new FileState();
-            FileState.FileStateInternalChanged += (s, e) => OnFileStateChanged();
+            FileState.FileStateInternalChanged += (_, _) => OnFileStateChanged();
 
             open = new XMLImport();
             save = new XMLExport();

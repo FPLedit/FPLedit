@@ -52,13 +52,13 @@ namespace FPLedit.Editor.TimetableEditor
             gridView.AddDropDownColumn<ShuntMove>(s => s.TargetTrack, tracks, T._("Zielgleis"), editable: true);
             gridView.AddCheckColumn<ShuntMove>(s => s.EmptyAfterwards, T._("Alle Wagen?"), editable: true);
 
-            gridView.SelectedItemsChanged += (s, e) => removeButton.Enabled = gridView.SelectedItem != null;
+            gridView.SelectedItemsChanged += (_, _) => removeButton.Enabled = gridView.SelectedItem != null;
 
             this.AddSizeStateHandler();
 
             shuntBackup = arrDep.Copy().ShuntMoves.ToList();
 
-            Shown += (s, e) => RefreshList();
+            Shown += (_, _) => RefreshList();
         }
 
         protected override void OnKeyDown(KeyEventArgs e)

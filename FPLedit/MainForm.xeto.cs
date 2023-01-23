@@ -84,7 +84,7 @@ namespace FPLedit
         {
             // Initialize main UI component
             networkEditingControl.Initialize(pluginInterface);
-            pluginInterface.FileOpened += (s, e) => networkEditingControl.ResetPan();
+            pluginInterface.FileOpened += (_, _) => networkEditingControl.ResetPan();
         }
 
         private void FileStateChanged(object sender, FileStateChangedEventArgs e)
@@ -117,7 +117,7 @@ namespace FPLedit
 #pragma warning disable CA2000
 #if DEBUG
             Menu.HelpMenu.Items.Add(new SeparatorMenuItem());
-            Menu.HelpMenu.CreateItem(T._("Exception auslösen"), clickHandler: (s, ev) => throw new Exception(T._("Ausgelöste Exception")));
+            Menu.HelpMenu.CreateItem(T._("Exception auslösen"), clickHandler: (_, _) => throw new Exception(T._("Ausgelöste Exception")));
 #endif
 #pragma warning restore CA2000
             

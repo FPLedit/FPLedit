@@ -48,7 +48,7 @@ namespace FPLedit.Editor.Trains
             lastComboBox.Items.AddRange(GetAllItems(tt, t => t.Last));
             mbrComboBox.Items.AddRange(GetAllItems(tt, t => t.Mbr));
 
-            KeyDown += (s, e) => daysControl.HandleKeypress(e);
+            KeyDown += (_, e) => daysControl.HandleKeypress(e);
 
             resetTransitionButton.TextColor = Colors.Red;
 

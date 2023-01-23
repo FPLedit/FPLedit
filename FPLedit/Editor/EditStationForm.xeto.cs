@@ -39,12 +39,12 @@ namespace FPLedit.Editor
             var nameValidator = new NotEmptyValidator(nameTextBox, errorMessage: T._("Bitte einen Bahnhofsnamen eingeben!"));
             validators = new ValidatorCollection(positionValidator, nameValidator);
 
-            this.Shown += (s, e) =>
+            this.Shown += (_, _) =>
             {
                 stationRendererHeight = stationRenderer.Height;
                 stationRendererWidth = stationRenderer.Width;
             };
-            stationRenderer.SizeChanged += (s, e) =>
+            stationRenderer.SizeChanged += (_, _) =>
             {
                 var size = ClientSize;
                 var changed = false;

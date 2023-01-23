@@ -9,10 +9,10 @@ namespace FPLedit.CorePlugins
 {
     internal sealed class MenuPlugin : IPlugin
     {
-        private IPluginInterface pluginInterface;
-        private ButtonMenuItem editRoot, previewRoot;
+        private IPluginInterface pluginInterface = null!;
+        private ButtonMenuItem editRoot = null!, previewRoot = null!;
         private int dialogOffset;
-        private IEditMenuItemAction[] editMenuActions;
+        private IEditMenuItemAction[] editMenuActions = Array.Empty<IEditMenuItemAction>();
 
         public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
         {
@@ -32,7 +32,7 @@ namespace FPLedit.CorePlugins
 
 #pragma warning disable CA2000
             foreach (var prev in previewables)
-                previewRoot.CreateItem(prev.MenuName, enabled: false, clickHandler: (s, ev) => prev.Show(pluginInterface));
+                previewRoot.CreateItem(prev.MenuName, enabled: false, clickHandler: (_, _) => prev.Show(pluginInterface));
 #pragma warning restore CA2000
 
             editMenuActions = pluginInterface.GetRegistered<IEditMenuItemAction>();
@@ -42,7 +42,7 @@ namespace FPLedit.CorePlugins
             dialogOffset = editRoot.Items.Count;
 #pragma warning disable CA2000
             foreach (var dialog in editMenuActions)
-                editRoot.CreateItem(dialog.DisplayName, enabled: dialog.IsEnabled(pluginInterface), clickHandler: (s, ev) => dialog.Invoke(pluginInterface));
+                editRoot.CreateItem(dialog.DisplayName, enabled: dialog.IsEnabled(pluginInterface), clickHandler: (_, _) => dialog.Invoke(pluginInterface));
 #pragma warning restore CA2000
         }
         

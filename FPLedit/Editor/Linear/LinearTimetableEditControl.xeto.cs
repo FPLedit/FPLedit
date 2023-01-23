@@ -85,9 +85,9 @@ namespace FPLedit.Editor.Linear
                     var tb = new TextBox { Tag = new CCCO() };
                     
                     if (mpmode)
-                        tb.KeyDown += (s, e) => HandleKeystroke(e, view);
+                        tb.KeyDown += (_, e) => HandleKeystroke(e, view);
                     
-                    tb.GotFocus += (s, e) =>
+                    tb.GotFocus += (s, _) =>
                     {
                         var dd2 = (TextBox)s;
                         var ccco = (CCCO)dd2!.Tag;
@@ -96,7 +96,7 @@ namespace FPLedit.Editor.Linear
                         TbEnterEditMode((DataElement)ccco.Data, dd2);
                     };
                     
-                    tb.LostFocus += (s, e) =>
+                    tb.LostFocus += (s, _) =>
                     {
                         var dd2 = (TextBox)s;
                         var ccco = (CCCO)dd2!.Tag;
@@ -137,7 +137,7 @@ namespace FPLedit.Editor.Linear
                     }
                 }
             };
-            cc.Paint += (s, e) =>
+            cc.Paint += (_, e) =>
             {
                 if (!mpmode)
                     return;
@@ -217,8 +217,8 @@ namespace FPLedit.Editor.Linear
                 ArrDeps = tra.GetArrDepsUnsorted()
             }).ToList();
 
-            view.GotFocus += (s, e) => focused = view;
-            view.KeyDown += (s, e) => HandleViewKeystroke(e, view);
+            view.GotFocus += (_, _) => focused = view;
+            view.KeyDown += (_, e) => HandleViewKeystroke(e, view);
             if (mpmode)
                 l.Add(null);
 

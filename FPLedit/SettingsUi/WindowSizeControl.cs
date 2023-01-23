@@ -22,7 +22,7 @@ namespace FPLedit.SettingsUi
                 Spacing = 5
             };
 
-            checkButton.Click += (s, e) =>
+            checkButton.Click += (_, _) =>
             {
                 SizeManager.Reset();
                 MessageBox.Show(T._("Die Änderungen werden beim nächsten Programmstart angewendet!"), "FPLedit");

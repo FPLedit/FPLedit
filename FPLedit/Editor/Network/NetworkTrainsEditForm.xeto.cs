@@ -36,7 +36,7 @@ namespace FPLedit.Editor.Network
             gridView.AddColumn<ITrain>(t => BuildPath(t), T._("Laufweg"));
             gridView.AddColumn<ITrain>(t => t.Comment, T._("Kommentar"));
 
-            gridView.MouseDoubleClick += (s, e) => EditTrain(gridView, TrainDirection.tr, false);
+            gridView.MouseDoubleClick += (_, _) => EditTrain(gridView, TrainDirection.tr, false);
 
             UpdateListView(gridView, TrainDirection.tr);
 

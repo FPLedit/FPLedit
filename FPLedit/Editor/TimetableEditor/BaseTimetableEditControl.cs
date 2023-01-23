@@ -28,7 +28,7 @@ namespace FPLedit.Editor.TimetableEditor
         protected BaseTimetableEditControl()
         {
             actionButtons = new ObservableCollection<Control>();
-            actionButtons.CollectionChanged += (s, e) =>
+            actionButtons.CollectionChanged += (_, e) =>
             {
                 var row = internalActionsLayout.Rows[0];
                 if (e.Action == NotifyCollectionChangedAction.Add)

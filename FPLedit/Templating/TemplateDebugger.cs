@@ -102,7 +102,7 @@ namespace FPLedit.Templating
                     Content = generatedCode, 
                     Size = new Size(800, 800)
                 };
-                form.Closed += (s, e) => opened = false;
+                form.Closed += (_, _) => opened = false;
                 opened = true;
             }
         }

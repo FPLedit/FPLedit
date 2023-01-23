@@ -31,7 +31,7 @@ namespace FPLedit.Editor.Rendering
         {
             this.pluginInterface = pluginInterface;
             routesDropDown.Initialize(pluginInterface);
-            pluginInterface.FileStateChanged += (s, e) =>
+            pluginInterface.FileStateChanged += (_, e) =>
             {
                 ReloadTimetable();
                 newButton.Enabled = routesDropDown.Enabled = newLineButton.Enabled = e.FileState.Opened;
@@ -46,7 +46,7 @@ namespace FPLedit.Editor.Rendering
                         c.Enabled = act.IsEnabled(pluginInterface);
                 }
             };
-            pluginInterface.ExtensionsLoaded += (s, e) =>
+            pluginInterface.ExtensionsLoaded += (_, _) =>
             {
                 var actions = pluginInterface.GetRegistered<IRouteAction>();
                 if (actions.Length > 0)
@@ -60,18 +60,18 @@ namespace FPLedit.Editor.Rendering
                         Tag = action,
                     };
                     btn.Enabled = action.IsEnabled(pluginInterface);
-                    btn.Click += (se, ev) => action.Invoke(pluginInterface, pluginInterface.Timetable?.GetRoute(routesDropDown.SelectedRoute));
+                    btn.Click += (_, _) => action.Invoke(pluginInterface, pluginInterface.Timetable?.GetRoute(routesDropDown.SelectedRoute));
                     toolbar.Items.Add(btn);
                 }
             };
 
-            routesDropDown.SelectedRouteChanged += (s, e) =>
+            routesDropDown.SelectedRouteChanged += (_, _) =>
             {
                 networkRenderer.SelectedRoute = routesDropDown.SelectedRoute;
                 pluginInterface.FileState.SelectedRoute = routesDropDown.SelectedRoute;
             };
 
-            networkRenderer.StationDoubleClicked += (s, e) =>
+            networkRenderer.StationDoubleClicked += (s, _) =>
             {
                 pluginInterface.StageUndoStep();
                 var sta = (Station)s;
@@ -91,7 +91,7 @@ namespace FPLedit.Editor.Rendering
                     pluginInterface.SetUnsaved();
                 }
             };
-            networkRenderer.StationRightClicked += (s, e) =>
+            networkRenderer.StationRightClicked += (s, _) =>
             {
                 var menu = new ContextMenu();
                 var itm = menu.CreateItem("Löschen");
@@ -122,8 +122,8 @@ namespace FPLedit.Editor.Rendering
                 (pluginInterface.FileState as FileState).Saved = false;
                 routesDropDown.SelectedRoute = args.Value;
             };
-            networkRenderer.StationMoveEnd += (s, args) => (pluginInterface.FileState as FileState).Saved = false;
-            newButton.Click += (s, e) =>
+            networkRenderer.StationMoveEnd += (_, _) => (pluginInterface.FileState as FileState).Saved = false;
+            newButton.Click += (_, _) =>
             {
                 pluginInterface.StageUndoStep();
                 var nsf = new EditStationForm(pluginInterface, pluginInterface.Timetable, routesDropDown.SelectedRoute);
@@ -140,7 +140,7 @@ namespace FPLedit.Editor.Rendering
                     ReloadTimetable();
                 }
             };
-            newLineButton.Click += (s, e) =>
+            newLineButton.Click += (_, _) =>
             {
                 pluginInterface.StageUndoStep();
                 var nlf = new EditStationForm(pluginInterface, pluginInterface.Timetable);
@@ -150,7 +150,7 @@ namespace FPLedit.Editor.Rendering
                     pluginInterface.SetUnsaved();
                 }
             };
-            joinLineButton.Click += (s, e) =>
+            joinLineButton.Click += (_, _) =>
             {
                 pluginInterface.StageUndoStep();
                 var epf = new EditPositionForm();
@@ -162,7 +162,7 @@ namespace FPLedit.Editor.Rendering
                 }
             };
 
-            KeyDown += (s, e) => DispatchKeystroke(e);
+            KeyDown += (_, e) => DispatchKeystroke(e);
         }
 
         public void ReloadTimetable()
