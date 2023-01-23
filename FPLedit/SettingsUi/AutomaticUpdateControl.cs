@@ -30,9 +30,9 @@ namespace FPLedit.SettingsUi
 
             checkButton.Click += (_, _) =>
             {
-                mg.CheckResult = (newAvail, vi) =>
+                mg.CheckResult = vi =>
                 {
-                    if (newAvail)
+                    if (vi.IsNewVersion())
                     {
                         DialogResult res = MessageBox.Show(T._("Eine neue Programmversion ({0}) ist verfügbar!\n{1}\nJetzt zur Download-Seite wechseln, um die neue Version herunterzuladen?", vi.NewVersion, vi.Description ?? ""),
                             T._("Neue FPLedit-Version verfügbar"), MessageBoxButtons.YesNo);

@@ -2,17 +2,18 @@
 using Eto.Forms;
 using FPLedit.Shared;
 using System;
-using System.Net;
-using System.Text;
+using System.Net.Http;
 using System.Xml;
 
 namespace FPLedit
 {
     internal sealed class UpdateManager
     {
+        private static readonly HttpClient wc = new();
+
         public string CheckUrl { get; }
 
-        public Action<bool, VersionInfo>? CheckResult { get; set; }
+        public Action<VersionInfo>? CheckResult { get; set; }
 
         public Action<string>? TextResult { get; set; }
 
@@ -42,16 +43,15 @@ namespace FPLedit
         private VersionInfo? GetUpdateInfoFromXml(string xml)
         {
             var doc = new XmlDocument { XmlResolver = null! };
+            var xmlReaderSettings = new XmlReaderSettings { DtdProcessing = DtdProcessing.Prohibit, XmlResolver = null };
 
-            var xmlReaderSettings = new XmlReaderSettings()
+            try
             {
-                DtdProcessing = DtdProcessing.Prohibit,
-                XmlResolver = null,
-            };
-
-            using (var reader = XmlReader.Create(new System.IO.StringReader(xml), xmlReaderSettings))
+                using var reader = XmlReader.Create(new System.IO.StringReader(xml), xmlReaderSettings);
                 doc.Load(reader);
-            
+            }
+            catch { return null; }
+
             if (doc.DocumentElement == null) return null;
 
             var ver = doc.DocumentElement.SelectSingleNode("/info/version");
@@ -59,48 +59,34 @@ namespace FPLedit
             var dsc = doc.DocumentElement.SelectSingleNode("/info/description");
             var txt = doc.DocumentElement.SelectSingleNode("/info/text");
 
-            if (url == null || ver == null) return null;
+            if (url == null || ver == null || !Version.TryParse(ver.InnerText, out var version))
+                return null;
 
-            return new VersionInfo(url.InnerText, new Version(ver.InnerText), dsc?.InnerText, txt?.InnerText);
+            return new VersionInfo(url.InnerText, version, dsc?.InnerText, txt?.InnerText);
         }
-
-        private bool IsNewVersion(Version check) 
-            => CurrentVersion.CompareTo(check) < 0 || 
-               (CurrentVersion.CompareTo(check) == 0 && (!string.IsNullOrEmpty(VersionInformation.Current.VersionSuffix) || VersionInformation.Current.IsDevelopmentVersion));
 
         public void CheckAsync()
         {
             var url = CheckUrl + "?pf=" + GetPlatform();
 
-            using var wc = new WebClient();
-            wc.Encoding = Encoding.UTF8;
-            wc.DownloadStringAsync(new Uri(url));
-            wc.DownloadStringCompleted += (_, e) =>
+            try
             {
-                if (e.Error == null && e.Result != "")
+                var task = wc.GetStringAsync(new Uri(url));
+                task.ContinueWith(x =>
                 {
-                    try
+                    var vi = GetUpdateInfoFromXml(x.Result);
+                    if (vi != null)
                     {
-                        var vi = GetUpdateInfoFromXml(e.Result);
-                        if (vi != null)
-                        {
-                            var hasNewVersion = IsNewVersion(vi.NewVersion);
-                            CheckResult?.Invoke(hasNewVersion, vi);
+                        CheckResult?.Invoke(vi);
 
-                            if (vi.Text != null)
-                                TextResult?.Invoke(vi.Text);
-                        }
-                        else
-                            CheckError?.Invoke(null);
+                        if (vi.Text != null)
+                            TextResult?.Invoke(vi.Text);
                     }
-                    catch (Exception ex)
-                    {
-                        CheckError?.Invoke(ex); // Error in the XML document.
-                    }
-                }
-                else
-                    CheckError?.Invoke(e.Error);
-            };
+                    else
+                        CheckError?.Invoke(null);
+                });
+            }
+            catch (Exception ex) { CheckError?.Invoke(ex); }
         }
 
         private string GetPlatform()
@@ -125,9 +111,9 @@ namespace FPLedit
             if (!AutoUpdateEnabled)
                 return;
 
-            CheckResult = (newAvailable, vi) =>
+            CheckResult = vi =>
             {
-                if (newAvailable)
+                if (vi.IsNewVersion())
                     log.Info(T._("Eine neue Programmversion ({0}) ist verfügbar! {1} Hier herunterladen: {2}", vi.NewVersion, vi.Description ?? "", vi.DownloadUrl));
                 else
                     log.Info(T._("Sie benutzen die aktuelleste Version von FPLedit ({0})!", CurrentVersionDisplay));
@@ -138,6 +124,11 @@ namespace FPLedit
             CheckAsync();
         }
 
-        public record VersionInfo(string DownloadUrl, Version NewVersion, string? Description, string? Text);
+        public record VersionInfo(string DownloadUrl, Version NewVersion, string? Description, string? Text)
+        {
+            public bool IsNewVersion()
+                => VersionInformation.Current.AppBaseVersion.CompareTo(NewVersion) < 0 || 
+                   (VersionInformation.Current.AppBaseVersion.CompareTo(NewVersion) == 0 && (!string.IsNullOrEmpty(VersionInformation.Current.VersionSuffix) || VersionInformation.Current.IsDevelopmentVersion));
+        }
     }
 }
