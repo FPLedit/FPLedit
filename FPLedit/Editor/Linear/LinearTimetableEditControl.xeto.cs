@@ -123,6 +123,7 @@ namespace FPLedit.Editor.Linear
                         tb.Visible = false;
                         return;
                     }
+                    if (data.IsMpDummy) return; // Skip "last rows" in mpmode.
                     ccco.Data = data;
 
                     new TimetableCellRenderProperties(time, sta, arrival, data).Apply(tb);
@@ -144,8 +145,7 @@ namespace FPLedit.Editor.Linear
                     return;
 
                 var data = (DataElement)e.Item;
-                if (data == null)
-                    return;
+                if (data == null || data.IsMpDummy) return;
 
                 new TimetableCellRenderProperties(time, sta, arrival, data).Render(e.Graphics, e.ClipRectangle);
             };
@@ -192,6 +192,17 @@ namespace FPLedit.Editor.Linear
             public Station SelectedStation { get; set; }
 
             public override Station GetStation() => SelectedStation;
+
+            public DataElement() {}
+
+            public DataElement(bool isMpDummy)
+            {
+                if (!isMpDummy) throw new ArgumentException("not set", nameof(isMpDummy));
+                IsMpDummy = true;
+                Train = null;
+                ArrDeps = null;
+                SelectedStation = null;
+            }
         }
 
         private string GetTransition(ITrain t) => tt.GetTransition(t)?.TName ?? "";
@@ -200,7 +211,7 @@ namespace FPLedit.Editor.Linear
         {
             var stations = tt.GetRoute(Timetable.LINEAR_ROUTE_ID).Stations.ToList().MaybeReverseDirection(dir);
 
-            view.AddColumn<DataElement>(t => t.Train.TName, T._("Zugnummer"));
+            view.AddColumn<DataElement>(t => t.IsMpDummy ? "" : t.Train.TName, T._("Zugnummer"), editable: false);
 #pragma warning disable CA2000
             foreach (var sta in stations)
             {
@@ -210,18 +221,18 @@ namespace FPLedit.Editor.Linear
                     view.AddColumn(GetCell(t => t.Departure, sta, false, view), T._("{0} ab", sta.SName), editable: true);
             }
 #pragma warning restore CA2000
-            view.AddColumn<DataElement>(t => GetTransition(t.Train), T._("Folgezug"));
+            view.AddColumn<DataElement>(t => GetTransition(t.Train), T._("Folgezug"), editable: false);
 
-            var l = tt.Trains.Where(t => t.Direction == dir).Select(tra => new DataElement()
+            view.GotFocus += (_, _) => focused = view;
+            view.KeyDown += (_, e) => HandleViewKeystroke(e, view);
+
+            var l = tt.Trains.Where(t => t.Direction == dir).Select(tra => new DataElement
             {
                 Train = tra,
                 ArrDeps = tra.GetArrDepsUnsorted()
             }).ToList();
-
-            view.GotFocus += (_, _) => focused = view;
-            view.KeyDown += (_, e) => HandleViewKeystroke(e, view);
             if (mpmode)
-                l.Add(null);
+                l.Add(new DataElement(isMpDummy: true)); // Add empty "last line" in multiplatform mode.
 
             view.DataStore = l.ToArray();
         }

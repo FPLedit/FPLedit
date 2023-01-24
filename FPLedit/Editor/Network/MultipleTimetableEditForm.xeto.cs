@@ -52,7 +52,7 @@ namespace FPLedit.Editor.Network
                 editor.ApplyChanges(); // Save old train data.
 
             var t = (IWritableTrain)trainDropDown.SelectedValue;
-            editor.Initialize(pluginInterface.Timetable, t);
+            editor.Initialize(t);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)

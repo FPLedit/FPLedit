@@ -7,11 +7,16 @@ namespace FPLedit.Editor.TimetableEditor
 {
     internal abstract class BaseTimetableDataElement
     {
-        public ITrain Train { get; set; }
+        /// <summary>
+        /// HACK for unixy systems that do not support directly editing in cells ("MP Mode" = "Multiplatform Mode").
+        /// A last line has to be added that has no contents (but is not null). This is accomplished by creating a
+        /// DataElement with IsMpDummy = true.
+        /// </summary>
+        public bool IsMpDummy { get; protected init; }
 
-        public Dictionary<Station, ArrDep> ArrDeps { get; set; }
+        public ITrain Train { get; init; }
 
-        //private Dictionary<Station, TagEntry> TmpTags { get; } = new();
+        public Dictionary<Station, ArrDep> ArrDeps { get; init; }
 
         public bool IsSelectedArrival { get; set; }
 
@@ -44,7 +49,7 @@ namespace FPLedit.Editor.TimetableEditor
         }
 
         #region Errors
-        private readonly List<ErrorEntry> errors = new List<ErrorEntry>();
+        private readonly List<ErrorEntry> errors = new();
 
         public bool HasError(Station sta, bool arrival)
         {
@@ -95,16 +100,13 @@ namespace FPLedit.Editor.TimetableEditor
                 Text = text;
             }
         }
-
-        /*private class TagEntry
-        {
-            public Station Station { get; init; }
-            public string ArrivalText = null;
-            public string DepartureText = null;
-        }*/
     }
     
-    internal class CCCO // CustomCellControlObject
+    /// <summary>
+    /// A CCCO (=CustomCellControlObject) is hardwired to a single control. It contains information that is not dependant
+    /// on the edited DataElement.
+    /// </summary>
+    internal class CCCO
     {
         public bool InhibitEvents { get; set; } = true;
         public BaseTimetableDataElement Data { get; set; }

@@ -17,7 +17,6 @@ namespace FPLedit.Editor.TimetableEditor
         private readonly TableLayout actionsLayout;
 #pragma warning restore CS0649
 
-        private Timetable tt;
         private IWritableTrain train;
         private List<Station> path;
 
@@ -46,34 +45,26 @@ namespace FPLedit.Editor.TimetableEditor
 
         public void HandleControlKeystroke(object sender, KeyEventArgs e)
         {
-            if (e.Key == Keys.T)
+            bool handled = true;
+            switch (e.Key)
             {
-                e.Handled = true;
-                Trapez(dataGridView);
+                case Keys.T: Trapez(dataGridView); break;
+                case Keys.B: RequestStop(dataGridView); break;
+                case Keys.Z: Zuglaufmeldung(dataGridView); break;
+                case Keys.R: Shunt(dataGridView); break;
+                default:
+                    handled = false;
+                    break;
             }
-            if (e.Key == Keys.B)
-            {
+
+            if (handled)
                 e.Handled = true;
-                RequestStop(dataGridView);
-            }
-            else if (e.Key == Keys.Z)
-            {
-                e.Handled = true;
-                Zuglaufmeldung(dataGridView);
-            }
-            else if (e.Key == Keys.R)
-            {
-                e.Handled = true;
-                Shunt(dataGridView);
-            }
             else
                 HandleKeystroke(e, dataGridView);
         }
 
-        public void Initialize(Timetable timetable, IWritableTrain t)
+        public void Initialize(IWritableTrain t)
         {
-            tt = timetable;
-
             train = t;
             path = t.GetPath();
 
@@ -118,15 +109,15 @@ namespace FPLedit.Editor.TimetableEditor
                 ConfigureCell = (args, control) =>
                 {
                     var tb = (TextBox) control;
-                    if (tb == null)
-                        return;
+                    if (tb == null) return;
                     var ccco = (CCCO) tb.Tag;
                     ccco.InhibitEvents = true;
 
-                    if (args?.Item == null)
-                        return;
+                    if (args?.Item == null) return;
                     
                     var data = (DataElement) args.Item;
+                    if (data.IsMpDummy) return; // Skip "last rows" in mpmode.
+
                     ccco.Data = data;
                     new TimetableCellRenderProperties(time, data.Station, arrival, data).Apply(tb);
 
@@ -134,7 +125,7 @@ namespace FPLedit.Editor.TimetableEditor
 
                     if (mpmode)
                     {
-                        // Wir gehen hier gleich in den vollen EditMode rein
+                        // Enter the full edit mode.
                         tb.CaretIndex = 0;
                         tb.SelectAll();
                         CellSelected(data, data.Station, arrival);
@@ -147,6 +138,7 @@ namespace FPLedit.Editor.TimetableEditor
             {
                 if (!mpmode) return;
                 var data = (DataElement) e.Item;
+                if (data.IsMpDummy) return; // Skip "last rows" in mpmode.
                 new TimetableCellRenderProperties(time, data.Station, arrival, data).Render(e.Graphics, e.ClipRectangle);
             };
             return cc;
@@ -199,6 +191,7 @@ namespace FPLedit.Editor.TimetableEditor
                         return;
                     
                     var data = (DataElement) args.Item;
+                    if (data.IsMpDummy) return; // Skip "last rows" in mpmode.
                     ccco.Data = data;
 
                     var ds = data.GetTrackDataStore().ToArray();
@@ -225,6 +218,7 @@ namespace FPLedit.Editor.TimetableEditor
             {
                 if (!mpmode) return;
                 var data = (DataElement) e.Item;
+                if (data.IsMpDummy) return; // Skip "last rows" in mpmode.
                 new TimetableCellRenderProperties2(track(data.ArrDeps[data.Station])).Render(e.Graphics, e.ClipRectangle);
             };
             return cc;
@@ -232,10 +226,12 @@ namespace FPLedit.Editor.TimetableEditor
 
         private CheckBoxCell GetCheckCell(Func<ArrDep, bool> check)
         {
-            return new CheckBoxCell
+            bool? B(DataElement d)
             {
-                Binding = Binding.Delegate<DataElement, bool>(d => check(d.ArrDeps[d.Station])).Cast<bool?>()
-            };
+                if (d.IsMpDummy) return null;
+                return check(d.ArrDeps[d.Station]);
+            }
+            return new CheckBoxCell { Binding = Binding.Delegate<DataElement, bool?>(B) };
         }
 
         protected override void CellSelected(BaseTimetableDataElement data, Station sta, bool arrival)
@@ -275,13 +271,22 @@ namespace FPLedit.Editor.TimetableEditor
                 ArrDeps = new Dictionary<Station, ArrDep>(1) { [sta] = arrDep };
                 Station = sta;
             }
+            
+            public DataElement(bool isMpDummy)
+            {
+                if (!isMpDummy) throw new ArgumentException("not set", nameof(isMpDummy));
+                IsMpDummy = true;
+                Train = null;
+                ArrDeps = null;
+                Station = null;
+            }
         }
 
         private void InitializeGridView(GridView view)
         {
 #pragma warning disable CA2000
             view.Columns.Clear();
-            view.AddColumn<DataElement>(t => t.Station.SName, T._("Bahnhof"), editable: false);
+            view.AddColumn<DataElement>(t => t.IsMpDummy ? "" : t.Station.SName, T._("Bahnhof"), editable: false);
             view.AddColumn(GetCell(t => t.Arrival, true), T._("Ankunft"), editable: true);
             view.AddColumn(GetCell(t => t.Departure, false), T._("Abfahrt"), editable: true);
             view.AddColumn(GetTrackCell(t => t.ArrivalTrack, (t,s) => t.ArrivalTrack = s, true), T._("Ankunftsgleis"), editable: true);
@@ -290,8 +295,12 @@ namespace FPLedit.Editor.TimetableEditor
 #pragma warning restore CA2000
 
             view.KeyDown += (_, e) => HandleViewKeystroke(e, view);
+            
+            var l = path.Select(sta => new DataElement(train, sta, train.GetArrDep(sta))).ToList();
+            if (mpmode)
+                l.Add(new DataElement(isMpDummy: true)); // Add empty "last line" in multiplatform mode.
 
-            view.DataStore = path.Select(sta => new DataElement(train, sta, train.GetArrDep(sta))).ToList();
+            view.DataStore = l;
             view.SelectedRowsChanged += (_, _) =>
             {
                 var selected = (DataElement) view.SelectedItem;

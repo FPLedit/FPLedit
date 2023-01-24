@@ -98,7 +98,7 @@ namespace FPLedit.Editor.Trains
 
         private void InitializeTrain()
         {
-            editor.Initialize(Train.ParentTimetable, Train);
+            editor.Initialize(Train);
 
             transitionDropDown.ItemTextBinding = Binding.Delegate<Train, string>(t => t.TName);
             transitionDropDown.DataStore = tt.Trains.Where(t => t != Train).OrderBy(t => t.TName).ToArray();
@@ -171,7 +171,7 @@ namespace FPLedit.Editor.Trains
                 {
                     th.FillTrain(tfd.ReferenceTrain, Train, tfd.Offset);
 
-                    editor.Initialize(Train.ParentTimetable, Train);
+                    editor.Initialize(Train);
                 }
             }
         }
