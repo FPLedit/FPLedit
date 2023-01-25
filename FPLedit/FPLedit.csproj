@@ -90,6 +90,7 @@
     <FrameworkReference Include="Microsoft.WindowsDesktop.App" />
     <KnownFrameworkReference Update="Microsoft.WindowsDesktop.App" IsWindowsOnly="false" />
     <KnownFrameworkReference Update="Microsoft.WindowsDesktop.App.WPF" IsWindowsOnly="false" />
+    <KnownFrameworkReference Update="Microsoft.WindowsDesktop.App.WindowsForms" IsWindowsOnly="false" />
   </ItemGroup>
   <ItemGroup Condition=" '$(RuntimeIdentifier)' == 'osx-x64' ">
     <PackageReference Include="Eto.Platform.Mac64" Version="$(EtoVersion)" />
