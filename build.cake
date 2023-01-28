@@ -24,7 +24,7 @@ var isNonFinalVersion = false;
 string gitRevision = null;
 
 // Automatic beta mode (local build)
-if (Argument<string>("auto-beta", null) != null) {
+if (HasArgument("auto-beta")) {
     ignoreNoDoc = true;
     incrementVersion = true;
     isNonFinalVersion = true;
@@ -88,17 +88,17 @@ Task("Restore-NuGet-Packages")
     .IsDependentOn("Clean")
     .Does(() =>
     {
-        DotNetCoreRestore("./FPLedit.sln");
+        DotNetRestore("./FPLedit.sln");
     });
 
 Task("Build")
     .IsDependentOn("Restore-NuGet-Packages")
     .Does(() =>
     {
-        var msbuildSettings = new DotNetCoreMSBuildSettings();
+        var msbuildSettings = new DotNetMSBuildSettings();
         if (!string.IsNullOrEmpty(preBuildVersionSuffix))
             msbuildSettings.Properties.Add("versionSuffix", new List<string> { preBuildVersionSuffix });
-        DotNetCoreBuild("./FPLedit.sln", new DotNetCoreBuildSettings
+        DotNetBuild("./FPLedit.sln", new DotNetBuildSettings
         {
             Configuration = configuration,
             NoRestore = false,
@@ -111,14 +111,14 @@ Task("PackNet")
     .Does(() =>
     {
         ForAllRuntimes( (runtime, distDir) => {
-            var msbuildSettings = new DotNetCoreMSBuildSettings();
+            var msbuildSettings = new DotNetMSBuildSettings();
             msbuildSettings.Properties.Add("IsNonFinalFPLeditBuild", new List<string> { isNonFinalVersion.ToString() });
             if (!string.IsNullOrEmpty(gitRevision))
                 msbuildSettings.Properties.Add("GitRevision", new List<string> { gitRevision });
             if (!string.IsNullOrEmpty(preBuildVersionSuffix))
                 msbuildSettings.Properties.Add("versionSuffix", new List<string> { preBuildVersionSuffix });
             msbuildSettings.Properties.Add("BaseOutputAppPath", new List<string> { IOPath.GetFullPath(distDir.Path.FullPath + "/") });
-            DotNetCorePublish("./FPLedit.sln", new DotNetCorePublishSettings {
+            DotNetPublish("./FPLedit.sln", new DotNetPublishSettings {
                 Configuration = configuration,
                 Runtime = runtime,
                 SelfContained = runtime == "osx-x64",
@@ -135,9 +135,9 @@ Task("BuildUserDocumentation")
     .Does(() =>
     {
         if (buildDocPdf) {
-            var docBuildSettings = new DotNetCoreMSBuildSettings();
+            var docBuildSettings = new DotNetMSBuildSettings();
             docBuildSettings.Properties.Add("OutputPath", new List<string> { IOPath.GetFullPath(buildDir.Path.FullPath) });
-            DotNetCoreBuild("./build_scripts/GenerateUserDocumentation.proj", new DotNetCoreBuildSettings {
+            DotNetBuild("./build_scripts/GenerateUserDocumentation.proj", new DotNetBuildSettings {
                 MSBuildSettings = docBuildSettings,
             });
             ForAllRuntimes( (runtime, distDir) => {
