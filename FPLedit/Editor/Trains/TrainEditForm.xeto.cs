@@ -102,12 +102,13 @@ namespace FPLedit.Editor.Trains
 
             transitionDropDown.ItemTextBinding = Binding.Delegate<Train, string>(t => t.TName);
             transitionDropDown.DataStore = tt.Trains.Where(t => t != Train).OrderBy(t => t.TName).ToArray();
-            
+
             var transitions = tt.GetEditableTransitions(Train);
+            // We currently only support editing complex transitions if only one transition exists (and thus not being relly "complex"...)
             if (transitions.Count == 1)
                 transitionDropDown.SelectedValue = transitions.Single().NextTrain;
             else
-                transitionDropDown.Enabled = false;
+                transitionDropDown.Enabled = transitions.Count == 0; // If no transition exists, we can certyinly create one.
 
             fillButton.Visible = tt.Type == TimetableType.Linear && th.FillCandidates(Train).Any();
 
@@ -145,10 +146,11 @@ namespace FPLedit.Editor.Trains
 
             if (!editor.ApplyChanges())
                 return;
-            
+
             NextTrains = new List<TransitionEntry>();
-            if (transitionDropDown.SelectedValue != null)
+            if (transitionDropDown.SelectedValue != null && transitionDropDown.Enabled) // Only update NextTrains if we could actuually select a transition.
                 NextTrains.Add(new TransitionEntry((ITrain) transitionDropDown.SelectedValue, Days.All, null));
+            //TODO: This does not keep the original NextTrains?
 
             if (Train.Id > 0)
                 tt.SetTransitions(Train, NextTrains);
@@ -165,14 +167,12 @@ namespace FPLedit.Editor.Trains
 
         private void FillButton_Click(object sender, EventArgs e)
         {
-            using (var tfd = new TrainFillDialog(Train))
+            using var tfd = new TrainFillDialog(Train);
+            if (tfd.ShowModal() == DialogResult.Ok)
             {
-                if (tfd.ShowModal() == DialogResult.Ok)
-                {
-                    th.FillTrain(tfd.ReferenceTrain, Train, tfd.Offset);
+                th.FillTrain(tfd.ReferenceTrain, Train, tfd.Offset);
 
-                    editor.Initialize(Train);
-                }
+                editor.Initialize(Train);
             }
         }
 
