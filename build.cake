@@ -1,6 +1,7 @@
-#addin "Cake.FileHelpers&version=3.2.1"
 #load "build_scripts/license.cake"
 using System.Text.RegularExpressions;
+using IOFile = System.IO.File;
+using IOPath = System.IO.Path;
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -58,7 +59,7 @@ if (incrementVersion)
     var fn = $"fpledit-{currentVersion}-{preBuildVersionSuffix}";
     
     if (incrementVersion) {
-        var files = GetFiles(Directory("./bin") + File($"{fn}*.zip")).Select(fp => fp.GetFilename().ToString());
+        var files = GetFiles($"./bin/{fn}*.zip").Select(fp => fp.GetFilename().ToString());
         var regex = new Regex($@"^{fn}(\d*).*\.zip$");
         
         var counter = files
@@ -112,10 +113,11 @@ Task("PackNet")
         ForAllRuntimes( (runtime, distDir) => {
             var msbuildSettings = new DotNetCoreMSBuildSettings();
             msbuildSettings.Properties.Add("IsNonFinalFPLeditBuild", new List<string> { isNonFinalVersion.ToString() });
-            msbuildSettings.Properties.Add("GitRevision", new List<string> { gitRevision });
+            if (!string.IsNullOrEmpty(gitRevision))
+                msbuildSettings.Properties.Add("GitRevision", new List<string> { gitRevision });
             if (!string.IsNullOrEmpty(preBuildVersionSuffix))
                 msbuildSettings.Properties.Add("versionSuffix", new List<string> { preBuildVersionSuffix });
-            msbuildSettings.Properties.Add("BaseOutputAppPath", new List<string> { System.IO.Path.GetFullPath(distDir.Path.FullPath + "/") });
+            msbuildSettings.Properties.Add("BaseOutputAppPath", new List<string> { IOPath.GetFullPath(distDir.Path.FullPath + "/") });
             DotNetCorePublish("./FPLedit.sln", new DotNetCorePublishSettings {
                 Configuration = configuration,
                 Runtime = runtime,
@@ -134,17 +136,17 @@ Task("BuildUserDocumentation")
     {
         if (buildDocPdf) {
             var docBuildSettings = new DotNetCoreMSBuildSettings();
-            docBuildSettings.Properties.Add("OutputPath", new List<string> { System.IO.Path.GetFullPath(buildDir.Path.FullPath) });
+            docBuildSettings.Properties.Add("OutputPath", new List<string> { IOPath.GetFullPath(buildDir.Path.FullPath) });
             DotNetCoreBuild("./build_scripts/GenerateUserDocumentation.proj", new DotNetCoreBuildSettings {
                 MSBuildSettings = docBuildSettings,
             });
             ForAllRuntimes( (runtime, distDir) => {
-                CopyFiles(buildDir + File("*.pdf"), distDir);
+                CopyFiles((string)buildDir + "/*.pdf", distDir);
             });
             hasDocInZip = true;
         } else if (!string.IsNullOrEmpty(copyDocPdf)) {
             ForAllRuntimes( (runtime, distDir) => {
-                CopyFiles(File(copyDocPdf), distDir);
+                CopyFiles(copyDocPdf, distDir);
             });
             hasDocInZip = true;
         }
@@ -164,7 +166,7 @@ Task("BuildLicenseReadme")
                 scriptsDir + Directory("info") + File("Info.txt"), 
                 scriptsDir + Directory("info") + File("3rd-party.txt"), 
                 version);
-            FileWriteText(distDir + File("README_LICENSE.txt"), text);
+            System.IO.File.WriteAllText((distDir + File("README_LICENSE.txt")).ToString(), text);
         });
     });
     
@@ -174,8 +176,8 @@ Task("BundleThirdParty")
         ForAllRuntimes( (runtime, distDir) => {
             var licenseDir = distDir + Directory("licenses");
             CleanDirectory(licenseDir);
-            CopyFiles(scriptsDir + Directory("info") + File("3rd-party.txt"), licenseDir);
-            CopyFiles(scriptsDir + Directory("info") + Directory("3rd-party") + File("*.txt"), licenseDir);
+            CopyFiles((string)scriptsDir + "/info/3rd-party.txt", licenseDir);
+            CopyFiles((string)scriptsDir + "/info/3rd-party/*.txt", licenseDir);
         });
     });
     
@@ -200,11 +202,11 @@ Task("PackRelease")
                 var macTarget = macBundle + Directory("Contents") + Directory("MacOS");
                 
                 var filesToZip = new List<string>();
-                filesToZip.AddRange(GetFiles(macBundle + File("**/*")).Select(f => f.FullPath));
+                filesToZip.AddRange(GetFiles((string)macBundle + "/**/*").Select(f => f.FullPath));
                 filesToZip.Add(distDir + File("README_LICENSE.txt"));
                 if (hasDocInZip)
                     filesToZip.Add(distDir + File("Dokumentation.pdf"));
-                filesToZip.AddRange(GetFiles(distDir + Directory("licenses") + File("*")).Select(f => f.FullPath));
+                filesToZip.AddRange(GetFiles((string)distDir + "/licenses/*").Select(f => f.FullPath));
                 
                 Zip(distDir, file, filesToZip);
             }
@@ -214,7 +216,7 @@ Task("PackRelease")
             var hash = fhc.Calculate(file, HashAlgorithm.SHA256).ToHex();
             var hash_line = $"{hash}  {zip_file_name}";
             zipFileHashes.Add(hash_line);
-            FileAppendText(Directory("./bin") + File($"fpledit-{version}-{nodoc_suffix}.sha256sums"), hash_line + "\n");
+            System.IO.File.AppendAllText($"./bin/fpledit-{version}-{nodoc_suffix}.sha256sums", hash_line + "\n");
         });
     });
 

@@ -10,7 +10,7 @@ Informationenn zu eingebundenen Bibliotheken finden Sie am Ende dieser Datei ode
 ";
 
     var text = string.Format(template_header, version, DateTime.Now.Year);     
-    text += context.FileReadText(licensePath);    
+    text += System.IO.File.ReadAllText(licensePath);    
     text += @"
 
 
@@ -20,7 +20,7 @@ EINGEBUNDENE BIBLIOTHEKEN
 
 ";
     
-    text += context.FileReadText(thirdPartyInfoPath);
+    text += System.IO.File.ReadAllText(thirdPartyInfoPath);
     return AddNewlines(text);
 }
 
