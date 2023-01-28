@@ -5,7 +5,7 @@ namespace FPLedit.Shared
 {
     /// <summary>
     /// Base type for all entities that are used in a timetable object model. Provides basic capabilities foir storing
-    /// attributes, children & interacting with underlying <see cref="XMLEntity"/>s.
+    /// attributes, children and interacting with underlying <see cref="XMLEntity"/>s.
     /// </summary>
     [Templating.TemplateSafe]
     public interface IEntity

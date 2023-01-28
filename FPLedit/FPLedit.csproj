@@ -14,7 +14,7 @@
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
     
-    <NoWarn>CS0693</NoWarn>
+    <NoWarn>CS0693,NETSDK1074</NoWarn>
   </PropertyGroup>
   
   <!-- Windows specific properties -->
@@ -88,13 +88,16 @@
   <ItemGroup Condition=" $( RuntimeIdentifier.StartsWith('win') ) ">
     <PackageReference Include="Eto.Platform.Wpf" Version="$(EtoVersion)" />
     <FrameworkReference Include="Microsoft.WindowsDesktop.App" />
+    <!-- allow cross-platform build on linux -->
     <KnownFrameworkReference Update="Microsoft.WindowsDesktop.App" IsWindowsOnly="false" />
     <KnownFrameworkReference Update="Microsoft.WindowsDesktop.App.WPF" IsWindowsOnly="false" />
     <KnownFrameworkReference Update="Microsoft.WindowsDesktop.App.WindowsForms" IsWindowsOnly="false" />
   </ItemGroup>
+
   <ItemGroup Condition=" '$(RuntimeIdentifier)' == 'osx-x64' ">
     <PackageReference Include="Eto.Platform.Mac64" Version="$(EtoVersion)" />
   </ItemGroup>
+
   <ItemGroup Condition=" ! $( RuntimeIdentifier.StartsWith('win') ) And '$(RuntimeIdentifier)' != 'osx-x64' ">
     <PackageReference Include="Eto.Platform.Gtk" Version="$(EtoVersion)" />
     

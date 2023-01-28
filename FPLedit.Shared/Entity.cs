@@ -5,8 +5,8 @@ using System.Diagnostics.CodeAnalysis;
 namespace FPLedit.Shared
 {
     /// <summary>
-    /// Base type for all entities that are used in a timetable object model. Provides basic capabilities foir storing
-    /// attributes, children & interacting with underlying <see cref="XMLEntity"/>s.
+    /// Base type for all entities that are used in a timetable object model. Provides basic capabilities for storing
+    /// attributes, children and interacting with underlying <see cref="XMLEntity"/>s.
     /// </summary>
     /// <remarks>All inheriting classes MUST implement the constructor <see cref="Entity(FPLedit.Shared.XMLEntity,FPLedit.Shared.Timetable)"/> itself!</remarks>
     [Templating.TemplateSafe]

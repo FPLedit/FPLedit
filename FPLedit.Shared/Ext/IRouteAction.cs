@@ -8,7 +8,7 @@
         /// <summary>
         /// Display name of the button, as it is shown on the Network editor toolbar.
         /// </summary>
-        /// <remarks>The character "&" can be used as a keyboard shortcut, to enable use without pointing device.</remarks>
+        /// <remarks>The character "&nsbp;" can be used as a keyboard shortcut, to enable use without pointing device.</remarks>
         string DisplayName { get; }
 
         /// <summary>
