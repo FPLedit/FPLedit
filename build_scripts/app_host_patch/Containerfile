@@ -1,4 +1,4 @@
-FROM alpine
+FROM alpine:latest
 RUN addgroup -S test -g 1000 && adduser -S test -u 1000 -G test && \
 	mkdir /data && chown test:test /data && apk update && apk add wine xvfb
 ADD AppHostPatcher.exe /data/
