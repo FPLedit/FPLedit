@@ -1,7 +1,6 @@
 ﻿using Eto.Drawing;
 using Eto.Forms;
 using System;
-using System.Threading.Tasks;
 using FPLedit.Shared;
 using FPLedit.Shared.Rendering;
 
@@ -37,7 +36,7 @@ namespace FPLedit.Bildfahrplan.Render
             if (!hadCrash && buffer == null && !generatingBuffer)
             {
                 generatingBuffer = true;
-                Task.Run(() =>
+                Application.Instance.InvokeAsync(() =>
                 {
                     Bitmap newBuffer = null;
                     try
