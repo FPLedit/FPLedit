@@ -13,7 +13,7 @@
         string DisplayName { get; }
         
         /// <summary>
-        /// Text of the menu item, which can contain the character "&nbsp;" to provide a keyboard shortcut.
+        /// Text of the menu item, which can contain the character "&amp;" to provide a keyboard shortcut.
         /// </summary>
         /// <remarks>Must always return the same value.</remarks>
         string MenuName { get; }

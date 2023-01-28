@@ -6,7 +6,7 @@
     public interface IEditMenuItemAction : IRegistrableComponent
     {
         /// <summary>
-        /// Display name of the menu item, which can contain the character "&nbsp;" to provide a keybaord shortcut.
+        /// Display name of the menu item, which can contain the character "&amp;" to provide a keybaord shortcut.
         /// </summary>
         /// <remarks>Must always return the same value.</remarks>
         string DisplayName { get; }

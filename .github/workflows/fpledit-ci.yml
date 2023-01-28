@@ -32,6 +32,9 @@ jobs:
         run: |
           echo "FPLEDIT_GIT_BETA=1" >> $GITHUB_ENV
 
+      - name: Restore dotnet tools
+        run: dotnet tool restore
+
       - name: Build
         run: bash ./build.sh --rid=linux-x64,osx-x64,win-x64,win-x86
         env:
