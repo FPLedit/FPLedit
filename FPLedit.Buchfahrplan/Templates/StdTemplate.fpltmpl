@@ -1,20 +1,21 @@
 ﻿<#@ fpledit_template type="bfpl" version="2" name="Standard-Buchfahrplan (kein voller Funktionsumfang)" #>
 
 <#
-function GetWelle(/* ref int */ counter, /* IStation */ sta, /* int */ route, /* Train */ tra, /* TemplateHelper */ helper)
+function GetWelle(/* object{ val: int } */ counter, /* IStation */ sta, /* int */ route, /* Train */ tra, /* TemplateHelper */ helper)
 {
     if (counter.val > 0)
     {
         counter.val--;
         return "";
     }
-    else if (sta.Wellenlinien.GetValue(route) != 0)
+
+    var w = sta.Wellenlinien.GetValue(route);
+    if (w != 0)
     {
-        var w = sta.Wellenlinien.GetValue(route);
         var stas = helper.GetStations(tra);
         stas = stas.skip(stas.indexOf(sta));
-        counter.val = stas.takeWhile(s => s.Wellenlinien.GetValue(route) == w).length; //TODO: Better data structure
-        return "<td class=\"zug welle welle" + safe_html(w) + "\" data-c=\"" + safe_html(counter.val) + "\" rowspan=\"" + safe_html(counter.val--) + "\"></td>";
+        counter.val = stas.takeWhile(s => s.Wellenlinien.GetValue(route) == w).length - 1;
+        return "<td class=\"zug welle welle" + safe_html(w) + "\" rowspan=\"" + safe_html(counter.val + 1) + "\"></td>";
     }
 
     return "<td class=\"zug welle\"></td>";
