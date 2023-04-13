@@ -11,13 +11,13 @@
 }
 .welle1 {
 	background-image: url(@@WELLE1@@) !important;
-	background-size: 5px 9.5px !important;
+	background-size: calc(1.4em / 4 * 1) calc(1.4em / 2) !important;
 }
 .welle2 {
 	background-image: url(@@WELLE2@@) !important;
-	background-size: 10px 9.5px !important;
+	background-size: calc(1.4em / 4 * 2) calc(1.4em / 2) !important;
 }
 .welle3 {
 	background-image: url(@@WELLE3@@) !important;
-	background-size: 15px 9.5px !important;
+	background-size: calc(1.4em / 4 * 3) calc(1.4em / 2) !important;
 }

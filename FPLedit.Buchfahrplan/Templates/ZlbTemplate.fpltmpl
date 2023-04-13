@@ -118,12 +118,15 @@ if (attrs != null)
 			white-space: normal;
 		}
 		.zug {
-			height: 19px;
+			height: 1.4em;
 			font-weight:400;
 			text-align:center;
 			vertical-align:top;
 			border-right:1.5pt solid black;
 			border-left:1.5pt solid black;
+            line-height: 1.25em;
+            padding-top: 0;
+            padding-bottom: 0;
 		}
 		.trapez-tt {
 			border: 1px solid black;
@@ -203,12 +206,12 @@ if (attrs != null)
 					<td class="spaltenkopf klein first">Lage<br>der<br>Betriebs-<br>stelle<br><br>km</td>
 					<td class="spaltenkopf klein">Höchst-<br>ge-<br>schwin-<br>digkeit<br><br>km/h</td>
 					<td class="spaltenkopf" colspan="2">Betriebsstellen,<br>ständige Langsam-<br>fahrstellen,<br>verkürzter<br>Vorsignalabstand</td>
-					<td class="spaltenkopf klein">An der<br>Trapeztafel<br>hält Zug</td>
+					<td class="spaltenkopf klein">An der<br>Trapez&shy;tafel<br>hält Zug</td>
 					<td class="spaltenkopf">An-<br>kunft</td>
 					<td class="spaltenkopf">Ab-<br>fahrt</td>
 					<td class="spaltenkopf klein">Kreu-<br>zung<br>mit Zug</td>
 					<td class="spaltenkopf klein">über-<br>holt<br>&mdash;<br>wird<br>über-<br>holt<br>durch<br>Zug</td>
-					<td class="spaltenkopf klein last">Zuglauf-<br>meldung<br>durch</td>
+					<td class="spaltenkopf klein last">Zug&shy;lauf-<br>mel&shy;dung<br>durch</td>
 				</tr>
 				<#
 				var rs_counter = { val: 0 };

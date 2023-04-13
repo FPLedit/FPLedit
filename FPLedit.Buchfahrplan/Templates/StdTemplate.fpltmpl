@@ -124,7 +124,7 @@ if (attrs != null)
 			border-left:1.5pt solid black;
 		}
 		.zug {
-			height: 19px;
+			height: 1.4em;
 			font-weight:400;
 			font-style:normal;
 			font-family: <#= safe_css_font(font) #>, sans-serif;
@@ -132,6 +132,9 @@ if (attrs != null)
 			vertical-align:top;
 			border-right:1.5pt solid black;
 			border-left:1.5pt solid black;
+            line-height: 1.25em;
+            padding-top: 0;
+            padding-bottom: 0;
 		}
 		.tabellenende {
 			height: 18px;
