@@ -102,12 +102,12 @@
     <PackageReference Include="Eto.Platform.Gtk" Version="$(EtoVersion)" />
     
     <!-- Temporary fix for issue with new glib2 -->
-    <PackageReference Include="AtkSharp" Version="3.24.24.34" />
-    <PackageReference Include="CairoSharp" Version="3.24.24.34" />
-    <PackageReference Include="PangoSharp" Version="3.24.24.34" />
-    <PackageReference Include="GdkSharp" Version="3.24.24.34" />
-    <PackageReference Include="GioSharp" Version="3.24.24.34" />
-    <PackageReference Include="GLibSharp" Version="3.24.24.34" />
-    <PackageReference Include="GtkSharp" Version="3.24.24.34" />
+    <PackageReference Include="AtkSharp" Version="3.24.24.38" />
+    <PackageReference Include="CairoSharp" Version="3.24.24.38" />
+    <PackageReference Include="PangoSharp" Version="3.24.24.38" />
+    <PackageReference Include="GdkSharp" Version="3.24.24.38" />
+    <PackageReference Include="GioSharp" Version="3.24.24.38" />
+    <PackageReference Include="GLibSharp" Version="3.24.24.38" />
+    <PackageReference Include="GtkSharp" Version="3.24.24.38" />
   </ItemGroup>
 </Project>

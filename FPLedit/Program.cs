@@ -56,6 +56,14 @@ namespace FPLedit
             App = new Application();
             App.LocalizeString += OnLocalizeString;
 
+            if (App.Platform.IsWpf)
+            {
+                // As of https://github.com/picoe/Eto/pull/2046/files, a default manifest is extracted by Eto and stored
+                // in the temp dir. This is unwanted in our case, as we have our own windows manifest.
+                // Use dynamic to avoid loading Eto.Wpf on all platforms.
+                ((dynamic)App.Handler).EnableVisualStyles = false;
+            }
+
             // Set app & settings paths
             PathManager.Instance.AppDirectory = Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.EntryExecutable);
             if (App.Platform.IsMac)

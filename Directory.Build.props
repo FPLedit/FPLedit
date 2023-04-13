@@ -1,7 +1,7 @@
 <!--
   FPLedit Build Process
   Common build properties for all projects.
-  (c) Manuel Huber 2020
+  (c) Manuel Huber 2020-2023
 -->
 
 <Project>
@@ -18,11 +18,15 @@
     
     <RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64</RuntimeIdentifiers>
 
-    <!--<WarningsAsErrors>CS8600;CS8602;CS8603</WarningsAsErrors>-->
+    <!-- Errors for nullable checks. -->
+    <!--<WarningsAsErrors>CS8600;CS8602</WarningsAsErrors>-->
+    <WarningsAsErrors>CS8603</WarningsAsErrors>
+
+    <!-- Conflicts between different versions. -->
     <MSBuildWarningsAsMessages>MSB3277</MSBuildWarningsAsMessages>
-    
-    <EtoVersion>2.7.2</EtoVersion>
-    
+
+    <EtoVersion>2.7.4</EtoVersion>
+
 	  <!-- Assembly info -->
 	  <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
