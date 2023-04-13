@@ -18,21 +18,17 @@ namespace FPLedit.Bildfahrplan
         private ButtonMenuItem graphItem, showItem, configItem, virtualRoutesItem, trainColorItem, stationStyleItem, printItem, exportItem;
         private CheckMenuItem overrideItem;
 #pragma warning restore CA2213
-        
+
         public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
         {
             this.pluginInterface = pluginInterface;
             Style.PluginInterface = pluginInterface;
 
-            if (!GdiAvailabilityTest.Test())
-            {
-                pluginInterface.Logger.Error(T._("Die Bibliothek libgdiplus wurde nicht gefunden! Die Bildfahrplanfunktionen stehen nicht zur Verfügung. Zur Installation siehe Installatiosnhinweise unter https://fahrplan.manuelhu.de/download/."));
-                return;
-            }
+            if (!GdiAvailabilityTest.TestAndLog(pluginInterface)) return;
 
             dpf = new DynamicPreview();
             componentRegistry.Register<IPreviewAction>(dpf);
-            pluginInterface.AppClosing += (s, e) => dpf.Close();
+            pluginInterface.AppClosing += (_, _) => dpf.Close();
 
 #if !DEBUG
             if (pluginInterface.Settings.Get<bool>("feature.enable-full-graph-editor"))
