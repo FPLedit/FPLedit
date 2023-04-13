@@ -11,11 +11,11 @@ namespace FPLedit.Editor.Linear
         private readonly IPluginInterface pluginInterface;
         private readonly object backupHandle;
 
-#pragma warning disable CS0649
+#pragma warning disable CS0649,CA2213
         private readonly GridView topGridView = default!, bottomGridView = default!;
         private readonly Label topLineLabel = default!, bottomLineLabel = default!;
         private readonly Button topEditButton = default!, topDeleteButton = default!, topCopyButton = default!, bottomEditButton = default!, bottomDeleteButton = default!, bottomCopyButton = default!;
-#pragma warning restore CS0649
+#pragma warning restore CS0649,CA2213
 
         private const TrainDirection TOP_DIRECTION = TrainDirection.ti;
         private const TrainDirection BOTTOM_DIRECTION = TrainDirection.ta;

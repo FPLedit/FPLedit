@@ -7,9 +7,9 @@ namespace FPLedit.Editor.Linear
 {
     internal sealed class LinearTimetableEditForm : FDialog<DialogResult>
     {
-#pragma warning disable CS0649
-        private readonly LinearTimetableEditControl editor;
-#pragma warning restore CS0649
+#pragma warning disable CS0649,CA2213
+        private readonly LinearTimetableEditControl editor = default!;
+#pragma warning restore CS0649,CA2213
 
         private readonly IPluginInterface pluginInterface;
         private readonly object backupHandle;

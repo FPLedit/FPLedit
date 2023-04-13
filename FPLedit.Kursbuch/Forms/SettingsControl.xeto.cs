@@ -14,15 +14,15 @@ namespace FPLedit.Kursbuch.Forms
 
         private const string NO_KBS_TEXT = "<keine Nummer>";
 
-#pragma warning disable CS0649
-        private readonly DropDown templateComboBox;
-        private readonly ComboBox fontComboBox, hefontComboBox;
-        private readonly Label exampleLabel, heexampleLabel, cssLabel, kbsnLabel;
-        private readonly UrlButton cssHelpLinkLabel;
-        private readonly CheckBox consoleCheckBox;
-        private readonly TextArea cssTextBox;
-        private readonly GridView kbsnListView;
-#pragma warning restore CS0649
+#pragma warning disable CS0649,CA2213
+        private readonly DropDown templateComboBox = default!;
+        private readonly ComboBox fontComboBox = default!, hefontComboBox = default!;
+        private readonly Label exampleLabel = default!, heexampleLabel = default!, cssLabel = default!, kbsnLabel = default!;
+        private readonly UrlButton cssHelpLinkLabel = default!;
+        private readonly CheckBox consoleCheckBox = default!;
+        private readonly TextArea cssTextBox = default!;
+        private readonly GridView kbsnListView = default!;
+#pragma warning restore CS0649,CA2213
 
         private readonly Dictionary<int, string> setRouteNumbers;
 
@@ -90,7 +90,7 @@ namespace FPLedit.Kursbuch.Forms
             if (tmpl != null)
                 attrs.Template = tmpl.Identifier;
 
-            settings.Set("kfpl.console", consoleCheckBox.Checked.Value);
+            settings.Set("kfpl.console", consoleCheckBox.Checked!.Value);
         }
 
         public void SetExpertMode(bool enabled)

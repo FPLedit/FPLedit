@@ -14,12 +14,12 @@ namespace FPLedit.Editor
         private readonly IPluginInterface pluginInterface;
         private readonly int route;
 
-#pragma warning disable CS0649
-        private readonly TextBox nameTextBox, positionTextBox, codeTextBox;
-        private readonly ComboBox typeComboBox;
-        private readonly CheckBox requestCheckBox;
-        private readonly StationRenderer stationRenderer;
-#pragma warning restore CS0649
+#pragma warning disable CS0649,CA2213
+        private readonly TextBox nameTextBox = default!, positionTextBox = default!, codeTextBox = default!;
+        private readonly ComboBox typeComboBox = default!;
+        private readonly CheckBox requestCheckBox = default!;
+        private readonly StationRenderer stationRenderer = default!;
+#pragma warning restore CS0649,CA2213
         private readonly ValidatorCollection validators;
 
         public Station Station { get; }

@@ -26,12 +26,12 @@ namespace FPLedit.SettingsUi
         private readonly ExtensionManager manager;
         private readonly IRestartable restartable;
 
-#pragma warning disable CS0649
+#pragma warning disable CS0649,CA2213
         private readonly ListBox enabledListBox = default!, disabledListBox = default!;
         private readonly Button deactivateButton = default!, activateButton = default!;
         private readonly Label infoLabel = default!;
         private readonly StackLayout restartStack = default!;
-#pragma warning restore CS0649
+#pragma warning restore CS0649,CA2213
 
         public ExtensionsControl(ExtensionManager mg, IRestartable restartable)
         {

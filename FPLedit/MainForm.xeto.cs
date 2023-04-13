@@ -15,12 +15,12 @@ namespace FPLedit
     internal sealed class MainForm : FForm, IPlugin
     {
         #region Controls
-#pragma warning disable CS0649
-        private readonly LogControl logTextBox;
+#pragma warning disable CS0649,CA2213
+        private readonly LogControl logTextBox = default!;
         private readonly ButtonMenuItem saveMenu, saveAsMenu, exportMenu, importMenu, lastMenu, convertMenu;
         private readonly NetworkEditingControl networkEditingControl;
         private readonly StackLayout loadingStack;
-#pragma warning restore CS0649
+#pragma warning restore CS0649,CA2213
         #endregion
 
         internal CrashReporting.CrashReporter CrashReporter { get; }
@@ -181,7 +181,7 @@ namespace FPLedit
 #pragma warning disable CA2000
                 var itm = lastMenu.CreateItem(lf);
 #pragma warning restore CA2000
-                itm.Click += (s, a) =>
+                itm.Click += (_, _) =>
                 {
                     if (Bootstrapper.FileHandler.NotifyIfUnsaved())
                         Bootstrapper.FileHandler.InternalOpen(lf, true);

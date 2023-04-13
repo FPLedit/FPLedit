@@ -11,14 +11,14 @@ namespace FPLedit.Buchfahrplan.Forms
         private readonly ISettings settings;
         private readonly BfplAttrs attrs;
 
-#pragma warning disable CS0649
+#pragma warning disable CS0649,CA2213
         private readonly DropDown templateComboBox = null!;
         private readonly ComboBox fontComboBox = null!;
         private readonly Label exampleLabel = null!, cssLabel = null!;
         private readonly UrlButton cssHelpLinkLabel = null!;
         private readonly CheckBox consoleCheckBox = null!, commentCheckBox = null!, daysCheckBox = null!;
         private readonly TextArea cssTextBox = null!;
-#pragma warning restore CS0649
+#pragma warning restore CS0649,CA2213
 
         public SettingsControl(IPluginInterface pluginInterface)
         {

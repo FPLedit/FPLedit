@@ -14,10 +14,10 @@ namespace FPLedit.Editor.Network
         private readonly Timetable tt;
         private readonly object backupHandle;
 
-#pragma warning disable CS0649
-        private readonly GridView gridView;
-        private readonly Button editPathButton, editButton, deleteButton, copyButton;
-#pragma warning restore CS0649
+#pragma warning disable CS0649,CA2213
+        private readonly GridView gridView = default!;
+        private readonly Button editPathButton = default!, editButton = default!, deleteButton = default!, copyButton = default!;
+#pragma warning restore CS0649,CA2213
 
         public NetworkTrainsEditForm(IPluginInterface pluginInterface) : base(pluginInterface.Timetable)
         {

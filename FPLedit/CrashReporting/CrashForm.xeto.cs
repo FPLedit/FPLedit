@@ -9,12 +9,12 @@ namespace FPLedit.CrashReporting
 {
     internal sealed class CrashForm : FDialog<DialogResult>
     {
-#pragma warning disable CS0649
+#pragma warning disable CS0649,CA2213
         private readonly Label fnLabel = default!;
         private readonly TextArea infoTextBox = default!;
         private readonly GroupBox restoreGroupBox = default!;
         private readonly Button norestoreButton = default!;
-#pragma warning restore CS0649
+#pragma warning restore CS0649,CA2213
 
         private readonly string crashFn;
 

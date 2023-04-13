@@ -11,14 +11,14 @@ namespace FPLedit.Aushangfahrplan.Forms
         private readonly ISettings settings;
         private readonly AfplAttrs attrs;
 
-#pragma warning disable CS0649
-        private readonly DropDown templateComboBox;
-        private readonly ComboBox fontComboBox, hwfontComboBox;
-        private readonly Label exampleLabel, hwexampleLabel, cssLabel;
-        private readonly UrlButton cssHelpLinkLabel;
-        private readonly CheckBox tracksCheckBox, consoleCheckBox, omitTracksSingleCheckBox;
-        private readonly TextArea cssTextBox;
-#pragma warning restore CS0649
+#pragma warning disable CS0649,CA2213
+        private readonly DropDown templateComboBox = default!;
+        private readonly ComboBox fontComboBox = default!, hwfontComboBox = default!;
+        private readonly Label exampleLabel = default!, hwexampleLabel = default!, cssLabel = default!;
+        private readonly UrlButton cssHelpLinkLabel = default!;
+        private readonly CheckBox tracksCheckBox = default!, consoleCheckBox = default!, omitTracksSingleCheckBox = default!;
+        private readonly TextArea cssTextBox = default!;
+#pragma warning restore CS0649,CA2213
 
         public SettingsControl(IPluginInterface pluginInterface)
         {

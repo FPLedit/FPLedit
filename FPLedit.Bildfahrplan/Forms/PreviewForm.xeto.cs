@@ -11,14 +11,14 @@ namespace FPLedit.Bildfahrplan.Forms
 {
     internal sealed class PreviewForm : FForm
     {
-#pragma warning disable CS0649
-        private readonly Drawable panel, hpanel;
-        private readonly Scrollable scrollable;
-        private readonly DaysControlWide dtc;
-        private readonly RoutesDropDown routesDropDown;
-        private readonly CheckBox splitCheckBox;
-        private readonly Button virtualRoutesButton, preferencesButton;
-#pragma warning restore CS0649
+#pragma warning disable CS0649,CA2213
+        private readonly Drawable panel = default!, hpanel = default!;
+        private readonly Scrollable scrollable = default!;
+        private readonly DaysControlWide dtc = default!;
+        private readonly RoutesDropDown routesDropDown = default!;
+        private readonly CheckBox splitCheckBox = default!;
+        private readonly Button virtualRoutesButton = default!, preferencesButton = default!;
+#pragma warning restore CS0649,CA2213
 
         private readonly IPluginInterface pluginInterface;
         private readonly AsyncDoubleBufferedGraph adbg;
@@ -37,10 +37,10 @@ namespace FPLedit.Bildfahrplan.Forms
             if (Screen != null && mainForm.Bounds.TopRight.X + 500 < Screen.Bounds.Width)
                 Location = mainForm.Bounds.TopRight + new Point(10, 0);
 
-            this.SizeChanged += (s, e) => panel.Invalidate();
+            this.SizeChanged += (_, _) => panel.Invalidate();
 
-            routesDropDown.SelectedRouteChanged += (s, e) => ResetRenderer();
-            dtc.SelectedDaysChanged += (s, e) =>
+            routesDropDown.SelectedRouteChanged += (_, _) => ResetRenderer();
+            dtc.SelectedDaysChanged += (_, _) =>
             {
                 var attrs = new TimetableStyle(pluginInterface.Timetable);
                 attrs.RenderDays = dtc.SelectedDays;
@@ -48,7 +48,7 @@ namespace FPLedit.Bildfahrplan.Forms
             };
 
             splitCheckBox.Checked = pluginInterface.Settings.Get<bool>("bifpl.lock-stations");
-            splitCheckBox.CheckedChanged += (s, e) =>
+            splitCheckBox.CheckedChanged += (_, _) =>
             {
                 ResetRenderer();
                 pluginInterface.Settings.Set("bifpl.lock-stations", splitCheckBox.Checked.Value);

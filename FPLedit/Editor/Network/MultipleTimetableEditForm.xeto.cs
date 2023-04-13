@@ -9,10 +9,10 @@ namespace FPLedit.Editor.Network
 {
     internal sealed class MultipleTimetableEditForm : FDialog<DialogResult>
     {
-#pragma warning disable CS0649
-        private readonly DropDown trainDropDown;
-        private readonly SingleTimetableEditControl editor;
-#pragma warning restore CS0649
+#pragma warning disable CS0649,CA2213
+        private readonly DropDown trainDropDown = default!;
+        private readonly SingleTimetableEditControl editor = default!;
+#pragma warning restore CS0649,CA2213
 
         private readonly IPluginInterface pluginInterface;
         private readonly object backupHandle;

@@ -12,13 +12,13 @@ namespace FPLedit.Editor.Rendering
     {
         private IPluginInterface pluginInterface;
 
-#pragma warning disable CS0649
-        private readonly RoutesDropDown routesDropDown;
+#pragma warning disable CS0649,CA2213
+        private readonly RoutesDropDown routesDropDown = default!;
         private readonly NetworkRenderer networkRenderer;
         private readonly Button newLineButton, newButton, joinLineButton;
         private readonly Divider divider1;
         private readonly StackLayout toolbar;
-#pragma warning restore CS0649
+#pragma warning restore CS0649,CA2213
         
         public static readonly Keys[] DispatchableKeys = { Keys.Home };
 
@@ -73,8 +73,9 @@ namespace FPLedit.Editor.Rendering
 
             networkRenderer.StationDoubleClicked += (s, _) =>
             {
-                pluginInterface.StageUndoStep();
                 var sta = (Station)s;
+                if (sta == null) return; // Something weird happened.
+                pluginInterface.StageUndoStep();
                 var r = routesDropDown.SelectedRoute;
                 if (sta.Routes.Length == 1)
                     r = sta.Routes[0];
@@ -95,9 +96,10 @@ namespace FPLedit.Editor.Rendering
             {
                 var menu = new ContextMenu();
                 var itm = menu.CreateItem("Löschen");
-                itm.Click += (se, ar) =>
+                itm.Click += (_, _) =>
                 {
                     var sta = (Station) s;
+                    if (sta == null) return; // Something weird happened.
                     if (pluginInterface.Timetable.WouldProduceAmbiguousRoute(sta))
                     {
                         MessageBox.Show(T._("Sie versuchen eine Station zu löschen, ohne die danach zwei Routen zusammenfallen, das heißt zwei Stationen auf mehr als einer Route ohne Zwischenstation verbunden sind.\n\n" +
@@ -117,12 +119,12 @@ namespace FPLedit.Editor.Rendering
                 };
                 menu.Show(this);
             };
-            networkRenderer.NewRouteAdded += (s, args) =>
+            networkRenderer.NewRouteAdded += (_, args) =>
             {
-                (pluginInterface.FileState as FileState).Saved = false;
+                (pluginInterface.FileState as FileState)!.Saved = false;
                 routesDropDown.SelectedRoute = args.Value;
             };
-            networkRenderer.StationMoveEnd += (_, _) => (pluginInterface.FileState as FileState).Saved = false;
+            networkRenderer.StationMoveEnd += (_, _) => (pluginInterface.FileState as FileState)!.Saved = false;
             newButton.Click += (_, _) =>
             {
                 pluginInterface.StageUndoStep();

@@ -19,10 +19,10 @@ namespace FPLedit.SettingsUi
     
     internal sealed class TemplatesControl : Panel
     {
-#pragma warning disable CS0649
+#pragma warning disable CS0649,CA2213
         private readonly GridView gridView = default!;
         private readonly Button extractButton = default!, editButton = default!, removeButton = default!, enableButton = default!, disableButton = default!;
-#pragma warning restore CS0649
+#pragma warning restore CS0649,CA2213
 
         private readonly TemplateManager manager;
         private ITemplate[] templates = {};

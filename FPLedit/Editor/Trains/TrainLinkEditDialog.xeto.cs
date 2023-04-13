@@ -11,11 +11,11 @@ namespace FPLedit.Editor.Trains
 {
     internal sealed class TrainLinkEditDialog : FDialog<DialogResult>
     {
-#pragma warning disable CS0649
-        private readonly TextBox startOffsetTextBox, differenceTextBox, nameTextBox, changeTextBox, countTextBox;
-        private readonly TableLayout autoTrainNameTableLayout, specialTrainNameTableLayout;
-        private readonly GridView specialNameGridView;
-#pragma warning restore CS0649
+#pragma warning disable CS0649,CA2213
+        private readonly TextBox startOffsetTextBox = default!, differenceTextBox = default!, nameTextBox = default!, changeTextBox = default!, countTextBox = default!;
+        private readonly TableLayout autoTrainNameTableLayout = default!, specialTrainNameTableLayout = default!;
+        private readonly GridView specialNameGridView = default!;
+#pragma warning restore CS0649,CA2213
         private readonly NumberValidator countValidator, changeValidator;
         private readonly TimeValidator differenceValidator, offsetValidator;
 

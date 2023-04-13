@@ -14,9 +14,9 @@ namespace FPLedit.Bildfahrplan.Forms
         private readonly IPluginInterface pluginInterface;
         private readonly object backupHandle;
 
-#pragma warning disable CS0649
-        private readonly GridView gridView;
-#pragma warning restore CS0649
+#pragma warning disable CS0649,CA2213
+        private readonly GridView gridView = default!;
+#pragma warning restore CS0649,CA2213
 
         public TrainStyleForm(IPluginInterface pluginInterface)
         {

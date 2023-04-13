@@ -10,11 +10,11 @@ namespace FPLedit.DebugDump.Forms
     {
         private DumpEvent currentEvent;
 
-#pragma warning disable CS0649
-        private readonly ListBox eventListBox;
-        private readonly TextArea propertyTextArea, dataTextArea;
-        private readonly DropDown dataDropDown;
-#pragma warning restore CS0649
+#pragma warning disable CS0649,CA2213
+        private readonly ListBox eventListBox = default!;
+        private readonly TextArea propertyTextArea = default!, dataTextArea = default!;
+        private readonly DropDown dataDropDown = default!;
+#pragma warning restore CS0649,CA2213
 
         public InspectForm(DumpEvent[] events)
         {

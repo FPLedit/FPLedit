@@ -12,11 +12,11 @@ namespace FPLedit.jTrainGraphStarter
     {
         private readonly ISettings settings;
 
-#pragma warning disable CS0649
-        private readonly TextBox javaPathTextBox, jtgPathTextBox;
-        private readonly DropDown versionComboBox;
-        private readonly CheckBox messageCheckBox;
-#pragma warning restore CS0649
+#pragma warning disable CS0649,CA2213
+        private readonly TextBox javaPathTextBox = default!, jtgPathTextBox = default!;
+        private readonly DropDown versionComboBox = default!;
+        private readonly CheckBox messageCheckBox = default!;
+#pragma warning restore CS0649,CA2213
 
         public SettingsForm(ISettings settings)
         {

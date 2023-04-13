@@ -10,12 +10,12 @@ namespace FPLedit.Editor.TimetableEditor
 {
     internal sealed class SingleTimetableEditControl : BaseTimetableEditControl
     {
-#pragma warning disable CS0649
-        private readonly GridView dataGridView;
-        private readonly ToggleButton trapeztafelToggle, requestToggle;
-        private readonly Button zlmButton, shuntButton;
-        private readonly TableLayout actionsLayout;
-#pragma warning restore CS0649
+#pragma warning disable CS0649,CA2213
+        private readonly GridView dataGridView = default!;
+        private readonly ToggleButton trapeztafelToggle = default!, requestToggle = default!;
+        private readonly Button zlmButton = default!, shuntButton = default!;
+        private readonly TableLayout actionsLayout = default!;
+#pragma warning restore CS0649,CA2213
 
         private IWritableTrain train;
         private List<Station> path;
@@ -76,7 +76,7 @@ namespace FPLedit.Editor.TimetableEditor
         {
             var cc = new CustomCell
             {
-                CreateCell = args =>
+                CreateCell = _ =>
                 {
                     var tb = new TextBox { Tag = new CCCO() };
 
@@ -148,7 +148,7 @@ namespace FPLedit.Editor.TimetableEditor
         {
             var cc = new CustomCell
             {
-                CreateCell = args =>
+                CreateCell = _ =>
                 {
                     var dd = new DropDown { Tag = new CCCO() };
 

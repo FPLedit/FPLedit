@@ -10,10 +10,10 @@ namespace FPLedit.Buchfahrplan.Forms
 {
     internal sealed class VelocityEditForm : FDialog<DialogResult>
     {
-#pragma warning disable CS0649
+#pragma warning disable CS0649,CA2213
         private readonly TextBox nameTextBox = null!, positionTextBox = null!, velocityTextBox = null!;
         private readonly DropDown wellenComboBox = null!, directionComboBox = null!;
-#pragma warning restore CS0649
+#pragma warning restore CS0649,CA2213
         private readonly ValidatorCollection validators;
 
         public IStation Station { get; init; } = null!;

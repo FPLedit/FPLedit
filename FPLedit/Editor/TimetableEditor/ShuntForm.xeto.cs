@@ -11,11 +11,11 @@ namespace FPLedit.Editor.TimetableEditor
 {
     internal sealed class ShuntForm : FDialog<DialogResult>
     {
-#pragma warning disable CS0649
-        private readonly GridView gridView;
-        private readonly Button removeButton;
-        private readonly Label arrivalLabel, departureLabel;
-#pragma warning restore CS0649
+#pragma warning disable CS0649,CA2213
+        private readonly GridView gridView = default!;
+        private readonly Button removeButton = default!;
+        private readonly Label arrivalLabel = default!, departureLabel = default!;
+#pragma warning restore CS0649,CA2213
 
         private readonly ArrDep arrDep;
         private readonly Station station;
@@ -131,6 +131,8 @@ namespace FPLedit.Editor.TimetableEditor
                 var res = MessageBox.Show(T._("Die erste Rangierfahrt beginnt nicht am Ankunftsgleis! Trotzdem fortfahren?"), "FPLedit", MessageBoxButtons.YesNo, MessageBoxType.Warning);
                 if (res == DialogResult.No) return;
             }
+            
+            //TODO: More shunt checks
             
             Close(DialogResult.Ok);
         }

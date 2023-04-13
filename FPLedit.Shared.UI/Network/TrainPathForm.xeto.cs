@@ -10,12 +10,12 @@ namespace FPLedit.Shared.UI.Network
     //TODO: Refactor out logic code
     public sealed class TrainPathForm : FDialog<DialogResult>
     {
-#pragma warning disable CS0649
+#pragma warning disable CS0649,CA2213
         private readonly NetworkRenderer networkRenderer = default!;
         private readonly Button closeButton = default!;
         private readonly CheckBox waypointsCheckBox = default!;
         private readonly UrlButton waypointsDocuLink = default!;
-#pragma warning restore CS0649
+#pragma warning restore CS0649,CA2213
 
         private readonly Pathfinder pathfinder;
         private readonly bool globalWaypointsAllowed = false;

@@ -14,10 +14,10 @@ namespace FPLedit.Editor.Filters
 
         private List<FilterRule> curTrainRules, curStationRules;
 
-#pragma warning disable CS0649
-        private readonly GridView trainPattListView, stationPattListView;
-        private readonly ListBox typeListBox;
-#pragma warning restore CS0649
+#pragma warning disable CS0649,CA2213
+        private readonly GridView trainPattListView = default!, stationPattListView = default!;
+        private readonly ListBox typeListBox = default!;
+#pragma warning restore CS0649,CA2213
 
         public FilterForm(IPluginInterface pluginInterface)
         {

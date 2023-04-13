@@ -13,16 +13,16 @@ namespace FPLedit.Editor.Trains
 {
     internal sealed class TrainEditForm : FDialog<DialogResult>
     {
-#pragma warning disable CS0649
-        private readonly TextBox nameTextBox, commentTextBox;
-        private readonly ComboBox locomotiveComboBox, mbrComboBox, lastComboBox;
-        private readonly Button fillButton, resetTransitionButton;
-        private readonly SingleTimetableEditControl editor;
-        private readonly DropDown transitionDropDown;
-        private readonly DaysControlNarrow daysControl;
-        private readonly GridView linkGridView;
-        private readonly GroupBox linkGroupBox;
-#pragma warning restore CS0649
+#pragma warning disable CS0649,CA2213
+        private readonly TextBox nameTextBox = default!, commentTextBox = default!;
+        private readonly ComboBox locomotiveComboBox = default!, mbrComboBox = default!, lastComboBox = default!;
+        private readonly Button fillButton, resetTransitionButton = default!;
+        private readonly SingleTimetableEditControl editor = default!;
+        private readonly DropDown transitionDropDown = default!;
+        private readonly DaysControlNarrow daysControl = default!;
+        private readonly GridView linkGridView = default!;
+        private readonly GroupBox linkGroupBox = default!;
+#pragma warning restore CS0649,CA2213
         private readonly NotEmptyValidator nameValidator;
 
         public Train Train { get; }

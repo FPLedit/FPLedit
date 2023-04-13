@@ -14,9 +14,9 @@ namespace FPLedit.jTrainGraphStarter
 
         private bool forceKill, exitClose;
 
-#pragma warning disable CS0649
-        private readonly ProgressBar progressBar;
-#pragma warning restore CS0649
+#pragma warning disable CS0649,CA2213
+        private readonly ProgressBar progressBar = default!;
+#pragma warning restore CS0649,CA2213
         
         public bool JtgSuccess { get; private set; }
 

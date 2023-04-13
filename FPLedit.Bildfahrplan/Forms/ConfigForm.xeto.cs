@@ -12,15 +12,15 @@ namespace FPLedit.Bildfahrplan.Forms
 {
     internal sealed class ConfigForm : FDialog<DialogResult>
     {
-#pragma warning disable CS0649
-        private readonly DropDown stationFontComboBox, timeColorComboBox, trainColorComboBox, stationColorComboBox, bgColorComboBox, timeFontComboBox, trainFontComboBox, trainWidthComboBox;
-        private readonly DropDown stationFontSizeComboBox, timeFontSizeComboBox, trainFontSizeComboBox, stationWidthComboBox, hourTimeWidthComboBox, minuteTimeWidthComboBox;
-        private readonly DropDown stationLinesDropDown;
-        private readonly TextBox heightPerHourTextBox;
-        private readonly TextBox startTimeTextBox;
-        private readonly TextBox endTimeTextBox;
-        private readonly CheckBox includeKilometreCheckBox, drawStationNamesCheckBox, stationVerticalCheckBox, multitrackCheckBox, networkTrainsCheckBox;
-#pragma warning restore CS0649
+#pragma warning disable CS0649,CA2213
+        private readonly DropDown stationFontComboBox = default!, timeColorComboBox = default!, trainColorComboBox = default!, stationColorComboBox = default!, bgColorComboBox = default!, timeFontComboBox = default!, trainFontComboBox = default!, trainWidthComboBox = default!;
+        private readonly DropDown stationFontSizeComboBox = default!, timeFontSizeComboBox = default!, trainFontSizeComboBox = default!, stationWidthComboBox = default!, hourTimeWidthComboBox = default!, minuteTimeWidthComboBox = default!;
+        private readonly DropDown stationLinesDropDown = default!;
+        private readonly TextBox heightPerHourTextBox = default!;
+        private readonly TextBox startTimeTextBox = default!;
+        private readonly TextBox endTimeTextBox = default!;
+        private readonly CheckBox includeKilometreCheckBox = default!, drawStationNamesCheckBox = default!, stationVerticalCheckBox = default!, multitrackCheckBox = default!, networkTrainsCheckBox = default!;
+#pragma warning restore CS0649,CA2213
         private readonly ValidatorCollection validators;
 
         private readonly TimetableStyle attrs;

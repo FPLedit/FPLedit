@@ -8,10 +8,10 @@ namespace FPLedit.SettingsUi
 {
     internal sealed class SettingsForm : FDialog<DialogResult>
     {
-#pragma warning disable CS0649
-        private readonly ListBox typeListBox;
-        private readonly Panel contentStack;
- #pragma warning restore CS0649
+#pragma warning disable CS0649,CA2213
+        private readonly ListBox typeListBox = default!;
+        private readonly Panel contentStack = default!;
+ #pragma warning restore CS0649,CA2213
 
         private readonly IPluginInterface pluginInterface;
         private readonly List<IAppearanceHandler> handlers;

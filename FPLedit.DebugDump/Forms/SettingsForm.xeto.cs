@@ -16,11 +16,11 @@ namespace FPLedit.DebugDump.Forms
     {
         private readonly ISettings settings;
 
-#pragma warning disable CS0649
-        private readonly TextBox pathTextBox;
-        private readonly CheckBox recordCheckBox;
-        private readonly Label privacyLabel;
-#pragma warning restore CS0649
+#pragma warning disable CS0649,CA2213
+        private readonly TextBox pathTextBox = default!;
+        private readonly CheckBox recordCheckBox = default!;
+        private readonly Label privacyLabel = default!;
+#pragma warning restore CS0649,CA2213
 
         public SettingsForm(ISettings settings)
         {

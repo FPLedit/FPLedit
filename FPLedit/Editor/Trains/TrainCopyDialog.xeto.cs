@@ -11,14 +11,14 @@ namespace FPLedit.Editor.Trains
 {
     internal sealed class TrainCopyDialog : FDialog<DialogResult>
     {
-#pragma warning disable CS0649
-        private readonly TextBox diffTextBox, nameTextBox, changeTextBox, countTextBox;
-        private readonly CheckBox copyAllCheckBox;
-        private readonly StackLayout selectStack, linkTypeStack;
-        private readonly TableLayout extendedOptionsTable, copyOptionsTable, autoNameOptionsTable, specialNameOptionsTable;
-        private readonly Button closeButton;
-        private readonly GridView specialNameGridView;
-#pragma warning restore CS0649
+#pragma warning disable CS0649,CA2213
+        private readonly TextBox diffTextBox = default!, nameTextBox = default!, changeTextBox = default!, countTextBox = default!;
+        private readonly CheckBox copyAllCheckBox = default!;
+        private readonly StackLayout selectStack = default!, linkTypeStack = default!;
+        private readonly TableLayout extendedOptionsTable = default!, copyOptionsTable = default!, autoNameOptionsTable = default!, specialNameOptionsTable = default!;
+        private readonly Button closeButton = default!;
+        private readonly GridView specialNameGridView = default!;
+#pragma warning restore CS0649,CA2213
         private readonly NumberValidator diffValidator, countValidator, changeValidator;
         private readonly SelectionUI<CopySelectionMode> modeSelect;
         private readonly SelectionUI<LinkTypeMode> linkSelect;
@@ -117,7 +117,7 @@ namespace FPLedit.Editor.Trains
                 var count = int.Parse(countTextBox.Text);
                 var add = int.Parse(changeTextBox.Text);
 
-                var trains = th.CopyTrainMultiple(train, diff, nameTextBox.Text, copyAllCheckBox.Checked.Value, count, add);
+                var trains = th.CopyTrainMultiple(train, diff, nameTextBox.Text, copyAllCheckBox.Checked!.Value, count, add);
 
                 foreach (var newTrain in trains)
                 {

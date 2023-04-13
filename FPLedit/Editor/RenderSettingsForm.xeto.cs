@@ -8,10 +8,10 @@ namespace FPLedit.Editor
 {
     internal sealed class RenderSettingsForm : FDialog<DialogResult>
     {
-#pragma warning disable CS0649
-        private readonly TabControl tabControl;
-        private readonly CheckBox expertCheckBox;
-#pragma warning restore CS0649
+#pragma warning disable CS0649,CA2213
+        private readonly TabControl tabControl = default!;
+        private readonly CheckBox expertCheckBox = default!;
+#pragma warning restore CS0649,CA2213
 
         private readonly IPluginInterface pluginInterface;
         private readonly List<IAppearanceHandler> handlers;
@@ -57,7 +57,7 @@ namespace FPLedit.Editor
 
         private void CloseButton_Click(object sender, EventArgs e)
         {
-            pluginInterface.Settings.Set("std.expert", expertCheckBox.Checked.Value);
+            pluginInterface.Settings.Set("std.expert", expertCheckBox.Checked!.Value);
             handlers.ForEach(sh => sh.Save());
             Close(DialogResult.Ok);
         }
@@ -66,7 +66,7 @@ namespace FPLedit.Editor
             => Close(DialogResult.Cancel);
 
         private void ExpertCheckBox_CheckedChanged(object sender, EventArgs e)
-            => handlers.ForEach(eh => eh.SetExpertMode(expertCheckBox.Checked.Value));
+            => handlers.ForEach(eh => eh.SetExpertMode(expertCheckBox.Checked!.Value));
         
         private static class L
         {

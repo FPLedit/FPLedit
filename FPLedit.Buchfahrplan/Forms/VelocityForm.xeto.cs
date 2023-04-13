@@ -10,10 +10,10 @@ namespace FPLedit.Buchfahrplan.Forms
 {
     internal sealed class VelocityForm : FDialog<DialogResult>
     {
-#pragma warning disable CS0649
+#pragma warning disable CS0649,CA2213
         private readonly GridView gridView = null!;
         private readonly Button deleteButton = null!;
-#pragma warning restore CS0649
+#pragma warning restore CS0649,CA2213
 
         private readonly IPluginInterface pluginInterface = null!;
         private readonly Route route = null!;
