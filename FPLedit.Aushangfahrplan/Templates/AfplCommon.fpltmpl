@@ -130,7 +130,7 @@ var multipleStations = tt.Type == TimetableType.Network && clr_toArray(tt.Statio
 body {
 	color:black;
 	font-size:16px;
-	font-family: "<#= safe_css_str(font) #>", sans-serif;
+	font-family: <#= safe_css_font(font) #>, sans-serif;
 }
 table {
 	margin-left: auto;
@@ -197,7 +197,7 @@ td {
 	border-bottom: 2px solid #000;
 }
 .time:not(.header), .name:not(.header), .direction:not(.header) {
-	font-family: "<#= safe_css_str(hwFont) #>", serif;
+	font-family: <#= safe_css_font(hwFont) #>, serif;
 }
 .dir {
 	border-top: 3px solid #000;

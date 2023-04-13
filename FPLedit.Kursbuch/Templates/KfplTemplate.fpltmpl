@@ -46,7 +46,7 @@ if (attrs != null)
 		<title>Tabellenfahrplan generiert von FPLedit</title>
 		<style>
 		body {
-			font-family:"<#= safe_css_str(font) #>",sans-serif;
+			font-family: <#= safe_css_font(font) #>, sans-serif;
 		}
 		table {
 			border-collapse: collapse;
@@ -65,7 +65,7 @@ if (attrs != null)
 			font-size:11.0pt;
 		}
 		.heading .line {
-			font-family:"<#= safe_css_str(heFont) #>",sans-serif;
+			font-family: <#= safe_css_font(heFont) #>, sans-serif;
 			font-weight:900;
 			letter-spacing:-.5pt;
 		}

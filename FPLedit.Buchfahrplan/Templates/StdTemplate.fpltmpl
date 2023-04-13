@@ -67,7 +67,7 @@ if (attrs != null)
 		.tfz {
 			font-weight:400;
 			font-style:normal;
-			font-family: "<#= safe_css_str(font) #>", sans-serif;
+			font-family: <#= safe_css_font(font) #>, sans-serif;
 			text-align:general;
 			vertical-align:bottom;
 		}
@@ -88,7 +88,7 @@ if (attrs != null)
 			font-size:15.0pt;
 			font-weight:400;
 			font-style:normal;
-			font-family:"<#= safe_css_str(font) #>", sans-serif;
+			font-family: <#= safe_css_font(font) #>, sans-serif;
 			text-align:center;
 			vertical-align:middle;
 		}
@@ -96,14 +96,14 @@ if (attrs != null)
 			font-size:12.0pt;
 			font-weight:400;
 			font-style:normal;
-			font-family:"<#= safe_css_str(font) #>", sans-serif;
+			font-family: <#= safe_css_font(font) #>, sans-serif;
 			text-align:center;
 			vertical-align:middle;
 		}
 		.spaltennummer {
 			font-weight:400;
 			font-style:normal;
-			font-family:"<#= safe_css_str(font) #>", sans-serif;
+			font-family: <#= safe_css_font(font) #>, sans-serif;
 			text-align:center;
 			vertical-align:top;
 			border-top:1.5pt solid black;
@@ -115,7 +115,7 @@ if (attrs != null)
 			height: 130px;
 			font-weight:400;
 			font-style:normal;
-			font-family:"<#= safe_css_str(font) #>", sans-serif;
+			font-family: <#= safe_css_font(font) #>, sans-serif;
 			text-align:center;
 			vertical-align:top;
 			border-top:.5pt solid black;
@@ -127,7 +127,7 @@ if (attrs != null)
 			height: 19px;
 			font-weight:400;
 			font-style:normal;
-			font-family:"<#= safe_css_str(font) #>", sans-serif;
+			font-family: <#= safe_css_font(font) #>, sans-serif;
 			text-align:center;
 			vertical-align:top;
 			border-right:1.5pt solid black;

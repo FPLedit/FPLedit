@@ -232,6 +232,7 @@ namespace FPLedit.Templating
                 .SetValue("clr_toArray",      (Func<IEnumerable<object>,object[]>)TemplateBuiltins.ClrToObject)
                 .SetValue("safe_html",        (Func<string,string>)TemplateOutput.SafeHtml)
                 .SetValue("safe_css_str",     (Func<string,string>)TemplateOutput.SafeCssStr)
+                .SetValue("safe_css_font",    (Func<string,string>)TemplateOutput.SafeCssFont)
                 .SetValue("safe_css_block",   (Func<string,string>)TemplateOutput.SafeCssBlock)
                 .SetValue("html_name",        (Func<string,string,string>)TemplateOutput.HtmlName)
                 .Execute(polyfillsCache, polyfillsParserOptions) // Load polyfills

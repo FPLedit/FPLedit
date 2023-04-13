@@ -54,7 +54,7 @@ if (attrs != null)
 			margin-bottom:65px;
 		}
 		body {
-			font-family:"<#= safe_css_str(font) #>", serif;
+			font-family: <#= safe_css_font(font) #>, serif;
 		}
 		table:not(.first) {
 			page-break-before:always;
