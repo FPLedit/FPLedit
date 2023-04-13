@@ -102,11 +102,12 @@ namespace FPLedit.Buchfahrplan.Forms
         public static class L
         {
             public static readonly string Title = T._("Höchstgeschwindigkeit ändern");
-            public static readonly string Position = T._("Position");
+            public static readonly string Position = T._("Position [km]");
             public static readonly string Name = T._("Name");
             public static readonly string Vmax = T._("Höchstgeschwindigkeit");
             public static readonly string Wavelines = T._("Wellenlinien");
             public static readonly string Direction = T._("Streckenrichtung");
+            public static readonly string Length = T._("Länge der Änderung [km]");
             public static readonly string Cancel = T._("Abbrechen");
             public static readonly string Close = T._("Schließen");
         }

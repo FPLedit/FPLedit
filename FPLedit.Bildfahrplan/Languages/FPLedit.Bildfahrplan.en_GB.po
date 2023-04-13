@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2022-01-27 19:55+0100\n"
-"PO-Revision-Date: 2022-01-27 19:55+0100\n"
+"POT-Creation-Date: 2023-02-02 10:59+0100\n"
+"PO-Revision-Date: 2023-02-02 10:59+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.2.2\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -382,15 +382,15 @@ msgstr "Dashed (93)"
 msgid "Lang gestrichelt"
 msgstr "Dashed (long)"
 
-#: Render/AsyncDoubleBufferedGraph.cs:92
+#: Render/AsyncDoubleBufferedGraph.cs:91
 msgid "Generiere Bildfahrplan..."
 msgstr "Generating graphical timetable..."
 
-#: Render/AsyncDoubleBufferedGraph.cs:104
+#: Render/AsyncDoubleBufferedGraph.cs:103
 msgid "Fehler beim Rendern (siehe Log)..."
 msgstr "Exception occurred while rendering (see log)..."
 
-#: Render/AsyncDoubleBufferedGraph.cs:106
+#: Render/AsyncDoubleBufferedGraph.cs:105
 msgid ""
 "Mehrere Folgezüge gefunden!\n"
 "Bitte oben angezeigte Tage einschränken\n"

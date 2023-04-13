@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2022-01-27 19:55+0100\n"
-"PO-Revision-Date: 2022-01-27 19:55+0100\n"
+"POT-Creation-Date: 2023-02-02 10:47+0100\n"
+"PO-Revision-Date: 2023-02-02 10:56+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.2.2\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: _;SelectionName\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -57,9 +57,21 @@ msgstr "Please enter a valid number as velocity!"
 
 #: Forms/VelocityEditForm.xeto.cs:28
 msgid "Bitte eine Zahl als Position eingeben!"
-msgstr "Please enter a valid number as position."
+msgstr "Please enter a valid number as position!"
 
-#: Forms/VelocityEditForm.xeto.cs:70
+#: Forms/VelocityEditForm.xeto.cs:37
+msgid "beide Richtungen"
+msgstr "both directions"
+
+#: Forms/VelocityEditForm.xeto.cs:38
+msgid "nur in Kilometrierungsrichtung"
+msgstr "in ascending direction of position"
+
+#: Forms/VelocityEditForm.xeto.cs:39
+msgid "nur entgegen Kilometrierungsrichtung"
+msgstr "in descending direction of position"
+
+#: Forms/VelocityEditForm.xeto.cs:83
 #, csharp-format
 msgid ""
 "Bitte erst alle Fehler beheben:\n"
@@ -68,31 +80,39 @@ msgstr ""
 "Please correct all errors before continuing:\n"
 "{0}"
 
-#: Forms/VelocityEditForm.xeto.cs:90 Forms/VelocityForm.xeto.cs:97
+#: Forms/VelocityEditForm.xeto.cs:104 Forms/VelocityForm.xeto.cs:93
 msgid "Höchstgeschwindigkeit ändern"
 msgstr "Change maximum velocity"
 
-#: Forms/VelocityEditForm.xeto.cs:91
-msgid "Position"
-msgstr "Position"
+#: Forms/VelocityEditForm.xeto.cs:105
+msgid "Position [km]"
+msgstr "Position [km]"
 
-#: Forms/VelocityEditForm.xeto.cs:92 Forms/VelocityForm.xeto.cs:29
+#: Forms/VelocityEditForm.xeto.cs:106 Forms/VelocityForm.xeto.cs:29
 msgid "Name"
 msgstr "Name"
 
-#: Forms/VelocityEditForm.xeto.cs:93
+#: Forms/VelocityEditForm.xeto.cs:107
 msgid "Höchstgeschwindigkeit"
 msgstr "Vmax"
 
-#: Forms/VelocityEditForm.xeto.cs:94 Forms/VelocityForm.xeto.cs:31
+#: Forms/VelocityEditForm.xeto.cs:108 Forms/VelocityForm.xeto.cs:31
 msgid "Wellenlinien"
 msgstr "Wavelines (marking the incline)"
 
-#: Forms/VelocityEditForm.xeto.cs:95 Forms/VelocityForm.xeto.cs:157
+#: Forms/VelocityEditForm.xeto.cs:109
+msgid "Streckenrichtung"
+msgstr "Valid in Direction"
+
+#: Forms/VelocityEditForm.xeto.cs:110
+msgid "Länge der Änderung [km]"
+msgstr "Change track-length [km]"
+
+#: Forms/VelocityEditForm.xeto.cs:111 Forms/VelocityForm.xeto.cs:153
 msgid "Abbrechen"
 msgstr "Cancel"
 
-#: Forms/VelocityEditForm.xeto.cs:96 Forms/VelocityForm.xeto.cs:158
+#: Forms/VelocityEditForm.xeto.cs:112 Forms/VelocityForm.xeto.cs:154
 msgid "Schließen"
 msgstr "Ok"
 
@@ -104,34 +124,34 @@ msgstr "km"
 msgid "Vmax"
 msgstr "Vmax"
 
-#: Forms/VelocityForm.xeto.cs:76
+#: Forms/VelocityForm.xeto.cs:73
 #, csharp-format
 msgid "Die Position muss im Streckenbereich liegen, also zwischen {0} und {1}!"
 msgstr ""
 "The given position must be in the range of this railway line, between {0} "
 "and {1}!"
 
-#: Forms/VelocityForm.xeto.cs:97 Forms/VelocityForm.xeto.cs:115
+#: Forms/VelocityForm.xeto.cs:93 Forms/VelocityForm.xeto.cs:111
 msgid "Zuerst muss eine Zeile ausgewählt werden!"
 msgstr "Please select an entry first!"
 
-#: Forms/VelocityForm.xeto.cs:115
+#: Forms/VelocityForm.xeto.cs:111
 msgid "Löschen"
 msgstr "Delete"
 
-#: Forms/VelocityForm.xeto.cs:153
+#: Forms/VelocityForm.xeto.cs:149
 msgid "Höchstgeschwindigkeiten ändern"
 msgstr "Change maximum velocities"
 
-#: Forms/VelocityForm.xeto.cs:154
+#: Forms/VelocityForm.xeto.cs:150
 msgid "Wechsel &hizufügen"
 msgstr "&Add Vmax change"
 
-#: Forms/VelocityForm.xeto.cs:155
+#: Forms/VelocityForm.xeto.cs:151
 msgid "Eintrag &bearbeiten"
 msgstr "&Edit entry"
 
-#: Forms/VelocityForm.xeto.cs:156
+#: Forms/VelocityForm.xeto.cs:152
 msgid "Wechsel &löschen"
 msgstr "&Delete Vmax change"
 
@@ -143,11 +163,11 @@ msgstr "Change &maximum velocities"
 msgid "Buchfahrplan als HTML Datei (*.html)|*.html"
 msgstr "Book timetable as HTML file (*.html)|*.html"
 
-#: Plugin.cs:14 Plugin.cs:18 Plugin.cs:30
+#: Plugin.cs:14 Plugin.cs:18 Plugin.cs:35
 msgid "Buchfahrplan"
 msgstr "Book timetable"
 
-#: Templates/TemplateHelper.cs:65
+#: Templates/TemplateHelper.cs:62
 msgid ""
 "Zwei benachbarte Stationen sollten nicht mehr als eine/keine Route gemeinsam "
 "haben! Zusammengefallene Routen sind vorhanden und werden nicht unterstützt."

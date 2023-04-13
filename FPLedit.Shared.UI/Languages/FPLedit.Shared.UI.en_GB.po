@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2022-01-27 19:50+0100\n"
-"PO-Revision-Date: 2022-01-27 19:51+0100\n"
+"POT-Creation-Date: 2023-02-02 11:00+0100\n"
+"PO-Revision-Date: 2023-02-02 11:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.2.2\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -115,11 +115,11 @@ msgstr "Activate none"
 msgid "<Lade>"
 msgstr "<Loading>"
 
-#: InputBox.cs:18 Network/TrainPathForm.xeto.cs:283
+#: InputBox.cs:18 Network/TrainPathForm.xeto.cs:288
 msgid "Schließen"
 msgstr "Ok"
 
-#: InputBox.cs:22 Network/TrainPathForm.xeto.cs:282
+#: InputBox.cs:22 Network/TrainPathForm.xeto.cs:287
 msgid "Abbrechen"
 msgstr "Cancel"
 
@@ -162,30 +162,30 @@ msgid ""
 "Klicken, um die Zielstation der Verbindung auzuwählen; ESC zum Abbrechen"
 msgstr "Click to select the station to connect to; press ESC to cancel"
 
-#: Network/TrainPathForm.xeto.cs:67
+#: Network/TrainPathForm.xeto.cs:68
 msgid "Startstation auswählen"
 msgstr "Select first station"
 
-#: Network/TrainPathForm.xeto.cs:76
+#: Network/TrainPathForm.xeto.cs:77
 msgid "Durch Klick Stationen am Anfang/Ende des Laufwegs entfernen"
 msgstr ""
 "Remove stations from the beginning/end of the route by clicking on them"
 
-#: Network/TrainPathForm.xeto.cs:84
+#: Network/TrainPathForm.xeto.cs:85
 msgid "Durch Klick Wegpunkte in der Reihenfolge des Durchfahrens hinzufügen"
 msgstr ""
 "Add waypoints by clicking on stations in the order they are passed by the "
 "train"
 
-#: Network/TrainPathForm.xeto.cs:107
+#: Network/TrainPathForm.xeto.cs:108
 msgid "Fahrtstrecke für neuen Zug auswählen"
 msgstr "Select route for new train"
 
-#: Network/TrainPathForm.xeto.cs:112
+#: Network/TrainPathForm.xeto.cs:113
 msgid "Weiter >>"
 msgstr "Continue >>"
 
-#: Network/TrainPathForm.xeto.cs:218
+#: Network/TrainPathForm.xeto.cs:223
 msgid ""
 "Der Laufweg enthält eine Station mehr als einmal. Dies ist aktuell nicht "
 "möglich. Ggf. fehlt ein weiterer Wegpunkt!"
@@ -193,23 +193,23 @@ msgstr ""
 "The lines contains a station more than one time. This is currently not "
 "possible. Maybe you are missing a waypoint?"
 
-#: Network/TrainPathForm.xeto.cs:284
+#: Network/TrainPathForm.xeto.cs:289
 msgid "Fahrtstrecke bearbeiten: {train}"
 msgstr "Edit route for train {train}"
 
-#: Network/TrainPathForm.xeto.cs:285
+#: Network/TrainPathForm.xeto.cs:290
 msgid "Hilfe zu Wegpunkten"
 msgstr "Help for waypoints"
 
-#: Network/TrainPathForm.xeto.cs:286
+#: Network/TrainPathForm.xeto.cs:291
 msgid "Wegpunkte setzen (für zirkuläre Netze)"
 msgstr "Set waypoints (circular networks)"
 
-#: Network/TrainPathForm.xeto.cs:287
+#: Network/TrainPathForm.xeto.cs:292
 msgid "https://fahrplan.manuelhu.de/fahrplaene-bearbeiten/cycles/"
 msgstr ""
 
-#: Network/TrainPathForm.xeto.cs:288
+#: Network/TrainPathForm.xeto.cs:293
 msgid "Laufweg zurücksetzen/leeren"
 msgstr "Clear/reset route"
 
