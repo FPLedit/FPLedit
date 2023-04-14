@@ -140,7 +140,7 @@ namespace FPLedit.Bildfahrplan.Render
                     var isTransition = isStationLine && (points.Count == i + 2 || Math.Sign(preX - curX) == Math.Sign(postX - curX));
 
                     float bezierFactor = !isTransition
-                        ? ((preX < postX) ? -1 : 1) // preX < postX --> TrainDirection.ti
+                        ? Math.Sign(preX - postX) // preX < postX --> TrainDirection.ti
                         : 0.5f * Math.Sign(preX - curX); // Transition
                     var bezierOffset = new SizeF(bezierFactor * 14, (cp2.Y - cp1.Y) / -4.0f);
                     var bezierOffsetT = new SizeF(bezierOffset.Width, -bezierOffset.Height);
@@ -154,7 +154,7 @@ namespace FPLedit.Bildfahrplan.Render
                             p.AddLine(cp1, cp2);
                             break;
                         case StationLineStyle.Cubic:
-                            var control2 = cp2 + (!isTransition ? bezierOffset : (SizeF.Empty - bezierOffsetT));
+                            var control2 = cp2 + (!isTransition ? bezierOffset : -1 * bezierOffsetT);
                             p.AddBezier(cp1, cp1 - bezierOffset, control2, cp2);
                             break;
                     }
@@ -162,36 +162,43 @@ namespace FPLedit.Bildfahrplan.Render
                 else
                     p.AddLine(cp1, cp2); // Normal line between stations
 
-                // Zugnummern nur zeichnen, wenn eine "schräge" Linie existiert.
-                if (Math.Abs(cp1.X - cp2.X) < TOLERANCE || Math.Abs(cp1.Y - cp2.Y) < TOLERANCE)
-                    continue;
-                // Zugnummern zeichnen
-                var trainFont = (Font)attrs.TrainFont;
-
-                var size = g.MeasureString(trainFont, train.TName);
-                float[] ys = { cp1.Y, cp2.Y };
-                float[] xs = { cp1.X, cp2.X };
-                float ty = ys.Min() + (ys.Max() - ys.Min()) / 2 - (size.Height / 2);
-                float tx = xs.Min() + (xs.Max() - xs.Min()) / 2;
-
-                if (ty > clipTop && ty < clipBottom) // check the clip area of the center, if this is outside we do not have to calc the angle.
-                {
-                    float angle = CalcAngle(ys, xs, train);
-                    var dh = (size.Width / 2 + size.Height / (2 + Math.Tan(angle))) * Math.Sin(angle);
-
-                    if (ty > clipTop + dh && ty < clipBottom - dh) // now check that we are fully inside the clipping area.
-                    {
-                        var matrix = g.Transform.Clone();
-
-                        g.TranslateTransform(tx, ty);
-                        g.RotateTransform(-angle);
-                        g.DrawText(trainFont, brush, -(size.Width / 2), -(size.Height / 2), train.TName);
-
-                        g.Transform = matrix;
-                    }
-                }
+                RenderTrainName(g, train, cp1, cp2, style, brush); // Zugnummern zeichnen.
             }
             g.DrawPath(pen, p);
+        }
+
+        private void RenderTrainName(Graphics g, ITrain train, PointF cp1, PointF cp2, TrainStyle style, Brush brush)
+        {
+            // only add the train number text, if the train line is not vertical or horizontal.
+            if (Math.Abs(cp1.X - cp2.X) < TOLERANCE || Math.Abs(cp1.Y - cp2.Y) < TOLERANCE)
+                return;
+            var trainFont = (Font) attrs.TrainFont;
+
+            var size = g.MeasureString(trainFont, train.TName);
+            if (Math.Abs(cp1.X - cp2.X) < size.Width + 5) // the train name is wider than the current space in the diagram.
+                return;
+
+            float[] ys = { cp1.Y, cp2.Y };
+            float[] xs = { cp1.X, cp2.X };
+            var t = new PointF(xs.Average(), ys.Average());
+            var d = new PointF(cp2.X - cp1.X, cp2.Y - cp1.Y); // train line vector.
+            var n = new SizeF(d.Y, -d.X) / (float) Math.Sqrt(d.Y * d.Y + d.X * d.X); // normal vector to the train line (2d).
+            t += Math.Sign(d.X) * n * (size.Height / 2 + style.CalcedWidth / 2f);
+
+            if (t.Y < clipTop || t.Y > clipBottom) // check the clip area of the center, if this is outside we do not have to calc the angle.
+                return;
+
+            var angle = CalcAngle(ys, xs, train);
+            var dh = (size.Width / 2 + size.Height / (2 + Math.Tan(angle))) * Math.Sin(angle);
+
+            if (t.Y < clipTop + dh || t.Y > clipBottom - dh) // now check that we are fully inside the clipping area.
+                return;
+
+            var matrix = g.Transform.Clone();
+            g.TranslateTransform(t.X, t.Y);
+            g.RotateTransform(-angle);
+            g.DrawText(trainFont, brush, -(size.Width / 2), -(size.Height / 2), train.TName);
+            g.Transform = matrix;
         }
 
         #region Render helpers
@@ -271,7 +278,7 @@ namespace FPLedit.Bildfahrplan.Render
                     var ardeps = t.GetArrDepsUnsorted();
 
                     var intersect = stasAfter.Intersect(p)
-                        .Where(s => ardeps[s].HasMinOneTimeSet);
+                        .Where(s => ardeps[s].HasMinOneTimeSet).ToArray();
 
                     if (!intersect.Any())
                         return false;
