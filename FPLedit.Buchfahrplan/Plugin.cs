@@ -24,6 +24,7 @@ namespace FPLedit.Buchfahrplan
         
         public void InitTemplates(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
         {
+            Templates.WellenCssHelper.UsePngFallback = pluginInterface.Settings.Get("bfpl.wellen-png-fallback", false);
             componentRegistry.Register<ITemplateProvider>(new Templates.StdTemplate());
             componentRegistry.Register<ITemplateProvider>(new Templates.ZlbTemplate());
             
