@@ -56,10 +56,10 @@ namespace FPLedit.Bildfahrplan.Render
 
             // Züge
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            g.SetClip(new RectangleF(0 /*margin.Left*/, margin.Top, width /*- margin.Left - margin.Right*/, height - margin.Bottom - margin.Top));
 
             var trains = tt.Trains.Where(t => t.Days.IsIntersecting(attrs.RenderDays));
-            var trainRenderer = new TrainRenderer(stations, tt, margin, startTime, stationOffsets, attrs.RenderDays);
+            var trainRenderer = new TrainRenderer(stations, tt, margin, startTime, stationOffsets, attrs.RenderDays,
+                clipTop: margin.Top, clipBottom: height - margin.Bottom);
             foreach (var train in trains)
                 trainRenderer.Render(g, train, exportColor);
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;

@@ -21,9 +21,12 @@ namespace FPLedit.Bildfahrplan.Render
         private readonly Days renderDays;
         private ITrain[] trainCache;
 
-        private readonly DashStyleHelper ds = new DashStyleHelper();
+        private readonly DashStyleHelper ds = new();
 
-        public TrainRenderer(IEnumerable<Station> stations, Timetable tt, Margins margin, TimeEntry startTime, Dictionary<Station, StationRenderProps> stationOffsets, Days renderDays)
+        private readonly float clipTop;
+        private readonly float clipBottom;
+
+        public TrainRenderer(IEnumerable<Station> stations, Timetable tt, Margins margin, TimeEntry startTime, Dictionary<Station, StationRenderProps> stationOffsets, Days renderDays, float clipTop, float clipBottom)
         {
             this.stations = stations;
             this.tt = tt;
@@ -31,6 +34,8 @@ namespace FPLedit.Bildfahrplan.Render
             this.startTime = startTime;
             this.stationOffsets = stationOffsets;
             this.renderDays = renderDays;
+            this.clipTop = clipTop;
+            this.clipBottom = clipBottom;
             attrs = new TimetableStyle(tt);
         }
 
@@ -118,60 +123,72 @@ namespace FPLedit.Bildfahrplan.Render
                 if (points.Count <= i + 1)
                     continue;
 
-                var isStationLine = (int)points[i].X == (int)points[i + 1].X;
-                if (isStationLine)
+                // Skip lines that are totally outside the rendering area.
+                if (points[i].Y < clipTop && points[i + 1].Y < clipTop)
+                    continue;
+                if (points[i].Y > clipBottom && points[i + 1].Y > clipBottom)
+                    continue;
+
+                var isStationLine = (int)points[i].X == (int)points[i + 1].X; // explicitely don't use op1/2 for state calculations.
+                var (cp1, cp2) = GetClippedPointsForLine(points[i], points[i + 1]);
+
+                if (isStationLine) // Line in one station.
                 {
                     var preX = i > 0 ? points[i - 1].X : 0;
                     var postX = i < points.Count - 2 ? points[i + 2].X : 0;
-                    var x = points[i].X;
-                    var isTransition = isStationLine && (points.Count == i + 2 || Math.Sign(preX - x) == Math.Sign(postX - x));
+                    var curX = points[i].X; // explicitely don't use op1 for state calculations.
+                    var isTransition = isStationLine && (points.Count == i + 2 || Math.Sign(preX - curX) == Math.Sign(postX - curX));
 
-                    float bezierFactor = !isTransition ?
-                        ((preX < postX) ? -1 : 1) : // preX < postX --> TrainDirection.ti
-                        Math.Sign(preX - x); // Transition
-                    if (isTransition) bezierFactor *= 0.5f;
-                    var bezierOffset = new SizeF(bezierFactor * 14, (points[i + 1].Y - points[i].Y) / -4.0f);
+                    float bezierFactor = !isTransition
+                        ? ((preX < postX) ? -1 : 1) // preX < postX --> TrainDirection.ti
+                        : 0.5f * Math.Sign(preX - curX); // Transition
+                    var bezierOffset = new SizeF(bezierFactor * 14, (cp2.Y - cp1.Y) / -4.0f);
                     var bezierOffsetT = new SizeF(bezierOffset.Width, -bezierOffset.Height);
 
                     switch (attrs.StationLines)
                     {
                         case StationLineStyle.None:
-                            p.MoveTo(points[i + 1]);
+                            p.MoveTo(cp2);
                             break;
                         case StationLineStyle.Normal:
-                            p.AddLine(points[i], points[i + 1]);
+                            p.AddLine(cp1, cp2);
                             break;
                         case StationLineStyle.Cubic:
-                            var control2 = points[i + 1] + (!isTransition ? bezierOffset : (SizeF.Empty-bezierOffsetT));
-                            p.AddBezier(points[i], points[i] - bezierOffset, control2, points[i + 1]);
+                            var control2 = cp2 + (!isTransition ? bezierOffset : (SizeF.Empty - bezierOffsetT));
+                            p.AddBezier(cp1, cp1 - bezierOffset, control2, cp2);
                             break;
                     }
                 }
                 else
-                    p.AddLine(points[i], points[i + 1]); // Normal line between stations
+                    p.AddLine(cp1, cp2); // Normal line between stations
 
-                if (points[i].X == points[i + 1].X || points[i].Y == points[i + 1].Y)
+                // Zugnummern nur zeichnen, wenn eine "schräge" Linie existiert.
+                if (Math.Abs(cp1.X - cp2.X) < TOLERANCE || Math.Abs(cp1.Y - cp2.Y) < TOLERANCE)
                     continue;
                 // Zugnummern zeichnen
                 var trainFont = (Font)attrs.TrainFont;
 
                 var size = g.MeasureString(trainFont, train.TName);
-                float[] ys = { points[i].Y, points[i + 1].Y };
-                float[] xs = { points[i].X, points[i + 1].X };
+                float[] ys = { cp1.Y, cp2.Y };
+                float[] xs = { cp1.X, cp2.X };
                 float ty = ys.Min() + (ys.Max() - ys.Min()) / 2 - (size.Height / 2);
                 float tx = xs.Min() + (xs.Max() - xs.Min()) / 2;
 
-                if (g.Clip.IsVisible(new PointF(tx, ty))) // translated drawing does not respect clip (Idk why)
+                if (ty > clipTop && ty < clipBottom) // check the clip area of the center, if this is outside we do not have to calc the angle.
                 {
                     float angle = CalcAngle(ys, xs, train);
-                            
-                    var matrix = g.Transform.Clone();
-                            
-                    g.TranslateTransform(tx, ty);
-                    g.RotateTransform(-angle);
-                    g.DrawText(trainFont, brush, -(size.Width / 2), -(size.Height / 2), train.TName);
-                            
-                    g.Transform = matrix;
+                    var dh = (size.Width / 2 + size.Height / (2 + Math.Tan(angle))) * Math.Sin(angle);
+
+                    if (ty > clipTop + dh && ty < clipBottom - dh) // now check that we are fully inside the clipping area.
+                    {
+                        var matrix = g.Transform.Clone();
+
+                        g.TranslateTransform(tx, ty);
+                        g.RotateTransform(-angle);
+                        g.DrawText(trainFont, brush, -(size.Width / 2), -(size.Height / 2), train.TName);
+
+                        g.Transform = matrix;
+                    }
                 }
             }
             g.DrawPath(pen, p);
@@ -199,6 +216,28 @@ namespace FPLedit.Bildfahrplan.Render
         {
             if (point.HasValue)
                 points.Add(point.Value);
+        }
+
+        (PointF cp1, PointF cp2) GetClippedPointsForLine(PointF p1, PointF p2)
+        {
+            var dx = p2.X - p1.X;
+            var dy = p2.Y - p1.Y;
+            if (p1.Y > clipTop && p2.Y < clipBottom)
+                return (p1, p2);
+            if (p1.Y > clipTop && p2.Y > clipBottom)
+            {
+                var clippedy = clipBottom - p2.Y;
+                var x = dy > TOLERANCE ? dx / dy * clippedy : 0;
+                return (p1, new PointF(p2.X + x, clipBottom));
+            }
+            if (p1.Y < clipTop && p2.Y > clipBottom)
+            {
+                var clippedy = clipTop - p1.Y;
+                var x = dy > TOLERANCE ? dx / dy * clippedy : 0;
+                return (new PointF(p1.X + x, clipTop), p2);
+            }
+
+            throw new Exception("tried to get clipped points for path fully outside rendering area, this should not happen!");
         }
         #endregion
 
@@ -264,5 +303,7 @@ namespace FPLedit.Bildfahrplan.Render
                         yield return sta;
             }
         }
+
+        private const double TOLERANCE = 1e-3; // Numerical tolerance for float comparisons.
     }
 }
