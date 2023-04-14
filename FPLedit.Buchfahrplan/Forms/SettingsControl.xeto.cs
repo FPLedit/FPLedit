@@ -16,7 +16,7 @@ namespace FPLedit.Buchfahrplan.Forms
         private readonly ComboBox fontComboBox = null!;
         private readonly Label exampleLabel = null!, cssLabel = null!;
         private readonly UrlButton cssHelpLinkLabel = null!;
-        private readonly CheckBox consoleCheckBox = null!, commentCheckBox = null!, daysCheckBox = null!;
+        private readonly CheckBox consoleCheckBox = null!, commentCheckBox = null!, daysCheckBox = null!, wvlPngFallbackCheckBox = null!;
         private readonly TextArea cssTextBox = null!;
 #pragma warning restore CS0649,CA2213
 
@@ -56,11 +56,12 @@ namespace FPLedit.Buchfahrplan.Forms
                 attrs.Template = tmpl.Identifier;
 
             settings.Set("bfpl.console", consoleCheckBox.Checked ?? false);
+            settings.Set("bfpl.wellen-png-fallback", wvlPngFallbackCheckBox.Checked ?? false);
         }
 
         public void SetExpertMode(bool enabled)
         {
-            cssTextBox.Visible = cssLabel.Visible = cssHelpLinkLabel.Visible = consoleCheckBox.Visible = enabled;
+            cssTextBox.Visible = cssLabel.Visible = cssHelpLinkLabel.Visible = consoleCheckBox.Visible = wvlPngFallbackCheckBox.Visible = enabled;
         }
         
         public static class L
@@ -74,6 +75,7 @@ namespace FPLedit.Buchfahrplan.Forms
             public static readonly string ShowComments = T._("Kommentare im Buchfahrplan anzeigen");
             public static readonly string ShowDays = T._("Verkehrstage im Buchfahrplan anzeigen");
             public static readonly string Console = T._("CSS-Test-Konsole bei Vorschau aktivieren (Gilt für alle Fahrpläne)");
+            public static readonly string WavelinesPngFallback = T._("Gibt Wellenlinien als PNG (statt SVG) aus.\n(Nur bei Druckproblemen aktivieren; gilt für alle Fahrplandateien)");
         }
     }
 }

@@ -29,6 +29,12 @@
     <TableRow>
       <TableCell />
       <TableCell ScaleWidth="true">
+        <CheckBox x:Name="wvlPngFallbackCheckBox" Text="{x:Static e:SettingsControl+L.WavelinesPngFallback}" />
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell />
+      <TableCell ScaleWidth="true">
         <CheckBox x:Name="commentCheckBox" Text="{x:Static e:SettingsControl+L.ShowComments}" />
       </TableCell>
     </TableRow>
