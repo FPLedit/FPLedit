@@ -8,7 +8,7 @@
 
     <!-- Use the following PropertyGroup for version bump -->
     <PropertyGroup>
-        <VersionPrefix>2.4.9</VersionPrefix>
+        <VersionPrefix>2.5.0</VersionPrefix>
         <VersionSuffix Condition=" '$(VersionSuffix)' == '' " />
     </PropertyGroup>
   
