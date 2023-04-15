@@ -23,7 +23,7 @@ namespace FPLedit.Editor.Linear
 
             editor.Initialize(pluginInterface.Timetable);
 
-            KeyDown += editor.HandleControlKeystroke;
+            KeyDown += (_, e) => editor.HandleControlKeystroke(e);
 
             this.AddCloseHandler();
             this.AddSizeStateHandler();

@@ -21,7 +21,7 @@ namespace FPLedit.Editor.Network
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            KeyDown += editor.HandleControlKeystroke;
+            KeyDown += (_, e) => editor.HandleControlKeystroke(e);
 
             this.AddCloseHandler();
             this.AddSizeStateHandler();

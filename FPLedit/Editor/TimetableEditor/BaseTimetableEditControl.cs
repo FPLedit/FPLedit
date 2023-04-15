@@ -31,10 +31,10 @@ namespace FPLedit.Editor.TimetableEditor
             actionButtons.CollectionChanged += (_, e) =>
             {
                 var row = internalActionsLayout.Rows[0];
-                if (e.Action == NotifyCollectionChangedAction.Add)
+                if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null)
                     foreach (Control btn in e.NewItems)
                         row.Cells.Add(btn);
-                if (e.Action == NotifyCollectionChangedAction.Remove)
+                if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null)
                     foreach (Control btn in e.OldItems)
                         row.Cells.Remove(btn);
             };
@@ -161,7 +161,7 @@ namespace FPLedit.Editor.TimetableEditor
                 //Console.WriteLine("Next pos: " + target.ToString());
 
                 view.ReloadData(view.SelectedRow); // Commit current data
-                view.BeginEdit(target.X, target.Y);
+                view.BeginEdit(target.row, target.col);
             }
             else if (e.Key == Keys.Escape)
             {
@@ -230,7 +230,7 @@ namespace FPLedit.Editor.TimetableEditor
 
         protected abstract void CellSelected(BaseTimetableDataElement data, Station sta, bool arrival);
 
-        protected abstract Point GetNextEditingPosition(BaseTimetableDataElement data, GridView view, KeyEventArgs e);
+        protected abstract (int col, int row) GetNextEditingPosition(BaseTimetableDataElement data, GridView view, KeyEventArgs e);
 
         protected abstract int FirstEditingColumn { get; }
     }

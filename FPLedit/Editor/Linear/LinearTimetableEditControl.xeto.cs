@@ -35,12 +35,12 @@ namespace FPLedit.Editor.Linear
             zlmButton.Click += (_, _) => ViewDependantAction(Zuglaufmeldung);
             base.Init(trapeztafelToggle, actionsLayout);
 
-            KeyDown += HandleControlKeystroke;
+            KeyDown += (_, e) => HandleControlKeystroke(e);
 
             trapeztafelToggle.Image = new Bitmap(this.GetResource("Resources.trapeztafel.png"));
         }
 
-        public void HandleControlKeystroke(object sender, KeyEventArgs e)
+        public void HandleControlKeystroke(KeyEventArgs e)
         {
             if (e.Key == Keys.T)
             {
@@ -86,7 +86,11 @@ namespace FPLedit.Editor.Linear
                     var tb = new TextBox { Tag = new CCCO() };
                     
                     if (mpmode)
-                        tb.KeyDown += (_, e) => HandleKeystroke(e, view);
+                        tb.KeyDown += (_, e) =>
+                        {
+                            focused = view;
+                            HandleControlKeystroke(e);
+                        };
                     
                     tb.GotFocus += (s, _) =>
                     {
@@ -132,10 +136,15 @@ namespace FPLedit.Editor.Linear
 
                     if (mpmode)
                     {
-                        // Wir gehen hier gleich in den vollen EditMode rein
+                        // Enter the full edit mode.
                         tb.CaretIndex = 0;
-                        tb.SelectAll();
                         TbEnterEditMode(data, tb);
+                        Application.Instance.InvokeAsync(() =>
+                        {
+                            tb.SelectAll();
+                            if (tb.Enabled) tb.Focus();
+                            else view.Focus();
+                        });
                     }
                 }
             };
@@ -152,7 +161,7 @@ namespace FPLedit.Editor.Linear
             return cc;
         }
 
-        protected override Point GetNextEditingPosition(BaseTimetableDataElement data, GridView view, KeyEventArgs e)
+        protected override (int col, int row) GetNextEditingPosition(BaseTimetableDataElement data, GridView view, KeyEventArgs e)
         {
             var path = data.Train.GetPath();
             int idx, row;
@@ -176,7 +185,7 @@ namespace FPLedit.Editor.Linear
                     row--;
                 }
             }
-            return new Point(row, idx);
+            return (idx, row);
         }
 
         protected override void CellSelected(BaseTimetableDataElement data, Station sta, bool arrival)

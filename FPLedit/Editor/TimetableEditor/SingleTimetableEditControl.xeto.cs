@@ -34,8 +34,8 @@ namespace FPLedit.Editor.TimetableEditor
             shuntButton.Click += (_, _) => Shunt(dataGridView);
             Init(trapeztafelToggle, actionsLayout);
 
-            KeyDown += HandleControlKeystroke;
-            dataGridView.KeyDown += HandleControlKeystroke;
+            KeyDown += (_, e) => HandleControlKeystroke(e);
+            dataGridView.KeyDown += (_, e) => HandleControlKeystroke(e);
             
 #pragma warning disable CA2000
             trapeztafelToggle.Image = new Bitmap(this.GetResource("Resources.trapeztafel.png")).WithSize(50, 30);
@@ -43,7 +43,7 @@ namespace FPLedit.Editor.TimetableEditor
 #pragma warning disable CA2000
         }
 
-        public void HandleControlKeystroke(object sender, KeyEventArgs e)
+        public bool HandleControlKeystroke(KeyEventArgs e)
         {
             bool handled = true;
             switch (e.Key)
@@ -61,6 +61,7 @@ namespace FPLedit.Editor.TimetableEditor
                 e.Handled = true;
             else
                 HandleKeystroke(e, dataGridView);
+            return handled;
         }
 
         public void Initialize(IWritableTrain t)
@@ -81,8 +82,19 @@ namespace FPLedit.Editor.TimetableEditor
                     var tb = new TextBox { Tag = new CCCO() };
 
                     if (mpmode)
-                        tb.KeyDown += (_, e) => HandleKeystroke(e, dataGridView);
-                    
+                        tb.KeyDown += (s, e) =>
+                        {
+                            var hadCellAction = HandleControlKeystroke(e);
+                            if (!hadCellAction || s != tb) return;
+
+                            // Return to current editing position.
+                            var ccco = (CCCO)tb.Tag;
+                            if (ccco.InhibitEvents)
+                                return;
+                            var cep = GetCurEditingPosition(ccco.Data, dataGridView);
+                            dataGridView.BeginEdit(cep.row, cep.col);
+                        };
+
                     tb.GotFocus += (s, _) =>
                     {
                         var dd2 = (TextBox)s;
@@ -127,10 +139,16 @@ namespace FPLedit.Editor.TimetableEditor
                     {
                         // Enter the full edit mode.
                         tb.CaretIndex = 0;
-                        tb.SelectAll();
                         CellSelected(data, data.Station, arrival);
                         data.IsSelectedArrival = arrival;
                         data.SelectedTextBox = tb;
+
+                        Application.Instance.InvokeAsync(() =>
+                        {
+                            tb.SelectAll();
+                            if (tb.Enabled) tb.Focus();
+                            else dataGridView.Focus();
+                        });
                     }
                 }
             };
@@ -211,6 +229,11 @@ namespace FPLedit.Editor.TimetableEditor
                         data.SelectedTextBox = null;
                         data.SelectedDropDown = dd;
                         dd.Focus();
+                        Application.Instance.InvokeAsync(() =>
+                        {
+                            if (dd.Enabled) dd.Focus();
+                            else dataGridView.Focus();
+                        });
                     }
                 },
             };
@@ -304,16 +327,22 @@ namespace FPLedit.Editor.TimetableEditor
             view.SelectedRowsChanged += (_, _) =>
             {
                 var selected = (DataElement) view.SelectedItem;
-                shuntButton.Enabled = selected?.Station.Tracks.Any() ?? false;
+                shuntButton.Enabled = selected?.Station?.Tracks.Any() ?? false;
             };
         }
 
-        protected override Point GetNextEditingPosition(BaseTimetableDataElement data, GridView view, KeyEventArgs e)
+        private (int col, int row) GetCurEditingPosition(BaseTimetableDataElement data, GridView view)
         {
             var arrival = data.IsSelectedArrival;
             var isTime = data.SelectedTextBox == null;
-            int idx = (arrival ? 1 : 2) + (isTime ? 2 : 0);
+            int col = (arrival ? 1 : 2) + (isTime ? 2 : 0);
             int row = view.SelectedRow;
+            return (col, row);
+        }
+
+        protected override (int col, int row) GetNextEditingPosition(BaseTimetableDataElement data, GridView view, KeyEventArgs e)
+        {
+            var (idx, row) = GetCurEditingPosition(data, view);
             if (!e.Control)
             {
                 idx++;
@@ -333,7 +362,7 @@ namespace FPLedit.Editor.TimetableEditor
                 }
             }
 
-            return new Point(row, idx);
+            return (idx, row);
         }
 
         private bool UpdateTrainDataFromGrid(GridView view)
