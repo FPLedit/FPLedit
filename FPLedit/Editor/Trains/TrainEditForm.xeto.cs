@@ -25,14 +25,22 @@ namespace FPLedit.Editor.Trains
 #pragma warning restore CS0649,CA2213
         private readonly NotEmptyValidator nameValidator;
 
+        /// <summary>
+        /// Output parameter for transitions. This property is populated after the form is closed.
+        /// </summary>
         public Train Train { get; }
         
+        /// <summary>
+        /// Output parameter for transitions. This property is populated after the form is closed.
+        /// </summary>
         public List<TransitionEntry> NextTrains { get; private set;  }
 
         private readonly Timetable tt;
         private readonly TrainEditHelper th;
 
         private Dictionary<Station, ArrDep> arrDepBackup;
+
+        private TransitionEntry singleTransition;
 
         private TrainEditForm(Timetable tt)
         {
@@ -62,6 +70,10 @@ namespace FPLedit.Editor.Trains
             }
         }
 
+        /// <summary>
+        /// Create a new instance to edit an existing train.
+        /// </summary>
+        /// <remarks>Don't use <see cref="NextTrains"/> in this case, transitions will be saved as well.</remarks>
         public TrainEditForm(Train train) : this(train.ParentTimetable)
         {
             Train = train;
@@ -78,12 +90,12 @@ namespace FPLedit.Editor.Trains
         }
 
         /// <summary>
-        /// Use <see cref="NextTrains"/> to wire up transitions.
-        /// This form will NOT wire up transitions itself!
+        /// Create a new instance to create a new train.
         /// </summary>
-        /// <param name="tt"></param>
-        /// <param name="direction"></param>
-        /// <param name="path"></param>
+        /// <remarks>
+        /// Use <see cref="NextTrains"/> to wire up transitions after this form has been closed.
+        /// This form will NOT wire up transitions itself for new trains!
+        /// </remarks>
         public TrainEditForm(Timetable tt, TrainDirection direction, List<Station> path = null) : this(tt)
         {
             Train = new Train(direction, tt);
@@ -106,9 +118,17 @@ namespace FPLedit.Editor.Trains
             var transitions = tt.GetEditableTransitions(Train);
             // We currently only support editing complex transitions if only one transition exists (and thus not being relly "complex"...)
             if (transitions.Count == 1)
-                transitionDropDown.SelectedValue = transitions.Single().NextTrain;
+            {
+                singleTransition = transitions.Single();
+                transitionDropDown.SelectedValue = singleTransition.NextTrain;
+            }
+            else if (transitions.Count == 0)
+                transitionDropDown.Enabled = true; // If no transition exists, we can certainly create one.
             else
-                transitionDropDown.Enabled = transitions.Count == 0; // If no transition exists, we can certyinly create one.
+            {
+                transitionDropDown.Enabled = false;
+                MessageBox.Show(T._("Dieser Zug hat komplexe Folgezüge/mehr als einen Folgezug definiert. Dies wird von FPLedit aktuell nicht zur Bearbeitung unterstützt."), "FPLedit", MessageBoxType.Warning);
+            }
 
             fillButton.Visible = tt.Type == TimetableType.Linear && th.FillCandidates(Train).Any();
 
@@ -148,12 +168,26 @@ namespace FPLedit.Editor.Trains
                 return;
 
             NextTrains = new List<TransitionEntry>();
-            if (transitionDropDown.SelectedValue != null && transitionDropDown.Enabled) // Only update NextTrains if we could actuually select a transition.
-                NextTrains.Add(new TransitionEntry((ITrain) transitionDropDown.SelectedValue, Days.All, null));
-            //TODO: This does not keep the original NextTrains?
+            // Only update NextTrains/transitions if we could actually select a transition.
+            // Otherwise we keep the existing complex structure.
+            if (transitionDropDown.Enabled)
+            {
+                if (transitionDropDown.SelectedValue != null)
+                {
+                    var next = (ITrain) transitionDropDown.SelectedValue;
+                    if (singleTransition != null)
+                    {
+                        // keep the old complex structure and only replace the next train.
+                        singleTransition.NextTrain = next;
+                        NextTrains.Add(singleTransition);
+                    }
+                    else
+                        NextTrains.Add(new TransitionEntry(next, Days.All, null));
+                }
 
-            if (Train.Id > 0)
-                tt.SetTransitions(Train, NextTrains);
+                if (Train.Id > 0)
+                    tt.SetTransitions(Train, NextTrains);
+            }
 
             Close(DialogResult.Ok);
         }
