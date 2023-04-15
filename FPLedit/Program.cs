@@ -95,6 +95,8 @@ namespace FPLedit
                     if (window.Visible && window != mainForm)
                         window.Close();
                 }
+                // Terminate the application - no idea why this is _now_ needed - it wasn't before.
+                Environment.Exit(0);
             };
 
             App.Run(mainForm);
