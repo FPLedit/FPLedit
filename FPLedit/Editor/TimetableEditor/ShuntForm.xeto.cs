@@ -110,31 +110,38 @@ namespace FPLedit.Editor.TimetableEditor
             arrDep.ShuntMoves.Sort(s => s.Time);
             RefreshList();
 
+            if (!ShuntChecks()) return;
+
+            Close(DialogResult.Ok);
+        }
+
+        private bool ShuntChecks()
+        {
             var outOfRange = arrDep.ShuntMoves.Any(
                 shunt => (shunt.Time < arrDep.Arrival && arrDep.Arrival != default) || (shunt.Time > arrDep.Departure && arrDep.Departure != default));
             if (outOfRange)
             {
                 MessageBox.Show(T._("Einige Rangierfahrten befinden sich außerhalb des Zeitfensters des Aufenthalts an der Station!"), "FPLedit", MessageBoxType.Error);
-                return;
+                return false;
             }
 
             var lastShuntTarget = arrDep.ShuntMoves.LastOrDefault()?.TargetTrack;
             if (!string.IsNullOrEmpty(arrDep.DepartureTrack) && lastShuntTarget != null && lastShuntTarget != arrDep.DepartureTrack)
             {
                 var res = MessageBox.Show(T._("Die letzte Rangierfahrt endet nicht am Abfahrtsgleis! Trotzdem fortfahren?"), "FPLedit", MessageBoxButtons.YesNo, MessageBoxType.Warning);
-                if (res == DialogResult.No) return;
+                if (res == DialogResult.No) return false;
             }
 
             var firstShuntSource = arrDep.ShuntMoves.FirstOrDefault()?.SourceTrack;
             if (!string.IsNullOrEmpty(arrDep.ArrivalTrack) && firstShuntSource != null && firstShuntSource != arrDep.ArrivalTrack)
             {
                 var res = MessageBox.Show(T._("Die erste Rangierfahrt beginnt nicht am Ankunftsgleis! Trotzdem fortfahren?"), "FPLedit", MessageBoxButtons.YesNo, MessageBoxType.Warning);
-                if (res == DialogResult.No) return;
+                if (res == DialogResult.No) return false;
             }
-            
+
             //TODO: More shunt checks
-            
-            Close(DialogResult.Ok);
+
+            return true;
         }
 
         private void CancelButton_Click(object sender, EventArgs e)
