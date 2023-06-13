@@ -1,4 +1,5 @@
 #nullable enable
+using System.Collections.Generic;
 using Eto.Forms;
 using FPLedit.Config;
 using FPLedit.CrashReporting;
@@ -29,7 +30,7 @@ namespace FPLedit
         [STAThread]
         private static void Main(string[] args)
         {
-            string? flagWarning = null;
+            var prePreBootstrapWarnings = new List<string>();
             var options = new OptionSet
             {
                 { "log-console|mp-log", v => OptionsParser.ConsoleLog = v != null },
@@ -50,7 +51,7 @@ namespace FPLedit
             }
             catch (Exception e)
             {
-                flagWarning = e.Message;
+                prePreBootstrapWarnings.Add(e.Message);
             }
 
             App = new Application();
@@ -60,8 +61,15 @@ namespace FPLedit
             {
                 // As of https://github.com/picoe/Eto/pull/2046/files, a default manifest is extracted by Eto and stored
                 // in the temp dir. This is unwanted in our case, as we have our own windows manifest.
-                // Use dynamic to avoid loading Eto.Wpf on all platforms.
-                ((dynamic)App.Handler).EnableVisualStyles = false;
+                // Use reflection to avoid loading Eto.Wpf on all platforms.
+                try
+                {
+                    App.Handler.GetType().GetProperty("EnableVisualStyles").SetValue(null, false);
+                }
+                catch (Exception e)
+                {
+                    prePreBootstrapWarnings.Add("Fehler beim Setzen von EnableVisualStyles: " + e.Message);
+                }
             }
 
             // Set app & settings paths
@@ -78,14 +86,15 @@ namespace FPLedit
                 App.UnhandledException += UnhandledException;
 
             var (lfh, bootstrapper) = InitializeMainComponents();
-            if (flagWarning != null)
-                bootstrapper.PreBootstrapWarnings.Add(flagWarning);
-            
+            if (prePreBootstrapWarnings.Any())
+                bootstrapper.PreBootstrapWarnings.AddRange(prePreBootstrapWarnings);
+            prePreBootstrapWarnings = null; // Avoid using the pre-pre-bootstrap warning collection after transfer to the bootstrapper.
+
             bootstrapper.PreBootstrapExtensions(); // Load extension files.
-            
+
             mainForm = new MainForm(lfh, crashReporter, bootstrapper);
             crashReporter = mainForm.CrashReporter;
-            
+
             // Close all other windows when attempting to close main form.
             mainForm.Closing += (_, _) =>
             {
