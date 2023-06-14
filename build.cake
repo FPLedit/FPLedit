@@ -156,7 +156,7 @@ Task("PrepareArtifacts")
     .IsDependentOn("BuildUserDocumentation")
     .Does(() => {
         // Cleanup satellite assemblies in languages not supported in FPLedit.
-        var foldersToDelete = new[] { "es", "fr", "hu", "it", "pt-BR", "ro", "ru", "zh-Hans" };
+        var foldersToDelete = new[] { "es", "fr", "hu", "it", "pt-BR", "ro", "ru", "sv", "zh-Hans" };
         ForAllRuntimes( (runtime, distDir) => {
             foreach (var languageFolder in foldersToDelete) {
                 var d = distDir + Directory(languageFolder);

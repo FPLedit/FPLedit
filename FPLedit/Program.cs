@@ -64,7 +64,9 @@ namespace FPLedit
                 // Use reflection to avoid loading Eto.Wpf on all platforms.
                 try
                 {
-                    App.Handler.GetType().GetProperty("EnableVisualStyles").SetValue(null, false);
+                    App.Handler.GetType()!
+                        .GetField("EnableVisualStyles", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public)!
+                        .SetValue(null, false);
                 }
                 catch (Exception e)
                 {
