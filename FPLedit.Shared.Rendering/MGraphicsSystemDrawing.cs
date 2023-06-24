@@ -31,22 +31,7 @@ public sealed class MGraphicsSystemDrawing : IMGraphics
         var x = g.MeasureString(text, (Font) timeFont);
         return (x.Width, x.Height);
     }
-    public (float Width, float Height) MeasureString(string text, MFont timeFont)
-    {
-        var x = g.MeasureString(text, (Font) timeFont);
-        return (x.Width, x.Height);
-    }
 
-    public void DrawLine((MColor c, float w) pen, float x1, float y1, float x2, float y2)
-    {
-        var penCacheKey = pen.GetHashCode();
-        if (!penCache.TryGetValue(penCacheKey, out var sdPen))
-        {
-            sdPen = new Pen(pen.c.ToSD(exportColor), pen.w);
-            penCache[penCacheKey] = sdPen;
-        }
-        g.DrawLine(sdPen, x1, y1, x2, y2);
-    }
     public void DrawLine((MColor c, float w, float[] ds) pen, float x1, float y1, float x2, float y2)
     {
         var penCacheKey = pen.GetHashCode();

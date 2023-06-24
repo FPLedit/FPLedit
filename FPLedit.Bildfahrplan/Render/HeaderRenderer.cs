@@ -25,14 +25,13 @@ namespace FPLedit.Bildfahrplan.Render
 
         public Dictionary<Station, StationRenderProps> Render(IMGraphics g, Margins margin, float width, float height, bool drawHeader)
         {
-            var stationFont = attrs.StationFont; // Reminder: Do not dispose, will be disposed with MFont instance!
             var stationOffsets = new Dictionary<Station, StationRenderProps>();
 
             var raw = path.GetRawPath().ToList();
             var allTrackCount = raw.Select(s => s.Tracks.Count).Sum();
             var stasWithTracks = raw.Count(s => s.Tracks.Any());
             var allTrackWidth = (stasWithTracks + allTrackCount) * StationRenderProps.IndividualTrackOffset;
-            var verticalTrackOffset = GetTrackOffset(g, stationFont) + TOP_GAP;
+            var verticalTrackOffset = GetTrackOffset(g, attrs.StationFont) + TOP_GAP;
 
             float length = 0f;
 
@@ -98,7 +97,7 @@ namespace FPLedit.Bildfahrplan.Render
                 if (attrs.DrawHeader)
                 {
                     var display = StationDisplay(sta);
-                    var size = g.MeasureString(stationFont, display);
+                    var size = g.MeasureString(attrs.StationFont, display);
 
                     if (attrs.StationVertical)
                     {
@@ -106,30 +105,30 @@ namespace FPLedit.Bildfahrplan.Render
                             
                         g.TranslateTransform(margin.Left + posX.Center + (size.Height / 2), margin.Top - 8 - verticalTrackOffset - size.Width);
                         g.RotateTransform(90);
-                        g.DrawText(stationFont, brush, 0, 0, display);
+                        g.DrawText(attrs.StationFont, brush, 0, 0, display);
 
                         g.RestoreTransform(matrix);
                     }
                     else
-                        g.DrawText(stationFont, brush, margin.Left + posX.Center - (size.Width / 2), margin.Top - size.Height - verticalTrackOffset - TOP_GAP, display);
+                        g.DrawText(attrs.StationFont, brush, margin.Left + posX.Center - (size.Width / 2), margin.Top - size.Height - verticalTrackOffset - TOP_GAP, display);
 
                     if (attrs.MultiTrack)
                     {
                         foreach (var track in posX.TrackOffsets)
                         {
-                            var trackSize = g.MeasureString(stationFont, track.Key);
+                            var trackSize = g.MeasureString(attrs.StationFont, track.Key);
                             if (attrs.StationVertical)
                             {
                                 var matrix = g.StoreTransform();
                                 
                                 g.TranslateTransform(margin.Left + track.Value + (trackSize.Height / 2), margin.Top - 8 - trackSize.Width);
                                 g.RotateTransform(90);
-                                g.DrawText(stationFont, brush, 0, 0, track.Key);
+                                g.DrawText(attrs.StationFont, brush, 0, 0, track.Key);
                                 
                                 g.RestoreTransform(matrix);
                             }
                             else
-                                g.DrawText(stationFont, brush, margin.Left + track.Value - (trackSize.Width / 2), margin.Top - trackSize.Height - TOP_GAP, track.Key);
+                                g.DrawText(attrs.StationFont, brush, margin.Left + track.Value - (trackSize.Width / 2), margin.Top - trackSize.Height - TOP_GAP, track.Key);
                         }
                     }
                 }
@@ -142,16 +141,15 @@ namespace FPLedit.Bildfahrplan.Render
 
         public float GetMarginTop(IMGraphics g)
         {
-            var stationFont = attrs.StationFont;
-            var emSize = g.MeasureString(stationFont, "M").Height;
+            var emSize = g.MeasureString(attrs.StationFont, "M").Height;
             
             var sMax = attrs.StationVertical ? 
                 (path.PathEntries.Any() ?
-                    path.PathEntries.Max(sta => g.MeasureString(StationDisplay(sta), stationFont).Width) 
+                    path.PathEntries.Max(sta => g.MeasureString(attrs.StationFont, StationDisplay(sta)).Width) 
                     : 0)
                 : emSize;
 
-            sMax += GetTrackOffset(g, stationFont) + TOP_GAP + 3;
+            sMax += GetTrackOffset(g, attrs.StationFont) + TOP_GAP + 3;
             
             return sMax;
         }
@@ -167,7 +165,7 @@ namespace FPLedit.Bildfahrplan.Render
                     return 0;
                 
                 if (attrs.StationVertical)
-                    return tracks.Max(t => g.MeasureString(t.Name, stationFont).Width);
+                    return tracks.Max(t => g.MeasureString(stationFont, t.Name).Width);
 
                 return emSize;
             }

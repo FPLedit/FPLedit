@@ -17,8 +17,8 @@ namespace FPLedit.Bildfahrplan.Render
 
         public void Render(IMGraphics g, Margins margin, TimeEntry startTime, TimeEntry endTime, float width)
         {
-            var minutePen = (attrs.TimeColor, attrs.MinuteTimeWidth);
-            var hourPen = (attrs.TimeColor, attrs.HourTimeWidth);
+            var minutePen = (attrs.TimeColor, attrs.MinuteTimeWidth, new []{1f});
+            var hourPen = (attrs.TimeColor, attrs.HourTimeWidth, new []{1f});
             
             foreach (var l in GetTimeLines(out bool hour, startTime, endTime))
             {
