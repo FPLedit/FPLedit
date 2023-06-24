@@ -5,6 +5,7 @@
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
     <NoWarn>CA1416</NoWarn>
+    <DefineConstants>ENABLE_SYSTEM_DRAWING</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyTitle>FPLedit - Exporter für Bildfahrpläne</AssemblyTitle>
@@ -15,7 +16,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>embedded</DebugType>
-    <DefineConstants>TRACE;DISABLE_EDIT_BIFPL</DefineConstants>
+    <DefineConstants>$(DefineConstants);TRACE;DISABLE_EDIT_BIFPL</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\FPLedit.Shared.Rendering\FPLedit.Shared.Rendering.csproj" />

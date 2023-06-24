@@ -1,8 +1,6 @@
 using Eto.Forms;
 using FPLedit.Shared;
-using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Drawing.Imaging;
 using FPLedit.Shared.UI;
 using System.Threading.Tasks;
 
@@ -42,7 +40,7 @@ namespace FPLedit.Bildfahrplan.Forms
             form.DefaultButton = exportButton;
             form.Title = T._("Bildfahrplan drucken");
 
-            exportButton.Click += (s, e) =>
+            exportButton.Click += (_, _) =>
             {
                 form.Result = true;
                 form.Close();
@@ -50,8 +48,7 @@ namespace FPLedit.Bildfahrplan.Forms
 
             if (form.ShowModal())
             {
-                var width = 0;
-                int.TryParse(widthTextBox.Text, out width);
+                int.TryParse(widthTextBox.Text, out var width);
                 if (width == 0)
                 {
                     pluginInterface.Logger.Error("Ungültige Breite angegeben!");
@@ -63,11 +60,11 @@ namespace FPLedit.Bildfahrplan.Forms
                 if (exportFileDialog.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
                 {
                     var filename = exportFileDialog.FileName;
-                    var export = new BitmapExport(routesDropDown.SelectedRoute, width, ImageFormat.Png);
+                    var export = new BitmapExport(routesDropDown.SelectedRoute, width);
 
                     pluginInterface.Logger.Info(T._("Exportiere Bildfahrplan in Datei {0}", filename));
                     var tsk = export.GetAsyncSafeExport(tt.Clone(), filename, pluginInterface);
-                    tsk.ContinueWith((t, o) =>
+                    tsk.ContinueWith((t, _) =>
                     {
                         if (t.Result == false)
                             pluginInterface.Logger.Error(T._("Exportieren des Bildfahrplans fehlgeschlagen!"));

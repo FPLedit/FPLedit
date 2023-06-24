@@ -45,7 +45,8 @@ namespace FPLedit.Bildfahrplan.Render
                         using (var ib = new ImageBridge(panel.Width, renderer.GetHeightExternal(drawHeader)))
                         using (var etoGraphics = new Graphics(newBuffer))
                         {
-                            renderer.Draw(ib.Graphics, drawHeader, forceWidth: panel.Width);
+                            var ibg2 = new Graphics2(ib.Graphics, false);
+                            renderer.Draw(ibg2, drawHeader, forceWidth: panel.Width);
                             lastBufferWidth = panel.Width;
                             ib.CoptyToEto(etoGraphics);
                         }

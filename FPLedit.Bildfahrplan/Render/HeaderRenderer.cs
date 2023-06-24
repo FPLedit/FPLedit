@@ -3,7 +3,6 @@ using FPLedit.Shared;
 using FPLedit.Shared.Rendering;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using FPLedit.Bildfahrplan.Helpers;
 
@@ -24,9 +23,9 @@ namespace FPLedit.Bildfahrplan.Render
             this.attrs = attrs;
         }
 
-        public Dictionary<Station, StationRenderProps> Render(Graphics g, Margins margin, float width, float height, bool drawHeader, bool exportColor)
+        public Dictionary<Station, StationRenderProps> Render(Graphics2 g, Margins margin, float width, float height, bool drawHeader)
         {
-            var stationFont = (Font)attrs.StationFont; // Reminder: Do not dispose, will be disposed with MFont instance!
+            var stationFont = attrs.StationFont; // Reminder: Do not dispose, will be disposed with MFont instance!
             var stationOffsets = new Dictionary<Station, StationRenderProps>();
 
             var raw = path.GetRawPath().ToList();
@@ -75,11 +74,8 @@ namespace FPLedit.Bildfahrplan.Render
                 if (!style.CalcedShow)
                     continue;
 
-                using var pen = new Pen(style.CalcedColor.ToSD(exportColor), style.CalcedWidth)
-                {
-                    DashPattern = ds.ParseDashstyle(style.CalcedLineStyle)
-                };
-                using var brush = new SolidBrush(style.CalcedColor.ToSD(exportColor));
+                var pen = (style.CalcedColor, style.CalcedWidth, ds.ParseDashstyle(style.CalcedLineStyle));
+                var brush = style.CalcedColor;
                 
                 if (!attrs.MultiTrack)
                 {
@@ -106,13 +102,13 @@ namespace FPLedit.Bildfahrplan.Render
 
                     if (attrs.StationVertical)
                     {
-                        var matrix = g.Transform.Clone();
+                        var matrix = g.StoreTransform();
                             
                         g.TranslateTransform(margin.Left + posX.Center + (size.Height / 2), margin.Top - 8 - verticalTrackOffset - size.Width);
                         g.RotateTransform(90);
                         g.DrawText(stationFont, brush, 0, 0, display);
 
-                        g.Transform = matrix;
+                        g.RestoreTransform(matrix);
                     }
                     else
                         g.DrawText(stationFont, brush, margin.Left + posX.Center - (size.Width / 2), margin.Top - size.Height - verticalTrackOffset - TOP_GAP, display);
@@ -124,13 +120,13 @@ namespace FPLedit.Bildfahrplan.Render
                             var trackSize = g.MeasureString(stationFont, track.Key);
                             if (attrs.StationVertical)
                             {
-                                var matrix = g.Transform.Clone();
-                                    
+                                var matrix = g.StoreTransform();
+                                
                                 g.TranslateTransform(margin.Left + track.Value + (trackSize.Height / 2), margin.Top - 8 - trackSize.Width);
                                 g.RotateTransform(90);
                                 g.DrawText(stationFont, brush, 0, 0, track.Key);
-                                    
-                                g.Transform = matrix;
+                                
+                                g.RestoreTransform(matrix);
                             }
                             else
                                 g.DrawText(stationFont, brush, margin.Left + track.Value - (trackSize.Width / 2), margin.Top - trackSize.Height - TOP_GAP, track.Key);
@@ -144,9 +140,9 @@ namespace FPLedit.Bildfahrplan.Render
         private string StationDisplay(PathEntry sta) => sta.Station.ToString(attrs.DisplayKilometre, sta.RouteIndex) + 
                                                         (!string.IsNullOrWhiteSpace(sta.Station.StationCode) ? $" ({sta.Station.StationCode})" : "");
 
-        public float GetMarginTop(Graphics g)
+        public float GetMarginTop(Graphics2 g)
         {
-            var stationFont = (Font)attrs.StationFont;
+            var stationFont = attrs.StationFont;
             var emSize = g.MeasureString(stationFont, "M").Height;
             
             var sMax = attrs.StationVertical ? 
@@ -160,7 +156,7 @@ namespace FPLedit.Bildfahrplan.Render
             return sMax;
         }
 
-        private float GetTrackOffset(Graphics g, Font stationFont)
+        private float GetTrackOffset(Graphics2 g, MFont stationFont)
         {
             var raw = path.GetRawPath().ToList();
             var emSize = g.MeasureString(stationFont, "M").Height;

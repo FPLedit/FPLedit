@@ -2,9 +2,8 @@
 using FPLedit.Bildfahrplan.Model;
 using FPLedit.Shared;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Linq;
+using FPLedit.Shared.Rendering;
 
 namespace FPLedit.Bildfahrplan.Render
 {
@@ -30,44 +29,44 @@ namespace FPLedit.Bildfahrplan.Render
             defaultMargin = margins;
         }
 
-        public void Draw(Graphics g, bool drawHeader, float? forceWidth = null, bool exportColor = false)
-            => Draw(g, attrs.StartTime, GetEndTime(attrs.StartTime, attrs.EndTime), drawHeader, forceWidth, exportColor);
+        public void Draw(Graphics2 g, bool drawHeader, float? forceWidth = null)
+            => Draw(g, attrs.StartTime, GetEndTime(attrs.StartTime, attrs.EndTime), drawHeader, forceWidth);
 
         public static Func<PathData> DefaultPathData(int route, Timetable tt) => () => tt.GetRoute(route).ToPathData(tt);
 
-        public void Draw(Graphics g, TimeEntry startTime, TimeEntry endTime, bool drawHeader, float? forceWidth = null, bool exportColor = false)
+        public void Draw(Graphics2 g, TimeEntry startTime, TimeEntry endTime, bool drawHeader, float? forceWidth = null)
         {
-            g.Clear(attrs.BgColor.ToSD(exportColor));
+            g.Clear(attrs.BgColor);
 
             var path = getPathData();
             var stations = path.GetRawPath().ToList();
 
             var margin = CalcMargins(g, defaultMargin, stations, startTime, endTime, drawHeader);
-            var width = forceWidth ?? g.ClipBounds.Width;
+            var width = forceWidth ?? g.GetDrawingArea().Width;
             var height = GetHeight(g, startTime, endTime, drawHeader);
 
             // Zeitaufteilung
             var timeRenderer = new TimeRenderer(attrs);
-            timeRenderer.Render(g, margin, startTime, endTime, width, exportColor);
+            timeRenderer.Render(g, margin, startTime, endTime, width);
 
             // Stationenaufteilung
             var headerRenderer = new HeaderRenderer(attrs, path);
-            var stationOffsets = headerRenderer.Render(g, margin, width, height, drawHeader, exportColor);
+            var stationOffsets = headerRenderer.Render(g, margin, width, height, drawHeader);
 
             // Züge
-            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            g.SetAntiAlias(true);
 
             var trains = tt.Trains.Where(t => t.Days.IsIntersecting(attrs.RenderDays));
             var trainRenderer = new TrainRenderer(stations, tt, margin, startTime, stationOffsets, attrs.RenderDays,
                 clipTop: margin.Top, clipBottom: height - margin.Bottom);
             foreach (var train in trains)
-                trainRenderer.Render(g, train, exportColor);
-            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
+                trainRenderer.Render(g, train);
+            g.SetAntiAlias(false);
         }
 
-        public void DrawHeader(Graphics g, int width, bool exportColor)
+        public void DrawHeader(Graphics2 g, int width, bool exportColor)
         {
-            g.Clear(attrs.BgColor.ToSD(exportColor));
+            g.Clear(attrs.BgColor);
 
             var path = getPathData();
             var stations = path.GetRawPath().ToList();
@@ -78,10 +77,10 @@ namespace FPLedit.Bildfahrplan.Render
 
             // Stationenaufteilung
             var headerRenderer = new HeaderRenderer(attrs, path);
-            headerRenderer.Render(g, margin, width, height, true, exportColor);
+            headerRenderer.Render(g, margin, width, height, true);
         }
 
-        private Margins CalcMargins(Graphics g, Margins orig, IEnumerable<Station> stations, TimeEntry startTime, TimeEntry endTime, bool drawHeader)
+        private Margins CalcMargins(Graphics2 g, Margins orig, IEnumerable<Station> stations, TimeEntry startTime, TimeEntry endTime, bool drawHeader)
         {
             const int additionalMargin = 5;
             var result = new Margins(orig.Left + additionalMargin, orig.Top + additionalMargin, orig.Right + additionalMargin, orig.Bottom + additionalMargin);
@@ -105,12 +104,11 @@ namespace FPLedit.Bildfahrplan.Render
 
         public int GetHeightExternal(TimeEntry start, TimeEntry end, bool drawHeader)
         {
-            using (var image = new Bitmap(1, 1, PixelFormat.Format24bppRgb))
-            using (var g = Graphics.FromImage(image))
-                return GetHeight(g, start, end, drawHeader);
+            using var g = Graphics2.CreateImage(1, 1);
+            return GetHeight(g, start, end, drawHeader);
         }
         
-        public int GetHeight(Graphics g, TimeEntry start, TimeEntry end, bool drawHeader)
+        public int GetHeight(Graphics2 g, TimeEntry start, TimeEntry end, bool drawHeader)
         {
             var stations = getPathData().GetRawPath().ToList();
             var m = CalcMargins(g, defaultMargin, stations, start, end, drawHeader);

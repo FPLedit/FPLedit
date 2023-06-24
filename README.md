@@ -10,14 +10,14 @@ The documentation (German only), release download and example files are availabl
 
 FPLedit currently uses the following dependencies from NuGet:
 
-* Eto.Forms - UI Framework
-* Jint - Javascript interpreter - used for templating
+* Eto.Forms - UI Framework (using Wpf on Windows, Gtk3 on Linux, ...)
+* Jint - Javascript interpreter (used for templating)
 * DeepCloner - used to generate checkpoints for undo operations
 * NGettext - used to localize the user interface
 * various .NET Core dependencies.
 * ... and some more dependencies that are only used to build / test the application (Cake, docfx, ...).
 
-Some of those packages are taken from different repositories. The `NuGet.config` in the repository root should take care of that.
+## Supported .NET Versions
 
 FPLedit currently can only be built and run with .NET 6. Support for .NET 5 and .NET 4.x/mono has been discontinued. .NET 7 is also not supported at the moment, as FPLedit still heavily uses `System.Drawing.Common` on Unix-like platforms.
 

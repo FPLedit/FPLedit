@@ -3,6 +3,7 @@ using FPLedit.Shared;
 
 namespace FPLedit.Bildfahrplan.Render
 {
+#if ENABLE_SYSTEM_DRAWING
     internal static class GdiAvailabilityTest
     {
         private static bool Test()
@@ -44,3 +45,4 @@ namespace FPLedit.Bildfahrplan.Render
         }
     }
 }
+#endif

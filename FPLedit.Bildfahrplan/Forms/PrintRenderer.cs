@@ -1,3 +1,4 @@
+#if ENABLE_SYSTEM_DRAWING
 using Eto.Forms;
 using FPLedit.Bildfahrplan.Model;
 using FPLedit.Bildfahrplan.Render;
@@ -6,6 +7,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
+using FPLedit.Shared.Rendering;
 using FPLedit.Shared.UI;
 using Print = System.Drawing.Printing;
 
@@ -59,13 +61,13 @@ namespace FPLedit.Bildfahrplan.Forms
             form.DefaultButton = printButton;
             form.Title = T._("Bildfahrplan drucken");
 
-            printButton.Click += (s, e) =>
+            printButton.Click += (_, _) =>
             {
                 form.Result = (string)printerDropDown.SelectedValue;
                 form.Close();
             };
 
-            printerDropDown.SelectedIndexChanged += (s, e) =>
+            printerDropDown.SelectedIndexChanged += (_, _) =>
             {
                 doc.PrinterSettings.PrinterName = (string)printerDropDown.SelectedValue;
                 var paper =  doc.PrinterSettings.PaperSizes.Cast<Print.PaperSize>().Select(p => p.PaperName).ToArray();
@@ -133,7 +135,8 @@ namespace FPLedit.Bildfahrplan.Forms
             renderer.SetMargins(margin);
 
             var start = last ?? attrs.StartTime;
-            last = GetTimeByHeight(e.Graphics, renderer, start, height);
+            var g2 = new Graphics2(e.Graphics, true);
+            last = GetTimeByHeight(g2, renderer, start, height);
 
             if (Eto.Platform.Instance.IsGtk)
             {
@@ -141,13 +144,14 @@ namespace FPLedit.Bildfahrplan.Forms
                 using (var bitmap = new Bitmap(width, height))
                 using (var gr = Graphics.FromImage(bitmap))
                 {
+                    var gr2 = new Graphics2(gr, true);
                     gr.PageUnit = GraphicsUnit.Display;
-                    renderer.Draw(gr, start, last.Value, true, width, true);
+                    renderer.Draw(gr2, start, last.Value, true, width);
                     e.Graphics.DrawImage(bitmap, 0, 0, width, height);
                 }
             }
             else
-                renderer.Draw(e.Graphics, start, last.Value, true, width, true);
+                renderer.Draw(g2, start, last.Value, true, width);
 
             var endTime = GetEndTime(start, attrs.EndTime);
             if (last!.Value < endTime)
@@ -156,7 +160,7 @@ namespace FPLedit.Bildfahrplan.Forms
                 last = null;
         }
 
-        private TimeEntry GetTimeByHeight(Graphics g, Renderer renderer, TimeEntry start, int height)
+        private TimeEntry GetTimeByHeight(Graphics2 g, Renderer renderer, TimeEntry start, int height)
         {
             var endTime = GetEndTime(start, attrs.EndTime);
             var fillUpMinutes = (byte) (60 - start.Minutes);
@@ -203,3 +207,4 @@ namespace FPLedit.Bildfahrplan.Forms
             => endTime < startTime ? endTime + new TimeEntry(24, 0) : endTime;
     }
 }
+#endif

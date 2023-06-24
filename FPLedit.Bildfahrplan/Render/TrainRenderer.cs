@@ -3,14 +3,12 @@ using FPLedit.Shared;
 using FPLedit.Shared.Rendering;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Linq;
 using FPLedit.Bildfahrplan.Helpers;
 
 namespace FPLedit.Bildfahrplan.Render
 {
-    internal sealed class TrainRenderer
+   internal sealed class TrainRenderer
     {
         private readonly IEnumerable<Station> stations; // Selected route, ordered
         private readonly Timetable tt;
@@ -39,7 +37,7 @@ namespace FPLedit.Bildfahrplan.Render
             attrs = new TimetableStyle(tt);
         }
 
-        public void Render(Graphics g, ITrain train, bool exportColor)
+        public void Render(Graphics2 g, ITrain train)
         {
             var style = new TrainStyle(train, attrs);
             if (!style.CalcedShow)
@@ -48,13 +46,10 @@ namespace FPLedit.Bildfahrplan.Render
             var ardps = train.GetArrDepsUnsorted();
             var dir = GetTrainDirection(train);
 
-            using var pen = new Pen(style.CalcedColor.ToSD(exportColor), style.CalcedWidth)
-            {
-                DashPattern = ds.ParseDashstyle(style.CalcedLineStyle)
-            };
-            using var brush = new SolidBrush(style.CalcedColor.ToSD(exportColor));
+            var pen = (style.CalcedColor, style.CalcedWidth, ds.ParseDashstyle(style.CalcedLineStyle));
+            var brush = style.CalcedColor;
             
-            List<PointF> points = new List<PointF>();
+            List<Vec2> points = new List<Vec2>();
             bool hadFirstArrival = false, hadLastDeparture = false, isFirst = true;
             var stas = dir ? Enumerable.Reverse(stations) : stations;
 
@@ -92,9 +87,9 @@ namespace FPLedit.Bildfahrplan.Render
             {
                 var hly = !dir ? 20 : -20;
                 if (hadLastDeparture)
-                    points.Add(points.Last() + new Size(50, hly));
+                    points.Add(points.Last() + new Vec2(50, hly));
                 if (hadFirstArrival)
-                    points.Insert(0, points.First() - new Size(50, hly));
+                    points.Insert(0, points.First() - new Vec2(50, hly));
             }
             else if (trainTravelsRouteCount <= 1)
                 return; // This train has only one station on this route and we don't draw network trains.
@@ -112,11 +107,11 @@ namespace FPLedit.Bildfahrplan.Render
                 if (lastStaOfFirst == firstStaOfNext)
                 {
                     var departure = transition.GetArrDep(firstStaOfNext).Departure;
-                    points.Add(new PointF(points.Last().X, GetTimeY(departure)));
+                    points.Add(new Vec2(points.Last().X, GetTimeY(departure)));
                 }
             }
 
-            using var p = new GraphicsPath();
+            var p = new List<IPathCmd>();
             
             for (int i = 0; i < points.Count; i += 1)
             {
@@ -142,37 +137,36 @@ namespace FPLedit.Bildfahrplan.Render
                     float bezierFactor = !isTransition
                         ? Math.Sign(preX - postX) // preX < postX --> TrainDirection.ti
                         : 0.5f * Math.Sign(preX - curX); // Transition
-                    var bezierOffset = new SizeF(bezierFactor * 14, (cp2.Y - cp1.Y) / -4.0f);
-                    var bezierOffsetT = new SizeF(bezierOffset.Width, -bezierOffset.Height);
+                    var bezierOffset = new Vec2(bezierFactor * 14, (cp2.Y - cp1.Y) / -4.0f);
 
                     switch (attrs.StationLines)
                     {
                         case StationLineStyle.None:
-                            p.MoveTo(cp2);
+                            p.Add(new PathMoveCmd(cp2));
                             break;
                         case StationLineStyle.Normal:
-                            p.AddLine(cp1, cp2);
+                            p.Add(new PathLineCmd(cp1, cp2));
                             break;
                         case StationLineStyle.Cubic:
-                            var control2 = cp2 + (!isTransition ? bezierOffset : -1 * bezierOffsetT);
-                            p.AddBezier(cp1, cp1 - bezierOffset, control2, cp2);
+                            var control2 = cp2 + (!isTransition ? bezierOffset : -1 * bezierOffset.Transpose);
+                            p.Add(new PathBezierCmd(cp1, cp1 - bezierOffset, control2, cp2));
                             break;
                     }
                 }
                 else
-                    p.AddLine(cp1, cp2); // Normal line between stations
+                    p.Add(new PathLineCmd(cp1, cp2)); // Normal line between stations
 
                 RenderTrainName(g, train, cp1, cp2, style, brush); // Zugnummern zeichnen.
             }
             g.DrawPath(pen, p);
         }
 
-        private void RenderTrainName(Graphics g, ITrain train, PointF cp1, PointF cp2, TrainStyle style, Brush brush)
+        private void RenderTrainName(Graphics2 g, ITrain train, Vec2 cp1, Vec2 cp2, TrainStyle style, MColor brush)
         {
             // only add the train number text, if the train line is not vertical or horizontal.
             if (Math.Abs(cp1.X - cp2.X) < TOLERANCE || Math.Abs(cp1.Y - cp2.Y) < TOLERANCE)
                 return;
-            var trainFont = (Font) attrs.TrainFont;
+            var trainFont = attrs.TrainFont;
 
             var size = g.MeasureString(trainFont, train.TName);
             if (Math.Abs(cp1.X - cp2.X) < size.Width + 5) // the train name is wider than the current space in the diagram.
@@ -180,10 +174,10 @@ namespace FPLedit.Bildfahrplan.Render
 
             float[] ys = { cp1.Y, cp2.Y };
             float[] xs = { cp1.X, cp2.X };
-            var t = new PointF(xs.Average(), ys.Average());
-            var d = new PointF(cp2.X - cp1.X, cp2.Y - cp1.Y); // train line vector.
-            var n = new SizeF(d.Y, -d.X) / (float) Math.Sqrt(d.Y * d.Y + d.X * d.X); // normal vector to the train line (2d).
-            t += Math.Sign(d.X) * n * (size.Height / 2 + style.CalcedWidth / 2f);
+            var t = new Vec2(xs.Average(), ys.Average());
+            var d = new Vec2(cp2.X - cp1.X, cp2.Y - cp1.Y); // train line vector.
+            var n = new Vec2(d.Y, -d.X) / (float) Math.Sqrt(d.Y * d.Y + d.X * d.X); // normal vector to the train line (2d).
+            t += n * Math.Sign(d.X) *(size.Height / 2 + style.CalcedWidth / 2f);
 
             if (t.Y < clipTop || t.Y > clipBottom) // check the clip area of the center, if this is outside we do not have to calc the angle.
                 return;
@@ -194,38 +188,38 @@ namespace FPLedit.Bildfahrplan.Render
             if (t.Y < clipTop + dh || t.Y > clipBottom - dh) // now check that we are fully inside the clipping area.
                 return;
 
-            var matrix = g.Transform.Clone();
+            var matrix = g.StoreTransform();
             g.TranslateTransform(t.X, t.Y);
             g.RotateTransform(-angle);
             g.DrawText(trainFont, brush, -(size.Width / 2), -(size.Height / 2), train.TName);
-            g.Transform = matrix;
+            g.RestoreTransform(matrix);
         }
 
         #region Render helpers
         private float GetTimeY(TimeEntry time) => margin.Top + ((time - startTime).GetTotalMinutes() * attrs.HeightPerHour / 60f);
 
-        PointF? GetGutterPoint(bool arrival, bool dir, StationRenderProps sx, TimeEntry time)
+        Vec2? GetGutterPoint(bool arrival, bool dir, StationRenderProps sx, TimeEntry time)
         {
             if (time == default)
                 return null;
             var x = arrival ^ dir ? sx.Left : sx.Right;
-            return new PointF(margin.Left + x, GetTimeY(time));
+            return new Vec2(margin.Left + x, GetTimeY(time));
         }
 
-        PointF? GetInternalPoint(StationRenderProps sx, TimeEntry time, string track)
+        Vec2? GetInternalPoint(StationRenderProps sx, TimeEntry time, string track)
         {
             if (time == default || track == null || !sx.TrackOffsets.TryGetValue(track, out float x))
                 return null;
-            return new PointF(margin.Left + x, GetTimeY(time));
+            return new Vec2(margin.Left + x, GetTimeY(time));
         }
 
-        void MaybeAddPoint(List<PointF> points, PointF? point)
+        void MaybeAddPoint(List<Vec2> points, Vec2? point)
         {
             if (point.HasValue)
                 points.Add(point.Value);
         }
 
-        (PointF cp1, PointF cp2) GetClippedPointsForLine(PointF p1, PointF p2)
+        (Vec2 cp1, Vec2 cp2) GetClippedPointsForLine(Vec2 p1, Vec2 p2)
         {
             var dx = p2.X - p1.X;
             var dy = p2.Y - p1.Y;
@@ -235,13 +229,13 @@ namespace FPLedit.Bildfahrplan.Render
             {
                 var clippedy = clipBottom - p2.Y;
                 var x = dy > TOLERANCE ? dx / dy * clippedy : 0;
-                return (p1, new PointF(p2.X + x, clipBottom));
+                return (p1, new Vec2(p2.X + x, clipBottom));
             }
             if (p1.Y < clipTop && p2.Y > clipBottom)
             {
                 var clippedy = clipTop - p1.Y;
                 var x = dy > TOLERANCE ? dx / dy * clippedy : 0;
-                return (new PointF(p1.X + x, clipTop), p2);
+                return (new Vec2(p1.X + x, clipTop), p2);
             }
 
             throw new Exception("tried to get clipped points for path fully outside rendering area, this should not happen!");

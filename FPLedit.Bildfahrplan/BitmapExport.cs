@@ -2,8 +2,7 @@
 using FPLedit.Bildfahrplan.Render;
 using FPLedit.Shared;
 using System.IO;
-using System.Drawing;
-using System.Drawing.Imaging;
+using FPLedit.Shared.Rendering;
 
 namespace FPLedit.Bildfahrplan
 {
@@ -11,13 +10,11 @@ namespace FPLedit.Bildfahrplan
     {
         private readonly int route;
         private readonly int width;
-        private readonly ImageFormat format;
 
-        public BitmapExport(int route, int width, ImageFormat format)
+        public BitmapExport(int route, int width)
         {
             this.route = route;
             this.width = width;
-            this.format = format;
         }
 
         public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[] flags = null) 
@@ -30,13 +27,12 @@ namespace FPLedit.Bildfahrplan
                 var virt = VirtualRoute.GetVRoute(tt, route);
                 pd = virt!.GetPathData;
             }
-            
+
             Renderer renderer = new Renderer(tt, pd);
-            using (var bmp = new Bitmap(width, renderer.GetHeightExternal(true), PixelFormat.Format32bppArgb))
-            using (var g = Graphics.FromImage(bmp))
+            using (var g2 = Graphics2.CreateImage(width, renderer.GetHeightExternal(true)))
             {
-                renderer.Draw(g, true, width, true);
-                bmp.Save(stream, format);
+                renderer.Draw(g2, true, width);
+                g2.SaveImagePng(stream);
             }
             return true;
         }

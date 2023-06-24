@@ -102,8 +102,9 @@ namespace FPLedit.Bildfahrplan.Forms
                 if (splitCheckBox.Checked!.Value)
                 {
                     using (var ib = new ImageBridge(hpanel.Width, hpanel.Height))
+                    using (var ibg2 = new Graphics2(ib.Graphics, false))
                     {
-                        renderer.DrawHeader(ib.Graphics, (scrollable.ClientSize.Width + panel.Width) / 2, exportColor: false);
+                        renderer.DrawHeader(ibg2, (scrollable.ClientSize.Width + panel.Width) / 2, exportColor: false);
                         ib.CoptyToEto(e.Graphics);
                     }
                 }

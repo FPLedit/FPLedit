@@ -24,7 +24,9 @@ namespace FPLedit.Bildfahrplan
             this.pluginInterface = pluginInterface;
             Style.PluginInterface = pluginInterface;
 
+#if ENABLE_SYSTEM_DRAWING
             if (!GdiAvailabilityTest.TestAndLog(pluginInterface)) return;
+#endif
 
             dpf = new DynamicPreview();
             componentRegistry.Register<IPreviewAction>(dpf);
@@ -43,10 +45,10 @@ namespace FPLedit.Bildfahrplan
                 printItem = graphItem.CreateItem(T._("&Drucken"), enabled: false, clickHandler: PrintItem_Click);
                 exportItem = graphItem.CreateItem(T._("&Exportieren"), enabled: false, clickHandler: ExportItem_Click);
                 graphItem.Items.Add(new SeparatorMenuItem());
-                configItem = graphItem.CreateItem(T._("Darste&llung ändern"), enabled: false, clickHandler: (s, ev) => ShowForm(new ConfigForm(pluginInterface.Timetable, pluginInterface)));
-                virtualRoutesItem = graphItem.CreateItem(T._("&Virtuelle Strecken"), enabled: false, clickHandler: (s, ev) => ShowForm(new VirtualRouteForm(pluginInterface)));
-                trainColorItem = graphItem.CreateItem(T._("&Zugdarstellung ändern"), enabled: false, clickHandler: (s, ev) => ShowForm(new TrainStyleForm(pluginInterface)));
-                stationStyleItem = graphItem.CreateItem(T._("&Stationsdarstellung ändern"), enabled: false, clickHandler: (s, ev) => ShowForm(new StationStyleForm(pluginInterface)));
+                configItem = graphItem.CreateItem(T._("Darste&llung ändern"), enabled: false, clickHandler: (_, _) => ShowForm(new ConfigForm(pluginInterface.Timetable, pluginInterface)));
+                virtualRoutesItem = graphItem.CreateItem(T._("&Virtuelle Strecken"), enabled: false, clickHandler: (_, _) => ShowForm(new VirtualRouteForm(pluginInterface)));
+                trainColorItem = graphItem.CreateItem(T._("&Zugdarstellung ändern"), enabled: false, clickHandler: (_, _) => ShowForm(new TrainStyleForm(pluginInterface)));
+                stationStyleItem = graphItem.CreateItem(T._("&Stationsdarstellung ändern"), enabled: false, clickHandler: (_, _) => ShowForm(new StationStyleForm(pluginInterface)));
                 overrideItem = graphItem.CreateCheckItem(T._("Verwende nur &Plandarstellung"), isChecked: pluginInterface.Settings.Get<bool>("bifpl.override-entity-styles"),
                     changeHandler: OverrideItem_CheckedChanged);
 #if !DEBUG
@@ -56,6 +58,7 @@ namespace FPLedit.Bildfahrplan
         
         private void PrintItem_Click(object sender, EventArgs e)
         {
+#if ENABLE_SYSTEM_DRAWING
             try
             {
                 using var pr = new PrintRenderer(pluginInterface);
@@ -65,6 +68,9 @@ namespace FPLedit.Bildfahrplan
             {
                 pluginInterface.Logger.Error(ex.Message);
             }
+#else
+            pluginInterface.Logger.Error(T._("Druckfunktion in dieser Version nicht aktiviert!"));
+#endif
         }
         
         private void ExportItem_Click(object sender, EventArgs e)
