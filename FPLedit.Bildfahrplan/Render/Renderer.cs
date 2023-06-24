@@ -29,12 +29,12 @@ namespace FPLedit.Bildfahrplan.Render
             defaultMargin = margins;
         }
 
-        public void Draw(Graphics2 g, bool drawHeader, float? forceWidth = null)
+        public void Draw(IMGraphics g, bool drawHeader, float? forceWidth = null)
             => Draw(g, attrs.StartTime, GetEndTime(attrs.StartTime, attrs.EndTime), drawHeader, forceWidth);
 
         public static Func<PathData> DefaultPathData(int route, Timetable tt) => () => tt.GetRoute(route).ToPathData(tt);
 
-        public void Draw(Graphics2 g, TimeEntry startTime, TimeEntry endTime, bool drawHeader, float? forceWidth = null)
+        public void Draw(IMGraphics g, TimeEntry startTime, TimeEntry endTime, bool drawHeader, float? forceWidth = null)
         {
             g.Clear(attrs.BgColor);
 
@@ -64,7 +64,7 @@ namespace FPLedit.Bildfahrplan.Render
             g.SetAntiAlias(false);
         }
 
-        public void DrawHeader(Graphics2 g, int width, bool exportColor)
+        public void DrawHeader(IMGraphics g, int width, bool exportColor)
         {
             g.Clear(attrs.BgColor);
 
@@ -80,7 +80,7 @@ namespace FPLedit.Bildfahrplan.Render
             headerRenderer.Render(g, margin, width, height, true);
         }
 
-        private Margins CalcMargins(Graphics2 g, Margins orig, IEnumerable<Station> stations, TimeEntry startTime, TimeEntry endTime, bool drawHeader)
+        private Margins CalcMargins(IMGraphics g, Margins orig, IEnumerable<Station> stations, TimeEntry startTime, TimeEntry endTime, bool drawHeader)
         {
             const int additionalMargin = 5;
             var result = new Margins(orig.Left + additionalMargin, orig.Top + additionalMargin, orig.Right + additionalMargin, orig.Bottom + additionalMargin);
@@ -104,11 +104,11 @@ namespace FPLedit.Bildfahrplan.Render
 
         public int GetHeightExternal(TimeEntry start, TimeEntry end, bool drawHeader)
         {
-            using var g = Graphics2.CreateImage(1, 1);
+            using var g = MGraphics.CreateImage(1, 1);
             return GetHeight(g, start, end, drawHeader);
         }
         
-        public int GetHeight(Graphics2 g, TimeEntry start, TimeEntry end, bool drawHeader)
+        public int GetHeight(IMGraphics g, TimeEntry start, TimeEntry end, bool drawHeader)
         {
             var stations = getPathData().GetRawPath().ToList();
             var m = CalcMargins(g, defaultMargin, stations, start, end, drawHeader);

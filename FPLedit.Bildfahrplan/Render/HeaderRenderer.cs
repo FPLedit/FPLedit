@@ -23,7 +23,7 @@ namespace FPLedit.Bildfahrplan.Render
             this.attrs = attrs;
         }
 
-        public Dictionary<Station, StationRenderProps> Render(Graphics2 g, Margins margin, float width, float height, bool drawHeader)
+        public Dictionary<Station, StationRenderProps> Render(IMGraphics g, Margins margin, float width, float height, bool drawHeader)
         {
             var stationFont = attrs.StationFont; // Reminder: Do not dispose, will be disposed with MFont instance!
             var stationOffsets = new Dictionary<Station, StationRenderProps>();
@@ -140,7 +140,7 @@ namespace FPLedit.Bildfahrplan.Render
         private string StationDisplay(PathEntry sta) => sta.Station.ToString(attrs.DisplayKilometre, sta.RouteIndex) + 
                                                         (!string.IsNullOrWhiteSpace(sta.Station.StationCode) ? $" ({sta.Station.StationCode})" : "");
 
-        public float GetMarginTop(Graphics2 g)
+        public float GetMarginTop(IMGraphics g)
         {
             var stationFont = attrs.StationFont;
             var emSize = g.MeasureString(stationFont, "M").Height;
@@ -156,7 +156,7 @@ namespace FPLedit.Bildfahrplan.Render
             return sMax;
         }
 
-        private float GetTrackOffset(Graphics2 g, MFont stationFont)
+        private float GetTrackOffset(IMGraphics g, MFont stationFont)
         {
             var raw = path.GetRawPath().ToList();
             var emSize = g.MeasureString(stationFont, "M").Height;

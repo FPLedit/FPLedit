@@ -135,7 +135,7 @@ namespace FPLedit.Bildfahrplan.Forms
             renderer.SetMargins(margin);
 
             var start = last ?? attrs.StartTime;
-            var g2 = new Graphics2(e.Graphics, true);
+            var g2 = new MGraphicsSystemDrawing(e.Graphics, true);
             last = GetTimeByHeight(g2, renderer, start, height);
 
             if (Eto.Platform.Instance.IsGtk)
@@ -144,7 +144,7 @@ namespace FPLedit.Bildfahrplan.Forms
                 using (var bitmap = new Bitmap(width, height))
                 using (var gr = Graphics.FromImage(bitmap))
                 {
-                    var gr2 = new Graphics2(gr, true);
+                    var gr2 = new MGraphicsSystemDrawing(gr, true);
                     gr.PageUnit = GraphicsUnit.Display;
                     renderer.Draw(gr2, start, last.Value, true, width);
                     e.Graphics.DrawImage(bitmap, 0, 0, width, height);
@@ -160,7 +160,7 @@ namespace FPLedit.Bildfahrplan.Forms
                 last = null;
         }
 
-        private TimeEntry GetTimeByHeight(Graphics2 g, Renderer renderer, TimeEntry start, int height)
+        private TimeEntry GetTimeByHeight(IMGraphics g, Renderer renderer, TimeEntry start, int height)
         {
             var endTime = GetEndTime(start, attrs.EndTime);
             var fillUpMinutes = (byte) (60 - start.Minutes);

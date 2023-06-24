@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace FPLedit.Shared.Rendering;
 
-public interface IGraphics2
+public interface IMGraphics : IDisposable
 {
     (float Width, float Height) MeasureString(MFont timeFont, string text);
     (float Width, float Height) MeasureString(string text, MFont timeFont);
@@ -17,4 +19,6 @@ public interface IGraphics2
     void SetAntiAlias(bool enable);
     (float Width, float Height) GetDrawingArea();
     void DrawPath((MColor c, int w, float[] ds) pen, List<IPathCmd> graphicsPath);
+    void Flush();
+    void SaveImagePng(Stream stream);
 }

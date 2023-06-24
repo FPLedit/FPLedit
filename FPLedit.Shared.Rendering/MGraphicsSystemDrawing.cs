@@ -7,7 +7,8 @@ using System.IO;
 
 namespace FPLedit.Shared.Rendering;
 
-public sealed class Graphics2 : IDisposable, IGraphics2
+#if ENABLE_SYSTEM_DRAWING
+public sealed class MGraphicsSystemDrawing : IMGraphics
 {
     private readonly Graphics g;
     private Bitmap? image;
@@ -16,7 +17,7 @@ public sealed class Graphics2 : IDisposable, IGraphics2
     private readonly Dictionary<int, SolidBrush> brushCache = new();
     private bool disposeGraphics;
 
-    public Graphics2(Graphics g, bool exportColor)
+    public MGraphicsSystemDrawing(Graphics g, bool exportColor)
     {
         this.exportColor = exportColor;
         this.g = g;
@@ -65,40 +66,19 @@ public sealed class Graphics2 : IDisposable, IGraphics2
         g.DrawText((Font)font, brush, x, y, text);
     }
 
-    public void Clear(MColor color)
-    {
-        g.Clear(color.ToSD(exportColor));
-    }
+    public void Clear(MColor color) => g.Clear(color.ToSD(exportColor));
 
-    public object StoreTransform()
-    {
-        return g.Transform.Clone();
-    }
+    public object StoreTransform() => g.Transform.Clone();
 
-    public void TranslateTransform(float tX, float tY)
-    {
-        g.TranslateTransform(tX, tY);
-    }
+    public void TranslateTransform(float tX, float tY) => g.TranslateTransform(tX, tY);
 
-    public void RotateTransform(float angle)
-    {
-        g.RotateTransform(angle);
-    }
+    public void RotateTransform(float angle) => g.RotateTransform(angle);
 
-    public void RestoreTransform(object matrix)
-    {
-        g.Transform = (Matrix)matrix;
-    }
+    public void RestoreTransform(object matrix) => g.Transform = (Matrix)matrix;
 
-    public void SetAntiAlias(bool enable)
-    {
-        g.SmoothingMode = enable ? SmoothingMode.AntiAlias : SmoothingMode.Default;
-    }
+    public void SetAntiAlias(bool enable) => g.SmoothingMode = enable ? SmoothingMode.AntiAlias : SmoothingMode.Default;
 
-    public (float Width, float Height) GetDrawingArea()
-    {
-        return (g.ClipBounds.Width, g.ClipBounds.Height);
-    }
+    public (float Width, float Height) GetDrawingArea() => (g.ClipBounds.Width, g.ClipBounds.Height);
 
     public void DrawPath((MColor c, int w, float[] ds) pen, List<IPathCmd> graphicsPath)
     {
@@ -123,11 +103,11 @@ public sealed class Graphics2 : IDisposable, IGraphics2
         g.DrawPath(sdPen, p);
     }
 
-    public static Graphics2 CreateImage(int width, int height)
+    public static IMGraphics CreateImage(int width, int height)
     {
         var image = new Bitmap(width, height, PixelFormat.Format24bppRgb);
         var g = Graphics.FromImage(image);
-        var g2 = new Graphics2(g, false);
+        var g2 = new MGraphicsSystemDrawing(g, false);
         g2.disposeGraphics = true;
         g2.image = image;
         return g2;
@@ -150,6 +130,11 @@ public sealed class Graphics2 : IDisposable, IGraphics2
 
     public void SaveImagePng(Stream stream)
     {
-        throw new NotImplementedException();
+        if (image == null)
+            throw new Exception("Trying to save graphics content not backed by image!");
+        image.Save(stream, ImageFormat.Png);
     }
+
+    public void Flush() => g.Flush();
 }
+#endif

@@ -15,7 +15,7 @@ namespace FPLedit.Bildfahrplan.Render
             this.attrs = attrs;
         }
 
-        public void Render(Graphics2 g, Margins margin, TimeEntry startTime, TimeEntry endTime, float width)
+        public void Render(IMGraphics g, Margins margin, TimeEntry startTime, TimeEntry endTime, float width)
         {
             var minutePen = (attrs.TimeColor, attrs.MinuteTimeWidth);
             var hourPen = (attrs.TimeColor, attrs.HourTimeWidth);
@@ -32,7 +32,7 @@ namespace FPLedit.Bildfahrplan.Render
             }
         }
 
-        public float GetMarginLeftOffset(Graphics2 g, TimeEntry startTime, TimeEntry endTime)
+        public float GetMarginLeftOffset(IMGraphics g, TimeEntry startTime, TimeEntry endTime)
         {
             return GetTimeLines(out _, startTime, endTime)
                 .Select(l => g.MeasureString(attrs.TimeFont, (startTime + new TimeEntry(0, l)).Normalize().ToShortTimeString()).Width)

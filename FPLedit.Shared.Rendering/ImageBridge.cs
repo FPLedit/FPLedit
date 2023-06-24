@@ -9,14 +9,16 @@ namespace FPLedit.Shared.Rendering
     {
         private readonly sd.Bitmap sdBuffer;
         private readonly sd.Graphics sdGraphics;
+        private readonly IMGraphics mGraphics;
 
-        public sd.Graphics Graphics => sdGraphics;
+        public IMGraphics Graphics => mGraphics;
 
         public ImageBridge(int width, int height)
         {
             sdBuffer = new sd.Bitmap(width, height, sd.Imaging.PixelFormat.Format32bppArgb);
             sdGraphics = sd.Graphics.FromImage(sdBuffer);
             sdGraphics.TextRenderingHint = sd.Text.TextRenderingHint.AntiAlias;
+            mGraphics = new MGraphicsSystemDrawing(sdGraphics, false);
         }
 
         public ImageBridge(ed.RectangleF rec) : this(width: (int)rec.Width, height: (int)rec.Height)
@@ -79,6 +81,7 @@ namespace FPLedit.Shared.Rendering
             GC.SuppressFinalize(this);
             sdBuffer?.Dispose();
             sdGraphics?.Dispose();
+            mGraphics?.Dispose();
             GC.Collect();
         }
 

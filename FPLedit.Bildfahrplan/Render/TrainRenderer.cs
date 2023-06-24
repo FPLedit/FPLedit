@@ -37,7 +37,7 @@ namespace FPLedit.Bildfahrplan.Render
             attrs = new TimetableStyle(tt);
         }
 
-        public void Render(Graphics2 g, ITrain train)
+        public void Render(IMGraphics g, ITrain train)
         {
             var style = new TrainStyle(train, attrs);
             if (!style.CalcedShow)
@@ -161,7 +161,7 @@ namespace FPLedit.Bildfahrplan.Render
             g.DrawPath(pen, p);
         }
 
-        private void RenderTrainName(Graphics2 g, ITrain train, Vec2 cp1, Vec2 cp2, TrainStyle style, MColor brush)
+        private void RenderTrainName(IMGraphics g, ITrain train, Vec2 cp1, Vec2 cp2, TrainStyle style, MColor brush)
         {
             // only add the train number text, if the train line is not vertical or horizontal.
             if (Math.Abs(cp1.X - cp2.X) < TOLERANCE || Math.Abs(cp1.Y - cp2.Y) < TOLERANCE)
