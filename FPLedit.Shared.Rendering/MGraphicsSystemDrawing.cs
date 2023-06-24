@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Drawing.Drawing2D;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Drawing.Text;
 using System.IO;
+using System.Threading.Tasks;
+using ed = Eto.Drawing;
 
 namespace FPLedit.Shared.Rendering;
 
@@ -78,6 +81,8 @@ public sealed class MGraphicsSystemDrawing : IMGraphics
 
     public void SetAntiAlias(bool enable) => g.SmoothingMode = enable ? SmoothingMode.AntiAlias : SmoothingMode.Default;
 
+    public void SetTextAntiAlias(bool enable) => g.TextRenderingHint = enable ? TextRenderingHint.AntiAlias : TextRenderingHint.SystemDefault;
+
     public (float Width, float Height) GetDrawingArea() => (g.ClipBounds.Width, g.ClipBounds.Height);
 
     public void DrawPath((MColor c, int w, float[] ds) pen, List<IPathCmd> graphicsPath)
@@ -103,11 +108,11 @@ public sealed class MGraphicsSystemDrawing : IMGraphics
         g.DrawPath(sdPen, p);
     }
 
-    public static IMGraphics CreateImage(int width, int height)
+    public static IMGraphics CreateImage(int width, int height, bool exportColor)
     {
-        var image = new Bitmap(width, height, PixelFormat.Format24bppRgb);
+        var image = new Bitmap(width, height, PixelFormat.Format32bppArgb);
         var g = Graphics.FromImage(image);
-        var g2 = new MGraphicsSystemDrawing(g, false);
+        var g2 = new MGraphicsSystemDrawing(g, exportColor);
         g2.disposeGraphics = true;
         g2.image = image;
         return g2;
@@ -136,5 +141,53 @@ public sealed class MGraphicsSystemDrawing : IMGraphics
     }
 
     public void Flush() => g.Flush();
+    
+    public ed.Bitmap LockEtoBitmap()
+    {
+        if (image == null)
+            throw new Exception("Trying to save graphics content not backed by image!");
+
+        g.Flush();
+        
+        var sdData = image.LockBits(new Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadOnly, image.PixelFormat);
+        var bytesPerPixel = ((int) image.PixelFormat >> 11) & 31;
+        var byteLength = sdData.Height * sdData.Width * bytesPerPixel;
+        
+        var etoBuffer = new ed.Bitmap(image.Width, image.Height, ed.PixelFormat.Format32bppRgba);
+        var etoData = etoBuffer.Lock();
+
+        if (sdData.Stride < 0)
+            throw new Exception("Negative stride value encountered!");
+
+        unsafe
+        {
+            if (sdData.Stride > 0 && sdData.Stride == sdData.Width * bytesPerPixel)
+                Buffer.MemoryCopy((void*) sdData.Scan0, (void*) etoData.Data, byteLength, byteLength);
+            else // Slightly slower route using the given stride width 
+            {
+                var switchColors = MColor.ShouldSwitchColors;
+                var scan = (byte*) sdData.Scan0;
+                var bytesPerScanLine = sdData.Width * bytesPerPixel;
+                Parallel.For(0, sdData.Height, i =>
+                {
+                    var line = scan + (i * sdData.Stride);
+                    for (int j = 0; j < bytesPerScanLine; j += bytesPerPixel)
+                    {
+                        var b = line[j];
+                        var g = line[j + 1];
+                        var r = line[j + 2];
+                        var a = line[j + 3];
+                        var c = ed.Color.FromArgb(switchColors ? b : r, g, switchColors ? r : b, a);
+                        etoData.SetPixel(j / bytesPerPixel, i, c);
+                    }
+                });
+            }
+        }
+
+        etoData.Dispose();
+        image.UnlockBits(sdData);
+        
+        return etoBuffer;
+    }
 }
 #endif

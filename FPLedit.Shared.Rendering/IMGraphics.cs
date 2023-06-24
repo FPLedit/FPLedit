@@ -17,8 +17,10 @@ public interface IMGraphics : IDisposable
     void RotateTransform(float angle);
     void RestoreTransform(object matrix);
     void SetAntiAlias(bool enable);
+    void SetTextAntiAlias(bool enable);
     (float Width, float Height) GetDrawingArea();
     void DrawPath((MColor c, int w, float[] ds) pen, List<IPathCmd> graphicsPath);
     void Flush();
     void SaveImagePng(Stream stream);
+    Eto.Drawing.Bitmap LockEtoBitmap();
 }

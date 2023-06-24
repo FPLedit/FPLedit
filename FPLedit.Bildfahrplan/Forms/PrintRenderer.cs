@@ -143,8 +143,8 @@ namespace FPLedit.Bildfahrplan.Forms
                 //HACK: Draw with the help of an extra buffer (prevent bug from System.Drawing.Commons on Linux, applying some transformation state to pages...)
                 using (var bitmap = new Bitmap(width, height))
                 using (var gr = Graphics.FromImage(bitmap))
+                using (var gr2 = new MGraphicsSystemDrawing(gr, true))
                 {
-                    var gr2 = new MGraphicsSystemDrawing(gr, true);
                     gr.PageUnit = GraphicsUnit.Display;
                     renderer.Draw(gr2, start, last.Value, true, width);
                     e.Graphics.DrawImage(bitmap, 0, 0, width, height);

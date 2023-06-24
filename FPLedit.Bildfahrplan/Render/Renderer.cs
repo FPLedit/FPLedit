@@ -104,7 +104,7 @@ namespace FPLedit.Bildfahrplan.Render
 
         public int GetHeightExternal(TimeEntry start, TimeEntry end, bool drawHeader)
         {
-            using var g = MGraphics.CreateImage(1, 1);
+            using var g = MGraphics.CreateImage(1, 1, false);
             return GetHeight(g, start, end, drawHeader);
         }
         
