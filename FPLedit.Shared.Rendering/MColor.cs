@@ -44,6 +44,11 @@ namespace FPLedit.Shared.Rendering
         }
 #endif
 
+        public SixLabors.ImageSharp.Color ToIS(bool forceNormalColor)
+        {
+            return SixLabors.ImageSharp.Color.FromRgba(R, G, B, 255);
+        }
+
         public static MColor White => new MColor(255, 255, 255);
 
         public static bool ShouldSwitchColors => Eto.Platform.Instance.IsGtk || Eto.Platform.Instance.IsMac;

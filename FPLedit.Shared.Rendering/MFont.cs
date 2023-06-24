@@ -55,12 +55,19 @@ namespace FPLedit.Shared.Rendering
             return m.instanceCachedSd;
         }
 #endif
+        public static explicit operator SixLabors.Fonts.Font(MFont m)
+        {
+            if (m.instanceCachedIs == null)
+                m.instanceCachedIs = SixLabors.Fonts.SystemFonts.CreateFont(m.Family == "SANS-SERIF" ? "Liberation Sans" : m.Family, m.Size, (SixLabors.Fonts.FontStyle)m.Style);
+            return m.instanceCachedIs;
+        }
 
         #region Caching (instance & global)
         private Eto.Drawing.Font? instanceCachedEto;
 #if ENABLE_SYSTEM_DRAWING
         private System.Drawing.Font? instanceCachedSd;
 #endif
+        private SixLabors.Fonts.Font? instanceCachedIs;
         private static readonly List<MFont> cachedM = new List<MFont>();
 
 #pragma warning disable IDE0060 // Nicht verwendete Parameter entfernen

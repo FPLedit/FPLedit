@@ -1,5 +1,8 @@
 namespace FPLedit.Shared.Rendering;
 
+/// <summary>
+/// A simple vector class for graphics abstraction, used for points and sizes.
+/// </summary>
 public readonly record struct Vec2(float X, float Y)
 {
     public static Vec2 operator *(Vec2 v, float f) => new (v.X * f, v.Y * f);
@@ -12,6 +15,7 @@ public readonly record struct Vec2(float X, float Y)
 #if ENABLE_SYSTEM_DRAWING
     public static explicit operator System.Drawing.PointF(Vec2 v) => new(v.X, v.Y);
 #endif
+    public static explicit operator SixLabors.ImageSharp.PointF(Vec2 v) => new(v.X, v.Y);
 }
 
 public interface IPathCmd {}
