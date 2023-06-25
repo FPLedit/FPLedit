@@ -93,20 +93,20 @@ namespace FPLedit.Bildfahrplan.Model
 
         public MFont StationFont
         {
-            get => MFont.Parse(tt.GetAttribute<string>("sFont"));
-            set => tt.SetAttribute("sFont", value.FontToString());
+            get => MFont.ParseJavaString(tt.GetAttribute<string>("sFont"));
+            set => tt.SetAttribute("sFont", value.FontToJavaString());
         }
 
         public MFont TimeFont
         {
-            get => MFont.Parse(tt.GetAttribute<string>("hFont"));
-            set => tt.SetAttribute("hFont", value.FontToString());
+            get => MFont.ParseJavaString(tt.GetAttribute<string>("hFont"));
+            set => tt.SetAttribute("hFont", value.FontToJavaString());
         }
 
         public MFont TrainFont
         {
-            get => MFont.Parse(tt.GetAttribute<string>("trFont"));
-            set => tt.SetAttribute("trFont", value.FontToString());
+            get => MFont.ParseJavaString(tt.GetAttribute<string>("trFont"));
+            set => tt.SetAttribute("trFont", value.FontToJavaString());
         }
 
 #endregion
