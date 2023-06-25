@@ -1,16 +1,17 @@
-public static string GetLicenseText(ICakeContext context, string licensePath, string thirdPartyInfoPath, string version)
+public static string GetLicenseText(ICakeContext context, string infoPath, string licensePath, string thirdPartyInfoPath, string version)
 {   
     var template_header = @"FPLedit Version {0}
 
 (c) 2015-{1} Manuel Huber
 https://fahrplan.manuelhu.de/
 
-Informationenn zu eingebundenen Bibliotheken finden Sie am Ende dieser Datei oder im Ordner lib/licenses.
+Informationen zu eingebundenen Bibliotheken von anderen Entwicklern finden Sie am Ende dieser Datei oder im Ordner lib/licenses.
 
 ";
 
-    var text = string.Format(template_header, version, DateTime.Now.Year);     
-    text += System.IO.File.ReadAllText(licensePath);    
+    var text = string.Format(template_header, version, DateTime.Now.Year);
+    text += System.IO.File.ReadAllText(infoPath);
+    text += System.IO.File.ReadAllText(licensePath);
     text += @"
 
 

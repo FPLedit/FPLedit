@@ -172,9 +172,10 @@ Task("BuildLicenseReadme")
     .Does(() => {
         ForAllRuntimes( (runtime, distDir) => {
             var version = GetProductVersion(Context, distDir + File("FPLedit.dll"));
-            var text = GetLicenseText(Context, 
-                scriptsDir + Directory("info") + File("Info.txt"), 
-                scriptsDir + Directory("info") + File("3rd-party.txt"), 
+            var text = GetLicenseText(Context,
+                scriptsDir + Directory("info") + File("Info.txt"),
+                scriptsDir + Directory("info") + File("gpl.txt"),
+                scriptsDir + Directory("info") + File("3rd-party.txt"),
                 version);
             System.IO.File.WriteAllText((distDir + File("README_LICENSE.txt")).ToString(), text);
         });

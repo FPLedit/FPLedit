@@ -9,11 +9,11 @@ Die Volltexte der Lizenzen finden Sie als Textdatei im Ordner lib/licenses.
 * Eto verwendet unter Linux die GtkSharp-Bibliotheken zur Darstellung.
   GNU Library General Public License
   <https://github.com/GtkSharp/GtkSharp>
-  
+
 * Eto und FPLedit verwendet Portable.Xaml zum Initialisieren der Benutzerschnittstelle.
   MIT X11 License
-  <https://github.com/cwensley/Portable.Xaml/blob/develop/LICENSE.txt> 
-  
+  <https://github.com/cwensley/Portable.Xaml> 
+
 * FPLedit verwendet die Bibliothek Jint zum Interpretieren der generierten Javascript-Templates.
   BSD 3-Clause License
   <https://github.com/sebastienros/jint>
@@ -25,22 +25,34 @@ Die Volltexte der Lizenzen finden Sie als Textdatei im Ordner lib/licenses.
 * FPLedit verwendet DeepCloner.
   MIT-License
   <https://github.com/force-net/DeepCloner>
-  
-* FPLedit verwendet Mono.Options
+
+* FPLedit verwendet Mono.Options.
   MIT-License
   <https://github.com/xamarin/XamarinComponents/tree/master/XPlat/Mono.Options>
-  
-* FPLedit verwendet NGettext zu Lokalisierung
+
+* FPLedit verwendet NGettext zu Lokalisierung.
   MIT-License
   <https://github.com/VitaliiTsilnyk/NGettext>
 
-* FPLedit verwendet als Basis .NET 5 und andere .NET-Pakete; sowie von .NET übernommenen Code
+* FPLedit benutzt ImageSharp und ImageSharp.Drawing zur Bildfahrplan-Darstellung.
+  ImageSharp Split License und Apache License 2.0
+  <https://github.com/SixLabors/ImageSharp>
+  <https://github.com/SixLabors/ImageSharp.Drawing>
+
+* FPLedit verwendet als Basis .NET 6 und andere .NET-Pakete; sowie von .NET übernommenen Code.
   MIT-License
   <https://github.com/dotnet/runtime>
 
 
-In der Entwicklung wurden zusätzlich die folgenden Prrogramme verwendet:
+In der Entwicklung wurde zusätzlich die folgenden Open-Source-Software verwendet:
 
 * Poedit zur Erstelllung der Überstzungsdateien
   <https://poedit.net/>
-
+* Cake-Build als Buildsystem
+  <https://github.com/cake-build/cake>
+* hugo und pandoc zur Erstellung der Dokumentation
+  <https://gohugo.io/>
+  <https://pandoc.org/>
+* docfx wird zur Erstellung der Entwickler-Dokumentation benutzt
+  MIT License
+  <https://github.com/dotnet/docfx>
