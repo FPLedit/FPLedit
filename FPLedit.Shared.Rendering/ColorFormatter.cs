@@ -18,7 +18,7 @@ namespace FPLedit.Shared.Rendering
             => $"#{c.R:X2}{c.G:X2}{c.B:X2}";
 
         private static string ToJtg2CustomColor(MColor c)
-            => "c(" + c.R + "," + c.G + "," + c.B + ")";
+            => $"c({c.R},{c.G},{c.B})";
 
         public static string ToString(MColor c, bool useJtg2Format = false)
             => useJtg2Format ? ToJtg2CustomColor(c) : ToHexString(c);
@@ -33,7 +33,8 @@ namespace FPLedit.Shared.Rendering
             	if (Array.IndexOf(hexChars, hex[i]) == -1)
             		return null;
 
-            return (MColor)Color.FromArgb(int.Parse(hex[1..], System.Globalization.NumberStyles.HexNumber));
+            var rgb = uint.Parse(hex[1..], System.Globalization.NumberStyles.HexNumber);
+            return new((byte) (rgb >> 16), (byte) (rgb >> 8), (byte) rgb);
         }
 
         private static MColor FromJtg2CustomColor(string jtg2)
@@ -42,7 +43,7 @@ namespace FPLedit.Shared.Rendering
             return new MColor(byte.Parse(parts[0]), byte.Parse(parts[1]), byte.Parse(parts[2]));
         }
 
-        private static readonly Dictionary<string, MColor> jtraingraphColors = new Dictionary<string, MColor>()
+        private static readonly Dictionary<string, MColor> jtraingraphColors = new()
         {
             ["schwarz"]    = (MColor)Colors.Black,
             ["grau"]       = (MColor)Colors.Gray,
@@ -69,8 +70,8 @@ namespace FPLedit.Shared.Rendering
             if (def.StartsWith("c(") && def.EndsWith(")"))
                 return FromJtg2CustomColor(def);
 
-            if (jtraingraphColors.ContainsKey(def))
-                return jtraingraphColors[def];
+            if (jtraingraphColors.TryGetValue(def, out var jtg))
+                return jtg;
 
             return defaultValue;
         }

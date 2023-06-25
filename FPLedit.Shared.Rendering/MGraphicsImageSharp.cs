@@ -16,7 +16,6 @@ namespace FPLedit.Shared.Rendering;
 public sealed class MGraphicsImageSharp : IMGraphics
 {
     private readonly Image<Rgba32> image;
-    private readonly bool exportColor;
     private readonly Dictionary<int, Pen> penCache = new();
 
     // Internal state
@@ -24,9 +23,8 @@ public sealed class MGraphicsImageSharp : IMGraphics
     private bool antiAlias = false;
     private bool textAntiAlias = false;
 
-    private MGraphicsImageSharp(Image<Rgba32> image, bool exportColor)
+    private MGraphicsImageSharp(Image<Rgba32> image)
     {
-        this.exportColor = exportColor;
         this.image = image;
     }
 
@@ -50,7 +48,7 @@ public sealed class MGraphicsImageSharp : IMGraphics
         var penCacheKey = pen.GetHashCode();
         if (!penCache.TryGetValue(penCacheKey, out var sdPen))
         {
-            sdPen = new Pen(pen.c.ToIS(exportColor), pen.w + 1, pen.ds); //TODO: I don't know why this `+1` is needed!?
+            sdPen = new Pen((Color)pen.c, pen.w + 1, pen.ds); //TODO: I don't know why this `+1` is needed!?
             penCache[penCacheKey] = sdPen;
         }
         image.Mutate(ctx => ctx.DrawLines(GetDrawingOptions(), sdPen, new []{ new PointF(x1, y1), new PointF(x2, y2)}));
@@ -58,10 +56,10 @@ public sealed class MGraphicsImageSharp : IMGraphics
 
     public void DrawText(MFont font, MColor solidColor, float x, float y, string text)
     {
-        image.Mutate(ctx => ctx.DrawText(GetDrawingOptions(), text, (Font)font, solidColor.ToIS(exportColor), new PointF(x, y)));
+        image.Mutate(ctx => ctx.DrawText(GetDrawingOptions(), text, (Font) font, (Color) solidColor, new PointF(x, y)));
     }
 
-    public void Clear(MColor color) => image.Mutate(ctx => ctx.Clear(color.ToIS(exportColor)));
+    public void Clear(MColor color) => image.Mutate(ctx => ctx.Clear((Color) color));
 
     public object StoreTransform() => matrix;
 
@@ -82,7 +80,7 @@ public sealed class MGraphicsImageSharp : IMGraphics
         var penCacheKey = pen.GetHashCode();
         if (!penCache.TryGetValue(penCacheKey, out var isPen))
         {
-            isPen = new Pen(pen.c.ToIS(exportColor), pen.w, pen.ds);
+            isPen = new Pen((Color) pen.c, pen.w, pen.ds);
             penCache[penCacheKey] = isPen;
         }
         
@@ -107,7 +105,7 @@ public sealed class MGraphicsImageSharp : IMGraphics
         var config = Configuration.Default.Clone();
         config.PreferContiguousImageBuffers = true; // Allow for copying to eto buffers below.
         var image = new Image<Rgba32>(config, width, height);
-        return new MGraphicsImageSharp(image, exportColor);
+        return new MGraphicsImageSharp(image);
     }
 
     public void Dispose()
@@ -138,7 +136,7 @@ public sealed class MGraphicsImageSharp : IMGraphics
         var byteLength = image.Height * image.Width * Unsafe.SizeOf<Rgba32>();
         if (memory.Length * Unsafe.SizeOf<Rgba32>() != byteLength || etoData.ScanWidth * etoBuffer.Height != byteLength)
             throw new Exception("Some weird stuff going on while copying memory"); 
-        
+
         using (MemoryHandle pinHandle = memory.Pin())
         {
             unsafe
@@ -148,7 +146,7 @@ public sealed class MGraphicsImageSharp : IMGraphics
         }
 
         etoData.Dispose();
-        
+
         return etoBuffer;
     }
 }

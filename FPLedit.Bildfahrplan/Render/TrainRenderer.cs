@@ -132,7 +132,7 @@ namespace FPLedit.Bildfahrplan.Render
                     var preX = i > 0 ? points[i - 1].X : 0;
                     var postX = i < points.Count - 2 ? points[i + 2].X : 0;
                     var curX = points[i].X; // explicitely don't use op1 for state calculations.
-                    var isTransition = isStationLine && (points.Count == i + 2 || Math.Sign(preX - curX) == Math.Sign(postX - curX));
+                    var isTransition = points.Count == i + 2 || Math.Sign(preX - curX) == Math.Sign(postX - curX);
 
                     float bezierFactor = !isTransition
                         ? Math.Sign(preX - postX) // preX < postX --> TrainDirection.ti
