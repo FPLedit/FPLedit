@@ -190,6 +190,7 @@ namespace FPLedit
             // Initailize some loosely coupled UI components, so that extensions can use them
             EtoExtensions.Initialize(bootstrapper); // Initialize Eto extensions
             FontCollection.InitAsync(); // Load list of available fonts, async, as this should not be needed by any extension.
+            MGraphics.PreferSystemDrawing = bootstrapper.FullSettings.Get<bool>("bifpl.prefer-system-drawing-renderer");
 #pragma warning disable CA2000
             TemplateDebugger.GetInstance().AttachDebugger(new GuiTemplateDebugger()); // Attach javascript debugger form
 #pragma warning restore CA2000

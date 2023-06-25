@@ -1,3 +1,5 @@
+using System;
+
 namespace FPLedit.Shared.Rendering;
 
 /// <summary>
@@ -11,13 +13,13 @@ public static class MGraphics
     /// </summary>
     public static IMGraphics CreateImage(int width, int height, bool exportColor)
     {
-        bool useSystemDrawing = false; //TODO: selection.
 #if ENABLE_SYSTEM_DRAWING
+        bool useSystemDrawing = Environment.OSVersion.Platform == PlatformID.Win32NT || PreferSystemDrawing;
         if (useSystemDrawing)
-        {
             return MGraphicsSystemDrawing.CreateImage(width, height, exportColor);
-        }
 #endif
         return MGraphicsImageSharp.CreateImage(width, height, exportColor);
     }
+
+    public static bool PreferSystemDrawing { get; set; }
 }
