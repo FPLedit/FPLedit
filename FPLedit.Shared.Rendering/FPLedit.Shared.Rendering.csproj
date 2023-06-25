@@ -7,7 +7,6 @@
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>CA1416</NoWarn>
-    <DefineConstants>ENABLE_SYSTEM_DRAWING</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyTitle>FPLedit - Shared Rendering components</AssemblyTitle>
@@ -25,6 +24,8 @@
     <PackageReference Include="Eto.Forms" Version="$(EtoVersion)" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.0.1" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta15" />
+  </ItemGroup>
+  <ItemGroup Condition="$(FPLeditEnableSystemDrawing)">
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>

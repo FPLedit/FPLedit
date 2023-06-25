@@ -5,7 +5,6 @@
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
     <NoWarn>CA1416</NoWarn>
-    <DefineConstants>ENABLE_SYSTEM_DRAWING</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyTitle>FPLedit - Exporter für Bildfahrpläne</AssemblyTitle>
@@ -27,6 +26,8 @@
     <PackageReference Include="Eto.Forms" Version="$(EtoVersion)" />
     <PackageReference Include="Eto.Serialization.Xaml" Version="$(EtoVersion)" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+  </ItemGroup>
+  <ItemGroup Condition="$(FPLeditEnableSystemDrawing)">
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>

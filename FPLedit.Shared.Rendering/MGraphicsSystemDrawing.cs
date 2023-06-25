@@ -51,7 +51,7 @@ public sealed class MGraphicsSystemDrawing : IMGraphics
             brush = new SolidBrush(solidColor.ToSD(exportColor));
             brushCache[brushCacheKey] = brush;
         }
-        g.DrawText((Font)font, brush, x, y, text);
+        g.DrawString(text, (Font)font, brush, x, y);
     }
 
     public void Clear(MColor color) => g.Clear(color.ToSD(exportColor));
@@ -84,7 +84,7 @@ public sealed class MGraphicsSystemDrawing : IMGraphics
         {
             switch (cmd)
             {
-                case PathMoveCmd move: p.MoveTo((PointF) move.To); break;
+                case PathMoveCmd: p.StartFigure(); break;
                 case PathLineCmd line: p.AddLine((PointF) line.Start, (PointF) line.End); break;
                 case PathBezierCmd bezier: p.AddBezier((PointF) bezier.ControlPoint1, (PointF) bezier.Control1, (PointF) bezier.ControlPoint2, (PointF) bezier.Control2); break;
                 default: throw new ArgumentException($"{nameof(graphicsPath)} contains unknown command of type {cmd.GetType().Name}");

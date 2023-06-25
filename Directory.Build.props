@@ -41,11 +41,18 @@
 
     <!-- Use common obj folder -->
     <IntermediateOutputPath>..\obj\$(SolutionName)\$(MSBuildProjectName)\$(Configuration)\</IntermediateOutputPath>
+
+    <!-- Enable System.Drawing support for bifpl and FPLedit.Shared.Rendering -->
+    <FPLeditEnableSystemDrawing>true</FPLeditEnableSystemDrawing>
   </PropertyGroup>
 
   <!-- Include Analyzers -->
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.3" />
   </ItemGroup>
+
+  <PropertyGroup Condition="$(FPLeditEnableSystemDrawing)">
+    <DefineConstants>ENABLE_SYSTEM_DRAWING</DefineConstants>
+  </PropertyGroup>
 
 </Project>
