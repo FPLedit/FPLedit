@@ -17,12 +17,10 @@ ProjectSection(SolutionItems) = preProject
 	build_scripts\license.cake = build_scripts\license.cake
 	build_scripts\ResourceHelper.cs = build_scripts\ResourceHelper.cs
 	build.cake = build.cake
-	NuGet.config = NuGet.config
 	Directory.Build.props = Directory.Build.props
 	build_scripts\GenerateVersionInfo.targets = build_scripts\GenerateVersionInfo.targets
 	build_scripts\VersionInfo.targets = build_scripts\VersionInfo.targets
 	build_scripts\GenerateSignatures.targets = build_scripts\GenerateSignatures.targets
-	build_scripts\GenerateUserDocumentation.proj = build_scripts\GenerateUserDocumentation.proj
 	build_scripts\AppHostPatch.targets = build_scripts\AppHostPatch.targets
 EndProjectSection
 EndProject

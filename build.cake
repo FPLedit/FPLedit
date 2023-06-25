@@ -135,15 +135,7 @@ Task("BuildUserDocumentation")
     .Does(() =>
     {
         if (buildDocPdf) {
-            var docBuildSettings = new DotNetMSBuildSettings();
-            docBuildSettings.Properties.Add("OutputPath", new List<string> { IOPath.GetFullPath(buildDir.Path.FullPath) });
-            DotNetBuild("./build_scripts/GenerateUserDocumentation.proj", new DotNetBuildSettings {
-                MSBuildSettings = docBuildSettings,
-            });
-            ForAllRuntimes( (runtime, distDir) => {
-                CopyFiles((string)buildDir + "/*.pdf", distDir);
-            });
-            hasDocInZip = true;
+            throw new Exception("Building doc PDF not supported any more...");
         } else if (!string.IsNullOrEmpty(copyDocPdf)) {
             ForAllRuntimes( (runtime, distDir) => {
                 CopyFiles(copyDocPdf, distDir);
