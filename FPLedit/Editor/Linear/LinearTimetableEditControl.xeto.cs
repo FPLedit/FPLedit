@@ -220,7 +220,7 @@ namespace FPLedit.Editor.Linear
         {
             var stations = tt.GetRoute(Timetable.LINEAR_ROUTE_ID).Stations.ToList().MaybeReverseDirection(dir);
 
-            view.AddColumn<DataElement>(t => t.IsMpDummy ? "" : t.Train.TName, T._("Zugnummer"), editable: false);
+            view.AddFuncColumn<DataElement>(t => t.IsMpDummy ? "" : t.Train.TName, T._("Zugnummer"));
 #pragma warning disable CA2000
             foreach (var sta in stations)
             {
@@ -230,7 +230,7 @@ namespace FPLedit.Editor.Linear
                     view.AddColumn(GetCell(t => t.Departure, sta, false, view), T._("{0} ab", sta.SName), editable: true);
             }
 #pragma warning restore CA2000
-            view.AddColumn<DataElement>(t => GetTransition(t.Train), T._("Folgezug"), editable: false);
+            view.AddFuncColumn<DataElement>(t => GetTransition(t.Train), T._("Folgezug"));
 
             view.GotFocus += (_, _) => focused = view;
             view.KeyDown += (_, e) => HandleViewKeystroke(e, view);

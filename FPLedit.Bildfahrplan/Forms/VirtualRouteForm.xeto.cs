@@ -26,7 +26,7 @@ namespace FPLedit.Bildfahrplan.Forms
 
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
-            gridView.AddColumn<VirtualRoute>(t => t.GetRouteName(), T._("Streckenverlauf"));
+            gridView.AddFuncColumn<VirtualRoute>(t => t.GetRouteName(), T._("Streckenverlauf"));
             gridView.DataStore = VirtualRoute.GetVRoutes(tt).ToArray();
 
             this.AddCloseHandler();

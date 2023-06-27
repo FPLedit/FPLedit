@@ -57,7 +57,7 @@ namespace FPLedit.Kursbuch.Forms
                 }, "Name", editable: true
             );
 #pragma warning restore CA2000
-            kbsnListView.AddColumn<Route>(r => r.GetRouteName(), T._("Strecke"));
+            kbsnListView.AddFuncColumn<Route>(r => r.GetRouteName(), T._("Strecke"));
             kbsnListView.DataStore = tt.GetRoutes();
 
             var tmpl = chooser.GetTemplate(tt);

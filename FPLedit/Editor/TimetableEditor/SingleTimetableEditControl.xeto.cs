@@ -309,7 +309,7 @@ namespace FPLedit.Editor.TimetableEditor
         {
 #pragma warning disable CA2000
             view.Columns.Clear();
-            view.AddColumn<DataElement>(t => t.IsMpDummy ? "" : t.Station.SName, T._("Bahnhof"), editable: false);
+            view.AddFuncColumn<DataElement>(t => t.IsMpDummy ? "" : t.Station.SName, T._("Bahnhof"));
             view.AddColumn(GetCell(t => t.Arrival, true), T._("Ankunft"), editable: true);
             view.AddColumn(GetCell(t => t.Departure, false), T._("Abfahrt"), editable: true);
             view.AddColumn(GetTrackCell(t => t.ArrivalTrack, (t,s) => t.ArrivalTrack = s, true), T._("Ankunftsgleis"), editable: true);

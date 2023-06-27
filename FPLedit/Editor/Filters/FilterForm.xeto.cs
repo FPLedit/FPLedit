@@ -50,8 +50,8 @@ namespace FPLedit.Editor.Filters
 
         private void InitView(GridView view)
         {
-            view.AddColumn<FilterRule>(r => TypeDescription(r.FilterType, r.Negate), T._("Typ"));
-            view.AddColumn<FilterRule>(r => r.SearchString, T._("Suchwert"));
+            view.AddFuncColumn<FilterRule>(r => TypeDescription(r.FilterType, r.Negate), T._("Typ"));
+            view.AddFuncColumn<FilterRule>(r => r.SearchString, T._("Suchwert"));
         }
 
         private void SwitchType(int idx)

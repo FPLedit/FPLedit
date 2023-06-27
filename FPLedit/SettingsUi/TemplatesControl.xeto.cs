@@ -25,7 +25,7 @@ namespace FPLedit.SettingsUi
 #pragma warning restore CS0649,CA2213
 
         private readonly TemplateManager manager;
-        private ITemplate[] templates = {};
+        private TemplateHost[] templates = Array.Empty<TemplateHost>();
 
         private readonly DirectoryInfo templatesDir;
 
@@ -37,10 +37,10 @@ namespace FPLedit.SettingsUi
             templatesDir = new DirectoryInfo(Path.Combine(PathManager.Instance.AppDirectory, manager.TemplatePath));
 
             var buildName = new Func<string, string>((x) => x.StartsWith("builtin:") ? T._("(integriert)") : x);
-            gridView.AddCheckColumn<ITemplate>(t => ((TemplateHost)t).Enabled, T._("Aktiviert"));
-            gridView.AddColumn<ITemplate>(t => t.TemplateName, T._("Name"));
-            gridView.AddColumn<ITemplate>(t => buildName(t.Identifier), T._("Dateiname"));
-            gridView.AddColumn<ITemplate>(t => t.TemplateType!, T._("Typ"));
+            gridView.AddCheckColumn<TemplateHost>(t => t.Enabled, T._("Aktiviert"));
+            gridView.AddFuncColumn<TemplateHost>(t => t.TemplateName, T._("Name"));
+            gridView.AddFuncColumn<TemplateHost>(t => buildName(t.Identifier), T._("Dateiname"));
+            gridView.AddFuncColumn<TemplateHost>(t => t.TemplateType!, T._("Typ"));
 
             gridView.SelectedItemsChanged += (_, _) =>
             {
@@ -62,7 +62,7 @@ namespace FPLedit.SettingsUi
 
         private void RefreshList()
         {
-            templates = manager.GetAllTemplates();
+            templates = manager.GetAllTemplates().Cast<TemplateHost>().ToArray();
             gridView.DataStore = templates;
         }
 

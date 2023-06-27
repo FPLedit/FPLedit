@@ -64,9 +64,9 @@ namespace FPLedit.Editor.Trains
                 linkGroupBox.Visible = false;
             else
             {
-                linkGridView.AddColumn<TrainLink>(tl => tl.TrainCount.ToString(), T._("Anzahl"));
-                linkGridView.AddColumn<TrainLink>(tl => tl.TimeOffset.ToTimeString(), T._("Erster Abstand"));
-                linkGridView.AddColumn<TrainLink>(tl => tl.TimeDifference.ToTimeString(), T._("Zeitdifferenz"));
+                linkGridView.AddFuncColumn<TrainLink>(tl => tl.TrainCount.ToString(), T._("Anzahl"));
+                linkGridView.AddFuncColumn<TrainLink>(tl => tl.TimeOffset.ToTimeString(), T._("Erster Abstand"));
+                linkGridView.AddFuncColumn<TrainLink>(tl => tl.TimeDifference.ToTimeString(), T._("Zeitdifferenz"));
             }
         }
 

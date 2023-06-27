@@ -57,7 +57,7 @@ namespace FPLedit.Editor.Trains
                     break;
                 case SpecialTrainNameGen stnc:
                     specialTrainNameTableLayout.Visible = true;
-                    specialNameGridView.AddColumn((SpecialNameEntry spn) => spn.RowNumber.ToString(), "");
+                    specialNameGridView.AddFuncColumn((SpecialNameEntry spn) => spn.RowNumber.ToString(), "");
                     specialNameGridView.AddColumn((SpecialNameEntry spn) => spn.Name, T._("Zugname"), true);
                    
                     var ds = new SpecialNameEntry[stnc.Names.Length];

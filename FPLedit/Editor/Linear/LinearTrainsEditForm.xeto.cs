@@ -66,13 +66,13 @@ namespace FPLedit.Editor.Linear
 
         private void InitListView(GridView view, Button[] buttons)
         {
-            view.AddColumn<ITrain>(t => t.IsLink ? T._("L") : "", "");
-            view.AddColumn<ITrain>(t => t.TName, T._("Zugnummer"));
-            view.AddColumn<ITrain>(t => t.Locomotive, T._("Tfz"));
-            view.AddColumn<ITrain>(t => t.Mbr, T._("Mbr"));
-            view.AddColumn<ITrain>(t => t.Last, T._("Last"));
-            view.AddColumn<ITrain>(t => t.Days.DaysToString(), T._("Verkehrstage"));
-            view.AddColumn<ITrain>(t => t.Comment, T._("Kommentar"));
+            view.AddFuncColumn<ITrain>(t => t.IsLink ? T._("L") : "", "");
+            view.AddFuncColumn<ITrain>(t => t.TName, T._("Zugnummer"));
+            view.AddFuncColumn<ITrain>(t => t.Locomotive, T._("Tfz"));
+            view.AddFuncColumn<ITrain>(t => t.Mbr, T._("Mbr"));
+            view.AddFuncColumn<ITrain>(t => t.Last, T._("Last"));
+            view.AddFuncColumn<ITrain>(t => t.Days.DaysToString(), T._("Verkehrstage"));
+            view.AddFuncColumn<ITrain>(t => t.Comment, T._("Kommentar"));
 
             view.GotFocus += (_, _) => active = view;
 

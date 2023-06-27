@@ -75,7 +75,7 @@ namespace FPLedit.TimetableChecks
                 Spacing = new Eto.Drawing.Size(5, 5),
             };
             gridView = new GridView();
-            gridView.AddColumn<string>(s => s, T._("Meldung"));
+            gridView.AddFuncColumn<string>(s => s, T._("Meldung"));
             stack.Add(gridView, 0, 0);
 
             form = new FForm()
