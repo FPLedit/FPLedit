@@ -1,6 +1,8 @@
+using FPLedit.Shared;
+
 namespace FPLedit.GTFS.GTFSLib;
 
-public sealed class Stop
+public sealed class Stop : IGtfsEntity
 {
     [GtfsField("stop_id", GtfsType.Id)]
     public string StopId { get; init; }
@@ -17,7 +19,20 @@ public sealed class Stop
     public LocationType LocationType => LocationType.Station;
 
     [GtfsField("wheelchair_boarding", GtfsType.Enum, Optional = true)]
-    public AccessibilityState WheelchairBoarding { get; init; }
+    public AccessibilityState WheelchairBoarding { get; set; }
+
+    public static Stop FromStation(IStation station, float lat, float lon)
+    {
+        return new()
+        {
+            StopId = GtfsField.ToId(station.SName),
+            StopName = station.SName,
+            StopLat = lat,
+            StopLon = lon,
+        };
+    }
+
+    public string GetPkProperty() => nameof(StopId);
 }
 
 public enum LocationType

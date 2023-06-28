@@ -1,9 +1,12 @@
+using System;
+using FPLedit.Shared;
+
 namespace FPLedit.GTFS.GTFSLib;
 
-public sealed class Calendar
+public sealed class Calendar : IGtfsEntity
 {
     [GtfsField("service_id", GtfsType.Id)]
-    public string Service { get; init; }
+    public string ServiceId { get; init; }
 
     [GtfsField("monday", GtfsType.Bool)]
     public bool Monday { get; init; }
@@ -21,21 +24,42 @@ public sealed class Calendar
     public bool Sunday { get; init; }
 
     [GtfsField("start_date", GtfsType.Date)]
-    public string StartDate { get; init; }
+    public DateOnly StartDate { get; init; }
     [GtfsField("end_date", GtfsType.Date)]
-    public string EndDate { get; init; }
+    public DateOnly EndDate { get; init; }
+
+    public static Calendar FromTrain(ITrain train, bool blank, DateOnly start, DateOnly end)
+    {
+        return new()
+        {
+            ServiceId = GtfsField.ToId(train.TName),
+            Monday = !blank && train.Days[0],
+            Tuesday = !blank && train.Days[1],
+            Wednesday = !blank && train.Days[2],
+            Thursday = !blank && train.Days[3],
+            Friday = !blank && train.Days[4],
+            Saturday = !blank && train.Days[5],
+            Sunday = !blank && train.Days[6],
+            StartDate = start,
+            EndDate = end,
+        };
+    }
+
+    public string GetPkProperty() => nameof(ServiceId);
 }
 
-public sealed class CalendarDate
+public sealed class CalendarDate : IGtfsEntity
 {
-    [GtfsField("service_id", GtfsType.Id, ForeignKey = "service_id")]
+    [GtfsField("service_id", GtfsType.Id)]
     public Calendar Service { get; init; }
 
     [GtfsField("date", GtfsType.Date)]
-    public string Date { get; init; }
+    public DateOnly Date { get; init; }
 
     [GtfsField("exception_type", GtfsType.Enum)]
     public CalendarDateType ExceptionType { get; init; }
+
+    public string GetPkProperty() => null;
 }
 
 public enum CalendarDateType

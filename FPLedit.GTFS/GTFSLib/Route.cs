@@ -1,6 +1,6 @@
 namespace FPLedit.GTFS.GTFSLib;
 
-public sealed class Route
+public sealed class Route : IGtfsEntity
 {
     [GtfsField("route_id", GtfsType.Id)]
     public string RouteId { get; init; }
@@ -12,6 +12,8 @@ public sealed class Route
 
     [GtfsField("route_long_name", GtfsType.Text)]
     public RouteType RouteType { get; init; }
+
+    public string GetPkProperty() => nameof(RouteId);
 }
 
 public enum RouteType

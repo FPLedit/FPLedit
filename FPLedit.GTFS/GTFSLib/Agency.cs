@@ -1,7 +1,7 @@
 namespace FPLedit.GTFS.GTFSLib;
 
 // Simple model, agency_id is not set.
-public sealed class Agency
+public sealed class Agency : IGtfsEntity
 {
     [GtfsField("agency_name", GtfsType.Text)]
     public string AgencyName { get; init; }
@@ -23,4 +23,6 @@ public sealed class Agency
     
     [GtfsField("agency_fare_url", GtfsType.URL, Optional = true)]
     public string AgencyFareUrl { get; init; }
+
+    public string GetPkProperty() => null;
 }
