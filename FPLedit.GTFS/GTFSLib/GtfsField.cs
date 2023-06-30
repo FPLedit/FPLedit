@@ -36,7 +36,7 @@ public sealed class GtfsField : Attribute
                 if (x is float f) return f.ToString(CultureInfo.InvariantCulture);
                 throw new ArgumentException("wrong argument type for GTFS conversion");
             case GtfsType.Bool:
-                if (x is float b) return ((int) b).ToString();
+                if (x is bool b) return (b ? 1 : 0).ToString();
                 throw new ArgumentException("wrong argument type for GTFS conversion");
             case GtfsType.Enum:
                 if (x is Enum e)

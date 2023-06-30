@@ -49,7 +49,11 @@ public sealed class GtfsFile
         foreach (var field in table.Keys.ToArray())
         {
             if (omits.TryGetValue(field, out var omit) && omit)
+            {
                 table.Remove(field);
+                continue;
+            }
+
             if (length == -1)
                 length = table[field].Count;
             if (length != table[field].Count)
@@ -69,5 +73,21 @@ public sealed class GtfsFile
         }
 
         return resultTable;
+    }
+
+    public Dictionary<string, string> Write()
+    {
+        var files = new Dictionary<string, string>();
+        files["agencies.txt"] = GetCsvString(new[] { Agency });
+        files["routes.txt"] = GetCsvString(new[] { Route });
+        files["stops.txt"] = GetCsvString(Stops);
+        files["trips.txt"] = GetCsvString(Trips);
+        files["stop_times.txt"] = GetCsvString(StopTimes);
+        files["calendars.txt"] = GetCsvString(Calendars);
+        if (CalendarDates.Any())
+            files["calendar_dates.txt"] = GetCsvString(CalendarDates);
+        if (Shapes.Any())
+            files["shapes.txt"] = GetCsvString(Shapes);
+        return files;
     }
 }

@@ -10,7 +10,7 @@ public sealed class Route : IGtfsEntity
     [GtfsField("route_long_name", GtfsType.Text, Optional = true)]
     public string RouteLongName { get; init; }
 
-    [GtfsField("route_long_name", GtfsType.Text)]
+    [GtfsField("route_type", GtfsType.Enum)]
     public RouteType RouteType { get; init; }
 
     public string GetPkProperty() => nameof(RouteId);
