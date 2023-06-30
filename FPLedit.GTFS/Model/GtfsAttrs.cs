@@ -56,7 +56,14 @@ namespace FPLedit.GTFS.Model
             get => GetAttribute("route_name", "");
             set => SetAttribute("route_name", value);
         }
-        
+
+        [XAttrName("route_type")]
+        public string RouteType
+        {
+            get => GetAttribute("route_type", "1");
+            set => SetAttribute("route_type", value);
+        }
+
         private GtfsAttrs(Timetable tt) : base("gtfs_attrs", tt)
         {
         }

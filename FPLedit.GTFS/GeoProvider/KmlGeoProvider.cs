@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -11,6 +12,7 @@ public class KmlGeoProvider : IGeoProvider
 {
     private readonly XmlDocument? kmlRoot;
     private readonly XmlNamespaceManager? nsmgr;
+    private readonly List<string> missedQueries = new();
 
     public KmlGeoProvider(string filename)
     {
@@ -46,7 +48,12 @@ public class KmlGeoProvider : IGeoProvider
             throw new Exception("KML Document not initialized!");
 
         var nodes = kmlRoot.DocumentElement!.SelectNodes("//k:coordinates/parent::k:Point/parent::k:Placemark/k:name/parent::k:Placemark", nsmgr!);
-        if (nodes == null) return null;
+        if (nodes == null)
+        {
+            missedQueries.Add(stationName);
+            return null;
+        }
+
         foreach (var node in nodes)
         {
             if (node is not XmlElement el) continue;
@@ -57,6 +64,8 @@ public class KmlGeoProvider : IGeoProvider
                 return CoordsFromKml(coords);
             }
         }
+
+        missedQueries.Add(stationName);
         return null;
     }
 
@@ -78,7 +87,12 @@ public class KmlGeoProvider : IGeoProvider
             throw new Exception("KML Document not initialized!");
         
         var nodes = kmlRoot.DocumentElement!.SelectNodes("//k:coordinates/parent::k:LineString/parent::k:Placemark/k:name/parent::k:Placemark", nsmgr!);
-        if (nodes == null) return Array.Empty<(float lat, float lon)>();
+        if (nodes == null)
+        {
+            missedQueries.Add(routeName);
+            return Array.Empty<(float lat, float lon)>();
+        }
+
         foreach (var node in nodes)
         {
             if (node is not XmlElement el) continue;
@@ -94,6 +108,10 @@ public class KmlGeoProvider : IGeoProvider
                     .ToArray();
             }
         }
+
+        missedQueries.Add(routeName);
         return Array.Empty<(float lat, float lon)>();
     }
+
+    public IEnumerable<string> GetMissedQueries() => missedQueries;
 }

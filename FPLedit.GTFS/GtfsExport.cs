@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,37 +7,67 @@ using FPLedit.GTFS.GTFSLib;
 using FPLedit.GTFS.Model;
 using FPLedit.Shared;
 using GtfsRoute = FPLedit.GTFS.GTFSLib.Route;
+using Route = FPLedit.Shared.Route;
 
 namespace FPLedit.GTFS;
 
 public class GtfsExport
 {
-    public static void X(Timetable tt, ILog log, string filename)
+    public static bool Export(Timetable tt, ILog log, string filename, string exportFolder)
     {
         if (tt.Type != TimetableType.Linear)
             throw new TimetableTypeNotSupportedException(TimetableType.Network, "GTFS Export");
+
+        if (!Directory.Exists(exportFolder))
+            Directory.CreateDirectory(exportFolder);
 
         var attTt = GtfsAttrs.GetAttrs(tt);
         if (attTt == null)
         {
             log.Error(T._("GTFS-Export: Keine Agency/Streckendaten vorhanden!"));
-            return;
+            return false;
         }
         var line = tt.GetRoute(Timetable.LINEAR_ROUTE_ID);
 
         if (string.IsNullOrEmpty(attTt.AgencyName) || string.IsNullOrEmpty(attTt.AgencyLang) || string.IsNullOrEmpty(attTt.AgencyUrl) || string.IsNullOrEmpty(attTt.AgencyTimezone) || string.IsNullOrEmpty(attTt.RouteName))
             log.Warning(T._("GTFS-Export: Unvollständige Agency/Streckendaten!"));
 
-        IGeoProvider? geo = null;
+        // Load geo provider, if the kml sidecar file exists.
+        IGeoProvider geo;
         if (File.Exists(filename + ".kml"))
             geo = new KmlGeoProvider(filename + ".kml");
         else
+        {
+            log.Warning(T._("Keine KML-Datei {0} gefunden!", filename + ".kml"));
             geo = new ZeroGeoProvider();
+        }
 
+        var file = GetGtfsFeedContents(tt, attTt, geo, line);
+
+        var missedQueries = geo.GetMissedQueries().ToArray();
+        if (missedQueries.Any())
+            log.Warning(T._("Nicht gefundene Geo-Angaben: {0}", string.Join(", ", missedQueries)));
+
+        // Write out the generated feed and warn for existing files.
+        var existingFiles = Directory.GetFiles(exportFolder).Select(Path.GetFileName).ToArray();
+        var files = file.GetFiles();
+        var filesToDelete = existingFiles.Except(files.Keys).ToArray();
+        if (filesToDelete.Any())
+            log.Warning(T._("Vorhandene Dateien im Zielordner: {0}", string.Join(", ", filesToDelete)));
+
+        foreach (var f in files)
+            File.WriteAllText(Path.Combine(exportFolder, f.Key), f.Value);
+
+        return true;
+    }
+
+    private static GtfsFile GetGtfsFeedContents(Timetable tt, GtfsAttrs attTt, IGeoProvider geo, Route line)
+    {
         var file = new GtfsFile();
+        var routeTypeValid = Enum.TryParse(attTt.RouteType, out RouteType routeType);
 
         file.Agency = new Agency { AgencyName = attTt.AgencyName, AgencyLang = attTt.AgencyLang, AgencyUrl = attTt.AgencyUrl, AgencyTimezone = attTt.AgencyTimezone };
-        file.Route = new GtfsRoute { RouteId = GtfsField.ToId(attTt.RouteName), RouteShortName = attTt.RouteName, RouteType = RouteType.Rail };
+        file.Route = new GtfsRoute { RouteId = GtfsField.ToId(attTt.RouteName), RouteShortName = attTt.RouteName, RouteType = routeTypeValid ? routeType : RouteType.Rail };
         var routeGeo = geo.GetGeoLine(attTt.RouteName);
 
         Shape? lastShape = null;
@@ -48,7 +79,7 @@ public class GtfsExport
                 file.Shapes.Add(lastShape);
             }
         }
-        
+
         var gtfsStops = new Dictionary<IStation, Stop>();
         foreach (var s in line.Stations)
         {
@@ -68,6 +99,7 @@ public class GtfsExport
                 foreach (var dt in daysOverride.IrregularDays)
                     file.CalendarDates.Add(new CalendarDate { Service = c, Date = dt, ExceptionType = CalendarDateType.Added });
             }
+
             file.Calendars.Add(c);
 
             var trip = Trip.FromTrain(file.Route, c, train);
@@ -82,6 +114,6 @@ public class GtfsExport
             file.StopTimes.AddRange(StopTime.FromTrain(trip, train, gtfsStops));
         }
 
-        var files = file.GetFiles();
+        return file;
     }
 }
