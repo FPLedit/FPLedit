@@ -65,7 +65,7 @@ namespace FPLedit.GTFS.Model
         {
         }
 
-        public static GtfsAttrs GetAttrs(Timetable tt)
+        public static GtfsAttrs? GetAttrs(Timetable tt)
         {
             var attrsEn = tt.Children.FirstOrDefault(x => x.XName == "gtfs_attrs");
             if (attrsEn != null)

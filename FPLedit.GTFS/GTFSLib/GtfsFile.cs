@@ -75,7 +75,7 @@ public sealed class GtfsFile
         return resultTable;
     }
 
-    public Dictionary<string, string> Write()
+    public Dictionary<string, string> GetFiles()
     {
         var files = new Dictionary<string, string>();
         files["agencies.txt"] = GetCsvString(new[] { Agency });
