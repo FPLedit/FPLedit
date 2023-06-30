@@ -14,22 +14,23 @@ FPLedit currently uses the following dependencies from NuGet:
 * Jint - Javascript interpreter (used for templating)
 * DeepCloner - used to generate checkpoints for undo operations
 * NGettext - used to localize the user interface
+* ImageSharp, ImageSharp.Drawing and SixLabors.Fonts - drawing of graphical timetables.
 * various .NET Core dependencies.
 * ... and some more dependencies that are only used to build / test the application (Cake, docfx, ...).
 
 ## Supported .NET Versions
 
-FPLedit currently can only be built and run with .NET 6. Support for .NET 5 and .NET 4.x/mono has been discontinued. .NET 7 is also not supported at the moment, as FPLedit still heavily uses `System.Drawing.Common` on Unix-like platforms.
+FPLedit currently can only be built and run with .NET 6. Support for .NET 5 and .NET 4.x/mono has been discontinued.
+
+.NET 7 is also not supported at the moment (but planned/in preparation), as FPLedit still uses `System.Drawing.Common` on Unix-like platforms (i.e. for printing).
 
 ## Packaging a release
 
 To build a relaease run `dotnet cake` in the repository root. Before you run cake the first time, you have to run `dotnet tool restore`.
 
-Accepted flags are `--auto-beta` which will build and assign a -betaX version number. Target plaforms for cross-platform builds are specified with `--rid=rid1,rid2,...`. Available rids are `linux-x64`, `osx-x64`, `win-x64` and `win-x64`. All other options are mainly specified with environment variables.
+Accepted flags are `--auto-beta` which will build and assign a -betaX version number. Target plaforms for cross-platform builds are specified with `--rid=rid1,rid2,...`. Available rids are `linux-x64`, `osx-x64`, `win-x64` and `win-x86`. All other options are mainly specified with environment variables.
 
-Bundled documetation:
-* If the `FPLEDIT_DOK_REPO` env variable is set to the folder of the documentation repo, the packaging scripts will also build the FPLedit offline pdf documentation. This requires an installation of `xelatex`, `sass`, `pandoc` and [hugo](https://gohugo.io) in your path.
-* If the `FPLEDIT_DOK_PDF` env variable is set to a (full) path of a pdf file, this will be copied to the distribution zip files as `Dokumentation.pdf`.
+Bundled documentation: If the `FPLEDIT_DOK_PDF` env variable is set to a (full) path of a pdf file, this will be copied to the distribution zip files as `Dokumentation.pdf`. By default, the file in the root of this repository will be used.
 
 Git snapshots:
 * `FPLEDIT_GIT`: This env variable should be set to the full commit sha1 hash (if applicable)
