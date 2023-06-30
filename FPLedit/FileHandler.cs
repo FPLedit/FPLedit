@@ -49,7 +49,7 @@ namespace FPLedit
             {
                 timetable = value;
                 if (value != null)
-                    FileStateChanged?.Invoke(this, new FileStateChangedEventArgs(FileState));
+                    OnFileStateChanged();
             }
         }
 
@@ -94,6 +94,7 @@ namespace FPLedit
             FileState.Saved = false;
         }
 
+        // Bubble up FileState change event to global callers.
         private void OnFileStateChanged()
         {
             FileState.UpdateMetaProperties(Timetable, undo);
@@ -130,7 +131,7 @@ namespace FPLedit
                 InternalCloseFile();
 
                 var tsk = import.GetAsyncSafeImport(importFileDialog.FileName, pluginInterface);
-                tsk.ContinueWith((Task<Timetable> t, object o) =>
+                tsk.ContinueWith((t, _) =>
                 {
                     Application.Instance.InvokeAsync(() =>
                     {
@@ -170,7 +171,7 @@ namespace FPLedit
 
                 pluginInterface.Logger.Info(T._("Exportiere in Datei {0}", filename));
                 var tsk = export.GetAsyncSafeExport(Timetable.Clone(), filename, pluginInterface);
-                tsk.ContinueWith((t, o) =>
+                tsk.ContinueWith((t, _) =>
                 {
                     if (t.Result == false)
                         pluginInterface.Logger.Error(T._("Exportieren fehlgeschlagen!"));
@@ -237,9 +238,9 @@ namespace FPLedit
             var (rev, frev) = (FileState.RevisionCounter, FileState.FileNameRevisionCounter);
 
             var tsk = open.GetAsyncSafeImport(filename, pluginInterface);
-            tsk.ContinueWith((Task<Timetable> t, object o) =>
+            tsk.ContinueWith((t, _) =>
             {
-                Application.Instance.InvokeAsync(() =>
+                var tsk2 = Application.Instance.InvokeAsync(() =>
                 {
                     if (t.Result == null)
                     {
@@ -257,6 +258,15 @@ namespace FPLedit
 
                     OpenWithVersionCheck(t.Result, filename);
                 });
+                tsk2.ContinueWith((t1, o) =>
+                {
+                    if (t1.Exception == null) return;
+                    pluginInterface.Logger.Error(t1.Exception.Message);
+                    pluginInterface.Logger.Error(T._("Fehler beim Öffnen der Datei!"));
+
+                    AsyncBlockingOperation = false; // Exit file actions that would spin forever.
+                    Application.Instance.InvokeAsync(CloseFile);
+                }, null, TaskContinuationOptions.OnlyOnFaulted);
             }, null, TaskScheduler.Default);
 
             // Start async operation, but we should not be able to start any other file operation in between.
@@ -303,7 +313,7 @@ namespace FPLedit
             var clone = Timetable.Clone();
 
             var tsk = save.GetAsyncSafeExport(clone, filename, pluginInterface);
-            tsk.ContinueWith((t, o) =>
+            tsk.ContinueWith((t, _) =>
             {
                 Application.Instance.InvokeAsync(() =>
                 {
@@ -366,7 +376,7 @@ namespace FPLedit
             cache.Clear();
 
             pluginInterface.Logger.Info(T._("Neue Datei erstellt"));
-            FileOpened?.Invoke(this, null);
+            FileOpened?.Invoke(this, EventArgs.Empty);
         }
 
         private void InternalCloseFile()
@@ -404,7 +414,7 @@ namespace FPLedit
                 saveFileDialog.Directory = uri;
             }
 
-            pluginInterface.Settings.Set("files.lastpath", lastPath);
+            pluginInterface.Settings.Set("files.lastpath", lastPath ?? "");
         }
 
         #endregion
@@ -416,7 +426,7 @@ namespace FPLedit
             if (!NotifyIfAsyncOperationInProgress())
                 return;
 
-            IExport exp = (Timetable.Type == TimetableType.Linear) ? (IExport) new NetworkExport() : new LinearExport();
+            IExport exp = (Timetable.Type == TimetableType.Linear) ? new NetworkExport() : new LinearExport();
             string orig = (Timetable.Type == TimetableType.Linear) ? T._("Linear-Fahrplan") : T._("Netzwerk-Fahrplan");
             string dest = (Timetable.Type == TimetableType.Linear) ? T._("Netzwerk-Fahrplan") : T._("Linear-Fahrplan");
 
@@ -462,7 +472,7 @@ namespace FPLedit
                 AsyncBlockingOperation = false;
 
                 if (tt != null)
-                    FileOpened?.Invoke(this, null);
+                    FileOpened?.Invoke(this, EventArgs.Empty);
                 return;
             }
 
