@@ -37,7 +37,7 @@ public sealed class Trip : IGtfsEntity
         };
     }
 
-    public string GetPkProperty() => nameof(TripId);
+    public string? GetPkProperty() => nameof(TripId);
 }
 
 public enum TripDirection

@@ -25,5 +25,5 @@ public sealed class Shape : IGtfsEntity
         ShapePtLon = lon;
     }
 
-    public string GetPkProperty() => nameof(ShapeId);
+    public string? GetPkProperty() => nameof(ShapeId);
 }

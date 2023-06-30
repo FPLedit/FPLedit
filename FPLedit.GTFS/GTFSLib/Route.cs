@@ -13,7 +13,7 @@ public sealed class Route : IGtfsEntity
     [GtfsField("route_type", GtfsType.Enum)]
     public RouteType RouteType { get; init; }
 
-    public string GetPkProperty() => nameof(RouteId);
+    public string? GetPkProperty() => nameof(RouteId);
 }
 
 public enum RouteType

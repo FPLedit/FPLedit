@@ -54,7 +54,7 @@ public sealed class StopTime : IGtfsEntity
         }
     }
 
-    public string GetPkProperty() => null;
+    public string? GetPkProperty() => null;
 }
 
 public enum PickupDropOffType : int

@@ -59,7 +59,7 @@ public sealed class CalendarDate : IGtfsEntity
     [GtfsField("exception_type", GtfsType.Enum)]
     public CalendarDateType ExceptionType { get; init; }
 
-    public string GetPkProperty() => null;
+    public string? GetPkProperty() => null;
 }
 
 public enum CalendarDateType

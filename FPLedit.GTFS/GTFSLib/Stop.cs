@@ -32,7 +32,7 @@ public sealed class Stop : IGtfsEntity
         };
     }
 
-    public string GetPkProperty() => nameof(StopId);
+    public string? GetPkProperty() => nameof(StopId);
 }
 
 public enum LocationType

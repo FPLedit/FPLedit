@@ -24,5 +24,5 @@ public sealed class Agency : IGtfsEntity
     [GtfsField("agency_fare_url", GtfsType.URL, Optional = true)]
     public string AgencyFareUrl { get; init; }
 
-    public string GetPkProperty() => null;
+    public string? GetPkProperty() => null;
 }

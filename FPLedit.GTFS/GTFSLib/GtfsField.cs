@@ -20,7 +20,7 @@ public sealed class GtfsField : Attribute
         Type = type;
     }
 
-    public string? GetValue(object x)
+    public string? GetValue(object? x)
     {
         switch (Type)
         {
@@ -57,10 +57,10 @@ public sealed class GtfsField : Attribute
             case GtfsType.Id:
                 if (x is IGtfsEntity ge)
                 {
-                    var prop = ge.GetType()!.GetProperty(ge.GetPkProperty(), BindingFlags.Instance | BindingFlags.Public);
+                    var prop = ge.GetType()!.GetProperty(ge.GetPkProperty()!, BindingFlags.Instance | BindingFlags.Public);
                     if (prop == null || prop.PropertyType != typeof(string))
                         throw new ArgumentException("wrong foreign key type for GTFS conversion");
-                    return EscapeString((string)prop.GetValue(ge));
+                    return EscapeString((string)prop.GetValue(ge)!);
                 }
 
                 if (x is string pk)
@@ -75,9 +75,9 @@ public sealed class GtfsField : Attribute
         }
     }
 
-    public static List<(string field, string value, bool optional)> GetValues(IGtfsEntity entry)
+    public static List<(string field, string? value, bool optional)> GetValues(IGtfsEntity entry)
     {
-        var dict = new List<(string field, string value, bool optional)>();
+        var dict = new List<(string field, string? value, bool optional)>();
         var props = entry.GetType()!.GetProperties(BindingFlags.Instance | BindingFlags.Public);
         foreach (var prop in props)
         {
