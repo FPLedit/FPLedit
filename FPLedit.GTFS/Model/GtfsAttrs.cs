@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using System.Text;
+using FPLedit.GTFS.GTFSLib;
 
 namespace FPLedit.GTFS.Model
 {
@@ -64,6 +65,19 @@ namespace FPLedit.GTFS.Model
             set => SetAttribute("route_type", value);
         }
 
+        public RouteType RouteTypeEnum
+        {
+            get => Enum.TryParse<RouteType>(RouteType, out var rt) ? rt : GTFSLib.RouteType.Rail;
+            set => RouteType = ((int)value).ToString();
+        }
+
+        [XAttrName("days_override")]
+        public string DaysOverride
+        {
+            get => GetAttribute("days_override", "");
+            set => SetAttribute("days_override", value);
+        }
+
         private GtfsAttrs(Timetable tt) : base("gtfs_attrs", tt)
         {
         }
@@ -86,5 +100,8 @@ namespace FPLedit.GTFS.Model
             tt.Children.Add(attrs.XMLEntity);
             return attrs;
         }
+
+        public bool HasAllRequiredFields
+            => !(string.IsNullOrEmpty(AgencyName) || string.IsNullOrEmpty(AgencyLang) || string.IsNullOrEmpty(AgencyUrl) || string.IsNullOrEmpty(AgencyTimezone) || string.IsNullOrEmpty(RouteName));
     }
 }

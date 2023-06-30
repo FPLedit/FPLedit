@@ -42,19 +42,19 @@ namespace FPLedit.Bildfahrplan.Forms
             var endTimeValidator = new TimeValidator(endTimeTextBox, false, errorMessage: T._("Bitte eine gültige Uhrzeit im Format hh:mm angeben!"), maximum: new TimeEntry(48, 0));
             validators = new ValidatorCollection(heightPerHourValidator, startTimeValidator, endTimeValidator);
 
-            DropDownBind.Color<TimetableStyle>(pluginInterface.Settings, bgColorComboBox, "BgColor");
-            DropDownBind.Color<TimetableStyle>(pluginInterface.Settings, stationColorComboBox, "StationColor");
-            DropDownBind.Color<TimetableStyle>(pluginInterface.Settings, timeColorComboBox, "TimeColor");
-            DropDownBind.Color<TimetableStyle>(pluginInterface.Settings, trainColorComboBox, "TrainColor");
+            DropDownBind.Color<TimetableStyle>(pluginInterface.Settings, bgColorComboBox, nameof(TimetableStyle.BgColor));
+            DropDownBind.Color<TimetableStyle>(pluginInterface.Settings, stationColorComboBox, nameof(TimetableStyle.StationColor));
+            DropDownBind.Color<TimetableStyle>(pluginInterface.Settings, timeColorComboBox, nameof(TimetableStyle.TimeColor));
+            DropDownBind.Color<TimetableStyle>(pluginInterface.Settings, trainColorComboBox, nameof(TimetableStyle.TrainColor));
 
-            DropDownBind.Font<TimetableStyle>(stationFontComboBox, stationFontSizeComboBox, "StationFont");
-            DropDownBind.Font<TimetableStyle>(timeFontComboBox, timeFontSizeComboBox, "TimeFont");
-            DropDownBind.Font<TimetableStyle>(trainFontComboBox, trainFontSizeComboBox, "TrainFont");
+            DropDownBind.Font<TimetableStyle>(stationFontComboBox, stationFontSizeComboBox, nameof(TimetableStyle.StationFont));
+            DropDownBind.Font<TimetableStyle>(timeFontComboBox, timeFontSizeComboBox, nameof(TimetableStyle.TimeFont));
+            DropDownBind.Font<TimetableStyle>(trainFontComboBox, trainFontSizeComboBox, nameof(TimetableStyle.TrainFont));
 
-            DropDownBind.Width<TimetableStyle>(hourTimeWidthComboBox, "HourTimeWidth");
-            DropDownBind.Width<TimetableStyle>(minuteTimeWidthComboBox, "MinuteTimeWidth");
-            DropDownBind.Width<TimetableStyle>(stationWidthComboBox, "StationWidth");
-            DropDownBind.Width<TimetableStyle>(trainWidthComboBox, "TrainWidth");
+            DropDownBind.Width<TimetableStyle>(hourTimeWidthComboBox, nameof(TimetableStyle.HourTimeWidth));
+            DropDownBind.Width<TimetableStyle>(minuteTimeWidthComboBox, nameof(TimetableStyle.MinuteTimeWidth));
+            DropDownBind.Width<TimetableStyle>(stationWidthComboBox, nameof(TimetableStyle.StationWidth));
+            DropDownBind.Width<TimetableStyle>(trainWidthComboBox, nameof(TimetableStyle.TrainWidth));
 
             var styles = new Dictionary<StationLineStyle, string>()
             {
@@ -62,7 +62,7 @@ namespace FPLedit.Bildfahrplan.Forms
                 [StationLineStyle.Normal] = T._("Gerade Linien"),
                 [StationLineStyle.Cubic] = T._("Kubische Linien"),
             };
-            DropDownBind.Enum<TimetableStyle, StationLineStyle>(stationLinesDropDown, "StationLines", styles);
+            DropDownBind.Enum<TimetableStyle, StationLineStyle>(stationLinesDropDown, nameof(TimetableStyle.StationLines), styles);
 
             heightPerHourTextBox.TextBinding.AddFloatConvBinding<TimetableStyle, TextControl>(s => s.HeightPerHour);
 

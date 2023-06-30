@@ -11,7 +11,7 @@ using Route = FPLedit.Shared.Route;
 
 namespace FPLedit.GTFS;
 
-public class GtfsExport
+public static class GtfsExport
 {
     public static bool Export(Timetable tt, ILog log, string filename, string exportFolder)
     {
@@ -29,13 +29,16 @@ public class GtfsExport
         }
         var line = tt.GetRoute(Timetable.LINEAR_ROUTE_ID);
 
-        if (string.IsNullOrEmpty(attTt.AgencyName) || string.IsNullOrEmpty(attTt.AgencyLang) || string.IsNullOrEmpty(attTt.AgencyUrl) || string.IsNullOrEmpty(attTt.AgencyTimezone) || string.IsNullOrEmpty(attTt.RouteName))
+        if (!attTt.HasAllRequiredFields)
             log.Warning(T._("GTFS-Export: Unvollständige Agency/Streckendaten!"));
 
         // Load geo provider, if the kml sidecar file exists.
         IGeoProvider geo;
         if (File.Exists(filename + ".kml"))
+        {
+            log.Info(T._("Benutze KML-Datei {0}", filename + ".kml"));
             geo = new KmlGeoProvider(filename + ".kml");
+        }
         else
         {
             log.Warning(T._("Keine KML-Datei {0} gefunden!", filename + ".kml"));
@@ -92,7 +95,8 @@ public class GtfsExport
         foreach (var train in tt.Trains)
         {
             var attTrain = new GtfsTrainAttrs(train);
-            var daysOverride = GtfsDays.Parse(attTrain.DaysOverride) ?? GtfsDays.Empty;
+            var daysOverrideString = string.IsNullOrEmpty(attTrain.DaysOverride) ? attTt.DaysOverride : attTrain.DaysOverride;
+            var daysOverride = GtfsDays.Parse(daysOverrideString) ?? GtfsDays.Empty;
             var c = Calendar.FromTrain(train, !daysOverride.IsRange, daysOverride.StartDate, daysOverride.EndDate);
             if (!daysOverride.IsRange)
             {

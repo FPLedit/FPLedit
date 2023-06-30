@@ -55,9 +55,14 @@ namespace FPLedit.Shared.UI
                 (a, val) => { var x = GetFont(a); x.Size = (int)val; p.SetValue(a, x); });
         }
 
-        public static void Enum<T, TEnum>(DropDown dropDown, string property, Dictionary<TEnum, string> display) where TEnum : Enum
+        public static void Enum<T, TEnum>(DropDown dropDown, string property, Dictionary<TEnum, string>? display) where TEnum : Enum
         {
             var p = GetProperty<T>(property);
+
+            // Derive a default data store for defined enum values.
+            display ??= System.Enum.GetValues(typeof(TEnum)).Cast<TEnum>()
+                .ToDictionary(e => e, e => System.Enum.GetName(typeof(TEnum), e)!);
+
             dropDown.ItemTextBinding = Binding.Delegate<TEnum, string>(s => display[s]);
             dropDown.DataStore = display.Keys.Cast<object>().ToArray();
             dropDown.SelectedValueBinding.BindDataContext<T>(s => (TEnum)p.GetValue(s)!, (s, v) => p.SetValue(s, v));
@@ -65,6 +70,6 @@ namespace FPLedit.Shared.UI
 
         private static PropertyInfo GetProperty<T>(string property)
             => typeof(T).GetProperty(property) 
-               ?? throw new Exception("Property " + property + "not found on type " + typeof(T).FullName);
+               ?? throw new Exception($"Property {property} not found on type {typeof(T).FullName}");
     }
 }

@@ -1,0 +1,64 @@
+﻿<e:AgencyPropsForm
+  xmlns="clr-namespace:Eto.Forms;assembly=Eto"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:e="clr-namespace:FPLedit.GTFS.Forms;assembly=FPLedit.GTFS"
+  DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
+  Title="{x:Static e:AgencyPropsForm+L.Title}" Resizable="false">
+  <TableLayout Spacing="5,5" Padding="10,10,10,10">
+    <TableRow>
+      <TableLayout Spacing="5,5">
+        <TableRow>
+          <Label Text="{x:Static e:AgencyPropsForm+L.AgencyHeading}" />
+          <TableCell />
+        </TableRow>
+        <TableRow>
+          <Label Text="{x:Static e:AgencyPropsForm+L.AgencyName}" />
+          <TextBox x:Name="agencyNameTextBox" Width="300" />
+        </TableRow>
+        <TableRow>
+          <Label Text="{x:Static e:AgencyPropsForm+L.AgencyLang}" />
+          <TextBox x:Name="agencyLangTextBox" Width="300" />
+        </TableRow>
+        <TableRow>
+          <Label Text="{x:Static e:AgencyPropsForm+L.AgencyUrl}" />
+          <TextBox x:Name="agencyUrlTextBox" Width="300" />
+        </TableRow>
+        <TableRow>
+          <Label Text="{x:Static e:AgencyPropsForm+L.AgencyTimezone}" />
+          <TextBox x:Name="agencyTimezoneTextBox" Width="300" />
+        </TableRow>
+
+        <TableRow>
+          <Label Text="{x:Static e:AgencyPropsForm+L.RouteHeading}" />
+          <TableCell />
+        </TableRow>
+        <TableRow>
+          <Label Text="{x:Static e:AgencyPropsForm+L.RouteName}" />
+          <TextBox x:Name="routeNameTextBox" Width="300" />
+        </TableRow>
+        <TableRow>
+          <Label Text="{x:Static e:AgencyPropsForm+L.RouteType}" />
+          <DropDown x:Name="routeTypeDropDown" Width="300" />
+        </TableRow>
+
+        <TableRow>
+          <Label Text="{x:Static e:AgencyPropsForm+L.TrainHeading}" />
+          <TableCell />
+        </TableRow>
+        <TableRow>
+          <Label Text="{x:Static e:AgencyPropsForm+L.DaysOverride}" />
+          <TextBox x:Name="daysOverrideTextBox" Width="300" />
+        </TableRow>
+      </TableLayout>
+    </TableRow>
+    <TableRow>
+      <TableLayout Spacing="5,5">
+        <TableRow>
+          <TableCell ScaleWidth="true" />
+          <Button x:Name="cancelButton" Text="{x:Static e:AgencyPropsForm+L.Cancel}" Click="CancelButton_Click" />
+          <Button x:Name="closeButton" Text="{x:Static e:AgencyPropsForm+L.Close}" Click="CloseButton_Click" />
+        </TableRow>
+      </TableLayout>
+    </TableRow>
+  </TableLayout>
+</e:AgencyPropsForm>

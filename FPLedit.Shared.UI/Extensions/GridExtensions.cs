@@ -24,6 +24,14 @@ namespace FPLedit.Shared.UI
         public static GridColumn AddDropDownColumn<T>(this GridView view, Expression<Func<T, object>> value, IEnumerable<object> dataStore, string header, bool editable = false)
             => view.AddColumn(new ComboBoxCell { Binding = Binding.Property(value), DataStore = dataStore }, header, editable);
 
+        public static GridColumn AddDropDownColumn<T, TEnum>(this GridView view, Expression<Func<T, TEnum>> value, string header, bool editable = false)
+            where TEnum : Enum
+        {
+            var dataStore = Enum.GetNames(typeof(TEnum));
+            var bind = Binding.Property(value).Convert<object>(e => e.ToString(), s => (TEnum) Enum.Parse(typeof(TEnum), (string) s));
+            return view.AddColumn(new ComboBoxCell { Binding = bind, DataStore = dataStore }, header, editable);
+        }
+
         public static GridColumn AddDropDownColumn<T>(this GridView view, Expression<Func<T, object>> value, IEnumerable<object> dataStore, IIndirectBinding<string> textBinding, string header, bool editable = false)
         {
             var internalBinding = Binding.Property(value);
