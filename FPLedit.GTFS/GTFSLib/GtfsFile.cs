@@ -86,7 +86,8 @@ public sealed class GtfsFile
         files["stops.txt"] = GetCsvString(Stops);
         files["trips.txt"] = GetCsvString(Trips);
         files["stop_times.txt"] = GetCsvString(StopTimes);
-        files["calendars.txt"] = GetCsvString(Calendars);
+        if (Calendars.Any())
+            files["calendars.txt"] = GetCsvString(Calendars);
         if (CalendarDates.Any())
             files["calendar_dates.txt"] = GetCsvString(CalendarDates);
         if (Shapes.Any())

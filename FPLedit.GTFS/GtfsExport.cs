@@ -97,25 +97,37 @@ public static class GtfsExport
             var attTrain = new GtfsTrainAttrs(train);
             var daysOverrideString = string.IsNullOrEmpty(attTrain.DaysOverride) ? attTt.DaysOverride : attTrain.DaysOverride;
             var daysOverride = GtfsDays.Parse(daysOverrideString) ?? GtfsDays.Empty;
-            var c = Calendar.FromTrain(train, !daysOverride.IsRange, daysOverride.StartDate, daysOverride.EndDate);
-            if (!daysOverride.IsRange)
+
+            var calendarsToUse = new List<ICalendar>();
+            if (daysOverride.IsRange)
+            {
+                var c = Calendar.FromTrain(train, daysOverride.StartDate, daysOverride.EndDate);
+                file.Calendars.Add(c);
+                calendarsToUse.Add(c);
+            }
+            else
             {
                 foreach (var dt in daysOverride.IrregularDays)
-                    file.CalendarDates.Add(new CalendarDate { Service = c, Date = dt, ExceptionType = CalendarDateType.Added });
+                {
+                    var c = new CalendarDate { ServiceId = train.TName + "__" + dt.ToString("yyyyMMdd"), Date = dt, ExceptionType = CalendarDateType.Added };
+                    file.CalendarDates.Add(c);
+                    calendarsToUse.Add(c);
+                }
             }
 
-            file.Calendars.Add(c);
+            foreach (var c in calendarsToUse)
+            {
+                var trip = Trip.FromTrain(file.Route, c, train);
+                if (lastShape != null)
+                    trip.Shape = lastShape;
+                if (attTrain.WheelchairAccessible != AccessibilityState.NotDefined)
+                    trip.WheelchairAccessible = attTrain.WheelchairAccessible;
+                if (attTrain.BikesAllowed != AccessibilityState.NotDefined)
+                    trip.BikesAllowed = attTrain.BikesAllowed;
+                file.Trips.Add(trip);
 
-            var trip = Trip.FromTrain(file.Route, c, train);
-            if (lastShape != null)
-                trip.Shape = lastShape;
-            if (attTrain.WheelchairAccessible != AccessibilityState.NotDefined)
-                trip.WheelchairAccessible = attTrain.WheelchairAccessible;
-            if (attTrain.BikesAllowed != AccessibilityState.NotDefined)
-                trip.BikesAllowed = attTrain.BikesAllowed;
-            file.Trips.Add(trip);
-
-            file.StopTimes.AddRange(StopTime.FromTrain(trip, train, gtfsStops));
+                file.StopTimes.AddRange(StopTime.FromTrain(trip, train, gtfsStops));
+            }
         }
 
         return file;

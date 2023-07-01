@@ -3,7 +3,15 @@ using FPLedit.Shared;
 
 namespace FPLedit.GTFS.GTFSLib;
 
-public sealed class Calendar : IGtfsEntity
+public interface ICalendar
+{
+    [GtfsField("service_id", GtfsType.Id)]
+    public string? ServiceId { get; init; }
+
+    public string GetTripIdSuffix();
+}
+
+public sealed class Calendar : IGtfsEntity, ICalendar
 {
     [GtfsField("service_id", GtfsType.Id)]
     public string? ServiceId { get; init; }
@@ -28,30 +36,31 @@ public sealed class Calendar : IGtfsEntity
     [GtfsField("end_date", GtfsType.Date)]
     public DateOnly EndDate { get; init; }
 
-    public static Calendar FromTrain(ITrain train, bool blank, DateOnly start, DateOnly end)
+    public static Calendar FromTrain(ITrain train, DateOnly start, DateOnly end)
     {
         return new()
         {
             ServiceId = GtfsField.ToId(train.TName),
-            Monday = !blank && train.Days[0],
-            Tuesday = !blank && train.Days[1],
-            Wednesday = !blank && train.Days[2],
-            Thursday = !blank && train.Days[3],
-            Friday = !blank && train.Days[4],
-            Saturday = !blank && train.Days[5],
-            Sunday = !blank && train.Days[6],
+            Monday = train.Days[0],
+            Tuesday = train.Days[1],
+            Wednesday = train.Days[2],
+            Thursday = train.Days[3],
+            Friday = train.Days[4],
+            Saturday = train.Days[5],
+            Sunday = train.Days[6],
             StartDate = start,
             EndDate = end,
         };
     }
 
-    public string GetPkProperty() => nameof(ServiceId);
+    public string? GetPkProperty() => nameof(ServiceId);
+    public string GetTripIdSuffix() => "";
 }
 
-public sealed class CalendarDate : IGtfsEntity
+public sealed class CalendarDate : IGtfsEntity, ICalendar
 {
     [GtfsField("service_id", GtfsType.Id)]
-    public Calendar? Service { get; init; }
+    public string? ServiceId { get; init; }
 
     [GtfsField("date", GtfsType.Date)]
     public DateOnly Date { get; init; }
@@ -60,6 +69,7 @@ public sealed class CalendarDate : IGtfsEntity
     public CalendarDateType ExceptionType { get; init; }
 
     public string? GetPkProperty() => null;
+    public string GetTripIdSuffix() => "__" + Date.ToString("yyyyMMdd");
 }
 
 public enum CalendarDateType

@@ -8,7 +8,7 @@ public sealed class Trip : IGtfsEntity
 
     [GtfsField("trip_id", GtfsType.Id)] public string? TripId { get; init; }
 
-    [GtfsField("service_id", GtfsType.Id)] public Calendar? Service { get; init; }
+    [GtfsField("service_id", GtfsType.Id)] public ICalendar? Service { get; init; }
 
     [GtfsField("trip_short_name", GtfsType.Text, Optional = true)]
     public string? TripShortName { get; init; }
@@ -25,12 +25,12 @@ public sealed class Trip : IGtfsEntity
     [GtfsField("shape_id", GtfsType.Id, Optional = true)] // actually not optional, but we don't support continuos stops.
     public Shape? Shape { get; set; }
 
-    public static Trip FromTrain(Route route, Calendar service, ITrain train)
+    public static Trip FromTrain(Route route, ICalendar service, ITrain train)
     {
         return new()
         {
             Route = route,
-            TripId = GtfsField.ToId(train.TName),
+            TripId = GtfsField.ToId(train.TName) + service.GetTripIdSuffix(),
             Service = service,
             TripShortName = train.TName,
             DirectionId = train.Direction == TrainDirection.ti ? TripDirection.Direction0 : TripDirection.Direction1,
