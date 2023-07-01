@@ -83,10 +83,10 @@ namespace FPLedit.GTFS.Forms
 
             public static readonly string RouteHeading = T._("Streckendaten:");
             public static readonly string RouteName = T._("Name der (einen) Strecke");
-            public static readonly string RouteType = T._("Zeitlinienstärke");
+            public static readonly string RouteType = T._("Typ des Beförderungsmittels");
 
             public static readonly string TrainHeading = T._("Globale Zugdaten:");
-            public static readonly string DaysOverride = T._("Verkehstage der GTFS-Züge");
+            public static readonly string DaysOverride = T._("Verkehrstage der GTFS-Züge");
 
             public static readonly string Cancel = T._("Abbrechen");
             public static readonly string Close = T._("Schließen");

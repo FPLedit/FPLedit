@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-02-02 10:47+0100\n"
-"PO-Revision-Date: 2023-02-02 10:56+0100\n"
+"POT-Creation-Date: 2023-07-01 17:25+0200\n"
+"PO-Revision-Date: 2023-07-01 17:26+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -10,46 +10,55 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.2\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: _;SelectionName\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: Forms/SettingsControl.xeto.cs:68
+#: Forms/SettingsControl.xeto.cs:69
 msgid "Beispiel"
 msgstr "Example"
 
-#: Forms/SettingsControl.xeto.cs:69
+#: Forms/SettingsControl.xeto.cs:70
 msgid "Buchfahrplan-Vorlage"
 msgstr "Template"
 
-#: Forms/SettingsControl.xeto.cs:70
+#: Forms/SettingsControl.xeto.cs:71
 msgid "Schriftart im Buchfahrplan"
 msgstr "Font"
 
-#: Forms/SettingsControl.xeto.cs:71
+#: Forms/SettingsControl.xeto.cs:72
 msgid "Eigene CSS-Styles"
 msgstr "Custom CSS styles"
 
-#: Forms/SettingsControl.xeto.cs:72
+#: Forms/SettingsControl.xeto.cs:73
 msgid "Hilfe zu CSS"
 msgstr "Help for custom CSS"
 
-#: Forms/SettingsControl.xeto.cs:73
+#: Forms/SettingsControl.xeto.cs:74
 msgid "https://fahrplan.manuelhu.de/dev/css/"
 msgstr ""
 
-#: Forms/SettingsControl.xeto.cs:74
+#: Forms/SettingsControl.xeto.cs:75
 msgid "Kommentare im Buchfahrplan anzeigen"
 msgstr "Show comments"
 
-#: Forms/SettingsControl.xeto.cs:75
+#: Forms/SettingsControl.xeto.cs:76
 msgid "Verkehrstage im Buchfahrplan anzeigen"
 msgstr "Show days"
 
-#: Forms/SettingsControl.xeto.cs:76
+#: Forms/SettingsControl.xeto.cs:77
 msgid "CSS-Test-Konsole bei Vorschau aktivieren (Gilt für alle Fahrpläne)"
 msgstr "Enable CSS debugging console (setting for all timetable files)"
+
+#: Forms/SettingsControl.xeto.cs:78
+msgid ""
+"Gibt Wellenlinien als PNG (statt SVG) aus.\n"
+"(Nur bei Druckproblemen aktivieren; gilt für alle Fahrplandateien)"
+msgstr ""
+"Outputs wavelines as PNG (instead of SVG).\n"
+"(only enable this if you have problems with printing; the setting is valid "
+"for all timetable files)"
 
 #: Forms/VelocityEditForm.xeto.cs:27
 msgid "Bitte eine Zahl als Geschwindikgeit eingeben!"
@@ -163,7 +172,7 @@ msgstr "Change &maximum velocities"
 msgid "Buchfahrplan als HTML Datei (*.html)|*.html"
 msgstr "Book timetable as HTML file (*.html)|*.html"
 
-#: Plugin.cs:14 Plugin.cs:18 Plugin.cs:35
+#: Plugin.cs:14 Plugin.cs:18 Plugin.cs:36
 msgid "Buchfahrplan"
 msgstr "Book timetable"
 
