@@ -118,7 +118,7 @@ namespace FPLedit.DebugDump
             {
                 try
                 {
-                    if (pluginInterface.Timetable == null || lastTimetableNode.XDiff(pluginInterface.Timetable.XMLEntity))
+                    if (pluginInterface.TimetableMaybeNull == null || lastTimetableNode.XDiff(pluginInterface.Timetable.XMLEntity))
                         return;
 
                     var clone = pluginInterface.Timetable.Clone();

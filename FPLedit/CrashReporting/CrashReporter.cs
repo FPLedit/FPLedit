@@ -32,8 +32,8 @@ namespace FPLedit.CrashReporting
                     Directory.CreateDirectory(dir);
 
                 var fnTimetable = pluginInterface.GetTemp(CRASH_TT_FN);
-                if (pluginInterface.Timetable != null!)
-                    new Shared.Filetypes.XMLExport().SafeExport(pluginInterface.Timetable, fnTimetable, pluginInterface);
+                if (pluginInterface.TimetableMaybeNull != null!)
+                    new Shared.Filetypes.XMLExport().SafeExport(pluginInterface.TimetableMaybeNull, fnTimetable, pluginInterface);
                 else if (File.Exists(fnTimetable))
                     File.Delete(fnTimetable);
 

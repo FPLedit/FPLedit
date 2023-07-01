@@ -35,7 +35,8 @@ namespace FPLedit
         public dynamic RootForm { get; private set; } = null!;
         public dynamic Menu { get; private set; } = null!;
 
-        public Timetable Timetable => FileHandler.Timetable!;
+        public Timetable Timetable => FileHandler.Timetable!; //TODO: throw if null.
+        public Timetable? TimetableMaybeNull => FileHandler.Timetable;
         public IFileState FileState => FileHandler.FileState;
 
         public event EventHandler<FileStateChangedEventArgs>? FileStateChanged;

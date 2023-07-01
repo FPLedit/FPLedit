@@ -84,9 +84,9 @@ namespace FPLedit.Editor
             undoItem.Enabled = e.FileState.CanGoBack;
 
             // Im Netzwerk-Modus nicht verwendete Menü-Einträge ausblenden
-            if (pluginInterface.Timetable != null!)
+            if (pluginInterface.TimetableMaybeNull != null!)
                 editLineItem.Enabled = pluginInterface.Timetable.Type != TimetableType.Network;
-            virtualRoutesItem.Visible = hasVirtualRouteSupport && pluginInterface?.Timetable?.Type == TimetableType.Network;
+            virtualRoutesItem.Visible = hasVirtualRouteSupport && pluginInterface.TimetableMaybeNull?.Type == TimetableType.Network;
         }
     }
 }

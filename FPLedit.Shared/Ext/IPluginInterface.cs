@@ -6,6 +6,7 @@ namespace FPLedit.Shared
     public interface IPluginInterface : IReducedPluginInterface, IUiPluginInterface
     {
         Timetable Timetable { get; }
+        Timetable? TimetableMaybeNull { get; }
 
         IFileState FileState { get; }
         void SetUnsaved();

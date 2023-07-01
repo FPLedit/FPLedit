@@ -32,6 +32,7 @@ namespace FPLedit.Tests
         public ILog Logger { get; }
 
         public Timetable Timetable => throw new NotImplementedException();
+        public Timetable? TimetableMaybeNull => throw new NotImplementedException();
 
         public IFileState FileState => throw new NotImplementedException();
 
