@@ -56,7 +56,7 @@ public static class GtfsExport
         var files = file.GetFiles();
         var filesToDelete = existingFiles.Except(files.Keys).ToArray();
         if (filesToDelete.Any())
-            log.Warning(T._("Vorhandene Dateien im Zielordner: {0}", string.Join(", ", filesToDelete)));
+            log.Warning(T._("Zusätzlich vorhandene Dateien im Zielordner: {0}", string.Join(", ", filesToDelete)));
 
         foreach (var f in files)
             File.WriteAllText(Path.Combine(exportFolder, f.Key), f.Value);

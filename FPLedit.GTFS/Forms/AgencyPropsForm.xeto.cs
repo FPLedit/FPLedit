@@ -32,7 +32,8 @@ namespace FPLedit.GTFS.Forms
             this.tt = pluginInterface.Timetable;
             this.pluginInterface = pluginInterface;
 
-            validators = new ValidatorCollection();
+            var daysOverrideValidator = new RegexValidator(daysOverrideTextBox, GtfsDays.FullDateRegex, true, errorMessage: T._("Bitte gültige Datumsspezifikation eintragen!"));
+            validators = new ValidatorCollection(daysOverrideValidator);
 
             agencyNameTextBox.TextBinding.BindDataContext<GtfsAttrs>(s => s.AgencyName);
             agencyLangTextBox.TextBinding.BindDataContext<GtfsAttrs>(s => s.AgencyLang);

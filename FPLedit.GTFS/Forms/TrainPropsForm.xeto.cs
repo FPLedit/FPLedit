@@ -35,7 +35,7 @@ namespace FPLedit.GTFS.Forms
             this.AddCloseHandler();
         }
         
-        private void ResetTrainStyle(bool message = true)
+        private void ResetTrainProps(bool message = true)
         {
             if (gridView.SelectedItem != null)
             {
@@ -43,7 +43,7 @@ namespace FPLedit.GTFS.Forms
                 gridView.ReloadData(gridView.SelectedRow);
             }
             else if (message)
-                MessageBox.Show(T._("Zuerst muss ein Zug ausgewählt werden!"), T._("Zugdarstellung zurücksetzen"));
+                MessageBox.Show(T._("Zuerst muss ein Zug ausgewählt werden!"), T._("Zugeinstellungen zurücksetzen"));
         }
 
         private void CancelButton_Click(object sender, EventArgs e)
@@ -55,14 +55,24 @@ namespace FPLedit.GTFS.Forms
 
         private void CloseButton_Click(object sender, EventArgs e)
         {
+            var trainsWithInvalidDaysOverrides = ((GtfsTrainAttrs[]) gridView.DataStore)
+                .Where(a => !GtfsDays.FullDateRegex.IsMatch(a.DaysOverride))
+                .Select(a => a.Train.TName).ToArray();
+
+            if (trainsWithInvalidDaysOverrides.Any())
+            {
+                MessageBox.Show(T._("Die folgenden Züge haben ungültige Datumsangaben: {0}", string.Join(", ", trainsWithInvalidDaysOverrides)), "FPLedit");
+                return;
+            }
+
             Result = DialogResult.Ok;
             pluginInterface.ClearBackup(backupHandle);
             this.NClose();
         }
 
         private void ResetButton_Click(object sender, EventArgs e)
-            => ResetTrainStyle();
-        
+            => ResetTrainProps();
+
         private static class L
         {
             public static readonly string Cancel = T._("Abbrechen");

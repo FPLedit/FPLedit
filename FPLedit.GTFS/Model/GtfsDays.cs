@@ -11,13 +11,13 @@ public readonly struct GtfsDays
     public DateOnly EndDate { get; init; }
     public DateOnly[] IrregularDays { get; init; }
 
+    private static readonly Regex rangeRegex = new(@"^(\d{4}-\d{2}-\d{2})--(\d{4}-\d{2}-\d{2})$");
+    private static readonly Regex singleDayRegex = new(@"^(?:(\d{4}-\d{2}-\d{2}),)+(\d{4}-\d{2}-\d{2})?$");
+    public static Regex FullDateRegex { get; } = new($"{rangeRegex}|{singleDayRegex}");
+
     public static GtfsDays? Parse(string days)
     {
         const string dateFormat = "yyyy-MM-dd";
-        // either date1-date2
-        var rangeRegex = new Regex(@"^(\d{4}-\d{2}-\d{2})--(\d{4}-\d{2}-\d{2})$");
-        // or date1,date2,date3,...
-        var singleDayRegex = new Regex(@"^((\d{4}-\d{2}-\d{2}),?)+$");
 
         var rangeMatch = rangeRegex.Match(days);
         if (rangeMatch.Success)

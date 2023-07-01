@@ -4,14 +4,14 @@ namespace FPLedit.GTFS.GTFSLib;
 
 public sealed class Trip : IGtfsEntity
 {
-    [GtfsField("route_id", GtfsType.Id)] public Route Route { get; init; }
+    [GtfsField("route_id", GtfsType.Id)] public Route? Route { get; init; }
 
-    [GtfsField("trip_id", GtfsType.Id)] public string TripId { get; init; }
+    [GtfsField("trip_id", GtfsType.Id)] public string? TripId { get; init; }
 
-    [GtfsField("service_id", GtfsType.Id)] public Calendar Service { get; init; }
+    [GtfsField("service_id", GtfsType.Id)] public Calendar? Service { get; init; }
 
     [GtfsField("trip_short_name", GtfsType.Text, Optional = true)]
-    public string TripShortName { get; init; }
+    public string? TripShortName { get; init; }
 
     [GtfsField("direction_id", GtfsType.Enum, Optional = true)]
     public TripDirection DirectionId { get; init; }
@@ -23,7 +23,7 @@ public sealed class Trip : IGtfsEntity
     public AccessibilityState WheelchairAccessible { get; set; }
 
     [GtfsField("shape_id", GtfsType.Id, Optional = true)] // actually not optional, but we don't support continuos stops.
-    public Shape Shape { get; set; }
+    public Shape? Shape { get; set; }
 
     public static Trip FromTrain(Route route, Calendar service, ITrain train)
     {

@@ -5,10 +5,10 @@ namespace FPLedit.GTFS.GTFSLib;
 public sealed class Stop : IGtfsEntity
 {
     [GtfsField("stop_id", GtfsType.Id)]
-    public string StopId { get; init; }
+    public string? StopId { get; init; }
 
     [GtfsField("stop_name", GtfsType.Text)]
-    private string StopName { get; init; }
+    private string? StopName { get; init; }
 
     [GtfsField("stop_lat", GtfsType.CoordLat)]
     public float StopLat { get; init; }

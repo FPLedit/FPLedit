@@ -3,12 +3,12 @@ namespace FPLedit.GTFS.GTFSLib;
 public sealed class Route : IGtfsEntity
 {
     [GtfsField("route_id", GtfsType.Id)]
-    public string RouteId { get; init; }
+    public string? RouteId { get; init; }
 
     [GtfsField("route_short_name", GtfsType.Text, Optional = true)]
-    public string RouteShortName { get; init; }
+    public string? RouteShortName { get; init; }
     [GtfsField("route_long_name", GtfsType.Text, Optional = true)]
-    public string RouteLongName { get; init; }
+    public string? RouteLongName { get; init; }
 
     [GtfsField("route_type", GtfsType.Enum)]
     public RouteType RouteType { get; init; }

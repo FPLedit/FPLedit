@@ -7,7 +7,7 @@ namespace FPLedit.GTFS.GTFSLib;
 public sealed class StopTime : IGtfsEntity
 {
     [GtfsField("trip_id", GtfsType.Id)]
-    public Trip Trip { get; init; }
+    public Trip? Trip { get; init; }
 
     [GtfsField("arrival_time", GtfsType.Time, Optional = true)] // not really optional, one of arrival and departure must be set.
     public TimeEntry? ArrivalTime { get; init; }
@@ -15,7 +15,7 @@ public sealed class StopTime : IGtfsEntity
     public TimeEntry? DepartureTime { get; init; }
 
     [GtfsField("stop_id", GtfsType.Id)]
-    public Stop Stop { get; init; }
+    public Stop? Stop { get; init; }
 
     [GtfsField("stop_sequence", GtfsType.UInt)]
     public uint StopSequence { get; init; }

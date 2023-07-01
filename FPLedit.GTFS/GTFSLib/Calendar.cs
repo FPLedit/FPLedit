@@ -6,7 +6,7 @@ namespace FPLedit.GTFS.GTFSLib;
 public sealed class Calendar : IGtfsEntity
 {
     [GtfsField("service_id", GtfsType.Id)]
-    public string ServiceId { get; init; }
+    public string? ServiceId { get; init; }
 
     [GtfsField("monday", GtfsType.Bool)]
     public bool Monday { get; init; }
@@ -51,7 +51,7 @@ public sealed class Calendar : IGtfsEntity
 public sealed class CalendarDate : IGtfsEntity
 {
     [GtfsField("service_id", GtfsType.Id)]
-    public Calendar Service { get; init; }
+    public Calendar? Service { get; init; }
 
     [GtfsField("date", GtfsType.Date)]
     public DateOnly Date { get; init; }

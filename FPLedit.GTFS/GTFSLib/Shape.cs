@@ -3,7 +3,7 @@ namespace FPLedit.GTFS.GTFSLib;
 public sealed class Shape : IGtfsEntity
 {
     [GtfsField("shape_id", GtfsType.Id)]
-    public string ShapeId { get; init; }
+    public string? ShapeId { get; init; }
 
     [GtfsField("shape_pt_lat", GtfsType.CoordLat)]
     public float ShapePtLat { get; init; }

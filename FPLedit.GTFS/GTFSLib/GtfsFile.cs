@@ -6,8 +6,8 @@ namespace FPLedit.GTFS.GTFSLib;
 
 public sealed class GtfsFile
 {
-    public Agency Agency { get; set; }
-    public Route Route { get; set; }
+    public Agency? Agency { get; set; }
+    public Route? Route { get; set; }
 
     public List<Stop> Stops { get; } = new();
     public List<Calendar> Calendars { get; } = new();
@@ -30,14 +30,14 @@ public sealed class GtfsFile
 
     private string[,] GetValues<T>(IEnumerable<T> entries) where T : IGtfsEntity
     {
-        var table = new Dictionary<string, List<string>>();
+        var table = new Dictionary<string, List<string?>>();
         var omits = new Dictionary<string, bool>();
         foreach (var entry in entries)
         {
             var values = GtfsField.GetValues(entry);
             foreach (var (field, value, optional) in values)
             {
-                if (!table.ContainsKey(field)) table[field] = new List<string>();
+                if (!table.ContainsKey(field)) table[field] = new List<string?>();
                 if (!omits.ContainsKey(field)) omits[field] = true;
 
                 table[field].Add(value);
@@ -69,7 +69,7 @@ public sealed class GtfsFile
         {
             j = 0;
             foreach (var kvp in table)
-                resultTable[j++, i + 1] = kvp.Value[i];
+                resultTable[j++, i + 1] = kvp.Value[i] ?? "";
         }
 
         return resultTable;
@@ -77,6 +77,9 @@ public sealed class GtfsFile
 
     public Dictionary<string, string> GetFiles()
     {
+        if (Agency == null || Route == null)
+            throw new Exception("Agency or Route instance not set!");
+
         var files = new Dictionary<string, string>();
         files["agencies.txt"] = GetCsvString(new[] { Agency });
         files["routes.txt"] = GetCsvString(new[] { Route });
