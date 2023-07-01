@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-07-01 17:20+0200\n"
-"PO-Revision-Date: 2023-07-01 17:45+0200\n"
+"POT-Creation-Date: 2023-07-04 19:22+0200\n"
+"PO-Revision-Date: 2023-07-04 19:22+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -461,7 +461,7 @@ msgid "Zuerst muss eine Station ausgewählt werden!"
 msgstr "Please select a station first!"
 
 #: Editor/LineEditForm.xeto.cs:107
-#: Editor/Rendering/NetworkEditingControl.xeto.cs:105
+#: Editor/Rendering/NetworkEditingControl.xeto.cs:137
 msgid ""
 "Sie versuchen eine Station zu löschen, ohne die danach zwei Routen "
 "zusammenfallen, das heißt zwei Stationen auf mehr als einer Route ohne "
@@ -474,7 +474,7 @@ msgstr ""
 "more than one line. This conflict cannot be resolved automatically."
 
 #: Editor/LineEditForm.xeto.cs:113
-#: Editor/Rendering/NetworkEditingControl.xeto.cs:111
+#: Editor/Rendering/NetworkEditingControl.xeto.cs:143
 msgid ""
 "Sie versuchen eine Station zu löschen, die an einem Kreuzungspunkt zweier "
 "Strecken liegt. Dies ist leider nicht möglich."
@@ -491,7 +491,7 @@ msgid "Strecke bearbeiten"
 msgstr "Edit line"
 
 #: Editor/LineEditForm.xeto.cs:171
-#: Editor/Rendering/NetworkEditingControl.xeto.cs:193
+#: Editor/Rendering/NetworkEditingControl.xeto.cs:225
 msgid "&Neue Station"
 msgstr "Add &new station"
 
@@ -713,7 +713,7 @@ msgstr "Timetable appearance"
 msgid "Expertenmodus (CSS-Bearbeitung) aktivieren"
 msgstr "Enable expert mode (CSS editor)"
 
-#: Editor/Rendering/NetworkEditingControl.xeto.cs:84
+#: Editor/Rendering/NetworkEditingControl.xeto.cs:116
 msgid ""
 "Die Station liegt auf mehreren Strecken. Bitte zuerst die Strecke auswählen, "
 "für die die Station bearbeitet werden soll!"
@@ -721,11 +721,11 @@ msgstr ""
 "This station is part of multiple lines. Please select the line you want to "
 "edit."
 
-#: Editor/Rendering/NetworkEditingControl.xeto.cs:194
+#: Editor/Rendering/NetworkEditingControl.xeto.cs:226
 msgid "Neue &Strecke"
 msgstr "Add new &line"
 
-#: Editor/Rendering/NetworkEditingControl.xeto.cs:195
+#: Editor/Rendering/NetworkEditingControl.xeto.cs:227
 msgid "Strecken &zusammenführen"
 msgstr "&Join lines"
 
@@ -1620,7 +1620,7 @@ msgstr "Language"
 msgid "Sprache der Benutzeroberfläche:"
 msgstr "Language of the user interface:"
 
-#: SettingsUi/LocaleControl.cs:41 SettingsUi/WindowSizeControl.cs:28
+#: SettingsUi/LocaleControl.cs:41 SettingsUi/UiSettingsControl.cs:29
 msgid "Die Änderungen werden beim nächsten Programmstart angewendet!"
 msgstr "All changes will be applied at the next start of FPLedit!"
 
@@ -1672,13 +1672,17 @@ msgstr "&Activate"
 msgid "&Deaktivieren"
 msgstr "&Deactivate"
 
-#: SettingsUi/WindowSizeControl.cs:11
-msgid "Fenstergrößen"
-msgstr "Window sizes"
+#: SettingsUi/UiSettingsControl.cs:12
+msgid "Benutzeroberfläche"
+msgstr "User interface"
 
-#: SettingsUi/WindowSizeControl.cs:16
+#: SettingsUi/UiSettingsControl.cs:16
 msgid "Gespeicherte Fenstergrößen löschen"
 msgstr "Clear all saved window sizes"
+
+#: SettingsUi/UiSettingsControl.cs:17
+msgid "Menüleiste mit Symbolen statt Text darstellen"
+msgstr "Show toolbar with icons instead of text labels"
 
 #: Templating/JavascriptTemplate.cs:107
 msgid "Nur eine fpledit_template-Direktive ist pro Vorlage erlaubt!"
@@ -1858,3 +1862,6 @@ msgstr ""
 #, csharp-format
 msgid "Sie benutzen die aktuelleste Version von FPLedit ({0})!"
 msgstr "You are using the most recent version of FPLedit ({0})"
+
+#~ msgid "Fenstergrößen"
+#~ msgstr "Window sizes"

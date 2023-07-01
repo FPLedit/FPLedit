@@ -9,7 +9,7 @@ namespace FPLedit.Editor.Rendering
         public Divider()
         {
             BackgroundColor = SystemColors.ControlText;
-            Size = new Size(2, 23);
+            Size = new Size(2, 35);
         }
     }
 }

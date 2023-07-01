@@ -11,6 +11,10 @@ namespace FPLedit.Editor.Rendering
     internal sealed class NetworkEditingControl : Panel
     {
         private IPluginInterface pluginInterface;
+        
+        private const int ICON_SIZE = 32;
+        public const string TOOLBAR_ICON_SETTINGS_KEY = "ui.toolbar-icons";
+        private bool toolbarUseIcons = true;
 
 #pragma warning disable CS0649,CA2213
         private readonly RoutesDropDown routesDropDown = default!;
@@ -29,6 +33,25 @@ namespace FPLedit.Editor.Rendering
 
         public void Initialize(IPluginInterface pluginInterface)
         {
+            toolbarUseIcons = pluginInterface.Settings.Get(TOOLBAR_ICON_SETTINGS_KEY, true);
+            // Convert the toolbar buttons to icons.
+            if (toolbarUseIcons)
+            {
+                newButton.ToolTip = newButton.Text.Replace("&", "");
+                newButton.Text = "";
+                newButton.Image = new Bitmap(this.GetResource("Resources.toolbar-add-station.png")).WithSize(ICON_SIZE, ICON_SIZE);
+
+                newLineButton.ToolTip = newLineButton.Text.Replace("&", "");
+                newLineButton.Text = "";
+                newLineButton.Image = new Bitmap(this.GetResource("Resources.toolbar-add-line.png")).WithSize(ICON_SIZE, ICON_SIZE);
+
+                joinLineButton.ToolTip = joinLineButton.Text.Replace("&", "");
+                joinLineButton.Text = "";
+                joinLineButton.Image = new Bitmap(this.GetResource("Resources.toolbar-join-line.png")).WithSize(ICON_SIZE, ICON_SIZE);
+
+                toolbar.VerticalContentAlignment = VerticalAlignment.Center;
+            }
+
             this.pluginInterface = pluginInterface;
             routesDropDown.Initialize(pluginInterface);
             pluginInterface.FileStateChanged += (_, e) =>
@@ -54,11 +77,15 @@ namespace FPLedit.Editor.Rendering
 
                 foreach (var action in actions)
                 {
-                    var btn = new Button()
+                    var btn = new Button { Tag = action };
+                    if (action.EtoIconBitmap is Bitmap bitmap && toolbarUseIcons)
                     {
-                        Text = action.DisplayName,
-                        Tag = action,
-                    };
+                        btn.ToolTip = action.DisplayName.Replace("&", "");
+                        btn.Image = bitmap.WithSize(ICON_SIZE, ICON_SIZE);
+                    }
+                    else
+                        btn.Text = action.DisplayName;
+
                     btn.Enabled = action.IsEnabled(pluginInterface);
                     btn.Click += (_, _) => action.Invoke(pluginInterface, pluginInterface.Timetable?.GetRoute(routesDropDown.SelectedRoute));
                     toolbar.Items.Add(btn);

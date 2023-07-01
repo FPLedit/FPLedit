@@ -8,6 +8,8 @@ namespace FPLedit.Editor.Network
     {
         public string DisplayName => T._("Stationen dieser Strecke b&earbeiten");
 
+        public dynamic? EtoIconBitmap => null;
+
         public bool IsEnabled(IPluginInterface pluginInterface)
             => pluginInterface.FileState.Opened;
 

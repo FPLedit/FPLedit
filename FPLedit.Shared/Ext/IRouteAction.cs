@@ -12,6 +12,12 @@
         string DisplayName { get; }
 
         /// <summary>
+        /// Icon of type <code>Eto.Bitmap</code>, will be used instead of the display text if not null, and configured by the user.
+        /// </summary>
+        /// <remarks>The icon size should be at least 64x64 px.</remarks>
+        dynamic? EtoIconBitmap { get; }
+
+        /// <summary>
         /// This method will be triggered when the action is invoked.
         /// </summary>
         void Invoke(IPluginInterface pluginInterface, Route route);
