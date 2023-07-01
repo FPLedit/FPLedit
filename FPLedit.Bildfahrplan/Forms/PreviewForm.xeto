@@ -11,7 +11,6 @@
         <StackLayout Orientation="Horizontal" VerticalContentAlignment="Center" Spacing="5" Padding="5,5,5,5">
           <shared:RoutesDropDown x:Name="routesDropDown" />
           <Button Click="PreferencesButton_Click" Text="{x:Static e:PreviewForm+L.ChangePlanDisplay}" x:Name="preferencesButton" />
-          <Button Click="VirtualRoutesButton_Click" Text="{x:Static e:PreviewForm+L.VirtualRoutes}" x:Name="virtualRoutesButton" />
           <CheckBox x:Name="splitCheckBox" Text="{x:Static e:PreviewForm+L.Split}" />
         </StackLayout>
         <GroupBox Text="{x:Static e:PreviewForm+L.Days}">

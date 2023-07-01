@@ -10,9 +10,9 @@ namespace FPLedit.Editor
     {
         private IPluginInterface pluginInterface = null!;
 
-        private bool hasFilterables, hasDesignables;
+        private bool hasFilterables, hasDesignables, hasVirtualRouteSupport;
 
-        private ButtonMenuItem editLineItem = null!, editTimetableItem = null!; // Type="Network"
+        private ButtonMenuItem editLineItem = null!, editTimetableItem = null!, virtualRoutesItem = null!; // Type="Network"
         private ButtonMenuItem editTrainsItem = null!, designItem = null!, filterItem = null!; // Type="Both"
         private ButtonMenuItem editRoot = null!, undoItem = null!; // Type="Both"
 
@@ -54,6 +54,8 @@ namespace FPLedit.Editor
 
             designItem = editRoot.CreateItem(T._("Fahrplan&darstellung"), enabled: false, clickHandler: (_, _) => ShowForm(new RenderSettingsForm(pluginInterface)));
             filterItem = editRoot.CreateItem(T._("Fi&lterregeln"), enabled: false, clickHandler: (_, _) => ShowForm(new Filters.FilterForm(pluginInterface)));
+
+            virtualRoutesItem = editRoot.CreateItem(T._("&Virtuelle Strecken"), enabled: false, clickHandler: (_, _) => ShowForm(new Network.VirtualRouteForm(pluginInterface)));
         }
 
         private void ShowForm(Dialog<DialogResult> form)
@@ -69,12 +71,13 @@ namespace FPLedit.Editor
         {
             hasFilterables = pluginInterface.GetRegistered<IFilterRuleContainer>().Length > 0;
             hasDesignables = pluginInterface.GetRegistered<IAppearanceControl>().Length > 0;
+            hasVirtualRouteSupport = pluginInterface.GetRegistered<ISupportsVirtualRoutes>().Length > 0;
         }
 
         private void PluginInterface_FileStateChanged(object? sender, FileStateChangedEventArgs e)
         {
             editLineItem.Enabled = e.FileState.Opened;
-            editTrainsItem.Enabled = e.FileState.Opened && e.FileState.LineCreated;
+            editTrainsItem.Enabled = virtualRoutesItem.Enabled = e.FileState.Opened && e.FileState.LineCreated;
             editTimetableItem.Enabled = e.FileState.Opened && e.FileState.LineCreated && e.FileState.TrainsCreated;
             designItem.Enabled = e.FileState.Opened && hasDesignables;
             filterItem.Enabled = e.FileState.Opened && hasFilterables;
@@ -83,6 +86,7 @@ namespace FPLedit.Editor
             // Im Netzwerk-Modus nicht verwendete Menü-Einträge ausblenden
             if (pluginInterface.Timetable != null!)
                 editLineItem.Enabled = pluginInterface.Timetable.Type != TimetableType.Network;
+            virtualRoutesItem.Visible = hasVirtualRouteSupport && pluginInterface?.Timetable?.Type == TimetableType.Network;
         }
     }
 }

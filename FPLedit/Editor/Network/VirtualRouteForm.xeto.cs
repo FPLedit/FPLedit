@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using FPLedit.Shared.UI.Network;
 
-namespace FPLedit.Bildfahrplan.Forms
+namespace FPLedit.Editor.Network
 {
     internal sealed class VirtualRouteForm : FDialog<DialogResult>
     {
@@ -39,7 +39,7 @@ namespace FPLedit.Bildfahrplan.Forms
             if (tpf.ShowModal(this) != DialogResult.Ok)
                 return;
             
-            VirtualRoute.CreateVRoute(tt, tpf.Path.First(), tpf.Path.Last(), tpf.Waypoints.ToArray());
+            VirtualRoute.CreateVRoute(tt, tpf.Path!.First(), tpf.Path.Last(), tpf.Waypoints.ToArray());
             gridView.DataStore = VirtualRoute.GetVRoutes(tt).ToArray();
         }
 

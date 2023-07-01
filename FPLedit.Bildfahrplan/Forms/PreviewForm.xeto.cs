@@ -17,7 +17,7 @@ namespace FPLedit.Bildfahrplan.Forms
         private readonly DaysControlWide dtc = default!;
         private readonly RoutesDropDown routesDropDown = default!;
         private readonly CheckBox splitCheckBox = default!;
-        private readonly Button virtualRoutesButton = default!, preferencesButton = default!;
+        private readonly Button preferencesButton = default!;
 #pragma warning restore CS0649,CA2213
 
         private readonly IPluginInterface pluginInterface;
@@ -68,7 +68,6 @@ namespace FPLedit.Bildfahrplan.Forms
             dtc.SelectedDays = new TimetableStyle(pluginInterface.Timetable).RenderDays;
             routesDropDown.Initialize(pluginInterface);
             routesDropDown.EnableVirtualRoutes = true;
-            virtualRoutesButton.Visible = pluginInterface.Timetable is { Type: TimetableType.Network };
         }
 
         private void PreferencesButton_Click(object sender, EventArgs e)
@@ -76,15 +75,6 @@ namespace FPLedit.Bildfahrplan.Forms
             pluginInterface.StageUndoStep();
             using (var cnf = new ConfigForm(pluginInterface.Timetable, pluginInterface))
                 cnf.ShowModal(this);
-            ResetRenderer();
-            pluginInterface.SetUnsaved();
-        }
-
-        private void VirtualRoutesButton_Click(object sender, EventArgs e)
-        {
-            pluginInterface.StageUndoStep();
-            using (var vrf = new VirtualRouteForm(pluginInterface))
-                vrf.ShowModal(this);
             ResetRenderer();
             pluginInterface.SetUnsaved();
         }
@@ -145,8 +135,7 @@ namespace FPLedit.Bildfahrplan.Forms
             
             scrollPosition = scrollable.ScrollPosition;
 
-            virtualRoutesButton.Visible = pluginInterface.Timetable is { Type: TimetableType.Network };
-            dtc.Enabled = routesDropDown.Enabled = splitCheckBox.Enabled = preferencesButton.Enabled = virtualRoutesButton.Enabled = pluginInterface.FileState.Opened;
+            dtc.Enabled = routesDropDown.Enabled = splitCheckBox.Enabled = preferencesButton.Enabled = pluginInterface.FileState.Opened;
 
             if (!pluginInterface.FileState.Opened)
                 ResetRenderer();
@@ -174,7 +163,6 @@ namespace FPLedit.Bildfahrplan.Forms
         private static class L
         {
             public static readonly string ChangePlanDisplay = T._("&Darstellung ändern");
-            public static readonly string VirtualRoutes = T._("Virtuelle Strecken");
             public static readonly string Split = T._("Stationen nicht mitscrollen");
             public static readonly string Days = T._("Verkehrstage");
             public static readonly string Title = T._("Dynamische Bildfahrplan-Vorschau");
