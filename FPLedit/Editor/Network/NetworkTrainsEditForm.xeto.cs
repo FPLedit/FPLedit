@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿#nullable enable
+using Eto.Forms;
 using FPLedit.Editor.Trains;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
@@ -33,7 +34,7 @@ namespace FPLedit.Editor.Network
             gridView.AddFuncColumn<ITrain>(t => t.Mbr, T._("Mbr"));
             gridView.AddFuncColumn<ITrain>(t => t.Last, T._("Last"));
             gridView.AddFuncColumn<ITrain>(t => t.Days.DaysToString(false), T._("Verkehrstage"));
-            gridView.AddFuncColumn<ITrain>(t => BuildPath(t), T._("Laufweg"));
+            gridView.AddFuncColumn<ITrain>(BuildPath, T._("Laufweg"));
             gridView.AddFuncColumn<ITrain>(t => t.Comment, T._("Kommentar"));
 
             gridView.MouseDoubleClick += (_, _) => EditTrain(gridView, TrainDirection.tr, false);
@@ -51,13 +52,13 @@ namespace FPLedit.Editor.Network
             this.AddSizeStateHandler();
         }
 
-        private void GridViewOnSelectedItemsChanged(object sender, EventArgs e)
+        private void GridViewOnSelectedItemsChanged(object? sender, EventArgs e)
         {
             editButton.Enabled = deleteButton.Enabled = copyButton.Enabled = editPathButton.Enabled
                 = gridView.SelectedItem != null && !((ITrain) gridView.SelectedItem).IsLink;
         }
 
-        private void HandleKeystroke(object sender, KeyEventArgs e)
+        private void HandleKeystroke(object? sender, KeyEventArgs e)
         {
             if (e.Key == Keys.Delete)
                 DeleteTrain(gridView, TrainDirection.tr, false);

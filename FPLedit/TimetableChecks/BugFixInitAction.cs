@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,28 +9,28 @@ namespace FPLedit.TimetableChecks
     public class BugFixInitAction : ITimetableInitAction
     {
         private const string KEY_AMBIGUOUS = "bugfix.corrected.ambiguous-routes";
-        public string Init(Timetable tt, IReducedPluginInterface pluginInterface)
+        public string? Init(Timetable tt, IReducedPluginInterface pluginInterface)
         {
             var upgradeMessages = new List<string>();
 
             // Bug in FPLedit 1.5.3 bis 2.0.0 muss nachträglich korrigiert werden
             // In manchen Fällen wurden Zug-Ids doppelt vergeben
-            var duplicate_tra_ids = tt.Trains.OfType<IWritableTrain>().GroupBy(t => t.Id).Where(g => g.Count() > 1).Select(g => g.ToArray());
-            if (duplicate_tra_ids.Any()) // Wir haben doppelte IDs
+            var duplicateTraIds = tt.Trains.OfType<IWritableTrain>().GroupBy(t => t.Id).Where(g => g.Count() > 1).Select(g => g.ToArray()).ToArray();
+            if (duplicateTraIds.Any()) // Wir haben doppelte IDs
             {
                 if (tt.Transitions.Any())
                 {
-                    var duplicate_transitions = duplicate_tra_ids.Where(dup => tt.HasTransition(dup[0], false)).ToArray();
-                    foreach (var dup in duplicate_transitions)
+                    var duplicateTransitions = duplicateTraIds.Where(dup => tt.HasTransition(dup[0], false)).ToArray();
+                    foreach (var dup in duplicateTransitions)
                         tt.RemoveTransition(dup[0], false); // Transitions mit dieser Id entfernen
 
-                    if (duplicate_transitions.Any())
+                    if (duplicateTransitions.Any())
                         upgradeMessages.Add(T._("Aufgrund eines Fehlers in früheren Versionen von FPLedit mussten leider einige Verknüpfungen zu Folgezügen aufgehoben werden. Die betroffenen Züge sind: {0}", 
-                            string.Join(", ", duplicate_transitions.SelectMany(dup => dup.Select(t => t.TName)))));
+                            string.Join(", ", duplicateTransitions.SelectMany(dup => dup.Select(t => t.TName)))));
                 }
 
                 // Korrektur ohne Side-Effects möglich, alle doppelten Zug-Ids werden neu vergeben
-                foreach (var dup in duplicate_tra_ids)
+                foreach (var dup in duplicateTraIds)
                     dup.Skip(1).All((t) => { t.Id = tt.NextTrainId(); return true; });
             }
 

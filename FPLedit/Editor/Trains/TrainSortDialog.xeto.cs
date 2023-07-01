@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿#nullable enable
+using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System;
@@ -68,7 +69,7 @@ namespace FPLedit.Editor.Trains
 
         protected override void Dispose(bool disposing)
         {
-            sortSelection?.Dispose();
+            sortSelection.Dispose();
             base.Dispose(disposing);
         }
 

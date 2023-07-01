@@ -36,7 +36,7 @@ namespace FPLedit
         
         internal int FileNameRevisionCounter { get; private set; }
 
-        public void UpdateMetaProperties(Timetable tt, UndoManager undo)
+        public void UpdateMetaProperties(Timetable? tt, UndoManager undo)
         {
             LineCreated = tt?.Stations.Count > 1; // Mind. 2 Bahnhöfe
             TrainsCreated = tt?.Trains.Count > 0;

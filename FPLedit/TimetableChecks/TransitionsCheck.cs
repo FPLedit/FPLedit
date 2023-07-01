@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿#nullable enable
+using System.Collections.Concurrent;
 using FPLedit.Shared;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +36,7 @@ namespace FPLedit.TimetableChecks
             return result;
         }
 
-        private IEnumerable<Station> GetSortedStations(ITrain train)
+        private IEnumerable<Station>? GetSortedStations(ITrain train)
         {
             var path = train.GetPath();
             var arrdeps = train.GetArrDepsUnsorted();

@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿#nullable enable
+using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System;
@@ -14,23 +15,16 @@ namespace FPLedit.SettingsUi
  #pragma warning restore CS0649,CA2213
 
         private readonly IPluginInterface pluginInterface;
-        private readonly List<IAppearanceHandler> handlers;
 
-        private SettingsForm()
+        public SettingsForm(IPluginInterface pluginInterface)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
-
-            handlers = new List<IAppearanceHandler>();
-
             this.AddSizeStateHandler();
-        }
 
-        public SettingsForm(IPluginInterface pluginInterface) : this()
-        {
             this.pluginInterface = pluginInterface;
 
             var settingsSections = pluginInterface.GetRegistered<ISettingsControl>();
-            
+
             typeListBox.SelectedValueChanged += SelectedSectionChanged;
 
             typeListBox.ItemTextBinding = Binding.Delegate<ISettingsControl, string>(c => c.DisplayName);
@@ -40,7 +34,7 @@ namespace FPLedit.SettingsUi
                 typeListBox.SelectedIndex = 0;
         }
 
-        private void SelectedSectionChanged(object sender, EventArgs e)
+        private void SelectedSectionChanged(object? sender, EventArgs e)
         {
             if (typeListBox.SelectedValue != null)
             {

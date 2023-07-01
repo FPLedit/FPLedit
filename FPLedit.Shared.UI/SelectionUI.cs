@@ -9,7 +9,7 @@ namespace FPLedit.Shared.UI
 {
     public sealed class SelectionUI<T> : IDisposable where T : Enum
     {
-        private readonly Action<T> selectedEvent;
+        private readonly Action<T>? selectedEvent;
 
         private readonly ActionInfo[] actions;
 
@@ -19,7 +19,7 @@ namespace FPLedit.Shared.UI
         
         public bool EnabledOptionSelected => selectedAction?.Enabled ?? false;
 
-        public SelectionUI(Action<T> selectedEvent, StackLayout st)
+        public SelectionUI(Action<T>? selectedEvent, StackLayout st)
         {
             var assembly = Assembly.GetCallingAssembly();
             this.selectedEvent = selectedEvent;
@@ -39,10 +39,9 @@ namespace FPLedit.Shared.UI
                     Text = FPLedit.Shared.T._a(assembly, ac.Name),
                     Checked = i == 0
                 };
-                if (master == null)
-                    master = rb;
+                master ??= rb;
 
-                rb.CheckedChanged += (s, e) =>
+                rb.CheckedChanged += (_, _) =>
                 {
                     if (rb.Checked)
                         InternalSelect(ac.Value);
@@ -52,7 +51,7 @@ namespace FPLedit.Shared.UI
                 ac.RadioButton = rb;
             }
 
-            selectedAction = actions[0]!; // Just a fix for nullable reference types.
+            selectedAction = actions[0];
             InternalSelect(actions[0].Value);
         }
 
@@ -105,8 +104,8 @@ namespace FPLedit.Shared.UI
             public readonly string Name;
             public readonly T Value;
             public bool Enabled;
-            
-            [AllowNull, NotNull]
+
+            [NotNull]
             public RadioButton? RadioButton
             {
                 get => radioButton ?? throw new Exception("");

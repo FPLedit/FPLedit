@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿#nullable enable
+using Eto.Forms;
 using System;
 using Eto.Drawing;
 using System.Linq;
@@ -16,17 +17,17 @@ namespace FPLedit
     {
         #region Controls
 #pragma warning disable CS0649,CA2213
-        private readonly LogControl logTextBox = default!;
-        private readonly ButtonMenuItem saveMenu, saveAsMenu, exportMenu, importMenu, lastMenu, convertMenu;
-        private readonly NetworkEditingControl networkEditingControl;
-        private readonly StackLayout loadingStack;
+        private readonly LogControl logTextBox = null!;
+        private readonly ButtonMenuItem saveMenu = null!, saveAsMenu = null!, exportMenu = null!, importMenu = null!, lastMenu = null!, convertMenu = null!;
+        private readonly NetworkEditingControl networkEditingControl = null!;
+        private readonly StackLayout loadingStack = null!;
 #pragma warning restore CS0649,CA2213
         #endregion
 
         internal CrashReporting.CrashReporter CrashReporter { get; }
         internal Bootstrapper Bootstrapper { get; }
         
-        private TimetableChecks.TimetableCheckRunner checkRunner;
+        private TimetableChecks.TimetableCheckRunner? checkRunner;
         private readonly LastFileHandler lfh;
         
         public static readonly string LocEditMenu = T._("&Bearbeiten");
@@ -63,7 +64,7 @@ namespace FPLedit
             CrashReporter = crashReporter;
 
             lfh.LastFilesUpdates += UpdateLastFilesMenu;
-            UpdateLastFilesMenu(null, null);
+            UpdateLastFilesMenu(null, EventArgs.Empty);
 
             Bootstrapper.Logger.AttachLogger(logTextBox);
             Bootstrapper.InitializeUi(this);
@@ -73,7 +74,7 @@ namespace FPLedit
             this.AddSizeStateHandler();
         }
 
-        private void FileHandlerOnAsyncOperationStateChanged(object sender, bool e)
+        private void FileHandlerOnAsyncOperationStateChanged(object? sender, bool e)
         {
             loadingStack.Visible = e;
         }
@@ -87,7 +88,7 @@ namespace FPLedit
             pluginInterface.FileOpened += (_, _) => networkEditingControl.ResetPan();
         }
 
-        private void FileStateChanged(object sender, FileStateChangedEventArgs e)
+        private void FileStateChanged(object? sender, FileStateChangedEventArgs e)
         {
             Title = "FPLedit" + (e.FileState.Opened ? " - "
                 + (e.FileState.FileName != null ? (Path.GetFileName(e.FileState.FileName) + " ") : "")
@@ -173,7 +174,7 @@ namespace FPLedit
             Bootstrapper.FullSettings.Remove("restart.file");
         }
 
-        private void UpdateLastFilesMenu(object sender, EventArgs e)
+        private void UpdateLastFilesMenu(object? sender, EventArgs e)
         {
             lastMenu.Items.Clear();
             foreach (var lf in lfh.LastFiles)
@@ -203,7 +204,7 @@ namespace FPLedit
             base.OnClosing(e);
         }
         
-        private void ProcessKeyDown(object s, KeyEventArgs e)
+        private void ProcessKeyDown(object? s, KeyEventArgs e)
         {
             if ((NetworkRenderer.DispatchableKeys.Contains(e.Key) || NetworkEditingControl.DispatchableKeys.Contains(e.Key)) && e.Modifiers == Keys.None)
                 networkEditingControl.DispatchKeystroke(e);

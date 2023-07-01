@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿#nullable enable
+using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using FPLedit.Shared.UI.Validators;
@@ -41,9 +42,9 @@ namespace FPLedit.Editor.Trains
             countTextBox.Text = "1";
             changeTextBox.Text = "2";
 
-            modeSelect = new SelectionUI<CopySelectionMode>(mode => UpdateVisibility(), selectStack);
-            linkSelect = new SelectionUI<LinkTypeMode>(linkType => UpdateVisibility(), linkTypeStack);
-            
+            modeSelect = new SelectionUI<CopySelectionMode>(_ => UpdateVisibility(), selectStack);
+            linkSelect = new SelectionUI<LinkTypeMode>(_ => UpdateVisibility(), linkTypeStack);
+
             if (tt.Type == TimetableType.Network && tt.Version.CompareTo(TimetableVersion.Extended_FPL2) < 0)
                 modeSelect.DisableOption(CopySelectionMode.Link);
 
@@ -74,6 +75,7 @@ namespace FPLedit.Editor.Trains
 
         private void UpdateVisibility()
         {
+            // Those two might be null when this is called when the constructor did not finish running...
             var mode = modeSelect?.SelectedState ?? CopySelectionMode.Copy;
             var linkType = linkSelect?.SelectedState ?? LinkTypeMode.Auto;
             
@@ -168,8 +170,8 @@ namespace FPLedit.Editor.Trains
 
         protected override void Dispose(bool disposing)
         {
-            modeSelect?.Dispose();
-            linkSelect?.Dispose();
+            modeSelect.Dispose();
+            linkSelect.Dispose();
             base.Dispose(disposing);
         }
 

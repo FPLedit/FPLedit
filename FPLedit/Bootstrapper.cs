@@ -35,7 +35,7 @@ namespace FPLedit
         public dynamic RootForm { get; private set; } = null!;
         public dynamic Menu { get; private set; } = null!;
 
-        public Timetable Timetable => FileHandler.Timetable;
+        public Timetable Timetable => FileHandler.Timetable!;
         public IFileState FileState => FileHandler.FileState;
 
         public event EventHandler<FileStateChangedEventArgs>? FileStateChanged;
@@ -195,21 +195,14 @@ namespace FPLedit
         
         private FileStream? GetFileStreamWithMaxPermissions(string filename)
         {
-            try
-            {
-                // try getting write access
-                return File.Open(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read);
-            }
-            catch
-            {
-                try
-                {
-                    return File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite); // try again with just read access
-                }
-                catch
-                {
-                }
-            }
+            // try getting write access
+            try { return File.Open(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read); }
+            catch {}
+
+            // try again with just read access
+            try { return File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite); }
+            catch {}
+
             return null;
         }
 

@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿#nullable enable
+using Eto.Forms;
 using FPLedit.NonDefaultFiletypes;
 using FPLedit.Shared;
 using FPLedit.Shared.Filetypes;
@@ -23,16 +24,16 @@ namespace FPLedit
         private readonly ILastFileHandler lfh;
         private readonly UndoManager undo;
 
-        private Timetable timetable;
+        private Timetable? timetable;
 
         private readonly BinaryCacheFile cache;
 
         private bool asyncBlockingOperation;
 
-        public bool AsyncBlockingOperation
+        private bool AsyncBlockingOperation
         {
             get => asyncBlockingOperation;
-            private set
+            set
             {
                 if (value != asyncBlockingOperation)
                 {
@@ -42,7 +43,7 @@ namespace FPLedit
             }
         }
 
-        public Timetable Timetable
+        public Timetable? Timetable
         {
             get => timetable;
             set
@@ -57,9 +58,9 @@ namespace FPLedit
 
         public ICacheFile Cache => cache;
 
-        public event EventHandler FileOpened;
-        public event EventHandler<FileStateChangedEventArgs> FileStateChanged;
-        public event EventHandler<bool> AsyncOperationStateChanged;
+        public event EventHandler? FileOpened;
+        public event EventHandler<FileStateChangedEventArgs>? FileStateChanged;
+        public event EventHandler<bool>? AsyncOperationStateChanged;
 
         public FileHandler(IPluginInterface pluginInterface, ILastFileHandler lfh, UndoManager undo)
         {
@@ -118,7 +119,7 @@ namespace FPLedit
                 return;
             }
 
-            if (!NotifyIfUnsaved(false))
+            if (!NotifyIfUnsaved())
                 return;
 
             var (rev, frev) = (FileState.RevisionCounter, FileState.FileNameRevisionCounter);
@@ -170,7 +171,7 @@ namespace FPLedit
                 pluginInterface.Settings.Set("exporter.last", exportFileDialog.CurrentFilterIndex);
 
                 pluginInterface.Logger.Info(T._("Exportiere in Datei {0}", filename));
-                var tsk = export.GetAsyncSafeExport(Timetable.Clone(), filename, pluginInterface);
+                var tsk = export.GetAsyncSafeExport(Timetable!.Clone(), filename, pluginInterface);
                 tsk.ContinueWith((t, _) =>
                 {
                     if (t.Result == false)
@@ -188,9 +189,9 @@ namespace FPLedit
             importFileDialog.AddLegacyFilter(importers.Select(im => im.Filter).ToArray());
 
             // Letzten Exporter auswählen
-            int exporter_idx = pluginInterface.Settings.Get("exporter.last", -1);
-            if (exporter_idx > -1 && exporters.Length > exporter_idx)
-                exportFileDialog.CurrentFilterIndex = exporter_idx + 1;
+            int exporterIdx = pluginInterface.Settings.Get("exporter.last", -1);
+            if (exporterIdx > -1 && exporters.Length > exporterIdx)
+                exportFileDialog.CurrentFilterIndex = exporterIdx + 1;
         }
 
         #endregion
@@ -205,14 +206,14 @@ namespace FPLedit
                 return;
             if (openFileDialog.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok && openFileDialog.FileName != null)
             {
-                InternalOpen(openFileDialog.FileName, true);
+                InternalOpen(openFileDialog.FileName!, true);
                 UpdateLastPath(openFileDialog);
-                lfh.AddLastFile(openFileDialog.FileName);
+                lfh.AddLastFile(openFileDialog.FileName!);
             }
         }
 
         public void Reload()
-            => InternalOpen(FileState.FileName, false);
+            => InternalOpen(FileState.FileName!, false);
 
         internal void InternalOpen(string filename, bool doAsync)
         {
@@ -226,13 +227,11 @@ namespace FPLedit
             if (File.Exists(cacheFile))
             {
                 var bytes = File.ReadAllBytes(filename);
-                using (var sha256 = SHA256.Create())
-                {
-                    var hash = string.Join("", sha256.ComputeHash(bytes).Select(b => b.ToString("X2")));
+                using var sha256 = SHA256.Create();
+                var hash = string.Join("", sha256.ComputeHash(bytes).Select(b => b.ToString("X2")));
 
-                    using (var stream = File.Open(cacheFile, FileMode.Open))
-                        cache.Read(stream, hash);
-                }
+                using var stream = File.Open(cacheFile, FileMode.Open);
+                cache.Read(stream, hash);
             }
 
             var (rev, frev) = (FileState.RevisionCounter, FileState.FileNameRevisionCounter);
@@ -258,7 +257,7 @@ namespace FPLedit
 
                     OpenWithVersionCheck(t.Result, filename);
                 });
-                tsk2.ContinueWith((t1, o) =>
+                tsk2.ContinueWith((t1, _) =>
                 {
                     if (t1.Exception == null) return;
                     pluginInterface.Logger.Error(t1.Exception.Message);
@@ -285,7 +284,7 @@ namespace FPLedit
             if (!NotifyIfAsyncOperationInProgress())
                 return;
 
-            string filename = FileState.FileName;
+            string? filename = FileState.FileName;
 
             bool saveAs = forceSaveAs || filename == null || filename == "" || Path.GetExtension(filename) != ".fpl";
 
@@ -293,12 +292,12 @@ namespace FPLedit
             {
                 if (saveFileDialog.ShowDialog(pluginInterface.RootForm) != DialogResult.Ok)
                     return;
-                filename = saveFileDialog.FileName;
+                filename = saveFileDialog.FileName!;
                 UpdateLastPath(saveFileDialog);
                 lfh.AddLastFile(saveFileDialog.FileName);
             }
 
-            InternalSave(filename, doAsync);
+            InternalSave(filename!, doAsync);
         }
 
         private void InternalSave(string filename, bool doAsync)
@@ -310,7 +309,7 @@ namespace FPLedit
 
             pluginInterface.Logger.Info(T._("Speichere Datei {0}", filename));
 
-            var clone = Timetable.Clone();
+            var clone = Timetable!.Clone();
 
             var tsk = save.GetAsyncSafeExport(clone, filename, pluginInterface);
             tsk.ContinueWith((t, _) =>
@@ -340,16 +339,12 @@ namespace FPLedit
                     var bytes = File.ReadAllBytes(filename);
                     if (cache.Any() && cache.ShouldWriteCacheFile(clone, pluginInterface.Settings))
                     {
-                        using (var sha256 = SHA256.Create())
-                        {
-                            var hash = string.Join("", sha256.ComputeHash(bytes).Select(b => b.ToString("X2")));
+                        using var sha256 = SHA256.Create();
+                        var hash = string.Join("", sha256.ComputeHash(bytes).Select(b => b.ToString("X2")));
 
-                            using (var stream = File.Open(cacheFile, FileMode.OpenOrCreate, FileAccess.Write))
-                            {
-                                stream.SetLength(0);
-                                cache.Write(stream, hash);
-                            }
-                        }
+                        using var stream = File.Open(cacheFile, FileMode.OpenOrCreate, FileAccess.Write);
+                        stream.SetLength(0);
+                        cache.Write(stream, hash);
                     }
                     else if (File.Exists(cacheFile)) // Delete cache file if we don't need one.
                         File.Delete(cacheFile);
@@ -406,9 +401,9 @@ namespace FPLedit
 
         private void UpdateLastPath(FileDialog dialog) => SetLastPath(Path.GetDirectoryName(dialog.FileName));
 
-        private void SetLastPath(string lastPath)
+        private void SetLastPath(string? lastPath)
         {
-            if (lastPath != "" && Uri.TryCreate(lastPath, UriKind.Absolute, out Uri uri))
+            if (!string.IsNullOrEmpty(lastPath) && Uri.TryCreate(lastPath, UriKind.Absolute, out Uri? uri))
             {
                 openFileDialog.Directory = uri;
                 saveFileDialog.Directory = uri;
@@ -426,30 +421,28 @@ namespace FPLedit
             if (!NotifyIfAsyncOperationInProgress())
                 return;
 
-            IExport exp = (Timetable.Type == TimetableType.Linear) ? new NetworkExport() : new LinearExport();
-            string orig = (Timetable.Type == TimetableType.Linear) ? T._("Linear-Fahrplan") : T._("Netzwerk-Fahrplan");
-            string dest = (Timetable.Type == TimetableType.Linear) ? T._("Netzwerk-Fahrplan") : T._("Linear-Fahrplan");
+            IExport exp = (Timetable!.Type == TimetableType.Linear) ? new NetworkExport() : new LinearExport();
+            string orig = (Timetable!.Type == TimetableType.Linear) ? T._("Linear-Fahrplan") : T._("Netzwerk-Fahrplan");
+            string dest = (Timetable!.Type == TimetableType.Linear) ? T._("Netzwerk-Fahrplan") : T._("Linear-Fahrplan");
 
             if (MessageBox.Show($"Die aktuelle Datei ist ein {orig}. Es wird zu einem {dest} konvertiert.", "FPLedit", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
                 return;
 
-            using (var sfd = new SaveFileDialog())
+            using var sfd = new SaveFileDialog();
+            sfd.Title = T._("Zieldatei für Konvertierung wählen");
+            sfd.AddLegacyFilter(exp.Filter);
+            if (sfd.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
             {
-                sfd.Title = T._("Zieldatei für Konvertierung wählen");
-                sfd.AddLegacyFilter(exp.Filter);
-                if (sfd.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
-                {
-                    pluginInterface.Logger.Info(T._("Konvertiere Datei..."));
-                    bool ret = exp.SafeExport(Timetable, sfd.FileName, pluginInterface);
-                    if (ret == false)
-                        return;
-                    pluginInterface.Logger.Info(T._("Konvertieren erfolgreich abgeschlossen!"));
-                    InternalOpen(sfd.FileName, true);
-                }
+                pluginInterface.Logger.Info(T._("Konvertiere Datei..."));
+                bool ret = exp.SafeExport(Timetable, sfd.FileName, pluginInterface);
+                if (ret == false)
+                    return;
+                pluginInterface.Logger.Info(T._("Konvertieren erfolgreich abgeschlossen!"));
+                InternalOpen(sfd.FileName, true);
             }
         }
 
-        private void OpenWithVersionCheck(Timetable tt, string filename)
+        private void OpenWithVersionCheck(Timetable? tt, string filename)
         {
             var compat = tt?.Version.GetVersionCompat().Compatibility;
             if (tt == null || compat == TtVersionCompatType.ReadWrite)
@@ -488,7 +481,7 @@ namespace FPLedit
 
         private bool PerformTimetableUpgrade(Timetable tt, bool optional)
         {
-            string newFn = null;
+            string? newFn = null;
             // Exporter based on timetable type.
             IExport exp;
             if (tt.Type == TimetableType.Linear)
@@ -567,13 +560,13 @@ namespace FPLedit
 
         public void Dispose()
         {
-            if (openFileDialog != null && !openFileDialog.IsDisposed)
+            if (!openFileDialog.IsDisposed)
                 openFileDialog.Dispose();
-            if (saveFileDialog != null && !saveFileDialog.IsDisposed)
+            if (!saveFileDialog.IsDisposed)
                 saveFileDialog.Dispose();
-            if (exportFileDialog != null && !exportFileDialog.IsDisposed)
+            if (!exportFileDialog.IsDisposed)
                 exportFileDialog.Dispose();
-            if (importFileDialog != null && !importFileDialog.IsDisposed)
+            if (!importFileDialog.IsDisposed)
                 importFileDialog.Dispose();
         }
     }

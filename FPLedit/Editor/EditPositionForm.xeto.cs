@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿#nullable enable
+using Eto.Forms;
 using FPLedit.Shared.UI;
 using FPLedit.Shared.UI.Validators;
 using System;
@@ -26,7 +27,7 @@ namespace FPLedit.Editor
         {
             if (!positionValidator.Valid)
             {
-                MessageBox.Show(T._("Bitte erst alle Fehler beheben:\n{0}", positionValidator.ErrorMessage));
+                MessageBox.Show(T._("Bitte erst alle Fehler beheben:\n{0}", positionValidator.ErrorMessage!));
                 return;
             }
 

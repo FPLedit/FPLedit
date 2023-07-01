@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿#nullable enable
+using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System;
@@ -11,13 +12,13 @@ namespace FPLedit.Editor
     {
         private readonly IPluginInterface pluginInterface;
         private readonly int route;
-        private object backupHandle;
+        private object backupHandle = null!;
 
 #pragma warning disable CS0649,CA2213
         private readonly GridView gridView = default!;
 #pragma warning restore CS0649,CA2213
 
-        private Station[] stations;
+        private Station[]? stations;
 
         public LineEditForm(IPluginInterface pluginInterface, int route)
         {
@@ -27,7 +28,7 @@ namespace FPLedit.Editor
             this.route = route;
 
             gridView.AddFuncColumn<Station>(s => s.SName, T._("Bahnhof"));
-            gridView.AddFuncColumn<Station>(s => s.Positions.GetPosition(route).ToString(), T._("abs. Kilometr."));
+            gridView.AddFuncColumn<Station>(s => s.Positions.GetPosition(route).ToString()!, T._("abs. Kilometr."));
             gridView.AddFuncColumn<Station>(s => s.StationCode, T._("Abk."));
             gridView.AddFuncColumn<Station>(s => s.StationType, T._("Typ"));
             gridView.AddFuncColumn<Station>(s => s.Tracks.Count.ToString(), T._("Anzahl Gleise"));
@@ -49,12 +50,12 @@ namespace FPLedit.Editor
             this.AddSizeStateHandler();
         }
         
-        private void OnFileStateChanged(object s, FileStateChangedEventArgs e)
+        private void OnFileStateChanged(object? s, FileStateChangedEventArgs e)
         {
             if (!Visible || IsDisposed) return;
 
             pluginInterface.ClearBackup(backupHandle);
-            backupHandle = null;
+            backupHandle = null!;
             InitializeGrid();
         }
 
@@ -64,7 +65,7 @@ namespace FPLedit.Editor
             UpdateStations();
         }
 
-        private void HandleKeystroke(object sender, KeyEventArgs e)
+        private void HandleKeystroke(object? sender, KeyEventArgs e)
         {
             if (e.Key == Keys.Delete)
                 DeleteStation(false);
@@ -122,21 +123,19 @@ namespace FPLedit.Editor
 
         private void NewStation()
         {
-            using (var nsf = new EditStationForm(pluginInterface, pluginInterface.Timetable, route))
+            using var nsf = new EditStationForm(pluginInterface, pluginInterface.Timetable, route);
+            if (nsf.ShowModal(this) == DialogResult.Ok)
             {
-                if (nsf.ShowModal(this) == DialogResult.Ok)
+                var sta = nsf.Station;
+
+                if (pluginInterface.Timetable.Type == TimetableType.Network)
                 {
-                    var sta = nsf.Station;
-
-                    if (pluginInterface.Timetable.Type == TimetableType.Network)
-                    {
-                        var handler = new StationCanvasPositionHandler();
-                        handler.SetMiddlePos(route, sta, pluginInterface.Timetable);
-                    }
-
-                    pluginInterface.Timetable.AddStation(sta, route);
-                    UpdateStations();
+                    var handler = new StationCanvasPositionHandler();
+                    handler.SetMiddlePos(route, sta, pluginInterface.Timetable);
                 }
+
+                pluginInterface.Timetable.AddStation(sta, route);
+                UpdateStations();
             }
         }
 

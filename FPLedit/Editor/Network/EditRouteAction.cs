@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿#nullable enable
+using Eto.Forms;
 using FPLedit.Shared;
 
 namespace FPLedit.Editor.Network
@@ -13,9 +14,9 @@ namespace FPLedit.Editor.Network
         public void Invoke(IPluginInterface pluginInterface, Route route)
         {
             pluginInterface.StageUndoStep();
-            using (var lef = new LineEditForm(pluginInterface, route.Index))
-                if (lef.ShowModal(pluginInterface.RootForm) == DialogResult.Ok)
-                    pluginInterface.SetUnsaved();
+            using var lef = new LineEditForm(pluginInterface, route.Index);
+            if (lef.ShowModal(pluginInterface.RootForm) == DialogResult.Ok)
+                pluginInterface.SetUnsaved();
         }
     }
 }

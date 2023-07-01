@@ -15,10 +15,6 @@ namespace FPLedit
 
         public string RuntimeVersion => System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription;
 
-        // ReSharper disable once MemberCanBePrivate.Global
-        // ReSharper disable once EmptyConstructor
-        public VersionInformation() {}
-
         private static VersionInformation? current;
         public static VersionInformation Current => current ??= new VersionInformation();
     }

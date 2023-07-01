@@ -1,4 +1,5 @@
-﻿using FPLedit.Shared;
+﻿#nullable enable
+using FPLedit.Shared;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;

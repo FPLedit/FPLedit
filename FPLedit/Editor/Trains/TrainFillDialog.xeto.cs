@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿#nullable enable
+using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using FPLedit.Shared.UI.Validators;
@@ -15,7 +16,7 @@ namespace FPLedit.Editor.Trains
 #pragma warning restore CS0649,CA2213
         private readonly NumberValidator offsetValidator;
 
-        public Train ReferenceTrain { get; private set; }
+        public Train? ReferenceTrain { get; private set; }
 
         public int Offset { get; private set; }
 
@@ -36,7 +37,7 @@ namespace FPLedit.Editor.Trains
         {
             if (!offsetValidator.Valid)
             {
-                MessageBox.Show(T._("Bitte erst alle Felder korrekt ausfüllen:\n{0}", offsetValidator.ErrorMessage));
+                MessageBox.Show(T._("Bitte erst alle Felder korrekt ausfüllen:\n{0}", offsetValidator.ErrorMessage!));
                 Result = DialogResult.None;
                 return;
             }

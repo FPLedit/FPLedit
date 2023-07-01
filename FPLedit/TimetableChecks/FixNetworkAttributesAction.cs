@@ -1,4 +1,5 @@
-﻿using FPLedit.Shared;
+﻿#nullable enable
+using FPLedit.Shared;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,7 +7,7 @@ namespace FPLedit.TimetableChecks
 {
     internal sealed class FixNetworkAttributesAction : ITimetableInitAction
     {
-        public string Init(Timetable tt, IReducedPluginInterface pluginInterface)
+        public string? Init(Timetable tt, IReducedPluginInterface pluginInterface)
         {
             // Bug in FPledit 1.5.4 bis 2.0.0 muss nachträglich korrigiert werden
             // Vmax/Wellenlinien bei Stationen wurden nicht routenspezifisch gespeichert

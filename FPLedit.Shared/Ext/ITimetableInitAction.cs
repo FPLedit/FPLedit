@@ -11,6 +11,6 @@
         /// <param name="tt">The writable copy of the current Timetable.</param>
         /// <param name="pluginInterface"></param>
         /// <returns>Any warning message that is shown to the user, otherwise null.</returns>
-        string Init(Timetable tt, IReducedPluginInterface pluginInterface);
+        string? Init(Timetable tt, IReducedPluginInterface pluginInterface);
     }
 }

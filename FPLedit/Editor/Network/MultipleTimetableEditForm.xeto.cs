@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿#nullable enable
+using Eto.Forms;
 using FPLedit.Shared;
 using System;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace FPLedit.Editor.Network
         private readonly IPluginInterface pluginInterface;
         private readonly object backupHandle;
 
-        private MultipleTimetableEditForm()
+        public MultipleTimetableEditForm(IPluginInterface pluginInterface)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
@@ -30,10 +31,7 @@ namespace FPLedit.Editor.Network
             // Important: After AddCloseHandler, otherwise it will destroy Timetable instance in mpmode!
             if (!Platform.IsWpf)
                 DefaultButton = null;
-        }
 
-        public MultipleTimetableEditForm(IPluginInterface pluginInterface) : this()
-        {
             this.pluginInterface = pluginInterface;
             backupHandle = pluginInterface.BackupTimetable();
 
@@ -46,7 +44,7 @@ namespace FPLedit.Editor.Network
             trainDropDown.SelectedIndex = 0;
         }
 
-        private void TrainDropDown_SelectedIndexChanged(object sender, EventArgs e)
+        private void TrainDropDown_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (editor.Initialized)
                 editor.ApplyChanges(); // Save old train data.

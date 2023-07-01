@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿#nullable enable
+using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System.Linq;
@@ -49,9 +50,9 @@ namespace FPLedit.Editor.Trains
             {
                 if (view.SelectedItem is Train tra)
                 {
-                    using (var tef = new TrainEditForm(tra))
-                        if (tef.ShowModal(this) == DialogResult.Ok)
-                            UpdateListView(view, dir);
+                    using var tef = new TrainEditForm(tra);
+                    if (tef.ShowModal(this) == DialogResult.Ok)
+                        UpdateListView(view, dir);
                 }
                 else if (message)
                     MessageBox.Show(T._("Verlinke Züge können nicht bearbeitet werden."), T._("Zug bearbeiten"));
@@ -62,16 +63,14 @@ namespace FPLedit.Editor.Trains
 
         protected void NewTrain(GridView view, TrainDirection direction)
         {
-            using (var tef = new TrainEditForm(tt, direction))
+            using var tef = new TrainEditForm(tt, direction);
+            if (tef.ShowModal(this) == DialogResult.Ok)
             {
-                if (tef.ShowModal(this) == DialogResult.Ok)
-                {
-                    tt.AddTrain(tef.Train);
-                    if (tef.NextTrains.Any())
-                        tt.SetTransitions(tef.Train, tef.NextTrains);
+                tt.AddTrain(tef.Train);
+                if (tef.NextTrains.Any())
+                    tt.SetTransitions(tef.Train, tef.NextTrains);
 
-                    UpdateListView(view, direction);
-                }
+                UpdateListView(view, direction);
             }
         }
 
@@ -95,9 +94,9 @@ namespace FPLedit.Editor.Trains
 
         protected void SortTrains(GridView view, TrainDirection dir)
         {
-            using (var tsd = new TrainSortDialog(dir, tt))
-                if (tsd.ShowModal(this) == DialogResult.Ok)
-                    UpdateListView(view, dir);
+            using var tsd = new TrainSortDialog(dir, tt);
+            if (tsd.ShowModal(this) == DialogResult.Ok)
+                UpdateListView(view, dir);
         }
     }
 }

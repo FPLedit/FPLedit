@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿#nullable enable
+using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System;
@@ -12,7 +13,7 @@ namespace FPLedit.Editor.Filters
         private readonly FilterableContainer[] fcontainers;
         private readonly IPluginInterface pluginInterface;
 
-        private List<FilterRule> curTrainRules, curStationRules;
+        private List<FilterRule> curTrainRules = null!, curStationRules = null!;
 
 #pragma warning disable CS0649,CA2213
         private readonly GridView trainPattListView = default!, stationPattListView = default!;
@@ -27,12 +28,7 @@ namespace FPLedit.Editor.Filters
             var tt = pluginInterface.Timetable;
 
             var filterables = pluginInterface.GetRegistered<IFilterRuleContainer>();
-            fcontainers = filterables.Select(f => new FilterableContainer()
-            {
-                Filterable = f,
-                StationRules = f.LoadStationRules(tt).ToList(),
-                TrainRules = f.LoadTrainRules(tt).ToList(),
-            }).ToArray();
+            fcontainers = filterables.Select(f => new FilterableContainer(f, f.LoadStationRules(tt).ToList(), f.LoadTrainRules(tt).ToList())).ToArray();
 
             typeListBox.Items.AddRange(filterables.Select(f => new ListItem() { Text = f.DisplayName }));
             typeListBox.SelectedIndexChanged += TypeListBox_SelectedIndexChanged;
@@ -103,13 +99,11 @@ namespace FPLedit.Editor.Filters
 
         private void AddEntry(GridView view, List<FilterRule> patterns, string property, FilterTarget target)
         {
-            using (var epf = new EditPatternForm(property, target))
+            using var epf = new EditPatternForm(property, target);
+            if (epf.ShowModal(this) == DialogResult.Ok)
             {
-                if (epf.ShowModal(this) == DialogResult.Ok)
-                {
-                    patterns.Add(epf.Pattern);
-                    UpdateListView(view, patterns);
-                }
+                patterns.Add(epf.Pattern);
+                UpdateListView(view, patterns);
             }
         }
 
@@ -146,7 +140,7 @@ namespace FPLedit.Editor.Filters
         private void DeleteStationPattButton_Click(object sender, EventArgs e)
             => DeleteEntry(stationPattListView, curStationRules);
 
-        private void TypeListBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void TypeListBox_SelectedIndexChanged(object? sender, EventArgs e)
             => SwitchType(typeListBox.SelectedIndex);
 
         private void CloseButton_Click(object sender, EventArgs e)
@@ -162,12 +156,8 @@ namespace FPLedit.Editor.Filters
 
         #endregion
 
-        private class FilterableContainer
-        {
-            public IFilterRuleContainer Filterable;
-            public List<FilterRule> TrainRules, StationRules;
-        }
-        
+        private record FilterableContainer(IFilterRuleContainer Filterable, List<FilterRule> TrainRules, List<FilterRule> StationRules);
+
         private static class L
         {
             public static readonly string Cancel = T._("Abbrechen");

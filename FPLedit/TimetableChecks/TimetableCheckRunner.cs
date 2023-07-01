@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿#nullable enable
+using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System;
@@ -12,13 +13,13 @@ namespace FPLedit.TimetableChecks
 #pragma warning disable CA1001  // Disposable fields are not disposed as this is a windows kept in the background.
     internal sealed class TimetableCheckRunner
     {
-        private FForm form;
-        private GridView gridView;
+        private FForm? form;
+        private GridView? gridView;
 
-        private CancellationTokenSource cancelTokenSource;
-        private Task lastTask;
+        private CancellationTokenSource? cancelTokenSource;
+        private Task? lastTask;
 
-        private readonly object uiLock = new object();
+        private readonly object uiLock = new();
 
         public TimetableCheckRunner(IPluginInterface pluginInterface)
         {
@@ -26,7 +27,7 @@ namespace FPLedit.TimetableChecks
 
             pluginInterface.FileStateChanged += (_, _) =>
             {
-                if (pluginInterface.Timetable == null)
+                if (pluginInterface.Timetable == null!)
                     return;
 
                 var clone = pluginInterface.Timetable.Clone();
@@ -38,8 +39,8 @@ namespace FPLedit.TimetableChecks
 
                 lastTask = new Task(tk =>
                 {
-                    var token = (CancellationToken)tk;
-                    
+                    var token = (CancellationToken)tk!;
+
                     var list = new List<string>();
 
                     foreach (var check in checks)
@@ -47,7 +48,7 @@ namespace FPLedit.TimetableChecks
                         token.ThrowIfCancellationRequested();
                         list.AddRange(check.Check(clone));
                     }
-                    
+
                     token.ThrowIfCancellationRequested();
 
                     Application.Instance.Invoke(() =>

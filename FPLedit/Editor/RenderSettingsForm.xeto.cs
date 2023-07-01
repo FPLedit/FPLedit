@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿#nullable enable
+using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System;
@@ -16,17 +17,11 @@ namespace FPLedit.Editor
         private readonly IPluginInterface pluginInterface;
         private readonly List<IAppearanceHandler> handlers;
 
-        private RenderSettingsForm()
+        public RenderSettingsForm(IPluginInterface pluginInterface)
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
-
-            handlers = new List<IAppearanceHandler>();
-
             this.AddSizeStateHandler();
-        }
-
-        public RenderSettingsForm(IPluginInterface pluginInterface) : this()
-        {
+            
             this.pluginInterface = pluginInterface;
 
             var designables = pluginInterface.GetRegistered<IAppearanceControl>();
@@ -34,6 +29,7 @@ namespace FPLedit.Editor
             tabControl.SuspendLayout();
             tabControl.Pages.Clear();
 
+            handlers = new List<IAppearanceHandler>();
             foreach (var d in designables)
             {
                 var c = d.GetControl(pluginInterface);
@@ -52,7 +48,7 @@ namespace FPLedit.Editor
 
             expertCheckBox.Checked = pluginInterface.Settings.Get<bool>("std.expert");
             expertCheckBox.CheckedChanged += ExpertCheckBox_CheckedChanged;
-            ExpertCheckBox_CheckedChanged(this, null);
+            ExpertCheckBox_CheckedChanged(this, EventArgs.Empty);
         }
 
         private void CloseButton_Click(object sender, EventArgs e)
@@ -65,7 +61,7 @@ namespace FPLedit.Editor
         private void CancelButton_Click(object sender, EventArgs e)
             => Close(DialogResult.Cancel);
 
-        private void ExpertCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void ExpertCheckBox_CheckedChanged(object? sender, EventArgs e)
             => handlers.ForEach(eh => eh.SetExpertMode(expertCheckBox.Checked!.Value));
         
         private static class L

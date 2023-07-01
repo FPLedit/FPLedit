@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿#nullable enable
+using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System;
@@ -39,7 +40,7 @@ namespace FPLedit.Editor.Network
             if (tpf.ShowModal(this) != DialogResult.Ok)
                 return;
             
-            VirtualRoute.CreateVRoute(tt, tpf.Path!.First(), tpf.Path.Last(), tpf.Waypoints.ToArray());
+            VirtualRoute.CreateVRoute(tt, tpf.Path!.First(), tpf.Path!.Last(), tpf.Waypoints.ToArray());
             gridView.DataStore = VirtualRoute.GetVRoutes(tt).ToArray();
         }
 

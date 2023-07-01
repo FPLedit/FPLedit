@@ -1,3 +1,4 @@
+#nullable enable
 using Eto.Forms;
 using FPLedit.Editor.Rendering;
 using FPLedit.Shared;
@@ -32,6 +33,7 @@ namespace FPLedit.Editor
 
         private EditStationForm(Timetable tt, IPluginInterface pluginInterface)
         {
+            Station = null!; // will be initialized later.
             this.pluginInterface = pluginInterface;
             Eto.Serialization.Xaml.XamlReader.Load(this);
 

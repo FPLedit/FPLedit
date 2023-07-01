@@ -1,4 +1,5 @@
-﻿using FPLedit.Shared;
+﻿#nullable enable
+using FPLedit.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -91,7 +92,7 @@ namespace FPLedit.Editor.Trains
         
         public void LinkTrainMultiple(Train orig, TimeEntry offset, TimeEntry diff, int count, ITrainNameGen tnc)
         {
-            if (orig.ParentTimetable!.Type == TimetableType.Network && orig.ParentTimetable!.Version.CompareTo(TimetableVersion.Extended_FPL2) < 0)
+            if (orig.ParentTimetable.Type == TimetableType.Network && orig.ParentTimetable.Version.CompareTo(TimetableVersion.Extended_FPL2) < 0)
                 throw new TimetableTypeNotSupportedException("train links");
             
             if (count < 0)
@@ -108,7 +109,7 @@ namespace FPLedit.Editor.Trains
             for (int i = 0; i < count; i++)
             {
                 var linkedTrain = new LinkedTrain(link, i);
-                orig.ParentTimetable!.AddTrain(linkedTrain);
+                orig.ParentTimetable.AddTrain(linkedTrain);
             }
         }
 

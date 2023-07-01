@@ -64,7 +64,7 @@ namespace FPLedit
                 // Use reflection to avoid loading Eto.Wpf on all platforms.
                 try
                 {
-                    App.Handler.GetType()!
+                    App.Handler.GetType()
                         .GetField("EnableVisualStyles", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public)!
                         .SetValue(null, false);
                 }
@@ -94,8 +94,7 @@ namespace FPLedit
 
             bootstrapper.PreBootstrapExtensions(); // Load extension files.
 
-            mainForm = new MainForm(lfh, crashReporter, bootstrapper);
-            crashReporter = mainForm.CrashReporter;
+            mainForm = new MainForm(lfh, crashReporter!, bootstrapper);
 
             // Close all other windows when attempting to close main form.
             mainForm.Closing += (_, _) =>

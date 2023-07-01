@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿#nullable enable
+using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System;
@@ -35,6 +36,8 @@ namespace FPLedit.Editor.Filters
             typeSelection = new SelectionUI<PatternSelectionType>(null, typeSelectionStack);
             if (target == FilterTarget.Train)
                 typeSelection.DisableOption(PatternSelectionType.StationType);
+
+            Pattern = new FilterRule((char)PatternSelectionType.Equals + " ");
         }
 
         private void CloseButton_Click(object sender, EventArgs e)
@@ -57,7 +60,7 @@ namespace FPLedit.Editor.Filters
 
         protected override void Dispose(bool disposing)
         {
-            typeSelection?.Dispose();
+            typeSelection.Dispose();
             base.Dispose(disposing);
         }
 

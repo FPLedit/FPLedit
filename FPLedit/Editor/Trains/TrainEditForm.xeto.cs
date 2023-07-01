@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿#nullable enable
+using Eto.Forms;
 using FPLedit.Editor.TimetableEditor;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
@@ -16,7 +17,7 @@ namespace FPLedit.Editor.Trains
 #pragma warning disable CS0649,CA2213
         private readonly TextBox nameTextBox = default!, commentTextBox = default!;
         private readonly ComboBox locomotiveComboBox = default!, mbrComboBox = default!, lastComboBox = default!;
-        private readonly Button fillButton, resetTransitionButton = default!;
+        private readonly Button fillButton = default!, resetTransitionButton = default!;
         private readonly SingleTimetableEditControl editor = default!;
         private readonly DropDown transitionDropDown = default!;
         private readonly DaysControlNarrow daysControl = default!;
@@ -33,17 +34,19 @@ namespace FPLedit.Editor.Trains
         /// <summary>
         /// Output parameter for transitions. This property is populated after the form is closed.
         /// </summary>
-        public List<TransitionEntry> NextTrains { get; private set;  }
+        public List<TransitionEntry> NextTrains { get; private set; }
 
         private readonly Timetable tt;
         private readonly TrainEditHelper th;
 
-        private Dictionary<Station, ArrDep> arrDepBackup;
+        private Dictionary<Station, ArrDep> arrDepBackup = null!;
 
-        private TransitionEntry singleTransition;
+        private TransitionEntry? singleTransition;
 
         private TrainEditForm(Timetable tt)
         {
+            Train = null!; // will be initialized later.
+            NextTrains = new List<TransitionEntry>();
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
             this.tt = tt;
@@ -96,7 +99,7 @@ namespace FPLedit.Editor.Trains
         /// Use <see cref="NextTrains"/> to wire up transitions after this form has been closed.
         /// This form will NOT wire up transitions itself for new trains!
         /// </remarks>
-        public TrainEditForm(Timetable tt, TrainDirection direction, List<Station> path = null) : this(tt)
+        public TrainEditForm(Timetable tt, TrainDirection direction, List<Station>? path = null) : this(tt)
         {
             Train = new Train(direction, tt);
 
@@ -148,7 +151,7 @@ namespace FPLedit.Editor.Trains
                 return;
             }
 
-            var nameExists = Train.ParentTimetable!.Trains.Where(t => t != Train).Select(t => t.TName).Contains(nameTextBox.Text);
+            var nameExists = Train.ParentTimetable.Trains.Where(t => t != Train).Select(t => t.TName).Contains(nameTextBox.Text);
 
             if (nameExists)
             {
@@ -204,7 +207,7 @@ namespace FPLedit.Editor.Trains
             using var tfd = new TrainFillDialog(Train);
             if (tfd.ShowModal() == DialogResult.Ok)
             {
-                th.FillTrain(tfd.ReferenceTrain, Train, tfd.Offset);
+                th.FillTrain(tfd.ReferenceTrain!, Train, tfd.Offset);
 
                 editor.Initialize(Train);
             }
