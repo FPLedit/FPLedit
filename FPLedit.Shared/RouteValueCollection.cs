@@ -26,8 +26,8 @@ namespace FPLedit.Shared
         private readonly Func<string, T> convTo;
         private readonly Func<T, string?> convFrom;
         private readonly bool optional;
-        [MaybeNull] private readonly T convDefault;
-        
+        private readonly T? convDefault;
+
         /// <inheritdoc />
         public IReadOnlyDictionary<int, T> Values => new ReadOnlyDictionary<int, T>(values);
 
@@ -88,8 +88,7 @@ namespace FPLedit.Shared
 
         
         /// <inheritdoc />
-        [return: MaybeNull]
-        public T GetValue(int route)
+        public T? GetValue(int route)
         {
             if (values.TryGetValue(route, out var val))
                 return val;
@@ -97,7 +96,7 @@ namespace FPLedit.Shared
         }
 
         /// <inheritdoc />
-        public void SetValue(int route, [AllowNull] T val)
+        public void SetValue(int route, T? val)
         {
             values[route] = val!;
             Write();
@@ -163,7 +162,7 @@ namespace FPLedit.Shared
         public bool ContainsValue(T value) => values.ContainsValue(value);
 
         /// <inheritdoc />
-        public void ReplaceAllValues([DisallowNull] T oldVal, [DisallowNull] T newVal)
+        public void ReplaceAllValues([DisallowNull] T oldVal, T? newVal)
         {
             for (int i = 0; i < values.Count; i++)
             {
@@ -180,7 +179,7 @@ namespace FPLedit.Shared
         private readonly Dictionary<int, T> values;
         [MaybeNull] private readonly T defaultValue;
 
-        internal StandaloneRouteValueCollection(Dictionary<int, T> values, [AllowNull] T defaultValue)
+        internal StandaloneRouteValueCollection(Dictionary<int, T> values, T? defaultValue)
         {
             this.values = values;
             this.defaultValue = defaultValue!;
@@ -190,8 +189,7 @@ namespace FPLedit.Shared
         public IReadOnlyDictionary<int, T> Values => new ReadOnlyDictionary<int, T>(values);
 
         /// <inheritdoc />
-        [return: MaybeNull]
-        public T GetValue(int route)
+        public T? GetValue(int route)
         {
             if (values.TryGetValue(route, out var val))
                 return val;
@@ -199,7 +197,7 @@ namespace FPLedit.Shared
         }
 
         /// <inheritdoc />
-        public void SetValue(int route, [AllowNull] T val)
+        public void SetValue(int route, T? val)
         {
             values[route] = val!;
         }
@@ -208,7 +206,7 @@ namespace FPLedit.Shared
         public bool ContainsValue(T value) => values.ContainsValue(value);
 
         /// <inheritdoc />
-        public void ReplaceAllValues([DisallowNull] T oldVal, [DisallowNull] T newVal)
+        public void ReplaceAllValues([DisallowNull] T oldVal, T? newVal)
         {
             for (int i = 0; i < values.Count; i++)
             {
@@ -235,13 +233,12 @@ namespace FPLedit.Shared
         /// <summary>
         /// Return the value - or the default value, if no value has been set - corresponding to the given route.
         /// </summary>
-        [return: MaybeNull]
-        T GetValue(int route);
+        T? GetValue(int route);
 
         /// <summary>
         /// Set the value corresponding to the given route.
         /// </summary>
-        void SetValue(int route, [AllowNull] T val);
+        void SetValue(int route, T? val);
         
         /// <summary>
         /// Returns whether this RVC contains the given value at any route.
@@ -249,9 +246,9 @@ namespace FPLedit.Shared
         bool ContainsValue(T value);
 
         /// <summary>
-        /// Replace all opccurences of <paramref name="oldVal"/> with <paramref name="newVal" /> on all routes. 
+        /// Replace all occurences of <paramref name="oldVal"/> with <paramref name="newVal"/> on all routes.
         /// </summary>
-        void ReplaceAllValues([DisallowNull] T oldVal, [DisallowNull] T newVal);
+        void ReplaceAllValues([DisallowNull] T oldVal, T? newVal);
     }
 }
 

@@ -1,4 +1,4 @@
-﻿using Eto.Drawing;
+﻿#nullable enable
 using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.Helpers;
@@ -11,18 +11,20 @@ namespace FPLedit.Editor.TimetableEditor
 {
     internal abstract class BaseTimetableEditControl : Panel
     {
-        private ToggleButton trapeztafelToggle;
-
         protected bool mpmode = false;
 
         public bool Initialized { get; protected set; }
 
+#pragma warning disable CA2213
+        private ToggleButton trapeztafelToggle = null!;
         // Actions
-        private TableLayout internalActionsLayout;
+        private TableLayout internalActionsLayout = null!;
+#pragma warning restore CA2213
 
         protected readonly ObservableCollection<Control> actionButtons;
-        private readonly TimeNormalizer timeNormalizer = new TimeNormalizer();
-        
+        private readonly TimeNormalizer timeNormalizer = new ();
+
+        // ReSharper disable once UnusedMember.Global (used from XAML)
         public IList<Control> ActionButtons => actionButtons;
 
         protected BaseTimetableEditControl()
@@ -49,7 +51,7 @@ namespace FPLedit.Editor.TimetableEditor
 
         protected void FormatCell(BaseTimetableDataElement data, Station sta, bool arrival, TextBox tb)
         {
-            string val = tb.Text;
+            string? val = tb.Text;
             if (string.IsNullOrEmpty(val))
             {
                 data.SetError(sta, arrival, null);
@@ -74,13 +76,14 @@ namespace FPLedit.Editor.TimetableEditor
                 return;
 
             var data = (BaseTimetableDataElement)view.SelectedItem;
+            if (data.IsMpDummy) return;
 
             // Trapeztafelhalt darf nur bei Ankünften sein
             if (!data.IsSelectedArrival)
                 return;
 
-            var sta = data.GetStation();
-            var trapez = !data.ArrDeps[sta].TrapeztafelHalt;
+            var sta = data.GetStation()!;
+            var trapez = !data.ArrDeps![sta].TrapeztafelHalt;
             data.SetTrapez(sta, trapez);
 
             view.ReloadData(view.SelectedRow);
@@ -94,13 +97,14 @@ namespace FPLedit.Editor.TimetableEditor
                 return;
 
             var data = (BaseTimetableDataElement)view.SelectedItem;
-            var sta = data.GetStation();
+            if (data.IsMpDummy) return;
+            var sta = data.GetStation()!;
 
             // Zuglaufmeldungen dürfen auch bei Abfahrt am ersten Bahnhof sein
             if (!data.IsFirst(sta) && !data.IsSelectedArrival)
                 return;
 
-            using (var zlmDialog = new ZlmEditForm(data.ArrDeps[sta].Zuglaufmeldung))
+            using (var zlmDialog = new ZlmEditForm(data.ArrDeps![sta].Zuglaufmeldung))
             {
                 if (zlmDialog.ShowModal(this) != DialogResult.Ok)
                     return;
@@ -111,7 +115,7 @@ namespace FPLedit.Editor.TimetableEditor
             view.ReloadData(view.SelectedRow);
         }
 
-        protected virtual void HandleKeystroke(KeyEventArgs e, GridView view)
+        protected virtual void HandleKeystroke(KeyEventArgs e, GridView? view)
         {
             if (view == null)
                 return;
@@ -127,9 +131,9 @@ namespace FPLedit.Editor.TimetableEditor
                 e.Handled = true;
 
                 var data = (BaseTimetableDataElement)view.SelectedItem;
-                if (data == null || data.GetStation() == null || data.SelectedTextBox == null)
+                if (data == null || data.IsMpDummy || data.GetStation() == null || data.SelectedTextBox == null)
                     return;
-                FormatCell(data, data.GetStation(), data.IsSelectedArrival, data.SelectedTextBox);
+                FormatCell(data, data.GetStation()!, data.IsSelectedArrival, data.SelectedTextBox);
 
                 view.ReloadData(view.SelectedRow);
             }
@@ -151,11 +155,11 @@ namespace FPLedit.Editor.TimetableEditor
                 e.Handled = true;
 
                 var data = (BaseTimetableDataElement)view.SelectedItem;
-                if (data == null || data.GetStation() == null)
+                if (data == null || data.IsMpDummy || data.GetStation() == null)
                     return;
 
                 if (data.SelectedTextBox !=  null)
-                    FormatCell(data, data.GetStation(), data.IsSelectedArrival, data.SelectedTextBox);
+                    FormatCell(data, data.GetStation()!, data.IsSelectedArrival, data.SelectedTextBox);
 
                 var target = GetNextEditingPosition(data, view, e);
                 //Console.WriteLine("Next pos: " + target.ToString());
@@ -171,7 +175,7 @@ namespace FPLedit.Editor.TimetableEditor
             if (e.Key == Keys.Down)
             {
                 var data = (BaseTimetableDataElement)view.SelectedItem;
-                if (data == null || data.GetStation() == null || data.SelectedDropDown == null)
+                if (data == null || data.IsMpDummy || data.GetStation() == null || data.SelectedDropDown == null)
                     return;
                 
                 e.Handled = true;
@@ -183,7 +187,7 @@ namespace FPLedit.Editor.TimetableEditor
             if (e.Key == Keys.Up)
             {
                 var data = (BaseTimetableDataElement)view.SelectedItem;
-                if (data == null || data.GetStation() == null || data.SelectedDropDown == null)
+                if (data == null || data.IsMpDummy || data.GetStation() == null || data.SelectedDropDown == null)
                     return;
                 
                 e.Handled = true;
@@ -197,7 +201,7 @@ namespace FPLedit.Editor.TimetableEditor
                     return;
 
                 var data = (BaseTimetableDataElement)view.SelectedItem;
-                if (data == null || data.SelectedTextBox == null)
+                if (data == null || data.IsMpDummy || data.SelectedTextBox == null)
                     return;
                 var tb = data.SelectedTextBox;
                 if (tb.HasFocus || tb.ReadOnly) // Wir können "echt" editieren / sind read-Only

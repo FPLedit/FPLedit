@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿#nullable enable
+using Eto.Forms;
 using FPLedit.Editor.Trains;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
@@ -20,7 +21,7 @@ namespace FPLedit.Editor.Linear
         private const TrainDirection TOP_DIRECTION = TrainDirection.ti;
         private const TrainDirection BOTTOM_DIRECTION = TrainDirection.ta;
 
-        private GridView active;
+        private GridView? active;
 
         public LinearTrainsEditForm(IPluginInterface pluginInterface) : base(pluginInterface.Timetable)
         {
@@ -48,7 +49,7 @@ namespace FPLedit.Editor.Linear
             this.AddSizeStateHandler();
         }
 
-        private void HandleKeystroke(object sender, KeyEventArgs e)
+        private void HandleKeystroke(object? sender, KeyEventArgs e)
         {
             if (active == null)
                 return;

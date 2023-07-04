@@ -1,4 +1,5 @@
-﻿using Eto.Drawing;
+﻿#nullable enable
+using Eto.Drawing;
 using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
@@ -78,7 +79,7 @@ namespace FPLedit.Editor.TimetableEditor
 
         private void RefreshList()
         {
-            if (gridView != null && !gridView.IsDisposed && gridView.Visible)
+            if (gridView != null! && !gridView.IsDisposed && gridView.Visible)
                 gridView.DataStore = arrDep.ShuntMoves.ToArray(); // Array is here to prevent unpredictable crashes with ObservableCollection as DataStore.
         }
 

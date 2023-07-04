@@ -1,4 +1,5 @@
-﻿using Eto.Drawing;
+﻿#nullable enable
+using Eto.Drawing;
 using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
@@ -10,18 +11,18 @@ namespace FPLedit.Editor.Rendering
 {
     internal sealed class NetworkEditingControl : Panel
     {
-        private IPluginInterface pluginInterface;
+        private IPluginInterface pluginInterface = null!;
         
         private const int ICON_SIZE = 32;
         public const string TOOLBAR_ICON_SETTINGS_KEY = "ui.toolbar-icons";
         private bool toolbarUseIcons = true;
 
 #pragma warning disable CS0649,CA2213
-        private readonly RoutesDropDown routesDropDown = default!;
-        private readonly NetworkRenderer networkRenderer;
-        private readonly Button newLineButton, newButton, joinLineButton;
-        private readonly Divider divider1;
-        private readonly StackLayout toolbar;
+        private readonly RoutesDropDown routesDropDown = null!;
+        private readonly NetworkRenderer networkRenderer = null!;
+        private readonly Button newLineButton = null!, newButton = null!, joinLineButton = null!;
+        private readonly Divider divider1 = null!;
+        private readonly StackLayout toolbar = null!;
 #pragma warning restore CS0649,CA2213
         
         public static readonly Keys[] DispatchableKeys = { Keys.Home };
@@ -87,7 +88,7 @@ namespace FPLedit.Editor.Rendering
                         btn.Text = action.DisplayName;
 
                     btn.Enabled = action.IsEnabled(pluginInterface);
-                    btn.Click += (_, _) => action.Invoke(pluginInterface, pluginInterface.Timetable?.GetRoute(routesDropDown.SelectedRoute));
+                    btn.Click += (_, _) => action.Invoke(pluginInterface, pluginInterface.TimetableMaybeNull?.GetRoute(routesDropDown.SelectedRoute));
                     toolbar.Items.Add(btn);
                 }
             };
@@ -100,7 +101,7 @@ namespace FPLedit.Editor.Rendering
 
             networkRenderer.StationDoubleClicked += (s, _) =>
             {
-                var sta = (Station)s;
+                var sta = (Station?) s;
                 if (sta == null) return; // Something weird happened.
                 pluginInterface.StageUndoStep();
                 var r = routesDropDown.SelectedRoute;
@@ -125,7 +126,7 @@ namespace FPLedit.Editor.Rendering
                 var itm = menu.CreateItem("Löschen");
                 itm.Click += (_, _) =>
                 {
-                    var sta = (Station) s;
+                    var sta = (Station?) s;
                     if (sta == null) return; // Something weird happened.
                     if (pluginInterface.Timetable.WouldProduceAmbiguousRoute(sta))
                     {
@@ -195,7 +196,7 @@ namespace FPLedit.Editor.Rendering
         }
 
         public void ReloadTimetable()
-            => networkRenderer.SetTimetable(pluginInterface.Timetable);
+            => networkRenderer.SetTimetable(pluginInterface.TimetableMaybeNull);
 
         public void DispatchKeystroke(KeyEventArgs e)
         {

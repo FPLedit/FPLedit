@@ -1,4 +1,5 @@
-﻿using Eto.Drawing;
+﻿#nullable enable
+using Eto.Drawing;
 using Eto.Forms;
 using FPLedit.Editor.TimetableEditor;
 using FPLedit.Shared;
@@ -21,19 +22,19 @@ namespace FPLedit.Editor.Linear
         private readonly TableLayout actionsLayout = default!;
 #pragma warning restore CS0649,CA2213
 
-        private GridView focused;
+        private GridView? focused;
 
-        private Timetable tt;
+        private Timetable tt = null!;
 
         protected override int FirstEditingColumn => 1; // erstes Abfahrtsfeld
 
-        public LinearTimetableEditControl() : base()
+        public LinearTimetableEditControl()
         {
             Eto.Serialization.Xaml.XamlReader.Load(this);
 
             trapeztafelToggle.Click += (_, _) => ViewDependantAction(Trapez);
             zlmButton.Click += (_, _) => ViewDependantAction(Zuglaufmeldung);
-            base.Init(trapeztafelToggle, actionsLayout);
+            Init(trapeztafelToggle, actionsLayout);
 
             KeyDown += (_, e) => HandleControlKeystroke(e);
 
@@ -81,7 +82,7 @@ namespace FPLedit.Editor.Linear
 
             var cc = new CustomCell
             {
-                CreateCell = args =>
+                CreateCell = _ =>
                 {
                     var tb = new TextBox { Tag = new CCCO() };
                     
@@ -94,8 +95,8 @@ namespace FPLedit.Editor.Linear
                     
                     tb.GotFocus += (s, _) =>
                     {
-                        var dd2 = (TextBox)s;
-                        var ccco = (CCCO)dd2!.Tag;
+                        var dd2 = (TextBox) s!;
+                        var ccco = (CCCO) dd2.Tag;
                         if (ccco.InhibitEvents)
                             return;
                         TbEnterEditMode((DataElement)ccco.Data, dd2);
@@ -103,8 +104,8 @@ namespace FPLedit.Editor.Linear
                     
                     tb.LostFocus += (s, _) =>
                     {
-                        var dd2 = (TextBox)s;
-                        var ccco = (CCCO)dd2!.Tag;
+                        var dd2 = (TextBox) s!;
+                        var ccco = (CCCO) dd2.Tag;
                         if (ccco.InhibitEvents)
                             return;
                         FormatCell(ccco.Data, sta, arrival, tb); 
@@ -163,11 +164,11 @@ namespace FPLedit.Editor.Linear
 
         protected override (int col, int row) GetNextEditingPosition(BaseTimetableDataElement data, GridView view, KeyEventArgs e)
         {
-            var path = data.Train.GetPath();
+            var path = data.Train!.GetPath();
             int idx, row;
             if (!e.Control)
             {
-                idx = path.IndexOf(data.GetStation()) * 2 + (data.IsSelectedArrival ? 1 : 2);
+                idx = path.IndexOf(data.GetStation()!) * 2 + (data.IsSelectedArrival ? 1 : 2);
                 row = view.SelectedRow;
                 if (path.Last() == data.GetStation() && data.IsSelectedArrival)
                 {
@@ -177,7 +178,7 @@ namespace FPLedit.Editor.Linear
             }
             else
             {
-                idx = path.IndexOf(data.GetStation()) * 2 - (data.IsSelectedArrival ? 1 : 0);
+                idx = path.IndexOf(data.GetStation()!) * 2 - (data.IsSelectedArrival ? 1 : 0);
                 row = view.SelectedRow;
                 if (path.First() == data.GetStation() && !data.IsSelectedArrival)
                 {
@@ -190,7 +191,7 @@ namespace FPLedit.Editor.Linear
 
         protected override void CellSelected(BaseTimetableDataElement data, Station sta, bool arrival)
         {
-            trapeztafelToggle.Checked = data.ArrDeps[sta].TrapeztafelHalt;
+            trapeztafelToggle.Checked = data.ArrDeps![sta].TrapeztafelHalt;
 
             trapeztafelToggle.Enabled = arrival;
             zlmButton.Enabled = arrival ^ (data.IsFirst(sta));
@@ -198,19 +199,19 @@ namespace FPLedit.Editor.Linear
 
         private class DataElement : BaseTimetableDataElement
         {
-            public Station SelectedStation { get; set; }
+            public Station? SelectedStation { get; set; }
 
-            public override Station GetStation() => SelectedStation;
+            public override Station? GetStation() => SelectedStation;
 
-            public DataElement() {}
-
-            public DataElement(bool isMpDummy)
+            public static DataElement CreateMpDummy()
             {
-                if (!isMpDummy) throw new ArgumentException("not set", nameof(isMpDummy));
-                IsMpDummy = true;
-                Train = null;
-                ArrDeps = null;
-                SelectedStation = null;
+                return new()
+                {
+                    IsMpDummy = true,
+                    Train = null,
+                    ArrDeps = null,
+                    SelectedStation = null,
+                };
             }
         }
 
@@ -220,7 +221,7 @@ namespace FPLedit.Editor.Linear
         {
             var stations = tt.GetRoute(Timetable.LINEAR_ROUTE_ID).Stations.ToList().MaybeReverseDirection(dir);
 
-            view.AddFuncColumn<DataElement>(t => t.IsMpDummy ? "" : t.Train.TName, T._("Zugnummer"));
+            view.AddFuncColumn<DataElement>(t => t.IsMpDummy ? "" : t.Train!.TName, T._("Zugnummer"));
 #pragma warning disable CA2000
             foreach (var sta in stations)
             {
@@ -230,7 +231,7 @@ namespace FPLedit.Editor.Linear
                     view.AddColumn(GetCell(t => t.Departure, sta, false, view), T._("{0} ab", sta.SName), editable: true);
             }
 #pragma warning restore CA2000
-            view.AddFuncColumn<DataElement>(t => GetTransition(t.Train), T._("Folgezug"));
+            view.AddFuncColumn<DataElement>(t => GetTransition(t.Train!), T._("Folgezug"));
 
             view.GotFocus += (_, _) => focused = view;
             view.KeyDown += (_, e) => HandleViewKeystroke(e, view);
@@ -241,7 +242,7 @@ namespace FPLedit.Editor.Linear
                 ArrDeps = tra.GetArrDepsUnsorted()
             }).ToList();
             if (mpmode)
-                l.Add(new DataElement(isMpDummy: true)); // Add empty "last line" in multiplatform mode.
+                l.Add(DataElement.CreateMpDummy()); // Add empty "last line" in multiplatform mode.
 
             view.DataStore = l.ToArray();
         }

@@ -1,4 +1,5 @@
-﻿using Eto.Drawing;
+﻿#nullable enable
+using Eto.Drawing;
 using Eto.Forms;
 using FPLedit.Shared;
 using System;
@@ -8,10 +9,10 @@ namespace FPLedit.Editor.TimetableEditor
     internal sealed class TimetableCellRenderProperties
     {
         private static bool initialized;
-        private static Font fn, fb, fc, fbc;
+        private static Font fn = null!, fb = null!, fc = null!, fbc = null!;
         private static Color errorColor, bgColor, textColor;
 
-        private string Text { get; }
+        private string? Text { get; }
         private Color Background { get; }
         private Font Font { get; }
         private bool ReadOnly { get; }
@@ -35,7 +36,7 @@ namespace FPLedit.Editor.TimetableEditor
             Background = bgColor;
             Font = fn;
 
-            var ardp = data.ArrDeps[sta];
+            var ardp = data.ArrDeps![sta];
 
             if (!data.HasError(sta, arrival))
                 Text = time(ardp) != default ? time(ardp).ToTimeString() : "";
@@ -102,10 +103,10 @@ namespace FPLedit.Editor.TimetableEditor
     internal sealed class TimetableCellRenderProperties2
     {
         private static bool initialized;
-        private static Font fn, fb;
+        private static Font fn = null!;
         private static Color bgColor, textColor;
 
-        public string Text { get; }
+        public string? Text { get; }
         public Color Background { get; }
         public Font Font { get; }
 
@@ -113,7 +114,6 @@ namespace FPLedit.Editor.TimetableEditor
         {
             if (!initialized)
             {
-                fb = SystemFonts.Bold();
                 fn = SystemFonts.Default();
                 bgColor = SystemColors.ControlBackground;
                 textColor = SystemColors.ControlText;

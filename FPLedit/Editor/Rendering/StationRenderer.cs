@@ -1,4 +1,5 @@
-﻿using Eto.Drawing;
+﻿#nullable enable
+using Eto.Drawing;
 using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.Rendering;
@@ -14,30 +15,30 @@ namespace FPLedit.Editor.Rendering
     {
         private const int INDENT = 20;
         private const int LINE_HEIGHT = 30;
-        private readonly Font font = new Font(FontFamilies.SansFamilyName, 8);
-        private readonly Pen dashedPen = new Pen(Colors.Black, 1) { DashStyle = DashStyles.Dash };
+        private readonly Font font = new (FontFamilies.SansFamilyName, 8);
+        private readonly Pen dashedPen = new (Colors.Black, 1) { DashStyle = DashStyles.Dash };
         private readonly Color textColor, bgColor;
 
-        private readonly List<RenderBtn<Track>> buttons = new List<RenderBtn<Track>>();
+        private readonly List<RenderBtn<Track>> buttons = new ();
 
-        private RenderBtn<Track> editingButton;
+        private RenderBtn<Track>? editingButton;
 
         // Injected by InitializeWithStation.
         private int routeIndex;
-        private Station station;
-        private Timetable tt;
+        private Station station = null!;
+        private Timetable tt = null!;
 
         #region Result properties
         
-        public IRouteValueCollection<string> DefaultTrackLeft { get; private set; }
+        public IRouteValueCollection<string> DefaultTrackLeft { get; private set; } = null!;
 
-        public IRouteValueCollection<string> DefaultTrackRight { get; private set; }
+        public IRouteValueCollection<string> DefaultTrackRight { get; private set; } = null!;
 
-        public ObservableCollection<Track> Tracks { get; private set; }
+        public ObservableCollection<Track> Tracks { get; private set; } = null!;
 
-        public Dictionary<string, string> TrackRenames { get; } = new Dictionary<string, string>();
+        public Dictionary<string, string> TrackRenames { get; } = new ();
         
-        private readonly List<string> trackRemoves = new List<string>();
+        private readonly List<string> trackRemoves = new ();
         public IEnumerable<string> TrackRemoves => trackRemoves.AsReadOnly();
         
         #endregion
@@ -89,8 +90,10 @@ namespace FPLedit.Editor.Rendering
                 e.Graphics.DrawText(font, textColor, Width - 5 - nextSize.Width, 5, nextText);
             }
 
-            var leftdefaultTrack = Tracks.IndexOf(Tracks.FirstOrDefault(t => t.Name == DefaultTrackLeft.GetValue(routeIndex)));
-            var rightdefaultTrack = Tracks.IndexOf(Tracks.FirstOrDefault(t => t.Name == DefaultTrackRight.GetValue(routeIndex)));
+            var ldt = Tracks.FirstOrDefault(t => t.Name == DefaultTrackLeft.GetValue(routeIndex));
+            var leftdefaultTrack = ldt != null ? Tracks.IndexOf(ldt) : -1;
+            var rdt = Tracks.FirstOrDefault(t => t.Name == DefaultTrackRight.GetValue(routeIndex));
+            var rightdefaultTrack = rdt != null ? Tracks.IndexOf(rdt) : -1;
 
             // Netzwerk: Falls noch keine Angabe: Standardgleise setzen
             if (tt.Type == TimetableType.Network && Tracks.Any())
@@ -171,17 +174,17 @@ namespace FPLedit.Editor.Rendering
                 if (trackIndex == leftdefaultTrack && !disableLeft)
                 {
                     var leftUpBtn = GetButton("▲", track, 10, y);
-                    leftUpBtn.Click += (s, x) => MoveDefaultTrack(DefaultTrackLeft, ((RenderBtn<Track>)s).Tag, -1);
+                    leftUpBtn.Click += (s, _) => MoveDefaultTrack(DefaultTrackLeft, ((RenderBtn<Track>) s!).Tag, -1);
                     var leftDownBtn = GetButton("▼", track, 30, y);
-                    leftDownBtn.Click += (s, x) => MoveDefaultTrack(DefaultTrackLeft, ((RenderBtn<Track>)s).Tag, 1);
+                    leftDownBtn.Click += (s, _) => MoveDefaultTrack(DefaultTrackLeft, ((RenderBtn<Track>) s!).Tag, 1);
                 }
 
                 if (trackIndex == rightdefaultTrack && !disableRight)
                 {
                     var rightUpButton = GetButton("▲", track, Width - 46, y);
-                    rightUpButton.Click += (s, x) => MoveDefaultTrack(DefaultTrackRight, ((RenderBtn<Track>)s).Tag, -1);
+                    rightUpButton.Click += (s, _) => MoveDefaultTrack(DefaultTrackRight, ((RenderBtn<Track>) s!).Tag, -1);
                     var rightDownBtn = GetButton("▼", track, Width - 26, y);
-                    rightDownBtn.Click += (s, x) => MoveDefaultTrack(DefaultTrackRight, ((RenderBtn<Track>)s).Tag, 1);
+                    rightDownBtn.Click += (s, _) => MoveDefaultTrack(DefaultTrackRight, ((RenderBtn<Track>) s!).Tag, 1);
                 }
 
                 y += LINE_HEIGHT;
@@ -190,8 +193,8 @@ namespace FPLedit.Editor.Rendering
             // Button für neue Gleise
             var addTrackText = T._("Neues Gleis hinzufügen");
             var textWidth = (int)e.Graphics.MeasureString(font, addTrackText).Width;
-            var addBtn = new RenderBtn<Track>(null, new Point(midx - (textWidth / 2) - 5, y - 8), new Size(textWidth + 10, 16), Colors.LightGrey, addTrackText);
-            buttons.Add(addBtn);
+            var addBtn = new RenderBtn<Track?>(null, new Point(midx - (textWidth / 2) - 5, y - 8), new Size(textWidth + 10, 16), Colors.LightGrey, addTrackText);
+            buttons.Add(addBtn!);
             addBtn.Click += AddBtn_Click;
 
             var newHeight = (Tracks.Count) * LINE_HEIGHT + 50;
@@ -217,7 +220,7 @@ namespace FPLedit.Editor.Rendering
             Invalidate();
         }
 
-        private void AddBtn_Click(object sender, EventArgs e)
+        private void AddBtn_Click(object? sender, EventArgs e)
         {
             var regex = new Regex(@"^Gleis (\d+)$", RegexOptions.Compiled);
             var maxTrack = 0;
@@ -239,9 +242,9 @@ namespace FPLedit.Editor.Rendering
             Invalidate();
         }
 
-        private void NameBtn_Click(object sender, EventArgs e)
+        private void NameBtn_Click(object? sender, EventArgs e)
         {
-            editingButton = (RenderBtn<Track>) sender;
+            editingButton = (RenderBtn<Track>) sender!;
             var oldName = editingButton.Tag.Name;
             var newName = Shared.UI.InputBox.Query(ParentWindow, T._("Gleisnamen bearbeiten"), oldName);
             if (newName != null && newName != oldName)
@@ -250,6 +253,8 @@ namespace FPLedit.Editor.Rendering
 
         private void CommitNameEdit(string oldName, string newName)
         {
+            if (editingButton == null) return;
+
             var duplicate = Tracks.Any(t => t != editingButton.Tag && t.Name == newName);
             if (duplicate)
             {
@@ -278,9 +283,9 @@ namespace FPLedit.Editor.Rendering
             editingButton = null;
         }
 
-        private void DownBtn_Click(object sender, EventArgs e)
+        private void DownBtn_Click(object? sender, EventArgs e)
         {
-            var btn = (RenderBtn<Track>)sender;
+            var btn = (RenderBtn<Track>) sender!;
             var idx = Tracks.IndexOf(btn.Tag);
             if (idx == Tracks.Count - 1)
                 return;
@@ -288,9 +293,9 @@ namespace FPLedit.Editor.Rendering
             Invalidate();
         }
 
-        private void UpBtn_Click(object sender, EventArgs e)
+        private void UpBtn_Click(object? sender, EventArgs e)
         {
-            var btn = (RenderBtn<Track>)sender;
+            var btn = (RenderBtn<Track>) sender!;
             var idx = Tracks.IndexOf(btn.Tag);
             if (idx == 0)
                 return;
@@ -298,12 +303,13 @@ namespace FPLedit.Editor.Rendering
             Invalidate();
         }
 
-        private void DeleteBtn_Click(object sender, EventArgs e)
+        private void DeleteBtn_Click(object? sender, EventArgs e)
         {
-            var btn = (RenderBtn<Track>)sender;
+            var btn = (RenderBtn<Track>) sender!;
             Tracks.Remove(btn.Tag);
 
             var firstName = Tracks.FirstOrDefault()?.Name;
+            // set to new first track or null if none is remaining.
             DefaultTrackLeft.ReplaceAllValues(btn.Tag.Name, firstName);
             DefaultTrackRight.ReplaceAllValues(btn.Tag.Name, firstName);
             
@@ -349,9 +355,9 @@ namespace FPLedit.Editor.Rendering
 
         protected override void Dispose(bool disposing)
         {
-            if (font != null && !font.IsDisposed)
+            if (!font.IsDisposed)
                 font.Dispose();
-            dashedPen?.Dispose();
+            dashedPen.Dispose();
             base.Dispose(disposing);
         }
     }

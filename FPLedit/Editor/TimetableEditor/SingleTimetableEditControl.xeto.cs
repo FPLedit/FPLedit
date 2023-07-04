@@ -1,4 +1,5 @@
-﻿using Eto.Drawing;
+﻿#nullable enable
+using Eto.Drawing;
 using Eto.Forms;
 using FPLedit.Shared;
 using System;
@@ -17,8 +18,8 @@ namespace FPLedit.Editor.TimetableEditor
         private readonly TableLayout actionsLayout = default!;
 #pragma warning restore CS0649,CA2213
 
-        private IWritableTrain train;
-        private List<Station> path;
+        private IWritableTrain train = null!;
+        private List<Station> path = null!;
 
         private const string NO_TRACK = "<Kein Gleis>";
 
@@ -88,7 +89,7 @@ namespace FPLedit.Editor.TimetableEditor
                             if (!hadCellAction || s != tb) return;
 
                             // Return to current editing position.
-                            var ccco = (CCCO)tb.Tag;
+                            var ccco = (CCCO) tb.Tag;
                             if (ccco.InhibitEvents)
                                 return;
                             var cep = GetCurEditingPosition(ccco.Data, dataGridView);
@@ -97,23 +98,23 @@ namespace FPLedit.Editor.TimetableEditor
 
                     tb.GotFocus += (s, _) =>
                     {
-                        var dd2 = (TextBox)s;
-                        var ccco = (CCCO)dd2!.Tag;
+                        var dd2 = (TextBox) s!;
+                        var ccco = (CCCO) dd2.Tag;
                         if (ccco.InhibitEvents)
                             return;
-                        CellSelected(ccco.Data, ccco.Data.GetStation(), arrival);
+                        CellSelected(ccco.Data, ccco.Data.GetStation()!, arrival);
                         ccco.Data.IsSelectedArrival = arrival;
                         ccco.Data.SelectedTextBox = tb;
                     };
                     
                     tb.LostFocus += (s, _) =>
                     {
-                        var dd2 = (TextBox)s;
-                        var ccco = (CCCO)dd2!.Tag;
+                        var dd2 = (TextBox) s!;
+                        var ccco = (CCCO) dd2.Tag;
                         if (ccco.InhibitEvents)
                             return;
-                        FormatCell(ccco.Data, ccco.Data.GetStation(), arrival, tb);
-                        new TimetableCellRenderProperties(time, ccco.Data.GetStation(), arrival, ccco.Data).Apply(tb);
+                        FormatCell(ccco.Data, ccco.Data.GetStation()!, arrival, tb);
+                        new TimetableCellRenderProperties(time, ccco.Data.GetStation()!, arrival, ccco.Data).Apply(tb);
                     };
                     
                     return tb;
@@ -131,7 +132,7 @@ namespace FPLedit.Editor.TimetableEditor
                     if (data.IsMpDummy) return; // Skip "last rows" in mpmode.
 
                     ccco.Data = data;
-                    new TimetableCellRenderProperties(time, data.Station, arrival, data).Apply(tb);
+                    new TimetableCellRenderProperties(time, data.Station!, arrival, data).Apply(tb);
 
                     ccco.InhibitEvents = false;
 
@@ -139,7 +140,7 @@ namespace FPLedit.Editor.TimetableEditor
                     {
                         // Enter the full edit mode.
                         tb.CaretIndex = 0;
-                        CellSelected(data, data.Station, arrival);
+                        CellSelected(data, data.Station!, arrival);
                         data.IsSelectedArrival = arrival;
                         data.SelectedTextBox = tb;
 
@@ -157,7 +158,7 @@ namespace FPLedit.Editor.TimetableEditor
                 if (!mpmode) return;
                 var data = (DataElement) e.Item;
                 if (data.IsMpDummy) return; // Skip "last rows" in mpmode.
-                new TimetableCellRenderProperties(time, data.Station, arrival, data).Render(e.Graphics, e.ClipRectangle);
+                new TimetableCellRenderProperties(time, data.Station!, arrival, data).Render(e.Graphics, e.ClipRectangle);
             };
             return cc;
         }
@@ -172,20 +173,20 @@ namespace FPLedit.Editor.TimetableEditor
 
                     dd.SelectedIndexChanged += (s, _) =>
                     {
-                        var dd2 = (DropDown)s;
-                        var ccco = (CCCO)dd2!.Tag;
+                        var dd2 = (DropDown) s!;
+                        var ccco = (CCCO) dd2.Tag;
                         if (ccco.InhibitEvents)
                             return;
                         var t = (string) dd.SelectedValue;
-                        var ds = ((DataElement)ccco.Data).GetTrackDataStore().ToArray();
+                        //var ds = ((DataElement)ccco.Data).GetTrackDataStore().ToArray();
 
-                        setTrack(ccco.Data.ArrDeps[ccco.Data.GetStation()], t == (string) dd.DataStore.FirstOrDefault() ? "" : t);
+                        setTrack(ccco.Data.ArrDeps![ccco.Data.GetStation()!], t == (string?) dd.DataStore.FirstOrDefault() ? "" : t);
                     };
                     
                     dd.GotFocus += (s, _) =>
                     {
-                        var dd2 = (DropDown)s;
-                        var ccco = (CCCO)dd2!.Tag;
+                        var dd2 = (DropDown) s!;
+                        var ccco = (CCCO) dd2.Tag;
                         if (ccco.InhibitEvents)
                             return;
                         ccco.Data.IsSelectedArrival = arrival;
@@ -216,10 +217,10 @@ namespace FPLedit.Editor.TimetableEditor
 
                     dd.DataStore = ds;
                     dd.Enabled = ds.Length > 1;
-                    if (data.IsFirst(data.Station) && arrival || data.IsLast(data.Station) && !arrival)
+                    if (data.IsFirst(data.Station!) && arrival || data.IsLast(data.Station!) && !arrival)
                         dd.Enabled = false;
                     
-                    dd.SelectedValue = track(data.ArrDeps[data.Station]);
+                    dd.SelectedValue = track(data.ArrDeps![data.Station!]);
                     
                     ccco.InhibitEvents = false; // Resume event handling of cutom control.
 
@@ -242,7 +243,7 @@ namespace FPLedit.Editor.TimetableEditor
                 if (!mpmode) return;
                 var data = (DataElement) e.Item;
                 if (data.IsMpDummy) return; // Skip "last rows" in mpmode.
-                new TimetableCellRenderProperties2(track(data.ArrDeps[data.Station])).Render(e.Graphics, e.ClipRectangle);
+                new TimetableCellRenderProperties2(track(data.ArrDeps![data.Station!])).Render(e.Graphics, e.ClipRectangle);
             };
             return cc;
         }
@@ -252,14 +253,16 @@ namespace FPLedit.Editor.TimetableEditor
             bool? B(DataElement d)
             {
                 if (d.IsMpDummy) return null;
-                return check(d.ArrDeps[d.Station]);
+                return check(d.ArrDeps![d.Station!]);
             }
             return new CheckBoxCell { Binding = Binding.Delegate<DataElement, bool?>(B) };
         }
 
         protected override void CellSelected(BaseTimetableDataElement data, Station sta, bool arrival)
         {
-            trapeztafelToggle.Checked = data.ArrDeps[sta].TrapeztafelHalt;
+            if (data.IsMpDummy) return; // Skip "last rows" in mpmode.
+
+            trapeztafelToggle.Checked = data.ArrDeps![sta].TrapeztafelHalt;
             requestToggle.Checked = data.ArrDeps[sta].RequestStop || sta.RequestStop;
 
             trapeztafelToggle.Enabled = requestToggle.Enabled = arrival && !data.IsFirst(sta) && !sta.RequestStop;
@@ -268,13 +271,13 @@ namespace FPLedit.Editor.TimetableEditor
 
         private class DataElement : BaseTimetableDataElement
         {
-            public Station Station { get; }
+            public Station? Station { get; }
 
-            public override Station GetStation() => Station;
+            public override Station? GetStation() => Station;
 
             public IEnumerable<object> GetTrackDataStore()
             {
-                var ds = Station.Tracks.Select(s => s.Name).ToList();
+                var ds = Station!.Tracks.Select(s => s.Name).ToList();
                 ds.Insert(0, NO_TRACK);
                 return ds;
             }
@@ -283,25 +286,26 @@ namespace FPLedit.Editor.TimetableEditor
             {
                 if (sta.RequestStop)
                     return;
-                var a = ArrDeps[sta];
+                var a = ArrDeps![sta];
                 a.RequestStop = req;
                 ArrDeps[sta] = a;
             }
 
-            public DataElement(ITrain tra, Station sta, ArrDep arrDep)
+            public DataElement(ITrain tra, Station? sta, ArrDep arrDep)
             {
                 Train = tra;
-                ArrDeps = new Dictionary<Station, ArrDep>(1) { [sta] = arrDep };
+                if (sta != null)
+                    ArrDeps = new Dictionary<Station, ArrDep>(1) { [sta] = arrDep };
                 Station = sta;
             }
             
-            public DataElement(bool isMpDummy)
+            public static DataElement CreateMpDummy()
             {
-                if (!isMpDummy) throw new ArgumentException("not set", nameof(isMpDummy));
-                IsMpDummy = true;
-                Train = null;
-                ArrDeps = null;
-                Station = null;
+                return new(null!, null!, null!)
+                {
+                    IsMpDummy = true,
+                    ArrDeps = null,
+                };
             }
         }
 
@@ -309,7 +313,7 @@ namespace FPLedit.Editor.TimetableEditor
         {
 #pragma warning disable CA2000
             view.Columns.Clear();
-            view.AddFuncColumn<DataElement>(t => t.IsMpDummy ? "" : t.Station.SName, T._("Bahnhof"));
+            view.AddFuncColumn<DataElement>(t => t.IsMpDummy ? "" : t.Station!.SName, T._("Bahnhof"));
             view.AddColumn(GetCell(t => t.Arrival, true), T._("Ankunft"), editable: true);
             view.AddColumn(GetCell(t => t.Departure, false), T._("Abfahrt"), editable: true);
             view.AddColumn(GetTrackCell(t => t.ArrivalTrack, (t,s) => t.ArrivalTrack = s, true), T._("Ankunftsgleis"), editable: true);
@@ -321,13 +325,16 @@ namespace FPLedit.Editor.TimetableEditor
             
             var l = path.Select(sta => new DataElement(train, sta, train.GetArrDep(sta))).ToList();
             if (mpmode)
-                l.Add(new DataElement(isMpDummy: true)); // Add empty "last line" in multiplatform mode.
+                l.Add(DataElement.CreateMpDummy()); // Add empty "last line" in multiplatform mode.
 
             view.DataStore = l;
             view.SelectedRowsChanged += (_, _) =>
             {
-                var selected = (DataElement) view.SelectedItem;
-                shuntButton.Enabled = selected?.Station?.Tracks.Any() ?? false;
+                var selected = (DataElement?) view.SelectedItem;
+                if (selected == null || selected.IsMpDummy)
+                    shuntButton.Enabled = false;
+                else
+                    shuntButton.Enabled = selected.Station?.Tracks.Any() ?? false;
             };
         }
 
@@ -378,13 +385,14 @@ namespace FPLedit.Editor.TimetableEditor
             if (view.SelectedRow == -1)
                 return;
 
-            var data = (DataElement) view.SelectedItem;
-            var sta = data.Station;
+            var data = (DataElement?) view.SelectedItem;
+            if (data == null || data.IsMpDummy) return;
+            var sta = data.Station!;
 
             if (!sta.Tracks.Any()) // We have no tracks.
                 return;
 
-            var arrDep = data.ArrDeps[sta];
+            var arrDep = data.ArrDeps![sta];
 
             using (var shf = new ShuntForm(train, arrDep, sta))
                 if (shf.ShowModal(this) != DialogResult.Ok)
@@ -398,19 +406,20 @@ namespace FPLedit.Editor.TimetableEditor
             if (view.SelectedRow == -1)
                 return;
 
-            var data = (DataElement)view.SelectedItem;
+            var data = (DataElement?) view.SelectedItem;
+            if (data == null || data.IsMpDummy) return;
 
             // Request Stop darf nur bei Ankünften sein
             if (!data.IsSelectedArrival)
                 return;
 
-            var sta = data.GetStation();
+            var sta = data.GetStation()!;
 
             // All traisn stop at this station.
             if (sta.RequestStop)
                 return;
             
-            var req = !data.ArrDeps[sta].RequestStop;
+            var req = !data.ArrDeps![sta].RequestStop;
             data.SetRequestStop(sta, req);
 
             view.ReloadData(view.SelectedRow);
