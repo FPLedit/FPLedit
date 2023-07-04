@@ -12,7 +12,7 @@
         string DisplayName { get; }
 
         /// <summary>
-        /// Icon of type <code>Eto.Bitmap</code>, will be used instead of the display text if not null, and configured by the user.
+        /// Icon of type <see cref="Eto.Drawing.Bitmap" />, will be used instead of the display text if not null, and configured by the user.
         /// </summary>
         /// <remarks>The icon size should be at least 64x64 px.</remarks>
         dynamic? EtoIconBitmap { get; }
@@ -20,7 +20,9 @@
         /// <summary>
         /// This method will be triggered when the action is invoked.
         /// </summary>
-        void Invoke(IPluginInterface pluginInterface, Route route);
+        /// <param name="pluginInterface">The current plugin interface instance.</param>
+        /// <param name="route">The currently selected route, or <see langword="null" /> if no route is selected (or no file is opened).</param>
+        void Invoke(IPluginInterface pluginInterface, Route? route);
 
         /// <summary>
         /// The return value of this function will determine if the button is currently enabled.

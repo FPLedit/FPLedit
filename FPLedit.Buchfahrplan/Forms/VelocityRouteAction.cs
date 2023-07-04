@@ -10,8 +10,10 @@ namespace FPLedit.Buchfahrplan.Forms
 
         public dynamic EtoIconBitmap => new Bitmap(ResourceHelper.GetResource("Buchfahrplan.Resources.toolbar-vmax.png"));
 
-        public void Invoke(IPluginInterface pluginInterface, Route route)
+        public void Invoke(IPluginInterface pluginInterface, Route? route)
         {
+            if (route == null) return;
+
             pluginInterface.StageUndoStep();
             using var svf = new VelocityForm(pluginInterface, route);
             if (svf.ShowModal() == DialogResult.Ok)

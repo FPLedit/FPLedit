@@ -13,8 +13,10 @@ namespace FPLedit.Editor.Network
         public bool IsEnabled(IPluginInterface pluginInterface)
             => pluginInterface.FileState.Opened;
 
-        public void Invoke(IPluginInterface pluginInterface, Route route)
+        public void Invoke(IPluginInterface pluginInterface, Route? route)
         {
+            if (route == null) return;
+
             pluginInterface.StageUndoStep();
             using var lef = new LineEditForm(pluginInterface, route.Index);
             if (lef.ShowModal(pluginInterface.RootForm) == DialogResult.Ok)
