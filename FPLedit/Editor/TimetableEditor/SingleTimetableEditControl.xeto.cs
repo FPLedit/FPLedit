@@ -443,6 +443,8 @@ namespace FPLedit.Editor.TimetableEditor
         {
             public static readonly string Zlm = T._("&Zuglaufmeldung durch");
             public static readonly string Shunts = T._("&Rangierfahrten");
+            public static readonly string TrapezTooltip = T._("Halt vor Trapeztafel");
+            public static readonly string RequestTooltip = T._("Bedarfshalt");
         }
     }
 }

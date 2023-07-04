@@ -308,6 +308,7 @@ namespace FPLedit.Editor.Linear
         private static class L
         {
             public static readonly string Zlm = T._("&Zuglaufmeldung durch");
+            public static readonly string TrapezTooltip = T._("Halt vor Trapeztafel");
             public static readonly string Shunts = T._("&Rangierfahrten");
         }
     }

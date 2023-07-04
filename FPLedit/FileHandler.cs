@@ -264,7 +264,7 @@ namespace FPLedit
                     pluginInterface.Logger.Error(T._("Fehler beim Öffnen der Datei!"));
 
                     AsyncBlockingOperation = false; // Exit file actions that would spin forever.
-                    Application.Instance.InvokeAsync(CloseFile);
+                    Application.Instance.InvokeAsync(() => CloseFile());
                 }, null, TaskContinuationOptions.OnlyOnFaulted);
             }, null, TaskScheduler.Default);
 
@@ -385,7 +385,7 @@ namespace FPLedit
             undo.ClearHistory();
         }
 
-        public void CloseFile()
+        public void CloseFile(bool manualAction = false)
         {
             if (!NotifyIfAsyncOperationInProgress())
                 return;
@@ -393,6 +393,9 @@ namespace FPLedit
                 return;
 
             InternalCloseFile();
+
+            if (manualAction)
+                pluginInterface.Logger.Info(T._("Datei geschlossen"));
         }
 
         #endregion

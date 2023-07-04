@@ -4,7 +4,7 @@
   xmlns:e="clr-namespace:FPLedit.Editor.Network;assembly=FPLedit"
   xmlns:et="clr-namespace:FPLedit.Editor.TimetableEditor;assembly=FPLedit"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
-  Title="{x:Static e:MultipleTimetableEditForm+L.Title}" ClientSize="410,470" Resizable="true">
+  Title="{x:Static e:MultipleTimetableEditForm+L.Title}" ClientSize="600,470" Resizable="true">
   <TableLayout>
     <TableRow>
       <TableCell ScaleWidth="true">
