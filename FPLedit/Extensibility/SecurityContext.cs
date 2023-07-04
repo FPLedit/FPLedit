@@ -1,5 +1,4 @@
-﻿#nullable enable
-namespace FPLedit.Extensibility
+﻿namespace FPLedit.Extensibility
 {
     internal enum SecurityContext
     {

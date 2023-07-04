@@ -1,4 +1,3 @@
-#nullable enable
 namespace FPLedit
 {
     internal sealed class RestartHandler : IRestartable

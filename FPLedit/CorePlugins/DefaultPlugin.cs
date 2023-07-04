@@ -1,4 +1,3 @@
-#nullable enable
 using FPLedit.Shared;
 
 namespace FPLedit.CorePlugins

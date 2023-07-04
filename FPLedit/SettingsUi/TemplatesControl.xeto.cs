@@ -1,5 +1,4 @@
-﻿#nullable enable
-using Eto.Forms;
+﻿using Eto.Forms;
 using FPLedit.Shared.Templating;
 using FPLedit.Shared.UI;
 using FPLedit.Templating;

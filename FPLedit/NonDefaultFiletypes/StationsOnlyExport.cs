@@ -1,4 +1,3 @@
-#nullable enable
 using System.IO;
 using FPLedit.Shared;
 using FPLedit.Shared.Filetypes;

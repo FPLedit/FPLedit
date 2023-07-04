@@ -1,5 +1,4 @@
-﻿#nullable enable
-using Eto.Forms;
+﻿using Eto.Forms;
 using System;
 using Eto.Drawing;
 using System.Linq;

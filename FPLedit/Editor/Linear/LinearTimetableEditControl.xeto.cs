@@ -1,5 +1,4 @@
-﻿#nullable enable
-using Eto.Drawing;
+﻿using Eto.Drawing;
 using Eto.Forms;
 using FPLedit.Editor.TimetableEditor;
 using FPLedit.Shared;

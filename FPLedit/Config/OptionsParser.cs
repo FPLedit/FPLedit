@@ -1,5 +1,4 @@
-﻿#nullable enable
-namespace FPLedit.Config
+﻿namespace FPLedit.Config
 {
     internal static class OptionsParser
     {

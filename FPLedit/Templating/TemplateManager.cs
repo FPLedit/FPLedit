@@ -1,5 +1,4 @@
-﻿#nullable enable
-using FPLedit.Shared;
+﻿using FPLedit.Shared;
 using FPLedit.Shared.Templating;
 using System;
 using System.Collections.Generic;

@@ -1,5 +1,4 @@
-﻿#nullable enable
-using Eto.Forms;
+﻿using Eto.Forms;
 using FPLedit.Shared;
 using System;
 using System.IO;

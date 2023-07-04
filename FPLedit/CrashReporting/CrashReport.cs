@@ -1,5 +1,4 @@
-﻿#nullable enable
-using FPLedit.Extensibility;
+﻿using FPLedit.Extensibility;
 using System;
 using System.IO;
 using System.Linq;
