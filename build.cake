@@ -132,7 +132,7 @@ Task("BuildUserDocumentation")
     .IsDependentOn("PackNet")
     .Does(() =>
     {
-        if (!string.IsNullOrEmpty(EnvironmentVariable("FPLEDIT_DOK_REPO")) {
+        if (!string.IsNullOrEmpty(EnvironmentVariable("FPLEDIT_DOK_REPO"))) {
             throw new Exception("Building doc PDF not supported any more...");
         } else if (!string.IsNullOrEmpty(copyDocPdf)) {
             ForAllRuntimes( (runtime, distDir) => {
@@ -157,7 +157,7 @@ Task("PrepareArtifacts")
             
             // Delete beta extensions.
             if (!isNonFinalVersion)
-                DeleteFiles(distDir + "FPLedit.GTFS.*");
+                DeleteFiles((string)distDir + "/FPLedit.GTFS.*");
         });
     });
     
