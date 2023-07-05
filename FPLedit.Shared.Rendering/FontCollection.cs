@@ -19,7 +19,7 @@ namespace FPLedit.Shared.Rendering
         {
             new Task(() =>
             {
-                var installedFamilies = Fonts.AvailableFontFamilies.Select(f => f.Name).ToList();
+                var installedFamilies = Fonts.AvailableFontFamilies.Select(f => f.Name).OrderBy(f => f).ToList();
 
                 installedFamilies.InsertRange(0, new[] { GenericSans, GenericSerif, GenericMonospace });
                 Families = installedFamilies.ToArray();

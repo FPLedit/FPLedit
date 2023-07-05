@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace FPLedit.Shared.Rendering
 {
@@ -62,11 +64,32 @@ namespace FPLedit.Shared.Rendering
             if (m.instanceCachedIs != null)
                 return m.instanceCachedIs;
 
+            void AddFontSearchDir(SixLabors.Fonts.IFontCollection coll, string directory)
+            {
+                var addSearchDir = new DirectoryInfo(directory);
+                if (!addSearchDir.Exists) return;
+
+                var fontFiles = addSearchDir.EnumerateFiles("*.*", SearchOption.AllDirectories)
+                    .Where(x => new[] { ".ttf", ".ttc", ".otf" }.Contains(x.Extension.ToLowerInvariant()));
+                foreach (var fnt in fontFiles)
+                {
+                    if (fnt.Extension.ToLowerInvariant() == ".ttc")
+                        coll.AddCollection(fnt.FullName);
+                    else
+                        coll.Add(fnt.FullName);
+                }
+            }
+
             // Initialize font collection with system fonts.
             if (imageSharpFontCollection == null)
             {
                 imageSharpFontCollection = new SixLabors.Fonts.FontCollection();
                 SixLabors.Fonts.FontCollectionExtensions.AddSystemFonts(imageSharpFontCollection);
+
+                // Temporary fix until the next release of SixLabors.Fonts.
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                    AddFontSearchDir(imageSharpFontCollection, Environment.ExpandEnvironmentVariables("%HOME%/.local/share/fonts/"));
+
                 //TODO: Add a local path relative to the application directory, if it exists!
             }
 
