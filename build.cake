@@ -157,7 +157,7 @@ Task("PrepareArtifacts")
             
             // Delete beta extensions.
             if (!isNonFinalVersion)
-                DeleteFiles(distDir + File("FPLedit.GTFS.*"));
+                DeleteFiles(distDir + "FPLedit.GTFS.*");
         });
     });
     
@@ -171,7 +171,7 @@ Task("BuildLicenseReadme")
                 scriptsDir + Directory("info") + File("gpl.txt"),
                 scriptsDir + Directory("info") + File("3rd-party.txt"),
                 version);
-            System.IO.File.WriteAllText((distDir + File("README_LICENSE.txt")).ToString(), text);
+            IOFile.WriteAllText((distDir + File("README_LICENSE.txt")).ToString(), text);
         });
     });
     
@@ -221,7 +221,7 @@ Task("PackRelease")
             var hash = fhc.Calculate(file, HashAlgorithm.SHA256).ToHex();
             var hash_line = $"{hash}  {zip_file_name}";
             zipFileHashes.Add(hash_line);
-            System.IO.File.AppendAllText($"./bin/fpledit-{version}-{nodoc_suffix}.sha256sums", hash_line + "\n");
+            IOFile.AppendAllText($"./bin/fpledit-{version}-{nodoc_suffix}.sha256sums", hash_line + "\n");
         });
     });
 
