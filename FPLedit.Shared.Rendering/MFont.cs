@@ -69,6 +69,7 @@ namespace FPLedit.Shared.Rendering
                 var addSearchDir = new DirectoryInfo(directory);
                 if (!addSearchDir.Exists) return;
 
+                // This implementation is based on SixLabors.Fonts.SystemFontCollection.
                 var fontFiles = addSearchDir.EnumerateFiles("*.*", SearchOption.AllDirectories)
                     .Where(x => new[] { ".ttf", ".ttc", ".otf" }.Contains(x.Extension.ToLowerInvariant()));
                 foreach (var fnt in fontFiles)

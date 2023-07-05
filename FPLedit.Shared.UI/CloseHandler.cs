@@ -6,17 +6,17 @@ namespace FPLedit.Shared.UI
 {
     internal sealed class CloseHandler
     {
-        private static readonly List<CloseHandler> activeHandlers = new List<CloseHandler>();
+        private static readonly List<CloseHandler> activeHandlers = new ();
 
         public Window Dialog { get; }
 
-        public Button Accept { get; }
+        public Button? Accept { get; }
 
-        public Button Deny { get; }
+        public Button? Deny { get; }
 
         private bool isClosing;
 
-        public CloseHandler(Window dialog, Button accept, Button deny)
+        public CloseHandler(Window dialog, Button? accept, Button? deny)
         {
             Dialog = dialog;
             Accept = accept;
@@ -28,25 +28,27 @@ namespace FPLedit.Shared.UI
 
         private void Dialog_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (isClosing)
+                return;
             isClosing = true;
             DetachHandler();
 
-            if ((Accept != null && Accept.HasFocus) || (Deny != null && Deny.HasFocus))
+            if (Accept is { HasFocus: true } || Deny is { HasFocus: true })
                 return;
 
             Deny?.PerformClick();
         }
 
-        public void DetachHandler()
+        private void DetachHandler()
         {
             activeHandlers.Remove(this);
             Dialog.Closing -= Dialog_Closing;
         }
 
         /// <summary>
-        /// NClose removes CloseHandlers.
+        /// NClose removes CloseHandlers and then closes the window, i.e. it closes the window without triggering the
+        /// Deny button action.
         /// </summary>
-        /// <param name="dialog"></param>
         public static void NClose(Window dialog)
         {
             var ch = activeHandlers.FirstOrDefault(c => c.Dialog == dialog);
@@ -60,12 +62,16 @@ namespace FPLedit.Shared.UI
 
     public static class CloseHandlerExtensions
     {
+        /// <summary>
+        /// Add a <see cref="CloseHandler"/> to the durrent window. This handler will call the deny button action if
+        /// the window is closed manually (with the close button proivided by the OS).
+        /// </summary>
         public static void AddCloseHandler(this Dialog dialog)
-            => AddCloseHandler(dialog, dialog.DefaultButton, dialog.AbortButton);
+            => new CloseHandler(dialog, dialog.DefaultButton, dialog.AbortButton);
 
-        public static void AddCloseHandler(this Window dialog, Button accept, Button cancel)
-            => new CloseHandler(dialog, accept, cancel);
-
+        /// <summary>
+        /// NClose closes the curretn window and detaches any <see cref="CloseHandler"/> beforehand.
+        /// </summary>
         public static void NClose(this Window dialog) => CloseHandler.NClose(dialog);
     }
 }

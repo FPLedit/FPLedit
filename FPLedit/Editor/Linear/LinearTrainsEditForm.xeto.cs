@@ -46,6 +46,11 @@ namespace FPLedit.Editor.Linear
 
             this.AddCloseHandler();
             this.AddSizeStateHandler();
+
+            // Bugfix, Window closes on enter [Enter]
+            // Important: After AddCloseHandler, otherwise it will destroy Timetable instance in mpmode!
+            if (!Platform.IsWpf)
+                DefaultButton = null;
         }
 
         private void HandleKeystroke(object? sender, KeyEventArgs e)

@@ -49,6 +49,11 @@ namespace FPLedit.Editor.Network
 
             this.AddCloseHandler();
             this.AddSizeStateHandler();
+
+            // Bugfix, Window closes on enter [Enter]
+            // Important: After AddCloseHandler, otherwise it will destroy Timetable instance in mpmode!
+            if (!Platform.IsWpf)
+                DefaultButton = null;
         }
 
         private void GridViewOnSelectedItemsChanged(object? sender, EventArgs e)

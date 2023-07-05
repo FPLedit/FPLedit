@@ -7,6 +7,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using FPLedit.Shared.Rendering;
 using FPLedit.Shared.UI;
 using Print = System.Drawing.Printing;
@@ -95,7 +96,7 @@ namespace FPLedit.Bildfahrplan.Forms
 
                 doc.DefaultPageSettings.Margins = new Print.Margins(50, 50, 50, 50); // not working (turning page????)
 
-                if (Eto.Platform.Instance.IsGtk)
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
                     var paperSize = doc.PrinterSettings.PaperSizes[paperDropDown.SelectedIndex];
                     //HACK: Do not use doc.DefaultPageSettings.Landscape on Linux, as it will lead to awkwardly turned rendering areas, ???)
@@ -138,7 +139,7 @@ namespace FPLedit.Bildfahrplan.Forms
             var g2 = new MGraphicsSystemDrawing(e.Graphics, true);
             last = GetTimeByHeight(g2, renderer, start, height);
 
-            if (Eto.Platform.Instance.IsGtk)
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 //HACK: Draw with the help of an extra buffer (prevent bug from System.Drawing.Commons on Linux, applying some transformation state to pages...)
                 using (var bitmap = new Bitmap(width, height))
