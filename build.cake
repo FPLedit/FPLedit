@@ -12,8 +12,6 @@ var configuration = Argument("configuration", "Release");
 var platform = Argument("tfm", "net6.0");
 var runtimes = Argument("rid", "linux-x64");
 
-var docRepoPath = EnvironmentVariable("FPLEDIT_DOK_REPO");
-var buildDocPdf = !(docRepoPath == null || docRepoPath == "");
 var copyDocPdf = EnvironmentVariable("FPLEDIT_DOK_PDF");
 
 var ignoreNoDoc = Argument<string>("ignore_no_doc", null) != null;
@@ -134,7 +132,7 @@ Task("BuildUserDocumentation")
     .IsDependentOn("PackNet")
     .Does(() =>
     {
-        if (buildDocPdf) {
+        if (!string.IsNullOrEmpty(EnvironmentVariable("FPLEDIT_DOK_REPO")) {
             throw new Exception("Building doc PDF not supported any more...");
         } else if (!string.IsNullOrEmpty(copyDocPdf)) {
             ForAllRuntimes( (runtime, distDir) => {
@@ -156,6 +154,10 @@ Task("PrepareArtifacts")
                     DeleteDirectory(d, new DeleteDirectorySettings { Recursive = true });
                 }
             }
+            
+            // Delete beta extensions.
+            if (!isNonFinalVersion)
+                DeleteFiles(distDir + File("FPLedit.GTFS.*"));
         });
     });
     
