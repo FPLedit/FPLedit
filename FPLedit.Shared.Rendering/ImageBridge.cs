@@ -9,7 +9,7 @@ namespace FPLedit.Shared.Rendering
 
         public ImageBridge(int width, int height)
         {
-            Graphics = MGraphics.CreateImage(width, height, false);
+            Graphics = MGraphics.CreateImage(width, height);
             Graphics.SetTextAntiAlias(true);
         }
 

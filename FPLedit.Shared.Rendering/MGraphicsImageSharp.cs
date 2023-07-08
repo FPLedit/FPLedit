@@ -100,7 +100,7 @@ public sealed class MGraphicsImageSharp : IMGraphics
         });
     }
 
-    public static IMGraphics CreateImage(int width, int height, bool exportColor)
+    public static IMGraphics CreateImage(int width, int height)
     {
         var config = Configuration.Default.Clone();
         config.PreferContiguousImageBuffers = true; // Allow for copying to eto buffers below.

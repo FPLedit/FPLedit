@@ -43,7 +43,7 @@
     <IntermediateOutputPath>..\obj\$(SolutionName)\$(MSBuildProjectName)\$(Configuration)\</IntermediateOutputPath>
 
     <!-- Enable System.Drawing support for bifpl and FPLedit.Shared.Rendering -->
-    <FPLeditEnableSystemDrawing Condition=" '$(FPLeditEnableSystemDrawing)' == '' ">true</FPLeditEnableSystemDrawing>
+    <FPLeditEnableSystemDrawing Condition=" '$(FPLeditEnableSystemDrawing)' == '' ">$( RuntimeIdentifier.StartsWith('win') )</FPLeditEnableSystemDrawing>
   </PropertyGroup>
 
   <!-- Include Analyzers -->

@@ -29,7 +29,7 @@ namespace FPLedit.Bildfahrplan
             }
 
             Renderer renderer = new Renderer(tt, pd);
-            using (var g2 = MGraphics.CreateImage(width, renderer.GetHeightExternal(true), true))
+            using (var g2 = MGraphics.CreateImage(width, renderer.GetHeightExternal(true)))
             {
                 renderer.Draw(g2, true, width);
                 g2.SaveImagePng(stream);

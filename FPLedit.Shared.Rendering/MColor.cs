@@ -19,13 +19,7 @@ namespace FPLedit.Shared.Rendering
             => PdfSharp.Drawing.XColor.FromArgb(255, m.R, m.G, m.B);
 
 #if ENABLE_SYSTEM_DRAWING
-        public System.Drawing.Color ToSD(bool forceNormalColor)
-        {
-            if (ShouldSwitchColors && !forceNormalColor)
-                return System.Drawing.Color.FromArgb(255, B, G, R);
-            return System.Drawing.Color.FromArgb(255, R, G, B);
-        }
-        public static bool ShouldSwitchColors => Eto.Platform.Instance.IsGtk || Eto.Platform.Instance.IsMac;
+        public System.Drawing.Color ToSD() => System.Drawing.Color.FromArgb(255, R, G, B);
 #endif
 
         public static MColor White => new (255, 255, 255);

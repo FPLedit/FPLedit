@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using ed = Eto.Drawing;
 
@@ -15,14 +16,12 @@ public sealed class MGraphicsSystemDrawing : IMGraphics
 {
     private readonly Graphics g;
     private Bitmap? image;
-    private readonly bool exportColor;
     private readonly Dictionary<int, Pen> penCache = new();
     private readonly Dictionary<int, SolidBrush> brushCache = new();
     private bool disposeGraphics;
 
-    public MGraphicsSystemDrawing(Graphics g, bool exportColor)
+    private MGraphicsSystemDrawing(Graphics g)
     {
-        this.exportColor = exportColor;
         this.g = g;
     }
 
@@ -37,7 +36,7 @@ public sealed class MGraphicsSystemDrawing : IMGraphics
         var penCacheKey = pen.GetHashCode();
         if (!penCache.TryGetValue(penCacheKey, out var sdPen))
         {
-            sdPen = new Pen(pen.c.ToSD(exportColor), pen.w) { DashPattern = pen.ds };
+            sdPen = new Pen(pen.c.ToSD(), pen.w) { DashPattern = pen.ds };
             penCache[penCacheKey] = sdPen;
         }
         g.DrawLine(sdPen, x1, y1, x2, y2);
@@ -48,13 +47,13 @@ public sealed class MGraphicsSystemDrawing : IMGraphics
         var brushCacheKey = solidColor.GetHashCode();
         if (!brushCache.TryGetValue(brushCacheKey, out var brush))
         {
-            brush = new SolidBrush(solidColor.ToSD(exportColor));
+            brush = new SolidBrush(solidColor.ToSD());
             brushCache[brushCacheKey] = brush;
         }
         g.DrawString(text, (Font)font, brush, x, y);
     }
 
-    public void Clear(MColor color) => g.Clear(color.ToSD(exportColor));
+    public void Clear(MColor color) => g.Clear(color.ToSD());
 
     public object StoreTransform() => g.Transform.Clone();
 
@@ -75,7 +74,7 @@ public sealed class MGraphicsSystemDrawing : IMGraphics
         var penCacheKey = pen.GetHashCode();
         if (!penCache.TryGetValue(penCacheKey, out var sdPen))
         {
-            sdPen = new Pen(pen.c.ToSD(exportColor), pen.w) { DashPattern = pen.ds };
+            sdPen = new Pen(pen.c.ToSD(), pen.w) { DashPattern = pen.ds };
             penCache[penCacheKey] = sdPen;
         }
 
@@ -93,11 +92,14 @@ public sealed class MGraphicsSystemDrawing : IMGraphics
         g.DrawPath(sdPen, p);
     }
 
-    public static IMGraphics CreateImage(int width, int height, bool exportColor)
+    public static IMGraphics CreateImage(int width, int height)
     {
+        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            throw new PlatformNotSupportedException(nameof(MGraphicsSystemDrawing) + " only supports Windows platforms!");
+
         var image = new Bitmap(width, height, PixelFormat.Format32bppArgb);
         var g = Graphics.FromImage(image);
-        var g2 = new MGraphicsSystemDrawing(g, exportColor);
+        var g2 = new MGraphicsSystemDrawing(g);
         g2.disposeGraphics = true;
         g2.image = image;
         return g2;
@@ -150,7 +152,7 @@ public sealed class MGraphicsSystemDrawing : IMGraphics
                 Buffer.MemoryCopy((void*) sdData.Scan0, (void*) etoData.Data, byteLength, byteLength);
             else // Slightly slower route using the given stride width 
             {
-                var switchColors = MColor.ShouldSwitchColors;
+                throw new Exception("this should not happen on Windows?! Remove otherwise");
                 var scan = (byte*) sdData.Scan0;
                 var bytesPerScanLine = sdData.Width * bytesPerPixel;
                 Parallel.For(0, sdData.Height, i =>
@@ -162,7 +164,7 @@ public sealed class MGraphicsSystemDrawing : IMGraphics
                         var g = line[j + 1];
                         var r = line[j + 2];
                         var a = line[j + 3];
-                        var c = ed.Color.FromArgb(switchColors ? b : r, g, switchColors ? r : b, a);
+                        var c = ed.Color.FromArgb(r, g, b, a);
                         etoData.SetPixel(j / bytesPerPixel, i, c);
                     }
                 });

@@ -24,10 +24,6 @@ namespace FPLedit.Bildfahrplan
             this.pluginInterface = pluginInterface;
             Style.PluginInterface = pluginInterface;
 
-#if ENABLE_SYSTEM_DRAWING
-            if (!GdiAvailabilityTest.TestAndLog(pluginInterface)) return;
-#endif
-
             dpf = new DynamicPreview();
             componentRegistry.Register<IPreviewAction>(dpf);
             pluginInterface.AppClosing += (_, _) => dpf.Close();
