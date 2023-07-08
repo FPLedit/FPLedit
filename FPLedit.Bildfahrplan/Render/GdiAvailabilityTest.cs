@@ -1,5 +1,6 @@
 using System;
 using FPLedit.Shared;
+using FPLedit.Shared.Rendering;
 
 namespace FPLedit.Bildfahrplan.Render;
 
@@ -10,8 +11,7 @@ internal static class GdiAvailabilityTest
     {
         try
         {
-            var bmp = new System.Drawing.Bitmap(1, 1);
-            bmp?.Dispose();
+            using var img = MGraphicsSystemDrawing.CreateImage(1, 1, true);
             return true;
         }
         catch

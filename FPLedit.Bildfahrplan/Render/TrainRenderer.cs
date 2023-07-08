@@ -125,6 +125,8 @@ namespace FPLedit.Bildfahrplan.Render
                     continue;
 
                 var isStationLine = (int)points[i].X == (int)points[i + 1].X; // explicitely don't use op1/2 for state calculations.
+                if (!InsideClipping(points[i], points[i + 1]))
+                    continue;
                 var (cp1, cp2) = GetClippedPointsForLine(points[i], points[i + 1]);
 
                 if (isStationLine) // Line in one station.
@@ -218,6 +220,8 @@ namespace FPLedit.Bildfahrplan.Render
             if (point.HasValue)
                 points.Add(point.Value);
         }
+
+        bool InsideClipping(Vec2 p1, Vec2 p2) => (p1.Y > clipTop && p2.Y < clipBottom) || (p1.Y < clipTop && p2.Y > clipBottom) || (p1.Y > clipTop && p2.Y > clipBottom);
 
         (Vec2 cp1, Vec2 cp2) GetClippedPointsForLine(Vec2 p1, Vec2 p2)
         {

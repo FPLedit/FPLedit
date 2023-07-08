@@ -13,7 +13,7 @@ namespace FPLedit.Shared.Rendering;
 /// </remarks>
 public interface IMGraphics : IDisposable
 {
-    (float Width, float Height) MeasureString(MFont timeFont, string text);
+    (float Width, float Height) MeasureString(MFont font, string text);
     void DrawLine((MColor c, float w, float[] ds) pen, float x1, float y1, float x2, float y2);
     void DrawText(MFont font, MColor solidColor, float x, float y, string text);
     void Clear(MColor color);

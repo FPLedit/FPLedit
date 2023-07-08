@@ -26,9 +26,9 @@ public sealed class MGraphicsSystemDrawing : IMGraphics
         this.g = g;
     }
 
-    public (float Width, float Height) MeasureString(MFont timeFont, string text)
+    public (float Width, float Height) MeasureString(MFont font, string text)
     {
-        var x = g.MeasureString(text, (Font) timeFont);
+        var x = g.MeasureString(text, (Font) font);
         return (x.Width, x.Height);
     }
 

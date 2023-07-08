@@ -6,6 +6,11 @@ using System.Runtime.InteropServices;
 
 namespace FPLedit.Shared.Rendering
 {
+    public sealed class MFontNotFoundException : Exception
+    {
+        public MFontNotFoundException(string message) : base(message) { }
+    }
+
     /// <summary>
     /// MetaFont to internally represent fonts that can be converted to System.Drawing, Eto.Drawing or Sixlabors.Fonts font instances.
     /// </summary>
@@ -50,6 +55,27 @@ namespace FPLedit.Shared.Rendering
             return m.instanceCachedEto;
         }
 
+        private PdfSharp.Drawing.XFont? instanceCachedPdf;
+        public static explicit operator PdfSharp.Drawing.XFont(MFont m)
+        {
+            if (PdfSharp.Fonts.GlobalFontSettings.FontResolver == null)
+                PdfSharp.Fonts.GlobalFontSettings.FontResolver = new MFontPdfResolver();
+
+            PdfSharp.Drawing.XFont family;
+            try
+            {
+                family = new PdfSharp.Drawing.XFont(m.Family, m.Size, (PdfSharp.Drawing.XFontStyleEx) m.Style);
+            }
+            catch (Exception)
+            {
+                throw new MFontNotFoundException(T._("Schriftart {0} wurde nicht gefunden!", m.Family));
+            }
+
+            if (m.instanceCachedPdf == null)
+                m.instanceCachedPdf = family;
+            return m.instanceCachedPdf;
+        }
+
 #if ENABLE_SYSTEM_DRAWING
         private System.Drawing.Font? instanceCachedSd;
         public static explicit operator System.Drawing.Font(MFont m)
@@ -59,11 +85,19 @@ namespace FPLedit.Shared.Rendering
             return m.instanceCachedSd;
         }
 #endif
+
+        #region ImageSharp
         public static explicit operator SixLabors.Fonts.Font(MFont m)
         {
             if (m.instanceCachedIs != null)
                 return m.instanceCachedIs;
 
+            var family = GetIsFontFamily(m.Family);
+            m.instanceCachedIs = new SixLabors.Fonts.Font(family, m.Size * 4f / 3, (SixLabors.Fonts.FontStyle) m.Style);
+            return m.instanceCachedIs;
+        }
+        public static SixLabors.Fonts.FontFamily GetIsFontFamily(string familyName)
+        {
             void AddFontSearchDir(SixLabors.Fonts.IFontCollection coll, string directory)
             {
                 var addSearchDir = new DirectoryInfo(directory);
@@ -99,28 +133,27 @@ namespace FPLedit.Shared.Rendering
                 foreach (var family in families)
                 {
                     try { return imageSharpFontCollection!.Get(family); }
-                    catch (SixLabors.Fonts.FontFamilyNotFoundException) {}
+                    catch (SixLabors.Fonts.FontFamilyNotFoundException) { }
                 }
                 return null;
             }
 
             // This list is based on the font discovery code of Eto, removing the split on the different platforms.
             // I also added some fonts (e.g. the Liberation families) that I often find on Linux systems.
-            var family = m.Family.ToUpperInvariant() switch
+            var family = familyName.ToUpperInvariant() switch
             {
                 Eto.Drawing.FontFamilies.SansFamilyName => GetFamily("Arial", "Liberation Sans", "Helvetica", "Tahoma", "Verdana", "sans", "Trebuchet", "FreeSans"),
                 Eto.Drawing.FontFamilies.SerifFamilyName => GetFamily("Times New Roman", "Liberation Serif", "serif", "FreeSerif", "Times"),
                 Eto.Drawing.FontFamilies.MonospaceFamilyName => GetFamily("Courier New", "Liberation Mono", "monospace", "FreeMono", "Courier"),
                 Eto.Drawing.FontFamilies.CursiveFamilyName => GetFamily("URW Chancery L", "Comic Sans MS", "Purisa", "Vemana2000", "Domestic Manners", "Papyrus", "Monotype Corsiva", "serif"),
                 Eto.Drawing.FontFamilies.FantasyFamilyName => GetFamily("Impact", "Juice ITC", "Penguin Attack", "Balker", "Marked Fool", "Junkyard", "Linux Biolinum", "serif"),
-                _ => GetFamily(m.Family),
+                _ => GetFamily(familyName),
             };
             if (!family.HasValue)
-                throw new Exception(T._("Schriftart {0} wurde nicht gefunden!", m.Family));
-
-            m.instanceCachedIs = new SixLabors.Fonts.Font(family.Value, m.Size * 4f / 3, (SixLabors.Fonts.FontStyle) m.Style);
-            return m.instanceCachedIs;
+                throw new MFontNotFoundException(T._("Schriftart {0} wurde nicht gefunden!", familyName));
+            return family.Value;
         }
+        #endregion
 
         #region Caching (instance & global)
         private Eto.Drawing.Font? instanceCachedEto;
@@ -139,6 +172,7 @@ namespace FPLedit.Shared.Rendering
             instanceCachedSd?.Dispose();
             instanceCachedSd = null;
 #endif
+            instanceCachedPdf = null;
         }
 
         private static SixLabors.Fonts.FontCollection? imageSharpFontCollection;

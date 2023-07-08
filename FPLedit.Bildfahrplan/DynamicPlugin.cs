@@ -62,7 +62,7 @@ namespace FPLedit.Bildfahrplan
 #if ENABLE_SYSTEM_DRAWING
             try
             {
-                using var pr = new PrintRenderer(pluginInterface);
+                var pr = new PrintRenderer(pluginInterface);
                 pr.InitPrint();
             }
             catch (Exception ex)

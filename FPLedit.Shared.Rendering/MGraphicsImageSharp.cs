@@ -37,9 +37,9 @@ public sealed class MGraphicsImageSharp : IMGraphics
         };
     }
 
-    public (float Width, float Height) MeasureString(MFont timeFont, string text)
+    public (float Width, float Height) MeasureString(MFont font, string text)
     {
-        var x = TextMeasurer.Measure(text, new TextOptions((Font) timeFont));
+        var x = TextMeasurer.Measure(text, new TextOptions((Font) font));
         return (x.Width, x.Height);
     }
 

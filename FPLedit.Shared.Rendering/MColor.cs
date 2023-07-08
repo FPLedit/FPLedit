@@ -15,6 +15,9 @@ namespace FPLedit.Shared.Rendering
         public static explicit operator SixLabors.ImageSharp.Color(MColor m)
             => SixLabors.ImageSharp.Color.FromRgba(m.R, m.G, m.B, 255);
 
+        public static explicit operator PdfSharp.Drawing.XColor(MColor m)
+            => PdfSharp.Drawing.XColor.FromArgb(255, m.R, m.G, m.B);
+
 #if ENABLE_SYSTEM_DRAWING
         public System.Drawing.Color ToSD(bool forceNormalColor)
         {
