@@ -4,7 +4,7 @@ using FPLedit.Bildfahrplan.Render;
 using FPLedit.Shared;
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+using System.IO;
 using FPLedit.Shared.Rendering;
 using FPLedit.Shared.UI;
 using PdfSharp;
@@ -20,7 +20,6 @@ namespace FPLedit.Bildfahrplan.Forms
         private readonly Timetable tt;
         private readonly TimetableStyle attrs;
 
-        private TimeEntry? last;
         private Func<PathData> pd;
 
         public PrintRenderer(IPluginInterface pluginInterface)
@@ -31,26 +30,29 @@ namespace FPLedit.Bildfahrplan.Forms
         }
 
         [SuppressMessage("ReSharper", "AccessToDisposedClosure")]
-        public void InitPrint()
+        public void DoPrint()
         {
-            using var doc = new PdfDocument();
             var form = new FDialog<DialogResult>();
             var routesDropDown = new RoutesDropDown();
             var routeStack = new StackLayout(routesDropDown) { Orientation = Orientation.Horizontal, Padding = new Eto.Drawing.Padding(10), Spacing = 5 };
             var routeGroup = new GroupBox { Content = routeStack, Text = T._("Strecke auswählen") };
             var paperDropDown = new DropDown();
             var landscapeChk = new CheckBox { Text = T._("Querformat") };
-            var printButton = new Button { Text = T._("Drucken") };
+            var printButton = new Button { Text = T._("PDF speichern") };
             var printerStack = new StackLayout(paperDropDown, landscapeChk, printButton) { Orientation = Orientation.Horizontal, Padding = new Eto.Drawing.Padding(10), Spacing = 5 };
             var printerGroup = new GroupBox { Content = printerStack, Text = T._("Druckeinstellungen") };
             var stack = new StackLayout(routeGroup, printerGroup) { Orientation = Orientation.Vertical, Padding = new Eto.Drawing.Padding(10), Spacing = 5 };
             
             routesDropDown.Initialize(pluginInterface);
             routesDropDown.EnableVirtualRoutes = true;
-            
+
+            paperDropDown.DataContext = new PageSize?(); // hacky way to use DropDownBind without a global datacontext.
+            DropDownBind.Enum<PageSize?, PageSize>(paperDropDown, "Value", null);
+            paperDropDown.SelectedValue = PageSize.A4;
+
             form.Content = stack;
             form.DefaultButton = printButton;
-            form.Title = T._("Bildfahrplan drucken");
+            form.Title = T._("Bildfahrplan als PDF drucken");
 
             printButton.Click += (_, _) =>
             {
@@ -58,72 +60,84 @@ namespace FPLedit.Bildfahrplan.Forms
                 form.Close();
             };
 
-            var paperSizes = Enum.GetValues<PageSize>()
-                .ToDictionary(e => e, e => Enum.GetName(e)!);
-
-            var a4Index = Array.IndexOf(paperSizes.Values.ToArray(), "A4");
-            paperDropDown.DataStore = paperSizes.Values;
-            paperDropDown.SelectedIndex = (a4Index != -1) ? a4Index : 0;
-
             if (form.ShowModal() == DialogResult.Ok)
             {
                 if (routesDropDown.SelectedRoute > Timetable.UNASSIGNED_ROUTE_ID)
                     pd = Renderer.DefaultPathData(routesDropDown.SelectedRoute, pluginInterface.Timetable);
                 else
+                    pd = VirtualRoute.GetVRoute(pluginInterface.Timetable, routesDropDown.SelectedRoute)!.GetPathData;
+
+                var size = (PageSize) paperDropDown.SelectedValue;
+                var orientation = landscapeChk.Checked!.Value ? PageOrientation.Landscape : PageOrientation.Portrait;
+
+                using var exportFileDialog = new SaveFileDialog { Title = T._("Bildfahrplan als PDF drucken") };
+                exportFileDialog.Filters.Add(new FileFilter(T._("PDF-Datei"), "*.pdf"));
+                if (pluginInterface.FileState.FileName != null)
                 {
-                    var virt = VirtualRoute.GetVRoute(pluginInterface.Timetable, routesDropDown.SelectedRoute);
-                    pd = virt!.GetPathData;
+                    exportFileDialog.Directory = new Uri(Path.GetDirectoryName(pluginInterface.FileState.FileName)!);
+                    exportFileDialog.FileName = Path.ChangeExtension(pluginInterface.FileState.FileName, "pdf");
                 }
 
-                doc.Info.Title = T._("Bildfahrplan generiert mit FPLedit");
+                if (exportFileDialog.ShowDialog((Window) pluginInterface.RootForm) != DialogResult.Ok)
+                    return;
 
-                var size = paperSizes.Single(p => p.Value == (string) paperDropDown.SelectedValue).Key;
-                var orientation = landscapeChk.Checked!.Value ? PageOrientation.Landscape : PageOrientation.Portrait;
+                var exportFilename = exportFileDialog.FileName;
+                if (exportFilename == null)
+                    return;
+
+                pluginInterface.Logger.Info(T._("Drucke als PDF {0}...", exportFilename));
 
                 try
                 {
-                    var needsMore = true;
-                    var pgC = 0;  // safety measure.
-                    while (needsMore && pgC < 10)
+                    using var doc = new PdfDocument();
+                    doc.Info.Title = T._("Bildfahrplan generiert mit FPLedit");
+                    doc.Info.Creator = "FPLedit";
+
+                    var needsMorePages = true;
+                    TimeEntry? startTime = null;
+                    while (needsMorePages)
                     {
-                        needsMore = PrintPage(doc, size, orientation);
-                        pgC++;
+                        (needsMorePages, var nextStartTime) = PrintPage(doc, size, orientation, 1f, startTime);
+                        if (needsMorePages && nextStartTime == startTime)
+                            throw new Exception(T._("Die Druckeinstellungen erzeugen unendlich viele Seiten!"));
+                        startTime = nextStartTime;
                     }
 
-                    doc.Save("./testout.pdf");
+                    doc.Save(exportFilename);
+                    pluginInterface.Logger.Info(T._("Drucken abgeschlossen..."));
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(T._("Fehler beim Drucken! {0}", ex.Message), "FPLedit", MessageBoxType.Error);
+                    pluginInterface.Logger.Error(T._("Fehler beim Drucken! {0}", ex.Message));
                 }
             }
         }
 
-        private bool PrintPage(PdfDocument doc, PageSize size, PageOrientation orientation)
+        private (bool, TimeEntry) PrintPage(PdfDocument doc, PageSize size, PageOrientation orientation, float marginCm, TimeEntry? startTime)
         {
-            var e = doc.AddPage();
-            e.Size = size;
-            e.TrimMargins = new TrimMargins {All = 20};
-            e.Orientation = orientation;
+            var page = doc.AddPage();
+            page.Size = size;
+            page.Orientation = orientation;
 
             var renderer = new Renderer(tt, pd);
-            double height = e.Height;
-            double width = e.Width;
+            double height = page.Height;
+            double width = page.Width;
 
-            var margin = new Margins(0f, 0f, 0f, 0f);
+            var marginLength = new XUnit(marginCm, XGraphicsUnit.Centimeter);
+            var margin = new Margins((float) marginLength, (float) marginLength, (float) marginLength, (float) marginLength);
             renderer.SetMargins(margin);
 
-            var start = last ?? attrs.StartTime;
-            using var g = XGraphics.FromPdfPage(e);
+            var start = startTime ?? attrs.StartTime;
+            using var g = XGraphics.FromPdfPage(page);
             var g2 = new MGraphicsPdfSharp(g);
-            last = GetTimeByHeight(g2, renderer, start, (int)height);
+            var curEndTime = GetTimeByHeight(g2, renderer, start, (int)height);
 
-            renderer.Draw(g2, start, last.Value, true, (int)width);
+            renderer.Draw(g2, start, curEndTime, true, (int)width);
 
             var endTime = GetEndTime(start, attrs.EndTime);
-            if (last!.Value < endTime)
-                return true;
-            return false;
+            if (curEndTime < endTime)
+                return (true, curEndTime);
+            return (false, curEndTime);
         }
 
         private TimeEntry GetTimeByHeight(IMGraphics g, Renderer renderer, TimeEntry start, int height)
@@ -136,12 +150,17 @@ namespace FPLedit.Bildfahrplan.Forms
 
             var spanMinutes = endTime.GetTotalMinutes() - start.GetTotalMinutes();
 
+            TimeEntry ClipEnd(TimeEntry calcedEnd)
+            {
+                if (calcedEnd >= endTime) return endTime;
+                if (calcedEnd < start) return start;
+                return calcedEnd;
+            }
+
             if (fillUpMinutes * (attrs.HeightPerHour / 60f) + headerHeight > height) // Not even the next hour does fit on the page.
             {
                 var end =  start + new TimeEntry(0, (int) ((height - headerHeight) / (attrs.HeightPerHour / 60f)));
-                if (end >= endTime)
-                    return endTime;
-                return end;
+                return ClipEnd(end);
             }
 
             var fullTimeHeight = height - headerHeight;
@@ -150,23 +169,19 @@ namespace FPLedit.Bildfahrplan.Forms
             {
                 int minutes = (int) (fullTimeHeight / (attrs.HeightPerHour / 60f));
                 var end = start + new TimeEntry(0, minutes);
-                if (end >= endTime)
-                    return endTime;
-                return end;
+                return ClipEnd(end);
             }
-            
-            var fullHourHeight = fullTimeHeight - fillUpMinutes * (attrs.HeightPerHour / 60f);
 
+            var fullHourHeight = fullTimeHeight - fillUpMinutes * (attrs.HeightPerHour / 60f);
             int fullHours = (int) (fullHourHeight / (attrs.HeightPerHour));
 
             if (fullHourHeight - fullHours * attrs.HeightPerHour > (attrs.HeightPerHour / 60f) * restMinutes && fullHours * 60 + fillUpMinutes + restMinutes >= spanMinutes)
             {
                 var end = start + new TimeEntry(fullHours, restMinutes + fillUpMinutes);
-                if (end > endTime)
-                    return endTime;
-                return end;
+                return ClipEnd(end);
             }
-            return  start + new TimeEntry(fullHours, fillUpMinutes);
+
+            return ClipEnd(start + new TimeEntry(fullHours, fillUpMinutes));
         }
         
         private TimeEntry GetEndTime(TimeEntry startTime, TimeEntry endTime)

@@ -55,19 +55,14 @@ namespace FPLedit.Bildfahrplan
         
         private void PrintItem_Click(object sender, EventArgs e)
         {
-#if ENABLE_SYSTEM_DRAWING
             try
             {
-                var pr = new PrintRenderer(pluginInterface);
-                pr.InitPrint();
+                new PrintRenderer(pluginInterface).DoPrint();
             }
             catch (Exception ex)
             {
                 pluginInterface.Logger.Error(ex.Message);
             }
-#else
-            pluginInterface.Logger.Error(T._("Druckfunktion in dieser Version nicht aktiviert!"));
-#endif
         }
         
         private void ExportItem_Click(object sender, EventArgs e)
