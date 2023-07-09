@@ -35,9 +35,9 @@
             yield return "        private readonly AssemblySignature[] generatedSignatures = {";
 
             var files = info.GetFiles("FPLedit.*.dll");
-            var sha512 = SHA256.Create();
+            var sha256 = SHA256.Create();
             foreach (var f in files) {
-                var hash = sha512.ComputeHash(File.ReadAllBytes(f.FullName));
+                var hash = sha256.ComputeHash(File.ReadAllBytes(f.FullName));
                 yield return "           new AssemblySignature(\"" + Path.GetFileName(f.FullName) + "\", new byte[] { " + BytesToString(hash) + " }),";
             }
 

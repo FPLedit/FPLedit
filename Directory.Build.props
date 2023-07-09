@@ -44,6 +44,9 @@
 
     <!-- Enable System.Drawing support for bifpl and FPLedit.Shared.Rendering -->
     <FPLeditEnableSystemDrawing Condition=" '$(FPLeditEnableSystemDrawing)' == '' ">$( RuntimeIdentifier.StartsWith('win') )</FPLeditEnableSystemDrawing>
+
+    <!-- Only copy german satellite assemblies -->
+    <SatelliteResourceLanguages>de</SatelliteResourceLanguages>
   </PropertyGroup>
 
   <!-- Include Analyzers -->
@@ -54,5 +57,17 @@
   <PropertyGroup Condition="$(FPLeditEnableSystemDrawing)">
     <DefineConstants>ENABLE_SYSTEM_DRAWING</DefineConstants>
   </PropertyGroup>
+
+  <!-- Remove unneeded PdfSharp assemblies -->
+  <Target Name="CustomBeforeBuild" BeforeTargets="_CopyFilesMarkedCopyLocal">
+    <ItemGroup>
+      <ReferencesToBeRemoved2 Include="@(ReferenceCopyLocalPaths)" Condition="%(Filename) == 'PdfSharp.Snippets'" />
+      <ReferencesToBeRemoved2 Include="@(ReferenceCopyLocalPaths)" Condition="%(Filename) == 'PdfSharp.WPFonts'" />
+      <ReferencesToBeRemoved2 Include="@(ReferenceCopyLocalPaths)" Condition="%(Filename) == 'PdfSharp.Charting'" />
+      <ReferencesToBeRemoved2 Include="@(ReferenceCopyLocalPaths)" Condition="%(Filename) == 'PdfSharp.Charting.resources'" />
+      <ReferencesToBeRemoved2 Include="@(ReferenceCopyLocalPaths)" Condition="%(Filename) == 'PdfSharp.Quality'" />
+      <ReferenceCopyLocalPaths Remove="@(ReferencesToBeRemoved2)" />
+    </ItemGroup>
+  </Target>
 
 </Project>
