@@ -50,12 +50,10 @@ namespace FPLedit.Shared.UI
 
         public static string? Query(Window parent, string title, string defaultValue)
         {
-            using (var f = new InputBox(title, defaultValue))
-            {
-                if (f.ShowModal(parent) == DialogResult.Ok)
-                    return f.ResultText;
-                return null;
-            }
+            using var f = new InputBox(title, defaultValue);
+            if (f.ShowModal(parent) == DialogResult.Ok)
+                return f.ResultText;
+            return null;
         }
 
         protected override void Dispose(bool disposing)

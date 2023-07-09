@@ -54,13 +54,10 @@ namespace FPLedit.DebugDump.Forms
 
         private void SaveFile(object sender, EventArgs e)
         {
-            using (var sfd = new SaveFileDialog())
-            {
-                if (sfd.ShowDialog(this) == DialogResult.Ok)
-                {
-                    File.WriteAllText(sfd.FileName, dataTextArea.Text);
-                }
-            }
+            using var sfd = new SaveFileDialog();
+            if (sfd.ShowDialog(this) != DialogResult.Ok) return;
+
+            File.WriteAllText(sfd.FileName, dataTextArea.Text);
         }
     }
 }

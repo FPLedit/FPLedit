@@ -77,28 +77,25 @@ namespace FPLedit.jTrainGraphStarter
 
         private void ChooseJtgButton_Click(object sender, EventArgs e)
         {
-            using (var ofd = new OpenFileDialog())
-            {
-                ofd.Title = T._("jTrainGraph-Programmdatei wählen");
-                ofd.AddLegacyFilter(T._("JAR-Dateien (*.jar)|*.jar"));
+            using var ofd = new OpenFileDialog();
+            ofd.Title = T._("jTrainGraph-Programmdatei wählen");
+            ofd.AddLegacyFilter(T._("JAR-Dateien (*.jar)|*.jar"));
                 
-                if (!string.IsNullOrWhiteSpace(jtgPathTextBox.Text))
-                {
-                    var directory = Path.GetDirectoryName(jtgPathTextBox.Text);
-                    if (Directory.Exists(directory))
-                        ofd.Directory = new Uri(directory);
-                }
-
-                if (ofd.ShowDialog(this) == DialogResult.Ok)
-                {
-                    jtgPathTextBox.Text = ofd.FileName;
-
-                    JtgShared.JtgCompatCheck(jtgPathTextBox.Text, out var compatVersion);
-                    if (compatVersion.HasValue)
-                        versionComboBox.SelectedValue = versionComboBox.DataStore.
-                            FirstOrDefault(i => ((VersionItem)i).Version == compatVersion);
-                }
+            if (!string.IsNullOrWhiteSpace(jtgPathTextBox.Text))
+            {
+                var directory = Path.GetDirectoryName(jtgPathTextBox.Text);
+                if (Directory.Exists(directory))
+                    ofd.Directory = new Uri(directory);
             }
+
+            if (ofd.ShowDialog(this) != DialogResult.Ok)
+                return;
+            jtgPathTextBox.Text = ofd.FileName;
+
+            JtgShared.JtgCompatCheck(jtgPathTextBox.Text, out var compatVersion);
+            if (compatVersion.HasValue)
+                versionComboBox.SelectedValue = versionComboBox.DataStore.
+                    FirstOrDefault(i => ((VersionItem)i).Version == compatVersion);
         }
 
         private void FindJavaButton_Click(object sender, EventArgs e)

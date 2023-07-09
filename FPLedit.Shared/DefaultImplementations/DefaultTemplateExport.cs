@@ -31,8 +31,8 @@ namespace FPLedit.Shared.DefaultImplementations
             if (flags?.Contains(FLAG_TYROUT_CONSOLE) ?? false)
                 cont += ResourceHelper.GetStringResource("Shared.Resources.TryoutConsole.html");
 
-            using (var sw = new StreamWriter(stream, new UTF8Encoding(false), 1024, true))
-                sw.Write(cont);
+            using var sw = new StreamWriter(stream, new UTF8Encoding(false), 1024, true);
+            sw.Write(cont);
 
             return true;
         }

@@ -1,5 +1,4 @@
 using System;
-using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
 using System.Numerics;
@@ -137,7 +136,7 @@ public sealed class MGraphicsImageSharp : IMGraphics
         if (memory.Length * Unsafe.SizeOf<Rgba32>() != byteLength || etoData.ScanWidth * etoBuffer.Height != byteLength)
             throw new Exception("Some weird stuff going on while copying memory"); 
 
-        using (MemoryHandle pinHandle = memory.Pin())
+        using (var pinHandle = memory.Pin())
         {
             unsafe
             {

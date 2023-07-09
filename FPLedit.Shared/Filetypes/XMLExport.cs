@@ -36,13 +36,11 @@ namespace FPLedit.Shared.Filetypes
             
             var ttElm = BuildNode(xmlEntity);
 
-            using (var sw = new StreamWriter(stream, new UTF8Encoding(false), 1024, true))
-            using (var writer = new XmlTextWriter(sw))
-            {
-                if (debug)
-                    writer.Formatting = Formatting.Indented;
-                ttElm.Save(writer);
-            }
+            using var sw = new StreamWriter(stream, new UTF8Encoding(false), 1024, true);
+            using var writer = new XmlTextWriter(sw);
+            if (debug)
+                writer.Formatting = Formatting.Indented;
+            ttElm.Save(writer);
             return true;
         }
     }

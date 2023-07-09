@@ -1,27 +1,14 @@
 using System;
 
-namespace FPLedit.DebugDump
-{
-    internal class DumpEvent
-    {
-        public DumpEvent(DumpEventType type, DateTimeOffset time, string[] data)
-        {
-            Type = type;
-            Time = time;
-            Data = data;
-        }
+namespace FPLedit.DebugDump;
 
-        public DumpEventType Type { get; }
-        public DateTimeOffset Time { get; }
-        public string[] Data { get; }
-    }
+internal record DumpEvent(DumpEventType Type, DateTimeOffset Time, string[] Data);
     
-    internal enum DumpEventType : byte
-    {
-        TimetableChange = 1,
-        Log = 2,
-        TempFile = 4,
-        UiInteraction = 8,
-        DebugDumpInternal = 16,
-    }
+internal enum DumpEventType : byte
+{
+    TimetableChange = 1,
+    Log = 2,
+    TempFile = 4,
+    UiInteraction = 8,
+    DebugDumpInternal = 16,
 }

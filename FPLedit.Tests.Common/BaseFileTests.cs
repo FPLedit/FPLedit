@@ -29,9 +29,9 @@ namespace FPLedit.Tests.Common
 
         private static string GetStringResource(Assembly assembly, string dotFilePath)
         {
-            using (var stream = GetResource(assembly, dotFilePath))
-            using (var sr = new StreamReader(stream))
-                return sr.ReadToEnd();
+            using var stream = GetResource(assembly, dotFilePath);
+            using var sr = new StreamReader(stream);
+            return sr.ReadToEnd();
         }
     }
 }

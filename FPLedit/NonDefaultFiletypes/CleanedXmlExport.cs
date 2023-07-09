@@ -26,6 +26,9 @@ namespace FPLedit.NonDefaultFiletypes
             attrsNames = new Dictionary<string, List<string>>();
         }
 
+        //TODO: somehow also load additional removable attributes from extensions...
+        // timetable: fpl-dh, fpl-dnt, fpl-tc, fpl-trc, fpl-sc, fpl-{s,h,m,t}w (bifpl)
+        // train: fpl-gtfs-{days,bikes,wheelchair}
         private void LoadRemovableXmlNames()
         {
             var types = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName?.Contains("FPLedit") ?? false);

@@ -12,57 +12,57 @@ namespace FPLedit.Shared.Tests
         [Test]
         public void SimpleLinearCrossingTest()
         {
-            using (var s = PrepareTemp(Load("test_crossing0.fpl")))
-                GeneralCrossingTest(s);
+            using var s = PrepareTemp(Load("test_crossing0.fpl"));
+            GeneralCrossingTest(s);
         }
 
         [Test]
         public void SimpleNetworkCrossingTest()
         {
-            using (var s = PrepareTemp(Load("test_crossing1.fpl")))
-                GeneralCrossingTest(s);
+            using var s = PrepareTemp(Load("test_crossing1.fpl"));
+            GeneralCrossingTest(s);
         }
         
         [Test]
         public void ComplexNetworkCrossingTest()
         {
-            using (var s = PrepareTemp(Load("test_crossing2.fpl")))
-                GeneralCrossingTest(s);
+            using var s = PrepareTemp(Load("test_crossing2.fpl"));
+            GeneralCrossingTest(s);
         }
         
         [Test]
         public void SimpleLinearTrapezTest()
         {
-            using (var s = PrepareTemp(Load("test_trapez0.fpl")))
-                GeneralTrapezTest(s);
+            using var s = PrepareTemp(Load("test_trapez0.fpl"));
+            GeneralTrapezTest(s);
         }
         
         [Test]
         public void SimpleNetworkTrapezTest()
         {
-            using (var s = PrepareTemp(Load("test_trapez1.fpl")))
-                GeneralTrapezTest(s);
+            using var s = PrepareTemp(Load("test_trapez1.fpl"));
+            GeneralTrapezTest(s);
         }
 
         [Test]
         public void ComplexNetworkTrapezTest()
         {
-            using (var s = PrepareTemp(Load("test_trapez2.fpl")))
-                GeneralTrapezTest(s);
+            using var s = PrepareTemp(Load("test_trapez2.fpl"));
+            GeneralTrapezTest(s);
         }
 
         [Test]
         public void SimpleLinearOvertakeTest()
         {
-            using (var s = PrepareTemp(Load("test_overtake0.fpl")))
-                GeneralOvertakeTest(s);
+            using var s = PrepareTemp(Load("test_overtake0.fpl"));
+            GeneralOvertakeTest(s);
         }
 
         [Test]
         public void SimpleNetworkOvertakeTest()
         {
-            using (var s = PrepareTemp(Load("test_overtake1.fpl")))
-                GeneralOvertakeTest(s);
+            using var s = PrepareTemp(Load("test_overtake1.fpl"));
+            GeneralOvertakeTest(s);
         }
         
         // No ComplexNetworkOvertakeTest with test_overtake2.fpl as overtaking can only happen on the same route.

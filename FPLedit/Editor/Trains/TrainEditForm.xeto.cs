@@ -241,9 +241,9 @@ namespace FPLedit.Editor.Trains
                 var link = (TrainLink) linkGridView.SelectedItem;
                 if (link.TrainNamingScheme is AutoTrainNameGen || link.TrainNamingScheme is SpecialTrainNameGen)
                 {
-                    using (var tled = new TrainLinkEditDialog(link, tt))
-                        if (tled.ShowModal() == DialogResult.Ok)
-                            linkGridView.DataStore = Train.TrainLinks; // Reload data rows.
+                    using var tled = new TrainLinkEditDialog(link, tt);
+                    if (tled.ShowModal() == DialogResult.Ok)
+                        linkGridView.DataStore = Train.TrainLinks; // Reload data rows.
                 }
                 else
                     MessageBox.Show("Not Implemented: Name calculator not supported!", type: MessageBoxType.Error);

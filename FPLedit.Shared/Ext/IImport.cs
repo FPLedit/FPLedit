@@ -32,8 +32,8 @@ namespace FPLedit.Shared
         {
             try
             {
-                using (var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.Read))
-                    return imp.Import(stream, pluginInterface, replaceLog);
+                using var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.Read);
+                return imp.Import(stream, pluginInterface, replaceLog);
             }
             catch (Exception ex)
             {

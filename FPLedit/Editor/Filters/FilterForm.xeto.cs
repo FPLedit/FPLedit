@@ -83,13 +83,11 @@ namespace FPLedit.Editor.Filters
             {
                 var frule = (FilterRule)view.SelectedItem;
 
-                using (var epf = new EditPatternForm(frule, property, target))
+                using var epf = new EditPatternForm(frule, property, target);
+                if (epf.ShowModal(this) == DialogResult.Ok)
                 {
-                    if (epf.ShowModal(this) == DialogResult.Ok)
-                    {
-                        patterns[view.SelectedRow] = epf.Pattern;
-                        UpdateListView(view, patterns);
-                    }
+                    patterns[view.SelectedRow] = epf.Pattern;
+                    UpdateListView(view, patterns);
                 }
             }
             else if (message)

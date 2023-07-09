@@ -44,11 +44,9 @@ namespace FPLedit.Shared
         {
             try
             {
-                using (var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.Write))
-                {
-                    stream.SetLength(0);
-                    return exp.Export(tt, stream, pluginInterface, flags);
-                }
+                using var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.Write);
+                stream.SetLength(0);
+                return exp.Export(tt, stream, pluginInterface, flags);
             }
             catch (Exception ex)
             {

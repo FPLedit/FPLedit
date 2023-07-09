@@ -56,44 +56,42 @@ namespace FPLedit.jTrainGraphStarter
             {
                 var jtgFolder = Path.GetDirectoryName(jtgPath);
 
-                using (var p = new Process())
+                using var p = new Process();
+                p.StartInfo.WorkingDirectory = jtgFolder;
+                p.StartInfo.FileName = javapath;
+                p.StartInfo.Arguments = "-jar \"" + jtgPath + "\" \"" + fnArg + "\"";
+
+                try
                 {
-                    p.StartInfo.WorkingDirectory = jtgFolder;
-                    p.StartInfo.FileName = javapath;
-                    p.StartInfo.Arguments = "-jar \"" + jtgPath + "\" \"" + fnArg + "\"";
+                    if (!p.Start())
+                        throw new Exception("Process could not be started!");
 
-                    try
+                    pluginInterface.Logger.Info(T._("Wartet darauf, dass jTrainGraph beendet wird..."));
+
+                    while (!p.HasExited)
                     {
-                        if (!p.Start())
-                            throw new Exception("Process could not be started!");
-
-                        pluginInterface.Logger.Info(T._("Wartet darauf, dass jTrainGraph beendet wird..."));
-
-                        while (!p.HasExited)
+                        if (!forceKill)
+                            p.WaitForExit(1000);
+                        else
                         {
-                            if (!forceKill)
-                                p.WaitForExit(1000);
-                            else
-                            {
-                                p.Kill();
-                                return false;
-                            }
+                            p.Kill();
+                            return false;
                         }
-
-                        pluginInterface.Logger.Info(T._("jTrainGraph beendet! Lade Datei neu..."));
-
-                        if (p.ExitCode != 0)
-                            throw new Exception("Process exited with error code " + p.ExitCode);
-                    }
-                    catch (Exception e)
-                    {
-                        pluginInterface.Logger.Error(T._("Fehler beim Starten von jTrainGraph: Möglicherweise ist das jTrainGraphStarter Plugin falsch konfiguriert! Zur Konfiguration siehe jTrainGraph > Einstellungen"));
-                        pluginInterface.Logger.LogException(e);
-                        return false;
                     }
 
-                    return true;
+                    pluginInterface.Logger.Info(T._("jTrainGraph beendet! Lade Datei neu..."));
+
+                    if (p.ExitCode != 0)
+                        throw new Exception("Process exited with error code " + p.ExitCode);
                 }
+                catch (Exception e)
+                {
+                    pluginInterface.Logger.Error(T._("Fehler beim Starten von jTrainGraph: Möglicherweise ist das jTrainGraphStarter Plugin falsch konfiguriert! Zur Konfiguration siehe jTrainGraph > Einstellungen"));
+                    pluginInterface.Logger.LogException(e);
+                    return false;
+                }
+
+                return true;
             });
         }
     }

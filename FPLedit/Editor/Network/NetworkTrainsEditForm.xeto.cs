@@ -88,9 +88,9 @@ namespace FPLedit.Editor.Network
             {
                 if (view.SelectedItem is Train train)
                 {
-                    using (var tpf = TrainPathForm.EditPath(pluginInterface, train))
-                        if (tpf.ShowModal(this) == DialogResult.Ok)
-                            UpdateListView(view, TrainDirection.tr);
+                    using var tpf = TrainPathForm.EditPath(pluginInterface, train);
+                    if (tpf.ShowModal(this) == DialogResult.Ok)
+                        UpdateListView(view, TrainDirection.tr);
                 }
                 else if (message)
                         MessageBox.Show(T._("Verlinke Züge können nicht bearbeitet werden."), T._("Laufweg bearbeiten"));
@@ -119,22 +119,18 @@ namespace FPLedit.Editor.Network
 
         private void NewTrain(GridView view)
         {
-            using (var tpf = TrainPathForm.NewTrain(pluginInterface))
+            using var tpf = TrainPathForm.NewTrain(pluginInterface);
+            if (tpf.ShowModal(this) != DialogResult.Ok)
+                return;
+
+            using var tef = new TrainEditForm(pluginInterface.Timetable, TrainDirection.tr, tpf.Path);
+            if (tef.ShowModal(this) == DialogResult.Ok)
             {
-                if (tpf.ShowModal(this) != DialogResult.Ok)
-                    return;
+                tt.AddTrain(tef.Train);
+                if (tef.NextTrains.Any())
+                    tt.SetTransitions(tef.Train, tef.NextTrains);
 
-                using (var tef = new TrainEditForm(pluginInterface.Timetable, TrainDirection.tr, tpf.Path))
-                {
-                    if (tef.ShowModal(this) == DialogResult.Ok)
-                    {
-                        tt.AddTrain(tef.Train);
-                        if (tef.NextTrains.Any())
-                            tt.SetTransitions(tef.Train, tef.NextTrains);
-
-                        UpdateListView(view, TrainDirection.tr);
-                    }
-                }
+                UpdateListView(view, TrainDirection.tr);
             }
         }
 

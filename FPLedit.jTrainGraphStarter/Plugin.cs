@@ -157,11 +157,9 @@ namespace FPLedit.jTrainGraphStarter
 
         private bool ExecuteJTrainGraph(string fnArg, string jtgPath, string javapath)
         {
-            using (var runForm = new RunningForm(pluginInterface, fnArg, jtgPath, javapath))
-            {
-                runForm.ShowModal();
-                return runForm.JtgSuccess;
-            }
+            using var runForm = new RunningForm(pluginInterface, fnArg, jtgPath, javapath);
+            runForm.ShowModal();
+            return runForm.JtgSuccess;
         }
     }
 }
