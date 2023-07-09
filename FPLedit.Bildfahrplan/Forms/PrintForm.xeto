@@ -1,0 +1,30 @@
+﻿<e:PrintForm
+  xmlns="clr-namespace:Eto.Forms;assembly=Eto"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:e="clr-namespace:FPLedit.Bildfahrplan.Forms;assembly=FPLedit.Bildfahrplan"
+  xmlns:shared="clr-namespace:FPLedit.Shared.UI;assembly=FPLedit.Shared.UI"
+  DefaultButton="{x:Reference printButton}"
+  Title="{x:Static e:PrintForm+L.Title}" Resizable="false">
+  <StackLayout Spacing="5" Padding="10,10,10,10" HorizontalContentAlignment="Stretch" Orientation="Vertical">
+    <GroupBox Text="{x:Static e:PrintForm+L.SelectRoute}">
+      <StackLayout Spacing="5" Padding="10,10,10,10" HorizontalContentAlignment="Stretch" Orientation="Vertical">
+        <shared:RoutesDropDown x:Name="routesDropDown" />
+      </StackLayout>
+    </GroupBox>
+    
+    <GroupBox Text="{x:Static e:PrintForm+L.PageSettings}">
+      <StackLayout Spacing="5" Padding="10,10,10,10" HorizontalContentAlignment="Stretch" Orientation="Vertical">
+        <DropDown x:Name="paperDropDown" />
+        <CheckBox x:Name="landscapeChk" Text="{x:Static e:PrintForm+L.Landscape}" />
+        <StackLayout Spacing="5" Padding="0,0,0,0" Orientation="Horizontal">
+          <Label Text="{x:Static e:PrintForm+L.Margin}" />
+          <TextBox Width="80" x:Name="marginTextBox" />
+        </StackLayout>
+      </StackLayout>
+    </GroupBox>
+    
+    <StackLayout Spacing="5" Padding="10,10,10,10" HorizontalContentAlignment="Stretch" Orientation="Vertical">
+      <Button x:Name="printButton" Text="{x:Static e:PrintForm+L.Print}" Click="PrintButton_Click" />
+    </StackLayout>
+  </StackLayout>
+</e:PrintForm>

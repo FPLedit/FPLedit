@@ -55,6 +55,13 @@ namespace FPLedit.Shared
             return vroutes.Length > idx ? vroutes[idx] : null;
         }
 
+        public static Func<PathData> GetPathDataMaybeVirtual(Timetable tt, int routeIdx)
+        {
+            if (routeIdx > Timetable.UNASSIGNED_ROUTE_ID)
+                return () => tt.GetRoute(routeIdx).ToPathData(tt);
+            return GetVRoute(tt, routeIdx)!.GetPathData;
+        }
+
         public static void DeleteVRoute(VirtualRoute route)
         {
             var tt = route.tt;

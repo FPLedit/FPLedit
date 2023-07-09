@@ -3,10 +3,8 @@ using FPLedit.Bildfahrplan.Model;
 using FPLedit.Bildfahrplan.Render;
 using FPLedit.Shared;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using FPLedit.Shared.Rendering;
-using FPLedit.Shared.UI;
 using PdfSharp;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
@@ -29,87 +27,63 @@ namespace FPLedit.Bildfahrplan.Forms
             attrs = new TimetableStyle(tt);
         }
 
-        [SuppressMessage("ReSharper", "AccessToDisposedClosure")]
-        public void DoPrint()
+        public void InitPrint()
         {
-            var form = new FDialog<DialogResult>();
-            var routesDropDown = new RoutesDropDown();
-            var routeStack = new StackLayout(routesDropDown) { Orientation = Orientation.Horizontal, Padding = new Eto.Drawing.Padding(10), Spacing = 5 };
-            var routeGroup = new GroupBox { Content = routeStack, Text = T._("Strecke auswählen") };
-            var paperDropDown = new DropDown();
-            var landscapeChk = new CheckBox { Text = T._("Querformat") };
-            var printButton = new Button { Text = T._("PDF speichern") };
-            var printerStack = new StackLayout(paperDropDown, landscapeChk, printButton) { Orientation = Orientation.Horizontal, Padding = new Eto.Drawing.Padding(10), Spacing = 5 };
-            var printerGroup = new GroupBox { Content = printerStack, Text = T._("Druckeinstellungen") };
-            var stack = new StackLayout(routeGroup, printerGroup) { Orientation = Orientation.Vertical, Padding = new Eto.Drawing.Padding(10), Spacing = 5 };
-            
-            routesDropDown.Initialize(pluginInterface);
-            routesDropDown.EnableVirtualRoutes = true;
+            var form = new PrintForm(pluginInterface);
+            var printSettings = form.ShowModal();
+            if (printSettings == null)
+                return;
 
-            paperDropDown.DataContext = new PageSize?(); // hacky way to use DropDownBind without a global datacontext.
-            DropDownBind.Enum<PageSize?, PageSize>(paperDropDown, "Value", null);
-            paperDropDown.SelectedValue = PageSize.A4;
+            pd = VirtualRoute.GetPathDataMaybeVirtual(pluginInterface.Timetable, printSettings.Value.routeIdx);
 
-            form.Content = stack;
-            form.DefaultButton = printButton;
-            form.Title = T._("Bildfahrplan als PDF drucken");
+            var size = printSettings.Value.pageSize;
+            var orientation = printSettings.Value.landscape ? PageOrientation.Landscape : PageOrientation.Portrait;
+            var marginCm = printSettings.Value.marginCm;
 
-            printButton.Click += (_, _) =>
+            using var exportFileDialog = new SaveFileDialog { Title = T._("Bildfahrplan als PDF drucken") };
+            exportFileDialog.Filters.Add(new FileFilter(T._("PDF-Datei"), "*.pdf"));
+            if (pluginInterface.FileState.FileName != null)
             {
-                form.Result = DialogResult.Ok;
-                form.Close();
-            };
+                exportFileDialog.Directory = new Uri(Path.GetDirectoryName(pluginInterface.FileState.FileName)!);
+                exportFileDialog.FileName = Path.ChangeExtension(pluginInterface.FileState.FileName, "pdf");
+            }
 
-            if (form.ShowModal() == DialogResult.Ok)
+            if (exportFileDialog.ShowDialog((Window) pluginInterface.RootForm) != DialogResult.Ok)
+                return;
+
+            var exportFilename = exportFileDialog.FileName;
+            if (exportFilename == null)
+                return;
+
+            PrintDocument(exportFilename, size, orientation, marginCm);
+        }
+
+        private void PrintDocument(string exportFilename, PageSize size, PageOrientation orientation, float marginCm)
+        {
+            pluginInterface.Logger.Info(T._("Drucke als PDF {0}...", exportFilename));
+
+            try
             {
-                if (routesDropDown.SelectedRoute > Timetable.UNASSIGNED_ROUTE_ID)
-                    pd = Renderer.DefaultPathData(routesDropDown.SelectedRoute, pluginInterface.Timetable);
-                else
-                    pd = VirtualRoute.GetVRoute(pluginInterface.Timetable, routesDropDown.SelectedRoute)!.GetPathData;
+                using var doc = new PdfDocument();
+                doc.Info.Title = T._("Bildfahrplan generiert mit FPLedit");
+                doc.Info.Creator = "FPLedit";
 
-                var size = (PageSize) paperDropDown.SelectedValue;
-                var orientation = landscapeChk.Checked!.Value ? PageOrientation.Landscape : PageOrientation.Portrait;
-
-                using var exportFileDialog = new SaveFileDialog { Title = T._("Bildfahrplan als PDF drucken") };
-                exportFileDialog.Filters.Add(new FileFilter(T._("PDF-Datei"), "*.pdf"));
-                if (pluginInterface.FileState.FileName != null)
+                var needsMorePages = true;
+                TimeEntry? startTime = null;
+                while (needsMorePages)
                 {
-                    exportFileDialog.Directory = new Uri(Path.GetDirectoryName(pluginInterface.FileState.FileName)!);
-                    exportFileDialog.FileName = Path.ChangeExtension(pluginInterface.FileState.FileName, "pdf");
+                    (needsMorePages, var nextStartTime) = PrintPage(doc, size, orientation, marginCm, startTime);
+                    if (needsMorePages && nextStartTime == startTime)
+                        throw new Exception(T._("Die Druckeinstellungen erzeugen unendlich viele Seiten!"));
+                    startTime = nextStartTime;
                 }
 
-                if (exportFileDialog.ShowDialog((Window) pluginInterface.RootForm) != DialogResult.Ok)
-                    return;
-
-                var exportFilename = exportFileDialog.FileName;
-                if (exportFilename == null)
-                    return;
-
-                pluginInterface.Logger.Info(T._("Drucke als PDF {0}...", exportFilename));
-
-                try
-                {
-                    using var doc = new PdfDocument();
-                    doc.Info.Title = T._("Bildfahrplan generiert mit FPLedit");
-                    doc.Info.Creator = "FPLedit";
-
-                    var needsMorePages = true;
-                    TimeEntry? startTime = null;
-                    while (needsMorePages)
-                    {
-                        (needsMorePages, var nextStartTime) = PrintPage(doc, size, orientation, 1f, startTime);
-                        if (needsMorePages && nextStartTime == startTime)
-                            throw new Exception(T._("Die Druckeinstellungen erzeugen unendlich viele Seiten!"));
-                        startTime = nextStartTime;
-                    }
-
-                    doc.Save(exportFilename);
-                    pluginInterface.Logger.Info(T._("Drucken abgeschlossen..."));
-                }
-                catch (Exception ex)
-                {
-                    pluginInterface.Logger.Error(T._("Fehler beim Drucken! {0}", ex.Message));
-                }
+                doc.Save(exportFilename);
+                pluginInterface.Logger.Info(T._("Drucken abgeschlossen..."));
+            }
+            catch (Exception ex)
+            {
+                pluginInterface.Logger.Error(T._("Fehler beim Drucken! {0}", ex.Message));
             }
         }
 

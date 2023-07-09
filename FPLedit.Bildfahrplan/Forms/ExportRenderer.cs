@@ -1,6 +1,5 @@
 using Eto.Forms;
 using FPLedit.Shared;
-using System.Diagnostics.CodeAnalysis;
 using FPLedit.Shared.UI;
 using System.Threading.Tasks;
 
@@ -17,7 +16,6 @@ namespace FPLedit.Bildfahrplan.Forms
             this.tt = pluginInterface.Timetable;
         }
 
-        [SuppressMessage("ReSharper", "AccessToDisposedClosure")]
         public void InitPrint()
         {
             var form = new FDialog<bool>();

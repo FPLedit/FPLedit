@@ -57,7 +57,7 @@ namespace FPLedit.Bildfahrplan
         {
             try
             {
-                new PrintRenderer(pluginInterface).DoPrint();
+                new PrintRenderer(pluginInterface).InitPrint();
             }
             catch (Exception ex)
             {

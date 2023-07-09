@@ -107,14 +107,7 @@ namespace FPLedit.Bildfahrplan.Forms
         {
             if (pluginInterface.FileState.Opened)
             {
-                Func<PathData> pd;
-                if (routesDropDown.SelectedRoute > Timetable.UNASSIGNED_ROUTE_ID)
-                    pd = Renderer.DefaultPathData(routesDropDown.SelectedRoute, pluginInterface.Timetable);
-                else
-                {
-                    var virt = VirtualRoute.GetVRoute(pluginInterface.Timetable, routesDropDown.SelectedRoute);
-                    pd = virt!.GetPathData;
-                }
+                var pd = VirtualRoute.GetPathDataMaybeVirtual(pluginInterface.Timetable, routesDropDown.SelectedRoute);
 
                 renderer = new Renderer(pluginInterface.Timetable, pd);
                 if (!scrollPosition.HasValue)
