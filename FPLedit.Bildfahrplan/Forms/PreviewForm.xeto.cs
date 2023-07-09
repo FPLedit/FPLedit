@@ -91,10 +91,11 @@ namespace FPLedit.Bildfahrplan.Forms
                 
                 if (splitCheckBox.Checked!.Value)
                 {
-                    using (var ib = new ImageBridge(hpanel.Width, hpanel.Height))
+                    using (var ib = MGraphics.CreateImage(hpanel.Width, hpanel.Height))
                     {
-                        renderer.DrawHeader(ib.Graphics, (scrollable.ClientSize.Width + panel.Width) / 2, exportColor: false);
-                        ib.CoptyToEto(e.Graphics);
+                        renderer.DrawHeader(ib, (scrollable.ClientSize.Width + panel.Width) / 2, exportColor: false);
+                        using (var eto = ib.LockEtoBitmap())
+                            e.Graphics.DrawImage(eto, 0, 0);
                     }
                 }
             }

@@ -42,12 +42,14 @@ namespace FPLedit.Bildfahrplan.Render
                     try
                     {
                         newBuffer = new Bitmap(panel.Width, renderer.GetHeightExternal(drawHeader), PixelFormat.Format32bppRgba);
-                        using (var ib = new ImageBridge(panel.Width, renderer.GetHeightExternal(drawHeader)))
+                        using (var g2 = MGraphics.CreateImage(panel.Width, renderer.GetHeightExternal(drawHeader)))
                         using (var etoGraphics = new Graphics(newBuffer))
                         {
-                            renderer.Draw(ib.Graphics, drawHeader, forceWidth: panel.Width);
+                            g2.SetTextAntiAlias(true);
+                            renderer.Draw(g2, drawHeader, forceWidth: panel.Width);
                             lastBufferWidth = panel.Width;
-                            ib.CoptyToEto(etoGraphics);
+                            using (var eto = g2.LockEtoBitmap())
+                                etoGraphics.DrawImage(eto, 0, 0);
                         }
 
                         lock (bufferLock)
