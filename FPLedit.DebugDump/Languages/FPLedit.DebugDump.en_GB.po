@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-07-01 17:24+0200\n"
-"PO-Revision-Date: 2023-07-01 17:24+0200\n"
+"POT-Creation-Date: 2023-07-09 22:06+0200\n"
+"PO-Revision-Date: 2023-07-09 22:06+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -27,10 +27,10 @@ msgstr ""
 "Session file: {0}\n"
 "----------"
 
-#: Forms/SettingsForm.xeto.cs:54
+#: Forms/SettingsForm.xeto.cs:46
 msgid "Dump auswählen"
 msgstr "Select dump"
 
-#: Forms/SettingsForm.xeto.cs:67
+#: Forms/SettingsForm.xeto.cs:59
 msgid "Fehler beim Öffnen der Datei."
 msgstr "Error while opening the file."

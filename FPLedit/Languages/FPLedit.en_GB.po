@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-07-04 21:02+0200\n"
-"PO-Revision-Date: 2023-07-04 21:03+0200\n"
+"POT-Creation-Date: 2023-07-09 22:03+0200\n"
+"PO-Revision-Date: 2023-07-09 22:03+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -16,50 +16,50 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: .\n"
 
-#: BackwardCompat/BaseUpgradeExport.cs:12
-#: NonDefaultFiletypes/LinearExport.cs:13
-#: NonDefaultFiletypes/NetworkExport.cs:11
+#: BackwardCompat/BaseUpgradeExport.cs:11
+#: NonDefaultFiletypes/LinearExport.cs:12
+#: NonDefaultFiletypes/NetworkExport.cs:10
 msgid "Fahrplan Dateien (*.fpl)|*.fpl"
 msgstr "Timetable files (*.fpl)|*.fpl"
 
-#: BackwardCompat/LinearUpgradeExport.cs:15
+#: BackwardCompat/LinearUpgradeExport.cs:14
 #, csharp-format
 msgid "Nur lineare Fahrplandateien können mit {0} aktualisiert werden!"
 msgstr "Only linear timetables can be updated with {0}!"
 
-#: BackwardCompat/LinearUpgradeExport.cs:17
-#: BackwardCompat/NetworkUpgradeExport.cs:16
+#: BackwardCompat/LinearUpgradeExport.cs:16
+#: BackwardCompat/NetworkUpgradeExport.cs:15
 msgid ""
 "Nur Fahrpläne mit einer älteren Dateiversion können aktualisiert werden."
 msgstr "Only files created with an older file version can be updated."
 
-#: BackwardCompat/LinearUpgradeExport.cs:19
-#: BackwardCompat/NetworkUpgradeExport.cs:18
+#: BackwardCompat/LinearUpgradeExport.cs:18
+#: BackwardCompat/NetworkUpgradeExport.cs:17
 msgid "Dateiversion ist zu alt, um aktualisiert zu werden!"
 msgstr "The file version is too old to be updated!"
 
-#: BackwardCompat/NetworkUpgradeExport.cs:14
+#: BackwardCompat/NetworkUpgradeExport.cs:13
 #, csharp-format
 msgid "Nur Netzwerk-Fahrplandateien können mit {0} aktualisiert werden!"
 msgstr "Only network timetables can be updated with {0}!"
 
-#: Bootstrapper.cs:164
+#: Bootstrapper.cs:163
 msgid ""
 "Temp-Datei konnte nicht angelegt werden. Fallback-Dateipfad wird verwendet. "
 "Dies wird Probleme bereiten!"
 msgstr ""
 "Temporary file could not be created. This will probably cause problems!"
 
-#: Bootstrapper.cs:179
+#: Bootstrapper.cs:178
 msgid "Temp-Verzeichnis konnte nicht geleert werden."
 msgstr "Temporary directory could not be cleared."
 
-#: Bootstrapper.cs:231
+#: Bootstrapper.cs:230
 #, csharp-format
 msgid "Anlegen der angeforderten Einstellungsdatei {0} ist fehlgeschlagen."
 msgstr "Failed to create settings file {0}."
 
-#: Bootstrapper.cs:234
+#: Bootstrapper.cs:233
 #, csharp-format
 msgid ""
 "Der als config.path_redirect angegebene Ordnerpfad {0} existiert nicht! "
@@ -68,7 +68,7 @@ msgstr ""
 "The directory {0} specified as config.path_redirect does not exist. FPLedit "
 "will use the settings file in the application directory."
 
-#: Bootstrapper.cs:247
+#: Bootstrapper.cs:246
 msgid ""
 "Keine Einstellungsdatei zum Schreiben gefunden. Änderungen an "
 "Programmeinstellungen werden verworfen."
@@ -76,20 +76,20 @@ msgstr ""
 "No writable config file found. All chnages to application settings will be "
 "lost."
 
-#: Config/ConfigFile.cs:100
+#: Config/ConfigFile.cs:99
 #, csharp-format
 msgid "Konfiguration: Falsches Format in Zeile: {0}"
 msgstr "Configuration: Wrong format in line: {0}"
 
-#: CrashReporting/CrashForm.xeto.cs:30
+#: CrashReporting/CrashForm.xeto.cs:29
 msgid "<Neue Datei>"
 msgstr "<New file>"
 
-#: CrashReporting/CrashForm.xeto.cs:45
+#: CrashReporting/CrashForm.xeto.cs:44
 msgid "Fehler in FPLedit"
 msgstr "Error in FPLedit"
 
-#: CrashReporting/CrashForm.xeto.cs:46
+#: CrashReporting/CrashForm.xeto.cs:45
 msgid ""
 "In FPLedit ist ein interner Fehler aufgetreten. Weiterführende Informationen "
 "wurden gesammelt:"
@@ -97,11 +97,11 @@ msgstr ""
 "An internal error occurred in FPLedit. Information on this error has been "
 "gathered:"
 
-#: CrashReporting/CrashForm.xeto.cs:47
+#: CrashReporting/CrashForm.xeto.cs:46
 msgid "Fehler melden"
 msgstr "Report error"
 
-#: CrashReporting/CrashForm.xeto.cs:48
+#: CrashReporting/CrashForm.xeto.cs:47
 msgid ""
 "Diese können an den Autor von FPLedit weitergegeben werden, um zur "
 "Fehlerbehebung beizutragen."
@@ -109,23 +109,23 @@ msgstr ""
 "The gathered information can be sent to the creator of FPLedit. This can "
 "help with solving the underlying issue."
 
-#: CrashReporting/CrashForm.xeto.cs:49
+#: CrashReporting/CrashForm.xeto.cs:48
 msgid "(1) Email senden und Fehlerhergang beschreiben"
 msgstr "(1) Send an email in which you describe what happened"
 
-#: CrashReporting/CrashForm.xeto.cs:50
+#: CrashReporting/CrashForm.xeto.cs:49
 msgid "(2) Dateien dieses Ordners anhängen"
 msgstr "(2) Attach the files from this folder to the email"
 
-#: CrashReporting/CrashForm.xeto.cs:51
+#: CrashReporting/CrashForm.xeto.cs:50
 msgid "Vielen Dank, Ihr Programmautor"
 msgstr "Thanks for your help!"
 
-#: CrashReporting/CrashForm.xeto.cs:52
+#: CrashReporting/CrashForm.xeto.cs:51
 msgid "Wiederherstellung"
 msgstr "File recovery"
 
-#: CrashReporting/CrashForm.xeto.cs:53
+#: CrashReporting/CrashForm.xeto.cs:52
 msgid ""
 "Der Zustand des bearbeiteten Fahrplans wurde beim Absturz gespeichert. "
 "Möglicherweise können die Daten wiederhergestellt werden:"
@@ -133,30 +133,30 @@ msgstr ""
 "The current timetable could been saved when the crash occurred. Maybe your "
 "data can be recovered:"
 
-#: CrashReporting/CrashForm.xeto.cs:54
+#: CrashReporting/CrashForm.xeto.cs:53
 msgid "Datei wiederherstellen"
 msgstr "Restore file"
 
-#: CrashReporting/CrashForm.xeto.cs:55
+#: CrashReporting/CrashForm.xeto.cs:54
 msgid "Nicht wiederherstellen"
 msgstr "Do not restore"
 
-#: CrashReporting/CrashForm.xeto.cs:56 Editor/EditPositionForm.xeto.cs:45
-#: Editor/EditStationForm.xeto.cs:177 Editor/Filters/EditPatternForm.xeto.cs:88
-#: Editor/Filters/FilterForm.xeto.cs:164 Editor/LineEditForm.xeto.cs:169
-#: Editor/Linear/LinearTimetableEditForm.xeto.cs:62
-#: Editor/Linear/LinearTrainsEditForm.xeto.cs:139
-#: Editor/Network/MultipleTimetableEditForm.xeto.cs:90
+#: CrashReporting/CrashForm.xeto.cs:55 Editor/EditPositionForm.xeto.cs:44
+#: Editor/EditStationForm.xeto.cs:176 Editor/Filters/EditPatternForm.xeto.cs:87
+#: Editor/Filters/FilterForm.xeto.cs:161 Editor/LineEditForm.xeto.cs:168
+#: Editor/Linear/LinearTimetableEditForm.xeto.cs:61
+#: Editor/Linear/LinearTrainsEditForm.xeto.cs:143
+#: Editor/Network/MultipleTimetableEditForm.xeto.cs:89
 #: Editor/Network/NetworkTrainsEditForm.xeto.cs:172
-#: Editor/Network/VirtualRouteForm.xeto.cs:71
-#: Editor/RenderSettingsForm.xeto.cs:70
-#: Editor/TimetableEditor/ShuntForm.xeto.cs:166
-#: Editor/TimetableEditor/ZlmEditForm.xeto.cs:37
-#: Editor/Trains/TrainEditForm.xeto.cs:262 SettingsUi/SettingsForm.xeto.cs:58
+#: Editor/Network/VirtualRouteForm.xeto.cs:70
+#: Editor/RenderSettingsForm.xeto.cs:69
+#: Editor/TimetableEditor/ShuntForm.xeto.cs:165
+#: Editor/TimetableEditor/ZlmEditForm.xeto.cs:36
+#: Editor/Trains/TrainEditForm.xeto.cs:261 SettingsUi/SettingsForm.xeto.cs:57
 msgid "Schließen"
 msgstr "Close"
 
-#: CrashReporting/CrashReporter.cs:49
+#: CrashReporting/CrashReporter.cs:48
 msgid ""
 "Es ist ein unerwarteter Fehler in FPLedit aufgetreten.\n"
 "\n"
@@ -167,7 +167,7 @@ msgstr ""
 "\n"
 "FPLedit will be restarted. Possibly, the current timetable can be recovered."
 
-#: CrashReporting/CrashReporter.cs:54
+#: CrashReporting/CrashReporter.cs:53
 #, csharp-format
 msgid ""
 "Es ist ein unerwarteter Fehler in FPLedit aufgetreten. Es konnten keine "
@@ -182,12 +182,12 @@ msgstr ""
 "\n"
 "{0}"
 
-#: Editor/EditPositionForm.xeto.cs:23 Editor/EditStationForm.xeto.cs:40
+#: Editor/EditPositionForm.xeto.cs:22 Editor/EditStationForm.xeto.cs:39
 msgid "Bitte eine Zahl als Position eingeben!"
 msgstr "Please enter a number as position!"
 
-#: Editor/EditPositionForm.xeto.cs:30 Editor/EditStationForm.xeto.cs:116
-#: Editor/Trains/TrainEditForm.xeto.cs:150
+#: Editor/EditPositionForm.xeto.cs:29 Editor/EditStationForm.xeto.cs:115
+#: Editor/Trains/TrainEditForm.xeto.cs:149
 #, csharp-format
 msgid ""
 "Bitte erst alle Fehler beheben:\n"
@@ -196,47 +196,47 @@ msgstr ""
 "Please correct all errors before continuing:\n"
 "{0}"
 
-#: Editor/EditPositionForm.xeto.cs:44 Editor/EditStationForm.xeto.cs:176
-#: Editor/Filters/EditPatternForm.xeto.cs:87
-#: Editor/Filters/FilterForm.xeto.cs:163 Editor/LineEditForm.xeto.cs:168
-#: Editor/Linear/LinearTimetableEditForm.xeto.cs:61
-#: Editor/Linear/LinearTrainsEditForm.xeto.cs:138
-#: Editor/Network/MultipleTimetableEditForm.xeto.cs:89
+#: Editor/EditPositionForm.xeto.cs:43 Editor/EditStationForm.xeto.cs:175
+#: Editor/Filters/EditPatternForm.xeto.cs:86
+#: Editor/Filters/FilterForm.xeto.cs:160 Editor/LineEditForm.xeto.cs:167
+#: Editor/Linear/LinearTimetableEditForm.xeto.cs:60
+#: Editor/Linear/LinearTrainsEditForm.xeto.cs:142
+#: Editor/Network/MultipleTimetableEditForm.xeto.cs:88
 #: Editor/Network/NetworkTrainsEditForm.xeto.cs:171
-#: Editor/RenderSettingsForm.xeto.cs:69
-#: Editor/TimetableEditor/ShuntForm.xeto.cs:165
-#: Editor/TimetableEditor/ZlmEditForm.xeto.cs:36
-#: Editor/Trains/TrainCopyDialog.xeto.cs:198
-#: Editor/Trains/TrainEditForm.xeto.cs:261
-#: Editor/Trains/TrainFillDialog.xeto.cs:56
-#: Editor/Trains/TrainLinkEditDialog.xeto.cs:143
-#: Editor/Trains/TrainSortDialog.xeto.cs:95
+#: Editor/RenderSettingsForm.xeto.cs:68
+#: Editor/TimetableEditor/ShuntForm.xeto.cs:164
+#: Editor/TimetableEditor/ZlmEditForm.xeto.cs:35
+#: Editor/Trains/TrainCopyDialog.xeto.cs:197
+#: Editor/Trains/TrainEditForm.xeto.cs:260
+#: Editor/Trains/TrainFillDialog.xeto.cs:55
+#: Editor/Trains/TrainLinkEditDialog.xeto.cs:142
+#: Editor/Trains/TrainSortDialog.xeto.cs:94
 msgid "Abbrechen"
 msgstr "Cancel"
 
-#: Editor/EditPositionForm.xeto.cs:46 Editor/EditStationForm.xeto.cs:178
-#: Editor/TimetableEditor/ZlmEditForm.xeto.cs:38
+#: Editor/EditPositionForm.xeto.cs:45 Editor/EditStationForm.xeto.cs:177
+#: Editor/TimetableEditor/ZlmEditForm.xeto.cs:37
 msgid "Position (km)"
 msgstr "Position (km)"
 
-#: Editor/EditPositionForm.xeto.cs:47
+#: Editor/EditPositionForm.xeto.cs:46
 msgid "Neuen Positionseintrag bearbeiten"
 msgstr "Edit new position entry"
 
-#: Editor/EditStationForm.xeto.cs:41
+#: Editor/EditStationForm.xeto.cs:40
 msgid "Bitte einen Bahnhofsnamen eingeben!"
 msgstr "Please enter a station name first!"
 
-#: Editor/EditStationForm.xeto.cs:83
+#: Editor/EditStationForm.xeto.cs:82
 msgid "Neue Station erstellen"
 msgstr "Create new station"
 
-#: Editor/EditStationForm.xeto.cs:96 Editor/EditStationForm.xeto.cs:179
-#: Editor/LineEditForm.xeto.cs:97
+#: Editor/EditStationForm.xeto.cs:95 Editor/EditStationForm.xeto.cs:178
+#: Editor/LineEditForm.xeto.cs:96
 msgid "Station bearbeiten"
 msgstr "Edit station"
 
-#: Editor/EditStationForm.xeto.cs:136
+#: Editor/EditStationForm.xeto.cs:135
 msgid ""
 "ACHTUNG: Sie versuchen Stationen einer Strecke durch eine Positionsänderung "
 "zwischen zwei andere Bahnhöfe zu verschieben und damit die Stationen "
@@ -264,205 +264,205 @@ msgstr ""
 "old one.\n"
 "Continue with moving/resorting stations? (At your own risk)"
 
-#: Editor/EditStationForm.xeto.cs:149
+#: Editor/EditStationForm.xeto.cs:148
 msgid ""
 "Beim Anwenden ist (wie zu erwarten) ein Problem aufgetreten. Es wurden keine "
 "Änderungen vorgenommen."
 msgstr "As expected, an error occurred. No changes have been applied."
 
-#: Editor/EditStationForm.xeto.cs:180 Editor/Trains/TrainEditForm.xeto.cs:263
-#: SettingsUi/TemplatesControl.xeto.cs:41
+#: Editor/EditStationForm.xeto.cs:179 Editor/Trains/TrainEditForm.xeto.cs:262
+#: SettingsUi/TemplatesControl.xeto.cs:40
 msgid "Name"
 msgstr "Name"
 
-#: Editor/EditStationForm.xeto.cs:181
+#: Editor/EditStationForm.xeto.cs:180
 msgid "Betriebsst.-Abk."
 msgstr "Station code"
 
-#: Editor/EditStationForm.xeto.cs:182
+#: Editor/EditStationForm.xeto.cs:181
 msgid "Betriebsst.-Typ"
 msgstr "Station type"
 
-#: Editor/EditStationForm.xeto.cs:183 Editor/LineEditForm.xeto.cs:35
-#: Editor/TimetableEditor/SingleTimetableEditControl.xeto.cs:447
+#: Editor/EditStationForm.xeto.cs:182 Editor/LineEditForm.xeto.cs:34
+#: Editor/TimetableEditor/SingleTimetableEditControl.xeto.cs:446
 msgid "Bedarfshalt"
 msgstr "Request stop"
 
-#: Editor/EditorPlugin.cs:30
+#: Editor/EditorPlugin.cs:29
 msgid "&Rückgängig"
 msgstr "&Undo"
 
-#: Editor/EditorPlugin.cs:34
+#: Editor/EditorPlugin.cs:33
 msgid "&Strecke bearbeiten (linear)"
 msgstr "Edit &stations (linear)"
 
-#: Editor/EditorPlugin.cs:37
+#: Editor/EditorPlugin.cs:36
 msgid "&Züge bearbeiten"
 msgstr "Edit t&rains"
 
-#: Editor/EditorPlugin.cs:45
+#: Editor/EditorPlugin.cs:44
 msgid "&Fahrplan bearbeiten"
 msgstr "Edit &timetable"
 
-#: Editor/EditorPlugin.cs:55
+#: Editor/EditorPlugin.cs:54
 msgid "Fahrplan&darstellung"
 msgstr "Timetable &appearance"
 
-#: Editor/EditorPlugin.cs:56
+#: Editor/EditorPlugin.cs:55
 msgid "Fi&lterregeln"
 msgstr "Fi&lter rules"
 
-#: Editor/EditorPlugin.cs:58
+#: Editor/EditorPlugin.cs:57
 msgid "&Virtuelle Strecken"
 msgstr "&Virtual lines"
 
-#: Editor/Filters/EditPatternForm.xeto.cs:47
+#: Editor/Filters/EditPatternForm.xeto.cs:46
 msgid "Bitte einen Suchwert eingeben!"
 msgstr "Please enter a search string!"
 
-#: Editor/Filters/EditPatternForm.xeto.cs:73
-#: Editor/Filters/FilterForm.xeto.cs:114
+#: Editor/Filters/EditPatternForm.xeto.cs:72
+#: Editor/Filters/FilterForm.xeto.cs:111
 msgid "beginnt mit"
 msgstr "starts with"
 
-#: Editor/Filters/EditPatternForm.xeto.cs:75
-#: Editor/Filters/FilterForm.xeto.cs:115
+#: Editor/Filters/EditPatternForm.xeto.cs:74
+#: Editor/Filters/FilterForm.xeto.cs:112
 msgid "endet mit"
 msgstr "ends with"
 
-#: Editor/Filters/EditPatternForm.xeto.cs:77
-#: Editor/Filters/FilterForm.xeto.cs:116
+#: Editor/Filters/EditPatternForm.xeto.cs:76
+#: Editor/Filters/FilterForm.xeto.cs:113
 msgid "enthält"
 msgstr "contains"
 
-#: Editor/Filters/EditPatternForm.xeto.cs:79
-#: Editor/Filters/FilterForm.xeto.cs:117
+#: Editor/Filters/EditPatternForm.xeto.cs:78
+#: Editor/Filters/FilterForm.xeto.cs:114
 msgid "ist"
 msgstr "is"
 
-#: Editor/Filters/EditPatternForm.xeto.cs:81
-#: Editor/Filters/FilterForm.xeto.cs:118
+#: Editor/Filters/EditPatternForm.xeto.cs:80
+#: Editor/Filters/FilterForm.xeto.cs:115
 msgid "Betriebsst.-Typ ist"
 msgstr "Station type is"
 
-#: Editor/Filters/EditPatternForm.xeto.cs:89
-#: Editor/Filters/FilterForm.xeto.cs:97
+#: Editor/Filters/EditPatternForm.xeto.cs:88
+#: Editor/Filters/FilterForm.xeto.cs:94
 msgid "Regel bearbeiten"
 msgstr "Edit filter rule"
 
-#: Editor/Filters/EditPatternForm.xeto.cs:90
+#: Editor/Filters/EditPatternForm.xeto.cs:89
 msgid "Bedingung umkehren"
 msgstr "Negate condition"
 
-#: Editor/Filters/FilterForm.xeto.cs:49 Editor/LineEditForm.xeto.cs:33
-#: SettingsUi/TemplatesControl.xeto.cs:43
+#: Editor/Filters/FilterForm.xeto.cs:48 Editor/LineEditForm.xeto.cs:32
+#: SettingsUi/TemplatesControl.xeto.cs:42
 msgid "Typ"
 msgstr "Type"
 
-#: Editor/Filters/FilterForm.xeto.cs:50
+#: Editor/Filters/FilterForm.xeto.cs:49
 msgid "Suchwert"
 msgstr "Search string"
 
-#: Editor/Filters/FilterForm.xeto.cs:58
+#: Editor/Filters/FilterForm.xeto.cs:57
 #, csharp-format
 msgid "Filterregeln für {0}"
 msgstr "Filter rules for {0}"
 
-#: Editor/Filters/FilterForm.xeto.cs:78 Editor/Filters/FilterForm.xeto.cs:97
+#: Editor/Filters/FilterForm.xeto.cs:77 Editor/Filters/FilterForm.xeto.cs:94
 msgid "Zuerst muss eine Regel ausgewählt werden!"
 msgstr "Please select a filter rule first!"
 
-#: Editor/Filters/FilterForm.xeto.cs:78
+#: Editor/Filters/FilterForm.xeto.cs:77
 msgid "Regel löschen"
 msgstr "Delete filter rule"
 
-#: Editor/Filters/FilterForm.xeto.cs:114
+#: Editor/Filters/FilterForm.xeto.cs:111
 msgid "beginnt nicht mit"
 msgstr "starts not with"
 
-#: Editor/Filters/FilterForm.xeto.cs:115
+#: Editor/Filters/FilterForm.xeto.cs:112
 msgid "endet nicht mit"
 msgstr "ends not with"
 
-#: Editor/Filters/FilterForm.xeto.cs:116
+#: Editor/Filters/FilterForm.xeto.cs:113
 msgid "enthält nicht"
 msgstr "contains not"
 
-#: Editor/Filters/FilterForm.xeto.cs:117
+#: Editor/Filters/FilterForm.xeto.cs:114
 msgid "ist nicht"
 msgstr "is not"
 
-#: Editor/Filters/FilterForm.xeto.cs:118
+#: Editor/Filters/FilterForm.xeto.cs:115
 msgid "Betriebsst.-Typ ist nicht"
 msgstr "Station type is not"
 
-#: Editor/Filters/FilterForm.xeto.cs:165
+#: Editor/Filters/FilterForm.xeto.cs:162
 msgid "Filterregeln"
 msgstr "Filter rules"
 
-#: Editor/Filters/FilterForm.xeto.cs:166
-#: Editor/TimetableEditor/ShuntForm.xeto.cs:168
+#: Editor/Filters/FilterForm.xeto.cs:163
+#: Editor/TimetableEditor/ShuntForm.xeto.cs:167
 msgid "&Hinzufügen"
 msgstr "&Add"
 
-#: Editor/Filters/FilterForm.xeto.cs:167 MainForm.xeto.cs:34 Program.cs:125
-#: SettingsUi/TemplatesControl.xeto.cs:182
+#: Editor/Filters/FilterForm.xeto.cs:164 MainForm.xeto.cs:32 Program.cs:124
+#: SettingsUi/TemplatesControl.xeto.cs:181
 msgid "&Bearbeiten"
 msgstr "&Edit"
 
-#: Editor/Filters/FilterForm.xeto.cs:168
-#: Editor/TimetableEditor/ShuntForm.xeto.cs:169
-#: SettingsUi/TemplatesControl.xeto.cs:184
+#: Editor/Filters/FilterForm.xeto.cs:165
+#: Editor/TimetableEditor/ShuntForm.xeto.cs:168
+#: SettingsUi/TemplatesControl.xeto.cs:183
 msgid "&Löschen"
 msgstr "De&lete template"
 
-#: Editor/Filters/FilterForm.xeto.cs:169
+#: Editor/Filters/FilterForm.xeto.cs:166
 msgid "H&inzufügen"
 msgstr "A&dd"
 
-#: Editor/Filters/FilterForm.xeto.cs:170
+#: Editor/Filters/FilterForm.xeto.cs:167
 msgid "B&earbeiten"
 msgstr "Ed&it"
 
-#: Editor/Filters/FilterForm.xeto.cs:171
+#: Editor/Filters/FilterForm.xeto.cs:168
 msgid "Lö&schen"
 msgstr "De&lete"
 
-#: Editor/Filters/FilterForm.xeto.cs:172
+#: Editor/Filters/FilterForm.xeto.cs:169
 msgid "Filter für"
 msgstr "Filter rules for"
 
-#: Editor/Filters/FilterForm.xeto.cs:173
+#: Editor/Filters/FilterForm.xeto.cs:170
 msgid "Züge ausblenden"
 msgstr "Hide trains"
 
-#: Editor/Filters/FilterForm.xeto.cs:174
+#: Editor/Filters/FilterForm.xeto.cs:171
 msgid "Bahnhöfe ausblenden"
 msgstr "Hide stations"
 
-#: Editor/LineEditForm.xeto.cs:30
-#: Editor/TimetableEditor/SingleTimetableEditControl.xeto.cs:316
+#: Editor/LineEditForm.xeto.cs:29
+#: Editor/TimetableEditor/SingleTimetableEditControl.xeto.cs:315
 msgid "Bahnhof"
 msgstr "Station name"
 
-#: Editor/LineEditForm.xeto.cs:31
+#: Editor/LineEditForm.xeto.cs:30
 msgid "abs. Kilometr."
 msgstr "abs. kilometer."
 
-#: Editor/LineEditForm.xeto.cs:32
+#: Editor/LineEditForm.xeto.cs:31
 msgid "Abk."
 msgstr "Station code"
 
-#: Editor/LineEditForm.xeto.cs:34
+#: Editor/LineEditForm.xeto.cs:33
 msgid "Anzahl Gleise"
 msgstr "Number of tracks"
 
-#: Editor/LineEditForm.xeto.cs:97 Editor/LineEditForm.xeto.cs:121
+#: Editor/LineEditForm.xeto.cs:96 Editor/LineEditForm.xeto.cs:120
 msgid "Zuerst muss eine Station ausgewählt werden!"
 msgstr "Please select a station first!"
 
-#: Editor/LineEditForm.xeto.cs:107
-#: Editor/Rendering/NetworkEditingControl.xeto.cs:133
+#: Editor/LineEditForm.xeto.cs:106
+#: Editor/Rendering/NetworkEditingControl.xeto.cs:132
 msgid ""
 "Sie versuchen eine Station zu löschen, ohne die danach zwei Routen "
 "zusammenfallen, das heißt zwei Stationen auf mehr als einer Route ohne "
@@ -474,8 +474,8 @@ msgstr ""
 "stations would be directly connected (without any stations in between) by "
 "more than one line. This conflict cannot be resolved automatically."
 
-#: Editor/LineEditForm.xeto.cs:113
-#: Editor/Rendering/NetworkEditingControl.xeto.cs:139
+#: Editor/LineEditForm.xeto.cs:112
+#: Editor/Rendering/NetworkEditingControl.xeto.cs:138
 msgid ""
 "Sie versuchen eine Station zu löschen, die an einem Kreuzungspunkt zweier "
 "Strecken liegt. Dies ist leider nicht möglich."
@@ -483,58 +483,58 @@ msgstr ""
 "You tried to remove a station at the junction of two lines. Unfortunately, "
 "this is not possible."
 
-#: Editor/LineEditForm.xeto.cs:121
+#: Editor/LineEditForm.xeto.cs:120
 msgid "Station löschen"
 msgstr "Delete station"
 
-#: Editor/LineEditForm.xeto.cs:170
+#: Editor/LineEditForm.xeto.cs:169
 msgid "Strecke bearbeiten"
 msgstr "Edit line"
 
-#: Editor/LineEditForm.xeto.cs:171
-#: Editor/Rendering/NetworkEditingControl.xeto.cs:221
+#: Editor/LineEditForm.xeto.cs:170
+#: Editor/Rendering/NetworkEditingControl.xeto.cs:220
 msgid "&Neue Station"
 msgstr "Add &new station"
 
-#: Editor/LineEditForm.xeto.cs:172
+#: Editor/LineEditForm.xeto.cs:171
 msgid "Station &bearbeiten"
 msgstr "&Edit station"
 
-#: Editor/LineEditForm.xeto.cs:173
+#: Editor/LineEditForm.xeto.cs:172
 msgid "Station &löschen"
 msgstr "&Delete station"
 
+#: Editor/Linear/LinearTimetableEditControl.xeto.cs:62
 #: Editor/Linear/LinearTimetableEditControl.xeto.cs:63
-#: Editor/Linear/LinearTimetableEditControl.xeto.cs:64
+#: Editor/Linear/LinearTrainsEditForm.xeto.cs:36
 #: Editor/Linear/LinearTrainsEditForm.xeto.cs:37
-#: Editor/Linear/LinearTrainsEditForm.xeto.cs:38
 #, csharp-format
 msgid "Züge {0}"
 msgstr "Trains {0}"
 
-#: Editor/Linear/LinearTimetableEditControl.xeto.cs:224
-#: Editor/Linear/LinearTrainsEditForm.xeto.cs:71
-#: Editor/Network/NetworkTrainsEditForm.xeto.cs:32
+#: Editor/Linear/LinearTimetableEditControl.xeto.cs:223
+#: Editor/Linear/LinearTrainsEditForm.xeto.cs:75
+#: Editor/Network/NetworkTrainsEditForm.xeto.cs:31
 msgid "Zugnummer"
 msgstr "Train name"
 
-#: Editor/Linear/LinearTimetableEditControl.xeto.cs:229
+#: Editor/Linear/LinearTimetableEditControl.xeto.cs:228
 #, csharp-format
 msgid "{0} an"
 msgstr "Arr. {0}"
 
-#: Editor/Linear/LinearTimetableEditControl.xeto.cs:231
+#: Editor/Linear/LinearTimetableEditControl.xeto.cs:230
 #, csharp-format
 msgid "{0} ab"
 msgstr "Dep. {0}"
 
-#: Editor/Linear/LinearTimetableEditControl.xeto.cs:234
-#: Editor/Trains/TrainEditForm.xeto.cs:272
+#: Editor/Linear/LinearTimetableEditControl.xeto.cs:233
+#: Editor/Trains/TrainEditForm.xeto.cs:271
 msgid "Folgezug"
 msgstr "Next train"
 
-#: Editor/Linear/LinearTimetableEditControl.xeto.cs:259
-#: Editor/TimetableEditor/SingleTimetableEditControl.xeto.cs:379
+#: Editor/Linear/LinearTimetableEditControl.xeto.cs:258
+#: Editor/TimetableEditor/SingleTimetableEditControl.xeto.cs:378
 msgid ""
 "Bitte erst alle Fehler beheben!\n"
 "\n"
@@ -546,180 +546,180 @@ msgstr ""
 "Time entries must be supplied in the formats hh:mm, h:mm, h:m, hh:mm, h:, :"
 "m, hhmm, hmm or mm!"
 
-#: Editor/Linear/LinearTimetableEditControl.xeto.cs:266
+#: Editor/Linear/LinearTimetableEditControl.xeto.cs:265
 msgid "Zug, der am Anfang noch da war, ist verschwunden!"
 msgstr "A train vanished!"
 
-#: Editor/Linear/LinearTimetableEditControl.xeto.cs:310
-#: Editor/TimetableEditor/SingleTimetableEditControl.xeto.cs:444
+#: Editor/Linear/LinearTimetableEditControl.xeto.cs:309
+#: Editor/TimetableEditor/SingleTimetableEditControl.xeto.cs:443
 msgid "&Zuglaufmeldung durch"
 msgstr "&Message on train progress by"
 
-#: Editor/Linear/LinearTimetableEditControl.xeto.cs:311
-#: Editor/TimetableEditor/SingleTimetableEditControl.xeto.cs:446
+#: Editor/Linear/LinearTimetableEditControl.xeto.cs:310
+#: Editor/TimetableEditor/SingleTimetableEditControl.xeto.cs:445
 msgid "Halt vor Trapeztafel"
 msgstr "\"Trapeztafelhalt\""
 
-#: Editor/Linear/LinearTimetableEditControl.xeto.cs:312
-#: Editor/TimetableEditor/SingleTimetableEditControl.xeto.cs:445
+#: Editor/Linear/LinearTimetableEditControl.xeto.cs:311
+#: Editor/TimetableEditor/SingleTimetableEditControl.xeto.cs:444
 msgid "&Rangierfahrten"
 msgstr "Shunting &movements"
 
-#: Editor/Linear/LinearTimetableEditForm.xeto.cs:63
+#: Editor/Linear/LinearTimetableEditForm.xeto.cs:62
 msgid "Fahrplan bearbeiten"
 msgstr "Edit timetable"
 
-#: Editor/Linear/LinearTrainsEditForm.xeto.cs:70
-#: Editor/Network/NetworkTrainsEditForm.xeto.cs:31
+#: Editor/Linear/LinearTrainsEditForm.xeto.cs:74
+#: Editor/Network/NetworkTrainsEditForm.xeto.cs:30
 msgid "L"
 msgstr "L"
 
-#: Editor/Linear/LinearTrainsEditForm.xeto.cs:72
-#: Editor/Network/NetworkTrainsEditForm.xeto.cs:33
-#: Editor/Trains/TrainEditForm.xeto.cs:266
+#: Editor/Linear/LinearTrainsEditForm.xeto.cs:76
+#: Editor/Network/NetworkTrainsEditForm.xeto.cs:32
+#: Editor/Trains/TrainEditForm.xeto.cs:265
 msgid "Tfz"
 msgstr "Loco"
 
-#: Editor/Linear/LinearTrainsEditForm.xeto.cs:73
-#: Editor/Network/NetworkTrainsEditForm.xeto.cs:34
-#: Editor/Trains/TrainEditForm.xeto.cs:268
+#: Editor/Linear/LinearTrainsEditForm.xeto.cs:77
+#: Editor/Network/NetworkTrainsEditForm.xeto.cs:33
+#: Editor/Trains/TrainEditForm.xeto.cs:267
 msgid "Mbr"
 msgstr "λ (%)"
 
-#: Editor/Linear/LinearTrainsEditForm.xeto.cs:74
-#: Editor/Network/NetworkTrainsEditForm.xeto.cs:35
-#: Editor/Trains/TrainEditForm.xeto.cs:270
+#: Editor/Linear/LinearTrainsEditForm.xeto.cs:78
+#: Editor/Network/NetworkTrainsEditForm.xeto.cs:34
+#: Editor/Trains/TrainEditForm.xeto.cs:269
 msgid "Last"
 msgstr "Load"
 
-#: Editor/Linear/LinearTrainsEditForm.xeto.cs:75
-#: Editor/Network/NetworkTrainsEditForm.xeto.cs:36
-#: Editor/Trains/TrainEditForm.xeto.cs:271
+#: Editor/Linear/LinearTrainsEditForm.xeto.cs:79
+#: Editor/Network/NetworkTrainsEditForm.xeto.cs:35
+#: Editor/Trains/TrainEditForm.xeto.cs:270
 msgid "Verkehrstage"
 msgstr "Days"
 
-#: Editor/Linear/LinearTrainsEditForm.xeto.cs:76
-#: Editor/Network/NetworkTrainsEditForm.xeto.cs:38
-#: Editor/Trains/TrainEditForm.xeto.cs:264
+#: Editor/Linear/LinearTrainsEditForm.xeto.cs:80
+#: Editor/Network/NetworkTrainsEditForm.xeto.cs:37
+#: Editor/Trains/TrainEditForm.xeto.cs:263
 msgid "Kommentar"
 msgstr "Comment"
 
-#: Editor/Linear/LinearTrainsEditForm.xeto.cs:140
+#: Editor/Linear/LinearTrainsEditForm.xeto.cs:144
 #: Editor/Network/NetworkTrainsEditForm.xeto.cs:173
 msgid "Züge bearbeiten"
 msgstr "Edit trains"
 
-#: Editor/Linear/LinearTrainsEditForm.xeto.cs:141
+#: Editor/Linear/LinearTrainsEditForm.xeto.cs:145
 #: Editor/Network/NetworkTrainsEditForm.xeto.cs:174
-#: Editor/Trains/TrainSortDialog.xeto.cs:98
+#: Editor/Trains/TrainSortDialog.xeto.cs:97
 msgid "Züge sortieren"
 msgstr "Sort trains"
 
-#: Editor/Linear/LinearTrainsEditForm.xeto.cs:142
+#: Editor/Linear/LinearTrainsEditForm.xeto.cs:146
 #: Editor/Network/NetworkTrainsEditForm.xeto.cs:175
-#: Editor/Trains/TrainCopyDialog.xeto.cs:205
+#: Editor/Trains/TrainCopyDialog.xeto.cs:204
 msgid "Zug kopieren/verschieben"
 msgstr "Copy or move trains"
 
-#: Editor/Linear/LinearTrainsEditForm.xeto.cs:143
+#: Editor/Linear/LinearTrainsEditForm.xeto.cs:147
 #: Editor/Network/NetworkTrainsEditForm.xeto.cs:176
-#: Editor/Trains/BaseTrainsEditor.cs:32 Editor/Trains/BaseTrainsEditor.cs:41
-#: Editor/Trains/BaseTrainsEditor.cs:44
+#: Editor/Trains/BaseTrainsEditor.cs:31 Editor/Trains/BaseTrainsEditor.cs:40
+#: Editor/Trains/BaseTrainsEditor.cs:43
 msgid "Zug löschen"
 msgstr "Delete train"
 
-#: Editor/Linear/LinearTrainsEditForm.xeto.cs:144
+#: Editor/Linear/LinearTrainsEditForm.xeto.cs:148
 #: Editor/Network/NetworkTrainsEditForm.xeto.cs:177
-#: Editor/Trains/BaseTrainsEditor.cs:58 Editor/Trains/BaseTrainsEditor.cs:61
-#: Editor/Trains/TrainEditForm.xeto.cs:90
+#: Editor/Trains/BaseTrainsEditor.cs:57 Editor/Trains/BaseTrainsEditor.cs:60
+#: Editor/Trains/TrainEditForm.xeto.cs:89
 msgid "Zug bearbeiten"
 msgstr "Edit train"
 
-#: Editor/Linear/LinearTrainsEditForm.xeto.cs:145
+#: Editor/Linear/LinearTrainsEditForm.xeto.cs:149
 #: Editor/Network/NetworkTrainsEditForm.xeto.cs:178
 msgid "Neuer Zug"
 msgstr "Add new train"
 
-#: Editor/Network/EditRouteAction.cs:9
+#: Editor/Network/EditRouteAction.cs:8
 msgid "Stationen dieser Strecke b&earbeiten"
 msgstr "&Edit stations of this line"
 
-#: Editor/Network/MultipleTimetableEditForm.xeto.cs:91
+#: Editor/Network/MultipleTimetableEditForm.xeto.cs:90
 msgid "Zugnummer:"
 msgstr "Train name:"
 
-#: Editor/Network/MultipleTimetableEditForm.xeto.cs:92
+#: Editor/Network/MultipleTimetableEditForm.xeto.cs:91
 msgid "Fahrpläne bearbeiten"
 msgstr "Edit timetables"
 
-#: Editor/Network/NetworkTrainsEditForm.xeto.cs:37
+#: Editor/Network/NetworkTrainsEditForm.xeto.cs:36
 msgid "Laufweg"
 msgstr "Train route"
 
-#: Editor/Network/NetworkTrainsEditForm.xeto.cs:92
-#: Editor/Trains/BaseTrainsEditor.cs:58
+#: Editor/Network/NetworkTrainsEditForm.xeto.cs:96
+#: Editor/Trains/BaseTrainsEditor.cs:57
 msgid "Verlinke Züge können nicht bearbeitet werden."
 msgstr "Linked trains cannot be edited."
 
-#: Editor/Network/NetworkTrainsEditForm.xeto.cs:92
-#: Editor/Network/NetworkTrainsEditForm.xeto.cs:95
+#: Editor/Network/NetworkTrainsEditForm.xeto.cs:96
+#: Editor/Network/NetworkTrainsEditForm.xeto.cs:99
 #: Editor/Network/NetworkTrainsEditForm.xeto.cs:179
 msgid "Laufweg bearbeiten"
 msgstr "Edit route"
 
-#: Editor/Network/NetworkTrainsEditForm.xeto.cs:95
-#: Editor/Network/NetworkTrainsEditForm.xeto.cs:113
-#: Editor/Trains/BaseTrainsEditor.cs:44 Editor/Trains/BaseTrainsEditor.cs:61
-#: Editor/Trains/BaseTrainsEditor.cs:92
+#: Editor/Network/NetworkTrainsEditForm.xeto.cs:99
+#: Editor/Network/NetworkTrainsEditForm.xeto.cs:117
+#: Editor/Trains/BaseTrainsEditor.cs:43 Editor/Trains/BaseTrainsEditor.cs:60
+#: Editor/Trains/BaseTrainsEditor.cs:91
 msgid "Zuerst muss ein Zug ausgewählt werden!"
 msgstr "Please selct a train first!"
 
-#: Editor/Network/NetworkTrainsEditForm.xeto.cs:110
-#: Editor/Trains/BaseTrainsEditor.cs:89
+#: Editor/Network/NetworkTrainsEditForm.xeto.cs:114
+#: Editor/Trains/BaseTrainsEditor.cs:88
 msgid "Verlinke Züge können nicht kopiert werden."
 msgstr "Linked trains cannot be copied."
 
-#: Editor/Network/NetworkTrainsEditForm.xeto.cs:110
-#: Editor/Network/NetworkTrainsEditForm.xeto.cs:113
-#: Editor/Trains/BaseTrainsEditor.cs:89 Editor/Trains/BaseTrainsEditor.cs:92
-#: Editor/Trains/TrainCopyDialog.xeto.cs:180
+#: Editor/Network/NetworkTrainsEditForm.xeto.cs:114
+#: Editor/Network/NetworkTrainsEditForm.xeto.cs:117
+#: Editor/Trains/BaseTrainsEditor.cs:88 Editor/Trains/BaseTrainsEditor.cs:91
+#: Editor/Trains/TrainCopyDialog.xeto.cs:179
 msgid "Zug kopieren"
 msgstr "Copy train"
 
-#: Editor/Network/VirtualRouteForm.xeto.cs:30
+#: Editor/Network/VirtualRouteForm.xeto.cs:29
 msgid "Streckenverlauf"
 msgstr "Route"
 
-#: Editor/Network/VirtualRouteForm.xeto.cs:39
+#: Editor/Network/VirtualRouteForm.xeto.cs:38
 msgid "Verlauf der neuen virtuellen Strecke auswählen"
 msgstr "Select route of the new virtual line"
 
-#: Editor/Network/VirtualRouteForm.xeto.cs:55
+#: Editor/Network/VirtualRouteForm.xeto.cs:54
 msgid "Zuerst muss eine virtuelle Strecke ausgewählt werden!"
 msgstr "Please select a virtual line first!"
 
-#: Editor/Network/VirtualRouteForm.xeto.cs:55
-#: Editor/Network/VirtualRouteForm.xeto.cs:69
+#: Editor/Network/VirtualRouteForm.xeto.cs:54
+#: Editor/Network/VirtualRouteForm.xeto.cs:68
 msgid "Virtuelle Strecke löschen"
 msgstr "Delete virtual line"
 
-#: Editor/Network/VirtualRouteForm.xeto.cs:70
+#: Editor/Network/VirtualRouteForm.xeto.cs:69
 msgid "Neue virtuelle Strecke"
 msgstr "New virtual line"
 
-#: Editor/Network/VirtualRouteForm.xeto.cs:72
+#: Editor/Network/VirtualRouteForm.xeto.cs:71
 msgid "Virtuelle Strecken bearbeiten"
 msgstr "Edit virtual line"
 
-#: Editor/RenderSettingsForm.xeto.cs:71
+#: Editor/RenderSettingsForm.xeto.cs:70
 msgid "Fahrplandarstellung"
 msgstr "Timetable appearance"
 
-#: Editor/RenderSettingsForm.xeto.cs:72
+#: Editor/RenderSettingsForm.xeto.cs:71
 msgid "Expertenmodus (CSS-Bearbeitung) aktivieren"
 msgstr "Enable expert mode (CSS editor)"
 
-#: Editor/Rendering/NetworkEditingControl.xeto.cs:112
+#: Editor/Rendering/NetworkEditingControl.xeto.cs:111
 msgid ""
 "Die Station liegt auf mehreren Strecken. Bitte zuerst die Strecke auswählen, "
 "für die die Station bearbeitet werden soll!"
@@ -727,121 +727,121 @@ msgstr ""
 "This station is part of multiple lines. Please select the line you want to "
 "edit."
 
-#: Editor/Rendering/NetworkEditingControl.xeto.cs:222
+#: Editor/Rendering/NetworkEditingControl.xeto.cs:221
 msgid "Neue &Strecke"
 msgstr "Add new &line"
 
-#: Editor/Rendering/NetworkEditingControl.xeto.cs:223
+#: Editor/Rendering/NetworkEditingControl.xeto.cs:222
 msgid "Strecken &zusammenführen"
 msgstr "&Join lines"
 
-#: Editor/Rendering/StationRenderer.cs:85
+#: Editor/Rendering/StationRenderer.cs:84
 #, csharp-format
 msgid "von {0}"
 msgstr "from {0}"
 
-#: Editor/Rendering/StationRenderer.cs:88
+#: Editor/Rendering/StationRenderer.cs:87
 #, csharp-format
 msgid "nach {0}"
 msgstr "to {0}"
 
-#: Editor/Rendering/StationRenderer.cs:194
+#: Editor/Rendering/StationRenderer.cs:193
 msgid "Neues Gleis hinzufügen"
 msgstr "Add new track"
 
-#: Editor/Rendering/StationRenderer.cs:249
+#: Editor/Rendering/StationRenderer.cs:248
 msgid "Gleisnamen bearbeiten"
 msgstr "Edit track name"
 
-#: Editor/Rendering/StationRenderer.cs:261
+#: Editor/Rendering/StationRenderer.cs:260
 #, csharp-format
 msgid ""
 "Ein Gleis mit der Bezeichnung {0} ist bereits vorhanden. Bitte wählen Sie "
 "einen anderen Namen!"
 msgstr "The station has already a track named {0}. Please choose another name!"
 
-#: Editor/TimetableEditor/ShuntForm.xeto.cs:51
+#: Editor/TimetableEditor/ShuntForm.xeto.cs:50
 msgid "Zeit"
 msgstr "Time"
 
-#: Editor/TimetableEditor/ShuntForm.xeto.cs:52
+#: Editor/TimetableEditor/ShuntForm.xeto.cs:51
 msgid "Startgleis"
 msgstr "Start track"
 
-#: Editor/TimetableEditor/ShuntForm.xeto.cs:53
+#: Editor/TimetableEditor/ShuntForm.xeto.cs:52
 msgid "Zielgleis"
 msgstr "End track"
 
-#: Editor/TimetableEditor/ShuntForm.xeto.cs:54
+#: Editor/TimetableEditor/ShuntForm.xeto.cs:53
 msgid "Alle Wagen?"
 msgstr "All waggons?"
 
-#: Editor/TimetableEditor/ShuntForm.xeto.cs:125
+#: Editor/TimetableEditor/ShuntForm.xeto.cs:124
 msgid ""
 "Einige Rangierfahrten befinden sich außerhalb des Zeitfensters des "
 "Aufenthalts an der Station!"
 msgstr ""
 "Some shunting movements are not in the stop time frame at this station!"
 
-#: Editor/TimetableEditor/ShuntForm.xeto.cs:132
+#: Editor/TimetableEditor/ShuntForm.xeto.cs:131
 msgid ""
 "Die letzte Rangierfahrt endet nicht am Abfahrtsgleis! Trotzdem fortfahren?"
 msgstr ""
 "The last shunting movement does not end at the departure track! Continue?"
 
-#: Editor/TimetableEditor/ShuntForm.xeto.cs:139
+#: Editor/TimetableEditor/ShuntForm.xeto.cs:138
 msgid ""
 "Die erste Rangierfahrt beginnt nicht am Ankunftsgleis! Trotzdem fortfahren?"
 msgstr ""
 "The first shunting movement does not begin at the arrival track! Continue?"
 
-#: Editor/TimetableEditor/ShuntForm.xeto.cs:167
+#: Editor/TimetableEditor/ShuntForm.xeto.cs:166
 msgid "Rangierfahrten am Bahnhof {station}"
 msgstr "Shunting movements at station {station}"
 
-#: Editor/TimetableEditor/ShuntForm.xeto.cs:170
+#: Editor/TimetableEditor/ShuntForm.xeto.cs:169
 msgid "S&ortieren"
 msgstr "S&ort"
 
-#: Editor/TimetableEditor/ShuntForm.xeto.cs:171
+#: Editor/TimetableEditor/ShuntForm.xeto.cs:170
 msgid "Ankunft: {time} / Gleis {track}"
 msgstr "Arrival: {time} / Track {track}"
 
-#: Editor/TimetableEditor/ShuntForm.xeto.cs:172
+#: Editor/TimetableEditor/ShuntForm.xeto.cs:171
 msgid "Abfahrt: {time} / Gleis {track}"
 msgstr "Departure: {time} / Track {track}"
 
-#: Editor/TimetableEditor/SingleTimetableEditControl.xeto.cs:317
+#: Editor/TimetableEditor/SingleTimetableEditControl.xeto.cs:316
 msgid "Ankunft"
 msgstr "Arrival"
 
-#: Editor/TimetableEditor/SingleTimetableEditControl.xeto.cs:318
+#: Editor/TimetableEditor/SingleTimetableEditControl.xeto.cs:317
 msgid "Abfahrt"
 msgstr "Departure"
 
-#: Editor/TimetableEditor/SingleTimetableEditControl.xeto.cs:319
+#: Editor/TimetableEditor/SingleTimetableEditControl.xeto.cs:318
 msgid "Ankunftsgleis"
 msgstr "Arrival track"
 
-#: Editor/TimetableEditor/SingleTimetableEditControl.xeto.cs:320
+#: Editor/TimetableEditor/SingleTimetableEditControl.xeto.cs:319
 msgid "Abfahrtsgleis"
 msgstr "Departure track"
 
-#: Editor/TimetableEditor/SingleTimetableEditControl.xeto.cs:321
+#: Editor/TimetableEditor/SingleTimetableEditControl.xeto.cs:320
 msgid "Rangiert"
 msgstr "Shunting at station"
 
-#: Editor/TimetableEditor/TimetableCellRenderProperties.cs:55
+#: Editor/TimetableEditor/TimetableCellRenderProperties.cs:54
 msgid "Die erste Station darf keinen Trapeztafelhalt beinhalten!"
 msgstr ""
 "The first station may not contain a \"Trapeztafelhalt\" (stop before German "
 "railway signal Ne 1)!"
 
-#: Editor/TimetableEditor/ZlmEditForm.xeto.cs:39
+#: Editor/TimetableEditor/ZlmEditForm.xeto.cs:38
 msgid "Zuglaufmeldung durch"
 msgstr "Message on train progress by"
 
-#: Editor/Trains/BaseTrainsEditor.cs:32
+#: Editor/Trains/BaseTrainsEditor.cs:31
 msgid ""
 "Der Zug kann nicht gelöscht werden, da er mindestens von einem verlinkten "
 "Zug referenziert wird!"
@@ -849,47 +849,47 @@ msgstr ""
 "This train cannot be removed as at least one linked train is still "
 "referencing it!"
 
-#: Editor/Trains/BaseTrainsEditor.cs:41
+#: Editor/Trains/BaseTrainsEditor.cs:40
 msgid "Verlinke Züge können nicht gelöscht werden."
 msgstr "Linked trains cannot be deleted."
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:34
-#: Editor/Trains/TrainFillDialog.xeto.cs:27
+#: Editor/Trains/TrainCopyDialog.xeto.cs:33
+#: Editor/Trains/TrainFillDialog.xeto.cs:26
 msgid "Bitte die Verschiebung als Zahl in Minuten angeben!"
 msgstr "Please enter a valid shift per train (number in full minutes)!"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:35
-#: Editor/Trains/TrainLinkEditDialog.xeto.cs:41
+#: Editor/Trains/TrainCopyDialog.xeto.cs:34
+#: Editor/Trains/TrainLinkEditDialog.xeto.cs:40
 msgid "Bitte eine gültige Anzahl >0 neuer Züge eingeben!"
 msgstr "Please enter a valid count of new trains!"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:36
-#: Editor/Trains/TrainLinkEditDialog.xeto.cs:42
+#: Editor/Trains/TrainCopyDialog.xeto.cs:35
+#: Editor/Trains/TrainLinkEditDialog.xeto.cs:41
 msgid "Bitte eine gültige Veränderung der Zugnummer eingeben!"
 msgstr "Please enter a valid change of train number!"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:52
-#: Editor/Trains/TrainLinkEditDialog.xeto.cs:62
+#: Editor/Trains/TrainCopyDialog.xeto.cs:51
+#: Editor/Trains/TrainLinkEditDialog.xeto.cs:61
 msgid "Zugname"
 msgstr "Train name"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:90
-#: Editor/Trains/TrainCopyDialog.xeto.cs:93
-#: Editor/Trains/TrainCopyDialog.xeto.cs:199
+#: Editor/Trains/TrainCopyDialog.xeto.cs:89
+#: Editor/Trains/TrainCopyDialog.xeto.cs:92
+#: Editor/Trains/TrainCopyDialog.xeto.cs:198
 msgid "Kopieren"
 msgstr "Copy"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:91
+#: Editor/Trains/TrainCopyDialog.xeto.cs:90
 msgid "Verschieben"
 msgstr "Move"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:92
+#: Editor/Trains/TrainCopyDialog.xeto.cs:91
 msgid "Verlinken"
 msgstr "Link"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:109
-#: Editor/Trains/TrainFillDialog.xeto.cs:40
-#: Editor/Trains/TrainLinkEditDialog.xeto.cs:100
+#: Editor/Trains/TrainCopyDialog.xeto.cs:108
+#: Editor/Trains/TrainFillDialog.xeto.cs:39
+#: Editor/Trains/TrainLinkEditDialog.xeto.cs:99
 #, csharp-format
 msgid ""
 "Bitte erst alle Felder korrekt ausfüllen:\n"
@@ -898,7 +898,7 @@ msgstr ""
 "Please fill out all fields correctly before continuing:\n"
 "{0}"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:128
+#: Editor/Trains/TrainCopyDialog.xeto.cs:127
 #, csharp-format
 msgid ""
 "Es ist bereits ein Zug mit der Zugnummer {0} in diesem Fahrplan vorhanden, "
@@ -907,72 +907,72 @@ msgstr ""
 "A train named {0} already exists in this timetable. Should the copy be "
 "created anyway?"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:129
+#: Editor/Trains/TrainCopyDialog.xeto.cs:128
 msgid "Züge kopieren"
 msgstr "Copy trains"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:151
-#: Editor/Trains/TrainLinkEditDialog.xeto.cs:123
+#: Editor/Trains/TrainCopyDialog.xeto.cs:150
+#: Editor/Trains/TrainLinkEditDialog.xeto.cs:122
 msgid "Es wurden keinen Namen für alle Züge angegeben!"
 msgstr "No name specified for some of the trains!"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:182
+#: Editor/Trains/TrainCopyDialog.xeto.cs:181
 msgid "Zug verschieben"
 msgstr "Move train"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:184
+#: Editor/Trains/TrainCopyDialog.xeto.cs:183
 msgid "Zug verlinken"
 msgstr "Link train"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:190
+#: Editor/Trains/TrainCopyDialog.xeto.cs:189
 msgid "Automatische Benennung"
 msgstr "Automatic naming"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:192
+#: Editor/Trains/TrainCopyDialog.xeto.cs:191
 msgid "Manuelle Benennung"
 msgstr "Manual naming"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:200
-#: Editor/Trains/TrainLinkEditDialog.xeto.cs:146
+#: Editor/Trains/TrainCopyDialog.xeto.cs:199
+#: Editor/Trains/TrainLinkEditDialog.xeto.cs:145
 msgid "Taktverschiebung in Minuten"
 msgstr "Shift of each train"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:201
-#: Editor/Trains/TrainLinkEditDialog.xeto.cs:147
+#: Editor/Trains/TrainCopyDialog.xeto.cs:200
+#: Editor/Trains/TrainLinkEditDialog.xeto.cs:146
 msgid "Anzahl der neuen Züge"
 msgstr "Number of new trains"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:202
-#: Editor/Trains/TrainLinkEditDialog.xeto.cs:148
+#: Editor/Trains/TrainCopyDialog.xeto.cs:201
+#: Editor/Trains/TrainLinkEditDialog.xeto.cs:147
 msgid "Basiszugnummer"
 msgstr "Base train name"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:203
-#: Editor/Trains/TrainLinkEditDialog.xeto.cs:149
+#: Editor/Trains/TrainCopyDialog.xeto.cs:202
+#: Editor/Trains/TrainLinkEditDialog.xeto.cs:148
 msgid "Änderung der Zugnummer"
 msgstr "Increment"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:204
+#: Editor/Trains/TrainCopyDialog.xeto.cs:203
 msgid "Erweiterte Attribute übernehmen"
 msgstr "Copy extended attributes"
 
-#: Editor/Trains/TrainEditForm.xeto.cs:56
+#: Editor/Trains/TrainEditForm.xeto.cs:55
 msgid "Bitte einen Zugnamen eingeben!"
 msgstr "Please enter a train name!"
 
-#: Editor/Trains/TrainEditForm.xeto.cs:70
+#: Editor/Trains/TrainEditForm.xeto.cs:69
 msgid "Anzahl"
 msgstr "Count"
 
-#: Editor/Trains/TrainEditForm.xeto.cs:71
+#: Editor/Trains/TrainEditForm.xeto.cs:70
 msgid "Erster Abstand"
 msgstr "Offset before the first train"
 
-#: Editor/Trains/TrainEditForm.xeto.cs:72
+#: Editor/Trains/TrainEditForm.xeto.cs:71
 msgid "Zeitdifferenz"
 msgstr "Time between new trains"
 
-#: Editor/Trains/TrainEditForm.xeto.cs:133
+#: Editor/Trains/TrainEditForm.xeto.cs:132
 msgid ""
 "Dieser Zug hat komplexe Folgezüge/mehr als einen Folgezug definiert. Dies "
 "wird von FPLedit aktuell nicht zur Bearbeitung unterstützt."
@@ -980,126 +980,126 @@ msgstr ""
 "This train has complex transitions to next trains/more than one next train "
 "defined. FPLedit is not able to edit such trains."
 
-#: Editor/Trains/TrainEditForm.xeto.cs:158
+#: Editor/Trains/TrainEditForm.xeto.cs:157
 #, csharp-format
 msgid ""
 "Ein Zug mit dem Namen \"{0}\" ist bereits vorhanden. Wirklich fortfahren?"
 msgstr "A train named \"{0}\" already exists. Proceed?"
 
-#: Editor/Trains/TrainEditForm.xeto.cs:232
+#: Editor/Trains/TrainEditForm.xeto.cs:231
 msgid "Erst muss eine Verknüpfung zum Löschen ausgewählt werden!"
 msgstr "Please select a link to delete first!"
 
-#: Editor/Trains/TrainEditForm.xeto.cs:253
+#: Editor/Trains/TrainEditForm.xeto.cs:252
 msgid "Erst muss eine Verknüpfung zum Bearbeiten ausgewählt werden!"
 msgstr "Please select a link to edit first!"
 
-#: Editor/Trains/TrainEditForm.xeto.cs:265
+#: Editor/Trains/TrainEditForm.xeto.cs:264
 msgid "Erweiterte Eigenschaften (für Bfpl)"
 msgstr "Extended attributes"
 
-#: Editor/Trains/TrainEditForm.xeto.cs:267
+#: Editor/Trains/TrainEditForm.xeto.cs:266
 msgid "Die Zuglok oder der verwendete Triebwagen."
 msgstr "Locomotive or the railcar used."
 
-#: Editor/Trains/TrainEditForm.xeto.cs:269
+#: Editor/Trains/TrainEditForm.xeto.cs:268
 msgid "Mindesbremshundertstel"
 msgstr "Braking percentage"
 
-#: Editor/Trains/TrainEditForm.xeto.cs:273
+#: Editor/Trains/TrainEditForm.xeto.cs:272
 msgid "Verknüpfungen"
 msgstr "Train links"
 
-#: Editor/Trains/TrainEditForm.xeto.cs:274
+#: Editor/Trains/TrainEditForm.xeto.cs:273
 msgid "Verknüpfung löschen"
 msgstr "Delete train link"
 
-#: Editor/Trains/TrainEditForm.xeto.cs:275
+#: Editor/Trains/TrainEditForm.xeto.cs:274
 msgid "Verknüpfung bearbeiten"
 msgstr "Edit link"
 
-#: Editor/Trains/TrainEditForm.xeto.cs:276
+#: Editor/Trains/TrainEditForm.xeto.cs:275
 msgid "Fahrplan"
 msgstr "Timetable"
 
-#: Editor/Trains/TrainEditForm.xeto.cs:277
+#: Editor/Trains/TrainEditForm.xeto.cs:276
 msgid "Von anderem Zug..."
 msgstr "Fill from other train..."
 
-#: Editor/Trains/TrainEditForm.xeto.cs:278
+#: Editor/Trains/TrainEditForm.xeto.cs:277
 msgid "Neuen Zug erstellen"
 msgstr "Create new train"
 
-#: Editor/Trains/TrainFillDialog.xeto.cs:57
+#: Editor/Trains/TrainFillDialog.xeto.cs:56
 msgid "Zeiten übernehmen"
 msgstr "Copy times"
 
-#: Editor/Trains/TrainFillDialog.xeto.cs:58
+#: Editor/Trains/TrainFillDialog.xeto.cs:57
 msgid "Referrenzzug:"
 msgstr "Reference train:"
 
-#: Editor/Trains/TrainFillDialog.xeto.cs:59
+#: Editor/Trains/TrainFillDialog.xeto.cs:58
 msgid "Taktverschiebung in Minuten:"
 msgstr "Time offset:"
 
-#: Editor/Trains/TrainFillDialog.xeto.cs:60
+#: Editor/Trains/TrainFillDialog.xeto.cs:59
 msgid "Fahrtzeiten von anderem Zug übernehmen"
 msgstr "Copy times from other train"
 
-#: Editor/Trains/TrainLinkEditDialog.xeto.cs:39
+#: Editor/Trains/TrainLinkEditDialog.xeto.cs:38
 msgid "Bitte die Verschiebung als Zeitangabe angeben!"
 msgstr "Please enter a valid shift per train!"
 
-#: Editor/Trains/TrainLinkEditDialog.xeto.cs:40
+#: Editor/Trains/TrainLinkEditDialog.xeto.cs:39
 msgid "Bitte die Startverschiebung als Zeitangabe angeben!"
 msgstr "Please enter a valid shift per train!"
 
-#: Editor/Trains/TrainLinkEditDialog.xeto.cs:144
+#: Editor/Trains/TrainLinkEditDialog.xeto.cs:143
 msgid "Übernehmen"
 msgstr "Commit"
 
-#: Editor/Trains/TrainLinkEditDialog.xeto.cs:145
+#: Editor/Trains/TrainLinkEditDialog.xeto.cs:144
 msgid "Verschiebung des ersten Zugs"
 msgstr "Offset of first train"
 
-#: Editor/Trains/TrainLinkEditDialog.xeto.cs:150
+#: Editor/Trains/TrainLinkEditDialog.xeto.cs:149
 msgid "Verlinkung bearbeiten"
 msgstr "Edit link"
 
-#: Editor/Trains/TrainSortDialog.xeto.cs:43
-#: Editor/Trains/TrainSortDialog.xeto.cs:52
+#: Editor/Trains/TrainSortDialog.xeto.cs:42
+#: Editor/Trains/TrainSortDialog.xeto.cs:51
 msgid "Die gewählte Option ist im Netzwerk-Fahrplan nicht verfügbar."
 msgstr "The selected option is not available in network timetables."
 
-#: Editor/Trains/TrainSortDialog.xeto.cs:81
+#: Editor/Trains/TrainSortDialog.xeto.cs:80
 msgid "Nach Namen"
 msgstr "By name"
 
-#: Editor/Trains/TrainSortDialog.xeto.cs:83
+#: Editor/Trains/TrainSortDialog.xeto.cs:82
 msgid "Nach Zugnummern (Name ohne Zugart)"
 msgstr "By number (name without train type prefix)"
 
-#: Editor/Trains/TrainSortDialog.xeto.cs:85
+#: Editor/Trains/TrainSortDialog.xeto.cs:84
 msgid "An einer Station nach Zeit"
 msgstr "By time, at one station"
 
-#: Editor/Trains/TrainSortDialog.xeto.cs:87
+#: Editor/Trains/TrainSortDialog.xeto.cs:86
 msgid "An allen Stationen, in Fahrtrichtung"
 msgstr "By time, at all stations (in line direction)"
 
-#: Editor/Trains/TrainSortDialog.xeto.cs:89
+#: Editor/Trains/TrainSortDialog.xeto.cs:88
 msgid "An allen Stationen, entgegen Fahrtrichtung"
 msgstr "By time, at all stations (against line direction)"
 
-#: Editor/Trains/TrainSortDialog.xeto.cs:96
+#: Editor/Trains/TrainSortDialog.xeto.cs:95
 msgid "Sortieren"
 msgstr "Sort"
 
-#: Editor/Trains/TrainSortDialog.xeto.cs:97
+#: Editor/Trains/TrainSortDialog.xeto.cs:96
 msgid "Station:"
 msgstr "Station:"
 
-#: Extensibility/ExtensionManager.cs:99
+#: Extensibility/ExtensionManager.cs:98
 #, csharp-format
 msgid ""
 "Erweiterung {0} konnte nicht geladen werden, bitte überprüfen ob diese noch "
@@ -1108,88 +1108,88 @@ msgstr ""
 "Extension {0} could not be loaded, please check if it is still blocked by "
 "windows!"
 
-#: Extensibility/PluginInfo.cs:49
+#: Extensibility/PluginInfo.cs:48
 msgid "<Fehler beim Laden>"
 msgstr "<Error while loading>"
 
-#: Extensibility/PluginInfo.cs:66
+#: Extensibility/PluginInfo.cs:65
 #, csharp-format
 msgid "Fehler beim Initialisieren einer Erweiterung: {0}: + {1}"
 msgstr "Error while initializing extension {0}: {1}"
 
-#: FileHandler.cs:77
+#: FileHandler.cs:76
 msgid "Fahrplandatei speichern"
 msgstr "Save timetable file"
 
-#: FileHandler.cs:78
+#: FileHandler.cs:77
 msgid "Fahrplandatei öffnen"
 msgstr "Open timetable file"
 
-#: FileHandler.cs:79
+#: FileHandler.cs:78
 msgid "Fahrplandatei exportieren"
 msgstr "Export timetable file"
 
-#: FileHandler.cs:80
+#: FileHandler.cs:79
 msgid "Datei importieren"
 msgstr "Import file"
 
-#: FileHandler.cs:118
+#: FileHandler.cs:117
 msgid "Keine Importer gefunden, Import nicht möglich!"
 msgstr "Import is not possible as no importers have been found!"
 
-#: FileHandler.cs:130
+#: FileHandler.cs:129
 #, csharp-format
 msgid "Importiere Datei {0}"
 msgstr "Importing file {0}"
 
-#: FileHandler.cs:141
+#: FileHandler.cs:140
 msgid "Importieren fehlgeschlagen!"
 msgstr "Import failed!"
 
-#: FileHandler.cs:145
+#: FileHandler.cs:144
 msgid "Datei erfolgreich importiert!"
 msgstr "File imported successfully!"
 
-#: FileHandler.cs:173
+#: FileHandler.cs:172
 #, csharp-format
 msgid "Exportiere in Datei {0}"
 msgstr "Exporting to file {0}"
 
-#: FileHandler.cs:178
+#: FileHandler.cs:177
 msgid "Exportieren fehlgeschlagen!"
 msgstr "Export failed!"
 
-#: FileHandler.cs:180
+#: FileHandler.cs:179
 msgid "Exportieren erfolgreich abgeschlossen!"
 msgstr "File exported successfully!"
 
-#: FileHandler.cs:222
+#: FileHandler.cs:221
 #, csharp-format
 msgid "Öffne Datei {0}"
 msgstr "Opening file {0}"
 
-#: FileHandler.cs:246 FileHandler.cs:264
+#: FileHandler.cs:245 FileHandler.cs:263
 msgid "Fehler beim Öffnen der Datei!"
 msgstr "Error while opening the file!"
 
-#: FileHandler.cs:250
+#: FileHandler.cs:249
 msgid "Datei erfolgeich geöffnet!"
 msgstr "File opened successfully!"
 
-#: FileHandler.cs:310
+#: FileHandler.cs:309
 #, csharp-format
 msgid "Speichere Datei {0}"
 msgstr "Saving file {0}"
 
-#: FileHandler.cs:321
+#: FileHandler.cs:320
 msgid "Speichern fehlgeschlagen!"
 msgstr "Save failed!"
 
-#: FileHandler.cs:325
+#: FileHandler.cs:324
 msgid "Speichern erfolgreich abgeschlossen!"
 msgstr "File saved succesfully!"
 
-#: FileHandler.cs:335
+#: FileHandler.cs:334
 msgid ""
 "Während dem Speichern wurde der Zustand verändert, daher ist Datei auf der "
 "Festplatte nicht mehr aktuell."
@@ -1197,40 +1197,40 @@ msgstr ""
 "The timetable has been changed while saving. The file saved on disk is "
 "potentially out-of-date."
 
-#: FileHandler.cs:373
+#: FileHandler.cs:372
 msgid "Neue Datei erstellt"
 msgstr "New file created successfully"
 
-#: FileHandler.cs:398
+#: FileHandler.cs:397
 msgid "Datei geschlossen"
 msgstr "File closed"
 
-#: FileHandler.cs:428 FileHandler.cs:429
+#: FileHandler.cs:427 FileHandler.cs:428
 msgid "Linear-Fahrplan"
 msgstr "Linear timetable"
 
-#: FileHandler.cs:428 FileHandler.cs:429
+#: FileHandler.cs:427 FileHandler.cs:428
 msgid "Netzwerk-Fahrplan"
 msgstr "Network timetable"
 
-#: FileHandler.cs:435
+#: FileHandler.cs:434
 msgid "Zieldatei für Konvertierung wählen"
 msgstr "Select file for conversion result"
 
-#: FileHandler.cs:439 FileHandler.cs:514
+#: FileHandler.cs:438 FileHandler.cs:513
 msgid "Konvertiere Datei..."
 msgstr "Converting file..."
 
-#: FileHandler.cs:443 FileHandler.cs:518
+#: FileHandler.cs:442 FileHandler.cs:517
 msgid "Konvertieren erfolgreich abgeschlossen!"
 msgstr "Conversion successfully!"
 
-#: FileHandler.cs:478
+#: FileHandler.cs:477
 #, csharp-format
 msgid "Diese Dateiformatsversion ({0}) wird nicht unterstützt."
 msgstr "The file version {0} is not supported."
 
-#: FileHandler.cs:497
+#: FileHandler.cs:496
 msgid ""
 "In einer neueren Dateiformatversion stehen mehr Funktionen zur Verfügung, "
 "die Aktualisierung ist aber nicht zwingend."
@@ -1238,13 +1238,13 @@ msgstr ""
 "In a new version of the file format, new features are available; but "
 "updating is currently not mandatory."
 
-#: FileHandler.cs:497
+#: FileHandler.cs:496
 msgid ""
 "Dieses Dateiformat kann von FPLedit nur noch auf neuere Versionen "
 "aktualisiert werden."
 msgstr "This file format can only be updated to newer versions."
 
-#: FileHandler.cs:498
+#: FileHandler.cs:497
 #, csharp-format
 msgid ""
 "Diese Fahrplandatei ist in einem alten Dateinformat erstellt worden. {0} "
@@ -1253,7 +1253,7 @@ msgstr ""
 "This file has been created in an older version of the fileformat! {0}. "
 "Should FPLedit update the file version?"
 
-#: FileHandler.cs:500
+#: FileHandler.cs:499
 msgid ""
 "ACHTUNG: Die Datei kann danach nur noch mit der aktuellsten Version von "
 "jTrainGraph bearbeitet werden!"
@@ -1261,15 +1261,15 @@ msgstr ""
 "WARNING: After this, the file can only be opened by the latest version of "
 "jTrainGraph!"
 
-#: FileHandler.cs:523
+#: FileHandler.cs:522
 msgid "Dateikonvertierung fehlgeschlagen!"
 msgstr "Conversion failed!"
 
-#: FileHandler.cs:529
+#: FileHandler.cs:528
 msgid "Dateikonvertierung abgebrochen!"
 msgstr "Conversion aborted!"
 
-#: FileHandler.cs:542
+#: FileHandler.cs:541
 msgid ""
 "Während dem Ladevorgang wurden Daten geändert. Sollen diese noch einmal in "
 "die letzte Datei geschrieben werden?"
@@ -1277,136 +1277,136 @@ msgstr ""
 "While loading the previous file changed in FPLedit. Would you like to save "
 "again before closing?"
 
-#: FileHandler.cs:542
+#: FileHandler.cs:541
 msgid "Wollen Sie die noch nicht gespeicherten Änderungen speichern?"
 msgstr "Do you want to save your unsaved changes?"
 
-#: FileHandler.cs:557
+#: FileHandler.cs:556
 msgid "Eine andere Dateioperation ist bereits im Gange!"
 msgstr "Another file operation is currently in progress!"
 
-#: InfoForm.cs:20
+#: InfoForm.cs:19
 msgid "Entwicklungsversion"
 msgstr "Development version"
 
-#: InfoForm.cs:26
+#: InfoForm.cs:25
 msgid "Erstellen von Fahrplanunterlagen für Modelleisenbahnen"
 msgstr "Create timetables for model railways"
 
-#: InfoForm.cs:28
+#: InfoForm.cs:27
 msgid "Online-Dokumentation & Updates"
 msgstr "Documentation and updates online"
 
-#: InfoForm.cs:31
+#: InfoForm.cs:30
 msgid "alle FPLedit-Beta-Tester"
 msgstr "all FPLedit testers"
 
-#: LogControl.cs:22
+#: LogControl.cs:21
 msgid "Alles löschen"
 msgstr "Clear"
 
-#: LogControl.cs:23
+#: LogControl.cs:22
 msgid "Debug-Informationen anzeigen"
 msgstr "Show debug information"
 
-#: MainForm.xeto.cs:35
+#: MainForm.xeto.cs:33
 msgid "&Vorschau"
 msgstr "&Preview"
 
-#: MainForm.xeto.cs:39 SettingsUi/SettingsForm.xeto.cs:59
+#: MainForm.xeto.cs:37 SettingsUi/SettingsForm.xeto.cs:58
 msgid "Einstellungen"
 msgstr "Settings"
 
-#: MainForm.xeto.cs:40
+#: MainForm.xeto.cs:38
 msgid "Datei schließen"
 msgstr "Close file"
 
-#: MainForm.xeto.cs:41
+#: MainForm.xeto.cs:39
 msgid "Online Hilfe"
 msgstr "Online Help"
 
-#: MainForm.xeto.cs:42 Program.cs:134
+#: MainForm.xeto.cs:40 Program.cs:133
 msgid "Info"
 msgstr "About"
 
-#: MainForm.xeto.cs:43
+#: MainForm.xeto.cs:41
 msgid "&Beenden"
 msgstr "&Quit"
 
-#: MainForm.xeto.cs:44
+#: MainForm.xeto.cs:42
 msgid "&Exportieren"
 msgstr "&Export"
 
-#: MainForm.xeto.cs:45
+#: MainForm.xeto.cs:43
 msgid "&Konvertieren"
 msgstr "&Convert"
 
-#: MainForm.xeto.cs:46
+#: MainForm.xeto.cs:44
 msgid "&Importieren"
 msgstr "&Import"
 
-#: MainForm.xeto.cs:47
+#: MainForm.xeto.cs:45
 msgid "Letzte Dateien"
 msgstr "Last files"
 
-#: MainForm.xeto.cs:48
+#: MainForm.xeto.cs:46
 msgid "Öffnen"
 msgstr "Open file"
 
-#: MainForm.xeto.cs:49
+#: MainForm.xeto.cs:47
 msgid "&Speichern"
 msgstr "&Save file"
 
-#: MainForm.xeto.cs:50
+#: MainForm.xeto.cs:48
 msgid "Speichern &unter"
 msgstr "Save file as"
 
-#: MainForm.xeto.cs:51
+#: MainForm.xeto.cs:49
 msgid "&Neu"
 msgstr "New"
 
-#: MainForm.xeto.cs:52
+#: MainForm.xeto.cs:50
 msgid "&Netzwerk-Fahrplan"
 msgstr "Network timetable"
 
-#: MainForm.xeto.cs:53
+#: MainForm.xeto.cs:51
 msgid "&Lineare Strecke"
 msgstr "Linear timetable"
 
-#: MainForm.xeto.cs:55
+#: MainForm.xeto.cs:53
 msgid "Lade Datei..."
 msgstr "Loading file..."
 
-#: MainForm.xeto.cs:122
+#: MainForm.xeto.cs:120
 msgid "Exception auslösen"
 msgstr "Trigger exception"
 
-#: MainForm.xeto.cs:122
+#: MainForm.xeto.cs:120
 msgid "Ausgelöste Exception"
 msgstr "Manually triggered exception"
 
-#: MainForm.xeto.cs:144
+#: MainForm.xeto.cs:142
 #, csharp-format
 msgid "Fehlermeldung des letzten Absturzes konnte nicht angezeigt werden: {0}"
 msgstr "The error message of the last crash could not be displayed: {0}"
 
-#: MainForm.xeto.cs:173
+#: MainForm.xeto.cs:171
 #, csharp-format
 msgid "Angegebene Startdatei {0} nicht gefunden!"
 msgstr "The supplied start file {0} could not be found!"
 
-#: NonDefaultFiletypes/CleanedXmlExport.cs:15
+#: NonDefaultFiletypes/CleanedXmlExport.cs:14
 msgid "Bereinigte Fahrplan Dateien (*.fpl)|*.fpl"
 msgstr "Cleaned timetable files (*.fpl)|*.fpl"
 
-#: NonDefaultFiletypes/CleanedXmlExport.cs:109
+#: NonDefaultFiletypes/CleanedXmlExport.cs:111
 msgid ""
 "Der aktuelle Fahrplan ist ein Netzwerk-Fahrplan. Aus diesem erweiterten "
 "Fahrplanformat können aus technischen Gründen keine von FPLedit angelegten "
 "Daten gelöscht werden."
 msgstr "The current timetable is a network timetable and cannot be cleaned."
 
-#: NonDefaultFiletypes/CleanedXmlExport.cs:114
+#: NonDefaultFiletypes/CleanedXmlExport.cs:116
 msgid ""
 "Hiermit werden alle in FPLedit zusätzlich eingebenen Werte (z.B. "
 "Lokomotiven, Lasten, Mindestbremshundertstel, Geschwindigkeiten, "
@@ -1417,11 +1417,11 @@ msgstr ""
 "This will remove all additional values entered in FPLedit (e.g. Locomotives, "
 "velocities, ...) and settings for non-graphical timetables! Continue?"
 
-#: NonDefaultFiletypes/LinearExport.cs:20
+#: NonDefaultFiletypes/LinearExport.cs:19
 msgid "Der Fahrplan hat mehr als eine oder keine Strecke"
 msgstr "The timetable has more than one line - or none"
 
-#: NonDefaultFiletypes/LinearExport.cs:23
+#: NonDefaultFiletypes/LinearExport.cs:22
 msgid ""
 "Eine Fahrplandatei der Version >= 101 kann nicht als lineare Datei <= 012 "
 "exportiert werden!"
@@ -1429,55 +1429,55 @@ msgstr ""
 "A timetable file of version >= 101 cannot be exported as linear timetable <= "
 "012!"
 
-#: NonDefaultFiletypes/NetworkExport.cs:20
+#: NonDefaultFiletypes/NetworkExport.cs:19
 msgid "Bitte zuerst die lineare Strecke auf die neueste Version aktualisieren!"
 msgstr "Update the linear file to the latest version first!"
 
-#: NonDefaultFiletypes/StationsOnlyExport.cs:19
+#: NonDefaultFiletypes/StationsOnlyExport.cs:18
 msgid "Fahrplan Dateien nur mit Stationen (Streckenexport) (*.fpl)|*.fpl"
 msgstr "Timetable files only with stations (line export) (*.fpl)|*.fpl"
 
-#: NonDefaultFiletypes/XMLStationsImport.cs:11
+#: NonDefaultFiletypes/XMLStationsImport.cs:10
 msgid "Lineare Streckendateien (*.str)|*.str"
 msgstr "Linear line files (*.str)|*.str"
 
-#: Program.cs:122
+#: Program.cs:121
 msgid "&Datei"
 msgstr "&File"
 
-#: Program.cs:123
+#: Program.cs:122
 msgid "&Hilfe"
 msgstr "&Help"
 
-#: Program.cs:124
+#: Program.cs:123
 msgid "&Ansicht"
 msgstr "&View"
 
-#: Program.cs:126
+#: Program.cs:125
 msgid "Beenden"
 msgstr "&Quit"
 
-#: Program.cs:135
+#: Program.cs:134
 msgid "Mitwirkende"
 msgstr "Contributors"
 
-#: Program.cs:136
+#: Program.cs:135
 msgid "Lizenz"
 msgstr "License"
 
-#: Program.cs:137
+#: Program.cs:136
 msgid "Entwicklung:"
 msgstr "Development:"
 
-#: Program.cs:138
+#: Program.cs:137
 msgid "Design:"
 msgstr "Design:"
 
-#: Program.cs:139
+#: Program.cs:138
 msgid "Dokumentation:"
 msgstr "Documentation:"
 
-#: Program.cs:203
+#: Program.cs:201
 msgid ""
 "Die Standard-Dateiformatversionen wurden zurückgesetzt, da Sie die Version "
 "von FPLedit aktualisiert haben. Diese Einstellung kann unter Einstellungen > "
@@ -1486,27 +1486,27 @@ msgstr ""
 "The default file versions have been reset as you have updated FPLedit. You "
 "can change this setting at Settings > File format versions."
 
-#: Program.cs:213
+#: Program.cs:211
 msgid "Gewählte lineare Standardversion ist nicht R/W-kompatibel!"
 msgstr "The selected linear default file version is not R/W-compatible!"
 
-#: Program.cs:220
+#: Program.cs:218
 msgid "Gewählte Netzwerk-Standardversion ist nicht R/W-kompatibel!"
 msgstr "The selected network default file version is not R/W-compatible!"
 
-#: SettingsUi/AutomaticUpdateControl.cs:11
+#: SettingsUi/AutomaticUpdateControl.cs:10
 msgid "Überprüfung auf neue Versionen"
 msgstr "Check for updates"
 
-#: SettingsUi/AutomaticUpdateControl.cs:18
+#: SettingsUi/AutomaticUpdateControl.cs:17
 msgid "Automatische Überprüfung auf Updates beim Programmstart aktivieren."
 msgstr "Activate automatic checks for available updates at startup."
 
-#: SettingsUi/AutomaticUpdateControl.cs:19
+#: SettingsUi/AutomaticUpdateControl.cs:18
 msgid "Datenschutz:"
 msgstr "Privacy:"
 
-#: SettingsUi/AutomaticUpdateControl.cs:20
+#: SettingsUi/AutomaticUpdateControl.cs:19
 msgid ""
 "Dabei wird Ihre IP-Adresse und der verwendete Betriebssystemtyp an den "
 "Server übermittelt; Die IP-Adresse wird nur anonymisiert in Log-Dateien "
@@ -1516,13 +1516,13 @@ msgstr ""
 "our servers. The IP address will be shortened and stored in log files. We "
 "cannot use the data to identify single users."
 
-#: SettingsUi/AutomaticUpdateControl.cs:21
-#: SettingsUi/AutomaticUpdateControl.cs:46
-#: SettingsUi/AutomaticUpdateControl.cs:52
+#: SettingsUi/AutomaticUpdateControl.cs:20
+#: SettingsUi/AutomaticUpdateControl.cs:45
+#: SettingsUi/AutomaticUpdateControl.cs:51
 msgid "Auf neue Version prüfen"
 msgstr "Check for updates"
 
-#: SettingsUi/AutomaticUpdateControl.cs:37
+#: SettingsUi/AutomaticUpdateControl.cs:36
 #, csharp-format
 msgid ""
 "Eine neue Programmversion ({0}) ist verfügbar!\n"
@@ -1533,31 +1533,31 @@ msgstr ""
 "{1}\n"
 "Would you like to visit the download page to download the update package?"
 
-#: SettingsUi/AutomaticUpdateControl.cs:38
+#: SettingsUi/AutomaticUpdateControl.cs:37
 msgid "Neue FPLedit-Version verfügbar"
 msgstr "Update available"
 
-#: SettingsUi/AutomaticUpdateControl.cs:45
+#: SettingsUi/AutomaticUpdateControl.cs:44
 msgid "Sie benutzen bereits die aktuelle Version!"
 msgstr "You are using the most recent version of FPLedit!"
 
-#: SettingsUi/AutomaticUpdateControl.cs:51
+#: SettingsUi/AutomaticUpdateControl.cs:50
 msgid "Verbindung mit dem Server fehlgeschlagen!"
 msgstr "Failed to connect to the server!"
 
-#: SettingsUi/DefaultVersionControl.cs:11
+#: SettingsUi/DefaultVersionControl.cs:10
 msgid "Dateiversionen"
 msgstr "File format versions"
 
-#: SettingsUi/DefaultVersionControl.cs:19
+#: SettingsUi/DefaultVersionControl.cs:18
 msgid "Lineare Fahrpläne"
 msgstr "Linear timetables"
 
-#: SettingsUi/DefaultVersionControl.cs:20
+#: SettingsUi/DefaultVersionControl.cs:19
 msgid "Netzwerk-Fahrpläne"
 msgstr "Network timetables"
 
-#: SettingsUi/DefaultVersionControl.cs:24
+#: SettingsUi/DefaultVersionControl.cs:23
 msgid ""
 "Hier kann die Dateiformatversion ausgewählt werden, mit der standardmäßig "
 "neue Dateien erstellt werden.\n"
@@ -1577,23 +1577,23 @@ msgstr ""
 "jTrainGraph.\n"
 "Opening newer files in older application versions might not be possible."
 
-#: SettingsUi/ExtensionsControl.xeto.cs:20
+#: SettingsUi/ExtensionsControl.xeto.cs:19
 msgid "Erweiterungen"
 msgstr "Extensions"
 
-#: SettingsUi/ExtensionsControl.xeto.cs:67
+#: SettingsUi/ExtensionsControl.xeto.cs:66
 msgid "Möchten sie das Programm jetzt neu starten?"
 msgstr "Restart now?"
 
-#: SettingsUi/ExtensionsControl.xeto.cs:78
+#: SettingsUi/ExtensionsControl.xeto.cs:77
 msgid "Autor:"
 msgstr "Author:"
 
-#: SettingsUi/ExtensionsControl.xeto.cs:78
+#: SettingsUi/ExtensionsControl.xeto.cs:77
 msgid "[Offizielle Erweiterung]"
 msgstr "[Official Extension]"
 
-#: SettingsUi/ExtensionsControl.xeto.cs:106
+#: SettingsUi/ExtensionsControl.xeto.cs:105
 #, csharp-format
 msgid ""
 "Die Erweiterung {0} stammt nicht vom FPLedit-Entwickler. Sie sollten die "
@@ -1605,52 +1605,52 @@ msgstr ""
 "You should enable this extension only if you trust the source. Malicious "
 "extensions could possibly contain malware."
 
-#: SettingsUi/ExtensionsControl.xeto.cs:125
-#: SettingsUi/TemplatesControl.xeto.cs:40
+#: SettingsUi/ExtensionsControl.xeto.cs:124
+#: SettingsUi/TemplatesControl.xeto.cs:39
 msgid "Aktiviert"
 msgstr "Activated"
 
-#: SettingsUi/ExtensionsControl.xeto.cs:126
+#: SettingsUi/ExtensionsControl.xeto.cs:125
 msgid "Deaktiviert"
 msgstr "Deactivated"
 
-#: SettingsUi/ExtensionsControl.xeto.cs:127
+#: SettingsUi/ExtensionsControl.xeto.cs:126
 msgid "Die Änderungen treten erst nach dem nächsten Programmstart in Kraft."
 msgstr "All changes will be applied at the next start of FPLedit."
 
-#: SettingsUi/ExtensionsControl.xeto.cs:128
+#: SettingsUi/ExtensionsControl.xeto.cs:127
 msgid "Jetzt neu starten"
 msgstr "Restart now"
 
-#: SettingsUi/LocaleControl.cs:10
+#: SettingsUi/LocaleControl.cs:9
 msgid "Sprache"
 msgstr "Language"
 
-#: SettingsUi/LocaleControl.cs:25
+#: SettingsUi/LocaleControl.cs:24
 msgid "Sprache der Benutzeroberfläche:"
 msgstr "Language of the user interface:"
 
-#: SettingsUi/LocaleControl.cs:41 SettingsUi/UiSettingsControl.cs:29
+#: SettingsUi/LocaleControl.cs:40 SettingsUi/UiSettingsControl.cs:28
 msgid "Die Änderungen werden beim nächsten Programmstart angewendet!"
 msgstr "All changes will be applied at the next start of FPLedit!"
 
-#: SettingsUi/TemplatesControl.xeto.cs:16
+#: SettingsUi/TemplatesControl.xeto.cs:15
 msgid "Vorlagen"
 msgstr "Templates"
 
-#: SettingsUi/TemplatesControl.xeto.cs:39
+#: SettingsUi/TemplatesControl.xeto.cs:38
 msgid "(integriert)"
 msgstr "(built-in)"
 
-#: SettingsUi/TemplatesControl.xeto.cs:42
+#: SettingsUi/TemplatesControl.xeto.cs:41
 msgid "Dateiname"
 msgstr "Filename"
 
-#: SettingsUi/TemplatesControl.xeto.cs:93
+#: SettingsUi/TemplatesControl.xeto.cs:92
 msgid "Die Vorlagendatei wird unwiderruflich gelöscht! Fortfahren?"
 msgstr "This template file will be deleted permanently. Continue?"
 
-#: SettingsUi/TemplatesControl.xeto.cs:111
+#: SettingsUi/TemplatesControl.xeto.cs:110
 #, csharp-format
 msgid ""
 "Die Vorlage {0} stammt nicht vom FPLedit-Entwickler. Sie sollten die Vorlage "
@@ -1662,7 +1662,7 @@ msgstr ""
 "should enable this template only if you trust the source. Malicious "
 "templates could possibly contain malware."
 
-#: SettingsUi/TemplatesControl.xeto.cs:175
+#: SettingsUi/TemplatesControl.xeto.cs:174
 #, csharp-format
 msgid ""
 "Es konnte kein Editor gestartet werden! Bitte öffnen Sie die Datei \"{0}\" "
@@ -1670,66 +1670,66 @@ msgid ""
 msgstr ""
 "No text editor could be launched. Please open file \"{0}\" in a text editor."
 
-#: SettingsUi/TemplatesControl.xeto.cs:183
+#: SettingsUi/TemplatesControl.xeto.cs:182
 msgid "Integrierte Vorlage &extrahieren"
 msgstr "&Extract internal template"
 
-#: SettingsUi/TemplatesControl.xeto.cs:185
+#: SettingsUi/TemplatesControl.xeto.cs:184
 msgid "&Aktivieren"
 msgstr "&Activate"
 
-#: SettingsUi/TemplatesControl.xeto.cs:186
+#: SettingsUi/TemplatesControl.xeto.cs:185
 msgid "&Deaktivieren"
 msgstr "&Deactivate"
 
-#: SettingsUi/UiSettingsControl.cs:12
+#: SettingsUi/UiSettingsControl.cs:11
 msgid "Benutzeroberfläche"
 msgstr "User interface"
 
-#: SettingsUi/UiSettingsControl.cs:16
+#: SettingsUi/UiSettingsControl.cs:15
 msgid "Gespeicherte Fenstergrößen löschen"
 msgstr "Clear all saved window sizes"
 
-#: SettingsUi/UiSettingsControl.cs:17
+#: SettingsUi/UiSettingsControl.cs:16
 msgid "Menüleiste mit Symbolen statt Text darstellen"
 msgstr "Show toolbar with icons instead of text labels"
 
-#: Templating/JavascriptTemplate.cs:107
+#: Templating/JavascriptTemplate.cs:106
 msgid "Nur eine fpledit_template-Direktive ist pro Vorlage erlaubt!"
 msgstr "Only one fpledit_template-directive is allowed per template!"
 
-#: Templating/JavascriptTemplate.cs:115
+#: Templating/JavascriptTemplate.cs:114
 #, csharp-format
 msgid "Template-version mismatch! (Current: {0} vs {1})"
 msgstr "Template-version mismatch (Current: {0} vs. {1})"
 
-#: Templating/JavascriptTemplate.cs:126
+#: Templating/JavascriptTemplate.cs:125
 msgid ""
 "Fehlende Angabe type, version oder name in der fpledit_template-Direktive!"
 msgstr "Missing type, version or name in the fpledit_template-directive!"
 
-#: Templating/TemplateHost.cs:39
+#: Templating/TemplateHost.cs:38
 msgid ""
 "Keine valide Template-Deklaration gefunden! Das Template steht deshalb nicht "
 "zur Verfügung!"
 msgstr "No valid template declaration found! The template cannot be used!"
 
-#: Templating/TemplateHost.cs:43
+#: Templating/TemplateHost.cs:42
 #, csharp-format
 msgid "Init-Fehler im Template {0}: {1}"
 msgstr "Error initializing template {0}: {1}"
 
-#: Templating/TemplateHost.cs:60 Templating/TemplateHost.cs:69
+#: Templating/TemplateHost.cs:59 Templating/TemplateHost.cs:68
 #, csharp-format
 msgid "Fehler im {0} {1}: {2} in line {3}, column {4}"
 msgstr "Error in {0} {1}: {2} in line {3}, column {4}"
 
-#: Templating/TemplateHost.cs:76
+#: Templating/TemplateHost.cs:75
 #, csharp-format
 msgid "Fehler im Template {0}: {1}"
 msgstr "Error in Template {0}: {1}"
 
-#: TimetableChecks/BugFixInitAction.cs:28
+#: TimetableChecks/BugFixInitAction.cs:27
 #, csharp-format
 msgid ""
 "Aufgrund eines Fehlers in früheren Versionen von FPLedit mussten leider "
@@ -1739,7 +1739,7 @@ msgstr ""
 "Because of a bug in older versions of FPLedit, some specified \"next "
 "trains\" had to be removed. The affected trains are: {0}"
 
-#: TimetableChecks/BugFixInitAction.cs:50
+#: TimetableChecks/BugFixInitAction.cs:49
 msgid ""
 "Die Datei enthält zusammengfefallene Strecken, das heißt zwei Stationen sind "
 "auf mehr als einer Route ohne Zwischenstation verbunden. FPLedit kann sich "
@@ -1751,16 +1751,16 @@ msgstr ""
 "may show unexpected behaviour as it cannot decide which route is the "
 "directly connecting route. Manual or automatic correction is not possible."
 
-#: TimetableChecks/DayOverflowCheck.cs:11
+#: TimetableChecks/DayOverflowCheck.cs:10
 msgid "Zugverkehr über Mitternacht"
 msgstr "Train running over midnight"
 
-#: TimetableChecks/DayOverflowCheck.cs:27
+#: TimetableChecks/DayOverflowCheck.cs:26
 #, csharp-format
 msgid "Der Zug {0} verkehrt über Mitternacht hinweg!"
 msgstr "The train {0} runs over midnight!"
 
-#: TimetableChecks/FixNetworkAttributesAction.cs:36
+#: TimetableChecks/FixNetworkAttributesAction.cs:35
 #, csharp-format
 msgid ""
 "Aufgrund eines Fehlers in früheren Versionen von FPLedit mussten leider "
@@ -1770,28 +1770,28 @@ msgstr ""
 "Because of a bug in older versions of FPLedit, some maximum velocities and "
 "wavelines have been reset. All affected stations: {0}"
 
-#: TimetableChecks/StationCodeCheck.cs:10
+#: TimetableChecks/StationCodeCheck.cs:9
 msgid "Ungültige Stationsabkürzungen"
 msgstr "Invalid station code"
 
-#: TimetableChecks/StationCodeCheck.cs:21
+#: TimetableChecks/StationCodeCheck.cs:20
 #, csharp-format
 msgid "Betriebsstellen-Abkürzungen {0} sind mehr als ein mal vorhanden!"
 msgstr "Station code {0} is used more than once!"
 
-#: TimetableChecks/TimetableCheckRunner.cs:79
+#: TimetableChecks/TimetableCheckRunner.cs:78
 msgid "Meldung"
 msgstr "Message"
 
-#: TimetableChecks/TimetableCheckRunner.cs:87
+#: TimetableChecks/TimetableCheckRunner.cs:86
 msgid "Überprüfungen"
 msgstr "Timetable checks"
 
-#: TimetableChecks/TrainsTrackCheck.cs:12
+#: TimetableChecks/TrainsTrackCheck.cs:11
 msgid "Ungültige Gleisangaben"
 msgstr "Invalid track names"
 
-#: TimetableChecks/TrainsTrackCheck.cs:26
+#: TimetableChecks/TrainsTrackCheck.cs:25
 #, csharp-format
 msgid ""
 "Ungültiges Ankunftsgleis: Zug {0} / Station {1} / Gleis \"{2}\" nicht "
@@ -1799,7 +1799,7 @@ msgid ""
 msgstr ""
 "Invalid arrival track: Train {0} / Station {1} / Track \"{2}\" not found."
 
-#: TimetableChecks/TrainsTrackCheck.cs:28
+#: TimetableChecks/TrainsTrackCheck.cs:27
 #, csharp-format
 msgid ""
 "Ungültiges Abfahrtsgleis: Zug {0} / Station {1} / Gleis \"{2}\" nicht "
@@ -1807,16 +1807,16 @@ msgid ""
 msgstr ""
 "Invalid departure track: Train {0} / Station {1} / Track \"{2}\" not found."
 
-#: TimetableChecks/TrainsTrackCheck.cs:32
+#: TimetableChecks/TrainsTrackCheck.cs:31
 #, csharp-format
 msgid "Ungültiges Rangiergleis: Zug {0} / Station {1} / Gleis nicht gefunden."
 msgstr "Invalid shunting track: Train {0} / Station {1} / Track not found."
 
-#: TimetableChecks/TransitionsCheck.cs:12
+#: TimetableChecks/TransitionsCheck.cs:11
 msgid "Ungültige Folgezüge"
 msgstr "Invalid next train"
 
-#: TimetableChecks/TransitionsCheck.cs:32
+#: TimetableChecks/TransitionsCheck.cs:31
 #, csharp-format
 msgid ""
 "Der Folgezug {0} beginnt an einer anderen Station, als die, an der vorherige "
@@ -1825,7 +1825,7 @@ msgstr ""
 "The next train {0} begins at a different station than where the previous "
 "train {1} ends."
 
-#: TimetableChecks/TransitionsCheck.cs:34
+#: TimetableChecks/TransitionsCheck.cs:33
 #, csharp-format
 msgid ""
 "Der Abfahrtszeit des Folgezuges {0} ist früher als die Ankunftszeit des "
@@ -1834,14 +1834,14 @@ msgstr ""
 "The departure time of the next train {0} is earlier than the arrival time of "
 "the previous train {1}."
 
-#: UndoManager.cs:47
+#: UndoManager.cs:46
 msgid ""
 "Fehler in einer Erweiterung: Vor jeder *möglichen* Änderung muss "
 "`StageUndoStep()` aufgerufen werden!"
 msgstr ""
 "Error in an extension: Before every change, `StageUndoStep()` must be called!"
 
-#: UpdateManager.cs:107
+#: UpdateManager.cs:106
 msgid ""
 "FPLedit kann automatisch bei jedem Programmstart nach einer aktuelleren "
 "Version suchen.\n"
@@ -1857,18 +1857,18 @@ msgstr ""
 "servers, and stored in log files in such way that we cannot identify "
 "individual users."
 
-#: UpdateManager.cs:107
+#: UpdateManager.cs:106
 msgid "Automatische Updateprüfung"
 msgstr "Check for available updates"
 
-#: UpdateManager.cs:117
+#: UpdateManager.cs:116
 #, csharp-format
 msgid ""
 "Eine neue Programmversion ({0}) ist verfügbar! {1} Hier herunterladen: {2}"
 msgstr ""
 "A new version ({0}) of FPLedit is available! {1} Visit {2} to download!"
 
-#: UpdateManager.cs:119
+#: UpdateManager.cs:118
 #, csharp-format
 msgid "Sie benutzen die aktuelleste Version von FPLedit ({0})!"
 msgstr "You are using the most recent version of FPLedit ({0})"

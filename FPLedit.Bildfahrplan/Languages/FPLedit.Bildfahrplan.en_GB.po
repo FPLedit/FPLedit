@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-07-01 17:17+0200\n"
-"PO-Revision-Date: 2023-07-01 17:23+0200\n"
+"POT-Creation-Date: 2023-07-09 22:04+0200\n"
+"PO-Revision-Date: 2023-07-09 22:05+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -15,45 +15,41 @@ msgstr ""
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: BitmapExport.cs:40
+#: BitmapExport.cs:30
 msgid "Bildfahrplan als PNG (*.png)|*.png"
 msgstr "Graphical timetable as PNG (*.png)|*.png"
 
-#: DynamicPlugin.cs:43
+#: DynamicPlugin.cs:39
 msgid "B&ildfahrplan"
 msgstr "Graph&ical timetable"
 
-#: DynamicPlugin.cs:45
+#: DynamicPlugin.cs:41
 msgid "&Anzeigen"
 msgstr "&Show"
 
-#: DynamicPlugin.cs:47
+#: DynamicPlugin.cs:43
 msgid "&Drucken"
 msgstr "&Print"
 
-#: DynamicPlugin.cs:48
+#: DynamicPlugin.cs:44
 msgid "&Exportieren"
 msgstr "&Export"
 
-#: DynamicPlugin.cs:50
+#: DynamicPlugin.cs:46
 msgid "Darste&llung ändern"
 msgstr "Change &plan display"
 
-#: DynamicPlugin.cs:51
+#: DynamicPlugin.cs:47
 msgid "&Zugdarstellung ändern"
 msgstr "&Train display"
 
-#: DynamicPlugin.cs:52
+#: DynamicPlugin.cs:48
 msgid "&Stationsdarstellung ändern"
 msgstr "&Station display"
 
-#: DynamicPlugin.cs:53
+#: DynamicPlugin.cs:49
 msgid "Verwende nur &Plandarstellung"
 msgstr "Only &use plan display"
-
-#: DynamicPlugin.cs:73
-msgid "Druckfunktion in dieser Version nicht aktiviert!"
-msgstr "Printing functionality is not enabled in this FPLedit build!"
 
 #: DynamicPreview.cs:12
 msgid "Dynamischer Bildfahrplan"
@@ -186,80 +182,101 @@ msgstr "Ok"
 msgid "Darstellung ändern"
 msgstr "Change plan display"
 
-#: Forms/ExportRenderer.cs:26 Forms/PrintRenderer.cs:48
+#: Forms/ExportRenderer.cs:24 Forms/PrintForm.xeto.cs:46
 msgid "Strecke auswählen"
 msgstr "Select line"
 
-#: Forms/ExportRenderer.cs:28
+#: Forms/ExportRenderer.cs:26
 msgid "Breite des Bildes (px)"
 msgstr "Image width (px)"
 
-#: Forms/ExportRenderer.cs:30
+#: Forms/ExportRenderer.cs:28
 msgid "Exportieren"
 msgstr "Export"
 
-#: Forms/ExportRenderer.cs:32
+#: Forms/ExportRenderer.cs:30
 msgid "Exporteinstellungen"
 msgstr "Export settings"
 
-#: Forms/ExportRenderer.cs:41 Forms/PrintRenderer.cs:62
+#: Forms/ExportRenderer.cs:39
 msgid "Bildfahrplan drucken"
 msgstr "Print graphical timetable"
 
-#: Forms/ExportRenderer.cs:58
+#: Forms/ExportRenderer.cs:56
 msgid "Bildfahrplan exportieren"
 msgstr "Export graphical timetable"
 
-#: Forms/ExportRenderer.cs:65
+#: Forms/ExportRenderer.cs:63
 #, csharp-format
 msgid "Exportiere Bildfahrplan in Datei {0}"
 msgstr "Exporting graphical timetable to file {0}"
 
-#: Forms/ExportRenderer.cs:70
+#: Forms/ExportRenderer.cs:68
 msgid "Exportieren des Bildfahrplans fehlgeschlagen!"
 msgstr "Error while exporting graphical timetable!"
 
-#: Forms/ExportRenderer.cs:72
+#: Forms/ExportRenderer.cs:70
 msgid "Exportieren des Bildfahrplans erfolgreich abgeschlossen!"
 msgstr "Successfully exported graphical timetable!"
 
-#: Forms/PreviewForm.xeto.cs:165
+#: Forms/PreviewForm.xeto.cs:159
 msgid "&Darstellung ändern"
 msgstr "Change &plan display"
 
-#: Forms/PreviewForm.xeto.cs:166
+#: Forms/PreviewForm.xeto.cs:160
 msgid "Stationen nicht mitscrollen"
 msgstr "Do not scroll station names"
 
-#: Forms/PreviewForm.xeto.cs:167
+#: Forms/PreviewForm.xeto.cs:161
 msgid "Verkehrstage"
 msgstr "Days"
 
-#: Forms/PreviewForm.xeto.cs:168
+#: Forms/PreviewForm.xeto.cs:162
 msgid "Dynamische Bildfahrplan-Vorschau"
 msgstr "Dynamic graphical timetable preview"
 
-#: Forms/PrintRenderer.cs:51
+#: Forms/PrintForm.xeto.cs:47
+msgid "Seiteneinstellungen"
+msgstr "Page settings"
+
+#: Forms/PrintForm.xeto.cs:48
 msgid "Querformat"
 msgstr "Landscape"
 
-#: Forms/PrintRenderer.cs:52
-msgid "Drucken"
-msgstr "&Print"
+#: Forms/PrintForm.xeto.cs:49
+msgid "Seitenrand [cm]:"
+msgstr "Page margin [cm]:"
 
-#: Forms/PrintRenderer.cs:54
-msgid "Druckeinstellungen"
-msgstr "Printer settings"
+#: Forms/PrintForm.xeto.cs:50
+msgid "PDF speichern"
+msgstr "Save PDF"
 
-#: Forms/PrintRenderer.cs:92
+#: Forms/PrintForm.xeto.cs:51 Forms/PrintRenderer.cs:43
+msgid "Bildfahrplan als PDF drucken"
+msgstr "Print graphical timetable as PDF"
+
+#: Forms/PrintRenderer.cs:44
+msgid "PDF-Datei"
+msgstr "PDF file"
+
+#: Forms/PrintRenderer.cs:63
+#, csharp-format
+msgid "Drucke als PDF {0}..."
+msgstr "Printing to PDF file {0}..."
+
+#: Forms/PrintRenderer.cs:68
 msgid "Bildfahrplan generiert mit FPLedit"
 msgstr "Graphical timetable generated with FPLedit"
 
-#: Forms/PrintRenderer.cs:111
-msgid "Ungültige Druckereinstellungen!"
-msgstr "Invalid printer settings!"
+#: Forms/PrintRenderer.cs:77
+msgid "Die Druckeinstellungen erzeugen unendlich viele Seiten!"
+msgstr "The current printing settings would produce an infinite number of pages!"
 
-#: Forms/PrintRenderer.cs:120
+#: Forms/PrintRenderer.cs:82
+msgid "Drucken abgeschlossen..."
+msgstr "Finished printing..."
+
+#: Forms/PrintRenderer.cs:86
 #, csharp-format
 msgid "Fehler beim Drucken! {0}"
 msgstr "Error while printing! {0}"
@@ -344,15 +361,15 @@ msgstr "Dashed (93)"
 msgid "Lang gestrichelt"
 msgstr "Dashed (long)"
 
-#: Render/AsyncDoubleBufferedGraph.cs:91
+#: Render/AsyncDoubleBufferedGraph.cs:93
 msgid "Generiere Bildfahrplan..."
 msgstr "Generating graphical timetable..."
 
-#: Render/AsyncDoubleBufferedGraph.cs:103
+#: Render/AsyncDoubleBufferedGraph.cs:105
 msgid "Fehler beim Rendern (siehe Log)..."
 msgstr "Exception occurred while rendering (see log)..."
 
-#: Render/AsyncDoubleBufferedGraph.cs:105
+#: Render/AsyncDoubleBufferedGraph.cs:107
 msgid ""
 "Mehrere Folgezüge gefunden!\n"
 "Bitte oben angezeigte Tage einschränken\n"
@@ -362,25 +379,27 @@ msgstr ""
 "Please limit the displayed weekdays (see above)\n"
 "and re-open the dynamic preview window."
 
-#: Render/GdiAvailabilityTest.cs:27
-msgid "GDI+ steht nicht zur Verfügung. Das sollte niemals passieren?"
-msgstr "GDI+ is not available. This should never happen?"
+#~ msgid "Druckfunktion in dieser Version nicht aktiviert!"
+#~ msgstr "Printing functionality is not enabled in this FPLedit build!"
 
-#: Render/GdiAvailabilityTest.cs:28 Render/GdiAvailabilityTest.cs:29
-#: Render/GdiAvailabilityTest.cs:30
-msgid "Die Bibliothek libgdiplus wurde nicht gefunden!"
-msgstr "The library libgidplus was not found on your system!"
+#~ msgid "Drucken"
+#~ msgstr "&Print"
 
-#: Render/GdiAvailabilityTest.cs:41
+#~ msgid "Druckeinstellungen"
+#~ msgstr "Printer settings"
+
+#~ msgid "Ungültige Druckereinstellungen!"
+#~ msgstr "Invalid printer settings!"
+
+#~ msgid "GDI+ steht nicht zur Verfügung. Das sollte niemals passieren?"
+#~ msgstr "GDI+ is not available. This should never happen?"
+
+#~ msgid "Die Bibliothek libgdiplus wurde nicht gefunden!"
+#~ msgstr "The library libgidplus was not found on your system!"
+
 #, csharp-format
-msgid ""
-"Die Bildfahrplanfunktionen stehen aufgrund eines Fehlers nicht zur "
-"Verfügung: {0} Zur Installation siehe Installationshinweise unter {1}."
-msgstr ""
-"Graphical timetable functionality will not be available because of an error: "
-"{0} For help, please consult the installation instructions on {1}."
+#~ msgid "Die Bildfahrplanfunktionen stehen aufgrund eines Fehlers nicht zur Verfügung: {0} Zur Installation siehe Installationshinweise unter {1}."
+#~ msgstr "Graphical timetable functionality will not be available because of an error: {0} For help, please consult the installation instructions on {1}."
 
-#~ msgid ""
-#~ "WARNUNG! Die folgende Funktion ist experimentell und ungetest. Fortfahren?"
-#~ msgstr ""
-#~ "WARNING! The following function is experimental and untested. Continue?"
+#~ msgid "WARNUNG! Die folgende Funktion ist experimentell und ungetest. Fortfahren?"
+#~ msgstr "WARNING! The following function is experimental and untested. Continue?"

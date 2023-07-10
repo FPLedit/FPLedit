@@ -39,6 +39,10 @@ Die Volltexte der Lizenzen finden Sie als Textdatei im Ordner lib/licenses.
   <https://github.com/SixLabors/ImageSharp>
   <https://github.com/SixLabors/ImageSharp.Drawing>
 
+* FPLedit benutzt PdfSharp zur Bildfahrplan-Darstellung.
+  MIT-License
+  <https://github.com/empira/PDFsharp>
+
 * FPLedit verwendet als Basis .NET 6 und andere .NET-Pakete; sowie von .NET übernommenen Code.
   MIT-License
   <https://github.com/dotnet/runtime>
