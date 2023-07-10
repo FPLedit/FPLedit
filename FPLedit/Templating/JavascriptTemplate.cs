@@ -209,7 +209,10 @@ namespace FPLedit.Templating
                 .Concat(extensionAllowedTypes)
                 .Concat(new[] { typeof(Enumerable) }); // Also whitelist type used for LINQ.
 
-            var engine = new Engine();
+            var engine = new Engine(opt =>
+            {
+                opt.DisableStringCompilation();
+            });
             foreach (var type in allowedTypes) // Register all allowed types.
                 engine.SetValue(type.Name, type);
 
@@ -219,8 +222,8 @@ namespace FPLedit.Templating
             const string polyFillsPath = "Templating.TemplatePolyfills.js";
             polyfillsCache ??= ResourceHelper.GetStringResource(polyFillsPath);
             
-            var polyfillsParserOptions = new ParserOptions(polyFillsPath) { Tolerant = false };
-            var templateCodeParserOptions = new ParserOptions(Identifier);
+            var polyfillsParserOptions = new ParserOptions() { Tolerant = false };
+            var templateCodeParserOptions = new ParserOptions();
             
             return engine
                 .SetValue("tt", tt)
@@ -234,9 +237,9 @@ namespace FPLedit.Templating
                 .SetValue("safe_css_font",    (Func<string,string>)TemplateOutput.SafeCssFont)
                 .SetValue("safe_css_block",   (Func<string,string>)TemplateOutput.SafeCssBlock)
                 .SetValue("html_name",        (Func<string,string,string>)TemplateOutput.HtmlName)
-                .Execute(polyfillsCache, polyfillsParserOptions) // Load polyfills
-                .Execute("var __builder = '';", polyfillsParserOptions) // Create output variable
-                .Execute(CompiledCode, templateCodeParserOptions)
+                .Execute(polyfillsCache, polyFillsPath, polyfillsParserOptions) // Load polyfills
+                .Execute("var __builder = '';", polyFillsPath, polyfillsParserOptions) // Create output variable
+                .Execute(CompiledCode, Identifier, templateCodeParserOptions)
                 .GetValue("__builder")
                 .ToString();
         }

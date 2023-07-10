@@ -56,14 +56,15 @@ namespace FPLedit.Templating
             {
                 var source = ex.Location.Source ?? Identifier;
                 var isModule = source != Identifier;
+                var loc = ex.Location.Start;
                 logger.Error(T._("Fehler im {0} {1}: {2} in line {3}, column {4}", 
-                    (isModule ? "Modul" : "Template"), source, ex.Message, ex.LineNumber, ex.Column));
+                    (isModule ? "Modul" : "Template"), source, ex.Message, loc.Line, loc.Column));
                 if (!isModule)
-                    TemplateDebugger.GetInstance().Navigate(ex.LineNumber, ex.Column);
+                    TemplateDebugger.GetInstance().Navigate(loc.Line, loc.Column);
             }
             catch (Esprima.ParserException ex)
             {
-                var source = ex.SourceText ?? Identifier;
+                var source = ex.Source ?? Identifier;
                 var isModule = source != Identifier;
                 logger.Error(T._("Fehler im {0} {1}: {2} in line {3}, column {4}", 
                     (isModule ? "Modul" : "Template"), source, ex.Message, ex.LineNumber, ex.Column));
