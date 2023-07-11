@@ -11,7 +11,7 @@ namespace FPLedit.Tests
 {
     public class BuiltinTemplateTest
     {
-        private TemplateManager templateManager;
+        private TemplateManager templateManager = null!;
         private const string DEFAULT_TEMPLATE_PATH = "templates";
         
         [SetUp]
@@ -23,7 +23,7 @@ namespace FPLedit.Tests
             using var settings = new Settings(defaultConfigFile);
 
             // Initialize a shallow dummy plugin interface.
-            var execPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var execPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
             var pi = new DummyPluginInterface
             {
                 settings = settings,
@@ -56,7 +56,7 @@ namespace FPLedit.Tests
             TestTemplateType(null, new Timetable(TimetableType.Network));
         }
         
-        private void TestTemplateType(string type, Timetable tt)
+        private void TestTemplateType(string? type, Timetable tt)
         {
         	var templates = type == null ? templateManager.GetAllTemplates() : templateManager.GetTemplates(type);
         	foreach (var t in templates)
@@ -66,8 +66,8 @@ namespace FPLedit.Tests
 
     internal sealed class TestDebugger : ITemplateDebugger
     {
-    	private string generatedCode;
-    	private string identifier;
+    	private string? generatedCode;
+    	private string? identifier;
 
     	public void SetContext(JavascriptTemplate template)
         {
@@ -77,8 +77,8 @@ namespace FPLedit.Tests
 
         public void Navigate(int line, int column) // We have an error.
         {
-        	var (start, end) = TemplateDebugger.GetNavigationOffsets(generatedCode, line, column, 4, 4);
-        	var codePart = generatedCode.Substring(start, end - start).Replace($"{line,4}", "--->");
+        	var (start, end) = TemplateDebugger.GetNavigationOffsets(generatedCode!, line, column, 4, 4);
+        	var codePart = generatedCode!.Substring(start, end - start).Replace($"{line,4}", "--->");
         	TestContext.Error.WriteLine(codePart);
         }
 

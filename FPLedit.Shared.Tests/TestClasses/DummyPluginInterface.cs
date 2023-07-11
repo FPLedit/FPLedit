@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using FPLedit.Shared.Templating;
 
-namespace FPLedit.Shared.Tests
+namespace FPLedit.Shared.Tests.TestClasses
 {
     public class DummyPluginInterface : IReducedPluginInterface
     {
@@ -40,17 +40,17 @@ namespace FPLedit.Shared.Tests
 
         public bool IsReadonly => false;
 
-        public T Get<T>(string key, T defaultValue = default)
+        public T? Get<T>(string key, T? defaultValue = default)
         {
             settings.TryGetValue(key, out var val);
             if (val != null)
                 return (T) Convert.ChangeType(val, typeof(T));
             return defaultValue;
         }
-        public T GetEnum<T>(string key, T defaultValue = default) where T : Enum
+        public T? GetEnum<T>(string key, T? defaultValue = default) where T : Enum
         {
             var underlying = Enum.GetUnderlyingType(typeof(T));
-            var x = (int) Convert.ChangeType(defaultValue, underlying);
+            var x = (int) Convert.ChangeType(defaultValue, underlying)!;
             return (T) Enum.ToObject(typeof(T), Get(key, x));
         }
         public bool KeyExists(string key) => settings.ContainsKey(key);

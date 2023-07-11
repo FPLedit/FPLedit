@@ -24,7 +24,7 @@ namespace FPLedit.Tests.Common
         
         private static Stream GetResource(Assembly assembly, string dotFilePath)
         {
-            return assembly.GetManifestResourceStream(dotFilePath);
+            return assembly.GetManifestResourceStream(dotFilePath)!;
         }
 
         private static string GetStringResource(Assembly assembly, string dotFilePath)

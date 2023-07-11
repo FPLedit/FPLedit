@@ -41,12 +41,13 @@ namespace FPLedit.Shared.Tests
                 TrainNamingScheme = new AutoTrainNameGen(normalTrain.TName, 2)
             };
             normalTrain.AddLink(link);
-            LinkedTrain linkedTrain = null;
+            LinkedTrain linkedTrain = null!;
             for (int i = 0; i < link.TrainCount; i++)
             {
                 linkedTrain = new LinkedTrain(link, i);
                 tt.AddTrain(linkedTrain);
             }
+            Assert.IsNotNull(linkedTrain);
 
             var sw = new Stopwatch();
             sw.Start();

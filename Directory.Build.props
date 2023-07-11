@@ -19,8 +19,7 @@
     <RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64</RuntimeIdentifiers>
 
     <!-- Errors for nullable checks. -->
-    <!--<WarningsAsErrors>CS8600;CS8602</WarningsAsErrors>-->
-    <WarningsAsErrors>CS8603</WarningsAsErrors>
+    <WarningsAsErrors>CS8600;CS8602;CS8603;CS8625</WarningsAsErrors>
 
     <!-- Conflicts between different versions. -->
     <MSBuildWarningsAsMessages>MSB3277</MSBuildWarningsAsMessages>

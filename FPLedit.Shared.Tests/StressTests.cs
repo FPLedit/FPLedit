@@ -18,7 +18,7 @@ namespace FPLedit.Shared.Tests
             var handler = new StationCanvasPositionHandler();
             Dictionary<Station, Point> stapos = new Dictionary<Station, Point>();
             var rand = new Random();
-            Station branchS = null;
+            Station? branchS = null;
             for (int i = 0; i < 2000; i++)
             {
                 var branch = rand.Next(2, 98);
@@ -36,7 +36,7 @@ namespace FPLedit.Shared.Tests
                         });
                     }
 
-                    if (j == 1 && i > 0)
+                    if (j == 1 && i > 0 && branchS != null)
                         tt.AddRoute(branchS, sta, 0f, 1f);
                     else
                     {

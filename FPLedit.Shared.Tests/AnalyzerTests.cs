@@ -2,6 +2,7 @@ using System.IO;
 using System.Linq;
 using FPLedit.Shared.Analyzers;
 using FPLedit.Shared.Filetypes;
+using FPLedit.Shared.Tests.TestClasses;
 using FPLedit.Tests.Common;
 using NUnit.Framework;
 
@@ -69,7 +70,8 @@ namespace FPLedit.Shared.Tests
 
         private static void GeneralTrapezTest(Stream s)
         {
-            var tt = new XMLImport().Import(s, new DummyPluginInterface());
+            var tt = new XMLImport().Import(s, new DummyPluginInterface())!;
+            Assert.IsNotNull(tt);
 
             var analyzer = new IntersectionAnalyzer(tt);
 
@@ -123,7 +125,8 @@ namespace FPLedit.Shared.Tests
 
         private static void GeneralCrossingTest(Stream s)
         {
-            var tt = new XMLImport().Import(s, new DummyPluginInterface());
+            var tt = new XMLImport().Import(s, new DummyPluginInterface())!;
+            Assert.IsNotNull(tt);
             
             var analyzer = new IntersectionAnalyzer(tt);
 
@@ -184,7 +187,8 @@ namespace FPLedit.Shared.Tests
         
         private static void GeneralOvertakeTest(Stream s)
         {
-            var tt = new XMLImport().Import(s, new DummyPluginInterface());
+            var tt = new XMLImport().Import(s, new DummyPluginInterface())!;
+            Assert.IsNotNull(tt);
             
             var analyzer = new IntersectionAnalyzer(tt);
 
