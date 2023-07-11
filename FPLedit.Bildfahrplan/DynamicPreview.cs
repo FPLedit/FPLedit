@@ -7,7 +7,7 @@ namespace FPLedit.Bildfahrplan
     public sealed class DynamicPreview : IPreviewAction, IDisposable
     {
         private bool opened = false;
-        private PreviewForm dpf;
+        private PreviewForm? dpf;
 
         public string DisplayName => T._("Dynamischer Bildfahrplan");
         
@@ -15,10 +15,10 @@ namespace FPLedit.Bildfahrplan
 
         public void Show(IPluginInterface pluginInterface)
         {
-            if (!opened)
+            if (dpf == null || !opened)
             {
                 dpf = new PreviewForm(pluginInterface);
-                dpf.Closed += (s, e) => opened = false;
+                dpf.Closed += (_, _) => opened = false;
                 dpf.Show();
                 opened = true;
             }

@@ -1,6 +1,7 @@
 ﻿using System;
 using Eto.Drawing;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FPLedit.Shared.Rendering
 {
@@ -59,13 +60,14 @@ namespace FPLedit.Shared.Rendering
             ["magenta"]    = (MColor)Colors.Magenta,
         };
 
+        [return: NotNullIfNotNull("defaultValue")]
         public static MColor? FromString(string? def, MColor? defaultValue)
         {
             if (def == null)
                 return defaultValue;
 
             if (def.StartsWith("#"))
-                return FromHexString(def);
+                return FromHexString(def) ?? defaultValue;
 
             if (def.StartsWith("c(") && def.EndsWith(")"))
                 return FromJtg2CustomColor(def);

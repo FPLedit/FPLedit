@@ -3,7 +3,6 @@ using FPLedit.Bildfahrplan.Model;
 using FPLedit.Shared;
 using System;
 using Eto.Forms;
-using FPLedit.Bildfahrplan.Render;
 using FPLedit.Shared.UI;
 
 namespace FPLedit.Bildfahrplan
@@ -11,18 +10,20 @@ namespace FPLedit.Bildfahrplan
     [Plugin("Dynamische Bildfahrplan-Vorschau", Vi.PFrom, Vi.PUpTo, Author = "Manuel Huber")]
     public sealed class DynamicPlugin : IPlugin, IDisposable
     {
-        private IPluginInterface pluginInterface;
-        private DynamicPreview dpf;
+        private IPluginInterface pluginInterface = default!;
+        private DynamicPreview? dpf;
+
+        private const string OVERRIDE_SETTINGS_KEY = "bifpl.override-entity-styles";
         
 #pragma warning disable CA2213
-        private ButtonMenuItem graphItem, showItem, configItem, trainColorItem, stationStyleItem, printItem, exportItem;
-        private CheckMenuItem overrideItem;
+        private ButtonMenuItem graphItem = default!, showItem = default!, configItem = default!, trainColorItem = default!, stationStyleItem = default!, printItem = default!, exportItem = default!;
+        private CheckMenuItem overrideItem = default!;
 #pragma warning restore CA2213
 
         public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
         {
             this.pluginInterface = pluginInterface;
-            Style.PluginInterface = pluginInterface;
+            Style.OverrideEntityStyle = pluginInterface.Settings.Get<bool>(OVERRIDE_SETTINGS_KEY);
 
             dpf = new DynamicPreview();
             componentRegistry.Register<IPreviewAction>(dpf);
@@ -46,14 +47,14 @@ namespace FPLedit.Bildfahrplan
                 configItem = graphItem.CreateItem(T._("Darste&llung ändern"), enabled: false, clickHandler: (_, _) => ShowForm(new ConfigForm(pluginInterface.Timetable, pluginInterface)));
                 trainColorItem = graphItem.CreateItem(T._("&Zugdarstellung ändern"), enabled: false, clickHandler: (_, _) => ShowForm(new TrainStyleForm(pluginInterface)));
                 stationStyleItem = graphItem.CreateItem(T._("&Stationsdarstellung ändern"), enabled: false, clickHandler: (_, _) => ShowForm(new StationStyleForm(pluginInterface)));
-                overrideItem = graphItem.CreateCheckItem(T._("Verwende nur &Plandarstellung"), isChecked: pluginInterface.Settings.Get<bool>("bifpl.override-entity-styles"),
+                overrideItem = graphItem.CreateCheckItem(T._("Verwende nur &Plandarstellung"), isChecked: Style.OverrideEntityStyle,
                     changeHandler: OverrideItem_CheckedChanged);
 #if !DEBUG
             }
 #endif
         }
         
-        private void PrintItem_Click(object sender, EventArgs e)
+        private void PrintItem_Click(object? sender, EventArgs e)
         {
             try
             {
@@ -65,7 +66,7 @@ namespace FPLedit.Bildfahrplan
             }
         }
         
-        private void ExportItem_Click(object sender, EventArgs e)
+        private void ExportItem_Click(object? sender, EventArgs e)
         {
             try
             {
@@ -77,7 +78,7 @@ namespace FPLedit.Bildfahrplan
             }
         }
 
-        private void ShowItem_Click(object sender, EventArgs e) => dpf.Show(pluginInterface);
+        private void ShowItem_Click(object? sender, EventArgs e) => dpf?.Show(pluginInterface);
 
         private void ShowForm(Dialog<DialogResult> form)
         {
@@ -88,12 +89,13 @@ namespace FPLedit.Bildfahrplan
                 form.Dispose();
         }
         
-        private void OverrideItem_CheckedChanged(object sender, EventArgs e)
+        private void OverrideItem_CheckedChanged(object? sender, EventArgs e)
         {
-            pluginInterface.Settings.Set("bifpl.override-entity-styles", overrideItem.Checked);
+            pluginInterface.Settings.Set(OVERRIDE_SETTINGS_KEY, overrideItem.Checked);
+            Style.OverrideEntityStyle = overrideItem.Checked;
         }
 
-        private void PluginInterface_FileStateChanged(object sender, FileStateChangedEventArgs e)
+        private void PluginInterface_FileStateChanged(object? sender, FileStateChangedEventArgs e)
         {
             showItem.Enabled = e.FileState.Opened && e.FileState.TrainsCreated;
             configItem.Enabled = e.FileState.Opened;

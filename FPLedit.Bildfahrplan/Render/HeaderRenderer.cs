@@ -1,7 +1,6 @@
 ﻿using FPLedit.Bildfahrplan.Model;
 using FPLedit.Shared;
 using FPLedit.Shared.Rendering;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using FPLedit.Bildfahrplan.Helpers;
@@ -35,16 +34,16 @@ namespace FPLedit.Bildfahrplan.Render
 
             float length = 0f;
 
-            PathEntry lastpe = null;
+            PathEntry? lastpe = null;
             foreach (var sta in path.PathEntries)
             {
                 var er = path.GetEntryRoute(sta.Station);
                 if (er != Timetable.UNASSIGNED_ROUTE_ID)
-                    length += (sta!.Station.Positions.GetPosition(er) - lastpe!.Station.Positions.GetPosition(er))!.Value;
+                    length += (sta.Station.Positions.GetPosition(er) - lastpe!.Station.Positions.GetPosition(er))!.Value;
                 lastpe = sta;
             }
 
-            StationRenderProps lastPos = null;
+            StationRenderProps? lastPos = null;
             lastpe = null;
             float kil = 0f;
             foreach (var sta in path.PathEntries)
@@ -53,7 +52,7 @@ namespace FPLedit.Bildfahrplan.Render
                 
                 var er = path.GetEntryRoute(sta.Station);
                 if (er != Timetable.UNASSIGNED_ROUTE_ID)
-                    kil += (sta!.Station.Positions.GetPosition(er) - lastpe!.Station.Positions.GetPosition(er))!.Value;
+                    kil += (sta.Station.Positions.GetPosition(er) - lastpe!.Station.Positions.GetPosition(er))!.Value;
                 lastpe = sta;
                 
                 StationRenderProps posX;

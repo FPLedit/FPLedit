@@ -8,7 +8,7 @@ namespace FPLedit.Bildfahrplan.Model
     {
         private readonly Timetable tt;
 
-        public TimetableStyle(Timetable tt) : base(tt)
+        public TimetableStyle(Timetable tt)
         {
             this.tt = tt;
         }
@@ -20,7 +20,7 @@ namespace FPLedit.Bildfahrplan.Model
                 var time = tt.GetAttribute("tMin", "00:00");
                 if (time == "")
                     time = "00:00";
-                return TimeEntry.Parse(time!);
+                return TimeEntry.Parse(time);
             }
             set => tt.SetAttribute("tMin", value.ToTimeString());
         }
@@ -32,7 +32,7 @@ namespace FPLedit.Bildfahrplan.Model
                 var time = tt.GetAttribute("tMax", "24:00");
                 if (time == "")
                     time = "24:00";
-                return TimeEntry.Parse(time!);
+                return TimeEntry.Parse(time);
             }
             set => tt.SetAttribute("tMax", value.ToTimeString());
         }
@@ -73,19 +73,19 @@ namespace FPLedit.Bildfahrplan.Model
 
         public bool StationVertical
         {
-            get => !tt.GetAttribute<bool>("sHor", true);
+            get => !tt.GetAttribute("sHor", true);
             set => tt.SetAttribute("sHor", (!value).ToString().ToLower());
         }
 
         public bool MultiTrack
         {
-            get => tt.GetAttribute<bool>("shMu", true);
+            get => tt.GetAttribute("shMu", true);
             set => tt.SetAttribute("shMu", value.ToString().ToLower());
         }
 
         public bool DrawNetworkTrains
         {
-            get => tt.GetAttribute<bool>("fpl-dnt", true);
+            get => tt.GetAttribute("fpl-dnt", true);
             set => tt.SetAttribute("fpl-dnt", value.ToString().ToLower());
         }
 

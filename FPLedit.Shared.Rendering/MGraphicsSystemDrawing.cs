@@ -1,3 +1,4 @@
+#if ENABLE_SYSTEM_DRAWING
 using System;
 using System.Collections.Generic;
 using System.Drawing.Drawing2D;
@@ -11,7 +12,7 @@ using ed = Eto.Drawing;
 
 namespace FPLedit.Shared.Rendering;
 
-#if ENABLE_SYSTEM_DRAWING
+[System.Runtime.Versioning.SupportedOSPlatform("windows")]
 public sealed class MGraphicsSystemDrawing : IMGraphics
 {
     private readonly Graphics g;

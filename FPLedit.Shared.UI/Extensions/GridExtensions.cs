@@ -32,7 +32,7 @@ namespace FPLedit.Shared.UI
             return view.AddColumn(new ComboBoxCell { Binding = bind, DataStore = dataStore }, header, editable);
         }
 
-        public static GridColumn AddDropDownColumn<T>(this GridView view, Expression<Func<T, object>> value, IEnumerable<object> dataStore, IIndirectBinding<string> textBinding, string header, bool editable = false)
+        public static GridColumn AddDropDownColumn<T>(this GridView view, Expression<Func<T, object?>> value, IEnumerable<object> dataStore, IIndirectBinding<string> textBinding, string header, bool editable = false)
         {
             var internalBinding = Binding.Property(value);
             Cell cell;

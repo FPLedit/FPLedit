@@ -18,8 +18,6 @@ namespace FPLedit.Bildfahrplan.Forms
         private readonly Timetable tt;
         private readonly TimetableStyle attrs;
 
-        private Func<PathData> pd;
-
         public PrintRenderer(IPluginInterface pluginInterface)
         {
             this.pluginInterface = pluginInterface;
@@ -34,7 +32,9 @@ namespace FPLedit.Bildfahrplan.Forms
             if (printSettings == null)
                 return;
 
-            pd = VirtualRoute.GetPathDataMaybeVirtual(pluginInterface.Timetable, printSettings.Value.routeIdx);
+            if (pluginInterface.Timetable != tt)
+                throw new InvalidOperationException("timetable changed while printing!");
+            var pd = VirtualRoute.GetPathDataMaybeVirtual(tt, printSettings.Value.routeIdx);
 
             var size = printSettings.Value.pageSize;
             var orientation = printSettings.Value.landscape ? PageOrientation.Landscape : PageOrientation.Portrait;
@@ -55,10 +55,10 @@ namespace FPLedit.Bildfahrplan.Forms
             if (exportFilename == null)
                 return;
 
-            PrintDocument(exportFilename, size, orientation, marginCm);
+            PrintDocument(exportFilename, size, orientation, marginCm, pd);
         }
 
-        private void PrintDocument(string exportFilename, PageSize size, PageOrientation orientation, float marginCm)
+        private void PrintDocument(string exportFilename, PageSize size, PageOrientation orientation, float marginCm, Func<PathData> pd)
         {
             pluginInterface.Logger.Info(T._("Drucke als PDF {0}...", exportFilename));
 
@@ -72,7 +72,7 @@ namespace FPLedit.Bildfahrplan.Forms
                 TimeEntry? startTime = null;
                 while (needsMorePages)
                 {
-                    (needsMorePages, var nextStartTime) = PrintPage(doc, size, orientation, marginCm, startTime);
+                    (needsMorePages, var nextStartTime) = PrintPage(doc, size, orientation, marginCm, startTime, pd);
                     if (needsMorePages && nextStartTime == startTime)
                         throw new Exception(T._("Die Druckeinstellungen erzeugen unendlich viele Seiten!"));
                     startTime = nextStartTime;
@@ -87,7 +87,7 @@ namespace FPLedit.Bildfahrplan.Forms
             }
         }
 
-        private (bool, TimeEntry) PrintPage(PdfDocument doc, PageSize size, PageOrientation orientation, float marginCm, TimeEntry? startTime)
+        private (bool, TimeEntry) PrintPage(PdfDocument doc, PageSize size, PageOrientation orientation, float marginCm, TimeEntry? startTime, Func<PathData> pd)
         {
             var page = doc.AddPage();
             page.Size = size;

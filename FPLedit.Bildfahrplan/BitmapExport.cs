@@ -16,7 +16,7 @@ internal sealed class BitmapExport : IExport
         this.width = width;
     }
 
-    public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[] flags = null)
+    public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null)
     {
         var pd = VirtualRoute.GetPathDataMaybeVirtual(tt, route);
         var renderer = new Renderer(tt, pd);

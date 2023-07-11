@@ -6,7 +6,7 @@ namespace FPLedit.Bildfahrplan.Helpers
 {
     internal sealed class DashStyleHelper
     {
-        private readonly List<DashStyle> types = new List<DashStyle>
+        private readonly List<DashStyle> types = new ()
         {
             new DashStyle(T._("Normal"), new[] { 10000.0f, 0.01f }),
             new DashStyle(T._("Gepunktet"), new[] { 3.0f, 3.0f }),

@@ -17,7 +17,7 @@ namespace FPLedit.Bildfahrplan.Render
         private readonly TimeEntry startTime;
         private readonly Dictionary<Station, StationRenderProps> stationOffsets;
         private readonly Days renderDays;
-        private ITrain[] trainCache;
+        private ITrain[]? trainCache;
 
         private readonly DashStyleHelper ds = new();
 
@@ -104,7 +104,7 @@ namespace FPLedit.Bildfahrplan.Render
             {
                 var firstStaOfNext = GetSortedStations(transition)?.FirstOrDefault();
 
-                if (lastStaOfFirst == firstStaOfNext)
+                if (lastStaOfFirst == firstStaOfNext && firstStaOfNext != null)
                 {
                     var departure = transition.GetArrDep(firstStaOfNext).Departure;
                     points.Add(new Vec2(points.Last().X, GetTimeY(departure)));
@@ -208,7 +208,7 @@ namespace FPLedit.Bildfahrplan.Render
             return new Vec2(margin.Left + x, GetTimeY(time));
         }
 
-        Vec2? GetInternalPoint(StationRenderProps sx, TimeEntry time, string track)
+        Vec2? GetInternalPoint(StationRenderProps sx, TimeEntry time, string? track)
         {
             if (time == default || track == null || !sx.TrackOffsets.TryGetValue(track, out float x))
                 return null;
@@ -297,7 +297,7 @@ namespace FPLedit.Bildfahrplan.Render
             return GetTrainDirection(train) ? 90 - angle : angle - 90;
         }
 
-        private IEnumerable<Station> GetSortedStations(ITrain train)
+        private IEnumerable<Station>? GetSortedStations(ITrain train)
         {
             var path = train.GetPath();
             var arrdeps = train.GetArrDepsUnsorted();

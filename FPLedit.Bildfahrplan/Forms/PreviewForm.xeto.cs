@@ -23,7 +23,7 @@ namespace FPLedit.Bildfahrplan.Forms
         private readonly IPluginInterface pluginInterface;
         private readonly AsyncDoubleBufferedGraph adbg;
         private Point? scrollPosition = new Point(0, 0);
-        private Renderer renderer;
+        private Renderer? renderer;
         
         public PreviewForm(IPluginInterface pluginInterface)
         {
@@ -122,9 +122,9 @@ namespace FPLedit.Bildfahrplan.Forms
             hpanel.Invalidate();
         }
 
-        private void PluginInterface_FileStateChanged(object sender, FileStateChangedEventArgs e)
+        private void PluginInterface_FileStateChanged(object? sender, FileStateChangedEventArgs e)
         {
-            if (!Visible || scrollable == null || adbg == null || hpanel == null || IsDisposed)
+            if (!Visible || scrollable == null! || adbg == null! || hpanel == null! || IsDisposed)
                 return;
             
             scrollPosition = scrollable.ScrollPosition;
@@ -138,7 +138,7 @@ namespace FPLedit.Bildfahrplan.Forms
             hpanel.Invalidate();
         }
         
-        private void PluginInterfaceOnFileOpened(object sender, EventArgs e) => ResetRenderer();
+        private void PluginInterfaceOnFileOpened(object? sender, EventArgs e) => ResetRenderer();
 
         private void Panel_Paint(object sender, PaintEventArgs e)
         {

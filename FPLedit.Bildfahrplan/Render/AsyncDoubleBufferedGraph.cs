@@ -8,7 +8,7 @@ namespace FPLedit.Bildfahrplan.Render
 {
     internal class AsyncDoubleBufferedGraph : IDisposable
     {
-        private Bitmap buffer;
+        private Bitmap? buffer;
         private bool generatingBuffer, hadCrash, hadAmbiguousTransitions;
         private float lastBufferWidth;
         
@@ -17,7 +17,7 @@ namespace FPLedit.Bildfahrplan.Render
         private readonly Panel panel;
         private readonly object bufferLock = new object();
 
-        public Action RenderingFinished { get; set; }
+        public Action? RenderingFinished { get; set; }
 
         public AsyncDoubleBufferedGraph(Panel p, IPluginInterface pluginInterface)
         {
@@ -25,7 +25,7 @@ namespace FPLedit.Bildfahrplan.Render
             panel = p;
         }
 
-        public void Render(Renderer renderer, Graphics g, bool drawHeader)
+        public void Render(Renderer? renderer, Graphics g, bool drawHeader)
         {
             if (renderer == null)
                 return;
@@ -38,7 +38,7 @@ namespace FPLedit.Bildfahrplan.Render
                 generatingBuffer = true;
                 Application.Instance.InvokeAsync(() =>
                 {
-                    Bitmap newBuffer = null;
+                    Bitmap? newBuffer = null;
                     try
                     {
                         newBuffer = new Bitmap(panel.Width, renderer.GetHeightExternal(drawHeader), PixelFormat.Format32bppRgba);
@@ -129,9 +129,9 @@ namespace FPLedit.Bildfahrplan.Render
         {
             if (buffer != null && !buffer.IsDisposed)
                 buffer.Dispose();
-            if (panel != null && !panel.IsDisposed)
+            if (panel != null! && !panel.IsDisposed)
                 panel.Dispose();
-            if (font != null && !font.IsDisposed)
+            if (font != null! && !font.IsDisposed)
                 font.Dispose();
         }
     }

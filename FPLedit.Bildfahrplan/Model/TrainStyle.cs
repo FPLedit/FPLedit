@@ -10,15 +10,10 @@ namespace FPLedit.Bildfahrplan.Model
 
         private readonly TimetableStyle ttStyle;
 
-        public TrainStyle(ITrain tra, TimetableStyle ttStyle) : base(tra.ParentTimetable)
+        public TrainStyle(ITrain tra, TimetableStyle ttStyle)
         {
             Train = tra;
             this.ttStyle = ttStyle;
-        }
-
-        public TrainStyle(Train tra) : base(tra.ParentTimetable)
-        {
-            Train = tra;
         }
 
         public void ResetDefaults()
@@ -31,7 +26,7 @@ namespace FPLedit.Bildfahrplan.Model
             LineStyle = 0;
         }
 
-        public MColor TrainColor
+        public MColor? TrainColor
         {
             get => ParseColor(Train.GetAttribute<string>("cl"), null);
             set
@@ -43,7 +38,7 @@ namespace FPLedit.Bildfahrplan.Model
         }
 
         public MColor CalcedColor => OverrideEntityStyle ? ttStyle.TrainColor : (TrainColor ?? ttStyle.TrainColor);
-        public string HexColor
+        public string? HexColor
         {
             get => TrainColor != null ? ColorFormatter.ToString(TrainColor, false) : null;
             set => TrainColor = ColorFormatter.FromString(value, MColor.White);
@@ -62,7 +57,10 @@ namespace FPLedit.Bildfahrplan.Model
             {
                 if (!(Train is IWritableTrain))
                     throw new InvalidOperationException("Style of linked train cannot be changed!");
-                Train.SetAttribute("sz", value.ToString());
+                if (value.HasValue)
+                    Train.SetAttribute("sz", value.Value.ToString());
+                else
+                    Train.RemoveAttribute("sz");
             }
         }
         public int CalcedWidth => OverrideEntityStyle ? ttStyle.TrainWidth : (TrainWidth ?? ttStyle.TrainWidth);
@@ -92,7 +90,7 @@ namespace FPLedit.Bildfahrplan.Model
 
         public int LineStyle
         {
-            get => Train.GetAttribute<int>("sy", 0);
+            get => Train.GetAttribute("sy", 0);
             set
             {
                 if (!(Train is IWritableTrain))

@@ -8,17 +8,12 @@ namespace FPLedit.Bildfahrplan.Model
         public Station Station { get; }
         
         private readonly TimetableStyle ttStyle;
-        public StationStyle(Station sta, TimetableStyle ttStyle) : base(sta.ParentTimetable)
+        public StationStyle(Station sta, TimetableStyle ttStyle)
         {
             this.Station = sta;
             this.ttStyle = ttStyle;
         }
 
-        public StationStyle(Station sta) : base(sta.ParentTimetable)
-        {
-            this.Station = sta;
-        }
-        
         public void ResetDefaults()
         {
             StationColor = null;
@@ -27,13 +22,13 @@ namespace FPLedit.Bildfahrplan.Model
             Show = true;
         }
 
-        public MColor StationColor
+        public MColor? StationColor
         {
             get => ParseColor(Station.GetAttribute<string>("cl"), null);
             set => Station.SetAttribute("cl", ColorToString(value ?? MColor.White));
         }
         public MColor CalcedColor => OverrideEntityStyle ? ttStyle.StationColor :(StationColor ?? ttStyle.StationColor);
-        public string HexColor
+        public string? HexColor
         {
             get => StationColor != null ? ColorFormatter.ToString(StationColor, false) : null;
             set => StationColor = ColorFormatter.FromString(value, MColor.White);
@@ -48,7 +43,13 @@ namespace FPLedit.Bildfahrplan.Model
                     return null;
                 return val;
             }
-            set => Station.SetAttribute("sz", value.ToString());
+            set
+            {
+                if (value.HasValue)
+                    Station.SetAttribute("sz", value.Value.ToString());
+                else
+                    Station.RemoveAttribute("sz");
+            }
         }
         public int CalcedWidth => OverrideEntityStyle ? ttStyle.StationWidth : (StationWidth ?? ttStyle.StationWidth);
         public int StationWidthInt
