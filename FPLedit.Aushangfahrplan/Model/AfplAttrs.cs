@@ -89,7 +89,7 @@ namespace FPLedit.Aushangfahrplan.Model
         {
         }
 
-        public static AfplAttrs GetAttrs(Timetable tt)
+        public static AfplAttrs? GetAttrs(Timetable tt)
         {
             var attrsEn = tt.Children.FirstOrDefault(x => x.XName == "afpl_attrs");
             if (attrsEn != null)

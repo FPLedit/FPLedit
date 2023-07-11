@@ -42,7 +42,7 @@ namespace FPLedit.Kursbuch.Forms
             attrs = KfplAttrs.GetAttrs(tt) ?? KfplAttrs.CreateAttrs(tt);
             fontComboBox.Text = attrs.Font;
             hefontComboBox.Text = attrs.HeFont;
-            cssTextBox.Text = attrs.Css ?? "";
+            cssTextBox.Text = attrs.Css;
 
             setRouteNumbers = new Dictionary<int, string>();
 #pragma warning disable CA2000
@@ -50,7 +50,7 @@ namespace FPLedit.Kursbuch.Forms
                 {
                     Binding = Binding.Delegate<Route, string>(r =>
                     {
-                        setRouteNumbers.TryGetValue(r.Index, out string val);
+                        setRouteNumbers.TryGetValue(r.Index, out string? val);
                         return val ?? attrs.KBSn.GetValue(r.Index) ?? NO_KBS_TEXT;
                     },
                     (r, n) => setRouteNumbers[r.Index] = n)
@@ -65,7 +65,7 @@ namespace FPLedit.Kursbuch.Forms
 
             consoleCheckBox.Checked = settings.Get<bool>("kfpl.console");
 
-            Shown += (s, e) =>
+            Shown += (_, _) =>
             {
                 if (!Eto.Platform.Instance.IsWpf)
                     kbsnLabel.WordWrap(200);

@@ -78,7 +78,7 @@ namespace FPLedit.Kursbuch.Model
         {
         }
 
-        public static KfplAttrs GetAttrs(Timetable tt)
+        public static KfplAttrs? GetAttrs(Timetable tt)
         {
             var attrsEn = tt.Children.FirstOrDefault(x => x.XName == "kfpl_attrs");
             if (attrsEn != null)

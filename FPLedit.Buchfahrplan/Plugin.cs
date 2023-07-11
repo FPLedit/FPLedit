@@ -29,8 +29,8 @@ namespace FPLedit.Buchfahrplan
             componentRegistry.Register<ITemplateProvider>(new Templates.ZlbTemplate());
             
             componentRegistry.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<Templates.TemplateHelper>("bfpl"));
-            componentRegistry.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<Model.BfplAttrs>("bfpl"));
-            componentRegistry.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<Model.BfplPoint>("bfpl"));
+            componentRegistry.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<BfplAttrs>("bfpl"));
+            componentRegistry.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<BfplPoint>("bfpl"));
         }
         
         internal static IFilterRuleContainer FilterRuleContainer => new DefaultFilterRuleContainer(T._("Buchfahrplan"), BfplAttrs.GetAttrs, BfplAttrs.CreateAttrs);

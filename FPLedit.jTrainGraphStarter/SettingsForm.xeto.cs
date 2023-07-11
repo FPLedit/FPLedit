@@ -121,7 +121,7 @@ namespace FPLedit.jTrainGraphStarter
 
         private static class L
         {
-            public static string CompatibleVersions { get; set; }
+            public static string CompatibleVersions { get; set; } = "";
             
             public static readonly string Title = T._("jTrainGraphStarter Einstellungen");
             public static readonly string Close = T._("Schließen");

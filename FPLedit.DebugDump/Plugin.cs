@@ -8,7 +8,7 @@ namespace FPLedit.DebugDump
     [Plugin("DebugDump", Vi.PFrom, Vi.PUpTo, Author = "Manuel Huber")]
     public sealed class Plugin : IPlugin, IDisposable
     {
-        private DebugListener listener;
+        private DebugListener? listener;
 
         public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
         {
@@ -22,8 +22,8 @@ namespace FPLedit.DebugDump
                 if (!Directory.Exists(basePath))
                     Directory.CreateDirectory(basePath);
                 
-                listener = new DebugListener();
-                listener.StartSession(pluginInterface, basePath);
+                listener = new DebugListener(basePath);
+                listener.StartSession(pluginInterface);
             }
             
             componentRegistry.Register<ISettingsControl>(new SettingsFormHandler());

@@ -8,20 +8,18 @@ namespace FPLedit.jTrainGraphStarter
     [Plugin("Starter für jTrainGraph", Vi.PFrom, Vi.PUpTo, Author = "Manuel Huber")]
     public sealed class Plugin : IPlugin
     {
-        private IPluginInterface pluginInterface;
-        private ButtonMenuItem startItem;
+        private IPluginInterface pluginInterface = null!;
+        private ButtonMenuItem startItem = null!;
 
         public void Init(IPluginInterface pi, IComponentRegistry componentRegistry)
         {
             pluginInterface = pi;
             pluginInterface.FileStateChanged += PluginInterface_FileStateChanged;
             
-#pragma warning disable CA2000
             var item = ((MenuBar)pluginInterface.Menu).CreateItem(T._("&jTrainGraph"));
-#pragma warning restore CA2000
 
             startItem = item.CreateItem(T._("jTrain&Graph starten"), enabled: false);
-            startItem.Click += (s, e) =>
+            startItem.Click += (_, _) =>
             {
                 if (pluginInterface.Timetable.Type == TimetableType.Linear)
                     StartLinear();
@@ -29,12 +27,10 @@ namespace FPLedit.jTrainGraphStarter
                     StartNetwork(pluginInterface.FileState.SelectedRoute);
             };
 
-#pragma warning disable CA2000
-            item.CreateItem(T._("Einstell&ungen"), clickHandler: (s, e) => (new SettingsForm(pluginInterface.Settings)).ShowModal(pluginInterface.RootForm));
-#pragma warning restore CA2000
+            item.CreateItem(T._("Einstell&ungen"), clickHandler: (_, _) => (new SettingsForm(pluginInterface.Settings)).ShowModal(pluginInterface.RootForm));
         }
 
-        private void PluginInterface_FileStateChanged(object sender, FileStateChangedEventArgs e)
+        private void PluginInterface_FileStateChanged(object? sender, FileStateChangedEventArgs e)
         {
             startItem.Enabled = e.FileState.Opened;
 
@@ -60,7 +56,7 @@ namespace FPLedit.jTrainGraphStarter
 
                 pluginInterface.Save(false);
 
-                StartJtg(pluginInterface.FileState.FileName, () => pluginInterface.Reload());
+                StartJtg(pluginInterface.FileState.FileName!, () => pluginInterface.Reload());
                 pluginInterface.ClearBackup(backupHandle);
             }
             catch (Exception e)
@@ -109,8 +105,13 @@ namespace FPLedit.jTrainGraphStarter
                 {
                     pluginInterface.StageUndoStep();
                     var crtt = importer.SafeImport(fn, pluginInterface, new SilentLogger(pluginInterface.Logger));
-                    sync.SyncBack(crtt);
-                    pluginInterface.SetUnsaved();
+                    if (crtt != null)
+                    {
+                        sync.SyncBack(crtt);
+                        pluginInterface.SetUnsaved();
+                    }
+                    else
+                        pluginInterface.Logger.Error(T._("Rück-Synchronisierung fehlgeschlagen!"));
                 });
                 pluginInterface.ClearBackup(backupHandle);
             }

@@ -50,7 +50,7 @@ namespace FPLedit.Aushangfahrplan.Templates
             if (tt.Type == TimetableType.Linear)
             {
                 var lSta = tt.GetRoute(Timetable.LINEAR_ROUTE_ID).Stations.ToList().MaybeReverseDirection(dir).LastOrDefault();
-                if (lSta != sta)
+                if (lSta != sta && lSta != null)
                     return new[] { lSta };
                 return Array.Empty<Station>();
             }
@@ -63,7 +63,7 @@ namespace FPLedit.Aushangfahrplan.Templates
                     .SkipWhile(s => s != sta))
                 .ToArray();
 
-            var connectionNodes = sta.ParentTimetable!.Stations.Where(s => s.Routes.Length > 1);
+            var connectionNodes = sta.ParentTimetable.Stations.Where(s => s.Routes.Length > 1);
             var visitedConnectionNodes = connectionNodes.Intersect(stasInTrains); // Eine Hälfte der "Richtungsangaben": Verbindungsknoten im Netz
 
             var visitedRoutes = stasInTrains.SelectMany(s => s.Routes).Distinct();

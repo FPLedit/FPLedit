@@ -29,8 +29,8 @@ namespace FPLedit.DebugDump
 
         public void Dispose()
         {
-            writer?.Dispose();
-            fs?.Dispose();
+            writer.Dispose();
+            fs.Dispose();
         }
     }
 }

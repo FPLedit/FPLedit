@@ -47,7 +47,7 @@ namespace FPLedit.Kursbuch
             var attrs = KfplAttrs.GetAttrs(tt);
             if (attrs == null)
                 return;
-            var route = tt.GetRoutes().FirstOrDefault().Index;
+            var route = tt.GetRoutes().Single().Index;
             ConvertAttrNetToLin(attrs.KBSn, route);
         }
 

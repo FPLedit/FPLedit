@@ -29,7 +29,7 @@ namespace FPLedit.jTrainGraphStarter
             progressBar.Indeterminate = true;
             
             WindowStyle = WindowStyle.None;
-            Closing += (s, e) => e.Cancel = !exitClose;
+            Closing += (_, e) => e.Cancel = !exitClose;
 
             var task = ExecuteJTrainGraphTask(fnArg, jtgPath, javapath);
             task.ContinueWith(t => Application.Instance.Invoke(() =>

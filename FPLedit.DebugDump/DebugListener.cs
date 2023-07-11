@@ -9,17 +9,21 @@ namespace FPLedit.DebugDump
 {
     internal sealed class DebugListener : IDisposable
     {
-        private FileSystemWatcher watcher;
-        private DumpWriter writer;
-        private string session;
-        private XMLEntity lastTimetableNode;
+        private FileSystemWatcher? watcher;
+        private readonly DumpWriter writer;
+        private readonly string session;
+        private XMLEntity? lastTimetableNode;
+        private readonly string fn;
 
-        public void StartSession(IPluginInterface pluginInterface, string basePath)
+        public DebugListener(string basePath)
         {
             session = Guid.NewGuid().ToString();
-            var fn = Path.Combine(basePath, $"fpledit-dump-{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.fpldmp");
+            fn = Path.Combine(basePath, $"fpledit-dump-{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.fpldmp");
             writer = new DumpWriter(fn);
+        }
 
+        public void StartSession(IPluginInterface pluginInterface)
+        {
             // Output some messages before starting so that user is informed better (and does not forget to turn it off!)
             pluginInterface.Logger.Warning(T._("Debug Dump ist aktiviert! Dies kann dazu führen, dass große Datenmengen aufgezeichnet werden.\nSession file: {0}\n----------", fn));
 
@@ -30,12 +34,12 @@ namespace FPLedit.DebugDump
             AddDumpUiInteraction();
             AddTimetableListener(pluginInterface);
 
-            pluginInterface.ExtensionsLoaded += (s, e) =>
+            pluginInterface.ExtensionsLoaded += (_, _) =>
             {
                 writer.WriteEvent(DumpEventType.DebugDumpInternal, "Session started", session);
                 writer.WriteEvent(DumpEventType.DebugDumpInternal, "Enabled extensions", pluginInterface.Settings.Get("extmgr.enabled", ""));
             };
-            pluginInterface.AppClosing += (s, e) => { writer.WriteEvent(DumpEventType.DebugDumpInternal, "Gracefully terminating session", session); };
+            pluginInterface.AppClosing += (_, _) => { writer.WriteEvent(DumpEventType.DebugDumpInternal, "Gracefully terminating session", session); };
 
             var tmpDir = pluginInterface.GetTemp("");
             watcher = new FileSystemWatcher(tmpDir, "*.*")
@@ -67,17 +71,17 @@ namespace FPLedit.DebugDump
         private void AddDumpUiInteraction()
         {
             // Log UI interaction
-            FFormHandler.Init += (se, a) =>
+            FFormHandler.Init += (se, _) =>
             {
-                var w = (Window) se;
-                var n = w.GetType().FullName;
+                var w = (Window) se!;
+                var n = w.GetType().FullName ?? "null-Type";
 
-                w.Shown += (s, e) =>
+                w.Shown += (_, _) =>
                 {
                     writer.WriteEvent(DumpEventType.UiInteraction, "Form", n, "event: Shown");
                     InstrumentControlEventsRecursive(w, n);
                 };
-                w.Closed += (s, e) => writer.WriteEvent(DumpEventType.UiInteraction, "Form", n, "event: Closed");
+                w.Closed += (_, _) => writer.WriteEvent(DumpEventType.UiInteraction, "Form", n, "event: Closed");
             };
         }
 
@@ -88,19 +92,19 @@ namespace FPLedit.DebugDump
                 switch (control)
                 {
                     case Button btn:
-                        btn.Click += (sender, args) => writer.WriteEvent(DumpEventType.UiInteraction, "Button", path + "/" + btn.Text, "event: Click");
+                        btn.Click += (_, _) => writer.WriteEvent(DumpEventType.UiInteraction, "Button", path + "/" + btn.Text, "event: Click");
                         break;
                     case TextBox box:
-                        box.TextChanged += (sender, args) => writer.WriteEvent(DumpEventType.UiInteraction, "TextBox", path + "/" + box.ID, "event: TextChanged", box.Text);
+                        box.TextChanged += (_, _) => writer.WriteEvent(DumpEventType.UiInteraction, "TextBox", path + "/" + box.ID, "event: TextChanged", box.Text);
                         break;
                     case DropDown dd:
-                        dd.SelectedIndexChanged += (sender, args) => writer.WriteEvent(DumpEventType.UiInteraction, "DropDown", path + "/" + dd.ID, "event: SelectedIndexChanged", dd.SelectedIndex.ToString());
+                        dd.SelectedIndexChanged += (_, _) => writer.WriteEvent(DumpEventType.UiInteraction, "DropDown", path + "/" + dd.ID, "event: SelectedIndexChanged", dd.SelectedIndex.ToString());
                         break;
                     case RadioButton rb:
-                        rb.CheckedChanged += (sender, args) => writer.WriteEvent(DumpEventType.UiInteraction, "RadioButton", path + "/" + rb.Text, "event: CheckedChanged", rb.Checked.ToString());
+                        rb.CheckedChanged += (_, _) => writer.WriteEvent(DumpEventType.UiInteraction, "RadioButton", path + "/" + rb.Text, "event: CheckedChanged", rb.Checked.ToString());
                         break;
                     case CheckBox rb:
-                        rb.CheckedChanged += (sender, args) => writer.WriteEvent(DumpEventType.UiInteraction, "CheckBox", path + "/" + rb.Text, "event: CheckedChanged", rb.Checked.ToString());
+                        rb.CheckedChanged += (_, _) => writer.WriteEvent(DumpEventType.UiInteraction, "CheckBox", path + "/" + rb.Text, "event: CheckedChanged", rb.Checked!.Value.ToString());
                         break;
                     case Container ct:
                         InstrumentControlEventsRecursive(ct, path + "/" + ct.GetType().Name);
@@ -114,7 +118,7 @@ namespace FPLedit.DebugDump
             lastTimetableNode = new XMLEntity("dummy");
 
             // Log Timetable changes
-            pluginInterface.FileStateChanged += (s, e) =>
+            pluginInterface.FileStateChanged += (_, _) =>
             {
                 try
                 {
@@ -156,7 +160,7 @@ namespace FPLedit.DebugDump
         public void Dispose()
         {
             watcher?.Dispose();
-            writer?.Dispose();
+            writer.Dispose();
         }
     }
 }

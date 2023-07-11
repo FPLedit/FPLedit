@@ -8,7 +8,7 @@ namespace FPLedit.DebugDump.Forms
 {
     internal sealed class InspectForm : FDialog<DialogResult>
     {
-        private DumpEvent currentEvent;
+        private DumpEvent? currentEvent;
 
 #pragma warning disable CS0649,CA2213
         private readonly ListBox eventListBox = default!;
@@ -27,7 +27,7 @@ namespace FPLedit.DebugDump.Forms
             dataDropDown.SelectedIndexChanged += DataDropDownOnSelectedIndexChanged;
         }
 
-        private void DataDropDownOnSelectedIndexChanged(object sender, EventArgs e)
+        private void DataDropDownOnSelectedIndexChanged(object? sender, EventArgs e)
         {
             if (currentEvent == null || dataDropDown.SelectedValue == null)
                 return;
@@ -39,7 +39,7 @@ namespace FPLedit.DebugDump.Forms
                 dataTextArea.Text = string.Join("\n\n\n", currentEvent.Data);
         }
 
-        private void EventListBoxOnSelectedIndexChanged(object sender, EventArgs e)
+        private void EventListBoxOnSelectedIndexChanged(object? sender, EventArgs e)
         {
             currentEvent = (DumpEvent) eventListBox.SelectedValue;
             if (currentEvent == null)

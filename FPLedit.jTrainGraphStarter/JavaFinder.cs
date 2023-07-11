@@ -1,16 +1,14 @@
 ﻿using Microsoft.Win32;
-using System;
+using System.Runtime.InteropServices;
 
 namespace FPLedit.jTrainGraphStarter
 {
     internal static class JavaFinder
     {
-        public static string JavaGuess()
+        public static string? JavaGuess()
         {
-            if (Environment.OSVersion.Platform != PlatformID.Win32NT)
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 return "java"; // Not supported
-            // Disable warnings "Registry.GetValue" is only supported on 'windows'".
-#pragma warning disable CA1416
 
             string[] keys = 
             {
@@ -22,12 +20,12 @@ namespace FPLedit.jTrainGraphStarter
             
             foreach (var key in keys)
             {
-                var x = (string)Registry.GetValue(key, "CurrentVersion", null);
+                var x = (string?)Registry.GetValue(key, "CurrentVersion", null);
                 if (string.IsNullOrEmpty(x))
                     continue;
 
                 var key2 = $@"{key}\{x}";
-                var home = (string)Registry.GetValue(key2, "JavaHome", null);
+                var home = (string?)Registry.GetValue(key2, "JavaHome", null);
 
                 if (string.IsNullOrEmpty(home))
                     continue;
@@ -35,7 +33,6 @@ namespace FPLedit.jTrainGraphStarter
             }
 
             return null;
-#pragma warning restore CA1416
         }
     }
 }

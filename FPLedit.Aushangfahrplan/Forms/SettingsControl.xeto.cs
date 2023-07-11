@@ -36,7 +36,7 @@ namespace FPLedit.Aushangfahrplan.Forms
             attrs = AfplAttrs.GetAttrs(tt) ?? AfplAttrs.CreateAttrs(tt);
             fontComboBox.Text = attrs.Font;
             hwfontComboBox.Text = attrs.HwFont;
-            cssTextBox.Text = attrs.Css ?? "";
+            cssTextBox.Text = attrs.Css;
             tracksCheckBox.Checked = attrs.ShowTracks;
 
             var tmpl = chooser.GetTemplate(tt);
