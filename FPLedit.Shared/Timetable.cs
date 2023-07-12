@@ -274,7 +274,7 @@ namespace FPLedit.Shared
             foreach (var train in trains)
             {
                 if (train is IWritableTrain wt && wt.Id == -1)
-                    wt.Id = ++nextTraId;
+                    wt.Id = AssignNextTrainId();
             }
 
             // Clean up invalid transitions
@@ -301,7 +301,8 @@ namespace FPLedit.Shared
              */
         }
 
-        public int NextTrainId() => ++nextTraId;
+        public int AssignNextTrainId() => ++nextTraId;
+        public int AssignNextRouteId() => ++nextRtId;
 
         #region Hilfsmethoden für Stationen
 
@@ -425,7 +426,7 @@ namespace FPLedit.Shared
                 return;
             
             if (tra is IWritableTrain wt)
-                wt.Id = ++nextTraId;
+                wt.Id = AssignNextTrainId();
             tra.ParentTimetable = this;
             trains.Add(tra);
             tElm.Children.Add(tra.XMLEntity);
@@ -559,8 +560,8 @@ namespace FPLedit.Shared
                 throw new TimetableTypeNotSupportedException(TimetableType.Linear, "routes");
             if (newStation.Routes.Length > 0)
                 throw new ArgumentException(nameof(newStation) + " has already some routes and is not plain.");
-            
-            var idx = ++nextRtId;
+
+            var idx = AssignNextRouteId();
 
             StationAddRoute(exisitingStartStation, idx);
             AddStation(newStation, idx); // this will call StationAddRoute.
@@ -609,6 +610,7 @@ namespace FPLedit.Shared
             if (station.Routes.Contains(route))
                 throw new ArgumentException(nameof(station) + " is already on route " + route);
 
+            // Try-add join route.
             StationAddRoute(station, route);
             station.Positions.SetPosition(route, newKm);
             RebuildRouteCache(route);
@@ -618,6 +620,7 @@ namespace FPLedit.Shared
             var junctions = Stations.Where(s => s.IsJunction && s.Routes.Intersect(maybeAffectedRoutes).Any()).Concat(new []{station}).Distinct().ToArray();
             var hasAmbiguousRoutes = CheckAmbiguousRoutesInternal(junctions);
 
+            // If we have ambiguous routes after this change, revert.
             if (hasAmbiguousRoutes)
             {
                 station.Positions.RemovePosition(route);
@@ -795,7 +798,7 @@ namespace FPLedit.Shared
             if ((parentNext is IWritableTrain wt) && link.TrainLinkIndex < wt.TrainLinks.Length)
             {
                 var nextLink = wt.TrainLinks[link.TrainLinkIndex];
-                if (nextLink == null || linkedTrain.LinkCountingIndex >= nextLink.TrainCount)
+                if (nextLink == null! || linkedTrain.LinkCountingIndex >= nextLink.TrainCount)
                     return null;
                 return nextLink.LinkedTrains[linkedTrain.LinkCountingIndex];
             }

@@ -30,7 +30,8 @@ namespace FPLedit.TimetableChecks
 
                 // Korrektur ohne Side-Effects möglich, alle doppelten Zug-Ids werden neu vergeben
                 foreach (var dup in duplicateTraIds)
-                    dup.Skip(1).All((t) => { t.Id = tt.NextTrainId(); return true; });
+                    foreach (var t in dup.Skip(1))
+                        t.Id = tt.AssignNextTrainId();
             }
 
             // Bug in FPLedit 2.1 muss nachträglich klar gemacht werden.
@@ -46,7 +47,7 @@ namespace FPLedit.TimetableChecks
                     var hasAmbiguousRoutes = tt.CheckAmbiguousRoutesInternal(junctions);
 
                     if (hasAmbiguousRoutes)
-                        upgradeMessages.Add(T._("Die Datei enthält zusammengfefallene Strecken, das heißt zwei Stationen sind auf mehr als einer Route ohne Zwischenstation verbunden. FPLedit kann sich danach komisch verhalten und Züge zufällig über die eine oder andere Strecke leiten. Eine Korrektur ist leider nicht möglich."));
+                        upgradeMessages.Add(T._("Die Datei enthält zusammengefallene Strecken, das heißt zwei Stationen sind auf mehr als einer Route ohne Zwischenstation verbunden. FPLedit kann sich danach komisch verhalten und Züge zufällig über die eine oder andere Strecke leiten. Eine Korrektur ist leider nicht möglich."));
                 }
                 pluginInterface.Cache.Set(KEY_AMBIGUOUS, "1");
             }
