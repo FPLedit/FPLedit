@@ -94,6 +94,7 @@ namespace FPLedit
             bootstrapper.PreBootstrapExtensions(); // Load extension files.
 
             mainForm = new MainForm(lfh, crashReporter!, bootstrapper);
+            bootstrapper.InitializeUi(mainForm);
 
             // Close all other windows when attempting to close main form.
             mainForm.Closing += (_, _) =>
@@ -188,9 +189,7 @@ namespace FPLedit
             // Initailize some loosely coupled UI components, so that extensions can use them
             EtoExtensions.Initialize(bootstrapper); // Initialize Eto extensions
             FontCollection.InitAsync(); // Load list of available fonts, async, as this should not be needed by any extension.
-#pragma warning disable CA2000
             TemplateDebugger.GetInstance().AttachDebugger(new GuiTemplateDebugger()); // Attach javascript debugger form
-#pragma warning restore CA2000
 
             // Reset default file format versions on first run.
             var lastRunVersion = bootstrapper.FullSettings.Get<string>("updater.lastrun-version");
@@ -229,9 +228,6 @@ namespace FPLedit
             bootstrapper.Logger.Debug("Current version: " + VersionInformation.Current.DisplayVersion);
             bootstrapper.Logger.Debug("Runtime version: " + VersionInformation.Current.RuntimeVersion);
             bootstrapper.Logger.Debug("OS version: " + VersionInformation.Current.OsVersion);
-            
-            // Init feature flags
-            FeatureFlags.Initialize(((IReducedPluginInterface)bootstrapper).Settings);
             
             var restartable = new RestartHandler(bootstrapper);
             

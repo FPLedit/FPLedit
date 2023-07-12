@@ -6,7 +6,6 @@ using System.Linq;
 using System.Reflection;
 using NGettext;
 using NGettext.Loaders;
-using NGettext.Plural;
 
 namespace FPLedit.Shared
 {
@@ -20,7 +19,7 @@ namespace FPLedit.Shared
         
         private static string currentLocale = DEFAULT_LOCALE;
         private static string localeDir = ".";
-        private static Dictionary<string, ICatalog> catalogs = new Dictionary<string, ICatalog>();
+        private static Dictionary<string, ICatalog> catalogs = new();
 
         public static void SetLocale(string localeRoot, string locale)
         {

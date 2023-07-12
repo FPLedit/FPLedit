@@ -56,7 +56,7 @@ namespace FPLedit.Extensibility
                 {
                     var assembly = Assembly.LoadFrom(file.FullName);
 
-                    foreach (var type in assembly.GetTypes())
+                    foreach (var type in assembly.GetExportedTypes())
                     {
                         if (!type.IsClass || !type.IsPublic || type.IsAbstract || type == typeof(IPlugin) || type.FullName == null)
                             continue;
@@ -79,7 +79,10 @@ namespace FPLedit.Extensibility
                         {
                             var plugin = (IPlugin?)Activator.CreateInstance(type);
                             if (plugin == null)
+                            {
+                                warnings.Add(T._("Erweiterung {0} konnte nicht geladen werden, Fehler beim Aufruf des Plugin-Konstruktors!", file.Name));
                                 continue; // Error calling the constructor. //TODO: better error?
+                            }
 
                             var pluginInfo = new PluginInfo(plugin, securityContext);
                             plugins.Add(pluginInfo);
@@ -105,11 +108,8 @@ namespace FPLedit.Extensibility
             return warnings;
         }
 
-        private static bool FilterFileNames(FileInfo fn) 
-            => !fn.Name.StartsWith("System.") &&
-               !fn.Name.StartsWith("Microsoft.") &&
-               !fn.Name.StartsWith("Eto.") &&
-               fn.Name != "netstandard.dll";
+        private static bool FilterFileNames(FileInfo fn)
+            => fn.Name.StartsWith("FPLedit.") && fn.Name != "FPLedit.dll" && !fn.Name.StartsWith("FPLedit.Shared.");
 
         public void Activate(PluginInfo pluginInfo)
         {

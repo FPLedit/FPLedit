@@ -13,11 +13,82 @@ namespace FPLedit
 {
     internal sealed class FileHandler : IDisposable
     {
-        private readonly SaveFileDialog saveFileDialog, exportFileDialog;
-        private readonly OpenFileDialog openFileDialog, importFileDialog;
+        #region Lazy-loaded file dialogs
+        private string? lastPath;
+        private SaveFileDialog? saveFileDialog;
+        private SaveFileDialog SaveFileDialog
+        {
+            get
+            {
+                if (saveFileDialog == null)
+                {
+                    saveFileDialog = new SaveFileDialog { Title = T._("Fahrplandatei speichern") };
+                    saveFileDialog.AddLegacyFilter(save.Filter);
+                    SetLastPath(lastPath);
+                }
+                return saveFileDialog;
+            }
+        }
+
+        private SaveFileDialog? exportFileDialog;
+        private SaveFileDialog ExportFileDialog
+        {
+            get
+            {
+                if (exportFileDialog == null)
+                {
+                    if (exporters == null)
+                        throw new Exception("Exporters not initialized!");
+                    exportFileDialog = new SaveFileDialog { Title = T._("Fahrplandatei exportieren") };
+                    exportFileDialog.AddLegacyFilter(exporters.Select(ex => ex.Filter).ToArray());
+                    
+                    // Letzten Exporter auswählen
+                    int exporterIdx = pluginInterface.Settings.Get("exporter.last", -1);
+                    if (exporterIdx > -1 && exporters.Length > exporterIdx)
+                        ExportFileDialog.CurrentFilterIndex = exporterIdx + 1;
+                }
+                return exportFileDialog;
+            }
+        }
+
+        private OpenFileDialog? openFileDialog;
+        private OpenFileDialog OpenFileDialog
+        {
+            get
+            {
+                if (openFileDialog == null)
+                {
+                    openFileDialog = new OpenFileDialog { Title = T._("Fahrplandatei öffnen") };
+                    openFileDialog.AddLegacyFilter(open.Filter);
+                    SetLastPath(lastPath);
+                }
+                return openFileDialog;
+            }
+        }
+
+        private OpenFileDialog? importFileDialog;
+        private OpenFileDialog ImportFileDialog
+        {
+            get
+            {
+                if (importFileDialog == null)
+                {
+                    if (importers == null)
+                        throw new Exception("Importers not initialized!");
+                    importFileDialog = new OpenFileDialog { Title = T._("Datei importieren") };
+                    importFileDialog.AddLegacyFilter(importers.Select(ex => ex.Filter).ToArray());
+                }
+
+                return importFileDialog;
+            }
+        }
+
+        #endregion
 
         private readonly IImport open;
         private readonly IExport save;
+        private IImport[]? importers;
+        private IExport[]? exporters;
 
         private readonly IPluginInterface pluginInterface;
         private readonly ILastFileHandler lfh;
@@ -25,7 +96,7 @@ namespace FPLedit
 
         private Timetable? timetable;
 
-        private readonly BinaryCacheFile cache;
+        private BinaryCacheFile? cache;
 
         private bool asyncBlockingOperation;
 
@@ -55,7 +126,8 @@ namespace FPLedit
 
         public FileState FileState { get; }
 
-        public ICacheFile Cache => cache;
+        public ICacheFile Cache => Cache2; //TODO: Can we deprecate and remove this?
+        private BinaryCacheFile Cache2 => cache ??= new BinaryCacheFile();
 
         public event EventHandler? FileOpened;
         public event EventHandler<FileStateChangedEventArgs>? FileStateChanged;
@@ -73,17 +145,7 @@ namespace FPLedit
             open = new XMLImport();
             save = new XMLExport();
 
-            saveFileDialog = new SaveFileDialog { Title = T._("Fahrplandatei speichern") };
-            openFileDialog = new OpenFileDialog { Title = T._("Fahrplandatei öffnen") };
-            exportFileDialog = new SaveFileDialog { Title = T._("Fahrplandatei exportieren") };
-            importFileDialog = new OpenFileDialog { Title = T._("Datei importieren") };
-
-            saveFileDialog.AddLegacyFilter(save.Filter);
-            openFileDialog.AddLegacyFilter(open.Filter);
-
-            SetLastPath(pluginInterface.Settings.Get("files.lastpath", ""));
-
-            cache = new BinaryCacheFile();
+            lastPath = pluginInterface.Settings.Get("files.lastpath", "");
         }
 
         #region FileState
@@ -107,10 +169,11 @@ namespace FPLedit
 
         internal void Import()
         {
+            if (importers == null)
+                throw new Exception("Importers not initialized!");
+
             if (!NotifyIfAsyncOperationInProgress())
                 return;
-
-            var importers = pluginInterface.GetRegistered<IImport>();
 
             if (importers.Length == 0)
             {
@@ -123,14 +186,14 @@ namespace FPLedit
 
             var (rev, frev) = (FileState.RevisionCounter, FileState.FileNameRevisionCounter);
 
-            if (importFileDialog.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
+            if (ImportFileDialog.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
             {
-                IImport import = importers[importFileDialog.CurrentFilterIndex];
-                pluginInterface.Logger.Info(T._("Importiere Datei {0}", importFileDialog.FileName));
+                IImport import = importers[ImportFileDialog.CurrentFilterIndex];
+                pluginInterface.Logger.Info(T._("Importiere Datei {0}", ImportFileDialog.FileName));
 
                 InternalCloseFile();
 
-                var tsk = import.GetAsyncSafeImport(importFileDialog.FileName, pluginInterface);
+                var tsk = import.GetAsyncSafeImport(ImportFileDialog.FileName, pluginInterface);
                 tsk.ContinueWith((t, _) =>
                 {
                     Application.Instance.InvokeAsync(() =>
@@ -148,7 +211,7 @@ namespace FPLedit
                                 return;
 
                         undo.ClearHistory();
-                        OpenWithVersionCheck(t.Result, importFileDialog.FileName);
+                        OpenWithVersionCheck(t.Result, ImportFileDialog.FileName);
                     });
                 }, null, TaskScheduler.Default);
 
@@ -160,14 +223,16 @@ namespace FPLedit
 
         internal void Export()
         {
+            if (exporters == null)
+                throw new Exception("Exporters not initialized!");
+
             if (!NotifyIfAsyncOperationInProgress())
                 return;
-            if (exportFileDialog.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
+            if (ExportFileDialog.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
             {
-                var exporters = pluginInterface.GetRegistered<IExport>();
-                var export = exporters[exportFileDialog.CurrentFilterIndex];
-                var filename = exportFileDialog.FileName;
-                pluginInterface.Settings.Set("exporter.last", exportFileDialog.CurrentFilterIndex);
+                var export = exporters[ExportFileDialog.CurrentFilterIndex];
+                var filename = ExportFileDialog.FileName;
+                pluginInterface.Settings.Set("exporter.last", ExportFileDialog.CurrentFilterIndex);
 
                 pluginInterface.Logger.Info(T._("Exportiere in Datei {0}", filename));
                 var tsk = export.GetAsyncSafeExport(Timetable!.Clone(), filename, pluginInterface);
@@ -184,13 +249,10 @@ namespace FPLedit
 
         internal void InitializeExportImport(IExport[] exporters, IImport[] importers)
         {
-            exportFileDialog.AddLegacyFilter(exporters.Select(ex => ex.Filter).ToArray());
-            importFileDialog.AddLegacyFilter(importers.Select(im => im.Filter).ToArray());
-
-            // Letzten Exporter auswählen
-            int exporterIdx = pluginInterface.Settings.Get("exporter.last", -1);
-            if (exporterIdx > -1 && exporters.Length > exporterIdx)
-                exportFileDialog.CurrentFilterIndex = exporterIdx + 1;
+            if (this.exporters != null || this.importers != null)
+                throw new Exception("Exporters and importers already initialized!");
+            this.exporters = exporters;
+            this.importers = importers;
         }
 
         #endregion
@@ -203,11 +265,12 @@ namespace FPLedit
                 return;
             if (!NotifyIfUnsaved())
                 return;
-            if (openFileDialog.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok && openFileDialog.FileName != null)
+            if (OpenFileDialog.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok && OpenFileDialog.FileName != null)
             {
-                InternalOpen(openFileDialog.FileName!, true);
-                UpdateLastPath(openFileDialog);
-                lfh.AddLastFile(openFileDialog.FileName!);
+                var fn = OpenFileDialog.FileName!;
+                InternalOpen(fn, true);
+                UpdateLastPath(fn);
+                lfh.AddLastFile(fn);
             }
         }
 
@@ -221,7 +284,7 @@ namespace FPLedit
             pluginInterface.Logger.Info(T._("Öffne Datei {0}", filename));
 
             // Load sidecar cache file.
-            cache.Clear();
+            cache?.Clear();
             var cacheFile = filename + "-cache";
             if (File.Exists(cacheFile))
             {
@@ -230,7 +293,7 @@ namespace FPLedit
                 var hash = string.Join("", sha256.ComputeHash(bytes).Select(b => b.ToString("X2")));
 
                 using var stream = File.Open(cacheFile, FileMode.Open);
-                cache.Read(stream, hash);
+                Cache2.Read(stream, hash);
             }
 
             var (rev, frev) = (FileState.RevisionCounter, FileState.FileNameRevisionCounter);
@@ -289,11 +352,11 @@ namespace FPLedit
 
             if (saveAs)
             {
-                if (saveFileDialog.ShowDialog(pluginInterface.RootForm) != DialogResult.Ok)
+                if (SaveFileDialog.ShowDialog(pluginInterface.RootForm) != DialogResult.Ok)
                     return;
-                filename = saveFileDialog.FileName!;
-                UpdateLastPath(saveFileDialog);
-                lfh.AddLastFile(saveFileDialog.FileName);
+                filename = SaveFileDialog.FileName!;
+                UpdateLastPath(filename);
+                lfh.AddLastFile(filename);
             }
 
             InternalSave(filename!, doAsync);
@@ -336,7 +399,7 @@ namespace FPLedit
                     // Create or delete sidecar file.
                     var cacheFile = filename + "-cache";
                     var bytes = File.ReadAllBytes(filename);
-                    if (cache.Any() && cache.ShouldWriteCacheFile(clone, pluginInterface.Settings))
+                    if (cache != null && cache.Any() && cache.ShouldWriteCacheFile(clone, pluginInterface.Settings))
                     {
                         using var sha256 = SHA256.Create();
                         var hash = string.Join("", sha256.ComputeHash(bytes).Select(b => b.ToString("X2")));
@@ -367,7 +430,7 @@ namespace FPLedit
             FileState.Saved = false;
             FileState.FileName = null;
             undo.ClearHistory();
-            cache.Clear();
+            cache?.Clear();
 
             pluginInterface.Logger.Info(T._("Neue Datei erstellt"));
             FileOpened?.Invoke(this, EventArgs.Empty);
@@ -380,7 +443,7 @@ namespace FPLedit
             FileState.Saved = false;
             FileState.FileName = null;
 
-            cache.Clear();
+            cache?.Clear();
             undo.ClearHistory();
         }
 
@@ -401,17 +464,20 @@ namespace FPLedit
 
         #region Last Directory Helper
 
-        private void UpdateLastPath(FileDialog dialog) => SetLastPath(Path.GetDirectoryName(dialog.FileName));
+        private void UpdateLastPath(string fn) => SetLastPath(Path.GetDirectoryName(fn));
 
-        private void SetLastPath(string? lastPath)
+        private void SetLastPath(string? newLastPath)
         {
-            if (!string.IsNullOrEmpty(lastPath) && Uri.TryCreate(lastPath, UriKind.Absolute, out Uri? uri))
+            if (!string.IsNullOrEmpty(newLastPath) && (openFileDialog != null || saveFileDialog != null) && Uri.TryCreate(newLastPath, UriKind.Absolute, out Uri? uri))
             {
-                openFileDialog.Directory = uri;
-                saveFileDialog.Directory = uri;
+                if (openFileDialog != null)
+                    openFileDialog.Directory = uri;
+                if (saveFileDialog != null)
+                    saveFileDialog.Directory = uri;
             }
 
-            pluginInterface.Settings.Set("files.lastpath", lastPath ?? "");
+            pluginInterface.Settings.Set("files.lastpath", newLastPath ?? "");
+            this.lastPath = newLastPath;
         }
 
         #endregion
@@ -562,13 +628,13 @@ namespace FPLedit
 
         public void Dispose()
         {
-            if (!openFileDialog.IsDisposed)
+            if (openFileDialog != null && !openFileDialog.IsDisposed)
                 openFileDialog.Dispose();
-            if (!saveFileDialog.IsDisposed)
+            if (saveFileDialog != null && !saveFileDialog.IsDisposed)
                 saveFileDialog.Dispose();
-            if (!exportFileDialog.IsDisposed)
+            if (exportFileDialog != null && !exportFileDialog.IsDisposed)
                 exportFileDialog.Dispose();
-            if (!importFileDialog.IsDisposed)
+            if (importFileDialog != null && !importFileDialog.IsDisposed)
                 importFileDialog.Dispose();
         }
     }

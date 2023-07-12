@@ -50,10 +50,7 @@ namespace FPLedit
             timetableBackup = new Dictionary<object, Timetable>();
             
             var configPath = Path.Combine(PathManager.Instance.SettingsDirectory, "fpledit.conf");
-
-#pragma warning disable CA2000
             settings = new Settings(GetConfigStream(configPath));
-#pragma warning restore CA2000
 
             var lang = settings.Get("lang", "de-DE");
             T.SetLocale(Path.Combine(PathManager.Instance.AppDirectory, "Languages"), lang);

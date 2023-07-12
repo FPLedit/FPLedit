@@ -63,10 +63,8 @@ namespace FPLedit
             CrashReporter = crashReporter;
 
             lfh.LastFilesUpdates += UpdateLastFilesMenu;
-            UpdateLastFilesMenu(null, EventArgs.Empty);
 
             Bootstrapper.Logger.AttachLogger(logTextBox);
-            Bootstrapper.InitializeUi(this);
             Bootstrapper.FileStateChanged += FileStateChanged;
             Bootstrapper.FileHandler.AsyncOperationStateChanged += FileHandlerOnAsyncOperationStateChanged;
 
@@ -103,29 +101,27 @@ namespace FPLedit
             // Now we can load extensions and templates
             Bootstrapper.ExtensionManager.InjectPlugin(this, 0);
             Bootstrapper.BootstrapExtensions();
-            
-            var importers = Bootstrapper.GetRegistered<IImport>();
 
             // Maybe remove import menu.
-            if (importers.Length == 0)
+            if (Bootstrapper.GetRegistered<IImport>().Length == 0)
                 Menu.ApplicationItems.Remove(importMenu);
 
             // Remove last files menu, if last file handling is disabled.
             if (!lfh.Enabled)
                 lastMenu.Enabled = false;
 
-#pragma warning disable CA2000
-#if DEBUG
-            Menu.HelpMenu.Items.Add(new SeparatorMenuItem());
-            Menu.HelpMenu.CreateItem(T._("Exception auslösen"), clickHandler: (_, _) => throw new Exception(T._("Ausgelöste Exception")));
-#endif
-#pragma warning restore CA2000
-            
             base.OnLoad(e);
         }
 
         protected override void OnShown(EventArgs e)
         {
+#if DEBUG
+            Menu.HelpMenu.Items.Add(new SeparatorMenuItem());
+            Menu.HelpMenu.CreateItem(T._("Exception auslösen"), clickHandler: (_, _) => throw new Exception(T._("Ausgelöste Exception")));
+#endif
+
+            UpdateLastFilesMenu(null, EventArgs.Empty);
+
             // Hatten wir einen Crash beim letzten Mal?
             if (CrashReporter.HasCurrentReport)
             {
@@ -178,9 +174,7 @@ namespace FPLedit
             lastMenu.Items.Clear();
             foreach (var lf in lfh.LastFiles)
             {
-#pragma warning disable CA2000
                 var itm = lastMenu.CreateItem(lf);
-#pragma warning restore CA2000
                 itm.Click += (_, _) =>
                 {
                     if (Bootstrapper.FileHandler.NotifyIfUnsaved())
