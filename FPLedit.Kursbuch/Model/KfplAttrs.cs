@@ -24,7 +24,7 @@ public sealed class KfplAttrs : Entity, IPatternSource
 
     [XAttrName("kbsn")]
     public RouteValueCollection<string> KBSn
-        => new RouteValueCollection<string>(this, ParentTimetable, "kbsn", "", s => s, s => s);
+        => new(this, ParentTimetable, "kbsn", "", s => s, s => s);
 
     [XAttrName("css")]
     public string Css

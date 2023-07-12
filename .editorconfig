@@ -57,6 +57,8 @@ dotnet_style_qualification_for_method=false:suggestion
 dotnet_style_qualification_for_property=false:suggestion
 dotnet_style_require_accessibility_modifiers=for_non_interface_members:suggestion
 
+dotnet_diagnostic.CS0693.severity=none
+
 # ReSharper properties
 resharper_apply_auto_detected_rules=false
 resharper_autodetect_indent_settings=true

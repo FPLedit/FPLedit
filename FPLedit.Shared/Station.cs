@@ -73,24 +73,24 @@ namespace FPLedit.Shared
 
         /// <inheritdoc />
         public PositionCollection Positions
-            => new PositionCollection(this, ParentTimetable);
+            => new(this, ParentTimetable);
 
         /// <summary>
         /// Track count on the route (not the station), to the right of the station. Depends on route index.
         /// </summary>
         [XAttrName("tr")]
         public RouteValueCollection<int> LineTracksRight
-            => new RouteValueCollection<int>(this, ParentTimetable, "tr", "1", s => int.Parse(s), i => i.ToString());
+            => new(this, ParentTimetable, "tr", "1", int.Parse, i => i.ToString());
 
         /// <inheritdoc />
         [XAttrName("fpl-wl", IsFpleditElement = true)]
         public RouteValueCollection<int> Wellenlinien
-            => new RouteValueCollection<int>(this, ParentTimetable, "fpl-wl", "0", s => int.Parse(s), i => i.ToString());
+            => new(this, ParentTimetable, "fpl-wl", "0", int.Parse, i => i.ToString());
 
         /// <inheritdoc />
         [XAttrName("fpl-vmax", IsFpleditElement = true)]
         public RouteValueCollection<string> Vmax
-            => new RouteValueCollection<string>(this, ParentTimetable, "fpl-vmax", "", s => s, s => s);
+            => new(this, ParentTimetable, "fpl-vmax", "", s => s, s => s);
 
         /// <summary>
         /// Deafult track against the route direction. Depends on route index.
@@ -98,7 +98,7 @@ namespace FPLedit.Shared
         /// <remarks>Tracks must be registered beforehand at <see cref="Tracks"/>.</remarks>
         [XAttrName("dTi")]
         public RouteValueCollection<string> DefaultTrackRight
-            => new RouteValueCollection<string>(this, ParentTimetable, "dTi", "", s => s, s => s);
+            => new(this, ParentTimetable, "dTi", "", s => s, s => s);
 
         /// <summary>
         /// Deafult track in the route direction. Depends on route index.
@@ -106,7 +106,7 @@ namespace FPLedit.Shared
         /// <remarks>Tracks must be registered beforehand at <see cref="Tracks"/>.</remarks>
         [XAttrName("dTa")]
         public RouteValueCollection<string> DefaultTrackLeft
-            => new RouteValueCollection<string>(this, ParentTimetable, "dTa", "", s => s, s => s);
+            => new(this, ParentTimetable, "dTa", "", s => s, s => s);
 
         /// <inheritdoc />
         [XAttrName("fpl-id", IsFpleditElement = true)]
@@ -172,16 +172,28 @@ namespace FPLedit.Shared
             Routes = list.ToArray();
             return true;
         }
-        
-        internal bool _InternalRemoveRoute(int route) //TODO: Remove RVC values.
+
+        internal bool _InternalRemoveRoute(int route)
         {
             if (!Routes.Contains(route)) 
                 return false;
+
             var list = Routes.ToList();
             list.Remove(route);
             Routes = list.ToArray();
             Positions.RemovePosition(route);
+
+            // Remove RVC values.
+            foreach (var rvc in GetDefinedRvcs())
+                rvc.RemoveValue(route);
+
             return true;
+        }
+
+        private IRouteValueCollection[] GetDefinedRvcs()
+        {
+            // We do not deal with external RVCs here, see remarks on RouteValueCollction{T}.
+            return new IRouteValueCollection[] { Wellenlinien, Vmax, DefaultTrackLeft, DefaultTrackRight, LineTracksRight };
         }
     }
 }

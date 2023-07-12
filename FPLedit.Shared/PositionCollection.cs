@@ -20,7 +20,7 @@ namespace FPLedit.Shared
         /// <summary>
         /// Creates a new PosColl.
         /// </summary>
-        /// <param name="s">The station this PC should operate on..</param>
+        /// <param name="s">The station this PC should operate on.</param>
         /// <param name="tt">The parent timetable of the station <paramref name="s"/>.</param>
         public PositionCollection(IStation s, Timetable tt)
         {
