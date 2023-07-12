@@ -5,83 +5,82 @@ using System.Collections.Generic;
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable ClassNeverInstantiated.Global
 
-namespace FPLedit.Kursbuch.Templates
+namespace FPLedit.Kursbuch.Templates;
+
+public sealed class TemplateHelper
 {
-    public sealed class TemplateHelper
+    private readonly Timetable tt;
+
+    private readonly FilterRule[] trules, srules;
+
+    public TemplateHelper(Timetable tt)
     {
-        private readonly Timetable tt;
+        this.tt = tt;
 
-        private readonly FilterRule[] trules, srules;
+        var filterable = Plugin.FilterRuleContainer;
 
-        public TemplateHelper(Timetable tt)
-        {
-            this.tt = tt;
-
-            var filterable = Plugin.FilterRuleContainer;
-
-            trules = filterable.LoadTrainRules(tt).ToArray();
-            srules = filterable.LoadStationRules(tt).ToArray();
-        }
+        trules = filterable.LoadTrainRules(tt).ToArray();
+        srules = filterable.LoadStationRules(tt).ToArray();
+    }
         
-        public static string SafeHtml(string s) => Shared.Templating.TemplateOutput.SafeHtml(s);
+    public static string SafeHtml(string s) => Shared.Templating.TemplateOutput.SafeHtml(s);
 
-        public Station[] GetStations(Route route, TrainDirection dir)
+    public Station[] GetStations(Route route, TrainDirection dir)
+    {
+        var stas = route.Stations.Where(s => srules.All(r => !r.Matches(s)))
+            .ToArray();
+        if (dir == TrainDirection.ta)
+            return stas.Reverse().ToArray();
+        return stas;
+    }
+
+    public ITrain[] GetTrains(Route route, TrainDirection direction)
+    {
+        var routeStations = (IList<Station>)GetStations(route, direction).ToArray();
+        var firstTimes = new Dictionary<ITrain, TimeEntry>();
+
+        foreach (var t in tt.Trains)
         {
-            var stas = route.Stations.Where(s => srules.All(r => !r.Matches(s)))
-                .ToArray();
-            if (dir == TrainDirection.ta)
-                return stas.Reverse().ToArray();
-            return stas;
-        }
-
-        public ITrain[] GetTrains(Route route, TrainDirection direction)
-        {
-            var routeStations = (IList<Station>)GetStations(route, direction).ToArray();
-            var firstTimes = new Dictionary<ITrain, TimeEntry>();
-
-            foreach (var t in tt.Trains)
-            {
-                if (trules.Any(r => r.Matches(t)))
-                    continue;
+            if (trules.Any(r => r.Matches(t)))
+                continue;
                 
-                if (tt.Type == TimetableType.Linear) // Züge in linearen Fahrplänen sind recht einfach
-                {
-                    if (t.Direction != direction)
-                        continue;
+            if (tt.Type == TimetableType.Linear) // Züge in linearen Fahrplänen sind recht einfach
+            {
+                if (t.Direction != direction)
+                    continue;
 
-                    var ardps = t.GetArrDepsUnsorted();
-                    var firstStaion = t.GetPath().FirstOrDefault(a => ardps[a].HasMinOneTimeSet);
-                    if (firstStaion == null)
-                        continue; // Something weird happened...
-                    firstTimes.Add(t, ardps[firstStaion].FirstSetTime);
-                }
-                else
-                {
-                    var path = t.GetPath();
-                    var sortedStopsOnRoute = routeStations
-                        .Intersect(path)
-                        .OrderBy(s => t.GetArrDep(s).FirstSetTime)
-                        .Where(s => t.GetArrDep(s).HasMinOneTimeSet)
-                        .ToArray();
-
-                    if (!sortedStopsOnRoute.Any()) // The train does not stop on this route, ignore.
-                        continue;
-
-                    if (routeStations.IndexOf(sortedStopsOnRoute.First()) < routeStations.IndexOf(sortedStopsOnRoute.Last()))
-                    {
-                        var time = t.GetArrDep(sortedStopsOnRoute.First()).FirstSetTime;
-                        firstTimes.Add(t, time);
-                    } // else: Not needed as routeStations are already sorted according to direction.
-                }
+                var ardps = t.GetArrDepsUnsorted();
+                var firstStaion = t.GetPath().FirstOrDefault(a => ardps[a].HasMinOneTimeSet);
+                if (firstStaion == null)
+                    continue; // Something weird happened...
+                firstTimes.Add(t, ardps[firstStaion].FirstSetTime);
             }
+            else
+            {
+                var path = t.GetPath();
+                var sortedStopsOnRoute = routeStations
+                    .Intersect(path)
+                    .OrderBy(s => t.GetArrDep(s).FirstSetTime)
+                    .Where(s => t.GetArrDep(s).HasMinOneTimeSet)
+                    .ToArray();
 
-            return firstTimes.Keys.OrderBy(t => firstTimes[t]).ToArray();
+                if (!sortedStopsOnRoute.Any()) // The train does not stop on this route, ignore.
+                    continue;
+
+                if (routeStations.IndexOf(sortedStopsOnRoute.First()) < routeStations.IndexOf(sortedStopsOnRoute.Last()))
+                {
+                    var time = t.GetArrDep(sortedStopsOnRoute.First()).FirstSetTime;
+                    firstTimes.Add(t, time);
+                } // else: Not needed as routeStations are already sorted according to direction.
+            }
         }
 
-        public string GetRouteName(Route r, TrainDirection dir)
-        {
-            var stas = GetStations(r, dir);
-            return SafeHtml(stas.FirstOrDefault()?.SName + " - " + stas.LastOrDefault()?.SName);
-        }
+        return firstTimes.Keys.OrderBy(t => firstTimes[t]).ToArray();
+    }
+
+    public string GetRouteName(Route r, TrainDirection dir)
+    {
+        var stas = GetStations(r, dir);
+        return SafeHtml(stas.FirstOrDefault()?.SName + " - " + stas.LastOrDefault()?.SName);
     }
 }

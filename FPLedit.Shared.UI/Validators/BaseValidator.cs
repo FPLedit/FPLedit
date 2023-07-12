@@ -1,47 +1,46 @@
 ﻿using Eto.Drawing;
 using Eto.Forms;
 
-namespace FPLedit.Shared.UI.Validators
+namespace FPLedit.Shared.UI.Validators;
+
+public abstract class BaseValidator
 {
-    public abstract class BaseValidator
+    private readonly Color defaultColor;
+        
+    public TextBox Control { get; }
+
+    public Color ErrorColor { get; }
+
+    public bool EnableErrorColoring { get; }
+
+    public string? ErrorMessage { get; }
+
+    public bool Enabled { get; set;  } = true;
+        
+    public bool Valid => !Enabled || IsValid();
+
+    protected BaseValidator(TextBox control, bool validateOnType, bool enableErrorColoring = true, string? errorMessage = null)
     {
-        private readonly Color defaultColor;
-        
-        public TextBox Control { get; }
+        Control = control;
+        defaultColor = control.BackgroundColor;
+        EnableErrorColoring = enableErrorColoring;
+        ErrorColor = new Color(Colors.Red, 0.4f);
+        ErrorMessage = errorMessage;
 
-        public Color ErrorColor { get; }
-
-        public bool EnableErrorColoring { get; }
-
-        public string? ErrorMessage { get; }
-
-        public bool Enabled { get; set;  } = true;
-        
-        public bool Valid => !Enabled || IsValid();
-
-        protected BaseValidator(TextBox control, bool validateOnType, bool enableErrorColoring = true, string? errorMessage = null)
-        {
-            Control = control;
-            defaultColor = control.BackgroundColor;
-            EnableErrorColoring = enableErrorColoring;
-            ErrorColor = new Color(Colors.Red, 0.4f);
-            ErrorMessage = errorMessage;
-
-            if (validateOnType)
-                Control.TextChanged += (s, e) => Validate();
-            else
-                Control.LostFocus += (s, e) => Validate();
-        }
-
-        private void Validate()
-        {
-            var valid = IsValid();
-
-            if (EnableErrorColoring)
-                Control.BackgroundColor = valid ? defaultColor : ErrorColor;
-            Control.ToolTip = valid ? null : ErrorMessage;
-        }
-
-        protected abstract bool IsValid();
+        if (validateOnType)
+            Control.TextChanged += (s, e) => Validate();
+        else
+            Control.LostFocus += (s, e) => Validate();
     }
+
+    private void Validate()
+    {
+        var valid = IsValid();
+
+        if (EnableErrorColoring)
+            Control.BackgroundColor = valid ? defaultColor : ErrorColor;
+        Control.ToolTip = valid ? null : ErrorMessage;
+    }
+
+    protected abstract bool IsValid();
 }

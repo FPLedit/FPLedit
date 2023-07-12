@@ -3,44 +3,43 @@ using Eto.Forms;
 using FPLedit.Shared.Rendering;
 using System;
 
-namespace FPLedit.Shared.UI
+namespace FPLedit.Shared.UI;
+
+public sealed class FontComboBox
 {
-    public sealed class FontComboBox
+    private readonly ComboBox box;
+    private readonly Label label;
+
+    public FontComboBox(ComboBox box, Label label)
     {
-        private readonly ComboBox box;
-        private readonly Label label;
+        this.box = box;
+        this.label = label;
 
-        public FontComboBox(ComboBox box, Label label)
+        box.DataStore = new [] { T._("<Lade>") };
+        box.SelectedIndex = 0;
+
+        // Asynchrones Laden der Font-Liste, um Performance-Problemen vorzubeugen
+        Application.Instance.AsyncInvoke(() =>
         {
-            this.box = box;
-            this.label = label;
+            box.ItemTextBinding = Binding.Delegate<string, string>(s => s);
+            box.DataStore = FontCollection.Families;
+        });
 
-            box.DataStore = new [] { T._("<Lade>") };
-            box.SelectedIndex = 0;
+        box.TextChanged += TextChanged;
+    }
 
-            // Asynchrones Laden der Font-Liste, um Performance-Problemen vorzubeugen
-            Application.Instance.AsyncInvoke(() =>
-            {
-                box.ItemTextBinding = Binding.Delegate<string, string>(s => s);
-                box.DataStore = FontCollection.Families;
-            });
+    private void TextChanged(object? sender, EventArgs e)
+    {
+        if (box.Text == "" || label == null)
+            return;
 
-            box.TextChanged += TextChanged;
+        try
+        {
+            label.Font = new Font(box.Text, 10);
         }
-
-        private void TextChanged(object? sender, EventArgs e)
+        catch
         {
-            if (box.Text == "" || label == null)
-                return;
-
-            try
-            {
-                label.Font = new Font(box.Text, 10);
-            }
-            catch
-            {
-                label.Visible = false;
-            }
+            label.Visible = false;
         }
     }
 }

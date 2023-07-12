@@ -1,9 +1,8 @@
-﻿namespace FPLedit.Bildfahrplan.Model
+﻿namespace FPLedit.Bildfahrplan.Model;
+
+internal enum StationLineStyle
 {
-    internal enum StationLineStyle
-    {
-        None = 0,
-        Normal = 1,
-        Cubic = 2
-    }
+    None = 0,
+    Normal = 1,
+    Cubic = 2
 }

@@ -1,14 +1,13 @@
 ﻿using Eto.Forms;
 
-namespace FPLedit.Shared.UI.Validators
-{
-    public sealed class NotEmptyValidator : BaseValidator
-    {
-        public NotEmptyValidator(TextBox control, bool enableErrorColoring = true, string? errorMessage = null)
-            : base(control, true, enableErrorColoring, errorMessage)
-        {
-        }
+namespace FPLedit.Shared.UI.Validators;
 
-        protected override bool IsValid() => Control.Text != "";
+public class NotEmptyValidator : BaseValidator
+{
+    public NotEmptyValidator(TextBox control, bool enableErrorColoring = true, string? errorMessage = null)
+        : base(control, true, enableErrorColoring, errorMessage)
+    {
     }
+
+    protected override bool IsValid() => Control.Text != "";
 }

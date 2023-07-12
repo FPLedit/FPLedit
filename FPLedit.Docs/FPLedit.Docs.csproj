@@ -12,10 +12,6 @@
   <PropertyGroup>
     <AssemblyTitle>FPLedit - API-Dokumentation</AssemblyTitle>
   </PropertyGroup>
-  <ItemGroup>
-    <Folder Include="apidoc" />
-    <Folder Include="images" />
-  </ItemGroup>
   <Target Name="Cleanup" AfterTargets="DocGenerateMetadata">
     <PropertyGroup>
       <_CleanupDocFxOutputDirectory>$(IntermediateOutputPath)/api_gen</_CleanupDocFxOutputDirectory>
