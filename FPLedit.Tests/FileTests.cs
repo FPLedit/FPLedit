@@ -25,8 +25,7 @@ namespace FPLedit.Tests
             Assert.IsTrue(pi.HadWarning("Verknüpfungen zu Folgezügen aufgehoben werden") > 0);
                 
             Assert.AreEqual(1, tt!.Transitions.Count);
-            //TODO: InternalsVisibleTo not working?
-            //Assert.AreEqual(null, tt.GetTransitionUnLinked("10")); // Transitions got removed.
+            Assert.AreEqual(null, tt.GetTransitionUnLinked("10")); // Transitions got removed.
             Assert.AreEqual("69724", tt.GetTrainById(12)!.TName); // One id got changed.
             Assert.AreEqual(5, tt.Trains.Count); // We still have 5 trains.
             Assert.AreEqual(5, tt.Trains.Select(t => t.Id).Distinct().Count()); // We have 5 different IDs now.

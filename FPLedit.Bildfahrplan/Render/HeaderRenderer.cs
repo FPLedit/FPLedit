@@ -134,8 +134,11 @@ internal sealed class HeaderRenderer
         }
         return stationOffsets;
     }
+    
+    private string StationToString(Station sta, bool kilometre, int route)
+        => sta.SName + (kilometre ? (" (" + sta.Positions.GetPosition(route) + ")") : "");
 
-    private string StationDisplay(PathEntry sta) => sta.Station.ToString(attrs.DisplayKilometre, sta.RouteIndex) + 
+    private string StationDisplay(PathEntry sta) => StationToString(sta.Station, attrs.DisplayKilometre, sta.RouteIndex) + 
                                                     (!string.IsNullOrWhiteSpace(sta.Station.StationCode) ? $" ({sta.Station.StationCode})" : "");
 
     public float GetMarginTop(IMGraphics g)

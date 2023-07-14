@@ -81,7 +81,7 @@ namespace FPLedit.Extensibility
                             if (plugin == null)
                             {
                                 warnings.Add(T._("Erweiterung {0} konnte nicht geladen werden, Fehler beim Aufruf des Plugin-Konstruktors!", file.Name));
-                                continue; // Error calling the constructor. //TODO: better error?
+                                continue; // Error calling the constructor.
                             }
 
                             var pluginInfo = new PluginInfo(plugin, securityContext);
