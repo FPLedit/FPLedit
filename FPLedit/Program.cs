@@ -93,7 +93,11 @@ namespace FPLedit
 
             bootstrapper.PreBootstrapExtensions(); // Load extension files.
 
-            mainForm = new MainForm(lfh, crashReporter!, bootstrapper);
+
+            System.Diagnostics.Stopwatch sw = new();
+            sw.Start();
+            mainForm = new MainForm(lfh, crashReporter!, bootstrapper, sw);
+
             bootstrapper.InitializeUi(mainForm);
 
             // Close all other windows when attempting to close main form.

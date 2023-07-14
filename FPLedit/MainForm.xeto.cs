@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿#define test
+using Eto.Forms;
 using System;
 using Eto.Drawing;
 using System.Linq;
@@ -53,10 +54,68 @@ namespace FPLedit
             public static readonly string LoadingFile = T._("Lade Datei...");
         }
 
-        public MainForm(LastFileHandler lfh, CrashReporting.CrashReporter crashReporter, Bootstrapper bootstrapper)
+        public MainForm(LastFileHandler lfh, CrashReporting.CrashReporter crashReporter, Bootstrapper bootstrapper, System.Diagnostics.Stopwatch sw)
         {
+            #if test
             Eto.Serialization.Xaml.XamlReader.Load(this);
+            #else
+
+            var loadingStack2 = new StackLayout(new Label { Text = L.LoadingFile }, new Spinner { Enabled = true }) { Orientation = Orientation.Horizontal, VerticalContentAlignment = VerticalAlignment.Stretch, Spacing = 10, Padding = 30 };
+            loadingStack = new StackLayout(loadingStack2) { Orientation = Orientation.Vertical, HorizontalContentAlignment = HorizontalAlignment.Center, Visible = false };
+            
+            Content = new TableLayout(new[]
+            {
+                new TableRow(networkEditingControl = new NetworkEditingControl()),
+                new TableRow(loadingStack),
+                new TableRow(logTextBox = new LogControl() { Height = 200 }),
+            });
+            logTextBox.KeyDown += ProcessKeyDown;
+            
+            this.ClientSize = new Size(980, 580);
+            AllowDrop = true;
+            Title = "FPLedit";
+
+            var newMenu = EtoExtensions.CreateItem(L.MenuNew);
+            newMenu.CreateItem(L.MenuNewLinear, clickHandler: LinearNewMenu_Click);
+            newMenu.CreateItem(L.MenuNewNetwork, clickHandler: NetworkNewMenu_Click);
+            
+            this.Menu = new MenuBar() { IncludeSystemItems = MenuBarSystemItems.None };
+            this.Menu.ApplicationItems.AddRange(new MenuItem[]
+            {
+                newMenu,
+                EtoExtensions.CreateItem(L.MenuOpen, clickHandler: OpenMenu_Click, shortcut: Keys.Control|Keys.O),
+                saveMenu = EtoExtensions.CreateItem(L.MenuSave, clickHandler: SaveMenu_Click, enabled: false, shortcut: Keys.Control|Keys.S),
+                saveAsMenu = EtoExtensions.CreateItem(L.MenuSaveAs, clickHandler: SaveAsMenu_Click, enabled: false, shortcut: Keys.Control|Keys.Shift|Keys.S),
+                (lastMenu = EtoExtensions.CreateItem(L.MenuLastFiles)),
+                new SeparatorMenuItem(),
+                importMenu = EtoExtensions.CreateItem(L.MenuImport, clickHandler: ImportMenu_Click),
+                exportMenu = EtoExtensions.CreateItem(L.MenuExport, enabled: false, clickHandler: ExportMenu_Click, shortcut: Keys.Control|Keys.E),
+                convertMenu = EtoExtensions.CreateItem(L.MenuConvert, enabled: false, clickHandler: ConvertMenu_Click, shortcut: Keys.Control|Keys.K),
+                new SeparatorMenuItem(),
+                EtoExtensions.CreateItem(L.MenuClose, clickHandler: CloseFileMenu_Click),
+            });
+            this.Menu.HelpItems.AddRange(new MenuItem[]
+            {
+                EtoExtensions.CreateItem(L.MenuSettings, clickHandler: SettingsMenu_Click),
+                new SeparatorMenuItem(),
+                EtoExtensions.CreateItem(L.MenuOnlineHelp, clickHandler: HelpMenu_Click, shortcut: Keys.F1),
+            });
+            this.Menu.AboutItem = EtoExtensions.CreateItem(L.MenuAbout, clickHandler: AboutMenu_Click);
+            this.Menu.QuitItem = EtoExtensions.CreateItem(L.MenuQuit, clickHandler: QuitMenu_Click);
+            this.Menu.CreateItem(LocEditMenu);
+            this.Menu.CreateItem(LocPreviewMenu);
+#endif
+
             Icon = new Icon(this.GetResource("Resources.programm.ico"));
+            
+            sw.Stop();
+#if test
+            var fn = "statrtup-time-xeto.dat";
+#else
+            var fn = "statrtup-time-direct.dat";
+#endif
+            File.AppendAllText(fn, $"{sw.ElapsedMilliseconds}\n");
+            Environment.Exit(0);
 
             this.lfh = lfh;
             Bootstrapper = bootstrapper;
@@ -115,6 +174,7 @@ namespace FPLedit
 
         protected override void OnShown(EventArgs e)
         {
+            Profiler.Profile("OnShown");
 #if DEBUG
             Menu.HelpMenu.Items.Add(new SeparatorMenuItem());
             Menu.HelpMenu.CreateItem(T._("Exception auslösen"), clickHandler: (_, _) => throw new Exception(T._("Ausgelöste Exception")));
@@ -239,19 +299,19 @@ namespace FPLedit
         #endregion
 
         #region Events
-        private void SaveMenu_Click(object sender, EventArgs e) => Bootstrapper.Save(false);
-        private void OpenMenu_Click(object sender, EventArgs e) => Bootstrapper.Open();
-        private void SaveAsMenu_Click(object sender, EventArgs e) => Bootstrapper.Save(true);
-        private void ImportMenu_Click(object sender, EventArgs e) => Bootstrapper.FileHandler.Import();
-        private void ExportMenu_Click(object sender, EventArgs e) => Bootstrapper.FileHandler.Export();
-        private void QuitMenu_Click(object sender, EventArgs e) => Close();
-        private void CloseFileMenu_Click(object sender, EventArgs e) => Bootstrapper.FileHandler.CloseFile(manualAction: true);
-        private void LinearNewMenu_Click(object sender, EventArgs e) => Bootstrapper.FileHandler.New(TimetableType.Linear);
-        private void NetworkNewMenu_Click(object sender, EventArgs e) => Bootstrapper.FileHandler.New(TimetableType.Network);
-        private void ConvertMenu_Click(object sender, EventArgs e) => Bootstrapper.FileHandler.ConvertTimetable();
-        private void AboutMenu_Click(object sender, EventArgs e) => new InfoForm().ShowDialog(this);
-        private void SettingsMenu_Click(object sender, EventArgs e) => new SettingsUi.SettingsForm(Bootstrapper).ShowModal(this);
-        private void HelpMenu_Click(object sender, EventArgs e) => Bootstrapper.OpenUrl("https://fahrplan.manuelhu.de/");
+        private void SaveMenu_Click(object? sender, EventArgs e) => Bootstrapper.Save(false);
+        private void OpenMenu_Click(object? sender, EventArgs e) => Bootstrapper.Open();
+        private void SaveAsMenu_Click(object? sender, EventArgs e) => Bootstrapper.Save(true);
+        private void ImportMenu_Click(object? sender, EventArgs e) => Bootstrapper.FileHandler.Import();
+        private void ExportMenu_Click(object? sender, EventArgs e) => Bootstrapper.FileHandler.Export();
+        private void QuitMenu_Click(object? sender, EventArgs e) => Close();
+        private void CloseFileMenu_Click(object? sender, EventArgs e) => Bootstrapper.FileHandler.CloseFile(manualAction: true);
+        private void LinearNewMenu_Click(object? sender, EventArgs e) => Bootstrapper.FileHandler.New(TimetableType.Linear);
+        private void NetworkNewMenu_Click(object? sender, EventArgs e) => Bootstrapper.FileHandler.New(TimetableType.Network);
+        private void ConvertMenu_Click(object? sender, EventArgs e) => Bootstrapper.FileHandler.ConvertTimetable();
+        private void AboutMenu_Click(object? sender, EventArgs e) => new InfoForm().ShowDialog(this);
+        private void SettingsMenu_Click(object? sender, EventArgs e) => new SettingsUi.SettingsForm(Bootstrapper).ShowModal(this);
+        private void HelpMenu_Click(object? sender, EventArgs e) => Bootstrapper.OpenUrl("https://fahrplan.manuelhu.de/");
         #endregion
 
         protected override void Dispose(bool disposing)
