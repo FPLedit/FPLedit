@@ -4,7 +4,8 @@ namespace FPLedit.Buchfahrplan.Templates;
 
 public sealed class StdTemplate : ITemplateProvider
 {
-    public string TemplateIdentifier => "builtin:FPLedit.Buchfahrplan/Templates/StdTemplate.fpltmpl";
+    internal const string IDENTIFIER = "builtin:FPLedit.Buchfahrplan/Templates/StdTemplate.fpltmpl";
+    public string TemplateIdentifier => IDENTIFIER;
 
     public string GetTemplateCode() => ResourceHelper.GetStringResource("Buchfahrplan.Templates.StdTemplate.fpltmpl")
         .Replace("{{##WELLEN_CSS##}}", WellenCssHelper.GetWellenCss());

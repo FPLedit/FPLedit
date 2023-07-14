@@ -26,13 +26,13 @@ public sealed class Plugin : IPlugin, ITemplatePlugin
     {
         componentRegistry.Register<ITemplateProvider>(new Templates.StdTemplateProvider());
         componentRegistry.Register<ITemplateProvider>(new Templates.SvgTemplateProvider());
-            
-        componentRegistry.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<Templates.TemplateHelper>("afpl"));
-        componentRegistry.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<AfplAttrs>("afpl"));
+
+        componentRegistry.Register<ITemplateWhitelistEntry>(
+            new TemplateWhitelistEntry("afpl", typeof(Templates.TemplateHelper), typeof(AfplAttrs)));
     }
         
     internal static IFilterRuleContainer FilterRuleContainer => new DefaultFilterRuleContainer(T._("Aushangfahrplan"), AfplAttrs.GetAttrs, AfplAttrs.CreateAttrs);
         
     internal static ITemplateChooser GetTemplateChooser(IReducedPluginInterface pi) 
-        => new DefaultTemplateChooser(pi, "afpl", "afpl_attrs", "tmpl", "builtin:FPLedit.Aushangfahrplan/Templates/AfplTemplate.fpltmpl");
+        => new DefaultTemplateChooser(pi, "afpl", "afpl_attrs", "tmpl", Templates.StdTemplateProvider.IDENTIFIER);
 }

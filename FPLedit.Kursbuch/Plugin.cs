@@ -29,15 +29,15 @@ public sealed class Plugin : IPlugin, ITemplatePlugin
     public void InitTemplates(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
     {
         componentRegistry.Register<ITemplateProvider>(new Templates.TemplateProvider());
-            
-        componentRegistry.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<Templates.TemplateHelper>("kfpl"));
-        componentRegistry.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<KfplAttrs>("kfpl"));
+
+        componentRegistry.Register<ITemplateWhitelistEntry>(
+            new TemplateWhitelistEntry("kfpl", typeof(Templates.TemplateHelper), typeof(KfplAttrs)));
     }
 
     internal static IFilterRuleContainer FilterRuleContainer => new DefaultFilterRuleContainer(T._("Kursbuch"), KfplAttrs.GetAttrs, KfplAttrs.CreateAttrs);
         
     internal static ITemplateChooser GetTemplateChooser(IReducedPluginInterface pi) 
-        => new DefaultTemplateChooser(pi, "kfpl", "kfpl_attrs", "tmpl", "builtin:FPLedit.Kursbuch/Templates/KfplTemplate.fpltmpl");
+        => new DefaultTemplateChooser(pi, "kfpl", "kfpl_attrs", "tmpl", Templates.TemplateProvider.IDENTFIER);
 }
 
 public sealed class FixAttrsAction : BaseConverterFileType, ITimetableTypeChangeAction

@@ -5,7 +5,8 @@ namespace FPLedit.Aushangfahrplan.Templates;
 
 internal sealed class StdTemplateProvider : BaseTemplateProxy, ITemplateProvider
 {
-    public string TemplateIdentifier => "builtin:FPLedit.Aushangfahrplan/Templates/AfplTemplate.fpltmpl";
+    internal const string IDENTIFIER = "builtin:FPLedit.Aushangfahrplan/Templates/AfplTemplate.fpltmpl";
+    public string TemplateIdentifier => IDENTIFIER;
 
     public string GetTemplateCode()
         => GeneratePreamble(T._("Standard (DRG aus Malsch)"), "Abfahrt") +

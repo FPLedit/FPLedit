@@ -4,7 +4,8 @@ namespace FPLedit.Kursbuch.Templates;
 
 internal sealed class TemplateProvider : ITemplateProvider
 {
-    public string TemplateIdentifier => "builtin:FPLedit.Kursbuch/Templates/KfplTemplate.fpltmpl";
+    internal const string IDENTFIER = "builtin:FPLedit.Kursbuch/Templates/KfplTemplate.fpltmpl";
+    public string TemplateIdentifier => IDENTFIER;
 
     public string GetTemplateCode() => ResourceHelper.GetStringResource("Kursbuch.Templates.KfplTemplate.fpltmpl");
 }

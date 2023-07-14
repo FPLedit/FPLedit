@@ -14,27 +14,27 @@ public sealed class Plugin : IPlugin, ITemplatePlugin
         var preview = new DefaultPreview("bfpl", T._("Buchfahrplan"), export);
         componentRegistry.Register<IExport>(export);
         componentRegistry.Register<IPreviewAction>(preview);
-            
+
         componentRegistry.Register<IAppearanceControl>(new DefaultAppearanceControl(pi => new Forms.SettingsControl(pi), T._("Buchfahrplan")));
         componentRegistry.Register<IFilterRuleContainer>(FilterRuleContainer);
         componentRegistry.Register<IRouteAction>(new Forms.VelocityRouteAction());
-            
+
         InitTemplates(pluginInterface, componentRegistry);
     }
-        
+
     public void InitTemplates(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
     {
         Templates.WellenCssHelper.UsePngFallback = pluginInterface.Settings.Get("bfpl.wellen-png-fallback", false);
         componentRegistry.Register<ITemplateProvider>(new Templates.StdTemplate());
         componentRegistry.Register<ITemplateProvider>(new Templates.ZlbTemplate());
-            
-        componentRegistry.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<Templates.TemplateHelper>("bfpl"));
-        componentRegistry.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<BfplAttrs>("bfpl"));
-        componentRegistry.Register<ITemplateWhitelistEntry>(new TemplateWhitelistEntry<BfplPoint>("bfpl"));
+
+        componentRegistry.Register<ITemplateWhitelistEntry>(
+            new TemplateWhitelistEntry("bfpl", typeof(Templates.TemplateHelper), typeof(BfplAttrs), typeof(BfplPoint)));
     }
-        
-    internal static IFilterRuleContainer FilterRuleContainer => new DefaultFilterRuleContainer(T._("Buchfahrplan"), BfplAttrs.GetAttrs, BfplAttrs.CreateAttrs);
-        
+
+    internal static IFilterRuleContainer FilterRuleContainer
+        => new DefaultFilterRuleContainer(T._("Buchfahrplan"), BfplAttrs.GetAttrs, BfplAttrs.CreateAttrs);
+
     internal static ITemplateChooser GetTemplateChooser(IReducedPluginInterface pi) 
-        => new DefaultTemplateChooser(pi, "bfpl", "bfpl_attrs", "tmpl", "builtin:FPLedit.Buchfahrplan/Templates/StdTemplate.fpltmpl");
+        => new DefaultTemplateChooser(pi, "bfpl", "bfpl_attrs", "tmpl", Templates.StdTemplate.IDENTIFIER);
 }
