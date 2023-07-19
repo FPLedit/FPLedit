@@ -1,16 +1,15 @@
-﻿namespace FPLedit.Shared
+﻿namespace FPLedit.Shared;
+
+public interface IFileState
 {
-    public interface IFileState
-    {
-        bool Opened { get; }
-        bool Saved { get; }
+    bool Opened { get; }
+    bool Saved { get; }
 
-        bool LineCreated { get; }
-        bool TrainsCreated { get; }
+    bool LineCreated { get; }
+    bool TrainsCreated { get; }
 
-        bool CanGoBack { get; }
+    bool CanGoBack { get; }
 
-        string? FileName { get; }
-        int SelectedRoute { get; set; }
-    }
+    string? FileName { get; }
+    int SelectedRoute { get; set; }
 }

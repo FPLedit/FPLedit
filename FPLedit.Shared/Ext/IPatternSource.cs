@@ -1,9 +1,8 @@
-namespace FPLedit.Shared
-{
-    public interface IPatternSource
-    {
-        string TrainPatterns { get; set; }
+namespace FPLedit.Shared;
 
-        string StationPatterns { get; set; }
-    }
+public interface IPatternSource
+{
+    string TrainPatterns { get; set; }
+
+    string StationPatterns { get; set; }
 }

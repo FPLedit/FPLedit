@@ -1,31 +1,30 @@
 ﻿using System.IO;
 using System.Xml.Linq;
 
-namespace FPLedit.Shared.Filetypes
+namespace FPLedit.Shared.Filetypes;
+
+public sealed class XMLImport : IImport
 {
-    public sealed class XMLImport : IImport
+    public string Filter => T._("Fahrplan Dateien (*.fpl)|*.fpl");
+
+    public Timetable? Import(Stream stream, IReducedPluginInterface pluginInterface, ILog? replaceLog = null)
     {
-        public string Filter => T._("Fahrplan Dateien (*.fpl)|*.fpl");
+        var xElement = XElement.Load(stream);
 
-        public Timetable? Import(Stream stream, IReducedPluginInterface pluginInterface, ILog? replaceLog = null)
+        var xmlEntity = new XMLEntity(xElement);
+        var tt = new Timetable(xmlEntity);
+
+        if (tt.Initialized)
         {
-            var xElement = XElement.Load(stream);
-
-            var xmlEntity = new XMLEntity(xElement);
-            var tt = new Timetable(xmlEntity);
-
-            if (tt.Initialized)
+            var actions = pluginInterface.GetRegistered<ITimetableInitAction>();
+            foreach (var action in actions)
             {
-                var actions = pluginInterface.GetRegistered<ITimetableInitAction>();
-                foreach (var action in actions)
-                {
-                    var message = action.Init(tt, pluginInterface);
-                    if (message != null)
-                        pluginInterface.Logger.Warning(message);
-                }
+                var message = action.Init(tt, pluginInterface);
+                if (message != null)
+                    pluginInterface.Logger.Warning(message);
             }
-
-            return tt;
         }
+
+        return tt;
     }
 }
