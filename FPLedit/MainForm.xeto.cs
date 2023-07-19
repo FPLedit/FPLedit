@@ -54,68 +54,10 @@ namespace FPLedit
             public static readonly string LoadingFile = T._("Lade Datei...");
         }
 
-        public MainForm(LastFileHandler lfh, CrashReporting.CrashReporter crashReporter, Bootstrapper bootstrapper, System.Diagnostics.Stopwatch sw)
+        public MainForm(LastFileHandler lfh, CrashReporting.CrashReporter crashReporter, Bootstrapper bootstrapper)
         {
-            #if test
             Eto.Serialization.Xaml.XamlReader.Load(this);
-            #else
-
-            var loadingStack2 = new StackLayout(new Label { Text = L.LoadingFile }, new Spinner { Enabled = true }) { Orientation = Orientation.Horizontal, VerticalContentAlignment = VerticalAlignment.Stretch, Spacing = 10, Padding = 30 };
-            loadingStack = new StackLayout(loadingStack2) { Orientation = Orientation.Vertical, HorizontalContentAlignment = HorizontalAlignment.Center, Visible = false };
-            
-            Content = new TableLayout(new[]
-            {
-                new TableRow(networkEditingControl = new NetworkEditingControl()),
-                new TableRow(loadingStack),
-                new TableRow(logTextBox = new LogControl() { Height = 200 }),
-            });
-            logTextBox.KeyDown += ProcessKeyDown;
-            
-            this.ClientSize = new Size(980, 580);
-            AllowDrop = true;
-            Title = "FPLedit";
-
-            var newMenu = EtoExtensions.CreateItem(L.MenuNew);
-            newMenu.CreateItem(L.MenuNewLinear, clickHandler: LinearNewMenu_Click);
-            newMenu.CreateItem(L.MenuNewNetwork, clickHandler: NetworkNewMenu_Click);
-            
-            this.Menu = new MenuBar() { IncludeSystemItems = MenuBarSystemItems.None };
-            this.Menu.ApplicationItems.AddRange(new MenuItem[]
-            {
-                newMenu,
-                EtoExtensions.CreateItem(L.MenuOpen, clickHandler: OpenMenu_Click, shortcut: Keys.Control|Keys.O),
-                saveMenu = EtoExtensions.CreateItem(L.MenuSave, clickHandler: SaveMenu_Click, enabled: false, shortcut: Keys.Control|Keys.S),
-                saveAsMenu = EtoExtensions.CreateItem(L.MenuSaveAs, clickHandler: SaveAsMenu_Click, enabled: false, shortcut: Keys.Control|Keys.Shift|Keys.S),
-                (lastMenu = EtoExtensions.CreateItem(L.MenuLastFiles)),
-                new SeparatorMenuItem(),
-                importMenu = EtoExtensions.CreateItem(L.MenuImport, clickHandler: ImportMenu_Click),
-                exportMenu = EtoExtensions.CreateItem(L.MenuExport, enabled: false, clickHandler: ExportMenu_Click, shortcut: Keys.Control|Keys.E),
-                convertMenu = EtoExtensions.CreateItem(L.MenuConvert, enabled: false, clickHandler: ConvertMenu_Click, shortcut: Keys.Control|Keys.K),
-                new SeparatorMenuItem(),
-                EtoExtensions.CreateItem(L.MenuClose, clickHandler: CloseFileMenu_Click),
-            });
-            this.Menu.HelpItems.AddRange(new MenuItem[]
-            {
-                EtoExtensions.CreateItem(L.MenuSettings, clickHandler: SettingsMenu_Click),
-                new SeparatorMenuItem(),
-                EtoExtensions.CreateItem(L.MenuOnlineHelp, clickHandler: HelpMenu_Click, shortcut: Keys.F1),
-            });
-            this.Menu.AboutItem = EtoExtensions.CreateItem(L.MenuAbout, clickHandler: AboutMenu_Click);
-            this.Menu.QuitItem = EtoExtensions.CreateItem(L.MenuQuit, clickHandler: QuitMenu_Click);
-            this.Menu.CreateItem(LocEditMenu);
-            this.Menu.CreateItem(LocPreviewMenu);
-#endif
-
             Icon = new Icon(this.GetResource("Resources.programm.ico"));
-            
-            sw.Stop();
-#if test
-            var fn = "statrtup-time-xeto.dat";
-#else
-            var fn = "statrtup-time-direct.dat";
-#endif
-            File.AppendAllText(fn, $"{sw.ElapsedMilliseconds}\n");
-            Environment.Exit(0);
 
             this.lfh = lfh;
             Bootstrapper = bootstrapper;
@@ -174,7 +116,6 @@ namespace FPLedit
 
         protected override void OnShown(EventArgs e)
         {
-            Profiler.Profile("OnShown");
 #if DEBUG
             Menu.HelpMenu.Items.Add(new SeparatorMenuItem());
             Menu.HelpMenu.CreateItem(T._("Exception auslösen"), clickHandler: (_, _) => throw new Exception(T._("Ausgelöste Exception")));

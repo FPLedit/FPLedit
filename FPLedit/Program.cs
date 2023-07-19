@@ -4,6 +4,7 @@ using FPLedit.Config;
 using FPLedit.CrashReporting;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using FPLedit.Logger;
 using FPLedit.Shared;
 using FPLedit.Shared.Rendering;
@@ -93,11 +94,7 @@ namespace FPLedit
 
             bootstrapper.PreBootstrapExtensions(); // Load extension files.
 
-
-            System.Diagnostics.Stopwatch sw = new();
-            sw.Start();
-            mainForm = new MainForm(lfh, crashReporter!, bootstrapper, sw);
-
+            mainForm = new MainForm(lfh, crashReporter!, bootstrapper);
             bootstrapper.InitializeUi(mainForm);
 
             // Close all other windows when attempting to close main form.
