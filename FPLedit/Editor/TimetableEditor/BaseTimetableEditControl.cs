@@ -6,235 +6,234 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 
-namespace FPLedit.Editor.TimetableEditor
-{
-    internal abstract class BaseTimetableEditControl : Panel
-    {
-        protected bool mpmode = false;
+namespace FPLedit.Editor.TimetableEditor;
 
-        public bool Initialized { get; protected set; }
+internal abstract class BaseTimetableEditControl : Panel
+{
+    protected bool mpmode = false;
+
+    public bool Initialized { get; protected set; }
 
 #pragma warning disable CA2213
-        private ToggleButton trapeztafelToggle = null!;
-        // Actions
-        private TableLayout internalActionsLayout = null!;
+    private ToggleButton trapeztafelToggle = null!;
+    // Actions
+    private TableLayout internalActionsLayout = null!;
 #pragma warning restore CA2213
 
-        protected readonly ObservableCollection<Control> actionButtons;
-        private readonly TimeNormalizer timeNormalizer = new ();
+    protected readonly ObservableCollection<Control> actionButtons;
+    private readonly TimeNormalizer timeNormalizer = new ();
 
-        // ReSharper disable once UnusedMember.Global (used from XAML)
-        public IList<Control> ActionButtons => actionButtons;
+    // ReSharper disable once UnusedMember.Global (used from XAML)
+    public IList<Control> ActionButtons => actionButtons;
 
-        protected BaseTimetableEditControl()
+    protected BaseTimetableEditControl()
+    {
+        actionButtons = new ObservableCollection<Control>();
+        actionButtons.CollectionChanged += (_, e) =>
         {
-            actionButtons = new ObservableCollection<Control>();
-            actionButtons.CollectionChanged += (_, e) =>
-            {
-                var row = internalActionsLayout.Rows[0];
-                if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null)
-                    foreach (Control btn in e.NewItems)
-                        row.Cells.Add(btn);
-                if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null)
-                    foreach (Control btn in e.OldItems)
-                        row.Cells.Remove(btn);
-            };
+            var row = internalActionsLayout.Rows[0];
+            if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null)
+                foreach (Control btn in e.NewItems)
+                    row.Cells.Add(btn);
+            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null)
+                foreach (Control btn in e.OldItems)
+                    row.Cells.Remove(btn);
+        };
+    }
+
+    protected void Init(ToggleButton trapeztafelToggle, TableLayout actionsLayout)
+    {
+        this.trapeztafelToggle = trapeztafelToggle;
+        internalActionsLayout = actionsLayout;
+        mpmode = !Eto.Platform.Instance.SupportedFeatures.HasFlag(Eto.PlatformFeatures.CustomCellSupportsControlView);
+    }
+
+    protected void FormatCell(BaseTimetableDataElement data, Station sta, bool arrival, TextBox tb)
+    {
+        string? val = tb.Text;
+        if (string.IsNullOrEmpty(val))
+        {
+            data.SetError(sta, arrival, null);
+            data.SetTime(sta, arrival, "0");
+            return;
         }
 
-        protected void Init(ToggleButton trapeztafelToggle, TableLayout actionsLayout)
+        val = timeNormalizer.Normalize(val);
+        bool error = true;
+        if (val != null)
         {
-            this.trapeztafelToggle = trapeztafelToggle;
-            internalActionsLayout = actionsLayout;
-            mpmode = !Eto.Platform.Instance.SupportedFeatures.HasFlag(Eto.PlatformFeatures.CustomCellSupportsControlView);
+            tb.Text = val;
+            data.SetTime(sta, arrival, val);
+            error = false;
         }
+        data.SetError(sta, arrival, error ? tb.Text : null);
+    }
 
-        protected void FormatCell(BaseTimetableDataElement data, Station sta, bool arrival, TextBox tb)
+    protected void Trapez(GridView view)
+    {
+        if (view.SelectedRow == -1)
+            return;
+
+        var data = (BaseTimetableDataElement)view.SelectedItem;
+        if (data.IsMpDummy) return;
+
+        // Trapeztafelhalt darf nur bei Ankünften sein
+        if (!data.IsSelectedArrival)
+            return;
+
+        var sta = data.GetStation()!;
+        var trapez = !data.ArrDeps![sta].TrapeztafelHalt;
+        data.SetTrapez(sta, trapez);
+
+        view.ReloadData(view.SelectedRow);
+        trapeztafelToggle.Checked = trapez;
+        CellSelected(data, sta, data.IsSelectedArrival);
+    }
+
+    protected void Zuglaufmeldung(GridView view)
+    {
+        if (view.SelectedRow == -1)
+            return;
+
+        var data = (BaseTimetableDataElement)view.SelectedItem;
+        if (data.IsMpDummy) return;
+        var sta = data.GetStation()!;
+
+        // Zuglaufmeldungen dürfen auch bei Abfahrt am ersten Bahnhof sein
+        if (!data.IsFirst(sta) && !data.IsSelectedArrival)
+            return;
+
+        using (var zlmDialog = new ZlmEditForm(data.ArrDeps![sta].Zuglaufmeldung))
         {
-            string? val = tb.Text;
-            if (string.IsNullOrEmpty(val))
-            {
-                data.SetError(sta, arrival, null);
-                data.SetTime(sta, arrival, "0");
+            if (zlmDialog.ShowModal(this) != DialogResult.Ok)
                 return;
-            }
 
-            val = timeNormalizer.Normalize(val);
-            bool error = true;
-            if (val != null)
-            {
-                tb.Text = val;
-                data.SetTime(sta, arrival, val);
-                error = false;
-            }
-            data.SetError(sta, arrival, error ? tb.Text : null);
+            data.SetZlm(sta, zlmDialog.Zlm);
         }
 
-        protected void Trapez(GridView view)
+        view.ReloadData(view.SelectedRow);
+    }
+
+    protected virtual void HandleKeystroke(KeyEventArgs e, GridView? view)
+    {
+        if (view == null)
+            return;
+
+        if (e.Handled)
+            return;
+
+        if (e.Key == Keys.Enter)
         {
-            if (view.SelectedRow == -1)
+            if (!mpmode)
                 return;
+
+            e.Handled = true;
 
             var data = (BaseTimetableDataElement)view.SelectedItem;
-            if (data.IsMpDummy) return;
-
-            // Trapeztafelhalt darf nur bei Ankünften sein
-            if (!data.IsSelectedArrival)
+            if (data == null || data.IsMpDummy || data.GetStation() == null || data.SelectedTextBox == null)
                 return;
-
-            var sta = data.GetStation()!;
-            var trapez = !data.ArrDeps![sta].TrapeztafelHalt;
-            data.SetTrapez(sta, trapez);
+            FormatCell(data, data.GetStation()!, data.IsSelectedArrival, data.SelectedTextBox);
 
             view.ReloadData(view.SelectedRow);
-            trapeztafelToggle.Checked = trapez;
-            CellSelected(data, sta, data.IsSelectedArrival);
         }
-
-        protected void Zuglaufmeldung(GridView view)
+        else if (e.Key == Keys.T)
         {
-            if (view.SelectedRow == -1)
+            e.Handled = true;
+            Trapez(view);
+        }
+        else if (e.Key == Keys.Z)
+        {
+            e.Handled = true;
+            Zuglaufmeldung(view);
+        }
+        else if (e.Key == Keys.Tab)
+        {
+            if (!mpmode)
                 return;
+
+            e.Handled = true;
 
             var data = (BaseTimetableDataElement)view.SelectedItem;
-            if (data.IsMpDummy) return;
-            var sta = data.GetStation()!;
-
-            // Zuglaufmeldungen dürfen auch bei Abfahrt am ersten Bahnhof sein
-            if (!data.IsFirst(sta) && !data.IsSelectedArrival)
+            if (data == null || data.IsMpDummy || data.GetStation() == null)
                 return;
 
-            using (var zlmDialog = new ZlmEditForm(data.ArrDeps![sta].Zuglaufmeldung))
-            {
-                if (zlmDialog.ShowModal(this) != DialogResult.Ok)
-                    return;
-
-                data.SetZlm(sta, zlmDialog.Zlm);
-            }
-
-            view.ReloadData(view.SelectedRow);
-        }
-
-        protected virtual void HandleKeystroke(KeyEventArgs e, GridView? view)
-        {
-            if (view == null)
-                return;
-
-            if (e.Handled)
-                return;
-
-            if (e.Key == Keys.Enter)
-            {
-                if (!mpmode)
-                    return;
-
-                e.Handled = true;
-
-                var data = (BaseTimetableDataElement)view.SelectedItem;
-                if (data == null || data.IsMpDummy || data.GetStation() == null || data.SelectedTextBox == null)
-                    return;
+            if (data.SelectedTextBox !=  null)
                 FormatCell(data, data.GetStation()!, data.IsSelectedArrival, data.SelectedTextBox);
 
-                view.ReloadData(view.SelectedRow);
-            }
-            else if (e.Key == Keys.T)
-            {
-                e.Handled = true;
-                Trapez(view);
-            }
-            else if (e.Key == Keys.Z)
-            {
-                e.Handled = true;
-                Zuglaufmeldung(view);
-            }
-            else if (e.Key == Keys.Tab)
-            {
-                if (!mpmode)
-                    return;
+            var target = GetNextEditingPosition(data, view, e);
+            //Console.WriteLine("Next pos: " + target.ToString());
 
-                e.Handled = true;
-
-                var data = (BaseTimetableDataElement)view.SelectedItem;
-                if (data == null || data.IsMpDummy || data.GetStation() == null)
-                    return;
-
-                if (data.SelectedTextBox !=  null)
-                    FormatCell(data, data.GetStation()!, data.IsSelectedArrival, data.SelectedTextBox);
-
-                var target = GetNextEditingPosition(data, view, e);
-                //Console.WriteLine("Next pos: " + target.ToString());
-
-                view.ReloadData(view.SelectedRow); // Commit current data
-                view.BeginEdit(target.row, target.col);
-            }
-            else if (e.Key == Keys.Escape)
-            {
-                e.Handled = true;
-                view.CancelEdit();
-            }
-            if (e.Key == Keys.Down)
-            {
-                var data = (BaseTimetableDataElement)view.SelectedItem;
-                if (data == null || data.IsMpDummy || data.GetStation() == null || data.SelectedDropDown == null)
-                    return;
-                
-                e.Handled = true;
-                var idx = data.SelectedDropDown.SelectedIndex + 1;
-                if (idx < data.SelectedDropDown.DataStore.Count())
-                    data.SelectedDropDown.SelectedIndex = idx;
-                
-            }
-            if (e.Key == Keys.Up)
-            {
-                var data = (BaseTimetableDataElement)view.SelectedItem;
-                if (data == null || data.IsMpDummy || data.GetStation() == null || data.SelectedDropDown == null)
-                    return;
-                
-                e.Handled = true;
-                var idx = data.SelectedDropDown.SelectedIndex - 1;
-                if (idx >= 0)
-                    data.SelectedDropDown.SelectedIndex = idx;
-            }
-            else
-            {
-                if (!mpmode)
-                    return;
-
-                var data = (BaseTimetableDataElement)view.SelectedItem;
-                if (data == null || data.IsMpDummy || data.SelectedTextBox == null)
-                    return;
-                var tb = data.SelectedTextBox;
-                if (tb.HasFocus || tb.ReadOnly) // Wir können "echt" editieren / sind read-Only
-                    return;
-                if (char.IsLetterOrDigit(e.KeyChar) || char.IsPunctuation(e.KeyChar))
-                {
-                    tb.Text += e.KeyChar;
-                    e.Handled = true;
-                }
-                if (e.Key == Keys.Backspace && tb.Text.Length > 0)
-                    tb.Text = tb.Text.Substring(0, tb.Text.Length - 1);
-            }
+            view.ReloadData(view.SelectedRow); // Commit current data
+            view.BeginEdit(target.row, target.col);
         }
-
-        protected void HandleViewKeystroke(KeyEventArgs e, GridView view)
+        else if (e.Key == Keys.Escape)
         {
-            if (e.Key == Keys.Home) // Pos1
-            {
-                if (!mpmode)
-                    return;
-
-                e.Handled = true;
-                if (view.IsEditing)
-                    view.ReloadData(view.SelectedRow);
-                view.BeginEdit(0, FirstEditingColumn); // erstes Abfahrtsfeld
-            }
-            else
-                HandleKeystroke(e, view);
+            e.Handled = true;
+            view.CancelEdit();
         }
+        if (e.Key == Keys.Down)
+        {
+            var data = (BaseTimetableDataElement)view.SelectedItem;
+            if (data == null || data.IsMpDummy || data.GetStation() == null || data.SelectedDropDown == null)
+                return;
+                
+            e.Handled = true;
+            var idx = data.SelectedDropDown.SelectedIndex + 1;
+            if (idx < data.SelectedDropDown.DataStore.Count())
+                data.SelectedDropDown.SelectedIndex = idx;
+                
+        }
+        if (e.Key == Keys.Up)
+        {
+            var data = (BaseTimetableDataElement)view.SelectedItem;
+            if (data == null || data.IsMpDummy || data.GetStation() == null || data.SelectedDropDown == null)
+                return;
+                
+            e.Handled = true;
+            var idx = data.SelectedDropDown.SelectedIndex - 1;
+            if (idx >= 0)
+                data.SelectedDropDown.SelectedIndex = idx;
+        }
+        else
+        {
+            if (!mpmode)
+                return;
 
-        protected abstract void CellSelected(BaseTimetableDataElement data, Station sta, bool arrival);
-
-        protected abstract (int col, int row) GetNextEditingPosition(BaseTimetableDataElement data, GridView view, KeyEventArgs e);
-
-        protected abstract int FirstEditingColumn { get; }
+            var data = (BaseTimetableDataElement)view.SelectedItem;
+            if (data == null || data.IsMpDummy || data.SelectedTextBox == null)
+                return;
+            var tb = data.SelectedTextBox;
+            if (tb.HasFocus || tb.ReadOnly) // Wir können "echt" editieren / sind read-Only
+                return;
+            if (char.IsLetterOrDigit(e.KeyChar) || char.IsPunctuation(e.KeyChar))
+            {
+                tb.Text += e.KeyChar;
+                e.Handled = true;
+            }
+            if (e.Key == Keys.Backspace && tb.Text.Length > 0)
+                tb.Text = tb.Text.Substring(0, tb.Text.Length - 1);
+        }
     }
+
+    protected void HandleViewKeystroke(KeyEventArgs e, GridView view)
+    {
+        if (e.Key == Keys.Home) // Pos1
+        {
+            if (!mpmode)
+                return;
+
+            e.Handled = true;
+            if (view.IsEditing)
+                view.ReloadData(view.SelectedRow);
+            view.BeginEdit(0, FirstEditingColumn); // erstes Abfahrtsfeld
+        }
+        else
+            HandleKeystroke(e, view);
+    }
+
+    protected abstract void CellSelected(BaseTimetableDataElement data, Station sta, bool arrival);
+
+    protected abstract (int col, int row) GetNextEditingPosition(BaseTimetableDataElement data, GridView view, KeyEventArgs e);
+
+    protected abstract int FirstEditingColumn { get; }
 }

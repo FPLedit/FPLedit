@@ -1,14 +1,13 @@
 ﻿using Eto.Drawing;
 using Eto.Forms;
 
-namespace FPLedit.Editor.Rendering
+namespace FPLedit.Editor.Rendering;
+
+internal sealed class Divider : Panel
 {
-    internal sealed class Divider : Panel
+    public Divider()
     {
-        public Divider()
-        {
-            BackgroundColor = SystemColors.ControlText;
-            Size = new Size(2, 35);
-        }
+        BackgroundColor = SystemColors.ControlText;
+        Size = new Size(2, 35);
     }
 }

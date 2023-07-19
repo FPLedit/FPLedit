@@ -5,58 +5,57 @@ using FPLedit.Shared.UI.Validators;
 using System;
 using System.Linq;
 
-namespace FPLedit.Editor.Trains
+namespace FPLedit.Editor.Trains;
+
+internal sealed class TrainFillDialog : FDialog<DialogResult>
 {
-    internal sealed class TrainFillDialog : FDialog<DialogResult>
-    {
 #pragma warning disable CS0649,CA2213
-        private readonly DropDown trainsComboBox = default!;
-        private readonly TextBox offsetTextBox = default!;
+    private readonly DropDown trainsComboBox = default!;
+    private readonly TextBox offsetTextBox = default!;
 #pragma warning restore CS0649,CA2213
-        private readonly NumberValidator offsetValidator;
+    private readonly NumberValidator offsetValidator;
 
-        public Train? ReferenceTrain { get; private set; }
+    public Train? ReferenceTrain { get; private set; }
 
-        public int Offset { get; private set; }
+    public int Offset { get; private set; }
 
-        public TrainFillDialog(Train train)
+    public TrainFillDialog(Train train)
+    {
+        Eto.Serialization.Xaml.XamlReader.Load(this);
+
+        offsetValidator = new NumberValidator(offsetTextBox, false, true, errorMessage: T._("Bitte die Verschiebung als Zahl in Minuten angeben!"));
+
+        offsetTextBox.Text = "+20";
+
+        trainsComboBox.ItemTextBinding = Binding.Delegate<Train, string>(t => t.TName);
+        trainsComboBox.DataStore = new TrainEditHelper().FillCandidates(train).ToArray();
+        trainsComboBox.SelectedIndex = 0;
+    }
+
+    private void CloseButton_Click(object sender, EventArgs e)
+    {
+        if (!offsetValidator.Valid)
         {
-            Eto.Serialization.Xaml.XamlReader.Load(this);
-
-            offsetValidator = new NumberValidator(offsetTextBox, false, true, errorMessage: T._("Bitte die Verschiebung als Zahl in Minuten angeben!"));
-
-            offsetTextBox.Text = "+20";
-
-            trainsComboBox.ItemTextBinding = Binding.Delegate<Train, string>(t => t.TName);
-            trainsComboBox.DataStore = new TrainEditHelper().FillCandidates(train).ToArray();
-            trainsComboBox.SelectedIndex = 0;
+            MessageBox.Show(T._("Bitte erst alle Felder korrekt ausfüllen:\n{0}", offsetValidator.ErrorMessage!));
+            Result = DialogResult.None;
+            return;
         }
 
-        private void CloseButton_Click(object sender, EventArgs e)
-        {
-            if (!offsetValidator.Valid)
-            {
-                MessageBox.Show(T._("Bitte erst alle Felder korrekt ausfüllen:\n{0}", offsetValidator.ErrorMessage!));
-                Result = DialogResult.None;
-                return;
-            }
+        ReferenceTrain = (Train)trainsComboBox.SelectedValue;
+        Offset = int.Parse(offsetTextBox.Text);
 
-            ReferenceTrain = (Train)trainsComboBox.SelectedValue;
-            Offset = int.Parse(offsetTextBox.Text);
+        Close(DialogResult.Ok);
+    }
 
-            Close(DialogResult.Ok);
-        }
-
-        private void CancelButton_Click(object sender, EventArgs e)
-            => Close(DialogResult.Cancel);
+    private void CancelButton_Click(object sender, EventArgs e)
+        => Close(DialogResult.Cancel);
         
-        private static class L
-        {
-            public static readonly string Cancel = T._("Abbrechen");
-            public static readonly string Close = T._("Zeiten übernehmen");
-            public static readonly string Reference = T._("Referrenzzug:");
-            public static readonly string Offset = T._("Taktverschiebung in Minuten:");
-            public static readonly string Title = T._("Fahrtzeiten von anderem Zug übernehmen");
-        }
+    private static class L
+    {
+        public static readonly string Cancel = T._("Abbrechen");
+        public static readonly string Close = T._("Zeiten übernehmen");
+        public static readonly string Reference = T._("Referrenzzug:");
+        public static readonly string Offset = T._("Taktverschiebung in Minuten:");
+        public static readonly string Title = T._("Fahrtzeiten von anderem Zug übernehmen");
     }
 }
