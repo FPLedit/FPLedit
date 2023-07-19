@@ -7,7 +7,6 @@ namespace FPLedit.TimetableChecks;
 
 public class BugFixInitAction : ITimetableInitAction
 {
-    private const string KEY_AMBIGUOUS = "bugfix.corrected.ambiguous-routes";
     public string? Init(Timetable tt, IReducedPluginInterface pluginInterface)
     {
         var upgradeMessages = new List<string>();
@@ -32,24 +31,6 @@ public class BugFixInitAction : ITimetableInitAction
             foreach (var dup in duplicateTraIds)
             foreach (var t in dup.Skip(1))
                 t.Id = tt.AssignNextTrainId();
-        }
-
-        // Bug in FPLedit 2.1 muss nachträglich klar gemacht werden.
-        // Durch Nutzerinteraction konnten "ambiguous routes" entstehen.
-        // Eine Korrektur ist nicht möglich.
-        if (pluginInterface.Cache.Get(KEY_AMBIGUOUS) != "1")
-        {
-            if (tt.Type == TimetableType.Network && tt.HasRouteCycles)
-            {
-                // All stations that are junction points.
-                var maybeAffectedRoutes = tt.GetCyclicRoutes();
-                var junctions = tt.Stations.Where(s => s.IsJunction && s.Routes.Intersect(maybeAffectedRoutes).Any()).ToArray();
-                var hasAmbiguousRoutes = tt.CheckAmbiguousRoutesInternal(junctions);
-
-                if (hasAmbiguousRoutes)
-                    upgradeMessages.Add(T._("Die Datei enthält zusammengefallene Strecken, das heißt zwei Stationen sind auf mehr als einer Route ohne Zwischenstation verbunden. FPLedit kann sich danach komisch verhalten und Züge zufällig über die eine oder andere Strecke leiten. Eine Korrektur ist leider nicht möglich."));
-            }
-            pluginInterface.Cache.Set(KEY_AMBIGUOUS, "1");
         }
 
         return upgradeMessages.Any() ? string.Join(Environment.NewLine, upgradeMessages) : null;
