@@ -6,7 +6,6 @@ using FPLedit.Shared.UI;
 using System;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace FPLedit;
@@ -45,7 +44,7 @@ internal sealed class FileHandler : IDisposable
                 // Letzten Exporter auswählen
                 int exporterIdx = pluginInterface.Settings.Get("exporter.last", -1);
                 if (exporterIdx > -1 && exporters.Length > exporterIdx)
-                    ExportFileDialog.CurrentFilterIndex = exporterIdx + 1;
+                    exportFileDialog.CurrentFilterIndex = exporterIdx + 1;
             }
             return exportFileDialog;
         }
@@ -96,8 +95,6 @@ internal sealed class FileHandler : IDisposable
 
     private Timetable? timetable;
 
-    private BinaryCacheFile? cache;
-
     private bool asyncBlockingOperation;
 
     private bool AsyncBlockingOperation
@@ -125,9 +122,6 @@ internal sealed class FileHandler : IDisposable
     }
 
     public FileState FileState { get; }
-
-    public ICacheFile Cache => Cache2; //TODO: Can we deprecate and remove this?
-    private BinaryCacheFile Cache2 => cache ??= new BinaryCacheFile();
 
     public event EventHandler? FileOpened;
     public event EventHandler<FileStateChangedEventArgs>? FileStateChanged;
@@ -283,19 +277,6 @@ internal sealed class FileHandler : IDisposable
 
         pluginInterface.Logger.Info(T._("Öffne Datei {0}", filename));
 
-        // Load sidecar cache file.
-        cache?.Clear();
-        var cacheFile = filename + "-cache";
-        if (File.Exists(cacheFile))
-        {
-            var bytes = File.ReadAllBytes(filename);
-            using var sha256 = SHA256.Create();
-            var hash = string.Join("", sha256.ComputeHash(bytes).Select(b => b.ToString("X2")));
-
-            using var stream = File.Open(cacheFile, FileMode.Open);
-            Cache2.Read(stream, hash);
-        }
-
         var (rev, frev) = (FileState.RevisionCounter, FileState.FileNameRevisionCounter);
 
         var tsk = open.GetAsyncSafeImport(filename, pluginInterface);
@@ -395,21 +376,6 @@ internal sealed class FileHandler : IDisposable
                     FileState.FileName = filename;
                 if (nrev != rev || nfrev != frev)
                     pluginInterface.Logger.Warning(T._("Während dem Speichern wurde der Zustand verändert, daher ist Datei auf der Festplatte nicht mehr aktuell."));
-
-                // Create or delete sidecar file.
-                var cacheFile = filename + "-cache";
-                var bytes = File.ReadAllBytes(filename);
-                if (cache != null && cache.Any() && cache.ShouldWriteCacheFile(clone, pluginInterface.Settings))
-                {
-                    using var sha256 = SHA256.Create();
-                    var hash = string.Join("", sha256.ComputeHash(bytes).Select(b => b.ToString("X2")));
-
-                    using var stream = File.Open(cacheFile, FileMode.OpenOrCreate, FileAccess.Write);
-                    stream.SetLength(0);
-                    cache.Write(stream, hash);
-                }
-                else if (File.Exists(cacheFile)) // Delete cache file if we don't need one.
-                    File.Delete(cacheFile);
             });
         }, null, TaskScheduler.Default);
         if (doAsync)
@@ -430,7 +396,6 @@ internal sealed class FileHandler : IDisposable
         FileState.Saved = false;
         FileState.FileName = null;
         undo.ClearHistory();
-        cache?.Clear();
 
         pluginInterface.Logger.Info(T._("Neue Datei erstellt"));
         FileOpened?.Invoke(this, EventArgs.Empty);
@@ -443,7 +408,6 @@ internal sealed class FileHandler : IDisposable
         FileState.Saved = false;
         FileState.FileName = null;
 
-        cache?.Clear();
         undo.ClearHistory();
     }
 

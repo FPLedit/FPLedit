@@ -49,9 +49,7 @@ namespace FPLedit.Shared
         /// This property is only available after the <see cref="IPluginInterface.ExtensionsLoaded"/> event is invoked and thus cannot be used in <see cref="IPlugin.Init"/>.
         /// </remarks>
         ITemplateManager TemplateManager { get; }
-        
-        ICacheFile Cache { get; }
-        
+
         string GetTemp(string filename);
         string ExecutableDir { get; }
     }

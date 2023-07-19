@@ -28,7 +28,6 @@ internal sealed class Bootstrapper : IPluginInterface, IDisposable
     ISettings IPluginInterface.Settings => settings;
     IReadOnlySettings IReducedPluginInterface.Settings => settings;
     public ISettings FullSettings => settings;
-    public ICacheFile Cache => FileHandler.Cache;
     public ITemplateManager TemplateManager { get; private set; } = null!;
     public ILog Logger { get; private set; } = null!;
     public dynamic RootForm { get; private set; } = null!;
