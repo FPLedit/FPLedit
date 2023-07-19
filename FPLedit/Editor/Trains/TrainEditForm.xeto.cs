@@ -62,14 +62,9 @@ internal sealed class TrainEditForm : FDialog<DialogResult>
 
         resetTransitionButton.TextColor = Colors.Red;
 
-        if (tt.Type == TimetableType.Network && tt.Version.CompareTo(TimetableVersion.Extended_FPL2) < 0)
-            linkGroupBox.Visible = false;
-        else
-        {
-            linkGridView.AddFuncColumn<TrainLink>(tl => tl.TrainCount.ToString(), T._("Anzahl"));
-            linkGridView.AddFuncColumn<TrainLink>(tl => tl.TimeOffset.ToTimeString(), T._("Erster Abstand"));
-            linkGridView.AddFuncColumn<TrainLink>(tl => tl.TimeDifference.ToTimeString(), T._("Zeitdifferenz"));
-        }
+        linkGridView.AddFuncColumn<TrainLink>(tl => tl.TrainCount.ToString(), T._("Anzahl"));
+        linkGridView.AddFuncColumn<TrainLink>(tl => tl.TimeOffset.ToTimeString(), T._("Erster Abstand"));
+        linkGridView.AddFuncColumn<TrainLink>(tl => tl.TimeDifference.ToTimeString(), T._("Zeitdifferenz"));
     }
 
     /// <summary>
@@ -138,8 +133,7 @@ internal sealed class TrainEditForm : FDialog<DialogResult>
             .Select(kvp => new KeyValuePair<Station, ArrDep>(kvp.Key, kvp.Value.Copy()))
             .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
-        if (tt.Type != TimetableType.Network || tt.Version.CompareTo(TimetableVersion.Extended_FPL2) >= 0)
-            linkGridView.DataStore = Train.TrainLinks;
+        linkGridView.DataStore = Train.TrainLinks;
     }
 
     private void CloseButton_Click(object sender, EventArgs e)
@@ -219,9 +213,6 @@ internal sealed class TrainEditForm : FDialog<DialogResult>
 
     private void DeleteLinkButton_Click(object sender, EventArgs e)
     {
-        if (tt.Type == TimetableType.Network && tt.Version.CompareTo(TimetableVersion.Extended_FPL2) < 0)
-            throw new TimetableTypeNotSupportedException("train links");
-            
         if (linkGridView.SelectedItem != null)
         {
             tt.RemoveLink((TrainLink) linkGridView.SelectedItem);
@@ -233,9 +224,6 @@ internal sealed class TrainEditForm : FDialog<DialogResult>
         
     private void EditLinkButton_Click(object sender, EventArgs e)
     {
-        if (tt.Type == TimetableType.Network && tt.Version.CompareTo(TimetableVersion.Extended_FPL2) < 0)
-            throw new TimetableTypeNotSupportedException("train links");
-            
         if (linkGridView.SelectedItem != null)
         {
             var link = (TrainLink) linkGridView.SelectedItem;

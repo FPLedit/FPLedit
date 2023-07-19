@@ -183,11 +183,7 @@ namespace FPLedit.Shared
 
                     counters[c.XName]++;
                 }
-                
-                // Old network timetables do not support linked trains.
-                if ((linkedTrainsMap.Any() || trainLinkElements.Any()) && Type == TimetableType.Network && Version.CompareTo(TimetableVersion.Extended_FPL2) < 0)
-                    throw new TimetableTypeNotSupportedException("Linked trains");
-                
+
                 // Correction to compensate deleted orphaned trains.
                 var indexCorrection = new Dictionary<string, int>(3)
                 {

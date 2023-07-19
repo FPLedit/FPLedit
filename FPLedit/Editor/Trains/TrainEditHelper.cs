@@ -91,9 +91,6 @@ internal sealed class TrainEditHelper
         
     public void LinkTrainMultiple(Train orig, TimeEntry offset, TimeEntry diff, int count, ITrainNameGen tnc)
     {
-        if (orig.ParentTimetable.Type == TimetableType.Network && orig.ParentTimetable.Version.CompareTo(TimetableVersion.Extended_FPL2) < 0)
-            throw new TimetableTypeNotSupportedException("train links");
-            
         if (count < 0)
             throw new ArgumentException("Value must be greater than or equal to zero", nameof(count));
 

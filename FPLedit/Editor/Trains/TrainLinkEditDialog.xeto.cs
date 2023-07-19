@@ -30,9 +30,6 @@ internal sealed class TrainLinkEditDialog : FDialog<DialogResult>
     /// <param name="tt">Current timetable instance.</param>
     public TrainLinkEditDialog(TrainLink link, Timetable tt)
     {
-        if (tt.Type == TimetableType.Network && tt.Version.CompareTo(TimetableVersion.Extended_FPL2) < 0)
-            throw new TimetableTypeNotSupportedException("train links");
-            
         Eto.Serialization.Xaml.XamlReader.Load(this);
 
         differenceValidator = new TimeValidator(differenceTextBox, false, errorMessage: T._("Bitte die Verschiebung als Zeitangabe angeben!"));

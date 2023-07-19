@@ -44,9 +44,6 @@ internal sealed class TrainCopyDialog : FDialog<DialogResult>
         modeSelect = new SelectionUI<CopySelectionMode>(_ => UpdateVisibility(), selectStack);
         linkSelect = new SelectionUI<LinkTypeMode>(_ => UpdateVisibility(), linkTypeStack);
 
-        if (tt.Type == TimetableType.Network && tt.Version.CompareTo(TimetableVersion.Extended_FPL2) < 0)
-            modeSelect.DisableOption(CopySelectionMode.Link);
-
         specialNameGridView.AddFuncColumn((SpecialNameEntry spn) => spn.RowNumber.ToString(), "");
         specialNameGridView.AddColumn((SpecialNameEntry spn) => spn.Name, T._("Zugname"), true);
         specialNameGridView.DataStore = new[] { new SpecialNameEntry(1, "") };
