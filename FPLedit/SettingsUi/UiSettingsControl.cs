@@ -4,35 +4,34 @@ using FPLedit.Editor.Rendering;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 
-namespace FPLedit.SettingsUi
+namespace FPLedit.SettingsUi;
+
+public class UiSettingsControl : ISettingsControl
 {
-    public class UiSettingsControl : ISettingsControl
+    public string DisplayName => T._("Benutzeroberfläche");
+
+    public Control GetControl(IPluginInterface pluginInterface)
     {
-        public string DisplayName => T._("Benutzeroberfläche");
+        var checkButton = new Button { Text = T._("Gespeicherte Fenstergrößen löschen") };
+        var toolbarCheckBox = new CheckBox { Text = T._("Menüleiste mit Symbolen statt Text darstellen") };
 
-        public Control GetControl(IPluginInterface pluginInterface)
+        var stack = new StackLayout(toolbarCheckBox,  checkButton)
         {
-            var checkButton = new Button { Text = T._("Gespeicherte Fenstergrößen löschen") };
-            var toolbarCheckBox = new CheckBox { Text = T._("Menüleiste mit Symbolen statt Text darstellen") };
+            Padding = new Padding(10),
+            Orientation = Orientation.Vertical,
+            Spacing = 15
+        };
 
-            var stack = new StackLayout(toolbarCheckBox,  checkButton)
-            {
-                Padding = new Padding(10),
-                Orientation = Orientation.Vertical,
-                Spacing = 15
-            };
+        checkButton.Click += (_, _) =>
+        {
+            SizeManager.Reset();
+            MessageBox.Show(T._("Die Änderungen werden beim nächsten Programmstart angewendet!"), "FPLedit");
+        };
 
-            checkButton.Click += (_, _) =>
-            {
-                SizeManager.Reset();
-                MessageBox.Show(T._("Die Änderungen werden beim nächsten Programmstart angewendet!"), "FPLedit");
-            };
+        toolbarCheckBox.Checked = pluginInterface.Settings.Get(NetworkEditingControl.TOOLBAR_ICON_SETTINGS_KEY, true);
+        toolbarCheckBox.CheckedChanged += (_, _)
+            => pluginInterface.Settings.Set(NetworkEditingControl.TOOLBAR_ICON_SETTINGS_KEY, toolbarCheckBox.Checked!.Value);
 
-            toolbarCheckBox.Checked = pluginInterface.Settings.Get(NetworkEditingControl.TOOLBAR_ICON_SETTINGS_KEY, true);
-            toolbarCheckBox.CheckedChanged += (_, _)
-                => pluginInterface.Settings.Set(NetworkEditingControl.TOOLBAR_ICON_SETTINGS_KEY, toolbarCheckBox.Checked!.Value);
-
-            return stack;
-        }
+        return stack;
     }
 }

@@ -1,8 +1,7 @@
-﻿namespace FPLedit.Extensibility
+﻿namespace FPLedit.Extensibility;
+
+internal enum SecurityContext
 {
-    internal enum SecurityContext
-    {
-        Official,
-        ThirdParty,
-    }
+    Official,
+    ThirdParty,
 }

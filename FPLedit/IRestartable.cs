@@ -1,7 +1,6 @@
-﻿namespace FPLedit
+﻿namespace FPLedit;
+
+public interface IRestartable
 {
-    public interface IRestartable
-    {
-        void RestartWithCurrentFile();
-    }
+    void RestartWithCurrentFile();
 }

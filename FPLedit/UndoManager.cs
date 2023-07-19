@@ -2,60 +2,59 @@
 using System;
 using System.Linq;
 
-namespace FPLedit
+namespace FPLedit;
+
+internal sealed class UndoManager
 {
-    internal sealed class UndoManager
+    private const int MAX_STEPS = 2;
+
+    private Timetable?[] steps;
+    private int pointer;
+
+    private Timetable? stagedStep = null;
+
+    public bool CanGoBack => steps.Any(s => s != null);
+
+    public UndoManager()
     {
-        private const int MAX_STEPS = 2;
+        steps = new Timetable[MAX_STEPS];
+    }
 
-        private Timetable?[] steps;
-        private int pointer;
+    public Timetable? Undo()
+    {
+        if (steps.All(s => s == null))
+            return null;
 
-        private Timetable? stagedStep = null;
+        // Pop
+        pointer = (steps.Length + pointer - 1) % steps.Length;
+        var step = steps[pointer];
+        steps[pointer] = null;
 
-        public bool CanGoBack => steps.Any(s => s != null);
+        return step;
+    }
 
-        public UndoManager()
-        {
-            steps = new Timetable[MAX_STEPS];
-        }
+    // Speichert den aktuellen Status, *vor* der Veränderung aufzurufen!
+    public void StageUndoStep(Timetable tt)
+    {
+        stagedStep = tt.Clone();
+    }
 
-        public Timetable? Undo()
-        {
-            if (steps.All(s => s == null))
-                return null;
+    // Fügt den vorher "gestageten" Step zum Stack hinzu
+    public void AddUndoStep()
+    {
+        if (stagedStep == null)
+            throw new Exception(T._("Fehler in einer Erweiterung: Vor jeder *möglichen* Änderung muss `StageUndoStep()` aufgerufen werden!"));
 
-            // Pop
-            pointer = (steps.Length + pointer - 1) % steps.Length;
-            var step = steps[pointer];
-            steps[pointer] = null;
+        // Push
+        steps[pointer] = stagedStep;
+        pointer = (pointer + 1) % steps.Length;
 
-            return step;
-        }
+        stagedStep = null;
+    }
 
-        // Speichert den aktuellen Status, *vor* der Veränderung aufzurufen!
-        public void StageUndoStep(Timetable tt)
-        {
-            stagedStep = tt.Clone();
-        }
-
-        // Fügt den vorher "gestageten" Step zum Stack hinzu
-        public void AddUndoStep()
-        {
-            if (stagedStep == null)
-                throw new Exception(T._("Fehler in einer Erweiterung: Vor jeder *möglichen* Änderung muss `StageUndoStep()` aufgerufen werden!"));
-
-            // Push
-            steps[pointer] = stagedStep;
-            pointer = (pointer + 1) % steps.Length;
-
-            stagedStep = null;
-        }
-
-        public void ClearHistory()
-        {
-            pointer = 0;
-            steps = new Timetable[MAX_STEPS];
-        }
+    public void ClearHistory()
+    {
+        pointer = 0;
+        steps = new Timetable[MAX_STEPS];
     }
 }

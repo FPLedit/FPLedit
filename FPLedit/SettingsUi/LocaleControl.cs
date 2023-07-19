@@ -2,49 +2,48 @@ using Eto.Drawing;
 using Eto.Forms;
 using FPLedit.Shared;
 
-namespace FPLedit.SettingsUi
+namespace FPLedit.SettingsUi;
+
+public class LocaleControl : ISettingsControl
 {
-    public class LocaleControl : ISettingsControl
+    public string DisplayName => T._("Sprache");
+
+    public Control GetControl(IPluginInterface pluginInterface)
     {
-        public string DisplayName => T._("Sprache");
-
-        public Control GetControl(IPluginInterface pluginInterface)
+        var availableLocales = T.GetAvailableLocales();
+        var currentLocale = T.GetCurrentLocale();
+            
+        var stack = new StackLayout()
         {
-            var availableLocales = T.GetAvailableLocales();
-            var currentLocale = T.GetCurrentLocale();
+            Padding = new Padding(10),
+            Orientation = Orientation.Vertical,
+            Spacing = 5
+        };
+        RadioButton? master = null;
             
-            var stack = new StackLayout()
+        stack.Items.Add(new Label { Text = T._("Sprache der Benutzeroberfläche:") });
+
+        foreach (var locale in availableLocales)
+        {
+            var rb = new RadioButton(master)
             {
-                Padding = new Padding(10),
-                Orientation = Orientation.Vertical,
-                Spacing = 5
+                Text = locale.Value,
+                Checked = locale.Key == currentLocale,
             };
-            RadioButton? master = null;
-            
-            stack.Items.Add(new Label { Text = T._("Sprache der Benutzeroberfläche:") });
+            master ??= rb;
 
-            foreach (var locale in availableLocales)
+            rb.CheckedChanged += (_, _) =>
             {
-                var rb = new RadioButton(master)
+                if (rb.Checked)
                 {
-                    Text = locale.Value,
-                    Checked = locale.Key == currentLocale,
-                };
-                master ??= rb;
+                    pluginInterface.Settings.Set("lang", locale.Key);
+                    MessageBox.Show(T._("Die Änderungen werden beim nächsten Programmstart angewendet!"), "FPLedit");
+                }
+            };
 
-                rb.CheckedChanged += (_, _) =>
-                {
-                    if (rb.Checked)
-                    {
-                        pluginInterface.Settings.Set("lang", locale.Key);
-                        MessageBox.Show(T._("Die Änderungen werden beim nächsten Programmstart angewendet!"), "FPLedit");
-                    }
-                };
-
-                stack.Items.Add(rb);
-            }
-
-            return stack;
+            stack.Items.Add(rb);
         }
+
+        return stack;
     }
 }

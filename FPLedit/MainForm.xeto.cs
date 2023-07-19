@@ -11,255 +11,254 @@ using FPLedit.Shared.UI.Network;
 using FPLedit.Editor.Rendering;
 using FPLedit.Config;
 
-namespace FPLedit
+namespace FPLedit;
+
+internal sealed class MainForm : FForm, IPlugin
 {
-    internal sealed class MainForm : FForm, IPlugin
-    {
-        #region Controls
+    #region Controls
 #pragma warning disable CS0649,CA2213
-        private readonly LogControl logTextBox = null!;
-        private readonly ButtonMenuItem saveMenu = null!, saveAsMenu = null!, exportMenu = null!, importMenu = null!, lastMenu = null!, convertMenu = null!;
-        private readonly NetworkEditingControl networkEditingControl = null!;
-        private readonly StackLayout loadingStack = null!;
+    private readonly LogControl logTextBox = null!;
+    private readonly ButtonMenuItem saveMenu = null!, saveAsMenu = null!, exportMenu = null!, importMenu = null!, lastMenu = null!, convertMenu = null!;
+    private readonly NetworkEditingControl networkEditingControl = null!;
+    private readonly StackLayout loadingStack = null!;
 #pragma warning restore CS0649,CA2213
-        #endregion
+    #endregion
 
-        internal CrashReporting.CrashReporter CrashReporter { get; }
-        internal Bootstrapper Bootstrapper { get; }
+    internal CrashReporting.CrashReporter CrashReporter { get; }
+    internal Bootstrapper Bootstrapper { get; }
         
-        private TimetableChecks.TimetableCheckRunner? checkRunner;
-        private readonly LastFileHandler lfh;
+    private TimetableChecks.TimetableCheckRunner? checkRunner;
+    private readonly LastFileHandler lfh;
         
-        public static readonly string LocEditMenu = T._("&Bearbeiten");
-        public static readonly string LocPreviewMenu = T._("&Vorschau");
+    public static readonly string LocEditMenu = T._("&Bearbeiten");
+    public static readonly string LocPreviewMenu = T._("&Vorschau");
         
-        public static class L
-        {
-            public static readonly string MenuSettings = T._("Einstellungen");
-            public static readonly string MenuClose = T._("Datei schließen");
-            public static readonly string MenuOnlineHelp = T._("Online Hilfe");
-            public static readonly string MenuAbout = T._("Info");
-            public static readonly string MenuQuit = T._("&Beenden");
-            public static readonly string MenuExport = T._("&Exportieren");
-            public static readonly string MenuConvert = T._("&Konvertieren");
-            public static readonly string MenuImport = T._("&Importieren");
-            public static readonly string MenuLastFiles = T._("Letzte Dateien");
-            public static readonly string MenuOpen = T._("Öffnen");
-            public static readonly string MenuSave = T._("&Speichern");
-            public static readonly string MenuSaveAs = T._("Speichern &unter");
-            public static readonly string MenuNew = T._("&Neu");
-            public static readonly string MenuNewNetwork = T._("&Netzwerk-Fahrplan");
-            public static readonly string MenuNewLinear = T._("&Lineare Strecke");
+    public static class L
+    {
+        public static readonly string MenuSettings = T._("Einstellungen");
+        public static readonly string MenuClose = T._("Datei schließen");
+        public static readonly string MenuOnlineHelp = T._("Online Hilfe");
+        public static readonly string MenuAbout = T._("Info");
+        public static readonly string MenuQuit = T._("&Beenden");
+        public static readonly string MenuExport = T._("&Exportieren");
+        public static readonly string MenuConvert = T._("&Konvertieren");
+        public static readonly string MenuImport = T._("&Importieren");
+        public static readonly string MenuLastFiles = T._("Letzte Dateien");
+        public static readonly string MenuOpen = T._("Öffnen");
+        public static readonly string MenuSave = T._("&Speichern");
+        public static readonly string MenuSaveAs = T._("Speichern &unter");
+        public static readonly string MenuNew = T._("&Neu");
+        public static readonly string MenuNewNetwork = T._("&Netzwerk-Fahrplan");
+        public static readonly string MenuNewLinear = T._("&Lineare Strecke");
             
-            public static readonly string LoadingFile = T._("Lade Datei...");
-        }
+        public static readonly string LoadingFile = T._("Lade Datei...");
+    }
 
-        public MainForm(LastFileHandler lfh, CrashReporting.CrashReporter crashReporter, Bootstrapper bootstrapper)
-        {
-            Eto.Serialization.Xaml.XamlReader.Load(this);
-            Icon = new Icon(this.GetResource("Resources.programm.ico"));
+    public MainForm(LastFileHandler lfh, CrashReporting.CrashReporter crashReporter, Bootstrapper bootstrapper)
+    {
+        Eto.Serialization.Xaml.XamlReader.Load(this);
+        Icon = new Icon(this.GetResource("Resources.programm.ico"));
 
-            this.lfh = lfh;
-            Bootstrapper = bootstrapper;
-            CrashReporter = crashReporter;
+        this.lfh = lfh;
+        Bootstrapper = bootstrapper;
+        CrashReporter = crashReporter;
 
-            lfh.LastFilesUpdates += UpdateLastFilesMenu;
+        lfh.LastFilesUpdates += UpdateLastFilesMenu;
 
-            Bootstrapper.Logger.AttachLogger(logTextBox);
-            Bootstrapper.FileStateChanged += FileStateChanged;
-            Bootstrapper.FileHandler.AsyncOperationStateChanged += FileHandlerOnAsyncOperationStateChanged;
+        Bootstrapper.Logger.AttachLogger(logTextBox);
+        Bootstrapper.FileStateChanged += FileStateChanged;
+        Bootstrapper.FileHandler.AsyncOperationStateChanged += FileHandlerOnAsyncOperationStateChanged;
 
-            this.AddSizeStateHandler();
-        }
+        this.AddSizeStateHandler();
+    }
 
-        private void FileHandlerOnAsyncOperationStateChanged(object? sender, bool e)
-        {
-            loadingStack.Visible = e;
-        }
+    private void FileHandlerOnAsyncOperationStateChanged(object? sender, bool e)
+    {
+        loadingStack.Visible = e;
+    }
         
-        #region Plugin Code
+    #region Plugin Code
         
-        public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
-        {
-            // Initialize main UI component
-            networkEditingControl.Initialize(pluginInterface);
-            pluginInterface.FileOpened += (_, _) => networkEditingControl.ResetPan();
-        }
+    public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
+    {
+        // Initialize main UI component
+        networkEditingControl.Initialize(pluginInterface);
+        pluginInterface.FileOpened += (_, _) => networkEditingControl.ResetPan();
+    }
 
-        private void FileStateChanged(object? sender, FileStateChangedEventArgs e)
-        {
-            Title = "FPLedit" + (e.FileState.Opened ? " - "
-                + (e.FileState.FileName != null ? (Path.GetFileName(e.FileState.FileName) + " ") : "")
-                + (e.FileState.Saved ? "" : "*") : "");
+    private void FileStateChanged(object? sender, FileStateChangedEventArgs e)
+    {
+        Title = "FPLedit" + (e.FileState.Opened ? " - "
+                                                  + (e.FileState.FileName != null ? (Path.GetFileName(e.FileState.FileName) + " ") : "")
+                                                  + (e.FileState.Saved ? "" : "*") : "");
 
-            saveMenu.Enabled = saveAsMenu.Enabled = exportMenu.Enabled = convertMenu.Enabled = e.FileState.Opened;
-        }
+        saveMenu.Enabled = saveAsMenu.Enabled = exportMenu.Enabled = convertMenu.Enabled = e.FileState.Opened;
+    }
         
-        #endregion
+    #endregion
         
-        protected override void OnLoad(EventArgs e)
-        {
-            // Now we can load extensions and templates
-            Bootstrapper.ExtensionManager.InjectPlugin(this, 0);
-            Bootstrapper.BootstrapExtensions();
+    protected override void OnLoad(EventArgs e)
+    {
+        // Now we can load extensions and templates
+        Bootstrapper.ExtensionManager.InjectPlugin(this, 0);
+        Bootstrapper.BootstrapExtensions();
 
-            // Maybe remove import menu.
-            if (Bootstrapper.GetRegistered<IImport>().Length == 0)
-                Menu.ApplicationItems.Remove(importMenu);
+        // Maybe remove import menu.
+        if (Bootstrapper.GetRegistered<IImport>().Length == 0)
+            Menu.ApplicationItems.Remove(importMenu);
 
-            // Remove last files menu, if last file handling is disabled.
-            if (!lfh.Enabled)
-                lastMenu.Enabled = false;
+        // Remove last files menu, if last file handling is disabled.
+        if (!lfh.Enabled)
+            lastMenu.Enabled = false;
 
-            base.OnLoad(e);
-        }
+        base.OnLoad(e);
+    }
 
-        protected override void OnShown(EventArgs e)
-        {
+    protected override void OnShown(EventArgs e)
+    {
 #if DEBUG
-            Menu.HelpMenu.Items.Add(new SeparatorMenuItem());
-            Menu.HelpMenu.CreateItem(T._("Exception auslösen"), clickHandler: (_, _) => throw new Exception(T._("Ausgelöste Exception")));
+        Menu.HelpMenu.Items.Add(new SeparatorMenuItem());
+        Menu.HelpMenu.CreateItem(T._("Exception auslösen"), clickHandler: (_, _) => throw new Exception(T._("Ausgelöste Exception")));
 #endif
 
-            UpdateLastFilesMenu(null, EventArgs.Empty);
+        UpdateLastFilesMenu(null, EventArgs.Empty);
 
-            // Hatten wir einen Crash beim letzten Mal?
-            if (CrashReporter.HasCurrentReport)
-            {
-                try
-                {
-                    using var cf = new CrashReporting.CrashForm(CrashReporter);
-                    if (cf.ShowModal(this) == DialogResult.Ok)
-                        CrashReporter.Restore(Bootstrapper.FileHandler);
-                    else
-                        CrashReporter.RemoveCrashFlag();
-                }
-                catch (Exception ex)
-                {
-                    Bootstrapper.Logger.Error(T._("Fehlermeldung des letzten Absturzes konnte nicht angezeigt werden: {0}", ex.Message));
-                    CrashReporter.RemoveCrashFlag(); // Der Crash crasht sogar noch die Fehlerbehandlung...
-                }
-            }
-            
-            foreach (var msg in Bootstrapper.PreBootstrapWarnings)
-                Bootstrapper.Logger.Warning(msg);
-            
-            checkRunner = new TimetableChecks.TimetableCheckRunner(Bootstrapper); // CheckRunner initialisieren
-            
-            LoadStartFile();
-            Bootstrapper.Update.AutoUpdateCheck(Bootstrapper.Logger);
-            
-            base.OnShown(e);
-        }
-
-        private void LoadStartFile()
+        // Hatten wir einen Crash beim letzten Mal?
+        if (CrashReporter.HasCurrentReport)
         {
-            // Parameter: Fpledit.exe [Dateiname] ODER Datei aus Restart
-            var fn = OptionsParser.OpenFilename;
-            fn = Bootstrapper.FullSettings.Get("restart.file", fn);
-            if (fn != null)
+            try
             {
-                if (File.Exists(fn))
-                {
-                    Bootstrapper.FileHandler.InternalOpen(fn, true);
-                    lfh.AddLastFile(fn);
-                }
+                using var cf = new CrashReporting.CrashForm(CrashReporter);
+                if (cf.ShowModal(this) == DialogResult.Ok)
+                    CrashReporter.Restore(Bootstrapper.FileHandler);
                 else
-                    Bootstrapper.Logger.Error(T._("Angegebene Startdatei {0} nicht gefunden!", fn));
+                    CrashReporter.RemoveCrashFlag();
             }
-            Bootstrapper.FullSettings.Remove("restart.file");
-        }
-
-        private void UpdateLastFilesMenu(object? sender, EventArgs e)
-        {
-            lastMenu.Items.Clear();
-            foreach (var lf in lfh.LastFiles)
+            catch (Exception ex)
             {
-                var itm = lastMenu.CreateItem(lf);
-                itm.Click += (_, _) =>
-                {
-                    if (Bootstrapper.FileHandler.NotifyIfUnsaved())
-                        Bootstrapper.FileHandler.InternalOpen(lf, true);
-                };
+                Bootstrapper.Logger.Error(T._("Fehlermeldung des letzten Absturzes konnte nicht angezeigt werden: {0}", ex.Message));
+                CrashReporter.RemoveCrashFlag(); // Der Crash crasht sogar noch die Fehlerbehandlung...
             }
         }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            if (!Bootstrapper.FullSettings.KeyExists("restart.file") && !Program.ExceptionQuit)
-            {
-                lfh.Persist();
-                if (!Bootstrapper.FileHandler.NotifyIfUnsaved())
-                    e.Cancel = true;
-
-                Bootstrapper.ClearTemp();
-            }
             
-            base.OnClosing(e);
-        }
-        
-        private void ProcessKeyDown(object? s, KeyEventArgs e)
+        foreach (var msg in Bootstrapper.PreBootstrapWarnings)
+            Bootstrapper.Logger.Warning(msg);
+            
+        checkRunner = new TimetableChecks.TimetableCheckRunner(Bootstrapper); // CheckRunner initialisieren
+            
+        LoadStartFile();
+        Bootstrapper.Update.AutoUpdateCheck(Bootstrapper.Logger);
+            
+        base.OnShown(e);
+    }
+
+    private void LoadStartFile()
+    {
+        // Parameter: Fpledit.exe [Dateiname] ODER Datei aus Restart
+        var fn = OptionsParser.OpenFilename;
+        fn = Bootstrapper.FullSettings.Get("restart.file", fn);
+        if (fn != null)
         {
-            if ((NetworkRenderer.DispatchableKeys.Contains(e.Key) || NetworkEditingControl.DispatchableKeys.Contains(e.Key)) && e.Modifiers == Keys.None)
-                networkEditingControl.DispatchKeystroke(e);
+            if (File.Exists(fn))
+            {
+                Bootstrapper.FileHandler.InternalOpen(fn, true);
+                lfh.AddLastFile(fn);
+            }
+            else
+                Bootstrapper.Logger.Error(T._("Angegebene Startdatei {0} nicht gefunden!", fn));
         }
+        Bootstrapper.FullSettings.Remove("restart.file");
+    }
 
-        protected override void OnKeyDown(KeyEventArgs e)
+    private void UpdateLastFilesMenu(object? sender, EventArgs e)
+    {
+        lastMenu.Items.Clear();
+        foreach (var lf in lfh.LastFiles)
         {
-            ProcessKeyDown(null, e);
-            base.OnKeyDown(e);
+            var itm = lastMenu.CreateItem(lf);
+            itm.Click += (_, _) =>
+            {
+                if (Bootstrapper.FileHandler.NotifyIfUnsaved())
+                    Bootstrapper.FileHandler.InternalOpen(lf, true);
+            };
         }
+    }
 
-        #region Drag'n'Drop
-        protected override void OnDragEnter(DragEventArgs e)
+    protected override void OnClosing(CancelEventArgs e)
+    {
+        if (!Bootstrapper.FullSettings.KeyExists("restart.file") && !Program.ExceptionQuit)
         {
-            e.Effects = DragEffects.None;
-
-            if (!e.Data.Types.Contains("FileDrop"))
-                return;
-
-            Uri[] files = e.Data.Uris;
-            if (files.Length == 1 && files[0].AbsolutePath.EndsWith(".fpl"))
-                e.Effects = DragEffects.Copy;
-
-            base.OnDragEnter(e);
-        }
-
-        protected override void OnDragDrop(DragEventArgs e)
-        {
-            Uri[] files = e.Data.Uris;
-            if (files == null || files.Length != 1 || !files[0].AbsolutePath.EndsWith(".fpl"))
-                return;
-
+            lfh.Persist();
             if (!Bootstrapper.FileHandler.NotifyIfUnsaved())
-                return;
-            Bootstrapper.FileHandler.InternalOpen(files[0].LocalPath, true);
+                e.Cancel = true;
 
-            base.OnDragDrop(e);
+            Bootstrapper.ClearTemp();
         }
-        #endregion
+            
+        base.OnClosing(e);
+    }
+        
+    private void ProcessKeyDown(object? s, KeyEventArgs e)
+    {
+        if ((NetworkRenderer.DispatchableKeys.Contains(e.Key) || NetworkEditingControl.DispatchableKeys.Contains(e.Key)) && e.Modifiers == Keys.None)
+            networkEditingControl.DispatchKeystroke(e);
+    }
 
-        #region Events
-        private void SaveMenu_Click(object? sender, EventArgs e) => Bootstrapper.Save(false);
-        private void OpenMenu_Click(object? sender, EventArgs e) => Bootstrapper.Open();
-        private void SaveAsMenu_Click(object? sender, EventArgs e) => Bootstrapper.Save(true);
-        private void ImportMenu_Click(object? sender, EventArgs e) => Bootstrapper.FileHandler.Import();
-        private void ExportMenu_Click(object? sender, EventArgs e) => Bootstrapper.FileHandler.Export();
-        private void QuitMenu_Click(object? sender, EventArgs e) => Close();
-        private void CloseFileMenu_Click(object? sender, EventArgs e) => Bootstrapper.FileHandler.CloseFile(manualAction: true);
-        private void LinearNewMenu_Click(object? sender, EventArgs e) => Bootstrapper.FileHandler.New(TimetableType.Linear);
-        private void NetworkNewMenu_Click(object? sender, EventArgs e) => Bootstrapper.FileHandler.New(TimetableType.Network);
-        private void ConvertMenu_Click(object? sender, EventArgs e) => Bootstrapper.FileHandler.ConvertTimetable();
-        private void AboutMenu_Click(object? sender, EventArgs e) => new InfoForm().ShowDialog(this);
-        private void SettingsMenu_Click(object? sender, EventArgs e) => new SettingsUi.SettingsForm(Bootstrapper).ShowModal(this);
-        private void HelpMenu_Click(object? sender, EventArgs e) => Bootstrapper.OpenUrl("https://fahrplan.manuelhu.de/");
-        #endregion
+    protected override void OnKeyDown(KeyEventArgs e)
+    {
+        ProcessKeyDown(null, e);
+        base.OnKeyDown(e);
+    }
 
-        protected override void Dispose(bool disposing)
-        {
-            foreach (var topLevelItem in Menu.Items)
-                topLevelItem.DisposeMenu();
-            base.Dispose(disposing);
-        }
+    #region Drag'n'Drop
+    protected override void OnDragEnter(DragEventArgs e)
+    {
+        e.Effects = DragEffects.None;
+
+        if (!e.Data.Types.Contains("FileDrop"))
+            return;
+
+        Uri[] files = e.Data.Uris;
+        if (files.Length == 1 && files[0].AbsolutePath.EndsWith(".fpl"))
+            e.Effects = DragEffects.Copy;
+
+        base.OnDragEnter(e);
+    }
+
+    protected override void OnDragDrop(DragEventArgs e)
+    {
+        Uri[] files = e.Data.Uris;
+        if (files == null || files.Length != 1 || !files[0].AbsolutePath.EndsWith(".fpl"))
+            return;
+
+        if (!Bootstrapper.FileHandler.NotifyIfUnsaved())
+            return;
+        Bootstrapper.FileHandler.InternalOpen(files[0].LocalPath, true);
+
+        base.OnDragDrop(e);
+    }
+    #endregion
+
+    #region Events
+    private void SaveMenu_Click(object? sender, EventArgs e) => Bootstrapper.Save(false);
+    private void OpenMenu_Click(object? sender, EventArgs e) => Bootstrapper.Open();
+    private void SaveAsMenu_Click(object? sender, EventArgs e) => Bootstrapper.Save(true);
+    private void ImportMenu_Click(object? sender, EventArgs e) => Bootstrapper.FileHandler.Import();
+    private void ExportMenu_Click(object? sender, EventArgs e) => Bootstrapper.FileHandler.Export();
+    private void QuitMenu_Click(object? sender, EventArgs e) => Close();
+    private void CloseFileMenu_Click(object? sender, EventArgs e) => Bootstrapper.FileHandler.CloseFile(manualAction: true);
+    private void LinearNewMenu_Click(object? sender, EventArgs e) => Bootstrapper.FileHandler.New(TimetableType.Linear);
+    private void NetworkNewMenu_Click(object? sender, EventArgs e) => Bootstrapper.FileHandler.New(TimetableType.Network);
+    private void ConvertMenu_Click(object? sender, EventArgs e) => Bootstrapper.FileHandler.ConvertTimetable();
+    private void AboutMenu_Click(object? sender, EventArgs e) => new InfoForm().ShowDialog(this);
+    private void SettingsMenu_Click(object? sender, EventArgs e) => new SettingsUi.SettingsForm(Bootstrapper).ShowModal(this);
+    private void HelpMenu_Click(object? sender, EventArgs e) => Bootstrapper.OpenUrl("https://fahrplan.manuelhu.de/");
+    #endregion
+
+    protected override void Dispose(bool disposing)
+    {
+        foreach (var topLevelItem in Menu.Items)
+            topLevelItem.DisposeMenu();
+        base.Dispose(disposing);
     }
 }

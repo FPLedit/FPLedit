@@ -1,38 +1,37 @@
 using System;
 
-namespace FPLedit
+namespace FPLedit;
+
+internal sealed class PathManager
 {
-    internal sealed class PathManager
+    private static PathManager? instance;
+    private string? appDirectory, settingsDirectory;
+
+    public static PathManager Instance
     {
-        private static PathManager? instance;
-        private string? appDirectory, settingsDirectory;
-
-        public static PathManager Instance
+        get
         {
-            get
-            {
-                instance ??= new PathManager();
-                return instance;
-            }
+            instance ??= new PathManager();
+            return instance;
         }
+    }
 
-        private PathManager() {}
+    private PathManager() {}
 
-        public string AppDirectory
+    public string AppDirectory
+    {
+        get
         {
-            get
-            {
-                if (appDirectory == null)
-                    throw new InvalidOperationException(nameof(AppDirectory) + " is not set!");
-                return appDirectory;
-            }
-            set => appDirectory = value ?? throw new ArgumentNullException(nameof(value), "Tried to set " + nameof(AppDirectory) + " to null!");
+            if (appDirectory == null)
+                throw new InvalidOperationException(nameof(AppDirectory) + " is not set!");
+            return appDirectory;
         }
+        set => appDirectory = value ?? throw new ArgumentNullException(nameof(value), "Tried to set " + nameof(AppDirectory) + " to null!");
+    }
 
-        public string SettingsDirectory
-        {
-            get => settingsDirectory ?? AppDirectory;
-            set => settingsDirectory = value ?? throw new ArgumentNullException(nameof(value), "Tried to set " + nameof(SettingsDirectory) + " to null!");
-        }
+    public string SettingsDirectory
+    {
+        get => settingsDirectory ?? AppDirectory;
+        set => settingsDirectory = value ?? throw new ArgumentNullException(nameof(value), "Tried to set " + nameof(SettingsDirectory) + " to null!");
     }
 }
