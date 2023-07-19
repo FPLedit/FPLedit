@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using System.Reflection;
 using Esprima;
 using FPLedit.Shared.Templating;
 using FPLedit.Shared;
@@ -30,6 +31,7 @@ internal sealed class JavascriptTemplate : ITemplate
         TemplateSource = code;
         Identifier = identifier;
         this.pluginInterface = pluginInterface;
+        TemplateBuiltins.Logger = pluginInterface.Logger;
 
         CompiledCode = ParseTemplate(TemplateSource.AsSpan());
     }
@@ -221,32 +223,35 @@ internal sealed class JavascriptTemplate : ITemplate
         // Load polyfills from resources.
         const string polyFillsPath = "Templating.TemplatePolyfills.js";
         polyfillsCache ??= ResourceHelper.GetStringResource(polyFillsPath);
-            
-        var polyfillsParserOptions = new ParserOptions() { Tolerant = false };
+
+        var polyfillsParserOptions = new ParserOptions { Tolerant = false };
         var templateCodeParserOptions = new ParserOptions();
-            
+
         return engine
             .SetValue("tt", tt)
-            .SetValue("debug", new Action<object?>(o => pluginInterface.Logger.Info($"{o?.GetType().FullName ?? "null"}: {o ?? "null"}")))
-            .SetValue("debug_print", new Action<object>(o => pluginInterface.Logger.Info($"{o}")))
-            .SetValue("clr_typename",     (Func<object,string>)TemplateBuiltins.ClrTypeName)
-            .SetValue("clr_typefullname", (Func<object,string?>)TemplateBuiltins.ClrTypeFullName)
-            .SetValue("clr_toArray",      (Func<IEnumerable<object>,object[]>)TemplateBuiltins.ClrToObject)
-            .SetValue("safe_html",        (Func<string,string>)TemplateOutput.SafeHtml)
-            .SetValue("safe_css_str",     (Func<string,string>)TemplateOutput.SafeCssStr)
-            .SetValue("safe_css_font",    (Func<string,string>)TemplateOutput.SafeCssFont)
-            .SetValue("safe_css_block",   (Func<string,string>)TemplateOutput.SafeCssBlock)
-            .SetValue("html_name",        (Func<string,string,string>)TemplateOutput.HtmlName)
+            .SetValue("debug",            TemplateBuiltins.Debug)
+            .SetValue("debug_print",      TemplateBuiltins.DebugPrint)
+            .SetValue("clr_typename",     TemplateBuiltins.ClrTypeName)
+            .SetValue("clr_typefullname", TemplateBuiltins.ClrTypeFullName)
+            .SetValue("clr_toArray",      TemplateBuiltins.ClrToArray)
+            .SetValue("safe_html",        TemplateOutput.SafeHtml)
+            .SetValue("safe_css_str",     TemplateOutput.SafeCssStr)
+            .SetValue("safe_css_font",    TemplateOutput.SafeCssFont)
+            .SetValue("safe_css_block",   TemplateOutput.SafeCssBlock)
+            .SetValue("html_name",        TemplateOutput.HtmlName)
             .Execute(polyfillsCache, polyFillsPath, polyfillsParserOptions) // Load polyfills
             .Execute("var __builder = '';", polyFillsPath, polyfillsParserOptions) // Create output variable
             .Execute(CompiledCode, Identifier, templateCodeParserOptions)
             .GetValue("__builder")
             .ToString();
     }
-        
+
     private static class TemplateBuiltins
     {
-        public static object[] ClrToObject(IEnumerable<object> o) => o.ToArray();
+        public static ILog? Logger;
+        public static void Debug(object? o) => Logger?.Info($"{o?.GetType().FullName ?? "null"}: {o ?? "null"}");
+        public static void DebugPrint(object? o) => Logger?.Info($"{o}");
+        public static object[] ClrToArray(IEnumerable<object> o) => o.ToArray();
         public static string? ClrTypeFullName(object o) => o.GetType().FullName;
         public static string ClrTypeName(object o) => o.GetType().Name;
     }
