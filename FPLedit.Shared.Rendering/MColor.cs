@@ -19,7 +19,7 @@ public sealed record MColor(byte R, byte G, byte B)
         => PdfSharp.Drawing.XColor.FromArgb(255, m.R, m.G, m.B);
 
 #if ENABLE_SYSTEM_DRAWING
-        public System.Drawing.Color ToSD() => System.Drawing.Color.FromArgb(255, R, G, B);
+    public System.Drawing.Color ToSD() => System.Drawing.Color.FromArgb(255, R, G, B);
 #endif
 
     public static MColor White => new (255, 255, 255);

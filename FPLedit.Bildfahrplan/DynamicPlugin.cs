@@ -32,25 +32,25 @@ public sealed class DynamicPlugin : IPlugin, IDisposable
         componentRegistry.Register<ISupportsVirtualRoutes>(new SupportsVirtualRoutes());
 
 #if !DEBUG
-            if (pluginInterface.Settings.Get<bool>("feature.enable-full-graph-editor"))
-            {
+        if (pluginInterface.Settings.Get<bool>("feature.enable-full-graph-editor"))
+        {
 #endif
-        pluginInterface.FileStateChanged += PluginInterface_FileStateChanged;
-                
-        graphItem = ((MenuBar)pluginInterface.Menu).CreateItem(T._("B&ildfahrplan"));
+            pluginInterface.FileStateChanged += PluginInterface_FileStateChanged;
 
-        showItem = graphItem.CreateItem(T._("&Anzeigen"), enabled: false, clickHandler: ShowItem_Click);
-        graphItem.Items.Add(new SeparatorMenuItem());
-        printItem = graphItem.CreateItem(T._("&Drucken"), enabled: false, clickHandler: PrintItem_Click);
-        exportItem = graphItem.CreateItem(T._("&Exportieren"), enabled: false, clickHandler: ExportItem_Click);
-        graphItem.Items.Add(new SeparatorMenuItem());
-        configItem = graphItem.CreateItem(T._("Darste&llung ändern"), enabled: false, clickHandler: (_, _) => ShowForm(new ConfigForm(pluginInterface.Timetable, pluginInterface)));
-        trainColorItem = graphItem.CreateItem(T._("&Zugdarstellung ändern"), enabled: false, clickHandler: (_, _) => ShowForm(new TrainStyleForm(pluginInterface)));
-        stationStyleItem = graphItem.CreateItem(T._("&Stationsdarstellung ändern"), enabled: false, clickHandler: (_, _) => ShowForm(new StationStyleForm(pluginInterface)));
-        overrideItem = graphItem.CreateCheckItem(T._("Verwende nur &Plandarstellung"), isChecked: Style.OverrideEntityStyle,
-            changeHandler: OverrideItem_CheckedChanged);
+            graphItem = ((MenuBar)pluginInterface.Menu).CreateItem(T._("B&ildfahrplan"));
+
+            showItem = graphItem.CreateItem(T._("&Anzeigen"), enabled: false, clickHandler: ShowItem_Click);
+            graphItem.Items.Add(new SeparatorMenuItem());
+            printItem = graphItem.CreateItem(T._("&Drucken"), enabled: false, clickHandler: PrintItem_Click);
+            exportItem = graphItem.CreateItem(T._("&Exportieren"), enabled: false, clickHandler: ExportItem_Click);
+            graphItem.Items.Add(new SeparatorMenuItem());
+            configItem = graphItem.CreateItem(T._("Darste&llung ändern"), enabled: false, clickHandler: (_, _) => ShowForm(new ConfigForm(pluginInterface.Timetable, pluginInterface)));
+            trainColorItem = graphItem.CreateItem(T._("&Zugdarstellung ändern"), enabled: false, clickHandler: (_, _) => ShowForm(new TrainStyleForm(pluginInterface)));
+            stationStyleItem = graphItem.CreateItem(T._("&Stationsdarstellung ändern"), enabled: false, clickHandler: (_, _) => ShowForm(new StationStyleForm(pluginInterface)));
+            overrideItem = graphItem.CreateCheckItem(T._("Verwende nur &Plandarstellung"), isChecked: Style.OverrideEntityStyle,
+                changeHandler: OverrideItem_CheckedChanged);
 #if !DEBUG
-            }
+        }
 #endif
     }
         

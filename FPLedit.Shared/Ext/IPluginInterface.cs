@@ -26,10 +26,10 @@ public interface IPluginInterface : IReducedPluginInterface, IUiPluginInterface
 
     new ISettings Settings { get; }
 
-    event EventHandler<FileStateChangedEventArgs> FileStateChanged;
-    event EventHandler ExtensionsLoaded;
-    event EventHandler FileOpened;
-    event EventHandler AppClosing;
+    event EventHandler<FileStateChangedEventArgs>? FileStateChanged;
+    event EventHandler? ExtensionsLoaded;
+    event EventHandler? FileOpened;
+    event EventHandler? AppClosing;
 }
 
 public interface IComponentRegistry

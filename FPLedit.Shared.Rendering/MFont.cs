@@ -77,13 +77,13 @@ public sealed class MFont : IDisposable
     }
 
 #if ENABLE_SYSTEM_DRAWING
-        private System.Drawing.Font? instanceCachedSd;
-        public static explicit operator System.Drawing.Font(MFont m)
-        {
-            if (m.instanceCachedSd == null)
-                m.instanceCachedSd = new System.Drawing.Font(m.Family, m.Size, (System.Drawing.FontStyle)m.Style);
-            return m.instanceCachedSd;
-        }
+    private System.Drawing.Font? instanceCachedSd;
+    public static explicit operator System.Drawing.Font(MFont m)
+    {
+        if (m.instanceCachedSd == null)
+            m.instanceCachedSd = new System.Drawing.Font(m.Family, m.Size, (System.Drawing.FontStyle)m.Style);
+        return m.instanceCachedSd;
+    }
 #endif
 
     #region ImageSharp
@@ -169,8 +169,8 @@ public sealed class MFont : IDisposable
         instanceCachedEto = null;
         instanceCachedIs = null;
 #if ENABLE_SYSTEM_DRAWING
-            instanceCachedSd?.Dispose();
-            instanceCachedSd = null;
+        instanceCachedSd?.Dispose();
+        instanceCachedSd = null;
 #endif
         instanceCachedPdf = null;
     }

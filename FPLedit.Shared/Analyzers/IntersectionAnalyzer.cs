@@ -37,7 +37,7 @@ public sealed class IntersectionAnalyzer
     {
         var its = IntersectTrainsAtStations(train, station, true);
 
-        var days = Days.None;
+        var days = Days.All; // If we have no intersecting train, we should return the trains days itself.
         var stoppingTrains = new List<ITrain>();
 
         foreach (var it in its)
@@ -47,9 +47,6 @@ public sealed class IntersectionAnalyzer
             if (it.GetArrDep(station).TrapeztafelHalt)
                 stoppingTrains.Add(it);
         }
-
-        if (!its.Any()) // We had no intersecting train, so we should return the trains days itself.
-            days = Days.All;
 
         return new TrapezEntry(train.GetArrDep(station).TrapeztafelHalt, stoppingTrains.ToArray(), train.Days.IntersectingDays(days));
     }
@@ -111,16 +108,4 @@ public sealed class IntersectionAnalyzer
     }
 }
 
-public sealed class TrapezEntry
-{
-    public TrapezEntry(bool isStopping, ITrain[] intersectingTrainsStopping, Days stopDays)
-    {
-        IsStopping = isStopping;
-        IntersectingTrainsStopping = intersectingTrainsStopping;
-        StopDays = stopDays;
-    }
-
-    public bool IsStopping { get; }
-    public ITrain[] IntersectingTrainsStopping { get; }
-    public Days StopDays { get; }
-}
+public sealed record TrapezEntry(bool IsStopping, ITrain[] IntersectingTrainsStopping, Days StopDays);
