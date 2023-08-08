@@ -1,7 +1,6 @@
-namespace FPLedit.Shared
+namespace FPLedit.Shared;
+
+public interface ISortedStations
 {
-    public interface ISortedStations
-    {
-        Station[] GetSurroundingStations(Station center, int radius);
-    }
+    Station[] GetSurroundingStations(Station center, int radius);
 }
