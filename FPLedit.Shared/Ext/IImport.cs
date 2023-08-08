@@ -24,26 +24,23 @@ public interface IImport : IRegistrableComponent
     /// </summary>
     /// <remarks>Must always return the same value.</remarks>
     string Filter { get; }
-}
 
-public static class ImportExt
-{
-    public static Timetable? SafeImport(this IImport imp, string filename, IReducedPluginInterface pluginInterface, ILog? replaceLog = null)
+    public Timetable? SafeImport(string filename, IReducedPluginInterface pluginInterface, ILog? replaceLog = null)
     {
         try
         {
             using var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.Read);
-            return imp.Import(stream, pluginInterface, replaceLog);
+            return Import(stream, pluginInterface, replaceLog);
         }
         catch (Exception ex)
         {
             var log = replaceLog ?? pluginInterface.Logger;
-            log.Error(imp.GetType().Name + ": " + ex.Message);
+            log.Error(GetType().Name + ": " + ex.Message);
             log.LogException(ex);
             return null;
         }
     }
 
-    public static Task<Timetable?> GetAsyncSafeImport(this IImport imp, string filename, IReducedPluginInterface pluginInterface) 
-        => new Task<Timetable?>(() => imp.SafeImport(filename, pluginInterface));
+    public Task<Timetable?> GetAsyncSafeImport(string filename, IReducedPluginInterface pluginInterface) 
+        => new Task<Timetable?>(() => SafeImport(filename, pluginInterface));
 }

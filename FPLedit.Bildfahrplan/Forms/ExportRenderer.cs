@@ -52,13 +52,13 @@ internal sealed class ExportRenderer
                 pluginInterface.Logger.Error("Ungültige Breite angegeben!");
                 return;
             }
-                
+
             var exportFileDialog = new SaveFileDialog { Title = T._("Bildfahrplan exportieren") };
             exportFileDialog.Filters.Add(new FileFilter("PNG-Datei", ".png"));
             if (exportFileDialog.ShowDialog(pluginInterface.RootForm) == DialogResult.Ok)
             {
                 var filename = exportFileDialog.FileName;
-                var export = new BitmapExport(routesDropDown.SelectedRoute, width);
+                IExport export = new BitmapExport(routesDropDown.SelectedRoute, width);
 
                 pluginInterface.Logger.Info(T._("Exportiere Bildfahrplan in Datei {0}", filename));
                 var tsk = export.GetAsyncSafeExport(tt.Clone(), filename, pluginInterface);

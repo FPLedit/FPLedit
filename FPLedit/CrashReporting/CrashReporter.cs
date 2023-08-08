@@ -32,7 +32,7 @@ internal sealed class CrashReporter
 
             var fnTimetable = pluginInterface.GetTemp(CRASH_TT_FN);
             if (pluginInterface.TimetableMaybeNull != null!)
-                new Shared.Filetypes.XMLExport().SafeExport(pluginInterface.TimetableMaybeNull, fnTimetable, pluginInterface);
+                ((IExport) new Shared.Filetypes.XMLExport()).SafeExport(pluginInterface.TimetableMaybeNull, fnTimetable, pluginInterface);
             else if (File.Exists(fnTimetable))
                 File.Delete(fnTimetable);
 

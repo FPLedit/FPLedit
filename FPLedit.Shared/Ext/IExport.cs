@@ -27,30 +27,27 @@ public interface IExport : IRegistrableComponent
     /// </summary>
     /// <remarks>Must always return the same value.</remarks>
     string Filter { get; }
-}
 
-public static class ExportExt
-{
+
     /// <summary>
     /// This function provides a safe way to execute any exporter to write to a file directly.
     /// </summary>
-    /// <param name="exp">The exporter to be used.</param>
     /// <param name="tt">A readonly copy of the current timetable.</param>
     /// <param name="filename"></param>
     /// <param name="pluginInterface">A reduced PluginInterface that provides limited core features from FPledit.</param>
     /// <param name="flags">Exporter flags.</param>
     /// <returns>If the operation was successful.</returns>
-    public static bool SafeExport(this IExport exp, Timetable tt, string filename, IReducedPluginInterface pluginInterface, string[]? flags = null)
+    public bool SafeExport(Timetable tt, string filename, IReducedPluginInterface pluginInterface, string[]? flags = null)
     {
         try
         {
             using var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.Write);
             stream.SetLength(0);
-            return exp.Export(tt, stream, pluginInterface, flags);
+            return Export(tt, stream, pluginInterface, flags);
         }
         catch (Exception ex)
         {
-            pluginInterface.Logger.Error( exp.GetType().Name + ": " + ex.Message);
+            pluginInterface.Logger.Error(GetType().Name + ": " + ex.Message);
             pluginInterface.Logger.LogException(ex);
             return false;
         }
@@ -59,12 +56,11 @@ public static class ExportExt
     /// <summary>
     /// This function provides a safe way to async-execute any exporter to write to a file directly.
     /// </summary>
-    /// <param name="exp">The exporter to be used.</param>
     /// <param name="tt">A readonly copy of the current timetable.</param>
     /// <param name="filename"></param>
     /// <param name="pluginInterface">A reduced PluginInterface that provides limited core features from FPledit.</param>
     /// <param name="flags">Exporter flags.</param>
     /// <returns>A Task that has not been started yet, which can be used to execute the exporter.</returns>
-    public static Task<bool> GetAsyncSafeExport(this IExport exp, Timetable tt, string filename, IReducedPluginInterface pluginInterface, string[]? flags = null) 
-        => new Task<bool>(() => exp.SafeExport(tt, filename, pluginInterface, flags));
+    public Task<bool> GetAsyncSafeExport(Timetable tt, string filename, IReducedPluginInterface pluginInterface, string[]? flags = null) 
+        => new Task<bool>(() => SafeExport(tt, filename, pluginInterface, flags));
 }

@@ -94,8 +94,8 @@ public sealed class Plugin : IPlugin
             if (pluginInterface.Timetable.Version.CompareTo(TimetableVersion.Extended_FPL2) < 0 && targetVersion.CompareTo(TimetableVersion.JTG3_3) >= 0)
                 throw new Exception(T._("Die Erstellen einer linearen Datei der Version >= 012 aus einer Datei der Version 100 ist nicht möglich!"));
 
-            var exporter = new Shared.Filetypes.XMLExport();
-            var importer = new Shared.Filetypes.XMLImport();
+            IExport exporter = new Shared.Filetypes.XMLExport();
+            IImport importer = new Shared.Filetypes.XMLImport();
             var sync = new TimetableRouteSync(pluginInterface.Timetable, route);
             var rtt = sync.GetRouteTimetable(targetVersion);
             var fn = pluginInterface.GetTemp(Guid.NewGuid() + "-route-" + route + ".fpl");
