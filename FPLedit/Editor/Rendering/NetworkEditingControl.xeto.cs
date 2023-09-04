@@ -102,6 +102,7 @@ internal sealed class NetworkEditingControl : Panel
         {
             var sta = (Station?) s;
             if (sta == null) return; // Something weird happened.
+
             pluginInterface.StageUndoStep();
             var r = routesDropDown.SelectedRoute;
             if (sta.Routes.Length == 1)
@@ -121,24 +122,26 @@ internal sealed class NetworkEditingControl : Panel
         };
         networkRenderer.StationRightClicked += (s, _) =>
         {
+            var sta = (Station?) s;
+            if (sta == null) return; // Something weird happened.
+
             var menu = new ContextMenu();
-            var itm = menu.CreateItem("Löschen");
-            itm.Click += (_, _) =>
+            var deleteItem = menu.CreateItem(T._("Löschen"));
+            deleteItem.Click += (_, _) =>
             {
-                var sta = (Station?) s;
-                if (sta == null) return; // Something weird happened.
                 if (pluginInterface.Timetable.WouldProduceAmbiguousRoute(sta))
                 {
                     MessageBox.Show(T._("Sie versuchen eine Station zu löschen, ohne die danach zwei Routen zusammenfallen, das heißt zwei Stationen auf mehr als einer Route ohne Zwischenstation verbunden sind.\n\n" +
                                         "Der Konflikt kann nicht automatisch aufgehoben werden."), "FPLedit", MessageBoxType.Error);
                     return;
                 }
+
                 if (sta.IsJunction)
                 {
                     MessageBox.Show(T._("Sie versuchen eine Station zu löschen, die an einem Kreuzungspunkt zweier Strecken liegt. Dies ist leider nicht möglich."), "FPLedit", MessageBoxType.Error);
                     return;
                 }
-                    
+
                 pluginInterface.StageUndoStep();
                 pluginInterface.Timetable.RemoveStation(sta);
                 ReloadTimetable();
@@ -201,13 +204,13 @@ internal sealed class NetworkEditingControl : Panel
     {
         switch (e.Key)
         {
-            // See DISPATCHABLE_KEYS
+            // See DispatchableKeys
             case Keys.Home:
                 routesDropDown.Focus();
                 e.Handled = true;
                 break;
         }
-            
+
         if (!e.Handled)
             networkRenderer.DispatchKeystroke(e);
     }

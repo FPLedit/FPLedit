@@ -4,7 +4,6 @@ using FPLedit.Shared.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-// ReSharper disable InconsistentNaming
 
 namespace FPLedit.Shared.UI.Network;
 
@@ -13,9 +12,9 @@ public sealed class NetworkRenderer : Drawable
     private PointF mousePosition = PointF.Empty;
 
     private Timetable? tt;
-    private readonly List<RenderBtn<Station>> panels = new List<RenderBtn<Station>>();
+    private readonly List<RenderBtn<Station>> panels = new ();
     private readonly Font? font;
-    private readonly Pen linePen, highlightPen;
+    private readonly Pen linePen, highlightPen, borderPen;
     private readonly Color systemBgColor, systemTextColor;
 
     public static readonly Keys[] DispatchableKeys = { Keys.R, Keys.S, Keys.Escape, Keys.Equal /* Plus */, Keys.Minus, Keys.Add, Keys.Subtract };
@@ -24,75 +23,74 @@ public sealed class NetworkRenderer : Drawable
     {
         if (font is { IsDisposed: false })
             font.Dispose();
-        // ReSharper disable ConstantConditionalAccessQualifier
-        linePen?.Dispose();
-        highlightPen?.Dispose();
-        // ReSharper restore ConstantConditionalAccessQualifier
+        linePen.Dispose();
+        highlightPen.Dispose();
+        borderPen.Dispose();
     }
 
     private bool IsNetwork => tt?.Type == TimetableType.Network;
-        
-    private bool _setPanCenterEnabled = true;
+    
+    private bool setPanCenterEnabled = true;
     public bool SetPanCenterEnabled
     {
-        get => _setPanCenterEnabled;
-        set { _setPanCenterEnabled = value; Invalidate(); }
+        get => setPanCenterEnabled;
+        set { setPanCenterEnabled = value; Invalidate(); }
     }
 
-    private bool _stationMovingEnabled = true;
+    private bool stationMovingEnabled = true;
     public bool StationMovingEnabled
     {
-        get => _stationMovingEnabled;
-        set { _stationMovingEnabled = value; Invalidate(); }
+        get => stationMovingEnabled;
+        set { stationMovingEnabled = value; Invalidate(); }
     }
-    private string? _fixedStatusString = null;
+    private string? fixedStatusString;
     public string? FixedStatusString
     {
-        get => _fixedStatusString;
-        set { _fixedStatusString = value; Invalidate(); }
+        get => fixedStatusString;
+        set { fixedStatusString = value; Invalidate(); }
     }
-    private bool _disableTopBorder = false;
+    private bool disableTopBorder;
     public bool DisableTopBorder
     {
-        get => _disableTopBorder;
-        set { _disableTopBorder = value; Invalidate(); }
+        get => disableTopBorder;
+        set { disableTopBorder = value; Invalidate(); }
     }
-    private int _selectedRoute = Timetable.LINEAR_ROUTE_ID;
+    private int selectedRoute = Timetable.LINEAR_ROUTE_ID;
     public int SelectedRoute
     {
-        get => _selectedRoute;
-        set { _selectedRoute = value; Invalidate(); }
+        get => selectedRoute;
+        set { selectedRoute = value; Invalidate(); }
     }
-    private bool _highlightBetween;
+    private bool highlightBetween;
     public bool HighlightBetweenStations
     {
-        get => _highlightBetween;
-        set { _highlightBetween = value; Invalidate(); }
+        get => highlightBetween;
+        set { highlightBetween = value; Invalidate(); }
     }
 
-    private PathData? _highlightedPath;
+    private PathData? highlightedPath;
 
     public void SetHighlightedPath(IEnumerable<Station>? stations)
     {
         var stas = stations ?? Array.Empty<Station>();
-        _highlightedPath = new PathData(tt!, stas);
+        highlightedPath = new PathData(tt!, stas);
         Invalidate();
     }
 
-    private PointF _pan = PointF.Empty;
+    private PointF pan = PointF.Empty;
     public PointF Pan
     {
-        get => _pan;
-        set { _pan = value; Invalidate(); }
+        get => pan;
+        set { pan = value; Invalidate(); }
     }
 
-    private float _zoom = 1;
+    private float zoom = 1;
     public float Zoom
     {
-        get => _zoom;
+        get => zoom;
         set
         {
-            _zoom = Math.Max(Math.Min(value, 2f), 0.5f);
+            zoom = Math.Clamp(value, 0.5f, 2f);
             Invalidate();
         }
     }
@@ -109,20 +107,22 @@ public sealed class NetworkRenderer : Drawable
 
     private const int OFFSET_X = 20;
     private const int OFFSET_Y = 50;
-    private readonly Point OFFSET = new Point(OFFSET_X, OFFSET_Y);
+    // ReSharper disable once InconsistentNaming
+    private readonly Point OFFSET = new (OFFSET_X, OFFSET_Y);
 
-    private Station? tmp_sta;
-    private float tmp_km;
+    private Station? modeTempSta;
+    private float modeTempKm;
     private Modes mode;
 
     public NetworkRenderer()
     {
         systemBgColor = SystemColors.ControlBackground;
         systemTextColor = SystemColors.ControlText;
-            
+
         font = new Font(FontFamilies.SansFamilyName, 8);
         linePen = new Pen(systemTextColor, 2f);
         highlightPen = new Pen(Colors.Red, 2f);
+        borderPen = new Pen(Brushes.Black) { DashStyle = new DashStyle(0, new[] { 2f, 2f, 2f, 2f }) };
         handler = new StationCanvasPositionHandler();
 
         MouseDown += (_, _) => PlaceStation();
@@ -141,12 +141,12 @@ public sealed class NetworkRenderer : Drawable
                 stapos = handler.LoadNetworkPoints(tt);
         }
 
-        _highlightedPath = PathData.Empty(tt!);
+        highlightedPath = PathData.Empty(tt!);
 
-        this.Invalidate();
+        Invalidate();
     }
 
-    public void ReloadTimetable()
+    private void ReloadTimetable()
     {
         SetTimetable(tt);
         Invalidate();
@@ -155,15 +155,15 @@ public sealed class NetworkRenderer : Drawable
     #region Drawing
     protected override void OnPaint(PaintEventArgs e)
     {
-        this.SuspendLayout();
+        SuspendLayout();
         // Reset
         e.Graphics.Clear(systemBgColor);
         panels.Clear();
 
         e.Graphics.SaveTransform();
-        e.Graphics.TranslateTransform(_pan);
-        e.Graphics.ScaleTransform(_zoom);
-        DrawNetwork(e.Graphics, - _pan * 1/_zoom, (- _pan + Bounds.Size ) * 1/_zoom);
+        e.Graphics.TranslateTransform(pan);
+        e.Graphics.ScaleTransform(zoom);
+        DrawNetwork(e.Graphics, - pan * 1/zoom, (- pan + Bounds.Size) * 1/zoom);
         e.Graphics.RestoreTransform();
             
         // Draw Status strings & border on top of network
@@ -180,6 +180,7 @@ public sealed class NetworkRenderer : Drawable
             return;
             
         Rectangle rec = new Rectangle((Point)leftTop, (Point)bottomRight);
+        var btnSize = new Size(10, 10);
 
         Station? lastSta = null;
         foreach (var r in routes)
@@ -205,7 +206,7 @@ public sealed class NetworkRenderer : Drawable
                         text += km + "|";
                     }
 
-                    text = text.Substring(0, text.Length - 1) + ")";
+                    text = text[..^1] + ")";
                         
                     g.SaveTransform();
                     g.TranslateTransform(x + 6, y + 7);
@@ -225,32 +226,31 @@ public sealed class NetworkRenderer : Drawable
 
                 if (!doRender) continue;
                     
-                var panelColor = _highlightedPath!.ContainsStation(sta) ? Colors.Red : Colors.Gray;
-                RenderBtn<Station>? args = panels.FirstOrDefault(pa => pa.Tag == sta);
-                if (args == null)
+                var panelColor = highlightedPath!.ContainsStation(sta) ? Colors.Red : Colors.Gray;
+                RenderBtn<Station>? btn = panels.FirstOrDefault(pa => pa.Tag == sta);
+                if (btn == null)
                 {
-                    args = new RenderBtn<Station>(sta, new Point(x - 5, y - 5), new Size(10, 10), panelColor);
-                    panels.Add(args);
+                    btn = new RenderBtn<Station>(sta, new Point(x, y) - btnSize / 2, btnSize, panelColor);
+                    panels.Add(btn);
                     // Wire events
                     switch (mode)
                     {
-                        case Modes.Normal: ApplyNormalMode(args, sta); break;
-                        case Modes.AddRoute: ApplyAddMode(args, sta); break;
-                        case Modes.JoinRoutes: ApplyJoinMode(args, sta); break;
+                        case Modes.Normal: ApplyNormalMode(btn, sta); break;
+                        case Modes.AddRoute: ApplyAddMode(btn, sta); break;
+                        case Modes.JoinRoutes: ApplyJoinMode(btn, sta); break;
+                        default: throw new NotImplementedException(nameof(NetworkRenderer) + " encountered an unsupported mode!");
                     }
                 }
-                args.BackgroundColor = panelColor;
+                btn.BackgroundColor = panelColor;
             }
         }
 
-        if (tmp_sta != null && stapos!.TryGetValue(tmp_sta, out Point point))
+        if (modeTempSta != null && ModeCanConnectStation() && stapos!.TryGetValue(modeTempSta, out var point))
         {
-            var x = OFFSET_X + point.X;
-            var y = OFFSET_Y + point.Y;
+            var p = OFFSET + point;
+            g.DrawLine(linePen, p, (mousePosition - pan) * (1 / zoom));
 
-            g.DrawLine(linePen, new Point(x, y), (mousePosition - _pan) * (1 / _zoom));
-
-            var args = new RenderBtn<Station>(tmp_sta, new Point(x - 5, y - 5), new Size(10, 10), Colors.DarkCyan);
+            var args = new RenderBtn<Station>(modeTempSta, p - btnSize / 2, btnSize, Colors.DarkCyan);
             panels.Add(args);
         }
 
@@ -260,10 +260,10 @@ public sealed class NetworkRenderer : Drawable
 
     private void DrawStatus(Graphics g)
     {
-        if (!_pan.IsZero || Math.Abs(_zoom - 1) > 0.01f)
+        if (!pan.IsZero || Math.Abs(zoom - 1) > 0.01f)
         {
             var statusL = T._("Ansicht verschoben, [R] für Reset");
-            if (SetPanCenterEnabled && IsNetwork && !_pan.IsZero)
+            if (SetPanCenterEnabled && IsNetwork && !pan.IsZero)
                 statusL += T._(", [S] zum Speichern");
             var sizeL = g.MeasureString(font, statusL);
             var pointL = new PointF(0, ClientSize.Height - sizeL.Height);
@@ -283,13 +283,12 @@ public sealed class NetworkRenderer : Drawable
     {
         if (DisableTopBorder)
             return;
-        using var pen = new Pen(Brushes.Black) { DashStyle = DashStyle.Parse("2,2,2,2") };
-        g.DrawLine(pen, Point.Empty, new Point(ClientSize.Width, 0));
+        g.DrawLine(borderPen, Point.Empty, new Point(ClientSize.Width, 0));
     }
 
     private Pen GetLinePen(int route, Station sta, Station lastSta)
     {
-        if (route == SelectedRoute || (_highlightBetween && _highlightedPath!.IsDirectlyConnected(sta, lastSta)))
+        if (route == SelectedRoute || (highlightBetween && highlightedPath!.IsDirectlyConnected(sta, lastSta)))
             return highlightPen;
         return linePen;
     }
@@ -310,7 +309,16 @@ public sealed class NetworkRenderer : Drawable
     }
     #endregion
 
-    #region AddMode
+    private void ResetToNormalMode()
+    {
+        modeTempSta = null;
+        Cursor = Cursors.Default;
+        mode = Modes.Normal;
+
+        Invalidate();
+    }
+
+    #region Add Mode
     private void ApplyAddMode(RenderBtn<Station> p, Station sta)
     {
         p.Click += (_, _) => ConnectAddStation(sta);
@@ -318,10 +326,9 @@ public sealed class NetworkRenderer : Drawable
 
     private void ConnectAddStation(Station sta)
     {
-        mode = Modes.Normal;
-        var rtIdx = tt!.AddRoute(sta, tmp_sta!, 0, tmp_km);
+        var rtIdx = tt!.AddRoute(sta, modeTempSta!, 0, modeTempKm);
         handler.WriteStapos(tt, stapos!);
-        tmp_sta = null;
+        ResetToNormalMode();
 
         NewRouteAdded?.Invoke(this, new EventArgs<int>(rtIdx));
         ReloadTimetable();
@@ -329,14 +336,31 @@ public sealed class NetworkRenderer : Drawable
 
     public void StartAddStation(Station rawSta, float km)
     {
-        tmp_sta = rawSta;
-        tmp_km = km;
+        modeTempSta = rawSta;
+        modeTempKm = km;
         mode = Modes.AddRoute;
 
         Cursor = Cursors.Crosshair;
-        this.Focus();
+        Focus();
+        Invalidate();
     }
 
+    private void PlaceStation()
+    {
+        if (!ModeCanConnectStation())
+            return;
+        if (modeTempSta == null || stapos!.TryGetValue(modeTempSta, out _))
+            return;
+
+        Cursor = Cursors.Default;
+        var point = new Point((mousePosition - pan) * (1 / zoom)) - OFFSET;
+        stapos[modeTempSta] = new Point(point);
+
+        Invalidate();
+    }
+    #endregion
+
+    #region Join Mode
     private void ApplyJoinMode(RenderBtn<Station> p, Station sta)
     {
         p.Click += (_, _) => ConnectJoinLines(sta);
@@ -344,48 +368,23 @@ public sealed class NetworkRenderer : Drawable
 
     public void StartJoinLines(float km)
     {
-        tmp_km = km;
+        modeTempKm = km;
         mode = Modes.JoinRoutes;
 
         Cursor = Cursors.Crosshair;
-        this.Focus();
+        Focus();
+        Invalidate();
     }
 
     private void ConnectJoinLines(Station sta)
     {
         if (sta.Routes.Contains(SelectedRoute))
-            MessageBox.Show(T._("Die Verbindung konnte nicht erstellt werden, da die gewählte Zielstation sich bereits auf der Gleichen Strecke befindet!"));
-        else if (!tt!.JoinRoutes(SelectedRoute, sta, tmp_km))
+            MessageBox.Show(T._("Die Verbindung konnte nicht erstellt werden, da die gewählte Zielstation sich bereits auf der gleichen Strecke befindet!"));
+        else if (!tt!.JoinRoutes(SelectedRoute, sta, modeTempKm))
             MessageBox.Show(T._("Die Verbindung konnte nicht erstellt werden, da sonst Routen zusammenfallen würden!"));
-            
-        tmp_sta = null;
-        mode = Modes.Normal;
 
+        ResetToNormalMode();
         ReloadTimetable();
-    }
-
-    private void AbortAddStation()
-    {
-        if (tmp_sta == null) // Nicht benötigt
-            return;
-
-        tmp_sta = null;
-        Cursor = Cursors.Default;
-        mode = Modes.Normal;
-
-        Invalidate();
-    }
-
-    private void PlaceStation()
-    {
-        if (tmp_sta == null || stapos!.TryGetValue(tmp_sta, out _))
-            return;
-
-        Cursor = Cursors.Default;
-        var point = new Point((mousePosition - _pan) * (1 / _zoom)) - OFFSET;
-        stapos[tmp_sta] = new Point(point);
-
-        Invalidate();
     }
     #endregion
 
@@ -394,18 +393,18 @@ public sealed class NetworkRenderer : Drawable
         return m switch
         {
             Modes.Normal => T._("Streckennetz bearbeiten"),
-            Modes.AddRoute => T._("Klicken, um Station hinzuzufügen und diese mit einer bestehenden Station zu verbinden; ESC zum Abbrechen"),
-            Modes.JoinRoutes => T._("Klicken, um die Zielstation der Verbindung auzuwählen; ESC zum Abbrechen"),
-            _ => ""
+            Modes.AddRoute => T._("Klicken, um Station hinzuzufügen und diese mit einer bestehenden Station zu verbinden") + "; " + T._("[ESC] zum Abbrechen"),
+            Modes.JoinRoutes => T._("Klicken, um die Zielstation der Verbindung auszuwählen") + "; " + T._("[ESC] zum Abbrechen"),
+            _ => throw new NotImplementedException(nameof(NetworkRenderer) + " encountered an unsupported mode!"),
         };
     }
 
     public void DispatchKeystroke(KeyEventArgs e)
     {
-        switch (e.Key) // See Dispatchable_Keys
+        switch (e.Key) // See DispatchableKeys
         {
             case Keys.Escape:
-                AbortAddStation();
+                ResetToNormalMode();
                 e.Handled = true;
                 break;
             case Keys.R:
@@ -419,7 +418,7 @@ public sealed class NetworkRenderer : Drawable
                     e.Handled = true;
                     var keys = stapos.Keys.ToArray();
                     foreach (var sta in keys)
-                        stapos[sta] += (Point)(Pan * 1/_zoom);
+                        stapos[sta] += (Point)(Pan * 1/zoom);
                     handler.WriteStapos(tt, stapos);
                     Pan = PointF.Empty;
                 }
@@ -453,7 +452,7 @@ public sealed class NetworkRenderer : Drawable
         hasPanned = false;
 
         foreach (var args in panels.ToArray())
-            args.HandleDoubleClick(new Point(e.Location), new Point(_pan), _zoom);
+            args.HandleDoubleClick(new Point(e.Location), new Point(pan), zoom);
 
         lastDoubleClick = true;
         base.OnMouseDoubleClick(e);
@@ -467,12 +466,12 @@ public sealed class NetworkRenderer : Drawable
         {
             if (e.Buttons == MouseButtons.Alternate)
                 foreach (var args in panels.ToArray())
-                    args.HandleRightClick(new Point(e.Location), new Point(_pan), _zoom);
+                    args.HandleRightClick(new Point(e.Location), new Point(pan), zoom);
             else if (e.Buttons == MouseButtons.Primary && StationMovingEnabled && IsNetwork)
             {
                 foreach (var args in panels.ToArray())
                 {
-                    if (args.Rect.Contains(new Point((new Point(e.Location) - new Point(_pan)) * (1/_zoom))))
+                    if (args.Rect.Contains(new Point((new Point(e.Location) - new Point(pan)) * (1/zoom))))
                     {
                         draggedControl = args;
                         Cursor = Cursors.Move;
@@ -483,7 +482,7 @@ public sealed class NetworkRenderer : Drawable
             if (e.Buttons == MouseButtons.Primary && draggedControl == null && tt != null) // Only pan if we have data & we don't drag anything
             {
                 hasPanned = true;
-                originalPan = _pan;
+                originalPan = pan;
                 originalLocation = e.Location;
                 Cursor = Cursors.Move;
             }
@@ -511,16 +510,16 @@ public sealed class NetworkRenderer : Drawable
                 p.Y = ClientSize.Height;
 
             draggedControl.Location = p;
-            stapos![draggedControl.Tag] = new Point((p - _pan) * (1 / _zoom)) - OFFSET;
+            stapos![draggedControl.Tag] = new Point((p - pan) * (1 / zoom)) - OFFSET;
             hasDragged = true;
             Invalidate();
         }
         if (hasPanned)
         {
-            _pan = originalPan + (e.Location - originalLocation) * (1 / _zoom);
+            pan = originalPan + (e.Location - originalLocation) * (1 / zoom);
             Invalidate();
         }
-        if (tmp_sta != null)
+        if (modeTempSta != null && ModeCanConnectStation())
             Invalidate();
         base.OnMouseMove(e);
     }
@@ -530,7 +529,7 @@ public sealed class NetworkRenderer : Drawable
         if (e.Buttons == MouseButtons.Primary && DateTime.Now.Ticks >= lastClick + CLICK_TIME)
         {
             foreach (var args in panels.ToArray())
-                args.HandleClick(new Point(e.Location), new Point(_pan), _zoom);
+                args.HandleClick(new Point(e.Location), new Point(pan), zoom);
         }
 
         if (StationMovingEnabled && IsNetwork && draggedControl != null)
@@ -570,4 +569,6 @@ public sealed class NetworkRenderer : Drawable
         AddRoute,
         JoinRoutes,
     }
+
+    private bool ModeCanConnectStation() => mode is Modes.AddRoute or Modes.JoinRoutes;
 }
