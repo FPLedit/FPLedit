@@ -39,12 +39,12 @@ internal sealed class NetworkUpgradeExport : BaseUpgradeExport
             // Durch Nutzerinteraction konnten "ambiguous routes" entstehen.
             // Eine Korrektur ist nicht möglich.
             // Das Format Extended_FPL2 wurtde mit Version 2.3.0 eingeführt, der Fix hier mit v2.2.0 ausgerollt.
-            if (tt is { Type: TimetableType.Network, Version: TimetableVersion.Extended_FPL, HasRouteCycles: true })
+            if (origVersion == TimetableVersion.Extended_FPL && ttclone is { Type: TimetableType.Network, HasRouteCycles: true })
             {
                 // All stations that are junction points.
-                var maybeAffectedRoutes = tt.GetCyclicRoutes();
-                var junctions = tt.Stations.Where(s => s.IsJunction && s.Routes.Intersect(maybeAffectedRoutes).Any()).ToArray();
-                var hasAmbiguousRoutes = tt.CheckAmbiguousRoutesInternal(junctions);
+                var maybeAffectedRoutes = ttclone.GetCyclicRoutes();
+                var junctions = ttclone.Stations.Where(s => s.IsJunction && s.Routes.Intersect(maybeAffectedRoutes).Any()).ToArray();
+                var hasAmbiguousRoutes = ttclone.CheckAmbiguousRoutesInternal(junctions);
 
                 if (hasAmbiguousRoutes)
                     pluginInterface.Logger.Warning(T._("Die Datei enthält zusammengefallene Strecken, das heißt zwei Stationen sind auf mehr als einer Route ohne Zwischenstation verbunden. FPLedit kann sich danach komisch verhalten und Züge zufällig über die eine oder andere Strecke leiten. Eine Korrektur ist leider nicht möglich."));
