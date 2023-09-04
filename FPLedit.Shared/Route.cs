@@ -87,7 +87,7 @@ public sealed class Route : ISortedStations
             return Array.Empty<Station>(); // Not in the current route.
 
         var leftIndex = Math.Max(centerIndex - radius, 0);
-        var rightIndex = Math.Min(centerIndex + radius, stations.Length - 1);
+        var rightIndex = Math.Min(centerIndex + radius, stations.Length - 1) + 1;
 
         return stations[leftIndex..rightIndex];
     }
