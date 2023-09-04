@@ -190,6 +190,29 @@ public sealed class Station : Entity, IStation
         return true;
     }
 
+    internal bool _InternalReplaceRoute(int oldRoute, int newRoute)
+    {
+        if (!Routes.Contains(oldRoute)) 
+            return false;
+
+        var list = Routes.ToList();
+        list.Remove(oldRoute);
+        list.Add(newRoute);
+        Routes = list.ToArray();
+
+        // Swap positions.
+        var oldPosition = Positions.GetPosition(oldRoute);
+        Positions.RemovePosition(oldRoute);
+        if (oldPosition.HasValue)
+            Positions.SetPosition(newRoute, oldPosition!.Value);
+
+        // Swap RVC values.
+        foreach (var rvc in GetDefinedRvcs())
+            rvc.SwapRouteId(oldRoute, newRoute);
+
+        return true;
+    }
+
     private IRouteValueCollection[] GetDefinedRvcs()
     {
         // We do not deal with external RVCs here, see remarks on RouteValueCollction{T}.

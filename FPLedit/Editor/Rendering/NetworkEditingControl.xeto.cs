@@ -13,6 +13,7 @@ internal sealed class NetworkEditingControl : Panel
     private IPluginInterface pluginInterface = null!;
         
     private const int ICON_SIZE = 32;
+    private const int ICON_SIZE_CONTEXT = 16;
     public const string TOOLBAR_ICON_SETTINGS_KEY = "ui.toolbar-icons";
     private bool toolbarUseIcons = true;
 
@@ -147,6 +148,17 @@ internal sealed class NetworkEditingControl : Panel
                 ReloadTimetable();
                 pluginInterface.SetUnsaved();
             };
+            if (pluginInterface.Timetable.Type == TimetableType.Network)
+            {
+                var breakItem = menu.CreateItem(T._("Eine Strecke trennen"));
+                breakItem.Image = new Bitmap(this.GetResource("Resources.toolbar-break-line.png")).WithSize(ICON_SIZE_CONTEXT, ICON_SIZE_CONTEXT);
+                breakItem.Click += (_, _) =>
+                {
+                    pluginInterface.StageUndoStep();
+                    networkRenderer.StartBreakLine(sta);
+                    pluginInterface.SetUnsaved();
+                };
+            }
             menu.Show(this);
         };
         networkRenderer.NewRouteAdded += (_, args) =>

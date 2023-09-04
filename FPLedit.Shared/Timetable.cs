@@ -628,6 +628,90 @@ public sealed class Timetable : Entity, ITimetable
         return true;
     }
 
+    /// <inheritdoc />
+    /// <exception cref="TimetableTypeNotSupportedException">If called on a linear timetable.</exception>
+    public (bool success, string? failReason, bool? isSafeFailure) BreakRouteUnsafe(Station station1, Station station2)
+    {
+        if (Type == TimetableType.Linear)
+            throw new TimetableTypeNotSupportedException(TimetableType.Linear, "routes");
+
+        if (GetDirectlyConnectingRoute(station1, station2) == UNASSIGNED_ROUTE_ID)
+            return (false, T._("Die beiden ausgewählten Stationen sind nicht benachbart!"), true);
+
+        var routes = station1.Routes.Where(r => station2.Routes.Contains(r)).ToArray();
+        if (routes.Length != 1)
+            return (false, T._("Zwei benachbarte Stationen können nicht mehr als eine/keine Route gemeinsam haben! Zusammengefallene Routen sind vorhanden und werden nicht unterstützt."), true);
+        var route = routes[0];
+        var rt = GetRoute(route);
+        if (!rt.Exists)
+            throw new Exception(nameof(BreakRouteUnsafe) + ": route does not exist");
+
+        // Helper function to test for the station graph being disconnected after a "succesful" route break.
+        (bool success, string? failReason, bool? isSafeFailure) CheckConnectedAndReturn()
+        {
+            if (CheckStationGraphInternal(checkDisconnected: true).hasDisconnected)
+                return (false, T._("Das Streckennetz zerfällt nach der Auftrennung der Strecke in zwei Teile."), false);
+            return (true, null, null);
+        }
+
+        // Breaking a line is not possible when trains travel over the segment.
+        foreach (var train in Trains)
+        {
+            var path = train.GetPath();
+            if (path.Contains(station1) && path.Contains(station2))
+                return (false, T._("Mindestens ein Zug befährt den Streckenabschnitt!"), true);
+        }
+
+        if (rt.Stations.Count < 2)
+            throw new Exception(nameof(BreakRouteUnsafe) + ": route with less than two stations?!");
+
+        // Trivial case: if the route only has two stations.
+        if (rt.Stations.Count == 2)
+        {
+            if (station1.Routes.Length <= 1 || station2.Routes.Length <= 1)
+                return (false, T._("Einzelne Stationen ohne Strecken können nicht existieren. Hinweis: Das Löschen der vorletzten Station einer Strecke entfernt auch Routen-Reste!"), true); // Otherwise we would have an "orphaned" station.
+            StationRemoveRoute(station1, route);
+            StationRemoveRoute(station2, route);
+            return CheckConnectedAndReturn();
+        }
+
+        // Trivial case: If the station is the last/first of the line, just remove the route and be good.
+        if (rt.Stations.First() == station1 || rt.Stations.Last() == station1)
+        {
+            if (station1.Routes.Length <= 1)
+                return (false, T._("Einzelne Stationen ohne Strecken können nicht existieren. Hinweis: Erste/Letzte Stationen einer Strecke können einfach gelöscht werden!"), true); // Otherwise we would have an "orphaned" station.
+            StationRemoveRoute(station1, route);
+            return CheckConnectedAndReturn();
+        }
+        if (rt.Stations.First() == station2 || rt.Stations.Last() == station2)
+        {
+            if (station2.Routes.Length <= 1)
+                return (false, T._("Einzelne Stationen ohne Strecken können nicht existieren. Hinweis: Erste/Letzte Stationen einer Strecke können einfach gelöscht werden!"), true); // Otherwise we would have an "orphaned" station.
+            StationRemoveRoute(station2, route);
+            return CheckConnectedAndReturn();
+        }
+
+        // Now all the trivial cases have been dealt with. We really need a new route id, as the split is
+        // somewhere in the middle of the line.
+        var newRtId = AssignNextRouteId();
+
+        var newRouteStations = rt.Stations.SkipWhile(s => s != station1).Skip(1).ToList();
+        if (newRouteStations.Count == 0 || newRouteStations.First() != station2)
+            throw new Exception(nameof(BreakRouteUnsafe) + ": split is more than one station?");
+
+        foreach (var newRtStation in newRouteStations)
+        {
+            if (!newRtStation._InternalReplaceRoute(route, newRtId))
+                throw new Exception(nameof(BreakRouteUnsafe) + ": trying to move station now on route?");
+        }
+
+        // Build caches for both routes.
+        RebuildRouteCache(route);
+        RebuildRouteCache(newRtId);
+
+        return CheckConnectedAndReturn();
+    }
+
     /// <summary>
     /// Internal function to check for ambiguous routes at the given junctions.
     /// </summary>

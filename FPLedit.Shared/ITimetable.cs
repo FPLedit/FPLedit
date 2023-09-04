@@ -109,6 +109,21 @@ public interface ITimetable
     /// <returns>Specifies whether the operation has been successful.</returns>
     bool JoinRoutes(int route, Station station, float newKm);
     /// <summary>
+    /// Break an existing route between two stations that are already on the route.
+    /// </summary>
+    /// <returns>Whether the operation was successful, and if not, a failure reason.</returns>
+    /// <remarks><para>This will fail if either
+    /// <list type="bullet">
+    ///     <item><description>the two stations are not on a single connecting route, or</description></item>
+    ///     <item><description>the resulting network would be disconnected, or</description></item>
+    ///     <item><description>trains are travelling over the route segment, or</description></item>
+    ///     <item><description>there are any stations between <paramref name="station1"/> and <paramref name="station2"/>.</description></item>
+    /// </list></para>
+    /// <para>This operation is unsafe and might corrupt the timetable state. If <c>isSafeFailure</c> is <see langword="false" /> in the
+    /// returned tuple, the behaviour is undefined! It is advisable to do a dry-run on a timetable copy that can be discarded!</para>
+    /// </remarks>
+    (bool success, string? failReason, bool? isSafeFailure) BreakRouteUnsafe(Station station1, Station station2);
+    /// <summary>
     /// Gets the route with the specifiec route index.
     /// </summary>
     Route GetRoute(int index);

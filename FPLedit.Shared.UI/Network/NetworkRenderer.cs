@@ -178,7 +178,7 @@ public sealed class NetworkRenderer : Drawable
     {
         if (routes == null || routes.Length == 0)
             return;
-            
+
         Rectangle rec = new Rectangle((Point)leftTop, (Point)bottomRight);
         var btnSize = new Size(10, 10);
 
@@ -238,6 +238,7 @@ public sealed class NetworkRenderer : Drawable
                         case Modes.Normal: ApplyNormalMode(btn, sta); break;
                         case Modes.AddRoute: ApplyAddMode(btn, sta); break;
                         case Modes.JoinRoutes: ApplyJoinMode(btn, sta); break;
+                        case Modes.BreakRoute: ApplyBreakMode(btn, sta); break;
                         default: throw new NotImplementedException(nameof(NetworkRenderer) + " encountered an unsupported mode!");
                     }
                 }
@@ -295,7 +296,7 @@ public sealed class NetworkRenderer : Drawable
 
     protected override void OnSizeChanged(EventArgs e)
     {
-        this.Invalidate();
+        Invalidate();
         base.OnSizeChanged(e);
     }
     #endregion
@@ -388,6 +389,60 @@ public sealed class NetworkRenderer : Drawable
     }
     #endregion
 
+    #region BreakRoute
+    private void ApplyBreakMode(RenderBtn<Station> p, Station sta)
+    {
+        p.Click += (_, _) => PerformBreakLine(sta);
+    }
+
+    public void StartBreakLine(Station origin)
+    {
+        modeTempSta = origin;
+        mode = Modes.BreakRoute;
+
+        Cursor = Cursors.Crosshair;
+        Focus();
+        Invalidate();
+    }
+
+    private void PerformBreakLine(Station target)
+    {
+        // First do a dry-run on a fresh copy of the current timetable.
+        var shouldTryBreak = false;
+        try
+        {
+            var testTt = tt!.Clone();
+            var testModeTempSta = testTt.Stations.First(s => s.Id == modeTempSta!.Id);
+            var testTarget = testTt.Stations.First(s => s.Id == target.Id);
+            var testBreakResult = testTt!.BreakRouteUnsafe(testModeTempSta, testTarget);
+            if (!testBreakResult.success)
+                MessageBox.Show(T._("Strecken-Trennen nicht möglich: {0}", testBreakResult.failReason ?? ""), "FPLedit", MessageBoxType.Error);
+
+            shouldTryBreak = testBreakResult.success;
+        }
+        catch (Exception e)
+        {
+            MessageBox.Show(T._("Strecken-Trennen nicht möglich: {0}", e.Message), "FPLedit", MessageBoxType.Error);
+        }
+
+        if (shouldTryBreak)
+        {
+            var breakResult = tt!.BreakRouteUnsafe(modeTempSta!, target);
+            if (!breakResult.success)
+            {
+                // still something went wrong?
+                var message = T._("Fehler beim Strecken-Trennen: {0}", breakResult.failReason ?? "");
+                if (!(breakResult.isSafeFailure ?? false))
+                    message += "\n\n" + T._("WARNUNG: Potentiell befindet sich die Fahrplandatei jetzt in einem inkonsistenten Zustand!");
+                MessageBox.Show(message, "FPLedit", MessageBoxType.Error);
+            }
+        }
+
+        ResetToNormalMode();
+        ReloadTimetable();
+    }
+    #endregion
+
     private string GetStatusString(Modes m)
     {
         return m switch
@@ -395,6 +450,7 @@ public sealed class NetworkRenderer : Drawable
             Modes.Normal => T._("Streckennetz bearbeiten"),
             Modes.AddRoute => T._("Klicken, um Station hinzuzufügen und diese mit einer bestehenden Station zu verbinden") + "; " + T._("[ESC] zum Abbrechen"),
             Modes.JoinRoutes => T._("Klicken, um die Zielstation der Verbindung auszuwählen") + "; " + T._("[ESC] zum Abbrechen"),
+            Modes.BreakRoute => T._("Klicken, um die Nachbarstation auf der zu trennenden Strecke auszuwählen") + "; " + T._("[ESC] zum Abbrechen"),
             _ => throw new NotImplementedException(nameof(NetworkRenderer) + " encountered an unsupported mode!"),
         };
     }
@@ -568,6 +624,7 @@ public sealed class NetworkRenderer : Drawable
         Normal,
         AddRoute,
         JoinRoutes,
+        BreakRoute,
     }
 
     private bool ModeCanConnectStation() => mode is Modes.AddRoute or Modes.JoinRoutes;
