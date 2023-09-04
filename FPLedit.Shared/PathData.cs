@@ -122,15 +122,16 @@ public class PathData : ISortedStations
     /// the order of the current path.
     /// </summary>
     /// <remarks>
-    /// The result will be silently truncated, if there are less than <paramref name="radius"/> stations on
-    /// either side of the <paramref name="center"/> station.
+    /// <para>The result will be silently truncated, if there are less than <paramref name="radius"/> stations on
+    /// either side of the <paramref name="center"/> station.</para>
+    /// <para>If the station does not exist on the current route, an empty array will be returned.</para>
     /// </remarks>
     /// <exception cref="ArgumentOutOfRangeException">The radius was not positive.</exception>
     public Station[] GetSurroundingStations(Station center, int radius)
     {
         if (radius < 0)
             throw new ArgumentOutOfRangeException(nameof(radius));
-            
+
         var stations = GetRawPath().ToArray();
 
         var centerIndex = Array.IndexOf(stations, center);
@@ -139,11 +140,8 @@ public class PathData : ISortedStations
 
         var leftIndex = Math.Max(centerIndex - radius, 0);
         var rightIndex = Math.Min(centerIndex + radius, stations.Length - 1);
-        var length = rightIndex - leftIndex + 1;
-            
-        var array = new Station[length];
-        Array.Copy(stations, array, length);
-        return array;
+
+        return stations[leftIndex..rightIndex];
     }
 
     /// <summary>
