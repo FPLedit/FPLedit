@@ -21,7 +21,7 @@ public sealed class TrainPathForm : FDialog<DialogResult>
     private readonly bool globalWaypointsAllowed = false;
 
     // Internal state: path & waypoints
-    private readonly List<Station> wayPoints = new List<Station>();
+    private readonly List<Station> wayPoints = new ();
     private List<Station>? path;
 
     public List<Station>? Path
@@ -133,18 +133,18 @@ public sealed class TrainPathForm : FDialog<DialogResult>
             else if (intersectf.Count() == 1)
                 Path.InsertRange(0, pf.Take(pf.Count - 1)); // Insert at the end of path
             else
-                MessageBox.Show("Diese Station kann nicht zum Laufweg hinzugefügt werden, da dabei ein verzweigter Laufweg entstehen würde!", "FPLedit");
+                MessageBox.Show(T._("Diese Station kann nicht zum Laufweg hinzugefügt werden, da dabei ein verzweigter Laufweg entstehen würde!"), "FPLedit");
 
         }
         // From here on, we search for reasons, NOT removing the station.
         else if (sta != Path.Last() && sta != Path.First()) // Currently already in path, but not at both ends
         {
-            MessageBox.Show("Diese Station kann nicht aus dem Laufweg entfernt werden, da sie zwischen Start- und Zielstatation liegt. Nur Start- und Zielstationen können entfernt werden!",
+            MessageBox.Show(T._("Diese Station kann nicht aus dem Laufweg entfernt werden, da sie zwischen Start- und Zielstatation liegt. Nur Start- und Zielstationen können entfernt werden!"),
                 "FPLedit");
         }
         else if (Path.Count < 3)
         {
-            MessageBox.Show("Diese Station kann nicht aus dem Laufweg entfernt werden, da mindestens immer 2 Stationen enthalten sein müssen!",
+            MessageBox.Show(T._("Diese Station kann nicht aus dem Laufweg entfernt werden, da mindestens immer 2 Stationen enthalten sein müssen!"),
                 "FPLedit");
         }
         else
@@ -168,17 +168,23 @@ public sealed class TrainPathForm : FDialog<DialogResult>
         if (Path == null || !Path.Any()) // There is no current path, so we set the first station
         {
             Path = new[] { sta }.ToList();
-            networkRenderer.FixedStatusString = "Zielstation auswählen";
+            networkRenderer.FixedStatusString = T._("Zielstation auswählen");
         }
         else if (Path.Count == 1) // We already have the first station set, so set the end of path
         {
             if (sta == Path.First())
             {
-                MessageBox.Show("Züge mit gleicher Start- und Zielstation sind nicht möglich!");
+                MessageBox.Show(T._("Züge mit gleicher Start- und Zielstation sind nicht möglich!"), "FPLedit");
                 return;
             }
 
             Path = pathfinder.GetPath(Path.First(), sta);
+
+            if (!Path.Any())
+            {
+                MessageBox.Show(T._("Es konnte kein gültiger Laufweg für diesen Zug ermittelt werden!"), "FPLedit", MessageBoxType.Error);
+                return;
+            }
 
             Transition(stateChangeRoute);
         }
