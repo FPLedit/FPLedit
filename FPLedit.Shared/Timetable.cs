@@ -629,14 +629,14 @@ public sealed class Timetable : Entity, ITimetable
     }
 
     /// <summary>
-    /// Internal function to check for ambiguous rouztes at the given junctions.
+    /// Internal function to check for ambiguous routes at the given junctions.
     /// </summary>
     /// <param name="junctions">Collection of junction points.</param>
     /// <returns>Whether ambiguous routes exist.</returns>
     public bool CheckAmbiguousRoutesInternal(Station[] junctions)
     {
         var hasAmbiguousRoutes = false;
-            
+
         for (int i = 0; i < junctions.Length - 1; i++)
         {
             for (int j = i + 1; j < junctions.Length; j++)
@@ -657,8 +657,65 @@ public sealed class Timetable : Entity, ITimetable
             if (Type == TimetableType.Linear)
                 throw new TimetableTypeNotSupportedException(TimetableType.Linear, "routes");
 
-            return GetCyclicRoutes().Any();
+            var graphCheck = CheckStationGraphInternal();
+            return graphCheck.hasCycles;
         }
+    }
+
+    private (bool hasCycles, bool hasDisconnected) CheckStationGraphInternal(bool checkDisconnected = false)
+    {
+        if (!Stations.Any())
+            return (false, false);
+
+        const int unvisited = 0, visiting = 1, finalized = 2;
+        var marking = new Dictionary<Station, int>();
+        var predecessor = new Dictionary<Station, Station?>();
+        foreach (var s in Stations)
+        {
+            marking[s] = unvisited;
+            predecessor[s] = null;
+        }
+
+        var hasCycles = false;
+
+        // Perform a DFS on the station graph. Each node (station) can either be unvisited, currently in progess
+        // visiting or finalized.
+        // Visit the full graph (starting with one arbitrary station), to also look for disconnected parts of the
+        // graph (which we do not support).
+        void VisitStation(Station u)
+        {
+            marking[u] = visiting;
+            // Get all adjacent stations of the current station u.
+            var adjacent = new HashSet<Station>();
+            foreach (var r in u.Routes)
+            {
+                foreach (var a in routeCache[r].GetSurroundingStations(u, 1))
+                    adjacent.Add(a);
+            }
+            adjacent.Remove(u); // GetSurroundingStations also returns the current station, so remove it again.
+
+            foreach (var a in adjacent)
+            {
+                if (marking[a] == visiting && predecessor[u] != a)
+                    hasCycles = true;
+                if (marking[a] == unvisited)
+                {
+                    predecessor[a] = u;
+                    VisitStation(a);
+                }
+            }
+
+            marking[u] = finalized;
+        }
+
+        VisitStation(Stations.First());
+
+        // If we still have unvisited stations after performing the DFS, we have disconnected subgraphs :-(
+        var hasDisconnected = false;
+        if (checkDisconnected)
+            hasDisconnected = marking.Any(m => m.Value == unvisited);
+
+        return (hasCycles, hasDisconnected);
     }
 
     public IList<int> GetCyclicRoutes()

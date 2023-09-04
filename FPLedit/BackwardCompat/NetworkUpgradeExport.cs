@@ -26,12 +26,20 @@ internal sealed class NetworkUpgradeExport : BaseUpgradeExport
         if (origVersion.CompareTo(TimetableVersion.Extended_FPL2) < 0)
         {
             UpgradeTimePrecision(xclone, false); // We had no train link support in network timetable version=100.
+        }
 
+        // Load new XML as Timetable instance.
+        var ttclone = new Timetable(xclone);
+
+        // POST UPGRADE 100 --> 101 (CURRENT): Check for bugs!
+        // Do this only after initializing ttclone, as we need a fully initialized R/W Timetable instance for that.
+        if (origVersion.CompareTo(TimetableVersion.Extended_FPL2) < 0)
+        {
             // Bug in FPLedit 2.1 muss nachträglich klar gemacht werden.
             // Durch Nutzerinteraction konnten "ambiguous routes" entstehen.
             // Eine Korrektur ist nicht möglich.
             // Das Format Extended_FPL2 wurtde mit Version 2.3.0 eingeführt, der Fix hier mit v2.2.0 ausgerollt.
-            if (tt.Type == TimetableType.Network && tt.Version == TimetableVersion.Extended_FPL && tt.HasRouteCycles)
+            if (tt is { Type: TimetableType.Network, Version: TimetableVersion.Extended_FPL, HasRouteCycles: true })
             {
                 // All stations that are junction points.
                 var maybeAffectedRoutes = tt.GetCyclicRoutes();
@@ -43,8 +51,6 @@ internal sealed class NetworkUpgradeExport : BaseUpgradeExport
             }
         }
 
-        // UPGRADE GENERAL
-        var ttclone = new Timetable(xclone);
         return new XMLExport().Export(ttclone, stream, pluginInterface);
     }
 }

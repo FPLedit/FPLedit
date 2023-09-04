@@ -76,8 +76,9 @@ public interface ITimetable
     void RemoveTrain(ITrain tra);
 
     /// <summary>
-    /// Speicifies whether this train contains cyclic routes.
+    /// Tests whether this timetable contains cyclic routes.
     /// </summary>
+    /// <remarks>Cyclic routes are fully supported, but might need some extra help to find right pathways through the station graph.</remarks>
     bool HasRouteCycles { get; }
     /// <summary>
     /// This function adds an additional new route to an already added station.
