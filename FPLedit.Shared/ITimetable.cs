@@ -121,7 +121,8 @@ public interface ITimetable
     /// </summary>
     bool RouteConnectsDirectly(int routeToCheck, Station sta1, Station sta2);
     /// <summary>
-    /// Get the first route (index) that directly connects both stations, with no other station in between.
+    /// Get the first route (index) that directly connects both stations, with no other station in between
+    /// — or <see cref="Timetable.UNASSIGNED_ROUTE_ID" /> if no such route exists.
     /// </summary>
     int GetDirectlyConnectingRoute(Station sta1, Station sta2);
 

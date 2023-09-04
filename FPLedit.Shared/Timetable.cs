@@ -763,8 +763,8 @@ public sealed class Timetable : Entity, ITimetable
 
     /// <inheritdoc />
     public int GetDirectlyConnectingRoute(Station sta1, Station sta2)
-        => sta1.Routes.Intersect(sta2.Routes).DefaultIfEmpty(-1)
-            .FirstOrDefault(r => RouteConnectsDirectly(r, sta1, sta2));
+        => sta1.Routes.Intersect(sta2.Routes)
+            .FirstOrDefault(r => RouteConnectsDirectly(r, sta1, sta2), UNASSIGNED_ROUTE_ID);
 
     private void RemoveOrphanedRoutes()
     {
