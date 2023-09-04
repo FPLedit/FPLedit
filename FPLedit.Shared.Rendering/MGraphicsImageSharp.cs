@@ -38,7 +38,7 @@ public sealed class MGraphicsImageSharp : IMGraphics
 
     public (float Width, float Height) MeasureString(MFont font, string text)
     {
-        var x = TextMeasurer.Measure(text, new TextOptions((Font) font));
+        var x = TextMeasurer.MeasureSize(text, new TextOptions((Font) font));
         return (x.Width, x.Height);
     }
 
@@ -47,10 +47,10 @@ public sealed class MGraphicsImageSharp : IMGraphics
         var penCacheKey = pen.GetHashCode();
         if (!penCache.TryGetValue(penCacheKey, out var sdPen))
         {
-            sdPen = new Pen((Color)pen.c, pen.w + 1, pen.ds); //TODO: I don't know why this `+1` is needed!?
+            sdPen = new PatternPen((Color)pen.c, pen.w + 1, pen.ds); //TODO: I don't know why this `+1` is needed!?
             penCache[penCacheKey] = sdPen;
         }
-        image.Mutate(ctx => ctx.DrawLines(GetDrawingOptions(), sdPen, new []{ new PointF(x1, y1), new PointF(x2, y2)}));
+        image.Mutate(ctx => ctx.DrawLine(GetDrawingOptions(), sdPen, new []{ new PointF(x1, y1), new PointF(x2, y2)}));
     }
 
     public void DrawText(MFont font, MColor solidColor, float x, float y, string text)
@@ -79,7 +79,7 @@ public sealed class MGraphicsImageSharp : IMGraphics
         var penCacheKey = pen.GetHashCode();
         if (!penCache.TryGetValue(penCacheKey, out var isPen))
         {
-            isPen = new Pen((Color) pen.c, pen.w, pen.ds);
+            isPen = new PatternPen((Color) pen.c, pen.w, pen.ds);
             penCache[penCacheKey] = isPen;
         }
         
@@ -91,7 +91,7 @@ public sealed class MGraphicsImageSharp : IMGraphics
                 switch (cmd)
                 {
                     case PathMoveCmd: break;
-                    case PathLineCmd line: ctx.DrawLines(dopt, isPen, new[] { (PointF) line.Start, (PointF) line.End }); break;
+                    case PathLineCmd line: ctx.DrawLine(dopt, isPen, new[] { (PointF) line.Start, (PointF) line.End }); break;
                     case PathBezierCmd bezier: ctx.DrawBeziers(dopt, isPen, new[] {(PointF) bezier.ControlPoint1, (PointF) bezier.Control1, (PointF) bezier.ControlPoint2, (PointF) bezier.Control2} ); break;
                     default: throw new ArgumentException($"{nameof(graphicsPath)} contains unknown command of type {cmd.GetType().Name}");
                 }
