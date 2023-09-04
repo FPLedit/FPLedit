@@ -1,7 +1,6 @@
-namespace FPLedit.Shared.Tests
+namespace FPLedit.Shared.Tests;
+
+public class FilterRuleTests
 {
-    public class FilterRuleTests
-    {
         
-    }
 }
