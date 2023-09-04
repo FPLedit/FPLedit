@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<jTrainGraph_timetable version="010" name="Bildfahrplan Strecke Alexisbad - Harzgerode" tMin="511" tMax="1024" d="1111111" bgC="weiß" sFont="font(SansSerif;1;12)" trFont="font(SansSerif;0;12)" hFont="font(SansSerif;0;12)" tFont="font(SansSerif;0;12)" sHor="false" sLine="0" shKm="true" sStation="-1" eStation="-1" cNr="1" exW="200" exH="2625" shV="false">
+<jTrainGraph_timetable version="012" name="Bildfahrplan Strecke Alexisbad - Harzgerode" tMin="511" tMax="1024" d="1111111" bgC="weiß" sFont="font(SansSerif;1;12)" trFont="font(SansSerif;0;12)" hFont="font(SansSerif;0;12)" tFont="font(SansSerif;0;12)" sHor="false" sLine="0" shKm="true" sStation="-1" eStation="-1" cNr="1" exW="200" exH="2625" shV="false">
   <stations>
     <sta name="Alexisbad" km="0.0" cl="orange" sh="true" sz="1" sy="0" fpl-vmax="20" fpl-wl="3" tr="2" />
     <sta name="Anschl Ziegelwerk" km="2.6" cl="orange" sh="true" sz="1" sy="4" fpl-vmax="20" fpl-wl="3" />

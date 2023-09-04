@@ -1,5 +1,7 @@
 using System;
+using System.IO;
 using System.Linq;
+using FPLedit.BackwardCompat;
 using FPLedit.Shared;
 using FPLedit.Shared.Filetypes;
 using FPLedit.Tests.Common;
@@ -18,12 +20,13 @@ namespace FPLedit.Tests
             
             var pi = new DummyPluginInterface();
             pi.Registry.Register<ITimetableInitAction>(new BugFixInitAction());
-                
+
             var tt = new XMLImport().Import(s, pi);
             Assert.IsNotNull(tt);
-                
+            Assert.IsTrue(tt!.Initialized);
+
             Assert.IsTrue(pi.HadWarning("Verknüpfungen zu Folgezügen aufgehoben werden") > 0);
-                
+
             Assert.AreEqual(1, tt!.Transitions.Count);
             Assert.AreEqual(null, tt.GetTransitionUnLinked("10")); // Transitions got removed.
             Assert.AreEqual("69724", tt.GetTrainById(12)!.TName); // One id got changed.
@@ -36,14 +39,19 @@ namespace FPLedit.Tests
         {
             var text = Load("test_ambiguous_routes.fpl");
             using var s = PrepareTemp(text);
-            
+
             var pi = new DummyPluginInterface();
             pi.Registry.Register<ITimetableInitAction>(new BugFixInitAction());
-                
+
             var tt = new XMLImport().Import(s, pi);
             Assert.IsNotNull(tt);
-                
-            Assert.IsTrue(pi.HadWarning("enthält zusammengfefallene Strecken") > 0);
+            Assert.IsTrue(tt!.Initialized);
+
+            using var outStream = new MemoryStream();
+            var exportResult = new NetworkUpgradeExport().Export(tt!, outStream, pi);
+            Assert.IsTrue(exportResult);
+
+            Assert.IsTrue(pi.HadWarning("enthält zusammengefallene Strecken") > 0);
         }
         
         [Test]

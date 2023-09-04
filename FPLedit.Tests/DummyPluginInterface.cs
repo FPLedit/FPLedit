@@ -17,8 +17,6 @@ namespace FPLedit.Tests
             Registry = new RegisterStore();
         }
 
-        public ICacheFile Cache => throw new NotImplementedException();
-
         public string GetTemp(string filename)
         {
             throw new NotImplementedException();

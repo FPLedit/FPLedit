@@ -72,6 +72,7 @@ namespace FPLedit.Shared.Tests
         {
             var tt = new XMLImport().Import(s, new DummyPluginInterface())!;
             Assert.IsNotNull(tt);
+            Assert.IsTrue(tt!.Initialized);
 
             var analyzer = new IntersectionAnalyzer(tt);
 
@@ -127,6 +128,7 @@ namespace FPLedit.Shared.Tests
         {
             var tt = new XMLImport().Import(s, new DummyPluginInterface())!;
             Assert.IsNotNull(tt);
+            Assert.IsTrue(tt!.Initialized);
             
             var analyzer = new IntersectionAnalyzer(tt);
 
@@ -189,6 +191,7 @@ namespace FPLedit.Shared.Tests
         {
             var tt = new XMLImport().Import(s, new DummyPluginInterface())!;
             Assert.IsNotNull(tt);
+            Assert.IsTrue(tt!.Initialized);
             
             var analyzer = new IntersectionAnalyzer(tt);
 

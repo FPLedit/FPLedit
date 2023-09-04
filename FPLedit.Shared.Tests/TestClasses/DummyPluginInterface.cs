@@ -12,8 +12,6 @@ namespace FPLedit.Shared.Tests.TestClasses
             Settings = new TestSettings(new Dictionary<string, string>());
         }
 
-        public ICacheFile Cache => throw new NotImplementedException();
-
         public string GetTemp(string filename)
         {
             throw new NotImplementedException();

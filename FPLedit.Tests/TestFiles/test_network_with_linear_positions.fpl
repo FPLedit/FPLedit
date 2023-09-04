@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<jTrainGraph_timetable version="100">
+<jTrainGraph_timetable version="101">
   <stations>
     <sta name="A" km="0.0" fpl-rt="0" fpl-id="0" fpl-pos="0;0" />
     <sta name="D" km="1.5" fpl-rt="1" fpl-id="3" fpl-pos="100;100" />
