@@ -6,14 +6,12 @@ using FPLedit.Shared;
 
 namespace FPLedit.Editor;
 
-internal sealed class EditPositionForm : FDialog<DialogResult>
+internal sealed class EditPositionForm : FDialog<float?>
 {
 #pragma warning disable CS0649,CA2213
     private readonly TextBox positionTextBox = default!;
 #pragma warning restore CS0649,CA2213
     private readonly NumberValidator positionValidator;
-
-    public float Position { get; private set; }
 
     public EditPositionForm()
     {
@@ -30,13 +28,11 @@ internal sealed class EditPositionForm : FDialog<DialogResult>
             return;
         }
 
-        Position = float.Parse(positionTextBox.Text);
-
-        Close(DialogResult.Ok);
+        Close(float.Parse(positionTextBox.Text));
     }
 
     private void CancelButton_Click(object sender, EventArgs e)
-        => Close(DialogResult.Cancel);
+        => Close(null);
 
     private static class L
     {

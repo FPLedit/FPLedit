@@ -50,7 +50,7 @@ internal abstract class BaseTrainsEditor : FDialog<DialogResult>
             if (view.SelectedItem is Train tra)
             {
                 using var tef = new TrainEditForm(tra);
-                if (tef.ShowModal(this) == DialogResult.Ok)
+                if (tef.ShowModal(this) != null)
                     UpdateListView(view, dir);
             }
             else if (message)
@@ -63,11 +63,12 @@ internal abstract class BaseTrainsEditor : FDialog<DialogResult>
     protected void NewTrain(GridView view, TrainDirection direction)
     {
         using var tef = new TrainEditForm(tt, direction);
-        if (tef.ShowModal(this) == DialogResult.Ok)
+        var result = tef.ShowModal(this);
+        if (result != null)
         {
-            tt.AddTrain(tef.Train);
-            if (tef.NextTrains.Any())
-                tt.SetTransitions(tef.Train, tef.NextTrains);
+            tt.AddTrain(result.Train);
+            if (result.NextTrains.Any())
+                tt.SetTransitions(result.Train, result.NextTrains);
 
             UpdateListView(view, direction);
         }

@@ -5,31 +5,24 @@ using FPLedit.Shared;
 
 namespace FPLedit.Editor.TimetableEditor;
 
-internal sealed class ZlmEditForm : FDialog<DialogResult>
+internal sealed class ZlmEditForm : FDialog<string?>
 {
 #pragma warning disable CS0649,CA2213
     private readonly TextBox zlmTextBox = default!;
 #pragma warning restore CS0649,CA2213
 
-    public string Zlm { get; set; }
-
     public ZlmEditForm(string zlm)
     {
         Eto.Serialization.Xaml.XamlReader.Load(this);
-
-        Zlm = zlm;
         zlmTextBox.Text = zlm;
     }
 
     private void CloseButton_Click(object sender, EventArgs e)
-    {
-        Zlm = zlmTextBox.Text;
-        Close(DialogResult.Ok);
-    }
+        => Close(zlmTextBox.Text);
 
     private void CancelButton_Click(object sender, EventArgs e)
-        => Close(DialogResult.Cancel);
-        
+        => Close(null);
+
     private static class L
     {
         public static readonly string Cancel = T._("Abbrechen");

@@ -115,11 +115,10 @@ internal sealed class NetworkEditingControl : Panel
                 return;
             }
             var nsf = new EditStationForm(pluginInterface, sta, r);
-            if (nsf.ShowModal(this) == DialogResult.Ok)
-            {
-                ReloadTimetable();
-                pluginInterface.SetUnsaved();
-            }
+            if (nsf.ShowModal(this) == null) return;
+
+            ReloadTimetable();
+            pluginInterface.SetUnsaved();
         };
         networkRenderer.StationRightClicked += (s, _) =>
         {
@@ -171,36 +170,36 @@ internal sealed class NetworkEditingControl : Panel
         {
             pluginInterface.StageUndoStep();
             var nsf = new EditStationForm(pluginInterface, pluginInterface.Timetable, routesDropDown.SelectedRoute);
-            if (nsf.ShowModal(this) == DialogResult.Ok)
+            var result = nsf.ShowModal(this);
+            if (result == null) return;
+
+            if (pluginInterface.Timetable.Type == TimetableType.Network)
             {
-                Station sta = nsf.Station;
-                if (pluginInterface.Timetable.Type == TimetableType.Network)
-                {
-                    var handler = new StationCanvasPositionHandler();
-                    handler.SetMiddlePos(routesDropDown.SelectedRoute, sta, pluginInterface.Timetable);
-                }
-                pluginInterface.Timetable.AddStation(sta, networkRenderer.SelectedRoute);
-                pluginInterface.SetUnsaved();
-                ReloadTimetable();
+                var handler = new StationCanvasPositionHandler();
+                handler.SetMiddlePos(routesDropDown.SelectedRoute, result.Station, pluginInterface.Timetable);
             }
+            pluginInterface.Timetable.AddStation(result.Station, networkRenderer.SelectedRoute);
+            pluginInterface.SetUnsaved();
+            ReloadTimetable();
         };
         newLineButton.Click += (_, _) =>
         {
             pluginInterface.StageUndoStep();
             var nlf = new EditStationForm(pluginInterface, pluginInterface.Timetable, Timetable.UNASSIGNED_ROUTE_ID);
-            if (nlf.ShowModal(this) == DialogResult.Ok)
-            {
-                networkRenderer.StartAddStation(nlf.Station, nlf.Position);
-                pluginInterface.SetUnsaved();
-            }
+            var result = nlf.ShowModal(this);
+            if (result == null) return;
+
+            networkRenderer.StartAddStation(result.Station, result.NewPosition!.Value);
+            pluginInterface.SetUnsaved();
         };
         joinLineButton.Click += (_, _) =>
         {
             pluginInterface.StageUndoStep();
             var epf = new EditPositionForm();
-            if (epf.ShowModal(this) == DialogResult.Ok)
+            var newPosition = epf.ShowModal(this);
+            if (newPosition.HasValue)
             {
-                networkRenderer.StartJoinLines(epf.Position);
+                networkRenderer.StartJoinLines(newPosition.Value);
                 ReloadTimetable();
                 pluginInterface.SetUnsaved();
             }

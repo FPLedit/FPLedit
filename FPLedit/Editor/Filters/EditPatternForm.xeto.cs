@@ -5,7 +5,7 @@ using System;
 
 namespace FPLedit.Editor.Filters;
 
-internal sealed class EditPatternForm : FDialog<DialogResult>
+internal sealed class EditPatternForm : FDialog<FilterRule?>
 {
 #pragma warning disable CS0649,CA2213
     private readonly TextBox searchTextBox = default!;
@@ -15,11 +15,8 @@ internal sealed class EditPatternForm : FDialog<DialogResult>
 #pragma warning restore CS0649,CA2213
     private readonly SelectionUI<PatternSelectionType> typeSelection;
 
-    public FilterRule Pattern { get; private set; }
-
     public EditPatternForm(FilterRule rule, string property, FilterTarget target) : this(property, target)
     {
-        Pattern = rule;
         searchTextBox.Text = rule.SearchString;
         negateCheckBox.Checked = rule.Negate;
 
@@ -35,8 +32,6 @@ internal sealed class EditPatternForm : FDialog<DialogResult>
         typeSelection = new SelectionUI<PatternSelectionType>(null, typeSelectionStack);
         if (target == FilterTarget.Train)
             typeSelection.DisableOption(PatternSelectionType.StationType);
-
-        Pattern = new FilterRule((char)PatternSelectionType.Equals + " ");
     }
 
     private void CloseButton_Click(object sender, EventArgs e)
@@ -44,17 +39,15 @@ internal sealed class EditPatternForm : FDialog<DialogResult>
         if (searchTextBox.Text.Length == 0)
         {
             MessageBox.Show(T._("Bitte einen Suchwert eingeben!"));
-            Result = DialogResult.Cancel;
+            Result = null;
             return;
         }
 
         char type = (char)typeSelection.SelectedState;
-
         var negate = negateCheckBox.Checked == true ? "!" : "";
+        var pattern = new FilterRule(negate + type + searchTextBox.Text);
 
-        Pattern = new FilterRule(negate + type + searchTextBox.Text);
-
-        Close(DialogResult.Ok);
+        Close(pattern);
     }
 
     protected override void Dispose(bool disposing)
@@ -64,7 +57,7 @@ internal sealed class EditPatternForm : FDialog<DialogResult>
     }
 
     private void CancelButton_Click(object sender, EventArgs e)
-        => Close(DialogResult.Cancel);
+        => Close(null);
 
     // Hinweis: Speigelung von FPLedit.Shared.FilterType
     private enum PatternSelectionType

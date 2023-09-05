@@ -7,17 +7,15 @@ using System.Linq;
 
 namespace FPLedit.Editor.Trains;
 
-internal sealed class TrainFillDialog : FDialog<DialogResult>
+internal sealed class TrainFillDialog : FDialog<TrainFillDialog.FillOperation?>
 {
+    internal sealed record FillOperation(Train ReferenceTrain, int Offset);
+
 #pragma warning disable CS0649,CA2213
     private readonly DropDown trainsComboBox = default!;
     private readonly TextBox offsetTextBox = default!;
 #pragma warning restore CS0649,CA2213
     private readonly NumberValidator offsetValidator;
-
-    public Train? ReferenceTrain { get; private set; }
-
-    public int Offset { get; private set; }
 
     public TrainFillDialog(Train train)
     {
@@ -37,18 +35,15 @@ internal sealed class TrainFillDialog : FDialog<DialogResult>
         if (!offsetValidator.Valid)
         {
             MessageBox.Show(T._("Bitte erst alle Felder korrekt ausfüllen:\n{0}", offsetValidator.ErrorMessage!));
-            Result = DialogResult.None;
+            Result = null;
             return;
         }
 
-        ReferenceTrain = (Train)trainsComboBox.SelectedValue;
-        Offset = int.Parse(offsetTextBox.Text);
-
-        Close(DialogResult.Ok);
+        Close(new FillOperation((Train)trainsComboBox.SelectedValue, int.Parse(offsetTextBox.Text)));
     }
 
     private void CancelButton_Click(object sender, EventArgs e)
-        => Close(DialogResult.Cancel);
+        => Close(null);
         
     private static class L
     {

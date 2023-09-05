@@ -11,8 +11,10 @@ using FPLedit.Shared.TrainLinks;
 
 namespace FPLedit.Editor.Trains;
 
-internal sealed class TrainEditForm : FDialog<DialogResult>
+internal sealed class TrainEditForm : FDialog<TrainEditForm.EditResult?>
 {
+    internal sealed record EditResult(Train Train, IEnumerable<TransitionEntry> NextTrains);
+
 #pragma warning disable CS0649,CA2213
     private readonly TextBox nameTextBox = default!, commentTextBox = default!;
     private readonly ComboBox locomotiveComboBox = default!, mbrComboBox = default!, lastComboBox = default!;
@@ -21,19 +23,10 @@ internal sealed class TrainEditForm : FDialog<DialogResult>
     private readonly DropDown transitionDropDown = default!;
     private readonly DaysControlNarrow daysControl = default!;
     private readonly GridView linkGridView = default!;
-    private readonly GroupBox linkGroupBox = default!;
 #pragma warning restore CS0649,CA2213
     private readonly NotEmptyValidator nameValidator;
 
-    /// <summary>
-    /// Output parameter for transitions. This property is populated after the form is closed.
-    /// </summary>
-    public Train Train { get; }
-        
-    /// <summary>
-    /// Output parameter for transitions. This property is populated after the form is closed.
-    /// </summary>
-    public List<TransitionEntry> NextTrains { get; private set; }
+    private readonly Train train;
 
     private readonly Timetable tt;
     private readonly TrainEditHelper th;
@@ -44,8 +37,7 @@ internal sealed class TrainEditForm : FDialog<DialogResult>
 
     private TrainEditForm(Timetable tt)
     {
-        Train = null!; // will be initialized later.
-        NextTrains = new List<TransitionEntry>();
+        train = null!; // will be initialized later.
         Eto.Serialization.Xaml.XamlReader.Load(this);
 
         this.tt = tt;
@@ -70,10 +62,10 @@ internal sealed class TrainEditForm : FDialog<DialogResult>
     /// <summary>
     /// Create a new instance to edit an existing train.
     /// </summary>
-    /// <remarks>Don't use <see cref="NextTrains"/> in this case, transitions will be saved as well.</remarks>
+    /// <remarks>Don't use <see cref="EditResult.NextTrains"/> in this case, transitions will be saved as well.</remarks>
     public TrainEditForm(Train train) : this(train.ParentTimetable)
     {
-        Train = train;
+        this.train = train;
         nameTextBox.Text = train.TName;
         locomotiveComboBox.Text = train.Locomotive;
         mbrComboBox.Text = train.Mbr;
@@ -90,29 +82,29 @@ internal sealed class TrainEditForm : FDialog<DialogResult>
     /// Create a new instance to create a new train.
     /// </summary>
     /// <remarks>
-    /// Use <see cref="NextTrains"/> to wire up transitions after this form has been closed.
+    /// Use <see cref="EditResult.NextTrains"/> to wire up transitions after this form has been closed.
     /// This form will NOT wire up transitions itself for new trains!
     /// </remarks>
-    public TrainEditForm(Timetable tt, TrainDirection direction, List<Station>? path = null) : this(tt)
+    public TrainEditForm(Timetable tt, TrainDirection direction, IEnumerable<Station>? path = null) : this(tt)
     {
-        Train = new Train(direction, tt);
+        train = new Train(direction, tt);
 
         if (path != null)
-            Train.AddAllArrDeps(path);
+            train.AddAllArrDeps(path);
         if (tt.Type == TimetableType.Linear)
-            Train.AddLinearArrDeps();
+            train.AddLinearArrDeps();
 
         InitializeTrain();
     }
 
     private void InitializeTrain()
     {
-        editor.Initialize(Train);
+        editor.Initialize(train);
 
         transitionDropDown.ItemTextBinding = Binding.Delegate<Train, string>(t => t.TName);
-        transitionDropDown.DataStore = tt.Trains.Where(t => t != Train).OrderBy(t => t.TName).ToArray();
+        transitionDropDown.DataStore = tt.Trains.Where(t => t != train).OrderBy(t => t.TName).ToArray();
 
-        var transitions = tt.GetEditableTransitions(Train);
+        var transitions = tt.GetEditableTransitions(train);
         // We currently only support editing complex transitions if only one transition exists (and thus not being relly "complex"...)
         if (transitions.Count == 1)
         {
@@ -127,13 +119,13 @@ internal sealed class TrainEditForm : FDialog<DialogResult>
             MessageBox.Show(T._("Dieser Zug hat komplexe Folgezüge/mehr als einen Folgezug definiert. Dies wird von FPLedit aktuell nicht zur Bearbeitung unterstützt."), "FPLedit", MessageBoxType.Warning);
         }
 
-        fillButton.Visible = tt.Type == TimetableType.Linear && th.FillCandidates(Train).Any();
+        fillButton.Visible = tt.Type == TimetableType.Linear && th.FillCandidates(train).Any();
 
-        arrDepBackup = Train.GetArrDepsUnsorted()
+        arrDepBackup = train.GetArrDepsUnsorted()
             .Select(kvp => new KeyValuePair<Station, ArrDep>(kvp.Key, kvp.Value.Copy()))
             .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
-        linkGridView.DataStore = Train.TrainLinks;
+        linkGridView.DataStore = train.TrainLinks;
     }
 
     private void CloseButton_Click(object sender, EventArgs e)
@@ -144,7 +136,7 @@ internal sealed class TrainEditForm : FDialog<DialogResult>
             return;
         }
 
-        var nameExists = Train.ParentTimetable.Trains.Where(t => t != Train).Select(t => t.TName).Contains(nameTextBox.Text);
+        var nameExists = train.ParentTimetable.Trains.Where(t => t != train).Select(t => t.TName).Contains(nameTextBox.Text);
 
         if (nameExists)
         {
@@ -153,17 +145,17 @@ internal sealed class TrainEditForm : FDialog<DialogResult>
                 return;
         }
 
-        Train.TName = nameTextBox.Text;
-        Train.Locomotive = locomotiveComboBox.Text;
-        Train.Mbr = mbrComboBox.Text;
-        Train.Last = lastComboBox.Text;
-        Train.Comment = commentTextBox.Text;
-        Train.Days = daysControl.SelectedDays;
+        train.TName = nameTextBox.Text;
+        train.Locomotive = locomotiveComboBox.Text;
+        train.Mbr = mbrComboBox.Text;
+        train.Last = lastComboBox.Text;
+        train.Comment = commentTextBox.Text;
+        train.Days = daysControl.SelectedDays;
 
         if (!editor.ApplyChanges())
             return;
 
-        NextTrains = new List<TransitionEntry>();
+        var nextTrains = new List<TransitionEntry>();
         // Only update NextTrains/transitions if we could actually select a transition.
         // Otherwise we keep the existing complex structure.
         if (transitionDropDown.Enabled)
@@ -175,34 +167,34 @@ internal sealed class TrainEditForm : FDialog<DialogResult>
                 {
                     // keep the old complex structure and only replace the next train.
                     singleTransition.NextTrain = next;
-                    NextTrains.Add(singleTransition);
+                    nextTrains.Add(singleTransition);
                 }
                 else
-                    NextTrains.Add(new TransitionEntry(next, Days.All, null));
+                    nextTrains.Add(new TransitionEntry(next, Days.All, null));
             }
 
-            if (Train.Id > 0)
-                tt.SetTransitions(Train, NextTrains);
+            if (train.Id > 0)
+                tt.SetTransitions(train, nextTrains);
         }
 
-        Close(DialogResult.Ok);
+        Close(new EditResult(train, nextTrains));
     }
 
     private void CancelButton_Click(object sender, EventArgs e)
     {
         foreach (var (sta, ardpBak) in arrDepBackup)
-            Train.GetArrDep(sta).ApplyCopy(ardpBak);
-        Close(DialogResult.Cancel);
+            train.GetArrDep(sta).ApplyCopy(ardpBak);
+        Close(null);
     }
 
     private void FillButton_Click(object sender, EventArgs e)
     {
-        using var tfd = new TrainFillDialog(Train);
-        if (tfd.ShowModal() == DialogResult.Ok)
+        using var tfd = new TrainFillDialog(train);
+        var fillOperation = tfd.ShowModal();
+        if (fillOperation != null)
         {
-            th.FillTrain(tfd.ReferenceTrain!, Train, tfd.Offset);
-
-            editor.Initialize(Train);
+            th.FillTrain(fillOperation.ReferenceTrain, train, fillOperation.Offset);
+            editor.Initialize(train);
         }
     }
 
@@ -216,7 +208,7 @@ internal sealed class TrainEditForm : FDialog<DialogResult>
         if (linkGridView.SelectedItem != null)
         {
             tt.RemoveLink((TrainLink) linkGridView.SelectedItem);
-            linkGridView.DataStore = Train.TrainLinks; // Reload data rows.
+            linkGridView.DataStore = train.TrainLinks; // Reload data rows.
         }
         else
             MessageBox.Show(T._("Erst muss eine Verknüpfung zum Löschen ausgewählt werden!"));
@@ -231,7 +223,7 @@ internal sealed class TrainEditForm : FDialog<DialogResult>
             {
                 using var tled = new TrainLinkEditDialog(link, tt);
                 if (tled.ShowModal() == DialogResult.Ok)
-                    linkGridView.DataStore = Train.TrainLinks; // Reload data rows.
+                    linkGridView.DataStore = train.TrainLinks; // Reload data rows.
             }
             else
                 MessageBox.Show("Not Implemented: Name calculator not supported!", type: MessageBoxType.Error);

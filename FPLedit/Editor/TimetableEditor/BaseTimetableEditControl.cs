@@ -105,10 +105,11 @@ internal abstract class BaseTimetableEditControl : Panel
 
         using (var zlmDialog = new ZlmEditForm(data.ArrDeps![sta].Zuglaufmeldung))
         {
-            if (zlmDialog.ShowModal(this) != DialogResult.Ok)
+            var zlm = zlmDialog.ShowModal(this);
+            if (zlm == null)
                 return;
 
-            data.SetZlm(sta, zlmDialog.Zlm);
+            data.SetZlm(sta, zlm);
         }
 
         view.ReloadData(view.SelectedRow);

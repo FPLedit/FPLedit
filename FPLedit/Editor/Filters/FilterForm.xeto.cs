@@ -84,9 +84,10 @@ internal sealed class FilterForm : FDialog<DialogResult>
             var frule = (FilterRule)view.SelectedItem;
 
             using var epf = new EditPatternForm(frule, property, target);
-            if (epf.ShowModal(this) == DialogResult.Ok)
+            var filterRule = epf.ShowModal(this);
+            if (filterRule != null)
             {
-                patterns[view.SelectedRow] = epf.Pattern;
+                patterns[view.SelectedRow] = filterRule;
                 UpdateListView(view, patterns);
             }
         }
@@ -97,9 +98,10 @@ internal sealed class FilterForm : FDialog<DialogResult>
     private void AddEntry(GridView view, List<FilterRule> patterns, string property, FilterTarget target)
     {
         using var epf = new EditPatternForm(property, target);
-        if (epf.ShowModal(this) == DialogResult.Ok)
+        var filterRule = epf.ShowModal(this);
+        if (filterRule != null)
         {
-            patterns.Add(epf.Pattern);
+            patterns.Add(filterRule);
             UpdateListView(view, patterns);
         }
     }

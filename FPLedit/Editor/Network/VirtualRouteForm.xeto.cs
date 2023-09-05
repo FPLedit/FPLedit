@@ -36,10 +36,11 @@ internal sealed class VirtualRouteForm : FDialog<DialogResult>
     {
         using var tpf = TrainPathForm.NewTrain(pluginInterface);
         tpf.Title = T._("Verlauf der neuen virtuellen Strecke auswählen");
-        if (tpf.ShowModal(this) != DialogResult.Ok)
+        var pathResult = tpf.ShowModal(this);
+        if (pathResult == null)
             return;
-            
-        VirtualRoute.CreateVRoute(tt, tpf.Path!.First(), tpf.Path!.Last(), tpf.Waypoints.ToArray());
+
+        VirtualRoute.CreateVRoute(tt, pathResult.Path[0], pathResult.Path[^1], pathResult.Waypoints.ToArray());
         gridView.DataStore = VirtualRoute.GetVRoutes(tt).ToArray();
     }
 

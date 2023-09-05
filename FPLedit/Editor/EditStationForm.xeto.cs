@@ -9,8 +9,10 @@ using FPLedit.Shared.Helpers;
 
 namespace FPLedit.Editor;
 
-internal sealed class EditStationForm : FDialog<DialogResult>
+internal sealed class EditStationForm : FDialog<EditStationForm.EditResult?>
 {
+    internal sealed record EditResult(Station Station, float? NewPosition);
+
     private readonly IPluginInterface pluginInterface;
     private readonly int route;
 
@@ -22,17 +24,14 @@ internal sealed class EditStationForm : FDialog<DialogResult>
 #pragma warning restore CS0649,CA2213
     private readonly ValidatorCollection validators;
 
-    public Station Station { get; }
-
-    public float Position { get; private set; }
-
-    private readonly bool existingStation;
+    private readonly Station station;
+    private readonly bool isExistingStation;
 
     private int stationRendererHeight, stationRendererWidth;
 
     private EditStationForm(Timetable tt, IPluginInterface pluginInterface)
     {
-        Station = null!; // will be initialized later.
+        station = null!; // will be initialized later.
         this.pluginInterface = pluginInterface;
         Eto.Serialization.Xaml.XamlReader.Load(this);
 
@@ -81,10 +80,10 @@ internal sealed class EditStationForm : FDialog<DialogResult>
     {
         Title = T._("Neue Station erstellen");
         this.route = route;
-        existingStation = false;
-        Station = new Station(tt);
+        isExistingStation = false;
+        station = new Station(tt);
 
-        stationRenderer.InitializeWithStation(route, Station);
+        stationRenderer.InitializeWithStation(route, station);
     }
 
     /// <summary>
@@ -96,16 +95,16 @@ internal sealed class EditStationForm : FDialog<DialogResult>
         nameTextBox.Text = station.SName;
         positionTextBox.Text = station.Positions.GetPosition(route)!.Value.ToString("0.0");
             
-        Station = station;
+        this.station = station;
         this.route = route;
 
-        existingStation = true;
+        isExistingStation = true;
 
-        stationRenderer.InitializeWithStation(route, Station);
+        stationRenderer.InitializeWithStation(route, this.station);
             
         codeTextBox.Text = station.StationCode;
         typeComboBox.Text = station.StationType;
-        requestCheckBox.Checked = Station.RequestStop;
+        requestCheckBox.Checked = this.station.RequestStop;
     }
 
     private void CloseButton_Click(object sender, EventArgs e)
@@ -116,20 +115,20 @@ internal sealed class EditStationForm : FDialog<DialogResult>
             return;
         }
             
-        if (existingStation && route == Timetable.UNASSIGNED_ROUTE_ID)
+        if (isExistingStation && route == Timetable.UNASSIGNED_ROUTE_ID)
             throw new InvalidOperationException("Invalid state: No assigned route but Station marked as existing.");
 
-        Station.SName = nameTextBox.Text;
-            
-        Station.StationCode = codeTextBox.Text;
-        Station.StationType = typeComboBox.Text;
-        Station.RequestStop = requestCheckBox.Checked ?? false; 
+        station.SName = nameTextBox.Text;
+        station.StationCode = codeTextBox.Text;
+        station.StationType = typeComboBox.Text;
+        station.RequestStop = requestCheckBox.Checked ?? false; 
 
         // Set position.
         var newPos = float.Parse(positionTextBox.Text);
+        float? newPosResult = null;
         if (route == Timetable.UNASSIGNED_ROUTE_ID) // We have a new station on a new route
-            Position = newPos;
-        else if (!StationMoveHelper.TrySafeMove(Station, existingStation, newPos, route))
+            newPosResult = newPos;
+        else if (!StationMoveHelper.TrySafeMove(station, isExistingStation, newPos, route))
         {
             // We tried a safe move, but it is not possible.
             var res = MessageBox.Show(T._("ACHTUNG: Sie versuchen Stationen einer Strecke durch eine Positionsänderung zwischen zwei andere Bahnhöfe zu verschieben und damit die Stationen umzusortieren.\n\nDies wird IN JEDEM FALL bei Zügen, die über diese Strecke verkehren, zu unerwarteten und Effekten und Fehlern führen und wird mit großer Wahrscheinlickeit zu Nebeneffekten an anderen Stellen führen und benötigt manuelle Nacharbeit. Diese Aktion wird nicht empfohlen.\n\n(Sie können stattdessen die alte Station löschen und eine neue anlegen). Trotzdem fortfahren und Stationen umzusortieren (auf eigenes Risiko)?"),
@@ -140,7 +139,7 @@ internal sealed class EditStationForm : FDialog<DialogResult>
             var backup = pluginInterface.BackupTimetable();
             try
             {
-                StationMoveHelper.PerformUnsafeMove(Station, existingStation, newPos, route);
+                StationMoveHelper.PerformUnsafeMove(station, isExistingStation, newPos, route);
             }
             catch
             {
@@ -154,21 +153,21 @@ internal sealed class EditStationForm : FDialog<DialogResult>
         }
             
         // Update track data.
-        Station.DefaultTrackLeft.FromStandalone(stationRenderer.DefaultTrackLeft);
-        Station.DefaultTrackRight.FromStandalone(stationRenderer.DefaultTrackRight);
-        Station.Tracks.Clear();
+        station.DefaultTrackLeft.FromStandalone(stationRenderer.DefaultTrackLeft);
+        station.DefaultTrackRight.FromStandalone(stationRenderer.DefaultTrackRight);
+        station.Tracks.Clear();
         foreach (var track in stationRenderer.Tracks)
-            Station.Tracks.Add(track);
+            station.Tracks.Add(track);
         foreach (var rename in stationRenderer.TrackRenames)
-            Station.ParentTimetable._InternalRenameAllTrainTracksAtStation(Station, rename.Key, rename.Value);
+            station.ParentTimetable._InternalRenameAllTrainTracksAtStation(station, rename.Key, rename.Value);
         foreach (var remove in stationRenderer.TrackRemoves)
-            Station.ParentTimetable._InternalRemoveAllTrainTracksAtStation(Station, remove);
+            station.ParentTimetable._InternalRemoveAllTrainTracksAtStation(station, remove);
 
-        Close(DialogResult.Ok);
+        Close(new EditResult(station, newPosResult));
     }
 
     private void CancelButton_Click(object sender, EventArgs e)
-        => Close(DialogResult.Cancel);
+        => Close(null);
         
     private static class L
     {

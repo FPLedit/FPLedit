@@ -89,7 +89,7 @@ internal sealed class NetworkTrainsEditForm : BaseTrainsEditor
             if (view.SelectedItem is Train train)
             {
                 using var tpf = TrainPathForm.EditPath(pluginInterface, train);
-                if (tpf.ShowModal(this) == DialogResult.Ok)
+                if (tpf.ShowModal(this) != null)
                     UpdateListView(view, TrainDirection.tr);
             }
             else if (message)
@@ -120,15 +120,17 @@ internal sealed class NetworkTrainsEditForm : BaseTrainsEditor
     private void NewTrain(GridView view)
     {
         using var tpf = TrainPathForm.NewTrain(pluginInterface);
-        if (tpf.ShowModal(this) != DialogResult.Ok)
+        var pathResult = tpf.ShowModal(this);
+        if (pathResult == null)
             return;
 
-        using var tef = new TrainEditForm(pluginInterface.Timetable, TrainDirection.tr, tpf.Path);
-        if (tef.ShowModal(this) == DialogResult.Ok)
+        using var tef = new TrainEditForm(pluginInterface.Timetable, TrainDirection.tr, pathResult.Path);
+        var result = tef.ShowModal(this);
+        if (result != null)
         {
-            tt.AddTrain(tef.Train);
-            if (tef.NextTrains.Any())
-                tt.SetTransitions(tef.Train, tef.NextTrains);
+            tt.AddTrain(result.Train);
+            if (result.NextTrains.Any())
+                tt.SetTransitions(result.Train, result.NextTrains);
 
             UpdateListView(view, TrainDirection.tr);
         }

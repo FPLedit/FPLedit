@@ -123,19 +123,17 @@ internal sealed class LineEditForm : FDialog<DialogResult>
     private void NewStation()
     {
         using var nsf = new EditStationForm(pluginInterface, pluginInterface.Timetable, route);
-        if (nsf.ShowModal(this) == DialogResult.Ok)
+        var result = nsf.ShowModal(this);
+        if (result == null) return;
+
+        if (pluginInterface.Timetable.Type == TimetableType.Network)
         {
-            var sta = nsf.Station;
-
-            if (pluginInterface.Timetable.Type == TimetableType.Network)
-            {
-                var handler = new StationCanvasPositionHandler();
-                handler.SetMiddlePos(route, sta, pluginInterface.Timetable);
-            }
-
-            pluginInterface.Timetable.AddStation(sta, route);
-            UpdateStations();
+            var handler = new StationCanvasPositionHandler();
+            handler.SetMiddlePos(route, result.Station, pluginInterface.Timetable);
         }
+
+        pluginInterface.Timetable.AddStation(result.Station, route);
+        UpdateStations();
     }
 
     private void CloseButton_Click(object sender, EventArgs e)
