@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-07-01 17:49+0200\n"
-"PO-Revision-Date: 2023-07-01 17:51+0200\n"
+"POT-Creation-Date: 2023-09-05 17:37+0200\n"
+"PO-Revision-Date: 2023-09-05 17:37+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -14,11 +14,11 @@ msgstr ""
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: Forms/AgencyPropsForm.xeto.cs:35
+#: Forms/AgencyPropsForm.xeto.cs:33
 msgid "Bitte gültige Datumsspezifikation eintragen!"
 msgstr "Please enter a valid date range!"
 
-#: Forms/AgencyPropsForm.xeto.cs:58
+#: Forms/AgencyPropsForm.xeto.cs:56
 #, csharp-format
 msgid ""
 "Bitte erst alle Fehler beheben:\n"
@@ -27,55 +27,55 @@ msgstr ""
 "Please fix all errors first:\n"
 "{0}"
 
-#: Forms/AgencyPropsForm.xeto.cs:78
+#: Forms/AgencyPropsForm.xeto.cs:76
 msgid "Betreiberdaten:"
 msgstr "Agency properties:"
 
-#: Forms/AgencyPropsForm.xeto.cs:79
+#: Forms/AgencyPropsForm.xeto.cs:77
 msgid "Name d. Betreibers"
 msgstr "Name of the agency"
 
-#: Forms/AgencyPropsForm.xeto.cs:80
+#: Forms/AgencyPropsForm.xeto.cs:78
 msgid "Sprachcode d. Betreibers (z.B. „de“ oder „de-DE“)"
 msgstr "Language code of the agency (e.g. \"de\", \"en\", or \"en-GB\")"
 
-#: Forms/AgencyPropsForm.xeto.cs:81
+#: Forms/AgencyPropsForm.xeto.cs:79
 msgid "Website d. Betreibers"
 msgstr "Website of the agency"
 
-#: Forms/AgencyPropsForm.xeto.cs:82
+#: Forms/AgencyPropsForm.xeto.cs:80
 msgid "Zeitzone d. Betreibers (z.B. „Europe/Berlin“)"
 msgstr "Time zone of the agency (e.g. \"Europe/London\")"
 
-#: Forms/AgencyPropsForm.xeto.cs:84
+#: Forms/AgencyPropsForm.xeto.cs:82
 msgid "Streckendaten:"
 msgstr "Route properties:"
 
-#: Forms/AgencyPropsForm.xeto.cs:85
+#: Forms/AgencyPropsForm.xeto.cs:83
 msgid "Name der (einen) Strecke"
 msgstr "Name of the (single) route"
 
-#: Forms/AgencyPropsForm.xeto.cs:86
+#: Forms/AgencyPropsForm.xeto.cs:84
 msgid "Typ des Beförderungsmittels"
 msgstr "Type of transportation"
 
-#: Forms/AgencyPropsForm.xeto.cs:88
+#: Forms/AgencyPropsForm.xeto.cs:86
 msgid "Globale Zugdaten:"
 msgstr "Global data for trains:"
 
-#: Forms/AgencyPropsForm.xeto.cs:89
+#: Forms/AgencyPropsForm.xeto.cs:87
 msgid "Verkehrstage der GTFS-Züge"
 msgstr "Service days for GTFS trains"
 
-#: Forms/AgencyPropsForm.xeto.cs:91 Forms/TrainPropsForm.xeto.cs:78
+#: Forms/AgencyPropsForm.xeto.cs:89 Forms/TrainPropsForm.xeto.cs:78
 msgid "Abbrechen"
 msgstr "Cancel"
 
-#: Forms/AgencyPropsForm.xeto.cs:92 Forms/TrainPropsForm.xeto.cs:79
+#: Forms/AgencyPropsForm.xeto.cs:90 Forms/TrainPropsForm.xeto.cs:79
 msgid "Schließen"
 msgstr "Close"
 
-#: Forms/AgencyPropsForm.xeto.cs:93
+#: Forms/AgencyPropsForm.xeto.cs:91
 msgid "GTFS-Agency- und Streckendaten"
 msgstr "GTFS Agency and route properties"
 

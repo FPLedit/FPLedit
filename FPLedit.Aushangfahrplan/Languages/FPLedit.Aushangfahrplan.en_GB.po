@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-07-01 17:26+0200\n"
-"PO-Revision-Date: 2023-07-01 17:26+0200\n"
+"POT-Creation-Date: 2023-09-05 17:35+0200\n"
+"PO-Revision-Date: 2023-09-05 17:35+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -67,10 +67,10 @@ msgstr "Stop-specific timetable as HTML file (*.html)|*.html"
 msgid "Aushangfahrplan"
 msgstr "Stop-specific timetable"
 
-#: Templates/TemplateProxy.cs:11
+#: Templates/TemplateProxy.cs:12
 msgid "Standard (DRG aus Malsch)"
 msgstr "Default (DRG from Malsch)"
 
-#: Templates/TemplateProxy.cs:20
+#: Templates/TemplateProxy.cs:21
 msgid "Wie Standard, mit Schriftzug \\\"Abfahrt\\\" in Originalschrift"
 msgstr "Like default, but with \\\"Abfahrt\\\" set in the original font"

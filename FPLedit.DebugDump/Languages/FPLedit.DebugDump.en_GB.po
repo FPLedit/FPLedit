@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-07-09 22:06+0200\n"
-"PO-Revision-Date: 2023-07-09 22:06+0200\n"
+"POT-Creation-Date: 2023-09-05 17:35+0200\n"
+"PO-Revision-Date: 2023-09-05 17:35+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Poedit-KeywordsList: _;SelectionName\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: DebugListener.cs:24
+#: DebugListener.cs:28
 #, csharp-format
 msgid ""
 "Debug Dump ist aktiviert! Dies kann dazu führen, dass große Datenmengen "

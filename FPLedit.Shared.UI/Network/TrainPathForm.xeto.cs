@@ -117,7 +117,7 @@ public sealed class TrainPathForm : FDialog<DialogResult>
     #region State handlers
     private void ChangeRoute(Station sta)
     {
-        if (PathSafeguard("Change-Route"))
+        if (PathSafeguard(nameof(ChangeRoute)))
             return;
 
         if (!Path.Contains(sta)) // Not in path. Maybe add it.
@@ -155,7 +155,7 @@ public sealed class TrainPathForm : FDialog<DialogResult>
 
     private void AddWaypoint(Station sta)
     {
-        if (PathSafeguard("Add-Waypoint"))
+        if (PathSafeguard(nameof(AddWaypoint)))
             return;
 
         if (!wayPoints.Contains(sta))
@@ -196,15 +196,16 @@ public sealed class TrainPathForm : FDialog<DialogResult>
         wayPoints.Clear();
     }
 
-    [MemberNotNullWhen(false,"Path")]
+    [MemberNotNullWhen(false, "Path")]
     private bool PathSafeguard(string mode) // Helper, used in states
     {
-        if (Path == null || !Path.Any()) // We have no path. How did we come so far?
+        var hasNoPath = Path == null || !Path.Any();
+        if (hasNoPath) // We have no path. How did we come so far?
         {
-            MessageBox.Show($"Interner Fehler: Kein Pfad vorhanden, obwohl im {mode} Modus. Dieses Fenster muss leider geschlossen werden!", "FPLedit", MessageBoxType.Error);
+            MessageBox.Show(T._("Interner Fehler: Unerwartet kein Pfad vorhanden! Dieses Fenster muss leider geschlossen werden! ({0})", mode), "FPLedit", MessageBoxType.Error);
             Close(DialogResult.Cancel);
         }
-        return Path == null || !Path.Any();
+        return hasNoPath;
     }
     #endregion
 
@@ -223,10 +224,10 @@ public sealed class TrainPathForm : FDialog<DialogResult>
     {
         if (PathSafeguard("Close"))
             return;
-            
+
         if (Path.Distinct().Count() < Path.Count)
         {
-            MessageBox.Show(T._("Der Laufweg enthält eine Station mehr als einmal. Dies ist aktuell nicht möglich. Ggf. fehlt ein weiterer Wegpunkt!"),
+            MessageBox.Show(T._("Der Laufweg enthält eine Station mehr als einmal. Dies ist aktuell nicht möglich. Ggf. fehlt ein weiterer Wegpunkt?"),
                 "FPLedit");
             return;
         }
