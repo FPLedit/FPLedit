@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Force.DeepCloner;
 #pragma warning disable CS8618
 
@@ -37,15 +38,7 @@ public sealed class Timetable : Entity, ITimetable
     [XAttrName("version")]
     public TimetableVersion Version => (TimetableVersion) GetAttribute("version", 0);
 
-    public TimetableType Type
-    {
-        get
-        {
-            if (typeCache == null)
-                typeCache = Version.GetVersionCompat().Type;
-            return typeCache.Value;
-        }
-    }
+    public TimetableType Type => typeCache ??= Version.GetVersionCompat().Type;
 
     public void SetVersion(TimetableVersion version)
     {
@@ -785,6 +778,8 @@ public sealed class Timetable : Entity, ITimetable
                 if (marking[a] == unvisited)
                 {
                     predecessor[a] = u;
+
+                    RuntimeHelpers.EnsureSufficientExecutionStack();
                     VisitStation(a);
                 }
             }
