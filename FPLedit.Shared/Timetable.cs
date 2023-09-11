@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Force.DeepCloner;
-#pragma warning disable CS8618
 
 namespace FPLedit.Shared;
 
@@ -22,12 +21,9 @@ public sealed class Timetable : Entity, ITimetable
     public static TimetableVersion DefaultLinearVersion { get; set; } = PRESET_LINEAR_VERSION;
     public static TimetableVersion DefaultNetworkVersion { get; set; } = PRESET_NETWORK_VERSION;
 
-    private readonly XMLEntity sElm, tElm, trElm;
-    private readonly XMLEntity? vElm;
+    private readonly XMLEntity sElm, tElm, trElm, vElm;
 
     private int nextStaId, nextRtId, nextTraId, nextVehId;
-
-    public bool Initialized { get; } = false;
 
     private readonly Dictionary<int, Route> routeCache;
 
@@ -42,6 +38,8 @@ public sealed class Timetable : Entity, ITimetable
 
     public void SetVersion(TimetableVersion version)
     {
+        if (version.GetVersionCompat().Compatibility != TtVersionCompatType.ReadWrite)
+            throw new NotSupportedException(T._("Nicht schreibbare Dateiversion."));
         SetAttribute("version", version.ToNumberString());
         typeCache = null;
     }
@@ -87,7 +85,6 @@ public sealed class Timetable : Entity, ITimetable
         trains = new List<ITrain>();
         transitions = new List<Transition>();
         vehicles = new List<Vehicle>();
-        Initialized = true;
 
         SetAttribute("version", (type == TimetableType.Network ? DefaultNetworkVersion : DefaultLinearVersion).ToNumberString());
         sElm = new XMLEntity("stations");
@@ -112,16 +109,14 @@ public sealed class Timetable : Entity, ITimetable
     /// <summary>
     /// Create a timetable instance from the given <see cref="XMLEntity"/>.
     /// </summary>
-    /// <exception cref="NotSupportedException">FPLedit does not support this timetable's <see cref="TimetableVersion"/>.</exception>
+    /// <exception cref="NotSupportedException">FPLedit does not support this timetable's <see cref="TimetableVersion"/> or it is not writable.</exception>
     public Timetable(XMLEntity en) : base(en, null)
     {
         if (!Enum.IsDefined(typeof(TimetableVersion), Version))
             throw new NotSupportedException(T._("Unbekannte Dateiversion."));
 
         if (Version.GetVersionCompat().Compatibility != TtVersionCompatType.ReadWrite)
-            return; // Do not create any properties as we cannot read this format.
-
-        Initialized = true;
+            throw new NotSupportedException(T._("Nicht schreibbare Dateiversion.")); // Do not create any properties as we cannot read this format.
 
         stations = new List<Station>();
         var tmpSElm = Children.SingleOrDefault(x => x.XName == "stations");

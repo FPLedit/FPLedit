@@ -12,14 +12,15 @@ public sealed class XMLImport : IImport
         var xElement = XElement.Load(stream);
 
         var xmlEntity = new XMLEntity(xElement);
-        var tt = new Timetable(xmlEntity);
+        ITimetable tt = new XmlOnlyTimetable(xmlEntity);
 
-        if (tt is Timetable)
+        if (tt.Version.GetVersionCompat().Compatibility == TtVersionCompatType.ReadWrite)
         {
+            tt = new Timetable(xmlEntity);
             var actions = pluginInterface.GetRegistered<ITimetableInitAction>();
             foreach (var action in actions)
             {
-                var message = action.Init(tt, pluginInterface);
+                var message = action.Init((Timetable)tt, pluginInterface);
                 if (message != null)
                     pluginInterface.Logger.Warning(message);
             }
