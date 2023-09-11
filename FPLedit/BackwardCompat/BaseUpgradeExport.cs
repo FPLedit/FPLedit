@@ -1,12 +1,20 @@
 using System.IO;
 using System.Linq;
 using FPLedit.Shared;
+using FPLedit.Shared.Filetypes;
 
 namespace FPLedit.BackwardCompat;
 
 public abstract class BaseUpgradeExport : IExport
 {
-    public abstract bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null);
+    public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null)
+    {
+        // Prevent access to the original timetable in the upgrade routine (it would be broken, no properties are initialized...).
+        var ttclone = PerformUpgrade(tt.XMLEntity.XClone(), tt.Version, stream, pluginInterface, flags);
+        return new XMLExport().Export(ttclone, stream, pluginInterface);
+    }
+
+    protected abstract Timetable PerformUpgrade(XMLEntity tt, TimetableVersion origVersion, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null);
 
     public string Filter => T._("Fahrplan Dateien (*.fpl)|*.fpl");
 
