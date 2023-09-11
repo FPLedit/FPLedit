@@ -7,14 +7,14 @@ public sealed class XMLImport : IImport
 {
     public string Filter => T._("Fahrplan Dateien (*.fpl)|*.fpl");
 
-    public Timetable? Import(Stream stream, IReducedPluginInterface pluginInterface, ILog? replaceLog = null)
+    public ITimetable? Import(Stream stream, IReducedPluginInterface pluginInterface, ILog? replaceLog = null)
     {
         var xElement = XElement.Load(stream);
 
         var xmlEntity = new XMLEntity(xElement);
         var tt = new Timetable(xmlEntity);
 
-        if (tt.Initialized)
+        if (tt is Timetable)
         {
             var actions = pluginInterface.GetRegistered<ITimetableInitAction>();
             foreach (var action in actions)

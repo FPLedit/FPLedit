@@ -17,7 +17,7 @@ public interface IImport : IRegistrableComponent
     /// <param name="replaceLog">The importer should log to this logger if it is not null.</param>
     /// <returns>The newly imported Timetable instance, otherwise null.</returns>
     /// <remarks>This method must be thread-safe and MUST NOT call into UI directly, as it might be called on a non-UI thread.</remarks>
-    Timetable? Import(Stream stream, IReducedPluginInterface pluginInterface, ILog? replaceLog = null);
+    ITimetable? Import(Stream stream, IReducedPluginInterface pluginInterface, ILog? replaceLog = null);
 
     /// <summary>
     /// Filetype filter of the form "description|pattern", e.g. "Description (*.ext)|*.ext"
@@ -25,7 +25,7 @@ public interface IImport : IRegistrableComponent
     /// <remarks>Must always return the same value.</remarks>
     string Filter { get; }
 
-    public Timetable? SafeImport(string filename, IReducedPluginInterface pluginInterface, ILog? replaceLog = null)
+    public ITimetable? SafeImport(string filename, IReducedPluginInterface pluginInterface, ILog? replaceLog = null)
     {
         try
         {
@@ -41,6 +41,6 @@ public interface IImport : IRegistrableComponent
         }
     }
 
-    public Task<Timetable?> GetAsyncSafeImport(string filename, IReducedPluginInterface pluginInterface) 
-        => new Task<Timetable?>(() => SafeImport(filename, pluginInterface));
+    public Task<ITimetable?> GetAsyncSafeImport(string filename, IReducedPluginInterface pluginInterface) 
+        => new Task<ITimetable?>(() => SafeImport(filename, pluginInterface));
 }

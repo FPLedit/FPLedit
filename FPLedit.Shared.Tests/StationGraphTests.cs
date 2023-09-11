@@ -15,9 +15,8 @@ public sealed class StationGraphTests : BaseFileTests
         var text = Load("test_cycles.fpl");
         using var s = PrepareTemp(text);
 
-        var tt = new XMLImport().Import(s, new DummyPluginInterface());
+        var tt = (Timetable)new XMLImport().Import(s, new DummyPluginInterface())!;
         Assert.IsNotNull(tt);
-        Assert.IsTrue(tt!.Initialized);
 
         Assert.IsTrue(tt.HasRouteCycles);
     }

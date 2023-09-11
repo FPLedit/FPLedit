@@ -21,9 +21,8 @@ public class FileTests : BaseFileTests
         var pi = new DummyPluginInterface();
         pi.Registry.Register<ITimetableInitAction>(new BugFixInitAction());
 
-        var tt = new XMLImport().Import(s, pi);
+        var tt = (Timetable)new XMLImport().Import(s, pi)!;
         Assert.IsNotNull(tt);
-        Assert.IsTrue(tt!.Initialized);
 
         Assert.IsTrue(pi.HadWarning("Verknüpfungen zu Folgezügen aufgehoben werden") > 0);
 
@@ -43,9 +42,8 @@ public class FileTests : BaseFileTests
         var pi = new DummyPluginInterface();
         pi.Registry.Register<ITimetableInitAction>(new BugFixInitAction());
 
-        var tt = new XMLImport().Import(s, pi);
+        var tt = (Timetable)new XMLImport().Import(s, pi)!;
         Assert.IsNotNull(tt);
-        Assert.IsTrue(tt!.Initialized);
 
         using var outStream = new MemoryStream();
         var exportResult = new NetworkUpgradeExport().Export(tt!, outStream, pi);

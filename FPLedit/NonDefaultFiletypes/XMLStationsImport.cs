@@ -9,7 +9,7 @@ internal sealed class XmlStationsImport : IImport
 {
     public string Filter => T._("Lineare Streckendateien (*.str)|*.str");
 
-    public Timetable Import(Stream stream, IReducedPluginInterface pluginInterface, ILog? replaceLog = null)
+    public ITimetable? Import(Stream stream, IReducedPluginInterface pluginInterface, ILog? replaceLog = null)
     {
         var xElement = XElement.Load(stream);
 

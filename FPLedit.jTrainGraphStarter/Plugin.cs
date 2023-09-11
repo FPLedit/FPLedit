@@ -105,9 +105,9 @@ public sealed class Plugin : IPlugin
             {
                 pluginInterface.StageUndoStep();
                 var crtt = importer.SafeImport(fn, pluginInterface, new SilentLogger(pluginInterface.Logger));
-                if (crtt != null)
+                if (crtt is Timetable crtt2)
                 {
-                    sync.SyncBack(crtt);
+                    sync.SyncBack(crtt2);
                     pluginInterface.SetUnsaved();
                 }
                 else

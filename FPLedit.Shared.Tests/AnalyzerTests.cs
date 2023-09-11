@@ -70,9 +70,8 @@ public class AnalyzerTests : BaseFileTests
 
     private static void GeneralTrapezTest(Stream s)
     {
-        var tt = new XMLImport().Import(s, new DummyPluginInterface())!;
+        var tt = (Timetable)new XMLImport().Import(s, new DummyPluginInterface())!;
         Assert.IsNotNull(tt);
-        Assert.IsTrue(tt!.Initialized);
 
         var analyzer = new IntersectionAnalyzer(tt);
 
@@ -126,9 +125,8 @@ public class AnalyzerTests : BaseFileTests
 
     private static void GeneralCrossingTest(Stream s)
     {
-        var tt = new XMLImport().Import(s, new DummyPluginInterface())!;
+        var tt = (Timetable)new XMLImport().Import(s, new DummyPluginInterface())!;
         Assert.IsNotNull(tt);
-        Assert.IsTrue(tt!.Initialized);
             
         var analyzer = new IntersectionAnalyzer(tt);
 
@@ -189,10 +187,9 @@ public class AnalyzerTests : BaseFileTests
         
     private static void GeneralOvertakeTest(Stream s)
     {
-        var tt = new XMLImport().Import(s, new DummyPluginInterface())!;
+        var tt = (Timetable)new XMLImport().Import(s, new DummyPluginInterface())!;
         Assert.IsNotNull(tt);
-        Assert.IsTrue(tt!.Initialized);
-            
+
         var analyzer = new IntersectionAnalyzer(tt);
 
         var station = tt.Stations.Single(st => st.SName == "B");
