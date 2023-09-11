@@ -72,7 +72,7 @@ public sealed class Pathfinder
             var rail = queue.Dequeue();
 
             if (rail == dest)
-                return ways[dest].SkipWhile(r => r == null).Concat(new[] { dest }).ToList();
+                return ways[dest].SkipWhile(r => r == null!).Concat(new[] { dest }).ToList();
 
             var last = parents[rail];
             foreach (var n in GetNextStations(rail))

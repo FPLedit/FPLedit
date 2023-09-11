@@ -11,10 +11,8 @@ namespace FPLedit.GTFS;
 [Plugin("Modul für GTFS-Export", Vi.PFrom, Vi.PUpTo, Author = "Manuel Huber")]
 public sealed class Plugin : IPlugin
 {
-#pragma warning disable CS8618
-    private ButtonMenuItem gtfsItem, agencyPropsItem, trainPropsItem, exportItem;
-    private IPluginInterface pluginInterface;
-#pragma warning restore CS8618
+    private ButtonMenuItem gtfsItem = null!, agencyPropsItem = null!, trainPropsItem = null!, exportItem = null!;
+    private IPluginInterface pluginInterface = null!;
 
     public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
     {
