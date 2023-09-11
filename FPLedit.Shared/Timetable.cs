@@ -93,15 +93,11 @@ public sealed class Timetable : Entity, ITimetable
         sElm = new XMLEntity("stations");
         tElm = new XMLEntity("trains");
         trElm = new XMLEntity("transitions");
+        vElm = new XMLEntity("vehicles");
         Children.Add(sElm);
         Children.Add(tElm);
         Children.Add(trElm);
-
-        if (Version.CompareTo(TimetableVersion.JTG3_2) > 0)
-        {
-            vElm = new XMLEntity("vehicles");
-            Children.Add(vElm);
-        }
+        Children.Add(vElm);
 
         tElm.ChildrenChangedDirect += OnTrainsChanged;
             
@@ -213,7 +209,7 @@ public sealed class Timetable : Entity, ITimetable
             tElm = new XMLEntity("trains");
             Children.Add(tElm);
         }
-            
+
         tElm.ChildrenChangedDirect += OnTrainsChanged;
 
         transitions = new List<Transition>();
@@ -232,23 +228,20 @@ public sealed class Timetable : Entity, ITimetable
 
         vehicles = new List<Vehicle>();
         var tmpVElm = Children.SingleOrDefault(x => x.XName == "vehicles");
-        if (Version.CompareTo(TimetableVersion.JTG3_2) >= 0)
+        if (tmpVElm != null)
         {
-            if (tmpVElm != null)
-            {
-                vElm = tmpVElm;
-                foreach (var c in trElm.Children.Where(x => x.XName == "veh")) // Filtert andere Elemente
-                    vehicles.Add(new Vehicle(c, this));
-            }
-            else
-            {
-                vElm = new XMLEntity("vehicles");
-                Children.Add(vElm);
-            }
-
-            if (vehicles.Any())
-                nextVehId = vehicles.Max(v => v.Id);
+            vElm = tmpVElm;
+            foreach (var c in trElm.Children.Where(x => x.XName == "veh")) // Filtert andere Elemente
+                vehicles.Add(new Vehicle(c, this));
         }
+        else
+        {
+            vElm = new XMLEntity("vehicles");
+            Children.Add(vElm);
+        }
+
+        if (vehicles.Any())
+            nextVehId = vehicles.Max(v => v.Id);
 
         // Höchste IDs ermitteln
         if (trains.Count > 0)
@@ -892,19 +885,14 @@ public sealed class Timetable : Entity, ITimetable
         var editable = GetEditableTransitionsInternal(first).ToArray();
         RemoveTransitionsInternal(editable); // Clean up.
 
-        var shouldApplyFilter = Version.Compare(TimetableVersion.JTG3_2) >= 0;
-
         foreach (var tran in trans)
         {
-            if (!shouldApplyFilter && (tran.StationId != null || tran.Days != Days.All))
-                throw new TimetableTypeNotSupportedException("Transition filters");
-                
             var t = new Transition(this)
             {
                 First = first.QualifiedId,
                 Next = tran.NextTrain.QualifiedId,
                 Days = tran.Days,
-                StationId = tran.StationId != null ? "" : Transition.LAST_STATION,
+                StationId = tran.Station != null ? "" : Transition.LAST_STATION,
             };
             trElm.Children.Add(t.XMLEntity);
             transitions.Add(t);
@@ -949,17 +937,12 @@ public sealed class Timetable : Entity, ITimetable
         if (firstQualifiedTrainId == "-1" || string.IsNullOrWhiteSpace(firstQualifiedTrainId))
             return null;
 
-        var shouldApplyFilter = Version.Compare(TimetableVersion.JTG3_2) >= 0;
-
         bool Filter(Transition tra)
         {
             var result = tra.First == firstQualifiedTrainId;
-            if (shouldApplyFilter)
-            {
-                result &= daysFilter == null || tra.Days.IsIntersecting(daysFilter.Value);
-                result &= stationFilter == null || tra.IsTransitionValidAt(stationFilter);
-                result &= tra.GetAttribute<string>("vc") == null;
-            }
+            result &= daysFilter == null || tra.Days.IsIntersecting(daysFilter.Value);
+            result &= stationFilter == null || tra.IsTransitionValidAt(stationFilter);
+            result &= tra.GetAttribute<string>("vc") == null;
 
             return result;
         }

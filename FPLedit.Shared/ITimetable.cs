@@ -164,8 +164,6 @@ public interface ITimetable
     /// <param name="stationFilter">Returns only transitions that are valid at the given station.</param>
     /// <returns>The next train or null, if none exists.</returns>
     /// <remarks>
-    /// <para>On <see cref="Version"/>s lower than <see cref="TimetableVersion.JTG3_2"/>, all filters given with
-    /// <paramref name="daysFilter"/> and <paramref name="stationFilter"/> will be silently ignored!</para>
     /// <para><paramref name="daysFilter"/> does not filter on the returned trains <see cref="ITrain.Days"/>!</para>
     /// </remarks>
     ITrain? GetTransition(ITrain? first, Days? daysFilter = null, Station? stationFilter = null);

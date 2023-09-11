@@ -32,7 +32,7 @@ public sealed class Transition : Entity
         get => GetAttribute("next", "");
         set => SetAttribute("next", value);
     }
-        
+
     [XAttrName("df")]
     public Days Days
     {
@@ -51,11 +51,8 @@ public sealed class Transition : Entity
 
     public bool IsTransitionValidAt(Station sta)
     {
-        if (ParentTimetable.Version.Compare(TimetableVersion.JTG3_2) < 2)
-            return true; // Before jTG 3.2 everything is valid.
-
         if (StationId == LAST_STATION)
-            return true; // Thuis is a "wildcard match"
+            return true; // This is a "wildcard match"
 
         int id;
         if (ParentTimetable.Type == TimetableType.Linear)
@@ -66,19 +63,6 @@ public sealed class Transition : Entity
         return StationId == id.ToString();
     }
 }
-    
-public sealed class TransitionEntry
-{
-    public TransitionEntry(ITrain nextTrain, Days days, Station? stationId)
-    {
-        NextTrain = nextTrain;
-        Days = days;
-        StationId = stationId;
-    }
 
-    public ITrain NextTrain { get; set; }
-        
-    public Days Days { get; set; }
-
-    public Station? StationId { get; set; }
-}
+[Templating.TemplateSafe]
+public sealed record TransitionEntry(ITrain NextTrain, Days Days, Station? Station);
