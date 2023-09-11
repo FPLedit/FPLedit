@@ -9,7 +9,7 @@ internal sealed class NetworkExport : BaseConverterFileType, IExport
 {
     public string Filter => T._("Fahrplan Dateien (*.fpl)|*.fpl");
 
-    public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null)
+    public bool Export(ITimetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null)
     {
         if (tt.Type == TimetableType.Network)
             throw new TimetableTypeNotSupportedException(TimetableType.Network, "convert to network");

@@ -474,10 +474,10 @@ internal sealed class FileHandler : IDisposable
         }
     }
 
-    private void OpenWithVersionCheck(Timetable? tt, string filename)
+    private void OpenWithVersionCheck(ITimetable? tt, string filename)
     {
         var compat = tt?.Version.GetVersionCompat().Compatibility;
-        if (tt == null || compat == TtVersionCompatType.ReadWrite)
+        if (tt == null || (compat == TtVersionCompatType.ReadWrite && tt is Timetable))
         {
             // Get default version based on timetable type.
             var defaultVersion = Timetable.DefaultLinearVersion;
@@ -488,7 +488,7 @@ internal sealed class FileHandler : IDisposable
                 return;
 
             // this file is in a supported version (or non-existant).
-            Timetable = tt;
+            Timetable = (Timetable?)tt;
 
             FileState.Opened = tt != null;
             FileState.Saved = tt != null;
@@ -511,7 +511,7 @@ internal sealed class FileHandler : IDisposable
         PerformTimetableUpgrade(tt, false);
     }
 
-    private bool PerformTimetableUpgrade(Timetable tt, bool optional)
+    private bool PerformTimetableUpgrade(ITimetable tt, bool optional)
     {
         string? newFn = null;
         // Exporter based on timetable type.

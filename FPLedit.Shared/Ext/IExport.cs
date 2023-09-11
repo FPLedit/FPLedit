@@ -20,7 +20,7 @@ public interface IExport : IRegistrableComponent
     /// <param name="flags">Exporter flags.</param>
     /// <returns>If the operation was successful.</returns>
     /// <remarks>This method must be thread-safe and MUST NOT call into UI directly, as it might be called on a non-UI thread.</remarks>
-    bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null);
+    bool Export(ITimetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null);
 
     /// <summary>
     /// Filetype filter of the form "description|pattern", e.g. "Description (*.ext)|*.ext"
@@ -37,7 +37,7 @@ public interface IExport : IRegistrableComponent
     /// <param name="pluginInterface">A reduced PluginInterface that provides limited core features from FPledit.</param>
     /// <param name="flags">Exporter flags.</param>
     /// <returns>If the operation was successful.</returns>
-    public bool SafeExport(Timetable tt, string filename, IReducedPluginInterface pluginInterface, string[]? flags = null)
+    public bool SafeExport(ITimetable tt, string filename, IReducedPluginInterface pluginInterface, string[]? flags = null)
     {
         try
         {
@@ -61,6 +61,6 @@ public interface IExport : IRegistrableComponent
     /// <param name="pluginInterface">A reduced PluginInterface that provides limited core features from FPledit.</param>
     /// <param name="flags">Exporter flags.</param>
     /// <returns>A Task that has not been started yet, which can be used to execute the exporter.</returns>
-    public Task<bool> GetAsyncSafeExport(Timetable tt, string filename, IReducedPluginInterface pluginInterface, string[]? flags = null) 
+    public Task<bool> GetAsyncSafeExport(ITimetable tt, string filename, IReducedPluginInterface pluginInterface, string[]? flags = null) 
         => new Task<bool>(() => SafeExport(tt, filename, pluginInterface, flags));
 }

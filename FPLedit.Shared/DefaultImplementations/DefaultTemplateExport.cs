@@ -19,8 +19,9 @@ public sealed class DefaultTemplateExport : IExport
         Filter = filter;
     }
 
-    public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null)
+    public bool Export(ITimetable itt, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null)
     {
+        var tt = (Timetable)itt;
         var chooser = getChooser(pluginInterface);
         var templ = chooser.GetTemplate(tt);
         string? cont = templ.GenerateResult(tt);

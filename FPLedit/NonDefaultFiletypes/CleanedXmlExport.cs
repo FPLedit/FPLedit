@@ -99,7 +99,7 @@ internal sealed class CleanedXmlExport : IExport
             ProcessEntity(ch);
     }
 
-    public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null)
+    public bool Export(ITimetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null)
     {
         if (!namesCreated)
             LoadRemovableXmlNames();

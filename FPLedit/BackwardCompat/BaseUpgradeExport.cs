@@ -7,7 +7,7 @@ namespace FPLedit.BackwardCompat;
 
 public abstract class BaseUpgradeExport : IExport
 {
-    public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null)
+    public bool Export(ITimetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null)
     {
         // Prevent access to the original timetable in the upgrade routine (it would be broken, no properties are initialized...).
         var ttclone = PerformUpgrade(tt.XMLEntity.XClone(), tt.Version, stream, pluginInterface, flags);

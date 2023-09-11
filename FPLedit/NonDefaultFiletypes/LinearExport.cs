@@ -11,7 +11,7 @@ internal sealed class LinearExport : BaseConverterFileType, IExport
 {
     public string Filter => T._("Fahrplan Dateien (*.fpl)|*.fpl");
 
-    public bool Export(Timetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null)
+    public bool Export(ITimetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null)
     {
         if (tt.Type == TimetableType.Linear)
             throw new TimetableTypeNotSupportedException(TimetableType.Linear, "convert to linear");

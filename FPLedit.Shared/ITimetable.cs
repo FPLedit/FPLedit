@@ -7,7 +7,7 @@ namespace FPLedit.Shared;
 /// Object model type representing a single timetable file state.
 /// </summary>
 [Templating.TemplateSafe]
-public interface ITimetable
+public interface ITimetable : IEntity
 {
     /// <summary>
     /// This event will be fired when the trains of this timetable instance are changed.
