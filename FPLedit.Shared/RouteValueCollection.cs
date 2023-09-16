@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Force.DeepCloner;
+using Force.DeepCloner.Helpers;
 using FPLedit.Shared.Helpers;
 
 namespace FPLedit.Shared;
@@ -42,7 +42,7 @@ public class RouteValueCollection<T> : IRouteValueCollection<T>
     /// Creates a standalone copy of this RVC.
     /// </summary>
     public IRouteValueCollection<T> ToStandalone() 
-        => new StandaloneRouteValueCollection<T>(values.DeepClone(), convDefault);
+        => new StandaloneRouteValueCollection<T>(DeepClonerGenerator.CloneObject(values), convDefault);
 
     /// <summary>
     /// Copies all values from a (standalone) RVC back into this instance. This clears all values of this instance before.

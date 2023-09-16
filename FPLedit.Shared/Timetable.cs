@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Force.DeepCloner;
+using Force.DeepCloner.Helpers;
 
 namespace FPLedit.Shared;
 
@@ -1043,11 +1043,11 @@ public sealed class Timetable : Entity, ITimetable
             
         link.ParentTrain.RemoveLink(link);
     }
-        
+
     #endregion
-        
+
     /// <inheritdoc />
-    public Timetable Clone() => this.DeepClone();
+    public Timetable Clone() => DeepClonerGenerator.CloneObject(this);
 
     [DebuggerStepThrough]
     public override string ToString() => string.Join(" | ", GetRoutes().Select(r => r.GetRouteName()));

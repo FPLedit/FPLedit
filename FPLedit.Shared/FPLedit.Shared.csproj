@@ -32,7 +32,6 @@
     </AssemblyAttribute>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="DeepCloner" Version="0.10.2" />
     <PackageReference Include="Eto.Forms" Version="$(EtoVersion)" />
     <PackageReference Include="NGettext" Version="0.6.7" />
   </ItemGroup>
