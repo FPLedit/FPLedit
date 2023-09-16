@@ -22,7 +22,7 @@ Die Volltexte der Lizenzen finden Sie als Textdatei im Ordner lib/licenses.
   BSD 3-Clause License
   <https://github.com/sebastienros/esprima-dotnet>
 
-* FPLedit verwendet DeepCloner.
+* FPLedit enthält Code von DeepCloner.
   MIT-License
   <https://github.com/force-net/DeepCloner>
 

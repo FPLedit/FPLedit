@@ -1047,7 +1047,7 @@ public sealed class Timetable : Entity, ITimetable
     #endregion
 
     /// <inheritdoc />
-    public Timetable Clone() => DeepClonerGenerator.CloneObject(this);
+    public Timetable Clone() => DeepCloner.CloneObject(this);
 
     [DebuggerStepThrough]
     public override string ToString() => string.Join(" | ", GetRoutes().Select(r => r.GetRouteName()));

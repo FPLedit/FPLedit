@@ -42,7 +42,7 @@ public class RouteValueCollection<T> : IRouteValueCollection<T>
     /// Creates a standalone copy of this RVC.
     /// </summary>
     public IRouteValueCollection<T> ToStandalone() 
-        => new StandaloneRouteValueCollection<T>(DeepClonerGenerator.CloneObject(values), convDefault);
+        => new StandaloneRouteValueCollection<T>(DeepCloner.CloneObject(values), convDefault);
 
     /// <summary>
     /// Copies all values from a (standalone) RVC back into this instance. This clears all values of this instance before.

@@ -5,26 +5,29 @@ using System.Reflection;
 
 namespace Force.DeepCloner.Helpers
 {
-	internal static class DeepClonerGenerator
+    internal static class DeepCloner
+    {
+        public static T CloneObject<T>(T obj)
+        {
+            if (obj is ValueType)
+            {
+                var type = obj.GetType();
+                if (typeof(T) == type)
+                {
+                    if (DeepClonerSafeTypes.CanReturnSameObject(type))
+                        return obj;
+
+                    return DeepClonerGenerator.CloneStructInternal(obj, new DeepCloneState());
+                }
+            }
+
+            return (T) DeepClonerGenerator.CloneClassRoot(obj);
+        }
+    }
+
+    internal static class DeepClonerGenerator
 	{
-		public static T CloneObject<T>(T obj)
-		{
-			if (obj is ValueType)
-			{
-				var type = obj.GetType();
-				if (typeof(T) == type)
-				{
-					if (DeepClonerSafeTypes.CanReturnSameObject(type))
-						return obj;
-
-					return CloneStructInternal(obj, new DeepCloneState());
-				}
-			}
-
-			return (T)CloneClassRoot(obj);
-		}
-
-		private static object CloneClassRoot(object obj)
+		internal static object CloneClassRoot(object obj)
 		{
 			if (obj == null)
 				return null;
@@ -32,7 +35,7 @@ namespace Force.DeepCloner.Helpers
 			var cloner = (Func<object, DeepCloneState, object>)DeepClonerCache.GetOrAddClass(obj.GetType(), t => GenerateCloner(t, true));
 
 			// null -> should return same type
-			if (cloner == null) 
+			if (cloner == null)
 				return obj;
 
 			return cloner(obj, new DeepCloneState());
