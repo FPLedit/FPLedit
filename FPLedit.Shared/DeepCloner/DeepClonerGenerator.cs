@@ -57,7 +57,7 @@ namespace Force.DeepCloner.Helpers
 			return cloner(obj, state);
 		}
 
-		private static T CloneStructInternal<T>(T obj, DeepCloneState state) // where T : struct
+		internal static T CloneStructInternal<T>(T obj, DeepCloneState state) // where T : struct
 		{
 			// no loops, no nulls, no inheritance
 			var cloner = GetClonerForValueType<T>();
@@ -194,12 +194,12 @@ namespace Force.DeepCloner.Helpers
 			}
 		}
 
-		internal static Func<T, DeepCloneState, T> GetClonerForValueType<T>()
+		private static Func<T, DeepCloneState, T> GetClonerForValueType<T>()
 		{
 			return (Func<T, DeepCloneState, T>)DeepClonerCache.GetOrAddStructAsObject(typeof(T), t => GenerateCloner(t, false));
 		}
 
-		private static object GenerateCloner(Type t, bool asObject)
+		private static Delegate GenerateCloner(Type t, bool asObject)
 		{
 			if (DeepClonerSafeTypes.CanReturnSameObject(t) && (asObject && !t.GetTypeInfo().IsValueType)) 
 				return null;

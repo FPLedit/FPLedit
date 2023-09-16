@@ -10,63 +10,27 @@ namespace Force.DeepCloner.Helpers
 {
 	internal static class DeepClonerExprGenerator
 	{
-		private static readonly ConcurrentDictionary<FieldInfo, bool> _readonlyFields = new ();
+		private static readonly ConcurrentDictionary<FieldInfo, bool> readonlyFields = new ();
 
-		private static readonly bool _canFastCopyReadonlyFields = false;
+		private static readonly bool canFastCopyReadonlyFields = false;
 
-		private static readonly MethodInfo _fieldSetMethod;
+		private static readonly MethodInfo fieldSetMethod;
 		static DeepClonerExprGenerator()
 		{
-			try
-			{
-				typeof(DeepClonerExprGenerator).GetTypeInfo().GetDeclaredField(nameof(_canFastCopyReadonlyFields))!.SetValue(null, true);
-				_fieldSetMethod = typeof(FieldInfo).GetMethod("SetValue", new[] {typeof(object), typeof(object)});
-				
-				if (_fieldSetMethod == null)
-					throw new ArgumentNullException();
-			}
-			catch (Exception)
-			{
-				// cannot
-			}
+			typeof(DeepClonerExprGenerator).GetTypeInfo().GetDeclaredField(nameof(canFastCopyReadonlyFields))!.SetValue(null, true);
+			fieldSetMethod = typeof(FieldInfo).GetMethod("SetValue", new[] {typeof(object), typeof(object)});
+
+			if (fieldSetMethod == null)
+				throw new ArgumentNullException();
 		}
 		
-		internal static object GenerateClonerInternal(Type realType, bool asObject)
-		{
-			return GenerateProcessMethod(realType, asObject && realType.IsValueType);
-		}
+		internal static Delegate GenerateClonerInternal(Type realType, bool asObject)
+            => GenerateProcessMethod(realType, asObject && realType.IsValueType);
 
-		// today, I found that it not required to do such complex things. Just SetValue is enough
-		// is it new runtime changes, or I made incorrect assumptions eariler
-		// slow, but hardcore method to set readonly field
-		internal static void ForceSetField(FieldInfo field, object obj, object value)
-		{
-			var fieldInfo = field.GetType().GetTypeInfo().GetDeclaredField("m_fieldAttributes");
-
-			// TODO: think about it
-			// nothing to do :( we should a throw an exception, but it is no good for user
-			if (fieldInfo == null)
-				return;
-			var ov = fieldInfo.GetValue(field);
-			if (!(ov is FieldAttributes))
-				return;
-			var v = (FieldAttributes)ov;
-
-			// protect from parallel execution, when first thread set field readonly back, and second set it to write value
-			lock (fieldInfo)
-			{
-				fieldInfo.SetValue(field, v & ~FieldAttributes.InitOnly);
-				field.SetValue(obj, value);
-				fieldInfo.SetValue(field, v | FieldAttributes.InitOnly);
-			}
-		}
-
-		private static object GenerateProcessMethod(Type type, bool unboxStruct)
+        private static Delegate GenerateProcessMethod(Type type, bool unboxStruct)
 		{
 			if (type.IsArray)
-			{
 				return GenerateProcessArrayMethod(type);
-			}
 
 			if (type.FullName != null && type.FullName.StartsWith("System.Tuple`"))
 			{
@@ -78,9 +42,7 @@ namespace Force.DeepCloner.Helpers
 				// current tuples contain only 8 arguments, but may be in future...
 				// we'll write code that works with it
 				if (genericArguments.Length < 10 && genericArguments.All(DeepClonerSafeTypes.CanReturnSameObject))
-				{
 					return GenerateProcessTupleMethod(type);
-				}
 			}
 
 			var methodType = unboxStruct || type.GetTypeInfo().IsClass ? typeof(object) : type;
@@ -94,7 +56,7 @@ namespace Force.DeepCloner.Helpers
 
 			if (!type.GetTypeInfo().IsValueType)
 			{
-				var methodInfo = typeof(object).GetTypeInfo().GetDeclaredMethod("MemberwiseClone");
+				var methodInfo = typeof(object).GetTypeInfo().GetDeclaredMethod(nameof(MemberwiseClone))!;
 
 				// to = (T)from.MemberwiseClone()
 				expressionList.Add(Expression.Assign(toLocal, Expression.Convert(Expression.Call(from, methodInfo), type)));
@@ -106,7 +68,7 @@ namespace Force.DeepCloner.Helpers
 				// added from -> to binding to ensure reference loop handling
 				// structs cannot loop here
 				// state.AddKnownRef(from, to)
-				expressionList.Add(Expression.Call(state, typeof(DeepCloneState).GetMethod("AddKnownRef"), from, toLocal));
+				expressionList.Add(Expression.Call(state, typeof(DeepCloneState).GetMethod(nameof(DeepCloneState.AddKnownRef))!, from, toLocal));
 			}
 			else
 			{
@@ -141,9 +103,9 @@ namespace Force.DeepCloner.Helpers
 				if (!DeepClonerSafeTypes.CanReturnSameObject(fieldInfo.FieldType))
 				{
 					var methodInfo = fieldInfo.FieldType.GetTypeInfo().IsValueType
-										? typeof(DeepClonerGenerator).GetTypeInfo().GetDeclaredMethod("CloneStructInternal")
+										? typeof(DeepClonerGenerator).GetTypeInfo().GetDeclaredMethod(nameof(DeepClonerGenerator.CloneStructInternal))!
 																	.MakeGenericMethod(fieldInfo.FieldType)
-										: typeof(DeepClonerGenerator).GetTypeInfo().GetDeclaredMethod("CloneClassInternal");
+										: typeof(DeepClonerGenerator).GetTypeInfo().GetDeclaredMethod(nameof(DeepClonerGenerator.CloneClassInternal))!;
 
 					var get = Expression.Field(fromLocal, fieldInfo);
 
@@ -154,22 +116,17 @@ namespace Force.DeepCloner.Helpers
 
 					// should handle specially
 					// todo: think about optimization, but it rare case
-					var isReadonly = _readonlyFields.GetOrAdd(fieldInfo, f => f.IsInitOnly);
+					var isReadonly = readonlyFields.GetOrAdd(fieldInfo, f => f.IsInitOnly);
 					if (isReadonly)
 					{
-						if (_canFastCopyReadonlyFields)
-						{
-							expressionList.Add(Expression.Call(
-								Expression.Constant(fieldInfo),
-								_fieldSetMethod,
-								Expression.Convert(toLocal, typeof(object)),
-								Expression.Convert(call, typeof(object))));
-						}
-						else
-						{
-							var setMethod = typeof(DeepClonerExprGenerator).GetTypeInfo().GetDeclaredMethod("ForceSetField");
-							expressionList.Add(Expression.Call(setMethod, Expression.Constant(fieldInfo), Expression.Convert(toLocal, typeof(object)), Expression.Convert(call, typeof(object))));							
-						}
+						if (!canFastCopyReadonlyFields)
+                            throw new NotSupportedException();
+
+						expressionList.Add(Expression.Call(
+							Expression.Constant(fieldInfo),
+							fieldSetMethod,
+							Expression.Convert(toLocal, typeof(object)),
+							Expression.Convert(call, typeof(object))));
 					}
 					else
 					{
@@ -189,9 +146,9 @@ namespace Force.DeepCloner.Helpers
 			return Expression.Lambda(funcType, Expression.Block(blockParams, expressionList), from, state).Compile();
 		}
 
-		private static object GenerateProcessArrayMethod(Type type)
+		private static Delegate GenerateProcessArrayMethod(Type type)
 		{
-			var elementType = type.GetElementType();
+			var elementType = type.GetElementType()!;
 			var rank = type.GetArrayRank();
 
 			MethodInfo methodInfo;
@@ -202,31 +159,36 @@ namespace Force.DeepCloner.Helpers
 				if (rank == 2 && type == elementType.MakeArrayType(2))
 				{
 					// small optimization for 2 dim arrays
-					methodInfo = typeof(DeepClonerGenerator).GetTypeInfo().GetDeclaredMethod("Clone2DimArrayInternal").MakeGenericMethod(elementType);
+					methodInfo = typeof(DeepClonerGenerator).GetTypeInfo()
+                        .GetDeclaredMethod(nameof(DeepClonerGenerator.Clone2DimArrayInternal))!
+                        .MakeGenericMethod(elementType);
 				}
 				else
 				{
-					methodInfo = typeof(DeepClonerGenerator).GetTypeInfo().GetDeclaredMethod("CloneAbstractArrayInternal");
+					methodInfo = typeof(DeepClonerGenerator).GetTypeInfo()
+                        .GetDeclaredMethod(nameof(DeepClonerGenerator.CloneAbstractArrayInternal));
 				}
 			}
 			else
 			{
-				var methodName = "Clone1DimArrayClassInternal";
-				if (DeepClonerSafeTypes.CanReturnSameObject(elementType)) methodName = "Clone1DimArraySafeInternal";
-				else if (elementType.GetTypeInfo().IsValueType) methodName = "Clone1DimArrayStructInternal";
-				methodInfo = typeof(DeepClonerGenerator).GetTypeInfo().GetDeclaredMethod(methodName).MakeGenericMethod(elementType);
+				var methodName = nameof(DeepClonerGenerator.Clone1DimArrayClassInternal);
+				if (DeepClonerSafeTypes.CanReturnSameObject(elementType))
+                    methodName = nameof(DeepClonerGenerator.Clone1DimArraySafeInternal);
+				else if (elementType.GetTypeInfo().IsValueType)
+                    methodName = nameof(DeepClonerGenerator.Clone1DimArrayStructInternal);
+				methodInfo = typeof(DeepClonerGenerator).GetTypeInfo().GetDeclaredMethod(methodName)!.MakeGenericMethod(elementType);
 			}
 
 			ParameterExpression from = Expression.Parameter(typeof(object));
 			var state = Expression.Parameter(typeof(DeepCloneState));
-			var call = Expression.Call(methodInfo, Expression.Convert(from, type), state);
+			var call = Expression.Call(methodInfo!, Expression.Convert(from, type), state);
 
 			var funcType = typeof(Func<,,>).MakeGenericType(typeof(object), typeof(DeepCloneState), typeof(object));
 
 			return Expression.Lambda(funcType, call, from, state).Compile();
 		}
 
-		private static object GenerateProcessTupleMethod(Type type)
+		private static Delegate GenerateProcessTupleMethod(Type type)
 		{
 			ParameterExpression from = Expression.Parameter(typeof(object));
 			var state = Expression.Parameter(typeof(DeepCloneState));
@@ -244,7 +206,7 @@ namespace Force.DeepCloner.Helpers
 					.Select(x => Expression.Property(local, x.Name))));
 			
 			return Expression.Lambda(funcType, Expression.Block(new[] { local },
-				assign, constructor, Expression.Call(state, typeof(DeepCloneState).GetMethod("AddKnownRef"), from, local),
+				assign, constructor, Expression.Call(state, typeof(DeepCloneState).GetMethod(nameof(DeepCloneState.AddKnownRef))!, from, local),
 					from),
 				from, state).Compile();
 		}

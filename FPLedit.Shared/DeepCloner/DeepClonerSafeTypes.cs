@@ -44,7 +44,7 @@ namespace Force.DeepCloner.Helpers
 			}
 
 			// do not copy db null
-			if (type.FullName.StartsWith("System.DBNull"))
+			if (type.FullName!.StartsWith("System.DBNull"))
 			{
 				knownTypes.TryAdd(type, true);
 				return true;
