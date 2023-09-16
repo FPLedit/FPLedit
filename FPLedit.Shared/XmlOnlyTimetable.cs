@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace FPLedit.Shared;
 
 /// <summary>
-/// This is a special, very simplistic type of timetable. It just allows access to <see cref="XmlOnlyTimetable.XMLEntity"/>,
+/// This is a special, very simplistic type of timetable. It just allows access to <see cref="Entity.XMLEntity"/>,
 /// <see cref="XmlOnlyTimetable.Version"/> and <see cref="XmlOnlyTimetable.Type"/>. All other properties or methods will throw.
 /// </summary>
 /// <remarks>If applicable, a fully featured <see cref="Timetable"/> could be constructed – but note the timetable compat checks.</remarks>
@@ -16,7 +16,9 @@ public class XmlOnlyTimetable : Entity, ITimetable
     {
     }
 
+#pragma warning disable CS0067
     public event EventHandler? TrainsXmlCollectionChanged;
+#pragma warning restore CS0067
     
     private TimetableType? typeCache;
 

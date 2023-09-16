@@ -59,7 +59,7 @@ public class PositionCollection
     /// </summary>
     /// <remarks>
     /// <para>If applied on existing stations: <see cref="StationMoveHelper.PerformUnsafeMove"/> on why this is even worse than that method (and what could possibly go wrong).</para>
-    /// <para>It might be neccessary to call <see cref="Timetable.RebuildRouteCache"/> after changing a position.</para>
+    /// <para>It might be neccessary to rebuild the timetable's route cache after changing a position.</para>
     /// </remarks>
     /// <param name="route"></param>
     /// <param name="km"></param>
