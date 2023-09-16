@@ -11,7 +11,7 @@ namespace Force.DeepCloner.Helpers
 	/// </summary>
 	internal static class DeepClonerSafeTypes
 	{
-		internal static readonly ConcurrentDictionary<Type, bool> KnownTypes = new ConcurrentDictionary<Type, bool>();
+        private static readonly ConcurrentDictionary<Type, bool> knownTypes = new ();
 
 		static DeepClonerSafeTypes()
 		{
@@ -27,57 +27,57 @@ namespace Force.DeepCloner.Helpers
 							Type.GetType("System.RuntimeTypeHandle"),
 							StringComparer.Ordinal.GetType(),
 							StringComparer.CurrentCulture.GetType(), // CultureAwareComparer - can be same
-						}) KnownTypes.TryAdd(x, true);
+						}) knownTypes.TryAdd(x, true);
 		}
 
 		private static bool CanReturnSameType(Type type, HashSet<Type> processingTypes)
 		{
-			if (KnownTypes.TryGetValue(type, out bool isSafe))
+			if (knownTypes.TryGetValue(type, out bool isSafe))
 				return isSafe;
 			
 			// enums are safe
 			// pointers (e.g. int*) are unsafe, but we cannot do anything with it except blind copy
-			if (type.IsEnum() || type.IsPointer)
+			if (type.IsEnum || type.IsPointer)
 			{
-				KnownTypes.TryAdd(type, true);
+				knownTypes.TryAdd(type, true);
 				return true;
 			}
 
 			// do not copy db null
 			if (type.FullName.StartsWith("System.DBNull"))
 			{
-				KnownTypes.TryAdd(type, true);
+				knownTypes.TryAdd(type, true);
 				return true;
 			}
 
 			if (type.FullName.StartsWith("System.RuntimeType"))
 			{
-				KnownTypes.TryAdd(type, true);
+				knownTypes.TryAdd(type, true);
 				return true;
 			}
 			
 			if (type.FullName.StartsWith("System.Reflection.") && Equals(type.GetTypeInfo().Assembly, typeof(PropertyInfo).GetTypeInfo().Assembly))
 			{
-				KnownTypes.TryAdd(type, true);
+				knownTypes.TryAdd(type, true);
 				return true;
 			}
 
 			if (type.IsSubclassOfTypeByName("CriticalFinalizerObject"))
 			{
-				KnownTypes.TryAdd(type, true);
+				knownTypes.TryAdd(type, true);
 				return true;
 			}
 			
 			// better not to touch ms dependency injection
 			if (type.FullName.StartsWith("Microsoft.Extensions.DependencyInjection."))
 			{
-				KnownTypes.TryAdd(type, true);
+				knownTypes.TryAdd(type, true);
 				return true;
 			}
 
 			if (type.FullName == "Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector")
 			{
-				KnownTypes.TryAdd(type, true);
+				knownTypes.TryAdd(type, true);
 				return true;
 			}
 
@@ -90,15 +90,15 @@ namespace Force.DeepCloner.Helpers
 				    || type.FullName.StartsWith("System.Collections.Generic.NullableEqualityComparer`")
 				    || type.FullName == "System.Collections.Generic.ByteEqualityComparer")
 				{
-					KnownTypes.TryAdd(type, true);
+					knownTypes.TryAdd(type, true);
 					return true;
 				}
 			}
 
 			// classes are always unsafe (we should copy it fully to count references)
-			if (!type.IsValueType())
+			if (!type.IsValueType)
 			{
-				KnownTypes.TryAdd(type, false);
+				knownTypes.TryAdd(type, false);
 				return false;
 			}
 
@@ -112,8 +112,8 @@ namespace Force.DeepCloner.Helpers
 			var tp = type;
 			do
 			{
-				fi.AddRange(tp.GetAllFields());
-				tp = tp.BaseType();
+				fi.AddRange(tp.GetDeclaredFields());
+				tp = tp.GetTypeInfo().BaseType;
 			}
 			while (tp != null);
 
@@ -127,12 +127,12 @@ namespace Force.DeepCloner.Helpers
 				// not safe and not not safe. we need to go deeper
 				if (!CanReturnSameType(fieldType, processingTypes))
 				{
-					KnownTypes.TryAdd(type, false);
+					knownTypes.TryAdd(type, false);
 					return false;
 				}
 			}
 
-			KnownTypes.TryAdd(type, true);
+			knownTypes.TryAdd(type, true);
 			return true;
 		}
 

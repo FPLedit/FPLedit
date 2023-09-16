@@ -1,6 +1,7 @@
 ﻿#nullable disable
 using System;
 using System.Linq;
+using System.Reflection;
 
 namespace Force.DeepCloner.Helpers
 {
@@ -128,7 +129,7 @@ namespace Force.DeepCloner.Helpers
 				return outArray;
 			}
 
-			if (typeof(T).IsValueType())
+			if (typeof(T).GetTypeInfo().IsValueType)
 			{
 				var cloner = GetClonerForValueType<T>();
 				for (var i = 0; i < l1; i++)
@@ -200,7 +201,7 @@ namespace Force.DeepCloner.Helpers
 
 		private static object GenerateCloner(Type t, bool asObject)
 		{
-			if (DeepClonerSafeTypes.CanReturnSameObject(t) && (asObject && !t.IsValueType())) 
+			if (DeepClonerSafeTypes.CanReturnSameObject(t) && (asObject && !t.GetTypeInfo().IsValueType)) 
 				return null;
 
 			return DeepClonerExprGenerator.GenerateClonerInternal(t, asObject);
