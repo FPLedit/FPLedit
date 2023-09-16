@@ -5,8 +5,8 @@ using FPLedit.Shared.UI;
 using FPLedit.Shared.UI.Validators;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using Eto.Drawing;
 using FPLedit.Shared.TrainLinks;
 
 namespace FPLedit.Editor.Trains;
@@ -18,22 +18,20 @@ internal sealed class TrainEditForm : FDialog<TrainEditForm.EditResult?>
 #pragma warning disable CS0649,CA2213
     private readonly TextBox nameTextBox = default!, commentTextBox = default!;
     private readonly ComboBox locomotiveComboBox = default!, mbrComboBox = default!, lastComboBox = default!;
-    private readonly Button fillButton = default!, resetTransitionButton = default!;
+    private readonly Button fillButton = default!, deleteTransitionButton = default!;
     private readonly SingleTimetableEditControl editor = default!;
-    private readonly DropDown transitionDropDown = default!;
     private readonly DaysControlNarrow daysControl = default!;
-    private readonly GridView linkGridView = default!;
+    private readonly GridView linkGridView = default!, transitionsGridView = default!;
 #pragma warning restore CS0649,CA2213
     private readonly NotEmptyValidator nameValidator;
 
     private readonly Train train;
+    private readonly ObservableCollection<TransitionEntry> transitions = new ();
 
     private readonly Timetable tt;
     private readonly TrainEditHelper th;
 
     private Dictionary<Station, ArrDep> arrDepBackup = null!;
-
-    private TransitionEntry? singleTransition;
 
     private TrainEditForm(Timetable tt)
     {
@@ -52,11 +50,13 @@ internal sealed class TrainEditForm : FDialog<TrainEditForm.EditResult?>
 
         KeyDown += (_, e) => daysControl.HandleKeypress(e);
 
-        resetTransitionButton.TextColor = Colors.Red;
-
         linkGridView.AddFuncColumn<TrainLink>(tl => tl.TrainCount.ToString(), T._("Anzahl"));
         linkGridView.AddFuncColumn<TrainLink>(tl => tl.TimeOffset.ToTimeString(), T._("Erster Abstand"));
         linkGridView.AddFuncColumn<TrainLink>(tl => tl.TimeDifference.ToTimeString(), T._("Zeitdifferenz"));
+
+        transitionsGridView.AddFuncColumn<TransitionEntry>(tl => tl.NextTrain.TName, T._("Folgezug"));
+        transitionsGridView.AddFuncColumn<TransitionEntry>(tl => tl.Days.ToBinString(), T._("Tage"));
+        transitionsGridView.AddFuncColumn<TransitionEntry>(tl => tl.Station?.SName ?? "-", T._("Station"));
     }
 
     /// <summary>
@@ -101,23 +101,10 @@ internal sealed class TrainEditForm : FDialog<TrainEditForm.EditResult?>
     {
         editor.Initialize(train);
 
-        transitionDropDown.ItemTextBinding = Binding.Delegate<Train, string>(t => t.TName);
-        transitionDropDown.DataStore = tt.Trains.Where(t => t != train).OrderBy(t => t.TName).ToArray();
-
-        var transitions = tt.GetEditableTransitions(train);
-        // We currently only support editing complex transitions if only one transition exists (and thus not being relly "complex"...)
-        if (transitions.Count == 1)
-        {
-            singleTransition = transitions.Single();
-            transitionDropDown.SelectedValue = singleTransition.NextTrain;
-        }
-        else if (transitions.Count == 0)
-            transitionDropDown.Enabled = true; // If no transition exists, we can certainly create one.
-        else
-        {
-            transitionDropDown.Enabled = false;
-            MessageBox.Show(T._("Dieser Zug hat komplexe Folgezüge/mehr als einen Folgezug definiert. Dies wird von FPLedit aktuell nicht zur Bearbeitung unterstützt."), "FPLedit", MessageBoxType.Warning);
-        }
+        transitions.Clear();
+        foreach (var tr in tt.GetEditableTransitions(train))
+            transitions.Add(tr);
+        transitionsGridView.DataStore = transitions;
 
         fillButton.Visible = tt.Type == TimetableType.Linear && th.FillCandidates(train).Any();
 
@@ -155,29 +142,10 @@ internal sealed class TrainEditForm : FDialog<TrainEditForm.EditResult?>
         if (!editor.ApplyChanges())
             return;
 
-        var nextTrains = new List<TransitionEntry>();
-        // Only update NextTrains/transitions if we could actually select a transition.
-        // Otherwise we keep the existing complex structure.
-        if (transitionDropDown.Enabled)
-        {
-            if (transitionDropDown.SelectedValue != null)
-            {
-                var next = (ITrain) transitionDropDown.SelectedValue;
-                if (singleTransition != null)
-                {
-                    // keep the old complex structure and only replace the next train.
-                    singleTransition.NextTrain = next;
-                    nextTrains.Add(singleTransition);
-                }
-                else
-                    nextTrains.Add(new TransitionEntry(next, Days.All, null));
-            }
+        if (train.Id > 0)
+            tt.SetTransitions(train, transitions);
 
-            if (train.Id > 0)
-                tt.SetTransitions(train, nextTrains);
-        }
-
-        Close(new EditResult(train, nextTrains));
+        Close(new EditResult(train, transitions));
     }
 
     private void CancelButton_Click(object sender, EventArgs e)
@@ -198,9 +166,37 @@ internal sealed class TrainEditForm : FDialog<TrainEditForm.EditResult?>
         }
     }
 
-    private void ResetTransitionButton_Click(object sender, EventArgs e)
+    private void DeleteTransitionButton_Click(object sender, EventArgs e)
     {
-        transitionDropDown.SelectedIndex = -1;
+        if (transitionsGridView.SelectedItem != null)
+            transitions.Remove((TransitionEntry) transitionsGridView.SelectedItem);
+        else
+            MessageBox.Show(T._("Erst muss ein Folgezug zum Löschen ausgewählt werden!"));
+    }
+
+    private void EditTransitionButton_Click(object sender, EventArgs e)
+    {
+        if (transitionsGridView.SelectedItem != null)
+        {
+            var transition = (TransitionEntry) transitionsGridView.SelectedItem;
+            var tef = new TrainTransitionEditDialog(transition, train, tt);
+            var newTransition = tef.ShowModal();
+            if (newTransition != null)
+            {
+                transitions.Insert(transitions.IndexOf(transition), newTransition);
+                transitions.Remove(transition);
+            }
+        }
+        else
+            MessageBox.Show(T._("Erst muss ein Folgezug zum Bearbeiten ausgewählt werden!"));
+    }
+
+    private void AddTransitionButton_Click(object sender, EventArgs e)
+    {
+        var tef = new TrainTransitionEditDialog(null, train, tt);
+        var newTransition = tef.ShowModal();
+        if (newTransition != null)
+            transitions.Add(newTransition);
     }
 
     private void DeleteLinkButton_Click(object sender, EventArgs e)
@@ -219,7 +215,7 @@ internal sealed class TrainEditForm : FDialog<TrainEditForm.EditResult?>
         if (linkGridView.SelectedItem != null)
         {
             var link = (TrainLink) linkGridView.SelectedItem;
-            if (link.TrainNamingScheme is AutoTrainNameGen || link.TrainNamingScheme is SpecialTrainNameGen)
+            if (link.TrainNamingScheme is AutoTrainNameGen or SpecialTrainNameGen)
             {
                 using var tled = new TrainLinkEditDialog(link, tt);
                 if (tled.ShowModal() == DialogResult.Ok)
