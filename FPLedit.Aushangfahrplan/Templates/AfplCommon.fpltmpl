@@ -65,12 +65,12 @@ function TrackCell(/* Train[] */ trains, /* TrainDirection */ dir, /* int */ i, 
     // Gleis-Angabe bekommen
     var ardp = train.GetArrDep(sta);
     var track = ardp.DepartureTrack;
-    if (s_isNullOrEmpty(track) && ardp.ArrivalTrack != null)
+    if ((track == null || track == "") && ardp.ArrivalTrack != null)
         track = ardp.ArrivalTrack;
 
-    if (s_isNullOrEmpty(track) && sta.Tracks.toArray().length < 2 && omitTracksWhenSingle) {
+    if ((track == null || track == "") && sta.Tracks.toArray().length < 2 && omitTracksWhenSingle) {
         track = "";
-    } else if (s_isNullOrEmpty(track)) {
+    } else if (track == null || track == "") {
         track = trackHelper.GetTrack(train, sta, dir, ardp, TrackQuery.Departure);
     }
 

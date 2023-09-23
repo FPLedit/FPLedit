@@ -237,7 +237,7 @@ if (attrs != null)
 					<#= GetWelle(rs_counter, entity, route, tra, helper) #>
 
 					<#
-					if (clr_typename(entity) == "Station") {
+					if (entity instanceof Station) {
 						var ardp = tra.GetArrDep(entity);
 						var ar = ardp.Arrival.ToShortTimeString();
 						var dp = ardp.Departure.ToShortTimeString();

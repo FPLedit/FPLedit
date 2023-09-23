@@ -220,20 +220,17 @@ internal sealed class JavascriptTemplate : ITemplate
         var engine = new Engine(opt =>
         {
             opt.DisableStringCompilation();
-            // Allow LINQ extension methods.
-            opt.AddExtensionMethods(typeof(Enumerable));
+
+            opt.AddExtensionMethods(typeof(Enumerable)); // Allow LINQ extension methods.
             opt.AddExtensionMethods(allowedExtensionsTypes.ToArray());
         });
         foreach (var type in allowedTypes) // Register all allowed types.
             engine.SetValue(type.Name, TypeReference.CreateTypeReference(engine, type));
 
-        // Add common methods.
+        // Add debugging methods.
         engine
             .SetValue("debug", TemplateBuiltins.Debug)
-            .SetValue("debug_print", TemplateBuiltins.DebugPrint)
-            .SetValue("clr_typename", TemplateBuiltins.ClrTypeName)
-            .SetValue("clr_typefullname", TemplateBuiltins.ClrTypeFullName)
-            .SetValue("s_isNullOrEmpty", string.IsNullOrEmpty);
+            .SetValue("debug_print", TemplateBuiltins.DebugPrint);
 
         TemplateDebugger.GetInstance().SetContext(this); // Move "Debugger" context to current template.
 
@@ -255,7 +252,5 @@ internal sealed class JavascriptTemplate : ITemplate
         public static ILog? Logger;
         public static void Debug(object? o) => Logger?.Info($"{o?.GetType().FullName ?? "null"}: {o ?? "null"}");
         public static void DebugPrint(object? o) => Logger?.Info($"{o}");
-        public static string? ClrTypeFullName(object o) => o.GetType().FullName;
-        public static string ClrTypeName(object o) => o.GetType().Name;
     }
 }
