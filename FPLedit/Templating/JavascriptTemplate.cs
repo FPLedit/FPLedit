@@ -233,11 +233,6 @@ internal sealed class JavascriptTemplate : ITemplate
             .SetValue("debug_print", TemplateBuiltins.DebugPrint)
             .SetValue("clr_typename", TemplateBuiltins.ClrTypeName)
             .SetValue("clr_typefullname", TemplateBuiltins.ClrTypeFullName)
-            .SetValue("safe_html", TemplateOutput.SafeHtml)
-            .SetValue("safe_css_str", TemplateOutput.SafeCssStr)
-            .SetValue("safe_css_font", TemplateOutput.SafeCssFont)
-            .SetValue("safe_css_block", TemplateOutput.SafeCssBlock)
-            .SetValue("html_name", TemplateOutput.HtmlName)
             .SetValue("s_isNullOrEmpty", string.IsNullOrEmpty);
 
         TemplateDebugger.GetInstance().SetContext(this); // Move "Debugger" context to current template.

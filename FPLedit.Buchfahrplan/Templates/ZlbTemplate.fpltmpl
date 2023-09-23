@@ -15,7 +15,7 @@ function GetWelle(/* object{ val: int } */ counter, /* IStation */ sta, /* int *
         var stas = helper.GetStations(tra);
         stas = stas.skip(stas.indexOf(sta));
         counter.val = stas.takeWhile(s => s.Wellenlinien.GetValue(route) == w).length - 1;
-        return "<td class=\"zug welle welle" + safe_html(w) + "\" rowspan=\"" + safe_html(counter.val + 1) + "\"></td>";
+        return "<td class=\"zug welle welle" + w.safeHtml() + "\" rowspan=\"" + (counter.val + 1).safeHtml() + "\"></td>";
     }
 
     return "<td class=\"zug welle\"></td>";
@@ -54,7 +54,7 @@ if (attrs != null)
 			margin-bottom:65px;
 		}
 		body {
-			font-family: <#= safe_css_font(font) #>, serif;
+			font-family: <#= font.safeCssFont() #>, serif;
 		}
 		table:not(.first) {
 			page-break-before:always;
@@ -152,7 +152,7 @@ if (attrs != null)
 		{{##WELLEN_CSS##}}
 		</style>
 		<style id="add-css">
-			<#= safe_css_block(additionalCss) #>
+			<#= additionalCss.safeCssBlock() #>
 		</style>
 	</head>
 	<body>
@@ -162,7 +162,7 @@ if (attrs != null)
 			var trains = helper.GetTrains();
 			for (var ti = 0; ti < trains.length; ti++) { 
 			    var tra = trains[ti]; #>
-			<table id="<#= html_name(tra.TName, "train-") #>" class="<#= safe_html(first ? "first" : "") #>">
+			<table id="<#= tra.TName.htmlName("train-") #>" class="<#= (first ? "first" : "").safeHtml() #>">
 				<# first = false; #>
 				<col style="width:50px;">
 				<col style="width:50px;">
@@ -172,14 +172,14 @@ if (attrs != null)
 				<col style="width:60px;">
 				<col style="width:60px;">
 				<tr>
-					<td colspan="10" class="trainname"><#= safe_html(tra.TName) #><#= helper.GetDaysHtml(tra, showDays) #></td>
+					<td colspan="10" class="trainname"><#= tra.TName.safeHtml() #><#= helper.GetDaysHtml(tra, showDays) #></td>
 				</tr>
 				<tr>
-					<td colspan="10" class="linename"><#= safe_html(tra.GetLineName()) #></td>
+					<td colspan="10" class="linename"><#= tra.GetLineName().safeHtml() #></td>
 				</tr>
 				<# if (showComments && tra.Comment != null && tra.Comment !== "") { #>
 				<tr>
-					<td colspan="10" class="comment"><#= safe_html(tra.Comment) #></td>
+					<td colspan="10" class="comment"><#= tra.Comment.safeHtml() #></td>
 				</tr>
 				<# } #>
 				<tr>
@@ -221,7 +221,7 @@ if (attrs != null)
 				for (var si = 0; si < stations.length; si++) {				
 				    var entity = stations[si];
 				#>
-				<tr class="<#= html_name(entity.SName, "station-") #>">
+				<tr class="<#= entity.SName.htmlName("station-") #>">
 					<#
 						if (entity != stations.last() && tt.Type == TimetableType.Network) {
 							var sta1 = stations[stations.indexOf(entity) + 1];
@@ -230,10 +230,10 @@ if (attrs != null)
 						var pos = entity.Positions.GetPosition(route);
 						var cur_vmax = entity.Vmax.GetValue(route);
 					#>
-					<td class="zug first"><#= safe_html(pos != null ? pos.toFixed(1) : "") #></td>
-					<td class="zug"><#= safe_html(cur_vmax == last_vmax ? "" : cur_vmax) #></td>
+					<td class="zug first"><#= (pos != null ? pos.toFixed(1) : "").safeHtml() #></td>
+					<td class="zug"><#= (cur_vmax == last_vmax ? "" : cur_vmax).safeHtml() #></td>
 					<# last_vmax = cur_vmax; #>
-					<td class="zug stat"><#= safe_html(entity.SName) #></td>
+					<td class="zug stat"><#= entity.SName.safeHtml() #></td>
 					<#= GetWelle(rs_counter, entity, route, tra, helper) #>
 
 					<#
@@ -245,11 +245,11 @@ if (attrs != null)
                         var rq = ardp.RequestStop || entity.RequestStop;
 					#>
 					<td class="zug klein"><#= helper.TrapezHalt(tra, entity) #></td>
-					<td class="zug"><#= safe_html(rq ? "x" : "") #><#= safe_html((ar != "00:00" && ar != dp) ? ar : "") #></td>
-					<td class="zug"><#= safe_html(dp != "00:00" ? dp : "") #></td>
+					<td class="zug"><#= (rq ? "x" : "").safeHtml() #><#= (ar != "00:00" && ar != dp) ? ar : "").safeHtml() #></td>
+					<td class="zug"><#= (dp != "00:00" ? dp : "").safeHtml() #></td>
 					<td class="zug klein"><#= helper.Kreuzt(tra, entity) #></td>
 					<td class="zug klein"><#= helper.Ueberholt(tra, entity) #></td>
-					<td class="zug klein last"><#= safe_html(zlm || "") #></td>
+					<td class="zug klein last"><#= (zlm || "").safeHtml() #></td>
 
 					<# } else { #>
 					<td class="zug klein"><!--Trapeztafel--></td>

@@ -8,12 +8,17 @@ namespace FPLedit.Shared.Templating;
 /// <summary>
 /// Helper class for sanitizing and checking output in templates. Those functions are available as aliases in templates.
 /// </summary>
+[TemplateSafe(AllowExtensionMethods = true)]
 public static class TemplateOutput
 {
     /// <summary>
     /// Returns a sanitized version of the given string that can safely be used in HTML output.
     /// </summary>
-    public static string SafeHtml(string s) => HttpUtility.HtmlEncode(s);
+    public static string SafeHtml(this string s) => HttpUtility.HtmlEncode(s);
+    /// <summary>
+    /// Returns a sanitized version of the given string that can safely be used in HTML output.
+    /// </summary>
+    public static string SafeHtml(this IConvertible s) => HttpUtility.HtmlEncode(s);
 
     /// <summary>
     /// Checks whether the given string is safe to use as css string, and throws otherwise.
@@ -21,10 +26,9 @@ public static class TemplateOutput
     /// </summary>
     /// <remarks>
     /// <para>The user of this function is responsible for quoting the string.</para>
-    /// <para>Templates can use this as &quot;safe_css_str&quot;</para>
     /// </remarks>
     /// <exception cref="TemplateOutputException">If the given string is not valid as safe css string.</exception>
-    public static string SafeCssStr(string s)
+    public static string SafeCssStr(this string s)
     {
         if (!Regex.IsMatch(s, @"^[a-zA-Z0-9 ._-]+$"))
             throw new TemplateOutputException("Invalid (unsafe) string passed to " + nameof(SafeCssStr));
@@ -37,10 +41,9 @@ public static class TemplateOutput
     /// </summary>
     /// <remarks>
     /// <para>This function quotes the given font name, but only if necessary - fonts can also be CSS tokens (e.g. serif)</para>
-    /// <para>Templates can use this as &quot;safe_css_font&quot;</para>
     /// </remarks>
     /// <exception cref="TemplateOutputException">If the given string is not valid as safe css font name.</exception>
-    public static string SafeCssFont(string s)
+    public static string SafeCssFont(this string s)
     {
         if (!Regex.IsMatch(s, @"^[a-zA-Z0-9 ._-]+$"))
             throw new TemplateOutputException("Invalid (unsafe) string passed to " + nameof(SafeCssFont));
@@ -53,9 +56,8 @@ public static class TemplateOutput
     /// Checks whether the given string is safe to use inside a css block, and throws otherwise.
     /// The check is quite narrow and might not allow all allowed css block constents.
     /// </summary>
-    /// <remarks>Templates can use this as &quot;safe_css_block&quot;</remarks>
     /// <exception cref="TemplateOutputException">If the given string is not valid as safe css block.</exception>
-    public static string SafeCssBlock(string s)
+    public static string SafeCssBlock(this string s)
     {
         if (s.Contains("</"))
             throw new TemplateOutputException("Invalid (unsafe) string passed to " + nameof(SafeCssBlock));
@@ -69,9 +71,8 @@ public static class TemplateOutput
     /// <remarks>
     /// <para>It is neither guaranteed that the returned value is actually a valid html
     /// identifier nor that the identifier is unique.</para>
-    /// <para>Templates can use this as &quot;html_name&quot;</para>
     /// </remarks>
-    public static string HtmlName(string name, string prefix)
+    public static string HtmlName(this string name, string prefix)
     {
         var n = prefix + name.Replace("#", "").ToLower();
         n = Regex.Replace(n, @"/[^a-z0-9-]/", "-");
