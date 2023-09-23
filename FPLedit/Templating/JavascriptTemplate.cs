@@ -23,7 +23,6 @@ internal sealed class JavascriptTemplate : ITemplate
 
     private const int CURRENT_VERSION = 2;
 
-    private static Script? compiledPolyfillAst;
     private Script? compiledScriptAst;
 
     public JavascriptTemplate(string code, string identifier, IReducedPluginInterface pluginInterface)
@@ -237,18 +236,9 @@ internal sealed class JavascriptTemplate : ITemplate
         // Parse the template to an Esprima AST.
         compiledScriptAst ??= Engine.PrepareScript(CompiledCode, Identifier);
 
-        // Load polyfills from resources and parse.
-        if (compiledPolyfillAst == null)
-        {
-            const string polyFillsPath = "Templating.TemplatePolyfills.js";
-            var polyfillsCache = ResourceHelper.GetStringResource(polyFillsPath);
-            compiledPolyfillAst ??= Engine.PrepareScript(polyfillsCache, polyFillsPath, true);
-        }
-
         var html = engine
             .SetValue("tt", tt)
-            .Execute(compiledPolyfillAst) // Load polyfills
-            .Execute("var __builder = '';") // Create output variable
+            .SetValue("__builder", "") // Create output variable
             .Execute(compiledScriptAst)
             .GetValue("__builder")
             .AsString();
