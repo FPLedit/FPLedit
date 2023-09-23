@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
-using System.Reflection;
-using Esprima;
+using Esprima.Ast;
 using FPLedit.Shared.Templating;
 using FPLedit.Shared;
 using Jint;
@@ -24,7 +23,8 @@ internal sealed class JavascriptTemplate : ITemplate
 
     private const int CURRENT_VERSION = 2;
 
-    private static string? polyfillsCache;
+    private static Script? compiledPolyfillAst;
+    private Script? compiledScriptAst;
 
     public JavascriptTemplate(string code, string identifier, IReducedPluginInterface pluginInterface)
     {
@@ -216,34 +216,44 @@ internal sealed class JavascriptTemplate : ITemplate
             opt.DisableStringCompilation();
         });
         foreach (var type in allowedTypes) // Register all allowed types.
-            engine.SetValue(type.Name, type);
+            engine.SetValue(type.Name, TypeReference.CreateTypeReference(engine, type));
+
+        // Add common methods.
+        engine
+            .SetValue("debug", TemplateBuiltins.Debug)
+            .SetValue("debug_print", TemplateBuiltins.DebugPrint)
+            .SetValue("clr_typename", TemplateBuiltins.ClrTypeName)
+            .SetValue("clr_typefullname", TemplateBuiltins.ClrTypeFullName)
+            .SetValue("clr_toArray", TemplateBuiltins.ClrToArray)
+            .SetValue("safe_html", TemplateOutput.SafeHtml)
+            .SetValue("safe_css_str", TemplateOutput.SafeCssStr)
+            .SetValue("safe_css_font", TemplateOutput.SafeCssFont)
+            .SetValue("safe_css_block", TemplateOutput.SafeCssBlock)
+            .SetValue("html_name", TemplateOutput.HtmlName)
+            .SetValue("s_isNullOrEmpty", string.IsNullOrEmpty);
 
         TemplateDebugger.GetInstance().SetContext(this); // Move "Debugger" context to current template.
 
-        // Load polyfills from resources.
-        const string polyFillsPath = "Templating.TemplatePolyfills.js";
-        polyfillsCache ??= ResourceHelper.GetStringResource(polyFillsPath);
+        // Parse the template to an Esprima AST.
+        compiledScriptAst ??= Engine.PrepareScript(CompiledCode, Identifier);
 
-        var polyfillsParserOptions = new ParserOptions { Tolerant = false };
-        var templateCodeParserOptions = new ParserOptions();
+        // Load polyfills from resources and parse.
+        if (compiledPolyfillAst == null)
+        {
+            const string polyFillsPath = "Templating.TemplatePolyfills.js";
+            var polyfillsCache = ResourceHelper.GetStringResource(polyFillsPath);
+            compiledPolyfillAst ??= Engine.PrepareScript(polyfillsCache, polyFillsPath, true);
+        }
 
-        return engine
+        var html = engine
             .SetValue("tt", tt)
-            .SetValue("debug",            TemplateBuiltins.Debug)
-            .SetValue("debug_print",      TemplateBuiltins.DebugPrint)
-            .SetValue("clr_typename",     TemplateBuiltins.ClrTypeName)
-            .SetValue("clr_typefullname", TemplateBuiltins.ClrTypeFullName)
-            .SetValue("clr_toArray",      TemplateBuiltins.ClrToArray)
-            .SetValue("safe_html",        TemplateOutput.SafeHtml)
-            .SetValue("safe_css_str",     TemplateOutput.SafeCssStr)
-            .SetValue("safe_css_font",    TemplateOutput.SafeCssFont)
-            .SetValue("safe_css_block",   TemplateOutput.SafeCssBlock)
-            .SetValue("html_name",        TemplateOutput.HtmlName)
-            .Execute(polyfillsCache, polyFillsPath, polyfillsParserOptions) // Load polyfills
-            .Execute("var __builder = '';", polyFillsPath, polyfillsParserOptions) // Create output variable
-            .Execute(CompiledCode, Identifier, templateCodeParserOptions)
+            .Execute(compiledPolyfillAst) // Load polyfills
+            .Execute("var __builder = '';") // Create output variable
+            .Execute(compiledScriptAst)
             .GetValue("__builder")
-            .ToString();
+            .AsString();
+
+        return html;
     }
 
     private static class TemplateBuiltins
