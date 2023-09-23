@@ -28,6 +28,7 @@ public enum TrainDirection
     // ReSharper restore InconsistentNaming
 }
 
+[Templating.TemplateSafe(AllowExtensionMethods = true)]
 public static class TrainDirectionExt
 {
     public static bool IsSortReverse(this TrainDirection dir)

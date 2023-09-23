@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using System.Reflection;
 using Esprima.Ast;
 using FPLedit.Shared.Templating;
 using FPLedit.Shared;
@@ -201,19 +203,26 @@ internal sealed class JavascriptTemplate : ITemplate
     public string GenerateResult(Timetable tt)
     {
         // Allowed types whitlisted by extensions (for this specific template type or generic (e.g. type == null)).
-        var extensionAllowedTypes = pluginInterface.GetRegistered<ITemplateWhitelistEntry>()
+        var allowedTypes = pluginInterface.GetRegistered<ITemplateWhitelistEntry>()
             .Where(w => w.TemplateType == TemplateType || w.TemplateType == null!)
-            .SelectMany(w => w.WhitelistTypes);
+            .SelectMany(w => w.WhitelistTypes)
+            .ToList();
+        var allowedExtensionsTypes = new List<Type>();
         // Globally whitelisted: From FPLedit.Shared, marked with TemplateSafeAttribute.
-        var allowedTypes = typeof(Timetable).Assembly.GetTypes()
-            .Where(type => type.GetCustomAttributes(typeof(TemplateSafeAttribute), true).Length > 0)
-            .Concat(extensionAllowedTypes);
+        foreach (var type in typeof(Timetable).Assembly.GetTypes())
+        {
+            var attr = type.GetCustomAttribute<TemplateSafeAttribute>(true);
+            if (attr == null) continue;
+            allowedTypes.Add(type);
+            if (attr.AllowExtensionMethods) allowedExtensionsTypes.Add(type);
+        }
 
         var engine = new Engine(opt =>
         {
             opt.DisableStringCompilation();
             // Allow LINQ extension methods.
             opt.AddExtensionMethods(typeof(Enumerable));
+            opt.AddExtensionMethods(allowedExtensionsTypes.ToArray());
         });
         foreach (var type in allowedTypes) // Register all allowed types.
             engine.SetValue(type.Name, TypeReference.CreateTypeReference(engine, type));

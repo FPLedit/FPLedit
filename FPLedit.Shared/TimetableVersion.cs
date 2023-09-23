@@ -42,7 +42,7 @@ public enum TimetableVersion
     // ReSharper restore InconsistentNaming
 }
 
-[Templating.TemplateSafe]
+[Templating.TemplateSafe(AllowExtensionMethods = true)]
 public static class TimetableVersionExt
 {
     /// <summary>
