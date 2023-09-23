@@ -1,11 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using Esprima.Ast;
 using FPLedit.Shared.Templating;
 using FPLedit.Shared;
 using Jint;
+using Jint.Runtime.Interop;
 
 namespace FPLedit.Templating;
 
@@ -208,12 +208,13 @@ internal sealed class JavascriptTemplate : ITemplate
         // Globally whitelisted: From FPLedit.Shared, marked with TemplateSafeAttribute.
         var allowedTypes = typeof(Timetable).Assembly.GetTypes()
             .Where(type => type.GetCustomAttributes(typeof(TemplateSafeAttribute), true).Length > 0)
-            .Concat(extensionAllowedTypes)
-            .Concat(new[] { typeof(Enumerable) }); // Also whitelist type used for LINQ.
+            .Concat(extensionAllowedTypes);
 
         var engine = new Engine(opt =>
         {
             opt.DisableStringCompilation();
+            // Allow LINQ extension methods.
+            opt.AddExtensionMethods(typeof(Enumerable));
         });
         foreach (var type in allowedTypes) // Register all allowed types.
             engine.SetValue(type.Name, TypeReference.CreateTypeReference(engine, type));
@@ -224,7 +225,6 @@ internal sealed class JavascriptTemplate : ITemplate
             .SetValue("debug_print", TemplateBuiltins.DebugPrint)
             .SetValue("clr_typename", TemplateBuiltins.ClrTypeName)
             .SetValue("clr_typefullname", TemplateBuiltins.ClrTypeFullName)
-            .SetValue("clr_toArray", TemplateBuiltins.ClrToArray)
             .SetValue("safe_html", TemplateOutput.SafeHtml)
             .SetValue("safe_css_str", TemplateOutput.SafeCssStr)
             .SetValue("safe_css_font", TemplateOutput.SafeCssFont)
@@ -261,7 +261,6 @@ internal sealed class JavascriptTemplate : ITemplate
         public static ILog? Logger;
         public static void Debug(object? o) => Logger?.Info($"{o?.GetType().FullName ?? "null"}: {o ?? "null"}");
         public static void DebugPrint(object? o) => Logger?.Info($"{o}");
-        public static object[] ClrToArray(IEnumerable<object> o) => o.ToArray();
         public static string? ClrTypeFullName(object o) => o.GetType().FullName;
         public static string ClrTypeName(object o) => o.GetType().Name;
     }

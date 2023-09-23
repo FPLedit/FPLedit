@@ -43,7 +43,7 @@ function DirCell( /* Train[] */ trains, /* int */ i) {
     if (train == null)
         return "<td class=\"direction\"></td>";
  
-    return "<td class=\"direction\">" + safe_html(dict_last(train.GetArrDepsUnsorted(), (k, v) => v.HasMinOneTimeSet).key.SName) + "</td>";
+    return "<td class=\"direction\">" + safe_html(train.GetArrDepsUnsorted().last((kvp) => kvp.value.HasMinOneTimeSet).key.SName) + "</td>";
 }
 
 function DirHeader(/* bool */ showText) {
@@ -68,7 +68,7 @@ function TrackCell(/* Train[] */ trains, /* TrainDirection */ dir, /* int */ i, 
     if (s_isNullOrEmpty(track) && ardp.ArrivalTrack != null)
         track = ardp.ArrivalTrack;
 
-    if (s_isNullOrEmpty(track) && clr_toArray(sta.Tracks).length < 2 && omitTracksWhenSingle) {
+    if (s_isNullOrEmpty(track) && sta.Tracks.toArray().length < 2 && omitTracksWhenSingle) {
         track = "";
     } else if (s_isNullOrEmpty(track)) {
         track = trackHelper.GetTrack(train, sta, dir, ardp, TrackQuery.Departure);
@@ -118,7 +118,7 @@ if (attrs != null)
 }
 
 // Netzwerk-Modus mit Zielangabe
-var multipleStations = tt.Type == TimetableType.Network && clr_toArray(tt.Stations).some(s => s.Routes.length > 1);
+var multipleStations = tt.Type == TimetableType.Network && tt.Stations.toArray().some(s => s.Routes.length > 1);
 #>
 
 <!doctype html>
