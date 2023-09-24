@@ -10,8 +10,8 @@ namespace FPLedit.Shared;
 [Templating.TemplateSafe]
 public readonly struct TimeEntry : IComparable, IComparable<TimeEntry>, IEquatable<TimeEntry>
 {
-    public static readonly TimeEntry Zero = new TimeEntry(0,0, 0, 0);
-    private static readonly TimeNormalizer normalizer = new TimeNormalizer();
+    public static readonly TimeEntry Zero = new (0,0, 0, 0);
+    private static readonly TimeNormalizer normalizer = new ();
 
     public short Minutes { get; }
     public short Hours { get; }
@@ -22,7 +22,7 @@ public readonly struct TimeEntry : IComparable, IComparable<TimeEntry>, IEquatab
     {
         if (seconds != 0 && decimals != 0)
             throw new ArgumentException("Overspecified seconds as well as decimal minutes!");
-            
+
         Seconds = (short)(seconds % 60);
         Decimals = (short)(decimals % 100);
 
@@ -52,44 +52,62 @@ public readonly struct TimeEntry : IComparable, IComparable<TimeEntry>, IEquatab
     public TimeEntry(int hours, int minutes) : this(hours, minutes, 0, 0)
     {
     }
-        
+
     public TimeEntry Add(TimeEntry entry)
     {
         var h = Hours + entry.Hours;
         var m = Minutes + entry.Minutes;
-            
-        // Exact calculations.
+
+        // Exact calculations are possible if both use the same way to specify seconds.
         if (Seconds != 0 && entry.Seconds != 0)
             return new TimeEntry(h, m, Seconds + entry.Seconds, 0);
         if (Decimals != 0 && entry.Decimals != 0)
             return new TimeEntry(h, m, 0, Decimals + entry.Decimals);
-            
+
         // This possibly leads to a loss of precision.
         var d = (GetSecondsDecimal() + entry.GetSecondsDecimal()) * 100M;
-        Debug.WriteLineIf(d - (short) d != 0, $"Encountered loss of precision while rounding TimeEntries {d} => {(short)d}", "warning");
-        return new TimeEntry(h, m, 0,(short)d);
+        return new TimeEntry(h, m, 0,GuardPrecisionLoss(d));
     }
 
     public TimeEntry Substract(TimeEntry entry)
     {
         var h = Hours - entry.Hours;
         var m = Minutes - entry.Minutes;
-            
-        // Exact calculations.
+
+        // Exact calculations are possible if both use the same way to specify seconds.
         if (Seconds != 0 && entry.Seconds != 0)
             return new TimeEntry(h, m, Seconds - entry.Seconds, 0);
         if (Decimals != 0 && entry.Decimals != 0)
             return new TimeEntry(h, m, 0, Decimals - entry.Decimals);
-            
+
         // This possibly leads to a loss of precision!
         var d = (GetSecondsDecimal() - entry.GetSecondsDecimal()) * 100M;
-        Debug.WriteLineIf(d - (short) d != 0, $"Encountered loss of precision while rounding TimeEntries {d} => {(short)d}", "warning");
-        return new TimeEntry(h, m, 0, (short)d);
+        return new TimeEntry(h, m, 0, GuardPrecisionLoss(d));
+    }
+
+    public TimeEntry NormalizeDecimalsToSeconds()
+    {
+        if (Seconds > 0)
+            return this;
+        return new TimeEntry(Hours, Minutes, GuardPrecisionLoss(Decimals / 100M * 60M), 0);
+    }
+
+    public TimeEntry NormalizeSecondsToDecimals()
+    {
+        if (Decimals > 0)
+            return this;
+        return new TimeEntry(Hours, Minutes, 0, GuardPrecisionLoss(GetSecondsDecimal() * 100M));
+    }
+
+    private static short GuardPrecisionLoss(decimal d)
+    {
+        Debug.WriteLineIf(d - (short) d != 0, $"Encountered loss of precision while rounding TimeEntries {d} => {(short) d}", "warning");
+        return (short) d;
     }
 
     public int GetTotalMinutes() => Hours * 60 + Minutes;
-        
-    public TimeEntry Normalize() => new TimeEntry(Hours % 24, Minutes, Seconds, Decimals);
+
+    public TimeEntry Normalize() => new (Hours % 24, Minutes, Seconds, Decimals);
 
     private decimal GetSecondsDecimal() => Decimals != 0 ? Decimals / 100M : Seconds / 60M;
 
@@ -120,7 +138,7 @@ public readonly struct TimeEntry : IComparable, IComparable<TimeEntry>, IEquatab
     }
 
     // ReSharper disable RedundantCast
-    public override int GetHashCode() => ((int)Hours << 16) | ((int)Minutes << 8) | (int)Seconds;
+    public override int GetHashCode() => ((int)Hours << 24) | ((int)Minutes << 16) | ((int)Seconds << 8) | (int)Decimals;
     // ReSharper restore RedundantCast
 
     public bool Equals(TimeEntry obj) => obj.Hours == Hours && obj.Minutes == Minutes && obj.Seconds == Seconds && obj.Decimals == Decimals;
@@ -161,10 +179,10 @@ public readonly struct TimeEntry : IComparable, IComparable<TimeEntry>, IEquatab
     public static TimeEntry operator -(TimeEntry t1, TimeEntry t2) => t1.Substract(t2);
     public static TimeEntry operator -(TimeEntry t1) => Zero.Substract(t1);
     public static TimeEntry operator +(TimeEntry t1) => Zero.Add(t1);
-    public static TimeEntry operator *(int n, TimeEntry t) => new TimeEntry(n * t.Hours, n * t.Minutes, n * t.Seconds, n * t.Decimals);
+    public static TimeEntry operator *(int n, TimeEntry t) => new (n * t.Hours, n * t.Minutes, n * t.Seconds, n * t.Decimals);
     public static TimeEntry operator *(TimeEntry t, int n) => n * t;
-    public static explicit operator TimeEntry(TimeSpan ts) => new TimeEntry(ts.Days * 24 + ts.Hours, ts.Minutes, ts.Seconds, 0);
-        
+    public static explicit operator TimeEntry(TimeSpan ts) => new (ts.Days * 24 + ts.Hours, ts.Minutes, ts.Seconds, 0);
+
     public static bool TryParse(string s, out TimeEntry entry)
     {
         entry = new TimeEntry();
@@ -174,7 +192,7 @@ public readonly struct TimeEntry : IComparable, IComparable<TimeEntry>, IEquatab
         entry = new TimeEntry(time.Value.hours, time.Value.minutes, time.Value.seconds, time.Value.decimals);
         return true;
     }
-        
+
     public static TimeEntry Parse(string s)
     {
         if (!TryParse(s, out var entry))

@@ -180,14 +180,14 @@ public class TimeEntryTests
         Assert.AreEqual(TimeEntry.Zero - te, -te);
         Assert.AreEqual(mte, -te);
         Assert.AreEqual(te, -mte);
-            
+
         // Test binary ops
         var dte = new TimeEntry(21, 20);
         Assert.AreEqual(dte, te + te);
         Assert.AreEqual(TimeEntry.Zero, te - te);
         var te2 = new TimeEntry(3, 33);
         Assert.AreEqual(te + te2, te2 + te);
-        Assert.AreEqual( te - te2, -(te2 - te));
+        Assert.AreEqual(te - te2, -(te2 - te));
 
         Assert.AreEqual(te, dte - te);
         Assert.AreEqual(te, te + te - te);
@@ -195,18 +195,32 @@ public class TimeEntryTests
         Assert.AreEqual(te, (te + te) - te);
         Assert.AreEqual(te, te + TimeEntry.Zero);
         Assert.AreEqual(te, te - TimeEntry.Zero);
-            
+
         // Test if methods do the same
         Assert.AreEqual(te.Add(te2), te + te2);
         Assert.AreEqual(te.Substract(te2), te - te2);
-            
+
         // Test calcualtions with decimals and seconds
         // Test precise calculations
         Assert.AreEqual(new TimeEntry(0, 0, 50, 0), new TimeEntry(0, 0, 37, 0) + new TimeEntry(0, 0, 13, 0));
         Assert.AreEqual(new TimeEntry(0, 0, 0, 50), new TimeEntry(0, 0, 0, 37) + new TimeEntry(0, 0, 0, 13));
-            
+
         // Loss of precision
         Assert.AreEqual(new TimeEntry(0, 0, 0, 74), new TimeEntry(0, 0, 37, 0) + new TimeEntry(0, 0, 0, 13));
+
+    }
+
+    [Test]
+    public void NormalizeTests()
+    {
+        var te1 = new TimeEntry(0, 0, 50, 0);
+        var te2 = new TimeEntry(0, 0, 0, 50);
+
+        Assert.AreEqual(te1, te1.NormalizeDecimalsToSeconds());
+        Assert.AreEqual(te2, te2.NormalizeSecondsToDecimals());
+        
+        Assert.AreEqual(te1.NormalizeSecondsToDecimals(), new TimeEntry(0, 0, 0, 83));
+        Assert.AreEqual(te2.NormalizeDecimalsToSeconds(), new TimeEntry(0, 0, 30, 0));
     }
 
     [Test]

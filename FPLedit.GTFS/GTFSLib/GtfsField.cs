@@ -48,7 +48,7 @@ public sealed class GtfsField : Attribute
                 throw new ArgumentException("wrong argument type for GTFS conversion");
             case GtfsType.Time:
                 if (x is null && Optional) return "";
-                if (x is TimeEntry tm) return tm.ToTimeString().Replace(":", ""); //TODO: Handle decimals.
+                if (x is TimeEntry tm) return tm.NormalizeDecimalsToSeconds().ToTimeString().Replace(":", "");
                 throw new ArgumentException("wrong argument type for GTFS conversion");
             case GtfsType.Date:
                 if (x is null && Optional) return "";
