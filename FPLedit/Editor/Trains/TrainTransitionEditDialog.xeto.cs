@@ -14,6 +14,11 @@ internal sealed class TrainTransitionEditDialog : FDialog<TransitionEntry?>
 #pragma warning restore CS0649,CA2213
 
     /// <summary>
+    /// This temp station instance is used for marking the selection of "all stations".
+    /// </summary>
+    private readonly Station allStationsStation;
+
+    /// <summary>
     /// Create a new dialog to edit (= discard + create new) the given transition entry.
     /// </summary>
     /// <param name="transition">Transition object that is used as blueprint, null if a new transition should be created. Note: The referenced object will not be mutated!</param>
@@ -24,28 +29,33 @@ internal sealed class TrainTransitionEditDialog : FDialog<TransitionEntry?>
         Eto.Serialization.Xaml.XamlReader.Load(this);
 
         var selectableTrains = tt.Trains.Where(t => t != train).OrderBy(t => t.TName).ToArray();
-        var selectableStations = new Station?[] { null }.Union(train.GetPath()).ToArray();
+        allStationsStation = new Station(tt) { SName = T._("<Alle Stationen>") };
+        var selectableStations = new [] { allStationsStation }.Union(train.GetPath()).ToArray();
 
         nextTrainDropDown.ItemTextBinding = Binding.Delegate<Train, string>(t => t.TName);
         nextTrainDropDown.DataStore = selectableTrains;
 
-        //TODO: fix name for null display
-        stationDropDown.ItemTextBinding = Binding.Delegate<Station?, string>(t => t?.SName ?? "<Alle Stationen>");
+        stationDropDown.ItemTextBinding = Binding.Delegate<IStation, string>(t => t.SName );
         stationDropDown.DataStore = selectableStations;
 
-        //TODO: check if in selectableTrains/selectableStations
-        if (transition != null && !selectableTrains.Contains(transition.NextTrain))
+        if (transition != null)
         {
-            throw new NotImplementedException();
+            if (!selectableTrains.Contains(transition.NextTrain))
+                MessageBox.Show(T._("Der bisher ausgewählte Folgezug existiert nicht mehr!"), "FPLedit", MessageBoxType.Warning);
+            else
+                nextTrainDropDown.SelectedValue = transition?.NextTrain;
         }
-        if (transition?.Station != null && !selectableStations.Contains(transition.Station))
+        if (transition?.Station != null)
         {
-            throw new NotImplementedException();
+            if (!selectableStations.Contains(transition.Station))
+                MessageBox.Show(T._("Die bisher ausgewählte Station existiert nicht mehr!"), "FPLedit", MessageBoxType.Warning);
+            else
+                stationDropDown.SelectedValue = transition.Station;
         }
 
-        nextTrainDropDown.SelectedValue = transition?.NextTrain;
+        stationDropDown.SelectedValue ??= allStationsStation; // If we did not yet set a selected station, select "all stations".
+
         daysControl.SelectedDays = transition?.Days ?? Days.All;
-        stationDropDown.SelectedValue = transition?.Station;
     }
 
     private void CloseButton_Click(object sender, EventArgs e)
@@ -57,7 +67,8 @@ internal sealed class TrainTransitionEditDialog : FDialog<TransitionEntry?>
             return;
         }
 
-        var transition = new TransitionEntry((ITrain) nextTrainDropDown.SelectedValue, daysControl.SelectedDays, (Station?) stationDropDown.SelectedValue);
+        var station = stationDropDown.SelectedValue == allStationsStation ? null : (Station) stationDropDown.SelectedValue;
+        var transition = new TransitionEntry((ITrain) nextTrainDropDown.SelectedValue, daysControl.SelectedDays, station);
 
         Close(transition);
     }
