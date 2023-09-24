@@ -121,10 +121,6 @@ public sealed class MFont : IDisposable
             imageSharpFontCollection = new SixLabors.Fonts.FontCollection();
             SixLabors.Fonts.FontCollectionExtensions.AddSystemFonts(imageSharpFontCollection);
 
-            // Temporary fix until the next release of SixLabors.Fonts.
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                AddFontSearchDir(imageSharpFontCollection, Environment.ExpandEnvironmentVariables("%HOME%/.local/share/fonts/"));
-
             //TODO: Add a local path relative to the application directory, if it exists!
         }
 
