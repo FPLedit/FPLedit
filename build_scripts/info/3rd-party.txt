@@ -34,10 +34,11 @@ Die Volltexte der Lizenzen finden Sie als Textdatei im Ordner lib/licenses.
   MIT-License
   <https://github.com/VitaliiTsilnyk/NGettext>
 
-* FPLedit benutzt ImageSharp und ImageSharp.Drawing zur Bildfahrplan-Darstellung.
-  ImageSharp Split License und Apache License 2.0
+* FPLedit benutzt ImageSharp, ImageSharp.Drawing und SixLabors.Fonts zur Bildfahrplan-Darstellung.
+  Apache License 2.0
   <https://github.com/SixLabors/ImageSharp>
   <https://github.com/SixLabors/ImageSharp.Drawing>
+  <https://github.com/SixLabors/SixLabors.Fonts>
 
 * FPLedit benutzt PdfSharp zur Bildfahrplan-Darstellung.
   MIT-License
