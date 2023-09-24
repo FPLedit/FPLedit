@@ -115,7 +115,6 @@ namespace Force.DeepCloner.Helpers
 						call = Expression.Convert(call, fieldInfo.FieldType);
 
 					// should handle specially
-					// todo: think about optimization, but it rare case
 					var isReadonly = readonlyFields.GetOrAdd(fieldInfo, f => f.IsInitOnly);
 					if (isReadonly)
 					{

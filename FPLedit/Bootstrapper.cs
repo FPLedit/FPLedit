@@ -33,7 +33,7 @@ internal sealed class Bootstrapper : IPluginInterface, IDisposable
     public dynamic RootForm { get; private set; } = null!;
     public dynamic Menu { get; private set; } = null!;
 
-    public Timetable Timetable => FileHandler.Timetable!; //TODO: throw if null.
+    public Timetable Timetable => FileHandler.Timetable ?? throw new NullReferenceException("Current timetable instance is null!");
     public Timetable? TimetableMaybeNull => FileHandler.Timetable;
     public IFileState FileState => FileHandler.FileState;
 

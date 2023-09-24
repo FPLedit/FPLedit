@@ -24,7 +24,7 @@ internal sealed class TimetableCheckRunner
 
         pluginInterface.FileStateChanged += (_, _) =>
         {
-            if (pluginInterface.Timetable == null!)
+            if (pluginInterface.TimetableMaybeNull == null!)
                 return;
 
             var clone = pluginInterface.Timetable.Clone();

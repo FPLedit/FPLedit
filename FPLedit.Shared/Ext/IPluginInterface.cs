@@ -5,10 +5,25 @@ namespace FPLedit.Shared;
 
 public interface IPluginInterface : IReducedPluginInterface, IUiPluginInterface
 {
+    /// <summary>
+    /// This will provide the current timetable instance, and will throw if the current instance is unset (i.e. no file is opened).
+    /// </summary>
+    /// <remarks>Use <see cref="TimetableMaybeNull"/> to check for <see langword="null" />.</remarks>
+    /// <exception cref="NullReferenceException">No current timetable exists, i.e. no file is opened.</exception>
     Timetable Timetable { get; }
+    /// <summary>
+    /// This will provide the current timetable instance, or <see langword="null" /> if the current instance is unset (i.e. no file is opened).
+    /// </summary>
     Timetable? TimetableMaybeNull { get; }
 
+    /// <summary>
+    /// The current application-wide file state (this is also accessible if no file is opened).
+    /// </summary>
     IFileState FileState { get; }
+    /// <summary>
+    /// Mark the current timetable as unsaved
+    /// </summary>
+    /// <exception cref="NullReferenceException">No current timetable exists, i.e. no file is opened.</exception>
     void SetUnsaved();
 
     object BackupTimetable();
