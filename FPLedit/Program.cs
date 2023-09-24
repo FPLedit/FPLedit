@@ -188,7 +188,7 @@ internal static class Program
 
         // Initailize some loosely coupled UI components, so that extensions can use them
         EtoExtensions.Initialize(bootstrapper); // Initialize Eto extensions
-        FontCollection.InitAsync(); // Load list of available fonts, async, as this should not be needed by any extension.
+        FontCollection.InitAsync(bootstrapper.FullSettings); // Load list of available fonts, async, as this should not be needed by any extension.
         TemplateDebugger.GetInstance().AttachDebugger(new GuiTemplateDebugger()); // Attach javascript debugger form
 
         // Reset default file format versions on first run.

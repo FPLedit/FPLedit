@@ -121,7 +121,13 @@ public sealed class MFont : IDisposable
             imageSharpFontCollection = new SixLabors.Fonts.FontCollection();
             SixLabors.Fonts.FontCollectionExtensions.AddSystemFonts(imageSharpFontCollection);
 
-            //TODO: Add a local path relative to the application directory, if it exists!
+            // Add a local path relative to the application directory, if it exists and enabled.
+            var addLocalFontDir = FontCollection.Settings.Get("fonts.add-local-dir", false);
+            if (addLocalFontDir)
+            {
+                var appDirectory = Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.EntryExecutable);
+                AddFontSearchDir(imageSharpFontCollection, Path.Combine(appDirectory, "fonts"));
+            }
         }
 
         SixLabors.Fonts.FontFamily? GetFamily(params string[] families)

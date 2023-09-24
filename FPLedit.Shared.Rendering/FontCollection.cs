@@ -15,8 +15,11 @@ public static class FontCollection
 
     public static string GenericMonospace => FontFamilies.MonospaceFamilyName;
 
-    public static void InitAsync()
+    public static IReadOnlySettings Settings { get; private set; } = null!;
+
+    public static void InitAsync(IReadOnlySettings settings)
     {
+        Settings = settings;
         new Task(() =>
         {
             var installedFamilies = Fonts.AvailableFontFamilies.Select(f => f.Name).OrderBy(f => f).ToList();
