@@ -24,7 +24,7 @@
     <!-- Conflicts between different versions. -->
     <MSBuildWarningsAsMessages>MSB3277</MSBuildWarningsAsMessages>
 
-    <EtoVersion>2.7.5</EtoVersion>
+    <EtoVersion>2.8.1</EtoVersion>
 
 	  <!-- Assembly info -->
 	  <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
