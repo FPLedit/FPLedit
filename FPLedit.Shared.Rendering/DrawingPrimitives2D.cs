@@ -17,6 +17,7 @@ public readonly record struct Vec2(float X, float Y)
 #endif
     public static explicit operator SixLabors.ImageSharp.PointF(Vec2 v) => new(v.X, v.Y);
     public static explicit operator PdfSharp.Drawing.XPoint(Vec2 v) => new(v.X, v.Y);
+    public override string ToString() => $"({X} | {Y})";
 }
 
 /// <summary>

@@ -221,21 +221,21 @@ internal sealed class TrainRenderer
             points.Add(point.Value);
     }
 
-    bool InsideClipping(Vec2 p1, Vec2 p2) => (p1.Y > clipTop && p2.Y < clipBottom) || (p1.Y < clipTop && p2.Y > clipBottom) || (p1.Y > clipTop && p2.Y > clipBottom);
+    bool InsideClipping(Vec2 p1, Vec2 p2) => (p1.Y >= clipTop && p2.Y <= clipBottom) || (p1.Y <= clipTop && p2.Y >= clipBottom) || (p1.Y >= clipTop && p2.Y >= clipBottom);
 
     (Vec2 cp1, Vec2 cp2) GetClippedPointsForLine(Vec2 p1, Vec2 p2)
     {
         var dx = p2.X - p1.X;
         var dy = p2.Y - p1.Y;
-        if (p1.Y > clipTop && p2.Y < clipBottom)
+        if (p1.Y >= clipTop && p2.Y <= clipBottom)
             return (p1, p2);
-        if (p1.Y > clipTop && p2.Y > clipBottom)
+        if (p1.Y >= clipTop && p2.Y >= clipBottom)
         {
             var clippedy = clipBottom - p2.Y;
             var x = dy > TOLERANCE ? dx / dy * clippedy : 0;
             return (p1, new Vec2(p2.X + x, clipBottom));
         }
-        if (p1.Y < clipTop && p2.Y > clipBottom)
+        if (p1.Y <= clipTop && p2.Y >= clipBottom)
         {
             var clippedy = clipTop - p1.Y;
             var x = dy > TOLERANCE ? dx / dy * clippedy : 0;
