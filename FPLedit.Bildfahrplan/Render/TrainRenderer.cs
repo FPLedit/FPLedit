@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FPLedit.Bildfahrplan.Helpers;
+using FPLedit.Shared.Helpers;
 
 namespace FPLedit.Bildfahrplan.Render;
 
@@ -20,6 +21,7 @@ internal sealed class TrainRenderer
     private ITrain[]? trainCache;
 
     private readonly DashStyleHelper ds = new();
+    private readonly TrackHelper tracks = new();
 
     private readonly float clipTop;
     private readonly float clipBottom;
@@ -44,18 +46,36 @@ internal sealed class TrainRenderer
             return;
 
         var ardps = train.GetArrDepsUnsorted();
+        var path = train.GetPath();
         var dir = GetTrainDirection(train);
+
+        var halfLineVec = new Vec2(dir ? -50 : 50, 20); // Halbe Linien bei Abfahrten / Ankünften ohne Gegenstelle
 
         var pen = (style.CalcedColor, style.CalcedWidth, ds.ParseDashstyle(style.CalcedLineStyle));
         var brush = style.CalcedColor;
             
         List<Vec2> points = new List<Vec2>();
+        List<int> pointBreaks = new List<int>();
         bool hadFirstArrival = false, hadLastDeparture = false, isFirst = true;
         var stas = dir ? Enumerable.Reverse(stations) : stations;
 
         int trainTravelsRouteCount = 0;
+        int lastPathIdx = -2;
+        bool hadLastSkippedStation = false;
         foreach (var sta in stas)
         {
+            var pathIdx = path.IndexOf(sta);
+            var skippedStation = pathIdx == -1 || (lastPathIdx != -2 && pathIdx != lastPathIdx + 1); // in the last step, we skipped some stations of this train.
+            if (skippedStation && !hadLastSkippedStation && points.Count > 0)
+            {
+                // Halbe Linien bei Abfahrten / Ankünften ohne Gegenstelle (hier innerhalb der Strecke und nicht am Rand)
+                if (attrs.DrawNetworkTrains && hadLastDeparture)
+                    points.Add(points.Last() + halfLineVec);
+                pointBreaks.Add(points.Count);
+            }
+            lastPathIdx = pathIdx;
+            hadLastSkippedStation = skippedStation;
+
             if (!ardps.ContainsKey(sta))
                 continue;
             var ardp = ardps[sta];
@@ -64,8 +84,11 @@ internal sealed class TrainRenderer
             if (!ardp.HasMinOneTimeSet)
                 continue;
 
+            var prePointIndex = points.Count; // needed for prepending a half-line
+
             MaybeAddPoint(points, GetGutterPoint(true, dir, stationOffsets[sta], ardp.Arrival));
-            MaybeAddPoint(points, GetInternalPoint(stationOffsets[sta], ardp.Arrival, ardp.ArrivalTrack));
+            var arrivalTrack = tracks.GetTrack(train, sta, dir ? TrainDirection.ta : TrainDirection.ti, ardp, TrackQuery.Arrival);
+            MaybeAddPoint(points, GetInternalPoint(stationOffsets[sta], ardp.Arrival, arrivalTrack));
 
             foreach (var shunt in ardp.ShuntMoves)
             {
@@ -73,8 +96,13 @@ internal sealed class TrainRenderer
                 MaybeAddPoint(points, GetInternalPoint(stationOffsets[sta], shunt.Time, shunt.TargetTrack));
             }
 
-            MaybeAddPoint(points, GetInternalPoint(stationOffsets[sta], ardp.Departure, ardp.DepartureTrack));
+            var departureTrack = tracks.GetTrack(train, sta, dir ? TrainDirection.ta : TrainDirection.ti, ardp, TrackQuery.Departure);
+            MaybeAddPoint(points, GetInternalPoint(stationOffsets[sta], ardp.Departure, departureTrack));
             MaybeAddPoint(points, GetGutterPoint(false, dir, stationOffsets[sta], ardp.Departure));
+
+            // Halbe Linien bei Abfahrten / Ankünften ohne Gegenstelle (hier innerhalb der Strecke und nicht am Rand)
+            if (skippedStation && attrs.DrawNetworkTrains && ardp.Arrival != default)
+                points.Insert(prePointIndex, points[prePointIndex] - halfLineVec);
 
             hadLastDeparture = ardp.Departure != default;
             if (isFirst)
@@ -85,11 +113,13 @@ internal sealed class TrainRenderer
         // Halbe Linien bei Abfahrten / Ankünften ohne Gegenstelle
         if (attrs.DrawNetworkTrains)
         {
-            var hly = !dir ? 20 : -20;
             if (hadLastDeparture)
-                points.Add(points.Last() + new Vec2(50, hly));
+                points.Add(points.Last() + halfLineVec);
             if (hadFirstArrival)
-                points.Insert(0, points.First() - new Vec2(50, hly));
+            {
+                pointBreaks = pointBreaks.Select(pb => pb + 1).ToList(); // increment all break indices, as we will prepend a point.
+                points.Insert(0, points.First() - halfLineVec);
+            }
         }
         else if (trainTravelsRouteCount <= 1)
             return; // This train has only one station on this route and we don't draw network trains.
@@ -129,6 +159,12 @@ internal sealed class TrainRenderer
                 continue;
             var (cp1, cp2) = GetClippedPointsForLine(points[i], points[i + 1]);
 
+            if (pointBreaks.Contains(i + 1))
+            {
+                p.Add(new PathMoveCmd(cp2));
+                continue;
+            }
+
             if (isStationLine) // Line in one station.
             {
                 var preX = i > 0 ? points[i - 1].X : 0;
@@ -156,9 +192,10 @@ internal sealed class TrainRenderer
                 }
             }
             else
+            {
                 p.Add(new PathLineCmd(cp1, cp2)); // Normal line between stations
-
-            RenderTrainName(g, train, cp1, cp2, style, brush); // Zugnummern zeichnen.
+                RenderTrainName(g, train, cp1, cp2, style, brush); // Zugnummern zeichnen.
+            }
         }
         g.DrawPath(pen, p);
     }
