@@ -33,10 +33,11 @@ internal sealed class CloseHandler
         isClosing = true;
         DetachHandler();
 
-        if (Accept is { HasFocus: true } || Deny is { HasFocus: true })
+        if (Accept is { IsDisposed: false, HasFocus: true } || Deny is { IsDisposed: false, HasFocus: true })
             return;
 
-        Deny?.PerformClick();
+        if (Deny is { IsDisposed: false })
+            Deny.PerformClick();
     }
 
     private void DetachHandler()
