@@ -23,10 +23,9 @@ internal sealed class TrainRenderer
     private readonly DashStyleHelper ds = new();
     private readonly TrackHelper tracks = new();
 
-    private readonly float clipTop;
-    private readonly float clipBottom;
+    private readonly float clipTop, clipBottom, clipRight, clipLeft;
 
-    public TrainRenderer(IEnumerable<Station> stations, Timetable tt, Margins margin, TimeEntry startTime, Dictionary<Station, StationRenderProps> stationOffsets, Days renderDays, float clipTop, float clipBottom)
+    public TrainRenderer(IEnumerable<Station> stations, Timetable tt, Margins margin, TimeEntry startTime, Dictionary<Station, StationRenderProps> stationOffsets, Days renderDays, float clipTop, float clipBottom, float clipRight)
     {
         this.stations = stations;
         this.tt = tt;
@@ -36,6 +35,8 @@ internal sealed class TrainRenderer
         this.renderDays = renderDays;
         this.clipTop = clipTop;
         this.clipBottom = clipBottom;
+        this.clipLeft = 0;
+        this.clipRight = clipRight;
         attrs = new TimetableStyle(tt);
     }
 
@@ -220,12 +221,15 @@ internal sealed class TrainRenderer
 
         if (t.Y < clipTop || t.Y > clipBottom) // check the clip area of the center, if this is outside we do not have to calc the angle.
             return;
+        if (t.X < clipLeft + margin.Left || t.X > clipRight - margin.Right)
+            return;
 
         var angle = CalcAngle(ys, xs, train);
         var dh = (size.Width / 2 + size.Height / (2 + Math.Tan(angle))) * Math.Sin(angle);
 
         if (t.Y < clipTop + dh || t.Y > clipBottom - dh) // now check that we are fully inside the clipping area.
             return;
+        // currently, do not check for detailed clipping in X direction.
 
         var matrix = g.StoreTransform();
         g.TranslateTransform(t.X, t.Y);

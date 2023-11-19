@@ -58,7 +58,7 @@ internal sealed class Renderer
 
         var trains = tt.Trains.Where(t => t.Days.IsIntersecting(attrs.RenderDays));
         var trainRenderer = new TrainRenderer(stations, tt, margin, startTime, stationOffsets, attrs.RenderDays,
-            clipTop: margin.Top, clipBottom: height - margin.Bottom);
+            clipTop: margin.Top, clipBottom: height - margin.Bottom, clipRight: width);
         foreach (var train in trains)
             trainRenderer.Render(g, train);
         g.SetAntiAlias(false);
