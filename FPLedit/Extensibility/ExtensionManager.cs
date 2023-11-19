@@ -109,7 +109,7 @@ internal sealed class ExtensionManager
     }
 
     private static bool FilterFileNames(FileInfo fn)
-        => fn.Name.StartsWith("FPLedit.") && fn.Name != "FPLedit.dll" && !fn.Name.StartsWith("FPLedit.Shared.");
+        => fn.Name.StartsWith("FPLedit.") && fn.Name != "FPLedit.dll" && !fn.Name.StartsWith("FPLedit.Shared.") && !fn.Name.StartsWith("FPLedit.Tests.");
 
     public void Activate(PluginInfo pluginInfo)
     {
