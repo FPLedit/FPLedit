@@ -13,26 +13,20 @@ internal sealed class CleanedXmlExport : IExport
 {
     public string Filter => T._("Bereinigte Fahrplan Dateien (*.fpl)|*.fpl");
 
-    private readonly Dictionary<string, List<string>> nodeNames;
-    private readonly Dictionary<string, List<string>> attrsNames;
+    private readonly Dictionary<string, List<string>> nodeNames = new() { [""] = new List<string>() }; // Initialize store for elements without parents
+    private readonly Dictionary<string, List<string>> attrsNames = new();
     private bool namesCreated;
 
-    public CleanedXmlExport()
+    private void LoadRemovableXmlNames(IReducedPluginInterface pluginInterface)
     {
-        nodeNames = new Dictionary<string, List<string>>
-        {
-            [""] = new() // Initialize store for elememnts without parents
-        };
-        attrsNames = new Dictionary<string, List<string>>();
-    }
+        // Load additional removable attributes from extensions.
+        var removableAttrs = pluginInterface.GetRegistered<IFpleditAttributes>()
+            .GroupBy(ra => ra.BaseType)
+            .ToDictionary(g => g.Key, g => g.SelectMany(r => r.Attributes).ToArray());
 
-    //TODO: somehow also load additional removable attributes from extensions...
-    // timetable: fpl-dh, fpl-dnt, fpl-tc, fpl-trc, fpl-sc, fpl-{s,h,m,t}w (bifpl)
-    // train: fpl-gtfs-{days,bikes,wheelchair}
-    private void LoadRemovableXmlNames()
-    {
-        var types = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName?.Contains("FPLedit") ?? false);
-        foreach (var assembly in types)
+        // Iterate all loaded entity types.
+        var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName?.Contains("FPLedit") ?? false);
+        foreach (var assembly in assemblies)
         {
             try
             {
@@ -44,7 +38,7 @@ internal sealed class CleanedXmlExport : IExport
                     var elm = type.GetCustomAttribute<XElmNameAttribute>(false);
                     if (elm == null)
                         continue; // This class represents no model element
-                        
+
                     if (elm.IsFpleditElement)
                     {
                         if (elm.ParentElements.Any())
@@ -60,12 +54,15 @@ internal sealed class CleanedXmlExport : IExport
                             nodeNames[""].AddRange(elm.Names);
                     }
 
-                        
+                    removableAttrs.TryGetValue(type, out var extensionRemovableAttrs);
+
                     var attrsToRemove = type
                         .GetProperties()
                         .Select(p => p.GetCustomAttribute<XAttrNameAttribute>())
-                        .Where(p => p != null && p.IsFpleditElement)
-                        .Select(p => p!.Name).ToArray();
+                        .Where(p => p is { IsFpleditElement: true })
+                        .Select(p => p!.Name)
+                        .Union(extensionRemovableAttrs ?? Array.Empty<string>())
+                        .ToArray();
 
                     if (attrsToRemove.Length == 0)
                         continue;
@@ -102,7 +99,7 @@ internal sealed class CleanedXmlExport : IExport
     public bool Export(ITimetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null)
     {
         if (!namesCreated)
-            LoadRemovableXmlNames();
+            LoadRemovableXmlNames(pluginInterface);
         namesCreated = true;
             
         if (tt.Type == TimetableType.Network)

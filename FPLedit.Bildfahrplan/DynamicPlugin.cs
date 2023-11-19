@@ -30,6 +30,7 @@ public sealed class DynamicPlugin : IPlugin, IDisposable
         pluginInterface.AppClosing += (_, _) => dpf.Close();
 
         componentRegistry.Register<ISupportsVirtualRoutes>(new SupportsVirtualRoutes());
+        componentRegistry.Register<IFpleditAttributes>(new FpleditAttributes(typeof(Timetable), "fpl-th", "fpl-dnt", "fpl-tc", "fpl-trc", "fpl-sc", "fpl-sw", "fpl-hw", "fpl-mw", "fpl-tw"));
 
 #if !DEBUG
         if (pluginInterface.Settings.Get<bool>("feature.enable-full-graph-editor"))

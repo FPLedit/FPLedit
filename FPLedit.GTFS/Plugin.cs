@@ -20,6 +20,7 @@ public sealed class Plugin : IPlugin
 
         componentRegistry.Register<IFilterRuleContainer>(FilterRuleContainer);
         componentRegistry.Register<ISupportsVirtualRoutes>(new SupportsVirtualRoutes());
+        componentRegistry.Register<IFpleditAttributes>(new FpleditAttributes(typeof(Train), "fpl-gtfs-wheelchair", "fpl-gtfs-bikes", "fpl-gtfs-days"));
 
         pluginInterface.FileStateChanged += PluginInterface_FileStateChanged;
 
