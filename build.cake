@@ -154,10 +154,6 @@ Task("PrepareArtifacts")
                     DeleteDirectory(d, new DeleteDirectorySettings { Recursive = true });
                 }
             }
-            
-            // Delete beta extensions.
-            if (!isNonFinalVersion)
-                DeleteFiles((string)distDir + "/FPLedit.GTFS.*");
         });
     });
     

@@ -71,10 +71,10 @@
     <ProjectReference Include="..\FPLedit.Bildfahrplan\FPLedit.Bildfahrplan.csproj" />
     <ProjectReference Include="..\FPLedit.jTrainGraphStarter\FPLedit.jTrainGraphStarter.csproj" />
     <ProjectReference Include="..\FPLedit.Kursbuch\FPLedit.Kursbuch.csproj" />
+    <ProjectReference Include="..\FPLedit.GTFS\FPLedit.GTFS.csproj" />
   </ItemGroup>
   <ItemGroup Condition=" $(Configuration) == 'Debug' ">
     <ProjectReference Include="..\FPLedit.DebugDump\FPLedit.DebugDump.csproj" />
-    <ProjectReference Include="..\FPLedit.GTFS\FPLedit.GTFS.csproj" />
   </ItemGroup>
 
   <ItemGroup>
