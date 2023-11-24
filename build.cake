@@ -119,7 +119,7 @@ Task("PackNet")
             DotNetPublish("./FPLedit.sln", new DotNetPublishSettings {
                 Configuration = configuration,
                 Runtime = runtime,
-                SelfContained = runtime == "osx-x64",
+                SelfContained = runtime.StartsWith("osx"),
                 OutputDirectory = distDir,
                 MSBuildSettings = msbuildSettings,
             });

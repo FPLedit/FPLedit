@@ -96,11 +96,11 @@
     <KnownFrameworkReference Update="Microsoft.WindowsDesktop.App.WindowsForms" IsWindowsOnly="false" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(RuntimeIdentifier)' == 'osx-x64' ">
+  <ItemGroup Condition=" $( RuntimeIdentifier.StartsWith('osx') ) ">
     <PackageReference Include="Eto.Platform.Mac64" Version="$(EtoVersion)" />
   </ItemGroup>
 
-  <ItemGroup Condition=" ! $( RuntimeIdentifier.StartsWith('win') ) And '$(RuntimeIdentifier)' != 'osx-x64' ">
+  <ItemGroup Condition=" ! $( RuntimeIdentifier.StartsWith('win') ) And ! $( RuntimeIdentifier.StartsWith('osx') ) ">
     <PackageReference Include="Eto.Platform.Gtk" Version="$(EtoVersion)" />
   </ItemGroup>
 </Project>
