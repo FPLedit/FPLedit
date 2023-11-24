@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-09-05 17:35+0200\n"
-"PO-Revision-Date: 2023-09-05 17:35+0200\n"
+"POT-Creation-Date: 2023-11-24 23:48+0100\n"
+"PO-Revision-Date: 2023-11-24 23:48+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -10,44 +10,44 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4.1\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: BitmapExport.cs:30
+#: BitmapExport.cs:31
 msgid "Bildfahrplan als PNG (*.png)|*.png"
 msgstr "Graphical timetable as PNG (*.png)|*.png"
 
-#: DynamicPlugin.cs:40
+#: DynamicPlugin.cs:41
 msgid "B&ildfahrplan"
 msgstr "Graph&ical timetable"
 
-#: DynamicPlugin.cs:42
+#: DynamicPlugin.cs:43
 msgid "&Anzeigen"
 msgstr "&Show"
 
-#: DynamicPlugin.cs:44
+#: DynamicPlugin.cs:45
 msgid "&Drucken"
 msgstr "&Print"
 
-#: DynamicPlugin.cs:45
+#: DynamicPlugin.cs:46
 msgid "&Exportieren"
 msgstr "&Export"
 
-#: DynamicPlugin.cs:47
+#: DynamicPlugin.cs:48
 msgid "Darste&llung ändern"
 msgstr "Change &plan display"
 
-#: DynamicPlugin.cs:48
+#: DynamicPlugin.cs:49
 msgid "&Zugdarstellung ändern"
 msgstr "&Train display"
 
-#: DynamicPlugin.cs:49
+#: DynamicPlugin.cs:50
 msgid "&Stationsdarstellung ändern"
 msgstr "&Station display"
 
-#: DynamicPlugin.cs:50
+#: DynamicPlugin.cs:51
 msgid "Verwende nur &Plandarstellung"
 msgstr "Only &use plan display"
 

@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-09-05 17:37+0200\n"
-"PO-Revision-Date: 2023-09-05 17:37+0200\n"
+"POT-Creation-Date: 2023-11-24 23:49+0100\n"
+"PO-Revision-Date: 2023-11-24 23:49+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4.1\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -144,22 +144,22 @@ msgstr "Geopositions not found: {0}"
 msgid "Zusätzlich vorhandene Dateien im Zielordner: {0}"
 msgstr "Additional files in the target directory: {0}"
 
-#: Plugin.cs:28
+#: Plugin.cs:27
 msgid "&GTFS"
 msgstr "&GTFS"
 
-#: Plugin.cs:29
+#: Plugin.cs:28
 msgid "GTFS-&Agencydaten ändern"
 msgstr "Update GTFS &agency properties"
 
-#: Plugin.cs:30
+#: Plugin.cs:29
 msgid "GTFS-&Zugeinstellungen ändern"
 msgstr "Update GTFS &train properties"
 
-#: Plugin.cs:31
+#: Plugin.cs:30
 msgid "&Exportiere GTFS-Feed"
 msgstr "&Export GTFS feed"
 
-#: Plugin.cs:61
+#: Plugin.cs:60
 msgid "GTFS"
 msgstr "GTFS"
