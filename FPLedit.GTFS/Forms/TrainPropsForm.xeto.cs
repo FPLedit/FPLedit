@@ -79,5 +79,8 @@ internal sealed class TrainPropsForm : FDialog<DialogResult>
         public static readonly string Close = T._("Schließen");
         public static readonly string Reset = T._("Eintrag &zurücksetzen");
         public static readonly string Title = T._("GTFS-Zugattribute ändern");
+
+        public static readonly string Help = T._("Dokumentation zum GTFS-Export");
+        public static readonly string HelpLink = T._("https://fahrplan.manuelhu.de/gtfs/");
     }
 }

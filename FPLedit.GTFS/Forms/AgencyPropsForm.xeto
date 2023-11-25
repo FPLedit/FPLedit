@@ -2,6 +2,7 @@
   xmlns="clr-namespace:Eto.Forms;assembly=Eto"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:e="clr-namespace:FPLedit.GTFS.Forms;assembly=FPLedit.GTFS"
+  xmlns:fui="clr-namespace:FPLedit.Shared.UI;assembly=FPLedit.Shared.UI"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
   Title="{x:Static e:AgencyPropsForm+L.Title}" Resizable="false">
   <TableLayout Spacing="5,5" Padding="10,10,10,10">
@@ -54,6 +55,7 @@
     <TableRow>
       <TableLayout Spacing="5,5">
         <TableRow>
+          <fui:UrlButton Url="{x:Static e:AgencyPropsForm+L.HelpLink}" Text="{x:Static e:AgencyPropsForm+L.Help}" />
           <TableCell ScaleWidth="true" />
           <Button x:Name="cancelButton" Text="{x:Static e:AgencyPropsForm+L.Cancel}" Click="CancelButton_Click" />
           <Button x:Name="closeButton" Text="{x:Static e:AgencyPropsForm+L.Close}" Click="CloseButton_Click" />

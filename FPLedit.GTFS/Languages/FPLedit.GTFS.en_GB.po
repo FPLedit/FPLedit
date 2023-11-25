@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-11-24 23:49+0100\n"
-"PO-Revision-Date: 2023-11-24 23:49+0100\n"
+"POT-Creation-Date: 2023-11-25 01:49+0100\n"
+"PO-Revision-Date: 2023-11-25 01:50+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -78,6 +78,14 @@ msgstr "Close"
 #: Forms/AgencyPropsForm.xeto.cs:91
 msgid "GTFS-Agency- und Streckendaten"
 msgstr "GTFS Agency and route properties"
+
+#: Forms/AgencyPropsForm.xeto.cs:93 Forms/TrainPropsForm.xeto.cs:83
+msgid "Dokumentation zum GTFS-Export"
+msgstr "Docs about the GTFS export"
+
+#: Forms/AgencyPropsForm.xeto.cs:94 Forms/TrainPropsForm.xeto.cs:84
+msgid "https://fahrplan.manuelhu.de/gtfs/"
+msgstr ""
 
 #: Forms/TrainPropsForm.xeto.cs:28
 msgid "Zugnummer"

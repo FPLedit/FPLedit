@@ -28,16 +28,16 @@ public sealed class GtfsField : Attribute
             case GtfsType.URL:
                 if (x is null && Optional) return "";
                 if (x is string s) return EscapeString(s); 
-                throw new ArgumentException("wrong argument type for GTFS conversion");
+                throw new ArgumentException($"wrong argument type for GTFS conversion {Type}");
             case GtfsType.UInt:
                 if (x is uint u) return u.ToString();
-                throw new ArgumentException("wrong argument type for GTFS conversion");
+                throw new ArgumentException($"wrong argument type for GTFS conversion {Type}");
             case GtfsType.Float:
                 if (x is float f) return f.ToString(CultureInfo.InvariantCulture);
-                throw new ArgumentException("wrong argument type for GTFS conversion");
+                throw new ArgumentException($"wrong argument type for GTFS conversion {Type}");
             case GtfsType.Bool:
                 if (x is bool b) return (b ? 1 : 0).ToString();
-                throw new ArgumentException("wrong argument type for GTFS conversion");
+                throw new ArgumentException($"wrong argument type for GTFS conversion {Type}");
             case GtfsType.Enum:
                 if (x is Enum e)
                 {
@@ -45,21 +45,21 @@ public sealed class GtfsField : Attribute
                     var v = (int) Convert.ChangeType(e, underlying);
                     return v.ToString();
                 }
-                throw new ArgumentException("wrong argument type for GTFS conversion");
+                throw new ArgumentException($"wrong argument type for GTFS conversion {Type}");
             case GtfsType.Time:
                 if (x is null && Optional) return "";
                 if (x is TimeEntry tm) return tm.NormalizeDecimalsToSeconds().ToTimeString().Replace(":", "");
-                throw new ArgumentException("wrong argument type for GTFS conversion");
+                throw new ArgumentException($"wrong argument type for GTFS conversion {Type}");
             case GtfsType.Date:
                 if (x is null && Optional) return "";
                 if (x is DateOnly dt) return dt.ToString("YYYYMMDD");
-                throw new ArgumentException("wrong argument type for GTFS conversion");
+                throw new ArgumentException($"wrong argument type for GTFS conversion {Type}");
             case GtfsType.Id:
                 if (x is IGtfsEntity ge)
                 {
                     var prop = ge.GetType()!.GetProperty(ge.GetPkProperty()!, BindingFlags.Instance | BindingFlags.Public);
                     if (prop == null || prop.PropertyType != typeof(string))
-                        throw new ArgumentException("wrong foreign key type for GTFS conversion");
+                        throw new ArgumentException($"wrong argument type for GTFS conversion {Type}");
                     return EscapeString((string)prop.GetValue(ge)!);
                 }
 
@@ -69,9 +69,9 @@ public sealed class GtfsField : Attribute
                 if (x == null && Optional)
                     return "";
 
-                throw new ArgumentException("wrong argument type for GTFS conversion");
+                throw new ArgumentException($"wrong argument type for GTFS conversion {Type}");
             default:
-                throw new ArgumentException("undefined type conversion in GTFS field conversion");
+                throw new ArgumentException($"undefined type {Type} conversion in GTFS field conversion");
         }
     }
 

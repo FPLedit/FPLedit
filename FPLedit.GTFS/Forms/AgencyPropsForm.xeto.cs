@@ -89,5 +89,8 @@ internal sealed class AgencyPropsForm : FDialog<DialogResult>
         public static readonly string Cancel = T._("Abbrechen");
         public static readonly string Close = T._("Schließen");
         public static readonly string Title = T._("GTFS-Agency- und Streckendaten");
+
+        public static readonly string Help = T._("Dokumentation zum GTFS-Export");
+        public static readonly string HelpLink = T._("https://fahrplan.manuelhu.de/gtfs/");
     }
 }
