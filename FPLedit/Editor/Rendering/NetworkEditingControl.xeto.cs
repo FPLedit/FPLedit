@@ -34,21 +34,21 @@ internal sealed class NetworkEditingControl : Panel
 
     public void Initialize(IPluginInterface pluginInterface)
     {
+        void ToolbarBtn(Button btn, Bitmap img)
+        {
+            btn.ToolTip = btn.Text.Replace("&", "");
+            btn.Text = "";
+            btn.Image = img.WithSize(ICON_SIZE, ICON_SIZE);
+            btn.ImagePosition = ButtonImagePosition.Overlay;
+        }
+
         toolbarUseIcons = pluginInterface.Settings.Get(TOOLBAR_ICON_SETTINGS_KEY, true);
         // Convert the toolbar buttons to icons.
         if (toolbarUseIcons)
         {
-            newButton.ToolTip = newButton.Text.Replace("&", "");
-            newButton.Text = "";
-            newButton.Image = new Bitmap(this.GetResource("Resources.toolbar-add-station.png")).WithSize(ICON_SIZE, ICON_SIZE);
-
-            newLineButton.ToolTip = newLineButton.Text.Replace("&", "");
-            newLineButton.Text = "";
-            newLineButton.Image = new Bitmap(this.GetResource("Resources.toolbar-add-line.png")).WithSize(ICON_SIZE, ICON_SIZE);
-
-            joinLineButton.ToolTip = joinLineButton.Text.Replace("&", "");
-            joinLineButton.Text = "";
-            joinLineButton.Image = new Bitmap(this.GetResource("Resources.toolbar-join-line.png")).WithSize(ICON_SIZE, ICON_SIZE);
+            ToolbarBtn(newButton, new Bitmap(this.GetResource("Resources.toolbar-add-station.png")));
+            ToolbarBtn(newLineButton, new Bitmap(this.GetResource("Resources.toolbar-add-line.png")));
+            ToolbarBtn(joinLineButton, new Bitmap(this.GetResource("Resources.toolbar-join-line.png")));
 
             toolbar.VerticalContentAlignment = VerticalAlignment.Center;
         }
@@ -59,7 +59,6 @@ internal sealed class NetworkEditingControl : Panel
         {
             ReloadTimetable();
             newButton.Enabled = routesDropDown.Enabled = newLineButton.Enabled = e.FileState.Opened;
-            routesDropDown.Visible = pluginInterface.FileState.Opened;
 
             newLineButton.Visible = joinLineButton.Visible = divider1.Visible = routesDropDown.Visible = pluginInterface.FileState.Opened && pluginInterface.Timetable.Type == TimetableType.Network;
             newLineButton.Enabled = joinLineButton.Enabled = pluginInterface.FileState.Opened && pluginInterface.Timetable.Type == TimetableType.Network && pluginInterface.Timetable.GetRoutes().Any();
@@ -78,16 +77,10 @@ internal sealed class NetworkEditingControl : Panel
 
             foreach (var action in actions)
             {
-                var btn = new Button { Tag = action };
+                var btn = new Button { Tag = action, Text = action.DisplayName, Enabled = action.IsEnabled(pluginInterface) };
                 if (action.EtoIconBitmap is Bitmap bitmap && toolbarUseIcons)
-                {
-                    btn.ToolTip = action.DisplayName.Replace("&", "");
-                    btn.Image = bitmap.WithSize(ICON_SIZE, ICON_SIZE);
-                }
-                else
-                    btn.Text = action.DisplayName;
+                    ToolbarBtn(btn, bitmap);
 
-                btn.Enabled = action.IsEnabled(pluginInterface);
                 btn.Click += (_, _) => action.Invoke(pluginInterface, pluginInterface.TimetableMaybeNull?.GetRoute(routesDropDown.SelectedRoute));
                 toolbar.Items.Add(btn);
             }
@@ -156,6 +149,7 @@ internal sealed class NetworkEditingControl : Panel
                     pluginInterface.StageUndoStep();
                     networkRenderer.StartBreakLine(sta);
                     pluginInterface.SetUnsaved();
+                    ReloadTimetable();
                 };
             }
             menu.Show(this);
