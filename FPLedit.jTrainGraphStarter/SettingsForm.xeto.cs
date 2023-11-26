@@ -24,11 +24,11 @@ internal sealed class SettingsForm : FDialog<DialogResult>
         var versions = TimetableVersionExt.GetAllVersionInfos()
             .Where(c => c.Compatibility == TtVersionCompatType.ReadWrite)
             .Where(c => c.JtgVersionCompatibility.Any())
-            .SelectMany(c => 
-                c.JtgVersionCompatibility.Select(j => new VersionItem(c.Version, j.version.Replace("*", "x"))))
+            .Select(c => new VersionItem(c.Version,
+                string.Join(", ", c.JtgVersionCompatibility.Select(j => j.version.Replace("*", "x")))))
             .ToArray();
 
-        L.CompatibleVersions = string.Join(", ", versions.Select(vi => vi.Name));
+        L.CompatibleVersions = string.Join("; ", versions.Select(vi => vi.Name));
             
         Eto.Serialization.Xaml.XamlReader.Load(this);
 
