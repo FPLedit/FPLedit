@@ -217,7 +217,7 @@ Task("PackRelease")
             var hash = fhc.Calculate(file, HashAlgorithm.SHA256).ToHex();
             var hash_line = $"{hash}  {zip_file_name}";
             zipFileHashes.Add(hash_line);
-            IOFile.AppendAllText($"./bin/fpledit-{version}-{nodoc_suffix}.sha256sums", hash_line + "\n");
+            IOFile.AppendAllText($"./bin/fpledit-{version}{nodoc_suffix}.sha256sums", hash_line + "\n");
         });
     });
 

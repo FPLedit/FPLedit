@@ -12,7 +12,7 @@ Die Volltexte der Lizenzen finden Sie als Textdatei im Ordner lib/licenses.
 
 * Eto und FPLedit verwendet Portable.Xaml zum Initialisieren der Benutzerschnittstelle.
   MIT X11 License
-  <https://github.com/cwensley/Portable.Xaml> 
+  <https://github.com/cwensley/Portable.Xaml>
 
 * FPLedit verwendet die Bibliothek Jint zum Interpretieren der generierten Javascript-Templates.
   BSD 3-Clause License
@@ -51,7 +51,7 @@ Die Volltexte der Lizenzen finden Sie als Textdatei im Ordner lib/licenses.
 
 In der Entwicklung wurde zusätzlich die folgenden Open-Source-Software verwendet:
 
-* Poedit zur Erstelllung der Überstzungsdateien
+* Poedit zur Erstellung der Überstzungsdateien
   <https://poedit.net/>
 * Cake-Build als Buildsystem
   <https://github.com/cake-build/cake>
