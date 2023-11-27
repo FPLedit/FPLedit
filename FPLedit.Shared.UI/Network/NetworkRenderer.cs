@@ -457,6 +457,8 @@ public sealed class NetworkRenderer : Drawable
 
     public void DispatchKeystroke(KeyEventArgs e)
     {
+        if (e.Modifiers != Keys.None)
+            return;
         switch (e.Key) // See DispatchableKeys
         {
             case Keys.Escape:

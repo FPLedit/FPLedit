@@ -207,6 +207,8 @@ internal sealed class NetworkEditingControl : Panel
 
     public void DispatchKeystroke(KeyEventArgs e)
     {
+        if (e.Modifiers != Keys.None)
+            return;
         switch (e.Key)
         {
             // See DispatchableKeys
