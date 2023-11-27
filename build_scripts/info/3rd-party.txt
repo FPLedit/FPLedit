@@ -4,7 +4,6 @@ Die Volltexte der Lizenzen finden Sie als Textdatei im Ordner lib/licenses.
 * FPLedit verwendet die Bibliothek Eto.Forms zur Darstellung der Benutzerschnittstelle.
   The BSD-3 License
   <https://github.com/picoe/Eto>
-  Aktuell verwendete Version: {eto_version}
 
 * Eto verwendet unter Linux die GtkSharp-Bibliotheken zur Darstellung.
   GNU Library General Public License

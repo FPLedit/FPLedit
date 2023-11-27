@@ -10,7 +10,7 @@ internal sealed class InfoForm : AboutDialog
     public InfoForm()
     {
         License = ResourceHelper.GetStringResource("Resources.Info.txt") 
-                  + ResourceHelper.GetStringResource("Resources.3rd-party.txt").Replace("{eto_version}", Vi.EtoVersion);
+                  + ResourceHelper.GetStringResource("Resources.3rd-party.txt");
         var v = Vi.DisplayVersion;
 #pragma warning disable CS0162 // The code might be unreachable depending on build parameters, but will be active otherwise.
         if (Vi.GitRevision != null)
