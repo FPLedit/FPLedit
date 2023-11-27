@@ -57,7 +57,10 @@
     <DefineConstants>ENABLE_SYSTEM_DRAWING</DefineConstants>
   </PropertyGroup>
 
-  <!-- Remove unneeded PdfSharp assemblies -->
+  <!--
+    Remove unneeded PdfSharp/AvalonDock assemblies
+    note: The two blocks differ in their variable names, but have to remove the same set of files!
+  -->
   <Target Name="CustomBeforeBuild" BeforeTargets="_CopyFilesMarkedCopyLocal">
     <ItemGroup>
       <ReferencesToBeRemoved2 Include="@(ReferenceCopyLocalPaths)" Condition="%(Filename) == 'PdfSharp.Snippets'" />
@@ -65,7 +68,23 @@
       <ReferencesToBeRemoved2 Include="@(ReferenceCopyLocalPaths)" Condition="%(Filename) == 'PdfSharp.Charting'" />
       <ReferencesToBeRemoved2 Include="@(ReferenceCopyLocalPaths)" Condition="%(Filename) == 'PdfSharp.Charting.resources'" />
       <ReferencesToBeRemoved2 Include="@(ReferenceCopyLocalPaths)" Condition="%(Filename) == 'PdfSharp.Quality'" />
+      <ReferencesToBeRemoved2 Include="@(ReferenceCopyLocalPaths)" Condition="%(Filename) == 'Xceed.Wpf.AvalonDock.Themes.Metro'" />
+      <ReferencesToBeRemoved2 Include="@(ReferenceCopyLocalPaths)" Condition="%(Filename) == 'Xceed.Wpf.AvalonDock.Themes.Aero'" />
+      <ReferencesToBeRemoved2 Include="@(ReferenceCopyLocalPaths)" Condition="%(Filename) == 'Xceed.Wpf.AvalonDock.Themes.VS2010'" />
       <ReferenceCopyLocalPaths Remove="@(ReferencesToBeRemoved2)" />
+    </ItemGroup>
+  </Target>
+  <Target Name="CustomBeforePublish" BeforeTargets="ComputeResolvedFilesToPublishList">
+    <ItemGroup>
+      <ReferencesToBeRemoved3 Include="@(_ResolvedCopyLocalPublishAssets)" Condition="%(Filename) == 'PdfSharp.Snippets'" />
+      <ReferencesToBeRemoved3 Include="@(_ResolvedCopyLocalPublishAssets)" Condition="%(Filename) == 'PdfSharp.WPFonts'" />
+      <ReferencesToBeRemoved3 Include="@(_ResolvedCopyLocalPublishAssets)" Condition="%(Filename) == 'PdfSharp.Charting'" />
+      <ReferencesToBeRemoved3 Include="@(_ResolvedCopyLocalPublishAssets)" Condition="%(Filename) == 'PdfSharp.Charting.resources'" />
+      <ReferencesToBeRemoved3 Include="@(_ResolvedCopyLocalPublishAssets)" Condition="%(Filename) == 'PdfSharp.Quality'" />
+      <ReferencesToBeRemoved3 Include="@(_ResolvedCopyLocalPublishAssets)" Condition="%(Filename) == 'Xceed.Wpf.AvalonDock.Themes.Metro'" />
+      <ReferencesToBeRemoved3 Include="@(_ResolvedCopyLocalPublishAssets)" Condition="%(Filename) == 'Xceed.Wpf.AvalonDock.Themes.Aero'" />
+      <ReferencesToBeRemoved3 Include="@(_ResolvedCopyLocalPublishAssets)" Condition="%(Filename) == 'Xceed.Wpf.AvalonDock.Themes.VS2010'" />
+      <_ResolvedCopyLocalPublishAssets Remove="@(ReferencesToBeRemoved2)" />
     </ItemGroup>
   </Target>
 
