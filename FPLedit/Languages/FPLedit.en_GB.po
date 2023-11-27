@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-11-24 23:49+0100\n"
-"PO-Revision-Date: 2023-11-24 23:59+0100\n"
+"POT-Creation-Date: 2023-11-27 10:42+0100\n"
+"PO-Revision-Date: 2023-11-27 10:42+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -475,7 +475,7 @@ msgid "Zuerst muss eine Station ausgewählt werden!"
 msgstr "Please select a station first!"
 
 #: Editor/LineEditForm.xeto.cs:106
-#: Editor/Rendering/NetworkEditingControl.xeto.cs:134
+#: Editor/Rendering/NetworkEditingControl.xeto.cs:127
 msgid ""
 "Sie versuchen eine Station zu löschen, ohne die danach zwei Routen "
 "zusammenfallen, das heißt zwei Stationen auf mehr als einer Route ohne "
@@ -488,7 +488,7 @@ msgstr ""
 "more than one line. This conflict cannot be resolved automatically."
 
 #: Editor/LineEditForm.xeto.cs:112
-#: Editor/Rendering/NetworkEditingControl.xeto.cs:141
+#: Editor/Rendering/NetworkEditingControl.xeto.cs:134
 msgid ""
 "Sie versuchen eine Station zu löschen, die an einem Kreuzungspunkt zweier "
 "Strecken liegt. Dies ist leider nicht möglich."
@@ -505,7 +505,7 @@ msgid "Strecke bearbeiten"
 msgstr "Edit line"
 
 #: Editor/LineEditForm.xeto.cs:168
-#: Editor/Rendering/NetworkEditingControl.xeto.cs:234
+#: Editor/Rendering/NetworkEditingControl.xeto.cs:230
 msgid "&Neue Station"
 msgstr "Add &new station"
 
@@ -734,7 +734,7 @@ msgstr "Timetable appearance"
 msgid "Expertenmodus (CSS-Bearbeitung) aktivieren"
 msgstr "Enable expert mode (CSS editor)"
 
-#: Editor/Rendering/NetworkEditingControl.xeto.cs:113
+#: Editor/Rendering/NetworkEditingControl.xeto.cs:106
 msgid ""
 "Die Station liegt auf mehreren Strecken. Bitte zuerst die Strecke auswählen, "
 "für die die Station bearbeitet werden soll!"
@@ -742,19 +742,19 @@ msgstr ""
 "This station is part of multiple lines. Please select the line you want to "
 "edit."
 
-#: Editor/Rendering/NetworkEditingControl.xeto.cs:129
+#: Editor/Rendering/NetworkEditingControl.xeto.cs:122
 msgid "Löschen"
 msgstr "Remove"
 
-#: Editor/Rendering/NetworkEditingControl.xeto.cs:152
+#: Editor/Rendering/NetworkEditingControl.xeto.cs:145
 msgid "Eine Strecke trennen"
 msgstr "Divide line next to this station"
 
-#: Editor/Rendering/NetworkEditingControl.xeto.cs:235
+#: Editor/Rendering/NetworkEditingControl.xeto.cs:231
 msgid "Neue &Strecke"
 msgstr "Add new &line"
 
-#: Editor/Rendering/NetworkEditingControl.xeto.cs:236
+#: Editor/Rendering/NetworkEditingControl.xeto.cs:232
 msgid "Strecken &zusammenführen"
 msgstr "&Join lines"
 
@@ -1231,33 +1231,33 @@ msgstr "Export failed!"
 msgid "Exportieren erfolgreich abgeschlossen!"
 msgstr "File exported successfully!"
 
-#: FileHandler.cs:278
+#: FileHandler.cs:281
 #, csharp-format
 msgid "Öffne Datei {0}"
 msgstr "Opening file {0}"
 
-#: FileHandler.cs:289 FileHandler.cs:307
+#: FileHandler.cs:292 FileHandler.cs:310
 msgid "Fehler beim Öffnen der Datei!"
 msgstr "Error while opening the file!"
 
-#: FileHandler.cs:293
+#: FileHandler.cs:296
 msgid "Datei erfolgeich geöffnet!"
 msgstr "File opened successfully!"
 
-#: FileHandler.cs:353
+#: FileHandler.cs:356
 #, csharp-format
 msgid "Speichere Datei {0}"
 msgstr "Saving file {0}"
 
-#: FileHandler.cs:364
+#: FileHandler.cs:367
 msgid "Speichern fehlgeschlagen!"
 msgstr "Save failed!"
 
-#: FileHandler.cs:368
+#: FileHandler.cs:371
 msgid "Speichern erfolgreich abgeschlossen!"
 msgstr "File saved succesfully!"
 
-#: FileHandler.cs:378
+#: FileHandler.cs:381
 msgid ""
 "Während dem Speichern wurde der Zustand verändert, daher ist Datei auf der "
 "Festplatte nicht mehr aktuell."
@@ -1265,40 +1265,40 @@ msgstr ""
 "The timetable has been changed while saving. The file saved on disk is "
 "potentially out-of-date."
 
-#: FileHandler.cs:400
+#: FileHandler.cs:403
 msgid "Neue Datei erstellt"
 msgstr "New file created successfully"
 
-#: FileHandler.cs:424
+#: FileHandler.cs:427
 msgid "Datei geschlossen"
 msgstr "File closed"
 
-#: FileHandler.cs:457 FileHandler.cs:458
+#: FileHandler.cs:460 FileHandler.cs:461
 msgid "Linear-Fahrplan"
 msgstr "Linear timetable"
 
-#: FileHandler.cs:457 FileHandler.cs:458
+#: FileHandler.cs:460 FileHandler.cs:461
 msgid "Netzwerk-Fahrplan"
 msgstr "Network timetable"
 
-#: FileHandler.cs:464
+#: FileHandler.cs:467
 msgid "Zieldatei für Konvertierung wählen"
 msgstr "Select file for conversion result"
 
-#: FileHandler.cs:468 FileHandler.cs:543
+#: FileHandler.cs:471 FileHandler.cs:546
 msgid "Konvertiere Datei..."
 msgstr "Converting file..."
 
-#: FileHandler.cs:472 FileHandler.cs:547
+#: FileHandler.cs:475 FileHandler.cs:550
 msgid "Konvertieren erfolgreich abgeschlossen!"
 msgstr "Conversion successfully!"
 
-#: FileHandler.cs:507
+#: FileHandler.cs:510
 #, csharp-format
 msgid "Diese Dateiformatsversion ({0}) wird nicht unterstützt."
 msgstr "The file version {0} is not supported."
 
-#: FileHandler.cs:526
+#: FileHandler.cs:529
 msgid ""
 "In einer neueren Dateiformatversion stehen mehr Funktionen zur Verfügung, "
 "die Aktualisierung ist aber nicht zwingend."
@@ -1306,13 +1306,13 @@ msgstr ""
 "In a new version of the file format, new features are available; but "
 "updating is currently not mandatory."
 
-#: FileHandler.cs:526
+#: FileHandler.cs:529
 msgid ""
 "Dieses Dateiformat kann von FPLedit nur noch auf neuere Versionen "
 "aktualisiert werden."
 msgstr "This file format can only be updated to newer versions."
 
-#: FileHandler.cs:527
+#: FileHandler.cs:530
 #, csharp-format
 msgid ""
 "Diese Fahrplandatei ist in einem alten Dateinformat erstellt worden. {0} "
@@ -1321,7 +1321,7 @@ msgstr ""
 "This file has been created in an older version of the fileformat! {0}. "
 "Should FPLedit update the file version?"
 
-#: FileHandler.cs:529
+#: FileHandler.cs:532
 msgid ""
 "ACHTUNG: Die Datei kann danach nur noch mit der aktuellsten Version von "
 "jTrainGraph bearbeitet werden!"
@@ -1329,15 +1329,15 @@ msgstr ""
 "WARNING: After this, the file can only be opened by the latest version of "
 "jTrainGraph!"
 
-#: FileHandler.cs:552
+#: FileHandler.cs:555
 msgid "Dateikonvertierung fehlgeschlagen!"
 msgstr "Conversion failed!"
 
-#: FileHandler.cs:558
+#: FileHandler.cs:561
 msgid "Dateikonvertierung abgebrochen!"
 msgstr "Conversion aborted!"
 
-#: FileHandler.cs:571
+#: FileHandler.cs:574
 msgid ""
 "Während dem Ladevorgang wurden Daten geändert. Sollen diese noch einmal in "
 "die letzte Datei geschrieben werden?"
@@ -1345,11 +1345,11 @@ msgstr ""
 "While loading the previous file changed in FPLedit. Would you like to save "
 "again before closing?"
 
-#: FileHandler.cs:571
+#: FileHandler.cs:574
 msgid "Wollen Sie die noch nicht gespeicherten Änderungen speichern?"
 msgstr "Do you want to save your unsaved changes?"
 
-#: FileHandler.cs:586
+#: FileHandler.cs:589
 msgid "Eine andere Dateioperation ist bereits im Gange!"
 msgstr "Another file operation is currently in progress!"
 
@@ -1369,11 +1369,15 @@ msgstr "Documentation and updates online"
 msgid "alle FPLedit-Beta-Tester"
 msgstr "all FPLedit testers"
 
-#: LogControl.cs:20
+#: LogControl.cs:21
 msgid "Alles löschen"
 msgstr "Clear"
 
-#: LogControl.cs:21
+#: LogControl.cs:22
+msgid "Meldungen kopieren"
+msgstr "Copy messages"
+
+#: LogControl.cs:23
 msgid "Debug-Informationen anzeigen"
 msgstr "Show debug information"
 

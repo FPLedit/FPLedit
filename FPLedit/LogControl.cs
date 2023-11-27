@@ -3,6 +3,7 @@ using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System;
+using System.Linq;
 
 namespace FPLedit;
 
@@ -17,7 +18,8 @@ internal sealed class LogControl : RichTextArea, ILog
         ReadOnly = true;
 
         menu = new ContextMenu();
-        menu.CreateItem(T._("Alles löschen"), clickHandler: (_, _) => Text = "");
+        menu.CreateItem(T._("Alles löschen"), clickHandler: (_, _) => Buffer.Clear());
+        menu.CreateItem(T._("Meldungen kopieren"), clickHandler: (_, _) => Clipboard.Instance.Text = Text);
         menu.CreateCheckItem(T._("Debug-Informationen anzeigen"), changeHandler: (s, _) => showDebug = ((CheckMenuItem)s!).Checked);
 
         systemText = SystemColors.ControlText;
@@ -40,9 +42,7 @@ internal sealed class LogControl : RichTextArea, ILog
         => WriteMl("[INFO] " + message, systemText);
 
     public void LogException(Exception e)
-    {
-        WriteMl("[EXCEPTION] " + e.GetExceptionDetails(), Colors.Red);
-    }
+        => WriteMl("[EXCEPTION] " + e.GetExceptionDetails(), Colors.Red);
 
     public void Debug(string message)
     {
@@ -60,26 +60,9 @@ internal sealed class LogControl : RichTextArea, ILog
 
     private void Write(string message, Color c)
     {
-        Append(message + Environment.NewLine, true);
-        int idx, last;
-        if (Environment.OSVersion.Platform == PlatformID.Unix)
-        {
-            idx = Text.LastIndexOf(message, StringComparison.Ordinal);
-            last = Text.Length;
-        }
-        else
-        {
-            var lines = string.Join("", Text.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
-            idx = lines.LastIndexOf(message, StringComparison.Ordinal);
-            last = lines.Length;
-        }
-
-        if (idx == -1)
-            return;
-
-        Selection = new Range<int>(idx, idx + message.Length);
-        SelectionForeground = c;
-        Selection = new Range<int>(last, last);
+        var start = Text.Length;
+        Buffer.Insert(start, message + Environment.NewLine);
+        Buffer.SetForeground(new Range<int>(start, Text.Length - Environment.NewLine.Length), c);
     }
     #endregion
 
@@ -91,6 +74,14 @@ internal sealed class LogControl : RichTextArea, ILog
             e.Handled = true;
         }
         base.OnMouseDown(e);
+    }
+
+    protected override void OnKeyDown(KeyEventArgs e)
+    {
+        // We do not want to capture most key events.
+        if (e.Control && new[] { Keys.A, Keys.C }.Contains(e.Key))
+            return;
+        base.OnKeyDown(e);
     }
 
     protected override void Dispose(bool disposing)
