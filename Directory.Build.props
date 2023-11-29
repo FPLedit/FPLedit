@@ -86,7 +86,7 @@
       <ReferencesToBeRemoved3 Include="@(_ResolvedCopyLocalPublishAssets)" Condition="%(Filename) == 'Xceed.Wpf.AvalonDock.Themes.Metro'" />
       <ReferencesToBeRemoved3 Include="@(_ResolvedCopyLocalPublishAssets)" Condition="%(Filename) == 'Xceed.Wpf.AvalonDock.Themes.Aero'" />
       <ReferencesToBeRemoved3 Include="@(_ResolvedCopyLocalPublishAssets)" Condition="%(Filename) == 'Xceed.Wpf.AvalonDock.Themes.VS2010'" />
-      <_ResolvedCopyLocalPublishAssets Remove="@(ReferencesToBeRemoved2)" />
+      <_ResolvedCopyLocalPublishAssets Remove="@(ReferencesToBeRemoved3)" />
     </ItemGroup>
   </Target>
 
