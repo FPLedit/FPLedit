@@ -16,6 +16,7 @@ public sealed class NetworkRenderer : Drawable
     private readonly Font? font;
     private readonly Pen linePen, highlightPen, borderPen;
     private readonly Color systemBgColor, systemTextColor;
+    private readonly Color panelColorNormal = Colors.Gray, panelColorHighlight = Colors.Red, panelColorTemp = Colors.DarkCyan;
 
     public static readonly Keys[] DispatchableKeys = { Keys.R, Keys.S, Keys.Escape, Keys.Equal /* Plus */, Keys.Minus, Keys.Add, Keys.Subtract };
 
@@ -121,7 +122,7 @@ public sealed class NetworkRenderer : Drawable
 
         font = new Font(FontFamilies.SansFamilyName, 8);
         linePen = new Pen(systemTextColor, 2f);
-        highlightPen = new Pen(Colors.Red, 2f);
+        highlightPen = new Pen(panelColorHighlight, 2f);
         borderPen = new Pen(Brushes.Black) { DashStyle = new DashStyle(0, new[] { 2f, 2f, 2f, 2f }) };
         handler = new StationCanvasPositionHandler();
 
@@ -226,7 +227,9 @@ public sealed class NetworkRenderer : Drawable
 
                 if (!doRender) continue;
                     
-                var panelColor = highlightedPath!.ContainsStation(sta) ? Colors.Red : Colors.Gray;
+                var panelColor = highlightedPath!.ContainsStation(sta) ? panelColorHighlight : panelColorNormal;
+                if (modeTempSta == sta) panelColor = panelColorTemp;
+
                 RenderBtn<Station>? btn = panels.FirstOrDefault(pa => pa.Tag == sta);
                 if (btn == null)
                 {
@@ -251,7 +254,7 @@ public sealed class NetworkRenderer : Drawable
             var p = OFFSET + point;
             g.DrawLine(linePen, p, (mousePosition - pan) * (1 / zoom));
 
-            var args = new RenderBtn<Station>(modeTempSta, p - btnSize / 2, btnSize, Colors.DarkCyan);
+            var args = new RenderBtn<Station>(modeTempSta, p - btnSize / 2, btnSize, panelColorTemp);
             panels.Add(args);
         }
 
