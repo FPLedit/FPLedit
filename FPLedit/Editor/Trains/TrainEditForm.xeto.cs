@@ -184,7 +184,7 @@ internal sealed class TrainEditForm : FDialog<TrainEditForm.EditResult?>
             if (newTransition != null)
             {
                 // TransitionEntry is a record, so == does check data equality. Do not match the original transition entry.
-                var duplicateTransition = transitions.Any(t => t == newTransition && !t.ReferenceEquals(transition));
+                var duplicateTransition = transitions.Any(t => t == newTransition && !ReferenceEquals(t, transition));
                 if (!duplicateTransition)
                 {
                     transitions.Insert(transitions.IndexOf(transition), newTransition);

@@ -103,7 +103,10 @@ public class VirtualRoute
     {
         var pf = new Pathfinder(tt);
         var stas = pf.GetPath(start, end, waypoints);
-        return new PathData(tt, stas);
+        var pd = new PathData(tt, stas);
+        if (pd.IsValidUncollapsed())
+            throw new Exception(T._("Ungültige (zusammengefallene) virtuelle Strecke!"));
+        return pd;
     }
 
     public string GetRouteName() 

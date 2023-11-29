@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-11-24 23:50+0100\n"
-"PO-Revision-Date: 2023-11-24 23:51+0100\n"
+"POT-Creation-Date: 2023-11-29 14:44+0100\n"
+"PO-Revision-Date: 2023-11-29 14:44+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -54,7 +54,11 @@ msgstr ""
 msgid "Mindestens ein Zug befährt den Streckenabschnitt!"
 msgstr "At least one train is travelling over this line segment!"
 
-#: Timetable.cs:653
+#: Timetable.cs:651
+msgid "Mindestens eine virtuelle Strecke berührt den Streckenabschnitt!"
+msgstr "At least one virtual route contains this line segment!"
+
+#: Timetable.cs:661
 msgid ""
 "Einzelne Stationen ohne Strecken können nicht existieren. Hinweis: Das "
 "Löschen der vorletzten Station einer Strecke entfernt auch Routen-Reste!"
@@ -62,7 +66,7 @@ msgstr ""
 "A single station without a connecting line cannot exist. Note, you can "
 "simply remove lines by deleting its stations one by one!"
 
-#: Timetable.cs:663 Timetable.cs:670
+#: Timetable.cs:671 Timetable.cs:678
 msgid ""
 "Einzelne Stationen ohne Strecken können nicht existieren. Hinweis: Erste/"
 "Letzte Stationen einer Strecke können einfach gelöscht werden!"
@@ -70,3 +74,7 @@ msgstr ""
 "A single station without a connecting line cannot exist. Note, you can "
 "simply remove the first or line stations of a line by deleting them in the "
 "usual way!"
+
+#: VirtualRoute.cs:108
+msgid "Ungültige (zusammengefallene) virtuelle Strecke!"
+msgstr "Invalid (collapsed) virtual route!"

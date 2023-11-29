@@ -643,6 +643,14 @@ public sealed class Timetable : Entity, ITimetable
                 return (false, T._("Mindestens ein Zug befährt den Streckenabschnitt!"), true, null);
         }
 
+        // Breaking a line is not possible when virtual lines contain the segment.
+        foreach (var vroute in VirtualRoute.GetVRoutes(this))
+        {
+            var path = vroute.GetPathData().GetRawPath().ToArray();
+            if (path.Contains(station1) && path.Contains(station2))
+                return (false, T._("Mindestens eine virtuelle Strecke berührt den Streckenabschnitt!"), true, null);
+        }
+
         if (rt.Stations.Count < 2)
             throw new Exception(nameof(BreakRouteUnsafe) + ": route with less than two stations?!");
 

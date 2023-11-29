@@ -149,6 +149,8 @@ public class PathData : ISortedStations
     /// </summary>
     public IEnumerable<Station> GetRawPath() => Entries.Select(e => e.Station);
 
+    public bool IsValidUncollapsed() => Entries.DistinctBy(e => e.Station).Count() == Entries.Length;
+
     /// <summary>
     /// Get an empty <see cref="PathData"/>-Instance.
     /// </summary>
