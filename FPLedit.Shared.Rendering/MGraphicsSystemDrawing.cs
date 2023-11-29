@@ -37,7 +37,10 @@ public sealed class MGraphicsSystemDrawing : IMGraphics
         var penCacheKey = pen.GetHashCode();
         if (!penCache.TryGetValue(penCacheKey, out var sdPen))
         {
-            sdPen = new Pen(pen.c.ToSD(), pen.w) { DashPattern = pen.ds };
+            if (pen.ds.Length != 0)
+                sdPen = new Pen(pen.c.ToSD(), pen.w) { DashPattern = pen.ds };
+            else
+                sdPen = new Pen(pen.c.ToSD(), pen.w);
             penCache[penCacheKey] = sdPen;
         }
         g.DrawLine(sdPen, x1, y1, x2, y2);
@@ -75,7 +78,10 @@ public sealed class MGraphicsSystemDrawing : IMGraphics
         var penCacheKey = pen.GetHashCode();
         if (!penCache.TryGetValue(penCacheKey, out var sdPen))
         {
-            sdPen = new Pen(pen.c.ToSD(), pen.w) { DashPattern = pen.ds };
+            if (pen.ds.Length != 0)
+                sdPen = new Pen(pen.c.ToSD(), pen.w) { DashPattern = pen.ds };
+            else
+                sdPen = new Pen(pen.c.ToSD(), pen.w);
             penCache[penCacheKey] = sdPen;
         }
 

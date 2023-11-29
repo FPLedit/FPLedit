@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FPLedit.Shared;
 
@@ -8,7 +9,7 @@ internal sealed class DashStyleHelper
 {
     private readonly List<DashStyle> types = new ()
     {
-        new DashStyle(T._("Normal"), new[] { 10000.0f, 0.01f }),
+        new DashStyle(T._("Normal"), Array.Empty<float>() ),
         new DashStyle(T._("Gepunktet"), new[] { 3.0f, 3.0f }),
         new DashStyle(T._("Kurz gestrichelt"), new[] { 6.0f, 3.0f }),
         new DashStyle(T._("Länger gestrichelt (63)"), new[] { 9.0f, 3.0f }),
