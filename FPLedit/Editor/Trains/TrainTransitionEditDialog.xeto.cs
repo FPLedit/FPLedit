@@ -29,7 +29,7 @@ internal sealed class TrainTransitionEditDialog : FDialog<TransitionEntry?>
         Eto.Serialization.Xaml.XamlReader.Load(this);
 
         var selectableTrains = tt.Trains.Where(t => t != train).OrderBy(t => t.TName).ToArray();
-        allStationsStation = new Station(tt) { SName = T._("<Alle Stationen>") };
+        allStationsStation = new Station(tt) { SName = T._("<Endbahnhof>") };
         var selectableStations = new [] { allStationsStation }.Union(train.GetPath()).ToArray();
 
         nextTrainDropDown.ItemTextBinding = Binding.Delegate<Train, string>(t => t.TName);
@@ -37,6 +37,7 @@ internal sealed class TrainTransitionEditDialog : FDialog<TransitionEntry?>
 
         stationDropDown.ItemTextBinding = Binding.Delegate<IStation, string>(t => t.SName );
         stationDropDown.DataStore = selectableStations;
+        stationDropDown.Enabled = false; // Selecting stations does not make sense without vehicle support...
 
         if (transition != null)
         {

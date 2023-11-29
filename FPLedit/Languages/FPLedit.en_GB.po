@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-11-29 11:19+0100\n"
-"PO-Revision-Date: 2023-11-29 11:19+0100\n"
+"POT-Creation-Date: 2023-11-29 12:00+0100\n"
+"PO-Revision-Date: 2023-11-29 12:08+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -223,7 +223,7 @@ msgstr ""
 #: Editor/Trains/TrainFillDialog.xeto.cs:50
 #: Editor/Trains/TrainLinkEditDialog.xeto.cs:139
 #: Editor/Trains/TrainSortDialog.xeto.cs:94
-#: Editor/Trains/TrainTransitionEditDialog.xeto.cs:81
+#: Editor/Trains/TrainTransitionEditDialog.xeto.cs:82
 msgid "Abbrechen"
 msgstr "Cancel"
 
@@ -544,7 +544,7 @@ msgstr "Dep. {0}"
 #: Editor/Linear/LinearTimetableEditControl.xeto.cs:231
 #: Editor/Trains/TrainEditForm.xeto.cs:57
 #: Editor/Trains/TrainEditForm.xeto.cs:261
-#: Editor/Trains/TrainTransitionEditDialog.xeto.cs:83
+#: Editor/Trains/TrainTransitionEditDialog.xeto.cs:84
 msgid "Folgezug"
 msgstr "Following train"
 
@@ -1055,7 +1055,7 @@ msgid "Neuer Folgezug"
 msgstr "Add following train"
 
 #: Editor/Trains/TrainEditForm.xeto.cs:266
-#: Editor/Trains/TrainTransitionEditDialog.xeto.cs:86
+#: Editor/Trains/TrainTransitionEditDialog.xeto.cs:87
 msgid "Folgezug bearbeiten"
 msgstr "Edit following train"
 
@@ -1100,7 +1100,7 @@ msgid "Bitte die Startverschiebung als Zeitangabe angeben!"
 msgstr "Please enter a valid shift per train!"
 
 #: Editor/Trains/TrainLinkEditDialog.xeto.cs:140
-#: Editor/Trains/TrainTransitionEditDialog.xeto.cs:82
+#: Editor/Trains/TrainTransitionEditDialog.xeto.cs:83
 msgid "Übernehmen"
 msgstr "Commit"
 
@@ -1146,26 +1146,26 @@ msgid "Station:"
 msgstr "Station:"
 
 #: Editor/Trains/TrainTransitionEditDialog.xeto.cs:32
-msgid "<Alle Stationen>"
-msgstr "<All stations>"
+msgid "<Endbahnhof>"
+msgstr "<Last station>"
 
-#: Editor/Trains/TrainTransitionEditDialog.xeto.cs:44
+#: Editor/Trains/TrainTransitionEditDialog.xeto.cs:45
 msgid "Der bisher ausgewählte Folgezug existiert nicht mehr!"
 msgstr "The previously selected following train does not exist any more!"
 
-#: Editor/Trains/TrainTransitionEditDialog.xeto.cs:51
+#: Editor/Trains/TrainTransitionEditDialog.xeto.cs:52
 msgid "Die bisher ausgewählte Station existiert nicht mehr!"
 msgstr "The previously selected station does not exist any more!"
 
-#: Editor/Trains/TrainTransitionEditDialog.xeto.cs:65
+#: Editor/Trains/TrainTransitionEditDialog.xeto.cs:66
 msgid "Bitte einen Folgezug auswählen!"
 msgstr "Please select a following train!"
 
-#: Editor/Trains/TrainTransitionEditDialog.xeto.cs:84
+#: Editor/Trains/TrainTransitionEditDialog.xeto.cs:85
 msgid "Station (optional)"
 msgstr "Station (optional)"
 
-#: Editor/Trains/TrainTransitionEditDialog.xeto.cs:85
+#: Editor/Trains/TrainTransitionEditDialog.xeto.cs:86
 msgid "Tage, an denen der Folgezug übergeht"
 msgstr "Days, on which the following train will continue"
 
@@ -1942,6 +1942,9 @@ msgstr ""
 #, csharp-format
 msgid "Sie benutzen die aktuelleste Version von FPLedit ({0})!"
 msgstr "You are using the most recent version of FPLedit ({0})"
+
+#~ msgid "<Alle Stationen>"
+#~ msgstr "<All stations>"
 
 #~ msgid "Station"
 #~ msgstr "Station"
