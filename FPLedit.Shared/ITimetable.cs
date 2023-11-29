@@ -122,7 +122,7 @@ public interface ITimetable : IEntity
     /// <para>This operation is unsafe and might corrupt the timetable state. If <c>isSafeFailure</c> is <see langword="false" /> in the
     /// returned tuple, the behaviour is undefined! It is advisable to do a dry-run on a timetable copy that can be discarded!</para>
     /// </remarks>
-    (bool success, string? failReason, bool? isSafeFailure) BreakRouteUnsafe(Station station1, Station station2);
+    (bool success, string? failReason, bool? isSafeFailure, int? routeToReload) BreakRouteUnsafe(Station station1, Station station2);
     /// <summary>
     /// Gets the route with the specifiec route index.
     /// </summary>

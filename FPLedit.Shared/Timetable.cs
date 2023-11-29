@@ -611,28 +611,28 @@ public sealed class Timetable : Entity, ITimetable
 
     /// <inheritdoc />
     /// <exception cref="TimetableTypeNotSupportedException">If called on a linear timetable.</exception>
-    public (bool success, string? failReason, bool? isSafeFailure) BreakRouteUnsafe(Station station1, Station station2)
+    public (bool success, string? failReason, bool? isSafeFailure, int? routeToReload) BreakRouteUnsafe(Station station1, Station station2)
     {
         if (Type == TimetableType.Linear)
             throw new TimetableTypeNotSupportedException(TimetableType.Linear, "routes");
 
         if (GetDirectlyConnectingRoute(station1, station2) == UNASSIGNED_ROUTE_ID)
-            return (false, T._("Die beiden ausgewählten Stationen sind nicht benachbart!"), true);
+            return (false, T._("Die beiden ausgewählten Stationen sind nicht benachbart!"), true, null);
 
         var routes = station1.Routes.Where(r => station2.Routes.Contains(r)).ToArray();
         if (routes.Length != 1)
-            return (false, T._("Zwei benachbarte Stationen können nicht mehr als eine/keine Route gemeinsam haben! Zusammengefallene Routen sind vorhanden und werden nicht unterstützt."), true);
+            return (false, T._("Zwei benachbarte Stationen können nicht mehr als eine/keine Route gemeinsam haben! Zusammengefallene Routen sind vorhanden und werden nicht unterstützt."), true, null);
         var route = routes[0];
         var rt = GetRoute(route);
         if (!rt.Exists)
             throw new Exception(nameof(BreakRouteUnsafe) + ": route does not exist");
 
         // Helper function to test for the station graph being disconnected after a "succesful" route break.
-        (bool success, string? failReason, bool? isSafeFailure) CheckConnectedAndReturn()
+        (bool success, string? failReason, bool? isSafeFailure, int? origRoute) CheckConnectedAndReturn()
         {
             if (CheckStationGraphInternal(checkDisconnected: true).hasDisconnected)
-                return (false, T._("Das Streckennetz zerfällt nach der Auftrennung der Strecke in zwei Teile."), false);
-            return (true, null, null);
+                return (false, T._("Das Streckennetz zerfällt nach der Auftrennung der Strecke in zwei Teile."), false, route);
+            return (true, null, null, route);
         }
 
         // Breaking a line is not possible when trains travel over the segment.
@@ -640,7 +640,7 @@ public sealed class Timetable : Entity, ITimetable
         {
             var path = train.GetPath();
             if (path.Contains(station1) && path.Contains(station2))
-                return (false, T._("Mindestens ein Zug befährt den Streckenabschnitt!"), true);
+                return (false, T._("Mindestens ein Zug befährt den Streckenabschnitt!"), true, null);
         }
 
         if (rt.Stations.Count < 2)
@@ -650,7 +650,7 @@ public sealed class Timetable : Entity, ITimetable
         if (rt.Stations.Count == 2)
         {
             if (station1.Routes.Length <= 1 || station2.Routes.Length <= 1)
-                return (false, T._("Einzelne Stationen ohne Strecken können nicht existieren. Hinweis: Das Löschen der vorletzten Station einer Strecke entfernt auch Routen-Reste!"), true); // Otherwise we would have an "orphaned" station.
+                return (false, T._("Einzelne Stationen ohne Strecken können nicht existieren. Hinweis: Das Löschen der vorletzten Station einer Strecke entfernt auch Routen-Reste!"), true, null); // Otherwise we would have an "orphaned" station.
             StationRemoveRoute(station1, route);
             StationRemoveRoute(station2, route);
             return CheckConnectedAndReturn();
@@ -660,14 +660,14 @@ public sealed class Timetable : Entity, ITimetable
         if (rt.Stations.First() == station1 || rt.Stations.Last() == station1)
         {
             if (station1.Routes.Length <= 1)
-                return (false, T._("Einzelne Stationen ohne Strecken können nicht existieren. Hinweis: Erste/Letzte Stationen einer Strecke können einfach gelöscht werden!"), true); // Otherwise we would have an "orphaned" station.
+                return (false, T._("Einzelne Stationen ohne Strecken können nicht existieren. Hinweis: Erste/Letzte Stationen einer Strecke können einfach gelöscht werden!"), true, null); // Otherwise we would have an "orphaned" station.
             StationRemoveRoute(station1, route);
             return CheckConnectedAndReturn();
         }
         if (rt.Stations.First() == station2 || rt.Stations.Last() == station2)
         {
             if (station2.Routes.Length <= 1)
-                return (false, T._("Einzelne Stationen ohne Strecken können nicht existieren. Hinweis: Erste/Letzte Stationen einer Strecke können einfach gelöscht werden!"), true); // Otherwise we would have an "orphaned" station.
+                return (false, T._("Einzelne Stationen ohne Strecken können nicht existieren. Hinweis: Erste/Letzte Stationen einer Strecke können einfach gelöscht werden!"), true, null); // Otherwise we would have an "orphaned" station.
             StationRemoveRoute(station2, route);
             return CheckConnectedAndReturn();
         }

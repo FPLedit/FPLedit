@@ -149,12 +149,11 @@ internal sealed class NetworkEditingControl : Panel
                     pluginInterface.StageUndoStep();
                     networkRenderer.StartBreakLine(sta);
                     pluginInterface.SetUnsaved();
-                    ReloadTimetable();
                 };
             }
             menu.Show(this);
         };
-        networkRenderer.NewRouteAdded += (_, args) =>
+        networkRenderer.RoutesChanged += (_, args) =>
         {
             (pluginInterface.FileState as FileState)!.Saved = false;
             routesDropDown.SelectedRoute = args.Value;

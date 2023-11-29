@@ -54,7 +54,7 @@ public class XmlOnlyTimetable : Entity, ITimetable
     public void StationRemoveRoute(Station sta, int route) => throw new NotSupportedException(ThrowMessage);
     public int AddRoute(Station exisitingStartStation, Station newStation, float newStartPosition, float newPosition) => throw new NotSupportedException(ThrowMessage);
     public bool JoinRoutes(int route, Station station, float newKm) => throw new NotSupportedException(ThrowMessage);
-    public (bool success, string? failReason, bool? isSafeFailure) BreakRouteUnsafe(Station station1, Station station2) => throw new NotSupportedException(ThrowMessage);
+    public (bool success, string? failReason, bool? isSafeFailure, int? routeToReload) BreakRouteUnsafe(Station station1, Station station2) => throw new NotSupportedException(ThrowMessage);
     public Route GetRoute(int index) => throw new NotSupportedException(ThrowMessage);
     public Route[] GetRoutes() => throw new NotSupportedException(ThrowMessage);
     public bool RouteConnectsDirectly(int routeToCheck, Station sta1, Station sta2) => throw new NotSupportedException(ThrowMessage);

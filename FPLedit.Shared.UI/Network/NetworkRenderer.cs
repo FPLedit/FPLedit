@@ -102,7 +102,7 @@ public sealed class NetworkRenderer : Drawable
     public event EventHandler? StationClicked;
     public event EventHandler? StationRightClicked;
     public event EventHandler? StationDoubleClicked;
-    public event EventHandler<EventArgs<int>>? NewRouteAdded;
+    public event EventHandler<EventArgs<int>>? RoutesChanged;
     public event EventHandler? StationMoveEnd;
 
     private const int OFFSET_X = 20;
@@ -331,7 +331,7 @@ public sealed class NetworkRenderer : Drawable
         handler.WriteStapos(tt, stapos!);
         ResetToNormalMode();
 
-        NewRouteAdded?.Invoke(this, new EventArgs<int>(rtIdx));
+        RoutesChanged?.Invoke(this, new EventArgs<int>(rtIdx));
         ReloadTimetable();
     }
 
@@ -414,7 +414,7 @@ public sealed class NetworkRenderer : Drawable
             var testTt = tt!.Clone();
             var testModeTempSta = testTt.Stations.First(s => s.Id == modeTempSta!.Id);
             var testTarget = testTt.Stations.First(s => s.Id == target.Id);
-            var testBreakResult = testTt!.BreakRouteUnsafe(testModeTempSta, testTarget);
+            var testBreakResult = testTt.BreakRouteUnsafe(testModeTempSta, testTarget);
             if (!testBreakResult.success)
                 MessageBox.Show(T._("Strecken-Trennen nicht möglich: {0}", testBreakResult.failReason ?? ""), "FPLedit", MessageBoxType.Error);
 
@@ -436,6 +436,8 @@ public sealed class NetworkRenderer : Drawable
                     message += "\n\n" + T._("WARNUNG: Potentiell befindet sich die Fahrplandatei jetzt in einem inkonsistenten Zustand!");
                 MessageBox.Show(message, "FPLedit", MessageBoxType.Error);
             }
+            if (breakResult.routeToReload.HasValue)
+                RoutesChanged?.Invoke(this, new EventArgs<int>(breakResult.routeToReload.Value));
         }
 
         ResetToNormalMode();
