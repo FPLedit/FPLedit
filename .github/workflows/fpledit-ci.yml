@@ -24,8 +24,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install podman
 
-      - name: Determine build type
-        if: ${{ github.event_name != 'release' }}
+      - name: Set beta build type
+        if: ${{ github.event_name != 'release' || !github.event.release.prerelease }}
         run: |
           echo "FPLEDIT_GIT_BETA=1" >> $GITHUB_ENV
 
@@ -33,7 +33,7 @@ jobs:
         run: dotnet tool restore
 
       - name: Build
-        run: dotnet cake --rid=linux-x64,osx-x64,win-x64,win-x86
+        run: dotnet cake --rid=linux-x64,osx-x64,win-x64
         env:
           FPLEDIT_GIT: ${{ github.sha }}
           FPLEDIT_DOK_PDF: ./Dokumentation.pdf

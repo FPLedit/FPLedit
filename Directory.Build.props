@@ -33,6 +33,8 @@
     <Company>Manuel Huber</Company>
     <Product>FPLedit</Product>
     <Copyright>Copyright © 2015-$([System.DateTime]::Now.ToString(`yyyy`)) Manuel Huber</Copyright>
+    <!-- .NET 8+: do not include full git hash in InformationalVersion -->
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 
     <!-- Output configuration -->
     <OutputPath Condition=" '$(ForceConfigurationDir)' == '' ">..\bin\$(Configuration)\</OutputPath>
