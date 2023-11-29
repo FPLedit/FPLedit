@@ -22,7 +22,7 @@
     <WarningsAsErrors>CS8600;CS8602;CS8603;CS8625</WarningsAsErrors>
 
     <!-- Conflicts between different versions. -->
-    <MSBuildWarningsAsMessages>MSB3277</MSBuildWarningsAsMessages>
+    <MSBuildWarningsAsMessages>$(MSBuildWarningsAsMessages);MSB3277</MSBuildWarningsAsMessages>
 
     <EtoVersion>2.8.1</EtoVersion>
 

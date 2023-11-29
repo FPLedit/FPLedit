@@ -78,6 +78,7 @@ public sealed class MFont : IDisposable
 
 #if ENABLE_SYSTEM_DRAWING
     private System.Drawing.Font? instanceCachedSd;
+    [System.Runtime.Versioning.SupportedOSPlatform("windows")]
     public static explicit operator System.Drawing.Font(MFont m)
     {
         if (m.instanceCachedSd == null)
@@ -171,8 +172,10 @@ public sealed class MFont : IDisposable
         instanceCachedEto = null;
         instanceCachedIs = null;
 #if ENABLE_SYSTEM_DRAWING
+#pragma warning disable CA1416
         instanceCachedSd?.Dispose();
         instanceCachedSd = null;
+#pragma warning enable CA1416
 #endif
         instanceCachedPdf = null;
     }

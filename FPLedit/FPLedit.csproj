@@ -16,6 +16,7 @@
     
     <NoWarn>CS0693,NETSDK1074</NoWarn>
     <Nullable>enable</Nullable>
+    <MSBuildWarningsAsMessages>$(MSBuildWarningsAsMessages);NETSDK1074</MSBuildWarningsAsMessages>
   </PropertyGroup>
   
   <!-- Windows specific properties -->
