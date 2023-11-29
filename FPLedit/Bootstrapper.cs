@@ -147,16 +147,14 @@ internal sealed class Bootstrapper : IPluginInterface, IDisposable
 
     public string GetTemp(string filename)
     {
-        var dirpath = Path.Combine(Path.GetTempPath(), "fpledit");
         try
         {
-            if (!Directory.Exists(dirpath))
-                Directory.CreateDirectory(dirpath);
-            return Path.Combine(dirpath, filename);
+            return Path.Combine(PathManager.CreateTempDir(), filename);
         }
-        catch
+        catch (Exception ex)
         {
-            Logger.Warning(T._("Temp-Datei konnte nicht angelegt werden. Fallback-Dateipfad wird verwendet. Dies wird Probleme bereiten!"));
+            Logger.LogException(ex);
+            Logger.Warning(T._("Temp-Verzeichnis konnte nicht angelegt werden. Fallback-Dateipfad wird verwendet. Dies wird Probleme bereiten!"));
             return Path.GetTempFileName();
         }
     }
