@@ -18,7 +18,7 @@ internal sealed class TrainEditForm : FDialog<TrainEditForm.EditResult?>
 #pragma warning disable CS0649,CA2213
     private readonly TextBox nameTextBox = default!, commentTextBox = default!;
     private readonly ComboBox locomotiveComboBox = default!, mbrComboBox = default!, lastComboBox = default!;
-    private readonly Button fillButton = default!, deleteTransitionButton = default!;
+    private readonly Button fillButton = default!;
     private readonly SingleTimetableEditControl editor = default!;
     private readonly DaysControlNarrow daysControl = default!;
     private readonly GridView linkGridView = default!, transitionsGridView = default!;
@@ -183,8 +183,15 @@ internal sealed class TrainEditForm : FDialog<TrainEditForm.EditResult?>
             var newTransition = tef.ShowModal();
             if (newTransition != null)
             {
-                transitions.Insert(transitions.IndexOf(transition), newTransition);
-                transitions.Remove(transition);
+                // TransitionEntry is a record, so == does check data equality. Do not match the original transition entry.
+                var duplicateTransition = transitions.Any(t => t == newTransition && !t.ReferenceEquals(transition));
+                if (!duplicateTransition)
+                {
+                    transitions.Insert(transitions.IndexOf(transition), newTransition);
+                    transitions.Remove(transition);
+                }
+                else
+                    MessageBox.Show(T._("Ein Folgezug mit den gleichen Angaben existiert bereits!"));
             }
         }
         else
@@ -196,7 +203,14 @@ internal sealed class TrainEditForm : FDialog<TrainEditForm.EditResult?>
         var tef = new TrainTransitionEditDialog(null, train, tt);
         var newTransition = tef.ShowModal();
         if (newTransition != null)
-            transitions.Add(newTransition);
+        {
+            // TransitionEntry is a record, so == does check data equality.
+            var duplicateTransition = transitions.Any(t => t == newTransition);
+            if (!duplicateTransition)
+                transitions.Add(newTransition);
+            else
+                MessageBox.Show(T._("Ein Folgezug mit den gleichen Angaben existiert bereits!"));
+        }
     }
 
     private void DeleteLinkButton_Click(object sender, EventArgs e)
@@ -209,7 +223,7 @@ internal sealed class TrainEditForm : FDialog<TrainEditForm.EditResult?>
         else
             MessageBox.Show(T._("Erst muss eine Verknüpfung zum Löschen ausgewählt werden!"));
     }
-        
+
     private void EditLinkButton_Click(object sender, EventArgs e)
     {
         if (linkGridView.SelectedItem != null)
@@ -230,7 +244,7 @@ internal sealed class TrainEditForm : FDialog<TrainEditForm.EditResult?>
 
     private IEnumerable<ListItem> GetAllItems(ITimetable timetable, Func<ITrain, string> func)
         => timetable.Trains.Select(func).Distinct().Where(s => s != "").OrderBy(s => s).Select(s => new ListItem { Text = s }).ToArray();
-        
+
     private static class L
     {
         public static readonly string Cancel = T._("Abbrechen");
@@ -248,6 +262,9 @@ internal sealed class TrainEditForm : FDialog<TrainEditForm.EditResult?>
         public static readonly string Links = T._("Verknüpfungen");
         public static readonly string DeleteLink = T._("Verknüpfung löschen");
         public static readonly string EditLink = T._("Verknüpfung bearbeiten");
+        public static readonly string NewTransition = T._("Neuer Folgezug");
+        public static readonly string EditTransition = T._("Folgezug bearbeiten");
+        public static readonly string DeleteTransition = T._("Folgezug löschen");
         public static readonly string Timetable = T._("Fahrplan");
         public static readonly string Fill = T._("Von anderem Zug...");
         public static readonly string Title = T._("Neuen Zug erstellen");

@@ -50,9 +50,9 @@
           <GroupBox Text="{x:Static e:TrainEditForm+L.NextTrain}">
             <StackLayout Padding="10,10,10,10" Spacing="5" Orientation="Vertical" HorizontalContentAlignment="Stretch">
               <GridView x:Name="transitionsGridView" />
-              <Button Click="AddTransitionButton_Click">Neuer Folgezug</Button>
-              <Button Click="EditTransitionButton_Click">Folgezug bearbeiten</Button>
-              <Button x:Name="deleteTransitionButton" Click="DeleteTransitionButton_Click">Folgezug löschen</Button>
+              <Button Click="AddTransitionButton_Click" Text="{x:Static e:TrainEditForm+L.NewTransition}" />
+              <Button Click="EditTransitionButton_Click" Text="{x:Static e:TrainEditForm+L.EditTransition}" />
+              <Button Click="DeleteTransitionButton_Click" Text="{x:Static e:TrainEditForm+L.DeleteTransition}" />
             </StackLayout>
           </GroupBox><!-- /group Folgezug -->
           <GroupBox Text="{x:Static e:TrainEditForm+L.Links}">
