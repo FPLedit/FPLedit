@@ -19,7 +19,7 @@ internal sealed class LogControl : RichTextArea, ILog
 
         menu = new ContextMenu();
         menu.CreateItem(T._("Alles löschen"), clickHandler: (_, _) => Buffer.Clear());
-        menu.CreateItem(T._("Meldungen kopieren"), clickHandler: (_, _) => Clipboard.Instance.Text = Text);
+        menu.CreateItem(T._("Meldungen kopieren"), clickHandler: (_, _) => Clipboard.Instance.Text = Text.Trim());
         menu.CreateCheckItem(T._("Debug-Informationen anzeigen"), changeHandler: (s, _) => showDebug = ((CheckMenuItem)s!).Checked);
 
         systemText = SystemColors.ControlText;
@@ -62,7 +62,9 @@ internal sealed class LogControl : RichTextArea, ILog
     {
         var start = Text.Length;
         Buffer.Insert(start, message + Environment.NewLine);
-        Buffer.SetForeground(new Range<int>(start, Text.Length - Environment.NewLine.Length), c);
+        var range = new Range<int>(start, Text.Length - Environment.NewLine.Length);
+        Buffer.SetForeground(range, c);
+        Selection = new Range<int>(range.End + 1); // Scroll to end.
     }
     #endregion
 
