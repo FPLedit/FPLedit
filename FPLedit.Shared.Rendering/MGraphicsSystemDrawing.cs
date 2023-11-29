@@ -158,24 +158,7 @@ public sealed class MGraphicsSystemDrawing : IMGraphics
             if (sdData.Stride > 0 && sdData.Stride == sdData.Width * bytesPerPixel)
                 Buffer.MemoryCopy((void*) sdData.Scan0, (void*) etoData.Data, byteLength, byteLength);
             else // Slightly slower route using the given stride width 
-            {
-                throw new Exception("this should not happen on Windows?! Remove otherwise");
-                var scan = (byte*) sdData.Scan0;
-                var bytesPerScanLine = sdData.Width * bytesPerPixel;
-                Parallel.For(0, sdData.Height, i =>
-                {
-                    var line = scan + (i * sdData.Stride);
-                    for (int j = 0; j < bytesPerScanLine; j += bytesPerPixel)
-                    {
-                        var b = line[j];
-                        var g = line[j + 1];
-                        var r = line[j + 2];
-                        var a = line[j + 3];
-                        var c = ed.Color.FromArgb(r, g, b, a);
-                        etoData.SetPixel(j / bytesPerPixel, i, c);
-                    }
-                });
-            }
+                throw new Exception("Fast buffer copy not possible: this should not happen on Windows!");
         }
 
         etoData.Dispose();
