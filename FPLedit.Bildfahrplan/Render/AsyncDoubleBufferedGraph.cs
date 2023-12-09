@@ -9,13 +9,13 @@ namespace FPLedit.Bildfahrplan.Render;
 internal class AsyncDoubleBufferedGraph : IDisposable
 {
     private Bitmap? buffer;
-    private bool generatingBuffer, hadCrash, hadAmbiguousTransitions;
+    private bool generatingBuffer, hadCrash, hadAmbiguousTransitions, hadInvalidVroute;
     private float lastBufferWidth;
-        
+
     private readonly IPluginInterface pluginInterface;
-    private readonly Font font = new Font(FontFamilies.SansFamilyName, 12);
+    private readonly Font font = new (FontFamilies.SansFamilyName, 12);
     private readonly Panel panel;
-    private readonly object bufferLock = new object();
+    private readonly object bufferLock = new ();
 
     public Action? RenderingFinished { get; set; }
 
@@ -63,7 +63,7 @@ internal class AsyncDoubleBufferedGraph : IDisposable
                 }
                 catch (Exception ex)
                 {
-                    if (ex is not AmbiguousTransitionException)
+                    if (ex is not AmbiguousTransitionException && ex is not VirtualRouteInvalidEception)
                         pluginInterface.Logger.LogException(ex);
                     lock (bufferLock)
                     {
@@ -76,7 +76,8 @@ internal class AsyncDoubleBufferedGraph : IDisposable
 
                     generatingBuffer = false;
                     hadCrash = true;
-                    hadAmbiguousTransitions = (ex is AmbiguousTransitionException);
+                    hadAmbiguousTransitions = ex is AmbiguousTransitionException;
+                    hadInvalidVroute = ex is VirtualRouteInvalidEception;
                 }
 
                 Application.Instance.Invoke(() =>
@@ -101,13 +102,22 @@ internal class AsyncDoubleBufferedGraph : IDisposable
         }
         else // We had a crash
         {
-            g.Clear(Colors.White);
             var text = T._("Fehler beim Rendern (siehe Log)...");
             if (hadAmbiguousTransitions)
                 text = T._("Mehrere Folgezüge gefunden!\nBitte oben angezeigte Tage einschränken\nund Bildfahrplanvorschau erneut öffnen.");
-            var t = g.MeasureString(font, text);
-            g.DrawText(font, Colors.Red, (panel.Width - t.Width) / 2, 30, text);
+            if (hadInvalidVroute)
+                text = T._("Ungültige (zusammengefallene) virtuelle Strecke!\nBitte die virtuelle Strecke neu anlegen.");
+            RenderError(g, text);
         }
+    }
+
+    public void RenderError(Graphics g, string text)
+    {
+        g.Clear(Colors.White);
+
+        var ft = new FormattedText { Text = text, Font = font, Alignment = FormattedTextAlignment.Center, ForegroundBrush = Brushes.Red };
+        var t = ft.Measure();
+        g.DrawText(ft, new PointF((panel.Width - t.Width) / 2, 30));
     }
 
     public void Invalidate() => Invalidate(false);

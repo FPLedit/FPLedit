@@ -105,10 +105,15 @@ public class VirtualRoute
         var stas = pf.GetPath(start, end, waypoints);
         var pd = new PathData(tt, stas);
         if (pd.IsValidUncollapsed())
-            throw new Exception(T._("Ungültige (zusammengefallene) virtuelle Strecke!"));
+            throw new VirtualRouteInvalidEception(T._("Ungültige (zusammengefallene) virtuelle Strecke!"));
         return pd;
     }
 
     public string GetRouteName() 
         => "[v] " + string.Join(" - ", new[] { start }.Concat(waypoints).Concat(new[] { end }).Select(s => s.SName));
+}
+
+public class VirtualRouteInvalidEception : Exception
+{
+    public VirtualRouteInvalidEception(string? message) : base(message) { }
 }

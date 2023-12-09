@@ -24,7 +24,8 @@ internal sealed class PreviewForm : FForm
     private readonly AsyncDoubleBufferedGraph adbg;
     private Point? scrollPosition = new Point(0, 0);
     private Renderer? renderer;
-        
+    private string? preRenderError;
+
     public PreviewForm(IPluginInterface pluginInterface)
     {
         Eto.Serialization.Xaml.XamlReader.Load(this);
@@ -105,18 +106,26 @@ internal sealed class PreviewForm : FForm
 
     private void ResetRenderer()
     {
+        renderer = null;
+        preRenderError = null;
         if (pluginInterface.FileState.Opened)
         {
             var pd = VirtualRoute.GetPathDataMaybeVirtual(pluginInterface.Timetable, routesDropDown.SelectedRoute);
-
-            renderer = new Renderer(pluginInterface.Timetable, pd);
-            if (!scrollPosition.HasValue)
-                scrollPosition = new Point(0, 0);
-            panel.Height = renderer.GetHeightExternal(!splitCheckBox.Checked!.Value);
-            hpanel.Height = splitCheckBox.Checked.Value ? renderer.GetHeightExternal(default, default, true) : 0;
+            if (pd().IsValidUncollapsed())
+            {
+                renderer = new Renderer(pluginInterface.Timetable, pd);
+                if (!scrollPosition.HasValue)
+                    scrollPosition = new Point(0, 0);
+                panel.Height = renderer.GetHeightExternal(!splitCheckBox.Checked!.Value);
+                hpanel.Height = splitCheckBox.Checked.Value ? renderer.GetHeightExternal(default, default, true) : 0;
+            }
+            else
+            {
+                panel.Height = scrollable.Height;
+                hpanel.Height = 1;
+                preRenderError = T._("Ungültige (zusammengefallene) virtuelle Strecke!\nBitte die virtuelle Strecke neu anlegen.");
+            }
         }
-        else
-            renderer = null;
 
         adbg.Invalidate();
         hpanel.Invalidate();
@@ -137,13 +146,15 @@ internal sealed class PreviewForm : FForm
         adbg.Invalidate();
         hpanel.Invalidate();
     }
-        
+
     private void PluginInterfaceOnFileOpened(object? sender, EventArgs e) => ResetRenderer();
 
     private void Panel_Paint(object sender, PaintEventArgs e)
     {
         if (renderer != null)
             adbg.Render(renderer, e.Graphics, !splitCheckBox.Checked!.Value);
+        else if (preRenderError != null)
+            adbg.RenderError(e.Graphics, preRenderError);
         else
             e.Graphics.Clear(Colors.White);
     }
