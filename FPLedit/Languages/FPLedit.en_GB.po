@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-11-29 12:00+0100\n"
-"PO-Revision-Date: 2023-11-29 12:08+0100\n"
+"POT-Creation-Date: 2023-12-09 23:27+0100\n"
+"PO-Revision-Date: 2023-12-09 23:28+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -160,7 +160,7 @@ msgstr "Do not restore"
 #: Editor/Linear/LinearTrainsEditForm.xeto.cs:143
 #: Editor/Network/MultipleTimetableEditForm.xeto.cs:89
 #: Editor/Network/NetworkTrainsEditForm.xeto.cs:174
-#: Editor/Network/VirtualRouteForm.xeto.cs:71
+#: Editor/Network/VirtualRouteForm.xeto.cs:72
 #: Editor/RenderSettingsForm.xeto.cs:69
 #: Editor/TimetableEditor/ShuntForm.xeto.cs:165
 #: Editor/TimetableEditor/ZlmEditForm.xeto.cs:29
@@ -505,7 +505,7 @@ msgid "Strecke bearbeiten"
 msgstr "Edit line"
 
 #: Editor/LineEditForm.xeto.cs:168
-#: Editor/Rendering/NetworkEditingControl.xeto.cs:230
+#: Editor/Rendering/NetworkEditingControl.xeto.cs:229
 msgid "&Neue Station"
 msgstr "Add &new station"
 
@@ -705,24 +705,28 @@ msgstr "Copy train"
 msgid "Streckenverlauf"
 msgstr "Route"
 
-#: Editor/Network/VirtualRouteForm.xeto.cs:38
+#: Editor/Network/VirtualRouteForm.xeto.cs:30
+msgid "ungültig, bitte neu anlegen!"
+msgstr "invalid, recreate to fix!"
+
+#: Editor/Network/VirtualRouteForm.xeto.cs:39
 msgid "Verlauf der neuen virtuellen Strecke auswählen"
 msgstr "Select route of the new virtual line"
 
-#: Editor/Network/VirtualRouteForm.xeto.cs:55
+#: Editor/Network/VirtualRouteForm.xeto.cs:56
 msgid "Zuerst muss eine virtuelle Strecke ausgewählt werden!"
 msgstr "Please select a virtual line first!"
 
-#: Editor/Network/VirtualRouteForm.xeto.cs:55
-#: Editor/Network/VirtualRouteForm.xeto.cs:69
+#: Editor/Network/VirtualRouteForm.xeto.cs:56
+#: Editor/Network/VirtualRouteForm.xeto.cs:70
 msgid "Virtuelle Strecke löschen"
 msgstr "Delete virtual line"
 
-#: Editor/Network/VirtualRouteForm.xeto.cs:70
+#: Editor/Network/VirtualRouteForm.xeto.cs:71
 msgid "Neue virtuelle Strecke"
 msgstr "New virtual line"
 
-#: Editor/Network/VirtualRouteForm.xeto.cs:72
+#: Editor/Network/VirtualRouteForm.xeto.cs:73
 msgid "Virtuelle Strecken bearbeiten"
 msgstr "Edit virtual line"
 
@@ -750,11 +754,11 @@ msgstr "Remove"
 msgid "Eine Strecke trennen"
 msgstr "Divide line next to this station"
 
-#: Editor/Rendering/NetworkEditingControl.xeto.cs:231
+#: Editor/Rendering/NetworkEditingControl.xeto.cs:230
 msgid "Neue &Strecke"
 msgstr "Add new &line"
 
-#: Editor/Rendering/NetworkEditingControl.xeto.cs:232
+#: Editor/Rendering/NetworkEditingControl.xeto.cs:231
 msgid "Strecken &zusammenführen"
 msgstr "&Join lines"
 
@@ -998,6 +1002,10 @@ msgstr "Time between new trains"
 #: Editor/Trains/TrainEditForm.xeto.cs:58
 msgid "Tage"
 msgstr "Days"
+
+#: Editor/Trains/TrainEditForm.xeto.cs:59
+msgid "Station"
+msgstr "Station"
 
 #: Editor/Trains/TrainEditForm.xeto.cs:130
 #, csharp-format
@@ -1945,9 +1953,6 @@ msgstr "You are using the most recent version of FPLedit ({0})"
 
 #~ msgid "<Alle Stationen>"
 #~ msgstr "<All stations>"
-
-#~ msgid "Station"
-#~ msgstr "Station"
 
 #~ msgid ""
 #~ "Dieser Zug hat komplexe Folgezüge/mehr als einen Folgezug definiert. Dies "

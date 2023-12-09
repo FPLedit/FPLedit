@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-11-24 23:48+0100\n"
-"PO-Revision-Date: 2023-11-24 23:48+0100\n"
+"POT-Creation-Date: 2023-12-09 23:28+0100\n"
+"PO-Revision-Date: 2023-12-09 23:29+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -219,19 +219,27 @@ msgstr "Error while exporting graphical timetable!"
 msgid "Exportieren des Bildfahrplans erfolgreich abgeschlossen!"
 msgstr "Successfully exported graphical timetable!"
 
-#: Forms/PreviewForm.xeto.cs:159
+#: Forms/PreviewForm.xeto.cs:126 Render/AsyncDoubleBufferedGraph.cs:109
+msgid ""
+"Ungültige (zusammengefallene) virtuelle Strecke!\n"
+"Bitte die virtuelle Strecke neu anlegen."
+msgstr ""
+"Invalid (collapsed) virtual route!\n"
+"Recreate the virtual route to fix the problem."
+
+#: Forms/PreviewForm.xeto.cs:170
 msgid "&Darstellung ändern"
 msgstr "Change &plan display"
 
-#: Forms/PreviewForm.xeto.cs:160
+#: Forms/PreviewForm.xeto.cs:171
 msgid "Stationen nicht mitscrollen"
 msgstr "Do not scroll station names"
 
-#: Forms/PreviewForm.xeto.cs:161
+#: Forms/PreviewForm.xeto.cs:172
 msgid "Verkehrstage"
 msgstr "Days"
 
-#: Forms/PreviewForm.xeto.cs:162
+#: Forms/PreviewForm.xeto.cs:173
 msgid "Dynamische Bildfahrplan-Vorschau"
 msgstr "Dynamic graphical timetable preview"
 
@@ -337,31 +345,31 @@ msgstr "Reset train display"
 msgid "Zugdarstellung ändern"
 msgstr "Change train display"
 
-#: Helpers/DashStyleHelper.cs:11
+#: Helpers/DashStyleHelper.cs:12
 msgid "Normal"
 msgstr "Normal"
 
-#: Helpers/DashStyleHelper.cs:12
+#: Helpers/DashStyleHelper.cs:13
 msgid "Gepunktet"
 msgstr "Dotted"
 
-#: Helpers/DashStyleHelper.cs:13
+#: Helpers/DashStyleHelper.cs:14
 msgid "Kurz gestrichelt"
 msgstr "Dashed (short)"
 
-#: Helpers/DashStyleHelper.cs:14
+#: Helpers/DashStyleHelper.cs:15
 msgid "Länger gestrichelt (63)"
 msgstr "Dashed (63)"
 
-#: Helpers/DashStyleHelper.cs:15
+#: Helpers/DashStyleHelper.cs:16
 msgid "Länger gestrichelt (93)"
 msgstr "Dashed (93)"
 
-#: Helpers/DashStyleHelper.cs:16
+#: Helpers/DashStyleHelper.cs:17
 msgid "Lang gestrichelt"
 msgstr "Dashed (long)"
 
-#: Render/AsyncDoubleBufferedGraph.cs:93
+#: Render/AsyncDoubleBufferedGraph.cs:94
 msgid "Generiere Bildfahrplan..."
 msgstr "Generating graphical timetable..."
 

@@ -27,6 +27,7 @@ internal sealed class VirtualRouteForm : FDialog<DialogResult>
         Eto.Serialization.Xaml.XamlReader.Load(this);
 
         gridView.AddFuncColumn<VirtualRoute>(t => t.GetRouteName(), T._("Streckenverlauf"));
+        gridView.AddFuncColumn<VirtualRoute>(t => t.GetPathData().IsValidUncollapsed() ? "" : T._("ungültig, bitte neu anlegen!"), "");
         gridView.DataStore = VirtualRoute.GetVRoutes(tt).ToArray();
 
         this.AddCloseHandler();

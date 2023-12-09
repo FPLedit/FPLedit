@@ -109,7 +109,7 @@ public class VirtualRoute
         return pd;
     }
 
-    public string GetRouteName() 
+    public string GetRouteName()
         => "[v] " + string.Join(" - ", new[] { start }.Concat(waypoints).Concat(new[] { end }).Select(s => s.SName));
 }
 
