@@ -24,7 +24,7 @@
     <!-- Conflicts between different versions. -->
     <MSBuildWarningsAsMessages>$(MSBuildWarningsAsMessages);MSB3277</MSBuildWarningsAsMessages>
 
-    <EtoVersion>2.8.1</EtoVersion>
+    <EtoVersion>2.8.2</EtoVersion>
 
 	  <!-- Assembly info -->
 	  <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
@@ -52,7 +52,7 @@
 
   <!-- Include Analyzers -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.4" />
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="8.0.0" />
   </ItemGroup>
 
   <PropertyGroup Condition="$(FPLeditEnableSystemDrawing)">

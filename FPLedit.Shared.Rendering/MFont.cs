@@ -175,7 +175,7 @@ public sealed class MFont : IDisposable
 #pragma warning disable CA1416
         instanceCachedSd?.Dispose();
         instanceCachedSd = null;
-#pragma warning enable CA1416
+#pragma warning restore CA1416
 #endif
         instanceCachedPdf = null;
     }

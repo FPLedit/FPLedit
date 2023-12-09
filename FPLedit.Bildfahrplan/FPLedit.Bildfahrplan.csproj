@@ -26,7 +26,7 @@
     <PackageReference Include="Eto.Forms" Version="$(EtoVersion)" />
     <PackageReference Include="Eto.Serialization.Xaml" Version="$(EtoVersion)" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="PDFsharp" Version="6.0.0-preview-4" />
+    <PackageReference Include="PDFsharp" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Languages/*.mo" CopyToOutputDirectory="Always" />
