@@ -30,6 +30,9 @@ internal sealed class VirtualRouteForm : FDialog<DialogResult>
         gridView.AddFuncColumn<VirtualRoute>(t => t.GetPathData().IsValidUncollapsed() ? "" : T._("ungültig, bitte neu anlegen!"), "");
         gridView.DataStore = VirtualRoute.GetVRoutes(tt).ToArray();
 
+        // This allows the selection of the last row on Wpf, see Eto#2443.
+        if (Platform.IsGtk) gridView.AllowEmptySelection = false;
+
         this.AddCloseHandler();
     }
         

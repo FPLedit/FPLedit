@@ -74,6 +74,8 @@ internal sealed class TimetableCheckRunner
         };
         gridView = new GridView();
         gridView.AddFuncColumn<string>(s => s, T._("Meldung"));
+        // This allows the selection of the last row on Wpf, see Eto#2443.
+        if (gridView.Platform.IsGtk) gridView.AllowEmptySelection = false;
         stack.Add(gridView, 0, 0);
 
         form = new FForm()

@@ -89,6 +89,9 @@ internal sealed class LinearTrainsEditForm : BaseTrainsEditor
             foreach (var button in buttons)
                 button.Enabled = view.SelectedItem != null && !((ITrain) view.SelectedItem).IsLink;
         };
+
+        // This allows the selection of the last row on Wpf, see Eto#2443.
+        if (Platform.IsGtk) view.AllowEmptySelection = false;
     }
 
     private void CloseButton_Click(object sender, EventArgs e)

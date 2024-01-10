@@ -32,6 +32,9 @@ internal sealed class TrainPropsForm : FDialog<DialogResult>
 
         gridView.DataStore = tt.Trains.OfType<IWritableTrain>().Select(t => new GtfsTrainAttrs(t)).ToArray();
 
+        // This allows the selection of the last row on Wpf, see Eto#2443.
+        if (Platform.IsGtk) gridView.AllowEmptySelection = false;
+
         this.AddCloseHandler();
     }
         

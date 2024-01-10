@@ -40,6 +40,9 @@ internal sealed class StationStyleForm : FDialog<DialogResult>
 
         gridView.DataStore = tt.Stations.Select(s => new StationStyle(s, attrs)).ToArray();
 
+        // This allows the selection of the last row on Wpf, see Eto#2443.
+        if (Platform.IsGtk) gridView.AllowEmptySelection = false;
+
         this.AddCloseHandler();
     }
     private void ResetStationStyle(bool message = true)

@@ -60,6 +60,9 @@ internal sealed class SettingsControl : Panel, IAppearanceHandler
         kbsnListView.AddFuncColumn<Route>(r => r.GetRouteName(), T._("Strecke"));
         kbsnListView.DataStore = tt.GetRoutes();
 
+        // This allows the selection of the last row on Wpf, see Eto#2443.
+        if (Platform.IsGtk) kbsnListView.AllowEmptySelection = false;
+
         var tmpl = chooser.GetTemplate(tt);
         templateComboBox.SelectedValue = tmpl;
 

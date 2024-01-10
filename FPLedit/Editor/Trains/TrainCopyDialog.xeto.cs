@@ -47,6 +47,9 @@ internal sealed class TrainCopyDialog : FDialog<DialogResult>
         specialNameGridView.AddFuncColumn((SpecialNameEntry spn) => spn.RowNumber.ToString(), "");
         specialNameGridView.AddColumn((SpecialNameEntry spn) => spn.Name, T._("Zugname"), true);
         specialNameGridView.DataStore = new[] { new SpecialNameEntry(1, "") };
+
+        // This allows the selection of the last row on Wpf, see Eto#2443.
+        if (Platform.IsGtk) specialNameGridView.AllowEmptySelection = false;
     }
 
     private void CountTextBox_TextChanged(object sender, EventArgs e)

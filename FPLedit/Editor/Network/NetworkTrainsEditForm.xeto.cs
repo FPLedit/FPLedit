@@ -38,6 +38,9 @@ internal sealed class NetworkTrainsEditForm : BaseTrainsEditor
 
         gridView.MouseDoubleClick += (_, _) => EditTrain(gridView, TrainDirection.tr, false);
 
+        // This allows the selection of the last row on Wpf, see Eto#2443.
+        if (Platform.IsGtk) gridView.AllowEmptySelection = false;
+
         UpdateListView(gridView, TrainDirection.tr);
 
         if (Eto.Platform.Instance.IsWpf)

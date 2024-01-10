@@ -47,6 +47,9 @@ internal sealed class FilterForm : FDialog<DialogResult>
     {
         view.AddFuncColumn<FilterRule>(r => TypeDescription(r.FilterType, r.Negate), T._("Typ"));
         view.AddFuncColumn<FilterRule>(r => r.SearchString, T._("Suchwert"));
+
+        // This allows the selection of the last row on Wpf, see Eto#2443.
+        if (Platform.IsGtk) view.AllowEmptySelection = false;
     }
 
     private void SwitchType(int idx)

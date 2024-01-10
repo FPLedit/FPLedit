@@ -40,6 +40,9 @@ internal sealed class LineEditForm : FDialog<DialogResult>
         else
             gridView.KeyDown += HandleKeystroke;
 
+        // This allows the selection of the last row on Wpf, see Eto#2443.
+        if (Platform.IsGtk) gridView.AllowEmptySelection = false;
+
         pluginInterface.FileStateChanged += OnFileStateChanged;
         Closing += (_, _) => pluginInterface.FileStateChanged -= OnFileStateChanged;
 

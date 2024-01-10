@@ -53,10 +53,14 @@ internal sealed class TrainEditForm : FDialog<TrainEditForm.EditResult?>
         linkGridView.AddFuncColumn<TrainLink>(tl => tl.TrainCount.ToString(), T._("Anzahl"));
         linkGridView.AddFuncColumn<TrainLink>(tl => tl.TimeOffset.ToTimeString(), T._("Erster Abstand"));
         linkGridView.AddFuncColumn<TrainLink>(tl => tl.TimeDifference.ToTimeString(), T._("Zeitdifferenz"));
+        // This allows the selection of the last row on Wpf, see Eto#2443.
+        if (Platform.IsGtk) linkGridView.AllowEmptySelection = false;
 
         transitionsGridView.AddFuncColumn<TransitionEntry>(tl => tl.NextTrain.TName, T._("Folgezug"));
         transitionsGridView.AddFuncColumn<TransitionEntry>(tl => tl.Days.ToBinString(), T._("Tage"));
         transitionsGridView.AddFuncColumn<TransitionEntry>(tl => tl.Station?.SName ?? "-", T._("Station"));
+        // This allows the selection of the last row on Wpf, see Eto#2443.
+        if (Platform.IsGtk) transitionsGridView.AllowEmptySelection = false;
     }
 
     /// <summary>

@@ -34,6 +34,9 @@ internal sealed class VelocityForm : FDialog<DialogResult>
 
         gridView.SelectedItemsChanged += (_, _) => SelectPoint();
 
+        // This allows the selection of the last row on Wpf, see Eto#2443.
+        if (Platform.IsGtk) gridView.AllowEmptySelection = false;
+
         this.AddCloseHandler();
         this.AddSizeStateHandler();
     }

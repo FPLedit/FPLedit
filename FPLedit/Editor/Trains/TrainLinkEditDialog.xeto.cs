@@ -65,6 +65,9 @@ internal sealed class TrainLinkEditDialog : FDialog<DialogResult>
             default:
                 throw new NotSupportedException("Not Implemented: Name calculator not supported!");
         }
+
+        // This allows the selection of the last row on Wpf, see Eto#2443.
+        if (Platform.IsGtk) specialNameGridView.AllowEmptySelection = false;
     }
         
     private void CountTextBox_TextChanged(object sender, EventArgs e)

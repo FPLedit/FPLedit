@@ -41,6 +41,9 @@ internal sealed class TemplatesControl : Panel
         gridView.AddFuncColumn<TemplateHost>(t => buildName(t.Identifier), T._("Dateiname"));
         gridView.AddFuncColumn<TemplateHost>(t => t.TemplateType!, T._("Typ"));
 
+        // This allows the selection of the last row on Wpf, see Eto#2443.
+        if (Platform.IsGtk) gridView.AllowEmptySelection = false;
+
         gridView.SelectedItemsChanged += (_, _) =>
         {
             var tmpl = (TemplateHost?)gridView.SelectedItem;

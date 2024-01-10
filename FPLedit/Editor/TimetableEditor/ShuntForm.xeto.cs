@@ -54,6 +54,9 @@ internal sealed class ShuntForm : FDialog<DialogResult>
 
         gridView.SelectedItemsChanged += (_, _) => removeButton.Enabled = gridView.SelectedItem != null;
 
+        // This allows the selection of the last row on Wpf, see Eto#2443.
+        if (Platform.IsGtk) gridView.AllowEmptySelection = false;
+
         this.AddSizeStateHandler();
 
         shuntBackup = arrDep.Copy().ShuntMoves.ToList();

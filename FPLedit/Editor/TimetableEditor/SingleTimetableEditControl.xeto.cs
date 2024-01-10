@@ -36,7 +36,7 @@ internal sealed class SingleTimetableEditControl : BaseTimetableEditControl
 
         KeyDown += (_, e) => HandleControlKeystroke(e);
         dataGridView.KeyDown += (_, e) => HandleControlKeystroke(e);
-            
+
 #pragma warning disable CA2000
         trapeztafelToggle.Image = new Bitmap(this.GetResource("Resources.trapeztafel.png")).WithSize(50, 30);
         requestToggle.Image = new Bitmap(this.GetResource("Resources.bedarf.png")).WithSize(50, 30);
@@ -333,6 +333,9 @@ internal sealed class SingleTimetableEditControl : BaseTimetableEditControl
             else
                 shuntButton.Enabled = selected.Station?.Tracks.Any() ?? false;
         };
+
+        // This allows the selection of the last row on Wpf, see Eto#2443.
+        if (Platform.IsGtk) view.AllowEmptySelection = false;
     }
 
     private (int col, int row) GetCurEditingPosition(BaseTimetableDataElement data, GridView view)
