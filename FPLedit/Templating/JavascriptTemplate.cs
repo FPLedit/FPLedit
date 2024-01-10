@@ -229,6 +229,7 @@ internal sealed class JavascriptTemplate : ITemplate
 
         // Add debugging methods.
         engine
+            .SetValue("arrdep_kvp_key", TemplateBuiltins.GetKvpKey<Station, ArrDep>)
             .SetValue("debug", TemplateBuiltins.Debug)
             .SetValue("debug_print", TemplateBuiltins.DebugPrint);
 
@@ -252,5 +253,6 @@ internal sealed class JavascriptTemplate : ITemplate
         public static ILog? Logger;
         public static void Debug(object? o) => Logger?.Info($"{o?.GetType().FullName ?? "null"}: {o ?? "null"}");
         public static void DebugPrint(object? o) => Logger?.Info($"{o}");
+        public static T1 GetKvpKey<T1, T2>(KeyValuePair<T1, T2> o) => o.Key;
     }
 }
