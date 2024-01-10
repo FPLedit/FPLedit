@@ -27,7 +27,7 @@ internal sealed class FilterForm : FDialog<DialogResult>
         var tt = pluginInterface.Timetable;
 
         var filterables = pluginInterface.GetRegistered<IFilterRuleContainer>();
-        fcontainers = filterables.Select(f => new FilterableContainer(f, f.LoadStationRules(tt).ToList(), f.LoadTrainRules(tt).ToList())).ToArray();
+        fcontainers = filterables.Select(f => new FilterableContainer(f, f.LoadTrainRules(tt).ToList(), f.LoadStationRules(tt).ToList())).ToArray();
 
         typeListBox.Items.AddRange(filterables.Select(f => new ListItem() { Text = f.DisplayName }));
         typeListBox.SelectedIndexChanged += TypeListBox_SelectedIndexChanged;
