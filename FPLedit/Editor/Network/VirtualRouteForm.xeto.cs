@@ -27,7 +27,14 @@ internal sealed class VirtualRouteForm : FDialog<DialogResult>
         Eto.Serialization.Xaml.XamlReader.Load(this);
 
         gridView.AddFuncColumn<VirtualRoute>(t => t.GetRouteName(), T._("Streckenverlauf"));
-        gridView.AddFuncColumn<VirtualRoute>(t => t.GetPathData().IsValidUncollapsed() ? "" : T._("ungültig, bitte neu anlegen!"), "");
+        gridView.AddFuncColumn<VirtualRoute>(t =>
+        {
+            bool valid = false;
+            try { valid = t.GetPathData().IsValidUncollapsed(); }
+            catch { /* ignored */ }
+
+            return valid ? "" : T._("ungültig, bitte neu anlegen!");
+        }, "");
         gridView.DataStore = VirtualRoute.GetVRoutes(tt).ToArray();
 
         // This allows the selection of the last row on Wpf, see Eto#2443.

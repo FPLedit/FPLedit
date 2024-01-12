@@ -104,7 +104,7 @@ public class VirtualRoute
         var pf = new Pathfinder(tt);
         var stas = pf.GetPath(start, end, waypoints);
         var pd = new PathData(tt, stas);
-        if (pd.IsValidUncollapsed())
+        if (!pd.IsValidUncollapsed())
             throw new VirtualRouteInvalidEception(T._("Ungültige (zusammengefallene) virtuelle Strecke!"));
         return pd;
     }
