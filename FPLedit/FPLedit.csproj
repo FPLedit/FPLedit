@@ -81,7 +81,7 @@
   <ItemGroup>
     <PackageReference Include="Eto.Forms" Version="$(EtoVersion)" />
     <PackageReference Include="Eto.Serialization.Xaml" Version="$(EtoVersion)" />
-    <PackageReference Include="Jint" Version="3.0.0-beta-2056" />
+    <PackageReference Include="Jint" Version="3.0.0-beta-2058" />
     <PackageReference Include="Mono.Options" Version="6.12.0.148" />
     <PackageReference Include="Portable.Xaml" Version="0.26.0" />
     <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
