@@ -30,7 +30,7 @@ internal abstract class BaseTrainsEditor : FDialog<DialogResult>
                     if (message)
                         MessageBox.Show(T._("Der Zug kann nicht gelöscht werden, da er mindestens von einem verlinkten Zug referenziert wird!"), T._("Zug löschen"));
                 }
-                else
+                else if (MessageBox.Show(T._("Zug wirklich löschen?"), T._("Zug löschen"), MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     tt.RemoveTrain(train);
                     UpdateListView(view, dir);

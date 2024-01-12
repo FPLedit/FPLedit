@@ -116,8 +116,11 @@ internal sealed class LineEditForm : FDialog<DialogResult>
                 return;
             }
 
-            pluginInterface.Timetable.RemoveStation(sta);
-            UpdateStations();
+            if (MessageBox.Show(T._("Station wirklich löschen?"), "FPLedit", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                pluginInterface.Timetable.RemoveStation(sta);
+                UpdateStations();
+            }
         }
         else if (message)
             MessageBox.Show(T._("Zuerst muss eine Station ausgewählt werden!"), T._("Station löschen"));
