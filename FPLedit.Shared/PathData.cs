@@ -149,7 +149,33 @@ public class PathData : ISortedStations
     /// </summary>
     public IEnumerable<Station> GetRawPath() => Entries.Select(e => e.Station);
 
+    /// <summary>
+    /// Checks whether the current path is valid in the sense, that it does not contain any station multiple times.
+    /// </summary>
     public bool IsValidUncollapsed() => Entries.DistinctBy(e => e.Station).Count() == Entries.Length;
+
+    /// <summary>
+    /// Get a monotonically increasing position of all station along this path.
+    /// </summary>
+    public Dictionary<Station, float> GetPositionsAlongPath()
+    {
+        var pos = new Dictionary<Station, float>();
+        var p = 0.0f;
+        Station? last = null;
+        foreach (var pe in Entries)
+        {
+            if (last != null)
+            {
+                var route = GetEntryRoute(pe.Station);
+                p += Math.Abs(pe.Station.Positions.GetPosition(route)!.Value - last.Positions.GetPosition(route)!.Value);
+            }
+
+            pos.Add(pe.Station, p);
+            last = pe.Station;
+        }
+
+        return pos;
+    }
 
     /// <summary>
     /// Get an empty <see cref="PathData"/>-Instance.

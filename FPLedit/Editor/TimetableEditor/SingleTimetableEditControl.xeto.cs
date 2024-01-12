@@ -310,8 +310,20 @@ internal sealed class SingleTimetableEditControl : BaseTimetableEditControl
 
     private void InitializeGridView(GridView view)
     {
+        var pathData = new PathData(train.ParentTimetable, path);
+        var posAlongPath = pathData.GetPositionsAlongPath();
+
+        string NameCell(DataElement t)
+        {
+            if (t.IsMpDummy) return "";
+
+            // Durchlaufende Kilometrierung.
+            posAlongPath.TryGetValue(t.Station!, out var pos);
+            return t.Station!.SName + $" [{pos:f1}]";
+        }
+
         view.Columns.Clear();
-        view.AddFuncColumn<DataElement>(t => t.IsMpDummy ? "" : t.Station!.SName, T._("Bahnhof"));
+        view.AddFuncColumn<DataElement>(NameCell, T._("Bahnhof"));
         view.AddColumn(GetCell(t => t.Arrival, true), T._("Ankunft"), editable: true);
         view.AddColumn(GetCell(t => t.Departure, false), T._("Abfahrt"), editable: true);
         view.AddColumn(GetTrackCell(t => t.ArrivalTrack, (t,s) => t.ArrivalTrack = s, true), T._("Ankunftsgleis"), editable: true);
