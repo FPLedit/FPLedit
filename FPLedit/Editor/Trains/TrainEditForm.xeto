@@ -5,7 +5,7 @@
   xmlns:et="clr-namespace:FPLedit.Editor.TimetableEditor;assembly=FPLedit"
   xmlns:fui="clr-namespace:FPLedit.Shared.UI;assembly=FPLedit.Shared.UI"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
-  Title="{x:Static e:TrainEditForm+L.Title}" Resizable="true" MinimumSize="1000,700" >
+  Title="{x:Static e:TrainEditForm+L.Title}" Resizable="true" MinimumSize="1000,950" >
   <TableLayout Padding="10,10,10,10" Spacing="5,5">
     <TableRow ScaleHeight="true">
       <TableCell><!-- left column -->
