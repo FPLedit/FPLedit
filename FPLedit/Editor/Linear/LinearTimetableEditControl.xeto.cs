@@ -201,17 +201,6 @@ internal sealed class LinearTimetableEditControl : BaseTimetableEditControl
         public Station? SelectedStation { get; set; }
 
         public override Station? GetStation() => SelectedStation;
-
-        public static DataElement CreateMpDummy()
-        {
-            return new()
-            {
-                IsMpDummy = true,
-                Train = null,
-                ArrDeps = null,
-                SelectedStation = null,
-            };
-        }
     }
 
     private string GetTransition(ITrain t) => tt.GetTransition(t)?.TName ?? "";
@@ -233,15 +222,11 @@ internal sealed class LinearTimetableEditControl : BaseTimetableEditControl
         view.GotFocus += (_, _) => focused = view;
         view.KeyDown += (_, e) => HandleViewKeystroke(e, view);
 
-        var l = tt.Trains.Where(t => t.Direction == dir).Select(tra => new DataElement
+        view.DataStore = tt.Trains.Where(t => t.Direction == dir).Select(tra => new DataElement
         {
             Train = tra,
             ArrDeps = tra.GetArrDepsUnsorted()
         }).ToArray();
-        //if (mpmode)
-        //    l.Add(DataElement.CreateMpDummy()); // Add empty "last line" in multiplatform mode.
-
-        view.DataStore = l;
 
         // This allows the selection of the last row on Wpf, see Eto#2443.
         if (Platform.IsGtk) view.AllowEmptySelection = false;

@@ -297,15 +297,6 @@ internal sealed class SingleTimetableEditControl : BaseTimetableEditControl
                 ArrDeps = new Dictionary<Station, ArrDep>(1) { [sta] = arrDep };
             Station = sta;
         }
-            
-        public static DataElement CreateMpDummy()
-        {
-            return new(null!, null!, null!)
-            {
-                IsMpDummy = true,
-                ArrDeps = null,
-            };
-        }
     }
 
     private void InitializeGridView(GridView view)
@@ -332,11 +323,7 @@ internal sealed class SingleTimetableEditControl : BaseTimetableEditControl
 
         view.KeyDown += (_, e) => HandleViewKeystroke(e, view);
 
-        var l = path.Select(sta => new DataElement(train, sta, train.GetArrDep(sta))).ToArray();
-        //if (mpmode)
-        //    l.Add(DataElement.CreateMpDummy()); // Add empty "last line" in multiplatform mode.
-
-        view.DataStore = l;
+        view.DataStore = path.Select(sta => new DataElement(train, sta, train.GetArrDep(sta))).ToArray();
         view.SelectedRowsChanged += (_, _) =>
         {
             var selected = (DataElement?) view.SelectedItem;

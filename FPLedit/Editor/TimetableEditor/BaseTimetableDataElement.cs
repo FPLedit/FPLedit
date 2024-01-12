@@ -12,7 +12,7 @@ internal abstract class BaseTimetableDataElement
     /// A last line has to be added that has no contents (but is not null). This is accomplished by creating a
     /// DataElement with IsMpDummy = true.
     /// </summary>
-    public bool IsMpDummy { get; protected init; }
+    public bool IsMpDummy => false;
 
     public ITrain? Train { get; init; }
 
