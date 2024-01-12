@@ -237,11 +237,11 @@ internal sealed class LinearTimetableEditControl : BaseTimetableEditControl
         {
             Train = tra,
             ArrDeps = tra.GetArrDepsUnsorted()
-        }).ToList();
-        if (mpmode)
-            l.Add(DataElement.CreateMpDummy()); // Add empty "last line" in multiplatform mode.
+        }).ToArray();
+        //if (mpmode)
+        //    l.Add(DataElement.CreateMpDummy()); // Add empty "last line" in multiplatform mode.
 
-        view.DataStore = l.ToArray();
+        view.DataStore = l;
 
         // This allows the selection of the last row on Wpf, see Eto#2443.
         if (Platform.IsGtk) view.AllowEmptySelection = false;

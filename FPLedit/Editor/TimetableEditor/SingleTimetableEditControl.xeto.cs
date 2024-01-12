@@ -319,10 +319,10 @@ internal sealed class SingleTimetableEditControl : BaseTimetableEditControl
         view.AddColumn(GetCheckCell(t => t.ShuntMoves.Any()), T._("Rangiert"), editable: false);
 
         view.KeyDown += (_, e) => HandleViewKeystroke(e, view);
-            
-        var l = path.Select(sta => new DataElement(train, sta, train.GetArrDep(sta))).ToList();
-        if (mpmode)
-            l.Add(DataElement.CreateMpDummy()); // Add empty "last line" in multiplatform mode.
+
+        var l = path.Select(sta => new DataElement(train, sta, train.GetArrDep(sta))).ToArray();
+        //if (mpmode)
+        //    l.Add(DataElement.CreateMpDummy()); // Add empty "last line" in multiplatform mode.
 
         view.DataStore = l;
         view.SelectedRowsChanged += (_, _) =>
