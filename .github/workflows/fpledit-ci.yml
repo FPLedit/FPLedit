@@ -35,7 +35,7 @@ jobs:
         run: dotnet tool restore
 
       - name: Build
-        run: dotnet cake --rid=linux-x64,osx-x64,win-x64
+        run: dotnet cake --rid=linux-x64,osx-x64,win-x64,win-x86
         env:
           FPLEDIT_GIT: ${{ github.sha }}
           FPLEDIT_DOK_PDF: ./Dokumentation.pdf
