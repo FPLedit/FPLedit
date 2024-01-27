@@ -42,9 +42,8 @@ function DirCell( /* Train[] */ trains, /* int */ i) {
     var train = trains.length > i ? trains[i] : null;
     if (train == null)
         return "<td class=\"direction\"></td>";
-
-    var last_sta = train.GetArrDepsUnsorted().last((kvp) => kvp.value.HasMinOneTimeSet);
-    return "<td class=\"direction\">" + arrdep_kvp_key(last_sta).SName.safeHtml() + "</td>";
+ 
+    return "<td class=\"direction\">" + train.GetArrDepsUnsorted().last((kvp) => kvp.value.HasMinOneTimeSet).key.SName.safeHtml() + "</td>";
 }
 
 function DirHeader(/* bool */ showText) {
