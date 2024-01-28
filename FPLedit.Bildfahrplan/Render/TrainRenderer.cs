@@ -11,21 +11,20 @@ namespace FPLedit.Bildfahrplan.Render;
 
 internal sealed class TrainRenderer
 {
-    private readonly IEnumerable<Station> stations; // Selected route, ordered
+    private readonly IList<Station> stations; // Selected route, ordered
     private readonly Timetable tt;
     private readonly Margins margin;
     private readonly TimetableStyle attrs;
     private readonly TimeEntry startTime;
     private readonly Dictionary<Station, StationRenderProps> stationOffsets;
     private readonly Days renderDays;
-    private ITrain[]? trainCache;
 
     private readonly DashStyleHelper ds = new();
     private readonly TrackHelper tracks = new();
 
     private readonly float clipTop, clipBottom, clipRight, clipLeft;
 
-    public TrainRenderer(IEnumerable<Station> stations, Timetable tt, Margins margin, TimeEntry startTime, Dictionary<Station, StationRenderProps> stationOffsets, Days renderDays, float clipTop, float clipBottom, float clipRight)
+    public TrainRenderer(IList<Station> stations, Timetable tt, Margins margin, TimeEntry startTime, Dictionary<Station, StationRenderProps> stationOffsets, Days renderDays, float clipTop, float clipBottom, float clipRight)
     {
         this.stations = stations;
         this.tt = tt;
@@ -48,78 +47,103 @@ internal sealed class TrainRenderer
 
         var ardps = train.GetArrDepsUnsorted();
         var path = train.GetPath();
-        var dir = GetTrainDirection(train);
 
-        var halfLineVec = new Vec2(dir ? -50 : 50, 20); // Halbe Linien bei Abfahrten / Ankünften ohne Gegenstelle
+        Vec2 HalfLineVec(bool dir) => new (dir ? -50 : 50, 20); // Halbe Linien bei Abfahrten / Ankünften ohne Gegenstelle
 
         var pen = (style.CalcedColor, style.CalcedWidth, ds.ParseDashstyle(style.CalcedLineStyle));
         var brush = style.CalcedColor;
-            
+
         List<Vec2> points = new List<Vec2>();
         List<int> pointBreaks = new List<int>();
-        bool hadFirstArrival = false, hadLastDeparture = false, isFirst = true;
-        var stas = dir ? Enumerable.Reverse(stations) : stations;
+        bool? hadFirstArrival = null, hadLastDeparture = null;
+        var isFirst = true;
 
-        int trainTravelsRouteCount = 0;
-        int lastPathIdx = -2;
-        bool hadLastSkippedStation = false;
-        foreach (var sta in stas)
+        Station? lastSta = null;
+        var hadLastSkippedStation = false;
+        var trainTravelsRouteCount = 0;
+        foreach (var sta in path)
         {
-            var pathIdx = path.IndexOf(sta);
-            var skippedStation = pathIdx == -1 || (lastPathIdx != -2 && pathIdx != lastPathIdx + 1); // in the last step, we skipped some stations of this train.
+            var skippedStation = lastSta != null &&
+                                 (!stations.Contains(lastSta)
+                                  || (stations.Contains(sta) && Math.Abs(stations.IndexOf(lastSta) - stations.IndexOf(sta)) != 1));
+
             if (skippedStation && !hadLastSkippedStation && points.Count > 0)
             {
                 // Halbe Linien bei Abfahrten / Ankünften ohne Gegenstelle (hier innerhalb der Strecke und nicht am Rand)
-                if (attrs.DrawNetworkTrains && hadLastDeparture)
-                    points.Add(points.Last() + halfLineVec);
+                if (attrs.DrawNetworkTrains && hadLastDeparture.HasValue)
+                    points.Add(points.Last() + HalfLineVec(hadLastDeparture.Value));
                 pointBreaks.Add(points.Count);
             }
-            lastPathIdx = pathIdx;
-            hadLastSkippedStation = skippedStation;
+            hadLastSkippedStation = !isFirst && skippedStation;
 
-            if (!ardps.ContainsKey(sta))
+            if (!stations.Contains(sta))
+            {
+                lastSta = sta;
                 continue;
+            }
+
             var ardp = ardps[sta];
             trainTravelsRouteCount++;
-
             if (!ardp.HasMinOneTimeSet)
+            {
+                lastSta = sta;
                 continue;
+            }
 
             var prePointIndex = points.Count; // needed for prepending a half-line
 
-            MaybeAddPoint(points, GetGutterPoint(true, dir, stationOffsets[sta], ardp.Arrival));
+            bool dir;
+            var curOffset = stationOffsets[sta];
+            // Derive the direction _for this segment_
+            if (!skippedStation && !isFirst)
+            {
+                stationOffsets.TryGetValue(lastSta ?? sta, out var lastOffset);
+                dir = (lastOffset ?? curOffset).Center > curOffset.Center;
+            }
+            else
+            {
+                var staIdx = path.IndexOf(sta) + 1;
+                var nextSta = path.Count <= staIdx ? null : path[staIdx];
+                stationOffsets.TryGetValue(nextSta ?? sta, out var nextOffset);
+                dir = curOffset.Center > (nextOffset ?? curOffset).Center;
+            }
+
+            MaybeAddPoint(points, GetGutterPoint(true, dir, curOffset, ardp.Arrival));
             var arrivalTrack = tracks.GetTrack(train, sta, dir ? TrainDirection.ta : TrainDirection.ti, ardp, TrackQuery.Arrival);
-            MaybeAddPoint(points, GetInternalPoint(stationOffsets[sta], ardp.Arrival, arrivalTrack));
+            MaybeAddPoint(points, GetInternalPoint(curOffset, ardp.Arrival, arrivalTrack));
 
             foreach (var shunt in ardp.ShuntMoves)
             {
-                MaybeAddPoint(points, GetInternalPoint(stationOffsets[sta], shunt.Time, shunt.SourceTrack));
-                MaybeAddPoint(points, GetInternalPoint(stationOffsets[sta], shunt.Time, shunt.TargetTrack));
+                MaybeAddPoint(points, GetInternalPoint(curOffset, shunt.Time, shunt.SourceTrack));
+                MaybeAddPoint(points, GetInternalPoint(curOffset, shunt.Time, shunt.TargetTrack));
             }
 
             var departureTrack = tracks.GetTrack(train, sta, dir ? TrainDirection.ta : TrainDirection.ti, ardp, TrackQuery.Departure);
-            MaybeAddPoint(points, GetInternalPoint(stationOffsets[sta], ardp.Departure, departureTrack));
-            MaybeAddPoint(points, GetGutterPoint(false, dir, stationOffsets[sta], ardp.Departure));
+            MaybeAddPoint(points, GetInternalPoint(curOffset, ardp.Departure, departureTrack));
+            MaybeAddPoint(points, GetGutterPoint(false, dir, curOffset, ardp.Departure));
 
             // Halbe Linien bei Abfahrten / Ankünften ohne Gegenstelle (hier innerhalb der Strecke und nicht am Rand)
             if (skippedStation && attrs.DrawNetworkTrains && ardp.Arrival != default)
-                points.Insert(prePointIndex, points[prePointIndex] - halfLineVec);
+                points.Insert(prePointIndex, points[prePointIndex] - HalfLineVec(dir));
 
-            hadLastDeparture = ardp.Departure != default;
+            hadLastDeparture = ardp.Departure != default ? dir : null;
             if (isFirst)
-                hadFirstArrival = ardp.Arrival != default;
+                hadFirstArrival = ardp.Arrival != default ? dir : null;
             isFirst = false;
+
+            lastSta = sta;
         }
 
         // Halbe Linien bei Abfahrten / Ankünften ohne Gegenstelle
         if (attrs.DrawNetworkTrains)
         {
-            if (hadLastDeparture)
-                points.Add(points.Last() + halfLineVec);
-            if (hadFirstArrival)
+            if (hadLastDeparture.HasValue)
+                points.Add(points.Last() + HalfLineVec(hadLastDeparture.Value));
+
+            if (hadFirstArrival.HasValue)
             {
                 pointBreaks = pointBreaks.Select(pb => pb + 1).ToList(); // increment all break indices, as we will prepend a point.
-                points.Insert(0, points.First() - halfLineVec);
+                points.Insert(0, points.First() - HalfLineVec(hadFirstArrival.Value));
             }
         }
         else if (trainTravelsRouteCount <= 1)
@@ -131,7 +155,7 @@ internal sealed class TrainRenderer
         // Transition to the next train; filtered by days and station.
         var lastStaOfFirst = GetSortedStations(train)?.LastOrDefault();
         var transition = tt.GetTransition(train, renderDays, lastStaOfFirst);
-        if (transition != null && !hadLastDeparture && attrs.StationLines != StationLineStyle.None && transition.Days.IsIntersecting(renderDays))
+        if (transition != null && !(hadLastDeparture.HasValue && hadLastDeparture.Value) && attrs.StationLines != StationLineStyle.None && transition.Days.IsIntersecting(renderDays))
         {
             var firstStaOfNext = GetSortedStations(transition)?.FirstOrDefault();
 
@@ -224,7 +248,7 @@ internal sealed class TrainRenderer
         if (t.X < clipLeft + margin.Left || t.X > clipRight - margin.Right)
             return;
 
-        var angle = CalcAngle(ys, xs, train);
+        var angle = CalcAngle(ys, xs);
         var dh = (size.Width / 2 + size.Height / (2 + Math.Tan(angle))) * Math.Sin(angle);
 
         if (t.Y < clipTop + dh || t.Y > clipBottom - dh) // now check that we are fully inside the clipping area.
@@ -287,55 +311,10 @@ internal sealed class TrainRenderer
     }
     #endregion
 
-    #region Direction helpers
-    private bool GetTrainDirection(ITrain train)
+    private float CalcAngle(float[] ys, float[] xs)
     {
-        if (tt.Type == TimetableType.Linear)
-            return train.Direction == TrainDirection.ta;
-
-        return GetTrains(TrainDirection.ta).Contains(train);
-    }
-
-    private Station[] GetStationsInDir(TrainDirection dir)
-    {
-        var route = (tt.Type == TimetableType.Linear ? tt.GetRoute(Timetable.LINEAR_ROUTE_ID).Stations : stations)
-            .ToArray(); // Kopie erzeugen
-        if (dir.IsSortReverse())
-            Array.Reverse(route);
-
-        return route;
-    }
-
-    private ITrain[] GetTrains(TrainDirection dir)
-    {
-        if (trainCache == null)
-        {
-            var stasAfter = GetStationsInDir(dir);
-            trainCache = tt.Trains.Where(t =>
-            {
-                var p = t.GetPath();
-                var ardeps = t.GetArrDepsUnsorted();
-
-                var intersect = stasAfter.Intersect(p)
-                    .Where(s => ardeps[s].HasMinOneTimeSet).ToArray();
-
-                if (!intersect.Any())
-                    return false;
-
-                var time1 = ardeps[intersect.First()].FirstSetTime;
-                var time2 = ardeps[intersect.Last()].FirstSetTime;
-
-                return time1 < time2;
-            }).ToArray();
-        }
-        return trainCache;
-    }
-    #endregion
-
-    private float CalcAngle(float[] ys, float[] xs, ITrain train)
-    {
-        var angle = (float)(Math.Atan2(xs.Max() - xs.Min(), ys.Max() - ys.Min()) * (180d / Math.PI));
-        return GetTrainDirection(train) ? 90 - angle : angle - 90;
+        var angle = (float)(Math.Atan2(xs[0] - xs[1], ys[0] - ys[1]) * (180d / Math.PI));
+        return angle < 90 ? angle + 90 : angle - 90;
     }
 
     private IEnumerable<Station>? GetSortedStations(ITrain train)
