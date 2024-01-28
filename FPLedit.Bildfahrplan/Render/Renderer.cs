@@ -37,7 +37,7 @@ internal sealed class Renderer
         g.Clear(attrs.BgColor);
 
         var path = getPathData();
-        var stations = path.GetRawPath().ToList();
+        var stations = path.GetRawPath();
 
         var margin = CalcMargins(g, defaultMargin, stations, startTime, endTime, drawHeader);
         var width = forceWidth ?? g.GetDrawingArea().Width;
@@ -67,7 +67,7 @@ internal sealed class Renderer
         g.Clear(attrs.BgColor);
 
         var path = getPathData();
-        var stations = path.GetRawPath().ToList();
+        var stations = path.GetRawPath();
 
         var margin = CalcMargins(g, deafultHeaderMargin, stations, attrs.StartTime, GetEndTime(attrs.StartTime, attrs.EndTime), true);
 
@@ -108,7 +108,7 @@ internal sealed class Renderer
         
     public int GetHeight(IMGraphics g, TimeEntry start, TimeEntry end, bool drawHeader)
     {
-        var stations = getPathData().GetRawPath().ToList();
+        var stations = getPathData().GetRawPath();
         var m = CalcMargins(g, defaultMargin, stations, start, end, drawHeader);
         return (int)(m.Top + m.Bottom + (end - start).GetTotalMinutes() * attrs.HeightPerHour / 60f);
     }

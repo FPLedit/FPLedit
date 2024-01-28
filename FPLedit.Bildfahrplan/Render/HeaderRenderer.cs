@@ -27,7 +27,7 @@ internal sealed class HeaderRenderer
         var stationOffsets = new Dictionary<Station, StationRenderProps>();
 
         var posAlongPath = path.GetPositionsAlongPath();
-        var raw = path.GetRawPath().ToList();
+        var raw = path.GetRawPath();
         var allTrackCount = raw.Select(s => s.Tracks.Count).Sum();
         var stasWithTracks = raw.Count(s => s.Tracks.Any());
         var allTrackWidth = (stasWithTracks + allTrackCount) * StationRenderProps.IndividualTrackOffset;
@@ -145,7 +145,7 @@ internal sealed class HeaderRenderer
 
     private float GetTrackOffset(IMGraphics g, MFont stationFont)
     {
-        var raw = path.GetRawPath().ToList();
+        var raw = path.GetRawPath();
         var emSize = g.MeasureString(stationFont, "M").Height;
         if (attrs.MultiTrack)
         {

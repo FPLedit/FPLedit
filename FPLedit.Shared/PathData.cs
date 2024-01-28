@@ -10,7 +10,8 @@ namespace FPLedit.Shared;
 [Templating.TemplateSafe]
 public class PathData : ISortedStations
 {
-    protected PathEntry[] Entries { get; set; }
+    protected PathEntry[] Entries { get; init; }
+    protected Station[] RawPath { get; init; }
     public PathEntry[] PathEntries => Entries;
 
     private readonly Timetable tt;
@@ -21,18 +22,21 @@ public class PathData : ISortedStations
     public PathData(Timetable tt, IEnumerable<Station> path) : this(tt)
     {
         Entries = Init(path.ToArray(), (s, r) => new PathEntry(s, r));
+        RawPath = Entries.Select(e => e.Station).ToArray();
     }
 
     protected PathData(Timetable tt)
     {
         this.tt = tt;
         Entries = Array.Empty<PathEntry>();
+        RawPath = Array.Empty<Station>();
     }
 
     internal PathData(Route route, Timetable tt)
     {
         this.tt = tt;
         Entries = route.Stations.Select(s => new PathEntry(s, route.Index)).ToArray();
+        RawPath = Entries.Select(e => e.Station).ToArray();
     }
 
     /// <summary>
@@ -97,21 +101,20 @@ public class PathData : ISortedStations
     /// <summary>
     /// Returns whether this path contains the given station.
     /// </summary>
-    public bool ContainsStation(Station sta) => GetRawPath().Contains(sta);
+    public bool ContainsStation(Station sta) => RawPath.Contains(sta);
 
     /// <summary>
     /// Returns whether this path connects the two given stations directly.
     /// </summary>
     public bool IsDirectlyConnected(Station sta1, Station sta2)
     {
-        var path = GetRawPath().ToArray();
-        for (int i = 0; i < path.Length; i++)
+        for (int i = 0; i < RawPath.Length; i++)
         {
-            if (path[i] != sta1)
+            if (RawPath[i] != sta1)
                 continue;
-            if (i > 0 && path[i - 1] == sta2)
+            if (i > 0 && RawPath[i - 1] == sta2)
                 return true;
-            if (i < path.Length - 1 && path[i + 1] == sta2)
+            if (i < RawPath.Length - 1 && RawPath[i + 1] == sta2)
                 return true;
         }
         return false;
@@ -132,22 +135,20 @@ public class PathData : ISortedStations
         if (radius < 0)
             throw new ArgumentOutOfRangeException(nameof(radius));
 
-        var stations = GetRawPath().ToArray();
-
-        var centerIndex = Array.IndexOf(stations, center);
+        var centerIndex = Array.IndexOf(RawPath, center);
         if (centerIndex < 0)
             return Array.Empty<Station>(); // Not in the current path
 
         var leftIndex = Math.Max(centerIndex - radius, 0);
-        var rightIndex = Math.Min(centerIndex + radius, stations.Length - 1) + 1;
+        var rightIndex = Math.Min(centerIndex + radius, RawPath.Length - 1) + 1;
 
-        return stations[leftIndex..rightIndex];
+        return RawPath[leftIndex..rightIndex];
     }
 
     /// <summary>
     /// Returns only the raw stations used in this path, without any additional information.
     /// </summary>
-    public IEnumerable<Station> GetRawPath() => Entries.Select(e => e.Station);
+    public Station[] GetRawPath() => (Station[])RawPath.Clone();
 
     /// <summary>
     /// Checks whether the current path is valid in the sense, that it does not contain any station multiple times.
@@ -202,6 +203,7 @@ public class TrainPathData : PathData
             return new TrainPathEntry(s, ardp, r);
         });
         PathEntries = Entries.OfType<TrainPathEntry>().ToArray();
+        RawPath = Entries.Select(e => e.Station).ToArray();
     }
 }
 
