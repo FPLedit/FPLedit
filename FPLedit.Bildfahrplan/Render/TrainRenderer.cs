@@ -45,6 +45,7 @@ internal sealed class TrainRenderer
         if (!style.CalcedShow)
             return;
 
+        var pathData = new TrainPathData(train.ParentTimetable, train);
         var ardps = train.GetArrDepsUnsorted();
         var path = train.GetPath();
 
@@ -109,7 +110,7 @@ internal sealed class TrainRenderer
             }
 
             MaybeAddPoint(points, GetGutterPoint(true, dir, curOffset, ardp.Arrival));
-            var arrivalTrack = tracks.GetTrack(train, sta, dir ? TrainDirection.ta : TrainDirection.ti, ardp, TrackQuery.Arrival);
+            var arrivalTrack = tracks.GetTrack(pathData, sta, dir ? TrainDirection.ta : TrainDirection.ti, ardp, TrackQuery.Arrival);
             MaybeAddPoint(points, GetInternalPoint(curOffset, ardp.Arrival, arrivalTrack));
 
             foreach (var shunt in ardp.ShuntMoves)
@@ -118,7 +119,7 @@ internal sealed class TrainRenderer
                 MaybeAddPoint(points, GetInternalPoint(curOffset, shunt.Time, shunt.TargetTrack));
             }
 
-            var departureTrack = tracks.GetTrack(train, sta, dir ? TrainDirection.ta : TrainDirection.ti, ardp, TrackQuery.Departure);
+            var departureTrack = tracks.GetTrack(pathData, sta, dir ? TrainDirection.ta : TrainDirection.ti, ardp, TrackQuery.Departure);
             MaybeAddPoint(points, GetInternalPoint(curOffset, ardp.Departure, departureTrack));
             MaybeAddPoint(points, GetGutterPoint(false, dir, curOffset, ardp.Departure));
 

@@ -32,8 +32,6 @@ internal sealed class Renderer
     public void Draw(IMGraphics g, bool drawHeader, float? forceWidth = null)
         => Draw(g, attrs.StartTime, GetEndTime(attrs.StartTime, attrs.EndTime), drawHeader, forceWidth);
 
-    public static Func<PathData> DefaultPathData(int route, Timetable tt) => () => tt.GetRoute(route).ToPathData(tt);
-
     public void Draw(IMGraphics g, TimeEntry startTime, TimeEntry endTime, bool drawHeader, float? forceWidth = null)
     {
         g.Clear(attrs.BgColor);

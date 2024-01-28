@@ -28,18 +28,20 @@ internal sealed class ShuntForm : FDialog<DialogResult>
 
         this.arrDep = arrDep;
         this.station = sta;
-            
+
+        var path = new TrainPathData(train.ParentTimetable, train);
+
         var dir = new NetworkHelper(train.ParentTimetable).GetTrainDirectionAtStation(train, sta);
         var th = new TrackHelper();
 
         arrivalLabel.Font = new Font(arrivalLabel.Font.FamilyName, arrivalLabel.Font.Size, FontStyle.Bold);
         departureLabel.Font = new Font(departureLabel.Font.FamilyName, departureLabel.Font.Size, FontStyle.Bold);
-            
-        var arrivalTrack = dir.HasValue ? th.GetTrack(train, sta, dir.Value, arrDep, TrackQuery.Departure) : "-";
+
+        var arrivalTrack = dir.HasValue ? th.GetTrack(path, sta, dir.Value, arrDep, TrackQuery.Departure) : "-";
         arrivalLabel.Text = arrivalLabel.Text.Replace("{time}", arrDep.Arrival != default ? arrDep.Arrival.ToTimeString() : "-");
         arrivalLabel.Text = arrivalLabel.Text.Replace("{track}", arrivalTrack);
-            
-        var departureTrack = dir.HasValue ? th.GetTrack(train, sta, dir.Value, arrDep, TrackQuery.Departure) : "-";
+
+        var departureTrack = dir.HasValue ? th.GetTrack(path, sta, dir.Value, arrDep, TrackQuery.Departure) : "-";
         departureLabel.Text = departureLabel.Text.Replace("{time}", arrDep.Departure != default ? arrDep.Departure.ToTimeString() : "-");
         departureLabel.Text = departureLabel.Text.Replace("{track}", departureTrack);
 
