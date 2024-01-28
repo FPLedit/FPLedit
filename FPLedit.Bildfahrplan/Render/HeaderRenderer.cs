@@ -12,10 +12,10 @@ internal sealed class HeaderRenderer
     private readonly PathData path;
     private readonly TimetableStyle attrs;
 
-    private readonly DashStyleHelper ds = new DashStyleHelper();
+    private readonly DashStyleHelper ds = new ();
 
     private const int TOP_GAP = 5;
-        
+
     public HeaderRenderer(TimetableStyle attrs, PathData path)
     {
         this.path = path;
@@ -26,35 +26,22 @@ internal sealed class HeaderRenderer
     {
         var stationOffsets = new Dictionary<Station, StationRenderProps>();
 
+        var posAlongPath = path.GetPositionsAlongPath();
         var raw = path.GetRawPath().ToList();
         var allTrackCount = raw.Select(s => s.Tracks.Count).Sum();
         var stasWithTracks = raw.Count(s => s.Tracks.Any());
         var allTrackWidth = (stasWithTracks + allTrackCount) * StationRenderProps.IndividualTrackOffset;
         var verticalTrackOffset = GetTrackOffset(g, attrs.StationFont) + TOP_GAP;
 
-        float length = 0f;
-
-        PathEntry? lastpe = null;
-        foreach (var sta in path.PathEntries)
-        {
-            var er = path.GetEntryRoute(sta.Station);
-            if (er != Timetable.UNASSIGNED_ROUTE_ID)
-                length += (sta.Station.Positions.GetPosition(er) - lastpe!.Station.Positions.GetPosition(er))!.Value;
-            lastpe = sta;
-        }
+        float length = posAlongPath.Values.Max();
 
         StationRenderProps? lastPos = null;
-        lastpe = null;
-        float kil = 0f;
         foreach (var sta in path.PathEntries)
         {
             var style = new StationStyle(sta.Station, attrs);
-                
-            var er = path.GetEntryRoute(sta.Station);
-            if (er != Timetable.UNASSIGNED_ROUTE_ID)
-                kil += (sta.Station.Positions.GetPosition(er) - lastpe!.Station.Positions.GetPosition(er))!.Value;
-            lastpe = sta;
-                
+
+            var kil = posAlongPath[sta.Station];
+
             StationRenderProps posX;
             if (!attrs.MultiTrack)
                 posX = new StationRenderProps(sta.Station, kil, ((kil / length) * (width - margin.Right - margin.Left)));
@@ -101,7 +88,7 @@ internal sealed class HeaderRenderer
                 if (attrs.StationVertical)
                 {
                     var matrix = g.StoreTransform();
-                            
+
                     g.TranslateTransform(margin.Left + posX.Center + (size.Height / 2), margin.Top - 8 - verticalTrackOffset - size.Width);
                     g.RotateTransform(90);
                     g.DrawText(attrs.StationFont, brush, 0, 0, display);
@@ -119,7 +106,7 @@ internal sealed class HeaderRenderer
                         if (attrs.StationVertical)
                         {
                             var matrix = g.StoreTransform();
-                                
+
                             g.TranslateTransform(margin.Left + track.Value + (trackSize.Height / 2), margin.Top - 8 - trackSize.Width);
                             g.RotateTransform(90);
                             g.DrawText(attrs.StationFont, brush, 0, 0, track.Key);
@@ -134,7 +121,7 @@ internal sealed class HeaderRenderer
         }
         return stationOffsets;
     }
-    
+
     private string StationToString(Station sta, bool kilometre, int route)
         => sta.SName + (kilometre ? (" (" + sta.Positions.GetPosition(route) + ")") : "");
 
@@ -144,7 +131,7 @@ internal sealed class HeaderRenderer
     public float GetMarginTop(IMGraphics g)
     {
         var emSize = g.MeasureString(attrs.StationFont, "M").Height;
-            
+
         var sMax = attrs.StationVertical ? 
             (path.PathEntries.Any() ?
                 path.PathEntries.Max(sta => g.MeasureString(attrs.StationFont, StationDisplay(sta)).Width) 
@@ -152,7 +139,7 @@ internal sealed class HeaderRenderer
             : emSize;
 
         sMax += GetTrackOffset(g, attrs.StationFont) + TOP_GAP + 3;
-            
+
         return sMax;
     }
 
@@ -165,7 +152,7 @@ internal sealed class HeaderRenderer
             var tracks = raw.SelectMany(s => s.Tracks);
             if (!tracks.Any())
                 return 0;
-                
+
             if (attrs.StationVertical)
                 return tracks.Max(t => g.MeasureString(stationFont, t.Name).Width);
 
