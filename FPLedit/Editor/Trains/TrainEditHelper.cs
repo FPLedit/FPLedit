@@ -51,8 +51,11 @@ internal sealed class TrainEditHelper
     public IEnumerable<ITrain> FillCandidates(ITrain tra)
         => tra.ParentTimetable.Trains.Where(t => t.Direction == tra.Direction && t != tra);
 
-    public void MoveTrain(Train t, int offsetMin)
-        => InternalCopyArrDeps(t, t, offsetMin);
+    public void MoveTrain(Train[] trains, int offsetMin)
+    {
+        foreach (var t in trains)
+            InternalCopyArrDeps(t, t, offsetMin);
+    }
 
     private void InternalCopyArrDeps(Train source, Train destination, int offsetMin)
     {

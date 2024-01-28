@@ -21,18 +21,20 @@ internal abstract class BaseTrainsEditor : FDialog<DialogResult>
 
     protected void DeleteTrain(GridView view, TrainDirection dir, bool message = true)
     {
-        if (view.SelectedItem != null)
+        if (view.SelectedItems.Any())
         {
-            if (view.SelectedItem is Train train)
+            var trains = view.SelectedItems.OfType<Train>().ToArray();
+            if (trains.Length == view.SelectedItems.Count())
             {
-                if (train.TrainLinks.Any(l => l.TrainCount > 0))
+                if (trains.Any(t => t.TrainLinks.Any(l => l.TrainCount > 0)))
                 {
                     if (message)
                         MessageBox.Show(T._("Der Zug kann nicht gelöscht werden, da er mindestens von einem verlinkten Zug referenziert wird!"), T._("Zug löschen"));
                 }
                 else if (MessageBox.Show(T._("Zug wirklich löschen?"), T._("Zug löschen"), MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    tt.RemoveTrain(train);
+                    foreach (var t in trains)
+                        tt.RemoveTrain(t);
                     UpdateListView(view, dir);
                 }
             }
@@ -76,11 +78,12 @@ internal abstract class BaseTrainsEditor : FDialog<DialogResult>
 
     protected void CopyTrain(GridView view, TrainDirection dir, bool message = true)
     {
-        if (view.SelectedItem != null)
+        if (view.SelectedItems.Any())
         {
-            if (view.SelectedItem is Train train)
+            var trains = view.SelectedItems.OfType<Train>().ToArray();
+            if (trains.Length == view.SelectedItems.Count())
             {
-                using (var tcf = new TrainCopyDialog(train, tt))
+                using (var tcf = new TrainCopyDialog(trains, tt))
                     tcf.ShowModal(this);
 
                 UpdateListView(view, dir);

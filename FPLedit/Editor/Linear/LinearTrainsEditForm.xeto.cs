@@ -3,6 +3,7 @@ using FPLedit.Editor.Trains;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System;
+using System.Linq;
 
 namespace FPLedit.Editor.Linear;
 
@@ -29,8 +30,8 @@ internal sealed class LinearTrainsEditForm : BaseTrainsEditor
         var tt = pluginInterface.Timetable;
         backupHandle = pluginInterface.BackupTimetable();
 
-        InitListView(topGridView, new []{ topEditButton, topDeleteButton, topCopyButton });
-        InitListView(bottomGridView, new []{ bottomEditButton, bottomDeleteButton, bottomCopyButton });
+        InitListView(topGridView, new []{ topEditButton }, new []{ topDeleteButton, topCopyButton });
+        InitListView(bottomGridView, new []{ bottomEditButton }, new []{ bottomDeleteButton, bottomCopyButton });
 
         var rt = tt.GetRoute(Timetable.LINEAR_ROUTE_ID);
         topLineLabel.Text = T._("Züge {0}", rt.GetRouteName(TOP_DIRECTION.IsSortReverse()));
@@ -61,15 +62,15 @@ internal sealed class LinearTrainsEditForm : BaseTrainsEditor
 
         if (e.Key == Keys.Delete)
             DeleteTrain(active, dir, false);
-        else if ((e.Key == Keys.B && e.Control) || (e.Key == Keys.Enter))
+        else if (e is { Key: Keys.B, Control: true } || (e.Key == Keys.Enter))
             EditTrain(active, dir, false);
-        else if (e.Key == Keys.N && e.Control)
+        else if (e is { Key: Keys.N, Control: true })
             NewTrain(active, dir);
-        else if (e.Key == Keys.C && e.Control)
+        else if (e is { Key: Keys.C, Control: true })
             CopyTrain(active, dir);
     }
 
-    private void InitListView(GridView view, Button[] buttons)
+    private void InitListView(GridView view, Button[] singleButtons, Button[] multiButtons)
     {
         view.AddFuncColumn<ITrain>(t => t.IsLink ? T._("L") : "", "");
         view.AddFuncColumn<ITrain>(t => t.TName, T._("Zugnummer"));
@@ -86,12 +87,15 @@ internal sealed class LinearTrainsEditForm : BaseTrainsEditor
 
         view.SelectedItemsChanged += (_, _) =>
         {
-            foreach (var button in buttons)
+            foreach (var button in singleButtons)
                 button.Enabled = view.SelectedItem != null && !((ITrain) view.SelectedItem).IsLink;
+            foreach (var button in multiButtons)
+                button.Enabled = view.SelectedItems.Any() && view.SelectedItems.All(t => !(t as ITrain)!.IsLink);
         };
 
         // This allows the selection of the last row on Wpf, see Eto#2443.
         if (Platform.IsGtk) view.AllowEmptySelection = false;
+        view.AllowMultipleSelection = true;
     }
 
     private void CloseButton_Click(object sender, EventArgs e)

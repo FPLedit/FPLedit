@@ -23,10 +23,10 @@ internal sealed class TrainCopyDialog : FDialog<DialogResult>
     private readonly SelectionUI<CopySelectionMode> modeSelect;
     private readonly SelectionUI<LinkTypeMode> linkSelect;
 
-    private readonly Train train;
+    private readonly Train[] trains;
     private readonly Timetable tt;
 
-    public TrainCopyDialog(Train t, Timetable tt)
+    public TrainCopyDialog(Train[] t, Timetable tt)
     {
         Eto.Serialization.Xaml.XamlReader.Load(this);
 
@@ -34,9 +34,10 @@ internal sealed class TrainCopyDialog : FDialog<DialogResult>
         countValidator = new NumberValidator(countTextBox, false, true, allowNegative: false, errorMessage: T._("Bitte eine gültige Anzahl >0 neuer Züge eingeben!"));
         changeValidator = new NumberValidator(changeTextBox, false, true, errorMessage: T._("Bitte eine gültige Veränderung der Zugnummer eingeben!"));
 
-        train = t;
+        trains = t;
         this.tt = tt;
-        nameTextBox.Text = t.TName;
+        if (t.Length == 1)
+            nameTextBox.Text = t.Single().TName;
         diffTextBox.Text = "+20";
         countTextBox.Text = "1";
         changeTextBox.Text = "2";
@@ -50,6 +51,13 @@ internal sealed class TrainCopyDialog : FDialog<DialogResult>
 
         // This allows the selection of the last row on Wpf, see Eto#2443.
         if (Platform.IsGtk) specialNameGridView.AllowEmptySelection = false;
+
+        if (t.Length > 1)
+        {
+            modeSelect.DisableOption(CopySelectionMode.Copy);
+            modeSelect.DisableOption(CopySelectionMode.Link);
+            modeSelect.ChangeSelection(CopySelectionMode.Move);
+        }
     }
 
     private void CountTextBox_TextChanged(object sender, EventArgs e)
@@ -118,9 +126,9 @@ internal sealed class TrainCopyDialog : FDialog<DialogResult>
             var count = int.Parse(countTextBox.Text);
             var add = int.Parse(changeTextBox.Text);
 
-            var trains = th.CopyTrainMultiple(train, diff, nameTextBox.Text, copyAllCheckBox.Checked!.Value, count, add);
+            var newTrains = th.CopyTrainMultiple(trains.Single(), diff, nameTextBox.Text, copyAllCheckBox.Checked!.Value, count, add);
 
-            foreach (var newTrain in trains)
+            foreach (var newTrain in newTrains)
             {
                 if (tt.Trains.Any(t => t.TName == newTrain.TName))
                 {
@@ -156,10 +164,10 @@ internal sealed class TrainCopyDialog : FDialog<DialogResult>
                     throw new NotSupportedException("The selected LinkTypeMode is not defined!");
             }
 
-            th.LinkTrainMultiple(train, TimeEntry.Zero, new TimeEntry(0, diff), count, tnc);
+            th.LinkTrainMultiple(trains.Single(), TimeEntry.Zero, new TimeEntry(0, diff), count, tnc);
         }
         else
-            th.MoveTrain(train, diff);
+            th.MoveTrain(trains, diff);
 
         Close(DialogResult.Ok);
     }

@@ -40,6 +40,7 @@ internal sealed class NetworkTrainsEditForm : BaseTrainsEditor
 
         // This allows the selection of the last row on Wpf, see Eto#2443.
         if (Platform.IsGtk) gridView.AllowEmptySelection = false;
+        gridView.AllowMultipleSelection = true;
 
         UpdateListView(gridView, TrainDirection.tr);
 
@@ -61,21 +62,23 @@ internal sealed class NetworkTrainsEditForm : BaseTrainsEditor
 
     private void GridViewOnSelectedItemsChanged(object? sender, EventArgs e)
     {
-        editButton.Enabled = deleteButton.Enabled = copyButton.Enabled = editPathButton.Enabled
+        editButton.Enabled = editPathButton.Enabled
             = gridView.SelectedItem != null && !((ITrain) gridView.SelectedItem).IsLink;
+        deleteButton.Enabled = copyButton.Enabled
+            = gridView.SelectedItems.Any() && gridView.SelectedItems.All(t => !(t as ITrain)!.IsLink);
     }
 
     private void HandleKeystroke(object? sender, KeyEventArgs e)
     {
         if (e.Key == Keys.Delete)
             DeleteTrain(gridView, TrainDirection.tr, false);
-        else if ((e.Key == Keys.C && e.Control))
-            CopyTrain(gridView, false);
-        else if ((e.Key == Keys.P && e.Control))
+        else if (e is { Key: Keys.C, Control: true })
+            CopyTrain(gridView, TrainDirection.tr, false);
+        else if (e is { Key: Keys.P, Control: true })
             EditPath(gridView, false);
-        else if ((e.Key == Keys.B && e.Control) || (e.Key == Keys.Enter))
+        else if (e is { Key: Keys.B, Control: true } || (e.Key == Keys.Enter))
             EditTrain(gridView, TrainDirection.tr, false);
-        else if (e.Key == Keys.N && e.Control)
+        else if (e is { Key: Keys.N, Control: true })
             NewTrain(gridView);
     }
 
@@ -100,24 +103,6 @@ internal sealed class NetworkTrainsEditForm : BaseTrainsEditor
         }
         else if (message)
             MessageBox.Show(T._("Zuerst muss ein Zug ausgewählt werden!"), T._("Laufweg bearbeiten"));
-    }
-
-    private void CopyTrain(GridView view, bool message = true)
-    {
-        if (view.SelectedItem != null)
-        {
-            if (view.SelectedItem is Train train)
-            {
-                using (var tcf = new TrainCopyDialog(train, pluginInterface.Timetable))
-                    tcf.ShowModal(this);
-
-                UpdateListView(view, TrainDirection.tr);
-            }
-            else if (message)
-                MessageBox.Show(T._("Verlinke Züge können nicht kopiert werden."), T._("Zug kopieren"));
-        }
-        else if (message)
-            MessageBox.Show(T._("Zuerst muss ein Zug ausgewählt werden!"), T._("Zug kopieren"));
     }
 
     private void NewTrain(GridView view)
@@ -163,7 +148,7 @@ internal sealed class NetworkTrainsEditForm : BaseTrainsEditor
         => DeleteTrain(gridView, TrainDirection.tr);
 
     private void CopyButton_Click(object sender, EventArgs e)
-        => CopyTrain(gridView);
+        => CopyTrain(gridView, TrainDirection.tr);
 
     private void EditPathButton_Click(object sender, EventArgs e)
         => EditPath(gridView);
