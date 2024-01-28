@@ -110,17 +110,7 @@ internal sealed class TrainRenderer
             }
 
             MaybeAddPoint(points, GetGutterPoint(true, dir, curOffset, ardp.Arrival));
-            var pathDisc = pathData.GetSurroundingStations(sta, 1);
-            var entryRoute = pathData.GetEntryRoute(sta);
-            var entryDir = dir;
-            if (entryRoute != Timetable.UNASSIGNED_ROUTE_ID)
-            {
-                if (pathDisc.Length < 2 || pathDisc[1] != sta) throw new Exception("Unexpected path state");
-                var p1 = pathDisc[0].Positions.GetPosition(entryRoute);
-                var p2 = sta.Positions.GetPosition(entryRoute);
-                entryDir = p1 > p2;
-            }
-            var arrivalTrack = tracks.GetTrack(pathData, sta, entryDir ? TrainDirection.ta : TrainDirection.ti, ardp, TrackQuery.Arrival);
+            var arrivalTrack = tracks.GetTrack(pathData, sta, null, ardp, TrackQuery.Arrival);
             MaybeAddPoint(points, GetInternalPoint(curOffset, ardp.Arrival, arrivalTrack));
 
             foreach (var shunt in ardp.ShuntMoves)
@@ -129,21 +119,12 @@ internal sealed class TrainRenderer
                 MaybeAddPoint(points, GetInternalPoint(curOffset, shunt.Time, shunt.TargetTrack));
             }
 
-            var exitRoute = pathData.GetExitRoute(sta);
-            var exitDir = dir;
-            if (exitRoute != Timetable.UNASSIGNED_ROUTE_ID)
-            {
-                if (pathDisc.Length < 2 || pathDisc[^2] != sta) throw new Exception("Unexpected path state");
-                var p1 = pathDisc[^1].Positions.GetPosition(exitRoute);
-                var p2 = sta.Positions.GetPosition(exitRoute);
-                exitDir = p2 > p1;
-            }
-            var departureTrack = tracks.GetTrack(pathData, sta, exitDir ? TrainDirection.ta : TrainDirection.ti, ardp, TrackQuery.Departure);
+            var departureTrack = tracks.GetTrack(pathData, sta, null, ardp, TrackQuery.Departure);
             MaybeAddPoint(points, GetInternalPoint(curOffset, ardp.Departure, departureTrack));
             MaybeAddPoint(points, GetGutterPoint(false, dir, curOffset, ardp.Departure));
 
             // Halbe Linien bei Abfahrten / Ankünften ohne Gegenstelle (hier innerhalb der Strecke und nicht am Rand)
-            if (skippedStation && attrs.DrawNetworkTrains && ardp.Arrival != default)
+            if (skippedStation && !isFirst && attrs.DrawNetworkTrains && ardp.Arrival != default)
                 points.Insert(prePointIndex, points[prePointIndex] - HalfLineVec(dir));
 
             hadLastDeparture = ardp.Departure != default ? dir : null;
