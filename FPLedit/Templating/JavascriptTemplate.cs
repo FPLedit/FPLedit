@@ -202,7 +202,7 @@ internal sealed class JavascriptTemplate : ITemplate
 
     public string GenerateResult(Timetable tt)
     {
-        // Allowed types whitlisted by extensions (for this specific template type or generic (e.g. type == null)).
+        // Allowed types whitelisted by extensions (for this specific template type or generic (e.g. type == null)).
         var allowedTypes = pluginInterface.GetRegistered<ITemplateWhitelistEntry>()
             .Where(w => w.TemplateType == TemplateType || w.TemplateType == null!)
             .SelectMany(w => w.WhitelistTypes)

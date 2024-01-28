@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-11-24 23:49+0100\n"
-"PO-Revision-Date: 2023-11-24 23:49+0100\n"
+"POT-Creation-Date: 2024-01-28 13:29+0100\n"
+"PO-Revision-Date: 2024-01-28 13:30+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.1\n"
+"X-Generator: Poedit 3.4.2\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: _;SelectionName\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -51,13 +51,18 @@ msgstr ""
 msgid "jTrainGraph starten"
 msgstr "Start jTrainGraph"
 
-#: Plugin.cs:64 Plugin.cs:120
+#: Plugin.cs:64 Plugin.cs:125
 #, csharp-format
 msgid ""
 "Beim Verwenden von jTrainGraph ist ein unerwarteter Fehler aufgetreten! {0}"
 msgstr "Unexpected error while executing jTrainGraph: {0}"
 
-#: Plugin.cs:79
+#: Plugin.cs:73
+msgid ""
+"Virtuelle Strecken können aktuell nicht in jTrainGraph bearbeitet werden."
+msgstr "Virtual lines currently cannot be used in jTrainGraph."
+
+#: Plugin.cs:84
 msgid ""
 "Dies speichert die aktuell ausgewählte Route in eine temporäre Datei und "
 "öffnet dann jTrainGraph. Nachdem Sie die Arbeit in jTrainGraph beendet "
@@ -79,16 +84,16 @@ msgstr ""
 "\n"
 "This message can be disabled in jTrainGraph > Settings."
 
-#: Plugin.cs:82
+#: Plugin.cs:87
 msgid "jTrainGraph starten (aktuelle Route)"
 msgstr "Start jTrainGraph (current route)"
 
-#: Plugin.cs:91
+#: Plugin.cs:96
 msgid ""
 "Zielversion ist nicht R/W-Kompatibel. Bitte die Einstellungen überprüfen."
 msgstr "The target version is not R/W-compatible. Please check your settings."
 
-#: Plugin.cs:93
+#: Plugin.cs:98
 msgid ""
 "Die Erstellen einer linearen Datei der Version < 012 aus einer Datei der "
 "Version >= 101 ist nicht möglich!"
@@ -96,7 +101,7 @@ msgstr ""
 "Creating a linear timetable of version < 012 from a file of version > 101 is "
 "not possible!"
 
-#: Plugin.cs:95
+#: Plugin.cs:100
 msgid ""
 "Die Erstellen einer linearen Datei der Version >= 012 aus einer Datei der "
 "Version 100 ist nicht möglich!"
@@ -104,11 +109,11 @@ msgstr ""
 "Creating a linear timetable of version >= 012 from a file of version 100 is "
 "not possible!"
 
-#: Plugin.cs:114
+#: Plugin.cs:119
 msgid "Rück-Synchronisierung fehlgeschlagen!"
 msgstr "Synchronization of changes failed!"
 
-#: Plugin.cs:134
+#: Plugin.cs:139
 msgid ""
 "Die gewählte Version von jTrainGraph ist wahrscheinlich nicht mit FPledit "
 "kompatibel. Bitte verwenden Sie jTrainGraph in einer kompatiblen Version!"
@@ -116,11 +121,11 @@ msgstr ""
 "The selected version of jTrainGraph is possibly incompatible with FPLedit. "
 "Please use jTrainGraph in a compatible version!"
 
-#: Plugin.cs:135 Plugin.cs:141 SettingsForm.xeto.cs:65
+#: Plugin.cs:140 Plugin.cs:146 SettingsForm.xeto.cs:65
 msgid "jTrainGraphStarter: Fehler"
 msgstr "jTrainGraphStarter: Error"
 
-#: Plugin.cs:140
+#: Plugin.cs:145
 msgid ""
 "Die gewählte Version von jTrainGraph ist wahrscheinlich nicht mit der "
 "aktuellen Fahrplandatei kompatibel."

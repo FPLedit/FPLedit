@@ -69,6 +69,11 @@ public sealed class Plugin : IPlugin
 
     private void StartNetwork(int route)
     {
+        if (route < 0) {
+            pluginInterface.Logger.Error(T._("Virtuelle Strecken können aktuell nicht in jTrainGraph bearbeitet werden."));
+            return;
+        }
+
         var backupHandle = pluginInterface.BackupTimetable();
         try
         {

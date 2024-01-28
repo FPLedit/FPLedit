@@ -39,7 +39,7 @@ internal sealed class TemplateDebugger : ITemplateDebugger
     internal static string GetGeneratedCode(JavascriptTemplate template)
     {
         var line = 1;
-        return string.Join(Environment.NewLine,template.CompiledCode
+        return string.Join(Environment.NewLine, template.CompiledCode
             .Split(new[] { Environment.NewLine }, StringSplitOptions.None)
             .Select(l => $"/* {line++,4} */  {l}"));
     }
