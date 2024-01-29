@@ -16,7 +16,7 @@ public sealed class NetworkHelper
     {
         this.tt = tt;
     }
-        
+
     /// <summary>
     /// Returns all stations on all routes that are before or ahead of the current station.
     /// </summary>
@@ -25,7 +25,7 @@ public sealed class NetworkHelper
     {
         if (direction == TrainDirection.tr)
             throw new ArgumentException("Invalid (non-linear) train direction specified", nameof(direction));
-            
+
         if (tt.Type == TimetableType.Linear)
         {
             var stas = tt.GetRoute(Timetable.LINEAR_ROUTE_ID).Stations.ToList().MaybeReverseDirection(direction);
@@ -43,7 +43,7 @@ public sealed class NetworkHelper
         }
         return stasAfter.ToArray();
     }
-        
+
     /// <summary>
     /// Get all trains that pass through the given station with the provided direction.
     /// </summary>
@@ -55,7 +55,7 @@ public sealed class NetworkHelper
     {
         if (dir == TrainDirection.tr)
             throw new ArgumentException("Invalid (non-linear) train direction specified", nameof(dir));
-            
+
         var stasAfter = GetStationsInDir(dir, sta);
         var stasBefore = GetStationsInDir(dir == TrainDirection.ta ? TrainDirection.ti : TrainDirection.ta, sta);
 
@@ -68,7 +68,7 @@ public sealed class NetworkHelper
 
             var ardeps = t.GetArrDepsUnsorted();
             var isStopping = ardeps[sta].HasMinOneTimeSet;
-                
+
             Station? nextStopStation = path.Where(s => stasAfter.Contains(s)).FirstOrDefault(s => ardeps[s].HasMinOneTimeSet);
             Station? lastStopStation = null;
             if (nextStopStation == null || !isStopping)
@@ -105,7 +105,7 @@ public sealed class NetworkHelper
     {
         var stasAfter = GetStationsInDir(TrainDirection.ti, sta);
         var stasBefore = GetStationsInDir(TrainDirection.ta, sta);
-            
+
         var path = train.GetPath();
 
         if (!path.Contains(sta))
@@ -113,7 +113,7 @@ public sealed class NetworkHelper
 
         var ardeps = train.GetArrDepsUnsorted();
         var isStopping = ardeps[sta].HasMinOneTimeSet;
-                
+
         Station? nextStopStation = path.Where(s => stasAfter.Contains(s)).FirstOrDefault(s => ardeps[s].HasMinOneTimeSet);
         Station? lastStopStation = null;
         if (nextStopStation == null || !isStopping)
