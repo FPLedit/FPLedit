@@ -149,6 +149,8 @@ if (attrs != null)
 		.remarks {
 			text-align: right;
 		}
+
+        {{##WELLEN_CSS##}}
 		</style>
 		<style id="add-css">
 			<#= additionalCss.safeCssBlock() #>

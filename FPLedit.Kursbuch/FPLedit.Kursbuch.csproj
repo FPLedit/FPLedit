@@ -18,6 +18,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\build_scripts\ResourceHelper.cs" Link="Properties\ResourceHelper.cs" />
+    <Compile Include="..\FPLedit.Buchfahrplan\Templates\WellenCssHelper.cs" Link="Templates\WellenCssHelper.cs" />
+    <EmbeddedResource Include="..\FPLedit.Buchfahrplan\Resources\WellenCss.css" Link="Resources\WellenCss.css" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FPLedit.Shared.UI\FPLedit.Shared.UI.csproj" />

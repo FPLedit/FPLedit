@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using Eto.Drawing;
 
@@ -61,12 +62,16 @@ internal static class WellenCssHelper
         }
     }
 
-    public static string GetWellenCss()
+    public static string GetWellenCss(int maxWellen = 3)
     {
         Func<int,string> welle = usePngFallback ? GetWellePng : GetWelleSvg;
-        return cache ??= ResourceHelper.GetStringResource("Buchfahrplan.Resources.WellenCss.css")
-            .Replace("@@WELLE1@@", welle(1))
-            .Replace("@@WELLE2@@", welle(2))
-            .Replace("@@WELLE3@@", welle(3));
+        if (cache == null)
+        {
+            var path = Assembly.GetCallingAssembly().GetName().Name == "FPLedit.Kursbuch" ? "Kursbuch" : "Buchfahrplan";
+            cache = ResourceHelper.GetStringResource($"{path}.Resources.WellenCss.css");
+            for (var w = 1; w <= maxWellen; w++)
+                cache = cache.Replace($"@@WELLE{w}@@", welle(w));
+        }
+        return cache;
     }
 }
