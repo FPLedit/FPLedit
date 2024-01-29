@@ -276,7 +276,7 @@ internal sealed class TrainRenderer
 
     Vec2? GetInternalPoint(StationRenderProps sx, TimeEntry time, string? track)
     {
-        if (time == default || track == null || !sx.TrackOffsets.TryGetValue(track, out float x))
+        if (time == default || track == null || !sx.TrackOffsets.TryGetValue(track, out var x))
             return null;
         return new Vec2(margin.Left + x, GetTimeY(time));
     }

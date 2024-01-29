@@ -27,12 +27,12 @@ public sealed class MGraphicsImageSharp : IMGraphics
         this.image = image;
     }
 
-    private DrawingOptions GetDrawingOptions()
+    private DrawingOptions GetDrawingOptions(bool forText)
     {
         return new DrawingOptions
         {
             Transform = matrix,
-            GraphicsOptions = new GraphicsOptions { Antialias = antiAlias || textAntiAlias },
+            GraphicsOptions = new GraphicsOptions { Antialias = antiAlias || (forText && textAntiAlias) },
         };
     }
 
@@ -47,15 +47,15 @@ public sealed class MGraphicsImageSharp : IMGraphics
         var penCacheKey = pen.GetHashCode();
         if (!penCache.TryGetValue(penCacheKey, out var sdPen))
         {
-            sdPen = new PatternPen((Color)pen.c, pen.w + 1, pen.ds); //TODO: I don't know why this `+1` is needed!?
+            sdPen = new PatternPen((Color)pen.c, pen.w, pen.ds);
             penCache[penCacheKey] = sdPen;
         }
-        image.Mutate(ctx => ctx.DrawLine(GetDrawingOptions(), sdPen, new []{ new PointF(x1, y1), new PointF(x2, y2)}));
+        image.Mutate(ctx => ctx.DrawLine(GetDrawingOptions(false), sdPen, new []{ new PointF(x1, y1), new PointF(x2, y2)}));
     }
 
     public void DrawText(MFont font, MColor solidColor, float x, float y, string text)
     {
-        image.Mutate(ctx => ctx.DrawText(GetDrawingOptions(), text, (Font) font, (Color) solidColor, new PointF(x, y)));
+        image.Mutate(ctx => ctx.DrawText(GetDrawingOptions(true), text, (Font) font, (Color) solidColor, new PointF(x, y)));
     }
 
     public void Clear(MColor color) => image.Mutate(ctx => ctx.Clear((Color) color));
@@ -85,7 +85,7 @@ public sealed class MGraphicsImageSharp : IMGraphics
         
         image.Mutate(ctx =>
         {
-            var dopt = GetDrawingOptions();
+            var dopt = GetDrawingOptions(false);
             foreach (var cmd in graphicsPath)
             {
                 switch (cmd)

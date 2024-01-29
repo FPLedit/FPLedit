@@ -8,11 +8,11 @@ internal class StationRenderProps
 {
     public static int IndividualTrackOffset => 15;
 
-    public float Left { get; }
-    public float Right { get; }
-    public float Center => (Left + Right) / 2;
+    public int Left { get; }
+    public int Right { get; }
+    public int Center => (int)((Left + Right) / 2f);
 
-    public Dictionary<string, float> TrackOffsets { get; }
+    public Dictionary<string, int> TrackOffsets { get; }
 
     public float CurKilometer { get; }
 
@@ -20,17 +20,17 @@ internal class StationRenderProps
     {
         CurKilometer = kil;
 
-        TrackOffsets = new Dictionary<string, float>();
-        Left = Right = left;
+        TrackOffsets = new Dictionary<string, int>();
+        Left = Right = (int)left;
 
         if (includeTracks)
         {
             if (sta.Tracks.Any())
-                Right = left + (1 + sta.Tracks.Count) * IndividualTrackOffset;
+                Right = (int)(left + (1 + sta.Tracks.Count) * IndividualTrackOffset);
 
-            int i = 0;
+            var i = 0;
             foreach (var t in sta.Tracks)
-                TrackOffsets.Add(t.Name, left + (++i) * IndividualTrackOffset);
+                TrackOffsets.Add(t.Name, (int)(left + (++i) * IndividualTrackOffset));
         }
     }
 }
