@@ -151,6 +151,11 @@ if (attrs != null)
 		}
 
         {{##WELLEN_CSS##}}
+        .welle {
+            background-position: center center !important;
+            background-size: 0.25lh !important;
+            line-height: 19px !important;
+        }
 		</style>
 		<style id="add-css">
 			<#= additionalCss.safeCssBlock() #>
@@ -170,6 +175,7 @@ if (attrs != null)
 		for (let di = 0; di < dirs.length; di++) {
 		const direction = dirs[di];
 		const trains = helper.GetTrains(route, direction);
+        const train_data = [];
 		const stations = helper.GetStations(route, direction);
 	#>
 	<table cellspacing="0" cellpadding="0">
@@ -180,6 +186,8 @@ if (attrs != null)
             <td colspan="2" class="caption top bottom"><p><span>Zug Nr.</span></p></td>
             <# for (let ti = 0; ti < trains.length; ti++) {
                 const t = trains[ti];
+                const path = t.GetPath();
+                train_data[ti] = { hadFirst: false, hadLastOnLine: false, lastOnLine: stations.last(s => path.Contains(s)) };
                 const lastt = trains.last() == t ? " last-t" : "";
             #>
                 <td class="tn<#= lastt.safeHtml() #>"><span><#= Sign(t) #><#= t.TName.safeHtml().replace(" ", "&nbsp;") #></span></td>
@@ -199,29 +207,36 @@ if (attrs != null)
     		    const sta = stations[si];
     		#>
             <tr>
-                <# let time_class = stations.last() == sta ? " last" : ""; #>
-                <td class="km<#= time_class.safeHtml() #>"><span><#= (+sta.Positions.GetPosition(route.Index)).toFixed(1).safeHtml() #></span></td>
-                <td class="sta<#= time_class.safeHtml() #>"><span><#= sta.SName.safeHtml().replace(" ", "&nbsp;") #></span></td>
-                <td class="remarks<#= time_class.safeHtml() #>"><span><#= Remarks(sta, stations).safeHtml() #></span></td>
+                <# let row_class = stations.last() == sta ? " last" : ""; #>
+                <td class="km<#= row_class.safeHtml() #>"><span><#= (+sta.Positions.GetPosition(route.Index)).toFixed(1).safeHtml() #></span></td>
+                <td class="sta<#= row_class.safeHtml() #>"><span><#= sta.SName.safeHtml().replace(" ", "&nbsp;") #></span></td>
+                <td class="remarks<#= row_class.safeHtml() #>"><span><#= Remarks(sta, stations).safeHtml() #></span></td>
  
     			<# for (let ti2 = 0; ti2 < trains.length; ti2++) {
     			    const t = trains[ti2];
 
-                    let times = "...";
-                    time_class += trains.last() == t ? " last-t" : "";
+                    let times = "";
+                    let time_class = row_class + (trains.last() == t ? " last-t" : "");
 
                     if (t.GetPath().Contains(sta))
                     {
+                        train_data[ti2].hadStarted = true;
                         const ardp = t.GetArrDep(sta);
                         let time = ardp.Departure;
                         if (time == new TimeEntry()) time = ardp.Arrival;
-                        if (time == new TimeEntry()) times = "...";
+                        if (time == new TimeEntry()) times = "|";
                         else times = time.ToShortTimeString();
 
-                        if (times != "" && ardp.RequestStop) {
+                        if (times != "" && times != "|" && ardp.RequestStop) {
                             times = "X " + times;
+                            time_class += " request-stop";
                         }
+                        if (train_data[ti2].lastOnLine == sta) train_data[ti2].hadLastOnLine = true;
                     }
+
+                    if (times == "" && train_data[ti2].hadStarted && !train_data[ti2].hadLastOnLine)
+                        time_class += " not-on-line welle welle1";
+                    if (times == "|") time_class += " no-stop";
                 #>
                 <td class="ti<#= time_class.safeHtml() #>"><span><#= times.safeHtml() #></span></td>
                 <# } #>
