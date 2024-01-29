@@ -15,17 +15,17 @@ function Remarks( /* Station */ s, /* Station[] */ route) {
 	return "";
 }
 
-var kbsn = null;
-var font = "Arial"; //TODO: KBZiffern
-var heFont = "Arial Black";
-var additionalCss = "";
+let kbsn = null;
+let font = "Arial"; //TODO: KBZiffern
+let heFont = "Arial Black";
+let additionalCss = "";
 
-var TOP_DIRECTION = TrainDirection.ti;
-var BOTTOM_DIRECTION = TrainDirection.ta;
+const TOP_DIRECTION = TrainDirection.ti;
+const BOTTOM_DIRECTION = TrainDirection.ta;
 
-var helper = new TemplateHelper(tt);
+const helper = new TemplateHelper(tt);
 
-var attrs = KfplAttrs.GetAttrs(tt);
+const attrs = KfplAttrs.GetAttrs(tt);
 if (attrs != null)
 {
     if (attrs.Font != "")
@@ -156,19 +156,19 @@ if (attrs != null)
 	</head>
 
 	<body>
-	<# for (var i = 0; i < tt.GetRoutes().length; i++) {
-	 var route = tt.GetRoutes()[i];
+	<# for (let i = 0; i < tt.GetRoutes().length; i++) {
+	 const route = tt.GetRoutes()[i];
 	 #>
 	<p class="heading">
 		<span class="line"><#= kbsn != null ? (kbsn.GetValue(route.Index) || '') : '' #> <#= helper.GetRouteName(route, TOP_DIRECTION) #> </span>
 		<span class="back">und zurück</span>
 	</p>
 	<#
-		var dirs = [ TOP_DIRECTION, BOTTOM_DIRECTION ];
-		for (var di = 0; di < dirs.length; di++) {
-		var direction = dirs[di];
-		var trains = helper.GetTrains(route, direction);
-		var stations = helper.GetStations(route, direction);
+		const dirs = [ TOP_DIRECTION, BOTTOM_DIRECTION ];
+		for (let di = 0; di < dirs.length; di++) {
+		const direction = dirs[di];
+		const trains = helper.GetTrains(route, direction);
+		const stations = helper.GetStations(route, direction);
 	#>
 	<table cellspacing="0" cellpadding="0">
         <tr>
@@ -176,43 +176,43 @@ if (attrs != null)
             <td class="kmcap"><p>km</td>
             <!-- bottom entfernen, wenn Klassen hinzugefügt -->
             <td colspan="2" class="caption top bottom"><p><span>Zug Nr.</span></p></td>
-            <# for (var ti = 0; ti < trains.length; ti++) {
-                var t = trains[ti];
-                var lastt = trains.last() == t ? " last-t" : "";
+            <# for (let ti = 0; ti < trains.length; ti++) {
+                const t = trains[ti];
+                const lastt = trains.last() == t ? " last-t" : "";
             #>
                 <td class="tn<#= lastt.safeHtml() #>"><span><#= Sign(t) #><#= t.TName.safeHtml().replace(" ", "&nbsp;") #></span></td>
             <# } #>
         </tr>
         <!--<tr>
             <td class="caption bottom"><p><span>Klasse</span></p></td>
-            <# for (var ti = 0; ti < trains.length; ti++) {
-                var t = trains[ti];
-                var lastt = trains.last() == t ? " last-t" : "";
+            <# for (let ti = 0; ti < trains.length; ti++) {
+                const t = trains[ti];
+                const lastt = trains.last() == t ? " last-t" : "";
             #>
             <td class="kl<#= lastt.safeHtml() #>"><span>2. oG</span></td>
             <# } #>
         </tr>-->
         <#
-    		for (var si = 0; si < stations.length; si++) {
-    		    var sta = stations[si];
+    		for (let si = 0; si < stations.length; si++) {
+    		    const sta = stations[si];
     		#>
             <tr>
-                <# var s_last = stations.last() == sta ? " last" : ""; #>
-                <td class="km<#= s_last.safeHtml() #>"><span><#= (+sta.Positions.GetPosition(route.Index)).toFixed(1).safeHtml() #></span></td>
-                <td class="sta<#= s_last.safeHtml() #>"><span><#= sta.SName.safeHtml().replace(" ", "&nbsp;") #></span></td>
-                <td class="remarks<#= s_last.safeHtml() #>"><span><#= Remarks(sta, stations).safeHtml() #></span></td>
+                <# let time_class = stations.last() == sta ? " last" : ""; #>
+                <td class="km<#= time_class.safeHtml() #>"><span><#= (+sta.Positions.GetPosition(route.Index)).toFixed(1).safeHtml() #></span></td>
+                <td class="sta<#= time_class.safeHtml() #>"><span><#= sta.SName.safeHtml().replace(" ", "&nbsp;") #></span></td>
+                <td class="remarks<#= time_class.safeHtml() #>"><span><#= Remarks(sta, stations).safeHtml() #></span></td>
  
-    			<# for (var ti2 = 0; ti2 < trains.length; ti2++) {
-    			    var t = trains[ti2];
-    			    
-                    var times = "...";
-                    s_last += trains.last() == t ? " last-t" : "";
+    			<# for (let ti2 = 0; ti2 < trains.length; ti2++) {
+    			    const t = trains[ti2];
+
+                    let times = "...";
+                    time_class += trains.last() == t ? " last-t" : "";
 
                     if (t.GetPath().Contains(sta))
                     {
-                        var ardp = t.GetArrDep(sta);
-                        var time = ardp.Departure;
-                        if (time == new TimeEntry()) time =  ardp.Arrival;
+                        const ardp = t.GetArrDep(sta);
+                        let time = ardp.Departure;
+                        if (time == new TimeEntry()) time = ardp.Arrival;
                         if (time == new TimeEntry()) times = "...";
                         else times = time.ToShortTimeString();
 
@@ -221,7 +221,7 @@ if (attrs != null)
                         }
                     }
                 #>
-                <td class="ti<#= s_last.safeHtml() #>"><span><#= times.safeHtml() #></span></td>
+                <td class="ti<#= time_class.safeHtml() #>"><span><#= times.safeHtml() #></span></td>
                 <# } #>
             </tr>
 		<# } #>

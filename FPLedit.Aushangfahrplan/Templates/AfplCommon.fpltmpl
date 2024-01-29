@@ -9,7 +9,7 @@ function GetTimeString(/* TimeEntry */ t) {
 }
 
 function TimeCell(/* Train[] */ trains, /* Station */ sta, /* int */ i) {
-    var train = trains.length > i ? trains[i] : null;
+    const train = trains.length > i ? trains[i] : null;
     if (train == null)
         return "<td class=\"time\"></td>";
     return "<td class=\"time\">" + GetTimeString(train.GetArrDep(sta).Departure) + " " + GetDays(train) + "</td>";
@@ -23,7 +23,7 @@ function TimeHeader(/* bool */ showText) {
 
 // CELLS: Name column
 function NameCell(/* Train[] */ trains, /* int */ i) {
-    var train = trains.length > i ? trains[i] : null;
+    const train = trains.length > i ? trains[i] : null;
     if (train == null)
         return "<td class=\"name\"></td>";
     return "<td class=\"name\">" + train.TName.safeHtml() + "</td>";
@@ -39,7 +39,7 @@ function NameHeader(/* bool */ showText) {
 function DirCell( /* Train[] */ trains, /* int */ i) {
     if (!multipleStations)
         return "";
-    var train = trains.length > i ? trains[i] : null;
+    const train = trains.length > i ? trains[i] : null;
     if (train == null)
         return "<td class=\"direction\"></td>";
  
@@ -58,13 +58,13 @@ function DirHeader(/* bool */ showText) {
 function TrackCell(/* Train[] */ trains, /* TrainDirection */ dir, /* int */ i, /* Station */ sta) {
     if (!showTracks)
         return "";
-    var train = trains.length > i ? trains[i] : null;
+    const train = trains.length > i ? trains[i] : null;
     if (train == null)
         return "<td class=\"track\"></td>";
 
     // Gleis-Angabe bekommen
-    var ardp = train.GetArrDep(sta);
-    var track = ardp.DepartureTrack;
+    const ardp = train.GetArrDep(sta);
+    let track = ardp.DepartureTrack;
     if ((track == null || track == "") && ardp.ArrivalTrack != null)
         track = ardp.ArrivalTrack;
 
@@ -87,7 +87,7 @@ function TrackHeader(/* bool */ showText) {
 
 // ROWS
 function HeaderRow(/* Station[] */ stations) {
-    var show = stations.length > 0;
+    const show = stations.length > 0;
     return NameHeader(show) + TrackHeader(show) + TimeHeader(show) + DirHeader(show);
 }
 
@@ -95,16 +95,16 @@ function TrainRow(/* Train[] */ trains, /* TrainDirection */ dir, /* int */ i, /
     return NameCell(trains, i) + TrackCell(trains, dir, i, sta) + TimeCell(trains, sta, i) + DirCell(trains, i);
 }
 
-var font = "Arial";
-var hwFont = "serif";
-var additionalCss = "";
-var showTracks = true;
-var omitTracksWhenSingle = true;
+let font = "Arial";
+let hwFont = "serif";
+let additionalCss = "";
+let showTracks = true;
+let omitTracksWhenSingle = true;
 
-var helper = new TemplateHelper(tt);
-var trackHelper = new TrackHelper();
+const helper = new TemplateHelper(tt);
+const trackHelper = new TrackHelper();
 
-var attrs = AfplAttrs.GetAttrs(tt);
+const attrs = AfplAttrs.GetAttrs(tt);
 if (attrs != null)
 {
     if (attrs.Font != "")
@@ -118,7 +118,7 @@ if (attrs != null)
 }
 
 // Netzwerk-Modus mit Zielangabe
-var multipleStations = tt.Type == TimetableType.Network && tt.Stations.toArray().some(s => s.Routes.length > 1);
+const multipleStations = tt.Type == TimetableType.Network && tt.Stations.toArray().some(s => s.Routes.length > 1);
 #>
 
 <!doctype html>
@@ -230,20 +230,20 @@ if (!multipleStations) { #>
 </style>
 </head>
 <body>
-	<# var stations = helper.GetStations();
-	for (var si = 0; si < stations.length; si++) {
-        var sta = stations[si];
+	<# const stations = helper.GetStations();
+	for (let si = 0; si < stations.length; si++) {
+        const sta = stations[si];
 
-		var trainsA = helper.GetTrains(TrainDirection.ta, sta);
-		var trainsB = helper.GetTrains(TrainDirection.ti, sta);
-		var count = Math.max(trainsA.length, trainsB.length);
+		const trainsA = helper.GetTrains(TrainDirection.ta, sta);
+		const trainsB = helper.GetTrains(TrainDirection.ti, sta);
+		const count = Math.max(trainsA.length, trainsB.length);
 
 		if (count == 0)
 			continue;
 
-		var fss = helper.GetLastStations(TrainDirection.ta, sta, trainsA);
-		var lss = helper.GetLastStations(TrainDirection.ti, sta, trainsB);
-		var colspan = 2 + (multipleStations ? 1 : 0) + (showTracks ? 1 : 0);
+		const fss = helper.GetLastStations(TrainDirection.ta, sta, trainsA);
+		const lss = helper.GetLastStations(TrainDirection.ti, sta, trainsB);
+		const colspan = 2 + (multipleStations ? 1 : 0) + (showTracks ? 1 : 0);
 	#>
 	<p class="station">Bahnhof <#= sta.SName.safeHtml() #></p>
 	<p class="title"><#= abfahrtSVG #></p>
@@ -257,7 +257,7 @@ if (!multipleStations) { #>
             <#= HeaderRow(fss) #>
             <#= HeaderRow(lss) #>
         </tr>
-        <# for (var i = 0; i < count; i++) { #>
+        <# for (let i = 0; i < count; i++) { #>
         <tr class="train-row">
             <#= TrainRow(trainsA, TrainDirection.ta, i, sta) #>
             <#= TrainRow(trainsB, TrainDirection.ti, i, sta) #>

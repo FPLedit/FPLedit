@@ -9,10 +9,10 @@ function GetWelle(/* object{ val: int } */ counter, /* IStation */ sta, /* int *
         return "";
     }
 
-    var w = sta.Wellenlinien.GetValue(route);
+    const w = sta.Wellenlinien.GetValue(route);
     if (w != 0)
     {
-        var stas = helper.GetStations(tra);
+        let stas = helper.GetStations(tra);
         stas = stas.skip(stas.indexOf(sta));
         counter.val = stas.takeWhile(s => s.Wellenlinien.GetValue(route) == w).length - 1;
         return "<td class=\"zug welle welle" + w.safeHtml() + "\" rowspan=\"" + (counter.val + 1).safeHtml() + "\"></td>";
@@ -21,13 +21,13 @@ function GetWelle(/* object{ val: int } */ counter, /* IStation */ sta, /* int *
     return "<td class=\"zug welle\"></td>";
 }
 
-var font = "Alte DIN 1451 Mittelschrift";
-var additionalCss = "";
-var showDays = false, showComments = false;
+let font = "Alte DIN 1451 Mittelschrift";
+let additionalCss = "";
+let showDays = false, showComments = false;
 // Initialisierung
-var helper = new TemplateHelper(tt);
+const helper = new TemplateHelper(tt);
 
-var attrs = BfplAttrs.GetAttrs(tt);
+const attrs = BfplAttrs.GetAttrs(tt);
 if (attrs != null)
 {
     if (attrs.Font != "")
@@ -162,10 +162,10 @@ if (attrs != null)
 	<body>
 		<div>
 			<#
-			var first = true; // No pagebreak before first train
-			var trains = helper.GetTrains();
-			for (var ti = 0; ti < trains.length; ti++) { 
-			    var tra = trains[ti]; #>
+			let first = true; // No pagebreak before first train
+			const trains = helper.GetTrains();
+			for (let ti = 0; ti < trains.length; ti++) { 
+			    const tra = trains[ti]; #>
 			<table id="<#= tra.TName.htmlName("train-") #>" class="<#= (first ? "first" : "").safeHtml() #>">
 				<# first = false; #>
 				<col style="width:80px;" span="2">
@@ -206,21 +206,21 @@ if (attrs != null)
 					<td class="spaltenkopf">Ankunft</td><td class=spaltenkopf>Abfahrt<br>oder Durch-<br>fahrt</td>
 				</tr>
 				<#
-				var rs_counter = { val: 0 }; // Counter as object, to pass as reference in JS.
-				var last_vmax = "";
-				var stations = helper.GetStations(tra);
-				var route = Timetable.LINEAR_ROUTE_ID;
-				for (var si = 0; si < stations.length; si++) {
-				    var entity = stations[si];
+				let rs_counter = { val: 0 }; // Counter as object, to pass as reference in JS.
+				let last_vmax = "";
+				const stations = helper.GetStations(tra);
+				let route = Timetable.LINEAR_ROUTE_ID;
+				for (let si = 0; si < stations.length; si++) {
+				    const entity = stations[si];
 				#>
 				<tr class="<#= entity.SName.htmlName("station-") #>">
 					<#
 						if (entity != stations.last() && tt.Type == TimetableType.Network) {
-							var sta1 = stations[stations.indexOf(entity) + 1];
+							const sta1 = stations[stations.indexOf(entity) + 1];
 							route = entity.Routes.filter(r => sta1.Routes.includes(r))[0];
 						}
-						var pos = entity.Positions.GetPosition(route); // null or number
-						var cur_vmax = entity.Vmax.GetValue(route);
+						const pos = entity.Positions.GetPosition(route); // null or number
+						const cur_vmax = entity.Vmax.GetValue(route);
 					#>
 					<td class="zug"><#= (pos != null ? pos.toFixed(1) : "").safeHtml() #></td>
 					<td class="zug"><#= (cur_vmax == last_vmax ? "" : cur_vmax).safeHtml() #></td>
@@ -230,10 +230,10 @@ if (attrs != null)
 
 					<#
 					if (entity instanceof Station) {
-						var ardp = tra.GetArrDep(entity);
-						var ar = ardp.Arrival.ToShortTimeString();
-						var dp = ardp.Departure.ToShortTimeString();
-                        var rq = ardp.RequestStop || entity.RequestStop;
+						const ardp = tra.GetArrDep(entity);
+						const ar = ardp.Arrival.ToShortTimeString();
+						const dp = ardp.Departure.ToShortTimeString();
+                        const rq = ardp.RequestStop || entity.RequestStop;
 					#>
 					<td class="zug"><#= (rq ? "x" : "").safeHtml() #><#= ((ar != "00:00" && ar != dp) ? ar : "").safeHtml() #></td>
 					<td class="zug"><#= (dp != "00:00" ? dp : "").safeHtml() #></td>
