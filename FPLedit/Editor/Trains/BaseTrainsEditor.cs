@@ -21,6 +21,8 @@ internal abstract class BaseTrainsEditor : FDialog<DialogResult>
 
     protected void DeleteTrain(GridView view, TrainDirection dir, bool message = true)
     {
+        var msgCaption = T._nc("BaseTrainsEditor", "Zug löschen", "Züge löschen", view.SelectedItems.Count());
+
         if (view.SelectedItems.Any())
         {
             var trains = view.SelectedItems.OfType<Train>().ToArray();
@@ -29,9 +31,10 @@ internal abstract class BaseTrainsEditor : FDialog<DialogResult>
                 if (trains.Any(t => t.TrainLinks.Any(l => l.TrainCount > 0)))
                 {
                     if (message)
-                        MessageBox.Show(T._("Der Zug kann nicht gelöscht werden, da er mindestens von einem verlinkten Zug referenziert wird!"), T._("Zug löschen"));
+                        MessageBox.Show(T._("Der Zug kann nicht gelöscht werden, da er mindestens von einem verlinkten Zug referenziert wird!"), msgCaption);
                 }
-                else if (MessageBox.Show(T._("Zug wirklich löschen?"), T._("Zug löschen"), MessageBoxButtons.YesNo) == DialogResult.Yes)
+                else if (MessageBox.Show(T._n("Zug wirklich löschen?", "Züge wirklich löschen?", trains.Length), msgCaption, MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    
                 {
                     foreach (var t in trains)
                         tt.RemoveTrain(t);
@@ -39,10 +42,10 @@ internal abstract class BaseTrainsEditor : FDialog<DialogResult>
                 }
             }
             else if (message)
-                MessageBox.Show(T._("Verlinke Züge können nicht gelöscht werden."), T._("Zug löschen"));
+                MessageBox.Show(T._("Verlinke Züge können nicht gelöscht werden."), msgCaption);
         }
         else if (message)
-            MessageBox.Show(T._("Zuerst muss ein Zug ausgewählt werden!"), T._("Zug löschen"));
+            MessageBox.Show(T._("Zuerst muss mindestens ein Zug ausgewählt werden!"), msgCaption);
     }
 
     protected void EditTrain(GridView view, TrainDirection dir, bool message = true)
@@ -78,6 +81,8 @@ internal abstract class BaseTrainsEditor : FDialog<DialogResult>
 
     protected void CopyTrain(GridView view, TrainDirection dir, bool message = true)
     {
+        var msgCaption = T._nc("BaseTrainsEditor", "Zug kopieren", "Züge kopieren", view.SelectedItems.Count());
+
         if (view.SelectedItems.Any())
         {
             var trains = view.SelectedItems.OfType<Train>().ToArray();
@@ -89,10 +94,10 @@ internal abstract class BaseTrainsEditor : FDialog<DialogResult>
                 UpdateListView(view, dir);
             }
             else if (message)
-                MessageBox.Show(T._("Verlinke Züge können nicht kopiert werden."), T._("Zug kopieren"));
+                MessageBox.Show(T._("Verlinke Züge können nicht kopiert werden."), msgCaption);
         }
         else if (message)
-            MessageBox.Show(T._("Zuerst muss ein Zug ausgewählt werden!"), T._("Zug kopieren"));
+            MessageBox.Show(T._("Zuerst muss mindestens ein Zug ausgewählt werden!"), msgCaption);
     }
 
     protected void SortTrains(GridView view, TrainDirection dir)
