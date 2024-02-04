@@ -38,6 +38,17 @@ public static class T
         var assembly = Assembly.GetCallingAssembly();
         return GetCatalog(assembly).GetString(text, args);
     }
+
+    public static string _n(string text, string text2, long n, params object[] args)
+    {
+        var c = GetCatalog(Assembly.GetCallingAssembly());
+        return args.Length > 0 ? c.GetPluralString(text, text2, n, args) : c.GetPluralString(text, text2, n);
+    }
+    public static string _nc(string context, string text, string text2, long n, params object[] args)
+    {
+        var c = GetCatalog(Assembly.GetCallingAssembly());
+        return args.Length > 0 ? c.GetParticularPluralString(context, text, text2, n, args) : c.GetParticularPluralString(context, text, text2, n);
+    }
         
     public static string _a(Assembly assembly, string text) => GetCatalog(assembly).GetString(text);
 
