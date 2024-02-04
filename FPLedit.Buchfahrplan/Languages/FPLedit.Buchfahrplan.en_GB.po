@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-11-24 23:48+0100\n"
-"PO-Revision-Date: 2023-11-24 23:49+0100\n"
+"POT-Creation-Date: 2024-02-04 13:12+0100\n"
+"PO-Revision-Date: 2024-02-04 13:12+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.1\n"
+"X-Generator: Poedit 3.4.2\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: _;SelectionName;_n:1,2;_nc:1c,2,3\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -89,7 +89,7 @@ msgstr ""
 "Please correct all errors before continuing:\n"
 "{0}"
 
-#: Forms/VelocityEditForm.xeto.cs:104 Forms/VelocityForm.xeto.cs:93
+#: Forms/VelocityEditForm.xeto.cs:104 Forms/VelocityForm.xeto.cs:96
 msgid "Höchstgeschwindigkeit ändern"
 msgstr "Change maximum velocity"
 
@@ -117,11 +117,11 @@ msgstr "Valid in Direction"
 msgid "Länge der Änderung [km]"
 msgstr "Change track-length [km]"
 
-#: Forms/VelocityEditForm.xeto.cs:111 Forms/VelocityForm.xeto.cs:153
+#: Forms/VelocityEditForm.xeto.cs:111 Forms/VelocityForm.xeto.cs:156
 msgid "Abbrechen"
 msgstr "Cancel"
 
-#: Forms/VelocityEditForm.xeto.cs:112 Forms/VelocityForm.xeto.cs:154
+#: Forms/VelocityEditForm.xeto.cs:112 Forms/VelocityForm.xeto.cs:157
 msgid "Schließen"
 msgstr "Ok"
 
@@ -133,34 +133,34 @@ msgstr "km"
 msgid "Vmax"
 msgstr "Vmax"
 
-#: Forms/VelocityForm.xeto.cs:73
+#: Forms/VelocityForm.xeto.cs:76
 #, csharp-format
 msgid "Die Position muss im Streckenbereich liegen, also zwischen {0} und {1}!"
 msgstr ""
 "The given position must be in the range of this railway line, between {0} "
 "and {1}!"
 
-#: Forms/VelocityForm.xeto.cs:93 Forms/VelocityForm.xeto.cs:111
+#: Forms/VelocityForm.xeto.cs:96 Forms/VelocityForm.xeto.cs:114
 msgid "Zuerst muss eine Zeile ausgewählt werden!"
 msgstr "Please select an entry first!"
 
-#: Forms/VelocityForm.xeto.cs:111
+#: Forms/VelocityForm.xeto.cs:114
 msgid "Löschen"
 msgstr "Delete"
 
-#: Forms/VelocityForm.xeto.cs:149
+#: Forms/VelocityForm.xeto.cs:152
 msgid "Höchstgeschwindigkeiten ändern"
 msgstr "Change maximum velocities"
 
-#: Forms/VelocityForm.xeto.cs:150
+#: Forms/VelocityForm.xeto.cs:153
 msgid "Wechsel &hizufügen"
 msgstr "&Add Vmax change"
 
-#: Forms/VelocityForm.xeto.cs:151
+#: Forms/VelocityForm.xeto.cs:154
 msgid "Eintrag &bearbeiten"
 msgstr "&Edit entry"
 
-#: Forms/VelocityForm.xeto.cs:152
+#: Forms/VelocityForm.xeto.cs:155
 msgid "Wechsel &löschen"
 msgstr "&Delete Vmax change"
 

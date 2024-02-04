@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-11-24 23:49+0100\n"
-"PO-Revision-Date: 2023-11-24 23:49+0100\n"
+"POT-Creation-Date: 2024-02-04 13:11+0100\n"
+"PO-Revision-Date: 2024-02-04 13:11+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.1\n"
+"X-Generator: Poedit 3.4.2\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: _;SelectionName;_n:1,2;_nc:1c,2,3\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -19,43 +19,43 @@ msgstr ""
 msgid "Strecke"
 msgstr "Line"
 
-#: Forms/SettingsControl.xeto.cs:113
+#: Forms/SettingsControl.xeto.cs:116
 msgid "Beispiel"
 msgstr "Example"
 
-#: Forms/SettingsControl.xeto.cs:114
+#: Forms/SettingsControl.xeto.cs:117
 msgid "Tabellenfahrplan-Vorlage"
 msgstr "Template"
 
-#: Forms/SettingsControl.xeto.cs:115
+#: Forms/SettingsControl.xeto.cs:118
 msgid "Schriftart im Tabellenfahrpl."
 msgstr "Font"
 
-#: Forms/SettingsControl.xeto.cs:116
+#: Forms/SettingsControl.xeto.cs:119
 msgid "Schriftart für Kursbuchstr."
 msgstr "Font used for headings"
 
-#: Forms/SettingsControl.xeto.cs:117
+#: Forms/SettingsControl.xeto.cs:120
 msgid "Eigene CSS-Styles"
 msgstr "Custom CSS styles"
 
-#: Forms/SettingsControl.xeto.cs:118
+#: Forms/SettingsControl.xeto.cs:121
 msgid "Hilfe zu CSS"
 msgstr "Help for custom CSS styles"
 
-#: Forms/SettingsControl.xeto.cs:119
+#: Forms/SettingsControl.xeto.cs:122
 msgid "https://fahrplan.manuelhu.de/dev/css/"
 msgstr ""
 
-#: Forms/SettingsControl.xeto.cs:120
+#: Forms/SettingsControl.xeto.cs:123
 msgid "Kursbuchstreckennummern"
 msgstr "Line numbers"
 
-#: Forms/SettingsControl.xeto.cs:121
+#: Forms/SettingsControl.xeto.cs:124
 msgid "Zum Bearbeiten zwei Mal mit Kurzem Abstand auf den Eintrag klicken"
 msgstr "To edit a line number, double click with short pause in between."
 
-#: Forms/SettingsControl.xeto.cs:122
+#: Forms/SettingsControl.xeto.cs:125
 msgid "CSS-Test-Konsole bei Vorschau aktivieren (Gilt für alle Fahrpläne)"
 msgstr "Enable CSS debugging console (setting for all timetable files)"
 

@@ -27,6 +27,7 @@ internal sealed class NetworkTrainsEditForm : BaseTrainsEditor
         tt = pluginInterface.Timetable;
         backupHandle = pluginInterface.BackupTimetable();
 
+        // TRANSLATORS: "L" ist kurz für "Link"
         gridView.AddFuncColumn<ITrain>(t => t.IsLink ? T._("L") : "", "");
         gridView.AddFuncColumn<ITrain>(t => t.TName, T._("Zugnummer"));
         gridView.AddFuncColumn<ITrain>(t => t.Locomotive, T._("Tfz"));

@@ -72,6 +72,7 @@ internal sealed class LinearTrainsEditForm : BaseTrainsEditor
 
     private void InitListView(GridView view, Button[] singleButtons, Button[] multiButtons)
     {
+        // TRANSLATORS: "L" ist kurz für "Link"
         view.AddFuncColumn<ITrain>(t => t.IsLink ? T._("L") : "", "");
         view.AddFuncColumn<ITrain>(t => t.TName, T._("Zugnummer"));
         view.AddFuncColumn<ITrain>(t => t.Locomotive, T._("Tfz"));

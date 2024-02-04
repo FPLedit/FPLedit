@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-12-09 23:28+0100\n"
-"PO-Revision-Date: 2023-12-09 23:29+0100\n"
+"POT-Creation-Date: 2024-02-04 13:11+0100\n"
+"PO-Revision-Date: 2024-02-04 13:11+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.1\n"
+"X-Generator: Poedit 3.4.2\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -168,13 +168,13 @@ msgstr "End time"
 msgid "Zeiten berechnen"
 msgstr "Get times from timetable"
 
-#: Forms/ConfigForm.xeto.cs:155 Forms/StationStyleForm.xeto.cs:75
-#: Forms/TrainStyleForm.xeto.cs:76
+#: Forms/ConfigForm.xeto.cs:155 Forms/StationStyleForm.xeto.cs:78
+#: Forms/TrainStyleForm.xeto.cs:79
 msgid "Abbrechen"
 msgstr "Cancel"
 
-#: Forms/ConfigForm.xeto.cs:156 Forms/StationStyleForm.xeto.cs:76
-#: Forms/TrainStyleForm.xeto.cs:77
+#: Forms/ConfigForm.xeto.cs:156 Forms/StationStyleForm.xeto.cs:79
+#: Forms/TrainStyleForm.xeto.cs:80
 msgid "Schließen"
 msgstr "Ok"
 
@@ -309,19 +309,19 @@ msgstr "Stroke type"
 msgid "Station zeichnen"
 msgstr "Show station"
 
-#: Forms/StationStyleForm.xeto.cs:53
+#: Forms/StationStyleForm.xeto.cs:56
 msgid "Zuerst muss eine Station ausgewählt werden!"
 msgstr "Please select a station first!"
 
-#: Forms/StationStyleForm.xeto.cs:53
+#: Forms/StationStyleForm.xeto.cs:56
 msgid "Stationsdarstellung zurücksetzen"
 msgstr "Reset station display"
 
-#: Forms/StationStyleForm.xeto.cs:77 Forms/TrainStyleForm.xeto.cs:78
+#: Forms/StationStyleForm.xeto.cs:80 Forms/TrainStyleForm.xeto.cs:81
 msgid "Eintrag &zurücksetzen"
 msgstr "Reset entry"
 
-#: Forms/StationStyleForm.xeto.cs:78
+#: Forms/StationStyleForm.xeto.cs:81
 msgid "Stationsdarstellung ändern"
 msgstr "Change station display"
 
@@ -333,15 +333,15 @@ msgstr "Train name"
 msgid "Zug zeichnen"
 msgstr "Show train"
 
-#: Forms/TrainStyleForm.xeto.cs:54
+#: Forms/TrainStyleForm.xeto.cs:57
 msgid "Zuerst muss ein Zug ausgewählt werden!"
 msgstr "Please select a train first!"
 
-#: Forms/TrainStyleForm.xeto.cs:54
+#: Forms/TrainStyleForm.xeto.cs:57
 msgid "Zugdarstellung zurücksetzen"
 msgstr "Reset train display"
 
-#: Forms/TrainStyleForm.xeto.cs:79
+#: Forms/TrainStyleForm.xeto.cs:82
 msgid "Zugdarstellung ändern"
 msgstr "Change train display"
 
