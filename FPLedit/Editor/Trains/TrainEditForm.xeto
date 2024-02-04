@@ -5,7 +5,7 @@
   xmlns:et="clr-namespace:FPLedit.Editor.TimetableEditor;assembly=FPLedit"
   xmlns:fui="clr-namespace:FPLedit.Shared.UI;assembly=FPLedit.Shared.UI"
   DefaultButton="{x:Reference closeButton}" AbortButton="{x:Reference cancelButton}"
-  Title="{x:Static e:TrainEditForm+L.Title}" Resizable="true" MinimumSize="1000,950" >
+  Title="{x:Static e:TrainEditForm+L.Title}" Resizable="true" MinimumSize="800,600" >
   <TableLayout Padding="10,10,10,10" Spacing="5,5">
     <TableRow ScaleHeight="true">
       <TableCell><!-- left column -->
@@ -47,31 +47,33 @@
           <GroupBox Text="{x:Static e:TrainEditForm+L.Days}">
             <fui:DaysControlNarrow x:Name="daysControl" />
           </GroupBox><!-- /group Verkehrstage -->
-          <GroupBox Text="{x:Static e:TrainEditForm+L.NextTrain}">
+        </StackLayout>
+      </TableCell><!-- /left column -->
+      <TableCell><!-- right column -->
+        <TabControl>
+          <TabPage Text="{x:Static e:TrainEditForm+L.Timetable}" Height="400">
+            <et:SingleTimetableEditControl x:Name="editor">
+              <et:SingleTimetableEditControl.ActionButtons>
+                <Button x:Name="fillButton" Text="{x:Static e:TrainEditForm+L.Fill}" Click="FillButton_Click" />
+              </et:SingleTimetableEditControl.ActionButtons>
+            </et:SingleTimetableEditControl>
+          </TabPage>
+          <TabPage Text="{x:Static e:TrainEditForm+L.NextTrain}">
             <StackLayout Padding="10,10,10,10" Spacing="5" Orientation="Vertical" HorizontalContentAlignment="Stretch">
               <GridView x:Name="transitionsGridView" />
               <Button Click="AddTransitionButton_Click" Text="{x:Static e:TrainEditForm+L.NewTransition}" />
               <Button Click="EditTransitionButton_Click" Text="{x:Static e:TrainEditForm+L.EditTransition}" />
               <Button Click="DeleteTransitionButton_Click" Text="{x:Static e:TrainEditForm+L.DeleteTransition}" />
             </StackLayout>
-          </GroupBox><!-- /group Folgezug -->
-          <GroupBox Text="{x:Static e:TrainEditForm+L.Links}">
+          </TabPage><!-- /tab Folgezug -->
+          <TabPage Text="{x:Static e:TrainEditForm+L.Links}">
             <StackLayout Padding="10,10,10,10" Spacing="5" Orientation="Vertical" HorizontalContentAlignment="Stretch">
               <GridView x:Name="linkGridView" />
               <Button Click="DeleteLinkButton_Click" Text="{x:Static e:TrainEditForm+L.DeleteLink}" />
               <Button Click="EditLinkButton_Click" Text="{x:Static e:TrainEditForm+L.EditLink}" />
             </StackLayout>
-          </GroupBox><!-- /group Verknüpfungen -->
-        </StackLayout>
-      </TableCell><!-- /left column -->
-      <TableCell><!-- right column -->
-        <GroupBox Text="{x:Static e:TrainEditForm+L.Timetable}" Height="400">
-          <et:SingleTimetableEditControl x:Name="editor">
-            <et:SingleTimetableEditControl.ActionButtons>
-              <Button x:Name="fillButton" Text="{x:Static e:TrainEditForm+L.Fill}" Click="FillButton_Click" />
-            </et:SingleTimetableEditControl.ActionButtons>
-          </et:SingleTimetableEditControl>
-        </GroupBox>
+          </TabPage><!-- /tab Verknüpfungen -->
+        </TabControl>
       </TableCell><!-- /right column -->
     </TableRow>
     <TableRow><!-- bottom actions -->
