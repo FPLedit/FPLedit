@@ -51,19 +51,26 @@ internal sealed class TrainEditHelper
     public IEnumerable<ITrain> FillCandidates(ITrain tra)
         => tra.ParentTimetable.Trains.Where(t => t.Direction == tra.Direction && t != tra);
 
-    public void MoveTrain(Train[] trains, int offsetMin)
+    public void MoveTrain(Train[] trains, int offsetMin, Station? startStation = null)
     {
         foreach (var t in trains)
-            InternalCopyArrDeps(t, t, offsetMin);
+            InternalCopyArrDeps(t, t, offsetMin, startStation);
     }
 
-    private void InternalCopyArrDeps(Train source, Train destination, int offsetMin)
+    private void InternalCopyArrDeps(Train source, Train destination, int offsetMin, Station? startStation = null)
     {
+        if (startStation != null && source != destination)
+            throw new ArgumentException("A start station can only be applied if copying train to itself!", nameof(startStation));
+
         var offset = new TimeEntry(0, offsetMin);
         var path = source.GetPath();
 
+        var hadStartStation = false;
         foreach (var sta in path)
         {
+            if (sta == startStation) hadStartStation = true;
+            if (startStation != null && !hadStartStation) continue;
+
             var ardp = source.GetArrDep(sta).Copy();
             if (sta != path.First() && ardp.Arrival != default)
                 ardp.Arrival = ardp.Arrival.Add(offset);

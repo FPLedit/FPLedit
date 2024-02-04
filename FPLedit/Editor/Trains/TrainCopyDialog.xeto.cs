@@ -15,9 +15,10 @@ internal sealed class TrainCopyDialog : FDialog<DialogResult>
     private readonly TextBox diffTextBox = default!, nameTextBox = default!, changeTextBox = default!, countTextBox = default!;
     private readonly CheckBox copyAllCheckBox = default!;
     private readonly StackLayout selectStack = default!, linkTypeStack = default!;
-    private readonly TableLayout extendedOptionsTable = default!, copyOptionsTable = default!, autoNameOptionsTable = default!, specialNameOptionsTable = default!;
+    private readonly TableLayout extendedOptionsTable = default!, copyOptionsTable = default!, autoNameOptionsTable = default!, specialNameOptionsTable = default!, moveOptionsTable = default!;
     private readonly Button closeButton = default!;
     private readonly GridView specialNameGridView = default!;
+    private readonly DropDown moveStartStationDropDown = default!;
 #pragma warning restore CS0649,CA2213
     private readonly NumberValidator diffValidator, countValidator, changeValidator;
     private readonly SelectionUI<CopySelectionMode> modeSelect;
@@ -25,6 +26,11 @@ internal sealed class TrainCopyDialog : FDialog<DialogResult>
 
     private readonly Train[] trains;
     private readonly Timetable tt;
+
+    /// <summary>
+    /// This temp station instance is used for marking the selection of the "respective first station".
+    /// </summary>
+    private readonly Station moveStartFirstStationStation;
 
     public TrainCopyDialog(Train[] t, Timetable tt)
     {
@@ -48,6 +54,12 @@ internal sealed class TrainCopyDialog : FDialog<DialogResult>
         specialNameGridView.AddFuncColumn((SpecialNameEntry spn) => spn.RowNumber.ToString(), "");
         specialNameGridView.AddColumn((SpecialNameEntry spn) => spn.Name, T._("Zugname"), true);
         specialNameGridView.DataStore = new[] { new SpecialNameEntry(1, "") };
+
+        moveStartFirstStationStation = new Station(tt) { SName = T._("<Erste Station>") };
+        var selectableStations = new [] { moveStartFirstStationStation }.Union(t.SelectMany(x => x.GetPath()).Distinct()).ToArray();
+        moveStartStationDropDown.ItemTextBinding = Binding.Delegate<Station, string>(s => s.SName);
+        moveStartStationDropDown.DataStore = selectableStations;
+        moveStartStationDropDown.SelectedValue = moveStartFirstStationStation;
 
         // This allows the selection of the last row on Wpf, see Eto#2443.
         if (Platform.IsGtk) specialNameGridView.AllowEmptySelection = false;
@@ -88,6 +100,7 @@ internal sealed class TrainCopyDialog : FDialog<DialogResult>
 
         extendedOptionsTable.Visible = copyOptionsTable.Visible = (mode == CopySelectionMode.Copy || mode == CopySelectionMode.Link);
         autoNameOptionsTable.Visible = (mode == CopySelectionMode.Copy || (mode == CopySelectionMode.Link && linkType == LinkTypeMode.Auto));
+        moveOptionsTable.Visible = mode == CopySelectionMode.Move;
         specialNameOptionsTable.Visible = (mode == CopySelectionMode.Link && linkType == LinkTypeMode.Special);
         linkTypeStack.Visible = mode == CopySelectionMode.Link;
         copyAllCheckBox.Visible = mode == CopySelectionMode.Copy;
@@ -167,7 +180,10 @@ internal sealed class TrainCopyDialog : FDialog<DialogResult>
             th.LinkTrainMultiple(trains.Single(), TimeEntry.Zero, new TimeEntry(0, diff), count, tnc);
         }
         else
-            th.MoveTrain(trains, diff);
+        {
+            var startStation = moveStartStationDropDown.SelectedValue == moveStartFirstStationStation ? null : (Station) moveStartStationDropDown.SelectedValue;
+            th.MoveTrain(trains, diff, startStation);
+        }
 
         Close(DialogResult.Ok);
     }
@@ -209,6 +225,7 @@ internal sealed class TrainCopyDialog : FDialog<DialogResult>
         public static readonly string BaseName = T._("Basiszugnummer");
         public static readonly string NumberChange = T._("Änderung der Zugnummer");
         public static readonly string Extended = T._("Erweiterte Attribute übernehmen");
+        public static readonly string MoveStartStation = T._("Verschiebe nur Zeiten ab Station");
         public static readonly string Title = T._("Zug kopieren/verschieben");
     }
 }

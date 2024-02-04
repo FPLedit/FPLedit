@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2024-02-04 13:07+0100\n"
-"PO-Revision-Date: 2024-02-04 13:10+0100\n"
+"POT-Creation-Date: 2024-02-04 14:49+0100\n"
+"PO-Revision-Date: 2024-02-04 14:49+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -217,7 +217,7 @@ msgstr ""
 #: Editor/RenderSettingsForm.xeto.cs:68
 #: Editor/TimetableEditor/ShuntForm.xeto.cs:169
 #: Editor/TimetableEditor/ZlmEditForm.xeto.cs:28
-#: Editor/Trains/TrainCopyDialog.xeto.cs:205
+#: Editor/Trains/TrainCopyDialog.xeto.cs:221
 #: Editor/Trains/TrainEditForm.xeto.cs:254
 #: Editor/Trains/TrainFillDialog.xeto.cs:50
 #: Editor/Trains/TrainLinkEditDialog.xeto.cs:142
@@ -636,7 +636,7 @@ msgstr "Sort trains"
 
 #: Editor/Linear/LinearTrainsEditForm.xeto.cs:154
 #: Editor/Network/NetworkTrainsEditForm.xeto.cs:166
-#: Editor/Trains/TrainCopyDialog.xeto.cs:212
+#: Editor/Trains/TrainCopyDialog.xeto.cs:229
 msgid "Zug kopieren/verschieben"
 msgstr "Copy or move trains"
 
@@ -896,41 +896,45 @@ msgstr[1] "Copy trains"
 msgid "Verlinke Züge können nicht kopiert werden."
 msgstr "Linked trains cannot be copied."
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:33
+#: Editor/Trains/TrainCopyDialog.xeto.cs:39
 #: Editor/Trains/TrainFillDialog.xeto.cs:24
 msgid "Bitte die Verschiebung als Zahl in Minuten angeben!"
 msgstr "Please enter a valid shift per train (number in full minutes)!"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:34
+#: Editor/Trains/TrainCopyDialog.xeto.cs:40
 #: Editor/Trains/TrainLinkEditDialog.xeto.cs:37
 msgid "Bitte eine gültige Anzahl >0 neuer Züge eingeben!"
 msgstr "Please enter a valid count of new trains!"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:35
+#: Editor/Trains/TrainCopyDialog.xeto.cs:41
 #: Editor/Trains/TrainLinkEditDialog.xeto.cs:38
 msgid "Bitte eine gültige Veränderung der Zugnummer eingeben!"
 msgstr "Please enter a valid change of train number!"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:49
+#: Editor/Trains/TrainCopyDialog.xeto.cs:55
 #: Editor/Trains/TrainLinkEditDialog.xeto.cs:58
 msgid "Zugname"
 msgstr "Train name"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:97
-#: Editor/Trains/TrainCopyDialog.xeto.cs:100
-#: Editor/Trains/TrainCopyDialog.xeto.cs:206
+#: Editor/Trains/TrainCopyDialog.xeto.cs:58
+msgid "<Erste Station>"
+msgstr "<First station>"
+
+#: Editor/Trains/TrainCopyDialog.xeto.cs:110
+#: Editor/Trains/TrainCopyDialog.xeto.cs:113
+#: Editor/Trains/TrainCopyDialog.xeto.cs:222
 msgid "Kopieren"
 msgstr "Copy"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:98
+#: Editor/Trains/TrainCopyDialog.xeto.cs:111
 msgid "Verschieben"
 msgstr "Move"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:99
+#: Editor/Trains/TrainCopyDialog.xeto.cs:112
 msgid "Verlinken"
 msgstr "Link"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:116
+#: Editor/Trains/TrainCopyDialog.xeto.cs:129
 #: Editor/Trains/TrainFillDialog.xeto.cs:37
 #: Editor/Trains/TrainLinkEditDialog.xeto.cs:99
 #, csharp-format
@@ -941,7 +945,7 @@ msgstr ""
 "Please fill out all fields correctly before continuing:\n"
 "{0}"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:135
+#: Editor/Trains/TrainCopyDialog.xeto.cs:148
 #, csharp-format
 msgid ""
 "Es ist bereits ein Zug mit der Zugnummer {0} in diesem Fahrplan vorhanden, "
@@ -950,58 +954,62 @@ msgstr ""
 "A train named {0} already exists in this timetable. Should the copy be "
 "created anyway?"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:136
+#: Editor/Trains/TrainCopyDialog.xeto.cs:149
 msgid "Züge kopieren"
 msgstr "Copy trains"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:158
+#: Editor/Trains/TrainCopyDialog.xeto.cs:171
 #: Editor/Trains/TrainLinkEditDialog.xeto.cs:122
 msgid "Es wurden keinen Namen für alle Züge angegeben!"
 msgstr "No name specified for some of the trains!"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:187
+#: Editor/Trains/TrainCopyDialog.xeto.cs:203
 msgid "Zug kopieren"
 msgstr "Copy train"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:189
+#: Editor/Trains/TrainCopyDialog.xeto.cs:205
 msgid "Zug verschieben"
 msgstr "Move train"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:191
+#: Editor/Trains/TrainCopyDialog.xeto.cs:207
 msgid "Zug verlinken"
 msgstr "Link train"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:197
+#: Editor/Trains/TrainCopyDialog.xeto.cs:213
 msgid "Automatische Benennung"
 msgstr "Automatic naming"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:199
+#: Editor/Trains/TrainCopyDialog.xeto.cs:215
 msgid "Manuelle Benennung"
 msgstr "Manual naming"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:207
+#: Editor/Trains/TrainCopyDialog.xeto.cs:223
 #: Editor/Trains/TrainLinkEditDialog.xeto.cs:145
 msgid "Taktverschiebung in Minuten"
 msgstr "Shift of each train"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:208
+#: Editor/Trains/TrainCopyDialog.xeto.cs:224
 #: Editor/Trains/TrainLinkEditDialog.xeto.cs:146
 msgid "Anzahl der neuen Züge"
 msgstr "Number of new trains"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:209
+#: Editor/Trains/TrainCopyDialog.xeto.cs:225
 #: Editor/Trains/TrainLinkEditDialog.xeto.cs:147
 msgid "Basiszugnummer"
 msgstr "Base train name"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:210
+#: Editor/Trains/TrainCopyDialog.xeto.cs:226
 #: Editor/Trains/TrainLinkEditDialog.xeto.cs:148
 msgid "Änderung der Zugnummer"
 msgstr "Increment"
 
-#: Editor/Trains/TrainCopyDialog.xeto.cs:211
+#: Editor/Trains/TrainCopyDialog.xeto.cs:227
 msgid "Erweiterte Attribute übernehmen"
 msgstr "Copy extended attributes"
+
+#: Editor/Trains/TrainCopyDialog.xeto.cs:228
+msgid "Verschiebe nur Zeiten ab Station"
+msgstr "Move only times after station"
 
 #: Editor/Trains/TrainEditForm.xeto.cs:45
 msgid "Bitte einen Zugnamen eingeben!"
@@ -1970,9 +1978,6 @@ msgstr ""
 #, csharp-format
 msgid "Sie benutzen die aktuelleste Version von FPLedit ({0})!"
 msgstr "You are using the most recent version of FPLedit ({0})"
-
-#~ msgid "<Alle Stationen>"
-#~ msgstr "<All stations>"
 
 #~ msgid ""
 #~ "Dieser Zug hat komplexe Folgezüge/mehr als einen Folgezug definiert. Dies "
