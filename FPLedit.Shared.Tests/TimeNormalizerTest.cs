@@ -9,7 +9,7 @@ public class TimeNormalizerTest
     public void NormalizeTest()
     {
         var normalizer = new TimeNormalizer();
-            
+
         Assert.AreEqual("00:00", normalizer.Normalize("0:0"));
         Assert.AreEqual("00:00", normalizer.Normalize("0"));
         Assert.AreEqual("00:00", normalizer.Normalize("00:00"));
@@ -32,12 +32,11 @@ public class TimeNormalizerTest
         Assert.AreEqual("00:36", normalizer.Normalize("36"));
         Assert.AreEqual("00:06", normalizer.Normalize("6"));
         Assert.AreEqual("15:36", normalizer.Normalize("1536"));
-            
+
         Assert.AreEqual("00:00", normalizer.Normalize("00:00:00")); // Remove empty seconds part.
         Assert.AreEqual("01:04", normalizer.Normalize("01:04:00")); // Remove empty seconds part.
         Assert.AreEqual("01:00:02", normalizer.Normalize("1::2"));
 
-            
         Assert.AreEqual(null, normalizer.Normalize(" "));
         Assert.AreEqual(null, normalizer.Normalize(""));
         Assert.AreEqual(null, normalizer.Normalize("1 2"));

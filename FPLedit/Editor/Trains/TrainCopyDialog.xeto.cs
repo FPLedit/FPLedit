@@ -85,7 +85,7 @@ internal sealed class TrainCopyDialog : FDialog<DialogResult>
         // Those two might be null when this is called when the constructor did not finish running...
         var mode = modeSelect?.SelectedState ?? CopySelectionMode.Copy;
         var linkType = linkSelect?.SelectedState ?? LinkTypeMode.Auto;
-            
+
         extendedOptionsTable.Visible = copyOptionsTable.Visible = (mode == CopySelectionMode.Copy || mode == CopySelectionMode.Link);
         autoNameOptionsTable.Visible = (mode == CopySelectionMode.Copy || (mode == CopySelectionMode.Link && linkType == LinkTypeMode.Auto));
         specialNameOptionsTable.Visible = (mode == CopySelectionMode.Link && linkType == LinkTypeMode.Special);
@@ -199,7 +199,7 @@ internal sealed class TrainCopyDialog : FDialog<DialogResult>
         [SelectionName("Manuelle Benennung")]
         Special
     }
-        
+
     private static class L
     {
         public static readonly string Cancel = T._("Abbrechen");

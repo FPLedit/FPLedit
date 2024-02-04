@@ -144,7 +144,7 @@ internal sealed class LinearTrainsEditForm : BaseTrainsEditor
     private void BottomSortButton_Click(object sender, EventArgs e)
         => SortTrains(bottomGridView, BOTTOM_DIRECTION);
     #endregion
-        
+
     private static class L
     {
         public static readonly string Cancel = T._("Abbrechen");

@@ -8,9 +8,9 @@ public abstract class DaysControl : Panel
 {
     private CheckBox[]? daysBoxes;
     private ToggleButton[]? shortcutsToggle;
-        
+
     private bool applyingShortcut;
-        
+
     private readonly Days wShortcut = Days.Parse("1111110");
     private readonly Days wExclSaShortcut = Days.Parse("1111100");
     private readonly Days sShortcut = Days.Parse("0000001");
@@ -21,25 +21,25 @@ public abstract class DaysControl : Panel
 
     protected void InitializeWithControls()
     {
-        daysBoxes = new[] { 
-            FindChild<CheckBox>("mondayCheckBox"), 
-            FindChild<CheckBox>("tuesdayCheckBox"), 
+        daysBoxes = new[] {
+            FindChild<CheckBox>("mondayCheckBox"),
+            FindChild<CheckBox>("tuesdayCheckBox"),
             FindChild<CheckBox>("wednesdayCheckBox"),
-            FindChild<CheckBox>("thursdayCheckBox"), 
-            FindChild<CheckBox>("fridayCheckBox"), 
-            FindChild<CheckBox>("saturdayCheckBox"), 
-            FindChild<CheckBox>("sundayCheckBox") 
+            FindChild<CheckBox>("thursdayCheckBox"),
+            FindChild<CheckBox>("fridayCheckBox"),
+            FindChild<CheckBox>("saturdayCheckBox"),
+            FindChild<CheckBox>("sundayCheckBox")
         };
         foreach (var dayBox in daysBoxes)
             dayBox.CheckedChanged += CheckBoxStateChanged;
-            
+
         var shortcuts = new[] { wShortcut, wExclSaShortcut, sShortcut, aShortcut, zShortcut };
-        shortcutsToggle = new[] { 
-            FindChild<ToggleButton>("wShort"), 
-            FindChild<ToggleButton>("wSaShort"), 
-            FindChild<ToggleButton>("sShort"), 
-            FindChild<ToggleButton>("aShort"), 
-            FindChild<ToggleButton>("zShort") 
+        shortcutsToggle = new[] {
+            FindChild<ToggleButton>("wShort"),
+            FindChild<ToggleButton>("wSaShort"),
+            FindChild<ToggleButton>("sShort"),
+            FindChild<ToggleButton>("aShort"),
+            FindChild<ToggleButton>("zShort")
         };
         for (int i = 0; i < shortcutsToggle.Length; i++)
         {
@@ -52,15 +52,15 @@ public abstract class DaysControl : Panel
     {
         get => new Days(daysBoxes!.Select(b => b.Checked!.Value).ToArray());
         set => SetDays(value);
-    } 
-        
+    }
+
     private void SetDays(Days days)
     {
         applyingShortcut = true;
         for (int i = 0; i < days.Length; i++)
             daysBoxes![i].Checked = days[i];
         applyingShortcut = false;
-            
+
         UpdateShortcutState();
     }
 
@@ -108,7 +108,7 @@ public abstract class DaysControl : Panel
         var cur = SelectedDays;
         foreach (var item in shortcutsToggle!)
             item.Checked = cur.Equals((Days)item.Tag);
-            
+
         SelectedDaysChanged?.Invoke(this, EventArgs.Empty);
     }
 
@@ -121,7 +121,7 @@ public abstract class DaysControl : Panel
         public static readonly string FridayShort = T._("Fr");
         public static readonly string SaturdayShort = T._("Sa");
         public static readonly string SundayShort = T._("So");
-            
+
         public static readonly string MondayLong = T._("Montag");
         public static readonly string TuesdayLong = T._("Dienstag");
         public static readonly string WednesdayLong = T._("Mittwoch");
@@ -129,8 +129,7 @@ public abstract class DaysControl : Panel
         public static readonly string FridayLong = T._("Freitag");
         public static readonly string SaturdayLong = T._("Samstag");
         public static readonly string SundayLong = T._("Sonntag");
-            
-            
+
         public static readonly string W = T._("W");
         public static readonly string WLong = T._("Werktags (Montag - Samstag)");
         public static readonly string WSa = T._("W (Sa)");
@@ -152,7 +151,7 @@ public sealed class DaysControlNarrow : DaysControl
         InitializeWithControls();
     }
 }
-    
+
 public sealed class DaysControlWide : DaysControl
 {
     public DaysControlWide()

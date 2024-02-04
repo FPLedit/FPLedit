@@ -11,7 +11,7 @@ internal sealed class SettingsFormHandler : ISettingsControl
 
     public Control GetControl(IPluginInterface pluginInterface) => new SettingsForm(pluginInterface.Settings);
 }
-    
+
 internal sealed class SettingsForm : Panel
 {
 #pragma warning disable CS0649,CA2213

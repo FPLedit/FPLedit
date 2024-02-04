@@ -22,7 +22,7 @@ internal sealed class MenuPlugin : IPlugin
         editRoot = (ButtonMenuItem) ((MenuBar) pluginInterface.Menu).GetItem(MainForm.LocEditMenu)!;
         previewRoot = (ButtonMenuItem) ((MenuBar) pluginInterface.Menu).GetItem(MainForm.LocPreviewMenu)!;
     }
-        
+
     private void PluginInterface_ExtensionsLoaded(object? sender, EventArgs e)
     {
         var previewables = pluginInterface.GetRegistered<IPreviewAction>();
@@ -40,7 +40,7 @@ internal sealed class MenuPlugin : IPlugin
         foreach (var dialog in editMenuActions)
             editRoot.CreateItem(dialog.DisplayName, enabled: dialog.IsEnabled(pluginInterface), clickHandler: (_, _) => dialog.Invoke(pluginInterface));
     }
-        
+
     private void PluginInterface_FileStateChanged(object? sender, FileStateChangedEventArgs e)
     {
         foreach (var ddi in previewRoot.Items.OfType<ButtonMenuItem>())

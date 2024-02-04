@@ -14,23 +14,23 @@ public enum TimetableType
 
 public class TimetableTypeNotSupportedException : NotSupportedException
 {
-    public TimetableTypeNotSupportedException(TimetableType type, string feature) 
+    public TimetableTypeNotSupportedException(TimetableType type, string feature)
         : base("Timetable file of type " + type + " does not support the following feature: " + feature)
     {
     }
-        
-    public TimetableTypeNotSupportedException(TimetableType type, string feature, Exception innerException) 
+
+    public TimetableTypeNotSupportedException(TimetableType type, string feature, Exception innerException)
         : base("Timetable file of type " + type + " does not support the following feature: " + feature, innerException)
     {
     }
-        
-    public TimetableTypeNotSupportedException(string feature) 
+
+    public TimetableTypeNotSupportedException(string feature)
         : base("Current timetable file does not support a required feature: " + feature)
     {
     }
-        
-    public TimetableTypeNotSupportedException(string feature, Exception innerEexception) 
-        : base("Current timetable file does not support a required feature: " + feature, innerEexception)
+
+    public TimetableTypeNotSupportedException(string feature, Exception innerException)
+        : base("Current timetable file does not support a required feature: " + feature, innerException)
     {
     }
 

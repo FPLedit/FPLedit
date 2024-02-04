@@ -10,7 +10,7 @@ public sealed class DynamicPreview : IPreviewAction, IDisposable
     private PreviewForm? dpf;
 
     public string DisplayName => T._("Dynamischer Bildfahrplan");
-        
+
     public string MenuName => T._("Dynamischer B&ildfahrplan");
 
     public void Show(IPluginInterface pluginInterface)

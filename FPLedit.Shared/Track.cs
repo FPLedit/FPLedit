@@ -22,7 +22,7 @@ public sealed class Track : Entity
         get => GetAttribute("name", "");
         set => SetAttribute("name", value);
     }
-        
+
     /// <summary>
     /// Create a copy of this Track. This is not a deep copy, as it copies only the xml tree below, and it preserves the parent timetable.
     /// </summary>

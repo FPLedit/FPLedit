@@ -14,7 +14,7 @@ internal ref struct ArgsParser
     private readonly Span<bool> found;
 
     public (string name, string value) Current { get; private set; }
-        
+
     public ArgsParser GetEnumerator() => this;
 
     public ArgsParser(ReadOnlySpan<char> args, params string[] required)
@@ -22,7 +22,7 @@ internal ref struct ArgsParser
         this.args = args;
         this.required = required;
         startIndex = 0;
-            
+
         found = new bool[required.Length];
         Current = ("", "");
     }

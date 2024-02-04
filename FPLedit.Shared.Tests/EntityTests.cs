@@ -11,7 +11,7 @@ public class EntityTests
     public void CreationTest()
     {
         var tt = new Timetable(TimetableType.Linear);
-            
+
         var x = new TestEntity("test", tt);
         Assert.AreEqual("test", x.XMLEntity.XName);
         Assert.AreEqual(0, x.Attributes.Count);
@@ -20,19 +20,19 @@ public class EntityTests
         Assert.AreEqual(0, x.XMLEntity.Children.Count);
         Assert.AreEqual(null, x.XMLEntity.Value);
         Assert.AreEqual(tt, x.ParentTimetable);
-            
+
         // externes setzen
         x.SetAttribute("test-attr1", "test-attr1-val");
         Assert.IsTrue(x.Attributes.Count == 1);
         Assert.IsTrue(x.Attributes.ContainsKey("test-attr1"));
         Assert.AreEqual("test-attr1-val", x.Attributes["test-attr1"]);
         Assert.AreEqual("test-attr1-val", x.GetAttribute<string>("test-attr1"));
-            
+
         Assert.IsTrue(x.XMLEntity.Attributes.Count == 1);
         Assert.IsTrue(x.XMLEntity.Attributes.ContainsKey("test-attr1"));
         Assert.AreEqual("test-attr1-val", x.XMLEntity.Attributes["test-attr1"]);
         Assert.AreEqual("test-attr1-val", x.XMLEntity.GetAttribute<string>("test-attr1"));
-            
+
         // internes setzen
         Assert.AreEqual(null, x.GetAttribute<string>("test-attr2"));
         Assert.AreEqual(0, x.GetAttribute<int>("test-attr2"));
@@ -43,19 +43,19 @@ public class EntityTests
         Assert.AreEqual(2, x.GetAttribute<int>("test-attr2"));
         Assert.AreEqual("2", x.XMLEntity.GetAttribute<string>("test-attr2"));
         Assert.AreEqual(2, x.XMLEntity.GetAttribute<int>("test-attr2"));
-            
+
         // externes Löschen
         x.RemoveAttribute("test-attr1");
         Assert.AreEqual(null, x.GetAttribute<string>("test-attr1"));
         Assert.IsFalse(x.Attributes.ContainsKey("test-attr1"));
         Assert.AreEqual(null, x.XMLEntity.GetAttribute<string>("test-attr1"));
         Assert.IsFalse(x.XMLEntity.Attributes.ContainsKey("test-attr1"));
-            
+
         // internes Löschen
         x.Attributes.Remove("test-attr2");
         Assert.AreEqual(0, x.GetAttribute<int>("test-attr2"));
         Assert.AreEqual(0, x.XMLEntity.GetAttribute<int>("test-attr2"));
-            
+
         // Collections tauschen
         x.SetAttribute("test", "1");
         x.Attributes = new Dictionary<string, string>();
@@ -78,7 +78,7 @@ public class EntityTests
     public void XmlEntityTest()
     {
         var tt = new Timetable(TimetableType.Linear);
-            
+
         // children
         var el = XElement.Parse("<test a=\"1\" b=\"aBcDeF\"><a abc=\"1\" /><b>d</b>hallo</test>");
         var x = new XMLEntity(el);

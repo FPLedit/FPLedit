@@ -26,13 +26,13 @@ internal sealed class MainForm : FForm, IPlugin
 
     internal CrashReporting.CrashReporter CrashReporter { get; }
     internal Bootstrapper Bootstrapper { get; }
-        
+
     private TimetableChecks.TimetableCheckRunner? checkRunner;
     private readonly LastFileHandler lfh;
-        
+
     public static readonly string LocEditMenu = T._("&Bearbeiten");
     public static readonly string LocPreviewMenu = T._("&Vorschau");
-        
+
     public static class L
     {
         public static readonly string MenuSettings = T._("Einstellungen");
@@ -50,7 +50,7 @@ internal sealed class MainForm : FForm, IPlugin
         public static readonly string MenuNew = T._("&Neu");
         public static readonly string MenuNewNetwork = T._("&Netzwerk-Fahrplan");
         public static readonly string MenuNewLinear = T._("&Lineare Strecke");
-            
+
         public static readonly string LoadingFile = T._("Lade Datei...");
     }
 
@@ -76,9 +76,9 @@ internal sealed class MainForm : FForm, IPlugin
     {
         loadingStack.Visible = e;
     }
-        
+
     #region Plugin Code
-        
+
     public void Init(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
     {
         // Initialize main UI component
@@ -94,9 +94,9 @@ internal sealed class MainForm : FForm, IPlugin
 
         saveMenu.Enabled = saveAsMenu.Enabled = exportMenu.Enabled = convertMenu.Enabled = e.FileState.Opened;
     }
-        
+
     #endregion
-        
+
     protected override void OnLoad(EventArgs e)
     {
         // Now we can load extensions and templates
@@ -140,15 +140,15 @@ internal sealed class MainForm : FForm, IPlugin
                 CrashReporter.RemoveCrashFlag(); // Der Crash crasht sogar noch die Fehlerbehandlung...
             }
         }
-            
+
         foreach (var msg in Bootstrapper.PreBootstrapWarnings)
             Bootstrapper.Logger.Warning(msg);
-            
+
         checkRunner = new TimetableChecks.TimetableCheckRunner(Bootstrapper); // CheckRunner initialisieren
-            
+
         LoadStartFile();
         Bootstrapper.Update.AutoUpdateCheck(Bootstrapper.Logger);
-            
+
         base.OnShown(e);
     }
 
@@ -194,10 +194,10 @@ internal sealed class MainForm : FForm, IPlugin
 
             Bootstrapper.ClearTemp();
         }
-            
+
         base.OnClosing(e);
     }
-        
+
     private void ProcessKeyDown(object? s, KeyEventArgs e)
     {
         if ((NetworkRenderer.DispatchableKeys.Contains(e.Key) || NetworkEditingControl.DispatchableKeys.Contains(e.Key)) && e.Modifiers == Keys.None)

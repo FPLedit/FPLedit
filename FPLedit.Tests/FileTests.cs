@@ -17,7 +17,7 @@ public class FileTests : BaseFileTests
     {
         var text = Load("test_duplicate_ids.fpl");
         using var s = PrepareTemp(text);
-            
+
         var pi = new DummyPluginInterface();
         pi.Registry.Register<ITimetableInitAction>(new BugFixInitAction());
 
@@ -32,7 +32,7 @@ public class FileTests : BaseFileTests
         Assert.AreEqual(5, tt.Trains.Count); // We still have 5 trains.
         Assert.AreEqual(5, tt.Trains.Select(t => t.Id).Distinct().Count()); // We have 5 different IDs now.
     }
-        
+
     [Test]
     public void AmbiguousRoutesTest()
     {
@@ -51,13 +51,13 @@ public class FileTests : BaseFileTests
 
         Assert.IsTrue(pi.HadWarning("enthält zusammengefallene Strecken") > 0);
     }
-        
+
     [Test]
     public void NetworkFileWithLinearStationsTest()
     {
         var text = Load("test_network_with_linear_positions.fpl");
         using var s = PrepareTemp(text);
-            
+
         Assert.Throws<FormatException>(() => new XMLImport().Import(s, new DummyPluginInterface()));
     }
 }

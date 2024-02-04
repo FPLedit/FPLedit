@@ -11,7 +11,7 @@ public sealed class TempLogger : ILog
     public void AttachLogger(ILog other)
     {
     }
-        
+
     private readonly string filename;
 
     public TempLogger(IPluginInterface pluginInterface)

@@ -147,13 +147,13 @@ public class TestLogger : ILog
         warnings.RemoveAll(w => warns.Contains(w));
         return warns.Count;
     }
-        
+
     public bool CanAttach => false;
 
     public void AttachLogger(ILog other)
     {
     }
-        
+
     public void Error(string message) => throw new LogErrorException("Error: " + message);
 
     public void Warning(string message) => warnings.Add(message);

@@ -6,7 +6,7 @@
     <Platforms>AnyCPU</Platforms>
 
     <!-- Stops FPledit.Docs.dll from appearing -->
-    <OutputPath>$(IntermediateOutputPath)\binary-unused</OutputPath>    
+    <OutputPath>$(IntermediateOutputPath)\binary-unused</OutputPath>
     <IsPublishable>false</IsPublishable>
   </PropertyGroup>
   <PropertyGroup>
@@ -20,7 +20,7 @@
       <DocfxGeneratedFiles Include="$(MSBuildProjectDirectory)/api/*.yml" />
       <DocfxGeneratedFiles Include="$(MSBuildProjectDirectory)/api/.manifest*" />
     </ItemGroup>
-    
+
     <Message Text="Cleanup: Moving generated files to $(_CleanupDocFxOutputDirectory)..." />
     <MakeDir Directories="$(_DocFxOutputDirectory)" />
     <Move SourceFiles="@(DocfxGeneratedFiles)" DestinationFolder="$(_CleanupDocFxOutputDirectory)" />

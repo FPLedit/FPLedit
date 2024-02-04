@@ -65,7 +65,7 @@ public class PathData : ISortedStations
     /// </summary>
     public Station? NextStation(Station sta)
         => Entries.SkipWhile(pe => pe.Station != sta).Skip(1).FirstOrDefault()?.Station;
-        
+
     /// <summary>
     /// Returns the previous station before the given station, following this path, or null.
     /// </summary>
@@ -84,7 +84,7 @@ public class PathData : ISortedStations
             return Timetable.UNASSIGNED_ROUTE_ID;
         return tt.GetDirectlyConnectingRoute(sta, next);
     }
-        
+
     /// <summary>
     /// Get the route this path enters the given station on.
     /// </summary>
@@ -119,7 +119,7 @@ public class PathData : ISortedStations
         }
         return false;
     }
-        
+
     /// <summary>
     /// Returns +/-<paramref name="radius"/> stations around the given <paramref name="center"/> station, following
     /// the order of the current path.
@@ -183,7 +183,7 @@ public class PathData : ISortedStations
     /// </summary>
     public static PathData Empty(Timetable tt) => new PathData(tt, Array.Empty<Station>());
 }
-    
+
 /// <summary>
 /// Specific PathData, initialized with just a a train, containing the whole path &amp; time entries for this train.
 /// </summary>
@@ -223,7 +223,7 @@ public class PathEntry
 
     public int RouteIndex { get; }
 }
-    
+
 /// <summary>
 /// Entry of a <see cref="TrainPathData"/>. Represents one station on a specific route with attached time entry data.
 /// </summary>

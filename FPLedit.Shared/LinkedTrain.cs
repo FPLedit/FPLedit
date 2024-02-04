@@ -104,7 +104,7 @@ public class LinkedTrain : Entity, ITrain
         this.countingIndex = countingIndex;
         baseTrain = link.ParentTrain;
     }
-        
+
     /// <summary>
     /// Create a new linked train instance.
     /// </summary>

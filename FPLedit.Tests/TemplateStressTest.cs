@@ -19,7 +19,7 @@ public class TemplateStressTest
 
         var before = GC.GetTotalMemory(false);
         Assert.IsTrue(before / Math.Pow(2, 20) < 80); // lower than 80 MB
-            
+
         for (var i = 0; i < 10000; i++)
         {
             tmpl.GenerateResult(tt);

@@ -40,11 +40,11 @@ internal sealed class TrainLinkEditDialog : FDialog<DialogResult>
         origLink = link;
         train = link.ParentTrain;
         this.tt = tt;
-            
+
         startOffsetTextBox.Text = link.TimeOffset.ToTimeString();
         differenceTextBox.Text = link.TimeDifference.ToTimeString();
         countTextBox.Text = link.TrainCount.ToString();
-            
+
         switch (link.TrainNamingScheme)
         {
             case AutoTrainNameGen atnc:
@@ -56,7 +56,7 @@ internal sealed class TrainLinkEditDialog : FDialog<DialogResult>
                 specialTrainNameTableLayout.Visible = true;
                 specialNameGridView.AddFuncColumn((SpecialNameEntry spn) => spn.RowNumber.ToString(), "");
                 specialNameGridView.AddColumn((SpecialNameEntry spn) => spn.Name, T._("Zugname"), true);
-                   
+
                 var ds = new SpecialNameEntry[stnc.Names.Length];
                 for (int i = 0; i < stnc.Names.Length; i++)
                     ds[i] = new SpecialNameEntry(i + 1, stnc.Names[i]);
@@ -69,7 +69,7 @@ internal sealed class TrainLinkEditDialog : FDialog<DialogResult>
         // This allows the selection of the last row on Wpf, see Eto#2443.
         if (Platform.IsGtk) specialNameGridView.AllowEmptySelection = false;
     }
-        
+
     private void CountTextBox_TextChanged(object sender, EventArgs e)
     {
         if (!countValidator.Valid || specialNameGridView.DataStore == null)
@@ -127,10 +127,10 @@ internal sealed class TrainLinkEditDialog : FDialog<DialogResult>
             default:
                 throw new NotSupportedException("Not Implemented: Name calculator not supported!");
         }
-            
+
         tt.RemoveLink(origLink); // Remove old link.
         th.LinkTrainMultiple(train, offset, diff, count, tnc); // Create new link.
-            
+
         Close(DialogResult.Ok);
     }
 
@@ -149,5 +149,5 @@ internal sealed class TrainLinkEditDialog : FDialog<DialogResult>
         public static readonly string Title = T._("Verlinkung bearbeiten");
     }
 }
-    
+
 internal record SpecialNameEntry(int RowNumber, string Name);

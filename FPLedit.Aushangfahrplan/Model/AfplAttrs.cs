@@ -80,7 +80,6 @@ public sealed class AfplAttrs : Entity, IPatternSource
         set => SetAttribute("omit-single-tr", value.ToString().ToLower());
     }
 
-
     private AfplAttrs(Timetable tt) : base("afpl_attrs", tt)
     {
     }

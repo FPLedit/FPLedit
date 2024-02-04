@@ -20,10 +20,10 @@ internal sealed class PrintForm : FDialog<(int routeIdx, PageSize pageSize, bool
     public PrintForm(IPluginInterface pluginInterface)
     {
         Eto.Serialization.Xaml.XamlReader.Load(this);
-            
+
         routesDropDown.Initialize(pluginInterface);
         routesDropDown.EnableVirtualRoutes = true;
-            
+
         paperDropDown.DataContext = new PageSize?(); // hacky way to use DropDownBind without a global datacontext.
         DropDownBind.Enum<PageSize?, PageSize>(paperDropDown, "Value", null);
         paperDropDown.SelectedValue = PageSize.A4;

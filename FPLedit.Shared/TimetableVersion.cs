@@ -24,11 +24,11 @@ public enum TimetableVersion
     [TtVersionCompat(TtVersionCompatType.UpgradeOnly, TimetableType.Linear)]
     [JtgVersionCompat("3.11", TtVersionJtgCompat.OnlyLinear)]
     JTG3_1 = 010,
-        
+
     [TtVersionCompat(TtVersionCompatType.UpgradeOnly, TimetableType.Linear)]
     [JtgVersionCompat("3.2*", TtVersionJtgCompat.OnlyLinear)]
     JTG3_2 = 011,
-        
+
     [TtVersionCompat(TtVersionCompatType.ReadWrite, TimetableType.Linear)]
     [JtgVersionCompat("3.3*", TtVersionJtgCompat.OnlyLinear)]
     [JtgVersionCompat("3.4*", TtVersionJtgCompat.OnlyLinear)]
@@ -36,7 +36,7 @@ public enum TimetableVersion
 
     [TtVersionCompat(TtVersionCompatType.UpgradeOnly, TimetableType.Network)]
     Extended_FPL = 100,
-        
+
     [TtVersionCompat(TtVersionCompatType.ReadWrite, TimetableType.Network)]
     Extended_FPL2 = 101,
     // ReSharper restore InconsistentNaming
@@ -68,7 +68,7 @@ public static class TimetableVersionExt
     /// Compatibility map to cache compatibility data retrieved from attributes.
     /// </summary>
     private static readonly Dictionary<TimetableVersion, TimetableVersionCompat> compatTable = new Dictionary<TimetableVersion, TimetableVersionCompat>();
-        
+
     /// <summary>
     /// Get compatibilzty information for this version.
     /// </summary>
@@ -76,20 +76,20 @@ public static class TimetableVersionExt
     {
         if (compatTable.TryGetValue(version, out var c))
             return c;
-            
+
         var attr = GetAttributes<TtVersionCompatAttribute>(version)?.FirstOrDefault();
         var compatType = attr?.CompatType ?? TtVersionCompatType.None;
         var type = attr?.FileType ?? TimetableType.Linear;
 
         var jtgCompat = GetAttributes<JtgVersionCompatAttribute>(version).Select(j => (j.Version, j.CompatType)).ToArray();
-            
+
         return (compatTable[version] = new TimetableVersionCompat(version, compatType, type, jtgCompat));
     }
 
     /// <summary>
     /// Get the compatibility information for versions defined in <see cref="TimetableVersion"/>.
     /// </summary>
-    public static IEnumerable<TimetableVersionCompat> GetAllVersionInfos() 
+    public static IEnumerable<TimetableVersionCompat> GetAllVersionInfos()
         => Enum.GetValues(typeof(TimetableVersion)).Cast<TimetableVersion>().Select(v => v.GetVersionCompat());
 
     private static IEnumerable<T> GetAttributes<T>(TimetableVersion version)

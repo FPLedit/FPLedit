@@ -44,7 +44,7 @@ internal sealed class TrainFillDialog : FDialog<TrainFillDialog.FillOperation?>
 
     private void CancelButton_Click(object sender, EventArgs e)
         => Close(null);
-        
+
     private static class L
     {
         public static readonly string Cancel = T._("Abbrechen");

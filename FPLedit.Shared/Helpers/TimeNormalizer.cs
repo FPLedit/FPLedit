@@ -67,7 +67,7 @@ public sealed class TimeNormalizer
         }
         return null;
     }
-        
+
     /// <summary>
     /// Parses the given input string.
     /// </summary>

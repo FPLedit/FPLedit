@@ -19,14 +19,14 @@ public class XmlOnlyTimetable : Entity, ITimetable
 #pragma warning disable CS0067
     public event EventHandler? TrainsXmlCollectionChanged;
 #pragma warning restore CS0067
-    
+
     private TimetableType? typeCache;
 
     [XAttrName("version")]
     public TimetableVersion Version => (TimetableVersion) GetAttribute("version", 0);
 
     public TimetableType Type => typeCache ??= Version.GetVersionCompat().Type;
-    
+
     public IList<Station> Stations => throw new NotSupportedException(ThrowMessage);
     public IList<ITrain> Trains => throw new NotSupportedException(ThrowMessage);
     public IList<Transition> Transitions => throw new NotSupportedException(ThrowMessage);

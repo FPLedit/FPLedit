@@ -105,7 +105,7 @@ internal sealed class SingleTimetableEditControl : BaseTimetableEditControl
                     ccco.Data.IsSelectedArrival = arrival;
                     ccco.Data.SelectedTextBox = tb;
                 };
-                    
+
                 tb.LostFocus += (s, _) =>
                 {
                     var dd2 = (TextBox) s!;
@@ -115,7 +115,7 @@ internal sealed class SingleTimetableEditControl : BaseTimetableEditControl
                     FormatCell(ccco.Data, ccco.Data.GetStation()!, arrival, tb);
                     new TimetableCellRenderProperties(time, ccco.Data.GetStation()!, arrival, ccco.Data).Apply(tb);
                 };
-                    
+
                 return tb;
             },
             ConfigureCell = (args, control) =>
@@ -126,7 +126,7 @@ internal sealed class SingleTimetableEditControl : BaseTimetableEditControl
                 ccco.InhibitEvents = true;
 
                 if (args?.Item == null) return;
-                    
+
                 var data = (DataElement) args.Item;
                 if (data.IsMpDummy) return; // Skip "last rows" in mpmode.
 
@@ -181,7 +181,7 @@ internal sealed class SingleTimetableEditControl : BaseTimetableEditControl
 
                     setTrack(ccco.Data.ArrDeps![ccco.Data.GetStation()!], t == (string?) dd.DataStore.FirstOrDefault() ? "" : t);
                 };
-                    
+
                 dd.GotFocus += (s, _) =>
                 {
                     var dd2 = (DropDown) s!;
@@ -192,9 +192,9 @@ internal sealed class SingleTimetableEditControl : BaseTimetableEditControl
                     ccco.Data.SelectedTextBox = null;
                     ccco.Data.SelectedDropDown = dd;
                 };
-                    
+
                 dd.KeyDown += (_, e) => HandleKeystroke(e, dataGridView);
-                    
+
                 return dd;
             },
             ConfigureCell = (args, control) =>
@@ -207,7 +207,7 @@ internal sealed class SingleTimetableEditControl : BaseTimetableEditControl
 
                 if (args?.Item == null)
                     return;
-                    
+
                 var data = (DataElement) args.Item;
                 if (data.IsMpDummy) return; // Skip "last rows" in mpmode.
                 ccco.Data = data;
@@ -218,9 +218,9 @@ internal sealed class SingleTimetableEditControl : BaseTimetableEditControl
                 dd.Enabled = ds.Length > 1;
                 if (data.IsFirst(data.Station!) && arrival || data.IsLast(data.Station!) && !arrival)
                     dd.Enabled = false;
-                    
+
                 dd.SelectedValue = track(data.ArrDeps![data.Station!]);
-                    
+
                 ccco.InhibitEvents = false; // Resume event handling of cutom control.
 
                 if (mpmode)
@@ -280,7 +280,7 @@ internal sealed class SingleTimetableEditControl : BaseTimetableEditControl
             ds.Insert(0, NO_TRACK);
             return ds;
         }
-            
+
         public void SetRequestStop(Station sta, bool req)
         {
             if (sta.RequestStop)
@@ -399,7 +399,7 @@ internal sealed class SingleTimetableEditControl : BaseTimetableEditControl
 
         view.ReloadData(view.SelectedRow);
     }
-        
+
     private void RequestStop(GridView view)
     {
         if (view.SelectedRow == -1)
@@ -417,7 +417,7 @@ internal sealed class SingleTimetableEditControl : BaseTimetableEditControl
         // All traisn stop at this station.
         if (sta.RequestStop)
             return;
-            
+
         var req = !data.ArrDeps![sta].RequestStop;
         data.SetRequestStop(sta, req);
 
@@ -434,7 +434,7 @@ internal sealed class SingleTimetableEditControl : BaseTimetableEditControl
             foreach (var col in dataGridView.Columns)
                 if (!col.IsDisposed)
                     col.Dispose();
-            
+
         base.Dispose(disposing);
     }
 

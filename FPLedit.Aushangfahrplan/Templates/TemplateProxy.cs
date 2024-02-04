@@ -18,7 +18,7 @@ internal sealed class SvgTemplateProvider : BaseTemplateProxy, ITemplateProvider
     public string TemplateIdentifier => "builtin:FPLedit.Aushangfahrplan/Templates/SvgTemplate.fpltmpl";
 
     public string GetTemplateCode()
-        => GeneratePreamble(T._(@"Wie Standard, mit Schriftzug \""Abfahrt\"" in Originalschrift"), ResourceHelper.GetStringResource("Aushangfahrplan.Resources.abfahrt-text.svg")) + 
+        => GeneratePreamble(T._(@"Wie Standard, mit Schriftzug \""Abfahrt\"" in Originalschrift"), ResourceHelper.GetStringResource("Aushangfahrplan.Resources.abfahrt-text.svg")) +
            ResourceHelper.GetStringResource("Aushangfahrplan.Templates.AfplCommon.fpltmpl");
 }
 

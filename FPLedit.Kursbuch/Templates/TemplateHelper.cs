@@ -23,7 +23,7 @@ public sealed class TemplateHelper
         trules = filterable.LoadTrainRules(tt).ToArray();
         srules = filterable.LoadStationRules(tt).ToArray();
     }
-        
+
     public static string SafeHtml(string s) => Shared.Templating.TemplateOutput.SafeHtml(s);
 
     public Station[] GetStations(Route route, TrainDirection dir)

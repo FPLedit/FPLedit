@@ -69,6 +69,6 @@ public static class DropDownBind
     }
 
     private static PropertyInfo GetProperty<T>(string property)
-        => typeof(T).GetProperty(property) 
+        => typeof(T).GetProperty(property)
            ?? throw new Exception($"Property {property} not found on type {typeof(T).FullName}");
 }

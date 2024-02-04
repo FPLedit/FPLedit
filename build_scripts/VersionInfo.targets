@@ -11,5 +11,5 @@
         <VersionPrefix>2.6.2</VersionPrefix>
         <VersionSuffix Condition=" '$(VersionSuffix)' == '' " />
     </PropertyGroup>
-  
+
 </Project>

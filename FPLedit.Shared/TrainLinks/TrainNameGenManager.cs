@@ -24,7 +24,7 @@ public static class TrainNameGenManager
         var parts = trainNamingScheme.Split(';');
         if (parts.Length < 2)
             throw new FormatException("Train link naming scheme is to short: " + trainNamingScheme);
-            
+
         if (registered.TryGetValue(parts[0], out var tnct) && typeof(ITrainNameGen).IsAssignableFrom(tnct))
         {
             var tnc = (ITrainNameGen?) Activator.CreateInstance(tnct);

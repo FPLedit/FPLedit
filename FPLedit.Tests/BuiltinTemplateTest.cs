@@ -13,7 +13,7 @@ public class BuiltinTemplateTest
 {
     private TemplateManager templateManager = null!;
     private const string DEFAULT_TEMPLATE_PATH = "templates";
-        
+
     [SetUp]
     public void SetupTemplates()
     {
@@ -34,17 +34,17 @@ public class BuiltinTemplateTest
         // Load the default extension set.
         var extensionManager = new ExtensionManager(pi);
         extensionManager.LoadExtensions();
-            
+
         // Initialize (already loaded) extensions.
         var enabledPlugins = extensionManager.Plugins.Where(p => p.Enabled);
         foreach (var plugin in enabledPlugins)
             if (plugin.Plugin is ITemplatePlugin tp)
                 tp.InitTemplates(pi, pi.Registry);
-            
+
         // Load templates from files & extensions
         templateManager = new TemplateManager(pi.Registry, pi, DEFAULT_TEMPLATE_PATH);
         templateManager.LoadTemplates(DEFAULT_TEMPLATE_PATH);
-            
+
         // Attach a testing "debugger"
         TemplateDebugger.GetInstance().AttachDebugger(new TestDebugger());
     }
@@ -55,7 +55,7 @@ public class BuiltinTemplateTest
         TestTemplateType(null, new Timetable(TimetableType.Linear));
         TestTemplateType(null, new Timetable(TimetableType.Network));
     }
-        
+
     private void TestTemplateType(string? type, Timetable tt)
     {
         var templates = type == null ? templateManager.GetAllTemplates() : templateManager.GetTemplates(type);

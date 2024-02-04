@@ -65,14 +65,14 @@ internal sealed class CrashReporter
             if (fileStateRestored) return;
             fileStateRestored = true;
             fh.FileOpened -= RestoreFileState;
-                
+
             if (!HasCurrentTtBackup) return;
             fh.FileState.Saved = false;
             fh.FileState.FileName = OrigTtFileName != "" ? OrigTtFileName : null;
             RemoveCrashFlag();
         }
         fh.FileOpened += RestoreFileState;
-            
+
         fh.InternalOpen(CrashTtFileName, false);
     }
 
@@ -84,7 +84,6 @@ internal sealed class CrashReporter
         try { File.Delete(pluginInterface.GetTemp(CRASH_FLAG_FILE)); }
         catch { }
     }
-
 
     // Timetable backup after Crash
     public bool HasCurrentTtBackup => HasCurrentReport && File.Exists(pluginInterface.GetTemp(CRASH_TT_FN));

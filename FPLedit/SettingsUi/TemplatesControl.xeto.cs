@@ -15,7 +15,7 @@ internal sealed class TemplatesControlHandler : ISettingsControl
     public string DisplayName => T._("Vorlagen");
     public Control GetControl(IPluginInterface pluginInterface) => new TemplatesControl((TemplateManager)pluginInterface.TemplateManager);
 }
-    
+
 internal sealed class TemplatesControl : Panel
 {
 #pragma warning disable CS0649,CA2213
@@ -163,7 +163,7 @@ internal sealed class TemplatesControl : Panel
         // May not always work
         var tmpl = templates[gridView.SelectedRow];
         var fn = Path.Combine(templatesDir.FullName, tmpl.Identifier);
-            
+
         var watch = new Stopwatch();
         using (var p = OpenHelper.OpenProc(fn))
         {
@@ -178,7 +178,7 @@ internal sealed class TemplatesControl : Panel
         }
         ReloadTemplates();
     }
-        
+
     private static class L
     {
         public static readonly string EditButton = T._("&Bearbeiten");

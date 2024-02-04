@@ -19,7 +19,7 @@ internal sealed class ExtensionsControlHandler : ISettingsControl
     public string DisplayName => T._("Erweiterungen");
     public Control GetControl(IPluginInterface pluginInterface) => new ExtensionsControl(mg, restartable);
 }
-    
+
 internal sealed class ExtensionsControl : Panel
 {
     private readonly ExtensionManager manager;

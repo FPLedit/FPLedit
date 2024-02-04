@@ -14,7 +14,7 @@ internal class EscapeSplitHelper
     {
         this.delimiter = delimiter;
     }
-        
+
     public IEnumerable<string> SplitEscaped(string s)
     {
         string lastValue = "";

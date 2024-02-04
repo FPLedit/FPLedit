@@ -54,7 +54,7 @@ internal sealed class LinearTimetableEditForm : FDialog<DialogResult>
         this.NClose();
     }
     #endregion
-        
+
     private static class L
     {
         public static readonly string Cancel = T._("Abbrechen");

@@ -14,7 +14,7 @@ public sealed class DynamicPlugin : IPlugin, IDisposable
     private DynamicPreview? dpf;
 
     private const string OVERRIDE_SETTINGS_KEY = "bifpl.override-entity-styles";
-        
+
 #pragma warning disable CA2213
     private ButtonMenuItem graphItem = default!, showItem = default!, configItem = default!, trainColorItem = default!, stationStyleItem = default!, printItem = default!, exportItem = default!;
     private CheckMenuItem overrideItem = default!;
@@ -54,7 +54,7 @@ public sealed class DynamicPlugin : IPlugin, IDisposable
         }
 #endif
     }
-        
+
     private void PrintItem_Click(object? sender, EventArgs e)
     {
         try
@@ -66,7 +66,7 @@ public sealed class DynamicPlugin : IPlugin, IDisposable
             pluginInterface.Logger.Error(ex.Message);
         }
     }
-        
+
     private void ExportItem_Click(object? sender, EventArgs e)
     {
         try
@@ -89,7 +89,7 @@ public sealed class DynamicPlugin : IPlugin, IDisposable
         if (!form.IsDisposed)
             form.Dispose();
     }
-        
+
     private void OverrideItem_CheckedChanged(object? sender, EventArgs e)
     {
         pluginInterface.Settings.Set(OVERRIDE_SETTINGS_KEY, overrideItem.Checked);

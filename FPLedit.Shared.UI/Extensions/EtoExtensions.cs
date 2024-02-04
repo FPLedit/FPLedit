@@ -19,8 +19,8 @@ public static class EtoExtensions
     public static Stream GetResource(this Control dialog, string dotFilePath)
     {
         var assembly = Assembly.GetCallingAssembly();
-        return assembly.GetManifestResourceStream("FPLedit." + dotFilePath) 
-               ?? throw new Exception("Requested resource " + "FPLedit." + dotFilePath + " not found!"); 
+        return assembly.GetManifestResourceStream("FPLedit." + dotFilePath)
+               ?? throw new Exception("Requested resource " + "FPLedit." + dotFilePath + " not found!");
     }
 
     public static void AddSizeStateHandler(this Window w) => sizeManager!.Apply(w);
@@ -40,7 +40,7 @@ public static class EtoExtensions
             dialog.Filters.Add(f);
         }
     }
-    
+
     public static ButtonMenuItem CreateItem(string text, bool enabled = true, EventHandler<EventArgs>? clickHandler = null, Keys shortcut = default)
     {
         var itm = new ButtonMenuItem
@@ -74,7 +74,7 @@ public static class EtoExtensions
             return parent.Items.FirstOrDefault(i => i.Text == text.Replace("&", ""));
         return parent.Items.FirstOrDefault(i => i.Text == text);
     }
-        
+
     public static void DisposeMenu(this MenuItem mi)
     {
         if (!mi.IsDisposed)
@@ -82,7 +82,7 @@ public static class EtoExtensions
             if (mi is ButtonMenuItem bmi && !bmi.IsDisposed)
                 foreach (var mi2 in bmi.Items)
                     DisposeMenu(mi2);
-   
+
             mi.Dispose();
         }
     }

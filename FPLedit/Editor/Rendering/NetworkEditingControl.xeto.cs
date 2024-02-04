@@ -11,7 +11,7 @@ namespace FPLedit.Editor.Rendering;
 internal sealed class NetworkEditingControl : Panel
 {
     private IPluginInterface pluginInterface = null!;
-        
+
     private const int ICON_SIZE = 32;
     private const int ICON_SIZE_CONTEXT = 16;
     public const string TOOLBAR_ICON_SETTINGS_KEY = "ui.toolbar-icons";
@@ -24,7 +24,7 @@ internal sealed class NetworkEditingControl : Panel
     private readonly Divider divider1 = null!;
     private readonly StackLayout toolbar = null!;
 #pragma warning restore CS0649,CA2213
-        
+
     public static readonly Keys[] DispatchableKeys = { Keys.Home };
 
     public NetworkEditingControl()

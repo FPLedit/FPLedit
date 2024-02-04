@@ -45,7 +45,7 @@ public class ObservableChildrenCollection<T> : ObservableCollection<T>, IChildre
     {
         if (!initialized)
             return;
-            
+
         /*
          * CheatSheet for ObservableCollection.CollectionChanged
          * | Action        | NewItems       | OldItems      | NewStartIndex        | OldStartIndex          |
@@ -75,7 +75,7 @@ public class ObservableChildrenCollection<T> : ObservableCollection<T>, IChildre
             default:
                 throw new InvalidOperationException("Unerwartete Listenaktion");
         }
-            
+
         base.OnCollectionChanged(e);
     }
 
@@ -134,7 +134,7 @@ public interface IChildrenCollection<T> : IList<T>
     /// Move one element from <paramref name="oldIndex"/> to <paramref name="newIndex"/>.
     /// </summary>
     void Move(int oldIndex, int newIndex);
-        
+
     /// <summary>
     /// Sort the collection.
     /// </summary>
@@ -142,7 +142,7 @@ public interface IChildrenCollection<T> : IList<T>
     /// <typeparam name="TCompare">Type that will be compared for each child.</typeparam>
     void Sort<TCompare>(Func<T, TCompare> comparer) where TCompare : IComparable;
 }
-    
+
 public static class ObservableCollectionExtensions
 {
     public static int RemoveAll<T>(this IList<T> coll, Func<T, bool> condition)

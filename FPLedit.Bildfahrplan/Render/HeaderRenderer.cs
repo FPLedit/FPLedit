@@ -61,7 +61,7 @@ internal sealed class HeaderRenderer
 
             var pen = (style.CalcedColor, style.CalcedWidth, ds.ParseDashstyle(style.CalcedLineStyle));
             var brush = style.CalcedColor;
-                
+
             if (!attrs.MultiTrack)
             {
                 // Linie (Single-Track-Mode)
@@ -110,7 +110,7 @@ internal sealed class HeaderRenderer
                             g.TranslateTransform(margin.Left + track.Value + (trackSize.Height / 2), margin.Top - 8 - trackSize.Width);
                             g.RotateTransform(90);
                             g.DrawText(attrs.StationFont, brush, 0, 0, track.Key);
-                                
+
                             g.RestoreTransform(matrix);
                         }
                         else
@@ -125,16 +125,16 @@ internal sealed class HeaderRenderer
     private string StationToString(Station sta, bool kilometre, int route)
         => sta.SName + (kilometre ? (" (" + sta.Positions.GetPosition(route) + ")") : "");
 
-    private string StationDisplay(PathEntry sta) => StationToString(sta.Station, attrs.DisplayKilometre, sta.RouteIndex) + 
+    private string StationDisplay(PathEntry sta) => StationToString(sta.Station, attrs.DisplayKilometre, sta.RouteIndex) +
                                                     (!string.IsNullOrWhiteSpace(sta.Station.StationCode) ? $" ({sta.Station.StationCode})" : "");
 
     public float GetMarginTop(IMGraphics g)
     {
         var emSize = g.MeasureString(attrs.StationFont, "M").Height;
 
-        var sMax = attrs.StationVertical ? 
+        var sMax = attrs.StationVertical ?
             (path.PathEntries.Any() ?
-                path.PathEntries.Max(sta => g.MeasureString(attrs.StationFont, StationDisplay(sta)).Width) 
+                path.PathEntries.Max(sta => g.MeasureString(attrs.StationFont, StationDisplay(sta)).Width)
                 : 0)
             : emSize;
 

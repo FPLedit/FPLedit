@@ -16,7 +16,7 @@ public sealed class StandaloneRouteValueCollection<T> : IRouteValueCollection<T>
         this.values = values;
         this.defaultValue = defaultValue!;
     }
-        
+
     /// <inheritdoc />
     public IReadOnlyDictionary<int, T> Values => new ReadOnlyDictionary<int, T>(values);
 
@@ -33,7 +33,7 @@ public sealed class StandaloneRouteValueCollection<T> : IRouteValueCollection<T>
     {
         values[route] = val!;
     }
-        
+
     /// <inheritdoc />
     public bool RemoveValue(int route, out T? oldValue)
     {

@@ -12,7 +12,7 @@ public class LocaleControl : ISettingsControl
     {
         var availableLocales = T.GetAvailableLocales();
         var currentLocale = T.GetCurrentLocale();
-            
+
         var stack = new StackLayout()
         {
             Padding = new Padding(10),
@@ -20,7 +20,7 @@ public class LocaleControl : ISettingsControl
             Spacing = 5
         };
         RadioButton? master = null;
-            
+
         stack.Items.Add(new Label { Text = T._("Sprache der Benutzeroberfläche:") });
 
         foreach (var locale in availableLocales)

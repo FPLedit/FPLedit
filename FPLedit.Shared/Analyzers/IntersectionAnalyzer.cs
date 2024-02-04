@@ -43,7 +43,7 @@ public sealed class IntersectionAnalyzer
         foreach (var it in its)
         {
             days = days.Union(it.Days);
-                
+
             if (it.GetArrDep(station).TrapeztafelHalt)
                 stoppingTrains.Add(it);
         }
@@ -76,11 +76,11 @@ public sealed class IntersectionAnalyzer
                 var x = new int[p.Length];
                 for (int i = 0; i < p.Length; i++)
                     x[i] = Array.IndexOf(surrounding, p[i]);
-                    
+
                 // We have only one station in common (the center station), this is definitely a crossing (from another route)
                 if (x.Count(i => i >= 0) < 2)
                     return crossing;
-                    
+
                 var compare = x.FirstOrDefault().CompareTo(x.LastOrDefault());
                 return crossing ? compare > 0 : compare < 0;
             };

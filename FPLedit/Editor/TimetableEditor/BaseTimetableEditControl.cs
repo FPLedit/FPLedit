@@ -177,19 +177,19 @@ internal abstract class BaseTimetableEditControl : Panel
             var data = (BaseTimetableDataElement)view.SelectedItem;
             if (data == null || data.IsMpDummy || data.GetStation() == null || data.SelectedDropDown == null)
                 return;
-                
+
             e.Handled = true;
             var idx = data.SelectedDropDown.SelectedIndex + 1;
             if (idx < data.SelectedDropDown.DataStore.Count())
                 data.SelectedDropDown.SelectedIndex = idx;
-                
+
         }
         if (e.Key == Keys.Up)
         {
             var data = (BaseTimetableDataElement)view.SelectedItem;
             if (data == null || data.IsMpDummy || data.GetStation() == null || data.SelectedDropDown == null)
                 return;
-                
+
             e.Handled = true;
             var idx = data.SelectedDropDown.SelectedIndex - 1;
             if (idx >= 0)

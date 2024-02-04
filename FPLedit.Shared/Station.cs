@@ -42,7 +42,7 @@ public sealed class Station : Entity, IStation
     }
 
     /// <summary>
-    /// Optional metadata entry that contains the user-set station code. May be displayed on some outputs. 
+    /// Optional metadata entry that contains the user-set station code. May be displayed on some outputs.
     /// </summary>
     [XAttrName("fpl-cd", IsFpleditElement = true)]
     public string StationCode
@@ -52,7 +52,7 @@ public sealed class Station : Entity, IStation
     }
 
     /// <summary>
-    /// Optional metadata entry that contains the user-set station type. May be displayed on some outputs. 
+    /// Optional metadata entry that contains the user-set station type. May be displayed on some outputs.
     /// </summary>
     [XAttrName("fpl-tp", IsFpleditElement = true)]
     public string StationType
@@ -165,7 +165,7 @@ public sealed class Station : Entity, IStation
 
     internal bool _InternalAddRoute(int route)
     {
-        if (Routes.Contains(route)) 
+        if (Routes.Contains(route))
             return false;
         var list = Routes.ToList();
         list.Add(route);
@@ -175,7 +175,7 @@ public sealed class Station : Entity, IStation
 
     internal bool _InternalRemoveRoute(int route)
     {
-        if (!Routes.Contains(route)) 
+        if (!Routes.Contains(route))
             return false;
 
         var list = Routes.ToList();
@@ -192,7 +192,7 @@ public sealed class Station : Entity, IStation
 
     internal bool _InternalReplaceRoute(int oldRoute, int newRoute)
     {
-        if (!Routes.Contains(oldRoute)) 
+        if (!Routes.Contains(oldRoute))
             return false;
 
         var list = Routes.ToList();

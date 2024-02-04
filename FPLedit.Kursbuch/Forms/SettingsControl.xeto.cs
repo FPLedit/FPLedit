@@ -100,17 +100,17 @@ internal sealed class SettingsControl : Panel, IAppearanceHandler
     {
         cssTextBox.Visible = cssLabel.Visible = cssHelpLinkLabel.Visible = consoleCheckBox.Visible = enabled;
     }
-        
+
     protected override void Dispose(bool disposing)
     {
         if (disposing)
             foreach (var col in kbsnListView.Columns)
                 if (!col.IsDisposed)
                     col.Dispose();
-            
+
         base.Dispose(disposing);
     }
-        
+
     public static class L
     {
         public static readonly string Example = T._("Beispiel");

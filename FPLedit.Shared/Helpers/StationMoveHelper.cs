@@ -107,7 +107,7 @@ public static class StationMoveHelper
         {
             if (!(tra is IWritableTrain wt))
                 continue;
-                
+
             var path = tra.GetPath();
             var idx = path.IndexOf(sta);
             if (idx == -1) // Station not in path; not applicable to train.

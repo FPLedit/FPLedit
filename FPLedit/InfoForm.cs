@@ -9,7 +9,7 @@ internal sealed class InfoForm : AboutDialog
 {
     public InfoForm()
     {
-        License = ResourceHelper.GetStringResource("Resources.Info.txt") 
+        License = ResourceHelper.GetStringResource("Resources.Info.txt")
                   + ResourceHelper.GetStringResource("Resources.3rd-party.txt");
         var v = Vi.DisplayVersion;
 #pragma warning disable CS0162 // The code might be unreachable depending on build parameters, but will be active otherwise.
@@ -23,7 +23,7 @@ internal sealed class InfoForm : AboutDialog
         Logo = new Icon(ResourceHelper.GetResource("Resources.programm.ico"));
         ProgramName = "FPLedit";
         ProgramDescription = T._("Erstellen von Fahrplanunterlagen für Modelleisenbahnen");
-            
+
         WebsiteLabel = T._("Online-Dokumentation & Updates");
         Website = new Uri("https://fahrplan.manuelhu.de/");
 

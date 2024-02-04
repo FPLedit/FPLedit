@@ -146,7 +146,7 @@ internal sealed class VelocityForm : FDialog<DialogResult>
         => RemovePoint();
 
     #endregion
-        
+
     public static class L
     {
         public static readonly string Title = T._("Höchstgeschwindigkeiten ändern");

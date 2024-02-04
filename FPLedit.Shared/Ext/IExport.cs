@@ -61,6 +61,6 @@ public interface IExport : IRegistrableComponent
     /// <param name="pluginInterface">A reduced PluginInterface that provides limited core features from FPledit.</param>
     /// <param name="flags">Exporter flags.</param>
     /// <returns>A Task that has not been started yet, which can be used to execute the exporter.</returns>
-    public Task<bool> GetAsyncSafeExport(ITimetable tt, string filename, IReducedPluginInterface pluginInterface, string[]? flags = null) 
+    public Task<bool> GetAsyncSafeExport(ITimetable tt, string filename, IReducedPluginInterface pluginInterface, string[]? flags = null)
         => new Task<bool>(() => SafeExport(tt, filename, pluginInterface, flags));
 }

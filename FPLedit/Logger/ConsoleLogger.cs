@@ -10,7 +10,7 @@ public sealed class ConsoleLogger : ILog
     public void AttachLogger(ILog other)
     {
     }
-    
+
     public void Error(string message)
         => Console.WriteLine("[ERROR] " + message);
 

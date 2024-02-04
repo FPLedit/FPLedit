@@ -88,7 +88,7 @@ internal sealed class TrainSortDialog : FDialog<DialogResult>
         [SelectionName("An allen Stationen, entgegen Fahrtrichtung")]
         TimeUp,
     }
-        
+
     private static class L
     {
         public static readonly string Cancel = T._("Abbrechen");

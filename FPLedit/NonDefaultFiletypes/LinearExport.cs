@@ -17,7 +17,7 @@ internal sealed class LinearExport : BaseConverterFileType, IExport
             throw new TimetableTypeNotSupportedException(TimetableType.Linear, "convert to linear");
         if (tt.GetRoutes().Length != 1)
             throw new NotSupportedException(T._("Der Fahrplan hat mehr als eine oder keine Strecke"));
-            
+
         if (tt.Version.CompareTo(TimetableVersion.Extended_FPL2) >= 0 && Timetable.DefaultLinearVersion.CompareTo(TimetableVersion.JTG3_3) < 0)
             throw new NotSupportedException(T._("Eine Fahrplandatei der Version >= 101 kann nicht als lineare Datei <= 012 exportiert werden!"));
 
@@ -63,7 +63,7 @@ internal sealed class LinearExport : BaseConverterFileType, IExport
                 dir = TrainDirection.ta;
 
             t.XMLEntity.XName = dir.ToString();
-                
+
             if (t is not IWritableTrain wt)
                 continue;
 

@@ -28,21 +28,21 @@ public sealed class GtfsAttrs : Entity, IPatternSource
         get => GetAttribute("agency_name", "");
         set => SetAttribute("agency_name", value);
     }
-        
+
     [XAttrName("agency_lang")]
     public string AgencyLang
     {
         get => GetAttribute("agency_lang", "");
         set => SetAttribute("agency_lang", value);
     }
-        
+
     [XAttrName("agency_url")]
     public string AgencyUrl
     {
         get => GetAttribute("agency_url", "");
         set => SetAttribute("agency_url", value);
     }
-        
+
     [XAttrName("agency_timezone")]
     public string AgencyTimezone
     {

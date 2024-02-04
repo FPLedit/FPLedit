@@ -23,7 +23,7 @@ public class BugFixInitAction : ITimetableInitAction
                     tt.RemoveTransition(dup[0], false); // Transitions mit dieser Id entfernen
 
                 if (duplicateTransitions.Any())
-                    upgradeMessages.Add(T._("Aufgrund eines Fehlers in früheren Versionen von FPLedit mussten leider einige Verknüpfungen zu Folgezügen aufgehoben werden. Die betroffenen Züge sind: {0}", 
+                    upgradeMessages.Add(T._("Aufgrund eines Fehlers in früheren Versionen von FPLedit mussten leider einige Verknüpfungen zu Folgezügen aufgehoben werden. Die betroffenen Züge sind: {0}",
                         string.Join(", ", duplicateTransitions.SelectMany(dup => dup.Select(t => t.TName)))));
             }
 

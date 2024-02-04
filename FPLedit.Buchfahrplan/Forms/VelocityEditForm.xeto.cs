@@ -98,7 +98,7 @@ internal sealed class VelocityEditForm : FDialog<DialogResult>
 
     private void CancelButton_Click(object sender, EventArgs e)
         => Close(DialogResult.Cancel);
-        
+
     public static class L
     {
         public static readonly string Title = T._("Höchstgeschwindigkeit ändern");

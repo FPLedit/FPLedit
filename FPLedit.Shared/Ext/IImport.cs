@@ -41,6 +41,6 @@ public interface IImport : IRegistrableComponent
         }
     }
 
-    public Task<ITimetable?> GetAsyncSafeImport(string filename, IReducedPluginInterface pluginInterface) 
+    public Task<ITimetable?> GetAsyncSafeImport(string filename, IReducedPluginInterface pluginInterface)
         => new Task<ITimetable?>(() => SafeImport(filename, pluginInterface));
 }

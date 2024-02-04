@@ -82,7 +82,7 @@ public sealed class MGraphicsImageSharp : IMGraphics
             isPen = new PatternPen((Color) pen.c, pen.w, pen.ds);
             penCache[penCacheKey] = isPen;
         }
-        
+
         image.Mutate(ctx =>
         {
             var dopt = GetDrawingOptions(false);
@@ -120,7 +120,7 @@ public sealed class MGraphicsImageSharp : IMGraphics
     }
 
     public void Flush() {}
-    
+
     public ed.Bitmap LockEtoBitmap()
     {
         if (image == null)
@@ -134,7 +134,7 @@ public sealed class MGraphicsImageSharp : IMGraphics
 
         var byteLength = image.Height * image.Width * Unsafe.SizeOf<Rgba32>();
         if (memory.Length * Unsafe.SizeOf<Rgba32>() != byteLength || etoData.ScanWidth * etoBuffer.Height != byteLength)
-            throw new Exception("Some weird stuff going on while copying memory"); 
+            throw new Exception("Some weird stuff going on while copying memory");
 
         using (var pinHandle = memory.Pin())
         {

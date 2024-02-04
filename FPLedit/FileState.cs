@@ -32,7 +32,7 @@ internal sealed class FileState : IFileState
     public int SelectedRoute { get; set; }
 
     internal int RevisionCounter { get; private set; }
-        
+
     internal int FileNameRevisionCounter { get; private set; }
 
     public void UpdateMetaProperties(Timetable? tt, UndoManager undo)

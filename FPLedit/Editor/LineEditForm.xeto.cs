@@ -51,7 +51,7 @@ internal sealed class LineEditForm : FDialog<DialogResult>
         this.AddCloseHandler();
         this.AddSizeStateHandler();
     }
-        
+
     private void OnFileStateChanged(object? s, FileStateChangedEventArgs e)
     {
         if (!Visible || IsDisposed) return;
@@ -165,7 +165,7 @@ internal sealed class LineEditForm : FDialog<DialogResult>
 
     private void NewButton_Click(object sender, EventArgs e)
         => NewStation();
-        
+
     private static class L
     {
         public static readonly string Cancel = T._("Abbrechen");

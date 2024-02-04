@@ -9,7 +9,7 @@ public abstract class BaseFileTests
     protected string Load(string dotPath)
     {
         var assembly = Assembly.GetCallingAssembly();
-            
+
         return GetStringResource(assembly, assembly.GetName().Name + ".TestFiles." + dotPath);
     }
 
@@ -21,7 +21,7 @@ public abstract class BaseFileTests
         ms.Seek(0, SeekOrigin.Begin);
         return ms;
     }
-        
+
     private static Stream GetResource(Assembly assembly, string dotFilePath)
     {
         return assembly.GetManifestResourceStream(dotFilePath)!;

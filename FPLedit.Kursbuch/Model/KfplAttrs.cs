@@ -85,7 +85,7 @@ public sealed class KfplAttrs : Entity, IPatternSource
             return new KfplAttrs(attrsEn, tt);
         return null;
     }
-        
+
     public static KfplAttrs CreateAttrs(Timetable tt)
     {
         var attrs = new KfplAttrs(tt);

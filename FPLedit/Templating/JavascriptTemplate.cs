@@ -43,7 +43,7 @@ internal sealed class JavascriptTemplate : ITemplate
     {
         if (code.IsWhiteSpace())
             return string.Empty;
- 
+
         const string startTag = "<#";
         const string endTag = "#>";
 
@@ -102,7 +102,7 @@ internal sealed class JavascriptTemplate : ITemplate
                 break;
         }
     }
-        
+
     private void TemplateDefinition(ReadOnlySpan<char> argsString)
     {
         if (TemplateType != null)
@@ -154,7 +154,7 @@ internal sealed class JavascriptTemplate : ITemplate
                 sb.Append("\\n\";");
                 sb.Append(nl);
             }
-                
+
             sb.Append("__builder += \"");
             EscapeBackslashAndQuotes(sb, line);
             hadLast = true;
@@ -175,7 +175,7 @@ internal sealed class JavascriptTemplate : ITemplate
         {
             if (bsPart.End.Value - bsPart.Start.Value < 0)
                 continue;
-                
+
             if (hadBs)
                 sb.Append("\\\\");
 

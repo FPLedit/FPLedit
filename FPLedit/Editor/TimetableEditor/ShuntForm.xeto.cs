@@ -152,18 +152,18 @@ internal sealed class ShuntForm : FDialog<DialogResult>
     private void CancelButton_Click(object sender, EventArgs e)
     {
         gridView.DataStore = null; // Disconnect DataStore to prevent exceptions when modifying collection afterwards.
-            
+
         arrDep.ShuntMoves.Clear();
         foreach (var shunt in shuntBackup)
             arrDep.ShuntMoves.Add(shunt);
 
         Close(DialogResult.Cancel);
     }
-        
+
     private void AddButton_Click(object sender, EventArgs e) => NewShunt();
     private void RemoveButton_Click(object sender, EventArgs e) => RemoveShunt();
     private void SortButton_Click(object sender, EventArgs e) => SortShunts();
-        
+
     private static class L
     {
         public static readonly string Cancel = T._("Abbrechen");

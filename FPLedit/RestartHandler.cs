@@ -15,7 +15,7 @@ internal sealed class RestartHandler : IRestartable
             return;
         if (bootstrapper.FileState.Opened)
             bootstrapper.FullSettings.Set("restart.file", bootstrapper.FileState.FileName!);
-            
+
         Program.Restart();
     }
 }

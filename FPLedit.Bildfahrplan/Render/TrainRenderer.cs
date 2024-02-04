@@ -168,7 +168,7 @@ internal sealed class TrainRenderer
         }
 
         var p = new List<IPathCmd>();
-            
+
         for (int i = 0; i < points.Count; i += 1)
         {
             if (points.Count <= i + 1)

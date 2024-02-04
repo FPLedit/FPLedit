@@ -21,11 +21,11 @@ public sealed class Plugin : IPlugin, IDisposable
             basePath = Path.GetFullPath(basePath);
             if (!Directory.Exists(basePath))
                 Directory.CreateDirectory(basePath);
-                
+
             listener = new DebugListener(basePath);
             listener.StartSession(pluginInterface);
         }
-            
+
         componentRegistry.Register<ISettingsControl>(new SettingsFormHandler());
     }
 

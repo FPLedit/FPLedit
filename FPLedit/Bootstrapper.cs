@@ -41,25 +41,25 @@ internal sealed class Bootstrapper : IPluginInterface, IDisposable
     public event EventHandler? ExtensionsLoaded;
     public event EventHandler? AppClosing;
     public event EventHandler? FileOpened;
-        
+
     public List<string> PreBootstrapWarnings { get; } = new List<string>();
 
     public Bootstrapper(ILastFileHandler lfh)
     {
         timetableBackup = new Dictionary<object, Timetable>();
-            
+
         var configPath = Path.Combine(PathManager.Instance.SettingsDirectory, "fpledit.conf");
         settings = new Settings(GetConfigStream(configPath));
 
         var lang = settings.Get("lang", "de-DE");
         T.SetLocale(Path.Combine(PathManager.Instance.AppDirectory, "Languages"), lang);
-            
+
         registry = new RegisterStore();
         Update = new UpdateManager(settings);
         undo = new UndoManager();
         ExtensionManager = new ExtensionManager(this);
         FileHandler = new FileHandler(this, lfh, undo);
-            
+
         FileHandler.FileOpened += (o, args) => FileOpened?.Invoke(o, args);
         FileHandler.FileStateChanged += (o, args) => FileStateChanged?.Invoke(o, args);
     }
@@ -77,15 +77,15 @@ internal sealed class Bootstrapper : IPluginInterface, IDisposable
 
         if (!extensionsPreLoaded)
             throw new InvalidOperationException("Extensions have not been preloaded before attempting to initializing them!");
-            
+
         // Initialize (already loaded) extensions (==> base for the next steps)
         ExtensionManager.InitActivatedExtensions(registry);
-            
+
         // Initialize Export/Import
         var exporters = GetRegistered<IExport>();
         var importers = GetRegistered<IImport>();
         FileHandler.InitializeExportImport(exporters, importers);
-            
+
         // Load templates from files & extensions
         var templatePath = settings.Get("tmpl.root", DEFAULT_TEMPLATE_PATH);
         var templateManager = new TemplateManager(registry, this, templatePath);
@@ -93,7 +93,7 @@ internal sealed class Bootstrapper : IPluginInterface, IDisposable
         TemplateManager = templateManager;
 
         ExtensionsLoaded?.Invoke(this, EventArgs.Empty);
-            
+
         (RootForm as Window)!.Closing += (_, _) => AppClosing?.Invoke(this, EventArgs.Empty);
     }
 
@@ -101,12 +101,12 @@ internal sealed class Bootstrapper : IPluginInterface, IDisposable
     {
         var warns = ExtensionManager.LoadExtensions();
         PreBootstrapWarnings.AddRange(warns);
-            
+
         extensionsPreLoaded = true;
     }
-        
+
     #region Backup & Undo
-        
+
     public void Undo()
     {
         if (undo.CanGoBack)
@@ -116,12 +116,12 @@ internal sealed class Bootstrapper : IPluginInterface, IDisposable
 
     public void StageUndoStep()
         => undo.StageUndoStep(Timetable);
-        
+
     public void ClearBackup(object backupHandle)
     {
         timetableBackup.Remove(backupHandle);
     }
-        
+
     public object BackupTimetable()
     {
         var backupHandle = new object();
@@ -136,13 +136,13 @@ internal sealed class Bootstrapper : IPluginInterface, IDisposable
         FileHandler.Timetable = backupTt;
         ClearBackup(backupHandle);
     }
-        
+
     #endregion
 
     #region IPluginInterface Misc Implementations
 
     public string ExecutableDir => PathManager.Instance.AppDirectory;
-        
+
     public T[] GetRegistered<T>() => registry.GetRegistered<T>();
 
     public string GetTemp(string filename)
@@ -184,9 +184,9 @@ internal sealed class Bootstrapper : IPluginInterface, IDisposable
     public void OpenUrl(string address, bool isInternal = false) => OpenHelper.Open(address);
 
     #endregion
-        
+
     #region Config stream initialization
-        
+
     private FileStream? GetFileStreamWithMaxPermissions(string filename)
     {
         // try getting write access
@@ -219,7 +219,7 @@ internal sealed class Bootstrapper : IPluginInterface, IDisposable
             stream?.Dispose();
             stream = GetFileStreamWithMaxPermissions(userPath);
             createInUserDirectory = true;
-                
+
             if (stream == null)
                 PreBootstrapWarnings.Add(T._("Anlegen der angeforderten Einstellungsdatei {0} ist fehlgeschlagen.", userPath));
         }
@@ -235,15 +235,15 @@ internal sealed class Bootstrapper : IPluginInterface, IDisposable
             using (var defaultConfigFile = ResourceHelper.GetResource("Resources.fpledit.conf"))
                 defaultConfigFile.CopyTo(stream);
         }
-            
+
         if (!stream?.CanWrite ?? true)
             PreBootstrapWarnings.Add(T._("Keine Einstellungsdatei zum Schreiben gefunden. Änderungen an Programmeinstellungen werden verworfen."));
 
         return stream;
     }
-        
+
     #endregion
-        
+
     public void InjectLogger(ILog logger) => Logger = logger;
 
     public void Dispose()

@@ -15,8 +15,7 @@ public sealed class GtfsFile
     public List<Trip> Trips { get; } = new();
     public List<StopTime> StopTimes { get; } = new();
     public List<Shape> Shapes { get; } = new();
-    
-    
+
     private string GetCsvString<T>(IEnumerable<T> entries) where T : IGtfsEntity
     {
         string[,] table = GetValues(entries);

@@ -19,7 +19,7 @@ public abstract class Entity : IEntity
     public Timetable? ParentTimetable
     {
         get => parent ?? throw new InvalidOperationException("Tried to access parent timetable of dissociated Entity instance.");
-        set => parent = value; 
+        set => parent = value;
     }
 
     /// <inheritdoc />
@@ -90,8 +90,8 @@ public abstract class Entity : IEntity
     }
 
     public virtual void OnSetAttribute(string key, string value) { }
-        
+
     public virtual void OnRemoveAttribute(string key) { }
-        
+
     public virtual void OnChildrenChanged() { }
 }

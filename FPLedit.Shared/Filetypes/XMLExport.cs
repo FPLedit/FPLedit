@@ -24,7 +24,7 @@ public sealed class XMLExport : IExport
         return xElement;
     }
 
-    public bool Export(ITimetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null) 
+    public bool Export(ITimetable tt, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null)
         => ExportGenericNode(tt.XMLEntity, stream, pluginInterface, flags);
 
     public bool ExportGenericNode(XMLEntity xmlEntity, Stream stream, IReducedPluginInterface pluginInterface, string[]? flags = null)

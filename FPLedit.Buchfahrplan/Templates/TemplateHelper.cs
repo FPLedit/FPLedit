@@ -133,8 +133,8 @@ public sealed class TemplateHelper
 
         return "";
     }
-        
-    private string IntersectDaysSt(ITrain ot, ITrain t) 
+
+    private string IntersectDaysSt(ITrain ot, ITrain t)
         => SafeHtml(DaysToStringNotEqual(ot, ot.Days.IntersectingDays(t.Days)));
 
     private static string DaysToStringNotEqual(ITrain ot, Days days)

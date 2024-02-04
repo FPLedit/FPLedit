@@ -119,7 +119,7 @@ internal sealed class PrintRenderer
         var endTime = GetEndTime(start, attrs.EndTime);
         var fillUpMinutes = (byte) (60 - start.Minutes);
         var restMinutes = endTime.Minutes;
-            
+
         var headerHeight = renderer.GetHeight(g, default, default, true);
 
         var spanMinutes = endTime.GetTotalMinutes() - start.GetTotalMinutes();
@@ -157,7 +157,7 @@ internal sealed class PrintRenderer
 
         return ClipEnd(start + new TimeEntry(fullHours, fillUpMinutes));
     }
-        
+
     private TimeEntry GetEndTime(TimeEntry startTime, TimeEntry endTime)
         => endTime < startTime ? endTime + new TimeEntry(24, 0) : endTime;
 }

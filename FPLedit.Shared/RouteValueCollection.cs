@@ -41,7 +41,7 @@ public class RouteValueCollection<T> : IRouteValueCollection<T>
     /// <summary>
     /// Creates a standalone copy of this RVC.
     /// </summary>
-    public IRouteValueCollection<T> ToStandalone() 
+    public IRouteValueCollection<T> ToStandalone()
         => new StandaloneRouteValueCollection<T>(DeepCloner.CloneObject(values), convDefault);
 
     /// <summary>
@@ -93,7 +93,6 @@ public class RouteValueCollection<T> : IRouteValueCollection<T>
     {
     }
 
-        
     /// <inheritdoc />
     public T? GetValue(int route)
     {

@@ -9,11 +9,11 @@ namespace FPLedit.Shared;
 /// </summary>
 [Templating.TemplateSafe]
 public interface IEntity
-{ 
+{
     XMLEntity XMLEntity { get; }
-        
+
     [NotNull] Timetable? ParentTimetable { get; set; }
-        
+
     /// <summary>
     /// Gets or sets all XML attributes of the underlying XML node.
     /// </summary>
@@ -22,7 +22,7 @@ public interface IEntity
     /// Gets all children of the underlying XML node. The collection can be modified.
     /// </summary>
     IList<XMLEntity> Children { get; }
-        
+
     /// <summary>
     /// Get an attribute of the underlying XML node.
     /// </summary>

@@ -75,7 +75,7 @@ public interface ITrain : IEntity
     /// </summary>
     /// <returns></returns>
     Dictionary<Station, ArrDep> GetArrDepsUnsorted();
-        
+
     /// <summary>
     /// Get a display name for the path of the train.
     /// </summary>

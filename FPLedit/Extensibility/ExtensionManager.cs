@@ -22,7 +22,7 @@ internal sealed class ExtensionManager
     public ExtensionManager(IPluginInterface pluginInterface)
     {
         this.pluginInterface = pluginInterface;
-            
+
         plugins = new List<PluginInfo>();
         disposablePlugins = new List<IDisposable>();
     }
@@ -47,9 +47,9 @@ internal sealed class ExtensionManager
         var files = dir.GetFiles("*.dll")
             .Where(FilterFileNames)
             .ToArray();
-            
+
         var warnings = new List<string>();
-            
+
         foreach (var file in files)
         {
             try
@@ -117,7 +117,7 @@ internal sealed class ExtensionManager
             return;
         pluginInfo.Enabled = true;
         EnabledModified = true;
-            
+
         WriteConfig();
     }
 
@@ -127,7 +127,7 @@ internal sealed class ExtensionManager
             return;
         pluginInfo.Enabled = false;
         EnabledModified = true;
-            
+
         WriteConfig();
     }
 
@@ -173,7 +173,7 @@ internal sealed class ExtensionManager
         if (pluginsInitialized)
             throw new InvalidOperationException("Extensions have already been initialized!");
         pluginsInitialized = true;
-            
+
         var enabledPlugins = plugins.Where(p => p.Enabled);
         foreach (var plugin in enabledPlugins)
             plugin.TryInit(pluginInterface, componentRegistry);

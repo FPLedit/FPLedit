@@ -20,7 +20,7 @@ internal sealed class TimeRenderer
     {
         var minutePen = (attrs.TimeColor, attrs.MinuteTimeWidth, Array.Empty<float>());
         var hourPen = (attrs.TimeColor, attrs.HourTimeWidth, Array.Empty<float>());
-            
+
         foreach (var l in GetTimeLines(out bool hour, startTime, endTime))
         {
             var offset = margin.Top + l * attrs.HeightPerHour / 60f;
@@ -39,7 +39,7 @@ internal sealed class TimeRenderer
             .Select(l => g.MeasureString(attrs.TimeFont, (startTime + new TimeEntry(0, l)).Normalize().ToShortTimeString()).Width)
             .Concat(new[] { 0f }).Max();
     }
-        
+
     private List<int> GetTimeLines(out bool isStartFullHour, TimeEntry start, TimeEntry end)
     {
         if (end < start) // prevent endless loop

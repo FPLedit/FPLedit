@@ -58,7 +58,7 @@ internal sealed class FilterForm : FDialog<DialogResult>
         curTrainRules = f.TrainRules;
         curStationRules = f.StationRules;
         Title = T._("Filterregeln für {0}", f.Filterable.DisplayName);
-            
+
         UpdateListView(stationPattListView, curStationRules);
         UpdateListView(trainPattListView, curTrainRules);
     }

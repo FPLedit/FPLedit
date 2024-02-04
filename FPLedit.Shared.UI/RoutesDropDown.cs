@@ -20,7 +20,7 @@ public sealed class RoutesDropDown : DropDown
         {
             if (IsDisposed)
                 return;
-                
+
             ReloadRouteNames(lastFn != e.FileState.FileName);
             lastFn = e.FileState.FileName;
         };

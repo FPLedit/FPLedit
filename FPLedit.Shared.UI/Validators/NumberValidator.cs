@@ -7,7 +7,7 @@ public class NumberValidator : BaseValidator
     public bool AllowEmpty { get; set; }
 
     public bool UseInt { get; set; }
-        
+
     public bool AllowNegative { get; set; }
 
     public NumberValidator(TextBox control, bool allowEmpty, bool useInt, bool allowNegative = true, bool enableErrorColoring = true, string? errorMessage = null)

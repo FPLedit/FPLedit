@@ -20,7 +20,7 @@ internal sealed class VirtualRouteForm : FDialog<DialogResult>
     {
         this.pluginInterface = pluginInterface;
         tt = pluginInterface.Timetable;
-            
+
         if (tt.Type == TimetableType.Linear)
             throw new TimetableTypeNotSupportedException(TimetableType.Linear, "virtual routes");
 
@@ -42,7 +42,7 @@ internal sealed class VirtualRouteForm : FDialog<DialogResult>
 
         this.AddCloseHandler();
     }
-        
+
     private void CreateVRoute()
     {
         using var tpf = TrainPathForm.NewTrain(pluginInterface);
@@ -74,7 +74,7 @@ internal sealed class VirtualRouteForm : FDialog<DialogResult>
         Result = DialogResult.Ok;
         this.NClose();
     }
-        
+
     private static class L
     {
         public static readonly string Delete = T._("Virtuelle Strecke löschen");

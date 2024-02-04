@@ -57,7 +57,7 @@ public readonly struct Days : IEquatable<Days>, IEquatable<string>
     /// <summary>
     /// Generates a seven-bit binary string represenatation of the current Days value.
     /// </summary>
-    public string ToBinString() 
+    public string ToBinString()
         => internalDays.Aggregate("", (current, t) => current + (t ? "1" : "0"));
 
     public string DaysToString(bool veryShort = false)
@@ -121,7 +121,7 @@ public readonly struct Days : IEquatable<Days>, IEquatable<string>
             res[i] = this[i] || daysB[i];
         return new Days(res);
     }
-        
+
     /// <summary>
     /// Returns, whether the given binary string representation equals this Days instance.
     /// </summary>
@@ -153,7 +153,7 @@ public readonly struct Days : IEquatable<Days>, IEquatable<string>
     /// A days object, that has no flags set.
     /// </summary>
     public static readonly Days None = Parse("0000000");
-        
+
     /// <summary>
     /// A days object, that has all flags set.
     /// </summary>

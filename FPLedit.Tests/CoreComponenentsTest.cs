@@ -21,7 +21,7 @@ public class CoreComponenentsTest
     public void RegisterStoreTests()
     {
         using var registry = new RegisterStore();
-            
+
         var test11 = new Test11();
         var test112 = new Test11();
         var test12 = new Test12();
@@ -30,7 +30,7 @@ public class CoreComponenentsTest
         registry.Register<ITest1>(test12);
         registry.Register<ITest1>(test112);
         registry.Register<ITest2>(test21);
-                
+
         Assert.IsTrue(registry.GetRegistered<ITest1>().SequenceEqual(new ITest1[]{ test11, test12, test112 }));
         Assert.IsTrue(registry.GetRegistered<ITest2>().SequenceEqual(new ITest2[]{ test21}));
     }
@@ -43,7 +43,7 @@ public class CoreComponenentsTest
         //TODO: finish
     }
 }
-    
+
 internal interface ITest1 : IRegistrableComponent {}
 internal interface ITest2 : IRegistrableComponent{}
 internal class Test11 : ITest1 {}

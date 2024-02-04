@@ -10,7 +10,7 @@ public sealed class StdTemplate : ITemplateProvider
     public string GetTemplateCode() => ResourceHelper.GetStringResource("Buchfahrplan.Templates.StdTemplate.fpltmpl")
         .Replace("{{##WELLEN_CSS##}}", WellenCssHelper.GetWellenCss());
 }
-    
+
 public sealed class ZlbTemplate : ITemplateProvider
 {
     public string TemplateIdentifier => "builtin:FPLedit.Buchfahrplan/Templates/ZlbTemplate.fpltmpl";

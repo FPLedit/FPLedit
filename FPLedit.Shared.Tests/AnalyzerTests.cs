@@ -23,21 +23,21 @@ public class AnalyzerTests : BaseFileTests
         using var s = PrepareTemp(Load("test_crossing1.fpl"));
         GeneralCrossingTest(s);
     }
-        
+
     [Test]
     public void ComplexNetworkCrossingTest()
     {
         using var s = PrepareTemp(Load("test_crossing2.fpl"));
         GeneralCrossingTest(s);
     }
-        
+
     [Test]
     public void SimpleLinearTrapezTest()
     {
         using var s = PrepareTemp(Load("test_trapez0.fpl"));
         GeneralTrapezTest(s);
     }
-        
+
     [Test]
     public void SimpleNetworkTrapezTest()
     {
@@ -65,7 +65,7 @@ public class AnalyzerTests : BaseFileTests
         using var s = PrepareTemp(Load("test_overtake1.fpl"));
         GeneralOvertakeTest(s);
     }
-        
+
     // No ComplexNetworkOvertakeTest with test_overtake2.fpl as overtaking can only happen on the same route.
 
     private static void GeneralTrapezTest(Stream s)
@@ -89,13 +89,13 @@ public class AnalyzerTests : BaseFileTests
         {
             var probeTrain = tt.Trains.Single(t => t.TName == "C-normal");
             var trapez1 = analyzer.TrapezAtStation(probeTrain, station);
-            
+
             Assert.AreEqual(1, trapez1.IntersectingTrainsStopping.Length);
             Assert.AreEqual("P-normal", trapez1.IntersectingTrainsStopping[0].TName);
             Assert.IsFalse(trapez1.IsStopping);
             Assert.AreEqual(Days.Parse("1111100"), trapez1.StopDays);
         }
-            
+
         // Single train
         {
             var probeTrain = tt.Trains.Single(t => t.TName == "P-single");
@@ -104,7 +104,7 @@ public class AnalyzerTests : BaseFileTests
             Assert.IsTrue(trapez0.IsStopping);
             Assert.AreEqual("1111100", trapez0.StopDays.ToBinString());
         }
-            
+
         // Multiple
         {
             var probeTrain = tt.Trains.Single(t => t.TName == "P-multiple");
@@ -113,7 +113,7 @@ public class AnalyzerTests : BaseFileTests
             Assert.AreEqual("C-multiple", trapez0.IntersectingTrainsStopping[0].TName);
             Assert.IsTrue(trapez0.IsStopping);
             Assert.AreEqual(Days.Parse("1111100"), trapez0.StopDays);
-                
+
             var trapez1 = analyzer.TrapezAtStation(trapez0.IntersectingTrainsStopping[0], station);
 
             Assert.AreEqual(2, trapez1.IntersectingTrainsStopping.Length);
@@ -127,11 +127,11 @@ public class AnalyzerTests : BaseFileTests
     {
         var tt = (Timetable)new XMLImport().Import(s, new DummyPluginInterface())!;
         Assert.IsNotNull(tt);
-            
+
         var analyzer = new IntersectionAnalyzer(tt);
 
         var station = tt.Stations.Single(st => st.SName == "B");
-            
+
         // Overlap at end
         {
             var probeTrain = tt.Trains.Single(t => t.TName == "P-overlap-end");
@@ -184,7 +184,7 @@ public class AnalyzerTests : BaseFileTests
                 Assert.AreEqual(probeTrain, analyzer.CrossingAtStation(cw, station).Single());
         }
     }
-        
+
     private static void GeneralOvertakeTest(Stream s)
     {
         var tt = (Timetable)new XMLImport().Import(s, new DummyPluginInterface())!;
@@ -193,7 +193,7 @@ public class AnalyzerTests : BaseFileTests
         var analyzer = new IntersectionAnalyzer(tt);
 
         var station = tt.Stations.Single(st => st.SName == "B");
-            
+
         // Overlap at end
         {
             var probeTrain = tt.Trains.Single(t => t.TName == "P-overlap-end");

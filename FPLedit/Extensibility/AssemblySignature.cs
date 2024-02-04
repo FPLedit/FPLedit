@@ -12,7 +12,7 @@ internal sealed partial class AssemblySignatureVerifier
     {
         if (fn == null)
             return SecurityContext.ThirdParty;
-            
+
         var basename = Path.GetFileName(fn);
         var signature = generatedSignatures.FirstOrDefault(s => s.FileName == basename);
 

@@ -192,7 +192,7 @@ public interface ITimetable : IEntity
     Timetable Clone();
 
     /// <summary>
-    /// Remove the specified link and all linked trains from this timetable. 
+    /// Remove the specified link and all linked trains from this timetable.
     /// </summary>
     void RemoveLink(TrainLink link);
 }

@@ -37,7 +37,7 @@ internal sealed class TrainPropsForm : FDialog<DialogResult>
 
         this.AddCloseHandler();
     }
-        
+
     private void ResetTrainProps(bool message = true)
     {
         if (gridView.SelectedItem != null)

@@ -30,7 +30,7 @@ public sealed class NetworkRenderer : Drawable
     }
 
     private bool IsNetwork => tt?.Type == TimetableType.Network;
-    
+
     private bool setPanCenterEnabled = true;
     public bool SetPanCenterEnabled
     {
@@ -166,7 +166,7 @@ public sealed class NetworkRenderer : Drawable
         e.Graphics.ScaleTransform(zoom);
         DrawNetwork(e.Graphics, - pan * 1/zoom, (- pan + Bounds.Size) * 1/zoom);
         e.Graphics.RestoreTransform();
-            
+
         // Draw Status strings & border on top of network
         DrawStatus(e.Graphics);
         DrawBorder(e.Graphics);
@@ -208,7 +208,7 @@ public sealed class NetworkRenderer : Drawable
                     }
 
                     text = text[..^1] + ")";
-                        
+
                     g.SaveTransform();
                     g.TranslateTransform(x + 6, y + 7);
                     g.RotateTransform(60);
@@ -226,7 +226,7 @@ public sealed class NetworkRenderer : Drawable
                 lastSta = sta;
 
                 if (!doRender) continue;
-                    
+
                 var panelColor = highlightedPath!.ContainsStation(sta) ? panelColorHighlight : panelColorNormal;
                 if (modeTempSta == sta) panelColor = panelColorTemp;
 

@@ -28,7 +28,7 @@ internal sealed class StationRenderer : Drawable
     private Timetable tt = null!;
 
     #region Result properties
-        
+
     public IRouteValueCollection<string> DefaultTrackLeft { get; private set; } = null!;
 
     public IRouteValueCollection<string> DefaultTrackRight { get; private set; } = null!;
@@ -36,10 +36,10 @@ internal sealed class StationRenderer : Drawable
     public ObservableCollection<Track> Tracks { get; private set; } = null!;
 
     public Dictionary<string, string> TrackRenames { get; } = new ();
-        
+
     private readonly List<string> trackRemoves = new ();
     public IEnumerable<string> TrackRemoves => trackRemoves.AsReadOnly();
-        
+
     #endregion
 
     public StationRenderer()
@@ -47,7 +47,7 @@ internal sealed class StationRenderer : Drawable
         textColor = SystemColors.ControlText;
         bgColor = SystemColors.ControlBackground;
     }
-        
+
     public void InitializeWithStation(int route, Station value)
     {
         routeIndex = route;
@@ -69,7 +69,7 @@ internal sealed class StationRenderer : Drawable
         buttons.Clear();
 
         int midx = Width / 2;
-            
+
         // Richtungsangaben ermitteln
         var route = tt.GetRoute(routeIndex).Stations;
         var staIdx = route.IndexOf(station);
@@ -205,7 +205,7 @@ internal sealed class StationRenderer : Drawable
 
         foreach (var args in buttons)
             args.Draw(e.Graphics);
-            
+
         base.OnPaint(e);
     }
 
@@ -311,7 +311,7 @@ internal sealed class StationRenderer : Drawable
         // set to new first track or null if none is remaining.
         DefaultTrackLeft.ReplaceAllValues(btn.Tag.Name, firstName);
         DefaultTrackRight.ReplaceAllValues(btn.Tag.Name, firstName);
-            
+
         trackRemoves.Add(btn.Tag.Name);
 
         Invalidate();

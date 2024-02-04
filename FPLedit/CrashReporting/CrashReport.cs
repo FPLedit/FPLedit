@@ -27,13 +27,13 @@ public sealed class CrashReport
         SafeAction(() => Exception = new ExceptionInfo(x));
         SafeAction(() => Extensions = mg?.Plugins.Where(p => p.Enabled).Select(p => new ExtensionInfo(p)).ToArray());
         SafeAction(() => Assemblies = AppDomain.CurrentDomain.GetAssemblies().Select(a => a.GetName().Name).Where(a => a != null).Cast<string>().ToArray());
-            
+
         // Version information
         SafeAction(() => Version = VersionInformation.Current.DisplayVersion);
         SafeAction(() => RuntimeVersion = VersionInformation.Current.RuntimeVersion);
         SafeAction(() => OperatingSystem = VersionInformation.Current.OsVersion);
     }
-        
+
     public CrashReport() {} // needed for Serialization
 
     public string Serialize()
@@ -60,7 +60,7 @@ public sealed class ExtensionInfo
         Url = plugin.Url;
         FullName = plugin.FullName;
     }
-        
+
     public ExtensionInfo() {} // needed for Serialization
 
     public string? Name { get; set; }
@@ -73,7 +73,7 @@ public sealed class ExtensionInfo
 public sealed class ExceptionInfo
 {
     public ExceptionInfo() {} // needed for Serialization
-        
+
     public ExceptionInfo(Exception? x)
     {
         TypeName = x?.GetType().FullName;

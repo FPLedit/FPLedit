@@ -15,10 +15,10 @@ public sealed class Plugin : IPlugin, ITemplatePlugin
         var preview = new DefaultPreview("afpl", T._("Aushangfahrplan"), export);
         componentRegistry.Register<IExport>(export);
         componentRegistry.Register<IPreviewAction>(preview);
-            
+
         componentRegistry.Register<IAppearanceControl>(new DefaultAppearanceControl(pi => new SettingsControl(pi), T._("Aushangfahrplan")));
         componentRegistry.Register<IFilterRuleContainer>(FilterRuleContainer);
-            
+
         InitTemplates(pluginInterface, componentRegistry);
     }
 
@@ -30,9 +30,9 @@ public sealed class Plugin : IPlugin, ITemplatePlugin
         componentRegistry.Register<ITemplateWhitelistEntry>(
             new TemplateWhitelistEntry("afpl", typeof(Templates.TemplateHelper), typeof(AfplAttrs)));
     }
-        
+
     internal static IFilterRuleContainer FilterRuleContainer => new DefaultFilterRuleContainer(T._("Aushangfahrplan"), AfplAttrs.GetAttrs, AfplAttrs.CreateAttrs);
-        
-    internal static ITemplateChooser GetTemplateChooser(IReducedPluginInterface pi) 
+
+    internal static ITemplateChooser GetTemplateChooser(IReducedPluginInterface pi)
         => new DefaultTemplateChooser(pi, "afpl", "afpl_attrs", "tmpl", Templates.StdTemplateProvider.IDENTIFIER);
 }

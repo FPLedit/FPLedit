@@ -101,15 +101,15 @@ internal sealed class CleanedXmlExport : IExport
         if (!namesCreated)
             LoadRemovableXmlNames(pluginInterface);
         namesCreated = true;
-            
+
         if (tt.Type == TimetableType.Network)
         {
-            Application.Instance.Invoke(() => 
+            Application.Instance.Invoke(() =>
                 MessageBox.Show(T._("Der aktuelle Fahrplan ist ein Netzwerk-Fahrplan. Aus diesem erweiterten Fahrplanformat können aus technischen Gründen keine von FPLedit angelegten Daten gelöscht werden.")));
             return false;
         }
 
-        var res = Application.Instance.Invoke(() => 
+        var res = Application.Instance.Invoke(() =>
             MessageBox.Show(T._("Hiermit werden alle in FPLedit zusätzlich eingebenen Werte (z.B. Lokomotiven, Lasten, Mindestbremshundertstel, Geschwindigkeiten, Wellenlinien, Trapeztafelhalte und Zuglaufmeldungen) und Buchfahrplaneinstellungen aus dem gespeicherten Fahrplan gelöscht! Fortfahren?"),
                 "FPLedit", MessageBoxButtons.YesNo, MessageBoxType.Warning));
 

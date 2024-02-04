@@ -10,7 +10,7 @@ public sealed class DefaultPreview : IPreviewAction
     private readonly IExport export;
 
     public string DisplayName { get; }
-        
+
     public string MenuName { get; }
 
     public DefaultPreview(string templateType, string display, IExport export, string? menu = null)

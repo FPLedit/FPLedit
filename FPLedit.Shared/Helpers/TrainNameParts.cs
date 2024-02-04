@@ -47,7 +47,7 @@ public readonly struct TrainNameParts : IEquatable<TrainNameParts>
             return BaseName == np2.BaseName && Number.CompareTo(np2.Number) > 0;
         return string.Compare(FullName, np2.FullName, StringComparison.Ordinal) > 0;
     }
-            
+
     private static (int startNumber, int numberLength) RemoveNamePrefix(string name, out string prefix)
     {
         var nameBase = name.Trim();
@@ -58,11 +58,11 @@ public readonly struct TrainNameParts : IEquatable<TrainNameParts>
             i--;
 
         var numberLength = array.Length - i - 1;
-            
+
         prefix = nameBase.Substring(0, i + 1);
         var num = nameBase.Substring(i + 1, nameBase.Length - i - 1);
         int.TryParse(num, out int start); // Startnummer
-            
+
         return (start, numberLength);
     }
 

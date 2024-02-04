@@ -17,15 +17,15 @@ public sealed class Plugin : IPlugin, ITemplatePlugin
         var preview = new DefaultPreview("kfpl", T._("Kursbuch"), export);
         componentRegistry.Register<IExport>(export);
         componentRegistry.Register<IPreviewAction>(preview);
-            
+
         componentRegistry.Register<IFilterRuleContainer>(FilterRuleContainer);
         componentRegistry.Register<IAppearanceControl>(new DefaultAppearanceControl(pi => new SettingsControl(pi), T._("Kursbuch")));
-            
+
         componentRegistry.Register<ITimetableTypeChangeAction>(new FixAttrsAction());
-            
+
         InitTemplates(pluginInterface, componentRegistry);
     }
-        
+
     public void InitTemplates(IPluginInterface pluginInterface, IComponentRegistry componentRegistry)
     {
         componentRegistry.Register<ITemplateProvider>(new Templates.TemplateProvider());
@@ -35,8 +35,8 @@ public sealed class Plugin : IPlugin, ITemplatePlugin
     }
 
     internal static IFilterRuleContainer FilterRuleContainer => new DefaultFilterRuleContainer(T._("Kursbuch"), KfplAttrs.GetAttrs, KfplAttrs.CreateAttrs);
-        
-    internal static ITemplateChooser GetTemplateChooser(IReducedPluginInterface pi) 
+
+    internal static ITemplateChooser GetTemplateChooser(IReducedPluginInterface pi)
         => new DefaultTemplateChooser(pi, "kfpl", "kfpl_attrs", "tmpl", Templates.TemplateProvider.IDENTFIER);
 }
 

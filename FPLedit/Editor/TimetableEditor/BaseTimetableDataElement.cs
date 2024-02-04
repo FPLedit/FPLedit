@@ -21,7 +21,7 @@ internal abstract class BaseTimetableDataElement
     public bool IsSelectedArrival { get; set; }
 
     public TextBox? SelectedTextBox { get; set; }
-        
+
     public DropDown? SelectedDropDown { get; set; }
 
     public void SetTime(Station sta, bool arrival, string time)
@@ -101,7 +101,7 @@ internal abstract class BaseTimetableDataElement
         }
     }
 }
-    
+
 /// <summary>
 /// A CCCO (=CustomCellControlObject) is hardwired to a single control. It contains information that is not dependant
 /// on the edited DataElement.

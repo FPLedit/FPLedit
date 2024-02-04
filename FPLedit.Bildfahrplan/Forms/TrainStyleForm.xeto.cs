@@ -45,7 +45,7 @@ internal sealed class TrainStyleForm : FDialog<DialogResult>
 
         this.AddCloseHandler();
     }
-        
+
     private void ResetTrainStyle(bool message = true)
     {
         if (gridView.SelectedItem != null)
@@ -73,7 +73,7 @@ internal sealed class TrainStyleForm : FDialog<DialogResult>
 
     private void ResetButton_Click(object sender, EventArgs e)
         => ResetTrainStyle();
-        
+
     private static class L
     {
         public static readonly string Cancel = T._("Abbrechen");

@@ -285,7 +285,7 @@ public sealed class TrainPathForm : FDialog<TrainPathForm.PathResult?>
         public Action? StateInitialize { get; init; }
     }
     #endregion
-        
+
     private static class L
     {
         public static readonly string Cancel = T._("Abbrechen");

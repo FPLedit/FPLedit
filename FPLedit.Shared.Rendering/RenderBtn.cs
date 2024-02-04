@@ -16,7 +16,7 @@ public sealed class RenderBtn<T> : IDisposable
     public Rectangle Rect => new Rectangle(Location, Size);
 
     public Color BackgroundColor { get; set; }
-        
+
     public Color? ForegroundColor { get; set; }
 
     public string Text { get; set; }

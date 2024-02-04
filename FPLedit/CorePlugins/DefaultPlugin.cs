@@ -22,10 +22,10 @@ internal sealed class DefaultPlugin : IPlugin
         componentRegistry.Register<ITimetableCheck>(new TimetableChecks.StationCodeCheck());
         componentRegistry.Register<ITimetableInitAction>(new TimetableChecks.BugFixInitAction());
         componentRegistry.Register<ITimetableInitAction>(new TimetableChecks.FixNetworkAttributesAction());
-            
+
         componentRegistry.Register<IImport>(new NonDefaultFiletypes.XmlStationsImport());
         componentRegistry.Register<IExport>(new NonDefaultFiletypes.StationsOnlyExport());
-            
+
         componentRegistry.Register<ISettingsControl>(new SettingsUi.ExtensionsControlHandler(bootstrapper.ExtensionManager, restartable));
         componentRegistry.Register<ISettingsControl>(new SettingsUi.TemplatesControlHandler());
         componentRegistry.Register<ISettingsControl>(new SettingsUi.AutomaticUpdateControl());

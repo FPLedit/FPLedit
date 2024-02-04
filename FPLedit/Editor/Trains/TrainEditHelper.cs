@@ -77,7 +77,7 @@ internal sealed class TrainEditHelper
     {
         if (count < 0)
             throw new ArgumentException("Value must be greater than or equal to zero", nameof(count));
-            
+
         var ret = new Train[count];
 
         var np = new TrainNameParts(name);
@@ -91,7 +91,7 @@ internal sealed class TrainEditHelper
 
         return ret;
     }
-        
+
     public void LinkTrainMultiple(Train orig, TimeEntry offset, TimeEntry diff, int count, ITrainNameGen tnc)
     {
         if (count < 0)

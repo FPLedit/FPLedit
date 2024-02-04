@@ -21,7 +21,7 @@ internal sealed class TemplateDebugger : ITemplateDebugger
 
     public void Navigate(int line, int column) // We have an error.
         => Invoke(() => child?.Navigate(line, column));
-        
+
     public void OpenDebugger() // We have an error, so show this form.
         => Invoke(() => child?.OpenDebugger());
 
@@ -43,7 +43,7 @@ internal sealed class TemplateDebugger : ITemplateDebugger
             .Split(new[] { Environment.NewLine }, StringSplitOptions.None)
             .Select(l => $"/* {line++,4} */  {l}"));
     }
-        
+
     internal static (int start, int end) GetNavigationOffsets(string generatedCode, int line, int column, int preContextLines = 0, int postContextLines = 0)
     {
         var lines = generatedCode.Split(new[] {Environment.NewLine}, StringSplitOptions.None);
@@ -78,7 +78,7 @@ internal sealed class GuiTemplateDebugger : ITemplateDebugger
 
         OpenDebugger();
     }
-        
+
     public void OpenDebugger() // We have an error, so show this form.
     {
         EnsureForm();
@@ -98,7 +98,7 @@ internal sealed class GuiTemplateDebugger : ITemplateDebugger
             };
             form = new FForm
             {
-                Content = generatedCode, 
+                Content = generatedCode,
                 Size = new Size(800, 800)
             };
             form.Closed += (_, _) => opened = false;

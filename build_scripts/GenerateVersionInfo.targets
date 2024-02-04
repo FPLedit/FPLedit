@@ -39,21 +39,21 @@ internal static class Vi
     public const string PVersion = """ + PVersionFrom + @""";
     ///<summary>For bundled plugins: Compatible from - normally equals assembly version</summary>
     public const string PFrom = """ + PVersionFrom + @""";
-    
+
     ///<summary>Display version of the main FPLedit application.</summary>
     public const string DisplayVersion = """ + DisplayVersion + @""";
     ///<summary>Version suffix that should only be displayed (and not compared directly)</summary>
     public const string VersionSuffix = """ + VersionSuffix + @""";
-    
+
     ///<summary>Version of the bundled Eto libraries (from NuGet)</summary>
     public const string EtoVersion = """ + EtoVersion + @""";
-    
+
     ///<summary>Git revision that was used to build this version of FPLedit.</summary>
     public const string? GitRevision = " + gr + @";
-    
+
     ///<summary>Build date string representation.</summary>
     public const string BuildDate = """ + BuildDate + @""";
-    
+
     ///<summary>Specifies, if this is a final build (e.g. not a beta version of FPLedit.</summary>
     public const bool IsNonFinal = " + ((bool)IsNonFinal).ToString().ToLower() + @";
 }";

@@ -135,18 +135,18 @@ public sealed class MGraphicsSystemDrawing : IMGraphics
     }
 
     public void Flush() => g.Flush();
-    
+
     public ed.Bitmap LockEtoBitmap()
     {
         if (image == null)
             throw new Exception("Trying to save graphics content not backed by image!");
 
         g.Flush();
-        
+
         var sdData = image.LockBits(new Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadOnly, image.PixelFormat);
         var bytesPerPixel = ((int) image.PixelFormat >> 11) & 31;
         var byteLength = sdData.Height * sdData.Width * bytesPerPixel;
-        
+
         var etoBuffer = new ed.Bitmap(image.Width, image.Height, ed.PixelFormat.Format32bppRgba);
         var etoData = etoBuffer.Lock();
 
@@ -157,13 +157,13 @@ public sealed class MGraphicsSystemDrawing : IMGraphics
         {
             if (sdData.Stride > 0 && sdData.Stride == sdData.Width * bytesPerPixel)
                 Buffer.MemoryCopy((void*) sdData.Scan0, (void*) etoData.Data, byteLength, byteLength);
-            else // Slightly slower route using the given stride width 
+            else // Slightly slower route using the given stride width
                 throw new Exception("Fast buffer copy not possible: this should not happen on Windows!");
         }
 
         etoData.Dispose();
         image.UnlockBits(sdData);
-        
+
         return etoBuffer;
     }
 }

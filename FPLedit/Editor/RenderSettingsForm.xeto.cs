@@ -20,7 +20,7 @@ internal sealed class RenderSettingsForm : FDialog<DialogResult>
     {
         Eto.Serialization.Xaml.XamlReader.Load(this);
         this.AddSizeStateHandler();
-            
+
         this.pluginInterface = pluginInterface;
 
         var designables = pluginInterface.GetRegistered<IAppearanceControl>();
@@ -62,7 +62,7 @@ internal sealed class RenderSettingsForm : FDialog<DialogResult>
 
     private void ExpertCheckBox_CheckedChanged(object? sender, EventArgs e)
         => handlers.ForEach(eh => eh.SetExpertMode(expertCheckBox.Checked!.Value));
-        
+
     private static class L
     {
         public static readonly string Cancel = T._("Abbrechen");

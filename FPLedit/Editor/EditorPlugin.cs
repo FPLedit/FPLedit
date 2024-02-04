@@ -20,7 +20,7 @@ internal sealed class EditorPlugin : IPlugin
         this.pluginInterface = pluginInterface;
         pluginInterface.FileStateChanged += PluginInterface_FileStateChanged;
         pluginInterface.ExtensionsLoaded += PluginInterface_ExtensionsLoaded;
-            
+
         if (Environment.OSVersion.Platform != PlatformID.Win32NT || pluginInterface.Settings.Get<bool>("mp-compat.route-edit-button"))
             componentRegistry.Register<IRouteAction>(new Network.EditRouteAction());
 

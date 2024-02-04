@@ -48,7 +48,7 @@ internal sealed class EditStationForm : FDialog<EditStationForm.EditResult?>
         {
             var size = ClientSize;
             var changed = false;
-                
+
             if (WindowShown && stationRenderer.Height > stationRendererHeight)
             {
                 var diff = stationRenderer.Height - stationRendererHeight;
@@ -68,7 +68,7 @@ internal sealed class EditStationForm : FDialog<EditStationForm.EditResult?>
             if (changed)
                 ClientSize = size;
         };
-            
+
         typeComboBox.DataStore = tt.Stations.Select(s => s.StationType).Distinct().Where(s => s != "").OrderBy(s => s).Select(s => new ListItem { Text = s });
     }
 
@@ -94,14 +94,14 @@ internal sealed class EditStationForm : FDialog<EditStationForm.EditResult?>
         Title = T._("Station bearbeiten");
         nameTextBox.Text = station.SName;
         positionTextBox.Text = station.Positions.GetPosition(route)!.Value.ToString("0.0");
-            
+
         this.station = station;
         this.route = route;
 
         isExistingStation = true;
 
         stationRenderer.InitializeWithStation(route, this.station);
-            
+
         codeTextBox.Text = station.StationCode;
         typeComboBox.Text = station.StationType;
         requestCheckBox.Checked = this.station.RequestStop;
@@ -114,14 +114,14 @@ internal sealed class EditStationForm : FDialog<EditStationForm.EditResult?>
             MessageBox.Show(T._("Bitte erst alle Fehler beheben:\n{0}", validators.Message));
             return;
         }
-            
+
         if (isExistingStation && route == Timetable.UNASSIGNED_ROUTE_ID)
             throw new InvalidOperationException("Invalid state: No assigned route but Station marked as existing.");
 
         station.SName = nameTextBox.Text;
         station.StationCode = codeTextBox.Text;
         station.StationType = typeComboBox.Text;
-        station.RequestStop = requestCheckBox.Checked ?? false; 
+        station.RequestStop = requestCheckBox.Checked ?? false;
 
         // Set position.
         var newPos = float.Parse(positionTextBox.Text);
@@ -151,7 +151,7 @@ internal sealed class EditStationForm : FDialog<EditStationForm.EditResult?>
                 pluginInterface.ClearBackup(backup);
             }
         }
-            
+
         // Update track data.
         station.DefaultTrackLeft.FromStandalone(stationRenderer.DefaultTrackLeft);
         station.DefaultTrackRight.FromStandalone(stationRenderer.DefaultTrackRight);
@@ -168,7 +168,7 @@ internal sealed class EditStationForm : FDialog<EditStationForm.EditResult?>
 
     private void CancelButton_Click(object sender, EventArgs e)
         => Close(null);
-        
+
     private static class L
     {
         public static readonly string Cancel = T._("Abbrechen");

@@ -14,34 +14,34 @@ public class XmlEntityTests
         Assert.AreEqual(0, x.Attributes.Count);
         Assert.AreEqual(0, x.Children.Count);
         Assert.AreEqual(null, x.Value);
-            
+
         // externes setzen
         x.SetAttribute("test-attr1", "test-attr1-val");
         Assert.IsTrue(x.Attributes.Count == 1);
         Assert.IsTrue(x.Attributes.ContainsKey("test-attr1"));
         Assert.AreEqual("test-attr1-val", x.Attributes["test-attr1"]);
         Assert.AreEqual("test-attr1-val", x.GetAttribute<string>("test-attr1"));
-            
+
         // internes setzen
         Assert.AreEqual(null, x.GetAttribute<string>("test-attr2"));
         Assert.AreEqual(0, x.GetAttribute<int>("test-attr2"));
         x.Attributes["test-attr2"] = "2";
         Assert.AreEqual("2", x.GetAttribute<string>("test-attr2"));
         Assert.AreEqual(2, x.GetAttribute<int>("test-attr2"));
-            
+
         // externes Löschen
         x.RemoveAttribute("test-attr1");
         Assert.AreEqual(null, x.GetAttribute<string>("test-attr1"));
         Assert.IsFalse(x.Attributes.ContainsKey("test-attr1"));
-            
+
         // internes Löschen
         x.Attributes.Remove("test-attr2");
         Assert.AreEqual(0, x.GetAttribute<int>("test-attr2"));
-            
+
         // Value
         x.Value = "testval";
         Assert.AreEqual("testval", x.Value);
-            
+
         // Children (simple)
         var x2 = new XMLEntity("c");
         x.Children.Add(x2);
@@ -57,7 +57,7 @@ public class XmlEntityTests
         // xmlns
         var el = XElement.Parse("<fpl:test xmlns:fpl=\"test\" />");
         Assert.Throws<NotSupportedException>(() => new XMLEntity(el));
-            
+
         // basic
         el = XElement.Parse("<test a=\"1\" b=\"aBcDeF\" />");
         var en = new XMLEntity(el);
@@ -65,7 +65,7 @@ public class XmlEntityTests
         Assert.AreEqual(2, en.Attributes.Count);
         Assert.AreEqual("1", en.Attributes["a"]);
         Assert.AreEqual("aBcDeF", en.Attributes["b"]);
-            
+
         // children
         el = XElement.Parse("<test a=\"1\" b=\"aBcDeF\"><a abc=\"1\" /><b>d</b>hallo</test>");
         en = new XMLEntity(el);

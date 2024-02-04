@@ -19,7 +19,7 @@ internal sealed class UpdateManager
     public Action<Exception?>? CheckError { get; set; }
 
     private Version CurrentVersion { get; }
-        
+
     private string CurrentVersionDisplay { get; }
 
     public bool AutoUpdateEnabled
@@ -126,7 +126,7 @@ internal sealed class UpdateManager
     public record VersionInfo(string DownloadUrl, Version NewVersion, string? Description, string? Text)
     {
         public bool IsNewVersion()
-            => VersionInformation.Current.AppBaseVersion.CompareTo(NewVersion) < 0 || 
+            => VersionInformation.Current.AppBaseVersion.CompareTo(NewVersion) < 0 ||
                (VersionInformation.Current.AppBaseVersion.CompareTo(NewVersion) == 0 && (!string.IsNullOrEmpty(VersionInformation.Current.VersionSuffix) || VersionInformation.Current.IsDevelopmentVersion));
     }
 }

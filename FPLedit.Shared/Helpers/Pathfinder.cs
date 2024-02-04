@@ -29,7 +29,7 @@ public sealed class Pathfinder
         var points = new List<Station>(waypoints);
         points.Insert(0, start);
         points.Add(dest);
-            
+
         if (points.Any(p => !tt.Stations.Contains(p)))
             throw new ArgumentException(nameof(start) + " " + nameof(dest) + " or one of the " + nameof(waypoints) + "not part of the timetable!");
 

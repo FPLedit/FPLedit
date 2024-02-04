@@ -19,12 +19,12 @@ public class FDialog<T> : Dialog<T>
         WindowShown = true;
         base.OnShown(e);
     }
-        
+
     protected override void OnKeyDown(KeyEventArgs e)
     {
         if (!e.Handled && e.Control && e.Key == Keys.S)
             DefaultButton?.PerformClick();
-                
+
         base.OnKeyDown(e);
     }
 }
@@ -43,7 +43,7 @@ public class FDialog : Dialog
     {
         if (!e.Handled && e.Control && e.Key == Keys.S)
             DefaultButton?.PerformClick();
-                
+
         base.OnKeyDown(e);
     }
 }

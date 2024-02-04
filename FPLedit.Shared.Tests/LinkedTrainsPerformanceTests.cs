@@ -36,8 +36,8 @@ public class LinkedTrainsPerformanceTests
 
         var link = new TrainLink(normalTrain, 10)
         {
-            TimeDifference = new TimeEntry(0, 30), 
-            TimeOffset = new TimeEntry(0, 0), 
+            TimeDifference = new TimeEntry(0, 30),
+            TimeOffset = new TimeEntry(0, 0),
             TrainNamingScheme = new AutoTrainNameGen(normalTrain.TName, 2)
         };
         normalTrain.AddLink(link);
@@ -56,9 +56,9 @@ public class LinkedTrainsPerformanceTests
             var ardps = linkedTrain.GetArrDepsUnsorted();
         }
         sw.Stop();
-            
+
         Console.WriteLine("Linked read: " + ((float)sw.ElapsedMilliseconds)/100);
-            
+
         var sw2 = new Stopwatch();
         sw2.Start();
         for (int i = 0; i < 100; i++)
@@ -66,9 +66,9 @@ public class LinkedTrainsPerformanceTests
             var ardps = normalTrain.GetArrDepsUnsorted();
         }
         sw2.Stop();
-            
+
         Console.WriteLine("Normal read: " + ((float)sw2.ElapsedMilliseconds)/100);
-            
+
         var sw3 = new Stopwatch();
         var sta3 = stations[0];
         var ardp3 = normalTrain.GetArrDep(sta3);
@@ -78,7 +78,7 @@ public class LinkedTrainsPerformanceTests
             ardp3.Arrival = new TimeEntry(0, i);
         }
         sw3.Stop();
-            
+
         Console.WriteLine("Write: " + ((float)sw3.ElapsedMilliseconds)/100);
     }
 }

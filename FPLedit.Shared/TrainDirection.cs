@@ -20,7 +20,7 @@ public enum TrainDirection
     /// Trains against line direction (linear timetable only)
     /// </summary>
     ta,
-        
+
     /// <summary>
     /// Generic train wkithout specific direction (network timetable only)
     /// </summary>

@@ -7,7 +7,7 @@ namespace FPLedit.Extensibility;
 internal sealed class PluginInfo
 {
     internal readonly IPlugin? Plugin;
-        
+
     public bool IsBuiltin { get; }
 
     public bool Enabled { get; set; }

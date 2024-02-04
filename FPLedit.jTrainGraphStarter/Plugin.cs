@@ -15,7 +15,7 @@ public sealed class Plugin : IPlugin
     {
         pluginInterface = pi;
         pluginInterface.FileStateChanged += PluginInterface_FileStateChanged;
-            
+
         var item = ((MenuBar)pluginInterface.Menu).CreateItem(T._("&jTrainGraph"));
 
         startItem = item.CreateItem(T._("jTrain&Graph starten"), enabled: false);
@@ -91,7 +91,7 @@ public sealed class Plugin : IPlugin
             }
 
             var targetVersion = pluginInterface.Settings.GetEnum("jTGStarter.target-version", JtgShared.DEFAULT_TT_VERSION);
-                
+
             if (targetVersion.GetVersionCompat().Compatibility != TtVersionCompatType.ReadWrite)
                 throw new Exception(T._("Zielversion ist nicht R/W-Kompatibel. Bitte die Einstellungen überprüfen."));
             if (pluginInterface.Timetable.Version.CompareTo(TimetableVersion.Extended_FPL2) >= 0 && targetVersion.CompareTo(TimetableVersion.JTG3_3) < 0)
@@ -147,7 +147,7 @@ public sealed class Plugin : IPlugin
             return;
         }
 
-        if (!ExecuteJTrainGraph(fnArg, jtgPath, javapath)) 
+        if (!ExecuteJTrainGraph(fnArg, jtgPath, javapath))
             return;
 
         try

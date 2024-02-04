@@ -54,7 +54,7 @@ public class PositionCollection
     /// <para>Directly sets position on a given route.</para>
     /// <para>THIS IS POTENTIALLY DANGEROUS AND COULD MESS UP THE TIMETABLE IF APPLIED ON A REGISTERED STATION, as it does not update train ArrDep entry order.</para>
     /// <para>Use <see cref="StationMoveHelper"/> as a safe(r) replacement for moving Station.</para>
-    /// 
+    ///
     /// <para>This is probably safe when you generate timetable files from scratch, or use it on custom non-<see cref="Station"/> <see cref="IStation"/>-Entity types, as long as they are not entangled with trains.</para>
     /// </summary>
     /// <remarks>
@@ -68,7 +68,7 @@ public class PositionCollection
         positions[route] = km;
         Write();
     }
-        
+
     /// <summary>
     /// Removes the given route position entry from this station.
     /// </summary>
@@ -81,7 +81,6 @@ public class PositionCollection
         positions.Remove(route);
         Write();
     }
-
 
     /// <summary>
     /// Parse the position data data from a multi-route context (e.g. Network timetable).

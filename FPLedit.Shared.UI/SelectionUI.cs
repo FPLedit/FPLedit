@@ -16,7 +16,7 @@ public sealed class SelectionUI<T> : IDisposable where T : Enum
     private ActionInfo? selectedAction;
 
     public T? SelectedState => selectedAction != null ? selectedAction.Value : default;
-        
+
     public bool EnabledOptionSelected => selectedAction?.Enabled ?? false;
 
     public SelectionUI(Action<T>? selectedEvent, StackLayout st)
@@ -100,7 +100,7 @@ public sealed class SelectionUI<T> : IDisposable where T : Enum
     private class ActionInfo
     {
         private RadioButton? radioButton;
-            
+
         public readonly string Name;
         public readonly T Value;
         public bool Enabled;

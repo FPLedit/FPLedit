@@ -28,7 +28,7 @@ internal sealed class TimetableCheckRunner
                 return;
 
             var clone = pluginInterface.Timetable.Clone();
-                
+
             if (lastTask != null && cancelTokenSource != null && !lastTask.IsCompleted && !cancelTokenSource.IsCancellationRequested)
                 cancelTokenSource.Cancel();
 

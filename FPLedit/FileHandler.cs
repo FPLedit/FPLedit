@@ -40,7 +40,7 @@ internal sealed class FileHandler : IDisposable
                     throw new Exception("Exporters not initialized!");
                 exportFileDialog = new SaveFileDialog { Title = T._("Fahrplandatei exportieren") };
                 exportFileDialog.AddLegacyFilter(exporters.Select(ex => ex.Filter).ToArray());
-                    
+
                 // Letzten Exporter auswählen
                 int exporterIdx = pluginInterface.Settings.Get("exporter.last", -1);
                 if (exporterIdx > -1 && exporters.Length > exporterIdx)

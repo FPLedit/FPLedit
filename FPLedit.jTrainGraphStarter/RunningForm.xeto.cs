@@ -17,17 +17,17 @@ internal sealed class RunningForm : FDialog<DialogResult>
 #pragma warning disable CS0649,CA2213
     private readonly ProgressBar progressBar = default!;
 #pragma warning restore CS0649,CA2213
-        
+
     public bool JtgSuccess { get; private set; }
 
     public RunningForm(IPluginInterface pluginInterface, string fnArg, string jtgPath, string javapath)
     {
         this.pluginInterface = pluginInterface;
-            
+
         Eto.Serialization.Xaml.XamlReader.Load(this);
 
         progressBar.Indeterminate = true;
-            
+
         WindowStyle = WindowStyle.None;
         Closing += (_, e) => e.Cancel = !exitClose;
 

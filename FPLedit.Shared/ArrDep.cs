@@ -11,7 +11,7 @@ namespace FPLedit.Shared;
 public sealed class ArrDep : Entity
 {
     public const string DEFAULT_X_NAME = "t";
-        
+
     /// <summary>
     /// Collection that allows to modify the shunt moves at this train stop.
     /// </summary>
@@ -68,7 +68,7 @@ public sealed class ArrDep : Entity
         get => Convert.ToBoolean(GetAttribute<int>("fpl-tr"));
         set => SetAttribute("fpl-tr", value ? "1" : "0");
     }
-        
+
     /// <summary>
     /// Optional boolean flag: Whether the train stops always or only on request.
     /// </summary>
@@ -89,7 +89,7 @@ public sealed class ArrDep : Entity
         get => GetAttribute("fpl-zlm", "");
         set => SetAttribute("fpl-zlm", value);
     }
-        
+
     /// <summary>
     /// Optional value denoting a special track used for arrival at the given station. The track must be defined in
     /// the corresponding Station. If this is set to null, default values might be used or templates might fall back
@@ -130,7 +130,7 @@ public sealed class ArrDep : Entity
     /// <seealso cref="LastSetTime"/>
     public TimeEntry FirstSetTime
         => Arrival == default ? Departure : Arrival;
-        
+
     /// <summary>
     /// Returns the highest time value set either on <see cref="Arrival"/> or <see cref="Departure"/> - or
     /// <see cref="TimeEntry.Zero"/> if no time entry is set.

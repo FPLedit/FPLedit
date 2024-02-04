@@ -24,7 +24,7 @@ public readonly struct GtfsDays
         {
             var d1 = DateOnly.ParseExact(rangeMatch.Groups[1].ValueSpan, dateFormat);
             var d2 = DateOnly.ParseExact(rangeMatch.Groups[2].ValueSpan, dateFormat);
-            
+
             return new GtfsDays { StartDate = d1, EndDate = d2, IsRange = true, IrregularDays = Array.Empty<DateOnly>() };
         }
 

@@ -179,10 +179,10 @@ internal static class Program
 
         // Bootstrap the first main components
         var bootstrapper = new Bootstrapper(lfh);
-            
+
         // Initialize CrashReporter, so it can be used early
         crashReporter = new CrashReporter(bootstrapper);
-            
+
         // Wire up missin pieces in file handling
         lfh.Initialize(bootstrapper);
 
@@ -200,7 +200,7 @@ internal static class Program
             bootstrapper.PreBootstrapWarnings.Add(T._("Die Standard-Dateiformatversionen wurden zurückgesetzt, da Sie die Version von FPLedit aktualisiert haben. Diese Einstellung kann unter Einstellungen > Dateiversionen geändert werden."));
         }
         bootstrapper.FullSettings.Set("updater.lastrun-version", VersionInformation.Current.DisplayVersion);
-            
+
         // Load default versions for new timetable files from config.
         var linearDefaultVersion = bootstrapper.FullSettings.GetEnum("core.default-file-format", Timetable.DefaultLinearVersion);
         var linCompat = linearDefaultVersion.GetVersionCompat();
@@ -213,7 +213,7 @@ internal static class Program
         var netCompat = networkDefaultVersion.GetVersionCompat();
         if (netCompat.Compatibility == TtVersionCompatType.ReadWrite && netCompat.Type == TimetableType.Network)
             Timetable.DefaultNetworkVersion = networkDefaultVersion;
-        else 
+        else
             bootstrapper.PreBootstrapWarnings.Add(T._("Gewählte Netzwerk-Standardversion ist nicht R/W-kompatibel!"));
 
         // Load logger before extensions
@@ -223,14 +223,14 @@ internal static class Program
         if (OptionsParser.ConsoleLog)
             logger.AttachLogger(new ConsoleLogger());
         bootstrapper.InjectLogger(logger);
-            
+
         // Output some version stats
         bootstrapper.Logger.Debug("Current version: " + VersionInformation.Current.DisplayVersion);
         bootstrapper.Logger.Debug("Runtime version: " + VersionInformation.Current.RuntimeVersion);
         bootstrapper.Logger.Debug("OS version: " + VersionInformation.Current.OsVersion);
-            
+
         var restartable = new RestartHandler(bootstrapper);
-            
+
         // Add default plugins
         bootstrapper.ExtensionManager.InjectPlugin(new CorePlugins.MenuPlugin(), 0);
         bootstrapper.ExtensionManager.InjectPlugin(new Editor.EditorPlugin(), 0);

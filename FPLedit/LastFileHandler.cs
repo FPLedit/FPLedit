@@ -9,15 +9,15 @@ internal interface ILastFileHandler
 {
     void AddLastFile(string fn);
 }
-    
+
 internal sealed class LastFileHandler : ILastFileHandler
 {
     private List<string> lastFiles;
     private IPluginInterface? pluginInterface;
-        
+
     public bool Enabled { get; private set; }
     public IEnumerable<string> LastFiles => lastFiles.AsReadOnly();
-        
+
     public event EventHandler? LastFilesUpdates;
 
     public LastFileHandler()
@@ -31,15 +31,15 @@ internal sealed class LastFileHandler : ILastFileHandler
         this.pluginInterface = pluginInterface;
         Enabled = pluginInterface.Settings.Get("files.save-last", true);
         lastFiles = pluginInterface.Settings.Get("files.last", "").Split(';').Where(s => s != "").Reverse().ToList();
-            
+
         LastFilesUpdates?.Invoke(this, EventArgs.Empty);
     }
 
     public void AddLastFile(string filename)
     {
-        if (!Enabled) 
+        if (!Enabled)
             return;
-            
+
         if (!filename.EndsWith(".fpl"))
             filename += ".fpl";
 

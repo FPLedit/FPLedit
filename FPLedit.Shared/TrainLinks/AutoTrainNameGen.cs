@@ -12,12 +12,12 @@ namespace FPLedit.Shared.TrainLinks;
 public class AutoTrainNameGen : ITrainNameGen
 {
     internal const string PREFIX = "Auto";
-        
+
     /// <summary>
     /// Increment of the train number for each created linked train.
     /// </summary>
     public int Increment { get; private set; }
-        
+
     /// <summary>
     /// Base Name that is used to calculate the names of the linked trains.
     /// </summary>
@@ -30,7 +30,7 @@ public class AutoTrainNameGen : ITrainNameGen
         var partsArr = parts.ToArray();
         if (partsArr.Length != 3)
             throw new ArgumentException("AutoTrainNameCalculator: Length condition was not met (parts.Length != 3)", nameof(parts));
-            
+
         BaseTrainName = new TrainNameParts(partsArr[1]);
         Increment = int.Parse(partsArr[2]);
     }
@@ -39,9 +39,9 @@ public class AutoTrainNameGen : ITrainNameGen
     public IEnumerable<string> Serialize() => new []{ PREFIX, BaseTrainName.FullName, Increment.ToString() };
 
     /// <inheritdoc />
-    public string GetTrainName(int countingIndex) => 
+    public string GetTrainName(int countingIndex) =>
         BaseTrainName.BaseName + (BaseTrainName.Number + (countingIndex + 1) * Increment).ToString(new string('0', BaseTrainName.NumberLength));
-        
+
     /// <summary>
     /// Initialize a new empty instance.
     /// </summary>

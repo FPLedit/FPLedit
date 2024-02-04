@@ -4,7 +4,7 @@
   </PropertyGroup>
   <Import Project="$(SolutionDir)/build_scripts/GenerateSignatures.targets" />
   <Import Project="$(SolutionDir)/build_scripts/AppHostPatch.targets" />
-  
+
   <PropertyGroup>
     <ProjectGuid>{386836E8-5885-4ED1-B350-CE2BBEC5367E}</ProjectGuid>
     <TargetFramework>net6.0</TargetFramework>
@@ -13,12 +13,12 @@
     <ApplicationIcon>Resources\programm.ico</ApplicationIcon>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
-    
+
     <NoWarn>CS0693,NETSDK1074</NoWarn>
     <Nullable>enable</Nullable>
     <MSBuildWarningsAsMessages>$(MSBuildWarningsAsMessages);NETSDK1074</MSBuildWarningsAsMessages>
   </PropertyGroup>
-  
+
   <!-- Windows specific properties -->
   <PropertyGroup Condition=" $( RuntimeIdentifier.StartsWith('win') ) ">
     <TargetFramework>net6.0-windows</TargetFramework>
@@ -27,7 +27,7 @@
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
-  
+
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>portable</DebugType>
     <DefineConstants>$(DefineConstants);TRACE;DEBUG;ENABLE_CRASH_REPORTING_DEBUG_disabled</DefineConstants>
@@ -57,7 +57,7 @@
     <ProjectReference Include="..\FPLedit.Shared.UI\FPLedit.Shared.UI.csproj" />
     <ProjectReference Include="..\FPLedit.Shared\FPLedit.Shared.csproj" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <!-- Mac files -->
     <Content Include="Icon.icns" Link="Resources\Mac\Icons.icns" />
@@ -86,7 +86,7 @@
     <PackageReference Include="Portable.Xaml" Version="0.26.0" />
     <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
   </ItemGroup>
-  
+
   <!-- Platform specific packages and framework definitions -->
   <ItemGroup Condition=" $( RuntimeIdentifier.StartsWith('win') ) ">
     <PackageReference Include="Eto.Platform.Wpf" Version="$(EtoVersion)" />

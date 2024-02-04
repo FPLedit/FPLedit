@@ -9,13 +9,13 @@ internal static class JtgShared
 {
     public const string DEFAULT_FILENAME = "jTrainGraph_341.jar";
     public const TimetableVersion DEFAULT_TT_VERSION = TimetableVersion.JTG3_3;
-        
+
     public static bool JtgCompatCheck(string jTgPath, out TimetableVersion? fileVersion)
     {
         var versions = TimetableVersionExt.GetAllVersionInfos()
             .Where(c => c.Compatibility == TtVersionCompatType.ReadWrite)
             .Where(c => c.JtgVersionCompatibility.Any())
-            .SelectMany(c => 
+            .SelectMany(c =>
                 c.JtgVersionCompatibility.Select(j => (version: c.Version, pattern: j.version)))
             .ToArray();
 
@@ -38,7 +38,7 @@ internal static class JtgShared
                     return true;
                 }
             }
-                
+
             return false; // New major version, probably incompatible.
         }
         return true; // No information available, so it is "compatibile".

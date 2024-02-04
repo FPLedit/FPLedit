@@ -60,7 +60,7 @@ public sealed class Route : ISortedStations
     {
         if (!Exists)
             return T._("<leer>");
-        return reverse 
+        return reverse
             ? stations[^1].SName + " - " + stations[ 0].SName
             : stations[ 0].SName + " - " + stations[^1].SName; // this will always work, as stations.Length >= 1
     }

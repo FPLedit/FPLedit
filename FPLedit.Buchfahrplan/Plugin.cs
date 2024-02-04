@@ -35,6 +35,6 @@ public sealed class Plugin : IPlugin, ITemplatePlugin
     internal static IFilterRuleContainer FilterRuleContainer
         => new DefaultFilterRuleContainer(T._("Buchfahrplan"), BfplAttrs.GetAttrs, BfplAttrs.CreateAttrs);
 
-    internal static ITemplateChooser GetTemplateChooser(IReducedPluginInterface pi) 
+    internal static ITemplateChooser GetTemplateChooser(IReducedPluginInterface pi)
         => new DefaultTemplateChooser(pi, "bfpl", "bfpl_attrs", "tmpl", Templates.StdTemplate.IDENTIFIER);
 }

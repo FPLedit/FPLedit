@@ -97,7 +97,7 @@ public sealed class Timetable : Entity, ITimetable
         Children.Add(vElm);
 
         tElm.ChildrenChangedDirect += OnTrainsChanged;
-            
+
         routeCache = new Dictionary<int, Route>(); // Initialize empty route cache.
     }
 
@@ -140,7 +140,7 @@ public sealed class Timetable : Entity, ITimetable
         if (tmpTElm != null)
         {
             tElm = tmpTElm;
-                
+
             var directions = Enum.GetNames(typeof(TrainDirection));
             var trainElements = tElm.Children.Where(x => directions.Contains(x.XName)).ToArray();
             var trainLinkElements = new Dictionary<(TrainDirection, int), TrainLink>();
@@ -266,10 +266,10 @@ public sealed class Timetable : Entity, ITimetable
 
         // Finally initialize route cache structure
         routeCache = _InternalGetRoutesUncached().ToDictionary(r => r.Index, r => r);
-            
+
         if (routeCache == null)
             throw new Exception("RouteCache is null!");
-            
+
         /*
          * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
          * WARNING ROUTE CACHE IS NOW ACTIVE.
@@ -299,7 +299,7 @@ public sealed class Timetable : Entity, ITimetable
 
         stations.Add(sta);
         RebuildRouteCache(route);
-            
+
         if (Type == TimetableType.Linear)
         {
             if (route != LINEAR_ROUTE_ID)
@@ -340,7 +340,7 @@ public sealed class Timetable : Entity, ITimetable
         foreach (var t in Trains)
             if (t is IWritableTrain wt)
                 wt.AddArrDep(sta, route);
-            
+
         RebuildRouteCache(route);
     }
 
@@ -361,11 +361,11 @@ public sealed class Timetable : Entity, ITimetable
             if (int.TryParse(transition.StationId, out var numericStationId) && numericStationId == id)
                 transition.StationId = Transition.LAST_STATION; // Reset to default.
         }
-            
+
         sta.ParentTimetable = null;
         stations.Remove(sta);
         sElm.Children.Remove(sta.XMLEntity);
-            
+
         // Rebuild route cache (before removing orphaned routes)
         foreach (var route in routes)
             RebuildRouteCache(route);
@@ -391,9 +391,9 @@ public sealed class Timetable : Entity, ITimetable
             throw new TimetableTypeNotSupportedException(TimetableType.Linear, "station ids");
         return stations.FirstOrDefault(s => s.Id == id);
     }
-        
+
     #endregion
-        
+
     #region Hilfsmethoden für Züge
 
     /// <inheritdoc />
@@ -401,7 +401,7 @@ public sealed class Timetable : Entity, ITimetable
     {
         if (Trains.Contains(tra))
             return;
-            
+
         if (tra is IWritableTrain wt)
             wt.Id = AssignNextTrainId();
         tra.ParentTimetable = this;
@@ -412,7 +412,7 @@ public sealed class Timetable : Entity, ITimetable
     /// <inheritdoc />
     public ITrain? GetTrainById(int id)
         => trains.FirstOrDefault(t => t.Id == id && !t.IsLink);
-        
+
     /// <inheritdoc />
     public ITrain? GetTrainByQualifiedId(string qid)
         => trains.FirstOrDefault(t => t.QualifiedId == qid);
@@ -435,12 +435,12 @@ public sealed class Timetable : Entity, ITimetable
             var ardps = tra.GetArrDepsUnsorted();
             if (!ardps.TryGetValue(sta, out var ardp))
                 return;
-                
+
             if (ardp.ArrivalTrack == oldTrackName)
                 ardp.ArrivalTrack = newTrackName;
             if (ardp.DepartureTrack == oldTrackName)
                 ardp.DepartureTrack = newTrackName;
-                
+
             foreach (var shunt in ardp.ShuntMoves)
             {
                 if (shunt.SourceTrack == oldTrackName)
@@ -450,7 +450,7 @@ public sealed class Timetable : Entity, ITimetable
             }
         }
     }
-        
+
     public void _InternalRemoveAllTrainTracksAtStation(Station sta, string oldTrackName)
     {
         foreach (var tra in Trains)
@@ -458,12 +458,12 @@ public sealed class Timetable : Entity, ITimetable
             var ardps = tra.GetArrDepsUnsorted();
             if (!ardps.TryGetValue(sta, out var ardp))
                 return;
-                
+
             if (ardp.ArrivalTrack == oldTrackName)
                 ardp.ArrivalTrack = "";
             if (ardp.DepartureTrack == oldTrackName)
                 ardp.DepartureTrack = "";
-                
+
             var fixedShunts = ardp.ShuntMoves.ToArray(); // Copy of collection so that we can remove later on.
             foreach (var shunt in fixedShunts)
             {
@@ -472,7 +472,7 @@ public sealed class Timetable : Entity, ITimetable
             }
         }
     }
-        
+
     public void _InternalSwapTrainOrder(ITrain t1, ITrain t2)
     {
         var idx = trains.IndexOf(t1);
@@ -488,7 +488,7 @@ public sealed class Timetable : Entity, ITimetable
     #endregion
 
     #region Hilfsmethoden für Routen
-        
+
     internal void RebuildRouteCache(int route)
     {
         if (routeCache == null)
@@ -499,7 +499,7 @@ public sealed class Timetable : Entity, ITimetable
         else
             routeCache[route] = new Route(route, stas);
     }
-        
+
     private Route[] _InternalGetRoutesUncached()
     {
         if (Type == TimetableType.Network)
@@ -513,7 +513,7 @@ public sealed class Timetable : Entity, ITimetable
         // TimetableType.Linear
         return new[] { new Route(LINEAR_ROUTE_ID, Stations) };
     }
-        
+
     /// <inheritdoc />
     public void StationAddRoute(Station sta, int route)
     {
@@ -545,7 +545,7 @@ public sealed class Timetable : Entity, ITimetable
 
         exisitingStartStation.Positions.SetPosition(idx, newStartPosition);
         newStation.Positions.SetPosition(idx, newPosition);
-            
+
         RebuildRouteCache(idx); // Create cache entry
         return idx;
     }
@@ -564,14 +564,14 @@ public sealed class Timetable : Entity, ITimetable
     {
         if (Type == TimetableType.Linear && index != LINEAR_ROUTE_ID)
             throw new TimetableTypeNotSupportedException(TimetableType.Linear, "routes");
-            
+
         if (routeCache == null)
             throw new Exception("RouteCache is null!");
 
         if (routeCache.TryGetValue(index, out var route))
             return route;
         RebuildRouteCache(index);
-            
+
         if (routeCache.TryGetValue(index, out var route2))
             return route2;
         return new Route(index, Array.Empty<Station>());
@@ -591,7 +591,7 @@ public sealed class Timetable : Entity, ITimetable
         StationAddRoute(station, route);
         station.Positions.SetPosition(route, newKm);
         RebuildRouteCache(route);
-            
+
         // All stations that are junction points.
         var maybeAffectedRoutes = station.Routes.Concat(new[] { route }).ToArray();
         var junctions = Stations.Where(s => s.IsJunction && s.Routes.Intersect(maybeAffectedRoutes).Any()).Concat(new []{station}).Distinct().ToArray();
@@ -855,7 +855,7 @@ public sealed class Timetable : Entity, ITimetable
                 StationRemoveRoute(rsta, route.Index);
         }
     }
-        
+
     #endregion
 
     #region Hilfsmethoden für Umläufe
@@ -871,7 +871,7 @@ public sealed class Timetable : Entity, ITimetable
             .Select(t => new TransitionEntry(t.n!, t.t.Days, t.t.StationId != Transition.LAST_STATION && int.TryParse(t.t.StationId, out var sId) ? GetStationById(sId) : null))
             .ToList();
     }
-        
+
     private IEnumerable<Transition> GetEditableTransitionsInternal(ITrain first)
     {
         if (first.IsLink)
@@ -949,7 +949,7 @@ public sealed class Timetable : Entity, ITimetable
 
             return result;
         }
-            
+
         var trans = transitions.Where(Filter).ToArray();
 
         if (!trans.Any())
@@ -969,7 +969,7 @@ public sealed class Timetable : Entity, ITimetable
         var trans = transitions.Where(t => t.First == firstTrainId || (!onlyAsFirst && t.Next == firstTrainId)).ToArray();
         RemoveTransitionsInternal(trans);
     }
-        
+
     private void RemoveTransitionsInternal(Transition[] trans)
     {
         foreach (var transition in trans)
@@ -982,17 +982,17 @@ public sealed class Timetable : Entity, ITimetable
         => transitions.Any(t => t.First == tra.QualifiedId || (!onlyAsFirst && t.Next == tra.QualifiedId));
 
     #endregion
-        
+
     #region Fahrzeuge und Umläufe
-        
+
     private void RemoveOrphanedVehicleStarts(ITrain tra)
     {
         foreach (var veh in vehicles)
             veh.RemoveStartTrains(tra);
     }
-        
+
     #endregion
-        
+
     #region Uneindeutige Routen
 
     /// <inheritdoc />
@@ -1007,7 +1007,7 @@ public sealed class Timetable : Entity, ITimetable
                 continue; // we are ath the edge of a route.
             var routes = junctions.SelectMany(j => j.Routes).Distinct().ToArray();
             var intersect = routes.Intersect(routesToCheck);
-  
+
             var routeChandidates = routes.Except(intersect);
             foreach (var candidate in routeChandidates)
             {
@@ -1018,9 +1018,9 @@ public sealed class Timetable : Entity, ITimetable
 
         return false;
     }
-        
+
     #endregion
-        
+
     #region Hilfsmethoden für Links
 
     /// <inheritdoc />
@@ -1048,7 +1048,7 @@ public sealed class Timetable : Entity, ITimetable
             transition.First = DoTraReplace(transition.First);
             transition.Next = DoTraReplace(transition.Next);
         }
-            
+
         link.ParentTrain.RemoveLink(link);
     }
 

@@ -114,7 +114,7 @@ public sealed class BfplAttrs : Entity, IPatternSource
         Points.Remove(p);
         XMLEntity.Children.Remove(p.XMLEntity);
     }
-        
+
     public static BfplAttrs CreateAttrs(Timetable tt)
     {
         var attrs = new BfplAttrs(tt);

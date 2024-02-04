@@ -13,7 +13,7 @@ public static class OpenHelper
         var proc = OpenProc(url);
         proc?.Dispose();
     }
-        
+
     public static Process? OpenProc(string url)
     {
         try

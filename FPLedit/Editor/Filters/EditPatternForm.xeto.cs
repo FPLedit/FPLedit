@@ -73,7 +73,7 @@ internal sealed class EditPatternForm : FDialog<FilterRule?>
         [SelectionName("Betriebsst.-Typ ist")]
         StationType = '#',
     }
-        
+
     private static class L
     {
         public static readonly string Cancel = T._("Abbrechen");

@@ -6,7 +6,7 @@ namespace FPLedit.Bildfahrplan.Model;
 internal sealed class StationStyle : Style
 {
     public Station Station { get; }
-        
+
     private readonly TimetableStyle ttStyle;
     public StationStyle(Station sta, TimetableStyle ttStyle)
     {

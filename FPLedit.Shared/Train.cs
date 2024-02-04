@@ -84,9 +84,9 @@ public sealed class Train : Entity, IWritableTrain
     /// <inheritdoc />
     public ArrDep? AddArrDep(Station sta, int route)
     {
-        // Filter other elements in front 
+        // Filter other elements in front
         int idx = Children.TakeWhile(x => x.XName != ArrDep.DEFAULT_X_NAME).Count();
-            
+
         if (ParentTimetable.Type == TimetableType.Linear)
         {
             if (route != Timetable.LINEAR_ROUTE_ID)
@@ -148,7 +148,7 @@ public sealed class Train : Entity, IWritableTrain
             var sta = ParentTimetable.Type == TimetableType.Network
                 ? ParentTimetable.GetStationById(ardp.StationId)
                 : ParentTimetable.GetRoute(Timetable.LINEAR_ROUTE_ID).Stations[Array.IndexOf(ardps, ardp)]; // All arrdeps are sorted in line direction if linear
-                
+
             if (sta == null)
                 throw new Exception("Station not found!");
 
@@ -269,7 +269,7 @@ public sealed class Train : Entity, IWritableTrain
     {
         if (Children.Count(x => x.XName == "t") > tt.Stations.Count)
             throw new Exception("Zu viele Fahrtzeiteneinträge im Vergleich zur Stationsanzahl!");
-            
+
         trainLinks = Children.Where(x => x.XName == "tl").Select(x => new TrainLink(x, this)).ToList();
     }
 
@@ -299,15 +299,15 @@ public sealed class Train : Entity, IWritableTrain
     }
 
     #region Update hooks for linked trains
-        
+
     public override void OnRemoveAttribute(string key)
     {
         if (key == "islink")
             return;
-            
+
         foreach (var link in TrainLinks)
             link.Apply(false, true);
-            
+
         base.OnRemoveAttribute(key);
     }
 
@@ -315,10 +315,10 @@ public sealed class Train : Entity, IWritableTrain
     {
         if (key == "islink")
             return;
-            
+
         foreach (var link in TrainLinks)
             link.Apply(false, true);
-            
+
         base.OnSetAttribute(key, value);
     }
 
@@ -326,7 +326,7 @@ public sealed class Train : Entity, IWritableTrain
     {
         foreach (var link in TrainLinks)
             link.Apply(true, false);
-            
+
         base.OnChildrenChanged();
     }
 

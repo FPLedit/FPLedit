@@ -49,7 +49,7 @@ internal sealed class NetworkTrainsEditForm : BaseTrainsEditor
             KeyDown += HandleKeystroke;
         else
             gridView.KeyDown += HandleKeystroke;
-            
+
         gridView.SelectedItemsChanged += GridViewOnSelectedItemsChanged;
 
         this.AddCloseHandler();
@@ -156,7 +156,7 @@ internal sealed class NetworkTrainsEditForm : BaseTrainsEditor
 
     private void SortButton_Click(object sender, EventArgs e)
         => SortTrains(gridView, TrainDirection.tr);
-        
+
     private static class L
     {
         public static readonly string Cancel = T._("Abbrechen");

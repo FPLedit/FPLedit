@@ -28,12 +28,12 @@ internal sealed class ExportRenderer
         var exportButton = new Button { Text = T._("Exportieren") };
         var printerStack = new StackLayout(widthLabel, widthTextBox, exportButton) { Orientation = Orientation.Horizontal, Padding = new Eto.Drawing.Padding(10), Spacing = 5 };
         var printerGroup = new GroupBox { Content = printerStack, Text = T._("Exporteinstellungen") };
-            
+
         var stack = new StackLayout(routeGroup, printerGroup) { Orientation = Orientation.Vertical, Padding = new Eto.Drawing.Padding(10), Spacing = 5 };
-            
+
         routesDropDown.Initialize(pluginInterface);
         routesDropDown.EnableVirtualRoutes = true;
-            
+
         form.Content = stack;
         form.DefaultButton = exportButton;
         form.Title = T._("Bildfahrplan drucken");

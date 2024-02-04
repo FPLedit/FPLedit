@@ -11,7 +11,7 @@ public class StationsOnlyExport : IExport
         var clone = tt.XMLEntity.XClone(); // Create dissociated copy of this timetable-
 
         clone.Children.RemoveAll(x => x.XName != "stations");
-            
+
         return new XMLExport().ExportGenericNode(clone, stream, pluginInterface, flags);
     }
 

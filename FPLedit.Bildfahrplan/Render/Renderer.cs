@@ -82,21 +82,21 @@ internal sealed class Renderer
     {
         const int additionalMargin = 5;
         var result = new Margins(orig.Left + additionalMargin, orig.Top + additionalMargin, orig.Right + additionalMargin, orig.Bottom + additionalMargin);
-            
+
         var path = getPathData();
 
         // MarginTop berechnen
         var hr = new HeaderRenderer(attrs, path);
         result.Top = drawHeader ? (
-                attrs.DrawHeader ? 
-                    hr.GetMarginTop(g) + result.Top 
+                attrs.DrawHeader ?
+                    hr.GetMarginTop(g) + result.Top
                     : result.Top)
             : 5;
 
         // MarginLeft berechnen
         var tr = new TimeRenderer(attrs);
         result.Left += tr.GetMarginLeftOffset(g, startTime, endTime);
-            
+
         return result;
     }
 
@@ -105,7 +105,7 @@ internal sealed class Renderer
         using var g = MGraphics.CreateImage(1, 1);
         return GetHeight(g, start, end, drawHeader);
     }
-        
+
     public int GetHeight(IMGraphics g, TimeEntry start, TimeEntry end, bool drawHeader)
     {
         var stations = getPathData().GetRawPath();

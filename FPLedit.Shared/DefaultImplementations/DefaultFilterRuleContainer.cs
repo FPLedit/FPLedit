@@ -35,14 +35,14 @@ public sealed class DefaultFilterRuleContainer : BaseFilterRuleContainer, IFilte
     private readonly Func<Timetable, IPatternSource?> getProvider;
     private readonly Func<Timetable, IPatternSource> createProvider;
     public string DisplayName { get; }
-        
+
     public DefaultFilterRuleContainer(string displayName, Func<Timetable, IPatternSource?> getProvider, Func<Timetable,IPatternSource> createProvider)
     {
         this.getProvider = getProvider;
         this.createProvider = createProvider;
         DisplayName = displayName;
     }
-        
+
     protected override IPatternSource? GetProvider(Timetable tt) => getProvider(tt);
 
     protected override IPatternSource CreateProvider(Timetable tt) => createProvider(tt);

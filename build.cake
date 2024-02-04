@@ -53,19 +53,19 @@ if (incrementVersion && string.IsNullOrEmpty(preBuildVersionSuffix))
 if (incrementVersion) 
 {
     var currentVersion = XmlPeek(scriptsDir + File("VersionInfo.targets"), "/Project/PropertyGroup/VersionPrefix");
-    
+
     var fn = $"fpledit-{currentVersion}-{preBuildVersionSuffix}";
-    
+
     if (incrementVersion) {
         var files = GetFiles($"./bin/{fn}*.zip").Select(fp => fp.GetFilename().ToString());
         var regex = new Regex($@"^{fn}(\d*).*\.zip$");
-        
+
         var counter = files
             .Select(fn => regex.Match(fn))
             .Where(match => match.Success && match.Groups.Count == 2)
             .DefaultIfEmpty()
             .Max(match => int.Parse(match?.Groups[1]?.Value ?? "0"));
-        
+
         preBuildVersionSuffix += (counter + 1);
     }  
 }
@@ -103,7 +103,7 @@ Task("Build")
             MSBuildSettings = msbuildSettings,
         });
     });
-    
+
 Task("PackNet")
     .IsDependentOn("Build")
     .Does(() =>
@@ -232,7 +232,7 @@ Task("Default")
 	    
 	    if (!hasDocInZip)
 	        Warning("No user documentation built!");
-	    
+
 	    foreach (var hash_line in zipFileHashes) {	    	
 	    	Information(hash_line);
 	    }

@@ -16,7 +16,7 @@ public static class T
 {
     private const string DEFAULT_LOCALE = "de-DE";
     private const string DEFAULT_LOCALE_NAME = "Deutsch";
-        
+
     private static string currentLocale = DEFAULT_LOCALE;
     private static string localeDir = ".";
     private static Dictionary<string, ICatalog> catalogs = new();
@@ -49,7 +49,7 @@ public static class T
         var c = GetCatalog(Assembly.GetCallingAssembly());
         return args.Length > 0 ? c.GetParticularPluralString(context, text, text2, n, args) : c.GetParticularPluralString(context, text, text2, n);
     }
-        
+
     public static string _a(Assembly assembly, string text) => GetCatalog(assembly).GetString(text);
 
     public static string _a(Assembly assembly, string text, params object[] args) => GetCatalog(assembly).GetString(text, args);
@@ -69,7 +69,7 @@ public static class T
     {
         var ret = new Dictionary<string, string>();
         ret.Add(DEFAULT_LOCALE, DEFAULT_LOCALE_NAME);
-            
+
         var allCultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
 
         var dir = new DirectoryInfo(localeDir);

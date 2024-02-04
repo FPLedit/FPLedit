@@ -27,7 +27,7 @@ public sealed class GtfsField : Attribute
             case GtfsType.Text:
             case GtfsType.URL:
                 if (x is null && Optional) return "";
-                if (x is string s) return EscapeString(s); 
+                if (x is string s) return EscapeString(s);
                 throw new ArgumentException($"wrong argument type for GTFS conversion {Type}");
             case GtfsType.UInt:
                 if (x is uint u) return u.ToString();
@@ -112,7 +112,7 @@ public enum GtfsType
     UInt,
     Float,
     Bool, // originally an enum with 0=no, 1=yes
-    
+
     CoordLat = Float,
     CoordLon = Float,
 }

@@ -84,14 +84,14 @@ internal sealed class LinearTimetableEditControl : BaseTimetableEditControl
             CreateCell = _ =>
             {
                 var tb = new TextBox { Tag = new CCCO() };
-                    
+
                 if (mpmode)
                     tb.KeyDown += (_, e) =>
                     {
                         focused = view;
                         HandleControlKeystroke(e);
                     };
-                    
+
                 tb.GotFocus += (s, _) =>
                 {
                     var dd2 = (TextBox) s!;
@@ -100,17 +100,17 @@ internal sealed class LinearTimetableEditControl : BaseTimetableEditControl
                         return;
                     TbEnterEditMode((DataElement)ccco.Data, dd2);
                 };
-                    
+
                 tb.LostFocus += (s, _) =>
                 {
                     var dd2 = (TextBox) s!;
                     var ccco = (CCCO) dd2.Tag;
                     if (ccco.InhibitEvents)
                         return;
-                    FormatCell(ccco.Data, sta, arrival, tb); 
+                    FormatCell(ccco.Data, sta, arrival, tb);
                     new TimetableCellRenderProperties(time, sta, arrival, ccco.Data).Apply(tb);
                 };
-                    
+
                 return tb;
             },
             ConfigureCell = (args, control) =>
@@ -120,7 +120,7 @@ internal sealed class LinearTimetableEditControl : BaseTimetableEditControl
                     return;
                 var ccco = (CCCO) tb.Tag;
                 ccco.InhibitEvents = true; // Inihibit event handling while new state is set.
-                    
+
                 var data = (DataElement)args.Item;
                 if (data == null)
                 {

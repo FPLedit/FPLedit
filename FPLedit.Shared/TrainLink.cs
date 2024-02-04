@@ -13,7 +13,7 @@ namespace FPLedit.Shared;
 public class TrainLink : Entity
 {
     private readonly LinkedTrain[] linkedTrains;
-        
+
     /// <summary>
     /// The parent (writable) train.
     /// </summary>
@@ -23,7 +23,7 @@ public class TrainLink : Entity
     /// All linked trains, associated with this link element. This collection cannot be edited.
     /// </summary>
     public IList<LinkedTrain> LinkedTrains => Array.AsReadOnly(linkedTrains);
-        
+
     /// <summary>
     /// The naming scheme used for this train links children.
     /// </summary>
@@ -33,7 +33,7 @@ public class TrainLink : Entity
         get => TrainNameGenManager.Deserialize(GetAttribute("tln", ""));
         set => SetAttribute("tln", TrainNameGenManager.Serialize(value));
     }
-        
+
     /// <summary>
     /// Indices of the child trains. Zero based, counted on trains of this parent train's direction.
     /// </summary>
@@ -43,7 +43,7 @@ public class TrainLink : Entity
         get => GetAttribute("tli", "").Split(';').Select(s => int.Parse(s)).ToArray();
         private set => SetAttribute("tli", string.Join(";", value));
     }
-        
+
     /// <summary>
     /// Time difference (in minutes) between the linked trains.
     /// </summary>
@@ -59,7 +59,7 @@ public class TrainLink : Entity
         }
         set => SetAttribute("tld", value.ToTimeString());
     }
-        
+
     /// <summary>
     /// Initial time offset before the first linked train.
     /// </summary>
@@ -76,7 +76,6 @@ public class TrainLink : Entity
         set => SetAttribute("tlo", value.ToTimeString());
     }
 
-        
     /// <summary>
     /// Count of the linked trains, associated with this link element.
     /// </summary>
@@ -102,7 +101,7 @@ public class TrainLink : Entity
         get => GetAttribute<bool>("tlt");
         set => SetAttribute("tlt", value.ToString());
     }
-        
+
     /// <summary>
     /// Initializes a new train link element.
     /// </summary>

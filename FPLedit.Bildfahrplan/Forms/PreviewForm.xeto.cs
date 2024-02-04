@@ -89,7 +89,7 @@ internal sealed class PreviewForm : FForm
                 e.Graphics.Clear(Colors.White);
                 return;
             }
-                
+
             if (splitCheckBox.Checked!.Value)
             {
                 using (var ib = MGraphics.CreateImage(hpanel.Width, hpanel.Height))
@@ -135,7 +135,7 @@ internal sealed class PreviewForm : FForm
     {
         if (!Visible || scrollable == null! || adbg == null! || hpanel == null! || IsDisposed)
             return;
-            
+
         scrollPosition = scrollable.ScrollPosition;
 
         dtc.Enabled = routesDropDown.Enabled = splitCheckBox.Enabled = preferencesButton.Enabled = pluginInterface.FileState.Opened;

@@ -10,7 +10,7 @@ internal sealed class SilentLogger : ILog
     public void AttachLogger(ILog other)
     {
     }
-        
+
     private readonly ILog parent;
 
     public SilentLogger(ILog parent)

@@ -63,7 +63,7 @@ internal sealed class SettingsControl : Panel, IAppearanceHandler
     {
         cssTextBox.Visible = cssLabel.Visible = cssHelpLinkLabel.Visible = consoleCheckBox.Visible = wvlPngFallbackCheckBox.Visible = enabled;
     }
-        
+
     public static class L
     {
         public static readonly string Example = T._("Beispiel");

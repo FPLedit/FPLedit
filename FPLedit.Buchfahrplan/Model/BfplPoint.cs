@@ -61,14 +61,14 @@ public sealed class BfplPoint : Entity, IStation
         get => throw new InvalidOperationException("Points haben keine Id!");
         set => throw new InvalidOperationException("Points haben keine Id!");
     }
-        
+
     internal void _InternalAddRoute(int route)
     {
         var list = Routes.ToList();
         list.Add(route);
         Routes = list.ToArray();
     }
-        
+
     internal void _InternalRemoveRoute(int route)
     {
         var list = Routes.ToList();

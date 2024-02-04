@@ -20,7 +20,7 @@ EINGEBUNDENE BIBLIOTHEKEN
 =========================================
 
 ";
-    
+
     text += System.IO.File.ReadAllText(thirdPartyInfoPath);
     return AddNewlines(text);
 }

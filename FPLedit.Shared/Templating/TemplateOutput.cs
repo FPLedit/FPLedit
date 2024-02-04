@@ -49,9 +49,9 @@ public static class TemplateOutput
             throw new TemplateOutputException("Invalid (unsafe) string passed to " + nameof(SafeCssFont));
         if (new[] { "serif", "sans-serif", "monospace", "cursive", "fantasy", "system-ui" }.Contains(s))
             return s; // CSS-token, not string.
-        return "\"" + s + "\""; // literal font name, 
+        return "\"" + s + "\""; // literal font name,
     }
-        
+
     /// <summary>
     /// Checks whether the given string is safe to use inside a css block, and throws otherwise.
     /// The check is quite narrow and might not allow all allowed css block constents.
@@ -63,7 +63,7 @@ public static class TemplateOutput
             throw new TemplateOutputException("Invalid (unsafe) string passed to " + nameof(SafeCssBlock));
         return s;
     }
-        
+
     /// <summary>
     /// Creates a prefixed html id or class name from the given name. This function removes all characters that
     /// are not alphanumeric nor a hyphen.

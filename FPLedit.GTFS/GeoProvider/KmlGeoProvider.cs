@@ -32,7 +32,7 @@ public class KmlGeoProvider : IGeoProvider
             doc.Load(reader);
         }
         catch { return (null, null); }
-        
+
         if (doc.DocumentElement == null || doc.DocumentElement.Name != "kml" || !doc.DocumentElement.NamespaceURI.StartsWith("http://www.opengis.net/kml/"))
             return (null, null);
 
@@ -85,7 +85,7 @@ public class KmlGeoProvider : IGeoProvider
     {
         if (kmlRoot == null)
             throw new Exception("KML Document not initialized!");
-        
+
         var nodes = kmlRoot.DocumentElement!.SelectNodes("//k:coordinates/parent::k:LineString/parent::k:Placemark/k:name/parent::k:Placemark", nsmgr!);
         if (nodes == null)
         {
