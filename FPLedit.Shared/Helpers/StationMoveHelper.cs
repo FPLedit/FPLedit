@@ -22,7 +22,7 @@ public static class StationMoveHelper
     /// <param name="route">Route the move should be applied to.</param>
     /// <remarks>This method is safe to use, as it does not modify state.</remarks>
     /// <returns>true, when an unsafe update is required.</returns>
-    public static bool RequiresUnsafeMove(Station sta, bool existingStation, float newPos, int route)
+    private static bool RequiresUnsafeMove(Station sta, bool existingStation, float newPos, int route)
     {
         if (!existingStation)
             return false;
@@ -105,7 +105,7 @@ public static class StationMoveHelper
 
         foreach (var tra in sta.ParentTimetable.Trains)
         {
-            if (!(tra is IWritableTrain wt))
+            if (tra is not IWritableTrain wt)
                 continue;
 
             var path = tra.GetPath();
@@ -128,6 +128,7 @@ public static class StationMoveHelper
         }
 
         sta.Positions.SetPosition(route, newPos);
+        sta.ParentTimetable.RebuildRouteCache(route); // Recreate cache entry, as we will use this in the next block.
 
         foreach (var ardp in ardeps)
         {
