@@ -33,7 +33,11 @@ internal sealed class LineEditForm : FDialog<DialogResult>
         gridView.AddFuncColumn<Station>(s => s.Tracks.Count.ToString(), T._("Anzahl Gleise"));
         gridView.AddCheckColumn<Station>(s => s.RequestStop, T._("Bedarfshalt"));
 
-        gridView.MouseDoubleClick += (_, _) => EditStation(false);
+        gridView.MouseDoubleClick += (_, e) =>
+        {
+            if (gridView.GetCellAt(e.Location)?.Column == null) return;
+            EditStation(false);
+        };
 
         if (Eto.Platform.Instance.IsWpf)
             KeyDown += HandleKeystroke;

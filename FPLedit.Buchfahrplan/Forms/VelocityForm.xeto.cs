@@ -30,7 +30,11 @@ internal sealed class VelocityForm : FDialog<DialogResult>
         gridView.AddFuncColumn<IStation>(s => s.Vmax.GetValue(route!.Index)!, T._("Vmax"));
         gridView.AddFuncColumn<IStation>(s => s.Wellenlinien.GetValue(route!.Index).ToString(), T._("Wellenlinien"));
 
-        gridView.MouseDoubleClick += (_, _) => EditPoint(false);
+        gridView.MouseDoubleClick += (_, e) =>
+        {
+            if (gridView.GetCellAt(e.Location)?.Column == null) return;
+            EditPoint(false);
+        };
 
         gridView.SelectedItemsChanged += (_, _) => SelectPoint();
 

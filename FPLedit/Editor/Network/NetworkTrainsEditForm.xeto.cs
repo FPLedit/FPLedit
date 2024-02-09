@@ -37,7 +37,11 @@ internal sealed class NetworkTrainsEditForm : BaseTrainsEditor
         gridView.AddFuncColumn<ITrain>(BuildPath, T._("Laufweg"));
         gridView.AddFuncColumn<ITrain>(t => t.Comment, T._("Kommentar"));
 
-        gridView.MouseDoubleClick += (_, _) => EditTrain(gridView, TrainDirection.tr, false);
+        gridView.MouseDoubleClick += (_, e) =>
+        {
+            if (gridView.GetCellAt(e.Location)?.Column == null) return;
+            EditTrain(gridView, TrainDirection.tr, false);
+        };
 
         // This allows the selection of the last row on Wpf, see Eto#2443.
         if (Platform.IsGtk) gridView.AllowEmptySelection = false;

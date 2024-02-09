@@ -9,10 +9,7 @@
       <TableLayout Spacing="5,5">
         <TableRow ScaleHeight="True">
           <TableCell ScaleWidth="true">
-            <!-- HACK: Scrollable here is for Eto/WPF listening to DoubleClick events on Scrollbars associated with GridView -->
-            <Scrollable ExpandContentWidth="true" ExpandContentHeight="true">
-              <GridView x:Name="gridView" />
-            </Scrollable>
+            <GridView x:Name="gridView" />
           </TableCell>
           <StackLayout Spacing="5" HorizontalContentAlignment="Stretch">
             <Button Click="AddButton_Click" Text="{x:Static e:VelocityForm+L.Add}" />

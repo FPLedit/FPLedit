@@ -39,8 +39,16 @@ internal sealed class LinearTrainsEditForm : BaseTrainsEditor
         UpdateListView(topGridView, TOP_DIRECTION);
         UpdateListView(bottomGridView, BOTTOM_DIRECTION);
 
-        bottomGridView.MouseDoubleClick += (_, _) => EditTrain(bottomGridView, BOTTOM_DIRECTION, false);
-        topGridView.MouseDoubleClick += (_, _) => EditTrain(topGridView, TOP_DIRECTION, false);
+        bottomGridView.MouseDoubleClick += (_, e) =>
+        {
+            if (bottomGridView.GetCellAt(e.Location)?.Column == null) return;
+            EditTrain(bottomGridView, BOTTOM_DIRECTION, false);
+        };
+        topGridView.MouseDoubleClick += (_, e) =>
+        {
+            if (topGridView.GetCellAt(e.Location)?.Column == null) return;
+            EditTrain(topGridView, TOP_DIRECTION, false);
+        };
 
         if (Eto.Platform.Instance.IsWpf)
             KeyDown += HandleKeystroke;
