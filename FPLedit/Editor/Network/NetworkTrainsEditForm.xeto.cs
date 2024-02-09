@@ -19,7 +19,7 @@ internal sealed class NetworkTrainsEditForm : BaseTrainsEditor
     private readonly Button editPathButton = default!, editButton = default!, deleteButton = default!, copyButton = default!;
 #pragma warning restore CS0649,CA2213
 
-    public NetworkTrainsEditForm(IPluginInterface pluginInterface) : base(pluginInterface.Timetable)
+    public NetworkTrainsEditForm(IPluginInterface pluginInterface) : base(pluginInterface)
     {
         Eto.Serialization.Xaml.XamlReader.Load(this);
 

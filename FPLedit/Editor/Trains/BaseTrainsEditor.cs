@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿using System;
+using Eto.Forms;
 using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using System.Linq;
@@ -8,10 +9,12 @@ namespace FPLedit.Editor.Trains;
 internal abstract class BaseTrainsEditor : FDialog<DialogResult>
 {
     private readonly Timetable tt;
+    private readonly IPluginInterface pluginInterface;
 
-    public BaseTrainsEditor(Timetable tt)
+    protected BaseTrainsEditor(IPluginInterface pluginInterface)
     {
-        this.tt = tt;
+        this.pluginInterface = pluginInterface;
+        tt = pluginInterface.Timetable;
     }
 
     protected void UpdateListView(GridView view, TrainDirection direction)
@@ -50,19 +53,29 @@ internal abstract class BaseTrainsEditor : FDialog<DialogResult>
 
     protected void EditTrain(GridView view, TrainDirection dir, bool message = true)
     {
+        var msgCaption = T._("Zug bearbeiten");
+
         if (view.SelectedItem != null)
         {
             if (view.SelectedItem is Train tra)
             {
-                using var tef = new TrainEditForm(tra);
-                if (tef.ShowModal(this) != null)
-                    UpdateListView(view, dir);
+                try
+                {
+                    using var tef = new TrainEditForm(tra);
+                    if (tef.ShowModal(this) != null)
+                        UpdateListView(view, dir);
+                }
+                catch (Exception e)
+                {
+                    pluginInterface.Logger.LogException(e);
+                    MessageBox.Show(T._("Korrupter Zug konnte nicht geladen werden. Mehr Informationen im Log: {0}", e.Message), msgCaption);
+                }
             }
             else if (message)
-                MessageBox.Show(T._("Verlinke Züge können nicht bearbeitet werden."), T._("Zug bearbeiten"));
+                MessageBox.Show(T._("Verlinke Züge können nicht bearbeitet werden."), msgCaption);
         }
         else if (message)
-            MessageBox.Show(T._("Zuerst muss ein Zug ausgewählt werden!"), T._("Zug bearbeiten"));
+            MessageBox.Show(T._("Zuerst muss ein Zug ausgewählt werden!"), msgCaption);
     }
 
     protected void NewTrain(GridView view, TrainDirection direction)

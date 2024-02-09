@@ -23,7 +23,7 @@ internal sealed class LinearTrainsEditForm : BaseTrainsEditor
 
     private GridView? active;
 
-    public LinearTrainsEditForm(IPluginInterface pluginInterface) : base(pluginInterface.Timetable)
+    public LinearTrainsEditForm(IPluginInterface pluginInterface) : base(pluginInterface)
     {
         Eto.Serialization.Xaml.XamlReader.Load(this);
         this.pluginInterface = pluginInterface;
