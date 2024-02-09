@@ -54,6 +54,8 @@ function DirHeader(/* bool */ showText) {
     return "<td class=\"direction header\">Richtung</td>";
 }
 
+const trainPathDatas = new Map();
+
 // CELLS: Track column
 function TrackCell(/* Train[] */ trains, /* TrainDirection */ dir, /* int */ i, /* Station */ sta) {
     if (!showTracks)
@@ -71,7 +73,9 @@ function TrackCell(/* Train[] */ trains, /* TrainDirection */ dir, /* int */ i, 
     if ((track == null || track == "") && sta.Tracks.toArray().length < 2 && omitTracksWhenSingle) {
         track = "";
     } else if (track == null || track == "") {
-        track = trackHelper.GetTrack(train, sta, dir, ardp, TrackQuery.Departure);
+        if (!trainPathDatas.has(train))
+            trainPathDatas.set(train, new TrainPathData(train.ParentTimetable, train));
+        track = trackHelper.GetTrack(trainPathDatas.get(train), sta, dir, ardp, TrackQuery.Departure);
     }
 
     return "<td class=\"track\">" + track.safeHtml() + "</td>";
