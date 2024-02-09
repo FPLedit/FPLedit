@@ -216,7 +216,7 @@ public sealed class NetworkRenderer : Drawable
                     g.RestoreTransform();
                 }
 
-                if (lastP.HasValue && lastSta != null && (rec.Intersects(new Rectangle(OFFSET + lastP.Value, p)) || rec.Intersects(new Rectangle(p, OFFSET + lastP.Value))))
+                if (lastP.HasValue && lastSta != null && (doRender || rec.Contains(OFFSET + lastP.Value)))
                 {
                     var tPen = GetLinePen(r.Index, sta, lastSta);
                     g.DrawLine(tPen, p, OFFSET + lastP.Value);
