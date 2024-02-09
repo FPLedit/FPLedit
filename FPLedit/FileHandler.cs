@@ -370,10 +370,14 @@ internal sealed class FileHandler : IDisposable
                 var nrev = FileState.RevisionCounter;
                 var nfrev = FileState.FileNameRevisionCounter;
 
-                if (nrev == rev)
-                    FileState.Saved = true;
-                if (nfrev == frev)
-                    FileState.FileName = filename;
+                FileState.BatchMutate(f =>
+                {
+                    if (nrev == rev)
+                        f.Saved = true;
+                    if (nfrev == frev)
+                        f.FileName = filename;
+                });
+
                 if (nrev != rev || nfrev != frev)
                     pluginInterface.Logger.Warning(T._("Während dem Speichern wurde der Zustand verändert, daher ist Datei auf der Festplatte nicht mehr aktuell."));
             });
@@ -392,9 +396,12 @@ internal sealed class FileHandler : IDisposable
             return;
 
         Timetable = new Timetable(type);
-        FileState.Opened = true;
-        FileState.Saved = false;
-        FileState.FileName = null;
+        FileState.BatchMutate(f =>
+        {
+            f.Opened = true;
+            f.Saved = false;
+            f.FileName = null;
+        });
         undo.ClearHistory();
 
         pluginInterface.Logger.Info(T._("Neue Datei erstellt"));
@@ -404,9 +411,12 @@ internal sealed class FileHandler : IDisposable
     private void InternalCloseFile()
     {
         Timetable = null;
-        FileState.Opened = false;
-        FileState.Saved = false;
-        FileState.FileName = null;
+        FileState.BatchMutate(f =>
+        {
+            f.Opened = false;
+            f.Saved = false;
+            f.FileName = null;
+        });
 
         undo.ClearHistory();
     }
@@ -490,9 +500,12 @@ internal sealed class FileHandler : IDisposable
             // this file is in a supported version (or non-existant).
             Timetable = (Timetable?)tt;
 
-            FileState.Opened = tt != null;
-            FileState.Saved = tt != null;
-            FileState.FileName = tt != null ? filename : null;
+            FileState.BatchMutate(f =>
+            {
+                f.Opened = tt != null;
+                f.Saved = tt != null;
+                f.FileName = tt != null ? filename : null;
+            });
 
             AsyncBlockingOperation = false;
 

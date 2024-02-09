@@ -5,6 +5,8 @@ namespace FPLedit;
 
 internal sealed class FileState : IFileState
 {
+    private readonly object lockObject = new ();
+    private bool inhibitEvents = false;
     private bool opened, saved;
     private string? fileName;
 
@@ -23,9 +25,12 @@ internal sealed class FileState : IFileState
         get => fileName;
         set
         {
-            if (value != fileName)
-                FileNameRevisionCounter++;
-            TriggerEvent(fileName = value);
+            lock (lockObject)
+            {
+                if (value != fileName)
+                    FileNameRevisionCounter++;
+                TriggerEvent(fileName = value);
+            }
         }
     }
 
@@ -44,8 +49,23 @@ internal sealed class FileState : IFileState
 
     private void TriggerEvent(object? o)
     {
-        RevisionCounter++;
-        FileStateInternalChanged?.Invoke(this, new FileStateChangedEventArgs(this));
+        lock (lockObject)
+        {
+            if (inhibitEvents) return;
+            RevisionCounter++;
+            FileStateInternalChanged?.Invoke(this, new FileStateChangedEventArgs(this));
+        }
+    }
+
+    internal void BatchMutate(Action<FileState> action)
+    {
+        lock (lockObject)
+        {
+            inhibitEvents = true;
+            action(this);
+            inhibitEvents = false;
+            TriggerEvent(null);
+        }
     }
 
     internal event EventHandler<FileStateChangedEventArgs>? FileStateInternalChanged;
