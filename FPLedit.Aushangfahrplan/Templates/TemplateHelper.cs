@@ -44,6 +44,8 @@ public sealed class TemplateHelper
 
     #region Last stations
 
+    private Dictionary<int, PathData> routePathDatas = new();
+    
     public Station[] GetLastStations(TrainDirection dir, Station sta, IEnumerable<object> trainsInThisDirObj)
     {
         var trainsInThisDir = trainsInThisDirObj.Cast<ITrain>().ToArray(); // From JS.
@@ -73,11 +75,15 @@ public sealed class TemplateHelper
 
         foreach (var rt in visitedRoutes)
         {
-            var route = sta.ParentTimetable.GetRoute(rt).ToPathData(tt);
+            if (!routePathDatas.TryGetValue(rt, out var route))
+            {
+                route = sta.ParentTimetable.GetRoute(rt).ToPathData(tt);
+                routePathDatas[rt] = route;
+            }
             if (stasInTrains.Contains(route.NextStation(sta)))
-                stasAfter.Add(route.PathEntries.Last().Station);
+                stasAfter.Add(route.GetRawPath().Last());
             if (stasInTrains.Contains(route.PreviousStation(sta)))
-                stasAfter.Add(route.PathEntries.First().Station);
+                stasAfter.Add(route.GetRawPath().First());
         }
 
         return stasAfter

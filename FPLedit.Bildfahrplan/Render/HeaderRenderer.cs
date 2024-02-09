@@ -28,7 +28,7 @@ internal sealed class HeaderRenderer
 
         var posAlongPath = path.GetPositionsAlongPath();
         var raw = path.GetRawPath();
-        var allTrackCount = raw.Select(s => s.Tracks.Count).Sum();
+        var allTrackCount = raw.Sum(s => s.Tracks.Count);
         var stasWithTracks = raw.Count(s => s.Tracks.Any());
         var allTrackWidth = (stasWithTracks + allTrackCount) * StationRenderProps.IndividualTrackOffset;
         var verticalTrackOffset = GetTrackOffset(g, attrs.StationFont) + TOP_GAP;

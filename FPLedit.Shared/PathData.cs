@@ -64,20 +64,20 @@ public class PathData : ISortedStations
     /// Returns the next station after the given station, following this path, or null.
     /// </summary>
     public Station? NextStation(Station sta)
-        => Entries.SkipWhile(pe => pe.Station != sta).Skip(1).FirstOrDefault()?.Station;
+        => RawPath.SkipWhile(s => s != sta).Skip(1).FirstOrDefault();
 
     /// <summary>
     /// Returns the previous station before the given station, following this path, or null.
     /// </summary>
     public Station? PreviousStation(Station sta)
-        => Entries.TakeWhile(pe => pe.Station != sta).LastOrDefault()?.Station;
+        => RawPath.TakeWhile(s => s != sta).LastOrDefault();
 
     /// <summary>
     /// Get the route this path exits the given station on.
     /// </summary>
     public int GetExitRoute(Station sta)
     {
-        if (sta == Entries.LastOrDefault()?.Station)
+        if (sta == RawPath.LastOrDefault())
             return Timetable.UNASSIGNED_ROUTE_ID;
         var next = NextStation(sta);
         if (next == null)
@@ -90,9 +90,16 @@ public class PathData : ISortedStations
     /// </summary>
     public int GetEntryRoute(Station sta)
     {
-        if (sta == Entries.FirstOrDefault()?.Station)
+        if (sta == RawPath.FirstOrDefault())
             return Timetable.UNASSIGNED_ROUTE_ID;
         var previous = PreviousStation(sta);
+        if (previous == null)
+            return Timetable.UNASSIGNED_ROUTE_ID;
+        return tt.GetDirectlyConnectingRoute(sta, previous);
+    }
+
+    private int GetEntryRoute2(Station sta, Station? previous)
+    {
         if (previous == null)
             return Timetable.UNASSIGNED_ROUTE_ID;
         return tt.GetDirectlyConnectingRoute(sta, previous);
@@ -148,12 +155,12 @@ public class PathData : ISortedStations
     /// <summary>
     /// Returns only the raw stations used in this path, without any additional information.
     /// </summary>
-    public Station[] GetRawPath() => (Station[])RawPath.Clone();
+    public Station[] GetRawPath() => RawPath;
 
     /// <summary>
     /// Checks whether the current path is valid in the sense, that it does not contain any station multiple times.
     /// </summary>
-    public bool IsValidUncollapsed() => Entries.DistinctBy(e => e.Station).Count() == Entries.Length;
+    public bool IsValidUncollapsed() => RawPath.Distinct().Count() == RawPath.Length;
 
     /// <summary>
     /// Get a monotonically increasing position of all station along this path.
@@ -163,16 +170,16 @@ public class PathData : ISortedStations
         var pos = new Dictionary<Station, float>();
         var p = 0.0f;
         Station? last = null;
-        foreach (var pe in Entries)
+        foreach (var pe in RawPath)
         {
             if (last != null)
             {
-                var route = GetEntryRoute(pe.Station);
-                p += Math.Abs(pe.Station.Positions.GetPosition(route)!.Value - last.Positions.GetPosition(route)!.Value);
+                var route = GetEntryRoute2(pe, last);
+                p += Math.Abs(pe.Positions.GetPosition(route)!.Value - last.Positions.GetPosition(route)!.Value);
             }
 
-            pos.Add(pe.Station, p);
-            last = pe.Station;
+            pos.Add(pe, p);
+            last = pe;
         }
 
         return pos;
@@ -211,29 +218,10 @@ public class TrainPathData : PathData
 /// Entry of a default <see cref="PathData"/> structure. Represents one station on a specific route.
 /// </summary>
 [Templating.TemplateSafe]
-public class PathEntry
-{
-    public PathEntry(Station station, int routeIndex)
-    {
-        Station = station;
-        RouteIndex = routeIndex;
-    }
-
-    public Station Station { get; }
-
-    public int RouteIndex { get; }
-}
+public record PathEntry(Station Station, int RouteIndex);
 
 /// <summary>
 /// Entry of a <see cref="TrainPathData"/>. Represents one station on a specific route with attached time entry data.
 /// </summary>
 [Templating.TemplateSafe]
-public class TrainPathEntry : PathEntry
-{
-    public TrainPathEntry(Station station, ArrDep? arrDep, int routeIndex) : base(station, routeIndex)
-    {
-        ArrDep = arrDep;
-    }
-
-    public ArrDep? ArrDep { get; }
-}
+public record TrainPathEntry(Station Station, ArrDep? ArrDep, int RouteIndex) : PathEntry(Station, RouteIndex);

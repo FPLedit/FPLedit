@@ -65,7 +65,7 @@ public sealed class Route : ISortedStations
             : stations[ 0].SName + " - " + stations[^1].SName; // this will always work, as stations.Length >= 1
     }
 
-    public PathData ToPathData(Timetable tt) => new PathData(this, tt);
+    public PathData ToPathData(Timetable tt) => new (this, tt);
 
     /// <summary>
     /// Returns +/-<paramref name="radius"/> stations around the given <paramref name="center"/> station, following
