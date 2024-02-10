@@ -370,10 +370,10 @@ public sealed class Timetable : Entity, ITimetable
                 transition.StationId = Transition.LAST_STATION; // Reset to default.
         }
 
+        stationCache.Remove(sta.Id);
         sta.ParentTimetable = null;
         stations.Remove(sta);
         sElm.Children.Remove(sta.XMLEntity);
-        stationCache.Remove(sta.Id);
 
         // Rebuild route cache (before removing orphaned routes)
         foreach (var route in routes)
