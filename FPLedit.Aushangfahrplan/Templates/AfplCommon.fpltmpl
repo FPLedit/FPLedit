@@ -1,4 +1,12 @@
 ﻿<#
+
+// Cache train paths for performance.
+const trains_cache = new Map();
+function get_train_cached(t) {
+    if (!trains_cache.has(t)) trains_cache.set(t, t.GetArrDepsUnsorted());
+    return trains_cache.get(t);
+}
+
 // CELLS: Time column
 function GetDays(/* Train */ t) {
     return t.Days.DaysToString(true).safeHtml();
@@ -12,7 +20,7 @@ function TimeCell(/* Train[] */ trains, /* Station */ sta, /* int */ i) {
     const train = trains.length > i ? trains[i] : null;
     if (train == null)
         return "<td class=\"time\"></td>";
-    return "<td class=\"time\">" + GetTimeString(train.GetArrDep(sta).Departure) + " " + GetDays(train) + "</td>";
+    return "<td class=\"time\">" + GetTimeString(get_train_cached(train).GetValueOrDefault(sta).Departure) + " " + GetDays(train) + "</td>";
 }
 
 function TimeHeader(/* bool */ showText) {
@@ -43,7 +51,7 @@ function DirCell( /* Train[] */ trains, /* int */ i) {
     if (train == null)
         return "<td class=\"direction\"></td>";
  
-    return "<td class=\"direction\">" + train.GetArrDepsUnsorted().last((kvp) => kvp.value.HasMinOneTimeSet).key.SName.safeHtml() + "</td>";
+    return "<td class=\"direction\">" + get_train_cached(train).last((kvp) => kvp.value.HasMinOneTimeSet).key.SName.safeHtml() + "</td>";
 }
 
 function DirHeader(/* bool */ showText) {
@@ -65,7 +73,7 @@ function TrackCell(/* Train[] */ trains, /* TrainDirection */ dir, /* int */ i, 
         return "<td class=\"track\"></td>";
 
     // Gleis-Angabe bekommen
-    const ardp = train.GetArrDep(sta);
+    const ardp = get_train_cached(train).GetValueOrDefault(sta);
     let track = ardp.DepartureTrack;
     if ((track == null || track == "") && ardp.ArrivalTrack != null)
         track = ardp.ArrivalTrack;

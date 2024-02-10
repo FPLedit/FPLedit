@@ -160,6 +160,7 @@ if (attrs != null)
 			<#
 			let first = true; // No pagebreak before first train
 			const trains = helper.GetTrains();
+            const trains_cache = new Map();
 			for (let ti = 0; ti < trains.length; ti++) { 
 			    const tra = trains[ti]; #>
 			<table id="<#= tra.TName.htmlName("train-") #>" class="<#= (first ? "first" : "").safeHtml() #>">
@@ -238,14 +239,15 @@ if (attrs != null)
 
 					<#
 					if (entity instanceof Station) {
-						const ardp = tra.GetArrDep(entity);
+                        if (!trains_cache.has(tra)) trains_cache.set(tra, tra.GetArrDepsUnsorted());
+						const ardp = trains_cache.get(tra).GetValueOrDefault(entity);
 						const ar = ardp.Arrival.ToShortTimeString();
 						const dp = ardp.Departure.ToShortTimeString();
 						const zlm = ardp.Zuglaufmeldung;
                         const rq = ardp.RequestStop || entity.RequestStop;
 					#>
 					<td class="zug klein"><#= helper.TrapezHalt(tra, entity) #></td>
-					<td class="zug"><#= (rq ? "x" : "").safeHtml() #><#= (ar != "00:00" && ar != dp) ? ar : "").safeHtml() #></td>
+					<td class="zug"><#= (rq ? "x" : "").safeHtml() #><#= ((ar != "00:00" && ar != dp) ? ar : "").safeHtml() #></td>
 					<td class="zug"><#= (dp != "00:00" ? dp : "").safeHtml() #></td>
 					<td class="zug klein"><#= helper.Kreuzt(tra, entity) #></td>
 					<td class="zug klein"><#= helper.Ueberholt(tra, entity) #></td>

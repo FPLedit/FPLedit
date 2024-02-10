@@ -164,6 +164,7 @@ if (attrs != null)
 			<#
 			let first = true; // No pagebreak before first train
 			const trains = helper.GetTrains();
+            const trains_cache = new Map();
 			for (let ti = 0; ti < trains.length; ti++) { 
 			    const tra = trains[ti]; #>
 			<table id="<#= tra.TName.htmlName("train-") #>" class="<#= (first ? "first" : "").safeHtml() #>">
@@ -230,7 +231,8 @@ if (attrs != null)
 
 					<#
 					if (entity instanceof Station) {
-						const ardp = tra.GetArrDep(entity);
+                        if (!trains_cache.has(tra)) trains_cache.set(tra, tra.GetArrDepsUnsorted());
+						const ardp = trains_cache.get(tra).GetValueOrDefault(entity);
 						const ar = ardp.Arrival.ToShortTimeString();
 						const dp = ardp.Departure.ToShortTimeString();
                         const rq = ardp.RequestStop || entity.RequestStop;
