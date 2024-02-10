@@ -1,6 +1,7 @@
 ﻿using Eto.Drawing;
 using Eto.Forms;
 using System;
+using System.Threading.Tasks;
 using FPLedit.Shared;
 using FPLedit.Shared.Rendering;
 
@@ -36,21 +37,22 @@ internal class AsyncDoubleBufferedGraph : IDisposable
         if (!hadCrash && buffer == null && !generatingBuffer)
         {
             generatingBuffer = true;
-            Application.Instance.InvokeAsync(() =>
+            var width = panel.Width;
+            Task.Run(() =>
             {
                 Bitmap? newBuffer = null;
                 try
                 {
-                    newBuffer = new Bitmap(panel.Width, renderer.GetHeightExternal(drawHeader), PixelFormat.Format32bppRgba);
-                    using (var g2 = MGraphics.CreateImage(panel.Width, renderer.GetHeightExternal(drawHeader)))
+                    var height = renderer.GetHeightExternal(drawHeader);
+                    using var g2 = MGraphics.CreateImage(width, height);
+                    g2.SetTextAntiAlias(true);
+                    g2.Mutate(g3 => renderer.Draw(g3, drawHeader, forceWidth: panel.Width));
+
+                    newBuffer = new Bitmap(width, height, PixelFormat.Format32bppRgba);
                     using (var etoGraphics = new Graphics(newBuffer))
-                    {
-                        g2.SetTextAntiAlias(true);
-                        renderer.Draw(g2, drawHeader, forceWidth: panel.Width);
-                        lastBufferWidth = panel.Width;
-                        using (var eto = g2.LockEtoBitmap())
-                            etoGraphics.DrawImage(eto, 0, 0);
-                    }
+                    using (var eto = g2.LockEtoBitmap())
+                        etoGraphics.DrawImage(eto, 0, 0);
+                    lastBufferWidth = width;
 
                     lock (bufferLock)
                     {
@@ -69,10 +71,12 @@ internal class AsyncDoubleBufferedGraph : IDisposable
                     {
                         if (buffer != null && !buffer.IsDisposed)
                             buffer.Dispose();
+                        buffer = null;
                     }
 
                     if (newBuffer != null && !newBuffer.IsDisposed)
                         newBuffer.Dispose();
+                    newBuffer = null;
 
                     generatingBuffer = false;
                     hadCrash = true;
@@ -84,7 +88,6 @@ internal class AsyncDoubleBufferedGraph : IDisposable
                 {
                     panel.Invalidate();
                     RenderingFinished?.Invoke();
-                    GC.Collect();
                 });
             });
         }

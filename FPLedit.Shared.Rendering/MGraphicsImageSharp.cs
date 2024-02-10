@@ -15,6 +15,7 @@ namespace FPLedit.Shared.Rendering;
 public sealed class MGraphicsImageSharp : IMGraphics
 {
     private readonly Image<Rgba32> image;
+    private IImageProcessingContext? ctx;
     private readonly Dictionary<int, Pen> penCache = new();
 
     // Internal state
@@ -36,6 +37,16 @@ public sealed class MGraphicsImageSharp : IMGraphics
         };
     }
 
+    public void Mutate(Action<IMGraphics> action)
+    {
+        image.Mutate(c =>
+        {
+            ctx = c;
+            action(this);
+            ctx = null;
+        });
+    }
+
     public (float Width, float Height) MeasureString(MFont font, string text)
     {
         var x = TextMeasurer.MeasureSize(text, new TextOptions((Font) font));
@@ -50,15 +61,15 @@ public sealed class MGraphicsImageSharp : IMGraphics
             sdPen = new PatternPen((Color)pen.c, pen.w, pen.ds);
             penCache[penCacheKey] = sdPen;
         }
-        image.Mutate(ctx => ctx.DrawLine(GetDrawingOptions(false), sdPen, new []{ new PointF(x1, y1), new PointF(x2, y2)}));
+        ctx!.DrawLine(GetDrawingOptions(false), sdPen, new []{ new PointF(x1, y1), new PointF(x2, y2)});
     }
 
     public void DrawText(MFont font, MColor solidColor, float x, float y, string text)
     {
-        image.Mutate(ctx => ctx.DrawText(GetDrawingOptions(true), text, (Font) font, (Color) solidColor, new PointF(x, y)));
+        ctx!.DrawText(GetDrawingOptions(true), text, (Font) font, (Color) solidColor, new PointF(x, y));
     }
 
-    public void Clear(MColor color) => image.Mutate(ctx => ctx.Clear((Color) color));
+    public void Clear(MColor color) => ctx!.Clear((Color) color);
 
     public object StoreTransform() => matrix;
 

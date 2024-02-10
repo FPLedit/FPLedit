@@ -18,6 +18,8 @@ public sealed class MGraphicsPdfSharp : IMGraphics
         this.g = g;
     }
 
+    public void Mutate(Action<IMGraphics> action) => action(this);
+
     public (float Width, float Height) MeasureString(MFont font, string text)
     {
         var x = g.MeasureString(text, (XFont) font);

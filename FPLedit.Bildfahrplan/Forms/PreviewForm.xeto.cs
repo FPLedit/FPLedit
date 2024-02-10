@@ -92,12 +92,10 @@ internal sealed class PreviewForm : FForm
 
             if (splitCheckBox.Checked!.Value)
             {
-                using (var ib = MGraphics.CreateImage(hpanel.Width, hpanel.Height))
-                {
-                    renderer.DrawHeader(ib, (scrollable.ClientSize.Width + panel.Width) / 2, exportColor: false);
-                    using (var eto = ib.LockEtoBitmap())
-                        e.Graphics.DrawImage(eto, 0, 0);
-                }
+                using var ib = MGraphics.CreateImage(hpanel.Width, hpanel.Height);
+                ib.Mutate(ib2 => renderer.DrawHeader(ib2, (scrollable.ClientSize.Width + panel.Width) / 2, exportColor: false));
+                using (var eto = ib.LockEtoBitmap())
+                    e.Graphics.DrawImage(eto, 0, 0);
             }
         }
         catch

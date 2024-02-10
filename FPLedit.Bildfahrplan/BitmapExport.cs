@@ -22,9 +22,9 @@ internal sealed class BitmapExport : IExport
         var pd = VirtualRoute.GetPathDataMaybeVirtual(tt, route);
         var renderer = new Renderer(tt, pd);
 
-        using var g2 = MGraphics.CreateImage(width, renderer.GetHeightExternal(true));
-        renderer.Draw(g2, true, width);
-        g2.SaveImagePng(stream);
+        using var g = MGraphics.CreateImage(width, renderer.GetHeightExternal(true));
+        g.Mutate(g2 => renderer.Draw(g2, true, width));
+        g.SaveImagePng(stream);
         return true;
     }
 
