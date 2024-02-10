@@ -33,6 +33,14 @@ public class BugFixInitAction : ITimetableInitAction
                 t.Id = tt.AssignNextTrainId();
         }
 
+        // Bug in FPLedit 2.2.0 bis 2.6.2 erzeugte beim Verschieben von Stationen korrupte Zugläufe.
+        var moveCorruptedTrains = tt.Trains.OfType<IWritableTrain>().Where(t => !new TrainPathData(tt, t).IsValidPathIntegrity()).Select(t => t.TName).ToArray();
+        if (moveCorruptedTrains.Length > 0)
+        {
+            upgradeMessages.Add(T._("Aufgrund eines Fehlers in früheren Versionen von FPLedit sind eine Züge beschädigt. Die betroffenen Züge sind: {0}",
+                string.Join(", ", moveCorruptedTrains)));
+        }
+
         return upgradeMessages.Any() ? string.Join(Environment.NewLine, upgradeMessages) : null;
     }
 }

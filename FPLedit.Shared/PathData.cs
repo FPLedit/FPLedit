@@ -185,6 +185,22 @@ public class PathData : ISortedStations
         return pos;
     }
 
+    public bool IsValidPathIntegrity()
+    {
+        Station? last = null;
+        foreach (var pe in RawPath)
+        {
+            if (last != null)
+            {
+                var route = GetEntryRoute2(pe, last);
+                if (route == -1) return false;
+            }
+            last = pe;
+        }
+
+        return true;
+    }
+
     /// <summary>
     /// Get an empty <see cref="PathData"/>-Instance.
     /// </summary>
