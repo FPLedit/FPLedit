@@ -10,7 +10,10 @@ namespace FPLedit.Kursbuch.Templates;
 
 public sealed class TemplateHelper
 {
+    private record TrainCache(Station[] Path, Dictionary<Station, ArrDep> ArrDeps);
+
     private readonly Timetable tt;
+    private readonly Dictionary<ITrain, TrainCache> trainPathCache = new();
 
     private readonly FilterRule[] trules, srules;
 
@@ -23,8 +26,6 @@ public sealed class TemplateHelper
         trules = filterable.LoadTrainRules(tt).ToArray();
         srules = filterable.LoadStationRules(tt).ToArray();
     }
-
-    public static string SafeHtml(string s) => Shared.Templating.TemplateOutput.SafeHtml(s);
 
     public Station[] GetStations(Route route, TrainDirection dir)
     {
@@ -62,23 +63,29 @@ public sealed class TemplateHelper
             }
             else
             {
-                var path = t.GetPath();
-                var sortedStopsOnRoute = routeStations
-                    .Intersect(path)
-                    .Where(s => t.GetArrDep(s).HasMinOneTimeSet)
-                    .OrderBy(s => t.GetArrDep(s).FirstSetTime)
-                    .ToArray();
+                if (!trainPathCache.TryGetValue(t, out var path))
+                {
+                    var a = t.GetArrDepsUnsorted();
+                    var p = a
+                        .Where(s => s.Value.HasMinOneTimeSet)
+                        .OrderBy(s => s.Value.FirstSetTime)
+                        .Select(s => s.Key)
+                        .ToArray();
+                    path = new TrainCache(p, a);
+                    trainPathCache[t] = path;
+                }
+                var sortedStopsOnRoute = routeStations.Intersect(path.Path).ToArray();
 
-                if (!sortedStopsOnRoute.Any()) // The train does not stop on this route, ignore.
+                if (sortedStopsOnRoute.Length == 0) // The train does not stop on this route, ignore.
                     continue;
 
-                if (Array.IndexOf(routeStations, sortedStopsOnRoute.First()) >= Array.IndexOf(routeStations, sortedStopsOnRoute.Last())) // exclude other direction of this train.
+                if (Array.IndexOf(routeStations, sortedStopsOnRoute[0]) >= Array.IndexOf(routeStations, sortedStopsOnRoute[^1])) // exclude other direction of this train.
                     continue;
 
                 var times = new TimeEntry?[routeStations.Length];
                 for (var i = 0; i < routeStations.Length; i++)
                 {
-                    var a = sortedStopsOnRoute.Contains(routeStations[i]) ? t.GetArrDep(routeStations[i]) : null;
+                    var a = sortedStopsOnRoute.Contains(routeStations[i]) ? path.ArrDeps[routeStations[i]] : null;
                     times[i] = (a?.HasMinOneTimeSet ?? false) ? a.FirstSetTime : null;
                 }
 
@@ -107,6 +114,6 @@ public sealed class TemplateHelper
     public string GetRouteName(Route r, TrainDirection dir)
     {
         var stas = GetStations(r, dir);
-        return SafeHtml(stas.FirstOrDefault()?.SName + " - " + stas.LastOrDefault()?.SName);
+        return Shared.Templating.TemplateOutput.SafeHtml(stas.FirstOrDefault()?.SName + " - " + stas.LastOrDefault()?.SName);
     }
 }

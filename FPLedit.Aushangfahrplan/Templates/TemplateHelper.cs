@@ -15,6 +15,9 @@ public sealed class TemplateHelper
     private readonly NetworkHelper nh;
     private readonly FilterRule[] trules, srules;
 
+    private readonly Dictionary<ITrain, Dictionary<Station, ArrDep>> trainCache;
+    private readonly Dictionary<int, PathData> routePathDatas = new();
+
     public TemplateHelper(Timetable tt)
     {
         this.tt = tt;
@@ -24,6 +27,8 @@ public sealed class TemplateHelper
 
         trules = filterable.LoadTrainRules(tt).ToArray();
         srules = filterable.LoadStationRules(tt).ToArray();
+
+        trainCache = tt.Trains.ToDictionary(t => t, t => t.GetArrDepsUnsorted());
     }
 
     public Station[] GetStations()
@@ -36,16 +41,14 @@ public sealed class TemplateHelper
 
     private IEnumerable<ITrain> GetTrains(Station sta)
     {
-        return tt.Trains.Where(t => t.GetPath().Contains(sta)
-                                    && t.GetArrDep(sta).Departure != default
+        return tt.Trains.Where(t => trainCache[t].TryGetValue(sta, out var arrDep)
+                                    && arrDep.Departure != default
                                     && trules.All(r => !r.Matches(t)))
-            .OrderBy(t => t.GetArrDep(sta).Departure);
+            .OrderBy(t => trainCache[t][sta].Departure);
     }
 
     #region Last stations
 
-    private Dictionary<int, PathData> routePathDatas = new();
-    
     public Station[] GetLastStations(TrainDirection dir, Station sta, IEnumerable<object> trainsInThisDirObj)
     {
         var trainsInThisDir = trainsInThisDirObj.Cast<ITrain>().ToArray(); // From JS.

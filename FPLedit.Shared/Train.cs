@@ -124,7 +124,7 @@ public sealed class Train : Entity, IWritableTrain
     }
 
     /// <inheritdoc />
-    public bool TryGetArrDep(Station sta,  [NotNullWhen(returnValue: true)] out ArrDep? arrDep)
+    public bool TryGetArrDep(Station sta, [NotNullWhen(returnValue: true)] out ArrDep? arrDep)
     {
         var tElems = InternalGetArrDeps();
         if (ParentTimetable.Type == TimetableType.Linear)
