@@ -144,7 +144,8 @@ internal sealed class MainForm : FForm, IPlugin
         foreach (var msg in Bootstrapper.PreBootstrapWarnings)
             Bootstrapper.Logger.Warning(msg);
 
-        checkRunner = new TimetableChecks.TimetableCheckRunner(Bootstrapper); // CheckRunner initialisieren
+        if (!Bootstrapper.FullSettings.Get<bool>("core.disable-timetable-checks"))
+            checkRunner = new TimetableChecks.TimetableCheckRunner(Bootstrapper); // CheckRunner initialisieren
 
         LoadStartFile();
         Bootstrapper.Update.AutoUpdateCheck(Bootstrapper.Logger);

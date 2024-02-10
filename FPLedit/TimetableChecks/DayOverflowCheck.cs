@@ -9,9 +9,9 @@ internal sealed class DayOverflowCheck : ITimetableCheck
 {
     public string Display => T._("Zugverkehr über Mitternacht");
 
-    public IEnumerable<string> Check(Timetable tt)
+    public IEnumerable<TimetableCheckResult> Check(Timetable tt)
     {
-        var result = new ConcurrentBag<string>();
+        var result = new ConcurrentBag<TimetableCheckResult>();
         Parallel.ForEach(tt.Trains, train =>
         {
             var arrdeps = new TrainPathData(train.ParentTimetable, train);
@@ -23,7 +23,7 @@ internal sealed class DayOverflowCheck : ITimetableCheck
 
                 if (arrdep.ArrDep.HasMinOneTimeSet && arrdep.ArrDep.FirstSetTime < last)
                 {
-                    result.Add(T._("Der Zug {0} verkehrt über Mitternacht hinweg!", train.TName));
+                    result.Add(new TimetableCheckResult(T._("Der Zug {0} verkehrt über Mitternacht hinweg!", train.TName)));
                     return;
                 }
 

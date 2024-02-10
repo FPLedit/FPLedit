@@ -10,9 +10,9 @@ internal sealed class TransitionsCheck : ITimetableCheck
 {
     public string Display => T._("Ungültige Folgezüge");
 
-    public IEnumerable<string> Check(Timetable tt)
+    public IEnumerable<TimetableCheckResult> Check(Timetable tt)
     {
-        var result = new ConcurrentBag<string>();
+        var result = new ConcurrentBag<TimetableCheckResult>();
         Parallel.ForEach(tt.Transitions, tra =>
         {
             var first = tt.GetTrainByQualifiedId(tra.First);
@@ -21,28 +21,24 @@ internal sealed class TransitionsCheck : ITimetableCheck
             if (first == null || next == null)
                 return;
 
-            var lastStaOfFirst = GetSortedStations(first)?.LastOrDefault();
-            var firstStaOfNext = GetSortedStations(next)?.FirstOrDefault();
+            var lastStaOfFirst = GetSortedStations(first).LastOrDefault();
+            var firstStaOfNext = GetSortedStations(next).FirstOrDefault();
 
             if (lastStaOfFirst == null || firstStaOfNext == null)
                 return;
 
             if (lastStaOfFirst != firstStaOfNext)
-                result.Add(T._("Der Folgezug {0} beginnt an einer anderen Station, als die, an der vorherige Zug {1} endet.", next.TName, first.TName));
+                result.Add(new TimetableCheckResult(T._("Der Folgezug {0} beginnt an einer anderen Station, als die, an der vorherige Zug {1} endet.", next.TName, first.TName)));
             if (first.GetArrDep(lastStaOfFirst).FirstSetTime > next.GetArrDep(firstStaOfNext).FirstSetTime)
-                result.Add(T._("Der Abfahrtszeit des Folgezuges {0} ist früher als die Ankunftszeit des vorherigen Zuges {1}.", next.TName, first.TName));
+                result.Add(new TimetableCheckResult(T._("Der Abfahrtszeit des Folgezuges {0} ist früher als die Ankunftszeit des vorherigen Zuges {1}.", next.TName, first.TName)));
         });
         return result;
     }
 
-    private IEnumerable<Station>? GetSortedStations(ITrain train)
+    private IEnumerable<Station> GetSortedStations(ITrain train)
     {
         var path = train.GetPath();
         var arrdeps = train.GetArrDepsUnsorted();
-        foreach (var sta in path)
-        {
-            if (arrdeps[sta].HasMinOneTimeSet)
-                yield return sta;
-        }
+        return path.Where(sta => arrdeps[sta].HasMinOneTimeSet);
     }
 }

@@ -27,8 +27,6 @@ internal sealed class TimetableCheckRunner
             if (pluginInterface.TimetableMaybeNull == null!)
                 return;
 
-            var clone = pluginInterface.Timetable.Clone();
-
             if (lastTask != null && cancelTokenSource != null && !lastTask.IsCompleted && !cancelTokenSource.IsCancellationRequested)
                 cancelTokenSource.Cancel();
 
@@ -38,22 +36,31 @@ internal sealed class TimetableCheckRunner
             {
                 var token = (CancellationToken)tk!;
 
-                var list = new List<string>();
+                // First clone the timetable. Doing this off UI-thread is dangerous, but otherwise we will stall the UI
+                // rendering a lot for big files.
+                if (pluginInterface.TimetableMaybeNull == null!)
+                    return;
+                var clone = pluginInterface.Timetable.Clone();
+                if (token.IsCancellationRequested) return;
 
+                // Execute all checks.
+                var list = new List<TimetableCheckResult>();
                 foreach (var check in checks)
                 {
-                    token.ThrowIfCancellationRequested();
+                    if (token.IsCancellationRequested) return;
                     list.AddRange(check.Check(clone));
                 }
 
-                token.ThrowIfCancellationRequested();
+                if (!list.Any() || token.IsCancellationRequested)
+                    return;
 
                 Application.Instance.Invoke(() =>
                 {
                     lock (uiLock)
                     {
-                        if (list.Any() && form == null)
+                        if (form == null)
                             GetForm().Show();
+                        if (token.IsCancellationRequested) return;
                         if (gridView != null && gridView.Visible)
                             gridView.DataStore = list.ToArray();
                     }
@@ -73,7 +80,7 @@ internal sealed class TimetableCheckRunner
             Spacing = new Eto.Drawing.Size(5, 5),
         };
         gridView = new GridView();
-        gridView.AddFuncColumn<string>(s => s, T._("Meldung"));
+        gridView.AddFuncColumn<TimetableCheckResult>(s => s.Display, T._("Meldung"));
         // This allows the selection of the last row on Wpf, see Eto#2443.
         if (gridView.Platform.IsGtk) gridView.AllowEmptySelection = false;
         stack.Add(gridView, 0, 0);

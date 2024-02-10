@@ -8,7 +8,7 @@ internal sealed class StationCodeCheck : ITimetableCheck
 {
     public string Display => T._("Ungültige Stationsabkürzungen");
 
-    public IEnumerable<string> Check(Timetable tt)
+    public IEnumerable<TimetableCheckResult> Check(Timetable tt)
     {
         var codes = tt.Stations
             .Select(s => s.StationCode)
@@ -17,6 +17,6 @@ internal sealed class StationCodeCheck : ITimetableCheck
             .Where(c => c.Count() > 1)
             .Select(g => g.Key);
         if (codes.Any())
-            yield return T._("Betriebsstellen-Abkürzungen {0} sind mehr als ein mal vorhanden!", string.Join(", ", codes));
+            yield return new TimetableCheckResult(T._("Betriebsstellen-Abkürzungen {0} sind mehr als ein mal vorhanden!", string.Join(", ", codes)));
     }
 }

@@ -37,7 +37,7 @@ public class BugFixInitAction : ITimetableInitAction
         var moveCorruptedTrains = tt.Trains.OfType<IWritableTrain>().Where(t => !new TrainPathData(tt, t).IsValidPathIntegrity()).Select(t => t.TName).ToArray();
         if (moveCorruptedTrains.Length > 0)
         {
-            upgradeMessages.Add(T._("Aufgrund eines Fehlers in früheren Versionen von FPLedit sind eine Züge beschädigt. Die betroffenen Züge sind: {0}",
+            upgradeMessages.Add(T._("Aufgrund eines Fehlers in früheren Versionen von FPLedit sind einige Züge beschädigt. Die betroffenen Züge sind: {0}",
                 string.Join(", ", moveCorruptedTrains)));
         }
 

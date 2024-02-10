@@ -17,5 +17,10 @@ public interface ITimetableCheck : IRegistrableComponent
     /// </summary>
     /// <param name="tt">Read-only copy of the current timetable.</param>
     /// <remarks>This method must be thread-safe and MUST NOT call into UI directly, as it might be called on a non-UI thread.</remarks>
-    IEnumerable<string> Check(Timetable tt);
+    IEnumerable<TimetableCheckResult> Check(Timetable tt);
 }
+
+/// <summary>
+/// Result of a <see cref="ITimetableCheck"/> operation.
+/// </summary>
+public record TimetableCheckResult(string Display);
