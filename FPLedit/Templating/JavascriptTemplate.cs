@@ -221,7 +221,7 @@ internal sealed class JavascriptTemplate : ITemplate
         {
             opt.DisableStringCompilation();
 
-            opt.AddExtensionMethods(typeof(Enumerable)); // Allow LINQ extension methods.
+            opt.AddExtensionMethods(typeof(Enumerable), typeof(CollectionExtensions)); // Allow LINQ extension methods.
             opt.AddExtensionMethods(allowedExtensionsTypes.ToArray());
         });
         foreach (var type in allowedTypes) // Register all allowed types.

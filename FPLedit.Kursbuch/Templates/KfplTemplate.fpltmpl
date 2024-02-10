@@ -187,7 +187,15 @@ if (attrs != null)
             <# for (let ti = 0; ti < trains.length; ti++) {
                 const t = trains[ti];
                 const path = t.GetPath();
-                train_data[ti] = { hadFirst: false, hadLastOnLine: false, lastOnLine: stations.last(s => path.Contains(s)) };
+                train_data[ti] = {
+                    // cached data.
+                    path: path,
+                    arrdeps: t.GetArrDepsUnsorted(),
+                    // template state.
+                    hadFirst: false,
+                    hadLastOnLine: false,
+                    lastOnLine: stations.last(s => path.Contains(s))
+                };
                 const lastt = trains.last() == t ? " last-t" : "";
             #>
                 <td class="tn<#= lastt.safeHtml() #>"><span><#= Sign(t) #><#= t.TName.safeHtml().replace(" ", "&nbsp;") #></span></td>
@@ -214,14 +222,16 @@ if (attrs != null)
  
     			<# for (let ti2 = 0; ti2 < trains.length; ti2++) {
     			    const t = trains[ti2];
+                    const td = train_data[ti2];
 
                     let times = "";
                     let time_class = row_class + (trains.last() == t ? " last-t" : "");
 
-                    if (t.GetPath().Contains(sta))
+                    if (td.path.Contains(sta))
                     {
                         train_data[ti2].hadStarted = true;
-                        const ardp = t.GetArrDep(sta);
+
+                        const ardp = td.arrdeps.GetValueOrDefault(sta);
                         let time = ardp.Departure;
                         if (time == new TimeEntry()) time = ardp.Arrival;
                         if (time == new TimeEntry()) times = "|";
