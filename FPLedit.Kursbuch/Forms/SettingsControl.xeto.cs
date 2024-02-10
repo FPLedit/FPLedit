@@ -45,7 +45,6 @@ internal sealed class SettingsControl : Panel, IAppearanceHandler
         cssTextBox.Text = attrs.Css;
 
         setRouteNumbers = new Dictionary<int, string>();
-#pragma warning disable CA2000
         kbsnListView.AddColumn(new TextBoxCell
             {
                 Binding = Binding.Delegate<Route, string>(r =>
@@ -56,9 +55,7 @@ internal sealed class SettingsControl : Panel, IAppearanceHandler
                     (r, n) => setRouteNumbers[r.Index] = n)
             }, "Name", editable: true
         );
-#pragma warning restore CA2000
         kbsnListView.AddFuncColumn<Route>(r => r.GetRouteName(), T._("Strecke"));
-        kbsnListView.DataStore = tt.GetRoutes();
 
         // This allows the selection of the last row on Wpf, see Eto#2443.
         if (Platform.IsGtk) kbsnListView.AllowEmptySelection = false;
@@ -70,6 +67,7 @@ internal sealed class SettingsControl : Panel, IAppearanceHandler
 
         Shown += (_, _) =>
         {
+            kbsnListView.DataStore = tt.GetRoutes(); // Lazy-load route info.
             if (!Eto.Platform.Instance.IsWpf)
                 kbsnLabel.WordWrap(200);
         };

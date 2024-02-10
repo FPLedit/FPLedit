@@ -55,7 +55,7 @@ public sealed class TemplateHelper
                 for (var i = 0; i < routeStations.Length; i++)
                 {
                     var a = t.GetArrDep(routeStations[i]);
-                    times[i] = a.HasMinOneTimeSet ? a.FirstSetTime : null;
+                    times[i] = a.HasMinOneTimeSet ? a.LastSetTime : null;
                 }
 
                 if (times.All(te => te == null)) continue;
@@ -68,13 +68,13 @@ public sealed class TemplateHelper
                     var a = t.GetArrDepsUnsorted();
                     var p = a
                         .Where(s => s.Value.HasMinOneTimeSet)
-                        .OrderBy(s => s.Value.FirstSetTime)
+                        .OrderBy(s => s.Value.LastSetTime)
                         .Select(s => s.Key)
                         .ToArray();
                     path = new TrainCache(p, a);
                     trainPathCache[t] = path;
                 }
-                var sortedStopsOnRoute = routeStations.Intersect(path.Path).ToArray();
+                var sortedStopsOnRoute = path.Path.Intersect(routeStations).ToArray();
 
                 if (sortedStopsOnRoute.Length == 0) // The train does not stop on this route, ignore.
                     continue;
@@ -86,7 +86,7 @@ public sealed class TemplateHelper
                 for (var i = 0; i < routeStations.Length; i++)
                 {
                     var a = sortedStopsOnRoute.Contains(routeStations[i]) ? path.ArrDeps[routeStations[i]] : null;
-                    times[i] = (a?.HasMinOneTimeSet ?? false) ? a.FirstSetTime : null;
+                    times[i] = (a?.HasMinOneTimeSet ?? false) ? a.LastSetTime : null;
                 }
 
                 if (times.All(te => te == null)) continue;
@@ -96,19 +96,17 @@ public sealed class TemplateHelper
         }
 
         // Incremental sort, from last station backwards.
-        var trains = firstTimes.Keys.ToList();
+        var trains = firstTimes.Keys.ToArray();
         for (var i = routeStations.Length - 1; i >= 0; i--)
         {
-            trains.Sort(((train1, train2) =>
-            {
-                var te1 = firstTimes[train1][i];
-                var te2 = firstTimes[train2][i];
-                if (!te1.HasValue || !te2.HasValue) return 0;
-                return te1.Value.CompareTo(te2.Value);
-            }));
+            var trainsToSortAtThisSta = trains.Where(t => firstTimes[t][i].HasValue).ToArray();
+            var trainSlotsToSort = trainsToSortAtThisSta.Select(t => Array.IndexOf(trains, t)).ToArray();
+            var trainsSortedAtThisSta = trainsToSortAtThisSta.OrderBy(t => firstTimes[t][i]!.Value).ToArray();
+            for (var j = 0; j < trainsToSortAtThisSta.Length; j++)
+                trains[trainSlotsToSort[j]] = trainsSortedAtThisSta[j];
         }
 
-        return trains.ToArray();
+        return trains;
     }
 
     public string GetRouteName(Route r, TrainDirection dir)
