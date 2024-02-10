@@ -339,17 +339,17 @@ public sealed class Timetable : Entity, ITimetable
         }
         else
         {
-            StationAddRoute(sta, route);
+            StationAddRoute(sta, route); // This calls RebuildRouteCache(route).
             sElm.Children.Add(sta.XMLEntity);
             stationCache[sta.Id] = sta;
         }
+
+        RebuildRouteCache(route);
 
         // Add station to all trains.
         foreach (var t in Trains)
             if (t is IWritableTrain wt)
                 wt.AddArrDep(sta, route);
-
-        RebuildRouteCache(route);
     }
 
     /// <inheritdoc />
@@ -359,7 +359,7 @@ public sealed class Timetable : Entity, ITimetable
             if (train is IWritableTrain wt)
                 wt.RemoveArrDep(sta);
 
-        var needsCleanupLinear = Type == TimetableType.Linear && stations.First() == sta || stations.Last() == sta; //TODO
+        var needsCleanupLinear = Type == TimetableType.Linear && stations.First() == sta || stations.Last() == sta;
         var routes = sta.Routes;
 
         // Clean up all transitions which were only valid at this sttaion.

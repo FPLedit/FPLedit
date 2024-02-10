@@ -100,8 +100,7 @@ public static class StationMoveHelper
             return false;
         }
 
-        var ardeps = new Dictionary<IWritableTrain, ArrDep>();
-        var emptyArray = Array.Empty<int>();
+        var updates = new List<(IWritableTrain train, ArrDep arrdep)>();
 
         foreach (var tra in sta.ParentTimetable.Trains)
         {
@@ -117,25 +116,24 @@ public static class StationMoveHelper
             var prev = path.ElementAtOrDefault(idx - 1);
             var next = path.ElementAtOrDefault(idx + 1);
 
-            var routes = emptyArray.Concat(prev?.Routes ?? emptyArray).Concat(next?.Routes ?? emptyArray);
-            if (!routes.Contains(route))
+            if (!(prev?.Routes.Contains(route) ?? false) && !(next?.Routes.Contains(route) ?? false))
                 continue;
 
             // This train runs over this station on this route, so we need to update it.
             var arrDep = tra.GetArrDep(sta);
-            ardeps[wt] = arrDep.Copy();
+            updates.Add((wt, arrDep.Copy()));
             wt.RemoveArrDep(sta);
         }
 
         sta.Positions.SetPosition(route, newPos);
         sta.ParentTimetable.RebuildRouteCache(route); // Recreate cache entry, as we will use this in the next block.
 
-        foreach (var ardp in ardeps)
+        foreach (var u in updates)
         {
-            var a = ardp.Key.AddArrDep(sta, route);
+            var a = u.train.AddArrDep(sta, route); // this adds the new arrdep to the correct place.
             if (a == null)
-                throw new InvalidOperationException("Invalid state: Unexpected data loss while re-writing train: " + ardp.Key.TName);
-            a.ApplyCopy(ardp.Value);
+                throw new InvalidOperationException("Invalid state: Unexpected data loss while re-writing train: " + u.train.TName);
+            a.ApplyCopy(u.arrdep);
         }
 
         foreach (var rtIdx in sta.Routes)

@@ -152,10 +152,8 @@ public sealed class Train : Entity, IWritableTrain
             if (sta == null)
                 throw new Exception("Station not found!");
 
-            if (ret.ContainsKey(sta))
+            if (!ret.TryAdd(sta, ardp))
                 throw new Exception($"The path already contains the station \"{sta.SName}\"");
-
-            ret.Add(sta, ardp);
         }
         return ret;
     }

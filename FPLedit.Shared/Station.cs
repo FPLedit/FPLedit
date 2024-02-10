@@ -204,7 +204,7 @@ public sealed class Station : Entity, IStation
         var oldPosition = Positions.GetPosition(oldRoute);
         Positions.RemovePosition(oldRoute);
         if (oldPosition.HasValue)
-            Positions.SetPosition(newRoute, oldPosition!.Value);
+            Positions.SetPosition(newRoute, oldPosition.Value);
 
         // Swap RVC values.
         foreach (var rvc in GetDefinedRvcs())
