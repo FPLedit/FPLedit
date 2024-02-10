@@ -26,6 +26,7 @@ public sealed class Timetable : Entity, ITimetable
     private int nextStaId, nextRtId, nextTraId, nextVehId;
 
     private readonly Dictionary<int, Route> routeCache;
+    private readonly Dictionary<int, Station> stationCache;
 
     #region XmlAttributes
 
@@ -99,6 +100,7 @@ public sealed class Timetable : Entity, ITimetable
         tElm.ChildrenChangedDirect += OnTrainsChanged;
 
         routeCache = new Dictionary<int, Route>(); // Initialize empty route cache.
+        stationCache = new Dictionary<int, Station>();
     }
 
     private void OnTrainsChanged(object? sender, EventArgs e)
@@ -119,12 +121,17 @@ public sealed class Timetable : Entity, ITimetable
             throw new NotSupportedException(T._("Nicht schreibbare Dateiversion.")); // Do not create any properties as we cannot read this format.
 
         stations = new List<Station>();
+        stationCache = new Dictionary<int, Station>();
         var tmpSElm = Children.SingleOrDefault(x => x.XName == "stations");
         if (tmpSElm != null)
         {
             sElm = tmpSElm;
             foreach (var c in sElm.Children.Where(x => x.XName == "sta")) // Filtert andere Elemente
-                stations.Add(new Station(c, this));
+            {
+                var s = new Station(c, this);
+                stations.Add(s);
+                if (Type == TimetableType.Network) stationCache[s.Id] = s;
+            }
         }
         else
         {
@@ -334,6 +341,7 @@ public sealed class Timetable : Entity, ITimetable
         {
             StationAddRoute(sta, route);
             sElm.Children.Add(sta.XMLEntity);
+            stationCache[sta.Id] = sta;
         }
 
         // Add station to all trains.
@@ -351,11 +359,11 @@ public sealed class Timetable : Entity, ITimetable
             if (train is IWritableTrain wt)
                 wt.RemoveArrDep(sta);
 
-        var needsCleanup = stations.First() == sta || stations.Last() == sta;
+        var needsCleanupLinear = Type == TimetableType.Linear && stations.First() == sta || stations.Last() == sta; //TODO
         var routes = sta.Routes;
 
         // Clean up all transitions which were only valid at this sttaion.
-        var id = Type == TimetableType.Linear ? GetRoute(Timetable.LINEAR_ROUTE_ID).IndexOf(sta) : sta.Id;
+        var id = Type == TimetableType.Linear ? GetRoute(LINEAR_ROUTE_ID).IndexOf(sta) : sta.Id;
         foreach (var transition in transitions)
         {
             if (int.TryParse(transition.StationId, out var numericStationId) && numericStationId == id)
@@ -365,12 +373,13 @@ public sealed class Timetable : Entity, ITimetable
         sta.ParentTimetable = null;
         stations.Remove(sta);
         sElm.Children.Remove(sta.XMLEntity);
+        stationCache.Remove(sta.Id);
 
         // Rebuild route cache (before removing orphaned routes)
         foreach (var route in routes)
             RebuildRouteCache(route);
 
-        if (!needsCleanup && Type == TimetableType.Linear)
+        if (!needsCleanupLinear && Type == TimetableType.Linear)
             return;
 
         // Remove orphaned time entries at new last/first stations.
@@ -389,7 +398,8 @@ public sealed class Timetable : Entity, ITimetable
     {
         if (Type == TimetableType.Linear)
             throw new TimetableTypeNotSupportedException(TimetableType.Linear, "station ids");
-        return stations.FirstOrDefault(s => s.Id == id);
+        stationCache.TryGetValue(id, out var s);
+        return s;
     }
 
     #endregion
