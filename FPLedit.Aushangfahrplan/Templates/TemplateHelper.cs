@@ -47,11 +47,8 @@ public sealed class TemplateHelper
             .OrderBy(t => trainCache[t][sta].Departure);
     }
 
-    #region Last stations
-
-    public Station[] GetLastStations(TrainDirection dir, Station sta, IEnumerable<object> trainsInThisDirObj)
+    public Station[] GetLastStations(TrainDirection dir, Station sta, ITrain[] trainsInThisDir)
     {
-        var trainsInThisDir = trainsInThisDirObj.Cast<ITrain>().ToArray(); // From JS.
         if (tt.Type == TimetableType.Linear)
         {
             var lSta = tt.GetRoute(Timetable.LINEAR_ROUTE_ID).Stations.ToList().MaybeReverseDirection(dir).LastOrDefault();
@@ -62,7 +59,7 @@ public sealed class TemplateHelper
 
         // Alle Stationen in Zügen dieser Richtung, die nach dieser Station folgen
         var stasInTrains = trainsInThisDir
-            .SelectMany(t => t.GetArrDepsUnsorted()
+            .SelectMany(t => trainCache[t]
                 .Where(a => a.Value.HasMinOneTimeSet)
                 .Select(kvp => kvp.Key)
                 .SkipWhile(s => s != sta))
@@ -96,7 +93,6 @@ public sealed class TemplateHelper
             .OrderBy(s => s.SName)
             .ToArray();
     }
-    #endregion
 
     public ITrain[] GetTrains(TrainDirection dir, Station sta) => nh.GetTrains(GetTrains(sta), dir, sta).ToArray();
 }

@@ -55,6 +55,8 @@ internal sealed class TemplateHost : ITemplate
         catch (JavaScriptException ex)
         {
             var source = ex.Location.Source ?? Identifier;
+            if (source == "Esprima") source = Identifier; // Syntax errors are reported in a module called "Esprima".
+
             var isModule = source != Identifier;
             var loc = ex.Location.Start;
             logger.Error(T._("Fehler im {0} {1}: {2} in line {3}, column {4}",
@@ -65,6 +67,8 @@ internal sealed class TemplateHost : ITemplate
         catch (Esprima.ParserException ex)
         {
             var source = ex.Source ?? Identifier;
+            if (source == "Esprima") source = Identifier; // Syntax errors are reported in a module called "Esprima".
+
             var isModule = source != Identifier;
             logger.Error(T._("Fehler im {0} {1}: {2} in line {3}, column {4}",
                 (isModule ? "Modul" : "Template"), source, ex.Message, ex.LineNumber, ex.Column));

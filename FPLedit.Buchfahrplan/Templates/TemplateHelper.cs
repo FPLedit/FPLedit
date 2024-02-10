@@ -1,5 +1,6 @@
 ﻿using FPLedit.Buchfahrplan.Model;
 using FPLedit.Shared;
+using FPLedit.Shared.Templating;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,15 +27,13 @@ public sealed class TemplateHelper
         analyzer = new IntersectionAnalyzer(tt);
     }
 
-    private static string SafeHtml(string s) => Shared.Templating.TemplateOutput.SafeHtml(s);
-
     public string GetDaysHtml(ITrain tra, bool showDays)
     {
         var days = tra.Days.DaysToString(true);
         if (!showDays || days == "")
             return "";
 
-        days = Regex.Replace(days, @"\[(\w*)\]", (m) => " <span class=\"days\">" + SafeHtml(m.Groups[1].Value) + "</span>");
+        days = Regex.Replace(days, @"\[(\w*)\]", (m) => " <span class=\"days\">" + m.Groups[1].Value.SafeHtml() + "</span>");
 
         return "&nbsp;&nbsp;" + days;
     }
@@ -106,20 +105,20 @@ public sealed class TemplateHelper
     public string OptAttr(string caption, string value)
     {
         if (!string.IsNullOrEmpty(value))
-            return SafeHtml(caption + " " + value);
+            return (caption + " " + value).SafeHtml();
         return "";
     }
 
     public string Kreuzt(ITrain ot, Station s)
     {
-        return SafeHtml(string.Join(", ", analyzer.CrossingAtStation(ot, s)
-            .Select(tr => tr.TName + " " + IntersectDaysSt(ot, tr))));
+        return string.Join(", ", analyzer.CrossingAtStation(ot, s)
+            .Select(tr => tr.TName + " " + IntersectDaysSt(ot, tr))).SafeHtml();
     }
 
     public string Ueberholt(ITrain ot, Station s)
     {
-        return SafeHtml(string.Join(", ", analyzer.OvertakeAtStation(ot, s)
-            .Select(tr => tr.TName + " " + IntersectDaysSt(ot, tr))));
+        return string.Join(", ", analyzer.OvertakeAtStation(ot, s)
+            .Select(tr => tr.TName + " " + IntersectDaysSt(ot, tr))).SafeHtml();
     }
 
     public string TrapezHalt(ITrain probeTrain, Station s)
@@ -127,16 +126,16 @@ public sealed class TemplateHelper
         var trapez = analyzer.TrapezAtStation(probeTrain, s);
 
         if (trapez.IsStopping)
-            return "<span class=\"trapez-tt\">" + SafeHtml(probeTrain.TName) + "</span> " + SafeHtml(DaysToStringNotEqual(probeTrain, trapez.StopDays));
+            return "<span class=\"trapez-tt\">" + probeTrain.TName.SafeHtml() + "</span> " + DaysToStringNotEqual(probeTrain, trapez.StopDays).SafeHtml();
         if (trapez.IntersectingTrainsStopping.Any())
-            return SafeHtml(string.Join(", ", trapez.IntersectingTrainsStopping.Select(t => t.TName)) + " " + DaysToStringNotEqual(probeTrain, trapez.StopDays));
+            return (string.Join(", ", trapez.IntersectingTrainsStopping.Select(t => t.TName)) + " " + DaysToStringNotEqual(probeTrain, trapez.StopDays)).SafeHtml();
 
         return "";
     }
 
     private string IntersectDaysSt(ITrain ot, ITrain t)
-        => SafeHtml(DaysToStringNotEqual(ot, ot.Days.IntersectingDays(t.Days)));
+        => DaysToStringNotEqual(ot, ot.Days.IntersectingDays(t.Days)).SafeHtml();
 
     private static string DaysToStringNotEqual(ITrain ot, Days days)
-        => SafeHtml(days == ot.Days ? "" : days.DaysToString(true));
+        => (days == ot.Days ? "" : days.DaysToString(true)).SafeHtml();
 }
