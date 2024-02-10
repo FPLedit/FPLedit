@@ -67,8 +67,9 @@ internal sealed class PreviewForm : FForm
 
         // Initialisierung der Daten
         dtc.SelectedDays = new TimetableStyle(pluginInterface.Timetable).RenderDays;
-        routesDropDown.Initialize(pluginInterface);
+
         routesDropDown.EnableVirtualRoutes = true;
+        Shown += (_, _) => routesDropDown.Initialize(pluginInterface);
     }
 
     private void PreferencesButton_Click(object sender, EventArgs e)

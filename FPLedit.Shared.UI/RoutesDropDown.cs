@@ -16,7 +16,7 @@ public sealed class RoutesDropDown : DropDown
     {
         pluginInterface = pi;
 
-        pluginInterface.FileStateChanged += (s, e) =>
+        pluginInterface.FileStateChanged += (_, e) =>
         {
             if (IsDisposed)
                 return;
@@ -25,7 +25,7 @@ public sealed class RoutesDropDown : DropDown
             lastFn = e.FileState.FileName;
         };
 
-        SelectedIndexChanged += (s, e) =>
+        SelectedIndexChanged += (_, _) =>
         {
             if (SelectedIndex == -1)
                 return;
@@ -96,7 +96,9 @@ public sealed class RoutesDropDown : DropDown
 
     private void ReloadRouteNames(bool forceReload)
     {
-        if (pluginInterface!.TimetableMaybeNull == null)
+        if (pluginInterface == null) // This might be the case if we are setting config before calling Initialize().
+            return;
+        if (pluginInterface.TimetableMaybeNull == null)
         {
             Items.Clear();
             return;

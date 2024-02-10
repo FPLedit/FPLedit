@@ -31,8 +31,8 @@ internal sealed class ExportRenderer
 
         var stack = new StackLayout(routeGroup, printerGroup) { Orientation = Orientation.Vertical, Padding = new Eto.Drawing.Padding(10), Spacing = 5 };
 
-        routesDropDown.Initialize(pluginInterface);
         routesDropDown.EnableVirtualRoutes = true;
+        form.Shown += (_, _) => routesDropDown.Initialize(pluginInterface);
 
         form.Content = stack;
         form.DefaultButton = exportButton;
