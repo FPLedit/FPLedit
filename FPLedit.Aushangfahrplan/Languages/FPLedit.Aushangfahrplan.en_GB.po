@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-09-05 17:35+0200\n"
-"PO-Revision-Date: 2023-09-05 17:35+0200\n"
+"POT-Creation-Date: 2024-03-06 20:34+0100\n"
+"PO-Revision-Date: 2024-03-06 20:35+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4.2\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: _;SelectionName;_n:1,2;_nc:1c,2,3\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -67,10 +67,17 @@ msgstr "Stop-specific timetable as HTML file (*.html)|*.html"
 msgid "Aushangfahrplan"
 msgstr "Stop-specific timetable"
 
-#: Templates/TemplateProxy.cs:12
-msgid "Standard (DRG aus Malsch)"
-msgstr "Default (DRG from Malsch)"
+#: Templates/TemplateProxy.cs:11
+msgid "Nach Richtung sortiert, nach DV 450 der DRG"
+msgstr "Sorted by train direction, designed after DV 450 of DRG"
 
-#: Templates/TemplateProxy.cs:21
-msgid "Wie Standard, mit Schriftzug \\\"Abfahrt\\\" in Originalschrift"
-msgstr "Like default, but with \\\"Abfahrt\\\" set in the original font"
+#: Templates/TemplateProxy.cs:20
+msgid ""
+"Nach Richtung sortiert, nach DV 450 der DRG, mit Schriftzug \\\"Abfahrt\\\" "
+"in Originalschrift"
+msgstr ""
+"Sorted by train direction, designed after DV 450 of DRG, with the text \\"
+"\"Abfahrt\\\" set in the original font"
+
+#~ msgid "Standard (DRG aus Malsch)"
+#~ msgstr "Default (DRG from Malsch)"

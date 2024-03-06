@@ -5,12 +5,11 @@ namespace FPLedit.Aushangfahrplan.Templates;
 
 internal sealed class StdTemplateProvider : BaseTemplateProxy, ITemplateProvider
 {
-    internal const string IDENTIFIER = "builtin:FPLedit.Aushangfahrplan/Templates/AfplTemplate.fpltmpl";
-    public string TemplateIdentifier => IDENTIFIER;
+    public string TemplateIdentifier => "builtin:FPLedit.Aushangfahrplan/Templates/AfplTemplate.fpltmpl";
 
     public string GetTemplateCode()
-        => GeneratePreamble(T._("Standard (DRG aus Malsch)"), "Abfahrt") +
-           ResourceHelper.GetStringResource("Aushangfahrplan.Templates.AfplCommon.fpltmpl");
+        => GeneratePreamble(T._("Nach Richtung sortiert, nach DV 450 der DRG"), "Abfahrt") +
+           ResourceHelper.GetStringResource("Aushangfahrplan.Templates.AfplCommonDir.fpltmpl");
 }
 
 internal sealed class SvgTemplateProvider : BaseTemplateProxy, ITemplateProvider
@@ -18,8 +17,8 @@ internal sealed class SvgTemplateProvider : BaseTemplateProxy, ITemplateProvider
     public string TemplateIdentifier => "builtin:FPLedit.Aushangfahrplan/Templates/SvgTemplate.fpltmpl";
 
     public string GetTemplateCode()
-        => GeneratePreamble(T._(@"Wie Standard, mit Schriftzug \""Abfahrt\"" in Originalschrift"), ResourceHelper.GetStringResource("Aushangfahrplan.Resources.abfahrt-text.svg")) +
-           ResourceHelper.GetStringResource("Aushangfahrplan.Templates.AfplCommon.fpltmpl");
+        => GeneratePreamble(T._(@"Nach Richtung sortiert, nach DV 450 der DRG, mit Schriftzug \""Abfahrt\"" in Originalschrift"), ResourceHelper.GetStringResource("Aushangfahrplan.Resources.abfahrt-text.svg")) +
+           ResourceHelper.GetStringResource("Aushangfahrplan.Templates.AfplCommonDir.fpltmpl");
 }
 
 internal abstract class BaseTemplateProxy
