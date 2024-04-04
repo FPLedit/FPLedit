@@ -34,5 +34,5 @@ public sealed class Plugin : IPlugin, ITemplatePlugin
     internal static IFilterRuleContainer FilterRuleContainer => new DefaultFilterRuleContainer(T._("Aushangfahrplan"), AfplAttrs.GetAttrs, AfplAttrs.CreateAttrs);
 
     internal static ITemplateChooser GetTemplateChooser(IReducedPluginInterface pi)
-        => new DefaultTemplateChooser(pi, "afpl", "afpl_attrs", "tmpl", Templates.StdTemplateProvider.IDENTIFIER);
+        => new DefaultTemplateChooser(pi, "afpl", "afpl_attrs", "tmpl", new Templates.StdTemplateProvider().TemplateIdentifier);
 }
