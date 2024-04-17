@@ -22,8 +22,8 @@
   <ItemGroup>
     <PackageReference Include="Eto.Forms" Version="$(EtoVersion)" />
     <PackageReference Include="PDFsharp" Version="6.0.0" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.3" />
-    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="2.1.2" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.4" />
+    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="2.1.3" />
   </ItemGroup>
   <ItemGroup Condition="$(FPLeditEnableSystemDrawing)">
     <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
