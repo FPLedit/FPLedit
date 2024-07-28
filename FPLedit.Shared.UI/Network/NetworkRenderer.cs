@@ -112,7 +112,7 @@ public sealed class NetworkRenderer : Drawable
     private readonly Point OFFSET = new (OFFSET_X, OFFSET_Y);
 
     private Station? modeTempSta;
-    private float modeTempKm;
+    private decimal modeTempKm;
     private Modes mode;
 
     public NetworkRenderer()
@@ -338,7 +338,7 @@ public sealed class NetworkRenderer : Drawable
         ReloadTimetable();
     }
 
-    public void StartAddStation(Station rawSta, float km)
+    public void StartAddStation(Station rawSta, decimal km)
     {
         modeTempSta = rawSta;
         modeTempKm = km;
@@ -370,7 +370,7 @@ public sealed class NetworkRenderer : Drawable
         p.Click += (_, _) => ConnectJoinLines(sta);
     }
 
-    public void StartJoinLines(float km)
+    public void StartJoinLines(decimal km)
     {
         modeTempKm = km;
         mode = Modes.JoinRoutes;

@@ -11,7 +11,7 @@ namespace FPLedit.Editor;
 
 internal sealed class EditStationForm : FDialog<EditStationForm.EditResult?>
 {
-    internal sealed record EditResult(Station Station, float? NewPosition);
+    internal sealed record EditResult(Station Station, decimal? NewPosition);
 
     private readonly IPluginInterface pluginInterface;
     private readonly int route;
@@ -124,8 +124,8 @@ internal sealed class EditStationForm : FDialog<EditStationForm.EditResult?>
         station.RequestStop = requestCheckBox.Checked ?? false;
 
         // Set position.
-        var newPos = float.Parse(positionTextBox.Text);
-        float? newPosResult = null;
+        var newPos = decimal.Parse(positionTextBox.Text);
+        decimal? newPosResult = null;
         if (route == Timetable.UNASSIGNED_ROUTE_ID) // We have a new station on a new route
             newPosResult = newPos;
         else if (!StationMoveHelper.TrySafeMove(station, isExistingStation, newPos, route))

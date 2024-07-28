@@ -23,7 +23,7 @@ public class NumberValidator : BaseValidator
         if (AllowEmpty && Control.Text == "")
             return true;
         if (!UseInt)
-            return float.TryParse(Control.Text, out var valFloat) && (AllowNegative || valFloat >= 0);
+            return decimal.TryParse(Control.Text, out var valDecimal) && (AllowNegative || valDecimal >= 0);
         return int.TryParse(Control.Text, out var valInt) && (AllowNegative || valInt >= 0);
     }
 }

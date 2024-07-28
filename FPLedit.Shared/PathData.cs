@@ -165,10 +165,10 @@ public class PathData : ISortedStations
     /// <summary>
     /// Get a monotonically increasing position of all station along this path.
     /// </summary>
-    public Dictionary<Station, float> GetPositionsAlongPath()
+    public Dictionary<Station, decimal> GetPositionsAlongPath()
     {
-        var pos = new Dictionary<Station, float>();
-        var p = 0.0f;
+        var pos = new Dictionary<Station, decimal>();
+        decimal p = 0M;
         Station? last = null;
         foreach (var pe in RawPath)
         {

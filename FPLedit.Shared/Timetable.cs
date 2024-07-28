@@ -542,7 +542,7 @@ public sealed class Timetable : Entity, ITimetable
     /// <inheritdoc />
     /// <exception cref="TimetableTypeNotSupportedException">Operation was applied to a linear timetable.</exception>
     /// <exception cref="ArgumentException"><paramref name="newStation"/> already had some routes.</exception>
-    public int AddRoute(Station exisitingStartStation, Station newStation, float newStartPosition, float newPosition)
+    public int AddRoute(Station exisitingStartStation, Station newStation, decimal newStartPosition, decimal newPosition)
     {
         if (Type == TimetableType.Linear)
             throw new TimetableTypeNotSupportedException(TimetableType.Linear, "routes");
@@ -591,7 +591,7 @@ public sealed class Timetable : Entity, ITimetable
     /// <inheritdoc />
     /// <exception cref="TimetableTypeNotSupportedException">If called on a linear timetable.</exception>
     /// <exception cref="ArgumentException"><paramref name="station"/> already serves the Route <paramref name="route"/></exception>
-    public bool JoinRoutes(int route, Station station, float newKm)
+    public bool JoinRoutes(int route, Station station, decimal newKm)
     {
         if (Type == TimetableType.Linear)
             throw new TimetableTypeNotSupportedException(TimetableType.Linear, "routes");

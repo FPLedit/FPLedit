@@ -22,7 +22,7 @@ public static class StationMoveHelper
     /// <param name="route">Route the move should be applied to.</param>
     /// <remarks>This method is safe to use, as it does not modify state.</remarks>
     /// <returns>true, when an unsafe update is required.</returns>
-    private static bool RequiresUnsafeMove(Station sta, bool existingStation, float newPos, int route)
+    private static bool RequiresUnsafeMove(Station sta, bool existingStation, decimal newPos, int route)
     {
         if (!existingStation)
             return false;
@@ -37,7 +37,7 @@ public static class StationMoveHelper
         if (idx == -1)
             return false; //HACK: Not on this route. Probably something weird happening, but at least try to exit gracefully.
 
-        float? min = null, max = null;
+        decimal? min = null, max = null;
         if (idx < rt.Count - 1)
             max = rt[idx + 1].Positions.GetPosition(route);
         if (idx > 0)
@@ -58,7 +58,7 @@ public static class StationMoveHelper
     /// See <see cref="RequiresUnsafeMove"/> to check beforehand.
     /// </remarks>
     /// <returns>Whether this action was successful. If false, no move was performed, and a unsafe move is required.</returns>
-    public static bool TrySafeMove(Station sta, bool existingStation, float newPos, int route)
+    public static bool TrySafeMove(Station sta, bool existingStation, decimal newPos, int route)
     {
         var needsUnsafeUpdate = RequiresUnsafeMove(sta, existingStation, newPos, route);
 
@@ -89,7 +89,7 @@ public static class StationMoveHelper
     /// </remarks>
     /// <returns>Allows to check if users data is now at risk: true if we actually did something potentially bad. If false, we just moved the station safely, as we didn't have to do do dangerous things (all went well, no risky things happened).</returns>
     /// <exception cref="InvalidOperationException">Data loss occured while performing this task. Recovery is not possible. We have warned you.</exception>
-    public static bool PerformUnsafeMove(Station sta, bool existingStation, float newPos, int route)
+    public static bool PerformUnsafeMove(Station sta, bool existingStation, decimal newPos, int route)
     {
         var requiresUnsafeMove = RequiresUnsafeMove(sta, existingStation, newPos, route);
 

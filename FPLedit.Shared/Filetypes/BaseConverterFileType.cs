@@ -6,7 +6,7 @@ public abstract class BaseConverterFileType
 {
     protected void ConvertStationNetToLin(Station sta, int route)
     {
-        float km = sta.Positions.GetPosition(route) ?? throw new Exception($"The station {sta.SName} has no position entry on route {route}!");
+        var km = sta.Positions.GetPosition(route) ?? throw new Exception($"The station {sta.SName} has no position entry on route {route}!");
         sta.Positions.SetPosition(Timetable.LINEAR_ROUTE_ID, km);
         sta.Positions.Write(TimetableType.Linear);
 

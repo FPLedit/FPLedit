@@ -33,7 +33,7 @@ internal sealed class HeaderRenderer
         var allTrackWidth = (stasWithTracks + allTrackCount) * StationRenderProps.IndividualTrackOffset;
         var verticalTrackOffset = GetTrackOffset(g, attrs.StationFont) + TOP_GAP;
 
-        float length = posAlongPath.Values.Max();
+        decimal length = posAlongPath.Values.Max();
 
         StationRenderProps? lastPos = null;
         foreach (var sta in path.PathEntries)
@@ -44,13 +44,13 @@ internal sealed class HeaderRenderer
 
             StationRenderProps posX;
             if (!attrs.MultiTrack)
-                posX = new StationRenderProps(sta.Station, kil, ((kil / length) * (width - margin.Right - margin.Left)));
+                posX = new StationRenderProps(sta.Station, kil, ((float)(kil / length) * (width - margin.Right - margin.Left)));
             else
             {
                 var availWidth = width - margin.Right - margin.Left - allTrackWidth;
-                var lastKil = lastPos?.CurKilometer ?? 0f;
+                var lastKil = lastPos?.CurKilometer ?? 0M;
                 var lastRight = lastPos?.Right ?? 0f;
-                var leftOffset = (((kil / length) - (lastKil / length)) * availWidth);
+                var leftOffset = (float)((kil / length) - (lastKil / length)) * availWidth;
                 posX = new StationRenderProps(sta.Station, kil, lastRight + leftOffset, true);
             }
             lastPos = posX;

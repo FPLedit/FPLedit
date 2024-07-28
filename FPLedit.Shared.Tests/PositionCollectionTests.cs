@@ -13,13 +13,13 @@ public class PositionCollectionTests
 
         var pos = new PositionCollection(s, tt);
         pos.TestForErrors(); // Should do nothing
-        pos.SetPosition(123, 11.3f);
+        pos.SetPosition(123, 11.3M);
         Assert.AreEqual(11.3f, pos.GetPosition(123));
         pos.Write();
         pos.TestForErrors(); // Should do nothing
         Assert.AreEqual("123:11.3", s.Attributes["km"]);
 
-        pos.SetPosition(222, 0f);
+        pos.SetPosition(222, 0M);
         pos.Write();
         Assert.AreEqual("123:11.3;222:0.0", s.Attributes["km"]);
 
@@ -122,14 +122,14 @@ public class PositionCollectionTests
             var s = new Station(tt);
 
             var pos = new PositionCollection(s, tt);
-            pos.SetPosition(Timetable.LINEAR_ROUTE_ID, 123.4f);
+            pos.SetPosition(Timetable.LINEAR_ROUTE_ID, 123.4M);
             pos.Write();
 
             Assert.AreEqual("123.4", s.Attributes["kml"]);
             Assert.AreEqual("123.4", s.Attributes["kmr"]);
 
             // Other write does not affect data
-            pos.SetPosition(1, 0f);
+            pos.SetPosition(1, 0M);
             pos.Write();
 
             Assert.AreEqual("123.4", s.Attributes["kml"]);

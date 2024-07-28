@@ -89,7 +89,7 @@ internal sealed class VelocityEditForm : FDialog<DialogResult>
 
         if (Station is BfplPoint point)
         {
-            point.Positions.SetPosition(route, float.Parse(positionTextBox.Text));
+            point.Positions.SetPosition(route, decimal.Parse(positionTextBox.Text));
             point.SName = nameTextBox.Text;
             point.Direction.SetValue(route, (string)directionComboBox.SelectedValue);
         }

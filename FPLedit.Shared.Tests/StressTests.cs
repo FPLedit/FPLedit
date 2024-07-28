@@ -37,7 +37,7 @@ public class StressTests
                 }
 
                 if (j == 1 && i > 0 && branchS != null)
-                    tt.AddRoute(branchS, sta, 0f, 1f);
+                    tt.AddRoute(branchS, sta, 0M, 1M);
                 else
                 {
                     tt.AddStation(sta, i);

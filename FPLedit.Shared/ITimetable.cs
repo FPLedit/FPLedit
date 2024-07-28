@@ -99,7 +99,7 @@ public interface ITimetable : IEntity
     /// <param name="newPosition"></param>
     /// <returns>The index of the newly added route.</returns>
     /// <remarks>This operation is only supported on network timetables.</remarks>
-    int AddRoute(Station exisitingStartStation, Station newStation, float newStartPosition, float newPosition);
+    int AddRoute(Station exisitingStartStation, Station newStation, decimal newStartPosition, decimal newPosition);
     /// <summary>
     /// Connects an alredy existing station with another route to create circular networks.
     /// </summary>
@@ -107,7 +107,7 @@ public interface ITimetable : IEntity
     /// <param name="station"></param>
     /// <param name="newKm">The new position of <paramref name="station"/> on <paramref name="route"/>.</param>
     /// <returns>Specifies whether the operation has been successful.</returns>
-    bool JoinRoutes(int route, Station station, float newKm);
+    bool JoinRoutes(int route, Station station, decimal newKm);
     /// <summary>
     /// Break an existing route between two stations that are already on the route.
     /// </summary>

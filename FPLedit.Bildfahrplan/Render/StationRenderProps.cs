@@ -14,9 +14,9 @@ internal class StationRenderProps
 
     public Dictionary<string, int> TrackOffsets { get; }
 
-    public float CurKilometer { get; }
+    public decimal CurKilometer { get; }
 
-    public StationRenderProps(Station sta, float kil, float left, bool includeTracks = false)
+    public StationRenderProps(Station sta, decimal kil, float left, bool includeTracks = false)
     {
         CurKilometer = kil;
 

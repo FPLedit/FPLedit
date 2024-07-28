@@ -6,7 +6,7 @@ using FPLedit.Shared;
 
 namespace FPLedit.Editor;
 
-internal sealed class EditPositionForm : FDialog<float?>
+internal sealed class EditPositionForm : FDialog<decimal?>
 {
 #pragma warning disable CS0649,CA2213
     private readonly TextBox positionTextBox = default!;
@@ -28,7 +28,7 @@ internal sealed class EditPositionForm : FDialog<float?>
             return;
         }
 
-        Close(float.Parse(positionTextBox.Text));
+        Close(decimal.Parse(positionTextBox.Text));
     }
 
     private void CancelButton_Click(object sender, EventArgs e)

@@ -14,7 +14,7 @@ namespace FPLedit.Shared;
 public class PositionCollection
 {
     private readonly IStation sta;
-    private readonly Dictionary<int, float> positions;
+    private readonly Dictionary<int, decimal> positions;
     private readonly Timetable tt;
 
     /// <summary>
@@ -25,7 +25,7 @@ public class PositionCollection
     public PositionCollection(IStation s, Timetable tt)
     {
         sta = s;
-        positions = new Dictionary<int, float>();
+        positions = new Dictionary<int, decimal>();
         this.tt = tt;
         if (tt.Type == TimetableType.Linear)
             ParseLinear();
@@ -43,9 +43,9 @@ public class PositionCollection
     /// <summary>
     /// Returns the position - or null - on the given route.
     /// </summary>
-    public float? GetPosition(int route)
+    public decimal? GetPosition(int route)
     {
-        if (positions.TryGetValue(route, out float val))
+        if (positions.TryGetValue(route, out var val))
             return val;
         return null;
     }
@@ -63,7 +63,7 @@ public class PositionCollection
     /// </remarks>
     /// <param name="route"></param>
     /// <param name="km"></param>
-    public void SetPosition(int route, float km)
+    public void SetPosition(int route, decimal km)
     {
         positions[route] = km;
         Write();
@@ -94,7 +94,7 @@ public class PositionCollection
             var parts = p.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
 
             positions.Add(int.Parse(parts[0]),
-                float.Parse(parts[1], CultureInfo.InvariantCulture));
+                decimal.Parse(parts[1], CultureInfo.InvariantCulture));
         }
     }
 
@@ -107,7 +107,7 @@ public class PositionCollection
         var kmr = sta.GetAttribute("kmr", "0.0");
         if (kml != kmr)
             throw new NotSupportedException("Unterschiedliche kmr/kml werden aktuell von FPLedit nicht unterstützt!");
-        positions.Add(Timetable.LINEAR_ROUTE_ID, float.Parse(kml, CultureInfo.InvariantCulture));
+        positions.Add(Timetable.LINEAR_ROUTE_ID, decimal.Parse(kml, CultureInfo.InvariantCulture));
     }
 
     /// <summary>
@@ -119,8 +119,8 @@ public class PositionCollection
         var t = forceType ?? tt.Type;
         if (t == TimetableType.Linear)
         {
-            var posFloat = GetPosition(Timetable.LINEAR_ROUTE_ID) ?? throw new Exception("No linear position found while attempting to write linear positions.");
-            var pos = posFloat.ToString("0.0", CultureInfo.InvariantCulture);
+            var posDec = GetPosition(Timetable.LINEAR_ROUTE_ID) ?? throw new Exception("No linear position found while attempting to write linear positions.");
+            var pos = posDec.ToString("0.0", CultureInfo.InvariantCulture); // decimal format?
             sta.SetAttribute("kml", pos);
             sta.SetAttribute("kmr", pos);
             sta.RemoveAttribute("km");

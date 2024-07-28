@@ -87,11 +87,11 @@ public sealed class StationCanvasPositionHandler
         m.SetAttribute("fpl-pos", val);
     }
 
-    private Station? GetStationBefore(int route, float km, Timetable tt)
+    private Station? GetStationBefore(int route, decimal km, Timetable tt)
         => tt.Stations.LastOrDefault(s =>
             s.Routes.Contains(route) && s.Positions.GetPosition(route) < km);
 
-    private Station? GetStationAfter(int route, float km, Timetable tt)
+    private Station? GetStationAfter(int route, decimal km, Timetable tt)
         => tt.Stations.FirstOrDefault(s =>
             s.Routes.Contains(route) && s.Positions.GetPosition(route) > km);
 }

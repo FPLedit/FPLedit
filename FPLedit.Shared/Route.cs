@@ -25,14 +25,14 @@ public sealed class Route : ISortedStations
     /// <summary>
     /// Returns the minimum kilometer position on this line (minimum chainage).
     /// </summary>
-    public float MinPosition
-        => Exists ? stations[0].Positions.GetPosition(Index) ?? 0f : 0f;
+    public decimal MinPosition
+        => Exists ? stations[0].Positions.GetPosition(Index) ?? 0 : 0;
 
     /// <summary>
     /// Returns the maximum kilometer position on this line (maximum chainage).
     /// </summary>
-    public float MaxPosition
-        => Exists ? stations[^1].Positions.GetPosition(Index) ?? 0f : 0f;
+    public decimal MaxPosition
+        => Exists ? stations[^1].Positions.GetPosition(Index) ?? 0 : 0;
 
     /// <summary>
     /// Returns whether this route is not empty.
