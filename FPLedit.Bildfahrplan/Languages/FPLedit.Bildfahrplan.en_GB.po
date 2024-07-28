@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2024-02-04 13:11+0100\n"
-"PO-Revision-Date: 2024-02-04 13:11+0100\n"
+"POT-Creation-Date: 2024-07-28 19:29+0200\n"
+"PO-Revision-Date: 2024-07-28 19:29+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.4.4\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -219,7 +219,7 @@ msgstr "Error while exporting graphical timetable!"
 msgid "Exportieren des Bildfahrplans erfolgreich abgeschlossen!"
 msgstr "Successfully exported graphical timetable!"
 
-#: Forms/PreviewForm.xeto.cs:126 Render/AsyncDoubleBufferedGraph.cs:109
+#: Forms/PreviewForm.xeto.cs:125 Render/AsyncDoubleBufferedGraph.cs:112
 msgid ""
 "Ungültige (zusammengefallene) virtuelle Strecke!\n"
 "Bitte die virtuelle Strecke neu anlegen."
@@ -227,19 +227,19 @@ msgstr ""
 "Invalid (collapsed) virtual route!\n"
 "Recreate the virtual route to fix the problem."
 
-#: Forms/PreviewForm.xeto.cs:170
+#: Forms/PreviewForm.xeto.cs:169
 msgid "&Darstellung ändern"
 msgstr "Change &plan display"
 
-#: Forms/PreviewForm.xeto.cs:171
+#: Forms/PreviewForm.xeto.cs:170
 msgid "Stationen nicht mitscrollen"
 msgstr "Do not scroll station names"
 
-#: Forms/PreviewForm.xeto.cs:172
+#: Forms/PreviewForm.xeto.cs:171
 msgid "Verkehrstage"
 msgstr "Days"
 
-#: Forms/PreviewForm.xeto.cs:173
+#: Forms/PreviewForm.xeto.cs:172
 msgid "Dynamische Bildfahrplan-Vorschau"
 msgstr "Dynamic graphical timetable preview"
 
@@ -369,15 +369,15 @@ msgstr "Dashed (93)"
 msgid "Lang gestrichelt"
 msgstr "Dashed (long)"
 
-#: Render/AsyncDoubleBufferedGraph.cs:94
+#: Render/AsyncDoubleBufferedGraph.cs:97
 msgid "Generiere Bildfahrplan..."
 msgstr "Generating graphical timetable..."
 
-#: Render/AsyncDoubleBufferedGraph.cs:105
+#: Render/AsyncDoubleBufferedGraph.cs:108
 msgid "Fehler beim Rendern (siehe Log)..."
 msgstr "Exception occurred while rendering (see log)..."
 
-#: Render/AsyncDoubleBufferedGraph.cs:107
+#: Render/AsyncDoubleBufferedGraph.cs:110
 msgid ""
 "Mehrere Folgezüge gefunden!\n"
 "Bitte oben angezeigte Tage einschränken\n"

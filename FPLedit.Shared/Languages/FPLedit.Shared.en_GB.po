@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2024-02-04 13:10+0100\n"
-"PO-Revision-Date: 2024-02-04 13:10+0100\n"
+"POT-Creation-Date: 2024-07-28 19:27+0200\n"
+"PO-Revision-Date: 2024-07-28 19:28+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.4.4\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: _;SelectionName;_n:1,2;_nc:1c,2,3\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -23,19 +23,19 @@ msgstr "Timetable files (*.fpl)|*.fpl"
 msgid "<leer>"
 msgstr "<empty>"
 
-#: Timetable.cs:42 Timetable.cs:119 XmlOnlyTimetable.cs:13
+#: Timetable.cs:43 Timetable.cs:121 XmlOnlyTimetable.cs:13
 msgid "Nicht schreibbare Dateiversion."
 msgstr "Non-writable file version found."
 
-#: Timetable.cs:116
+#: Timetable.cs:118
 msgid "Unbekannte Dateiversion."
 msgstr "Unknown file version found."
 
-#: Timetable.cs:620
+#: Timetable.cs:681
 msgid "Die beiden ausgewählten Stationen sind nicht benachbart!"
 msgstr "The two selected stations are not directly connected!"
 
-#: Timetable.cs:624
+#: Timetable.cs:685
 msgid ""
 "Zwei benachbarte Stationen können nicht mehr als eine/keine Route gemeinsam "
 "haben! Zusammengefallene Routen sind vorhanden und werden nicht unterstützt."
@@ -43,22 +43,22 @@ msgstr ""
 "Two neighbouring stations cannot have more than one line in common! "
 "Collapsed, ambiguous lines between two stations are not supported."
 
-#: Timetable.cs:634
+#: Timetable.cs:695
 msgid ""
 "Das Streckennetz zerfällt nach der Auftrennung der Strecke in zwei Teile."
 msgstr ""
 "By dividing this line segment, the network would consist of two disconnected "
 "sub-networks."
 
-#: Timetable.cs:643
+#: Timetable.cs:704
 msgid "Mindestens ein Zug befährt den Streckenabschnitt!"
 msgstr "At least one train is travelling over this line segment!"
 
-#: Timetable.cs:651
+#: Timetable.cs:712
 msgid "Mindestens eine virtuelle Strecke berührt den Streckenabschnitt!"
 msgstr "At least one virtual route contains this line segment!"
 
-#: Timetable.cs:661
+#: Timetable.cs:722
 msgid ""
 "Einzelne Stationen ohne Strecken können nicht existieren. Hinweis: Das "
 "Löschen der vorletzten Station einer Strecke entfernt auch Routen-Reste!"
@@ -66,7 +66,7 @@ msgstr ""
 "A single station without a connecting line cannot exist. Note, you can "
 "simply remove lines by deleting its stations one by one!"
 
-#: Timetable.cs:671 Timetable.cs:678
+#: Timetable.cs:732 Timetable.cs:739
 msgid ""
 "Einzelne Stationen ohne Strecken können nicht existieren. Hinweis: Erste/"
 "Letzte Stationen einer Strecke können einfach gelöscht werden!"
