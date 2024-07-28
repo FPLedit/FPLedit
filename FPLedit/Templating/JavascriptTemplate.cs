@@ -46,30 +46,32 @@ internal sealed class JavascriptTemplate : ITemplate
 
         const string startTag = "<#";
         const string endTag = "#>";
+        const int tagLength = 2;
 
-        var scriptBuilder = new StringBuilder(code.Length + 1024);
+        var scriptBuilder = new StringBuilder(code.Length * 2);
 
-        var nextBlockSearchIdx = 0;
-        var blockStartIdx = IndexOfWithStart(code, startTag, nextBlockSearchIdx);
+        var lastBlockEndIdx = 0;
+        var blockStartIdx = NextIndexOf(code, startTag, lastBlockEndIdx);
 
         while (blockStartIdx >= 0)
         {
-            // Output plaintext until the start of this code block.
-            BuildMultilineAppend(scriptBuilder, code.Slice(nextBlockSearchIdx, blockStartIdx - nextBlockSearchIdx));
+            // Output plaintext between the end of the last and the start of this code block.
+            AppendNonBlock(scriptBuilder, code[lastBlockEndIdx..blockStartIdx]);
 
-            // Find corresponding (=next) end tag
-            var blockEndIdx = IndexOfWithStart(code, endTag, blockStartIdx);
-            if (blockEndIdx < 0) // This code block does not end. Throw.
-                throw new FormatException("Error parsing template script: No closing code block tag found.");
+            // Find corresponding (=next) end tag. No escaping is possible.
+            var blockEndIdx = NextIndexOf(code, endTag, blockStartIdx);
+            if (blockEndIdx < 0) // This code block does not end, parse code until end of the file.
+                blockEndIdx = code.Length;
 
-            AppendCodeTag(scriptBuilder, code.Slice(blockStartIdx + startTag.Length, blockEndIdx - blockStartIdx - endTag.Length)); // Add this code block to output.
+            AppendCodeTag(scriptBuilder, code[(blockStartIdx + tagLength)..blockEndIdx]); // Add this code block to output.
 
-            nextBlockSearchIdx = blockEndIdx + endTag.Length; // The next block can only start after the current one.
-            blockStartIdx = IndexOfWithStart(code, startTag, nextBlockSearchIdx); // Find next code block
+            lastBlockEndIdx = blockEndIdx + endTag.Length; // The next block can only start after the current one.
+            blockStartIdx = NextIndexOf(code, startTag, lastBlockEndIdx); // Find next code block
         }
 
         // Write out the final block of non-code text (No more code blocks found).
-        BuildMultilineAppend(scriptBuilder, code.Slice(nextBlockSearchIdx, code.Length - nextBlockSearchIdx));
+        if (code.Length > lastBlockEndIdx)
+            AppendNonBlock(scriptBuilder, code[lastBlockEndIdx..]);
 
         return scriptBuilder.ToString();
     }
@@ -89,11 +91,11 @@ internal sealed class JavascriptTemplate : ITemplate
             case '@' when text.Length > 1:
             {
                 var atRule = text[1..].Trim();
-                const string tmplDef = "fpledit_template";
+                const string tmplDef = "fpledit_template ";
                 if (atRule.IndexOf(tmplDef) == 0 && atRule.Length > tmplDef.Length)
                     TemplateDefinition(atRule[tmplDef.Length..].TrimStart());
                 else
-                    throw new FormatException("Invalid @ rule found in template!");
+                    throw new FormatException(T._("Unbekannte @-Regel in Vorlage!"));
                 break;
             }
             default:
@@ -114,7 +116,7 @@ internal sealed class JavascriptTemplate : ITemplate
             {
                 case "version":
                     if (val != CURRENT_VERSION.ToString())
-                        throw new Exception(T._("Template-version mismatch! (Current: {0} vs {1})", CURRENT_VERSION, val));
+                        throw new Exception(T._("Template-Format-Version stimmt nicht überein! (aktuell: {0} vs {1})", CURRENT_VERSION, val));
                     break;
                 case "type":
                     TemplateType = val;
@@ -128,13 +130,14 @@ internal sealed class JavascriptTemplate : ITemplate
             throw new Exception(T._("Fehlende Angabe type, version oder name in der fpledit_template-Direktive!"));
     }
 
-    private int IndexOfWithStart(ReadOnlySpan<char> span, ReadOnlySpan<char> search, int startIndex)
+    private int NextIndexOf(ReadOnlySpan<char> span, ReadOnlySpan<char> search, int startIndex)
     {
+        if (startIndex > span.Length) return -1;
         var idx = span[startIndex..].IndexOf(search, StringComparison.Ordinal);
         return idx != -1 ? idx + startIndex : -1;
     }
 
-    private void BuildMultilineAppend(StringBuilder sb, ReadOnlySpan<char> text)
+    private void AppendNonBlock(StringBuilder sb, ReadOnlySpan<char> text)
     {
         if (text.IsEmpty)
             return;
@@ -156,7 +159,7 @@ internal sealed class JavascriptTemplate : ITemplate
             }
 
             sb.Append("__builder += \"");
-            EscapeBackslashAndQuotes(sb, line);
+            AppendEscapedJsStringLiteral(sb, line);
             hadLast = true;
         }
 
@@ -167,7 +170,7 @@ internal sealed class JavascriptTemplate : ITemplate
         }
     }
 
-    private void EscapeBackslashAndQuotes(StringBuilder sb, ReadOnlySpan<char> line)
+    private void AppendEscapedJsStringLiteral(StringBuilder sb, ReadOnlySpan<char> line)
     {
         var bsSplitter = new SpanSplitEnumerator<char>(line, "\\".AsSpan());
         bool hadBs = false;

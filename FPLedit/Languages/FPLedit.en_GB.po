@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2024-07-28 19:24+0200\n"
-"PO-Revision-Date: 2024-07-28 19:27+0200\n"
+"POT-Creation-Date: 2024-07-28 21:31+0200\n"
+"PO-Revision-Date: 2024-07-28 21:31+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -1817,16 +1817,20 @@ msgstr "Clear all saved window sizes"
 msgid "Menüleiste mit Symbolen statt Text darstellen"
 msgstr "Show toolbar with icons instead of text labels"
 
-#: Templating/JavascriptTemplate.cs:109
+#: Templating/JavascriptTemplate.cs:98
+msgid "Unbekannte @-Regel in Vorlage!"
+msgstr "Invalid @ rule found in template!"
+
+#: Templating/JavascriptTemplate.cs:111
 msgid "Nur eine fpledit_template-Direktive ist pro Vorlage erlaubt!"
 msgstr "Only one fpledit_template-directive is allowed per template!"
 
-#: Templating/JavascriptTemplate.cs:117
+#: Templating/JavascriptTemplate.cs:119
 #, csharp-format
-msgid "Template-version mismatch! (Current: {0} vs {1})"
-msgstr "Template-version mismatch (Current: {0} vs. {1})"
+msgid "Template-Format-Version stimmt nicht überein! (aktuell: {0} vs {1})"
+msgstr "Template format version mismatch! (Current: {0} vs {1})"
 
-#: Templating/JavascriptTemplate.cs:128
+#: Templating/JavascriptTemplate.cs:130
 msgid ""
 "Fehlende Angabe type, version oder name in der fpledit_template-Direktive!"
 msgstr "Missing type, version or name in the fpledit_template-directive!"
