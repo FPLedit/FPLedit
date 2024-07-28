@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2024-02-10 00:12+0100\n"
-"PO-Revision-Date: 2024-02-10 00:12+0100\n"
+"POT-Creation-Date: 2024-07-28 19:24+0200\n"
+"PO-Revision-Date: 2024-07-28 19:27+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.4.4\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: _;SelectionName;_n:1,2;_nc:1c,2,3\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -152,8 +152,8 @@ msgstr "Restore file"
 msgid "Nicht wiederherstellen"
 msgstr "Do not restore"
 
-#: CrashReporting/CrashForm.xeto.cs:55 Editor/EditPositionForm.xeto.cs:40
-#: Editor/EditStationForm.xeto.cs:175 Editor/Filters/EditPatternForm.xeto.cs:80
+#: CrashReporting/CrashForm.xeto.cs:55 Editor/EditPositionForm.xeto.cs:41
+#: Editor/EditStationForm.xeto.cs:176 Editor/Filters/EditPatternForm.xeto.cs:80
 #: Editor/Filters/FilterForm.xeto.cs:166 Editor/LineEditForm.xeto.cs:176
 #: Editor/Linear/LinearTimetableEditForm.xeto.cs:61
 #: Editor/Linear/LinearTrainsEditForm.xeto.cs:159
@@ -193,11 +193,11 @@ msgstr ""
 "\n"
 "{0}"
 
-#: Editor/EditPositionForm.xeto.cs:20 Editor/EditStationForm.xeto.cs:38
+#: Editor/EditPositionForm.xeto.cs:21 Editor/EditStationForm.xeto.cs:39
 msgid "Bitte eine Zahl als Position eingeben!"
 msgstr "Please enter a number as position!"
 
-#: Editor/EditPositionForm.xeto.cs:27 Editor/EditStationForm.xeto.cs:114
+#: Editor/EditPositionForm.xeto.cs:28 Editor/EditStationForm.xeto.cs:115
 #: Editor/Trains/TrainEditForm.xeto.cs:126
 #, csharp-format
 msgid ""
@@ -207,7 +207,7 @@ msgstr ""
 "Please correct all errors before continuing:\n"
 "{0}"
 
-#: Editor/EditPositionForm.xeto.cs:39 Editor/EditStationForm.xeto.cs:174
+#: Editor/EditPositionForm.xeto.cs:40 Editor/EditStationForm.xeto.cs:175
 #: Editor/Filters/EditPatternForm.xeto.cs:79
 #: Editor/Filters/FilterForm.xeto.cs:165 Editor/LineEditForm.xeto.cs:175
 #: Editor/Linear/LinearTimetableEditForm.xeto.cs:60
@@ -226,29 +226,29 @@ msgstr ""
 msgid "Abbrechen"
 msgstr "Cancel"
 
-#: Editor/EditPositionForm.xeto.cs:41 Editor/EditStationForm.xeto.cs:176
+#: Editor/EditPositionForm.xeto.cs:42 Editor/EditStationForm.xeto.cs:177
 #: Editor/TimetableEditor/ZlmEditForm.xeto.cs:30
 msgid "Position (km)"
 msgstr "Position (km)"
 
-#: Editor/EditPositionForm.xeto.cs:42
+#: Editor/EditPositionForm.xeto.cs:43
 msgid "Neuen Positionseintrag bearbeiten"
 msgstr "Edit new position entry"
 
-#: Editor/EditStationForm.xeto.cs:39
+#: Editor/EditStationForm.xeto.cs:40
 msgid "Bitte einen Bahnhofsnamen eingeben!"
 msgstr "Please enter a station name first!"
 
-#: Editor/EditStationForm.xeto.cs:81
+#: Editor/EditStationForm.xeto.cs:82
 msgid "Neue Station erstellen"
 msgstr "Create new station"
 
-#: Editor/EditStationForm.xeto.cs:94 Editor/EditStationForm.xeto.cs:177
+#: Editor/EditStationForm.xeto.cs:95 Editor/EditStationForm.xeto.cs:178
 #: Editor/LineEditForm.xeto.cs:103
 msgid "Station bearbeiten"
 msgstr "Edit station"
 
-#: Editor/EditStationForm.xeto.cs:134
+#: Editor/EditStationForm.xeto.cs:135
 msgid ""
 "ACHTUNG: Sie versuchen Stationen einer Strecke durch eine Positionsänderung "
 "zwischen zwei andere Bahnhöfe zu verschieben und damit die Stationen "
@@ -276,26 +276,26 @@ msgstr ""
 "old one.\n"
 "Continue with moving/resorting stations? (At your own risk)"
 
-#: Editor/EditStationForm.xeto.cs:147
+#: Editor/EditStationForm.xeto.cs:148
 msgid ""
 "Beim Anwenden ist (wie zu erwarten) ein Problem aufgetreten. Es wurden keine "
 "Änderungen vorgenommen."
 msgstr "As expected, an error occurred. No changes have been applied."
 
-#: Editor/EditStationForm.xeto.cs:178 Editor/Trains/TrainEditForm.xeto.cs:256
+#: Editor/EditStationForm.xeto.cs:179 Editor/Trains/TrainEditForm.xeto.cs:256
 #: SettingsUi/TemplatesControl.xeto.cs:40
 msgid "Name"
 msgstr "Name"
 
-#: Editor/EditStationForm.xeto.cs:179
+#: Editor/EditStationForm.xeto.cs:180
 msgid "Betriebsst.-Abk."
 msgstr "Station code"
 
-#: Editor/EditStationForm.xeto.cs:180
+#: Editor/EditStationForm.xeto.cs:181
 msgid "Betriebsst.-Typ"
 msgstr "Station type"
 
-#: Editor/EditStationForm.xeto.cs:181 Editor/LineEditForm.xeto.cs:34
+#: Editor/EditStationForm.xeto.cs:182 Editor/LineEditForm.xeto.cs:34
 #: Editor/TimetableEditor/SingleTimetableEditControl.xeto.cs:446
 msgid "Bedarfshalt"
 msgstr "Request stop"
@@ -459,7 +459,7 @@ msgstr "Station name"
 
 #: Editor/LineEditForm.xeto.cs:30
 msgid "abs. Kilometr."
-msgstr "abs. kilometer."
+msgstr "abs. kilometre."
 
 #: Editor/LineEditForm.xeto.cs:31
 msgid "Abk."
@@ -1513,7 +1513,7 @@ msgstr "Manually triggered exception"
 msgid "Fehlermeldung des letzten Absturzes konnte nicht angezeigt werden: {0}"
 msgstr "The error message of the last crash could not be displayed: {0}"
 
-#: MainForm.xeto.cs:168
+#: MainForm.xeto.cs:169
 #, csharp-format
 msgid "Angegebene Startdatei {0} nicht gefunden!"
 msgstr "The supplied start file {0} could not be found!"
@@ -1862,6 +1862,23 @@ msgstr ""
 "Because of a bug in older versions of FPLedit, some specified \"following "
 "trains\" had to be removed. The affected trains are: {0}"
 
+#: TimetableChecks/BugFixInitAction.cs:40
+#, csharp-format
+msgid ""
+"Aufgrund eines Fehlers in früheren Versionen von FPLedit sind einige Züge "
+"beschädigt. Die betroffenen Züge sind: {0}"
+msgstr ""
+"Because of a bug in older versions of FPLedit, some trains are damaged. The "
+"affected trains are: {0}"
+
+#: TimetableChecks/BugFixInitAction.cs:58
+msgid ""
+"Aufgrund eines Fehlers in früheren Versionen von FPLedit sind ist die "
+"Reihenfolge und Kilometrierung der Stationen nicht überein."
+msgstr ""
+"Because of a bug in older versions of FPLedit, the in-file station order and "
+"the station order according to their positions is inconsistent."
+
 #: TimetableChecks/DayOverflowCheck.cs:10
 msgid "Zugverkehr über Mitternacht"
 msgstr "Train running over midnight"
@@ -1890,11 +1907,11 @@ msgstr "Invalid station code"
 msgid "Betriebsstellen-Abkürzungen {0} sind mehr als ein mal vorhanden!"
 msgstr "Station code {0} is used more than once!"
 
-#: TimetableChecks/TimetableCheckRunner.cs:76
+#: TimetableChecks/TimetableCheckRunner.cs:83
 msgid "Meldung"
 msgstr "Message"
 
-#: TimetableChecks/TimetableCheckRunner.cs:86
+#: TimetableChecks/TimetableCheckRunner.cs:93
 msgid "Überprüfungen"
 msgstr "Timetable checks"
 
@@ -1902,7 +1919,7 @@ msgstr "Timetable checks"
 msgid "Ungültige Gleisangaben"
 msgstr "Invalid track names"
 
-#: TimetableChecks/TrainsTrackCheck.cs:29
+#: TimetableChecks/TrainsTrackCheck.cs:25
 #, csharp-format
 msgid ""
 "Ungültiges Ankunftsgleis: Zug {0} / Station {1} / Gleis \"{2}\" nicht "
@@ -1910,7 +1927,7 @@ msgid ""
 msgstr ""
 "Invalid arrival track: Train {0} / Station {1} / Track \"{2}\" not found."
 
-#: TimetableChecks/TrainsTrackCheck.cs:31
+#: TimetableChecks/TrainsTrackCheck.cs:27
 #, csharp-format
 msgid ""
 "Ungültiges Abfahrtsgleis: Zug {0} / Station {1} / Gleis \"{2}\" nicht "
@@ -1918,7 +1935,7 @@ msgid ""
 msgstr ""
 "Invalid departure track: Train {0} / Station {1} / Track \"{2}\" not found."
 
-#: TimetableChecks/TrainsTrackCheck.cs:35
+#: TimetableChecks/TrainsTrackCheck.cs:31
 #, csharp-format
 msgid "Ungültiges Rangiergleis: Zug {0} / Station {1} / Gleis nicht gefunden."
 msgstr "Invalid shunting track: Train {0} / Station {1} / Track not found."

@@ -14,7 +14,7 @@ namespace FPLedit.Shared.Helpers;
 public static class StationMoveHelper
 {
     /// <summary>
-    /// Checks, if a given station needs an unsafe move operation (see <see cref="PerformUnsafeMove"/>)  to fulfill this move operation.
+    /// Checks, if a given station needs an unsafe move operation (see <see cref="PerformUnsafeMove"/>) to fulfill this move operation.
     /// </summary>
     /// <param name="sta">Station to move.</param>
     /// <param name="existingStation">Is this station already registered at the Timetable instance?</param>
@@ -43,11 +43,21 @@ public static class StationMoveHelper
         if (idx > 0)
             min = rt[idx - 1].Positions.GetPosition(route);
 
-        return ((min.HasValue && newPos < min) || (max.HasValue && newPos > max));
+        return newPos < min || newPos > max;
+    }
+
+    private static void SetPositionAndRebuild(Station sta, int route, decimal newPos)
+    {
+        sta.Positions.SetPosition(route, newPos);
+
+        if (sta.ParentTimetable.Type == TimetableType.Linear)
+            sta.ParentTimetable.RebuildLinearStationsAfterMove(sta);
+        else
+            sta.ParentTimetable.RebuildRouteCache(route);
     }
 
     /// <summary>
-    /// Attemps to safely move a station to a new position. It will fail and return false, if this is not possible.
+    /// Attempts to safely move a station to a new position. It will fail and return false, if this is not possible.
     /// </summary>
     /// <param name="sta">Station to move.</param>
     /// <param name="existingStation">Is this station already registered at the Timetable instance?</param>
@@ -63,16 +73,13 @@ public static class StationMoveHelper
         var needsUnsafeUpdate = RequiresUnsafeMove(sta, existingStation, newPos, route);
 
         if (!needsUnsafeUpdate)
-        {
-            sta.Positions.SetPosition(route, newPos);
-            sta.ParentTimetable.RebuildRouteCache(route);
-        }
+            SetPositionAndRebuild(sta, route, newPos);
 
         return !needsUnsafeUpdate;
     }
 
     /// <summary>
-    /// <para>Moves a station to the given new position. But if the new position lies between two other stations, it will try to resort the route's stations AND WILL PROBALY FAIL.</para>
+    /// <para>Moves a station to the given new position. But if the new position lies between two other stations, it will try to resort the route's stations AND WILL PROBABLY FAIL.</para>
     /// <para>Don't use it if you're unsure. (Better: Never, ever.)</para>
     /// <para>If you want to ask user first if he wants to destroy his data: use <see cref="RequiresUnsafeMove"/>.</para>
     /// <para>If no unsafe update is needed, it just moves the station safely (Nothing bad happened then. Check return value)</para>
@@ -95,8 +102,7 @@ public static class StationMoveHelper
 
         if (!requiresUnsafeMove)
         {
-            sta.Positions.SetPosition(route, newPos);
-            sta.ParentTimetable.RebuildRouteCache(route);
+            SetPositionAndRebuild(sta, route, newPos);
             return false;
         }
 
@@ -125,8 +131,7 @@ public static class StationMoveHelper
             wt.RemoveArrDep(sta);
         }
 
-        sta.Positions.SetPosition(route, newPos);
-        sta.ParentTimetable.RebuildRouteCache(route); // Recreate cache entry, as we will use this in the next block.
+        SetPositionAndRebuild(sta, route, newPos); // Recreate route cache entry, as we will use this in the next block.
 
         foreach (var u in updates)
         {

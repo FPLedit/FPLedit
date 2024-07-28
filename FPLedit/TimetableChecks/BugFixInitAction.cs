@@ -41,6 +41,24 @@ public class BugFixInitAction : ITimetableInitAction
                 string.Join(", ", moveCorruptedTrains)));
         }
 
+        // Bug in FPLedit x.x.x bis 2.6.3 erzeugte beim Verschieben von Stationen eine korrupte lineare Strecke.
+        if (tt.Type == TimetableType.Linear)
+        {
+            // check that we have a consistent ordering.
+            var staElems = tt.XMLEntity.Children.Single(x => x.XName == "stations")
+                .Children.Where(x => x.XName == "sta").ToList();
+            var stations = tt.GetRoute(Timetable.LINEAR_ROUTE_ID).Stations.ToList(); // Replace collection with an ordered one
+            var idx = 0;
+            var hasInconsitentOrdering = false;
+            foreach (var c in stations) // filter other xml elements.
+                hasInconsitentOrdering |= (staElems.IndexOf(c.XMLEntity) != idx++);
+
+            if (hasInconsitentOrdering)
+            {
+                upgradeMessages.Add(T._("Aufgrund eines Fehlers in früheren Versionen von FPLedit sind ist die Reihenfolge und Kilometrierung der Stationen nicht überein."));
+            }
+        }
+
         return upgradeMessages.Any() ? string.Join(Environment.NewLine, upgradeMessages) : null;
     }
 }

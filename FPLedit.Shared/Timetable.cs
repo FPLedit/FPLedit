@@ -126,7 +126,7 @@ public sealed class Timetable : Entity, ITimetable
         if (tmpSElm != null)
         {
             sElm = tmpSElm;
-            foreach (var c in sElm.Children.Where(x => x.XName == "sta")) // Filtert andere Elemente
+            foreach (var c in sElm.Children.Where(x => x.XName == "sta")) // filter other xml elements.
             {
                 var s = new Station(c, this);
                 stations.Add(s);
@@ -391,6 +391,56 @@ public sealed class Timetable : Entity, ITimetable
         // Remove orphaned routes, if applicable (requires route cache).
         if (Type == TimetableType.Network)
             RemoveOrphanedRoutes();
+    }
+
+    /// <exception cref="TimetableTypeNotSupportedException">Operation was applied to a network timetable.</exception>
+    internal void RebuildLinearStationsAfterMove(Station movedStation)
+    {
+        if (Type != TimetableType.Linear)
+            throw new TimetableTypeNotSupportedException(TimetableType.Linear, "routes");
+
+        var idxBefore = stations.IndexOf(movedStation);
+        var sortedStationsBefore = GetRoute(LINEAR_ROUTE_ID).Stations.ToList(); // Replace collection with an ordered one.
+        var idxBeforeSorted = sortedStationsBefore.IndexOf(movedStation);
+
+        RebuildRouteCache(LINEAR_ROUTE_ID);
+        stations = GetRoute(LINEAR_ROUTE_ID).Stations.ToList(); // Replace collection with an ordered one.
+        var idxAfter = stations.IndexOf(movedStation); // Get temporary index.
+
+        if (idxAfter == idxBefore && idxAfter == idxBeforeSorted) return;
+
+        sElm.Children.Remove(movedStation.XMLEntity);
+
+        // Get xml entity index of the previous/next station, to handle other xml entity types.
+        var childIndexAfter = idxAfter;
+        if (idxAfter > 0)
+        {
+            var staBefore = stations[idxAfter - 1];
+            childIndexAfter = sElm.Children.IndexOf(staBefore.XMLEntity) + 1;
+        }
+        else if (idxAfter == 0 && stations.Count > 1)
+        {
+            var staAfter = stations[1];
+            childIndexAfter = sElm.Children.IndexOf(staAfter.XMLEntity); // Insert before.
+        }
+        else if (stations.Count > 1)
+            throw new Exception("Invalid negative index encountered!");
+
+        sElm.Children.Insert(childIndexAfter, movedStation.XMLEntity);
+
+        // Update index of all following stations that are referenced in transitions.
+        var idxDelta = idxAfter < idxBefore ? +1 : -1;
+        var idxMin = idxAfter < idxBefore ? idxAfter : idxBefore + 1;
+        var idxMax = idxAfter < idxBefore ? idxBefore - 1 : idxAfter;
+        foreach (var transition in transitions)
+        {
+            if (!int.TryParse(transition.StationId, out var numericStationId))
+                continue;
+            if (numericStationId == idxBefore)
+                transition.StationId = idxAfter.ToString();
+            if (numericStationId >= idxMin && numericStationId <= idxMax)
+                transition.StationId = (numericStationId + idxDelta).ToString();
+        }
     }
 
     /// <inheritdoc />
