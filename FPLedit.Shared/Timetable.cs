@@ -362,7 +362,7 @@ public sealed class Timetable : Entity, ITimetable
         var needsCleanupLinear = Type == TimetableType.Linear && stations.First() == sta || stations.Last() == sta;
         var routes = sta.Routes;
 
-        // Clean up all transitions which were only valid at this sttaion.
+        // Clean up all transitions which were only valid at this station.
         var id = Type == TimetableType.Linear ? GetRoute(LINEAR_ROUTE_ID).IndexOf(sta) : sta.Id;
         foreach (var transition in transitions)
         {
@@ -370,7 +370,8 @@ public sealed class Timetable : Entity, ITimetable
                 transition.StationId = Transition.LAST_STATION; // Reset to default.
         }
 
-        stationCache.Remove(sta.Id);
+        if (Type != TimetableType.Linear)
+            stationCache.Remove(sta.Id);
         sta.ParentTimetable = null;
         stations.Remove(sta);
         sElm.Children.Remove(sta.XMLEntity);
