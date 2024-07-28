@@ -3,6 +3,7 @@ using Eto.Forms;
 using FPLedit.Shared.Rendering;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace FPLedit.Shared.UI.Network;
@@ -201,7 +202,7 @@ public sealed class NetworkRenderer : Drawable
                     var text = sta.SName + " (";
                     foreach (var ri in sta.Routes)
                     {
-                        var km = sta.Positions.GetPosition(ri)!.Value.ToString("0.0");
+                        var km = sta.Positions.GetPosition(ri)!.Value.ToString(CultureInfo.CurrentCulture);
                         if (ri == SelectedRoute && sta.Routes.Length > 1)
                             km = "▶" + km;
                         text += km + "|";

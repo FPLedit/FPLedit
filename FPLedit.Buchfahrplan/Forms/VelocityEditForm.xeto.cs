@@ -5,6 +5,7 @@ using FPLedit.Shared.UI;
 using FPLedit.Shared.UI.Validators;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace FPLedit.Buchfahrplan.Forms;
 
@@ -89,7 +90,7 @@ internal sealed class VelocityEditForm : FDialog<DialogResult>
 
         if (Station is BfplPoint point)
         {
-            point.Positions.SetPosition(route, decimal.Parse(positionTextBox.Text));
+            point.Positions.SetPosition(route, decimal.Parse(positionTextBox.Text, CultureInfo.CurrentCulture));
             point.SName = nameTextBox.Text;
             point.Direction.SetValue(route, (string)directionComboBox.SelectedValue);
         }

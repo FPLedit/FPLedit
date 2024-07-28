@@ -59,7 +59,7 @@ public class PositionCollection
     /// </summary>
     /// <remarks>
     /// <para>If applied on existing stations: <see cref="StationMoveHelper.PerformUnsafeMove"/> on why this is even worse than that method (and what could possibly go wrong).</para>
-    /// <para>It might be neccessary to rebuild the timetable's route cache after changing a position.</para>
+    /// <para>It might be necessary to rebuild the timetable's route cache after changing a position.</para>
     /// </remarks>
     /// <param name="route"></param>
     /// <param name="km"></param>
@@ -120,14 +120,14 @@ public class PositionCollection
         if (t == TimetableType.Linear)
         {
             var posDec = GetPosition(Timetable.LINEAR_ROUTE_ID) ?? throw new Exception("No linear position found while attempting to write linear positions.");
-            var pos = posDec.ToString("0.0", CultureInfo.InvariantCulture); // decimal format?
+            var pos = posDec.ToString(CultureInfo.InvariantCulture);
             sta.SetAttribute("kml", pos);
             sta.SetAttribute("kmr", pos);
             sta.RemoveAttribute("km");
         }
         else
         {
-            var posStrings = positions.Select(kvp => kvp.Key.ToString() + ":" + kvp.Value.ToString("0.0", CultureInfo.InvariantCulture));
+            var posStrings = positions.Select(kvp => kvp.Key + ":" + kvp.Value.ToString(CultureInfo.InvariantCulture));
             var text = string.Join(";", posStrings);
             sta.SetAttribute("km", text);
             sta.RemoveAttribute("kml");

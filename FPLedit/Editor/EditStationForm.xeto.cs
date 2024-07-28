@@ -4,6 +4,7 @@ using FPLedit.Shared;
 using FPLedit.Shared.UI;
 using FPLedit.Shared.UI.Validators;
 using System;
+using System.Globalization;
 using System.Linq;
 using FPLedit.Shared.Helpers;
 
@@ -93,7 +94,7 @@ internal sealed class EditStationForm : FDialog<EditStationForm.EditResult?>
     {
         Title = T._("Station bearbeiten");
         nameTextBox.Text = station.SName;
-        positionTextBox.Text = station.Positions.GetPosition(route)!.Value.ToString("0.0");
+        positionTextBox.Text = station.Positions.GetPosition(route)!.Value.ToString(CultureInfo.CurrentCulture);
 
         this.station = station;
         this.route = route;
@@ -124,7 +125,7 @@ internal sealed class EditStationForm : FDialog<EditStationForm.EditResult?>
         station.RequestStop = requestCheckBox.Checked ?? false;
 
         // Set position.
-        var newPos = decimal.Parse(positionTextBox.Text);
+        var newPos = decimal.Parse(positionTextBox.Text, CultureInfo.CurrentCulture);
         decimal? newPosResult = null;
         if (route == Timetable.UNASSIGNED_ROUTE_ID) // We have a new station on a new route
             newPosResult = newPos;

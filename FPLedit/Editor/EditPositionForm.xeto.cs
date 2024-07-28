@@ -2,6 +2,7 @@
 using FPLedit.Shared.UI;
 using FPLedit.Shared.UI.Validators;
 using System;
+using System.Globalization;
 using FPLedit.Shared;
 
 namespace FPLedit.Editor;
@@ -28,7 +29,7 @@ internal sealed class EditPositionForm : FDialog<decimal?>
             return;
         }
 
-        Close(decimal.Parse(positionTextBox.Text));
+        Close(decimal.Parse(positionTextBox.Text, CultureInfo.CurrentCulture));
     }
 
     private void CancelButton_Click(object sender, EventArgs e)
