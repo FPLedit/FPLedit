@@ -25,7 +25,7 @@ internal sealed class JavascriptTemplate : ITemplate
 
     private const int CURRENT_VERSION = 2;
 
-    private Script? compiledScriptAst;
+    private Prepared<Script>? compiledScriptAst;
 
     public JavascriptTemplate(string code, string identifier, IReducedPluginInterface pluginInterface)
     {
@@ -240,7 +240,7 @@ internal sealed class JavascriptTemplate : ITemplate
         var html = engine
             .SetValue("tt", tt)
             .SetValue("__builder", "") // Create output variable
-            .Execute(compiledScriptAst)
+            .Execute(compiledScriptAst.Value)
             .GetValue("__builder")
             .AsString();
 
