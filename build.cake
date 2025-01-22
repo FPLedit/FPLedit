@@ -9,7 +9,7 @@ using IOPath = System.IO.Path;
 
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
-var platform = Argument("tfm", "net6.0");
+var platform = Argument("tfm", "net8.0");
 var runtimes = Argument("rid", "linux-x64");
 
 var copyDocPdf = EnvironmentVariable("FPLEDIT_DOK_PDF");

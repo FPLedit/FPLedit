@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>{E83DBE22-B03E-43EB-98F7-98F5B0B6AADF}</ProjectGuid>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Configurations>Release</Configurations>
     <Platforms>AnyCPU</Platforms>
 
