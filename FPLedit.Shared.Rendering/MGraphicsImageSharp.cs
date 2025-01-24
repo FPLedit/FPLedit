@@ -8,7 +8,6 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
-using ed = Eto.Drawing;
 
 namespace FPLedit.Shared.Rendering;
 
@@ -132,7 +131,7 @@ public sealed class MGraphicsImageSharp : IMGraphics
 
     public void Flush() {}
 
-    public ed.Bitmap LockEtoBitmap()
+    public Eto.Drawing.Bitmap LockEtoBitmap()
     {
         if (image == null)
             throw new Exception("Trying to save graphics content not backed by image!");
@@ -140,7 +139,7 @@ public sealed class MGraphicsImageSharp : IMGraphics
         if (!image.DangerousTryGetSinglePixelMemory(out Memory<Rgba32> memory))
             throw new Exception("getting single pixel memory failed!");
 
-        var etoBuffer = new ed.Bitmap(image.Width, image.Height, ed.PixelFormat.Format32bppRgba);
+        var etoBuffer = new Eto.Drawing.Bitmap(image.Width, image.Height, Eto.Drawing.PixelFormat.Format32bppRgba);
         var etoData = etoBuffer.Lock();
 
         var byteLength = image.Height * image.Width * Unsafe.SizeOf<Rgba32>();

@@ -10,6 +10,10 @@ internal sealed partial class AssemblySignatureVerifier
 
     internal SecurityContext Validate(string? fn)
     {
+        // only support one hash algorithm at a time.
+        if (hashAlgorithm != "SHA256")
+            return SecurityContext.ThirdParty;
+
         if (fn == null)
             return SecurityContext.ThirdParty;
 
@@ -21,7 +25,7 @@ internal sealed partial class AssemblySignatureVerifier
 
         var bytes = File.ReadAllBytes(fn);
 
-        using var hasher = HashAlgorithm.Create(hashAlgorithm);
+        using var hasher = SHA256.Create();
         if (hasher == null)
             return SecurityContext.ThirdParty;
         var hash = hasher.ComputeHash(bytes);

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using PdfSharp.Drawing;
-using ed = Eto.Drawing;
 
 namespace FPLedit.Shared.Rendering;
 
@@ -93,5 +92,5 @@ public sealed class MGraphicsPdfSharp : IMGraphics
 
     public void Flush() { }
 
-    public ed.Bitmap LockEtoBitmap() => throw new NotSupportedException(nameof(MGraphicsPdfSharp) + " vcnnot be used for on-screen or PNG rendering!");
+    public Eto.Drawing.Bitmap LockEtoBitmap() => throw new NotSupportedException(nameof(MGraphicsPdfSharp) + " vcnnot be used for on-screen or PNG rendering!");
 }
