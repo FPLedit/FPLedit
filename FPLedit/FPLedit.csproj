@@ -1,9 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <AppHostPatch_ContainerFile>$(SolutionDir)/build_scripts/app_host_patch/Containerfile</AppHostPatch_ContainerFile>
-  </PropertyGroup>
   <Import Project="$(SolutionDir)/build_scripts/GenerateSignatures.targets" />
-  <Import Project="$(SolutionDir)/build_scripts/AppHostPatch.targets" />
 
   <PropertyGroup>
     <ProjectGuid>{386836E8-5885-4ED1-B350-CE2BBEC5367E}</ProjectGuid>
