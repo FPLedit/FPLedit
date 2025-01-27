@@ -23,10 +23,10 @@
     <PackageReference Include="Eto.Forms" Version="$(EtoVersion)" />
     <PackageReference Include="PDFsharp" Version="6.0.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.6" />
-    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="2.1.4" />
+    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="2.1.5" />
   </ItemGroup>
   <ItemGroup Condition="$(FPLeditEnableSystemDrawing)">
-    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="9.0.1" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Languages/*.mo" CopyToOutputDirectory="Always" />

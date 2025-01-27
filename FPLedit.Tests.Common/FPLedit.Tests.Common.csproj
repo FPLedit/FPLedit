@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="nunit" Version="3.14.0" />
+      <PackageReference Include="nunit" Version="4.3.2" />
     </ItemGroup>
 
   <ItemGroup>
