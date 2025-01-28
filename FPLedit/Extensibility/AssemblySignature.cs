@@ -6,14 +6,10 @@ namespace FPLedit.Extensibility;
 
 internal sealed partial class AssemblySignatureVerifier
 {
-    // hashAlgorithm, generatedSignatures are defined in compiler generated file!
+    // generatedSignatures are defined in compiler generated file!
 
     internal SecurityContext Validate(string? fn)
     {
-        // only support one hash algorithm at a time.
-        if (hashAlgorithm != "SHA256")
-            return SecurityContext.ThirdParty;
-
         if (fn == null)
             return SecurityContext.ThirdParty;
 

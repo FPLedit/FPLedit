@@ -18,10 +18,12 @@ namespace Force.DeepCloner.Helpers
             if (typeCache.TryGetValue(type, out var value)) return value;
 
 			// will lock by type object to ensure only one type generator is generated simultaneously
+#pragma warning disable CA2002 // Do not lock on objects with weak identity.
 			lock (type)
 			{
 				value = typeCache.GetOrAdd(type, t => adder(t));
 			}
+#pragma warning restore CA2002
 
 			return value;
 		}
@@ -34,10 +36,12 @@ namespace Force.DeepCloner.Helpers
             if (structAsObjectCache.TryGetValue(type, out var value)) return value;
 			
 			// will lock by type object to ensure only one type generator is generated simultaneously
+#pragma warning disable CA2002 // Do not lock on objects with weak identity.
 			lock (type)
 			{
 				value = structAsObjectCache.GetOrAdd(type, t => adder(t));
 			}
+#pragma warning restore CA2002
 
 			return value;
 		}

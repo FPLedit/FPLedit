@@ -20,8 +20,6 @@
       <Using Namespace="System.Security.Cryptography" />
       <Code Type="Fragment" Language="cs">
         <![CDATA[
-        string HashAlgorithm = "SHA256";
-
         string BytesToString(IEnumerable<byte> bytes) => string.Join(", ", System.Linq.Enumerable.Select(bytes, b => "0x" + b.ToString("X2")));
 
         IEnumerable<string> GetHashLines(DirectoryInfo info)
@@ -42,8 +40,6 @@
             }
 
             yield return "        };";
-
-            yield return "        private const string hashAlgorithm = \"" + HashAlgorithm + "\";";
 
             yield return "    }";
             yield return "}";
