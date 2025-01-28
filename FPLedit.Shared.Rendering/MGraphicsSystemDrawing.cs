@@ -8,7 +8,6 @@ using System.Drawing.Text;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using ed = Eto.Drawing;
 
 namespace FPLedit.Shared.Rendering;
 
@@ -138,7 +137,7 @@ public sealed class MGraphicsSystemDrawing : IMGraphics
 
     public void Flush() => g.Flush();
 
-    public ed.Bitmap LockEtoBitmap()
+    public Eto.Drawing.Bitmap LockEtoBitmap()
     {
         if (image == null)
             throw new Exception("Trying to save graphics content not backed by image!");
@@ -149,7 +148,7 @@ public sealed class MGraphicsSystemDrawing : IMGraphics
         var bytesPerPixel = ((int) image.PixelFormat >> 11) & 31;
         var byteLength = sdData.Height * sdData.Width * bytesPerPixel;
 
-        var etoBuffer = new ed.Bitmap(image.Width, image.Height, ed.PixelFormat.Format32bppRgba);
+        var etoBuffer = new Eto.Drawing.Bitmap(image.Width, image.Height, Eto.Drawing.PixelFormat.Format32bppRgba);
         var etoData = etoBuffer.Lock();
 
         if (sdData.Stride < 0)
